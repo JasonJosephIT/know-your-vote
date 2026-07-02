@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Symmetric Scrutiny Log — Civic Awareness Project</title>
+<style>
+  :root{
+    --ink:#1f2933; --muted:#5b6770; --line:#e1e5ea; --bg:#f7f8fa;
+    --card:#ffffff; --pass:#1f7a4d; --pass-bg:#e8f4ee;
+    --halt:#9a6b00; --halt-bg:#fbf2dd; --flag:#5a4b8a; --flag-bg:#eee9f6;
+    --accent:#2b3a55;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  header.page{border-bottom:2px solid var(--accent);padding-bottom:20px;margin-bottom:28px}
+  h1{font-size:26px;margin:0 0 6px;letter-spacing:-.01em}
+  .sub{color:var(--muted);font-size:15px;margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:18px;margin-top:16px;font-size:13px;color:var(--muted)}
+  .meta b{color:var(--ink);font-weight:600}
+  .formula{background:#eef1f5;border:1px solid var(--line);border-radius:8px;
+    padding:12px 14px;margin:20px 0 4px;font-size:13.5px;color:var(--accent)}
+  .formula code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:600}
+  .race{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:22px 22px 18px;margin:22px 0;box-shadow:0 1px 2px rgba(20,30,50,.04)}
+  .race-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+  .race-title{font-size:18px;font-weight:700;margin:0}
+  .race-sub{color:var(--muted);font-size:13px;margin:3px 0 0}
+  .badge{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    padding:6px 11px;border-radius:999px;white-space:nowrap}
+  .badge.pass{background:var(--pass-bg);color:var(--pass)}
+  .badge.halt{background:var(--halt-bg);color:var(--halt)}
+  table{width:100%;border-collapse:collapse;margin:16px 0 6px;font-size:13.5px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+  th{font-size:11.5px;text-transform:uppercase;letter-spacing:.02em;color:var(--muted);font-weight:600}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .party{display:inline-block;font-size:11px;font-weight:600;color:var(--muted);
+    border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-left:8px;vertical-align:middle}
+  .metrics{margin-top:14px;border-top:1px dashed var(--line);padding-top:14px}
+  .metric-row{display:grid;grid-template-columns:1.7fr .8fr .9fr auto;gap:10px;
+    align-items:center;padding:7px 0;font-size:13.5px;border-bottom:1px solid #f0f2f5}
+  .metric-row:last-child{border-bottom:none}
+  .metric-name{font-weight:600}
+  .metric-name .kind{font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.03em;
+    margin-left:8px;color:var(--muted)}
+  .metric-detail{color:var(--muted);font-variant-numeric:tabular-nums}
+  .pill{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;justify-self:end}
+  .pill.ok{background:var(--pass-bg);color:var(--pass)}
+  .pill.breach{background:var(--halt-bg);color:var(--halt)}
+  .pill.flag{background:var(--flag-bg);color:var(--flag)}
+  .note{border-radius:8px;padding:12px 14px;margin-top:14px;font-size:13.5px}
+  .note.halt{background:var(--halt-bg);border:1px solid #ecd9a6;color:#6f4e00}
+  .note.flag{background:var(--flag-bg);border:1px solid #ddd3ef;color:#463a6b}
+  .note b{color:inherit}
+  footer.page{margin-top:34px;border-top:1px solid var(--line);padding-top:20px;
+    font-size:13px;color:var(--muted)}
+  footer.page h2{font-size:14px;color:var(--ink);margin:0 0 8px}
+  footer.page ul{margin:0 0 14px;padding-left:18px}
+  footer.page li{margin:4px 0}
+  .defn code{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;
+    background:#eef1f5;padding:1px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page">
+    <h1>Symmetric Scrutiny Log</h1>
+    <p class="sub">Civic Awareness Project — published audit of equal scrutiny across candidates in each race.</p>
+    <div class="meta">
+      <span><b>Phase:</b> 1 — Florida MVP</span>
+      <span><b>Generated:</b> 2026-06-29 14:05 UTC</span>
+      <span><b>Audit:</b> deterministic, no AI</span>
+      <span><b>Sample / illustrative data</b></span>
+    </div>
+    <div class="formula">
+      Variance, every race: <code>(max − min) / max × 100</code>.
+      <b>Gates</b> (halt publication): fact-checks &lt; 10%, verifiable-fact count &lt; 15%, word count &lt; 15%.
+      <b>Flags</b> (human review, no halt): stated-position count &lt; 15%, spine-issue coverage (any gap).
+    </div>
+  </header>
+
+  <!-- RACE 1: PASS, 2 candidates, no flags -->
+  <section class="race">
+    <div class="race-head">
+      <div>
+        <p class="race-title">U.S. House — FL-28 (General)</p>
+        <p class="race-sub">Miami · Miami-Dade · 2 candidates · 4 spine issues</p>
+      </div>
+      <span class="badge pass">Pass · Published</span>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Candidate</th><th class="num">Words</th><th class="num">Verifiable facts</th><th class="num">Stated positions</th><th class="num">Fact-checks</th><th class="num">Spine coverage</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Candidate A <span class="party">cand_001 · REP</span></td><td class="num">455</td><td class="num">5</td><td class="num">4</td><td class="num">5</td><td class="num">4 / 4</td></tr>
+        <tr><td>Candidate B <span class="party">cand_002 · DEM</span></td><td class="num">412</td><td class="num">5</td><td class="num">4</td><td class="num">5</td><td class="num">4 / 4</td></tr>
+      </tbody>
+    </table>
+    <div class="metrics">
+      <div class="metric-row"><span class="metric-name">Fact-check variance<span class="kind">gate</span></span><span class="metric-detail">0.0%</span><span class="metric-detail">thr 10%</span><span class="pill ok">Within</span></div>
+      <div class="metric-row"><span class="metric-name">Verifiable-fact variance<span class="kind">gate</span></span><span class="metric-detail">0.0%</span><span class="metric-detail">thr 15%</span><span class="pill ok">Within</span></div>
+      <div class="metric-row"><span class="metric-name">Word-count variance<span class="kind">gate</span></span><span class="metric-detail">9.5%</span><span class="metric-detail">thr 15%</span><span class="pill ok">Within</span></div>
+      <div class="metric-row"><span class="metric-name">Stated-position variance<span class="kind">flag</span></span><span class="metric-detail">0.0%</span><span class="metric-detail">thr 15%</span><span class="pill ok">Even</span></div>
+      <div class="metric-row"><span class="metric-name">Spine-issue coverage<span class="kind">flag</span></span><span class="metric-detail">gap 0</span><span class="metric-detail">4 / 4 each</span><span class="pill ok">Even</span></div>
+    </div>
+  </section>
+
+  <!-- RACE 2: PASS, 3 candidates -->
+  <section class="race">
+    <div class="race-head">
+      <div>
+        <p class="race-title">Governor of Florida (General)</p>
+        <p class="race-sub">Statewide · 3 candidates · 5 spine issues · demonstrates the formula across 3+ candidates</p>
+      </div>
+      <span class="badge pass">Pass · Published</span>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Candidate</th><th class="num">Words</th><th class="num">Verifiable facts</th><th class="num">Stated positions</th><th class="num">Fact-checks</th><th class="num">Spine coverage</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Candidate C <span class="party">cand_010 · REP</span></td><td class="num">520</td><td class="num">6</td><td class="num">5</td><td class="num">6</td><td class="num">5 / 5</td></tr>
+        <tr><td>Candidate D <span class="party">cand_011 · DEM</span></td><td class="num">498</td><td class="num">6</td><td class="num">5</td><td class="num">6</td><td class="num">5 / 5</td></tr>
+        <tr><td>Candidate E <span class="party">cand_012 · NPA</span></td><td class="num">505</td><td class="num">6</td><td class="num">5</td><td class="num">6</td><td class="num">5 / 5</td></tr>
+      </tbody>
+    </table>
+    <div class="metrics">
+      <div class="metric-row"><span class="metric-name">Fact-check variance<span class="kind">gate</span></span><span class="metric-detail">0.0%</span><span class="metric-detail">thr 10%</span><span class="pill ok">Within</span></div>
+      <div class="metric-row"><span class="metric-name">Verifiable-fact variance<span class="kind">gate</span></span><span class="metric-detail">0.0%</span><span class="metric-detail">thr 15%</span><span class="pill ok">Within</span></div>
+      <div class="metric-row"><span class="metric-name">Word-count variance<span class="kind">gate</span></span><span class="metric-detail">4.2% <small>(520−498)/520</small></span><span class="metric-detail">thr 15%</span><span class="pill ok">Within</span></div>
+      <div class="metric-row"><span class="metric-name">Stated-position variance<span class="kind">flag</span></span><span class="metric-detail">0.0%</span><span class="metric-detail">thr 15%</span><span class="pill ok">Even</span></div>
+      <div class="metric-row"><span class="metric-name">Spine-issue coverage<span class="kind">flag</span></span><span class="metric-detail">gap 0</span><span class="metric-detail">5 / 5 each</span><span class="pill ok">Even</span></div>
+    </div>
+  </section>
+
+  <!-- RACE 3: HALT (masked-scrutiny case) + two flags -->
+  <section class="race">
+    <div class="race-head">
+      <div>
+        <p class="race-title">U.S. House — FL-15 (General)</p>
+        <p class="race-sub">Tampa · Hillsborough · 2 candidates · 4 spine issues</p>
+      </div>
+      <span class="badge halt">Halt · Blocked</span>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Candidate</th><th class="num">Words</th><th class="num">Verifiable facts</th><th class="num">Stated positions</th><th class="num">Fact-checks</th><th class="num">Spine coverage</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Candidate F <span class="party">cand_020 · REP</span></td><td class="num">440</td><td class="num">12</td><td class="num">3</td><td class="num">5</td><td class="num">4 / 4</td></tr>
+        <tr><td>Candidate G <span class="party">cand_021 · DEM</span></td><td class="num">445</td><td class="num">6</td><td class="num">9</td><td class="num">5</td><td class="num">3 / 4</td></tr>
+      </tbody>
+    </table>
+    <div class="metrics">
+      <div class="metric-row"><span class="metric-name">Fact-check variance<span class="kind">gate</span></span><span class="metric-detail">0.0%</span><span class="metric-detail">thr 10%</span><span class="pill ok">Within</span></div>
+      <div class="metric-row"><span class="metric-name">Verifiable-fact variance<span class="kind">gate</span></span><span class="metric-detail">50.0% <small>(12−6)/12</small></span><span class="metric-detail">thr 15%</span><span class="pill breach">Breach</span></div>
+      <div class="metric-row"><span class="metric-name">Word-count variance<span class="kind">gate</span></span><span class="metric-detail">1.1%</span><span class="metric-detail">thr 15%</span><span class="pill ok">Within</span></div>
+      <div class="metric-row"><span class="metric-name">Stated-position variance<span class="kind">flag</span></span><span class="metric-detail">66.7% <small>(9−3)/9</small></span><span class="metric-detail">thr 15%</span><span class="pill flag">Flag</span></div>
+      <div class="metric-row"><span class="metric-name">Spine-issue coverage<span class="kind">flag</span></span><span class="metric-detail">gap 1</span><span class="metric-detail">3 / 4 vs 4 / 4</span><span class="pill flag">Flag</span></div>
+    </div>
+    <div class="note halt">
+      <b>Publication blocked (gate breach).</b> Record scrutiny is uneven: <b>cand_020</b> has 12 verifiable
+      facts vs <b>cand_021</b>'s 6 (50% gap, over the 15% limit). Note the total claim counts are equal
+      (15 vs 15) — a blended count would have passed and hidden this. The split exposes it. The brief cannot
+      dispatch until the under-scrutinized candidate is brought to the same standard. Flagged 2026-06-29 14:02 UTC.
+    </div>
+    <div class="note flag">
+      <b>Flags for human review (do not block):</b> stated-position volume is uneven (cand_021 has 9 vs
+      cand_020's 3), and cand_021 covers 3 of 4 spine issues vs 4 of 4. These are surfaced for a reviewer —
+      candidate silence and self-portrait length are recorded honestly, never halted or manufactured.
+    </div>
+  </section>
+
+  <footer class="page">
+    <h2>How to read this log</h2>
+    <ul class="defn">
+      <li><b>Verifiable facts</b> and <b>fact-checks</b> are the record-and-adjudication scrutiny the neutrality claim rests on — they are <b>gates</b> that halt publication if uneven.</li>
+      <li><b>Stated positions</b> are candidate-authored (self-portrait). Because their volume tracks campaign resources, an imbalance is a <b>flag</b> for a human, never a halt — self-portrait size must not mask or manufacture a scrutiny gap.</li>
+      <li><b>Spine coverage</b> is how many shared issues a candidate has a stated position on. Silence on an issue is recorded as <code>no_stated_position_found</code> and flagged, never invented or halted. Candidate-specific extra issues are not counted here.</li>
+      <li><b>outside_opinion</b> claims are counted in no metric.</li>
+      <li>Variance is <code>(max − min) / max × 100</code> — the gap between the most- and least-scrutinized candidate, so no candidate can be held to a lower standard regardless of how many others are balanced.</li>
+    </ul>
+    <p>This log is published so the audit is verifiable by anyone. All numbers are computed by a deterministic tool with no AI in the loop. Sample data shown for specification review.</p>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Know Your Vote — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Colors */
+    --color-background: #F6F3EC;
+    --color-surface: #FFFFFF;
+    --color-surface-muted: #EFEAE0;
+    --color-on-surface: #22271F;
+    --color-on-surface-muted: #585E52;
+    --color-border: #E4DED2;
+    --color-border-strong: #CFC7B6;
+    --color-primary: #2F6B4F;
+    --color-primary-hover: #255A41;
+    --color-primary-muted: #E4EFE7;
+    --color-on-primary: #FFFFFF;
+    --color-accent: #B26836;
+    --color-accent-strong: #8A4E24;
+    --color-accent-muted: #F5E7D6;
+    --color-on-accent: #FFFFFF;
+    --color-success: #2F7D52;
+    --color-warning: #B07A1E;
+    --color-error: #B4402E;
+    --color-info: #2F6E7A;
+    --color-focus-ring: #2F6B4F;
+    --color-verdict-accurate: #2F6B4F;
+    --color-verdict-mostly-accurate: #5E8C6B;
+    --color-verdict-mixed: #B07A1E;
+    --color-verdict-mostly-inaccurate: #B4692E;
+    --color-verdict-inaccurate: #B4402E;
+    --color-verdict-unverifiable: #6B6F66;
+
+    /* Typography */
+    --font-heading: "Figtree", sans-serif;
+    --font-body: "Inter", sans-serif;
+    --font-mono: "IBM Plex Mono", monospace;
+
+    --type-display-size: 2.5rem;   --type-display-weight: 700; --type-display-lh: 1.1;  --type-display-ls: -0.02em;
+    --type-h1-size: 2rem;          --type-h1-weight: 700;      --type-h1-lh: 1.15; --type-h1-ls: -0.02em;
+    --type-h2-size: 1.5rem;        --type-h2-weight: 600;      --type-h2-lh: 1.2;  --type-h2-ls: -0.01em;
+    --type-h3-size: 1.25rem;       --type-h3-weight: 600;      --type-h3-lh: 1.3;  --type-h3-ls: 0;
+    --type-body-lg-size: 1.125rem; --type-body-lg-weight: 400; --type-body-lg-lh: 1.6;
+    --type-body-size: 1rem;        --type-body-weight: 400;    --type-body-lh: 1.6;
+    --type-body-sm-size: 0.875rem; --type-body-sm-weight: 400; --type-body-sm-lh: 1.5;
+    --type-label-size: 0.9375rem;  --type-label-weight: 600;   --type-label-lh: 1.2;
+    --type-caption-size: 0.8125rem;--type-caption-weight: 500; --type-caption-lh: 1.4; --type-caption-ls: 0.01em;
+    --type-overline-size: 0.75rem; --type-overline-weight: 700;--type-overline-lh: 1.3; --type-overline-ls: 0.08em;
+    --type-mono-size: 0.875rem;    --type-mono-weight: 400;    --type-mono-lh: 1.5;
+
+    /* Radius */
+    --rounded-none: 0px;
+    --rounded-sm: 4px;
+    --rounded-md: 8px;
+    --rounded-lg: 12px;
+    --rounded-xl: 16px;
+    --rounded-full: 999px;
+
+    /* Spacing */
+    --space-0: 0px;
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 64px;
+    --space-9: 96px;
+
+    /* Elevation */
+    --elevation-1: 0 1px 3px rgba(34,39,31,0.06);
+    --elevation-2: 0 4px 12px rgba(34,39,31,0.08);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--color-background);
+    color: var(--color-on-surface);
+    font-family: var(--font-body);
+    font-size: var(--type-body-size);
+    line-height: var(--type-body-lh);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: var(--space-7) var(--space-5) var(--space-9); }
+
+  h1.page { font-family: var(--font-heading); font-size: var(--type-display-size); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 var(--space-2); }
+  .lede { font-size: var(--type-body-lg-size); color: var(--color-on-surface-muted); max-width: 680px; margin: 0 0 var(--space-3); }
+  .mirror-note { font-family: var(--font-mono); font-size: var(--type-mono-size); color: var(--color-on-surface-muted); background: var(--color-surface-muted); border: 1px solid var(--color-border); border-radius: var(--rounded-md); padding: var(--space-2) var(--space-3); display: inline-block; }
+
+  section { margin-top: var(--space-8); }
+  .eyebrow { font-family: var(--font-body); font-size: var(--type-overline-size); font-weight: var(--type-overline-weight); line-height: var(--type-overline-lh); letter-spacing: var(--type-overline-ls); text-transform: uppercase; color: var(--color-accent-strong); margin: 0 0 var(--space-2); }
+  h2.sec { font-family: var(--font-heading); font-size: var(--type-h2-size); font-weight: 600; letter-spacing: -0.01em; margin: 0 0 var(--space-5); padding-bottom: var(--space-3); border-bottom: 1px solid var(--color-border); }
+  h3.sub { font-family: var(--font-heading); font-size: var(--type-h3-size); font-weight: 600; margin: var(--space-6) 0 var(--space-4); }
+
+  /* Colors */
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--space-4); }
+  .swatch { border: 1px solid var(--color-border); border-radius: var(--rounded-lg); overflow: hidden; background: var(--color-surface); }
+  .swatch .chip { height: 88px; display: flex; align-items: flex-end; padding: var(--space-3); }
+  .swatch .chip span { font-size: var(--type-caption-size); font-weight: 600; }
+  .swatch .meta { padding: var(--space-3); }
+  .swatch .name { font-weight: 600; font-size: var(--type-body-sm-size); }
+  .swatch .hex { font-family: var(--font-mono); font-size: var(--type-mono-size); color: var(--color-on-surface-muted); }
+
+  /* Typography specimens */
+  .spec { display: grid; grid-template-columns: 1fr; gap: var(--space-2); padding: var(--space-4) 0; border-bottom: 1px dashed var(--color-border); }
+  .spec .tags { font-family: var(--font-mono); font-size: var(--type-mono-size); color: var(--color-on-surface-muted); }
+
+  /* Spacing */
+  .space-row { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-2); }
+  .space-bar { background: var(--color-primary); height: 16px; border-radius: var(--rounded-sm); }
+  .space-row .lbl { font-family: var(--font-mono); font-size: var(--type-mono-size); color: var(--color-on-surface-muted); min-width: 150px; }
+
+  /* Radius */
+  .radius-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--space-4); }
+  .radius-box { height: 96px; background: var(--color-primary-muted); border: 1px solid var(--color-primary); display: flex; align-items: center; justify-content: center; }
+  .radius-cap { font-family: var(--font-mono); font-size: var(--type-mono-size); color: var(--color-on-surface-muted); margin-top: var(--space-2); text-align: center; }
+
+  /* Elevation */
+  .elev-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-5); }
+  .elev-card { background: var(--color-surface); border-radius: var(--rounded-lg); padding: var(--space-5); font-family: var(--font-mono); font-size: var(--type-mono-size); color: var(--color-on-surface-muted); }
+  .elev-0 { border: 1px solid var(--color-border); }
+  .elev-1 { border: 1px solid var(--color-border); box-shadow: var(--elevation-1); }
+  .elev-2 { box-shadow: var(--elevation-2); }
+
+  /* Components */
+  .demo { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--rounded-lg); padding: var(--space-5); margin-bottom: var(--space-5); }
+  .row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+  .state-label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-on-surface-muted); display: block; margin-bottom: var(--space-2); }
+
+  .btn { font-family: var(--font-body); font-size: var(--type-label-size); font-weight: var(--type-label-weight); line-height: 1; border: 0; cursor: pointer; border-radius: var(--rounded-md); padding: 12px 20px; }
+  .btn-primary { background: var(--color-primary); color: var(--color-on-primary); }
+  .btn-primary:hover { background: var(--color-primary-hover); }
+  .btn-primary-hoverstate { background: var(--color-primary-hover); color: var(--color-on-primary); }
+  .btn-primary-disabled { background: var(--color-surface-muted); color: var(--color-on-surface-muted); cursor: not-allowed; }
+  .btn-secondary { background: var(--color-surface); color: var(--color-primary); border: 1px solid var(--color-border-strong); }
+  .btn-secondary:hover { background: var(--color-primary-muted); color: var(--color-primary-hover); border-color: var(--color-primary); }
+  .btn-secondary-hoverstate { background: var(--color-primary-muted); color: var(--color-primary-hover); border: 1px solid var(--color-primary); }
+
+  .input { font-family: var(--font-body); font-size: var(--type-body-size); color: var(--color-on-surface); background: var(--color-surface); border: 1px solid var(--color-border-strong); border-radius: var(--rounded-md); padding: 12px 14px; width: 260px; max-width: 100%; }
+  .input:focus { outline: none; border: 2px solid var(--color-primary); padding: 11px 13px; }
+  .input-focusstate { border: 2px solid var(--color-primary); padding: 11px 13px; }
+
+  .card-demo { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--rounded-lg); padding: var(--space-5); max-width: 320px; }
+  .card-demo h4 { font-family: var(--font-heading); font-size: var(--type-h3-size); margin: 0 0 var(--space-2); }
+  .card-demo p { margin: 0; color: var(--color-on-surface-muted); font-size: var(--type-body-sm-size); }
+
+  .navbar { display: inline-flex; gap: var(--space-2); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--rounded-none); padding: var(--space-2); box-shadow: var(--elevation-2); }
+  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 76px; padding: var(--space-2); border-radius: var(--rounded-sm); color: var(--color-on-surface-muted); font-size: var(--type-caption-size); font-weight: 500; }
+  .nav-item .ico { width: 20px; height: 20px; border-radius: var(--rounded-sm); border: 2px solid currentColor; }
+  .nav-item.active { background: var(--color-primary-muted); color: var(--color-primary-hover); position: relative; }
+  .nav-item.active::after { content: ""; position: absolute; bottom: 2px; width: 16px; height: 2px; border-radius: var(--rounded-full); background: var(--color-accent); }
+
+  .verdict { display: inline-flex; align-items: center; gap: 6px; background: var(--color-surface-muted); border-radius: var(--rounded-full); padding: 4px 10px; font-size: var(--type-caption-size); font-weight: 600; }
+  .verdict .dot { width: 8px; height: 8px; border-radius: var(--rounded-full); }
+
+  .party-chip { display: inline-flex; align-items: center; background: var(--color-surface-muted); color: var(--color-on-surface-muted); border-radius: var(--rounded-full); padding: 3px 10px; font-size: var(--type-caption-size); font-weight: 600; }
+  .chip { display: inline-flex; align-items: center; background: var(--color-primary-muted); color: var(--color-primary-hover); border-radius: var(--rounded-full); padding: 4px 12px; font-size: var(--type-caption-size); font-weight: 600; }
+
+  /* Do / Don't */
+  .dd { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); }
+  .dd .col { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--rounded-lg); padding: var(--space-5); }
+  .dd h3 { margin: 0 0 var(--space-3); font-family: var(--font-heading); font-size: var(--type-h3-size); }
+  .dd .do h3 { color: var(--color-success); }
+  .dd .dont h3 { color: var(--color-error); }
+  .dd ul { margin: 0; padding-left: var(--space-4); }
+  .dd li { margin-bottom: var(--space-2); font-size: var(--type-body-sm-size); }
+  @media (max-width: 640px) { .dd { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1 class="page">Know Your Vote — Design System</h1>
+    <p class="lede">A calm, trustworthy, deliberately non-partisan design system — sage green and warm sand, humanist type, minimalist and straight-lined but never governmental.</p>
+    <p class="mirror-note">Human-readable mirror of <strong>docs/design.md</strong> — the tokens below render live from the same values. design.md is the source of truth.</p>
+  </header>
+
+  <!-- COLORS -->
+  <section>
+    <p class="eyebrow">Tokens</p>
+    <h2 class="sec">Colors</h2>
+
+    <h3 class="sub">Base &amp; Brand</h3>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:var(--color-background)"><span style="color:var(--color-on-surface)">background</span></div><div class="meta"><div class="name">background</div><div class="hex">#F6F3EC</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-surface); border-bottom:1px solid var(--color-border)"><span style="color:var(--color-on-surface)">surface</span></div><div class="meta"><div class="name">surface</div><div class="hex">#FFFFFF</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-surface-muted)"><span style="color:var(--color-on-surface)">surface-muted</span></div><div class="meta"><div class="name">surface-muted</div><div class="hex">#EFEAE0</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-on-surface)"><span style="color:#fff">on-surface</span></div><div class="meta"><div class="name">on-surface</div><div class="hex">#22271F</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-on-surface-muted)"><span style="color:#fff">on-surface-muted</span></div><div class="meta"><div class="name">on-surface-muted</div><div class="hex">#585E52</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-border)"><span style="color:var(--color-on-surface)">border</span></div><div class="meta"><div class="name">border</div><div class="hex">#E4DED2</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-border-strong)"><span style="color:var(--color-on-surface)">border-strong</span></div><div class="meta"><div class="name">border-strong</div><div class="hex">#CFC7B6</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-primary)"><span style="color:var(--color-on-primary)">primary</span></div><div class="meta"><div class="name">primary</div><div class="hex">#2F6B4F</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-primary-hover)"><span style="color:var(--color-on-primary)">primary-hover</span></div><div class="meta"><div class="name">primary-hover</div><div class="hex">#255A41</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-primary-muted)"><span style="color:var(--color-primary-hover)">primary-muted</span></div><div class="meta"><div class="name">primary-muted</div><div class="hex">#E4EFE7</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-accent)"><span style="color:var(--color-on-accent)">accent</span></div><div class="meta"><div class="name">accent</div><div class="hex">#B26836</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-accent-strong)"><span style="color:#fff">accent-strong</span></div><div class="meta"><div class="name">accent-strong</div><div class="hex">#8A4E24</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-accent-muted)"><span style="color:var(--color-accent-strong)">accent-muted</span></div><div class="meta"><div class="name">accent-muted</div><div class="hex">#F5E7D6</div></div></div>
+    </div>
+
+    <h3 class="sub">Semantic States</h3>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:var(--color-success)"><span style="color:#fff">success</span></div><div class="meta"><div class="name">success</div><div class="hex">#2F7D52</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-warning)"><span style="color:#fff">warning</span></div><div class="meta"><div class="name">warning</div><div class="hex">#B07A1E</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-error)"><span style="color:#fff">error</span></div><div class="meta"><div class="name">error</div><div class="hex">#B4402E</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-info)"><span style="color:#fff">info</span></div><div class="meta"><div class="name">info</div><div class="hex">#2F6E7A</div></div></div>
+    </div>
+
+    <h3 class="sub">Fact-Check Verdict Scale <span style="font-weight:400; font-size:var(--type-body-sm-size); color:var(--color-on-surface-muted)">(always paired with a text label — never color alone)</span></h3>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:var(--color-verdict-accurate)"><span style="color:#fff">accurate</span></div><div class="meta"><div class="name">verdict-accurate</div><div class="hex">#2F6B4F</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-verdict-mostly-accurate)"><span style="color:#fff">mostly-accurate</span></div><div class="meta"><div class="name">verdict-mostly-accurate</div><div class="hex">#5E8C6B</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-verdict-mixed)"><span style="color:#fff">mixed</span></div><div class="meta"><div class="name">verdict-mixed</div><div class="hex">#B07A1E</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-verdict-mostly-inaccurate)"><span style="color:#fff">mostly-inaccurate</span></div><div class="meta"><div class="name">verdict-mostly-inaccurate</div><div class="hex">#B4692E</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-verdict-inaccurate)"><span style="color:#fff">inaccurate</span></div><div class="meta"><div class="name">verdict-inaccurate</div><div class="hex">#B4402E</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--color-verdict-unverifiable)"><span style="color:#fff">unverifiable</span></div><div class="meta"><div class="name">verdict-unverifiable</div><div class="hex">#6B6F66</div></div></div>
+    </div>
+  </section>
+
+  <!-- TYPOGRAPHY -->
+  <section>
+    <p class="eyebrow">Tokens</p>
+    <h2 class="sec">Typography</h2>
+
+    <div class="spec"><div style="font-family:var(--font-heading); font-size:var(--type-display-size); font-weight:var(--type-display-weight); line-height:var(--type-display-lh); letter-spacing:var(--type-display-ls)">Your ballot, laid out fairly</div><div class="tags">display · Figtree 2.5rem / 700 / lh 1.1 / ls -0.02em</div></div>
+    <div class="spec"><div style="font-family:var(--font-heading); font-size:var(--type-h1-size); font-weight:var(--type-h1-weight); line-height:var(--type-h1-lh); letter-spacing:var(--type-h1-ls)">See who's on your ballot</div><div class="tags">h1 · Figtree 2rem / 700 / lh 1.15 / ls -0.02em</div></div>
+    <div class="spec"><div style="font-family:var(--font-heading); font-size:var(--type-h2-size); font-weight:var(--type-h2-weight); line-height:var(--type-h2-lh); letter-spacing:var(--type-h2-ls)">U.S. House — District 28</div><div class="tags">h2 · Figtree 1.5rem / 600 / lh 1.2 / ls -0.01em</div></div>
+    <div class="spec"><div style="font-family:var(--font-heading); font-size:var(--type-h3-size); font-weight:var(--type-h3-weight); line-height:var(--type-h3-lh)">What They've Done</div><div class="tags">h3 · Figtree 1.25rem / 600 / lh 1.3</div></div>
+    <div class="spec"><div style="font-size:var(--type-body-lg-size); font-weight:var(--type-body-lg-weight); line-height:var(--type-body-lg-lh)">Enter your ZIP and we'll show every candidate in your races — with equal space and equal scrutiny.</div><div class="tags">body-lg · Inter 1.125rem / 400 / lh 1.6</div></div>
+    <div class="spec"><div style="font-size:var(--type-body-size); font-weight:var(--type-body-weight); line-height:var(--type-body-lh)">Each brief separates what a candidate says, what they've done, and what's been verified — every claim linked to a source you can check yourself.</div><div class="tags">body · Inter 1rem / 400 / lh 1.6</div></div>
+    <div class="spec"><div style="font-size:var(--type-body-sm-size); font-weight:var(--type-body-sm-weight); line-height:var(--type-body-sm-lh)">Florida is a closed-primary state. Registration deadline: October 5.</div><div class="tags">body-sm · Inter 0.875rem / 400 / lh 1.5</div></div>
+    <div class="spec"><div style="font-size:var(--type-label-size); font-weight:var(--type-label-weight); line-height:var(--type-label-lh)">See my ballot</div><div class="tags">label · Inter 0.9375rem / 600 / lh 1.2</div></div>
+    <div class="spec"><div style="font-size:var(--type-caption-size); font-weight:var(--type-caption-weight); line-height:var(--type-caption-lh); letter-spacing:var(--type-caption-ls)">Source: FL Division of Elections · retrieved 2026-06-30</div><div class="tags">caption · Inter 0.8125rem / 500 / lh 1.4</div></div>
+    <div class="spec"><div style="font-size:var(--type-overline-size); font-weight:var(--type-overline-weight); line-height:var(--type-overline-lh); letter-spacing:var(--type-overline-ls); text-transform:uppercase; color:var(--color-accent-strong)">How we stay fair</div><div class="tags">overline · Inter 0.75rem / 700 / uppercase / ls 0.08em</div></div>
+    <div class="spec"><div style="font-family:var(--font-mono); font-size:var(--type-mono-size); font-weight:var(--type-mono-weight); line-height:var(--type-mono-lh)">race_id: fl-us-house-28 · verdict: mostly_accurate</div><div class="tags">mono · IBM Plex Mono 0.875rem / 400 / lh 1.5</div></div>
+  </section>
+
+  <!-- SPACING -->
+  <section>
+    <p class="eyebrow">Tokens</p>
+    <h2 class="sec">Spacing</h2>
+    <div class="space-row"><span class="lbl">space-1 · 4px</span><div class="space-bar" style="width:4px"></div></div>
+    <div class="space-row"><span class="lbl">space-2 · 8px</span><div class="space-bar" style="width:8px"></div></div>
+    <div class="space-row"><span class="lbl">space-3 · 12px</span><div class="space-bar" style="width:12px"></div></div>
+    <div class="space-row"><span class="lbl">space-4 · 16px</span><div class="space-bar" style="width:16px"></div></div>
+    <div class="space-row"><span class="lbl">space-5 · 24px</span><div class="space-bar" style="width:24px"></div></div>
+    <div class="space-row"><span class="lbl">space-6 · 32px</span><div class="space-bar" style="width:32px"></div></div>
+    <div class="space-row"><span class="lbl">space-7 · 48px</span><div class="space-bar" style="width:48px"></div></div>
+    <div class="space-row"><span class="lbl">space-8 · 64px</span><div class="space-bar" style="width:64px"></div></div>
+    <div class="space-row"><span class="lbl">space-9 · 96px</span><div class="space-bar" style="width:96px"></div></div>
+  </section>
+
+  <!-- RADIUS -->
+  <section>
+    <p class="eyebrow">Tokens</p>
+    <h2 class="sec">Radius</h2>
+    <div class="radius-grid">
+      <div><div class="radius-box" style="border-radius:var(--rounded-none)"></div><div class="radius-cap">none · 0px</div></div>
+      <div><div class="radius-box" style="border-radius:var(--rounded-sm)"></div><div class="radius-cap">sm · 4px</div></div>
+      <div><div class="radius-box" style="border-radius:var(--rounded-md)"></div><div class="radius-cap">md · 8px</div></div>
+      <div><div class="radius-box" style="border-radius:var(--rounded-lg)"></div><div class="radius-cap">lg · 12px</div></div>
+      <div><div class="radius-box" style="border-radius:var(--rounded-xl)"></div><div class="radius-cap">xl · 16px</div></div>
+      <div><div class="radius-box" style="border-radius:var(--rounded-full)"></div><div class="radius-cap">full · 999px</div></div>
+    </div>
+  </section>
+
+  <!-- ELEVATION -->
+  <section>
+    <p class="eyebrow">Tokens</p>
+    <h2 class="sec">Elevation &amp; Depth</h2>
+    <div class="elev-grid">
+      <div class="elev-card elev-0">elevation-0<br>border only (default)</div>
+      <div class="elev-card elev-1">elevation-1<br>0 1px 3px rgba(34,39,31,.06)</div>
+      <div class="elev-card elev-2">elevation-2<br>0 4px 12px rgba(34,39,31,.08)</div>
+    </div>
+  </section>
+
+  <!-- COMPONENTS -->
+  <section>
+    <p class="eyebrow">Live</p>
+    <h2 class="sec">Components</h2>
+
+    <h3 class="sub">Buttons</h3>
+    <div class="demo">
+      <div class="row">
+        <div><span class="state-label">primary</span><button class="btn btn-primary">See my ballot</button></div>
+        <div><span class="state-label">primary · hover</span><button class="btn btn-primary-hoverstate">See my ballot</button></div>
+        <div><span class="state-label">primary · disabled</span><button class="btn btn-primary-disabled" disabled>See my ballot</button></div>
+        <div><span class="state-label">secondary</span><button class="btn btn-secondary">Change location</button></div>
+        <div><span class="state-label">secondary · hover</span><button class="btn btn-secondary-hoverstate">Change location</button></div>
+      </div>
+    </div>
+
+    <h3 class="sub">Text Input</h3>
+    <div class="demo">
+      <div class="row">
+        <div><span class="state-label">default</span><input class="input" placeholder="Enter your ZIP code"></div>
+        <div><span class="state-label">focus</span><input class="input input-focusstate" value="33101"></div>
+      </div>
+    </div>
+
+    <h3 class="sub">Card</h3>
+    <div class="demo">
+      <div class="card-demo">
+        <h4>Governor</h4>
+        <p>Statewide · General election Nov 3 · 4 candidates</p>
+      </div>
+    </div>
+
+    <h3 class="sub">Section Navigation <span style="font-weight:400; font-size:var(--type-body-sm-size); color:var(--color-on-surface-muted)">(docks bottom on mobile, top on desktop)</span></h3>
+    <div class="demo">
+      <div class="navbar">
+        <div class="nav-item active"><span class="ico"></span>Races</div>
+        <div class="nav-item"><span class="ico"></span>Candidates</div>
+        <div class="nav-item"><span class="ico"></span>News</div>
+        <div class="nav-item"><span class="ico"></span>Find Mine</div>
+      </div>
+    </div>
+
+    <h3 class="sub">Verdict Badges</h3>
+    <div class="demo">
+      <div class="row">
+        <span class="verdict"><span class="dot" style="background:var(--color-verdict-accurate)"></span><span style="color:var(--color-verdict-accurate)">Accurate</span></span>
+        <span class="verdict"><span class="dot" style="background:var(--color-verdict-mostly-accurate)"></span><span style="color:var(--color-on-surface)">Mostly Accurate</span></span>
+        <span class="verdict"><span class="dot" style="background:var(--color-verdict-mixed)"></span><span style="color:var(--color-verdict-mixed)">Mixed</span></span>
+        <span class="verdict"><span class="dot" style="background:var(--color-verdict-mostly-inaccurate)"></span><span style="color:var(--color-verdict-mostly-inaccurate)">Mostly Inaccurate</span></span>
+        <span class="verdict"><span class="dot" style="background:var(--color-verdict-inaccurate)"></span><span style="color:var(--color-verdict-inaccurate)">Inaccurate</span></span>
+        <span class="verdict"><span class="dot" style="background:var(--color-verdict-unverifiable)"></span><span style="color:var(--color-on-surface)">Unverifiable</span></span>
+      </div>
+    </div>
+
+    <h3 class="sub">Party Chips <span style="font-weight:400; font-size:var(--type-body-sm-size); color:var(--color-on-surface-muted)">(identical, neutral treatment for every party — never color-coded)</span></h3>
+    <div class="demo">
+      <div class="row">
+        <span class="party-chip">REP</span>
+        <span class="party-chip">DEM</span>
+        <span class="party-chip">NPA</span>
+        <span class="party-chip">Other</span>
+      </div>
+    </div>
+
+    <h3 class="sub">Chips</h3>
+    <div class="demo">
+      <div class="row">
+        <span class="chip">Saved</span>
+        <span class="chip">Economy</span>
+        <span class="chip">Education</span>
+        <span class="chip">Healthcare</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DO / DON'T -->
+  <section>
+    <p class="eyebrow">Principles</p>
+    <h2 class="sec">Do's and Don'ts</h2>
+    <div class="dd">
+      <div class="col do">
+        <h3>✓ Do</h3>
+        <ul>
+          <li>Give every candidate identical visual weight — equal columns, equal type, equal spacing. Fairness is a layout invariant.</li>
+          <li>Keep one primary (sage) action per view; let everything else stay quiet and calm.</li>
+          <li>Always pair verdict and status color with a text label or icon — never rely on color alone.</li>
+          <li>Use warm sand neutrals and generous whitespace to keep the tone human and unhurried.</li>
+          <li>Reserve the clay accent for small, cheerful moments (active nav, highlights, illustrative marks).</li>
+        </ul>
+      </div>
+      <div class="col dont">
+        <h3>✗ Don't</h3>
+        <ul>
+          <li>Never color-code parties or candidates red/blue (or any partisan hue). Party chips are uniform and neutral, always.</li>
+          <li>Never adopt a government-portal look — no dense gray tables, no hard shadows, no Public Sans / USWDS styling.</li>
+          <li>Never let the accent or verdict reds dominate; they punctuate, they don't drive.</li>
+          <li>Never set body copy in the display face or shrink readable text below 14px.</li>
+          <li>Never use alarmist, saturated colors — stay calm even when a verdict is "Inaccurate."</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

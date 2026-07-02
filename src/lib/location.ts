@@ -1,0 +1,46 @@
+/* Device-local location memory (no accounts — PRD § 9). */
+
+export interface StoredLocation {
+  zip?: string;
+  county: string;
+  district?: string;
+  metro?: string | null;
+}
+
+const KEY = "kyv.location";
+
+export function readLocation(): StoredLocation | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(KEY);
+    return raw ? (JSON.parse(raw) as StoredLocation) : null;
+  } catch {
+    return null;
+  }
+}
+
+export function writeLocation(location: StoredLocation) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(KEY, JSON.stringify(location));
+  } catch {
+    /* Private-mode storage failures are fine — the URL still carries it. */
+  }
+}
+
+export function clearLocation() {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
+export function locationQuery(location: StoredLocation): string {
+  const params = new URLSearchParams();
+  if (location.zip) params.set("zip", location.zip);
+  if (location.district) params.set("district", location.district);
+  if (!location.zip && location.county) params.set("county", location.county);
+  return params.toString();
+}

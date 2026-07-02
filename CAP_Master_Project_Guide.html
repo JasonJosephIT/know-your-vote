@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAP Master Project Guide — Civic Awareness Project (Know Your Vote)</title>
+<style>
+  :root{
+    --ink:#1a2332; --ink-soft:#44506a; --paper:#f7f8fa; --card:#ffffff;
+    --line:#dde3ec; --accent:#1f4e79; --accent-soft:#e8f0f8;
+    --gate:#a4262c; --gate-bg:#fdf0f0; --flag:#8a6d00; --flag-bg:#fdf8e7;
+    --ok:#1e6b3a; --ok-bg:#eaf6ee; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.6 Georgia,'Times New Roman',serif;color:var(--ink);background:var(--paper)}
+  header.masthead{background:var(--ink);color:#fff;padding:38px 24px 30px;text-align:center}
+  header.masthead h1{margin:0;font-size:2rem;letter-spacing:.5px}
+  header.masthead .sub{color:#b8c4d8;font-size:.95rem;margin-top:8px}
+  header.masthead .meta{font-family:var(--mono);font-size:.75rem;color:#8fa0bd;margin-top:14px}
+  nav.toc{background:#243044;padding:10px 16px;text-align:center;position:sticky;top:0;z-index:10}
+  nav.toc a{color:#cfd9ea;text-decoration:none;font-family:var(--mono);font-size:.7rem;margin:0 7px;white-space:nowrap}
+  nav.toc a:hover{color:#fff;text-decoration:underline}
+  main{max-width:980px;margin:0 auto;padding:34px 22px 80px}
+  h2{font-size:1.45rem;color:var(--accent);border-bottom:3px solid var(--accent);padding-bottom:6px;margin:52px 0 18px}
+  h2:first-of-type{margin-top:10px}
+  h3{font-size:1.12rem;margin:30px 0 8px;color:var(--ink)}
+  h4{font-size:.95rem;margin:20px 0 6px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
+  p{margin:8px 0}
+  table{border-collapse:collapse;width:100%;margin:12px 0;background:var(--card);font-size:.88rem}
+  th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+  th{background:var(--accent-soft);color:var(--accent);font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}
+  code,.k{font-family:var(--mono);font-size:.83em;background:#eef1f6;padding:1px 5px;border-radius:3px}
+  .card{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:6px;padding:18px 22px;margin:18px 0}
+  .card h3{margin-top:0}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .io{background:#fafbfd;border:1px solid var(--line);border-radius:5px;padding:10px 14px;font-size:.9rem}
+  .io b{display:block;font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);margin-bottom:5px}
+  .io ul{margin:0;padding-left:18px}
+  .io li{margin:3px 0}
+  .pill{display:inline-block;font-family:var(--mono);font-size:.68rem;padding:2px 9px;border-radius:11px;margin:1px 3px 1px 0;font-weight:bold}
+  .pill.gate{background:var(--gate-bg);color:var(--gate);border:1px solid var(--gate)}
+  .pill.flag{background:var(--flag-bg);color:var(--flag);border:1px solid var(--flag)}
+  .pill.ok{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok)}
+  .pill.neutral{background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent)}
+  .rule{background:var(--accent-soft);border-left:5px solid var(--accent);padding:12px 16px;margin:14px 0;font-size:.95rem}
+  .warn{background:var(--gate-bg);border-left:5px solid var(--gate);padding:12px 16px;margin:14px 0;font-size:.95rem}
+  .amber{background:var(--flag-bg);border-left:5px solid var(--flag);padding:12px 16px;margin:14px 0;font-size:.95rem}
+  .flow{font-family:var(--mono);font-size:.8rem;background:var(--ink);color:#d9e2f0;padding:16px 20px;border-radius:6px;overflow-x:auto;line-height:1.7}
+  .flow .hl{color:#ffd479}
+  .stage-num{display:inline-block;background:var(--accent);color:#fff;font-family:var(--mono);font-size:.75rem;border-radius:50%;width:24px;height:24px;line-height:24px;text-align:center;margin-right:8px}
+  .status-done{color:var(--ok);font-weight:bold}
+  .status-open{color:var(--gate);font-weight:bold}
+  .status-next{color:var(--flag);font-weight:bold}
+  footer{text-align:center;color:var(--ink-soft);font-size:.8rem;padding:30px;border-top:1px solid var(--line)}
+  .changelog td:first-child{font-family:var(--mono);font-size:.78rem;white-space:nowrap}
+  @media print{nav.toc{display:none} .card{break-inside:avoid} h2{break-after:avoid}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <h1>Civic Awareness Project — Master Project Guide</h1>
+  <div class="sub">Know Your Vote &middot; Non-partisan Florida voter information &middot; Phase 1 (FL MVP)</div>
+  <div class="meta">GUIDE v1.1 &middot; Updated 2026-07-01 &middot; Governing docs: PRD v1.0 · Schema v1.0 · Tool Spec v1.0 · Agent Plan v1.1 · Balance Audit v1.1 · Logging v1.0</div>
+</header>
+
+<nav class="toc">
+  <a href="#use">How to Use</a>
+  <a href="#overview">Overview</a>
+  <a href="#constitution">Constitution</a>
+  <a href="#pipeline">Pipeline</a>
+  <a href="#components">Agents</a>
+  <a href="#tools">Tool Layer</a>
+  <a href="#schema">Data Schema</a>
+  <a href="#gates">Gates &amp; Flags</a>
+  <a href="#frontend">Front End</a>
+  <a href="#backend">Back End</a>
+  <a href="#integration">Integration</a>
+  <a href="#status">Build Status</a>
+  <a href="#changelog">Change Log</a>
+</nav>
+
+<main>
+
+<!-- ============================================================ -->
+<h2 id="use">0. How to Use This Guide</h2>
+<p>This is the <strong>single consolidated reference</strong> for the Civic Awareness Project — every part of the project, creation to production, in one document: product scope, the agent pipeline, the MCP tool layer, the data schema, the voter-facing front end, the back-end services, and how they all connect. It synthesizes the six governing documents; it does not replace them. Where this guide and a governing document disagree, the governing document wins, and this guide must be corrected.</p>
+
+<div class="rule"><strong>Working protocol with Claude:</strong> every section has a stable number and anchor (e.g., <code>§8 Front End</code>, <code>§9.2 Services</code>). To start a work session, point at the section: <em>"We're working on §9.1 — the database DDL."</em> Claude treats that section's requirements, inputs, and outputs as the work order, and checks the governing doc it cites before deviating.</div>
+
+<div class="rule"><strong>Amendment protocol:</strong> any global change (schema, thresholds, tool grants, allowlists, prompts, scope, stack) is made in the relevant governing document first, then recorded as a dated row in the <a href="#changelog">Change Log (§12)</a>, with the affected guide sections updated. No silent edits.</div>
+
+<h3>Document Registry &amp; Precedence</h3>
+<table>
+  <tr><th>Document</th><th>Version</th><th>Governs</th><th>Precedence note</th></tr>
+  <tr><td><code>CAP_PRD_v1.md</code></td><td>v1.0</td><td>Product scope, goals, KPIs, UX, risks</td><td>Root document. §7 (schema) superseded by Schema v1.</td></tr>
+  <tr><td><code>CAP_Schema_v1.md</code></td><td>v1.0</td><td>Authoritative data schema, constraints, Issue/Position layer</td><td><strong>Supersedes PRD §7</strong> wherever they differ.</td></tr>
+  <tr><td><code>CAP_MCP_Tool_Spec_v1.md</code></td><td>v1.0</td><td>12-tool MCP layer, per-agent authorization, allowlists</td><td>Source of truth for the tool layer. §4 (audit) superseded by Balance Audit v1.1.</td></tr>
+  <tr><td><code>CAP_Agent_Plan_v1.md</code></td><td>v1.1</td><td>Agent blueprints + paste-ready system prompts, orchestrator runbook</td><td>Prompts must align to Schema v1 and Tool Spec.</td></tr>
+  <tr><td><code>CAP_Balance_Audit_Spec_v1.md</code></td><td>v1.1</td><td>Audit metrics, gates vs. flags, variance formula, halt behavior</td><td>Supersedes single-<code>claim_count</code> model of v1.0 and Tool Spec §4.</td></tr>
+  <tr><td><code>CAP_Logging_Schema_v1.md</code></td><td>v1.0</td><td><code>action_log</code> record format, storage, KPI queries</td><td>Schema v1 §8 adds <code>guard_type</code> discriminator.</td></tr>
+  <tr><td><em>This guide, §8–§10</em></td><td>v1.1</td><td>Front-end, back-end, and integration requirements + stack decisions</td><td>First written record of these layers; promote to standalone specs if they grow.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="overview">1. Project Overview</h2>
+<p><strong>What CAP is:</strong> a non-partisan, location-based service delivering highly sourced, neutrally synthesized political candidate briefs to voters via SMS. A voter texts a ZIP code; the system resolves their races and returns a link to a fully sourced, mobile-first web brief.</p>
+<p><strong>Core differentiator:</strong> verifiable neutrality through a multi-agent AI pipeline that <em>mechanically</em> separates three categories of information — bias must be detected and blocked by the system itself before a brief is published:</p>
+<table>
+  <tr><th>Category</th><th>Agent</th><th>Bucket</th></tr>
+  <tr><td><strong>What they say</strong> — the candidate's self-portrait</td><td>Agent 1 · Profiler</td><td><code>stated_position</code></td></tr>
+  <tr><td><strong>What they've done</strong> — the legislative/financial record</td><td>Agent 2 · Record</td><td><code>verifiable_fact</code></td></tr>
+  <tr><td><strong>What is true</strong> — adjudicated fact-checks on a fixed verdict scale</td><td>Agent 3 · Fact-Checker</td><td><code>verifiable_fact</code> + <code>outside_opinion</code></td></tr>
+</table>
+
+<h3>Phase 1 Scope (July application deadline — Claude Corps Cohort 1)</h3>
+<div class="grid">
+  <div class="io"><b>In Scope</b>
+    <ul>
+      <li>Statewide races: Governor, Attorney General, CFO, Agriculture Commissioner</li>
+      <li>Congressional: FL-28 (Miami), FL-23 (Ft. Lauderdale), FL-15 (Tampa), FL-10 (Orlando)</li>
+      <li>Delivery: Twilio trial SMS → project owner's phone only</li>
+      <li>Front end: mobile-first web brief (no native app — matches PRD §8)</li>
+      <li>Database: Supabase (Postgres)</li>
+    </ul>
+  </div>
+  <div class="io"><b>Out of Scope (Phase 1)</b>
+    <ul>
+      <li>All other FL congressional districts; State Senate/House; municipal races</li>
+      <li>Mass SMS / A2P 10DLC carrier registration</li>
+      <li>Any geography outside Florida</li>
+      <li>Native mobile app / PWA (revisit in Phase 2 if warranted)</li>
+      <li>Phase 2: all 28 FL districts, state legislature races, full 10DLC registration</li>
+    </ul>
+  </div>
+</div>
+
+<h3>KPIs</h3>
+<table>
+  <tr><th>Metric</th><th>Target</th></tr>
+  <tr><td><strong>Traceability</strong></td><td>100% of published claims map to a <code>Source</code> object</td></tr>
+  <tr><td><strong>Symmetric Scrutiny</strong></td><td>&lt; 10% variance in fact-checks performed per candidate per race</td></tr>
+  <tr><td><strong>Balance</strong></td><td>&lt; 15% variance in word count and claim counts between candidates in the same race</td></tr>
+  <tr><td><strong>Audit Block Rate</strong></td><td>Track every instance a guard or the balance check halts the pipeline</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="constitution">2. The Constitution (applies to every agent, every session)</h2>
+<p>Five non-negotiable rules, inherited by all agents and placed at the top of every system prompt:</p>
+<div class="rule"><strong>1.</strong> Every claim maps to a <code>Source</code> object or is <strong>dropped</strong>. No Source → the claim is not written. No exceptions.</div>
+<div class="rule"><strong>2.</strong> <strong>"Unverifiable" is a valid verdict. Hallucination is not.</strong> Never fabricate a fact, a source, or a URL.</div>
+<div class="rule"><strong>3.</strong> Never infer motive. Never editorialize. Only describe.</div>
+<div class="rule"><strong>4.</strong> <strong>Buckets are sacred.</strong> <code>stated_position</code>, <code>verifiable_fact</code>, <code>outside_opinion</code> never cross-contaminate. A wrong-bucket write is rejected by the tool wrapper <em>and</em> by a Postgres CHECK, and halts the pipeline.</div>
+<div class="rule"><strong>5.</strong> Reach the database and the outside world <strong>only through MCP tools</strong>. No direct DB writes, no raw HTTP. The wrapper enforces authorization.</div>
+<p>Two additional load-bearing distinctions from Schema v1:</p>
+<p><strong>Attribution ≠ verification.</strong> <code>Claim.attributed</code> ("did the candidate say it") is independent of <code>verification</code>/<code>verdict</code> ("is it true"). A candidate can accurately state a false claim; never conflate the axes.</p>
+<p><strong>Silence is recorded, never filled.</strong> A candidate with no stance on a spine issue gets a Position with <code>coverage="no_stated_position_found"</code> — measured honestly, never fabricated, never a silent gap.</p>
+
+<!-- ============================================================ -->
+<h2 id="pipeline">3. Pipeline — Creation to Production</h2>
+<div class="flow">
+<span class="hl">STAGE 1  INTAKE &amp; RESOLUTION</span> (deterministic)
+   FL DoE candidate file + FEC API → Race + Candidate objects → spine issue set defined &amp; LOGGED
+        │
+<span class="hl">STAGE 2  AGENT EXECUTION</span> (AI layer — 3 agents IN PARALLEL per candidate)
+   Profiler → stated_position     Record → verifiable_fact     Fact-Checker → verifiable_fact + outside_opinion
+   (every tool call auto-logged via log_action; wrong bucket / off-allowlist = guard block)
+        │
+<span class="hl">STAGE 3  BALANCE AUDIT</span> (deterministic, no AI — once per race)
+   3 GATES + 2 FLAGS → PASS or HALT   (HALT = composition &amp; dispatch blocked)
+        │ PASS
+<span class="hl">STAGE 4  COMPOSITION</span>
+   Brief Composer → mobile-first HTML (grouped by issue)     SMS Composer → 160-char teaser + link
+        │
+<span class="hl">STAGE 5  HUMAN REVIEW GATE</span>
+   Project owner reviews HTML + SMS + any raised flags
+        │ approval AND verdict==PASS
+<span class="hl">STAGE 6  DISPATCH &amp; PUBLISH</span>
+   Brief published to static host → sms_dispatch (T12) → Twilio trial → owner's phone only
+</div>
+
+<h3><span class="stage-num">1</span>Intake &amp; Resolution — deterministic layer</h3>
+<div class="card">
+  <div class="grid">
+    <div class="io"><b>Inputs</b>
+      <ul>
+        <li>FL Division of Elections tab-delimited candidate file (via <code>doe_file_intake</code> T1)</li>
+        <li>FEC API — federal candidates in FL-10/15/23/28 (via <code>fec_api_query</code> T2)</li>
+        <li>Voter ZIP code (runtime, via <code>jurisdiction_resolve</code> T4)</li>
+      </ul>
+    </div>
+    <div class="io"><b>Outputs</b>
+      <ul>
+        <li><code>Race</code> and <code>Candidate</code> objects with internal IDs, race mapping, primary logic flags (FL = closed primary)</li>
+        <li>Verified <code>candidate_social_account</code> rows (provenance-chained)</li>
+        <li>The race's <strong>spine issue set</strong> — fixed, neutrally worded, sourced, logged to <code>action_log</code></li>
+        <li>ZIP → congressional district + statewide race set</li>
+      </ul>
+    </div>
+  </div>
+  <h4>Requirements</h4>
+  <ul>
+    <li>Filter to statewide races + the 4 target districts; merge + deduplicate DoE/FEC records.</li>
+    <li>Social handles ingested <strong>only</strong> for <code>qualifying_status='qualified'</code> candidates.</li>
+    <li>A handle is <code>verified</code> only if a candidate-authoritative source points at it (official site link, DoE or FEC filing) with <code>provenance_source_id</code> set. Only <code>verified</code> handles enter Allowlist A. Same provenance bar for every candidate in a race — never a lowered bar.</li>
+    <li>Spine issue selection is an editorial decision: it must be settled, sourced, and logged <em>before</em> agents run.</li>
+  </ul>
+</div>
+
+<h3><span class="stage-num">2</span>Agent Execution — see per-agent cards in §4</h3>
+<p>All three agents run in parallel per candidate. Each writes only to its authorized bucket(s), only through MCP tools. Cross-contamination is a pipeline failure.</p>
+
+<h3><span class="stage-num">3</span>Balance Audit — deterministic core, no AI</h3>
+<div class="card">
+  <div class="grid">
+    <div class="io"><b>Inputs</b>
+      <ul>
+        <li>All <code>Profile</code> objects for the race (via <code>db_read</code>)</li>
+        <li>Thresholds (defaults: word 15%, verifiable_fact 15%, stated_position 15%, fact_check 10%; override for testing only)</li>
+      </ul>
+    </div>
+    <div class="io"><b>Outputs</b>
+      <ul>
+        <li><code>verdict: PASS | HALT</code> with exact per-metric numbers (min, max, variance %, breach)</li>
+        <li><code>flags[]</code> for human review (never change the verdict)</li>
+        <li><code>balance_check_passed</code> / <code>flag_reason</code> / <code>flagged_at</code> written to each Profile</li>
+      </ul>
+    </div>
+  </div>
+  <h4>Requirements</h4>
+  <ul>
+    <li>Runs once per race, after all agents finish, before composition.</li>
+    <li>Variance formula, locked for all race sizes: <code>(max − min) / max × 100</code>. Mean/CV rejected — it dilutes the least-scrutinized candidate.</li>
+    <li><code>outside_opinion</code> claims are counted in <strong>no</strong> metric.</li>
+    <li>Architecture: one pure core (<code>balance_audit_core.py</code> — no I/O, no AI, injected clock) + two adapters (MCP wrapper T10 for the orchestrator; CLI for humans + CI).</li>
+    <li>On HALT: <code>sms_dispatch</code> unreachable until a human resolves the imbalance (e.g., re-run Agent 3 for the under-scrutinized candidate) and the audit passes.</li>
+  </ul>
+</div>
+
+<h3><span class="stage-num">4</span>Composition</h3>
+<div class="card">
+  <div class="grid">
+    <div class="io"><b>Inputs</b>
+      <ul>
+        <li>Claims, Positions, verdicts, and Sources for a PASS-ed race</li>
+        <li>Race key dates (election, registration deadline)</li>
+      </ul>
+    </div>
+    <div class="io"><b>Outputs</b>
+      <ul>
+        <li><strong>Brief Composer:</strong> mobile-first HTML per §8, grouped by issue — per candidate: 📋 What They Say / 📊 What They've Done / ✅ Fact-Check blocks, each with source links; footer with methodology link + bias-flag form link</li>
+        <li><strong>SMS Composer:</strong> ≤160-char teaser + link ("Your Florida voter brief is ready. Races covered: […]. Read it here: [link]")</li>
+      </ul>
+    </div>
+  </div>
+  <h4>Requirements</h4>
+  <ul>
+    <li>The composer caps per-candidate contribution <strong>symmetrically</strong>, so the word-count gate reflects allocated space, not raw footprint.</li>
+    <li>Every rendered claim shows its verdict (fixed six-value scale) and clickable sources.</li>
+    <li>Header notes Florida is a closed primary state.</li>
+  </ul>
+</div>
+
+<h3><span class="stage-num">5</span>Human Review Gate &nbsp;·&nbsp; <span class="stage-num">6</span>Dispatch &amp; Publish</h3>
+<div class="card">
+  <div class="grid">
+    <div class="io"><b>Inputs</b>
+      <ul>
+        <li>Final HTML brief + SMS text</li>
+        <li>Balance-audit verdict + any raised flags (surfaced to reviewer)</li>
+      </ul>
+    </div>
+    <div class="io"><b>Outputs</b>
+      <ul>
+        <li>Human approval / rejection</li>
+        <li>On approval AND <code>verdict==PASS</code>: brief published to the static host (§8.4), then <code>sms_dispatch</code> (T12) via Twilio trial to owner phone only</li>
+      </ul>
+    </div>
+  </div>
+  <h4>Requirements</h4>
+  <ul>
+    <li>Dispatch is structurally unreachable while a race is in HALT.</li>
+    <li>Flags alone never block dispatch — they inform the human decision.</li>
+    <li>Phase 1 legal posture: owner's phone only, Twilio trial; no mass registration (TCPA mitigation).</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="components">4. Components — Agents &amp; Orchestrator</h2>
+
+<div class="card">
+  <h3>Agent 1 — The Profiler <span class="pill neutral">bucket: stated_position</span></h3>
+  <p><strong>Objective:</strong> faithfully capture how the candidate presents themselves — the self-portrait, in their own framing. <strong>Structural guarantee:</strong> cannot reach any primary API or independent source, so it is <em>incapable</em> of fact-checking.</p>
+  <div class="grid">
+    <div class="io"><b>Inputs (candidate-controlled only)</b>
+      <ul>
+        <li>Campaign website, official bio, issue/policy pages</li>
+        <li>Official social accounts — admitted only via <strong>Allowlist A</strong> (verified handles)</li>
+        <li>The race's spine issue set (given at run start)</li>
+      </ul>
+    </div>
+    <div class="io"><b>Outputs</b>
+      <ul>
+        <li><code>Claim</code>: <code>bucket="stated_position"</code>, <code>attributed=true</code>, <code>verification="single_source"</code>, <code>verdict=null</code>, <code>issue_id</code> set, citing ≥1 <code>candidate_self</code> Source</li>
+        <li><code>Position</code> per spine issue (+ candidate-tier extras); <code>coverage="no_stated_position_found"</code> where the candidate is silent</li>
+      </ul>
+    </div>
+  </div>
+  <h4>Tools</h4>
+  <p><span class="pill ok">web_search T5 (Allowlist A)</span> <span class="pill ok">fetch_source T6 (candidate domains)</span> <span class="pill ok">source_register T7 (candidate_self only)</span> <span class="pill ok">db_read T8 (own bucket)</span> <span class="pill ok">claim_write T9 (stated_position only)</span> <span class="pill gate">DENIED: fec/fl-leg/doe APIs, balance_audit, sms_dispatch, other buckets</span></p>
+  <h4>Rules &amp; halt conditions</h4>
+  <ul>
+    <li>Never fact-check, adjudicate, verify, or rate any statement.</li>
+    <li>Attribute everything ("The campaign website states…"). Use "states"/"says", never "claims", unless directly quoting.</li>
+    <li>Never contrast words against record — not this bucket.</li>
+    <li>Halts: any write outside <code>stated_position</code>; any source outside Allowlist A; any truth adjudication.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>Agent 2 — The Record Agent <span class="pill neutral">bucket: verifiable_fact</span></h3>
+  <p><strong>Objective:</strong> document on-the-record actions independent of messaging. <strong>Structural guarantee:</strong> "primary sources only" is a hard wall — the agent has no <code>web_search</code> at all; it cannot read a news article even if it wanted to.</p>
+  <div class="grid">
+    <div class="io"><b>Inputs (primary sources only)</b>
+      <ul>
+        <li>FL Legislature bill/vote system + official journals (<code>fl_legislature_query</code> T3)</li>
+        <li>FEC campaign finance filings (<code>fec_api_query</code> T2)</li>
+        <li>FL DoE finance filings (<code>doe_file_intake</code> T1)</li>
+      </ul>
+    </div>
+    <div class="io"><b>Outputs</b>
+      <ul>
+        <li><code>Claim</code>: <code>bucket="verifiable_fact"</code>, <code>attributed=false</code> (this is the record, not speech), <code>verification="verified"</code>, <code>issue_id</code> set where mappable, citing <code>primary_doc</code> Sources</li>
+        <li>Neutral action language: "Voted NAY on SB 123 on 2025-03-04"; "Reported $412,000 in receipts in Q1 2026 per FEC filing"</li>
+      </ul>
+    </div>
+  </div>
+  <h4>Tools</h4>
+  <p><span class="pill ok">fec_api_query T2</span> <span class="pill ok">fl_legislature_query T3</span> <span class="pill ok">doe_file_intake T1 (finance)</span> <span class="pill ok">source_register T7 (primary_doc only)</span> <span class="pill ok">db_read T8 (own bucket)</span> <span class="pill ok">claim_write T9 (verifiable_fact only)</span> <span class="pill gate">HARD-DENIED: web_search, fetch_source</span></p>
+  <h4>Rules &amp; halt conditions</h4>
+  <ul>
+    <li>No news, opinion, advocacy, or non-primary sources — enforced at the wrapper, not by prompt.</li>
+    <li>Never infer why a candidate acted. State the action and its primary record. Stop.</li>
+    <li>May present stated-vs-did side by side, but must NOT label it hypocrisy, flip-flop, broken promise, or contradiction — the reader concludes.</li>
+    <li>Any action not tied to a primary record is not written.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>Agent 3 — The Fact-Checker <span class="pill neutral">buckets: verifiable_fact + outside_opinion</span></h3>
+  <p><strong>Objective:</strong> adjudicate the truth of specific, checkable claims using independent primary evidence. The only agent with <strong>cross-bucket read</strong> — but it can never write to <code>stated_position</code> (cannot rewrite the self-portrait).</p>
+  <div class="grid">
+    <div class="io"><b>Inputs</b>
+      <ul>
+        <li>Claims surfaced by Agents 1 &amp; 2 (cross-bucket <code>db_read</code>)</li>
+        <li>Independent evidence via <strong>Allowlist B</strong> (web_search/fetch_source) + primary APIs in read mode</li>
+      </ul>
+    </div>
+    <div class="io"><b>Outputs</b>
+      <ul>
+        <li>Factual verdicts → <code>Claim</code>, <code>bucket="verifiable_fact"</code>, <code>verdict</code> set (six-value scale), <code>verification="verified"</code> when ≥2 Tier 1</li>
+        <li>Opinions → <code>Claim</code>, <code>bucket="outside_opinion"</code>, unrated (<code>verdict=null</code>; excluded from all balance metrics)</li>
+        <li>Split statements: <code>derived_from</code> links each split claim back to the originating <code>stated_position</code>; <code>issue_id</code> carried over</li>
+        <li>Each check increments <code>fact_checks_performed</code> (Symmetric Scrutiny KPI)</li>
+      </ul>
+    </div>
+  </div>
+  <h4>Verdict scale (fixed — six labels only, no deviation)</h4>
+  <table>
+    <tr><th>Verdict</th><th>Meaning</th></tr>
+    <tr><td>Accurate</td><td>Supported by ≥2 independent primary sources</td></tr>
+    <tr><td>Mostly Accurate</td><td>Mostly supported; minor caveats or imprecision</td></tr>
+    <tr><td>Mixed</td><td>Partly true, partly false, or highly context-dependent</td></tr>
+    <tr><td>Mostly Inaccurate</td><td>Mostly unsupported; some kernel of truth</td></tr>
+    <tr><td>Inaccurate</td><td>Contradicted by ≥2 independent primary sources</td></tr>
+    <tr><td>Unverifiable</td><td>Cannot be adjudicated with available evidence — <strong>a success, not a failure</strong></td></tr>
+  </table>
+  <h4>Tools</h4>
+  <p><span class="pill ok">web_search T5 (Allowlist B)</span> <span class="pill ok">fetch_source T6 (allowlisted)</span> <span class="pill ok">fec/fl-leg/doe (read)</span> <span class="pill ok">source_register T7 (any type)</span> <span class="pill ok">db_read T8 (ALL buckets)</span> <span class="pill ok">claim_write T9 (verifiable_fact + outside_opinion)</span> <span class="pill gate">DENIED: stated_position writes, balance_audit, sms_dispatch</span></p>
+  <h4>Rules &amp; halt conditions</h4>
+  <ul>
+    <li><strong>≥2 Tier-1 rule:</strong> any verdict other than "Unverifiable" requires at least two independent Tier 1 primary sources. Tier 2 is corroboration only — never sufficient, and never inherit another checker's conclusion.</li>
+    <li>Never rate an opinion or value judgment ("taxes are too high" is not checkable) — route to <code>outside_opinion</code>, unrated.</li>
+    <li>Symmetric scrutiny: fact-checks are tracked per candidate and must be balanced within the race.</li>
+    <li>Every source lean-tagged at registration via <code>Source.lean_tag</code>.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>Orchestrator / Synthesis Layer <span class="pill neutral">deterministic — NO system prompt</span></h3>
+  <p><strong>Nature:</strong> deterministic controller, no model calls, no LLM prompt — it is control-flow code with a runbook. Inventing a "system prompt" for it is wrong by definition.</p>
+  <div class="grid">
+    <div class="io"><b>Inputs</b>
+      <ul>
+        <li>Race/Candidate objects from intake</li>
+        <li>Agent completion states; <code>balance_audit</code> result</li>
+        <li>Human approval at the review gate</li>
+      </ul>
+    </div>
+    <div class="io"><b>Outputs</b>
+      <ul>
+        <li>Parallel agent runs per candidate; audit invocation per race</li>
+        <li>Profile audit fields written (<code>balance_check_passed</code>, <code>flag_reason</code>, <code>flagged_at</code>)</li>
+        <li>Composed brief + SMS (on PASS); dispatch (on PASS + approval)</li>
+      </ul>
+    </div>
+  </div>
+  <h4>Tools</h4>
+  <p><span class="pill ok">doe_file_intake T1</span> <span class="pill ok">jurisdiction_resolve T4</span> <span class="pill ok">db_read T8 (all)</span> <span class="pill ok">balance_audit T10</span> <span class="pill ok">sms_dispatch T12 (post human-gate)</span> <span class="pill gate">DENIED: claim_write, web_search, fetch_source, adjudication queries</span></p>
+  <h4>Hard invariants</h4>
+  <ul>
+    <li>Never calls <code>claim_write</code> — it composes and dispatches, it does not author claims.</li>
+    <li>Cannot call <code>sms_dispatch</code> for a race whose latest audit returned HALT.</li>
+    <li>Every halt countable via <code>action_log.guard_triggered</code> (Audit Block Rate KPI).</li>
+    <li>Flags alone never HALT — only gate breaches do; flags are surfaced to the reviewer.</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="tools">5. MCP Tool Layer</h2>
+<p>Twelve tools across five layers. Agents reach the database and external world <em>only</em> through these. <code>source_register</code> is deliberately separate from <code>claim_write</code> so a Source exists and is typed <em>before</em> any claim can cite it — this is what makes "no Source → dropped" mechanically enforceable. <code>log_action</code> is invoked automatically inside every other wrapper, so logging cannot be skipped.</p>
+
+<table>
+  <tr><th>#</th><th>Tool</th><th>Layer</th><th>Determinism</th><th>Purpose</th></tr>
+  <tr><td>T1</td><td><code>doe_file_intake</code></td><td>Intake</td><td>Deterministic</td><td>Download + parse FL DoE candidate file; filter to target races</td></tr>
+  <tr><td>T2</td><td><code>fec_api_query</code></td><td>Primary API</td><td>Deterministic fetch</td><td>FEC candidates / finance filings for FL-10/15/23/28</td></tr>
+  <tr><td>T3</td><td><code>fl_legislature_query</code></td><td>Primary API</td><td>Deterministic fetch</td><td>Bill text, vote records, journals (Record Agent's spine)</td></tr>
+  <tr><td>T4</td><td><code>jurisdiction_resolve</code></td><td>Intake</td><td>Deterministic</td><td>ZIP → congressional district + statewide race set</td></tr>
+  <tr><td>T5</td><td><code>web_search</code></td><td>Discovery</td><td>Non-deterministic</td><td>Allowlist-enforced search (A for Agent 1; B for Agent 3)</td></tr>
+  <tr><td>T6</td><td><code>fetch_source</code></td><td>Discovery</td><td>Deterministic fetch</td><td>Retrieve a URL's content; tags retrieval time for the Source</td></tr>
+  <tr><td>T7</td><td><code>source_register</code></td><td>Data write</td><td>Deterministic</td><td>Create/dedupe a <code>Source</code>; returns <code>source_id</code></td></tr>
+  <tr><td>T8</td><td><code>db_read</code></td><td>Data read</td><td>Deterministic</td><td>Read Race/Candidate/Claim/Profile/Source objects</td></tr>
+  <tr><td>T9</td><td><code>claim_write</code></td><td>Data write</td><td>Deterministic + guard</td><td>Write a Claim; validates bucket vs. caller; wrong bucket → reject + halt</td></tr>
+  <tr><td>T10</td><td><code>balance_audit</code></td><td>Synthesis</td><td>Deterministic (no AI)</td><td>Compute variance; PASS/HALT with exact numbers</td></tr>
+  <tr><td>T11</td><td><code>log_action</code></td><td>Observability</td><td>Deterministic</td><td>Append-only log; auto-invoked inside every wrapper</td></tr>
+  <tr><td>T12</td><td><code>sms_dispatch</code></td><td>Delivery</td><td>Deterministic</td><td>Twilio trial send; human-gated, owner phone only</td></tr>
+</table>
+
+<h3>Authorization Matrix (enforced in the wrapper, keyed on <code>agent_id</code>)</h3>
+<table>
+  <tr><th>Tool</th><th>1 · Profiler</th><th>2 · Record</th><th>3 · Fact-Checker</th><th>Orchestrator</th></tr>
+  <tr><td><code>web_search</code> T5</td><td>✅ Allowlist A only</td><td>❌ <strong>hard-denied</strong></td><td>✅ Allowlist B</td><td>❌</td></tr>
+  <tr><td><code>fetch_source</code> T6</td><td>✅ candidate domains</td><td>❌</td><td>✅ any allowlisted</td><td>❌</td></tr>
+  <tr><td><code>fec_api_query</code> T2</td><td>❌</td><td>✅</td><td>✅ read</td><td>❌</td></tr>
+  <tr><td><code>fl_legislature_query</code> T3</td><td>❌</td><td>✅</td><td>✅ read</td><td>❌</td></tr>
+  <tr><td><code>doe_file_intake</code> T1</td><td>❌</td><td>✅ finance filings</td><td>✅ read</td><td>✅</td></tr>
+  <tr><td><code>source_register</code> T7</td><td>✅ <code>candidate_self</code> only</td><td>✅ <code>primary_doc</code> only</td><td>✅ any type</td><td>❌</td></tr>
+  <tr><td><code>db_read</code> T8</td><td>✅ own bucket</td><td>✅ own bucket</td><td>✅ <strong>all buckets</strong></td><td>✅ all</td></tr>
+  <tr><td><code>claim_write</code> T9</td><td>✅ <code>stated_position</code> only</td><td>✅ <code>verifiable_fact</code> only</td><td>✅ <code>verifiable_fact</code> + <code>outside_opinion</code></td><td>❌ never</td></tr>
+  <tr><td><code>balance_audit</code> T10</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td></tr>
+  <tr><td><code>sms_dispatch</code> T12</td><td>❌</td><td>❌</td><td>❌</td><td>✅ post human-gate</td></tr>
+</table>
+
+<h3>Allowlist A — Candidate-controlled (Profiler)</h3>
+<div class="card">
+  <p>Not a static global list — <strong>scoped per candidate</strong>, derived from the Candidate object at intake. A URL passes only if its registrable domain matches the candidate's <code>official_site</code>, OR it is a known social platform AND the handle matches that candidate's <code>status='verified'</code> registered handle. Everything else — news, PACs, endorsers, party sites, third parties — is blocked.</p>
+  <h4>Matcher requirements (implemented in <code>allowlist_a_core.py</code>)</h4>
+  <ul>
+    <li>PSL registrable-domain extraction (injectable; built-in default fails closed on unknown suffixes — production must inject a full PSL extractor).</li>
+    <li>Host→platform folding via <code>social_platform.host_pattern</code> (x.com/twitter.com, facebook/fb.com, instagram, youtube incl. <code>/@</code>, <code>/channel/</code>, <code>/user/</code>, <code>/c/</code>).</li>
+    <li>Tracking-param stripping; shortener denylist; <strong>redirects never followed</strong>; non-http(s) schemes blocked.</li>
+    <li><strong>Fail closed</strong> on empty scope (no official_site, no verified handles → block everything).</li>
+    <li>An <code>official_site</code> that is itself a social platform or shortener never admits by domain match — it must enter via a verified social-account row.</li>
+    <li>Every BLOCK is logged before returning: <code>status='fail'</code>, <code>guard_triggered=true</code>, <code>guard_type='allowlist'</code>.</li>
+  </ul>
+</div>
+
+<h3>Allowlist B — Independent authoritative (Fact-Checker)</h3>
+<div class="card">
+  <p>Static, curated, two tiers. Every retrieved source is lean-tagged.</p>
+  <table>
+    <tr><th>Tier</th><th>Role</th><th>Domains</th></tr>
+    <tr><td><strong>Tier 1</strong></td><td>Primary evidence — counts toward the ≥2 required for any verdict</td><td>fec.gov · FL DoE (dos.fl.gov) · flsenate.gov · myfloridahouse.gov · leg.state.fl.us · congress.gov · govinfo.gov · gao.gov · cbo.gov · bls.gov · census.gov · courtlistener.com</td></tr>
+    <tr><td><strong>Tier 2</strong></td><td>Corroboration only — never sufficient alone; verdicts never inherited</td><td>ballotpedia.org · votesmart.org · opensecrets.org · politifact.com · factcheck.org · apnews.com</td></tr>
+  </table>
+</div>
+
+<h3>Logging Layer (<code>action_log</code>)</h3>
+<div class="card">
+  <div class="grid">
+    <div class="io"><b>Inputs</b>
+      <ul>
+        <li>Every tool invocation — all twelve tools, <strong>reads included</strong> — written by the wrapper before returning</li>
+      </ul>
+    </div>
+    <div class="io"><b>Outputs</b>
+      <ul>
+        <li>Append-only Supabase table <code>action_log</code> (INSERT-only role; no UPDATE/DELETE granted to anyone)</li>
+        <li>SQL rollups for the three KPIs: Symmetric Scrutiny (fact-checks per candidate), Audit Block Rate (guard halts by tool), Traceability spot-check (written claim with null source_id = violation)</li>
+      </ul>
+    </div>
+  </div>
+  <h4>Record fields</h4>
+  <p><code>log_id · timestamp · agent_id (profiler|record|factchecker|orchestrator) · tool_called (T1–T12) · race_id · candidate_id · source_url · source_id · bucket_written · claim_id · status (success|fail) · failure_reason · guard_triggered · guard_type ('bucket'|'allowlist'|'denied_tool'|null)</code></p>
+  <ul>
+    <li><code>bucket_written</code>, <code>claim_id</code>, <code>source_id</code> are null for reads and non-write tools.</li>
+    <li>Early-return rejections (e.g., allowlist blocks) are <strong>not exempt</strong> from logging.</li>
+    <li><code>Profile.audit.fact_checks_performed</code> is a cache recomputed from <code>action_log</code> — the log is the independent audit trail proving the published numbers were not hand-tuned.</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="schema">6. Data Schema (authoritative: CAP_Schema_v1)</h2>
+<p>Ten linked objects. Every published claim must be traceable through this chain. Enum CHECKs enforce "buckets are sacred" at the database level — a wrong-bucket write is rejected by Postgres itself, not just the wrapper (defense in depth).</p>
+<table>
+  <tr><th>Object</th><th>PK</th><th>Uniqueness</th><th>Purpose / key rules</th></tr>
+  <tr><td><code>Race</code></td><td>race_id</td><td>—</td><td>Office, level, district, election type, key dates. CHECK on <code>level</code>, <code>election</code>.</td></tr>
+  <tr><td><code>Candidate</code></td><td>candidate_id</td><td>—</td><td>Party, incumbency, qualifying status, official_site, fec_id. Social accounts are a relation (projection), ingested only when <code>qualified</code>.</td></tr>
+  <tr><td><code>candidate_social_account</code></td><td>id</td><td>(platform, handle_norm)</td><td>Provenance-chained handles. Only <code>status='verified'</code> enters Allowlist A. One handle → one candidate; collision = intake flag.</td></tr>
+  <tr><td><code>social_platform</code></td><td>platform</td><td>—</td><td>Reference table: host regex + handle extraction rules. New platform = data insert, not migration.</td></tr>
+  <tr><td><code>Source</code></td><td>source_id</td><td>url_norm</td><td>Type (<code>factual_reporting | opinion | primary_doc | candidate_self</code>), <code>lean_tag</code>, <code>retrieved_at</code>. Normalized-URL dedupe enforced.</td></tr>
+  <tr><td><code>Claim</code></td><td>claim_id</td><td>—</td><td>Bucket + <code>attributed</code> + <code>verdict</code> (non-null only for Fact-Checker-adjudicated <code>verifiable_fact</code>) + <code>derived_from</code> lineage + <code>issue_id</code>.</td></tr>
+  <tr><td><code>claim_source</code></td><td>(claim_id, source_id)</td><td>composite PK</td><td>FK-validated join. <strong>A claim with zero rows is invalid and must not be published</strong> — "no Source → dropped" as referential integrity.</td></tr>
+  <tr><td><code>Issue</code></td><td>issue_id</td><td>—</td><td>Tiers: <code>spine</code> (fixed per race, neutrally worded, applied to all candidates, selection logged) and <code>candidate</code> (extras; never counted toward coverage parity).</td></tr>
+  <tr><td><code>Position</code></td><td>position_id</td><td>(candidate_id, issue_id)</td><td>Stance on one issue assembled from claims. <code>coverage: stated | no_stated_position_found</code> — sourced absence, never fabricated. Groups claims; never merges buckets.</td></tr>
+  <tr><td><code>Profile</code></td><td>(candidate_id, race_id)</td><td>same</td><td>Audit block: word_count, <code>verifiable_fact_count</code> (gate), <code>stated_position_count</code> (flag), fact_checks_performed, spine coverage, balance_check_passed, flag_reason.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="gates">7. Balance Gates &amp; Flags (Balance Audit v1.1 — the four-metric split)</h2>
+<p>Rationale: <code>verifiable_fact</code> and <code>fact_checks</code> are the scrutiny the neutrality claim rests on → they <strong>gate</strong> publication. <code>stated_position</code> is candidate-authored and footprint-driven, and spine-issue silence is real, sourced information → these are <strong>flags</strong> for a human, never "fixed" by fabricating content for the quiet candidate or trimming the loud one arbitrarily. This is what stops self-portrait size or issue silence from masking or manufacturing a scrutiny imbalance.</p>
+<table>
+  <tr><th>Metric</th><th>Kind</th><th>Threshold</th><th>On breach</th></tr>
+  <tr><td><code>fact_checks</code> variance</td><td><span class="pill gate">GATE</span></td><td>&lt; 10%</td><td><strong>HALT</strong> — dispatch blocked</td></tr>
+  <tr><td><code>verifiable_fact_count</code> variance</td><td><span class="pill gate">GATE</span></td><td>&lt; 15%</td><td><strong>HALT</strong> — dispatch blocked</td></tr>
+  <tr><td><code>word_count</code> variance</td><td><span class="pill gate">GATE</span></td><td>&lt; 15%</td><td><strong>HALT</strong> (composer caps contributions symmetrically, so this measures allocated space)</td></tr>
+  <tr><td><code>stated_position_count</code> variance</td><td><span class="pill flag">FLAG</span></td><td>&lt; 15%</td><td>flag <code>stated_position_asymmetry</code> — human review, no halt</td></tr>
+  <tr><td><code>spine_issues_covered</code></td><td><span class="pill flag">FLAG</span></td><td>any gap</td><td>flag <code>issue_coverage_asymmetry</code> — human review, no halt</td></tr>
+</table>
+<div class="warn"><strong>Why the split exists:</strong> the old blended <code>claim_count</code> could read 15 vs 15 (0% → PASS) while hiding a 50% record-scrutiny gap. Split, <code>verifiable_fact_count</code> breaches and the pipeline HALTs.</div>
+<p>The per-race results are published as the <strong>Symmetric Scrutiny Log</strong> (transparency mitigation for bias accusations): per candidate — word count, split claim counts, fact-checks performed, spine coverage, variances vs. thresholds, verdict, flags. Reference rendering: <code>CAP_Symmetric_Scrutiny_Log.html</code>.</p>
+
+<!-- ============================================================ -->
+<h2 id="frontend">8. Front End — Voter-Facing Web Brief</h2>
+<p><strong>Decision (2026-07-01):</strong> Phase 1 front end is the <strong>mobile-first web brief</strong> — exactly what PRD §8 specifies. No native app, no PWA, no client framework. The Brief Composer emits complete, self-contained static HTML; the front end <em>is</em> that output plus two supporting pages. Rationale: zero build chain, smallest possible trust surface, nothing between the audited data and the reader.</p>
+
+<h3 id="frontend-pages">8.1 Pages</h3>
+<table>
+  <tr><th>Page</th><th>Route (pattern)</th><th>Content</th></tr>
+  <tr><td><strong>Voter Brief</strong></td><td><code>/brief/{jurisdiction-slug}</code> (e.g. <code>/brief/fl-28</code>)</td><td>All races for the resolved jurisdiction: statewide 4 + the district race. Per PRD §8 structure below.</td></tr>
+  <tr><td><strong>Methodology</strong></td><td><code>/methodology</code></td><td>How neutrality is enforced: the three buckets, verdict scale, ≥2 Tier-1 rule, gates/flags, link to the published Symmetric Scrutiny Log.</td></tr>
+  <tr><td><strong>Flag-as-biased form</strong></td><td><code>/flag</code></td><td>Simple form (brief URL + free-text reason) posting to a single backend endpoint (§9.2). No account, no tracking.</td></tr>
+</table>
+
+<h3 id="frontend-structure">8.2 Brief page structure (PRD §8, issue-grouped per Schema v1)</h3>
+<div class="flow">
+[Header]   Race Name | Election: [date] | Registration Deadline: [date]
+           "Florida is a closed primary state."
+[Per candidate block — repeated, symmetrically capped]
+   CANDIDATE NAME (PARTY)
+   — grouped under the race's SPINE issues (+ candidate-tier extras) —
+   📋 WHAT THEY SAY      bulleted, from stated_position claims · Source: candidate site
+        (silence shown honestly: "No stated position found" for uncovered spine issues)
+   📊 WHAT THEY'VE DONE  bulleted, from verifiable_fact record claims · Sources: FL Leg / FEC
+   ✅ FACT-CHECK          Claim: "[exact text]" · Verdict badge (6-value scale) · Sources: ≥2 links
+[Footer]   How we ensure neutrality → /methodology     Flag this brief as biased → /flag
+</div>
+
+<h3 id="frontend-reqs">8.3 Requirements</h3>
+<div class="card">
+  <div class="grid">
+    <div class="io"><b>Inputs</b>
+      <ul>
+        <li>Composed brief data for PASS-ed, human-approved races only (Profiles, Positions, Claims, Sources, verdicts, key dates)</li>
+        <li>Jurisdiction slug from <code>jurisdiction_resolve</code></li>
+      </ul>
+    </div>
+    <div class="io"><b>Outputs</b>
+      <ul>
+        <li>Static, self-contained HTML page per jurisdiction, at a stable public URL</li>
+        <li>That URL is the link embedded by the SMS Composer</li>
+      </ul>
+    </div>
+  </div>
+  <h4>Functional requirements</h4>
+  <ul>
+    <li><strong>Publishes only audited data:</strong> a page may render only races whose latest balance audit is PASS <em>and</em> that cleared the human review gate. A HALTed race never reaches the front end.</li>
+    <li>Every claim renders with its bucket context (Say / Done / Fact-Check), verdict badge where applicable, and clickable source links — traceability is visible to the reader, not just the database.</li>
+    <li>Verdict badges use the six fixed labels only, styled consistently (no color-coding that implies party).</li>
+    <li>Candidate blocks are visually identical in structure and symmetrically capped in length (word-count gate, §7).</li>
+    <li>Candidate order within a race is neutral and deterministic (e.g., ballot order or alphabetical — decided once, applied to every race, documented in /methodology).</li>
+  </ul>
+  <h4>Non-functional requirements</h4>
+  <ul>
+    <li><strong>Mobile-first:</strong> readable from 320&nbsp;px wide; briefs open from an SMS on a phone — that is the primary device.</li>
+    <li><strong>Self-contained:</strong> inline CSS, no external JS frameworks, no CDN dependencies, no cookies, no third-party trackers or analytics scripts. Page weight target ≤ 200&nbsp;KB.</li>
+    <li><strong>Accessible:</strong> WCAG 2.1 AA — semantic headings, sufficient contrast, verdicts conveyed by text + shape (never color alone).</li>
+    <li><strong>Versioned:</strong> each published brief carries a generation timestamp and pipeline version in the footer; republishing creates a new version (prior versions retained for the audit trail).</li>
+  </ul>
+</div>
+
+<h3 id="frontend-hosting">8.4 Hosting</h3>
+<p><strong>Decision:</strong> static hosting on <strong>Vercel</strong> (recommended: zero-config static deploys, CDN, immutable deploy URLs for versioning). Acceptable fallback: Supabase Storage public bucket to keep the stack single-vendor. Either way the host serves only files the publish step (§10, Stage 6) uploads — the front end has no server-side logic and no database access.</p>
+
+<!-- ============================================================ -->
+<h2 id="backend">9. Back End — Services &amp; Database</h2>
+<p>The back end is <strong>five services around one database</strong>. Credential rule: agents never hold secrets; only the MCP tool-layer service and the webhook hold keys.</p>
+
+<h3 id="backend-db">9.1 Database — Supabase (Postgres)</h3>
+<div class="card">
+  <div class="grid">
+    <div class="io"><b>Inputs</b>
+      <ul>
+        <li>Writes exclusively from the MCP tool-layer service (T7 <code>source_register</code>, T9 <code>claim_write</code>, T11 <code>log_action</code>, intake upserts, audit-result writes)</li>
+      </ul>
+    </div>
+    <div class="io"><b>Outputs</b>
+      <ul>
+        <li>Reads via T8 <code>db_read</code> for agents/orchestrator; read-only queries for the composer and the Symmetric Scrutiny report</li>
+      </ul>
+    </div>
+  </div>
+  <h4>Requirements</h4>
+  <ul>
+    <li><strong>Tables:</strong> the ten Schema-v1 objects (§6) + <code>action_log</code>. DDL already specified for <code>candidate_social_account</code>, <code>social_platform</code>, <code>claim_source</code> (Schema v1) and <code>action_log</code> (Logging v1.0 §2); remaining tables need DDL written from the JSON shapes — one migration file per object, kept in the repo.</li>
+    <li><strong>Constraints are the last line of defense:</strong> every enum CHECK, PK, FK, and uniqueness rule from Schema v1 §9 is implemented in Postgres — a wrong-bucket write is rejected by the database even if a wrapper bug lets it through.</li>
+    <li><strong>Roles:</strong>
+      <ul>
+        <li><code>cap_tool_wrapper</code> — used only by the MCP tool-layer service. INSERT-only on <code>action_log</code> (no UPDATE/DELETE for anyone — the log is immutable); scoped INSERT/UPDATE on content tables.</li>
+        <li><code>cap_readonly</code> — composer, Scrutiny-report generator, CI checks. SELECT only.</li>
+        <li>No service uses the Supabase service-role key directly except migrations.</li>
+      </ul>
+    </li>
+    <li><strong>Traceability invariant:</strong> a claim with zero <code>claim_source</code> rows is invalid; the pre-publish check (SELECT for claims missing sources) must return empty before any compose step.</li>
+    <li>Indexes per Schema v1: social reverse-lookup, log <code>(race_id, candidate_id)</code>, partial index on <code>guard_triggered</code>.</li>
+  </ul>
+</div>
+
+<h3 id="backend-services">9.2 Services</h3>
+
+<div class="card">
+  <h3>S1 · MCP Tool-Layer Service <span class="pill neutral">Python 3.10+</span></h3>
+  <p>The single chokepoint: an MCP server exposing T1–T12, embedding the pure cores already built (<code>allowlist_a_core.py</code>, <code>profiler_guard_core.py</code>, <code>balance_audit_core.py</code>). The <em>only</em> component holding the DB write role and external API keys.</p>
+  <div class="grid">
+    <div class="io"><b>Inputs</b>
+      <ul>
+        <li>Tool calls from agents/orchestrator, keyed on <code>agent_id</code></li>
+        <li>External data: FL DoE file, FEC API, FL Legislature, fetched web pages</li>
+      </ul>
+    </div>
+    <div class="io"><b>Outputs</b>
+      <ul>
+        <li>Guarded DB writes (Sources, Claims, Positions, Profiles, audit results)</li>
+        <li>An <code>action_log</code> row for <em>every</em> invocation, written before returning — including early-return rejections</li>
+      </ul>
+    </div>
+  </div>
+  <h4>Requirements</h4>
+  <ul>
+    <li>Enforces the §5 authorization matrix and both allowlists <em>inside</em> the wrapper — prompts are not the enforcement mechanism.</li>
+    <li>Injects a full PSL extractor into <code>allowlist_a_core</code> (the built-in default is a fail-closed US-centric subset).</li>
+    <li>Holds secrets: <code>SUPABASE_DB_URL</code> (cap_tool_wrapper role), <code>FEC_API_KEY</code>, <code>TWILIO_ACCOUNT_SID</code>/<code>TWILIO_AUTH_TOKEN</code>. Secrets never appear in agent context or tool results.</li>
+    <li>Wrong-bucket <code>claim_write</code> → reject + pipeline halt (<code>guard_type='bucket'</code>); off-allowlist URL → block (<code>guard_type='allowlist'</code>); ungranted tool → deny (<code>guard_type='denied_tool'</code>).</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>S2 · Agent Runtime <span class="pill neutral">Anthropic API (Claude) via MCP</span></h3>
+  <div class="grid">
+    <div class="io"><b>Inputs</b>
+      <ul>
+        <li>Per-agent system prompts (Agent Plan v1.1 — paste-ready)</li>
+        <li>Candidate/race assignment + spine issue set from the orchestrator</li>
+      </ul>
+    </div>
+    <div class="io"><b>Outputs</b>
+      <ul>
+        <li>Tool calls to S1 only — Claims, Sources, Positions per each agent's contract (§4)</li>
+      </ul>
+    </div>
+  </div>
+  <h4>Requirements</h4>
+  <ul>
+    <li>Three agent configurations (profiler / record / factchecker), each connected to S1 with its own <code>agent_id</code> — the wrapper, not the prompt, decides what it can do.</li>
+    <li>Agents hold no credentials and receive no raw DB access.</li>
+    <li>Build order: Profiler → Record → Fact-Checker (needs 1 &amp; 2's claims) → Orchestrator.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>S3 · Orchestrator <span class="pill neutral">deterministic Python — no model calls</span></h3>
+  <p>Implements the Agent Plan §5 runbook (see §4 card). Runs intake, fans out the three agents per candidate, invokes <code>balance_audit</code> per race, enforces the human gate, triggers publish + dispatch. Its invariants are listed in §4; nothing here overrides them.</p>
+</div>
+
+<div class="card">
+  <h3>S4 · Inbound SMS Webhook <span class="pill neutral">Supabase Edge Function (TypeScript/Deno)</span></h3>
+  <div class="grid">
+    <div class="io"><b>Inputs</b>
+      <ul>
+        <li>Twilio inbound-SMS webhook POST (voter's ZIP code text)</li>
+      </ul>
+    </div>
+    <div class="io"><b>Outputs</b>
+      <ul>
+        <li>TwiML/API reply, ≤160 chars: "Your Florida voter brief is ready. Races covered: […]. Read it here: [link]"</li>
+        <li>Or a graceful miss: unrecognized/out-of-scope ZIP → short "not covered yet" reply listing covered metros</li>
+      </ul>
+    </div>
+  </div>
+  <h4>Requirements</h4>
+  <ul>
+    <li>Validates the Twilio request signature; rejects unsigned calls.</li>
+    <li>ZIP → jurisdiction via the same deterministic mapping as <code>jurisdiction_resolve</code> (T4) — one mapping table, two consumers, no drift.</li>
+    <li>Returns links only to <strong>published</strong> briefs; a jurisdiction whose races aren't published gets the "not covered yet" reply.</li>
+    <li>Phase 1: Twilio trial constraints apply — replies effectively reach the verified owner phone only. No marketing content, reply STOP handling left to Twilio defaults (TCPA posture, PRD §10).</li>
+    <li>Stores no PII: the voter's phone number is not persisted; the webhook is stateless (log volume/latency only, no numbers).</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>S5 · CLI Adapters <span class="pill neutral">Python — humans + CI</span></h3>
+  <p>Thin command-line entry points over the same pure cores: run the balance audit for the human review gate and CI, regenerate the published Symmetric Scrutiny Log, and run the traceability spot-check (§9.1). No logic duplicated — adapters only.</p>
+</div>
+
+<h3 id="backend-env">9.3 Environments &amp; secrets</h3>
+<table>
+  <tr><th>Environment</th><th>Purpose</th><th>Notes</th></tr>
+  <tr><td><code>local</code></td><td>Develop + unit-test the pure cores (pytest — already green for the 3 built cores)</td><td>No secrets needed; cores are pure by design.</td></tr>
+  <tr><td><code>ci</code></td><td>Run all core tests + audit CLI + traceability check on every change</td><td>Read-only DB role at most.</td></tr>
+  <tr><td><code>prod</code></td><td>Supabase project + S1 tool service + Edge Function + static host</td><td>Secrets in Supabase/host secret stores: <code>FEC_API_KEY</code>, <code>TWILIO_*</code>, <code>ANTHROPIC_API_KEY</code>, DB role URLs. Never committed, never in agent context.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="integration">10. System Integration — How It All Fits Together</h2>
+<p>Two independent flows share one database. The <strong>production flow</strong> builds and publishes briefs (slow, audited, human-gated). The <strong>request flow</strong> serves voters (fast, deterministic, read-only). They meet only at the published brief URL.</p>
+
+<h3>Flow A — Content production (build time)</h3>
+<div class="flow">
+FL DoE file ─┐
+FEC API ─────┤→ <span class="hl">S3 Orchestrator</span> → intake → Supabase (Race/Candidate/social accounts)
+             │        │  spine issues defined + logged
+             │        ▼
+             │  <span class="hl">S2 Agents ×3 (parallel per candidate)</span>
+             │        │  every call → <span class="hl">S1 Tool Layer</span> → guards + allowlists → Supabase
+             │        ▼                                   └→ action_log (every call)
+             │  <span class="hl">balance_audit (T10)</span> ── HALT ──→ blocked; human resolves; re-run
+             │        │ PASS
+             │        ▼
+             │  Brief Composer → mobile-first HTML   +   SMS Composer → 160-char text
+             │        ▼
+             │  <span class="hl">HUMAN REVIEW GATE</span> (owner reviews HTML + SMS + flags)
+             │        │ approve
+             ▼        ▼
+        publish HTML → <span class="hl">Static host (§8.4)</span> → stable /brief/{slug} URL
+                                    └───────→ sms_dispatch (T12) → owner's phone
+</div>
+
+<h3>Flow B — Voter request (runtime)</h3>
+<div class="flow">
+Voter texts ZIP → Twilio → <span class="hl">S4 Edge Function</span> (signature check, no PII stored)
+                              │ ZIP → jurisdiction (same table as T4)
+                              ▼
+                    published brief exists?
+                     ├─ yes → SMS reply with /brief/{slug} link → voter opens <span class="hl">mobile-first brief (§8)</span>
+                     └─ no  → "not covered yet" reply (covered metros listed)
+</div>
+
+<h3>Trust boundaries (why bias can't slip through a layer)</h3>
+<table>
+  <tr><th>Boundary</th><th>Enforced by</th></tr>
+  <tr><td>Agents can only do what their role allows</td><td>S1 wrapper authorization matrix (§5), keyed on <code>agent_id</code> — not prompts</td></tr>
+  <tr><td>Agents can only read approved sources</td><td>Allowlists A/B inside T5/T6; Record agent has no web tools at all</td></tr>
+  <tr><td>Wrong-bucket data can't enter the DB</td><td>Wrapper guard (reject + halt) <em>and</em> Postgres enum CHECKs — defense in depth</td></tr>
+  <tr><td>Unsourced claims can't be published</td><td><code>claim_source</code> FK join (zero rows = invalid) + pre-publish traceability query</td></tr>
+  <tr><td>Imbalanced briefs can't ship</td><td>Deterministic balance audit gates (§7); <code>sms_dispatch</code> unreachable on HALT</td></tr>
+  <tr><td>Nothing ships without a human</td><td>Review gate before publish + dispatch (Stage 5)</td></tr>
+  <tr><td>Numbers can't be hand-tuned silently</td><td>Append-only <code>action_log</code> (INSERT-only at the privilege level) corroborates every published count</td></tr>
+  <tr><td>Secrets never reach the model</td><td>Only S1/S4 hold keys; agents get tool results, never credentials</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="status">11. Build Status (as of 2026-07-01)</h2>
+<h3>Built &amp; tested (reference implementations, pure cores)</h3>
+<table>
+  <tr><th>Artifact</th><th>Implements</th><th>Status</th></tr>
+  <tr><td><code>balance_audit_core.py</code> + tests</td><td>Balance Audit v1.1 four-metric split, gates/flags, locked variance formula</td><td class="status-done">✔ Done</td></tr>
+  <tr><td><code>allowlist_a_core.py</code> + tests</td><td>Allowlist A matcher (Tool Spec §2.5 A + Schema §3/§4/§10): PSL extraction (injectable, fail-closed), platform folding, shortener denylist, social-site official_site guard</td><td class="status-done">✔ Done</td></tr>
+  <tr><td><code>profiler_guard_core.py</code> + tests</td><td>Profiler wrapper guards: tool access, own-bucket read, candidate_self-only registration, load-bearing claim_write contract (wrong bucket = reject + halt)</td><td class="status-done">✔ Done</td></tr>
+  <tr><td>Agent system prompts (all 3) + orchestrator runbook</td><td>Agent Plan v1.1 — paste-ready, aligned to Schema v1</td><td class="status-done">✔ Drafted</td></tr>
+  <tr><td><code>CAP_Symmetric_Scrutiny_Log.html</code></td><td>Published-log reference rendering</td><td class="status-open">⚠ Needs update to split counts + flags</td></tr>
+</table>
+
+<h3>Not yet started (now specified in this guide)</h3>
+<table>
+  <tr><th>Track</th><th>Guide section</th><th>Status</th></tr>
+  <tr><td>Database migrations (remaining tables from JSON shapes + roles/grants)</td><td>§9.1</td><td class="status-next">◻ Specified — next up</td></tr>
+  <tr><td>S1 MCP tool-layer service (T1–T12 wrappers around the built cores)</td><td>§9.2</td><td class="status-next">◻ Specified</td></tr>
+  <tr><td>S2 agent runtime wiring (3 agent configs against S1)</td><td>§9.2</td><td class="status-next">◻ Specified — blocked on S1</td></tr>
+  <tr><td>S3 orchestrator (runbook → code)</td><td>§9.2 / §4</td><td class="status-next">◻ Specified — blocked on S1/S2</td></tr>
+  <tr><td>S4 inbound SMS webhook (Edge Function)</td><td>§9.2</td><td class="status-next">◻ Specified</td></tr>
+  <tr><td>Brief Composer + front-end templates (mobile-first HTML)</td><td>§8</td><td class="status-next">◻ Specified — blocked on schema data</td></tr>
+  <tr><td>Methodology page + flag-as-biased form</td><td>§8.1</td><td class="status-next">◻ Specified</td></tr>
+  <tr><td>Static-host setup (Vercel) + publish step</td><td>§8.4 / §10</td><td class="status-next">◻ Specified</td></tr>
+</table>
+
+<h3>Recommended build order</h3>
+<p>1. Database migrations (§9.1) → 2. S1 tool layer around the built cores (§9.2) → 3. Profiler agent, then Record, then Fact-Checker (§4, Agent Plan order) → 4. Orchestrator (§4/§9.2) → 5. Composer + front end (§8) → 6. Webhook + publish + dispatch (§9.2/§10).</p>
+
+<h3>Open items (consolidated across all docs)</h3>
+<table>
+  <tr><th>Item</th><th>Owner / doc</th></tr>
+  <tr><td>Update <code>CAP_Symmetric_Scrutiny_Log.html</code> rendering to the split counts + flags (the v1.1 four-metric spec itself is done)</td><td>Balance Audit §8</td></tr>
+  <tr><td>Define the fixed, neutrally worded <strong>spine issue set per target race</strong>, with source/justification per issue, logged to action_log — must be settled before briefs are composed</td><td>Intake / editorial (Schema §10)</td></tr>
+  <tr><td>Handle drift / freshness: re-verify <code>verified_at</code> within a bounded window before composition; stale → unverified → excluded</td><td>Schema §10</td></tr>
+  <tr><td>Confirm <code>web_search</code>/<code>fetch_source</code> wrappers expose <code>lean_tag</code> capture at registration</td><td>Agent Plan §7</td></tr>
+  <tr><td>Confirm FL DoE candidate file format + download endpoint for 2026 cycle</td><td>PRD §12</td></tr>
+  <tr><td>Confirm FEC API key and rate limits for the 4 target districts</td><td>PRD §12</td></tr>
+  <tr><td>Confirm Twilio trial configuration + ZIP → district resolution logic</td><td>PRD §12</td></tr>
+  <tr><td>Production wrapper must inject a full PSL extractor into <code>allowlist_a_core</code> (built-in default is a US-centric subset, fail-closed)</td><td>Schema §10 resolution note</td></tr>
+  <tr><td>Decide neutral candidate ordering rule (ballot order vs. alphabetical) and document it in /methodology</td><td>This guide §8.3</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="changelog">12. Change Log</h2>
+<div class="amber"><strong>Protocol:</strong> every global change gets a dated row here — what changed, which governing doc(s) moved, and which guide sections were updated. Newest first.</div>
+<table class="changelog">
+  <tr><th>Date</th><th>Change</th><th>Docs affected</th></tr>
+  <tr><td>2026-07-01</td><td><strong>Guide v1.1 — renamed to Master Project Guide</strong> (was Project Bible v1.0). Added §8 Front End (decision: mobile-first web brief per PRD §8 — no native app/PWA in Phase 1), §9 Back End (Supabase Postgres + roles; five services: Python MCP tool layer, agent runtime, orchestrator, Supabase Edge Function webhook, CLI adapters; Vercel static hosting), §10 System Integration (two flows, trust-boundary table). Added the §0 pointing protocol for work sessions. Sections renumbered (Build Status → §11, Change Log → §12).</td><td>This guide §8–§10 (new); no governing-doc changes</td></tr>
+  <tr><td>2026-07-01</td><td><strong>Bible v1.0 compiled.</strong> Consolidated PRD, Schema, Tool Spec, Agent Plan, Balance Audit, and Logging specs into a single reference.</td><td>— (new artifact)</td></tr>
+  <tr><td>2026-07-01</td><td>Allowlist A matcher landed: <code>allowlist_a_core.py</code> + tests. Added guard beyond spec: a social-platform/shortener <code>official_site</code> never admits by domain. Profiler guards landed: <code>profiler_guard_core.py</code> + tests. Profiler prompt softening deemed unnecessary (matcher landed first).</td><td>Schema §10 items resolved</td></tr>
+  <tr><td>2026-06-29</td><td>Balance Audit v1.1: split <code>claim_count</code> into <code>verifiable_fact_count</code> (gate) + <code>stated_position_count</code> (flag); added <code>spine_issues_covered</code> flag. Variance formula locked: <code>(max−min)/max×100</code>, all race sizes.</td><td>Balance Audit v1.0 → v1.1; Schema §7.1</td></tr>
+  <tr><td>2026-06-29</td><td>Schema v1.0 adopted (supersedes PRD §7): social-account provenance chain, <code>Claim.verdict</code> field, attribution/verification split, <code>claim_source</code> join table, Issue/Position layer, <code>guard_type</code> log discriminator.</td><td>Schema v1.0; Agent Plan → v1.1</td></tr>
+  <tr><td>2026-06-29</td><td>Logging layer resolved: dedicated append-only Supabase <code>action_log</code> table; log every invocation including reads; KPI queries defined.</td><td>Logging v1.0</td></tr>
+  <tr><td>2026-06-29</td><td>Tool layer frozen: 12 tools, per-agent authorization matrix, Allowlists A/B defined; fact-check outlets placed in Tier 2 (corroboration only); <code>outside_opinion</code> excluded from balance counts.</td><td>Tool Spec v1.0</td></tr>
+  <tr><td>2026-06 (June)</td><td>PRD v1.0 drafted: FL MVP scope (4 statewide + 4 districts), 3-agent architecture, KPI targets, verdict scale, UX flow, risk mitigations.</td><td>PRD v1.0</td></tr>
+</table>
+
+</main>
+
+<footer>
+  Civic Awareness Project (Know Your Vote) · Master Project Guide v1.1 · This document describes; it never editorializes.<br>
+  Every claim herein maps to a governing document or was dropped.
+</footer>
+
+</body>
+</html>
