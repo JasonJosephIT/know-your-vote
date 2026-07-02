@@ -8,5 +8,5 @@ DELETE FROM issue WHERE issue_id LIKE 'demo-%';
 DELETE FROM profile WHERE candidate_id LIKE 'demo-%';
 DELETE FROM candidate WHERE candidate_id LIKE 'demo-%';
 DELETE FROM race WHERE race_id LIKE 'demo-%';
-DELETE FROM news_item WHERE title LIKE 'DEMO:%';
+DELETE FROM news_item WHERE title LIKE 'DEMO:%' OR race_id LIKE 'demo-%';
 DELETE FROM source WHERE source_id LIKE 'demo-%';

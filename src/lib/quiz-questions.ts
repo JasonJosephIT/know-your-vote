@@ -86,6 +86,31 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     ],
   },
   {
+    id: "insurance",
+    issueTitle: "Insurance & Property Costs",
+    prompt:
+      "On property insurance and what it costs to keep a home, which comes closest to your priority?",
+    kind: "choice",
+    options: [
+      { id: "rate-review", label: "Stronger state review of insurance rate increases" },
+      { id: "more-insurers", label: "Attracting more insurers through market incentives" },
+      { id: "hardening", label: "Direct help for homeowners hardening against storms" },
+      { id: "no-view", label: "No strong view on this one" },
+    ],
+  },
+  {
+    id: "safety",
+    issueTitle: "Public Safety & Crime",
+    prompt: "On public safety, which comes closest to your priority?",
+    kind: "choice",
+    options: [
+      { id: "enforcement-resources", label: "More resources for police and prosecution" },
+      { id: "prevention", label: "Crime-prevention and community programs" },
+      { id: "fraud-focus", label: "Cracking down on fraud and scams targeting consumers" },
+      { id: "no-view", label: "No strong view on this one" },
+    ],
+  },
+  {
     id: "free-response",
     issueTitle: "",
     prompt:

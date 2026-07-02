@@ -58,9 +58,9 @@ export function ZipEntry() {
         metro: data.metro,
       });
       track("zip_resolved");
-      const q = new URLSearchParams({ zip: data.zip });
+      const q = new URLSearchParams({ view: "races", zip: data.zip });
       if (data.district) q.set("district", data.district);
-      router.push(`/races?${q}`);
+      router.push(`/candidates?${q}`);
     } catch {
       setStage({
         kind: "error",
@@ -122,7 +122,7 @@ export function ZipEntry() {
           <CountyPicker
             onPick={(county) => {
               writeLocation({ county: county.name });
-              router.push(`/races?county=${county.fips}`);
+              router.push(`/candidates?view=races&county=${county.fips}`);
             }}
           />
         </div>
@@ -149,7 +149,7 @@ export function ZipEntry() {
         <CountyPicker
           onPick={(county) => {
             writeLocation({ county: county.name });
-            router.push(`/races?county=${county.fips}`);
+            router.push(`/candidates?view=races&county=${county.fips}`);
           }}
         />
       )}

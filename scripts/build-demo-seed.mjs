@@ -50,6 +50,42 @@ const RACES = [
     ],
   },
   {
+    id: "demo-fl-attorney-general",
+    office: "Attorney General of Florida",
+    level: "state",
+    district: null,
+    published: true,
+    spine: ["Public Safety & Crime", "Consumer Protection", "Government Accountability"],
+    candidates: [
+      { id: "demo-cand-crane", name: "Thomas Crane", party: "REP" },
+      { id: "demo-cand-vargas", name: "Elena Vargas", party: "DEM" },
+    ],
+  },
+  {
+    id: "demo-fl-cfo",
+    office: "Chief Financial Officer of Florida",
+    level: "state",
+    district: null,
+    published: true,
+    spine: ["Insurance & Property Costs", "State Budget & Spending", "Financial Transparency"],
+    candidates: [
+      { id: "demo-cand-bell", name: "Raymond Bell", party: "REP" },
+      { id: "demo-cand-foster", name: "Diane Foster", party: "DEM" },
+    ],
+  },
+  {
+    id: "demo-fl-agriculture",
+    office: "Commissioner of Agriculture of Florida",
+    level: "state",
+    district: null,
+    published: true,
+    spine: ["Farming & Rural Economy", "Water & Land Use", "Consumer Services"],
+    candidates: [
+      { id: "demo-cand-sutter", name: "Hank Sutter", party: "REP" },
+      { id: "demo-cand-mora", name: "Cecilia Mora", party: "DEM" },
+    ],
+  },
+  {
     id: "demo-fl-us-senate",
     office: "U.S. Senate (Florida)",
     level: "federal",
@@ -126,6 +162,24 @@ const SAY = {
     `${n} pledges to streamline permitting and fund the fictional First Key down-payment assistance program.`,
   "Government Transparency": (n) =>
     `${n} says they will publish every state contract over $100,000 in a searchable public ledger.`,
+  "Public Safety & Crime": (n) =>
+    `${n} says they will expand the fictional Regional Task Force Grants and add prosecution resources for violent and organized crime.`,
+  "Consumer Protection": (n) =>
+    `${n} says they will grow the fictional Scam Shield unit to pursue robocall and elder-fraud operations statewide.`,
+  "Government Accountability": (n) =>
+    `${n} pledges to publish public-records response times and audit state settlement spending under the fictional Sunshine Ledger plan.`,
+  "Insurance & Property Costs": (n) =>
+    `${n} says they will use the fictional Rate Review Board to challenge unjustified property-insurance increases.`,
+  "State Budget & Spending": (n) =>
+    `${n} pledges to post every state contract to the fictional Open Ledger portal within 30 days of signing.`,
+  "Financial Transparency": (n) =>
+    `${n} says they will expand the fictional Taxpayer Receipt tool showing where each state dollar goes.`,
+  "Farming & Rural Economy": (n) =>
+    `${n} says they will expand the fictional Farm Resilience Grant program for small growers hit by storms.`,
+  "Water & Land Use": (n) =>
+    `${n} pledges to enforce the fictional Best Management Practices Compact on fertilizer runoff.`,
+  "Consumer Services": (n) =>
+    `${n} says they will cut licensing and inspection wait times in half under the fictional Fast Lane services plan.`,
 };
 
 const DONE = {
@@ -143,6 +197,24 @@ const DONE = {
     `${n} voted for the fictional 2024 Permit Simplification Act and helped launch a county land-trust pilot.`,
   "Government Transparency": (n) =>
     `${n} published their office's full expense ledger quarterly while in local office.`,
+  "Public Safety & Crime": (n) =>
+    `${n} voted to fund the fictional 2023 Regional Task Force Grants and served on a county public-safety board.`,
+  "Consumer Protection": (n) =>
+    `${n} supported the fictional 2024 Robocall Enforcement Compact and led an elder-fraud restitution initiative.`,
+  "Government Accountability": (n) =>
+    `${n} backed the fictional 2023 Records Modernization Act and published quarterly office expense ledgers.`,
+  "Insurance & Property Costs": (n) =>
+    `${n} voted for the fictional 2024 Reinsurance Stability Act and served on a county rate-review commission.`,
+  "State Budget & Spending": (n) =>
+    `${n} backed the fictional 2023 Open Ledger Act and chaired a county budget oversight panel.`,
+  "Financial Transparency": (n) =>
+    `${n} launched a fictional county-level Taxpayer Receipt pilot and voted for annual audit funding.`,
+  "Farming & Rural Economy": (n) =>
+    `${n} voted for the fictional 2024 Farm Resilience Grant expansion and served on a rural development council.`,
+  "Water & Land Use": (n) =>
+    `${n} backed the fictional 2022 Runoff Standards Compact and funded county soil-testing programs.`,
+  "Consumer Services": (n) =>
+    `${n} cut permit backlogs on a fictional county services board and voted for fuel-inspection modernization.`,
 };
 
 const CHECK = {
@@ -160,12 +232,36 @@ const CHECK = {
     `${n} claimed the fictional permitting reform cut approval times from 18 months to 6.`,
   "Government Transparency": (n) =>
     `${n} claimed their ledger disclosures covered 100% of contracts over the threshold.`,
+  "Public Safety & Crime": (n) =>
+    `${n} claimed violent crime fell 15% in counties using the fictional task-force grants.`,
+  "Consumer Protection": (n) =>
+    `${n} claimed the fictional Scam Shield unit returned $40 million to consumers last year.`,
+  "Government Accountability": (n) =>
+    `${n} claimed their office answered 95% of records requests within ten days.`,
+  "Insurance & Property Costs": (n) =>
+    `${n} claimed the fictional Rate Review Board saved homeowners $300 per policy on average.`,
+  "State Budget & Spending": (n) =>
+    `${n} claimed the fictional Open Ledger portal covers every contract over $50,000.`,
+  "Financial Transparency": (n) =>
+    `${n} claimed the fictional Taxpayer Receipt tool was used by a million Floridians last year.`,
+  "Farming & Rural Economy": (n) =>
+    `${n} claimed the fictional resilience grants kept 200 family farms operating after the last hurricane.`,
+  "Water & Land Use": (n) =>
+    `${n} claimed fertilizer runoff dropped 25% under the fictional compact.`,
+  "Consumer Services": (n) =>
+    `${n} claimed licensing wait times fell from six weeks to three under the fictional plan.`,
 };
 
 const STANCE = {
   stated: (n, issue) =>
     `Stated positions on ${issue.toLowerCase()} center on the specific fictional programs ${n} has named publicly; see the sourced claims below.`,
 };
+
+/* --only=race-id,race-id emits demo-seed-delta.sql containing just those
+   races' rows — for additively seeding new races into a live database. */
+const onlyArg = process.argv.find((a) => a.startsWith("--only="));
+const onlyIds = onlyArg ? onlyArg.slice(7).split(",").filter(Boolean) : null;
+const ACTIVE_RACES = onlyIds ? RACES.filter((r) => onlyIds.includes(r.id)) : RACES;
 
 const sql = [];
 const sources = [];
@@ -186,7 +282,7 @@ const profiles = [];
 const socials = [];
 const publications = [];
 
-for (const race of RACES) {
+for (const race of ACTIVE_RACES) {
   const candIds = race.candidates.map((c) => c.id);
   races.push(
     `(${q(race.id)}, ${q(race.office)}, ${q(race.level)}, ${race.district ? q(race.district) : "NULL"}, 'general', true, NULL, ARRAY[${candIds.map(q).join(",")}]::text[], ${q(JSON.stringify(KEY_DATES))}::jsonb)`
@@ -368,15 +464,22 @@ DELETE FROM issue WHERE issue_id LIKE 'demo-%';
 DELETE FROM profile WHERE candidate_id LIKE 'demo-%';
 DELETE FROM candidate WHERE candidate_id LIKE 'demo-%';
 DELETE FROM race WHERE race_id LIKE 'demo-%';
-DELETE FROM news_item WHERE title LIKE 'DEMO:%';
+DELETE FROM news_item WHERE title LIKE 'DEMO:%' OR race_id LIKE 'demo-%';
 DELETE FROM source WHERE source_id LIKE 'demo-%';
 `;
 
-writeFileSync(path.join(root, "scripts", "demo-seed.sql"), seed);
-writeFileSync(path.join(root, "scripts", "demo-seed-1.sql"), part1);
-writeFileSync(path.join(root, "scripts", "demo-seed-2.sql"), part2);
-writeFileSync(path.join(root, "scripts", "demo-seed-3.sql"), part3);
-writeFileSync(path.join(root, "scripts", "demo-teardown.sql"), teardown);
-console.log(
-  `demo-seed.sql: ${races.length} races, ${candidates.length} candidates, ${claims.length} claims, ${positions.length} positions`
-);
+if (onlyIds) {
+  writeFileSync(path.join(root, "scripts", "demo-seed-delta.sql"), seed);
+  console.log(
+    `demo-seed-delta.sql (${onlyIds.join(",")}): ${races.length} races, ${candidates.length} candidates, ${claims.length} claims`
+  );
+} else {
+  writeFileSync(path.join(root, "scripts", "demo-seed.sql"), seed);
+  writeFileSync(path.join(root, "scripts", "demo-seed-1.sql"), part1);
+  writeFileSync(path.join(root, "scripts", "demo-seed-2.sql"), part2);
+  writeFileSync(path.join(root, "scripts", "demo-seed-3.sql"), part3);
+  writeFileSync(path.join(root, "scripts", "demo-teardown.sql"), teardown);
+  console.log(
+    `demo-seed.sql: ${races.length} races, ${candidates.length} candidates, ${claims.length} claims, ${positions.length} positions`
+  );
+}

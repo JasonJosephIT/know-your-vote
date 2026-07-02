@@ -5,18 +5,10 @@ import { usePathname } from "next/navigation";
 
 const items = [
   {
-    href: "/races",
-    label: "Races",
-    icon: (
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-        <rect x="3" y="4" width="14" height="12" rx="1.5" />
-        <path d="M6.5 8h7M6.5 12h4" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-  {
     href: "/candidates",
     label: "Candidates",
+    /* Race detail pages live under /races but belong to this section. */
+    alsoMatch: ["/races"],
     icon: (
       <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
         <circle cx="10" cy="7" r="3" />
@@ -27,6 +19,7 @@ const items = [
   {
     href: "/news",
     label: "News",
+    alsoMatch: [] as string[],
     icon: (
       <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
         <path d="M4 5.5h9.5v10H5.5A1.5 1.5 0 0 1 4 14V5.5Z" />
@@ -35,12 +28,14 @@ const items = [
     ),
   },
   {
-    href: "/find-my-candidates",
-    label: "Find Mine",
+    href: "/where-i-stand",
+    label: "Where I Stand",
+    alsoMatch: [] as string[],
     icon: (
       <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-        <circle cx="9" cy="9" r="4.5" />
-        <path d="m12.5 12.5 3.5 3.5" strokeLinecap="round" />
+        <circle cx="10" cy="10" r="7.5" />
+        <path d="M7.8 7.7a2.2 2.2 0 1 1 3.1 2.5c-.6.3-.9.8-.9 1.4" strokeLinecap="round" />
+        <path d="M10 14.2h.01" strokeLinecap="round" strokeWidth="2.2" />
       </svg>
     ),
   },
@@ -48,6 +43,11 @@ const items = [
 
 export function SectionNav() {
   const pathname = usePathname();
+
+  const isActive = (item: (typeof items)[number]) =>
+    [item.href, ...item.alsoMatch].some(
+      (base) => pathname === base || pathname.startsWith(`${base}/`)
+    );
 
   return (
     <nav
@@ -64,8 +64,7 @@ export function SectionNav() {
         </Link>
         <div className="flex w-full items-stretch justify-around gap-1 p-2 md:w-auto md:justify-end md:gap-2">
           {items.map((item) => {
-            const active =
-              pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const active = isActive(item);
             return (
               <Link
                 key={item.href}

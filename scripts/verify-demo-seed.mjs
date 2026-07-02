@@ -36,9 +36,9 @@ await db.exec(await readFile(path.join(root, "scripts", "demo-seed.sql"), "utf8"
 
 await db.exec("SET ROLE anon;");
 
-await check("anon sees exactly 5 published demo races", async () => {
+await check("anon sees exactly 8 published demo races", async () => {
   const r = await db.query("SELECT count(*)::int AS n FROM race;");
-  if (r.rows[0].n !== 5) throw new Error(`saw ${r.rows[0].n}`);
+  if (r.rows[0].n !== 8) throw new Error(`saw ${r.rows[0].n}`);
 });
 
 await check("FL-10 (in_review) is invisible to anon", async () => {

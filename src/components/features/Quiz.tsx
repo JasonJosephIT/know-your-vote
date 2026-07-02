@@ -8,7 +8,7 @@ import { QuizResults } from "@/components/features/QuizResult";
 import { track } from "@/lib/analytics";
 import { readLocation } from "@/lib/location";
 import { QUIZ_QUESTIONS } from "@/lib/quiz-questions";
-import type { QuizResponse } from "@/types/app";
+import type { QuizResponse, ResolveResult } from "@/types/app";
 
 type Stage =
   | { kind: "intro" }
@@ -22,11 +22,53 @@ export function Quiz() {
   const [stage, setStage] = useState<Stage>({ kind: "intro" });
   const [zip, setZip] = useState("");
   const [answers, setAnswers] = useState<Record<string, { choice?: string; freeText?: string }>>({});
+  const [zipChecking, setZipChecking] = useState(false);
+  const [zipNotice, setZipNotice] = useState<string | null>(null);
 
   function start() {
     const stored = readLocation();
     if (stored?.zip) setZip(stored.zip);
+    setZipNotice(null);
     setStage({ kind: "zip" });
+  }
+
+  /* Check coverage the moment the ZIP is submitted, not after the whole quiz
+     — an out-of-coverage voter should hear it here, not five questions in. */
+  async function checkZipThenAdvance(event: React.FormEvent) {
+    event.preventDefault();
+    if (!/^\d{5}$/.test(zip)) return;
+    setZipNotice(null);
+    setZipChecking(true);
+    try {
+      const stored = readLocation();
+      const params = new URLSearchParams({ zip });
+      if (stored?.zip === zip && stored?.district) {
+        params.set("district", stored.district);
+      }
+      const res = await fetch(`/api/resolve?${params}`);
+      const data: ResolveResult = await res.json();
+      if (!res.ok) {
+        setZipNotice("We couldn't match that ZIP — double-check it and try again.");
+        return;
+      }
+      if (!data.inCoverage) {
+        setZipNotice(
+          "We don't cover that area yet — right now it's the Miami, Fort Lauderdale, Tampa, and Orlando metros. Try a ZIP in one of those."
+        );
+        return;
+      }
+      if (data.needsCountyConfirm) {
+        setZipNotice(
+          "That ZIP spans more than one congressional district. Confirm your district on the home page first, then come back to the quiz."
+        );
+        return;
+      }
+      setStage({ kind: "questions", index: 0 });
+    } catch {
+      setZipNotice("We couldn't check that ZIP right now — try again in a moment.");
+    } finally {
+      setZipChecking(false);
+    }
   }
 
   async function submit() {
@@ -76,13 +118,7 @@ export function Quiz() {
 
   if (stage.kind === "zip") {
     return (
-      <form
-        className="flex flex-col gap-3"
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (/^\d{5}$/.test(zip)) setStage({ kind: "questions", index: 0 });
-        }}
-      >
+      <form className="flex flex-col gap-3" onSubmit={checkZipThenAdvance}>
         <label htmlFor="quiz-zip" className="text-label">
           First, your ZIP — so we quiz you on your actual ballot
         </label>
@@ -93,13 +129,21 @@ export function Quiz() {
             maxLength={5}
             placeholder="Enter your ZIP code"
             value={zip}
-            onChange={(e) => setZip(e.target.value.replace(/\D/g, ""))}
+            onChange={(e) => {
+              setZip(e.target.value.replace(/\D/g, ""));
+              if (zipNotice) setZipNotice(null);
+            }}
             className="sm:max-w-[200px]"
           />
-          <Button type="submit" disabled={!/^\d{5}$/.test(zip)}>
-            Next
+          <Button type="submit" disabled={!/^\d{5}$/.test(zip) || zipChecking}>
+            {zipChecking ? "Checking…" : "Next"}
           </Button>
         </div>
+        {zipNotice && (
+          <p role="alert" className="text-body-sm text-on-surface-muted">
+            {zipNotice}
+          </p>
+        )}
       </form>
     );
   }

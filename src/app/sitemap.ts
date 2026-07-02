@@ -8,8 +8,8 @@ const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://know-your-vote-chazak.
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${BASE}/`, changeFrequency: "weekly", priority: 1 },
-    { url: `${BASE}/races`, changeFrequency: "daily", priority: 0.9 },
-    { url: `${BASE}/find-my-candidates`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/candidates`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${BASE}/where-i-stand`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/news`, changeFrequency: "daily", priority: 0.6 },
     { url: `${BASE}/methodology`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/privacy`, changeFrequency: "yearly", priority: 0.3 },
