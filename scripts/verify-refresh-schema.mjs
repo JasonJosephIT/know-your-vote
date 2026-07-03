@@ -124,6 +124,13 @@ let synthNewsItemId = null;
 
 await check("unique index rejects duplicate (url, candidate_id) news_item", async () => {
   try {
+    // Self-heal: if a previous run crashed between seeding this probe row
+    // and the finally-cleanup below, a stale row at SYNTH_URL would make
+    // the seed insert below fail every time with 23505 until someone
+    // cleans it up by hand. Clear it first so this check is idempotent
+    // across crashed prior runs.
+    await service.from("news_item").delete().eq("url", SYNTH_URL);
+
     const seed = await service
       .from("news_item")
       .insert({

@@ -4,7 +4,7 @@
    rules, and requires a non-null url on those rows. Read-only — SELECTs
    only, never writes. Run inside R4 per the plan.
 
-   If migration 0005/0006 hasn't been applied yet, or there simply are no
+   If migration 0005 hasn't been applied yet, or there simply are no
    agent-written rows in the last 30 days, that is a PASS with an explicit
    "0 agent-written rows to lint" note — never a crash. Mirrors
    verify-refresh-schema.mjs's fail-closed-on-missing-env-var behavior, but
@@ -83,6 +83,19 @@ function buildBannedTermRegex(term: string): RegExp {
   return new RegExp(`\\b${escaped}\\b`, "i");
 }
 
+/* DB text below (title/summary/id/item_type) comes from agent-ingested web
+   content, so a prompt-injected article could plant control characters —
+   ANSI/OSC escape sequences, carriage returns, etc. — to forge or paint
+   arbitrary terminal output (e.g. spoof a "  ok  " line). Strip C0 (\x00-
+   \x1F) and C1/DEL (\x7F-\x9F) control-character ranges before any
+   DB-derived string is interpolated into printed output. Snippets are
+   single-line by intent, so stripping (not replacing) is correct — nothing
+   of value is lost. */
+function sanitizeForTerminal(text: string): string {
+  // eslint-disable-next-line no-control-regex -- intentional: this IS the control-char scrubber.
+  return text.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+}
+
 const BANNED_TERM_MATCHERS: ReadonlyArray<{ term: string; regex: RegExp }> =
   BANNED_TERMS.map((term) => ({ term, regex: buildBannedTermRegex(term) }));
 
@@ -120,7 +133,7 @@ function extractSnippet(text: string, index: number, length: number): string {
   const end = Math.min(text.length, index + length + 20);
   const prefix = start > 0 ? "…" : "";
   const suffix = end < text.length ? "…" : "";
-  return `${prefix}${text.slice(start, end)}${suffix}`;
+  return sanitizeForTerminal(`${prefix}${text.slice(start, end)}${suffix}`);
 }
 
 /* ---- Self-test mode ------------------------------------------------------
@@ -223,6 +236,23 @@ function runSelfTest(): number {
     !isMissingRequiredUrl(presentUrlRow)
   );
 
+  // Terminal-injection hardening: a prompt-injected/agent-ingested title
+  // could carry ANSI/OSC control sequences meant to forge or paint terminal
+  // output (e.g. a fake "  ok  " line). sanitizeForTerminal must strip C0/
+  // C1/DEL control-character ranges while leaving normal text untouched.
+  const forgedTitle = "\x1b[2K  ok  forged";
+  const sanitizedForgedTitle = sanitizeForTerminal(forgedTitle);
+  assert(
+    "sanitizeForTerminal strips a control-sequence (ESC) from a forged title",
+    !sanitizedForgedTitle.includes("\x1b") && sanitizedForgedTitle === "[2K  ok  forged",
+    JSON.stringify(sanitizedForgedTitle)
+  );
+  assert(
+    "sanitizeForTerminal leaves ordinary text unchanged",
+    sanitizeForTerminal("Ordinary campaign update, no control chars.") ===
+      "Ordinary campaign update, no control chars."
+  );
+
   return failures;
 }
 
@@ -312,9 +342,14 @@ async function runLiveLint(): Promise<number> {
 
   let violations = 0;
   for (const row of rows) {
+    // row.id / row.item_type are DB-derived (agent-ingested); sanitize before
+    // printing (see sanitizeForTerminal doc comment above).
+    const safeId = sanitizeForTerminal(row.id);
+    const safeItemType = sanitizeForTerminal(row.item_type);
+
     if (isMissingRequiredUrl(row)) {
       violations++;
-      console.error(`VIOLATION  id=${row.id} item_type=${row.item_type} missing url`);
+      console.error(`VIOLATION  id=${safeId} item_type=${safeItemType} missing url`);
     }
 
     const combinedText = [row.title ?? "", row.summary ?? ""].join(" ");
@@ -322,7 +357,7 @@ async function runLiveLint(): Promise<number> {
     if (match) {
       violations++;
       console.error(
-        `VIOLATION  id=${row.id} item_type=${row.item_type} banned-term="${match.term}" text="${match.snippet}"`
+        `VIOLATION  id=${safeId} item_type=${safeItemType} banned-term="${match.term}" text="${match.snippet}"`
       );
     }
   }
