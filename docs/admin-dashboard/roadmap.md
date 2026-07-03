@@ -1,7 +1,7 @@
 # Roadmap — Operator Console (`/admin`)
 
 > Checkboxes are updated as tasks are completed. The coding agent MUST mark tasks `- [x]` as they are finished.
-> Source docs: `docs/admin-dashboard/prd.md` (requirements, AFR-xxx), `docs/admin-dashboard/design.md` (schema, API contracts, deep dives). House conventions: `docs/product-roadmap.md` Build Philosophy applies unchanged — plus one addition below.
+> Source docs: `docs/admin-dashboard/prd.md` (requirements, AFR-xxx), `docs/admin-dashboard/design.md` (schema, API contracts, deep dives). UI specs: `docs/admin-dashboard/handoff/` (developer handoff per phase — tokens, states, redlines, a11y; A1 as-built, A2–A5 as target). House conventions: `docs/product-roadmap.md` Build Philosophy applies unchanged — plus one addition below.
 
 **Status:** 4/18 tasks complete
 **Current Phase:** Phase A1 foundation complete (code + embedded regression green); founder gates A00a–c still open → Phase A2 next
