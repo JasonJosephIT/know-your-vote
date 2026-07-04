@@ -4,7 +4,7 @@
 > Source docs: `docs/admin-dashboard/prd.md` (requirements, AFR-xxx), `docs/admin-dashboard/design.md` (schema, API contracts, deep dives). UI specs: `docs/admin-dashboard/handoff/` (developer handoff per phase — tokens, states, redlines, a11y; A1 as-built, A2–A5 as target). House conventions: `docs/product-roadmap.md` Build Philosophy applies unchanged — plus one addition below.
 
 **Status:** 4/18 tasks complete
-**Current Phase:** Phase A1 foundation complete (code + embedded regression green); founder gates A00a–c still open → Phase A2 next
+**Current Phase:** Phase A1 complete + **live-verified** (0005/0006 applied to prod, both guardrails green); founder gate A00a done, A00b/A00c set locally (Vercel env + Auth redirect-URLs pending) → Phase A2 next
 **Runnable bundles:** `docs/admin-dashboard/phases/run-1-foundation.md` (first, alone) → then `run-2-monitor-submit-review.md` (A2+A3 combined), `run-3-agent-control.md`, `run-4-site-metrics.md` in any order or in parallel. This file stays the single checkbox tracker.
 
 ## Build Philosophy (additions)
@@ -18,9 +18,12 @@
 
 > **Goal:** The accounts/keys/products the console integrates with exist. Tasks in later phases are written to *land safely* without these (honest degradation), but the console isn't "done" until they're set.
 
-- [ ] **TASK-A00a** *(founder)* — Apply migration `0005_refresh_agents.sql` to Supabase (decide the `candidate_contact` anon-policy question at the same time — see `.superpowers/sdd/progress.md` "OPEN DECISION"), then run `node scripts/verify-refresh-schema.mjs` to green.
+- [x] **TASK-A00a** *(founder)* — Apply migration `0005_refresh_agents.sql` to Supabase (decide the `candidate_contact` anon-policy question at the same time — see `.superpowers/sdd/progress.md` "OPEN DECISION"), then run `node scripts/verify-refresh-schema.mjs` to green.
+  ✓ 2026-07-03: applied 0005 **and** 0006 live to `pqracitpmzpiqfnzlngw` via the Supabase MCP. `candidate_contact` anon-read policy kept as written (table is empty until R2 populates it — revisitable before any data lands). `verify-refresh-schema.mjs` and `verify-admin-ops.mjs` both green against live.
 - [ ] **TASK-A00b** *(founder)* — Enable Supabase Auth (email/magic link) on project `pqracitpmzpiqfnzlngw`; set `ADMIN_EMAILS` in `.env.local` + Vercel env.
+  ~ Partial: Supabase email auth already enabled (provider on, signups allowed); `ADMIN_EMAILS` set in `.env.local`; login page verified flipping "Not configured"→form. **Pending (dashboard):** add `ADMIN_EMAILS` to Vercel env, and add Auth redirect URLs (`http://localhost:3000/**` + prod `/**`) so the magic link returns to `/admin/auth/callback`.
 - [ ] **TASK-A00c** *(founder)* — Set `SUPABASE_SERVICE_ROLE_KEY` (already required by the voter app's gated features), `VERCEL_API_TOKEN` (+ `VERCEL_TEAM_ID`/`VERCEL_PROJECT_ID`), and optionally `SENTRY_AUTH_TOKEN` + DSN, in `.env.local` + Vercel env.
+  ~ Partial: `SUPABASE_SERVICE_ROLE_KEY` (`sb_secret_…` key) set in `.env.local`. **Pending:** add it to Vercel env; `VERCEL_API_TOKEN`/`SENTRY_AUTH_TOKEN` still unset (only Phase A5 needs them).
 
 ## Phase A1: Foundation — ops schema, auth, shell
 
