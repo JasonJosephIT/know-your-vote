@@ -4,7 +4,10 @@
 > phases ship as separate PRs. Mark tasks `- [x]` as they are finished and keep
 > the Status line current. Every task ends with its Verify step passing.
 
-**Status:** 9/15 agent tasks complete · Phase A code complete (A1–A9); in review. Founder gates open: F4 (verify dates — nothing sends until then), A3 device check, Resend env in Vercel.
+**Status:** 9/15 agent tasks complete · Phase A complete — PR #3
+(feat/pwa-notifications-a). Founder gates open: F4 (verify dates — nothing
+sends until then), Resend env in Vercel, A2/A3 device smoke test. Phase B
+starts after A merges.
 **Design authority:** `docs/design/notification-pipeline-and-pwa.md` (full DDL,
 rationale, trade-offs) and `docs/adr/ADR-001-mobile-mirror-and-shell-parity.md`
 — **as amended by the ponytail decision of 2026-07-06 (user-approved), which
