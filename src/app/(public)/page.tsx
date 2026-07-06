@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { InstallCard } from "@/components/features/InstallCard";
 import { ZipEntry } from "@/components/features/ZipEntry";
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
         linked to a source. About a minute, no account, no agenda.
       </p>
       <ZipEntry />
+      <InstallCard />
       <p className="text-caption text-on-surface-muted">
         We describe what each candidate says, has done, and what&apos;s
         verified. You decide.{" "}

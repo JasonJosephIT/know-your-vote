@@ -1,5 +1,6 @@
 import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
+import { secretEquals } from "@/lib/secret-compare";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 
@@ -21,8 +22,8 @@ function authorized(request: NextRequest): boolean {
   const secret = process.env.CRON_SECRET;
   if (!secret) return false;
   return (
-    request.headers.get("x-cron-secret") === secret ||
-    request.headers.get("authorization") === `Bearer ${secret}`
+    secretEquals(request.headers.get("x-cron-secret"), secret) ||
+    secretEquals(request.headers.get("authorization"), `Bearer ${secret}`)
   );
 }
 

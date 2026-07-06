@@ -28,6 +28,22 @@ export default function PrivacyPage() {
           token. Nothing is linked to your browsing, nothing is shared or
           sold, and the unsubscribe link in every email works immediately.
         </p>
+        <p className="text-body">
+          That same signup also gets you a handful of deadline reminders by
+          email — voter registration, vote-by-mail request, early voting, and
+          election day. Every reminder contains only dates and official
+          links, every date is verified against its official source before
+          anything sends, and every email carries the same instant
+          unsubscribe link. Our send records store counts, never addresses.
+          Prefer zero email? The same dates are available as a{" "}
+          <a
+            href="/api/calendar/general_2026.ics"
+            className="text-primary underline underline-offset-2"
+          >
+            calendar file
+          </a>{" "}
+          that never touches our servers again after download.
+        </p>
       </section>
 
       <section className="flex flex-col gap-2">
