@@ -21,6 +21,10 @@
         live request per agent; the status/agent/kind CHECKs reject unknowns.
     13. admin_action is append-only even for service_role: INSERT/SELECT are
         granted, UPDATE/DELETE are denied (PRD § 5).
+    14. 0007_notifications objects exist (election_event,
+        notification_send_log); anon can neither read nor write them;
+        the event_type CHECK and the statewide-scope unique index reject
+        bad rows; send_log ON CONFLICT DO NOTHING dedupes.
 
    Supabase provides the anon/authenticated/service_role roles out of the box;
    the harness creates them first so the same SQL runs in both environments.
@@ -144,6 +148,16 @@ await check("uq_run_request_live partial index exists", async () => {
   if (r.rows[0].n !== 1) throw new Error("uq_run_request_live index missing");
 });
 
+/* 0007_notifications: the two notification-backbone tables. */
+for (const table of ["election_event", "notification_send_log"]) {
+  await check(`${table} table exists`, async () => {
+    const r = await db.query(
+      `SELECT count(*)::int AS n FROM information_schema.tables WHERE table_schema='public' AND table_name='${table}';`
+    );
+    if (r.rows[0].n !== 1) throw new Error(`${table} table missing`);
+  });
+}
+
 /* Fixture: one published race, one draft race, each with a candidate,
    profile, claim (sourced), and a social handle. */
 await db.exec(`
@@ -176,6 +190,11 @@ await db.exec(`
     ('c-pub', 'press@pub-candidate.example', 'https://pub-candidate.example/contact');
   INSERT INTO news_item (candidate_id, race_id, item_type, title, url) VALUES
     ('c-pub', 'r-pub', 'candidate_news', 'Filing shows X.', 'https://example.gov/story-1');
+  -- county-scoped fixture row: statewide rows come from 0008_election_seed
+  INSERT INTO election_event (county_fips, event_type, election, event_date, details_url) VALUES
+    ('12086', 'early_voting_start', 'general_2026', '2026-10-19', 'https://www.miamidade.gov/elections/');
+  INSERT INTO notification_send_log (dedupe_key, recipient_count) VALUES
+    ('general_2026:registration_deadline:T-7:email', 1);
 `);
 
 /* Everything below runs as anon. */
@@ -238,6 +257,22 @@ await expectDenied(
   "UPDATE race_publication SET status='published' WHERE race_id='r-draft';"
 );
 await expectDenied("anon cannot update claims", "UPDATE claim SET text='x';");
+await expectDenied(
+  "anon cannot read election_event",
+  "SELECT * FROM election_event;"
+);
+await expectDenied(
+  "anon cannot insert election_event",
+  "INSERT INTO election_event (event_type, election, event_date, details_url) VALUES ('election_day','general_2026','2026-11-03','https://x.example');"
+);
+await expectDenied(
+  "anon cannot read notification_send_log",
+  "SELECT * FROM notification_send_log;"
+);
+await expectDenied(
+  "anon cannot insert notification_send_log",
+  "INSERT INTO notification_send_log (dedupe_key) VALUES ('x');"
+);
 
 /* 0006_admin_ops: the ops plane is server-side only. Minimal INSERTs per table
    (a permission error fires before any NOT NULL/CHECK is evaluated, so the
@@ -354,6 +389,32 @@ await expectDenied(
   "service_role cannot DELETE admin_action (append-only)",
   "DELETE FROM admin_action;"
 );
+
+/* 0007_notifications constraint probes. */
+await expectConstraintViolation(
+  "event_type CHECK rejects an unknown event_type",
+  `INSERT INTO election_event (event_type, election, event_date, details_url)
+   VALUES ('runoff_deadline', 'general_2026', '2026-12-01', 'https://x.example');`,
+  /violates check constraint/
+);
+await expectConstraintViolation(
+  "unique index rejects a duplicate statewide election_event",
+  `INSERT INTO election_event (event_type, election, event_date, details_url)
+   VALUES ('registration_deadline', 'general_2026', '2026-10-06', 'https://x.example');`,
+  /duplicate key value violates unique constraint "uq_election_event_scope"/
+);
+await check("send_log ON CONFLICT DO NOTHING dedupes", async () => {
+  await db.exec(
+    `INSERT INTO notification_send_log (dedupe_key, recipient_count)
+     VALUES ('general_2026:registration_deadline:T-7:email', 999)
+     ON CONFLICT (dedupe_key) DO NOTHING;`
+  );
+  const r = await db.query(
+    "SELECT count(*)::int AS n, min(recipient_count)::int AS c FROM notification_send_log WHERE dedupe_key = 'general_2026:registration_deadline:T-7:email';"
+  );
+  if (r.rows[0].n !== 1 || r.rows[0].c !== 1)
+    throw new Error(`expected 1 untouched row, saw n=${r.rows[0].n} c=${r.rows[0].c}`);
+});
 
 await db.exec("RESET ROLE;");
 

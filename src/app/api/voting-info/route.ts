@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
+import { verifiedStatewideEvents } from "@/lib/notifications/election-events";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { resolveZip, ZIP_RE } from "@/lib/resolve";
 import { createServiceClient } from "@/lib/supabase/service";
@@ -106,10 +107,14 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  /* Dates come from founder-verified election_event rows (plan A5) — an
+     unverified or missing row simply drops its line from the email. */
+  const events = await verifiedStatewideEvents(service, "general_2026");
+  const byType = new Map(events.map((e) => [e.event_type, e]));
   const general = formatDate(
-    resolved.races.length > 0 ? "2026-11-03" : undefined
+    resolved.races.length > 0 ? byType.get("election_day")?.event_date : undefined
   );
-  const registration = formatDate("2026-10-05");
+  const registration = formatDate(byType.get("registration_deadline")?.event_date);
   const unsubscribeUrl = `${request.nextUrl.origin}/api/voting-info/unsubscribe?token=${subscription.unsubscribe_token}`;
 
   const resend = new Resend(process.env.RESEND_API_KEY);
@@ -126,6 +131,9 @@ export async function POST(request: NextRequest) {
       ``,
       registration ? `Registration deadline: ${registration}` : ``,
       general ? `General election: ${general}` : ``,
+      registration || general
+        ? `Add the key dates to your calendar: ${request.nextUrl.origin}/api/calendar/general_2026.ics`
+        : ``,
       `Florida is a closed-primary state — party registration determines your primary ballot.`,
       ``,
       `Your ballot, laid out fairly: ${request.nextUrl.origin}`,

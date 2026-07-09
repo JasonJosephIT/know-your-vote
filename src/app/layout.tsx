@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Figtree, Inter, IBM_Plex_Mono } from "next/font/google";
 import Script from "next/script";
 import { SectionNav } from "@/components/nav/SectionNav";
@@ -39,6 +39,19 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Know Your Vote",
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "KnowYourVote",
+  },
+  icons: {
+    apple: "/apple-touch-icon.png",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#2F6B4F",
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -51,7 +64,9 @@ export default function RootLayout({
       lang="en"
       className={`${figtree.variable} ${inter.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col pb-[88px] md:pt-[72px] md:pb-0">
+      {/* Bottom padding clears the fixed nav plus the home-indicator inset in
+          standalone PWA mode; top inset keeps content out of the status bar. */}
+      <body className="flex min-h-full flex-col pt-[env(safe-area-inset-top)] pb-[calc(88px+env(safe-area-inset-bottom))] md:pt-[72px] md:pb-0">
         {plausibleDomain && (
           <Script
             src="https://plausible.io/js/script.js"

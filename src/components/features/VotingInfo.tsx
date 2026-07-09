@@ -98,6 +98,16 @@ export function VotingInfo({ zip: initialZip = "" }: { zip?: string }) {
       <Button type="submit" disabled={stage.kind === "sending"} className="w-fit">
         {stage.kind === "sending" ? "Sending…" : "Email my voting info"}
       </Button>
+      <p className="text-caption text-on-surface-muted">
+        No email needed:{" "}
+        <a
+          href="/api/calendar/general_2026.ics"
+          className="underline underline-offset-2 hover:text-on-surface"
+        >
+          add the key dates straight to your calendar
+        </a>
+        .
+      </p>
     </form>
   );
 }
