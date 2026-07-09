@@ -13,7 +13,15 @@
      8. The news_item (url, candidate_id) unique index rejects a duplicate
         insert, and the item_type CHECK rejects an unknown item_type.
      9. anon can SELECT candidate_contact but cannot INSERT it.
-    10. 0007_notifications objects exist (election_event,
+    10. 0006_admin_ops objects exist: agent_run, agent_run_request,
+        review_item, admin_action, and the uq_run_request_live partial index.
+    11. The ops plane is server-side only: anon AND authenticated are denied
+        both SELECT and INSERT on all four ops tables (design.md § 3).
+    12. Ops CHECK/unique invariants hold: uq_run_request_live rejects a second
+        live request per agent; the status/agent/kind CHECKs reject unknowns.
+    13. admin_action is append-only even for service_role: INSERT/SELECT are
+        granted, UPDATE/DELETE are denied (PRD § 5).
+    14. 0007_notifications objects exist (election_event,
         notification_send_log); anon can neither read nor write them;
         the event_type CHECK and the statewide-scope unique index reject
         bad rows; send_log ON CONFLICT DO NOTHING dedupes.
@@ -120,6 +128,24 @@ await check("candidate.site_last_verified_at column exists", async () => {
     "SELECT count(*)::int AS n FROM information_schema.columns WHERE table_name='candidate' AND column_name='site_last_verified_at';"
   );
   if (r.rows[0].n !== 1) throw new Error("candidate.site_last_verified_at missing");
+});
+
+/* 0006_admin_ops: the four ops-plane tables exist (invariant 10). Same
+   count-based shape as the 0005 probes above — a missing table returns zero
+   rows rather than throwing. */
+for (const table of ["agent_run", "agent_run_request", "review_item", "admin_action"]) {
+  await check(`${table} table exists`, async () => {
+    const r = await db.query(
+      `SELECT count(*)::int AS n FROM information_schema.tables WHERE table_schema='public' AND table_name='${table}';`
+    );
+    if (r.rows[0].n !== 1) throw new Error(`${table} table missing`);
+  });
+}
+await check("uq_run_request_live partial index exists", async () => {
+  const r = await db.query(
+    "SELECT count(*)::int AS n FROM pg_indexes WHERE schemaname='public' AND indexname='uq_run_request_live';"
+  );
+  if (r.rows[0].n !== 1) throw new Error("uq_run_request_live index missing");
 });
 
 /* 0007_notifications: the two notification-backbone tables. */
@@ -248,6 +274,36 @@ await expectDenied(
   "INSERT INTO notification_send_log (dedupe_key) VALUES ('x');"
 );
 
+/* 0006_admin_ops: the ops plane is server-side only. Minimal INSERTs per table
+   (a permission error fires before any NOT NULL/CHECK is evaluated, so the
+   column list only needs to name the table). */
+const opsTables = ["agent_run", "agent_run_request", "review_item", "admin_action"];
+const opsInsert = {
+  agent_run: "INSERT INTO agent_run (agent) VALUES ('R1');",
+  agent_run_request: "INSERT INTO agent_run_request (agent) VALUES ('R1');",
+  review_item:
+    "INSERT INTO review_item (kind, source, payload) VALUES ('manual_news','operator','{}');",
+  admin_action:
+    "INSERT INTO admin_action (actor, action, subject_kind, subject_id) VALUES ('x','trigger','review_item', gen_random_uuid());",
+};
+
+/* anon: zero access to every ops table — SELECT and INSERT both denied. */
+for (const t of opsTables) {
+  await expectDenied(`anon cannot SELECT ${t}`, `SELECT * FROM ${t};`);
+  await expectDenied(`anon cannot INSERT ${t}`, opsInsert[t]);
+}
+
+await db.exec("RESET ROLE;");
+
+/* authenticated: this app has no accounts, and the ops plane is doubly off
+   limits to it — SELECT and INSERT denied on all four tables (invariant 11).
+   0002 revoked writes from authenticated and never granted it SELECT; the ops
+   tables add no grant either, so every verb is denied. */
+await db.exec("SET ROLE authenticated;");
+for (const t of opsTables) {
+  await expectDenied(`authenticated cannot SELECT ${t}`, `SELECT * FROM ${t};`);
+  await expectDenied(`authenticated cannot INSERT ${t}`, opsInsert[t]);
+}
 await db.exec("RESET ROLE;");
 
 /* Service role bypasses RLS for its two legitimate write paths. */
@@ -272,6 +328,66 @@ await expectConstraintViolation(
   `INSERT INTO news_item (item_type, title, url)
    VALUES ('candidate_endorsement', 'x', 'https://example.gov/story-2');`,
   /violates check constraint "news_item_item_type_check"/
+);
+
+/* 0006_admin_ops constraint probes (service_role — the role the console and
+   dispatcher write through). uq_run_request_live enforces one live (pending or
+   claimed) request per agent (invariant 12). */
+await db.exec("INSERT INTO agent_run_request (agent, status) VALUES ('R1','pending');");
+await expectConstraintViolation(
+  "uq_run_request_live rejects a 2nd live request for the same agent",
+  "INSERT INTO agent_run_request (agent, status) VALUES ('R1','claimed');",
+  /duplicate key value violates unique constraint "uq_run_request_live"/
+);
+await check("uq_run_request_live allows a different agent to be live", async () => {
+  await db.exec("INSERT INTO agent_run_request (agent, status) VALUES ('R2','pending');");
+});
+await check("uq_run_request_live allows a new request once the prior resolves", async () => {
+  await db.exec(
+    "UPDATE agent_run_request SET status='fulfilled', resolved_at=NOW() WHERE agent='R1' AND status='pending';"
+  );
+  await db.exec("INSERT INTO agent_run_request (agent, status) VALUES ('R1','pending');");
+});
+
+await expectConstraintViolation(
+  "agent_run.status CHECK rejects an unknown status",
+  "INSERT INTO agent_run (agent, status) VALUES ('R1','bogus');",
+  /violates check constraint "agent_run_status_check"/
+);
+await expectConstraintViolation(
+  "agent_run.agent CHECK rejects an unknown agent",
+  "INSERT INTO agent_run (agent) VALUES ('R9');",
+  /violates check constraint "agent_run_agent_check"/
+);
+await expectConstraintViolation(
+  "agent_run_request.status CHECK rejects an unknown status",
+  "INSERT INTO agent_run_request (agent, status) VALUES ('R3','bogus');",
+  /violates check constraint "agent_run_request_status_check"/
+);
+await expectConstraintViolation(
+  "review_item.kind CHECK rejects an unknown kind",
+  "INSERT INTO review_item (kind, source, payload) VALUES ('bogus','operator','{}');",
+  /violates check constraint "review_item_kind_check"/
+);
+await expectConstraintViolation(
+  "review_item.status CHECK rejects an unknown status",
+  "INSERT INTO review_item (kind, source, payload, status) VALUES ('manual_news','operator','{}','bogus');",
+  /violates check constraint "review_item_status_check"/
+);
+
+/* admin_action is append-only even for service_role (invariant 13): INSERT and
+   SELECT are granted, UPDATE/DELETE are not — so a tamper attempt is denied at
+   the privilege layer (BYPASSRLS does not bypass table grants). */
+await db.exec(
+  "INSERT INTO admin_action (actor, action, subject_kind, subject_id) VALUES ('op@example.com','approve','review_item', gen_random_uuid());"
+);
+await expectDenied(
+  "service_role cannot UPDATE admin_action (append-only)",
+  "UPDATE admin_action SET action='tampered';"
+);
+await expectDenied(
+  "service_role cannot DELETE admin_action (append-only)",
+  "DELETE FROM admin_action;"
 );
 
 /* 0007_notifications constraint probes. */
@@ -299,6 +415,7 @@ await check("send_log ON CONFLICT DO NOTHING dedupes", async () => {
   if (r.rows[0].n !== 1 || r.rows[0].c !== 1)
     throw new Error(`expected 1 untouched row, saw n=${r.rows[0].n} c=${r.rows[0].c}`);
 });
+
 await db.exec("RESET ROLE;");
 
 if (failures > 0) {

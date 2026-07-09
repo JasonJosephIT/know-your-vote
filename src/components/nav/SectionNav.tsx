@@ -44,6 +44,11 @@ const items = [
 export function SectionNav() {
   const pathname = usePathname();
 
+  /* The operator console (/admin) is a separate surface with its own nav and
+     chrome — the voter section nav never belongs there, and must not linger in
+     the DOM/tab order behind the console's full-screen shell. */
+  if (pathname.startsWith("/admin")) return null;
+
   const isActive = (item: (typeof items)[number]) =>
     [item.href, ...item.alsoMatch].some(
       (base) => pathname === base || pathname.startsWith(`${base}/`)
