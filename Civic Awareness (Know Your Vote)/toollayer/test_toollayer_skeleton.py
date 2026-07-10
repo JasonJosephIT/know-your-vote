@@ -20,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from cap_toollayer import (  # noqa: E402
     cores, discovery, errors, handlers, identity, intake, logsink, middleware,
-    store, synthesis,
+    schemas, server, store, synthesis,
 )
 
 
@@ -1110,6 +1110,129 @@ class TestSmsDispatch(unittest.TestCase):
         frozen = layer.dispatch("sms_dispatch", {"approval_token": "t",
                                 "to": "+15615550100", "body": "hi"})
         self.assertEqual(frozen["error"], errors.PIPELINE_HALTED)
+
+
+class TestToolSchemas(unittest.TestCase):
+    """The MCP surface must describe itself. A live claude-sonnet-5 Fact-Checker
+    session burned 17/26 tool calls guessing `type`/`lean_tag` when the tools
+    published no schema — these assertions keep the enums honest and pinned to
+    the canonical cores so the two can never drift."""
+
+    def setUp(self):
+        self.guard = cores.load_guard_core("factchecker")  # carries the canonical enums
+
+    def test_every_callable_tool_has_a_schema_and_t11_has_none(self):
+        self.assertEqual(set(schemas.TOOL_SCHEMAS), set(server.CALLABLE_TOOLS))
+        self.assertNotIn("log_action", schemas.TOOL_SCHEMAS)
+        for tool, spec in schemas.TOOL_SCHEMAS.items():
+            self.assertTrue(spec["description"].strip(), tool)
+            self.assertTrue(spec["input_schema"]["properties"], tool)
+
+    def test_enums_match_the_canonical_guard_core(self):
+        self.assertEqual(set(schemas.SOURCE_TYPES), set(self.guard.VALID_SOURCE_TYPES))
+        self.assertEqual(set(schemas.LEAN_TAGS), set(self.guard.VALID_LEAN_TAGS))
+        self.assertEqual(set(schemas.BUCKETS), set(self.guard.VALID_BUCKETS))
+        self.assertEqual(set(schemas.VERDICTS), set(self.guard.VERDICTS))
+        self.assertEqual(set(schemas.VERIFICATION), set(self.guard.VALID_VERIFICATION))
+
+    def test_named_catalogs_match_their_implementations(self):
+        self.assertEqual(set(schemas.DB_READ_QUERIES),
+                         set(store._NAMED_READS) | {"claims_by_bucket"})
+        self.assertEqual(set(schemas.FEC_ENDPOINTS), set(intake._FEC_ENDPOINTS))
+
+    def test_source_register_publishes_the_type_and_lean_enums(self):
+        props = schemas.TOOL_SCHEMAS["source_register"]["input_schema"]["properties"]
+        self.assertIn("candidate_self", props["type"]["enum"])
+        self.assertIn("primary_doc", props["type"]["enum"])
+        self.assertIn("N/A", props["lean_tag"]["enum"])
+        self.assertNotIn("neutral", props["lean_tag"]["enum"])  # what the model guessed
+
+    def test_claim_write_verdict_is_storage_form_and_nullable(self):
+        props = schemas.TOOL_SCHEMAS["claim_write"]["input_schema"]["properties"]
+        verdict = props["verdict"]
+        self.assertIn("mostly_accurate", verdict["enum"])   # snake_case, not "Mostly Accurate"
+        self.assertNotIn("Mostly Accurate", verdict["enum"])
+        self.assertIn(None, verdict["enum"])                # outside_opinion -> null
+        self.assertIn("storage form", verdict["description"].lower())
+        required = schemas.TOOL_SCHEMAS["claim_write"]["input_schema"]["required"]
+        self.assertIn("source_ids", required)               # no Source, no claim
+        self.assertIn("bucket", required)
+        self.assertEqual(props["source_ids"]["minItems"], 1)
+
+    def test_db_read_is_a_named_catalog_not_raw_sql(self):
+        props = schemas.TOOL_SCHEMAS["db_read"]["input_schema"]["properties"]
+        self.assertIn("claims_by_bucket", props["query"]["enum"])
+        self.assertEqual(set(props["buckets"]["items"]["enum"]), set(schemas.BUCKETS))
+
+    def test_sms_dispatch_requires_the_approval_token(self):
+        req = schemas.TOOL_SCHEMAS["sms_dispatch"]["input_schema"]["required"]
+        self.assertIn("approval_token", req)
+
+    def test_unknown_tool_schema_raises(self):
+        with self.assertRaises(KeyError):
+            schemas.schema_for("log_action")
+
+
+class TestPerIdentitySurface(unittest.TestCase):
+    """ADR-R1 makes one process = one identity, so the published MCP surface can
+    be exact: only granted tools, with enums narrowed to what the guard accepts.
+    Advertising a tool the guard will deny only invites a wasted call."""
+
+    def test_surface_never_advertises_an_ungranted_tool(self):
+        for agent in sorted(identity.VALID_IDENTITIES):
+            guard = cores.load_guard_core(agent)
+            surface = schemas.for_agent(agent, guard)
+            self.assertTrue(surface, agent)
+            for tool in surface:
+                self.assertTrue(guard.check_tool_access(tool)["ok"], (agent, tool))
+
+    def test_profiler_surface_is_narrowed_to_its_own_bucket_and_type(self):
+        s = schemas.for_agent("profiler")
+        self.assertNotIn("fec_api_query", s)      # denied -> not advertised
+        self.assertNotIn("balance_audit", s)
+        sr = s["source_register"]["input_schema"]["properties"]
+        self.assertEqual(sr["type"]["enum"], ["candidate_self"])
+        self.assertNotIn("lean_tag", sr)          # always N/A for the profiler
+        cw = s["claim_write"]["input_schema"]["properties"]
+        self.assertEqual(cw["bucket"]["enum"], ["stated_position"])
+        self.assertEqual(cw["verdict"]["enum"], [None])   # never adjudicates
+        self.assertEqual(s["db_read"]["input_schema"]["properties"]
+                          ["buckets"]["items"]["enum"], ["stated_position"])
+
+    def test_record_surface_has_no_web_tools_and_one_bucket(self):
+        s = schemas.for_agent("record")
+        self.assertNotIn("web_search", s)         # hard-denied at the wrapper
+        self.assertNotIn("fetch_source", s)
+        self.assertEqual(s["source_register"]["input_schema"]["properties"]
+                          ["type"]["enum"], ["primary_doc"])
+        self.assertEqual(s["claim_write"]["input_schema"]["properties"]
+                          ["bucket"]["enum"], ["verifiable_fact"])
+
+    def test_factchecker_surface_requires_lean_tag_and_excludes_stated_position(self):
+        s = schemas.for_agent("factchecker")
+        sr = s["source_register"]["input_schema"]
+        self.assertIn("lean_tag", sr["required"])          # Tool Spec §2.5 B
+        self.assertEqual(len(sr["properties"]["type"]["enum"]), 4)
+        cw = s["claim_write"]["input_schema"]["properties"]
+        self.assertEqual(set(cw["bucket"]["enum"]),
+                         {"verifiable_fact", "outside_opinion"})
+        self.assertNotIn("stated_position", cw["bucket"]["enum"])  # H1
+        self.assertIn(None, cw["verdict"]["enum"])
+        self.assertNotIn("balance_audit", s)
+        self.assertNotIn("sms_dispatch", s)
+
+    def test_orchestrator_surface_is_synthesis_and_intake_only(self):
+        s = schemas.for_agent("orchestrator")
+        self.assertIn("balance_audit", s)
+        self.assertIn("sms_dispatch", s)
+        self.assertIn("jurisdiction_resolve", s)
+        self.assertNotIn("claim_write", s)        # it composes, it does not author
+
+    def test_narrowing_does_not_mutate_the_base_schemas(self):
+        schemas.for_agent("profiler")
+        self.assertEqual(
+            set(schemas.TOOL_SCHEMAS["claim_write"]["input_schema"]
+                ["properties"]["bucket"]["enum"]), set(schemas.BUCKETS))
 
 
 if __name__ == "__main__":

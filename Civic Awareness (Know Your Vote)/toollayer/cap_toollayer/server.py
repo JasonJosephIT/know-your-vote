@@ -24,7 +24,7 @@ from pathlib import Path
 
 from . import (
     cores, discovery, errors, handlers, identity, intake, logsink, middleware,
-    store, synthesis,
+    schemas, store, synthesis,
 )
 
 # The externally callable surface: T1-T12 minus T11.
@@ -126,6 +126,15 @@ def selfcheck() -> int:
                 f"rows={rows}",
             )
 
+            surface = schemas.for_agent(agent_id, layer.guard)
+            check(
+                f"[{agent_id}] MCP surface advertises only granted tools",
+                bool(surface)
+                and all(layer.guard.check_tool_access(t)["ok"] for t in surface)
+                and probe not in surface,
+                f"surface={sorted(surface)}",
+            )
+
     # identity fail-closed paths
     try:
         identity.resolve_identity({})
@@ -145,13 +154,36 @@ def selfcheck() -> int:
     except logsink.LogConfigError:
         check("missing CAP_LOG_SINK refuses to start", True)
 
+    # the MCP surface must describe itself — an agent that guesses field names
+    # and enum values burns its budget on rejected calls.
+    missing = set(CALLABLE_TOOLS) - set(schemas.TOOL_SCHEMAS)
+    check(
+        "every callable tool publishes an MCP input schema",
+        not missing and all(
+            schemas.TOOL_SCHEMAS[t]["input_schema"].get("properties")
+            for t in CALLABLE_TOOLS
+        ),
+        f"missing={sorted(missing)}",
+    )
+    check(
+        "log_action (T11) publishes no schema — it is never callable",
+        "log_action" not in schemas.TOOL_SCHEMAS,
+    )
+
     print("\nselfcheck " + ("FAILED" if failures else "passed"))
     return 1 if failures else 0
 
 
 def serve() -> int:
+    # The low-level Server is used (not FastMCP) because FastMCP derives a
+    # tool's input schema from the Python signature; we need to publish the
+    # real per-tool schemas — an agent that must guess field names and enum
+    # values burns its budget on rejected calls (see schemas.py).
     try:
-        from mcp.server.fastmcp import FastMCP
+        import anyio
+        import mcp.types as types
+        from mcp.server.lowlevel import Server
+        from mcp.server.stdio import stdio_server
     except ImportError:
         print(
             "The `mcp` package is not installed — the stdio server cannot "
@@ -165,17 +197,32 @@ def serve() -> int:
     sink = build_sink()
     layer = build_layer(agent_id, sink)
 
-    app = FastMCP(f"cap-toollayer[{agent_id}]")
-    for tool_name in CALLABLE_TOOLS:
-        def make(tool: str):
-            def call(payload: dict | None = None) -> dict:
-                return layer.dispatch(tool, payload or {})
-            call.__name__ = tool
-            call.__doc__ = f"CAP tool {tool} (guarded; identity={agent_id})"
-            return call
-        app.tool(name=tool_name)(make(tool_name))
+    app = Server(f"cap-toollayer[{agent_id}]")
+    # Exactly the tools this identity is granted, with enums narrowed to what
+    # its guard accepts (ADR-R1 makes this exact — one process, one identity).
+    surface = schemas.for_agent(agent_id, layer.guard)
 
-    app.run()  # stdio transport
+    @app.list_tools()
+    async def _list_tools():
+        return [
+            types.Tool(name=tool, description=spec["description"],
+                       inputSchema=spec["input_schema"])
+            for tool, spec in surface.items()
+        ]
+
+    @app.call_tool()
+    async def _call_tool(name: str, arguments: dict | None = None):
+        # Every call still goes through dispatch(): guards, halt check, and
+        # the pre-return action_log row. Nothing bypasses the middleware.
+        result = layer.dispatch(name, arguments or {})
+        return [types.TextContent(type="text", text=json.dumps(result, default=str))]
+
+    async def _main() -> None:
+        async with stdio_server() as (read_stream, write_stream):
+            await app.run(read_stream, write_stream,
+                          app.create_initialization_options())
+
+    anyio.run(_main)
     return 0
 
 
