@@ -232,10 +232,15 @@ class SessionRunner:
         dispatch: Dispatch,
         log_counter: Callable[[], int],
         backend: AgentBackend,
+        claim_inventory: list[dict] | None = None,
     ) -> SessionResult:
+        # `claim_inventory` is forwarded to kickoff for the Fact-Checker (S2-R1);
+        # the Profiler/Record pass None (their kickoff ignores it). Without this
+        # the Fact-Checker's kickoff raises — see agents.AgentConfig.kickoff.
         system = config.render_system(candidate_id=candidate_id, race_id=race_id, name=name)
         kickoff = config.kickoff(candidate_id=candidate_id, race_id=race_id,
-                                 spine_issues=spine_issues)
+                                 spine_issues=spine_issues,
+                                 claim_inventory=claim_inventory)
         budget = BudgetGuard(max_tool_calls=config.max_tool_calls,
                              max_wall_clock_s=config.max_wall_clock_s,
                              clock=self._clock)
