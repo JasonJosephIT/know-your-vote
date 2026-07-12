@@ -19,7 +19,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from cap_runtime import agents, session  # noqa: E402
+from cap_runtime import agents, mcp_client, session  # noqa: E402
 
 SPINE = [{"issue_id": "i-housing", "title": "Housing affordability"},
          {"issue_id": "i-jobs", "title": "Jobs and the economy"}]
@@ -327,6 +327,224 @@ class TestLiveBackendLoop(unittest.TestCase):
             self.assertEqual(res.status, "complete")
             self.assertEqual(res.claims_written, 1)
             self.assertEqual(res.tool_calls, 2)   # 2 dispatches, budget-counted
+
+
+# --- S2-01 MCP-stdio client (mcp_client.py) -------------------------------
+# The whole client is covered through an injectable async-session seam, so
+# these tests never import `mcp`. The real `mcp` code path (default factory)
+# is exercised only at the parked, founder-gated live run.
+
+class _FakeTool:
+    """Duck-typed MCP tool object (as `types.Tool`: .name/.description/.inputSchema)."""
+    def __init__(self, name, description, inputSchema):
+        self.name, self.description, self.inputSchema = name, description, inputSchema
+
+
+class _FakeListToolsResult:
+    """Duck-typed MCP `tools/list` result (has `.tools`)."""
+    def __init__(self, tools):
+        self.tools = tools
+
+
+class _FakeTextBlock:
+    """Duck-typed MCP content block (as `types.TextContent`)."""
+    def __init__(self, text, type="text"):
+        self.type, self.text = type, text
+
+
+class _FakeCallResult:
+    """Duck-typed MCP `tools/call` result (has `.content` and `.isError`)."""
+    def __init__(self, content, isError=False):
+        self.content, self.isError = content, isError
+
+
+class _FakeSession:
+    """Stands in for an MCP `ClientSession`: async initialize/list_tools/call_tool.
+    S1 answers every call with one JSON text block, so that is what we return."""
+    def __init__(self, tools, responses=None, call_hook=None):
+        self._tools = tools
+        self._responses = responses or {}
+        self._call_hook = call_hook
+        self.initialized = False
+        self.calls = []
+
+    async def initialize(self):
+        self.initialized = True
+
+    async def list_tools(self):
+        return _FakeListToolsResult(self._tools)
+
+    async def call_tool(self, name, arguments):
+        self.calls.append((name, dict(arguments)))
+        if self._call_hook is not None:
+            self._call_hook(name, arguments)  # may raise
+        payload = self._responses.get(name, {"ok": True, "result": {}})
+        return _FakeCallResult([_FakeTextBlock(json.dumps(payload))])
+
+
+class _FakeSessionCM:
+    """Async context manager yielding a fake session; records teardown so the
+    tests can assert the client reaps it (== the real subprocess being reaped)."""
+    def __init__(self, session):
+        self.session = session
+        self.entered = False
+        self.exited = False
+
+    async def __aenter__(self):
+        self.entered = True
+        return self.session
+
+    async def __aexit__(self, *exc):
+        self.exited = True
+        return False
+
+
+def _client(cm, **kw):
+    return mcp_client.S1StdioClient(
+        command=[sys.executable, "-m", "cap_toollayer.server"],
+        env={"CAP_AGENT_ID": "profiler", "CAP_LOG_SINK": "postgres"},
+        cwd=".", session_factory=(lambda: cm), **kw)
+
+
+class TestToAnthropicTools(unittest.TestCase):
+    def test_maps_name_description_and_renames_input_schema(self):
+        schema = {"type": "object", "properties": {"claim_id": {"type": "string"}}}
+        out = mcp_client.to_anthropic_tools([
+            _FakeTool("claim_write", "write a claim", schema),
+            _FakeTool("source_register", "register a source",
+                      {"type": "object", "properties": {}}),
+        ])
+        self.assertEqual([t["name"] for t in out], ["claim_write", "source_register"])
+        self.assertEqual(out[0]["description"], "write a claim")
+        self.assertEqual(out[0]["input_schema"], schema)          # renamed verbatim
+        self.assertNotIn("inputSchema", out[0])                   # old key gone
+
+
+class TestUnwrapToolResult(unittest.TestCase):
+    def test_happy_path_json_text_to_dict(self):
+        payload = {"ok": True, "result": {"claim_id": "cl1"}}
+        res = _FakeCallResult([_FakeTextBlock(json.dumps(payload))])
+        self.assertEqual(mcp_client.unwrap_tool_result(res), payload)
+
+    def test_empty_content_is_structured_error(self):
+        out = mcp_client.unwrap_tool_result(_FakeCallResult([]))
+        self.assertEqual(out["error"], "malformed_tool_result")
+
+    def test_non_text_block_is_structured_error(self):
+        block = _FakeTextBlock(text=None, type="image")
+        out = mcp_client.unwrap_tool_result(_FakeCallResult([block]))
+        self.assertEqual(out["error"], "malformed_tool_result")
+
+    def test_invalid_json_is_structured_error_without_leaking_the_text(self):
+        secret = "postgresql://cap:s3cr3t@db.internal:5432/prod"  # secret-shaped
+        out = mcp_client.unwrap_tool_result(
+            _FakeCallResult([_FakeTextBlock(secret)]))  # not valid JSON
+        self.assertEqual(out["error"], "malformed_tool_result")
+        self.assertNotIn(secret, json.dumps(out))       # no secret leak
+        self.assertNotIn("s3cr3t", json.dumps(out))
+
+    def test_is_error_result_is_structured_error(self):
+        # Even with a JSON body, an MCP isError result must not be trusted.
+        secret = "sk-ant-shouldnotappear"
+        res = _FakeCallResult([_FakeTextBlock(secret)], isError=True)
+        out = mcp_client.unwrap_tool_result(res)
+        self.assertEqual(out["error"], "tool_error")
+        self.assertNotIn(secret, json.dumps(out))
+
+
+class TestS1StdioClient(unittest.TestCase):
+    TOOLS = [
+        _FakeTool("claim_write", "write a claim",
+                  {"type": "object", "properties": {"claim_id": {"type": "string"}}}),
+        _FakeTool("source_register", "register a source",
+                  {"type": "object", "properties": {}}),
+    ]
+
+    def test_connect_populates_tools_in_anthropic_shape(self):
+        sess = _FakeSession(self.TOOLS)
+        cm = _FakeSessionCM(sess)
+        with _client(cm) as client:
+            self.assertTrue(sess.initialized)                 # handshake ran
+            self.assertEqual([t["name"] for t in client.tools],
+                             ["claim_write", "source_register"])
+            self.assertEqual(client.tools[0]["input_schema"],
+                             {"type": "object", "properties": {"claim_id": {"type": "string"}}})
+            self.assertNotIn("inputSchema", client.tools[0])
+
+    def test_dispatch_returns_the_parsed_dict(self):
+        sess = _FakeSession(self.TOOLS, responses={
+            "claim_write": {"ok": True, "result": {"claim_id": "cl1"}}})
+        cm = _FakeSessionCM(sess)
+        with _client(cm) as client:
+            out = client.dispatch("claim_write", {"claim_id": "cl1",
+                                                  "bucket": "stated_position"})
+            self.assertEqual(out, {"ok": True, "result": {"claim_id": "cl1"}})
+            self.assertEqual(sess.calls[0], ("claim_write",
+                                             {"claim_id": "cl1", "bucket": "stated_position"}))
+
+    def test_halt_result_is_passed_through_unchanged(self):
+        halt = {"ok": False, "error": "pipeline_halted", "reasons": ["race frozen"]}
+        sess = _FakeSession(self.TOOLS, responses={"claim_write": halt})
+        cm = _FakeSessionCM(sess)
+        with _client(cm) as client:
+            self.assertEqual(client.dispatch("claim_write", {"x": 1}), halt)
+
+    def test_teardown_reaps_session_even_when_a_call_tool_raised(self):
+        def boom(name, args):
+            if name == "boom":
+                raise RuntimeError("connection to postgresql://u:p@h/db failed")
+        sess = _FakeSession(self.TOOLS, call_hook=boom)
+        cm = _FakeSessionCM(sess)
+        client = _client(cm)
+        with client:
+            out = client.dispatch("boom", {})
+            self.assertNotEqual(out.get("error"), None)        # degraded, not a crash
+            self.assertNotIn("postgresql", json.dumps(out))    # type only, no message
+        self.assertTrue(cm.exited)                             # subprocess reaped
+        self.assertFalse(client._thread.is_alive())            # background loop stopped
+
+    def test_mcp_absent_raises_not_configured(self):
+        try:
+            import mcp  # noqa: F401
+            self.skipTest("mcp is installed; the absent-path gate cannot be exercised")
+        except ImportError:
+            pass
+        client = mcp_client.S1StdioClient(
+            command=[sys.executable, "-m", "cap_toollayer.server"],
+            env={}, cwd=".")                                    # no injected factory
+        with self.assertRaises(session.NotConfigured) as ctx:
+            client.__enter__()
+        self.assertIn("mcp", str(ctx.exception).lower())        # names what is missing
+
+
+class TestS1ClientDrivesRunner(unittest.TestCase):
+    """The client is a drop-in for SessionRunner: its `.tools` feed the backend
+    and its `.dispatch` routes the loop's tool calls — proven end to end here
+    with the mock Anthropic client (no API spend) over a fake S1 session."""
+    def test_client_dispatch_is_drop_in_for_the_runner(self):
+        anthropic = MockAnthropic([
+            _Resp([_tool("t1", "source_register",
+                         {"url": "https://jane4congress.com", "type": "candidate_self"})],
+                  _Usage(100, 50)),
+            _Resp([_tool("t2", "claim_write",
+                         {"claim_id": "cl1", "bucket": "stated_position"})], _Usage(80, 40)),
+            _Resp([_text("Wrote 1 stated_position claim for cand1.")], _Usage(60, 20)),
+        ])
+        sess = _FakeSession(TestS1StdioClient.TOOLS)
+        cm = _FakeSessionCM(sess)
+        with _client(cm) as client, tempfile.TemporaryDirectory() as tmp:
+            runner = session.SessionRunner(runs_dir=tmp, clock=MutableClock())
+            res = runner.run(
+                agents.PROFILER, candidate_id="cand1", race_id="FL-28-general",
+                name="Jane", spine_issues=SPINE, dispatch=client.dispatch,
+                log_counter=lambda: 1,
+                backend=session.LiveAnthropicBackend(
+                    model="claude-sonnet-5", tools=client.tools, client=anthropic))
+            self.assertEqual(res.status, "complete")
+            self.assertEqual(res.claims_written, 1)
+            self.assertEqual(res.tool_calls, 2)
+            self.assertEqual([t for t, _ in sess.calls],
+                             ["source_register", "claim_write"])
 
 
 if __name__ == "__main__":
