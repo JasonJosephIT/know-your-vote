@@ -44,6 +44,19 @@ from . import session as _session
 _MCP_MISSING = ("the `mcp` package is not installed (needs a stable Python "
                 ">=3.11): pip install mcp")
 
+# Margin by which connect()'s outer ready-wait is made STRICTLY longer than the
+# inner handshake timeout (_serve_session bounds `_handshake` with
+# `_connect_timeout`). This one ordering invariant — outer ready-wait > inner
+# handshake timeout — makes the inner timeout the *single source of truth* for a
+# handshake timeout: it always resolves `_ready` (with success, or an in-task
+# `asyncio.TimeoutError`) before this outer backstop could fire, so connect()
+# deterministically surfaces the intended handshake error instead of a racing,
+# bare `concurrent.futures.TimeoutError`. Because `Future.result(timeout=...)`
+# returns the instant `_ready` resolves, the happy and handshake-timeout paths
+# stay fast (~`_connect_timeout`); this backstop only ever caps a background
+# thread that is genuinely wedged (one that never resolves `_ready` at all).
+_CONNECT_BACKSTOP_S = 5.0
+
 
 # -- pure helpers (no third-party imports) ---------------------------------
 
@@ -180,7 +193,14 @@ class S1StdioClient:
         self._serve_future = asyncio.run_coroutine_threadsafe(
             self._serve_session(factory), self._loop)
         try:
-            self._ready.result(timeout=self._connect_timeout)
+            # Invariant: this outer ready-wait > the inner handshake timeout
+            # (_serve_session bounds `_handshake` with `_connect_timeout`), so the
+            # inner `asyncio.wait_for` deterministically resolves `_ready` first —
+            # it, not a racing outer timer, is the single source of the
+            # handshake-timeout truth. `Future.result` returns the instant `_ready`
+            # resolves, so this stays fast; the backstop margin only caps a truly
+            # wedged background thread that never resolves `_ready`.
+            self._ready.result(timeout=self._connect_timeout + _CONNECT_BACKSTOP_S)
         except BaseException:
             self.close()   # tear the half-open bridge down, then surface the cause
             raise
@@ -245,11 +265,15 @@ class S1StdioClient:
         on this loop, which is safe.
 
         The handshake is bounded by `asyncio.wait_for(..., self._connect_timeout)`
-        (the same value connect() already uses for the ready-wait) so a hung real
-        `initialize()`/`list_tools()` raises IN THIS TASK rather than parking it
-        forever: the `async with factory()` block then exits normally, reaping the
-        S1 subprocess, instead of being abandoned mid-handshake where close() has
-        nothing to unwedge and the child is orphaned."""
+        so a hung real `initialize()`/`list_tools()` raises IN THIS TASK rather
+        than parking it forever: the `async with factory()` block then exits
+        normally, reaping the S1 subprocess, instead of being abandoned
+        mid-handshake where close() has nothing to unwedge and the child is
+        orphaned. This inner bound is *authoritative*: connect()'s outer
+        ready-wait is deliberately longer (`_connect_timeout + _CONNECT_BACKSTOP_S`),
+        so this timeout — not a racing outer `concurrent.futures.TimeoutError` —
+        is the single source of the handshake-timeout truth (see
+        `_CONNECT_BACKSTOP_S`)."""
         self._shutdown = asyncio.Event()
         try:
             async with factory() as sess:
