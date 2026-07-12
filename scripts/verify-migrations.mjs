@@ -25,6 +25,14 @@
         notification_send_log); anon can neither read nor write them;
         the event_type CHECK and the statewide-scope unique index reject
         bad rows; send_log ON CONFLICT DO NOTHING dedupes.
+    15. 0009_action_log_roles invariants (CAP_Runtime_PRD_v1 S1-01):
+        action_log exists with its guard partial index; cap_tool_wrapper
+        is INSERT-only on the log (no SELECT/UPDATE/DELETE) and can
+        write content tables but not DELETE, not touch PII, and not
+        write the freshness plane; cap_readonly sees the log and ALL
+        claims (published or not — traceability needs both) but writes
+        nothing; anon has zero log access; the log is append-only even
+        for service_role; the agent_id/status/bucket CHECKs hold.
 
    Supabase provides the anon/authenticated/service_role roles out of the box;
    the harness creates them first so the same SQL runs in both environments.
@@ -416,6 +424,134 @@ await check("send_log ON CONFLICT DO NOTHING dedupes", async () => {
     throw new Error(`expected 1 untouched row, saw n=${r.rows[0].n} c=${r.rows[0].c}`);
 });
 
+await db.exec("RESET ROLE;");
+
+/* 0009_action_log_roles (invariant 15). Object existence first. */
+await check("action_log table exists", async () => {
+  const r = await db.query(
+    "SELECT count(*)::int AS n FROM information_schema.tables WHERE table_schema='public' AND table_name='action_log';"
+  );
+  if (r.rows[0].n !== 1) throw new Error("action_log table missing");
+});
+await check("idx_log_guard partial index exists", async () => {
+  const r = await db.query(
+    "SELECT count(*)::int AS n FROM pg_indexes WHERE schemaname='public' AND indexname='idx_log_guard';"
+  );
+  if (r.rows[0].n !== 1) throw new Error("idx_log_guard index missing");
+});
+
+/* cap_tool_wrapper: the S1 service's role. INSERT-only on the log; scoped
+   content-plane writes; no DELETE; no PII; no freshness plane. */
+await db.exec("SET ROLE cap_tool_wrapper;");
+await check("cap_tool_wrapper can INSERT action_log", async () => {
+  await db.exec(
+    `INSERT INTO action_log (agent_id, tool_called, race_id, candidate_id, status)
+     VALUES ('profiler', 'db_read', 'r-pub', 'c-pub', 'success');`
+  );
+});
+await expectDenied(
+  "cap_tool_wrapper cannot SELECT action_log (write-only)",
+  "SELECT * FROM action_log;"
+);
+await expectDenied(
+  "cap_tool_wrapper cannot UPDATE action_log (append-only)",
+  "UPDATE action_log SET status='fail';"
+);
+await expectDenied(
+  "cap_tool_wrapper cannot DELETE action_log (append-only)",
+  "DELETE FROM action_log;"
+);
+await expectConstraintViolation(
+  "action_log agent_id CHECK rejects an unknown agent",
+  "INSERT INTO action_log (agent_id, tool_called, status) VALUES ('R1','db_read','success');",
+  /violates check constraint "action_log_agent_id_check"/
+);
+await expectConstraintViolation(
+  "action_log status CHECK rejects an unknown status",
+  "INSERT INTO action_log (agent_id, tool_called, status) VALUES ('profiler','db_read','partial');",
+  /violates check constraint "action_log_status_check"/
+);
+await expectConstraintViolation(
+  "action_log bucket CHECK rejects an unknown bucket",
+  "INSERT INTO action_log (agent_id, tool_called, status, bucket_written) VALUES ('profiler','claim_write','success','opinion');",
+  /violates check constraint "action_log_bucket_written_check"/
+);
+await check("cap_tool_wrapper can INSERT a source row", async () => {
+  await db.exec(
+    `INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag)
+     VALUES ('s-capw', 'https://example.gov/b', 'example.gov/b', 'Example Gov', 'primary_doc', 'N/A');`
+  );
+});
+await check("cap_tool_wrapper can UPDATE candidate freshness", async () => {
+  await db.exec(
+    "UPDATE candidate SET site_last_verified_at = NOW() WHERE candidate_id='c-pub';"
+  );
+});
+await check("cap_tool_wrapper sees unpublished claims too (T8 db_read)", async () => {
+  const r = await db.query("SELECT count(*)::int AS n FROM claim;");
+  if (r.rows[0].n !== 2) throw new Error(`saw ${r.rows[0].n} claims, expected 2`);
+});
+await expectDenied(
+  "cap_tool_wrapper cannot DELETE claims",
+  "DELETE FROM claim WHERE claim_id='cl-draft';"
+);
+await expectDenied(
+  "cap_tool_wrapper cannot UPDATE race_publication",
+  "UPDATE race_publication SET status='published' WHERE race_id='r-draft';"
+);
+await expectDenied(
+  "cap_tool_wrapper cannot read voting_info_subscription (PII)",
+  "SELECT * FROM voting_info_subscription;"
+);
+await expectDenied(
+  "cap_tool_wrapper cannot INSERT news_item (freshness plane)",
+  "INSERT INTO news_item (item_type, title) VALUES ('official_link','x');"
+);
+await db.exec("RESET ROLE;");
+
+/* cap_readonly: report/CI queries — reads everything non-PII, writes nothing. */
+await db.exec("SET ROLE cap_readonly;");
+await check("cap_readonly can SELECT action_log", async () => {
+  const r = await db.query("SELECT count(*)::int AS n FROM action_log;");
+  if (r.rows[0].n !== 1) throw new Error(`saw ${r.rows[0].n} log rows, expected 1`);
+});
+await check("cap_readonly sees ALL claims (traceability needs unpublished)", async () => {
+  const r = await db.query("SELECT count(*)::int AS n FROM claim;");
+  if (r.rows[0].n !== 2) throw new Error(`saw ${r.rows[0].n} claims, expected 2`);
+});
+await expectDenied(
+  "cap_readonly cannot INSERT action_log",
+  "INSERT INTO action_log (agent_id, tool_called, status) VALUES ('profiler','db_read','success');"
+);
+await expectDenied(
+  "cap_readonly cannot UPDATE claims",
+  "UPDATE claim SET text='x';"
+);
+await expectDenied(
+  "cap_readonly cannot read voting_info_subscription (PII)",
+  "SELECT * FROM voting_info_subscription;"
+);
+await db.exec("RESET ROLE;");
+
+/* anon: zero access to the log. */
+await db.exec("SET ROLE anon;");
+await expectDenied("anon cannot SELECT action_log", "SELECT * FROM action_log;");
+await expectDenied(
+  "anon cannot INSERT action_log",
+  "INSERT INTO action_log (agent_id, tool_called, status) VALUES ('profiler','db_read','success');"
+);
+await db.exec("RESET ROLE;");
+
+/* the log is append-only even for service_role (same posture as admin_action). */
+await db.exec("SET ROLE service_role;");
+await expectDenied(
+  "service_role cannot UPDATE action_log (append-only)",
+  "UPDATE action_log SET status='fail';"
+);
+await expectDenied(
+  "service_role cannot DELETE action_log (append-only)",
+  "DELETE FROM action_log;"
+);
 await db.exec("RESET ROLE;");
 
 if (failures > 0) {
