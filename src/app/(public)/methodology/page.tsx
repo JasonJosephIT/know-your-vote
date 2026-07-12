@@ -5,28 +5,41 @@ import type { ProfileAudit } from "@/types/schema";
 export const revalidate = 3600;
 export const metadata = { title: "How we stay fair — Know Your Vote" };
 
+type ScrutinyRace = {
+  raceId: string;
+  office: string;
+  rows: { name: string; audit: ProfileAudit }[];
+};
+
 const getScrutinyCounts = unstable_cache(
-  async () => {
-    const supabase = await createAnonServerClient();
-    const [racesRes, profilesRes, candidatesRes] = await Promise.all([
-      supabase.from("race").select("race_id, office").order("race_id"),
-      supabase.from("profile").select("candidate_id, race_id, audit"),
-      supabase.from("candidate").select("candidate_id, legal_name"),
-    ]);
-    const names = new Map(
-      (candidatesRes.data ?? []).map((c) => [c.candidate_id, c.legal_name])
-    );
-    return (racesRes.data ?? []).map((race) => ({
-      raceId: race.race_id,
-      office: race.office,
-      rows: (profilesRes.data ?? [])
-        .filter((p) => p.race_id === race.race_id)
-        .map((p) => ({
-          name: names.get(p.candidate_id) ?? p.candidate_id,
-          audit: p.audit as ProfileAudit,
-        }))
-        .sort((a, b) => a.name.localeCompare(b.name)),
-    }));
+  async (): Promise<ScrutinyRace[]> => {
+    // Degrade gracefully rather than crash the whole build when Supabase
+    // isn't configured at build time — same guard the races page's
+    // generateStaticParams (TASK-046) and sitemap (TASK-048) already use.
+    try {
+      const supabase = await createAnonServerClient();
+      const [racesRes, profilesRes, candidatesRes] = await Promise.all([
+        supabase.from("race").select("race_id, office").order("race_id"),
+        supabase.from("profile").select("candidate_id, race_id, audit"),
+        supabase.from("candidate").select("candidate_id, legal_name"),
+      ]);
+      const names = new Map(
+        (candidatesRes.data ?? []).map((c) => [c.candidate_id, c.legal_name])
+      );
+      return (racesRes.data ?? []).map((race) => ({
+        raceId: race.race_id,
+        office: race.office,
+        rows: (profilesRes.data ?? [])
+          .filter((p) => p.race_id === race.race_id)
+          .map((p) => ({
+            name: names.get(p.candidate_id) ?? p.candidate_id,
+            audit: p.audit as ProfileAudit,
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name)),
+      }));
+    } catch {
+      return [];
+    }
   },
   ["scrutiny-counts"],
   { revalidate: 3600, tags: ["races"] }
