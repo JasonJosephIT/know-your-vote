@@ -242,12 +242,19 @@ class S1StdioClient:
         the handshake, then hold them open until close() sets the shutdown event.
         Entering and exiting the `mcp` context managers in the same task is
         required by their anyio cancel scopes; tool calls arrive from other tasks
-        on this loop, which is safe."""
+        on this loop, which is safe.
+
+        The handshake is bounded by `asyncio.wait_for(..., self._connect_timeout)`
+        (the same value connect() already uses for the ready-wait) so a hung real
+        `initialize()`/`list_tools()` raises IN THIS TASK rather than parking it
+        forever: the `async with factory()` block then exits normally, reaping the
+        S1 subprocess, instead of being abandoned mid-handshake where close() has
+        nothing to unwedge and the child is orphaned."""
         self._shutdown = asyncio.Event()
         try:
             async with factory() as sess:
-                await sess.initialize()
-                listed = await sess.list_tools()
+                listed = await asyncio.wait_for(
+                    self._handshake(sess), timeout=self._connect_timeout)
                 self._session = sess
                 self.tools = to_anthropic_tools(_tools_of(listed))
                 if not self._ready.done():
@@ -260,6 +267,16 @@ class S1StdioClient:
                 self._ready.set_exception(exc)
         finally:
             self._session = None
+
+    @staticmethod
+    async def _handshake(sess: Any) -> Any:
+        """`initialize` -> `list_tools`, factored out so `_serve_session` can
+        bound it with `asyncio.wait_for`. On timeout, `wait_for` cancels this
+        coroutine in-task and raises `asyncio.TimeoutError` — an honest,
+        non-secret failure (no env/DSN/exception text) that propagates to
+        `connect()` via the `_ready` future."""
+        await sess.initialize()
+        return await sess.list_tools()
 
     def _build_default_factory(self) -> SessionFactory:
         """The real path: lazily import `mcp` (NotConfigured if absent) and return

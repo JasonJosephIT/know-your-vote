@@ -11,6 +11,8 @@ Run: python3 test_runtime.py
 
 from __future__ import annotations
 
+import asyncio
+import importlib.util
 import json
 import sys
 import tempfile
@@ -382,6 +384,25 @@ class _FakeSession:
         return _FakeCallResult([_FakeTextBlock(json.dumps(payload))])
 
 
+class _HangingFakeSession(_FakeSession):
+    """Same shape as `_FakeSession`, but `initialize()` never returns on its
+    own — it blocks past any reasonable connect timeout, standing in for a
+    real MCP handshake that hangs. Records whether it was cancelled in-task
+    (== the fix works) versus left to run forever (== the orphan bug)."""
+    def __init__(self, tools, hang_seconds=5.0):
+        super().__init__(tools)
+        self.hang_seconds = hang_seconds
+        self.cancelled = False
+
+    async def initialize(self):
+        try:
+            await asyncio.sleep(self.hang_seconds)
+        except asyncio.CancelledError:
+            self.cancelled = True
+            raise
+        self.initialized = True  # pragma: no cover — only if hang_seconds elapses
+
+
 class _FakeSessionCM:
     """Async context manager yielding a fake session; records teardown so the
     tests can assert the client reaps it (== the real subprocess being reaped)."""
@@ -504,17 +525,31 @@ class TestS1StdioClient(unittest.TestCase):
         self.assertFalse(client._thread.is_alive())            # background loop stopped
 
     def test_mcp_absent_raises_not_configured(self):
-        try:
-            import mcp  # noqa: F401
+        # A non-importing presence check: `find_spec` locates the module (or
+        # not) without running its top-level code, so this file never does
+        # `import mcp` even to decide whether to skip.
+        if importlib.util.find_spec("mcp") is not None:
             self.skipTest("mcp is installed; the absent-path gate cannot be exercised")
-        except ImportError:
-            pass
         client = mcp_client.S1StdioClient(
             command=[sys.executable, "-m", "cap_toollayer.server"],
             env={}, cwd=".")                                    # no injected factory
         with self.assertRaises(session.NotConfigured) as ctx:
             client.__enter__()
         self.assertIn("mcp", str(ctx.exception).lower())        # names what is missing
+
+    def test_hung_handshake_times_out_and_reaps_subprocess(self):
+        # A real initialize()/list_tools() that hangs must not park the serve
+        # task forever: connect() should raise promptly, the entered session
+        # context manager must still have been exited (== the S1 subprocess
+        # reaped), and no background thread should be left alive.
+        sess = _HangingFakeSession(self.TOOLS, hang_seconds=5.0)
+        cm = _FakeSessionCM(sess)
+        client = _client(cm, connect_timeout=0.05, close_timeout=2.0)
+        with self.assertRaises(asyncio.TimeoutError):
+            client.connect()
+        self.assertTrue(cm.exited)                    # async CM exited -> subprocess reaped
+        self.assertTrue(sess.cancelled)                # hung initialize() cancelled in-task
+        self.assertFalse(client._thread.is_alive())    # background loop not left hanging
 
 
 class TestS1ClientDrivesRunner(unittest.TestCase):
