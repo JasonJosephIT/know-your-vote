@@ -27,28 +27,46 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://know-your-vote-chazak.vercel.app"
   ),
   title: {
-    default: "Know Your Vote — Your ballot, laid out fairly",
+    default: "Know Your Vote, Know Your Ballot, Know Your Options",
     template: "%s",
   },
   description:
-    "See everyone on your ballot — what they say, what they've done, and what's been verified. Equal space, equal scrutiny, every claim linked to a source.",
+    "See everyone on your ballot, what they say, what they've done, and all facts no cap. Every claim linked to a source.",
   openGraph: {
-    title: "Know Your Vote — Your ballot, laid out fairly",
+    title: "Know Your Vote — Your Ballot, Your Options",
     description:
-      "See everyone on your ballot — what they say, what they've done, and what's been verified.",
+      "See everyone on your ballot what they say, what they've done, and all facts no cap.",
     type: "website",
     siteName: "Know Your Vote",
+    images: [
+      {
+        url: "/brand/site/og-card.png",
+        width: 1200,
+        height: 630,
+        alt: "Know Your Vote see who's on your local ballot.",
+      },
+    ],
   },
+  // Branded icons (Site + Mobile surfaces). SVG favicon preferred by modern browsers;
+  // .ico fallback; apple-touch uses the iOS app icon (Reversed colorway).
+  icons: {
+    icon: [
+      { url: "/brand/site/favicon.svg", type: "image/svg+xml" },
+      { url: "/brand/site/favicon.ico", sizes: "any" },
+      { url: "/brand/site/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/brand/site/favicon-16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [{ url: "/brand/mobile/app-icon-ios-180.png", sizes: "180x180", type: "image/png" }],
+  },
+  manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
+    title: "Know Your Vote",
     statusBarStyle: "default",
-    title: "KnowYourVote",
-  },
-  icons: {
-    apple: "/apple-touch-icon.png",
   },
 };
 
+// theme_color for the browser UI / PWA chrome — KYV Green (design.md `primary`).
 export const viewport: Viewport = {
   themeColor: "#2F6B4F",
   viewportFit: "cover",

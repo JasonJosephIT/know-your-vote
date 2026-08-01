@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV Splash / Launch Screen — Colorway: OFFICIAL on background #F6F3EC.
+     Portrait 1242x2688 (a common device launch canvas); the mark is centered with generous calm
+     space and NO text/tagline/loading copy (per roadmap: launch art is a mark, not a poster).
+     On a LIGHT paper field the readable brand color is KYV Green (the official logo's outline
+     color), so the K/Y/V acronym monogram is rendered in Green with a soft ink offset shadow —
+     the same monogram geometry as favicon.svg / app-icon-ios.svg, Official colorway. Centered,
+     small, lots of calm space. Inline presentation attributes only (ImageMagick-safe).
+     Tokens: background #F6F3EC, primary #2F6B4F, on-surface #22271F. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1242 2688" width="1242" height="2688" role="img" aria-label="Know Your Vote">
+  <rect width="1242" height="2688" fill="#F6F3EC"/>
+  <g transform="translate(621,1344)" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- soft ink offset shadow (very low opacity, +7,+7) for gentle depth -->
+    <g stroke="#22271F" stroke-opacity="0.14" stroke-width="34">
+      <path d="M-63 -103 V-19 M-63 -61 L11 -103 M-43.5 -64.5 L19 -19"/>
+      <path d="M-73 3 L-27 45 L19 3 M-27 45 V86"/>
+      <path d="M-73 56 L-27 129 L19 56"/>
+    </g>
+    <!-- KYV Green monogram (Official mark on light field) -->
+    <g stroke="#2F6B4F" stroke-width="34">
+      <path d="M-70 -110 V-26 M-70 -68 L4 -110 M-50.5 -71.5 L12 -26"/>
+      <path d="M-80 -4 L-34 38 L12 -4 M-34 38 V79"/>
+      <path d="M-80 49 L-34 122 L12 49"/>
+    </g>
+  </g>
+</svg>

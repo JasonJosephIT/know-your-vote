@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV Email Footer Mark — Colorway: MONO INK #22271F (single-color, per email footer spec).
+     240x80. Stacked K/Y/V acronym monogram (reuses the font-independent stroke geometry from
+     site/favicon.svg) rendered in a single ink color — the Mono Ink colorway for
+     fax/print/stamp/footer contexts — beside a small "nonpartisan" microline.
+     No social-partisan icons. Baked text (font-family kept for production re-render; PNG
+     renders in a fallback face because Figtree/Inter aren't installed in this workspace).
+     Tokens only: on-surface #22271F. Transparent background so it sits on any email footer fill. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" width="240" height="80"
+     role="img" aria-label="Know Your Vote — nonpartisan">
+  <!-- Stacked K / Y / V monogram, Mono Ink single color -->
+  <g transform="translate(14 10)" stroke="#22271F" stroke-width="4.4"
+     stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M8 2 V16 M8 9 L21 2 M11.4 8.4 L22 16"/>
+    <path d="M6 22 L14 30 L22 22 M14 30 V38"/>
+    <path d="M6 44 L14 56 L22 44"/>
+  </g>
+  <!-- Wordmark set as text + nonpartisan microline (Mono Ink) -->
+  <text x="56" y="36" font-family="Figtree, sans-serif" font-weight="700" font-size="20"
+        letter-spacing="-0.4" fill="#22271F">Know Your Vote</text>
+  <text x="56" y="58" font-family="Inter, sans-serif" font-weight="600" font-size="12.5"
+        letter-spacing="1.2" fill="#22271F">NONPARTISAN &#183; FLORIDA</text>
+</svg>
