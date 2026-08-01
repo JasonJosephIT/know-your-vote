@@ -9,11 +9,20 @@ export interface StoredLocation {
 
 const KEY = "kyv.location";
 
+/* readLocation doubles as a useSyncExternalStore getSnapshot, which requires
+   a referentially stable result while the stored value is unchanged — hence
+   the raw-string cache. Callers must not mutate the returned object. */
+let cache: { raw: string; location: StoredLocation } | null = null;
+
 export function readLocation(): StoredLocation | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = window.localStorage.getItem(KEY);
-    return raw ? (JSON.parse(raw) as StoredLocation) : null;
+    if (raw === null) return null;
+    if (!cache || cache.raw !== raw) {
+      cache = { raw, location: JSON.parse(raw) as StoredLocation };
+    }
+    return cache.location;
   } catch {
     return null;
   }
