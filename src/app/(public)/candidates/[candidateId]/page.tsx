@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { CandidateBrief } from "@/components/features/CandidateBrief";
+import { CandidateContact } from "@/components/features/CandidateContact";
+import { CandidateNews } from "@/components/features/CandidateNews";
 import { TrackBriefView } from "@/components/features/TrackBriefView";
 import { getCandidateDetail } from "@/lib/briefs";
 
@@ -32,10 +34,13 @@ export default async function CandidatePage({
       <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
         <h1 className="text-h1">This candidate isn&apos;t published yet</h1>
         <p className="text-body text-on-surface-muted">
-          Candidates appear here once their race passes the Balance Audit and
-          is published — equal space and equal scrutiny come first.
+          Candidates appear here once their race passes the Balance Audit and is
+          published — equal space and equal scrutiny come first.
         </p>
-        <Link href="/races" className="text-label text-primary underline underline-offset-2">
+        <Link
+          href="/races"
+          className="text-label text-primary underline underline-offset-2"
+        >
           Back to your races
         </Link>
       </main>
@@ -54,7 +59,13 @@ export default async function CandidatePage({
         </Link>
       </p>
       <TrackBriefView />
-      <CandidateBrief data={detail.brief} headingLevel="h2" linkToDetail={false} />
+      <CandidateBrief
+        data={detail.brief}
+        headingLevel="h2"
+        linkToDetail={false}
+      />
+      <CandidateNews candidateId={candidateId} />
+      <CandidateContact candidateId={candidateId} />
     </main>
   );
 }

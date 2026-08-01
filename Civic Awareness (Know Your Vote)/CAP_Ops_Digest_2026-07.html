@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAP Ops Digest — 2026-07-03</title>
+<style>
+  :root {
+    color-scheme: light;
+    --ink: #1a2233;
+    --muted: #5a6478;
+    --line: #d8dee9;
+    --bg: #ffffff;
+    --panel: #f6f8fb;
+    --accent: #1f5fbf;
+    --accent-soft: #e8f0fc;
+    --new: #0a7d4f;
+    --new-soft: #e6f5ee;
+    --exist: #6b5ca5;
+    --exist-soft: #efecf8;
+    --warn: #b3541e;
+    --warn-soft: #fdf0e7;
+    --bad: #b3261e;
+    --bad-soft: #fbe9e7;
+    --code-bg: #0f1626;
+    --code-ink: #d7e0f0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 40px 28px 80px; }
+  header.doc { border-bottom: 3px solid var(--ink); padding-bottom: 18px; margin-bottom: 28px; }
+  h1 { font-size: 26px; margin: 0 0 6px; letter-spacing: -0.3px; }
+  .meta { color: var(--muted); font-size: 13px; }
+  .meta b { color: var(--ink); }
+  h2 { font-size: 20px; margin: 44px 0 12px; padding-top: 18px; border-top: 1px solid var(--line); letter-spacing: -0.2px; }
+  h2 .sec { color: var(--accent); margin-right: 8px; }
+  h3 { font-size: 16px; margin: 26px 0 8px; }
+  p, li { color: var(--ink); }
+  .muted { color: var(--muted); }
+  .callout { background: var(--accent-soft); border-left: 4px solid var(--accent); padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 14px 0; }
+  .callout.warn { background: var(--warn-soft); border-left-color: var(--warn); }
+  .callout.new { background: var(--new-soft); border-left-color: var(--new); }
+  .callout.bad { background: var(--bad-soft); border-left-color: var(--bad); }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 18px; font-size: 14px; }
+  th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--panel); font-weight: 600; }
+  code { background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; font-size: 13px; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  pre { background: var(--code-bg); color: var(--code-ink); padding: 16px 18px; border-radius: 10px; overflow-x: auto; font-size: 13px; line-height: 1.55; }
+  pre code { background: none; border: none; color: inherit; padding: 0; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; margin-right: 6px; }
+  .tag.new { background: var(--new-soft); color: var(--new); }
+  .tag.exist { background: var(--exist-soft); color: var(--exist); }
+  .tag.gate { background: var(--warn-soft); color: var(--warn); }
+  .tag.bad { background: var(--bad-soft); color: var(--bad); }
+  .tag.dryrun { background: var(--exist-soft); color: var(--exist); }
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 16px 0 20px; }
+  .stat { border: 1.5px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--panel); }
+  .stat b { display: block; font-size: 24px; line-height: 1.2; }
+  .stat.warn { border-color: var(--warn); background: var(--warn-soft); }
+  .stat.warn b { color: var(--warn); }
+  .stat.bad { border-color: var(--bad); background: var(--bad-soft); }
+  .stat.bad b { color: var(--bad); }
+  .stat.good { border-color: var(--new); background: var(--new-soft); }
+  .stat.good b { color: var(--new); }
+  .stat small { color: var(--muted); }
+  .risk-list { list-style: none; margin: 0; padding: 0; }
+  .risk-list li { border: 1px solid var(--line); border-left: 4px solid var(--warn); border-radius: 0 8px 8px 0; padding: 10px 14px; margin-bottom: 10px; background: var(--warn-soft); }
+  .risk-list li.bad { border-left-color: var(--bad); background: var(--bad-soft); }
+  .agent-card { border: 1px solid var(--line); border-radius: 12px; margin: 22px 0; overflow: hidden; }
+  .agent-card > .head { background: var(--panel); padding: 12px 18px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px; }
+  .agent-card > .head h3 { margin: 0; }
+  .agent-card > .body { padding: 4px 18px 18px; }
+  .cadence { font-size: 13px; color: var(--muted); }
+  details { margin: 10px 0; }
+  summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+  .checklist li { margin: 5px 0; }
+  @media print { pre { white-space: pre-wrap; } .wrap { padding: 0; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc">
+  <h1>CAP Ops Digest — Live State of the Whole System</h1>
+  <div class="meta">
+    <b>Generated:</b> 2026-07-03 (R4, first live run) &nbsp;·&nbsp; <b>Owner:</b> Jason<br>
+    <b>Companion to:</b> CAP_Refresh_Agents_Plan_v1 · CAP_Agent_Plan_v1.1 · CAP_Schema_v1<br>
+    <b>Scope:</b> R4 is read-only on Supabase — no row was written, updated, or deleted to produce this page. Every number below comes from a query run this session or a file read this session.
+  </div>
+</header>
+
+<div class="callout">
+  <b>This is R4's first live run.</b> R1, R2, and R3 have never had a live (non-dry-run) execution either — every run report on file to date is a validation <b>DRY-RUN</b> (files ending <code>-DRYRUN.md</code>). This digest reports on those dry-runs honestly as dry-runs; it does not treat them as live activity. R4 itself audits machinery only — staleness, imbalance, failures, pending approvals — never candidates or content.
+</div>
+
+<!-- ================================================================ -->
+<h2><span class="sec">§1</span>Agent Runs</h2>
+
+<div class="agent-card">
+  <div class="head">
+    <h3><span class="tag dryrun">DRY-RUN</span> R1 — Candidate News Curator</h3>
+    <span class="cadence">Report: 2026-07-03-R1-DRYRUN.md</span>
+  </div>
+  <div class="body">
+    <table>
+      <tr><th>Last run</th><td>2026-07-03, dry-run only — no live run on file.</td></tr>
+      <tr><th>Items written</th><td>0 (dry-run override recorded would-be SQL; nothing executed).</td></tr>
+      <tr><th>Errors / stop conditions</th><td><b>Migration gate hit:</b> <code>news_item_item_type_check</code> allows only <code>pipeline_event</code>, <code>official_link</code> — <code>candidate_news</code> not yet legal, and <code>news_item.candidate_id</code> column does not exist. <b>Independent second blocker:</b> all 26 in-scope candidates are fixture data (<code>demo-cand-*</code>, spot-checked against real 2026 FL Agriculture Commissioner candidates — no name overlap found), so no genuine identity match against real news is possible yet regardless of the schema fix.</td></tr>
+      <tr><th>Coverage</th><td>26 of 26 targeted candidates in 8 published races treated symmetrically (0 items each, same reason each) — balance was not broken, no candidate got more search effort than another.</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="agent-card">
+  <div class="head">
+    <h3><span class="tag dryrun">DRY-RUN</span> R2 — Contact &amp; Race Info Refresher</h3>
+    <span class="cadence">Report: 2026-07-02-R2-DRYRUN.md</span>
+  </div>
+  <div class="body">
+    <table>
+      <tr><th>Last run</th><td>2026-07-02, dry-run only — no live run on file.</td></tr>
+      <tr><th>Items written</th><td>0.</td></tr>
+      <tr><th>Errors / stop conditions</th><td><b>Migration gate hit:</b> <code>candidate_contact</code> table, <code>candidate.site_last_verified_at</code>, and <code>race.info_last_verified_at</code> all absent from the live schema. <b>Independent finding:</b> all 26 in-scope candidates' <code>official_site</code> resolves to the same <code>example.org</code> placeholder domain — 3 spot-checks (2 offices, both publication batches) all returned HTTP 404; the remaining 23 share the identical structural pattern.</td></tr>
+      <tr><th>Coverage</th><td>9 of 9 published-or-not races read; 26 in-scope candidates all dispositioned "dead/parked site, not stamped." No <code>key_dates</code> diffs proposed — nothing found to compare against a real (non-demo) county record.</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="agent-card">
+  <div class="head">
+    <h3><span class="tag dryrun">DRY-RUN</span> R3 — Election News Curator</h3>
+    <span class="cadence">Report: 2026-07-03-R3-DRYRUN.md</span>
+  </div>
+  <div class="body">
+    <table>
+      <tr><th>Last run</th><td>2026-07-03, dry-run only — no live run on file.</td></tr>
+      <tr><th>Items written</th><td>0 (4 items — Miami-Dade, Broward, Hillsborough early-voting logistics + statewide HB 991 — were verified and would-insert SQL recorded, but not executed).</td></tr>
+      <tr><th>Errors / stop conditions</th><td><b>Migration gate hit:</b> <code>election_news</code> not yet a legal <code>item_type</code> on the live <code>news_item_item_type_check</code> constraint. A live run today would stop at the first INSERT.</td></tr>
+      <tr><th>Coverage</th><td>All 4 covered metros + statewide swept; <code>key_dates</code> cross-checked against dos.fl.gov and 3 county SoE sites — no mismatch found (0 flags for the R2 gate). 6 stories reviewed and skipped with reasons on file (1 flagged as a genuine coverage gap: no allowlisted source yet for the FL Supreme Court redistricting ruling).</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="agent-card">
+  <div class="head">
+    <h3><span class="tag exist">HEARTBEAT</span> App's daily cron — <code>/api/cron/refresh-news</code></h3>
+    <span class="cadence">Scheduled 10:00 UTC daily (<code>vercel.json</code>)</span>
+  </div>
+  <div class="body">
+    <table>
+      <tr><th>Newest <code>pipeline_event</code> row</th><td><span class="tag bad">none found</span> — <code>SELECT count(*) FROM news_item WHERE item_type='pipeline_event'</code> returns <b>0</b>, even though 8 of 9 races are currently <code>published</code>. The cron's own code inserts exactly one <code>pipeline_event</code> row per newly-published race it observes; zero rows on a table with 8 published races means either the cron has not successfully run since those races were published, or it ran before publication and was never re-triggered. This is a heartbeat gap, not a claim about what's in the feed.</td></tr>
+      <tr><th>What IS in <code>news_item</code> today</th><td>6 rows, all <code>item_type='official_link'</code>, all timestamped 2026-07-02 07:23:13 UTC — per R3's dry-run, these are migration seed data (official county/state voter-resource links), not cron output. The cron does not write <code>official_link</code> rows at all (confirmed by reading <code>route.ts</code>), so these 6 rows are independent of cron health.</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<h2><span class="sec">§2</span>Freshness</h2>
+
+<div class="callout warn">
+  <b>Migration <code>0005_refresh_agents.sql</code> is not applied to <code>pqracitpmzpiqfnzlngw</code>.</b> Confirmed independently this run via <code>list_migrations</code> (5 migrations present: <code>pipeline_read_models</code>, <code>app_tables</code>, <code>rls_policies</code>, <code>zip_seed</code>, <code>official_links</code> — none named <code>refresh_agents</code>) and via direct schema probes below. The file exists in the repo at <code>supabase/migrations/0005_refresh_agents.sql</code> and is well-formed/idempotent; it has simply never been run against this project. This is the single root cause behind most of R1/R2/R3's dry-run stops.</div>
+
+<table>
+  <tr><th>Freshness source this section needs</th><th>Exists on live schema?</th><th>Consequence</th></tr>
+  <tr><td><code>candidate_contact.last_verified_at</code> (oldest)</td><td><span class="tag bad">table absent</span></td><td>Cannot compute an "oldest verified" date — there has never been a row to verify. Reporting this as a gap, not as a fabricated date or a "0 days."</td></tr>
+  <tr><td><code>race.info_last_verified_at</code> (oldest)</td><td><span class="tag bad">column absent</span></td><td>Same — no race has ever been stamped, because the column to stamp does not exist yet.</td></tr>
+  <tr><td><code>candidate.site_last_verified_at</code></td><td><span class="tag bad">column absent</span></td><td>Same.</td></tr>
+</table>
+
+<h3>Dead <code>official_site</code> list</h3>
+<p>Independently queried this run: <code>SELECT count(*) FILTER (WHERE official_site LIKE '%example.org%') FROM candidate</code> → <b>29 of 29</b> candidates (all candidates in the table, including the 3 in the <code>in_review</code> race) use the placeholder domain <code>example.org/demo/&lt;slug&gt;</code>. R2's dry-run independently confirmed 3 of these 404 live via direct fetch (2 offices, both publication timestamps); <code>example.org</code> is IANA's reserved documentation domain per RFC 2606 and will never resolve to a real campaign site. Every candidate's official site is effectively dead until the fixture roster is replaced with real 2026 Florida candidates.</p>
+
+<div class="stat-row">
+  <div class="stat bad"><b>29 / 29</b><small>candidates with a dead/placeholder official_site</small></div>
+  <div class="stat bad"><b>0</b><small>candidates ever contact-verified (table doesn't exist)</small></div>
+  <div class="stat bad"><b>0</b><small>races ever info-verified (column doesn't exist)</small></div>
+</div>
+
+<p class="muted">No item above is being called "&gt;21 days stale" because staleness requires a timestamp to compare against <code>now()</code>, and none of the three freshness timestamps this section depends on exist yet. The honest status for all three is "never measurable," which is a more serious condition than any finite staleness age would be.</p>
+
+<!-- ================================================================ -->
+<h2><span class="sec">§3</span>Feed Health</h2>
+
+<p>Query: <code>news_item</code> rows with <code>published_at</code> in the last 30 days, grouped by <code>item_type</code> and by <code>metro</code>. All 6 rows currently in the table fall inside this window.</p>
+
+<table>
+  <tr><th>item_type</th><th>Count (last 30 days)</th></tr>
+  <tr><td><code>official_link</code></td><td>6</td></tr>
+  <tr><td><code>pipeline_event</code></td><td>0</td></tr>
+  <tr><td><code>candidate_news</code></td><td>0 — not a legal item_type yet (migration gate, §2)</td></tr>
+  <tr><td><code>election_news</code></td><td>0 — not a legal item_type yet (migration gate, §2)</td></tr>
+</table>
+
+<table>
+  <tr><th>metro</th><th>Count (last 30 days)</th></tr>
+  <tr><td>miami</td><td>1</td></tr>
+  <tr><td>fort_lauderdale</td><td>1</td></tr>
+  <tr><td>orlando</td><td>1</td></tr>
+  <tr><td>tampa</td><td>1</td></tr>
+  <tr><td><em>statewide (NULL)</em></td><td>2</td></tr>
+</table>
+
+<h3>By candidate within each race — symmetric-coverage check</h3>
+<div class="callout warn">
+  <b>Not yet computable.</b> <code>news_item</code> has no <code>candidate_id</code> column on the live schema (migration gate, §2), so no news row can be attributed to a specific candidate today. There is currently no data to evaluate a 3x-imbalance warning against — this is a data-availability gap, not a finding of "no imbalance." Revisit once migration 0005 lands and R1 has a live run to report on.</div>
+
+<h3>Neutrality lint</h3>
+<p>Ran <code>node scripts/verify-news-neutrality.ts</code> from the repo root this run. Verdict:</p>
+<pre><code>ok  0 agent-written rows to lint (no candidate_news/election_news rows in the last 30 days)
+
+All news-neutrality checks passed.</code></pre>
+<p class="muted">A clean pass here reflects an empty input set (0 rows of the two agent-written types exist), not a large body of vetted content — consistent with §2's migration-gate finding.</p>
+
+<!-- ================================================================ -->
+<h2><span class="sec">§4</span>Pipeline State</h2>
+
+<div class="stat-row">
+  <div class="stat good"><b>8</b><small>races: <code>race_publication.status = 'published'</code></small></div>
+  <div class="stat warn"><b>1</b><small>race: <code>status = 'in_review'</code> (demo-fl-house-10)</small></div>
+  <div class="stat good"><b>28</b><small>profiles: <code>balance_check_passed = true</code></small></div>
+  <div class="stat bad"><b>1</b><small>profile: <code>balance_check_passed = false</code></small></div>
+</div>
+
+<p class="muted">0 profiles have a null <code>balance_check_passed</code> value (29 of 29 profiles have the key present and set to either true or false — verified via <code>audit ? 'balance_check_passed'</code>).</p>
+
+<h3>Recent flags</h3>
+<table>
+  <tr><th>candidate_id</th><th>race_id</th><th>flag_reason</th><th>flagged_at</th><th>Detail</th></tr>
+  <tr>
+    <td><code>demo-cand-strand</code></td>
+    <td><code>demo-fl-house-10</code></td>
+    <td><code>scrutiny_halt</code></td>
+    <td>2026-06-30T12:00:00Z</td>
+    <td><code>balance_check_passed: false</code>; audit shows 3 spine issues covered, 1 fact-check performed, 3 stated positions, 4 verifiable facts recorded. This is the profile holding <code>demo-fl-house-10</code> in <code>in_review</code> rather than <code>published</code> — consistent with the publication-status split above.</td>
+  </tr>
+</table>
+
+<!-- ================================================================ -->
+<h2><span class="sec">§5</span>Waiting on Jason</h2>
+
+<div class="stat-row">
+  <div class="stat good"><b>0</b><small>R2 gated diffs awaiting approval</small></div>
+  <div class="stat good"><b>0</b><small>R1 items flagged for the Fact-Checker</small></div>
+  <div class="stat good"><b>0</b><small>R3 key_dates mismatches flagged</small></div>
+</div>
+
+<p>All three are genuinely empty this run, each for a specific, verifiable reason on file:</p>
+<ul>
+  <li><b>R2 gated diffs:</b> its dry-run report states "WAITING ON APPROVAL: none" — no <code>key_dates</code>, <code>qualifying_status</code>, or office/district diffs were proposed, because every comparison this run was against demo/seed data with no real county record to diff against.</li>
+  <li><b>R1 Fact-Checker flags:</b> its dry-run report states "None. No checkable factual claim was found this run" — no real candidate-news story was ever found or evaluated (blocked upstream by the fixture-identity finding in §1).</li>
+  <li><b>R3 key_dates mismatches:</b> its dry-run report states "0 — no key_dates mismatches found" after cross-checking all 9 races' dates against dos.fl.gov and 3 county SoE sites.</li>
+</ul>
+<p class="muted">A count of zero here reflects "nothing detected as changed," not "nothing was checked" — each agent's dry-run documents the comparison it actually ran.</p>
+
+<!-- ================================================================ -->
+<h2><span class="sec">§6</span>Open Risks</h2>
+
+<ul class="risk-list">
+  <li class="bad"><b>Migration 0005_refresh_agents.sql is unapplied.</b> It blocks R1 and R3 from writing any row at all, and blocks R2 from writing <code>candidate_contact</code> or stamping any freshness column — independently confirmed this run via <code>list_migrations</code>, <code>information_schema.columns</code>, and <code>to_regclass('public.candidate_contact')</code> (returns null). This is the single highest-leverage unblock available: applying one already-idempotent file changes three agents from "cannot write" to "can write."</li>
+  <li class="bad"><b>29 of 29 candidates have a dead official_site.</b> Every candidate row is fixture data pointing at <code>example.org</code>, which cannot ever resolve to a real site (RFC 2606 reserved domain). Contact info and site-liveness freshness (R2's whole mandate) cannot produce a single real result until the candidate roster is replaced with real 2026 Florida candidates.</li>
+  <li><b>Daily cron heartbeat is silent.</b> 0 <code>pipeline_event</code> rows exist despite 8 published races, and the cron's own code (<code>route.ts</code>) would insert one per newly-published race the first time it runs after publication. Either the cron has never fired since these 8 races went live, or something is preventing the insert from landing — worth checking Vercel cron logs directly, since this digest cannot see execution logs, only the resulting table state.</li>
+  <li><b>One profile is holding a race out of publication.</b> <code>demo-cand-strand</code> (<code>demo-fl-house-10</code>) has <code>balance_check_passed: false</code> (flagged 2026-06-30, reason <code>scrutiny_halt</code>), which is why that race sits at <code>in_review</code> instead of <code>published</code> — the one exception to an otherwise clean 8-of-9 publication rate.</li>
+  <li><b>Feed-level symmetric-coverage checks are not yet possible.</b> <code>news_item</code> has no <code>candidate_id</code> column today, so the §3 mandate (flag races where one candidate has 3x another's item count) has no data to run against. Not a finding of balance — a finding of "not yet measurable," same root cause as the migration gate above.</li>
+</ul>
+
+<p class="muted" style="margin-top:36px">CAP_Ops_Digest — generated 2026-07-03 by R4 (first live run), read-only against <code>pqracitpmzpiqfnzlngw</code>. Companion run report: <code>Agents/RunReports/2026-07-03-R4.md</code>. Regenerated weekly; overwrites this file in place, with one dated copy retained per calendar month.</p>
+
+</div>
+</body>
+</html>

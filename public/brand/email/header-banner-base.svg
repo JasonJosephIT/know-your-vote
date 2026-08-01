@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV Email Header Banner — BASE. Colorway: OFFICIAL on cream #F5EBD8.
+     @2x master 1200x300 (displays 600x150). The official WORDMARK (kyv-logo-official.svg)
+     is composited on top of this cream base as a PNG in a later ImageMagick step (convert
+     cannot resolve the wordmark's inline art via <image href> reliably, so the wordmark is
+     overlaid by compositing — same technique as site/og-card.png and mobile/feature-graphic.png).
+     Ample clearspace around the wordmark (design.md: clearspace = height of the "O").
+     NO CTA buttons (the email uses a live HTML/table button), NO dense text.
+     Tokens only: brand-cream #F5EBD8 field. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300">
+  <rect width="1200" height="300" fill="#F5EBD8"/>
+</svg>

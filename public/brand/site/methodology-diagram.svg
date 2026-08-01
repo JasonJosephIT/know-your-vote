@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV Methodology / trust diagram — Colorway: Official (Green + Cream + Ink, clay accent).
+     Depicts the 3-bucket model calmly: a claim flows into three neutral, equal-weight
+     buckets — stated_position / verifiable_fact / outside_opinion. Those three bucket names
+     are the ONLY baked text and are explicitly allowed as diagram labels. NO editorializing
+     or motive labels, no candidate, no partisan color. Buckets are visually equal (fairness).
+     Type: Figtree (headings) / Inter (labels) resolve live in-browser; system-humanist fallback.
+     Tokens: background #F6F3EC, surface #FFFFFF, primary #2F6B4F, primary-muted #E4EFE7,
+     brand-cream #F5EBD8, accent #B26836, border #E4DED2, border-strong #CFC7B6,
+     on-surface #22271F, on-surface-muted #585E52. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480" role="img"
+     aria-label="Trust model: a claim sorted into three equal buckets — stated position, verifiable fact, outside opinion">
+  <rect width="900" height="480" rx="16" fill="#F6F3EC"/>
+  <style>
+    .h  { font-family: "Figtree", system-ui, sans-serif; font-weight: 700; }
+    .lb { font-family: "Inter", system-ui, sans-serif; font-weight: 600; }
+    .cap{ font-family: "Inter", system-ui, sans-serif; font-weight: 500; }
+    .mono{ font-family: "IBM Plex Mono", ui-monospace, monospace; font-weight: 400; }
+  </style>
+
+  <!-- Source claim node (neutral) -->
+  <g transform="translate(450 74)">
+    <rect x="-150" y="-34" width="300" height="68" rx="14" fill="#FFFFFF" stroke="#CFC7B6" stroke-width="2"/>
+    <circle cx="-118" cy="0" r="16" fill="#E4EFE7"/>
+    <path d="M-126 0 l6 6 l11 -13" fill="none" stroke="#2F6B4F" stroke-width="3"
+          stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="-90" y="6" class="lb" font-size="20" fill="#22271F">One claim, examined</text>
+  </g>
+
+  <!-- connectors to three buckets -->
+  <g fill="none" stroke="#CFC7B6" stroke-width="2.5" stroke-linecap="round">
+    <path d="M450 108 C 450 150, 190 150, 190 190"/>
+    <path d="M450 108 L450 190"/>
+    <path d="M450 108 C 450 150, 710 150, 710 190"/>
+  </g>
+
+  <!-- three EQUAL buckets -->
+  <!-- bucket 1: stated_position -->
+  <g transform="translate(190 320)">
+    <rect x="-120" y="-130" width="240" height="260" rx="16" fill="#FFFFFF" stroke="#E4DED2" stroke-width="2"/>
+    <rect x="-120" y="-130" width="240" height="8" rx="4" fill="#2F6B4F"/>
+    <!-- icon: speech / quote -->
+    <g transform="translate(0 -66)" fill="none" stroke="#2F6B4F" stroke-width="3"
+       stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-34 -20 h68 a10 10 0 0 1 10 10 v28 a10 10 0 0 1 -10 10 h-40 l-18 16 v-16 h-10 a10 10 0 0 1 -10 -10 v-28 a10 10 0 0 1 10 -10 Z"/>
+    </g>
+    <text x="0" y="8" text-anchor="middle" class="mono" font-size="17" fill="#22271F">stated_position</text>
+    <text x="0" y="40" text-anchor="middle" class="cap" font-size="14" fill="#585E52">What the candidate</text>
+    <text x="0" y="60" text-anchor="middle" class="cap" font-size="14" fill="#585E52">says, quoted</text>
+    <!-- neutral tally dots -->
+    <g transform="translate(0 92)" fill="#CFC7B6">
+      <circle cx="-24" cy="0" r="4"/><circle cx="-8" cy="0" r="4"/>
+      <circle cx="8" cy="0" r="4"/><circle cx="24" cy="0" r="4"/>
+    </g>
+  </g>
+
+  <!-- bucket 2: verifiable_fact -->
+  <g transform="translate(450 320)">
+    <rect x="-120" y="-130" width="240" height="260" rx="16" fill="#FFFFFF" stroke="#E4DED2" stroke-width="2"/>
+    <rect x="-120" y="-130" width="240" height="8" rx="4" fill="#2F6B4F"/>
+    <!-- icon: magnifier / verify -->
+    <g transform="translate(0 -66)" fill="none" stroke="#2F6B4F" stroke-width="3"
+       stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="-6" cy="-2" r="18"/>
+      <line x1="9" y1="13" x2="22" y2="26"/>
+      <path d="M-14 -3 l7 8 l13 -16" stroke="#B26836"/>
+    </g>
+    <text x="0" y="8" text-anchor="middle" class="mono" font-size="17" fill="#22271F">verifiable_fact</text>
+    <text x="0" y="40" text-anchor="middle" class="cap" font-size="14" fill="#585E52">Checked against the</text>
+    <text x="0" y="60" text-anchor="middle" class="cap" font-size="14" fill="#585E52">public record</text>
+    <g transform="translate(0 92)" fill="#CFC7B6">
+      <circle cx="-24" cy="0" r="4"/><circle cx="-8" cy="0" r="4"/>
+      <circle cx="8" cy="0" r="4"/><circle cx="24" cy="0" r="4"/>
+    </g>
+  </g>
+
+  <!-- bucket 3: outside_opinion -->
+  <g transform="translate(710 320)">
+    <rect x="-120" y="-130" width="240" height="260" rx="16" fill="#FFFFFF" stroke="#E4DED2" stroke-width="2"/>
+    <rect x="-120" y="-130" width="240" height="8" rx="4" fill="#2F6B4F"/>
+    <!-- icon: two neutral voices / people (uniform, no favoring) -->
+    <g transform="translate(0 -66)" fill="none" stroke="#2F6B4F" stroke-width="3"
+       stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="-14" cy="-8" r="8"/>
+      <path d="M-28 18 a14 14 0 0 1 28 0"/>
+      <circle cx="14" cy="-8" r="8"/>
+      <path d="M0 18 a14 14 0 0 1 28 0"/>
+    </g>
+    <text x="0" y="8" text-anchor="middle" class="mono" font-size="17" fill="#22271F">outside_opinion</text>
+    <text x="0" y="40" text-anchor="middle" class="cap" font-size="14" fill="#585E52">What others say,</text>
+    <text x="0" y="60" text-anchor="middle" class="cap" font-size="14" fill="#585E52">attributed to source</text>
+    <g transform="translate(0 92)" fill="#CFC7B6">
+      <circle cx="-24" cy="0" r="4"/><circle cx="-8" cy="0" r="4"/>
+      <circle cx="8" cy="0" r="4"/><circle cx="24" cy="0" r="4"/>
+    </g>
+  </g>
+</svg>

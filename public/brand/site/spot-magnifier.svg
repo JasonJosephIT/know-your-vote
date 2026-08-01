@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV spot illustration — "We check the receipts" — Colorway: Official + clay accent.
+     A magnifier examining a stack of source/receipt lines. No text labels.
+     Tokens: background #F6F3EC, surface #FFFFFF, primary #2F6B4F, brand-cream #F5EBD8,
+     accent #B26836, border #E4DED2, border-strong #CFC7B6, surface-muted #EFEAE0. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360" role="img"
+     aria-label="A magnifier examining a stack of source lines">
+  <rect width="480" height="360" rx="16" fill="#F6F3EC"/>
+  <circle cx="210" cy="180" r="130" fill="#EFEAE0" opacity="0.7"/>
+  <!-- receipt / source sheet -->
+  <g transform="translate(150 96)">
+    <rect x="0" y="0" width="190" height="168" rx="14" fill="#FFFFFF" stroke="#E4DED2" stroke-width="2"/>
+    <rect x="26" y="30" width="120" height="10" rx="5" fill="#CFC7B6"/>
+    <rect x="26" y="58" width="138" height="9" rx="4.5" fill="#E4DED2"/>
+    <rect x="26" y="82" width="100" height="9" rx="4.5" fill="#E4DED2"/>
+    <rect x="26" y="106" width="128" height="9" rx="4.5" fill="#E4DED2"/>
+    <rect x="26" y="130" width="80" height="9" rx="4.5" fill="#E4DED2"/>
+  </g>
+  <!-- magnifier -->
+  <g transform="translate(288 214)">
+    <circle cx="0" cy="0" r="66" fill="#FFFFFF" fill-opacity="0.55" stroke="#2F6B4F" stroke-width="10"/>
+    <line x1="48" y1="48" x2="104" y2="104" stroke="#2F6B4F" stroke-width="16" stroke-linecap="round"/>
+    <!-- verified check inside the lens (clay accent punctuation) -->
+    <path d="M-24 2 l16 18 l30 -38" fill="none" stroke="#B26836" stroke-width="9"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

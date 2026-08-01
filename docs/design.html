@@ -77,6 +77,23 @@
     /* Elevation */
     --elevation-1: 0 1px 3px rgba(34,39,31,0.06);
     --elevation-2: 0 4px 12px rgba(34,39,31,0.08);
+
+    /* Brand */
+    --brand-green: #2F6B4F;
+    --brand-cream: #F5EBD8;
+    --brand-ink: #22271F;
+
+    /* Marketing palette */
+    --mkt-harvest-gold: #E3A72E;
+    --mkt-burnt-orange: #C1541C;
+    --mkt-brick: #7A2E1E;
+    --mkt-olive: #6B7A3A;
+
+    /* Motion */
+    --motion-fast: 120ms;
+    --motion-base: 200ms;
+    --motion-slow: 320ms;
+    --motion-easing: cubic-bezier(0.2, 0, 0, 1);
   }
 
   * { box-sizing: border-box; }
@@ -164,6 +181,30 @@
   .party-chip { display: inline-flex; align-items: center; background: var(--color-surface-muted); color: var(--color-on-surface-muted); border-radius: var(--rounded-full); padding: 3px 10px; font-size: var(--type-caption-size); font-weight: 600; }
   .chip { display: inline-flex; align-items: center; background: var(--color-primary-muted); color: var(--color-primary-hover); border-radius: var(--rounded-full); padding: 4px 12px; font-size: var(--type-caption-size); font-weight: 600; }
 
+  /* Brand & Logo */
+  .logo-hero { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--rounded-lg); padding: var(--space-6); display: flex; justify-content: center; }
+  .logo-hero img { width: min(420px, 80%); height: auto; }
+  .colorways { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-4); }
+  .colorway { border: 1px solid var(--color-border); border-radius: var(--rounded-lg); overflow: hidden; background: var(--color-surface); }
+  .colorway .stage { height: 120px; display: flex; align-items: center; justify-content: center; }
+  .colorway .stage img { width: 70%; height: auto; }
+  .colorway .meta { padding: var(--space-3); }
+  .colorway .name { font-weight: 600; font-size: var(--type-body-sm-size); }
+  .colorway .use { font-size: var(--type-caption-size); color: var(--color-on-surface-muted); }
+  .brand-rules { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-4); }
+  .brand-rule { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--rounded-lg); padding: var(--space-4); font-size: var(--type-body-sm-size); }
+  .brand-rule .k { font-family: var(--font-mono); font-size: var(--type-mono-size); color: var(--color-on-surface-muted); display: block; margin-bottom: var(--space-1); }
+
+  /* Motion */
+  .motion-row { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-3); }
+  .motion-row .lbl { font-family: var(--font-mono); font-size: var(--type-mono-size); color: var(--color-on-surface-muted); min-width: 190px; }
+  .motion-dot { width: 20px; height: 20px; border-radius: var(--rounded-full); background: var(--color-primary); }
+  .motion-track { width: 220px; border-bottom: 1px dashed var(--color-border-strong); padding-bottom: 4px; }
+  .motion-track:hover .motion-dot { transform: translateX(200px); }
+  .m-fast .motion-dot { transition: transform var(--motion-fast) var(--motion-easing); }
+  .m-base .motion-dot { transition: transform var(--motion-base) var(--motion-easing); }
+  .m-slow .motion-dot { transition: transform var(--motion-slow) var(--motion-easing); }
+
   /* Do / Don't */
   .dd { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); }
   .dd .col { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--rounded-lg); padding: var(--space-5); }
@@ -179,10 +220,36 @@
 <div class="wrap">
 
   <header>
-    <h1 class="page">Know Your Vote — Design System</h1>
-    <p class="lede">A calm, trustworthy, deliberately non-partisan design system — sage green and warm sand, humanist type, minimalist and straight-lined but never governmental.</p>
+    <h1 class="page">Know Your Vote — Design System <span style="font-size:1rem; font-family:var(--font-mono); color:var(--color-on-surface-muted); vertical-align:middle">v1.0</span></h1>
+    <p class="lede">The official KYV system, anchored to the official logo — calm, trustworthy, deliberately non-partisan. Governs web, mobile, and marketing.</p>
     <p class="mirror-note">Human-readable mirror of <strong>docs/design.md</strong> — the tokens below render live from the same values. design.md is the source of truth.</p>
   </header>
+
+  <!-- BRAND & LOGO -->
+  <section>
+    <p class="eyebrow">Brand</p>
+    <h2 class="sec">Logo</h2>
+
+    <div class="logo-hero"><img src="assets/kyv-logo-official.svg" alt="Know Your Vote official logo"></div>
+
+    <h3 class="sub">Colorways <span style="font-weight:400; font-size:var(--type-body-sm-size); color:var(--color-on-surface-muted)">(the only four approved renderings)</span></h3>
+    <div class="colorways">
+      <div class="colorway"><div class="stage" style="background:var(--color-background)"><img src="assets/kyv-logo-official.svg" alt="Official colorway"></div><div class="meta"><div class="name">Official</div><div class="use">Green / cream / ink on light backgrounds</div></div></div>
+      <div class="colorway"><div class="stage" style="background:var(--brand-green)"><img src="assets/kyv-logo-official.svg" alt="Reversed colorway" style="filter:brightness(1.15)"></div><div class="meta"><div class="name">Reversed</div><div class="use">Cream + ink letterforms on solid KYV Green or Ink</div></div></div>
+      <div class="colorway"><div class="stage" style="background:var(--color-surface)"><img src="assets/kyv-logo-official.svg" alt="Mono ink colorway" style="filter:grayscale(1) brightness(0.4)"></div><div class="meta"><div class="name">Mono Ink</div><div class="use">Single-color #22271F for print / stamp contexts</div></div></div>
+      <div class="colorway"><div class="stage" style="background:var(--brand-ink)"><img src="assets/kyv-logo-official.svg" alt="Mono cream colorway" style="filter:grayscale(1) brightness(4)"></div><div class="meta"><div class="name">Mono Cream</div><div class="use">Single-color #F5EBD8 on dark photography (with scrim)</div></div></div>
+    </div>
+
+    <h3 class="sub">Brand Constants</h3>
+    <div class="brand-rules">
+      <div class="brand-rule"><span class="k">brand-green</span>#2F6B4F — logo outlines · maps to <strong>primary</strong></div>
+      <div class="brand-rule"><span class="k">brand-cream</span>#F5EBD8 — letter fills · maps to <strong>brand-cream</strong></div>
+      <div class="brand-rule"><span class="k">brand-ink</span>#22271F — shadow letters · maps to <strong>on-surface</strong></div>
+      <div class="brand-rule"><span class="k">clearspace</span>Height of the logo's "O" on all sides</div>
+      <div class="brand-rule"><span class="k">min size</span>120px wide digital · 1in print</div>
+      <div class="brand-rule"><span class="k">hard rules</span>Never recolor, stretch, rebuild in a font, or place near candidate imagery</div>
+    </div>
+  </section>
 
   <!-- COLORS -->
   <section>
@@ -204,6 +271,16 @@
       <div class="swatch"><div class="chip" style="background:var(--color-accent)"><span style="color:var(--color-on-accent)">accent</span></div><div class="meta"><div class="name">accent</div><div class="hex">#B26836</div></div></div>
       <div class="swatch"><div class="chip" style="background:var(--color-accent-strong)"><span style="color:#fff">accent-strong</span></div><div class="meta"><div class="name">accent-strong</div><div class="hex">#8A4E24</div></div></div>
       <div class="swatch"><div class="chip" style="background:var(--color-accent-muted)"><span style="color:var(--color-accent-strong)">accent-muted</span></div><div class="meta"><div class="name">accent-muted</div><div class="hex">#F5E7D6</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--brand-cream)"><span style="color:var(--color-on-surface)">brand-cream</span></div><div class="meta"><div class="name">brand-cream</div><div class="hex">#F5EBD8</div></div></div>
+    </div>
+
+    <h3 class="sub">Marketing Palette <span style="font-weight:400; font-size:var(--type-body-sm-size); color:var(--color-on-surface-muted)">(marketing assets only — never product UI, never party coding)</span></h3>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:var(--mkt-harvest-gold)"><span style="color:var(--brand-ink)">harvest-gold</span></div><div class="meta"><div class="name">harvest-gold</div><div class="hex">#E3A72E</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--mkt-burnt-orange)"><span style="color:#fff">burnt-orange</span></div><div class="meta"><div class="name">burnt-orange</div><div class="hex">#C1541C</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--mkt-brick)"><span style="color:#fff">brick</span></div><div class="meta"><div class="name">brick</div><div class="hex">#7A2E1E</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--mkt-olive)"><span style="color:#fff">olive</span></div><div class="meta"><div class="name">olive</div><div class="hex">#6B7A3A</div></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--brand-cream)"><span style="color:var(--brand-ink)">cream</span></div><div class="meta"><div class="name">cream</div><div class="hex">#F5EBD8</div></div></div>
     </div>
 
     <h3 class="sub">Semantic States</h3>
@@ -281,6 +358,16 @@
       <div class="elev-card elev-1">elevation-1<br>0 1px 3px rgba(34,39,31,.06)</div>
       <div class="elev-card elev-2">elevation-2<br>0 4px 12px rgba(34,39,31,.08)</div>
     </div>
+  </section>
+
+  <!-- MOTION -->
+  <section>
+    <p class="eyebrow">Tokens</p>
+    <h2 class="sec">Motion <span style="font-weight:400; font-size:var(--type-body-sm-size); color:var(--color-on-surface-muted)">(hover a track to preview — nothing bounces or springs)</span></h2>
+    <div class="motion-row m-fast"><span class="lbl">fast · 120ms · hovers, toggles</span><div class="motion-track"><div class="motion-dot"></div></div></div>
+    <div class="motion-row m-base"><span class="lbl">base · 200ms · reveals</span><div class="motion-track"><div class="motion-dot"></div></div></div>
+    <div class="motion-row m-slow"><span class="lbl">slow · 320ms · page transitions</span><div class="motion-track"><div class="motion-dot"></div></div></div>
+    <p style="font-family:var(--font-mono); font-size:var(--type-mono-size); color:var(--color-on-surface-muted)">easing: cubic-bezier(0.2, 0, 0, 1)</p>
   </section>
 
   <!-- COMPONENTS -->
@@ -371,6 +458,8 @@
           <li>Always pair verdict and status color with a text label or icon — never rely on color alone.</li>
           <li>Use warm sand neutrals and generous whitespace to keep the tone human and unhurried.</li>
           <li>Reserve the clay accent for small, cheerful moments (active nav, highlights, illustrative marks).</li>
+          <li>Use only the four approved logo colorways, with full clearspace, at or above minimum size.</li>
+          <li>Anchor every marketing piece in KYV Green + Cream before reaching for the harvest tones.</li>
         </ul>
       </div>
       <div class="col dont">
@@ -381,6 +470,8 @@
           <li>Never let the accent or verdict reds dominate; they punctuate, they don't drive.</li>
           <li>Never set body copy in the display face or shrink readable text below 14px.</li>
           <li>Never use alarmist, saturated colors — stay calm even when a verdict is "Inaccurate."</li>
+          <li>Never recolor the logo, rebuild it in a font, stretch it, or place it near candidate imagery.</li>
+          <li>Never let marketing's retro voice (novelty display type, harvest palette) leak into product UI.</li>
         </ul>
       </div>
     </div>

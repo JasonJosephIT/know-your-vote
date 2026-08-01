@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Know Your Vote — Verdict badge component</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../kyv-artifact-theme.css">
+  <style>
+    /* Artifact-SPECIFIC layout only. No colors, no new brand values. */
+    body { margin: 0; padding: var(--spacing-7) 0; }
+    .vb-eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--text-overline);
+      font-weight: var(--text-overline--font-weight);
+      letter-spacing: var(--text-overline--letter-spacing);
+      text-transform: uppercase;
+      color: var(--color-on-surface-muted);
+      margin: 0 0 var(--spacing-2);
+    }
+    .vb-title {
+      font-family: var(--font-heading);
+      font-size: var(--text-h1);
+      font-weight: var(--text-h1--font-weight);
+      letter-spacing: var(--text-h1--letter-spacing);
+      line-height: var(--text-h1--line-height);
+      color: var(--color-on-surface);
+      margin: 0 0 var(--spacing-3);
+    }
+    .vb-lede {
+      font-family: var(--font-body);
+      font-size: var(--text-body-lg);
+      line-height: var(--text-body-lg--line-height);
+      color: var(--color-on-surface-muted);
+      margin: 0 0 var(--spacing-6);
+    }
+    .vb-scale { display: flex; flex-direction: column; gap: 0; }
+    .vb-row {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: var(--spacing-5);
+      align-items: center;
+      padding: var(--spacing-4) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .vb-row:last-child { border-bottom: none; }
+    .vb-meaning {
+      font-family: var(--font-body);
+      font-size: var(--text-body-sm);
+      line-height: var(--text-body-sm--line-height);
+      color: var(--color-on-surface-muted);
+      margin: 0;
+    }
+    .vb-h3 {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: var(--text-h3--font-weight);
+      color: var(--color-on-surface);
+      margin: 0 0 var(--spacing-3);
+    }
+    .vb-snippet {
+      font-family: var(--font-mono);
+      font-size: var(--text-mono);
+      line-height: 1.7;
+      color: var(--color-on-surface);
+      background-color: var(--color-surface-muted);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-4);
+      overflow-x: auto;
+      white-space: pre;
+      margin: 0;
+    }
+    .vb-note {
+      font-family: var(--font-body);
+      font-size: var(--text-body-sm);
+      line-height: var(--text-body-sm--line-height);
+      color: var(--color-on-surface-muted);
+      margin: var(--spacing-3) 0 0;
+    }
+    @media (max-width: 560px) {
+      .vb-row { grid-template-columns: 1fr; gap: var(--spacing-2); }
+    }
+  </style>
+</head>
+<body>
+  <main class="kyv-container">
+    <div class="kyv-measure" style="max-width: 820px;">
+      <p class="vb-eyebrow">Component</p>
+      <h1 class="vb-title">Verdict badge</h1>
+      <p class="vb-lede">The full fact-check scale. The verdict color drives only the badge&rsquo;s dot and label &mdash; never a filled background &mdash; so meaning survives for colorblind readers and never shouts.</p>
+
+      <section class="kyv-card" aria-label="Verdict scale">
+        <div class="vb-scale">
+          <div class="vb-row">
+            <span class="kyv-verdict-badge" style="color: var(--color-verdict-accurate)">Accurate</span>
+            <p class="vb-meaning">Checks out fully against the primary source.</p>
+          </div>
+          <div class="vb-row">
+            <span class="kyv-verdict-badge" style="color: var(--color-verdict-mostly-accurate)">Mostly accurate</span>
+            <p class="vb-meaning">Largely holds up, with a minor caveat.</p>
+          </div>
+          <div class="vb-row">
+            <span class="kyv-verdict-badge" style="color: var(--color-verdict-mixed)">Mixed</span>
+            <p class="vb-meaning">Part holds up, part does not.</p>
+          </div>
+          <div class="vb-row">
+            <span class="kyv-verdict-badge" style="color: var(--color-verdict-mostly-inaccurate)">Mostly inaccurate</span>
+            <p class="vb-meaning">Largely does not hold up, with a small true element.</p>
+          </div>
+          <div class="vb-row">
+            <span class="kyv-verdict-badge" style="color: var(--color-verdict-inaccurate)">Inaccurate</span>
+            <p class="vb-meaning">Does not hold up against the primary source.</p>
+          </div>
+          <div class="vb-row">
+            <span class="kyv-verdict-badge" style="color: var(--color-verdict-unverifiable)">Unverifiable</span>
+            <p class="vb-meaning">No primary source available to check it against.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="kyv-card" style="margin-top: var(--spacing-5);" aria-label="Copy-paste snippet">
+        <h2 class="vb-h3">Copy-paste markup</h2>
+        <pre class="vb-snippet">&lt;!-- Import the theme once, then use the helper. --&gt;
+&lt;link rel="stylesheet" href="../kyv-artifact-theme.css"&gt;
+
+&lt;!-- Color drives the dot + label only, via the badge's `color`. --&gt;
+&lt;span class="kyv-verdict-badge"
+      style="color: var(--color-verdict-accurate)"&gt;Accurate&lt;/span&gt;
+&lt;span class="kyv-verdict-badge"
+      style="color: var(--color-verdict-mostly-accurate)"&gt;Mostly accurate&lt;/span&gt;
+&lt;span class="kyv-verdict-badge"
+      style="color: var(--color-verdict-mixed)"&gt;Mixed&lt;/span&gt;
+&lt;span class="kyv-verdict-badge"
+      style="color: var(--color-verdict-mostly-inaccurate)"&gt;Mostly inaccurate&lt;/span&gt;
+&lt;span class="kyv-verdict-badge"
+      style="color: var(--color-verdict-inaccurate)"&gt;Inaccurate&lt;/span&gt;
+&lt;span class="kyv-verdict-badge"
+      style="color: var(--color-verdict-unverifiable)"&gt;Unverifiable&lt;/span&gt;</pre>
+        <p class="vb-note">Never set the verdict color as a background. The neutral <code>surface-muted</code> fill stays constant across all six; only the dot and text carry the scale.</p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

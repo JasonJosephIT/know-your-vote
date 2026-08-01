@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { Card } from "@/components/ui/Card";
 import { PartyChip } from "@/components/ui/PartyChip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
@@ -18,20 +18,18 @@ interface SavedSummary {
 }
 
 export function SavedCandidates() {
-  const [ids, setIds] = useState<string[] | null>(null);
+  /* null only on the server and the hydration render — render nothing until
+     the device-local list is knowable, so server HTML never shows a wrong
+     state. */
+  const ids = useSyncExternalStore<string[] | null>(
+    onSavedChange,
+    readSaved,
+    () => null,
+  );
   const [rows, setRows] = useState<SavedSummary[]>([]);
 
   useEffect(() => {
-    const refresh = () => setIds(readSaved());
-    refresh();
-    return onSavedChange(refresh);
-  }, []);
-
-  useEffect(() => {
-    if (!ids || ids.length === 0) {
-      setRows([]);
-      return;
-    }
+    if (!ids || ids.length === 0) return;
     const controller = new AbortController();
     fetch(`/api/candidates?ids=${ids.join(",")}`, { signal: controller.signal })
       .then((r) => (r.ok ? r.json() : { candidates: [] }))
@@ -52,9 +50,13 @@ export function SavedCandidates() {
     );
   }
 
+  /* rows lags ids while a fetch is in flight — filter so an unsave hides its
+     card immediately and rows from a previous list never resurface. */
+  const visible = rows.filter((c) => ids.includes(c.candidate_id));
+
   return (
     <ul className="flex flex-col gap-4">
-      {rows.map((c) => (
+      {visible.map((c) => (
         <li key={c.candidate_id}>
           <Card className="flex flex-col gap-2">
             <div className="flex flex-wrap items-center gap-2">
