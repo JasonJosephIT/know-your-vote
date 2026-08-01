@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV Android Adaptive Icon — BACKGROUND layer. Colorway: REVERSED (solid KYV Green field).
+     108x108dp equivalent. Full-bleed green; the OS mask (circle/squircle/rounded-square)
+     crops this safely. No detail — background layers must be edge-to-edge solid.
+     Token: primary #2F6B4F. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="108" height="108">
+  <rect width="108" height="108" fill="#2F6B4F"/>
+</svg>

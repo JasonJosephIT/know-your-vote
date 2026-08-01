@@ -44,3 +44,17 @@ next-env.d.ts
 .DS_Store
 __pycache__/
 *.pyc
+
+# --- reconciliation 2026-08-01 ---
+# Agent scaffolding and crawl caches
+.claude/
+.claude-crawl/
+
+# Generated ops output. NOTE: RunReports are your symmetric-scrutiny audit
+# trail (PRD §10 mitigation). If you want them tracked as evidence rather
+# than treated as build output, delete the RunReports line below.
+Civic Awareness (Know Your Vote)/Agents/RunReports/
+Civic Awareness (Know Your Vote)/CAP_Ops_Digest_*.html
+
+# Reconciliation script
+/reconcile-git.sh

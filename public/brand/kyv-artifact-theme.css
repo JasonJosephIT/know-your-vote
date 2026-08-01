@@ -1,0 +1,251 @@
+/* ============================================================================
+   KYV Artifact Theme — Know Your Vote
+   ----------------------------------------------------------------------------
+   Drop-in Tailwind v4 theme for standalone web artifacts, embeds, and email
+   templates that live OUTSIDE the Next.js app but must match it exactly.
+
+   Single source of truth: docs/design.md  (mirrored in src/app/globals.css).
+   If a token changes there, change it here too — these must never drift.
+
+   HOW TO USE
+   ----------------------------------------------------------------------------
+   • Tailwind v4 artifact (build step or CDN):
+       @import "tailwindcss";
+       @import "./kyv-artifact-theme.css";
+     Every token below becomes a utility (bg-primary, text-on-surface,
+     rounded-lg, p-5, shadow-elevation-2, font-heading, text-h2, …).
+
+   • No-build artifact / raw HTML / email:
+       <link rel="stylesheet" href="kyv-artifact-theme.css">
+     The @theme block still emits :root custom properties, so you can use
+     var(--color-primary), var(--text-h2), etc. directly in inline styles.
+     (Email note: most clients ignore <link> and CSS variables — for email,
+     copy the resolved hex values inline. See docs/asset-generation-guide.md.)
+
+   NON-PARTISAN RULE: nothing here color-codes parties or candidates. The
+   palette carries warmth and trust, never political affiliation.
+   ============================================================================ */
+
+@theme {
+  /* --- Core UI colors (identical to src/app/globals.css) ------------------ */
+  --color-background: #f6f3ec;
+  --color-surface: #ffffff;
+  --color-surface-muted: #efeae0;
+  --color-on-surface: #22271f;
+  --color-on-surface-muted: #585e52;
+  --color-border: #e4ded2;
+  --color-border-strong: #cfc7b6;
+  --color-primary: #2f6b4f;
+  --color-primary-hover: #255a41;
+  --color-primary-muted: #e4efe7;
+  --color-on-primary: #ffffff;
+  --color-accent: #b26836;
+  --color-accent-strong: #8a4e24;
+  --color-accent-muted: #f5e7d6;
+  --color-on-accent: #ffffff;
+  --color-success: #2f7d52;
+  --color-warning: #b07a1e;
+  --color-error: #b4402e;
+  --color-info: #2f6e7a;
+  --color-focus-ring: #2f6b4f;
+
+  /* Brand cream — the logo's letter-fill tone */
+  --color-brand-cream: #f5ebd8;
+
+  /* --- Verdict scale (fact-check outcomes; always paired with a text label) */
+  --color-verdict-accurate: #2f6b4f;
+  --color-verdict-mostly-accurate: #5e8c6b;
+  --color-verdict-mixed: #b07a1e;
+  --color-verdict-mostly-inaccurate: #b4692e;
+  --color-verdict-inaccurate: #b4402e;
+  --color-verdict-unverifiable: #6b6f66;
+
+  /* --- Marketing palette (retro-harvest; MARKETING SURFACES ONLY) ---------
+     Supporting tones only — KYV Green + Cream must still anchor the piece.
+     Never used in product UI, and never to code parties/candidates. */
+  --color-harvest-gold: #e3a72e;
+  --color-burnt-orange: #c1541c;
+  --color-brick: #7a2e1e;
+  --color-olive: #6b7a3a;
+
+  /* --- Type scale --------------------------------------------------------- */
+  --text-display: 2.5rem;
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 700;
+  --text-h1: 2rem;
+  --text-h1--line-height: 1.15;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h1--font-weight: 700;
+  --text-h2: 1.5rem;
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.01em;
+  --text-h2--font-weight: 600;
+  --text-h3: 1.25rem;
+  --text-h3--line-height: 1.3;
+  --text-h3--font-weight: 600;
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.6;
+  --text-body: 1rem;
+  --text-body--line-height: 1.6;
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.5;
+  --text-label: 0.9375rem;
+  --text-label--line-height: 1.2;
+  --text-label--font-weight: 600;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.4;
+  --text-caption--letter-spacing: 0.01em;
+  --text-caption--font-weight: 500;
+  --text-overline: 0.75rem;
+  --text-overline--line-height: 1.3;
+  --text-overline--letter-spacing: 0.08em;
+  --text-overline--font-weight: 700;
+  --text-mono: 0.875rem;
+  --text-mono--line-height: 1.5;
+
+  /* --- Radius ------------------------------------------------------------- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 999px;
+
+  /* --- Spacing (4px base; p-5 = 24px, NOT Tailwind's default 20px) -------- */
+  --spacing-0: 0px;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 24px;
+  --spacing-6: 32px;
+  --spacing-7: 48px;
+  --spacing-8: 64px;
+  --spacing-9: 96px;
+
+  /* --- Elevation (border-led brand — use sparingly) ----------------------- */
+  --shadow-elevation-1: 0 1px 3px rgba(34, 39, 31, 0.06);
+  --shadow-elevation-2: 0 4px 12px rgba(34, 39, 31, 0.08);
+
+  /* --- Motion ------------------------------------------------------------- */
+  --ease-kyv: cubic-bezier(0.2, 0, 0, 1);
+
+  /* --- Fonts -------------------------------------------------------------
+     Load Figtree, Inter, IBM Plex Mono in the artifact's <head> (e.g. Google
+     Fonts) so these resolve. Falls back to system humanist sans if missing. */
+  --font-heading: "Figtree", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+/* ============================================================================
+   Base + component conveniences for artifacts that are NOT running the app's
+   own globals.css. These mirror the component tokens in docs/design.md so a
+   one-off artifact gets calm, on-brand defaults for free.
+   ============================================================================ */
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-on-surface);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: 1.6;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* One strong action per view. */
+  .kyv-btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-label);
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    padding: 12px 20px;
+    border: none;
+    transition: background-color 120ms var(--ease-kyv);
+  }
+  .kyv-btn-primary:hover { background-color: var(--color-primary-hover); }
+
+  .kyv-btn-secondary {
+    background-color: var(--color-surface);
+    color: var(--color-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-label);
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    padding: 12px 20px;
+    border: 1px solid var(--color-border-strong);
+    transition: background-color 120ms var(--ease-kyv);
+  }
+  .kyv-btn-secondary:hover {
+    background-color: var(--color-primary-muted);
+    color: var(--color-primary-hover);
+    border-color: var(--color-primary);
+  }
+
+  /* Workhorse container. */
+  .kyv-card {
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-5);
+  }
+
+  /* Pills. Party chips MUST use the uniform neutral treatment — never colored. */
+  .kyv-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--color-primary-muted);
+    color: var(--color-primary-hover);
+    font-size: var(--text-caption);
+    font-weight: 500;
+    border-radius: var(--radius-full);
+    padding: 4px 12px;
+  }
+  .kyv-party-chip {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--color-surface-muted);
+    color: var(--color-on-surface-muted);
+    font-size: var(--text-caption);
+    font-weight: 500;
+    border-radius: var(--radius-full);
+    padding: 3px 10px;
+  }
+  .kyv-verdict-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--color-surface-muted);
+    color: var(--color-on-surface);
+    font-size: var(--text-caption);
+    font-weight: 500;
+    border-radius: var(--radius-full);
+    padding: 4px 10px;
+  }
+  /* Verdict meaning lives on the dot + label, never on the badge fill. */
+  .kyv-verdict-badge::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background-color: currentColor;
+  }
+
+  /* Layout guards from docs/design.md */
+  .kyv-container { max-width: 1120px; margin-inline: auto; padding-inline: var(--spacing-5); }
+  .kyv-measure   { max-width: 680px;  margin-inline: auto; }
+}

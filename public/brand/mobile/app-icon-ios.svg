@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV iOS App Icon — Colorway: REVERSED (cream monogram #F5EBD8 on solid KYV Green #2F6B4F).
+     Reuses the KYV acronym monogram geometry from public/brand/site/favicon.svg (stroke-based
+     K/Y/V, font-independent vector paths), rescaled to a 1024 grid with generous clearspace.
+     No wordmark, no text, no gloss. Inline presentation attributes only (ImageMagick-safe).
+     iOS icons render on a rounded-square mask supplied by the OS, so this is a full-bleed
+     green field with the monogram centered well inside the safe area (~64% of canvas).
+     Tokens: primary #2F6B4F, brand-cream #F5EBD8. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="Know Your Vote">
+  <rect width="1024" height="1024" fill="#2F6B4F"/>
+  <!-- Stacked K / Y / V monogram, centered on a 1024 grid.
+       Letterforms occupy roughly x:360-664, y:300-724 => ~62% span, generous clearspace. -->
+  <g stroke="#F5EBD8" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- K -->
+    <path d="M400 300 V468 M400 384 L548 300 M439 377 L562 468"/>
+    <!-- Y -->
+    <path d="M380 512 L472 596 L564 512 M472 596 V678"/>
+    <!-- V -->
+    <path d="M380 618 L472 764 L564 618"/>
+  </g>
+</svg>

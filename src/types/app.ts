@@ -21,16 +21,35 @@ export interface RacePublication {
   note: string | null;
 }
 
+/* pipeline_event/official_link are app/pipeline-authored; candidate_news/
+   election_news are agent-authored (R1/R3, migration 0005). */
+export type NewsItemType =
+  "pipeline_event" | "official_link" | "candidate_news" | "election_news";
+
 export interface NewsItem {
   id: string;
   race_id: string | null;
   metro: string | null;
-  item_type: "pipeline_event" | "official_link";
+  candidate_id: string | null;
+  item_type: NewsItemType;
   title: string;
   summary: string | null;
   url: string | null;
   source_id: string | null;
   published_at: string;
+}
+
+/* Contact & logistics layer written by the R2 refresher (migration 0005) —
+   same anon-read visibility class as news_item, never brief content. */
+export interface CandidateContact {
+  candidate_id: string;
+  campaign_email: string | null;
+  campaign_phone: string | null;
+  mailing_address: string | null;
+  contact_url: string | null;
+  source_url: string;
+  last_verified_at: string;
+  verified_by: string;
 }
 
 export interface VotingInfoSubscription {

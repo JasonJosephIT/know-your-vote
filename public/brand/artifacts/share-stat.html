@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Know Your Vote — Shareable stat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../kyv-artifact-theme.css">
+  <style>
+    /* Artifact-SPECIFIC layout only. No colors, no new brand values. */
+    html, body { margin: 0; }
+    body {
+      background-color: var(--color-background);
+      display: flex;
+      justify-content: center;
+      padding: var(--spacing-6);
+    }
+    /* Fixed 1200x630 share card, rendered to PNG. Green + Cream dominate. */
+    .share-card {
+      box-sizing: border-box;
+      width: 1200px;
+      height: 630px;
+      background-color: var(--color-primary);
+      color: var(--color-brand-cream);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .sc-eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--text-overline);
+      font-weight: var(--text-overline--font-weight);
+      letter-spacing: var(--text-overline--letter-spacing);
+      text-transform: uppercase;
+      color: var(--color-brand-cream);
+      opacity: 0.85;
+      margin: 0;
+    }
+    .sc-fact {
+      font-family: var(--font-heading);
+      font-size: 3.25rem;
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--color-brand-cream);
+      margin: 0;
+      max-width: 22ch;
+    }
+    .sc-fact .sc-num { color: var(--color-brand-cream); }
+    .sc-source {
+      font-family: var(--font-mono);
+      font-size: var(--text-mono);
+      color: var(--color-brand-cream);
+      opacity: 0.85;
+      margin: 0;
+    }
+    .sc-footer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: var(--spacing-5);
+    }
+    .sc-brand {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--color-brand-cream);
+    }
+    .sc-tag {
+      font-family: var(--font-body);
+      font-size: var(--text-body-sm);
+      color: var(--color-brand-cream);
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+  <div class="share-card" role="img" aria-label="Know Your Vote statistic card">
+    <p class="sc-eyebrow">Know your ballot</p>
+    <h1 class="sc-fact">A Florida general-election ballot can list <span class="sc-num">more than 30</span> separate contests and measures.</h1>
+    <div class="sc-footer">
+      <div>
+        <p class="sc-source">Source: placeholder &mdash; state elections dataset, 2026</p>
+      </div>
+      <div style="text-align:right;">
+        <div class="sc-brand">Know Your Vote</div>
+        <div class="sc-tag">nonpartisan Florida ballot info</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

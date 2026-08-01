@@ -116,6 +116,8 @@ flowchart TD
 **Required environment variables:**
 `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (server only), `ANTHROPIC_API_KEY` (server only), `RESEND_API_KEY` (server only), `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`, `SENTRY_DSN`, `SENTRY_AUTH_TOKEN`, `CRON_SECRET` (guards the cron route), `EMAIL_FROM` (verified Resend sender).
 
+Optional: `SHOW_CANDIDATE_CONTACT` (server only) — the candidate-page contact block from `candidate_contact` stays unrendered until this is `"true"` (CAP_Refresh_Agents_Plan §8 Q3: flip only after the first real R2 run's data is approved).
+
 ### Repository Structure
 
 ```
@@ -243,12 +245,14 @@ CREATE TABLE race_publication (
   note          TEXT
 );
 
--- Local Electoral News feed items (pipeline events + curated official links)
+-- Local Electoral News feed items (pipeline events + curated official links;
+-- migration 0005 adds candidate_id + the agent-written candidate_news /
+-- election_news item_types per CAP_Refresh_Agents_Plan §5)
 CREATE TABLE news_item (
   id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   race_id       TEXT REFERENCES race(race_id),       -- null = statewide/general
   metro         TEXT,                                 -- optional scope
-  item_type     TEXT NOT NULL CHECK (item_type IN ('pipeline_event','official_link')),
+  item_type     TEXT NOT NULL CHECK (item_type IN ('pipeline_event','official_link','candidate_news','election_news')),
   title         TEXT NOT NULL,                        -- neutral wording
   summary       TEXT,
   url           TEXT,                                 -- official/primary link when applicable
@@ -351,7 +355,7 @@ Response 200: { ok: true }   Response 404: { error: "Unknown token" }
 ```
 GET /api/news?zip=33101   (or ?metro=miami)
 Auth: none
-Response 200: { items: [ { id, itemType, title, summary, url, publishedAt, raceId } ] }   // newest first, published scope only
+Response 200: { items: [ { id, itemType, title, summary, url, publishedAt, raceId, candidateId } ] }   // newest first, published scope only
 ```
 
 ```

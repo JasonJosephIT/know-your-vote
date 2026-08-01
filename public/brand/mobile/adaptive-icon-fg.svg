@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV Android Adaptive Icon — FOREGROUND layer. Colorway: REVERSED (cream monogram, transparent bg).
+     108x108dp equivalent. Android reserves the outer 18dp on all sides as a parallax/mask margin,
+     so all content sits inside the central 66dp SAFE ZONE (a circle of radius ~33dp about center 54,54).
+     The K/Y/V monogram (reused from favicon.svg / app-icon-ios.svg) is scaled to fit well inside it
+     so it never clips under circular OR rounded-square masks. Transparent background: this layer
+     composites over adaptive-icon-bg.svg. Inline attributes only (ImageMagick-safe).
+     Token: brand-cream #F5EBD8. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="108" height="108" role="img" aria-label="Know Your Vote">
+  <!-- Monogram spans roughly x:38-70, y:33-75 => within the 66dp safe circle. Stroke scaled to grid. -->
+  <g stroke="#F5EBD8" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- K -->
+    <path d="M42.5 33 V51 M42.5 42 L58 33 M46.6 41.3 L59.5 51"/>
+    <!-- Y -->
+    <path d="M40.5 55.5 L50 64 L59.5 55.5 M50 64 V72.5"/>
+    <!-- V -->
+    <path d="M40.5 66.5 L50 82 L59.5 66.5"/>
+  </g>
+</svg>

@@ -8,8 +8,8 @@ export default function NewsPage() {
       <header className="flex flex-col gap-1">
         <h1 className="text-h1">Local electoral news</h1>
         <p className="text-body-sm text-on-surface-muted">
-          A calm daily digest of what actually changed — pipeline updates and
-          official sources only, no hot takes.
+          A calm digest of what actually changed — election news, candidate
+          news, pipeline updates, and official sources only, no hot takes.
         </p>
       </header>
       <NewsFeed />

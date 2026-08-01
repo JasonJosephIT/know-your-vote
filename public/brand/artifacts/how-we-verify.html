@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Know Your Vote — How we verify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../kyv-artifact-theme.css">
+  <style>
+    /* Artifact-SPECIFIC layout only. No colors, no new brand values. */
+    body { margin: 0; padding: var(--spacing-7) 0; }
+    .hv-eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--text-overline);
+      font-weight: var(--text-overline--font-weight);
+      letter-spacing: var(--text-overline--letter-spacing);
+      text-transform: uppercase;
+      color: var(--color-on-surface-muted);
+      margin: 0 0 var(--spacing-2);
+    }
+    .hv-title {
+      font-family: var(--font-heading);
+      font-size: var(--text-h1);
+      font-weight: var(--text-h1--font-weight);
+      letter-spacing: var(--text-h1--letter-spacing);
+      line-height: var(--text-h1--line-height);
+      color: var(--color-on-surface);
+      margin: 0 0 var(--spacing-3);
+    }
+    .hv-lede {
+      font-family: var(--font-body);
+      font-size: var(--text-body-lg);
+      line-height: var(--text-body-lg--line-height);
+      color: var(--color-on-surface-muted);
+      margin: 0 0 var(--spacing-7);
+    }
+    /* 3-bucket diagram — three equal buckets, calm and flat. */
+    .hv-buckets {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-5);
+      margin-bottom: var(--spacing-6);
+    }
+    .hv-bucket { display: flex; flex-direction: column; gap: var(--spacing-2); height: 100%; }
+    .hv-bucket-num {
+      font-family: var(--font-mono);
+      font-size: var(--text-mono);
+      color: var(--color-on-surface-muted);
+    }
+    .hv-bucket-key {
+      font-family: var(--font-mono);
+      font-size: var(--text-mono);
+      color: var(--color-primary);
+    }
+    .hv-bucket-name {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: var(--text-h3--font-weight);
+      color: var(--color-on-surface);
+      margin: var(--spacing-1) 0 0;
+    }
+    .hv-bucket-desc {
+      font-family: var(--font-body);
+      font-size: var(--text-body-sm);
+      line-height: var(--text-body-sm--line-height);
+      color: var(--color-on-surface);
+      margin: 0;
+    }
+    .hv-icon { width: 32px; height: 32px; color: var(--color-primary); }
+    .hv-sources {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-1);
+    }
+    .hv-source-link {
+      font-family: var(--font-mono);
+      font-size: var(--text-mono);
+      color: var(--color-primary);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .hv-source-link:hover { color: var(--color-primary-hover); }
+    .hv-note {
+      font-family: var(--font-body);
+      font-size: var(--text-body-sm);
+      line-height: var(--text-body-sm--line-height);
+      color: var(--color-on-surface-muted);
+      margin: 0;
+    }
+    @media (max-width: 720px) {
+      .hv-buckets { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="kyv-container">
+    <div class="kyv-measure" style="max-width: 960px;">
+      <p class="hv-eyebrow">Our method</p>
+      <h1 class="hv-title">How we verify</h1>
+      <p class="hv-lede">Every claim we show is sorted into one of three buckets before it reaches you. The bucket tells you what kind of thing you are reading &mdash; nothing more.</p>
+
+      <section class="kyv-card" aria-label="The three-bucket model">
+        <div class="hv-buckets">
+          <!-- Bucket 1 -->
+          <article class="hv-bucket">
+            <svg class="hv-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 10h8M8 14h5"/>
+              <path d="M21 12a9 9 0 1 1-3.6-7.2L21 4v5h-5"/>
+            </svg>
+            <span class="hv-bucket-num">01</span>
+            <span class="hv-bucket-key">stated_position</span>
+            <h2 class="hv-bucket-name">What they say</h2>
+            <p class="hv-bucket-desc">A candidate&rsquo;s own words &mdash; a quote, a bill they sponsored, a line from their platform. Presented as stated, attributed to where they said it.</p>
+          </article>
+
+          <!-- Bucket 2 -->
+          <article class="hv-bucket">
+            <svg class="hv-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            <span class="hv-bucket-num">02</span>
+            <span class="hv-bucket-key">verifiable_fact</span>
+            <h2 class="hv-bucket-name">What the record shows</h2>
+            <p class="hv-bucket-desc">A checkable fact &mdash; a roll-call vote, a public filing, an official dataset. Checked against a primary source and linked, so you can read it yourself.</p>
+          </article>
+
+          <!-- Bucket 3 -->
+          <article class="hv-bucket">
+            <svg class="hv-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span class="hv-bucket-num">03</span>
+            <span class="hv-bucket-key">outside_opinion</span>
+            <h2 class="hv-bucket-name">What others say</h2>
+            <p class="hv-bucket-desc">Analysis or commentary from a named third party &mdash; a court, an auditor, a rating group. Labeled as opinion and attributed, never presented as fact.</p>
+          </article>
+        </div>
+      </section>
+
+      <div class="kyv-card" style="margin-top: var(--spacing-5);">
+        <p class="hv-eyebrow">Where our facts come from</p>
+        <ul class="hv-sources">
+          <li><a class="hv-source-link" href="#source-record">Official voting record &mdash; primary source</a></li>
+          <li><a class="hv-source-link" href="#source-filing">Public campaign filing &mdash; primary source</a></li>
+          <li><a class="hv-source-link" href="#source-dataset">State elections dataset &mdash; primary source</a></li>
+        </ul>
+        <p class="hv-note" style="margin-top: var(--spacing-3);">Each verified claim links to its source. We describe what a claim is and where it comes from &mdash; we do not judge intent or motive.</p>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
