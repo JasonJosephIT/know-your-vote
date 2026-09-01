@@ -34,7 +34,11 @@ export function SavedCandidates() {
     }
     const controller = new AbortController();
     fetch(`/api/candidates?ids=${ids.join(",")}`, { signal: controller.signal })
-      .then((r) => (r.ok ? r.json() : { candidates: [] }))
+      .then((r) =>
+        r.ok
+          ? (r.json() as Promise<{ candidates?: SavedSummary[] }>)
+          : { candidates: [] as SavedSummary[] }
+      )
       .then((data) => setRows(data.candidates ?? []))
       .catch(() => {});
     return () => controller.abort();

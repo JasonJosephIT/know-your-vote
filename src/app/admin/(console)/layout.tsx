@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { AdminNav } from "@/components/admin/AdminNav";
+import { SessionRefresh } from "@/components/admin/SessionRefresh";
 import { createAdminServerClient, requireAdmin } from "@/lib/admin/guard";
 
 /* The authed console shell: header (operator identity + sign-out) and section
@@ -24,6 +25,7 @@ export default async function ConsoleLayout({
 
   return (
     <div className="flex min-h-full flex-col">
+      <SessionRefresh />
       <header className="border-b border-border bg-surface">
         <div className="mx-auto flex w-full max-w-[1120px] items-center justify-between gap-3 px-3 py-3 md:px-5">
           <span className="font-heading text-h3 text-primary">

@@ -87,7 +87,11 @@ export function Quiz() {
           })),
         }),
       });
-      const data = await res.json();
+      /* Cloudflare's Workers types make Response.json() `unknown` rather
+         than `any` (DOM lib), so the shape is named explicitly. */
+      const data = (await res.json()) as Partial<QuizResponse> & {
+        error?: string;
+      };
       if (!res.ok) {
         setStage({
           kind: "error",
@@ -97,7 +101,7 @@ export function Quiz() {
         return;
       }
       track("quiz_completed");
-      setStage({ kind: "results", response: data });
+      setStage({ kind: "results", response: data as QuizResponse });
     } catch {
       setStage({ kind: "error", message: "Couldn't process that — try again.", races: [] });
     }

@@ -14,7 +14,11 @@ audit and been published, and never authors, edits, or reorders a claim.
 
 Next.js (App Router) · React · TypeScript · Tailwind CSS v4 · Supabase
 (Postgres + RLS) · Anthropic Claude (quiz) · Resend (opt-in email) ·
-Plausible (cookieless analytics) · Sentry (PII-scrubbed) · Vercel.
+Plausible (cookieless analytics) · Sentry (PII-scrubbed) · Cloudflare Workers
+(via the OpenNext adapter, with R2 + D1 behind the Next.js cache).
+
+Deploying, the env-var split, and the Cron Trigger setup are documented in
+[docs/cloudflare-deploy.md](docs/cloudflare-deploy.md).
 
 ## Getting started
 
@@ -60,12 +64,16 @@ pipeline output before public launch.
 
 ## Going live — the short list
 
-1. Fill in `.env.local` / Vercel env: `SUPABASE_SERVICE_ROLE_KEY` (enables
-   voting-info storage + the news cron), `ANTHROPIC_API_KEY` (enables the
-   quiz), `RESEND_API_KEY` + `EMAIL_FROM` (enables the email), and optionally
-   `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` / `NEXT_PUBLIC_SENTRY_DSN` + `SENTRY_DSN`.
-2. In Vercel → Settings → Deployment Protection, set Vercel Authentication to
-   "Only Preview Deployments" so the production URL is public.
+1. Create the R2 bucket and D1 database, then set the Worker secrets —
+   `SUPABASE_SERVICE_ROLE_KEY` (voting-info storage + the news cron),
+   `ANTHROPIC_API_KEY` (the quiz), `RESEND_API_KEY` + `EMAIL_FROM` (the
+   email), `CRON_SECRET`, `ADMIN_EMAILS`, and optionally `SENTRY_DSN`. Note
+   that every `NEXT_PUBLIC_*` value is inlined at build time and belongs in
+   the BUILD environment, not in a Worker secret — see
+   [docs/cloudflare-deploy.md](docs/cloudflare-deploy.md).
+2. Point `NEXT_PUBLIC_SITE_URL` at the real hostname in `wrangler.jsonc` and
+   the build env before the first cron fires — reminder emails build their
+   unsubscribe links from it.
 3. Run real races through the pipeline's Balance Audit and publish only
    passes (roadmap TASK-050 — the launch gate), then remove the demo data.
 
