@@ -344,6 +344,20 @@ resolution statewide for the races and measures every Florida voter shares.
 
 ---
 
+## Phase 7: Ballot First, ZIP Optional
+
+> **Goal:** Stop gating the product behind a ZIP wall. Render the eight ballot
+> items every Florida voter shares immediately, and ask for a ZIP only where it
+> genuinely changes the answer — the U.S. House race and the polling place.
+
+Phase 7 has its own document: **[`docs/ballot-first-zip-optional.md`](./ballot-first-zip-optional.md)**,
+covering TASK-067 through TASK-071. It depends on Phase 6 TASK-060 (statewide
+ZIP coverage) and TASK-061–063 (ballot measures) — those are what leave only
+two surfaces genuinely needing a ZIP. It also amends the PRD's magic moment
+(FR-001 / TASK-015), which currently defines ZIP → ballot as *the* entry flow.
+
+---
+
 ## Agent Session Guide
 
 ### How to Use This Roadmap with Your Coding Agent
