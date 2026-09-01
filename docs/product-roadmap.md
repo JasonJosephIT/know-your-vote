@@ -329,6 +329,21 @@
 
 ---
 
+## Phase 6: The General Election Pivot
+
+> **Goal:** Turn a primary-election product into a general-election product for
+> November 3, 2026 — election-scoped reads, statewide ZIP coverage, first-class
+> ballot measures, verified deadlines, and copy that is true for the NPA voters
+> who were shut out in August.
+
+Phase 6 has its own document: **[`docs/general-election-pivot.md`](./general-election-pivot.md)**.
+It carries the full rationale, the ballot research, the gap analysis, and
+TASK-057 through TASK-066 in this file's format. TASK-053 (remaining
+congressional districts) is partially superseded by TASK-060, which opens ZIP
+resolution statewide for the races and measures every Florida voter shares.
+
+---
+
 ## Agent Session Guide
 
 ### How to Use This Roadmap with Your Coding Agent
