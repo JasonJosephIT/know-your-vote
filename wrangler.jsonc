@@ -1,0 +1,56 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "know-your-vote",
+
+  /* Custom entrypoint (see worker.ts): re-exports OpenNext's generated fetch
+     handler and adds the `scheduled` handler that replaces Vercel Cron. */
+  "main": "worker.ts",
+
+  /* >= 2025-08-16 is REQUIRED, not just recommended: that date adds
+     https.request to the Workers runtime, which @sentry/nextjs needs to
+     transmit events. On an earlier date the app still runs but server-side
+     error reporting silently goes nowhere. */
+  "compatibility_date": "2026-03-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+
+  /* ISR page cache. Create with:
+       npx wrangler r2 bucket create know-your-vote-opennext-cache */
+  "r2_buckets": [
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "know-your-vote-opennext-cache"
+    }
+  ],
+
+  /* Cache-tag store, which is what makes revalidateTag("races") in the
+     refresh-news cron actually invalidate anything. Create with:
+       npx wrangler d1 create know-your-vote-tag-cache
+     then paste the returned database_id below — it is not a secret. */
+  "d1_databases": [
+    {
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_name": "know-your-vote-tag-cache",
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+    }
+  ],
+
+  /* Same UTC times the Vercel crons used. worker.ts maps each expression to
+     its route; changing one without the other fails loudly. */
+  "triggers": {
+    "crons": ["0 10 * * *", "0 14 * * *"]
+  },
+
+  /* Public, non-secret, and needed at RUNTIME by the scheduled handler to
+     build correct unsubscribe links. It is also needed at BUILD time for
+     robots/sitemap/metadata — see docs/cloudflare-deploy.md; setting it here
+     alone is not sufficient. Every other value is a secret: set those with
+     `wrangler secret put`, never in this file. */
+  "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://know-your-vote.pages.dev"
+  }
+}

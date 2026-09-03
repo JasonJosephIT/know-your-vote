@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
       registration || general
         ? `Add the key dates to your calendar: ${request.nextUrl.origin}/api/calendar/general_2026.ics`
         : ``,
-      `Florida is a closed-primary state — party registration determines your primary ballot.`,
+      `Every registered Florida voter gets the same ballot in the general election, whatever party you're registered with — including no party at all.`,
       ``,
       `Your ballot, laid out fairly: ${request.nextUrl.origin}`,
       ``,

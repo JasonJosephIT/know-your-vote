@@ -10,9 +10,11 @@ import type { User } from "@supabase/supabase-js";
    has no accounts — `authenticated` has zero policies — so this allowlist is
    the ENTIRE authorization surface: a Supabase Auth session whose email is in
    ADMIN_EMAILS is an operator; everyone else is not.
-   requireAdmin()/checkAdmin() are used by BOTH the proxy and every admin RSC /
-   route handler; the proxy is UX, the in-handler check is the boundary
-   (CVE-2025-29927 — Next.js middleware/proxy is a known bypass class). */
+   requireAdmin()/checkAdmin() run in every admin layout, RSC, and route
+   handler, and that in-handler check IS the boundary. There is deliberately
+   no proxy/middleware gate to lean on (CVE-2025-29927 — Next.js
+   middleware/proxy is a known bypass class), so nothing is lost by the app
+   no longer having one. */
 
 /* ADMIN_EMAILS: comma-separated, compared case-folded. */
 export function adminEmails(): string[] {
@@ -36,9 +38,10 @@ export function isAllowlisted(email: string | null | undefined): boolean {
 /* Session-aware Supabase client bound to the request cookies. Unlike
    createAnonServerClient (deliberately session-less for the voter app), this
    reads and refreshes the operator's Supabase Auth session. setAll is wrapped
-   because Server Components cannot mutate cookies mid-render — the proxy
-   refreshes them instead (the standard @supabase/ssr pattern). Route handlers
-   and Server Actions CAN write, so exchange/sign-out through this client work. */
+   because Server Components cannot mutate cookies mid-render; the refresh
+   that persists a rotated token happens in the /admin/auth/refresh route
+   handler instead. Route handlers and Server Actions CAN write, so exchange,
+   refresh, and sign-out through this client all work. */
 export async function createAdminServerClient() {
   const cookieStore = await cookies();
   return createServerClient(
@@ -55,7 +58,8 @@ export async function createAdminServerClient() {
               cookieStore.set(name, value, options);
             }
           } catch {
-            /* invoked from a Server Component render — the proxy owns refresh */
+            /* invoked from a Server Component render — /admin/auth/refresh
+               owns persisting rotated tokens */
           }
         },
       },

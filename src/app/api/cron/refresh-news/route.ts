@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { secretEquals } from "@/lib/secret-compare";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
+import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
 /* Daily refresh (FR-009). Reads recent publication changes from the
    pipeline's output and upserts neutral news_item rows, then revalidates
@@ -39,7 +40,10 @@ async function refresh(request: NextRequest) {
       .from("race_publication")
       .select("race_id, status, published_at")
       .eq("status", "published"),
-    anon.from("race").select("race_id, office, district, key_dates"),
+    anon
+      .from("race")
+      .select("race_id, office, district, key_dates")
+      .eq("election", ACTIVE_ELECTION_KIND),
   ]);
   if (pubsRes.error || racesRes.error) {
     return NextResponse.json(

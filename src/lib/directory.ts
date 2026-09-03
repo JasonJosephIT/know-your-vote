@@ -2,6 +2,7 @@ import { orderCandidates } from "@/lib/briefs";
 import { COVERED_COUNTIES } from "@/lib/resolve";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import type { Candidate, Race } from "@/types/schema";
+import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
 /* Browsable candidate directory across the four covered counties. RLS keeps
    this to published races only; within each race the fixed ballot-order rule
@@ -31,7 +32,10 @@ export async function browseCandidates(options: {
   const supabase = await createAnonServerClient();
 
   const [racesRes, profilesRes] = await Promise.all([
-    supabase.from("race").select("race_id, office, district, level, candidate_ids"),
+    supabase
+      .from("race")
+      .select("race_id, office, district, level, candidate_ids")
+      .eq("election", ACTIVE_ELECTION_KIND),
     supabase.from("profile").select("candidate_id, race_id"),
   ]);
   let races = (racesRes.data ?? []) as Array<

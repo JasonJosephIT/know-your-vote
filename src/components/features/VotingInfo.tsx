@@ -33,7 +33,7 @@ export function VotingInfo({ zip: initialZip = "" }: { zip?: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ zip, email, consent }),
       });
-      const data = await res.json();
+      const data = (await res.json()) as { error?: string };
       if (!res.ok) {
         setStage({ kind: "error", message: data.error ?? "That didn't send — try again." });
         return;

@@ -1,5 +1,12 @@
 # PRD — Know Your Vote
 
+> **⚠️ Parts of this document are out of date.** Hosting moved from Vercel to
+> Cloudflare Workers, the proxy/middleware was removed, and the "closed
+> primary" note no longer applies to the November general election. Every
+> stale assertion is listed by line in
+> [`docs/scope-changes.md`](./scope-changes.md) — read that before building
+> from the sections on hosting, cron, secrets, or the ZIP-first magic moment.
+
 *Technical blueprint for the voter-facing web app of the Civic Awareness Project (CAP). Read alongside `product-vision.md` (strategy/brand) and the authoritative backend specs: `CAP_Schema_v1.md` (data schema), `CAP_Agent_Plan_v1.md`, `CAP_MCP_Tool_Spec_v1.md`, `CAP_Balance_Audit_Spec_v1.md`, `CAP_Logging_Schema_v1.md`. Visual tokens live in `docs/design.md` (generate via the Design System skill before styling work).*
 
 ---

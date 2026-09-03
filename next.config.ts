@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
 const nextConfig: NextConfig = {
   async redirects() {
@@ -11,6 +12,11 @@ const nextConfig: NextConfig = {
     ];
   },
 };
+
+/* Makes the wrangler.jsonc bindings (R2, D1, vars) reachable from `next dev`,
+   so local dev exercises the same cache path production uses. No-op in the
+   production build. */
+void initOpenNextCloudflareForDev();
 
 export default withSentryConfig(nextConfig, {
   /* Source-map upload runs only when SENTRY_AUTH_TOKEN is present (CI). */

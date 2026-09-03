@@ -44,3 +44,12 @@ next-env.d.ts
 .DS_Store
 __pycache__/
 *.pyc
+
+# cloudflare / opennext
+.open-next/
+.wrangler/
+.dev.vars
+# cloudflare-env.d.ts is deliberately COMMITTED: it is generated from
+# wrangler.jsonc, holds no secrets, and worker.ts needs the CloudflareEnv it
+# declares in order to type-check from a clean clone (this repo has no CI
+# step to regenerate it). Re-run `npm run cf-typegen` after editing bindings.
