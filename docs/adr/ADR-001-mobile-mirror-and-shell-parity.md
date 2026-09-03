@@ -1,8 +1,15 @@
 # ADR-001: Mobile/desktop mirror apps as thin shells over the deployed site, with a shell-parity harness
 
-**Status:** Proposed
+**Status:** Proposed — *context partly superseded 2026-09-03*
 **Date:** 2026-07-03
 **Deciders:** Joseph (founder)
+
+> The Context below describes the site as "server-rendered on Vercel" with
+> "Vercel cron". Hosting has since moved to Cloudflare Workers
+> (`docs/cloudflare-deploy.md`). The **decision** — remote-shell PWA over the
+> deployed site, one codebase — is unaffected: it turns on the site not being
+> statically exportable, which is still true. Only the named host moved. See
+> [`docs/scope-changes.md`](../scope-changes.md).
 
 ## Context
 

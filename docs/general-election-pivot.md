@@ -126,7 +126,7 @@ Worth stating plainly, because it shrinks the job:
 
 > Nothing ships without all four of these. They are ordered by dependency.
 
-- [ ] **TASK-057** — Single source of truth for "which election is live"
+- [x] **TASK-057** — Single source of truth for "which election is live"
   Files: `src/lib/election.ts` (new), `src/lib/resolve.ts`, `src/lib/briefs.ts`, `src/lib/directory.ts`
   Notes: One module exporting `ACTIVE_ELECTION = "general_2026"`, its
   `ElectionKind` (`"general"`), and its display label. Every race query filters
@@ -135,6 +135,10 @@ Worth stating plainly, because it shrinks the job:
   guarantee, and it stops being true the moment a 2028 primary row lands.
   Verify: insert a `primary` race, confirm it appears in none of `/races`,
   `/candidates`, `/api/resolve`.
+  **Done 2026-09-03 (`198cd75`)** — all eight reads filtered;
+  `scripts/verify-election-scope.mjs` enforces it statically (no database
+  needed) and was negative-tested. One documented exemption:
+  `YourRaces.raceDates`, already scoped by ids `resolve.ts` filtered.
 
 - [ ] **TASK-058** — Verify the `general_2026` date rows *(liability gate)*
   Files: `supabase/migrations/0010_verify_general_dates.sql`
@@ -147,7 +151,7 @@ Worth stating plainly, because it shrinks the job:
   Verify: `/api/calendar/general_2026.ics` returns 5 VEVENTs; `dueReminders()`
   yields the T-7 registration reminder for 2026-09-28.
 
-- [ ] **TASK-059** — Retire the closed-primary copy
+- [x] **TASK-059** — Retire the closed-primary copy
   Files: `src/components/features/YourRaces.tsx`, `src/app/api/voting-info/route.ts`
   Notes: Replace both instances with the general-election truth: every
   registered Florida voter receives the same ballot regardless of party
@@ -155,6 +159,9 @@ Worth stating plainly, because it shrinks the job:
   positively and without spin — for a third of the state this is news, and
   it's the most useful sentence on the page.
   Verify: no occurrence of "closed-primary" remains in `src/`.
+  **Done 2026-09-03 (`198cd75`)** — both instances replaced; grep confirms
+  none remain. Note `docs/prd.md` §433 and §530 still instruct showing the
+  note (logged in `docs/scope-changes.md`).
 
 - [ ] **TASK-060** — Open ZIP coverage statewide for shared ballot items
   Files: `scripts/build-zip-seed.mjs`, `supabase/migrations/0011_zip_statewide.sql`, `src/lib/resolve.ts`, `src/types/app.ts`
