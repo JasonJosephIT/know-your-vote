@@ -129,9 +129,10 @@ export async function YourRaces({
       )}
 
       <p className="text-caption text-on-surface-muted">
-        Florida is a closed-primary state — you vote in a party&apos;s primary
-        only if you&apos;re registered with that party. The general election is
-        open to every registered voter.
+        Every registered Florida voter gets the same ballot in the general
+        election, whatever party you&apos;re registered with — including no
+        party at all. If you couldn&apos;t vote in August&apos;s closed
+        primary, you can vote on all of this.
       </p>
 
       {!result.district && result.races.length > 0 && (

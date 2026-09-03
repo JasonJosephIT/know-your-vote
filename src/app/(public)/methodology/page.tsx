@@ -1,6 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import type { ProfileAudit } from "@/types/schema";
+import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
 export const revalidate = 3600;
 export const metadata = { title: "How we stay fair — Know Your Vote" };
@@ -19,7 +20,11 @@ const getScrutinyCounts = unstable_cache(
     try {
       const supabase = await createAnonServerClient();
       const [racesRes, profilesRes, candidatesRes] = await Promise.all([
-        supabase.from("race").select("race_id, office").order("race_id"),
+        supabase
+          .from("race")
+          .select("race_id, office")
+          .eq("election", ACTIVE_ELECTION_KIND)
+          .order("race_id"),
         supabase.from("profile").select("candidate_id, race_id, audit"),
         supabase.from("candidate").select("candidate_id, legal_name"),
       ]);

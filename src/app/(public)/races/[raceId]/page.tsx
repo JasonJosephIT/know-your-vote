@@ -3,6 +3,7 @@ import { RaceCompare } from "@/components/features/RaceCompare";
 import { TrackBriefView } from "@/components/features/TrackBriefView";
 import { getRaceBrief } from "@/lib/briefs";
 import { createAnonServerClient } from "@/lib/supabase/server";
+import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
 export const revalidate = 3600;
 
@@ -11,7 +12,10 @@ export const revalidate = 3600;
 export async function generateStaticParams() {
   try {
     const supabase = await createAnonServerClient();
-    const { data } = await supabase.from("race").select("race_id");
+    const { data } = await supabase
+      .from("race")
+      .select("race_id")
+      .eq("election", ACTIVE_ELECTION_KIND);
     return (data ?? []).map((r) => ({ raceId: r.race_id }));
   } catch {
     return [];
