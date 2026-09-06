@@ -89,6 +89,7 @@ It deliberately does **not** reuse `parse_candidate_list`: that parser collapses
 > machine** — the same box that live-verified T1–T3 on 2026-07-10 — and paste
 > the output back. The same limit applies to **B4, B5 and B7**: every task that
 > touches a live external endpoint is local-only.
+> **Runbook for that machine: `local-session.md`.**
 
 *This dump is a prerequisite for I1 and I2 alike: neither mapping can be written
 correctly without it.*
