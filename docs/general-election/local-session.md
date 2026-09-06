@@ -15,20 +15,26 @@ by ID; nothing is restated.
 
 ---
 
-## Do this first — B1 (≈2 minutes)
+## Do this first — B1 (≈2 minutes) — ✅ done 2026-09-06
 
-B1 gates B2, which is the parser fix at the centre of the whole scope change.
-Nothing else in the ingest plan can be written correctly until it's done.
+**B1 ran on 2026-09-06.** Findings are in `data-ingest.md` §1 *B1 results*;
+B2 and B3 are unblocked. The steps stay here so the run can be repeated when
+the export changes (e.g. after certification, when `ELE` will appear).
 
 ```bash
 git fetch origin
 git checkout claude/data-architecture-ingest-plan-u9b1fq
-python3 scripts/doe-code-dump.py            # fetches FED, CAB, STA
+python3 scripts/doe-code-dump.py            # fetches FED, CAB, LEG
 ```
 
 Python 3.9+ is enough — the script is stdlib only (`urllib`), no venv, no
 install, no API key. It needs none of the arm64/`mcp`/`psycopg` setup that
 AGENT_BRIEF §5 describes for running S1.
+
+**Use `/usr/bin/python3` on the founder's machine.** The python.org 3.11
+*alpha* that is first on `PATH` ships without a CA bundle and fails every
+fetch with `CERTIFICATE_VERIFY_FAILED`; the system 3.9.6 works (verified
+2026-09-06).
 
 Sanity-check it without touching the network first if you like:
 
@@ -53,16 +59,19 @@ guess here propagates into the audit population.
 | # | Question | Where to look | What it decides |
 |---|---|---|---|
 | **Q1** | Which `StatusCode` values actually appear now that the primary is over? | `StatusCode / StatusDesc` counts | The `excluded` tier. `intake.py` only knows `QUA` and `WIT` and maps everything else to `other` — **and never excludes anything**. Whatever code marks a primary loser is the one that must stop entering `race.candidate_ids` (defect I1) |
-| **Q2** | Is there *any* column identifying write-ins? | the `unknown-to-parser columns:` line | The `write_in` tier (defect I2). If a candidate-type column exists, use it. If the line says `(none)`, fall back to the `cantype` diff below |
+| **Q2** | Is there *any* column identifying write-ins? | the `unknown-to-parser columns:` line, then `PartyCode` | The `write_in` tier (defect I2). **Answered 2026-09-06:** no candidate-type column; the signal is `PartyCode = 'WRI'`, with status taking precedence (write-ins also carry `DNQ`/`WIT`/`REM`) |
 | **Q3** | Which `PartyCode` values appear beyond `REP`/`DEM`/`NPA`? | `PartyCode / PartyDesc` counts | Confirms **D2** in `data-architecture.md` — every distinct minor party found is one the current CHECK constraint would flatten into `other` |
 
-### If Q2 comes back `(none)`
+### The `cantype` diff is not a write-in test
 
-The export has no candidate-type column, so identify write-ins by set
-difference instead — two fetches, compare `AcctNum`. The form posts a `cantype`
-field (the script sends `cantype=ALL`); read the real option values off the DoE
-candidate-list form's `cantype` dropdown rather than guessing them, then fetch
-once per value and diff. Record the values you used.
+Earlier drafts of this file proposed diffing two fetches with different
+`cantype` values if no write-in column existed. Read off the DoE download form
+(`downloadcanlist.asp`) on 2026-09-06, `cantype` is **`STA` State Candidates /
+`LOC` Local Candidates / `ALL` State & Local** — a jurisdiction filter. Diffing
+it separates county-level filers from state-level ones and says nothing about
+write-ins. Use `PartyCode = 'WRI'` instead (Q2). The same form's `office`
+values are `All, FED, CAB, ATT, LEG, JUD, SPD` — `STA` was never valid there,
+which is why the script's third fetch used to return 0 rows.
 
 ---
 
@@ -92,7 +101,7 @@ so nobody schedules them into a remote session and watches them 403.
 
 | ID | Needs | Also needs |
 |---|---|---|
-| **B3** | nothing but a browser — seed `official_site` for ~20–30 briefed candidates, human-verified | — |
+| **B3** | nothing but a browser — seed `official_site` for the **22** `ballot`-tier candidates counted in `data-ingest.md` §1, human-verified | — |
 | **B4** | live FEC (T2) for incumbency / open-seat | `FEC_API_KEY` (already in `.env.local`) |
 | **B5** | live Congress.gov for federal incumbent voting records | a free `api.data.gov` key |
 | **B7** | the full S2-01 acceptance through real S1 | the AGENT_BRIEF §7 gates: arm64 Python 3.12 venv with `mcp`+`psycopg`, `SUPABASE_DB_URL` password, demo seed loaded, Anthropic spend |
@@ -105,11 +114,11 @@ briefs without tripping a single audit gate.
 
 ## Paste-ready session prompt
 
-> "Run B1 from `docs/general-election/local-session.md`. Execute
-> `python3 scripts/doe-code-dump.py` on this machine (remote sessions are
-> egress-blocked), then answer Q1/Q2/Q3 from that file against the real output.
-> Do not commit the raw DoE export — it carries candidate PII. Record the
-> findings in `data-ingest.md` §1, tick B1 in its §7 task table, and commit to
-> branch `claude/data-architecture-ingest-plan-u9b1fq`. Do not start B2 until
-> Q1 and Q2 are answered from the actual file — the whole point of B1 is that
-> the status codes are not guessed."
+B1 is done; the prompt below is kept for a re-run after the export changes.
+
+> "Re-run B1 from `docs/general-election/local-session.md`. Execute
+> `/usr/bin/python3 scripts/doe-code-dump.py` on this machine (remote sessions
+> are egress-blocked), then diff the output against the *B1 results* recorded
+> in `data-ingest.md` §1 — any new `StatusCode` or `PartyCode` is a B2 change.
+> Do not commit the raw DoE export — it carries candidate PII. Commit to
+> branch `claude/data-architecture-ingest-plan-u9b1fq`."

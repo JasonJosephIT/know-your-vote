@@ -70,7 +70,7 @@ write-in from a printed ballot line, which is exactly the distinction
 
 **Do not guess the codes.** Look at the real file first. That is what
 `scripts/doe-code-dump.py` does — it fetches `20261103-GEN` for each office
-group (`FED`, `CAB`, `STA`) and prints, for the 8 target races only, the
+group (`FED`, `CAB`, `LEG`) and prints, for the 8 target races only, the
 distinct `StatusCode`/`StatusDesc` and `PartyCode`/`PartyDesc` counts plus any
 column the current parser doesn't know about (a candidate-type column would be
 the clean write-in signal). If no column distinguishes write-ins, fetch twice
@@ -93,6 +93,145 @@ It deliberately does **not** reuse `parse_candidate_list`: that parser collapses
 
 *This dump is a prerequisite for I1 and I2 alike: neither mapping can be written
 correctly without it.*
+
+### B1 results — live run 2026-09-06
+
+Run on the founder's machine with `/usr/bin/python3` (3.9.6). Script stdout,
+verbatim — aggregate only, no candidate row travels:
+
+```
+## office=FED — 283 rows, 26 columns
+   columns: AcctNum, VoterID, ElectionID, OfficeCode, OfficeDesc, Juris1num, Juris2num, StatusCode, StatusDesc, PartyCode, PartyDesc, NameLast, NameFirst, NameMiddle, SuppressAddress, Addr1, Addr2, City, State, Zip, County, Phone, TrsNameLast, TrsNameFirst, TrsNameMiddle, Email
+   unknown-to-parser columns: StatusDesc, PartyDesc
+   rows in the 8 target races: 26
+   StatusCode / StatusDesc across target races:
+      'QUA'      'Qualified'                            x8
+      'DNQ'      'Did Not Qualify'                      x8
+      'WIT'      'Withdrew'                             x5
+      'DEF'      'Defeated'                             x4
+      'UNO'      'Unopposed'                            x1
+   PartyCode / PartyDesc across target races:
+      'REP'      'Republican Party of Florida'          x12
+      'DEM'      'Florida Democratic Party'             x11
+      'WRI'      'Write-In'                             x2
+      'NPA'      'No Party Affiliation (Partisan)'      x1
+
+## office=CAB — 83 rows, 26 columns
+   columns: AcctNum, VoterID, ElectionID, OfficeCode, OfficeDesc, Juris1num, Juris2num, StatusCode, StatusDesc, PartyCode, PartyDesc, NameLast, NameFirst, NameMiddle, SuppressAddress, Addr1, Addr2, City, State, Zip, County, Phone, TrsNameLast, TrsNameFirst, TrsNameMiddle, Email
+   unknown-to-parser columns: StatusDesc, PartyDesc
+   rows in the 8 target races: 83
+   StatusCode / StatusDesc across target races:
+      'DNQ'      'Did Not Qualify'                      x28
+      'DEF'      'Defeated'                             x19
+      'QUA'      'Qualified'                            x17
+      'WIT'      'Withdrew'                             x17
+      'REM'      'Removed'                              x2
+   PartyCode / PartyDesc across target races:
+      'REP'      'Republican Party of Florida'          x31
+      'DEM'      'Florida Democratic Party'             x23
+      'NPA'      'No Party Affiliation (Partisan)'      x16
+      'WRI'      'Write-In'                             x8
+      'IND'      'Independent Party of Florida'         x3
+      'LPF'      'Libertarian Party of Florida'         x1
+      'CPF'      'Constitution Party of Florida'        x1
+
+## office=STA — 0 rows, 26 columns
+   columns: AcctNum, VoterID, ElectionID, OfficeCode, OfficeDesc, Juris1num, Juris2num, StatusCode, StatusDesc, PartyCode, PartyDesc, NameLast, NameFirst, NameMiddle, SuppressAddress, Addr1, Addr2, City, State, Zip, County, Phone, TrsNameLast, TrsNameFirst, TrsNameMiddle, Email
+   unknown-to-parser columns: StatusDesc, PartyDesc
+   rows in the 8 target races: 0
+   StatusCode / StatusDesc across target races:
+   PartyCode / PartyDesc across target races:
+```
+
+Whole-file counts from the same fetch (all races, not just the 8 targets),
+computed by a throwaway aggregate — kept here because D2's CHECK applies to
+every ingested row, not only the target field:
+
+| Office group | Rows | StatusCode | PartyCode |
+|---|---|---|---|
+| `FED` (269 USR + 14 USS) | 283 | DEF 107 · QUA 86 · DNQ 57 · WIT 32 · UNO 1 | REP 134 · DEM 106 · NPA 22 · WRI 11 · LPF 5 · IND 3 · FFP 1 · **MGT 1 (empty `PartyDesc`)** |
+| `CAB` (63 GOV + 9 AGR + 7 CFO + 4 ATG) | 83 | DNQ 28 · DEF 19 · QUA 17 · WIT 17 · REM 2 | REP 31 · DEM 23 · NPA 16 · WRI 8 · IND 3 · LPF 1 · CPF 1 |
+
+#### Q1 — which status codes appear post-primary
+
+Six: `QUA` Qualified, `UNO` Unopposed, `DEF` Defeated, `DNQ` Did Not Qualify,
+`WIT` Withdrew, `REM` Removed. **The primary loser is `DEF`.** Mapping onto
+the D1 tiers (`data-architecture.md`):
+
+| `StatusCode` | `StatusDesc` | Tier |
+|---|---|---|
+| `QUA` | Qualified | `ballot` — or `write_in`, see Q2 |
+| `UNO` | Unopposed | `ballot` |
+| `DEF` | Defeated | `excluded` |
+| `DNQ` | Did Not Qualify | `excluded` |
+| `WIT` | Withdrew | `excluded` |
+| `REM` | Removed | `excluded` |
+| anything else | — | loud `status='fail'` (Risk R1) |
+
+The form's status filter also offers `ACT` Active and `ELE` Elected; neither
+is in the export today. B2 must **not** pre-map them: `ELE` will appear after
+certification and means the race is decided. Leave both unrecognised → fail
+until they are seen in a real file.
+
+#### Q2 — is there a write-in column
+
+No candidate-type column. The two "unknown-to-parser" columns are only
+`StatusDesc` and `PartyDesc`. **The write-in signal is `PartyCode = 'WRI'`
+(`PartyDesc = 'Write-In'`).**
+
+Precedence is status first, then party. Write-ins carry every status code —
+the whole-file cross-tab shows `WRI` rows with `DNQ` (4), `REM` (2) and `WIT`
+(1) as well as `QUA` (12). So: a row whose status is in the excluded set is
+`excluded` regardless of party; a `QUA`/`UNO` row with `WRI` is `write_in`;
+any other `QUA`/`UNO` row is `ballot`.
+
+**The `cantype` fallback in `local-session.md` is void.** Read off the DoE
+download form on 2026-09-06, the `cantype` select is `STA` State Candidates /
+`LOC` Local Candidates / `ALL` State & Local — a jurisdiction filter, not a
+candidate type. A cantype diff would separate county-level filers from
+state-level ones, not write-ins from printed lines. No diff fetch was needed.
+
+#### Q3 — party codes beyond REP/DEM/NPA
+
+In the 8 target races: `WRI` Write-In, `IND` Independent Party of Florida,
+`LPF` Libertarian Party of Florida, `CPF` Constitution Party of Florida.
+Whole-file adds `FFP` Florida Forward Party and `MGT`, which arrives with an
+**empty `PartyDesc`** (one FED row). **D2 confirmed:** three real minor
+parties in the target field alone would be flattened into `other` by the
+current CHECK, and the read model's raw-code fallback must tolerate a code that
+has no label at all. Note `NPA`'s description is
+"No Party Affiliation (Partisan)".
+
+#### Per-target-race tier counts
+
+What B2's parser must produce from today's file, and what B3 must seed.
+Aggregate only — race IDs are public.
+
+| Race | `ballot` | `write_in` | `excluded` | Note |
+|---|---|---|---|---|
+| FL-GOV | 8 | 2 | 53 | 15 DEF · 22 DNQ · 14 WIT · 2 REM |
+| FL-ATG | 2 | 0 | 2 | |
+| FL-CFO | 2 | 0 | 5 | |
+| FL-AGR | 2 | 1 | 6 | |
+| FL-10 | **1** | 0 | 6 | the file's only `UNO` row — a one-candidate race; A3's `unopposed` flag is live, not hypothetical |
+| FL-15 | 2 | 1 | 2 | |
+| FL-23 | 2 | 0 | 5 | |
+| FL-28 | 3 | 0 | 4 | |
+| **Total** | **22** | **4** | **83** | B3 seed = 22 `official_site` rows |
+
+Without I1 fixed, 83 excluded filers plus 4 write-ins would enter
+`race.candidate_ids` for 22 real ballot lines.
+
+#### Two corrections the run surfaced
+
+- The script's third office group **`STA` is not a valid `office` value** — that
+  is why it returned 0 rows, not because the list is empty. The form offers
+  `All`, `FED`, `CAB`, `ATT`, `LEG`, `JUD`, `SPD`; state legislature is `LEG`.
+  Fixed in `scripts/doe-code-dump.py`. No target race is affected (all eight
+  are `FED`/`CAB`).
+- The python.org 3.11 **alpha** first on the founder's `PATH` has no CA bundle
+  (`CERTIFICATE_VERIFY_FAILED` on every fetch). `/usr/bin/python3` works.
+  Noted in `local-session.md`.
 
 ### I3 — `official_site` is never populated, and the Profiler cannot run without it
 
@@ -217,13 +356,13 @@ tests pass will believe it fixed live copy that is still wrong.
 
 ## 7. Sub-agent task list
 
-Dependency-ordered. **B1 gates B2 and B3** — neither mapping can be written
-without the real status codes. **B2 requires `data-architecture.md` A1**, which
+Dependency-ordered. **B1 is done (2026-09-06) — B2 and B3 are unblocked**; the real status
+codes are in §1. **B2 requires `data-architecture.md` A1**, which
 adds the column it writes.
 
 | ID | Task | Files | Verify | Depends |
 |---|---|---|---|---|
-| **B1** | **Run `python3 scripts/doe-code-dump.py` on a machine with real network** (script is built + self-tested; remote sessions are egress-blocked — §1). Record the distributions and the write-in signal here | `scripts/doe-code-dump.py` (done), this file (§1) | `--selftest` passes ✅; live run pending — distributions recorded and write-in identification method confirmed against the real file | founder: local run |
+| **B1** ✅ | **Done 2026-09-06** — live run on the founder's machine; distributions, the write-in signal (`PartyCode='WRI'`, status takes precedence) and the D1 status→tier table are recorded in §1 *B1 results* | `scripts/doe-code-dump.py`, this file (§1) | `--selftest` passes ✅; live run ✅ — six status codes found (`DEF` is the primary loser), write-in signal confirmed, `cantype` fallback shown void | — |
 | **B2** | T1: tier mapping, exclude `excluded` from `candidate_ids`, verbatim party code, `ballot_status` through the upsert. Unrecognised status ⇒ loud fail | `toollayer/cap_toollayer/intake.py`, `store.py` | `python3 toollayer/test_toollayer_skeleton.py` (100) green + new cases: a defeated filer is absent from `candidate_ids`; a write-in is present with `ballot_status='write_in'`; an unknown code fails loudly; re-parse is byte-identical (idempotent) | B1, A1 |
 | **B3** | Populate `official_site` for briefed candidates — manual seed, one row per candidate, each URL human-verified | `scripts/` seed SQL | Every `ballot`-tier candidate in the 8 races has a non-NULL `official_site`; `store.candidate_scope` returns non-empty scope for each | B1 |
 | **B4** | Fill `is_incumbent` / `incumbent_id` / `is_open_seat` from the existing T2 FEC candidates endpoint | `toollayer/cap_toollayer/intake.py`, `store.py` | Known FL-28 incumbent resolves correctly; a genuinely open seat sets `is_open_seat` | B2 |

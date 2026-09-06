@@ -8,12 +8,16 @@ parser collapses StatusCode into {qualified, withdrawn, other} and PartyCode
 into {REP, DEM, NPA, other} -- it throws away precisely the values B1 exists to
 discover. Raw columns only.
 
-    python3 scripts/doe-code-dump.py                 # fetch FED, CAB, STA live
+    python3 scripts/doe-code-dump.py                 # fetch FED, CAB, LEG live
     python3 scripts/doe-code-dump.py --file x.txt    # parse a saved export
     python3 scripts/doe-code-dump.py --selftest      # no network
 
 Needs real outbound network. Claude Code remote sessions are egress-blocked
-(403 at the proxy for dos.elections.myflorida.com), so run this locally.
+(403 at the proxy for dos.elections.myflorida.com), so run this locally, with
+an interpreter that has a CA bundle (/usr/bin/python3 on the founder's Mac;
+the python.org 3.11 alpha there fails with CERTIFICATE_VERIFY_FAILED).
+
+Live run recorded 2026-09-06: docs/general-election/data-ingest.md §1.
 """
 import sys
 from collections import Counter
@@ -105,7 +109,10 @@ if __name__ == "__main__":
         p = sys.argv[sys.argv.index("--file") + 1]
         summarize(open(p, encoding="utf-8", errors="replace").read(), p)
     else:
-        for office in ("FED", "CAB", "STA"):
+        # Valid `office` values per the DoE download form (2026-09-06):
+        # All, FED, CAB, ATT, LEG, JUD, SPD. "STA" is not one — it is a
+        # `cantype` value (State vs Local) and returns 0 rows here.
+        for office in ("FED", "CAB", "LEG"):
             try:
                 summarize(fetch(office), f"office={office}")
             except Exception as e:
