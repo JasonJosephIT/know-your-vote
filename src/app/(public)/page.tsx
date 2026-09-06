@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DeadlineBanner } from "@/components/features/DeadlineBanner";
 import { InstallCard } from "@/components/features/InstallCard";
 import { ZipEntry } from "@/components/features/ZipEntry";
 
@@ -11,6 +12,7 @@ export default function Home() {
         and what&apos;s been verified. Equal space, equal scrutiny, every claim
         linked to a source. About a minute, no account, no agenda.
       </p>
+      <DeadlineBanner />
       <ZipEntry />
       <InstallCard />
       <p className="text-caption text-on-surface-muted">

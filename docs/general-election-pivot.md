@@ -242,7 +242,7 @@ Worth stating plainly, because it shrinks the job:
   tables existed. The component renders nothing when no measure is published,
   so it is safe on the page before TASK-066 content lands.
 
-- [ ] **TASK-064** — Deadline banner on the landing page
+- [x] **TASK-064** — Deadline banner on the landing page
   Files: `src/components/features/DeadlineBanner.tsx`, `src/app/(public)/page.tsx`
   Notes: Reads the next *verified* `election_event` and renders
   "Register by October 5 · Election Day November 3" with the calendar link.
@@ -250,8 +250,16 @@ Worth stating plainly, because it shrinks the job:
   safe to merge before TASK-058 lands. Countdown urgency without alarm — the
   design brief's calm poll-worker voice, not a campaign banner.
   Verify: with rows unverified the banner is absent, not broken.
+  Done: `src/lib/election-dates.ts` reads the verified statewide events through
+  the service client wrapped in `unstable_cache` (1h revalidate, tag
+  `election-dates`), so the landing page stays prerendered — the build still
+  reports `/` as `○` static with a 1h revalidate. It returns `null` on any of
+  three degradations: no `SUPABASE_SERVICE_ROLE_KEY`, no rows, or no *verified*
+  rows; `DeadlineBanner` renders nothing in that case, which is the state today
+  until TASK-058 lands. States the dates rather than counting down — a
+  countdown goes stale under ISR and would be wrong for up to an hour.
 
-- [ ] **TASK-065** — Reframe the quiz away from matching *(neutrality)*
+- [x] **TASK-065** — Reframe the quiz away from matching *(neutrality)*
   Files: `src/lib/quiz.ts`, `src/lib/quiz-guardrails.ts`, `src/components/features/QuizResult.tsx`
   Notes: In a four-way same-party primary, "here's who lines up with you" is a
   genuinely neutral service. In a two-way general it resolves to "you're a
@@ -261,6 +269,21 @@ Worth stating plainly, because it shrinks the job:
   picked"** — same evidence, equal space, no verdict. Update the guardrails
   and `verify-quiz-guardrails.ts` to reject ranked or comparative output.
   Verify: no result path emits an ordering, score, or "best match".
+  Done: the quiz was already unranked — `SYSTEM_PROMPT` has said "Never rank,
+  score, or compare candidates" since Phase 4, and no result path emitted an
+  ordering. The residual match-shape was the *alignment framing*, which in a
+  two-way general is a verdict even without a ranking: an "alignment note" per
+  candidate is a match score with the number filed off. So the concept was
+  renamed end to end — `alignmentNote → stanceSummary`,
+  `alignedIssues → issuesCovered`, tool `record_alignment → record_stances` —
+  and the prompt now carries an explicit rule: describe the candidate's stated
+  position, do not describe how it relates to, matches, aligns with, agrees
+  with, or differs from the voter's answers. The prompt is guidance, not a
+  boundary, so `COMPARATIVE_RE` in `quiz-guardrails.ts` joins `ENDORSEMENT_RE`
+  as a second filter that replaces any comparative phrasing that slips through
+  with the neutral fallback. `verify-quiz-guardrails.ts` covers six comparative
+  phrasings (all replaced) and four legitimate stance sentences that contain
+  the word "your" without comparing (all survive) — 16 checks, all passing.
 
 - [ ] **TASK-066** — Publish the content *(the real critical path)*
   Notes: Not a code task, and the one most likely to slip. Nine races

@@ -8,8 +8,9 @@ export default function WhereIStandPage() {
       <header className="flex flex-col gap-1">
         <h1 className="text-h1">Where do I stand?</h1>
         <p className="text-body-sm text-on-surface-muted">
-          A short quiz on the issues — then candidates whose stated positions
-          line up with yours. Worth a closer look, never who to vote for.
+          A short quiz on the issues — then what every candidate on your
+          ballot has said about the ones you picked. We don&apos;t score the
+          match, and we never say who to vote for.
         </p>
       </header>
       <Quiz />

@@ -72,8 +72,14 @@ export interface QuizResultCandidate {
   party: string;
   raceId: string;
   office: string;
-  alignmentNote: string;
-  alignedIssues: string[];
+  /* What this candidate has SAID about the issues the voter picked —
+     described on its own terms, not measured against the voter's answers.
+     Renamed from alignmentNote in TASK-065: in a two-way general, "aligns
+     with you" is a verdict even when nothing is ranked. */
+  stanceSummary: string;
+  /* Which of the voter's chosen issues this candidate has a stated position
+     on. A coverage fact, not a score. */
+  issuesCovered: string[];
 }
 
 export interface QuizResponse {
