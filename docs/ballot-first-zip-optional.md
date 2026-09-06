@@ -112,7 +112,13 @@ than a paragraph of assurance.
   Files: `src/app/(public)/page.tsx`, `src/components/features/SharedBallot.tsx` (new)
   Notes: Server-render the statewide races and published measures directly on
   `/`. Keep the ZIP field, demoted from gate to upgrade: *"Add your U.S. House
-  race."* Preserve the county fallback. Requires Phase 6 TASK-060 and TASK-063.
+  race."* Preserve the county fallback.
+  **Dependency correction (2026-09-06):** this originally said it requires
+  TASK-060. It does not. Statewide races already resolve with no ZIP
+  (`resolve.ts` reads `district IS NULL`), and measures are readable via
+  `getActiveMeasures()` since TASK-062. TASK-060 removes the out-of-metro
+  dead end, which is worth doing on its own, but it does not gate this.
+  TASK-063 is the real prerequisite, and only so the two link together.
   Verify: a first visit with JavaScript disabled and no stored state shows all
   eight shared ballot items.
 

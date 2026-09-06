@@ -174,6 +174,11 @@ Worth stating plainly, because it shrinks the job:
   Verify: a Tallahassee ZIP returns 5 statewide races + 3 measures and no
   congressional race, with copy naming the gap; a Miami ZIP additionally
   returns FL-28; a Georgia ZIP still returns out-of-state.
+  **Partially blocked (2026-09-06):** `www2.census.gov` returns 403 through
+  the Claude Code session's egress proxy, so neither ZCTA crosswalk file can
+  be fetched from there. The resolution logic and copy are writable; the seed
+  SQL needs the two files downloaded by someone who can reach them, then
+  `node scripts/build-zip-seed.mjs <zcta_cd.txt> <zcta_county.txt>`.
 
 ## 6. Day 2 — amendments and urgency
 

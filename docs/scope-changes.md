@@ -11,6 +11,51 @@ misleading.
 
 ---
 
+## 2026-09-06 · Hosting reverted to Vercel
+
+Vercel Pro became available, so the Cloudflare migration is reverted. Hosting
+is Vercel again, with `vercel.json` crons and `src/proxy.ts` restored.
+
+**This un-breaks most of the staleness table below.** `docs/prd.md`,
+`docs/VISION.md`, and ADR-001 describe Vercel as the host with Vercel Cron
+and secrets in Vercel env — all true again. Only two entries in that table
+survive the reversal:
+
+| Where | Still false | Why |
+|---|---|---|
+| `docs/prd.md` §182 | Rate limiting via "Vercel edge middleware" | Rate limiting is in-route (`src/lib/rate-limit.ts`); it was never middleware |
+| `docs/prd.md` §433, §530 | The "closed primary" note | Removed from the app in `198cd75` — false for the general election |
+
+Two things were deliberately **not** reverted:
+
+- **Next stays at 16.3.4.** The upgrade from 16.2.10 was a Cloudflare
+  prerequisite, but 16.3.4 is the latest stable, the build is clean, and the
+  proxy works on it (verified). Downgrading would be churn that loses patches.
+- **`Response.json()` annotations stay.** Cloudflare's types surfaced five
+  untyped fetch results in client components. Naming those shapes is more
+  correct than `any` on any platform; only the comment explaining *why* was
+  corrected.
+
+Reverted with the platform: `worker.ts`, `wrangler.jsonc`,
+`open-next.config.ts`, `cloudflare-env.d.ts`, `docs/cloudflare-deploy.md`, the
+adapter and wrangler dependencies, and `POST /admin/auth/refresh` +
+`SessionRefresh`. That refresh pair existed only because OpenNext could not
+bundle Next 16's Node-runtime Proxy; with the proxy back it is redundant, and
+per-request cookie refresh through the proxy is the canonical `@supabase/ssr`
+pattern this codebase was designed around.
+
+**What the detour cost and left behind.** Roughly two days, and it was not
+optional at the time — the account block meant nothing deployed at all. It
+also left three things worth keeping: TASK-057/059 and TASK-061/062 were
+built during it and are unaffected by hosting, and the exercise produced this
+log.
+
+**Still to do:** the Vercel Git integration should now go back to normal use
+rather than being disconnected, and `/api/admin/site/deployments` — the live
+Vercel API dependency flagged below — is no longer at risk.
+
+---
+
 ## 2026-09-01 → 09-03 · The general-election window
 
 Opening ask: pivot from the August 18 primary to the November 3 general

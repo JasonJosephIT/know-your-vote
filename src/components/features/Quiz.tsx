@@ -87,8 +87,9 @@ export function Quiz() {
           })),
         }),
       });
-      /* Cloudflare's Workers types make Response.json() `unknown` rather
-         than `any` (DOM lib), so the shape is named explicitly. */
+      /* res.json() is untyped network data; naming the shape here beats
+         letting `any` flow into setStage. The response is a QuizResponse on
+         success and {error} on failure. */
       const data = (await res.json()) as Partial<QuizResponse> & {
         error?: string;
       };
