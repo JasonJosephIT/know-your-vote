@@ -152,10 +152,12 @@ Dependency-ordered. N1 gates N2–N4.
 
 ## 5. Still open
 
-- **Who writes `candidate_news` rows?** Nothing populates them today. The R1–R4
-  refresh agents are specified as "built in later tasks" in `0005`, and
-  `CAP_Refresh_Agents_Plan` is **not in this repo**. Without them §2 has no
-  input. This is the critical path for the whole pivot.
+- **Who writes `candidate_news` rows?** Nothing populates them today — this is
+  the critical path for the whole pivot, and it now has its own spec:
+  **`candidate-news-PRD.md`** plus **`candidate-news-BRIEF.md`** for the session
+  that builds it. Short version: the R1–R4 agents are Cowork scheduled tasks
+  stored *outside* this repo, `CAP_Refresh_Agents_Plan` is not here, and
+  `TASK-A14`/`A15` are both unchecked.
 - **What is `N`?** Pick it from real data once N5 reports actual per-candidate
   counts. Choosing it before measuring is guessing.
 - **Where does the biography come from?** No `bio` field exists on `candidate`
