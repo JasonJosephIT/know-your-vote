@@ -227,11 +227,20 @@ Worth stating plainly, because it shrinks the job:
   An unbalanced or unpublished measure returns null from the read layer and
   renders the in-review page rather than a one-sided view.
 
-- [ ] **TASK-063** — Surface measures in resolution and the races list
+- [x] **TASK-063** — Surface measures in resolution and the races list
   Files: `src/lib/resolve.ts`, `src/types/app.ts`, `src/components/features/YourRaces.tsx`
   Notes: All three measures are statewide, so every Florida ZIP gets all three.
   Render them as a distinct "Ballot questions" group below races — a voter
   scanning for candidates should not mistake a measure for one.
+  **Done 2026-09-06** — `src/components/features/BallotQuestions.tsx`, mounted
+  in `YourRaces`. **Design change from this plan:** measures are deliberately
+  NOT added to `ResolveResult`. They are statewide and identical for everyone,
+  so threading them through a ZIP lookup would couple location-free data to a
+  location query — and rendering them without a ZIP is exactly what TASK-067
+  needs, so the component drops straight into the landing page. This file
+  listed `resolve.ts` and `app.ts` because it was written before the measure
+  tables existed. The component renders nothing when no measure is published,
+  so it is safe on the page before TASK-066 content lands.
 
 - [ ] **TASK-064** — Deadline banner on the landing page
   Files: `src/components/features/DeadlineBanner.tsx`, `src/app/(public)/page.tsx`

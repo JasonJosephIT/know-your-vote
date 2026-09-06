@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
+import { BallotQuestions } from "@/components/features/BallotQuestions";
 import { VotingInfo } from "@/components/features/VotingInfo";
 import { ZipEntry } from "@/components/features/ZipEntry";
 import { createAnonServerClient } from "@/lib/supabase/server";
@@ -127,6 +128,11 @@ export async function YourRaces({
           })}
         </ul>
       )}
+
+      {/* Statewide, so they belong below the location-specific races rather
+          than inside that list — a voter scanning for candidates should not
+          mistake a ballot question for one. */}
+      <BallotQuestions />
 
       <p className="text-caption text-on-surface-muted">
         Every registered Florida voter gets the same ballot in the general
