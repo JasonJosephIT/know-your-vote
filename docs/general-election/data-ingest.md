@@ -68,17 +68,27 @@ column** — only `StatusCode`/`StatusDesc`. So the parser cannot currently tell
 write-in from a printed ballot line, which is exactly the distinction
 `ballot_status` needs.
 
-**Do not guess the codes.** The first move is to look:
+**Do not guess the codes.** Look at the real file first. That is what
+`scripts/doe-code-dump.py` does — it fetches `20261103-GEN` for each office
+group (`FED`, `CAB`, `STA`) and prints, for the 8 target races only, the
+distinct `StatusCode`/`StatusDesc` and `PartyCode`/`PartyDesc` counts plus any
+column the current parser doesn't know about (a candidate-type column would be
+the clean write-in signal). If no column distinguishes write-ins, fetch twice
+with different `cantype` values and diff on `AcctNum` — a set difference, not a
+parser rewrite.
 
-```
-# throwaway, not committed: dump the live distribution
-StatusCode / StatusDesc / PartyCode / PartyDesc  ->  counts, per OfficeCode
-```
+It deliberately does **not** reuse `parse_candidate_list`: that parser collapses
+`StatusCode` to `{qualified, withdrawn, other}` and `PartyCode` to
+`{REP, DEM, NPA, other}`, discarding exactly the values B1 exists to find.
 
-Fetch `20261103-GEN` once per office group (`FED`, `CAB`, `STA`), print the
-distinct values, and let the real file drive the mapping. If no column
-distinguishes write-ins, fetch twice with different `cantype` values and diff on
-`AcctNum` — a set difference, not a parser rewrite.
+> **B1 cannot run from a Claude Code remote session.** Verified 2026-09-06: the
+> session's egress proxy answers `403` to CONNECT for every external host —
+> `dos.elections.myflorida.com`, `api.open.fec.gov`, `www.flsenate.gov`,
+> `dos.fl.gov`, and even `example.com`. Only the infrastructure allowlist (npm,
+> PyPI, the Anthropic API) is reachable. **Run the script on the founder's
+> machine** — the same box that live-verified T1–T3 on 2026-07-10 — and paste
+> the output back. The same limit applies to **B4, B5 and B7**: every task that
+> touches a live external endpoint is local-only.
 
 *This dump is a prerequisite for I1 and I2 alike: neither mapping can be written
 correctly without it.*
@@ -212,7 +222,7 @@ adds the column it writes.
 
 | ID | Task | Files | Verify | Depends |
 |---|---|---|---|---|
-| **B1** | Dump the live `20261103-GEN` export (`FED`, `CAB`, `STA`); record the distinct `StatusCode`/`StatusDesc`/`PartyCode` values and how write-ins are identifiable. Throwaway script, findings recorded here | this file (§1) | Distributions recorded; write-in identification method named and confirmed against the live file | — |
+| **B1** | **Run `python3 scripts/doe-code-dump.py` on a machine with real network** (script is built + self-tested; remote sessions are egress-blocked — §1). Record the distributions and the write-in signal here | `scripts/doe-code-dump.py` (done), this file (§1) | `--selftest` passes ✅; live run pending — distributions recorded and write-in identification method confirmed against the real file | founder: local run |
 | **B2** | T1: tier mapping, exclude `excluded` from `candidate_ids`, verbatim party code, `ballot_status` through the upsert. Unrecognised status ⇒ loud fail | `toollayer/cap_toollayer/intake.py`, `store.py` | `python3 toollayer/test_toollayer_skeleton.py` (100) green + new cases: a defeated filer is absent from `candidate_ids`; a write-in is present with `ballot_status='write_in'`; an unknown code fails loudly; re-parse is byte-identical (idempotent) | B1, A1 |
 | **B3** | Populate `official_site` for briefed candidates — manual seed, one row per candidate, each URL human-verified | `scripts/` seed SQL | Every `ballot`-tier candidate in the 8 races has a non-NULL `official_site`; `store.candidate_scope` returns non-empty scope for each | B1 |
 | **B4** | Fill `is_incumbent` / `incumbent_id` / `is_open_seat` from the existing T2 FEC candidates endpoint | `toollayer/cap_toollayer/intake.py`, `store.py` | Known FL-28 incumbent resolves correctly; a genuinely open seat sets `is_open_seat` | B2 |
