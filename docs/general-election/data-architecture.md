@@ -1,5 +1,13 @@
 # Data Architecture — Primary → General
 
+> ⚠️ **Superseded in part — read `news-fairness.md` first.** The founder retired
+> candidate **briefs** on 2026-09-06 (bio + per-candidate news cards instead), so
+> anything here about briefing, the audit population, or the Balance Audit as a
+> publication gate no longer applies. **Still live:** migration `0010` (`candidate.ballot_status`, party CHECK dropped) and the
+> read model — `ballot_status` now defines who gets a candidate page and news
+> slots rather than the audit denominator. **D1 is moot**: no briefs, no audit
+> population.
+
 **Scope change:** Know Your Vote was built and seeded around the **2026 Florida
 primary** (2026-08-18, now past). It must run off the **general election**
 (2026-11-03). This document owns the **stored shape**: DDL, constraints, RLS,

@@ -1,5 +1,12 @@
 # Data Ingest — Primary → General
 
+> ⚠️ **Superseded in part — read `news-fairness.md` first.** The founder retired
+> candidate **briefs** on 2026-09-06 (bio + per-candidate news cards instead), so
+> anything here about briefing, the audit population, or the Balance Audit as a
+> publication gate no longer applies. **Still live:** the whole T1 parser story — B1's findings, the tier mapping, `official_site`
+> (I3), and the copy fixes. Ingesting the right ballot matters more under the
+> pivot, not less.
+
 **Scope change:** the pipeline must ingest the **2026 Florida general election**
 (2026-11-03) rather than the primary (2026-08-18, now past). This document owns
 **how rows get filled**: HTTP sources, parsers, field population, gap-closing
