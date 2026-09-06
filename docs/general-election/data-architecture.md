@@ -57,9 +57,13 @@ identically:
    land in the general race.
 2. **Write-in candidates.** They qualify for the general, but appear on the
    ballot as a blank line, not a printed name. They typically have no campaign
-   site, no FEC committee, and no public positions.
-3. **Minor-party candidates.** Real ballot lines (Libertarian, Green, and
-   others), currently collapsed — see D2.
+   site, no FEC committee, and no public positions. **Four are in the target
+   field today**, identified by `PartyCode = 'WRI'` — there is no
+   candidate-type column (`data-ingest.md` §1 Q2, which owns the mapping and
+   the status-before-party precedence rule).
+3. **Minor-party candidates.** Real ballot lines — `IND`, `LPF` and `CPF` are
+   all present in the target races — currently collapsed together into
+   `other`; see D2.
 
 Why this is the gating decision and not a detail: **the Balance Audit is a
 hard publication gate**, and its variance formula is
@@ -69,17 +73,27 @@ hard publication gate**, and its variance formula is
 incumbent with twelve is `(12-0)/12*100 = 100%` variance → **HALT**.
 
 > A single write-in or defeated filer left in `candidate_ids` HALTs the race
-> permanently. With write-ins present in most contested Florida general races,
-> **the default outcome of running the pipeline today is that nothing
-> publishes at all.**
+> permanently. **The default outcome of running the pipeline today is that
+> nothing publishes at all.**
+
+**B1 measured exactly how bad this is** (live DoE run 2026-09-06, per-race
+table in `data-ingest.md` §1). Across the eight target races:
+
+| | `ballot` | `write_in` | `excluded` |
+|---|---|---|---|
+| Candidates | **22** | **4** | **83** |
+
+Without the filter, **87 non-ballot names join 22 real ballot lines**. Every
+one of the eight target races carries at least one, so this is not an edge
+case to handle later — it is the ordinary case, in every race we cover.
 
 **Recommendation (adopt unless the founder objects):** three tiers, one column.
 
 | Tier | Definition | In `candidate_ids`? | Briefed? | In audit denominator? |
 |---|---|---|---|---|
-| `ballot` | Printed ballot line, qualified for the general | yes | yes | **yes** |
-| `write_in` | Qualified write-in, no printed line | yes | no | **no** |
-| `excluded` | Withdrawn, defeated in the primary, disqualified | **no** | no | no |
+| `ballot` | `QUA` qualified or `UNO` unopposed, and not `WRI` | yes | yes | **yes** |
+| `write_in` | `QUA`/`UNO` with `PartyCode = 'WRI'` — no printed line | yes | no | **no** |
+| `excluded` | `DEF` defeated · `DNQ` did not qualify · `WIT` withdrew · `REM` removed | **no** | no | no |
 
 Rationale: the audit measures *symmetry of scrutiny among candidates we brief*.
 Briefing a write-in with no public material and then halting the race for
@@ -94,14 +108,28 @@ explicit sign-off and belongs in the public methodology page.**
 ### D2 — Minor parties
 
 `candidate.party CHECK (party IN ('REP','DEM','NPA','other'))`. In a closed
-primary only REP/DEM ballots exist, so the enum was free. On a general ballot,
-Libertarian and Green are distinct printed lines that both currently render as
-`other` — one real party erased into a bucket with another.
+primary only REP/DEM ballots exist, so the enum was free. On a general ballot
+they are distinct printed lines that all currently render as `other` — real
+parties erased into one bucket. B1 confirmed **`IND`, `LPF` and `CPF` in the
+target races alone**, plus `FFP` whole-file. (An earlier draft of this document
+guessed "Libertarian and Green"; the Green party is not in the file. The codes
+above are measured, not assumed.)
 
 **Recommendation (ponytail — this deletes code):** drop the CHECK, store the
 DoE `PartyCode` verbatim, and let the UI map known codes to labels with a
 fallback to the raw code. A constraint whose job is to protect display logic is
 better replaced by display logic that cannot crash.
+
+Two findings from B1 shape that fallback, and both are display concerns this
+document owns:
+
+- **`MGT` arrives with an empty `PartyDesc`.** The DoE itself has no label for
+  it, so the read model must render a code that has *no* human-readable name.
+  A fallback that assumes a label exists will print an empty chip.
+- **`WRI` is not a party.** It occupies the `PartyCode` column but means
+  "write-in". A write-in's actual party affiliation is simply not in the data,
+  so the UI must show *Write-in* as a status and **no party at all** — never a
+  chip reading "WRI", which would misrepresent an unknown as a party.
 
 ### D3 — Ballot measures and judicial retention: **skip them**
 
@@ -167,11 +195,13 @@ SQL before invoking the core.
   the AGENT_BRIEF house rule is that a core change requires a spec amendment
   first.
 
-**Unopposed races.** A general race with one briefed candidate yields variance
-`0.0` and passes trivially. That is arithmetically correct but not meaningful —
-"equal scrutiny" is vacuous with a sample of one. Record `unopposed` on the
-audit result so the race view can say so plainly instead of implying a
-comparison happened.
+**Unopposed races — live, not hypothetical.** B1 found **FL-10 has exactly one
+`ballot` candidate** (the file's only `UNO` row). A race with one briefed
+candidate yields variance `0.0` and passes trivially: arithmetically correct,
+but "equal scrutiny" is vacuous with a sample of one, and a side-by-side view
+would render a single column implying a comparison that never happened. Record
+`unopposed` on the audit result and have the race view say so plainly. This
+ships in the first run — it cannot be deferred.
 
 ---
 
@@ -180,14 +210,16 @@ comparison happened.
 `src/types/schema.ts` mirrors the DDL and must move with it:
 
 - `Party` — widen from the four-value union to `string`, with a display map and
-  a raw-code fallback (D2).
+  a raw-code fallback (D2). The fallback must survive a code with **no label**
+  (`MGT`), and must not render `WRI` as a party.
 - `Candidate` — add `ballot_status: "ballot" | "write_in" | "excluded"`.
 - `KeyDates.primary_date` — leave it. It is optional, the primary is a real
   historical date, and deleting it buys nothing.
 
 Brief and race reads (`src/lib/briefs.ts`, `src/lib/directory.ts`) filter to
 `ballot_status = 'ballot'`; the race view renders write-ins as a separate,
-clearly-labelled list.
+clearly-labelled list — name and status only, no party chip (D2), and an
+unopposed race says so rather than showing a one-column comparison (§3).
 
 ---
 
@@ -223,11 +255,11 @@ it done. **A1 must land before A3 or A4** — both read the column it adds.
 
 | ID | Task | Files | Verify | Depends |
 |---|---|---|---|---|
-| **A0** | Get founder sign-off on **D1** (three tiers) and **D2** (drop party CHECK). Do not start A1 until D1 is answered — it defines the column. | — | Written decision recorded in this file | — |
+| **A0** | Get founder sign-off on **D1** (three tiers) and **D2** (drop party CHECK). Both are now backed by measured data, not a guess — see D1's 22/4/83 table and D2's confirmed codes. Do not start A1 until D1 is answered: it defines the column. | — | Written decision recorded in this file | — |
 | **A1** | Write migration `0010_general_election.sql` exactly as §2 | `supabase/migrations/0010_general_election.sql` | `node scripts/verify-migrations.mjs` green, incl. existing RLS invariants | A0 |
 | **A2** | Extend `verify-migrations.mjs` with 0010 invariants: default is `'ballot'`, CHECK rejects a bogus tier, party CHECK is gone, index exists | `scripts/verify-migrations.mjs` | New checks fail against pre-0010 schema, pass after | A1 |
-| **A3** | T10 filters the audit population to `ballot_status='ballot'`; record excluded IDs + `unopposed` on the result. **Do not touch `balance_audit_core.py`** | `toollayer/cap_toollayer/synthesis.py` | `python3 toollayer/test_toollayer_skeleton.py` (100) green; new case: a write-in with 0 claims no longer HALTs a race that otherwise passes | A1 |
-| **A4** | Read model: widen `Party`, add `ballot_status`, filter briefs/directory to briefed tier, render write-ins as a labelled list | `src/types/schema.ts`, `src/lib/briefs.ts`, `src/lib/directory.ts`, `src/app/(public)/races/[raceId]/page.tsx` | `npm run build` clean; a seeded write-in appears in its own section and not in the side-by-side | A1 |
+| **A3** | T10 filters the audit population to `ballot_status='ballot'`; record excluded IDs + `unopposed` on the result. **Do not touch `balance_audit_core.py`** | `toollayer/cap_toollayer/synthesis.py` | `python3 toollayer/test_toollayer_skeleton.py` (100) green; new cases: a write-in with 0 claims no longer HALTs a race that otherwise passes, and a one-candidate race (FL-10's real shape) comes back `unopposed` rather than a silent 0.0-variance pass | A1 |
+| **A4** | Read model: widen `Party`, add `ballot_status`, filter briefs/directory to briefed tier, render write-ins as a labelled list | `src/types/schema.ts`, `src/lib/briefs.ts`, `src/lib/directory.ts`, `src/app/(public)/races/[raceId]/page.tsx` | `npm run build` clean; a seeded write-in appears in its own section, not in the side-by-side, and with no party chip; `LPF` renders its label and `MGT` (no label) renders its raw code without an empty chip | A1 |
 | **A5** | Methodology page states the write-in and exclusion policy in plain language | `src/app/(public)/methodology/page.tsx` | Page renders; wording matches the D1 decision | A0 |
 
 **Baseline that must stay green after every task** (AGENT_BRIEF §3):
