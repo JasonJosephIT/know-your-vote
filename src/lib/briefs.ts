@@ -1,5 +1,6 @@
 import { unstable_cache } from "next/cache";
 import { createAnonServerClient } from "@/lib/supabase/server";
+import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 import type {
   Candidate,
   CandidateSocialAccount,
@@ -107,6 +108,7 @@ async function fetchRaceBrief(raceId: string): Promise<RaceBrief | null> {
     .from("race")
     .select("*")
     .eq("race_id", raceId)
+    .eq("election", ACTIVE_ELECTION_KIND)
     .maybeSingle<Race>();
   if (!race) return null;
 

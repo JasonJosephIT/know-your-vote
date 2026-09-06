@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
+import { BallotQuestions } from "@/components/features/BallotQuestions";
 import { VotingInfo } from "@/components/features/VotingInfo";
 import { ZipEntry } from "@/components/features/ZipEntry";
 import { createAnonServerClient } from "@/lib/supabase/server";
@@ -128,10 +129,16 @@ export async function YourRaces({
         </ul>
       )}
 
+      {/* Statewide, so they belong below the location-specific races rather
+          than inside that list — a voter scanning for candidates should not
+          mistake a ballot question for one. */}
+      <BallotQuestions />
+
       <p className="text-caption text-on-surface-muted">
-        Florida is a closed-primary state — you vote in a party&apos;s primary
-        only if you&apos;re registered with that party. The general election is
-        open to every registered voter.
+        Every registered Florida voter gets the same ballot in the general
+        election, whatever party you&apos;re registered with — including no
+        party at all. If you couldn&apos;t vote in August&apos;s closed
+        primary, you can vote on all of this.
       </p>
 
       {!result.district && result.races.length > 0 && (

@@ -81,3 +81,31 @@ export interface QuizResponse {
   results: QuizResultCandidate[];
   disclaimer: string;
 }
+
+/* Ballot measures (0010). App-owned, unlike the pipeline's race tables. */
+export type MeasureSide = "support" | "oppose";
+
+export interface BallotMeasure {
+  measure_id: string;
+  election: string;
+  number: string;
+  official_title: string;
+  ballot_summary: string;
+  full_text_url: string;
+  placed_by: "legislature" | "citizen_initiative" | "commission" | "local";
+  /* Florida requires 60% for a constitutional amendment. Stored per measure
+     because local measures differ. */
+  threshold_pct: number;
+  jurisdiction: string;
+  display_order: number;
+}
+
+export interface MeasureArgument {
+  argument_id: string;
+  measure_id: string;
+  side: MeasureSide;
+  text: string;
+  source_id: string;
+  attributed: boolean;
+  display_order: number;
+}

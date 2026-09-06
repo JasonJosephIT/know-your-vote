@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { createAnonServerClient } from "@/lib/supabase/server";
+import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://know-your-vote-chazak.vercel.app";
 
@@ -18,7 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const supabase = await createAnonServerClient();
     const [races, profiles] = await Promise.all([
-      supabase.from("race").select("race_id"),
+      supabase.from("race").select("race_id").eq("election", ACTIVE_ELECTION_KIND),
       supabase.from("profile").select("candidate_id"),
     ]);
     return [

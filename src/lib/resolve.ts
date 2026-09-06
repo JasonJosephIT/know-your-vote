@@ -1,5 +1,6 @@
 import { createAnonServerClient } from "@/lib/supabase/server";
 import type { ResolveRaceSummary, ResolveResult } from "@/types/app";
+import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
 export const ZIP_RE = /^\d{5}$/;
 
@@ -20,6 +21,7 @@ async function racesForDistrict(district: string): Promise<ResolveRaceSummary[]>
   const { data, error } = await supabase
     .from("race")
     .select("race_id, office, level, district")
+    .eq("election", ACTIVE_ELECTION_KIND)
     .or(`district.is.null,district.eq.${district}`)
     .order("level", { ascending: false })
     .order("race_id");
@@ -112,6 +114,7 @@ export async function resolveCounty(countyFips: string): Promise<ResolveResult |
   const { data, error } = await supabase
     .from("race")
     .select("race_id, office, level, district")
+    .eq("election", ACTIVE_ELECTION_KIND)
     .is("district", null)
     .order("race_id");
   if (error) throw new Error(`race lookup failed: ${error.message}`);

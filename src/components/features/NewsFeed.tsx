@@ -46,7 +46,11 @@ export function NewsFeed() {
     }
 
     fetch(`/api/news?${params}`)
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((r) =>
+        r.ok
+          ? (r.json() as Promise<{ items?: FeedItem[] }>)
+          : Promise.reject()
+      )
       .then((data) => setStage({ kind: "ready", items: data.items ?? [] }))
       .catch(() => setStage({ kind: "error" }));
   }, []);

@@ -1,5 +1,12 @@
 # PRD — Know Your Vote
 
+> **⚠️ Two things in this document are out of date.** The "closed primary"
+> note (§433, §530) no longer applies to the November general election and was
+> removed from the app; and §182's "Vercel edge middleware" rate limiting is
+> in-route, not middleware. Hosting is Vercel, as described. Phase 7 also
+> amends the ZIP-first magic moment (FR-001 / TASK-015). Details in
+> [`docs/scope-changes.md`](./scope-changes.md).
+
 *Technical blueprint for the voter-facing web app of the Civic Awareness Project (CAP). Read alongside `product-vision.md` (strategy/brand) and the authoritative backend specs: `CAP_Schema_v1.md` (data schema), `CAP_Agent_Plan_v1.md`, `CAP_MCP_Tool_Spec_v1.md`, `CAP_Balance_Audit_Spec_v1.md`, `CAP_Logging_Schema_v1.md`. Visual tokens live in `docs/design.md` (generate via the Design System skill before styling work).*
 
 ---
