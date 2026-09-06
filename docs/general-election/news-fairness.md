@@ -141,8 +141,25 @@ Dependency-ordered. N1 gates N2–N4.
 | ID | Task | Files | Verify |
 |---|---|---|---|
 | **N1** | Migration `0011` exactly as §3 | `supabase/migrations/0011_news_fairness.sql` | `node scripts/verify-migrations.mjs` green; a `candidate_news` row with `source_id NULL` is rejected; an `official_link` row with NULL still inserts |
-| **N2** | News read joins `source`; API returns `publisher`, `type`, `lean_tag`. Widen `item_type` to the four values 0005 allows — `src/types/app.ts` and `NewsFeed.tsx` still only know two, so they are **already stale against the live DB** | `src/app/api/news/route.ts`, `src/types/app.ts` | Response carries all three fields; a `candidate_news` row round-trips |
-| **N3** | Card renders publisher + Reporting/Opinion + lean; **opinion cards visually distinct**, not just labelled | `src/components/features/NewsFeed.tsx` | `npm run build` clean; an opinion card is distinguishable from a reporting card without reading the text |
+| ~~**N2**~~ ✅ | News read joins `source`; API returns `publisher`, `type`, `lean_tag`. `item_type` widened to the four values 0005 allows; `candidate_id` added | `src/app/api/news/route.ts`, `src/types/app.ts`, `src/lib/news-labels.ts` | `npx tsc --noEmit` clean, `npm run build` clean, `node scripts/verify-news-labels.ts` passes |
+| ~~**N3**~~ ✅ | Card renders publisher + Reporting/Opinion + lean; opinion cards visually distinct | `src/components/features/NewsFeed.tsx` | `npm run build` clean; opinion rows get a muted ground + left rule, and say "Opinion" in words |
+~ **N2/N3 done 2026-09-06.** Label logic lives in `src/lib/news-labels.ts`
+(pure, no DB/network) and is pinned by `scripts/verify-news-labels.ts`, which
+was mutation-checked — breaking the `N/A` rule makes it exit 1. Two neutrality
+rules are encoded there rather than left to convention: **lean is never
+colour-coded** (the README's party-chip rule applies equally to lean), and
+**`N/A` is not a lean** so it prints nothing rather than the literal string. An
+item with no source gets *no* labels, so an unattributed row can never render
+as though it were attributed. Opinion styling reuses the repo's existing
+`border-l-2 border-border-strong` blockquote treatment on a muted ground —
+deliberately not a colour, which would imply a verdict about the piece.
+**Not verified:** the PostgREST embed `source(publisher, type, lean_tag)` is
+unproven against a live database — there is no Supabase reachable from this
+session. Typecheck, build and the pure label tests all pass; the join itself
+needs one live request to confirm.
+~ Pre-existing lint error left alone: `react-hooks/set-state-in-effect` in
+`NewsFeed.tsx` is on a line this change did not touch (present at HEAD).
+
 | **N4** | Equal-slot selection: `N` per `ballot` candidate, lean spread before recency, shortfall stated | `src/lib/` (new selector) + candidate page | Unit check: given a 14-vs-3 split, both candidates get `N` slots or an explicit shortfall note; slots are not single-lean when alternatives exist |
 | **N5** | Per-race coverage variance via `balance_audit_core`, recorded not gated. **Do not edit the core** | `toollayer/cap_toollayer/synthesis.py` or a script | Variance computed for an uneven race; nothing is blocked from publishing |
 | **N6** | Extend `verify-news-neutrality.ts`: assert every agent-written row has a source, and that its `type`/`lean_tag` are populated | `scripts/verify-news-neutrality.ts` | `--self-test` passes; a sourceless fixture fails the lint |
