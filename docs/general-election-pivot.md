@@ -177,7 +177,7 @@ Worth stating plainly, because it shrinks the job:
 
 ## 6. Day 2 — amendments and urgency
 
-- [ ] **TASK-061** — `ballot_measure` data model (app-owned)
+- [x] **TASK-061** — `ballot_measure` data model (app-owned)
   Files: `supabase/migrations/0012_ballot_measure.sql`, `0013_measure_rls.sql`
   Notes: App-owned, because the app never modifies pipeline tables. Three
   tables mirroring the race pattern:
@@ -194,8 +194,17 @@ Worth stating plainly, because it shrinks the job:
   of the ballot where nobody else is checking.
   Verify: extend `scripts/verify-migrations.mjs` to assert anon cannot read an
   unpublished measure and cannot write any measure table.
+  **Done 2026-09-06** — migrations `0010_ballot_measure.sql` /
+  `0011_measure_rls.sql` (taking 0010/0011 rather than the 0012/0013 penciled
+  in here: TASK-058 and TASK-060 landed later, and a gap would mean a
+  lower-numbered migration arriving after a higher one had been applied).
+  Fourteen assertions added to the pglite harness. The symmetry rule needed
+  **two** triggers, not one: guarding `measure_publication` alone left a
+  published measure skewable by deleting an opposing argument afterwards, so
+  a deferred constraint trigger on `measure_argument` closes it. Both paths
+  are asserted.
 
-- [ ] **TASK-062** — Measure read layer and pages
+- [x] **TASK-062** — Measure read layer and pages
   Files: `src/lib/measures.ts`, `src/app/(public)/measures/[measureId]/page.tsx`, `src/components/features/MeasureCompare.tsx`
   Notes: `measures.ts` mirrors `briefs.ts` — published-only, arguments dropped
   when they carry no source, same belt-and-braces re-check of the balance flag.
@@ -205,6 +214,13 @@ Worth stating plainly, because it shrinks the job:
   a simple majority passes an amendment, and correcting that is real service.
   Verify: an unpublished measure 404s; a measure with an unbalanced argument
   set never publishes.
+  **Done 2026-09-06** — `src/lib/measures.ts`, `MeasureCompare`,
+  `MeasureThreshold`, and `/measures/[measureId]`. The rule lives in
+  `src/lib/measure-balance.ts`, dependency-free so
+  `scripts/verify-measure-balance.ts` can run it under Node's type stripping
+  (the same reason `notifications/schedule.ts` is separate from its route).
+  An unbalanced or unpublished measure returns null from the read layer and
+  renders the in-review page rather than a one-sided view.
 
 - [ ] **TASK-063** — Surface measures in resolution and the races list
   Files: `src/lib/resolve.ts`, `src/types/app.ts`, `src/components/features/YourRaces.tsx`

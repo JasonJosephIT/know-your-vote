@@ -554,6 +554,136 @@ await expectDenied(
 );
 await db.exec("RESET ROLE;");
 
+/* ---------------------------------------------------------------- *
+ * 16. 0010/0011 ballot measures (TASK-061).
+ *
+ * Same posture as races: anon sees a measure only through a published
+ * measure_publication row, and can write nothing. Plus the symmetry rule,
+ * which is the part that is specific to measures — an amendment has no
+ * campaign obliged to balance it, so the database refuses to publish a
+ * lopsided one rather than trusting a reviewer to notice.
+ * ---------------------------------------------------------------- */
+
+await db.exec(`
+  INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag) VALUES
+    ('s-m', 'https://example.gov/m', 'example.gov/m', 'Example Gov', 'primary_doc', 'N/A');
+
+  INSERT INTO ballot_measure
+    (measure_id, election, number, official_title, ballot_summary, full_text_url,
+     placed_by, threshold_pct, jurisdiction, display_order) VALUES
+    ('m-pub',   'general_2026', '1', 'Published Measure', 'Summary.', 'https://example.gov/1', 'legislature', 60, 'FL', 1),
+    ('m-draft', 'general_2026', '2', 'Draft Measure',     'Summary.', 'https://example.gov/2', 'legislature', 60, 'FL', 2),
+    ('m-skew',  'general_2026', '3', 'Lopsided Measure',  'Summary.', 'https://example.gov/3', 'legislature', 60, 'FL', 3);
+
+  INSERT INTO measure_argument (argument_id, measure_id, side, text, source_id) VALUES
+    ('a1', 'm-pub',   'support', 'For.',     's-m'),
+    ('a2', 'm-pub',   'oppose',  'Against.', 's-m'),
+    ('a3', 'm-draft', 'support', 'For.',     's-m'),
+    ('a4', 'm-draft', 'oppose',  'Against.', 's-m'),
+    -- m-skew: three for, none against.
+    ('a5', 'm-skew',  'support', 'For A.',   's-m'),
+    ('a6', 'm-skew',  'support', 'For B.',   's-m'),
+    ('a7', 'm-skew',  'support', 'For C.',   's-m');
+
+  INSERT INTO measure_publication (measure_id, status) VALUES
+    ('m-pub', 'published'),
+    ('m-draft', 'draft');
+`);
+
+await check("anon sees only published measures", async () => {
+  await db.exec("SET ROLE anon;");
+  const res = await db.query("SELECT measure_id FROM ballot_measure ORDER BY measure_id;");
+  await db.exec("RESET ROLE;");
+  const ids = res.rows.map((r) => r.measure_id);
+  if (ids.length !== 1 || ids[0] !== "m-pub") {
+    throw new Error(`expected only m-pub, got [${ids.join(", ")}]`);
+  }
+});
+
+await check("anon sees arguments only for published measures", async () => {
+  await db.exec("SET ROLE anon;");
+  const res = await db.query("SELECT argument_id FROM measure_argument ORDER BY argument_id;");
+  await db.exec("RESET ROLE;");
+  const ids = res.rows.map((r) => r.argument_id);
+  if (ids.length !== 2 || ids[0] !== "a1" || ids[1] !== "a2") {
+    throw new Error(`expected a1,a2 only, got [${ids.join(", ")}]`);
+  }
+});
+
+await db.exec("SET ROLE anon;");
+await expectDenied(
+  "anon cannot INSERT a ballot_measure",
+  `INSERT INTO ballot_measure (measure_id, election, number, official_title, ballot_summary, full_text_url, placed_by, threshold_pct)
+   VALUES ('m-x','general_2026','9','X','S','https://e.gov/x','legislature',60);`
+);
+await expectDenied(
+  "anon cannot INSERT a measure_argument",
+  `INSERT INTO measure_argument (argument_id, measure_id, side, text, source_id)
+   VALUES ('a-x','m-pub','support','X','s-m');`
+);
+await expectDenied(
+  "anon cannot publish a measure",
+  "UPDATE measure_publication SET status='published';"
+);
+await db.exec("RESET ROLE;");
+
+/* The symmetry rule. These run as service_role: the trigger must hold for
+   the role that actually writes, not only for anon. */
+await db.exec("SET ROLE service_role;");
+await expectConstraintViolation(
+  "a measure with no opposing argument cannot be published",
+  "INSERT INTO measure_publication (measure_id, status) VALUES ('m-skew','published');",
+  /must both exist and differ by at most one/
+);
+/* The INSERT above was rejected, so m-skew has no publication row yet; give
+   it a draft one so the UPDATE path is actually exercised rather than
+   matching zero rows. */
+await db.exec("INSERT INTO measure_publication (measure_id, status) VALUES ('m-skew','draft');");
+await expectConstraintViolation(
+  "a skewed measure cannot be published by UPDATE either",
+  "UPDATE measure_publication SET status='published' WHERE measure_id='m-skew';",
+  /must both exist and differ by at most one/
+);
+await check("a balanced measure still publishes", async () => {
+  await db.exec(
+    `INSERT INTO measure_argument (argument_id, measure_id, side, text, source_id)
+     VALUES ('a8','m-skew','oppose','Against A.','s-m'), ('a9','m-skew','oppose','Against B.','s-m');`
+  );
+  await db.exec("UPDATE measure_publication SET status='published' WHERE measure_id='m-skew';");
+  const res = await db.query("SELECT status FROM measure_publication WHERE measure_id='m-skew';");
+  if (res.rows[0].status !== "published") throw new Error("expected m-skew to publish once balanced");
+});
+
+/* The hole the publication-side trigger alone leaves: a measure published
+   while balanced, then skewed by removing the other side. */
+await expectConstraintViolation(
+  "a published measure cannot be skewed by deleting an argument",
+  "DELETE FROM measure_argument WHERE argument_id='a2';",
+  /is published: support and oppose arguments/
+);
+await expectConstraintViolation(
+  "a published measure cannot be skewed by flipping an argument's side",
+  "UPDATE measure_argument SET side='support' WHERE argument_id='a2';",
+  /is published: support and oppose arguments/
+);
+await check("an unpublished measure's arguments can still be edited freely", async () => {
+  /* m-draft is not published, so the rule does not apply to it. */
+  await db.exec("DELETE FROM measure_argument WHERE argument_id='a4';");
+});
+await expectConstraintViolation(
+  "threshold_pct must be a real percentage",
+  `INSERT INTO ballot_measure (measure_id, election, number, official_title, ballot_summary, full_text_url, placed_by, threshold_pct)
+   VALUES ('m-bad','general_2026','9','X','S','https://e.gov/x','legislature',0);`,
+  /threshold_pct/
+);
+await expectConstraintViolation(
+  "side must be support or oppose",
+  `INSERT INTO measure_argument (argument_id, measure_id, side, text, source_id)
+   VALUES ('a-bad','m-pub','maybe','X','s-m');`,
+  /side/
+);
+await db.exec("RESET ROLE;");
+
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed`);
   process.exit(1);
