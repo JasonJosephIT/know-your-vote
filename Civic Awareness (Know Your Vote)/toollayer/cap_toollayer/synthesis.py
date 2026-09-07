@@ -13,6 +13,9 @@ T10 balance_audit
   handler's `halt` flag, so the middleware records `guard_triggered=true`
   (Audit Block Rate KPI) and freezes the S1 process's write tools — sms
   dispatch included. The audit itself never decides publication; it reports.
+  It also records N5 per-race `coverage`: the variance over each ballot
+  candidate's `named` news items. Report-only, like `unopposed` — no path
+  from it to `verdict`, `halt` or `balance_check_passed`.
 
 T12 sms_dispatch
   Refuses unless the caller presents the single-use approval token S3 mints at
@@ -68,6 +71,52 @@ def build_synthesis_handlers(
     audit_core = cores.load_aux_core("balance_audit").balance_audit_core
     sms_sender = sms_sender or _default_twilio_send
 
+    def _coverage(audited: list[Mapping[str, Any]], race_id: str) -> dict:
+        """N5: (max-min)/max over per-candidate `named` news items.
+
+        Recorded, never gated. The press covering a race unevenly is not
+        something the pipeline — or anyone in it — can remediate, so halting on
+        it would hide a real ballot to no one's benefit. Hence the core's
+        verdict and flags are discarded here; only the numbers are kept, and
+        the caller's `verdict`/`halt`/`balance_check_passed` never see them.
+        """
+        roster = [p["candidate_id"] for p in audited]
+        try:
+            rows = store.read_named_news_counts(roster)
+        except Exception as err:  # noqa: BLE001
+            # Degrade honestly: a missing coverage number is reported as
+            # missing. It must not take the scrutiny audit down with it.
+            return {"error": errors.UPSTREAM_FAILED,
+                    "reasons": [f"coverage read failed ({type(err).__name__})"]}
+        # Zero-fill every roster candidate, the same rule as
+        # namedCountsByCandidate() in src/lib/news-match.ts: a candidate the
+        # press ignored is the widest gap in the report, and dropping them
+        # would silently exclude it from the variance.
+        counts = {cid: 0 for cid in roster}
+        for row in rows:
+            if row["candidate_id"] in counts:
+                counts[row["candidate_id"]] = int(row["n"])
+        # An adapter, not a reimplementation. The variance belongs to
+        # balance_audit_core (`_variance_pct` is private and the core is locked
+        # — never edited), but its public entry takes Schema-v1 Profiles, not
+        # raw counts. So each count rides in as a synthetic profile's
+        # word_count and we read that one metric back out. The threshold is
+        # forced below zero purely so the core always fills in `candidates`
+        # (low/high); the breach flag it computes is meaningless here and
+        # dropped, because coverage never gates.
+        entry = audit_core(
+            [{"candidate_id": cid, "race_id": race_id,
+              "facts": [], "positions": [],
+              "audit": {"word_count": n, "fact_checks_performed": 0}}
+             for cid, n in counts.items()],
+            {"word_count_pct": -1.0},
+        )["metrics"]["word_count"]
+        coverage = {"counts": counts, "variance_pct": entry["variance_pct"],
+                    "min": entry["min"], "max": entry["max"]}
+        if entry["max"] > entry["min"]:
+            coverage["candidates"] = entry["candidates"]
+        return coverage
+
     def balance_audit(payload: Mapping[str, Any]) -> dict:
         race_id = payload.get("race_id")
         try:
@@ -105,6 +154,9 @@ def build_synthesis_handlers(
         # candidate, so this is live, not hypothetical. Recorded, never gated:
         # the audit reports, it does not decide publication.
         result["unopposed"] = len(audited) == 1
+        # N5, and read the same way as `unopposed`: a fact about the race, not
+        # an input to the verdict below.
+        result["coverage"] = _coverage(audited, race_id)
 
         halted = result["verdict"] == "HALT"
         flag_reason = ("scrutiny_halt" if halted

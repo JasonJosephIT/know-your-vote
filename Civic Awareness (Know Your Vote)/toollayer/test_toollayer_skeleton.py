@@ -1224,6 +1224,117 @@ class TestBalanceAudit(unittest.TestCase):
         self.assertIn("LEFT JOIN candidate", profile_reads[0])
         self.assertIn("c.ballot_status", profile_reads[0])
 
+    # --- P2 / N5: per-race named-coverage variance, recorded never gated ---
+
+    def _uneven_coverage_db(self, counts_rows, race="FL-15-general"):
+        # SELECT results are consumed in execution order: profiles, then counts.
+        return (FakeDb()
+                .prime_read([_profile("cand_001", race, 450, 5, 4, 5, 4),
+                             _profile("cand_002", race, 448, 5, 4, 5, 4)])
+                .prime_read(counts_rows))
+
+    def test_coverage_variance_recorded_for_an_uneven_race(self):
+        db = self._uneven_coverage_db([{"candidate_id": "cand_001", "n": 4},
+                                       {"candidate_id": "cand_002", "n": 1}])
+        layer, db = make_synthesis_layer(db=db)
+        res = layer.dispatch("balance_audit", {"race_id": "FL-15-general"})
+        cov = res["result"]["coverage"]
+        self.assertEqual(cov["counts"], {"cand_001": 4, "cand_002": 1})
+        self.assertEqual(cov["variance_pct"], 75.0)   # (4-1)/4, the core's unit
+        self.assertEqual((cov["min"], cov["max"]), (1, 4))
+        self.assertEqual(cov["candidates"], {"low": "cand_002", "high": "cand_001"})
+
+    def test_candidate_with_zero_coverage_is_counted_not_dropped(self):
+        """The press ignoring a candidate is the widest gap in the report.
+        Drop them from the denominator and the number we publish about our own
+        fairness improves precisely because coverage got less fair."""
+        db = self._uneven_coverage_db([{"candidate_id": "cand_001", "n": 3}])
+        layer, db = make_synthesis_layer(db=db)
+        res = layer.dispatch("balance_audit", {"race_id": "FL-15-general"})
+        cov = res["result"]["coverage"]
+        self.assertEqual(cov["counts"], {"cand_001": 3, "cand_002": 0})
+        self.assertEqual(cov["variance_pct"], 100.0)
+        self.assertEqual((cov["min"], cov["max"]), (0, 3))
+
+    def test_uneven_coverage_never_gates_publication(self):
+        """N5 reports, it never halts. Halting a race because the press covered
+        it unevenly would hide a real ballot over something nobody can
+        remediate -- so a 100% coverage gap leaves verdict/halt/
+        balance_check_passed exactly as the scrutiny metrics left them."""
+        db = self._uneven_coverage_db([{"candidate_id": "cand_001", "n": 9}])
+        layer, db = make_synthesis_layer(db=db)
+        res = layer.dispatch("balance_audit", {"race_id": "FL-15-general"})
+        self.assertEqual(res["result"]["coverage"]["variance_pct"], 100.0)
+        self.assertEqual(res["result"]["verdict"], "PASS")
+        self.assertFalse(layer.halted)                    # nothing frozen
+        self.assertFalse(committed_log_rows(db)[-1]["guard_triggered"])
+        patches = [json.loads(params[0]) for sql, params in db.committed
+                   if sql.startswith("UPDATE profile")]
+        self.assertEqual(len(patches), 2)
+        self.assertTrue(all(p["balance_check_passed"] for p in patches))
+        self.assertTrue(all(p["flag_reason"] is None for p in patches))
+
+    def test_coverage_read_counts_named_rows_only(self):
+        """Structural, like the LEFT JOIN test above: FakeDb returns primed
+        rows whatever the SQL, so the filter has to be pinned on the emitted
+        query. It earns its place because `related` rows attach to every
+        candidate the ambiguity admits -- equal across a race by construction
+        -- so counting them would drag the variance toward zero."""
+        db = self._uneven_coverage_db([{"candidate_id": "cand_001", "n": 4}])
+        layer, db = make_synthesis_layer(db=db)
+        layer.dispatch("balance_audit", {"race_id": "FL-15-general"})
+        news_reads = [(sql, params) for sql, params in db.selects
+                      if "FROM news_item" in sql]
+        self.assertEqual(len(news_reads), 1)
+        sql, params = news_reads[0]
+        self.assertIn("relation = 'named'", sql)
+        self.assertIn("ANY(", sql)            # roster filtered in SQL, not Python
+        self.assertEqual(list(params[0]), ["cand_001", "cand_002"])
+
+    def test_coverage_read_failure_is_recorded_without_failing_the_audit(self):
+        # execute order: profiles(1) counts(2) -> kill the coverage read only.
+        db = FakeDb(fail_at=2).prime_read([
+            _profile("cand_001", "FL-15-general", 450, 5, 4, 5, 4),
+            _profile("cand_002", "FL-15-general", 448, 5, 4, 5, 4),
+        ])
+        layer, db = make_synthesis_layer(db=db)
+        res = layer.dispatch("balance_audit", {"race_id": "FL-15-general"})
+        self.assertTrue(res["ok"], res)                      # the audit still ran
+        self.assertEqual(res["result"]["coverage"]["error"], errors.UPSTREAM_FAILED)
+        self.assertEqual(res["result"]["verdict"], "PASS")
+        self.assertFalse(layer.halted)
+        self.assertEqual(len(profile_updates(db)), 2)
+        self.assertEqual(committed_log_rows(db)[-1]["status"], "success")
+
+    def test_unopposed_race_has_zero_coverage_variance(self):
+        db = (FakeDb()
+              .prime_read([_profile("cand_solo", "FL-10-general", 450, 5, 4, 5, 4)])
+              .prime_read([{"candidate_id": "cand_solo", "n": 7}]))
+        layer, db = make_synthesis_layer(db=db)
+        res = layer.dispatch("balance_audit", {"race_id": "FL-10-general"})
+        cov = res["result"]["coverage"]
+        self.assertEqual(cov["counts"], {"cand_solo": 7})
+        self.assertEqual(cov["variance_pct"], 0.0)
+        # No low/high: with max == min there is no gap to name. `unopposed`
+        # already tells the reader why the number is vacuous.
+        self.assertNotIn("candidates", cov)
+
+    def test_coverage_roster_is_the_ballot_tier_only(self):
+        db = (FakeDb()
+              .prime_read([
+                  _profile("cand_001", "FL-15-general", 450, 5, 4, 5, 4),
+                  _profile("cand_002", "FL-15-general", 448, 5, 4, 5, 4),
+                  _profile("cand_wri", "FL-15-general", 0, 0, 0, 0, 0,
+                           ballot_status="write_in")])
+              .prime_read([{"candidate_id": "cand_001", "n": 4},
+                           {"candidate_id": "cand_002", "n": 4}]))
+        layer, db = make_synthesis_layer(db=db)
+        res = layer.dispatch("balance_audit", {"race_id": "FL-15-general"})
+        # An excluded filer has no page to cover, so counting them would report
+        # a coverage gap the pipeline itself created.
+        self.assertEqual(res["result"]["coverage"]["counts"],
+                         {"cand_001": 4, "cand_002": 4})
+
     def test_no_profiles_degrades(self):
         db = FakeDb().prime_read([])
         layer, db = make_synthesis_layer(db=db)

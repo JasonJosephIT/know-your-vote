@@ -271,6 +271,27 @@ class Store(logsink.PostgresSink):
             (race_id,),
         )
 
+    def read_named_news_counts(self, candidate_ids: Sequence[str]) -> list[dict]:
+        """Per-candidate count of `named` news items, for N5 coverage variance.
+
+        `named` only, and filtered in SQL rather than in Python: a `related`
+        row attaches to every candidate the ambiguity admits, so those counts
+        are equal across a race by construction and would drag the variance
+        toward zero — the tier that exists to fill a voter's page flattering
+        the number we publish about our own fairness. (0017 added the column;
+        idx_news_item_candidate_relation serves exactly this shape.)
+
+        A candidate with no `named` rows simply does not come back. The caller
+        zero-fills, because a candidate the press ignored is the widest gap in
+        the report and must not vanish from the denominator.
+        """
+        return self._fetchall(
+            "SELECT candidate_id, COUNT(*) AS n FROM news_item "
+            "WHERE relation = 'named' AND candidate_id = ANY(%s) "
+            "GROUP BY candidate_id",
+            (list(candidate_ids),),
+        )
+
     def write_balance_result(
         self, candidate_id: str, race_id: str, patch: Mapping[str, Any]
     ) -> None:
