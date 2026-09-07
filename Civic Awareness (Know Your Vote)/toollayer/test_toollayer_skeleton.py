@@ -823,6 +823,9 @@ _DOE_FIXTURE = "\n".join([
     _doe_row("89111", "USR", "United States Representative", "010", "UNO", "DEM", "Smith", "Jane", "Q"),
     _doe_row("89222", "USR", "United States Representative", "001", "QUA", "REP", "Doe", "John"),   # non-target
     _doe_row("89333", "GOV", "Governor", "", "QUA", "NPA", "Abrams", "Pat"),
+    # U.S. Senate: statewide AND federal. B1 measured 14 USS rows on the live
+    # file and the parser skipped every one of them until 2026-09-07.
+    _doe_row("89999", "USS", "United States Senator", "", "QUA", "DEM", "Reed", "Dana"),
     # A real minor party -- verbatim under D2, flattened to "other" before it.
     _doe_row("89777", "GOV", "Governor", "", "QUA", "LPF", "Reyes", "Sam"),
     _doe_row("89444", "USR", "United States Representative", "028", "WIT", "DEM", "Gone", "Gary"),
@@ -849,8 +852,9 @@ class TestIntakeDoEParser(unittest.TestCase):
     def test_filters_to_target_races_and_drops_nontarget(self):
         p = intake.parse_candidate_list(_DOE_FIXTURE)
         self.assertEqual(sorted(p["races"]), [
-            "FL-10-general", "FL-23-general", "FL-28-general", "FL-GOV-general"])
-        self.assertEqual(len(p["candidates"]), 8)
+            "FL-10-general", "FL-23-general", "FL-28-general",
+            "FL-GOV-general", "FL-SEN-general"])
+        self.assertEqual(len(p["candidates"]), 9)
         self.assertEqual(p["skipped"], 1)  # FL-01 is not a target
 
     def test_field_mapping_and_pii_dropped(self):
@@ -866,6 +870,20 @@ class TestIntakeDoEParser(unittest.TestCase):
         self.assertNotIn("secret@example.com", repr(jane))
         self.assertEqual(by_id["FL-DOE-89333"]["party"], "NPA")
         self.assertEqual(by_id["FL-DOE-89444"]["qualifying_status"], "withdrawn")
+
+    def test_us_senate_is_a_target_race_and_is_federal(self):
+        """The gap found by the 2026-09-07 database audit. USS fell through to
+        `skipped` — silently, because skipping is the normal path for most of
+        the file — so a statewide federal race was missing from every ballot
+        with nothing in the output to say so."""
+        p = intake.parse_candidate_list(_DOE_FIXTURE)
+        senate = p["races"]["FL-SEN-general"]
+        self.assertEqual(senate["candidate_ids"], ["FL-DOE-89999"])
+        # Statewide and federal are different axes: no district, but not a
+        # state office. Filing it under 'state' would misplace it in the read
+        # model's federal/state grouping.
+        self.assertEqual(senate["level"], "federal")
+        self.assertIsNone(senate["district"])
 
     def test_race_carries_its_candidate_ids(self):
         p = intake.parse_candidate_list(_DOE_FIXTURE)
@@ -917,7 +935,7 @@ class TestIntakeDoEParser(unittest.TestCase):
 
     def test_tier_counts_are_reported(self):
         p = intake.parse_candidate_list(_DOE_FIXTURE)
-        self.assertEqual(p["tiers"], {"ballot": 4, "write_in": 1, "excluded": 3})
+        self.assertEqual(p["tiers"], {"ballot": 5, "write_in": 1, "excluded": 3})
 
     def test_unknown_status_code_fails_loudly(self):
         """ACT and ELE are on the DoE form but not in the file. ELE arrives
@@ -942,14 +960,14 @@ class TestIntakeDoEHandler(unittest.TestCase):
         layer, db = make_intake_layer("record", doe_fetch=lambda office=None: _DOE_FIXTURE)
         res = layer.dispatch("doe_file_intake", {"office": "FED"})
         self.assertTrue(res["ok"], res)
-        self.assertEqual(res["result"]["candidate_count"], 8)
+        self.assertEqual(res["result"]["candidate_count"], 9)
         self.assertEqual(res["result"]["skipped"], 1)
         self.assertEqual(res["result"]["tiers"],
-                         {"ballot": 4, "write_in": 1, "excluded": 3})
+                         {"ballot": 5, "write_in": 1, "excluded": 3})
         races = committed_into(db, "race")
         cands = committed_into(db, "candidate")
-        self.assertEqual(len(races), 4)
-        self.assertEqual(len(cands), 8)
+        self.assertEqual(len(races), 5)
+        self.assertEqual(len(cands), 9)
         # ballot_status rides the upsert, so the tier is in the database and
         # not only in the run report.
         self.assertIn("ballot_status", cands[0][0])
@@ -1055,7 +1073,15 @@ class TestIntakeFLSenateAndJurisdiction(unittest.TestCase):
         self.assertTrue(res["ok"], res)
         self.assertEqual(res["result"]["congressional_districts"], ["FL-28"])
         self.assertTrue(res["result"]["in_coverage"])
-        self.assertEqual(len(res["result"]["statewide_races"]), 4)
+        # Five, not four: the four state cabinet offices plus the U.S. Senate
+        # seat. A ZIP lookup returns the races that apply regardless of
+        # district, and the Senate race is statewide even though it is federal.
+        # This assertion read 4 until 2026-09-07 and was encoding the parser's
+        # blind spot as an expectation.
+        self.assertEqual(
+            res["result"]["statewide_races"],
+            ["FL-AGR-general", "FL-ATG-general", "FL-CFO-general",
+             "FL-GOV-general", "FL-SEN-general"])
 
     def test_jurisdiction_bad_zip_degrades(self):
         layer, db = make_intake_layer("orchestrator")

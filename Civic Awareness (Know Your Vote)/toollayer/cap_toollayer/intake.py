@@ -49,11 +49,27 @@ DOE_ELECTION_ID = "20261103-GEN"  # 2026 general
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
        "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")  # DoE WAF wants a UA
 
-# OfficeCode -> statewide target race_id; USR + these districts are the
-# congressional targets (CAP_PRD Target Races: Gov/AG/CFO/AgComm + FL-10/15/23/28).
-_STATEWIDE_RACES = {
-    "GOV": "FL-GOV-general", "ATG": "FL-ATG-general",
-    "CFO": "FL-CFO-general", "AGR": "FL-AGR-general",
+# OfficeCode -> (race_id, level) for every race with no district: the four
+# state cabinet offices and the U.S. Senate seat. `level` rides in the map
+# rather than being assumed from "statewide", because the two are not the same
+# thing — the Senate race is statewide AND federal, and an earlier version
+# that inferred level from this map would have filed it under 'state'.
+#
+# USS WAS MISSING UNTIL 2026-09-07, and it is the reason this comment is long.
+# The parser mapped USR and the four cabinet offices, so every U.S. Senate
+# filing fell through to `skipped` — silently, because skipping is the normal
+# path for the ~90% of the file that is not a target race. B1's own whole-file
+# table recorded "FED (269 USR + 14 USS)" and nobody read the second number.
+# A statewide federal race would have been absent from every voter's ballot
+# with nothing in the output to say so. Adding an office here is the only
+# thing that makes a race exist; check this map against the ballot, not
+# against the last run's counts.
+_NO_DISTRICT_RACES = {
+    "GOV": ("FL-GOV-general", "state"),
+    "ATG": ("FL-ATG-general", "state"),
+    "CFO": ("FL-CFO-general", "state"),
+    "AGR": ("FL-AGR-general", "state"),
+    "USS": ("FL-SEN-general", "federal"),
 }
 _TARGET_US_HOUSE = {"010", "015", "023", "028"}
 
@@ -154,9 +170,9 @@ def parse_candidate_list(text: str) -> dict:
         row = line.split("\t")
         office_code = col(row, "OfficeCode")
         juris = col(row, "Juris1num")
-        if office_code in _STATEWIDE_RACES:
-            race_id = _STATEWIDE_RACES[office_code]
-            level, district = "state", None
+        if office_code in _NO_DISTRICT_RACES:
+            race_id, level = _NO_DISTRICT_RACES[office_code]
+            district = None
         elif office_code == "USR" and juris in _TARGET_US_HOUSE:
             race_id = f"FL-{int(juris)}-general"
             level, district = "federal", str(int(juris))
@@ -374,7 +390,7 @@ def build_intake_handlers(
             "zip5": zip5,
             "congressional_districts": sorted({r["congressional_district"] for r in rows}),
             "in_coverage": any(r.get("in_coverage") for r in rows),
-            "statewide_races": sorted(_STATEWIDE_RACES.values()),
+            "statewide_races": sorted(r for r, _ in _NO_DISTRICT_RACES.values()),
             "rows": rows,
         }}
 
