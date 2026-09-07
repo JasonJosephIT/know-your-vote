@@ -79,7 +79,7 @@ Do NOT read the whole spec corpus up front; each task names what it needs.
    ```
    python3 toollayer/test_toollayer_skeleton.py        # 168
    (cd toollayer && python3 -m cap_toollayer.server --selfcheck)
-   python3 runtime/test_runtime.py                     # 26
+   python3 runtime/test_runtime.py   # 39
    node ../scripts/verify-migrations.mjs               # if you touched SQL
    ```
 5. Mark the task `- [x]`, append a one-line `~ Done <date>: <what/how verified>`

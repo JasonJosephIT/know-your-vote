@@ -382,7 +382,7 @@ adds the column it writes.
 **Baseline that must stay green after every task** (AGENT_BRIEF §3):
 
 ```
-python3 toollayer/test_toollayer_skeleton.py        # 100
+python3 toollayer/test_toollayer_skeleton.py        # 168
 (cd toollayer && python3 -m cap_toollayer.server --selfcheck)
 python3 runtime/test_runtime.py                     # 39
 node scripts/verify-migrations.mjs                  # if SQL changed
