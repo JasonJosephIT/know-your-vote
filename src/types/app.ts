@@ -1,5 +1,10 @@
 /* App-owned tables (PRD § 3) and shared response shapes. */
 
+/* `news_item.relation` — CHECK-constrained in migration 0017. One definition
+   of the two tiers, owned by the matcher that assigns them. */
+import type { NewsRelation } from "@/lib/news-match";
+export type { NewsRelation };
+
 export type Metro = "miami" | "fort_lauderdale" | "tampa" | "orlando";
 
 export interface ZipDistrict {
@@ -34,12 +39,16 @@ export interface NewsItem {
   race_id: string | null;
   candidate_id: string | null;
   metro: string | null;
+  county_fips: string | null;
   item_type: NewsItemType;
   title: string;
   summary: string | null;
   url: string | null;
   source_id: string | null;
   published_at: string;
+  /* How this row was matched to its candidate (migration 0017, PRD §6).
+     NULL on rows that are not a candidate match at all. */
+  relation: NewsRelation | null;
 }
 
 /* Contact & logistics layer written by the R2 refresher (migration 0005) —
