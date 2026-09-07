@@ -8,8 +8,10 @@ import { SaveToggle } from "@/components/ui/SaveToggle";
 import type { QuizResponse } from "@/types/app";
 import type { Party } from "@/types/schema";
 
-/* Full field, neutral order, no ranking — the disclaimer is part of the
-   feature, not fine print (FR-007). */
+/* Full field, neutral order, no ranking, and since TASK-065 no comparison to
+   the voter either: each card states what that candidate has said about the
+   issues picked, and the reader draws the conclusion. The disclaimer is part
+   of the feature, not fine print (FR-007). */
 export function QuizResults({ response }: { response: QuizResponse }) {
   return (
     <div className="flex flex-col gap-4">
@@ -43,10 +45,10 @@ export function QuizResults({ response }: { response: QuizResponse }) {
                       <PartyChip party={c.party as Party} />
                       <SaveToggle candidateId={c.candidateId} />
                     </div>
-                    <p className="text-body-sm">{c.alignmentNote}</p>
-                    {c.alignedIssues.length > 0 && (
+                    <p className="text-body-sm">{c.stanceSummary}</p>
+                    {c.issuesCovered.length > 0 && (
                       <p className="flex flex-wrap gap-2">
-                        {c.alignedIssues.map((issue) => (
+                        {c.issuesCovered.map((issue) => (
                           <Chip key={issue}>{issue}</Chip>
                         ))}
                       </p>
