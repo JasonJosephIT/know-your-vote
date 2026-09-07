@@ -164,10 +164,42 @@ needs one live request to confirm.
 ~ Pre-existing lint error left alone: `react-hooks/set-state-in-effect` in
 `NewsFeed.tsx` is on a line this change did not touch (present at HEAD).
 
-| **N4** | Equal-slot selection: `N` per `ballot` candidate, lean spread before recency, shortfall stated | `src/lib/` (new selector) + candidate page | Unit check: given a 14-vs-3 split, both candidates get `N` slots or an explicit shortfall note; slots are not single-lean when alternatives exist |
+| ~~**N4**~~ ✅ | Equal-slot selection: `N` per `ballot` candidate, lean spread before recency, shortfall stated | `src/lib/` (new selector) + candidate page | Unit check: given a 14-vs-3 split, both candidates get `N` slots or an explicit shortfall note; slots are not single-lean when alternatives exist |
+~ **N4 done 2026-09-07.** The rule lives in `src/lib/news-slots.ts` (pure, no
+DB/network) and is pinned by `scripts/verify-news-slots.ts`, which was
+mutation-checked — swapping the greedy pick for plain recency makes it exit 1.
+`N` is deliberately **unchosen**: the selector takes it as a parameter,
+`undefined` means "order everything, cap nothing", and
+`src/components/features/CandidateNews.tsx` passes none, because §5 says `N`
+comes from measured coverage and N5 has not measured it.
+**Hard gate:** `N` must be passed to `CandidateNews` before `candidate_news`
+rows go live — until then the equal-slot promise is an ordering, not a cap.
+`.limit(10)` was removed from `fetchCandidateNews` (10 newest can all share one
+lean, which defeats the spread) and a 30-day predicate added in its place, off
+`RECENT_WINDOW_DAYS` in `src/lib/neutrality.ts`.
+**Not verified:** the `source(publisher, type, lean_tag)` embed is unproven
+against a live database — same caveat as N2/N3.
+
 | **N5** | Per-race coverage variance via `balance_audit_core`, recorded not gated. **Do not edit the core** | `toollayer/cap_toollayer/synthesis.py` or a script | Variance computed for an uneven race; nothing is blocked from publishing |
-| **N6** | Extend `verify-news-neutrality.ts`: assert every agent-written row has a source, and that its `type`/`lean_tag` are populated | `scripts/verify-news-neutrality.ts` | `--self-test` passes; a sourceless fixture fails the lint |
-| **N7** | Methodology page states both clauses in plain language — labelling, equal slots, and that lean is disclosed rather than judged | `src/app/(public)/methodology/page.tsx` | Page renders; wording matches §1 and §2 |
+| ~~**N6**~~ ✅ | Extend `verify-news-neutrality.ts`: assert every agent-written row has a source, and that its `type`/`lean_tag` are populated | `scripts/verify-news-neutrality.ts` | `--self-test` passes; a sourceless fixture fails the lint |
+~ **N6 done 2026-09-07.** "No source, no card" is now a read-side lint: an
+agent-written row needs a non-null `source_id`, an embedded source that
+actually resolves, and both `type` and `lean_tag` populated. One pure function
+serves both the `--self-test` fixtures and the live lint path, so the two
+cannot drift. Empty strings are rejected, not just nulls — a blank `type` is a
+missing label, and the DB's NOT NULL would not catch it.
+**Not verified:** the live path (a real query against `news_item`) is unproven
+here; only the self-test fixtures ran.
+
+| ~~**N7**~~ ✅ | Methodology page states both clauses in plain language — labelling, equal slots, and that lean is disclosed rather than judged | `src/app/(public)/methodology/page.tsx` | Page renders; wording matches §1 and §2 |
+~ **N7 done 2026-09-07.** Two sections landed on the methodology page: "We show
+the ballot, not the filing list" and "How we label the news" (labelling, the
+equal-slot rule and its unmeasured `N`, and lean disclosed rather than judged).
+**Left alone deliberately:** the pre-existing brief-era sections — "Say, done,
+and true", "The Balance Audit is a gate", and the "flag this brief" link — were
+seen and not touched. Briefs are retired "for now" (this document's opening
+decision), so whether that copy is corrected, softened or removed is a founder
+call, not a drive-by edit.
 
 ---
 
