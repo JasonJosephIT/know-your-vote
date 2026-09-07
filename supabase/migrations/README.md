@@ -21,7 +21,7 @@ Rules:
 | 0010 | `0010_ballot_measure.sql` | applied 2026-09-07 |
 | 0011 | `0011_measure_rls.sql` | applied 2026-09-07 |
 | 0012 | `0012_measure_function_search_path.sql` | applied 2026-09-07 |
-| 0013 | `0013_general_election.sql` — `candidate.ballot_status`, party CHECK dropped (`docs/general-election/data-architecture.md` §2, A1) | written 2026-09-07, **not yet applied**. Written *after* 0014–0017 but numbered before them, so it applies first on a fresh database and last on the live one — safe only because nothing in 0014–0017 touches `candidate` (checked). |
+| 0013 | `0013_general_election.sql` — `candidate.ballot_status`, party CHECK dropped (`docs/general-election/data-architecture.md` §2, A1) | applied 2026-09-07, **out of order** — written after 0014–0017 and applied after them, though numbered before. Recorded as **`general_election`**. Safe only because nothing in 0014–0017 touches `candidate`, which was checked. A fresh database applies it first instead; both orders are valid because the statements are independent. |
 | **0014** | `0014_news_fairness.sql` — agent news rows must carry a `source_id` (`docs/general-election/news-fairness.md` §3, N1) | **reserved, not written** |
 | 0015 | `0015_general_election_copy.sql` — UPDATEs the seeded registration-link `news_item` row off primary-era copy (`docs/general-election/data-ingest.md` B6) | applied 2026-09-07 |
 | 0016 | `0016_news_county.sql` — `news_item.county_fips` + `idx_news_item_county` (`docs/general-election/candidate-news-PRD.md` §7, task C9) | applied 2026-09-07 (recorded in `schema_migrations` as **`news_county`**, without the `0016_` prefix 0015 has — match by content, not by name) |
