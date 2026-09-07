@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV spot illustration — "See every candidate, side by side, equal weight" —
+     Colorway: Official + clay accent. A stack of stacked "receipt" lines / ballot rows,
+     each with a neutral check. Equal visual weight per row (fairness invariant). No text.
+     Tokens: background #F6F3EC, surface #FFFFFF, primary #2F6B4F, primary-muted #E4EFE7,
+     brand-cream #F5EBD8, accent #B26836, border #E4DED2, border-strong #CFC7B6. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360" role="img"
+     aria-label="A stack of ballot rows, each with a check, given equal weight">
+  <rect width="480" height="360" rx="16" fill="#F6F3EC"/>
+  <circle cx="360" cy="90" r="120" fill="#E4EFE7" opacity="0.6"/>
+  <g transform="translate(70 66)">
+    <!-- three equal-weight rows -->
+    <g>
+      <rect x="0" y="0" width="340" height="66" rx="12" fill="#FFFFFF" stroke="#E4DED2" stroke-width="2"/>
+      <circle cx="40" cy="33" r="17" fill="#E4EFE7"/>
+      <path d="M32 33 l6 6 l11 -13" fill="none" stroke="#2F6B4F" stroke-width="3.4"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="74" y="21" width="200" height="9" rx="4.5" fill="#CFC7B6"/>
+      <rect x="74" y="39" width="140" height="8" rx="4" fill="#E4DED2"/>
+    </g>
+    <g transform="translate(0 82)">
+      <rect x="0" y="0" width="340" height="66" rx="12" fill="#FFFFFF" stroke="#E4DED2" stroke-width="2"/>
+      <circle cx="40" cy="33" r="17" fill="#E4EFE7"/>
+      <path d="M32 33 l6 6 l11 -13" fill="none" stroke="#2F6B4F" stroke-width="3.4"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="74" y="21" width="180" height="9" rx="4.5" fill="#CFC7B6"/>
+      <rect x="74" y="39" width="160" height="8" rx="4" fill="#E4DED2"/>
+    </g>
+    <g transform="translate(0 164)">
+      <rect x="0" y="0" width="340" height="66" rx="12" fill="#FFFFFF" stroke="#E4DED2" stroke-width="2"/>
+      <circle cx="40" cy="33" r="17" fill="#F5E7D6"/>
+      <path d="M32 33 l6 6 l11 -13" fill="none" stroke="#B26836" stroke-width="3.4"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="74" y="21" width="210" height="9" rx="4.5" fill="#CFC7B6"/>
+      <rect x="74" y="39" width="130" height="8" rx="4" fill="#E4DED2"/>
+    </g>
+  </g>
+</svg>

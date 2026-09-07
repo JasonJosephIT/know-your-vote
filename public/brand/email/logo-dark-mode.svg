@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV Email Dark-Mode Fallback Logo — Colorway: MONO CREAM #F5EBD8 (single-color).
+     Transparent, padded. Cream K/Y/V acronym monogram on a transparent field so it stays
+     legible when an email client force-inverts to dark mode (KYV Green inverts poorly, so
+     per the roadmap we serve a Mono Cream monogram — NO green). Reuses the font-independent
+     stroke geometry from site/favicon.svg / footer-mark.svg. Generous padding (clearspace).
+     Tokens only: brand-cream #F5EBD8. Square 1:1 so it drops into any dark header slot. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160"
+     role="img" aria-label="Know Your Vote">
+  <!-- Stacked K / Y / V monogram, Mono Cream single color, centered with padding -->
+  <g transform="translate(48 34)" stroke="#F5EBD8" stroke-width="9"
+     stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M18 4 V34 M18 18 L45 4 M25 17 L47 34"/>
+    <path d="M13 48 L30 65 L47 48 M30 65 V82"/>
+    <path d="M13 96 L30 122 L47 96"/>
+  </g>
+</svg>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV spot illustration — "Find your ballot by location" — Colorway: Official + clay accent.
+     Location pin over an abstract map fragment. No text labels (page renders them).
+     Tokens: background #F6F3EC, surface #FFFFFF, primary #2F6B4F, brand-cream #F5EBD8,
+     accent #B26836, border #E4DED2, primary-muted #E4EFE7. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360" role="img"
+     aria-label="A location pin on an abstract map">
+  <rect width="480" height="360" rx="16" fill="#F6F3EC"/>
+  <circle cx="240" cy="185" r="128" fill="#E4EFE7" opacity="0.8"/>
+  <!-- abstract map grid tile -->
+  <g transform="translate(240 190)" opacity="0.9">
+    <rect x="-96" y="-70" width="192" height="150" rx="14" fill="#FFFFFF" stroke="#E4DED2" stroke-width="2"/>
+    <path d="M-96 -18 H96 M-96 30 H96 M-30 -70 V80 M34 -70 V80"
+          stroke="#E4DED2" stroke-width="2" fill="none"/>
+    <path d="M-96 40 C -50 10, -20 34, 20 6 C 54 -18, 76 2, 96 -14"
+          stroke="#CFC7B6" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+  <!-- pin -->
+  <g transform="translate(240 168)">
+    <ellipse cx="0" cy="86" rx="26" ry="8" fill="#22271F" opacity="0.10"/>
+    <path d="M0 -52 C 30 -52, 48 -30, 48 -4 C 48 30, 12 62, 0 82 C -12 62, -48 30, -48 -4 C -48 -30, -30 -52, 0 -52 Z"
+          fill="#B26836"/>
+    <circle cx="0" cy="-6" r="18" fill="#F5EBD8"/>
+    <circle cx="0" cy="-6" r="7" fill="#2F6B4F"/>
+  </g>
+</svg>

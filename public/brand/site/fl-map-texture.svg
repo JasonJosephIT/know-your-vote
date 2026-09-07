@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV Florida district / map texture — Colorway: Mono / muted (single muted green tint).
+     Neutral geographic shapes only — abstract district cells outlined uniformly. NO party
+     shading: every region is the SAME faint fill, so no cell reads as "red" or "blue" or
+     favored. No text. Meant as a light background/pattern behind live HTML.
+     Tokens: background #F6F3EC, primary-muted #E4EFE7, border #E4DED2,
+     border-strong #CFC7B6, on-surface-muted #585E52 (outline). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520" role="img"
+     aria-label="Abstract Florida map divided into uniform, unshaded districts">
+  <rect width="900" height="520" fill="#F6F3EC"/>
+  <!-- Abstract Florida body, panhandle + peninsula, as one uniform muted shape -->
+  <g stroke="#585E52" stroke-opacity="0.55" stroke-width="2" stroke-linejoin="round" fill="#E4EFE7" fill-opacity="0.55">
+    <path d="M70 120
+             C 120 108, 300 112, 470 122
+             C 540 126, 560 150, 548 178
+             C 540 198, 560 210, 566 250
+             C 576 316, 640 360, 690 470
+             C 712 518, 700 540, 672 520
+             C 632 492, 616 430, 596 372
+             C 582 330, 556 312, 520 306
+             C 380 288, 210 282, 130 258
+             C 84 244, 66 210, 70 156
+             C 71 142, 66 128, 70 120 Z"/>
+  </g>
+  <!-- Uniform district cells: identical faint fill + identical outline, no color coding.
+       Clipped to the state shape via the same silhouette as a mask. -->
+  <clipPath id="fl">
+    <path d="M70 120 C 120 108, 300 112, 470 122 C 540 126, 560 150, 548 178
+             C 540 198, 560 210, 566 250 C 576 316, 640 360, 690 470
+             C 712 518, 700 540, 672 520 C 632 492, 616 430, 596 372
+             C 582 330, 556 312, 520 306 C 380 288, 210 282, 130 258
+             C 84 244, 66 210, 70 156 C 71 142, 66 128, 70 120 Z"/>
+  </clipPath>
+  <g clip-path="url(#fl)" stroke="#CFC7B6" stroke-width="1.5" fill="none" opacity="0.8">
+    <!-- irregular but UNIFORM division lines -->
+    <path d="M180 100 L150 300"/>
+    <path d="M280 100 L300 320"/>
+    <path d="M400 110 L430 300"/>
+    <path d="M510 120 L540 320"/>
+    <path d="M560 260 L620 470"/>
+    <path d="M60 180 L560 210"/>
+    <path d="M120 250 L600 300"/>
+    <path d="M520 350 L700 380"/>
+  </g>
+</svg>

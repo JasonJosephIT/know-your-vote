@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV Hero illustration — Colorway: Official (Green #2F6B4F + Cream #F5EBD8 + Ink #22271F)
+     with soft clay accent #B26836 for small warm moments. Abstract civic motifs only:
+     a ballot card with "receipt" lines + checkmark, an abstract Florida silhouette, a
+     location pin, and a magnifier. NO headlines, buttons, or CTA text — the page renders
+     all copy live. Border-led, flat depth; generous whitespace. Tokens only:
+     background #F6F3EC, surface #FFFFFF, surface-muted #EFEAE0, border #E4DED2,
+     border-strong #CFC7B6, on-surface-muted #585E52, primary, brand-cream, accent. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 720" width="1440" height="720" role="img"
+     aria-label="Abstract civic illustration: a ballot, a Florida silhouette, a location pin, and a magnifier">
+  <rect width="1440" height="720" fill="#F6F3EC"/>
+
+  <!-- Soft ambient circles for calm depth -->
+  <circle cx="1150" cy="150" r="240" fill="#EFEAE0" opacity="0.7"/>
+  <circle cx="300" cy="600" r="180" fill="#E4EFE7" opacity="0.7"/>
+
+  <!-- ===== Ballot card (surface, border-led) with receipt lines + checkmark ===== -->
+  <g transform="translate(470 150)">
+    <rect x="0" y="0" width="360" height="440" rx="16" fill="#FFFFFF" stroke="#E4DED2" stroke-width="2"/>
+    <!-- header band -->
+    <rect x="0" y="0" width="360" height="70" rx="16" fill="#2F6B4F"/>
+    <rect x="0" y="40" width="360" height="30" fill="#2F6B4F"/>
+    <circle cx="44" cy="35" r="14" fill="#F5EBD8"/>
+    <rect x="70" y="26" width="150" height="8" rx="4" fill="#F5EBD8" opacity="0.9"/>
+    <rect x="70" y="42" width="96" height="7" rx="3.5" fill="#F5EBD8" opacity="0.6"/>
+
+    <!-- receipt "what they said / did / verified" rows: each a check + stacked lines -->
+    <g>
+      <!-- row 1 -->
+      <circle cx="46" cy="140" r="18" fill="#E4EFE7"/>
+      <path d="M38 140 l6 6 l11 -13" fill="none" stroke="#2F6B4F" stroke-width="3.4"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="82" y="126" width="220" height="9" rx="4.5" fill="#CFC7B6"/>
+      <rect x="82" y="146" width="150" height="8" rx="4" fill="#E4DED2"/>
+      <!-- row 2 -->
+      <circle cx="46" cy="210" r="18" fill="#E4EFE7"/>
+      <path d="M38 210 l6 6 l11 -13" fill="none" stroke="#2F6B4F" stroke-width="3.4"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="82" y="196" width="200" height="9" rx="4.5" fill="#CFC7B6"/>
+      <rect x="82" y="216" width="170" height="8" rx="4" fill="#E4DED2"/>
+      <!-- row 3 -->
+      <circle cx="46" cy="280" r="18" fill="#F5E7D6"/>
+      <path d="M38 280 l6 6 l11 -13" fill="none" stroke="#B26836" stroke-width="3.4"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="82" y="266" width="180" height="9" rx="4.5" fill="#CFC7B6"/>
+      <rect x="82" y="286" width="210" height="8" rx="4" fill="#E4DED2"/>
+    </g>
+
+    <!-- big verified checkmark seal (neutral, non-partisan) -->
+    <g transform="translate(180 380)">
+      <circle cx="0" cy="0" r="42" fill="#2F6B4F"/>
+      <path d="M-18 2 l12 13 l24 -30" fill="none" stroke="#F5EBD8" stroke-width="7"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <!-- ===== Abstract Florida silhouette (geographic, neutral, no party shading) ===== -->
+  <g transform="translate(120 170)" opacity="0.95">
+    <path d="M20 20
+             C 40 14, 120 16, 210 22
+             C 250 24, 258 40, 250 58
+             C 244 74, 236 84, 240 104
+             C 246 132, 268 150, 286 192
+             C 300 224, 300 256, 286 268
+             C 270 282, 252 262, 246 232
+             C 240 206, 226 190, 210 186
+             C 150 176, 96 172, 58 160
+             C 30 151, 18 132, 20 96
+             C 21 66, 14 34, 20 20 Z"
+          fill="#E4EFE7" stroke="#2F6B4F" stroke-width="3" stroke-linejoin="round"/>
+    <!-- location pin dropped on the map -->
+    <g transform="translate(150 96)">
+      <path d="M0 -34 C 19 -34, 30 -20, 30 -4 C 30 16, 8 34, 0 46 C -8 34, -30 16, -30 -4 C -30 -20, -11 -34, 0 -34 Z"
+            fill="#B26836"/>
+      <circle cx="0" cy="-2" r="11" fill="#F5EBD8"/>
+    </g>
+  </g>
+
+  <!-- ===== Magnifier over "receipts" (search / verify motif) ===== -->
+  <g transform="translate(930 400)">
+    <!-- small stacked receipt lines being examined -->
+    <rect x="40" y="20" width="150" height="120" rx="12" fill="#FFFFFF" stroke="#E4DED2" stroke-width="2"/>
+    <rect x="60" y="44" width="110" height="8" rx="4" fill="#E4DED2"/>
+    <rect x="60" y="66" width="90" height="8" rx="4" fill="#E4DED2"/>
+    <rect x="60" y="88" width="104" height="8" rx="4" fill="#E4DED2"/>
+    <rect x="60" y="110" width="70" height="8" rx="4" fill="#E4DED2"/>
+    <!-- magnifier -->
+    <g transform="translate(150 96)">
+      <circle cx="0" cy="0" r="56" fill="#FFFFFF" fill-opacity="0.65" stroke="#2F6B4F" stroke-width="8"/>
+      <line x1="40" y1="40" x2="86" y2="86" stroke="#2F6B4F" stroke-width="12" stroke-linecap="round"/>
+      <path d="M-20 2 l14 15 l26 -32" fill="none" stroke="#B26836" stroke-width="7"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <!-- Quiet baseline rule for grounding (border-strong, flat) -->
+  <rect x="120" y="640" width="1200" height="3" rx="1.5" fill="#CFC7B6" opacity="0.5"/>
+</svg>

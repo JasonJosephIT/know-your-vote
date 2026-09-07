@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV empty-state / no-results art — Colorway: Muted Official (no clay, kept quiet).
+     Calm, reassuring motif: an open, empty ballot envelope with a gentle magnifier —
+     "nothing here yet," not "error." No sad/alarming imagery, no text (page renders copy).
+     Tokens: background #F6F3EC, surface #FFFFFF, surface-muted #EFEAE0, primary #2F6B4F,
+     primary-muted #E4EFE7, border #E4DED2, border-strong #CFC7B6, on-surface-muted #585E52. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" width="360" height="280" role="img"
+     aria-label="An empty ballot envelope, calm and reassuring">
+  <rect width="360" height="280" rx="14" fill="#F6F3EC"/>
+  <ellipse cx="180" cy="232" rx="120" ry="14" fill="#EFEAE0"/>
+  <!-- envelope / tray -->
+  <g transform="translate(180 150)">
+    <rect x="-104" y="-40" width="208" height="112" rx="14" fill="#FFFFFF" stroke="#E4DED2" stroke-width="2"/>
+    <!-- open flap -->
+    <path d="M-104 -28 L0 34 L104 -28" fill="none" stroke="#CFC7B6" stroke-width="2.5" stroke-linejoin="round"/>
+    <!-- empty inner card, faint -->
+    <rect x="-70" y="-58" width="140" height="70" rx="10" fill="#EFEAE0"/>
+    <rect x="-50" y="-40" width="90" height="8" rx="4" fill="#E4DED2"/>
+    <rect x="-50" y="-24" width="60" height="7" rx="3.5" fill="#E4DED2"/>
+    <!-- gentle dashed "nothing yet" ring -->
+    <circle cx="0" cy="6" r="26" fill="none" stroke="#CFC7B6" stroke-width="2.5" stroke-dasharray="4 7"/>
+  </g>
+</svg>

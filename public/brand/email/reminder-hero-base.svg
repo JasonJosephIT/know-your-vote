@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV Email Reminder Hero (deadline) — BASE. Colorway: OFFICIAL (Green #2F6B4F + Cream
+     #F5EBD8 + Ink #22271F) with a harvest-gold #E3A72E accent (marketing support tone only).
+     1200x600. Calm civic motif: a friendly desk calendar with a circled day + a small
+     verified check — NO alarmist countdown red, NO candidate imagery. A neutral placeholder
+     baked date "Register by Oct 5" is set as text. The official WORDMARK (kyv-logo-official.svg)
+     is composited on top of this base as a PNG in a later ImageMagick step (same technique as
+     og-card / feature-graphic). Reuses hero.svg's ballot/receipt/check treatment for cohesion.
+     Tokens only: background #F6F3EC, surface #FFFFFF, surface-muted #EFEAE0, border #E4DED2,
+     border-strong #CFC7B6, primary #2F6B4F, brand-cream #F5EBD8, on-surface #22271F,
+     on-surface-muted #585E52, primary-muted #E4EFE7, marketing harvest-gold #E3A72E.
+     Baked text keeps Figtree/Inter font-family for production re-render (renders in a fallback
+     face in this workspace because those fonts aren't installed). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600"
+     font-family="Inter, sans-serif">
+  <!-- Cream field, anchoring the piece in the brand -->
+  <rect width="1200" height="600" fill="#F5EBD8"/>
+
+  <!-- Soft ambient shapes for calm depth (cohesion with hero.svg) -->
+  <circle cx="1080" cy="120" r="230" fill="#E4EFE7" opacity="0.65"/>
+  <circle cx="140" cy="520" r="150" fill="#EFEAE0" opacity="0.7"/>
+
+  <!-- ===== Calm civic motif: desk calendar with a circled day + verified check ===== -->
+  <g transform="translate(760 150)">
+    <!-- calendar body -->
+    <rect x="0" y="26" width="300" height="300" rx="20" fill="#FFFFFF" stroke="#CFC7B6" stroke-width="3"/>
+    <!-- green header band -->
+    <rect x="0" y="26" width="300" height="72" rx="20" fill="#2F6B4F"/>
+    <rect x="0" y="62" width="300" height="36" fill="#2F6B4F"/>
+    <!-- calendar rings -->
+    <rect x="66" y="8" width="16" height="44" rx="8" fill="#22271F"/>
+    <rect x="218" y="8" width="16" height="44" rx="8" fill="#22271F"/>
+    <!-- month label placeholder rows on the header -->
+    <rect x="30" y="54" width="120" height="12" rx="6" fill="#F5EBD8" opacity="0.9"/>
+    <!-- grid dots (neutral) -->
+    <g fill="#E4DED2">
+      <circle cx="52" cy="150" r="10"/><circle cx="108" cy="150" r="10"/><circle cx="164" cy="150" r="10"/><circle cx="220" cy="150" r="10"/><circle cx="264" cy="150" r="10"/>
+      <circle cx="52" cy="210" r="10"/><circle cx="108" cy="210" r="10"/>
+      <circle cx="220" cy="210" r="10"/><circle cx="264" cy="210" r="10"/>
+      <circle cx="52" cy="270" r="10"/><circle cx="108" cy="270" r="10"/><circle cx="164" cy="270" r="10"/><circle cx="220" cy="270" r="10"/><circle cx="264" cy="270" r="10"/>
+    </g>
+    <!-- circled deadline day — harvest-gold ring (calm accent, NOT red) with a check -->
+    <circle cx="164" cy="210" r="26" fill="#F5E7D6" stroke="#E3A72E" stroke-width="5"/>
+    <path d="M152 210 l8 8 l16 -19" fill="none" stroke="#2F6B4F" stroke-width="5"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- ===== Baked copy (left) — calm deadline reminder, non-alarmist ===== -->
+  <text x="110" y="250" font-family="Inter, sans-serif" font-weight="700" font-size="26"
+        letter-spacing="2" fill="#B26836">A FRIENDLY REMINDER</text>
+  <text x="108" y="330" font-family="Figtree, sans-serif" font-weight="700" font-size="72"
+        letter-spacing="-1.5" fill="#22271F">Register by</text>
+  <text x="108" y="410" font-family="Figtree, sans-serif" font-weight="700" font-size="72"
+        letter-spacing="-1.5" fill="#2F6B4F">Oct 5</text>
+  <text x="112" y="470" font-family="Inter, sans-serif" font-weight="400" font-size="27"
+        fill="#585E52">So you&#8217;re ready when the ballot arrives.</text>
+  <!-- quiet grounding rule -->
+  <rect x="112" y="500" width="360" height="4" rx="2" fill="#CFC7B6" opacity="0.5"/>
+</svg>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV Notification / Status Icon — Colorway: MONO INK (#22271F single-color silhouette).
+     24px. Status/notification icons are single-color (the OS tints/masks them), so this is the
+     simplest possible K/Y/V monogram silhouette — same letter geometry as the brand monogram,
+     stroked heavier so it survives 24px. No color, no detail, transparent background.
+     For a light/dark status bar the app can recolor via currentColor tinting; the master is Mono Ink.
+     Inline attributes only (ImageMagick-safe). Token: on-surface #22271F. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Know Your Vote">
+  <g stroke="#22271F" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="translate(4,0)">
+    <!-- K -->
+    <path d="M5 3 V9 M5 6 L10.5 3 M6.6 5.7 L11 9"/>
+    <!-- Y -->
+    <path d="M4.5 11 L8 14 L11.5 11 M8 14 V17"/>
+    <!-- V -->
+    <path d="M4.5 15 L8 21 L11.5 15"/>
+  </g>
+</svg>

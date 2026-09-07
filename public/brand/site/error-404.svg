@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV 404 / error illustration — Colorway: Muted Official (calm; NO alarmist red).
+     Friendly, low-key: a location pin that has slipped off the edge of a map fragment —
+     "this page wandered off," not "danger." Soft clay accent only on the pin. No text.
+     Tokens: background #F6F3EC, surface #FFFFFF, surface-muted #EFEAE0, primary #2F6B4F,
+     primary-muted #E4EFE7, accent #B26836, border #E4DED2, border-strong #CFC7B6. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" width="360" height="280" role="img"
+     aria-label="A location pin that has wandered off the map, friendly and low-key">
+  <rect width="360" height="280" rx="14" fill="#F6F3EC"/>
+  <circle cx="150" cy="128" r="96" fill="#E4EFE7" opacity="0.7"/>
+  <!-- map fragment (a torn corner) -->
+  <g transform="translate(78 78)">
+    <path d="M0 14 Q0 0 14 0 L150 0 Q164 0 164 14 L164 120
+             Q120 108 96 128 Q64 152 0 138 Z"
+          fill="#FFFFFF" stroke="#E4DED2" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M0 52 H150 M0 96 H120 M64 0 V138 M110 0 V116"
+          stroke="#E4DED2" stroke-width="2" fill="none"/>
+  </g>
+  <!-- pin wandered off to the lower-right, tilted -->
+  <g transform="translate(258 172) rotate(18)">
+    <ellipse cx="0" cy="52" rx="18" ry="6" fill="#22271F" opacity="0.08"/>
+    <path d="M0 -34 C 20 -34, 32 -20, 32 -4 C 32 20, 8 40, 0 52 C -8 40, -32 20, -32 -4 C -32 -20, -20 -34, 0 -34 Z"
+          fill="#B26836"/>
+    <circle cx="0" cy="-4" r="12" fill="#F5EBD8"/>
+    <!-- gentle question-dot, muted (no alarm) -->
+    <circle cx="0" cy="-4" r="4.5" fill="#8A4E24"/>
+  </g>
+  <!-- soft dotted trail from map to stray pin -->
+  <path d="M210 176 Q235 182 246 168" fill="none" stroke="#CFC7B6" stroke-width="2.5"
+        stroke-linecap="round" stroke-dasharray="2 8"/>
+</svg>
