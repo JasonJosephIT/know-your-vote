@@ -1,7 +1,18 @@
 /* Read-model types mirroring CAP_Schema_v1.md (pipeline-owned, read-only
    for this app) exactly as stored in Supabase. */
 
-export type Party = "REP" | "DEM" | "NPA" | "other";
+/* The DoE PartyCode, verbatim. Migration 0013 dropped the CHECK that used to
+   force everything outside REP/DEM/NPA into 'other' — IND, LPF and CPF are all
+   printed ballot lines in the target races, and B1 also found MGT, which the
+   DoE ships with an EMPTY description. So this is a string, not a union: the
+   column is no longer constrained, and a type that claimed otherwise would be
+   lying about the data. Known codes get labels in PartyChip, which is the one
+   place the list lives. */
+export type Party = string;
+
+/* candidate.ballot_status (migration 0013). Only `ballot` is briefed, audited
+   or shown — see data-architecture.md D1, decided by the founder 2026-09-07. */
+export type BallotStatus = "ballot" | "write_in" | "excluded";
 
 export type Verdict =
   | "accurate"
@@ -44,6 +55,7 @@ export interface Candidate {
   office_sought: string;
   is_incumbent: boolean;
   qualifying_status: "qualified" | "withdrawn" | "other";
+  ballot_status: BallotStatus;
   prior_offices: string[];
   official_site: string | null;
   fec_id: string | null;

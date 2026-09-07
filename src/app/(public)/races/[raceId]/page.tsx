@@ -84,8 +84,17 @@ export default async function RacePage({
           {general ? ` · General election ${general}` : ""}
           {registration ? ` · Register by ${registration}` : ""}
         </p>
+        {/* "Equal scrutiny" is a claim about a comparison, and with one
+            candidate there is no comparison to make — the Balance Audit's
+            variance over a single profile is 0.0 and passes trivially
+            (data-architecture.md §3, recorded as `unopposed` by A3). B1 found
+            FL-10 in exactly this shape: the file's only UNO row. Say it
+            plainly rather than let the standard line imply a fairness check
+            that had nothing to weigh. */}
         <p className="text-body-sm text-on-surface-muted">
-          Here&apos;s your race — every candidate, same space, same scrutiny.
+          {brief.candidates.length === 1
+            ? "One candidate qualified for this race, so there is nothing to compare — here's what we have on them."
+            : "Here's your race — every candidate, same space, same scrutiny."}
         </p>
       </header>
 
