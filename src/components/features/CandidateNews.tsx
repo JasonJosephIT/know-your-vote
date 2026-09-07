@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/Card";
-import { getCandidateNews } from "@/lib/briefs";
+import { getCandidateNews, type CandidateNewsItem } from "@/lib/briefs";
 import { formatNewsDate, safeHttpUrl } from "@/lib/format";
-import type { NewsItem } from "@/types/app";
+import { selectNewsSlots } from "@/lib/news-slots";
 
 /* Candidate-scoped news written by the R1 curator: neutral restatements of
    on-the-record events, every item cited to an allowlisted source. Renders
@@ -15,7 +15,7 @@ import type { NewsItem } from "@/types/app";
    alongside a story that named them would let a voter read "Also about this
    race" as "about this candidate", which is the one misreading the tier
    exists to prevent. So the divider is a heading, not a styling cue. */
-function NewsCard({ item }: { item: NewsItem }) {
+function NewsCard({ item }: { item: CandidateNewsItem }) {
   const url = safeHttpUrl(item.url);
   return (
     <li>
@@ -44,12 +44,28 @@ function NewsCard({ item }: { item: NewsItem }) {
   );
 }
 
-export async function CandidateNews({ candidateId }: { candidateId: string }) {
+/* `slots` is the per-candidate slot count N of news-fairness.md §2 — every
+   ballot-tier candidate in a race gets the same one. It is intentionally
+   OPTIONAL and has no default: §5 says N comes from real per-candidate counts
+   once N5 measures them, and N5 has no data yet. Left unset, the selector
+   still orders the items by the fairness rule and caps nothing. */
+export async function CandidateNews({
+  candidateId,
+  slots,
+}: {
+  candidateId: string;
+  slots?: number;
+}) {
   const items = await getCandidateNews(candidateId);
   if (items.length === 0) return null;
 
-  const related = items.filter((i) => i.relation === "related");
-  const named = items.filter((i) => i.relation !== "related");
+  /* One application of the rule, in one place (src/lib/news-slots.ts): tier
+     first, then lean spread, then type spread, then recency. The tier split
+     below only regroups what the selector already chose and ordered — it does
+     not re-rank anything. */
+  const { slots: selected, shortfall } = selectNewsSlots(items, slots);
+  const related = selected.filter((i) => i.relation === "related");
+  const named = selected.filter((i) => i.relation !== "related");
 
   return (
     <section className="flex flex-col gap-3">
@@ -92,6 +108,16 @@ export async function CandidateNews({ candidateId }: { candidateId: string }) {
             ))}
           </ul>
         </>
+      )}
+
+      {/* Shortfall is stated, never padded (news-fairness.md §2). The press
+          covered this candidate less; the honest response is to say how many
+          stories there were, not to fill the gap with something else. */}
+      {shortfall > 0 && (
+        <p className="text-body-sm text-on-surface-muted">
+          Only {selected.length} stories found for this candidate in the last 30
+          days.
+        </p>
       )}
     </section>
   );

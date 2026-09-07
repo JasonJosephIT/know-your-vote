@@ -64,6 +64,9 @@ export default async function CandidatePage({
         headingLevel="h2"
         linkToDetail={false}
       />
+      {/* No `slots` prop on purpose: news-fairness.md §5 says N is picked from
+          real per-candidate counts once N5 reports them, and N5 has no data
+          yet. Until then the fairness ordering applies with no cap. */}
       <CandidateNews candidateId={candidateId} />
       <CandidateContact candidateId={candidateId} />
     </main>
