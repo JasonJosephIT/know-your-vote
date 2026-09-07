@@ -802,18 +802,33 @@ def _doe_row(acct, office, desc, juris, status, party, last, first, middle="",
              email="secret@example.com", phone="5615551212"):
     return "\t".join([
         acct, "0", "20261103-GEN", office, desc, juris, "", status,
-        {"QUA": "Qualified", "WIT": "Withdrawn", "ACT": "Active"}.get(status, status),
+        {"QUA": "Qualified", "UNO": "Unopposed", "DEF": "Defeated",
+         "DNQ": "Did Not Qualify", "WIT": "Withdrew", "REM": "Removed"}.get(status, status),
         party, party + " Party", last, first, middle, "N", "PO Box 1", "",
         "Miami", "FL", "33101", "MDA", phone, "", "", "", email])
 
 
+# Status codes are the six B1 measured in the live 20261103-GEN export
+# (data-ingest.md section 1 Q1). ACT and ELE are on the download form but not
+# in the file, so the parser must reject them rather than pre-map them -- the
+# fixture below deliberately contains none.
 _DOE_FIXTURE = "\n".join([
     _DOE_HEADER,
     _doe_row("89070", "USR", "United States Representative", "023", "QUA", "REP", "Adeimy", "Deborah"),
-    _doe_row("89111", "USR", "United States Representative", "010", "ACT", "DEM", "Smith", "Jane", "Q"),
+    # UNO is FL-10's real shape: the file's only unopposed row.
+    _doe_row("89111", "USR", "United States Representative", "010", "UNO", "DEM", "Smith", "Jane", "Q"),
     _doe_row("89222", "USR", "United States Representative", "001", "QUA", "REP", "Doe", "John"),   # non-target
     _doe_row("89333", "GOV", "Governor", "", "QUA", "NPA", "Abrams", "Pat"),
+    # A real minor party -- verbatim under D2, flattened to "other" before it.
+    _doe_row("89777", "GOV", "Governor", "", "QUA", "LPF", "Reyes", "Sam"),
     _doe_row("89444", "USR", "United States Representative", "028", "WIT", "DEM", "Gone", "Gary"),
+    # The post-primary case B1 found 83 of: a defeated filer still in the file.
+    _doe_row("89555", "USR", "United States Representative", "028", "DEF", "DEM", "Lost", "Lee"),
+    # Qualified write-in: blank ballot line, so excluded from the race (D1).
+    _doe_row("89666", "USR", "United States Representative", "023", "QUA", "WRI", "Penn", "Wri"),
+    # Status beats party: a write-in that did not qualify is excluded for
+    # that, not filed as a write-in.
+    _doe_row("89888", "USR", "United States Representative", "028", "DNQ", "WRI", "Nope", "Nora"),
 ])
 
 
@@ -831,7 +846,7 @@ class TestIntakeDoEParser(unittest.TestCase):
         p = intake.parse_candidate_list(_DOE_FIXTURE)
         self.assertEqual(sorted(p["races"]), [
             "FL-10-general", "FL-23-general", "FL-28-general", "FL-GOV-general"])
-        self.assertEqual(len(p["candidates"]), 4)
+        self.assertEqual(len(p["candidates"]), 8)
         self.assertEqual(p["skipped"], 1)  # FL-01 is not a target
 
     def test_field_mapping_and_pii_dropped(self):
@@ -840,7 +855,7 @@ class TestIntakeDoEParser(unittest.TestCase):
         jane = by_id["FL-DOE-89111"]
         self.assertEqual(jane["legal_name"], "Jane Q Smith")
         self.assertEqual(jane["party"], "DEM")
-        self.assertEqual(jane["qualifying_status"], "other")  # ACT -> other
+        self.assertEqual(jane["qualifying_status"], "qualified")  # UNO -> qualified
         # PII must not survive into the candidate row
         for pii in ("email", "phone", "Addr1", "City", "Zip"):
             self.assertNotIn(pii, jane)
@@ -850,9 +865,64 @@ class TestIntakeDoEParser(unittest.TestCase):
 
     def test_race_carries_its_candidate_ids(self):
         p = intake.parse_candidate_list(_DOE_FIXTURE)
-        self.assertEqual(p["races"]["FL-GOV-general"]["candidate_ids"], ["FL-DOE-89333"])
+        self.assertEqual(p["races"]["FL-GOV-general"]["candidate_ids"],
+                         ["FL-DOE-89333", "FL-DOE-89777"])
         self.assertEqual(p["races"]["FL-GOV-general"]["level"], "state")
         self.assertEqual(p["races"]["FL-10-general"]["district"], "10")
+
+    # --- B2: the D1 ballot-status filter -------------------------------
+
+    def test_defeated_filer_is_absent_from_candidate_ids(self):
+        """The post-primary defect B1 measured: 83 losers in 8 races. One
+        candidate with zero claims against an incumbent with twelve is 100%
+        variance, and the Balance Audit HALTs at 10% -- so a single defeated
+        filer left in the race blocks publication permanently."""
+        p = intake.parse_candidate_list(_DOE_FIXTURE)
+        by_id = {c["candidate_id"]: c for c in p["candidates"]}
+        self.assertEqual(by_id["FL-DOE-89555"]["ballot_status"], "excluded")
+        self.assertNotIn("FL-DOE-89555", p["races"]["FL-28-general"]["candidate_ids"])
+        # The filing is still stored -- an invisible exclusion is not auditable.
+        self.assertIn("FL-DOE-89555", by_id)
+
+    def test_write_in_is_tiered_and_kept_off_the_ballot(self):
+        """D1 (founder 2026-09-07): a write-in has no printed line, so nothing
+        about one reaches a voter. It keeps its own tier because a write-in and
+        a defeated filer are different facts."""
+        p = intake.parse_candidate_list(_DOE_FIXTURE)
+        by_id = {c["candidate_id"]: c for c in p["candidates"]}
+        self.assertEqual(by_id["FL-DOE-89666"]["ballot_status"], "write_in")
+        self.assertNotIn("FL-DOE-89666", p["races"]["FL-23-general"]["candidate_ids"])
+        self.assertEqual(p["races"]["FL-23-general"]["candidate_ids"], ["FL-DOE-89070"])
+
+    def test_status_beats_party_for_a_disqualified_write_in(self):
+        p = intake.parse_candidate_list(_DOE_FIXTURE)
+        by_id = {c["candidate_id"]: c for c in p["candidates"]}
+        self.assertEqual(by_id["FL-DOE-89888"]["ballot_status"], "excluded")
+
+    def test_a_race_whose_filers_all_lost_has_no_ballot_lines(self):
+        p = intake.parse_candidate_list(_DOE_FIXTURE)
+        self.assertEqual(p["races"]["FL-28-general"]["candidate_ids"], [])
+
+    def test_minor_party_code_is_stored_verbatim(self):
+        """D2: LPF, IND and CPF are printed ballot lines. The old map
+        flattened all three into 'other'."""
+        p = intake.parse_candidate_list(_DOE_FIXTURE)
+        by_id = {c["candidate_id"]: c for c in p["candidates"]}
+        self.assertEqual(by_id["FL-DOE-89777"]["party"], "LPF")
+        self.assertEqual(by_id["FL-DOE-89666"]["party"], "WRI")
+
+    def test_tier_counts_are_reported(self):
+        p = intake.parse_candidate_list(_DOE_FIXTURE)
+        self.assertEqual(p["tiers"], {"ballot": 4, "write_in": 1, "excluded": 3})
+
+    def test_unknown_status_code_fails_loudly(self):
+        """ACT and ELE are on the DoE form but not in the file. ELE arrives
+        after certification and means the race is decided -- bucketing it
+        silently would publish a settled race as a live one."""
+        row = _doe_row("89999", "GOV", "Governor", "", "ELE", "REP", "New", "Ned")
+        with self.assertRaises(intake.DoEFormatError) as ctx:
+            intake.parse_candidate_list("\n".join([_DOE_HEADER, row]))
+        self.assertIn("ELE", str(ctx.exception))
 
     def test_parse_is_deterministic_idempotent(self):
         self.assertEqual(intake.parse_candidate_list(_DOE_FIXTURE),
@@ -868,12 +938,17 @@ class TestIntakeDoEHandler(unittest.TestCase):
         layer, db = make_intake_layer("record", doe_fetch=lambda office=None: _DOE_FIXTURE)
         res = layer.dispatch("doe_file_intake", {"office": "FED"})
         self.assertTrue(res["ok"], res)
-        self.assertEqual(res["result"]["candidate_count"], 4)
+        self.assertEqual(res["result"]["candidate_count"], 8)
         self.assertEqual(res["result"]["skipped"], 1)
+        self.assertEqual(res["result"]["tiers"],
+                         {"ballot": 4, "write_in": 1, "excluded": 3})
         races = committed_into(db, "race")
         cands = committed_into(db, "candidate")
         self.assertEqual(len(races), 4)
-        self.assertEqual(len(cands), 4)
+        self.assertEqual(len(cands), 8)
+        # ballot_status rides the upsert, so the tier is in the database and
+        # not only in the run report.
+        self.assertIn("ballot_status", cands[0][0])
         self.assertIn("ON CONFLICT (race_id) DO UPDATE", races[0][0])       # idempotent
         self.assertIn("ON CONFLICT (candidate_id) DO UPDATE", cands[0][0])
 
