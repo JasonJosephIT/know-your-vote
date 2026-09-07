@@ -963,6 +963,303 @@ class TestIntakeDoEHandler(unittest.TestCase):
         self.assertEqual(len(committed_into(db, "race")), 0)
 
 
+# =========================================================================
+# B4 — FEC incumbency (is_incumbent / incumbent_id / is_open_seat)
+# =========================================================================
+
+def committed_updates(db, table):
+    return [(sql, params) for sql, params in db.committed
+            if sql.lstrip().upper().startswith("UPDATE " + table.upper() + " ")]
+
+
+def _fec_cand(cid, name, challenge, *, office="H", district="28", party="REP",
+              election_years=(2026,), cycles=(2026,)):
+    """One FEC /candidates/ result row in the live field shape (swagger
+    definition `Candidate`, checked 2026-09-07)."""
+    return {"candidate_id": cid, "name": name, "party": party, "office": office,
+            "state": "FL", "district": district, "candidate_status": "C",
+            "incumbent_challenge": challenge,
+            "election_years": list(election_years), "cycles": list(cycles)}
+
+
+def _fec_get_map(by_district, calls=None):
+    def fec_get(path, params):
+        if calls is not None:
+            calls.append((path, dict(params)))
+        return {"api_version": "1.0", "pagination": {"count": 0},
+                "results": list(by_district.get(params.get("district"), []))}
+    return fec_get
+
+
+_GIMENEZ, _RIVERA = "FL-DOE-90001", "FL-DOE-90002"
+
+# FL-28 is the shape B4 exists for: a sitting member plus a challenger.
+_DOE_INCUMBENCY_FIXTURE = "\n".join([
+    _DOE_HEADER,
+    _doe_row("90001", "USR", "United States Representative", "028", "QUA", "REP",
+             "Gimenez", "Carlos", "A"),
+    _doe_row("90002", "USR", "United States Representative", "028", "QUA", "DEM",
+             "Rivera", "Ana"),
+    # A statewide race in the same file: the FEC has no jurisdiction over it.
+    _doe_row("90003", "GOV", "Governor", "", "QUA", "REP", "Abrams", "Pat"),
+])
+
+_RACE_28 = {"race_id": "FL-28-general", "level": "federal", "district": "28"}
+_ROSTER_28 = [
+    {"candidate_id": _GIMENEZ, "legal_name": "Carlos A Gimenez", "party": "REP"},
+    {"candidate_id": _RIVERA, "legal_name": "Ana Rivera", "party": "DEM"},
+]
+
+# The stale row is load-bearing: it is an "I" for a cycle that is over, so
+# dropping the 2026 filter turns the happy path into an unmatched-incumbent
+# refusal. That is mutation check (b).
+_FL28_ROWS = [
+    _fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "I"),
+    _fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM"),
+    _fec_cand("H8FL28999", "RETIRED, ROBERT", "I",
+              election_years=(2022,), cycles=(2022,)),
+]
+
+
+class TestIncumbencyResolver(unittest.TestCase):
+    """The pure resolver: matching, and every way it refuses."""
+
+    def test_incumbent_resolves_and_seat_is_not_open(self):
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, _FL28_ROWS)
+        self.assertEqual(out["status"], "resolved", out)
+        self.assertEqual(out["race_id"], "FL-28-general")
+        self.assertEqual(out["incumbent_id"], _GIMENEZ)
+        self.assertIs(out["is_open_seat"], False)
+        self.assertTrue(out["candidates"][_GIMENEZ]["is_incumbent"])
+        self.assertEqual(out["candidates"][_GIMENEZ]["fec_id"], "H0FL28001")
+        self.assertFalse(out["candidates"][_RIVERA]["is_incumbent"])
+        self.assertEqual(out["candidates"][_RIVERA]["fec_id"], "H4FL28002")
+        # the 2022 "I" row is not this election and must not be considered
+        self.assertEqual(out["unresolved"], [])
+
+    def test_fec_id_beats_the_name(self):
+        roster = [dict(_ROSTER_28[0]),
+                  {"candidate_id": _RIVERA, "legal_name": "Nobody At All",
+                   "fec_id": "H4FL28002"}]
+        out = intake.resolve_incumbency(_RACE_28, roster, _FL28_ROWS)
+        self.assertEqual(out["status"], "resolved", out)
+        self.assertEqual(out["candidates"][_RIVERA]["fec_id"], "H4FL28002")
+
+    def test_name_match_ignores_case_and_punctuation(self):
+        race = {"race_id": "FL-26-general", "level": "federal", "district": "26"}
+        roster = [{"candidate_id": "c1", "legal_name": "Mario Diaz-Balart"}]
+        rows = [_fec_cand("H4FL26001", "DIAZ-BALART, MARIO", "I", district="26")]
+        out = intake.resolve_incumbency(race, roster, rows)
+        self.assertEqual(out["status"], "resolved", out)
+        self.assertEqual(out["incumbent_id"], "c1")
+
+    def test_open_seat_only_when_every_row_resolved_and_none_incumbent(self):
+        rows = [_fec_cand("H4FL28002", "RIVERA, ANA", "O", party="DEM"),
+                _fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "O")]
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
+        self.assertEqual(out["status"], "resolved", out)
+        self.assertIs(out["is_open_seat"], True)
+        self.assertIsNone(out["incumbent_id"])
+
+    def test_unmatched_incumbent_refuses_and_never_calls_the_seat_open(self):
+        """A retiring member who still filed with the FEC is exactly this
+        case. Calling the seat open because we failed to match would publish
+        a challenger as the sitting member's equal."""
+        rows = [_fec_cand("H0FL28777", "STRANGER, SAM", "I"),
+                _fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM")]
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
+        self.assertEqual(out["status"], "refused", out)
+        self.assertNotIn("is_open_seat", out)
+        self.assertIn("H0FL28777", " ".join(out["reasons"]))
+
+    def test_unknown_incumbent_challenge_refuses_naming_the_value(self):
+        rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "X")]
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
+        self.assertEqual(out["status"], "refused", out)
+        self.assertIn("'X'", " ".join(out["reasons"]))
+
+    def test_two_incumbent_rows_refuse(self):
+        rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "I"),
+                _fec_cand("H4FL28002", "RIVERA, ANA", "I", party="DEM")]
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
+        self.assertEqual(out["status"], "refused", out)
+
+    def test_a_candidate_matching_two_rows_is_unresolved(self):
+        rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "C"),
+                _fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM"),
+                _fec_cand("H4FL28003", "RIVERA, ANA M", "C", party="DEM")]
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
+        self.assertEqual(out["status"], "resolved", out)
+        self.assertNotIn(_RIVERA, out["candidates"])       # nothing written
+        self.assertIn(_RIVERA, [u.get("candidate_id") for u in out["unresolved"]])
+        self.assertIs(out["is_open_seat"], False)          # not cleanly resolved
+
+    def test_a_candidate_matching_no_row_is_unresolved(self):
+        roster = _ROSTER_28 + [{"candidate_id": "FL-DOE-90009",
+                                "legal_name": "Absent Andy"}]
+        out = intake.resolve_incumbency(_RACE_28, roster, _FL28_ROWS)
+        self.assertEqual(out["status"], "resolved", out)
+        self.assertNotIn("FL-DOE-90009", out["candidates"])
+        self.assertIn("FL-DOE-90009",
+                      [u.get("candidate_id") for u in out["unresolved"]])
+
+    def test_null_incumbent_challenge_is_unresolved_not_a_default(self):
+        rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", None),
+                _fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM")]
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
+        self.assertEqual(out["status"], "resolved", out)
+        self.assertNotIn(_GIMENEZ, out["candidates"])
+        self.assertIs(out["is_open_seat"], False)
+
+    def test_non_house_rows_are_ignored(self):
+        rows = [_fec_cand("S4FL00123", "GIMENEZ, CARLOS A.", "I", office="S",
+                          district="00")]
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
+        self.assertEqual(out["status"], "refused", out)   # nothing left to read
+        self.assertIn("no FEC", " ".join(out["reasons"]))
+
+    def test_no_rows_at_all_refuses_rather_than_declaring_an_open_seat(self):
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, [])
+        self.assertEqual(out["status"], "refused", out)
+        self.assertNotIn("is_open_seat", out)
+
+    def test_every_unresolved_entry_names_a_reason(self):
+        rows = [_fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM"),
+                _fec_cand("H9FL28004", "GHOST, GARY", "C")]
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
+        self.assertTrue(out["unresolved"])
+        for entry in out["unresolved"]:
+            self.assertTrue(entry.get("reason"), entry)
+
+
+class TestIntakeIncumbencyHandler(unittest.TestCase):
+    def _layer(self, calls=None, by_district=None, **kw):
+        return make_intake_layer(
+            "record",
+            doe_fetch=lambda office=None: _DOE_INCUMBENCY_FIXTURE,
+            fec_api_key=kw.pop("fec_api_key", "testkey"),
+            fec_get=_fec_get_map(by_district if by_district is not None
+                                 else {"28": _FL28_ROWS}, calls),
+            **kw)
+
+    def test_fl28_incumbent_reaches_both_tables(self):
+        layer, db = self._layer()
+        res = layer.dispatch("doe_file_intake", {"office": "FED",
+                                                 "fill_incumbency": True})
+        self.assertTrue(res["ok"], res)
+        out = res["result"]["incumbency"]["FL-28-general"]
+        self.assertEqual(out["incumbent_id"], _GIMENEZ)
+        self.assertIs(out["is_open_seat"], False)
+        race_updates = committed_updates(db, "race")
+        cand_updates = committed_updates(db, "candidate")
+        self.assertEqual(len(race_updates), 1)
+        self.assertIn("incumbent_id", race_updates[0][0])
+        self.assertIn("is_open_seat", race_updates[0][0])
+        self.assertEqual(race_updates[0][1], (_GIMENEZ, False, "FL-28-general"))
+        self.assertEqual(len(cand_updates), 2)
+        by_cid = {p[-1]: (sql, p) for sql, p in cand_updates}
+        self.assertIn("is_incumbent", by_cid[_GIMENEZ][0])
+        self.assertEqual(by_cid[_GIMENEZ][1], (True, "H0FL28001", _GIMENEZ))
+        self.assertEqual(by_cid[_RIVERA][1], (False, "H4FL28002", _RIVERA))
+        # the FEC linkage must never clobber an existing one with NULL
+        self.assertIn("COALESCE", by_cid[_GIMENEZ][0])
+
+    def test_query_asks_for_the_2026_house_field_in_this_district(self):
+        calls = []
+        layer, db = self._layer(calls=calls)
+        layer.dispatch("doe_file_intake", {"fill_incumbency": True})
+        self.assertEqual(len(calls), 1)          # only the federal race
+        path, params = calls[0]
+        self.assertEqual(path, "/candidates/")
+        self.assertEqual(params["state"], "FL")
+        self.assertEqual(params["district"], "28")
+        self.assertEqual(params["office"], "H")
+        self.assertEqual(params["election_year"], 2026)
+        self.assertEqual(params["per_page"], 100)
+        self.assertEqual(params["api_key"], "testkey")
+
+    def test_open_seat_sets_the_flag(self):
+        rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "O"),
+                _fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM")]
+        layer, db = self._layer(by_district={"28": rows})
+        res = layer.dispatch("doe_file_intake", {"fill_incumbency": True})
+        out = res["result"]["incumbency"]["FL-28-general"]
+        self.assertIs(out["is_open_seat"], True)
+        self.assertIsNone(out["incumbent_id"])
+        self.assertEqual(committed_updates(db, "race")[0][1],
+                         (None, True, "FL-28-general"))
+
+    def test_statewide_race_is_not_applicable(self):
+        layer, db = self._layer()
+        res = layer.dispatch("doe_file_intake", {"fill_incumbency": True})
+        gov = res["result"]["incumbency"]["FL-GOV-general"]
+        self.assertEqual(gov["status"], "not_applicable")
+        self.assertIn("federal", gov["reason"])
+
+    def test_refused_race_writes_nothing(self):
+        rows = [_fec_cand("H0FL28777", "STRANGER, SAM", "I")]
+        layer, db = self._layer(by_district={"28": rows})
+        res = layer.dispatch("doe_file_intake", {"fill_incumbency": True})
+        out = res["result"]["incumbency"]["FL-28-general"]
+        self.assertEqual(out["status"], "refused")
+        self.assertNotIn("is_open_seat", out)
+        self.assertEqual(committed_updates(db, "race"), [])
+        self.assertEqual(committed_updates(db, "candidate"), [])
+
+    def test_missing_key_refuses_before_anything_is_fetched(self):
+        fetched = []
+        def doe_fetch(office=None):
+            fetched.append(office)
+            return _DOE_INCUMBENCY_FIXTURE
+        layer, db = make_intake_layer("record", doe_fetch=doe_fetch,
+                                      fec_api_key="")
+        res = layer.dispatch("doe_file_intake", {"fill_incumbency": True})
+        self.assertEqual(res["error"], errors.NOT_CONFIGURED)
+        self.assertIn("FEC_API_KEY", " ".join(res["reasons"]))
+        self.assertEqual(fetched, [])
+        self.assertEqual(committed_into(db, "race"), [])
+        self.assertEqual(committed_into(db, "candidate"), [])
+
+    def test_flag_absent_is_exactly_todays_behaviour(self):
+        calls = []
+        layer, db = self._layer(calls=calls)
+        with_flag = layer.dispatch("doe_file_intake", {"fill_incumbency": False})
+        self.assertNotIn("incumbency", with_flag["result"])
+        layer2, db2 = self._layer(calls=calls)
+        plain = layer2.dispatch("doe_file_intake", {})
+        self.assertEqual(plain["result"], with_flag["result"])
+        self.assertEqual(calls, [])          # the FEC is never touched
+
+    def test_fec_failure_is_recorded_and_the_intake_still_stands(self):
+        def boom(path, params):
+            raise RuntimeError("connection reset")
+        layer, db = make_intake_layer(
+            "record", doe_fetch=lambda office=None: _DOE_INCUMBENCY_FIXTURE,
+            fec_api_key="testkey", fec_get=boom)
+        res = layer.dispatch("doe_file_intake", {"fill_incumbency": True})
+        self.assertTrue(res["ok"], res)
+        self.assertEqual(res["result"]["incumbency"]["FL-28-general"]["error"],
+                         errors.UPSTREAM_FAILED)
+        self.assertEqual(len(committed_into(db, "candidate")), 3)  # DoE stands
+        self.assertEqual(committed_updates(db, "race"), [])
+
+    def test_a_write_failure_rolls_the_whole_call_back(self):
+        db = FakeDb()
+        st = store.Store("postgres://unused", connect=lambda dsn: db)
+        def explode(*a, **kw):
+            raise RuntimeError("server closed the connection unexpectedly")
+        st.write_incumbency = explode
+        guard = cores.load_guard_core("record")
+        layer = middleware.ToolLayer("record", guard, st)
+        layer.handlers.update(intake.build_intake_handlers(
+            "record", st, doe_fetch=lambda office=None: _DOE_INCUMBENCY_FIXTURE,
+            fec_api_key="testkey", fec_get=_fec_get_map({"28": _FL28_ROWS})))
+        res = layer.dispatch("doe_file_intake", {"fill_incumbency": True})
+        self.assertEqual(res["error"], errors.UPSTREAM_FAILED)
+        self.assertGreaterEqual(db.rolled_back, 1)
+        self.assertEqual(committed_into(db, "race"), [])
+
+
 class TestIntakeFEC(unittest.TestCase):
     def _ok_response(self):
         return {"api_version": "1.0", "pagination": {"count": 7},

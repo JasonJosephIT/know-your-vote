@@ -205,6 +205,194 @@ def parse_candidate_list(text: str) -> dict:
             "tiers": tiers}
 
 
+# ==========================================================================
+# B4 — incumbency resolver (pure; the FEC fetch and the UPDATEs are separate)
+# ==========================================================================
+#
+# The FEC `/candidates/` field `incumbent_challenge` is the only structured
+# statement anyone publishes about who currently holds a federal seat, so B4
+# reads it rather than inferring incumbency from a title string. It is also
+# the field that decides whether a race is a challenge to a sitting member or
+# an open seat -- a framing difference the Balance Audit and every profile
+# page inherit -- which is why every ambiguity below refuses instead of
+# guessing.
+#
+# Matching, in order:
+#   1. `candidate.fec_id == fec_row.candidate_id`. If the DoE candidate
+#      already carries an FEC id, that id decides and the name is not read.
+#   2. Otherwise names. FEC `name` is "LAST, FIRST MIDDLE"; the DoE
+#      `legal_name` parse_candidate_list builds is "First Middle Last". Both
+#      sides are lowercased and split on non-alphanumerics, so case, commas,
+#      periods and the hyphen in "DIAZ-BALART" all fall out. A match needs
+#      BOTH the surname (the pre-comma tokens, compared against the same
+#      number of trailing DoE tokens, so a two-word surname still matches)
+#      AND the first given token.
+#
+# Refusals (`status: "refused"`, nothing written for the race):
+#   * an `incumbent_challenge` outside I/C/O/null -- an unrecognised code is a
+#     schema change, and the fail-closed rule (AGENT_BRIEF §4) says stop;
+#   * an "I" row matching zero or several roster candidates. A member who is
+#     retiring still has an FEC record, so an unmatched "I" is precisely the
+#     case where calling the seat open would be wrong;
+#   * two "I" rows -- the district cannot have two sitting members;
+#   * no 2026 House rows at all. Empty is not evidence of an open seat.
+#
+# Unresolved (recorded with a reason, that row/candidate simply not written):
+#   * a roster candidate matching zero or several FEC rows;
+#   * a non-"I" FEC row matching zero or several roster candidates (a primary
+#     loser who still has a 2026 filing is the ordinary case);
+#   * a matched row whose `incumbent_challenge` is null -- null is "the FEC
+#     does not say", and writing `is_incumbent = false` for it would be the
+#     silent default the house rules forbid.
+#
+# `is_open_seat` is True only when every 2026 House row resolved to exactly
+# one roster candidate with a known challenge code and none of them is "I".
+# Anything less leaves it False: the column already defaults to false, so
+# False is "not established as open", never "we looked away".
+
+_TARGET_ELECTION_YEAR = 2026
+_CHALLENGE_CODES = frozenset({"I", "C", "O"})
+
+
+def _name_tokens(name: str) -> list[str]:
+    import re
+    return [t for t in re.split(r"[^0-9a-z]+", (name or "").lower()) if t]
+
+
+def _fec_name_parts(name: str) -> tuple[list[str], list[str]]:
+    """"LAST, FIRST MIDDLE" -> (surname tokens, given tokens)."""
+    surname, sep, given = (name or "").partition(",")
+    if not sep:
+        return [], []          # not the documented shape -> matches nothing
+    return _name_tokens(surname), _name_tokens(given)
+
+
+def _names_match(doe_name: str, fec_name: str) -> bool:
+    doe = _name_tokens(doe_name)
+    surname, given = _fec_name_parts(fec_name)
+    if not (doe and surname and given):
+        return False
+    n = len(surname)
+    # `>` not `>=`: the first token must be a given name, not part of the
+    # surname, or a bare "Gimenez" would match "GIMENEZ, CARLOS".
+    return len(doe) > n and doe[-n:] == surname and doe[0] == given[0]
+
+
+def resolve_incumbency(
+    race: Mapping[str, Any],
+    candidates: list[Mapping[str, Any]],
+    fec_rows: list[Mapping[str, Any]],
+) -> dict:
+    """Match a race's ballot-tier roster against FEC rows. Pure — no I/O.
+
+    See the section comment above for the matching order and every refusal.
+    Returns either
+      {"race_id", "status": "resolved", "incumbent_id", "is_open_seat",
+       "candidates": {cid: {"is_incumbent", "fec_id"}}, "unresolved": [...]}
+    or {"race_id", "status": "refused", "reasons": [...], "unresolved": [...]}
+    — a refusal carries no `is_open_seat` at all, so a caller cannot read a
+    missing answer as a False one.
+    """
+    race_id = race.get("race_id")
+    # `election_years` is the year the candidate ran, so it names this
+    # election exactly; `cycles` is the two-year FEC reporting bucket and a
+    # 2025 special-election filer also carries cycle 2026. The narrower field
+    # is the right one for "who is on the November 2026 ballot".
+    rows = [r for r in fec_rows
+            if str(r.get("office") or "").upper() == "H"
+            and _TARGET_ELECTION_YEAR in (r.get("election_years") or [])]
+    if not rows:
+        return {"race_id": race_id, "status": "refused", "unresolved": [],
+                "reasons": [f"no FEC House rows for {_TARGET_ELECTION_YEAR} in "
+                            f"district {race.get('district')!r}"]}
+
+    reasons: list[str] = []
+    for row in rows:
+        code = row.get("incumbent_challenge")
+        if code is not None and code not in _CHALLENGE_CODES:
+            reasons.append(
+                f"FEC row {row.get('candidate_id')!r} carries an unrecognised "
+                f"incumbent_challenge {code!r}; expected I, C, O or null")
+
+    # Both directions of the match, so "one row, one candidate" is checkable
+    # from either side.
+    matched: dict[int, list[str]] = {}
+    per_candidate_rows: dict[str, list[int]] = {}
+    for cand in candidates:
+        cid = cand.get("candidate_id")
+        fec_id = cand.get("fec_id")
+        hits = [i for i, row in enumerate(rows)
+                if (row.get("candidate_id") == fec_id if fec_id
+                    else _names_match(cand.get("legal_name") or "",
+                                      row.get("name") or ""))]
+        per_candidate_rows[cid] = hits
+        for i in hits:
+            matched.setdefault(i, []).append(cid)
+
+    unresolved: list[dict] = []
+    resolved_pairs: dict[str, int] = {}      # cid -> row index, 1:1 and coded
+    for cid, hits in per_candidate_rows.items():
+        if len(hits) != 1:
+            unresolved.append({"candidate_id": cid, "reason": (
+                f"matched {len(hits)} FEC rows; a name has to resolve to "
+                "exactly one filing to be written")})
+
+    incumbent_ids: list[str] = []
+    all_rows_clean = True
+    for i, row in enumerate(rows):
+        cids = matched.get(i, [])
+        code = row.get("incumbent_challenge")
+        is_incumbent_row = code == "I"
+        if len(cids) != 1 or len(per_candidate_rows.get(cids[0], [])) != 1:
+            all_rows_clean = False
+            why = (f"matched {len(cids)} ballot-tier candidates in {race_id}"
+                   if len(cids) != 1 else
+                   f"matched {cids[0]}, who also matches "
+                   f"{len(per_candidate_rows[cids[0]])} FEC rows")
+            note = {"fec_candidate_id": row.get("candidate_id"), "reason": why}
+            if is_incumbent_row:
+                reasons.append(
+                    f"FEC row {row.get('candidate_id')!r} is the incumbent "
+                    f"({note['reason']}); refusing rather than reporting an "
+                    "open seat")
+            else:
+                unresolved.append(note)
+            continue
+        if code is None:
+            all_rows_clean = False
+            unresolved.append({"fec_candidate_id": row.get("candidate_id"),
+                               "reason": "incumbent_challenge is null — the "
+                                         "FEC does not state a status"})
+            continue
+        if code not in _CHALLENGE_CODES:
+            all_rows_clean = False
+            continue                      # already refused above
+        if is_incumbent_row:
+            incumbent_ids.append(cids[0])
+        resolved_pairs[cids[0]] = i
+
+    if len(incumbent_ids) > 1:
+        reasons.append(f"{len(incumbent_ids)} FEC rows claim to be the "
+                       f"incumbent in {race_id}; a district has one")
+    if reasons:
+        return {"race_id": race_id, "status": "refused",
+                "reasons": reasons, "unresolved": unresolved}
+
+    per_candidate = {
+        cid: {"is_incumbent": rows[i].get("incumbent_challenge") == "I",
+              "fec_id": rows[i].get("candidate_id")}
+        for cid, i in sorted(resolved_pairs.items())
+    }
+    return {
+        "race_id": race_id,
+        "status": "resolved",
+        "incumbent_id": incumbent_ids[0] if incumbent_ids else None,
+        "is_open_seat": all_rows_clean and not incumbent_ids,
+        "candidates": per_candidate,
+        "unresolved": unresolved,
+    }
+
+
 def _default_doe_fetch(office: str = "FED") -> str:
     import httpx
     r = httpx.post(DOE_URL, headers={"User-Agent": _UA}, timeout=60, data={
@@ -264,8 +452,34 @@ def build_intake_handlers(
     sleep = sleep or __import__("time").sleep
     key = fec_api_key if fec_api_key is not None else os.environ.get("FEC_API_KEY")
 
+    def _incumbency_for_race(race: Mapping[str, Any],
+                             roster: list[Mapping[str, Any]]) -> dict:
+        if race.get("level") != "federal" or not race.get("district"):
+            return {"status": "not_applicable",
+                    "reason": "FEC covers federal races only"}
+        data = _fec_with_backoff(fec_get, _FEC_ENDPOINTS["candidates"], {
+            # `district` is two digits on the wire; parse_candidate_list has
+            # already stripped the leading zero for the race_id.
+            "state": "FL", "district": f"{int(race['district']):02d}",
+            "office": "H", "election_year": _TARGET_ELECTION_YEAR,
+            "per_page": 100, "api_key": key,
+        }, sleep)
+        if isinstance(data, dict) and "error" in data:
+            return data                      # already a structured error
+        if not isinstance(data, dict) or "results" not in data:
+            return {"ok": False, "error": errors.UPSTREAM_FAILED,
+                    "reasons": ["FEC response missing expected 'results' envelope"]}
+        return resolve_incumbency(race, roster, data["results"])
+
     def doe_file_intake(payload: Mapping[str, Any]) -> dict:
         office = payload.get("office", "FED")
+        fill_incumbency = bool(payload.get("fill_incumbency"))
+        # Before the DoE fetch, not after: a run that cannot finish should not
+        # half-finish. Nothing is written and nothing is downloaded.
+        if fill_incumbency and not key:
+            return {"ok": False, "error": errors.NOT_CONFIGURED,
+                    "reasons": ["FEC_API_KEY is not set — incumbency fill "
+                                "unavailable"]}
         try:
             text = doe_fetch(office)
         except Exception as err:  # noqa: BLE001
@@ -284,7 +498,7 @@ def build_intake_handlers(
             store.rollback()
             return {"ok": False, "error": errors.UPSTREAM_FAILED,
                     "reasons": [f"intake upsert failed ({type(err).__name__})"]}
-        return {"ok": True, "result": {
+        result = {
             "races": sorted(parsed["races"]),
             "candidate_count": len(parsed["candidates"]),
             "skipped": parsed["skipped"],
@@ -292,7 +506,33 @@ def build_intake_handlers(
             # report rather than only from the database: a caller can see that
             # 87 filings were parsed and 22 became ballot lines.
             "tiers": parsed["tiers"],
-        }}
+        }
+        if fill_incumbency:
+            by_id = {c["candidate_id"]: c for c in parsed["candidates"]}
+            incumbency: dict[str, dict] = {}
+            for race_id, race in sorted(parsed["races"].items()):
+                # Only the ballot tier is a roster candidate — candidate_ids
+                # already holds exactly that set (D1).
+                roster = [by_id[cid] for cid in race["candidate_ids"]]
+                out = _incumbency_for_race(race, roster)
+                incumbency[race_id] = out
+                if out.get("status") != "resolved":
+                    continue        # refused / not_applicable / upstream error
+                try:
+                    store.write_incumbency(race_id, out["incumbent_id"],
+                                           out["is_open_seat"], out["candidates"])
+                except Exception as err:  # noqa: BLE001
+                    # A failed UPDATE leaves the transaction dirty, so the DoE
+                    # upserts above are lost either way — roll back and say so
+                    # rather than committing a half-written run. (A FEC *fetch*
+                    # failure is different: it is recorded per race and the
+                    # intake stands.)
+                    store.rollback()
+                    return {"ok": False, "error": errors.UPSTREAM_FAILED,
+                            "reasons": [f"incumbency write failed for {race_id} "
+                                        f"({type(err).__name__})"]}
+            result["incumbency"] = incumbency
+        return {"ok": True, "result": result}
 
     def fec_api_query(payload: Mapping[str, Any]) -> dict:
         if not key:

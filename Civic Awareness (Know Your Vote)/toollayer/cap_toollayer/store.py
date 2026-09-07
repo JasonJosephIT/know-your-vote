@@ -191,6 +191,37 @@ class Store(logsink.PostgresSink):
              cand.get("ballot_status", "ballot"), cand.get("fec_id")),
         )
 
+    # -- B4 incumbency (separate UPDATEs, deliberately) --------------------
+
+    def write_incumbency(
+        self,
+        race_id: str,
+        incumbent_id: str | None,
+        is_open_seat: bool,
+        per_candidate: Mapping[str, Mapping[str, Any]],
+    ) -> None:
+        """Write the resolved FEC incumbency onto `race` and `candidate`.
+
+        Not folded into upsert_race/upsert_candidate: those replace the row
+        from the DoE file, which carries no incumbency at all, so a later DoE
+        re-run would wipe these three columns. upsert_race deliberately does
+        not name them; this is the only writer. Uncommitted, like every other
+        content write — the tool-call log write is the transaction boundary.
+        """
+        self._execute(
+            "UPDATE race SET incumbent_id = %s, is_open_seat = %s "
+            "WHERE race_id = %s",
+            (incumbent_id, is_open_seat, race_id),
+        )
+        for candidate_id, vals in sorted(per_candidate.items()):
+            # COALESCE so a row we could not link this run keeps the fec_id an
+            # earlier run established.
+            self._execute(
+                "UPDATE candidate SET is_incumbent = %s, "
+                "fec_id = COALESCE(%s, fec_id) WHERE candidate_id = %s",
+                (bool(vals.get("is_incumbent")), vals.get("fec_id"), candidate_id),
+            )
+
     # -- T4 jurisdiction_resolve (read zip_district; one mapping, no copy) --
 
     def jurisdiction_resolve(self, zip5: str) -> list[dict]:
