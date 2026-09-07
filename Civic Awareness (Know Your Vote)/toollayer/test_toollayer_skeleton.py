@@ -1027,6 +1027,9 @@ _DOE_INCUMBENCY_FIXTURE = "\n".join([
              "Rivera", "Ana"),
     # A statewide race in the same file: the FEC has no jurisdiction over it.
     _doe_row("90003", "GOV", "Governor", "", "QUA", "REP", "Abrams", "Pat"),
+    # The U.S. Senate seat: federal, no district. FEC covers it, but the
+    # incumbency fill only knows the House query shape (not_implemented).
+    _doe_row("90004", "USS", "United States Senator", "", "QUA", "DEM", "Reed", "Dana"),
 ])
 
 _RACE_28 = {"race_id": "FL-28-general", "level": "federal", "district": "28"}
@@ -1595,7 +1598,11 @@ class TestIntakeIncumbencyHandler(unittest.TestCase):
         self.assertEqual(sen["status"], "not_implemented", sen)
         self.assertIn("office=S", sen["reason"])
         self.assertNotIn("is_open_seat", sen)
-        self.assertEqual(committed_updates(db, "race"), [])
+        # FL-28 in the same file still resolves and writes; the Senate row
+        # must not.
+        self.assertEqual(
+            [p for _, p in committed_updates(db, "race") if "FL-SEN-general" in p],
+            [])
 
     def test_refused_race_writes_nothing(self):
         rows = [_fec_cand("H0FL28777", "STRANGER, SAM", "I")]
@@ -1641,7 +1648,7 @@ class TestIntakeIncumbencyHandler(unittest.TestCase):
         self.assertTrue(res["ok"], res)
         self.assertEqual(res["result"]["incumbency"]["FL-28-general"]["error"],
                          errors.UPSTREAM_FAILED)
-        self.assertEqual(len(committed_into(db, "candidate")), 3)  # DoE stands
+        self.assertEqual(len(committed_into(db, "candidate")), 4)  # DoE stands
         self.assertEqual(committed_updates(db, "race"), [])
 
     def test_a_write_failure_rolls_the_whole_call_back(self):
