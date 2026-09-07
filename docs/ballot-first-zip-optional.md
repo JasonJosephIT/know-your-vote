@@ -244,12 +244,43 @@ than a paragraph of assurance.
   `ANTHROPIC_API_KEY`, and this session has neither — the live check is a
   no-ZIP quiz on the preview deploy.
 
-- [ ] **TASK-069** — Un-gate the news feed
+- [x] **TASK-069** — Un-gate the news feed
   Files: `src/components/features/NewsFeed.tsx`, `src/app/api/news/route.ts`
   Notes: Replace the `noLocation` dead end with statewide items; metro scoping
   becomes a narrowing filter when a location is present in the URL, not a
   precondition.
   Verify: `/news` with empty storage renders statewide items, not an empty state.
+  **Done 2026-09-07** — the last of Phase 7's gates.
+
+  **`route.ts` needed no change at all.** Every parameter was already optional
+  and a request with none already returns the statewide scope
+  (`and(race_id.is.null,metro.is.null)`). The gate lived entirely in the
+  component: the effect `return`ed before fetching when no location was
+  stored, and the render replaced the feed with an "Add your ZIP" prompt. Both
+  are gone; the file is otherwise untouched, and `verify-news-ungated` pins
+  the three parameters as optional so the feed cannot be re-gated from the
+  server side without anyone noticing.
+
+  **The data was checked before the code was written**, which is the lesson
+  TASK-067 paid for: querying `news_item` as `anon` first confirmed three
+  genuinely statewide rows — voter registration, the Division of Elections,
+  and statewide election news (HB 991). Un-gating therefore produces a real
+  feed rather than an honest-looking empty state, and that was known going in
+  rather than discovered on a deploy.
+
+  **Deviation from the plan's wording:** it says metro scoping "becomes a
+  narrowing filter". The route ORs statewide, metro, and race scopes, so a ZIP
+  *adds* local items rather than hiding statewide ones — kept as is. A voter
+  who enters a ZIP should not thereby lose the voter-registration link, which
+  is what narrowing would do.
+
+  **Not moved to the URL.** The plan says "when a location is present in the
+  URL", but `/news` is a static route and `useSearchParams` here would force a
+  Suspense bailout for no gain today. It still reads `kyv.location`; TASK-070
+  owns that migration and already lists this file.
+
+  Copy followed TASK-067's honesty rule: the page was titled *Local electoral
+  news*, and with no location it is statewide, so "Local" came off.
 
 - [ ] **TASK-070** — Remove `kyv.location`
   Files: `src/lib/location.ts` (delete), `ZipEntry.tsx`, `Quiz.tsx`, `NewsFeed.tsx`, `SavedCandidates.tsx`

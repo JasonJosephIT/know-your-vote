@@ -53,16 +53,18 @@ content work, not engineering.
 | TASK-065 | Quiz reframed from alignment to stances, with `COMPARATIVE_RE` as a second guardrail |
 | TASK-067 | `SharedBallot` on `/` — statewide races and measures with no ZIP; ZIP demoted to an upgrade |
 | TASK-068 | Quiz un-gated — opens on question one, runs statewide; ZIP offered at the results step |
+| TASK-069 | News feed un-gated — statewide items with no location; the route already allowed it |
 
 ### Next, in order
 
 Engineering, none of it blocked:
 
-1. **TASK-069 → 071** — the rest of Phase 7. TASK-067 and TASK-068 landed 2026-09-07: the
-   landing page renders the shared ballot with no ZIP, and the quiz runs with
-   no ZIP and offers one at its results step. TASK-069 (news feed) is the last
-   gate; TASK-070 removes `kyv.location` once nothing reads it, and TASK-071
-   makes the privacy page and the analytics funnel match.
+1. **TASK-070 → 071** — the rest of Phase 7. TASK-067, TASK-068 and TASK-069
+   landed 2026-09-07, so **no surface gates on ZIP any more**: the landing page
+   renders the shared ballot, the quiz runs from question one, and the news
+   feed shows statewide items. What remains is cleanup that depends on that
+   being true — TASK-070 removes `kyv.location` now that nothing needs it, and
+   TASK-071 makes the privacy page and the analytics funnel match the product.
 
 Partially blocked: **TASK-060** needs the Census ZCTA crosswalk files, and
 `www2.census.gov` is unreachable from the Claude Code session (403 at the
