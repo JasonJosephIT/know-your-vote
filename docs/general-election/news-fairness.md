@@ -116,7 +116,7 @@ it, as `data-architecture.md` §3 already requires.
 ## 3. Schema change — migration `0014_news_fairness.sql`
 
 > **Number reserved in `supabase/migrations/README.md`** (was `0011`, then
-> `0014`; `0014` is now `general_election`). Check the ledger before creating
+> `0013`; `0013` is now `general_election`). Check the ledger before creating
 > the file.
 
 One constraint. Everything else in this document is application code.
