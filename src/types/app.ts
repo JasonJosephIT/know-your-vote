@@ -21,11 +21,20 @@ export interface RacePublication {
   note: string | null;
 }
 
+/* Migration 0005 widened item_type to four values and added candidate_id;
+   this type was left behind and no longer matched the live database. */
+export type NewsItemType =
+  | "pipeline_event"
+  | "official_link"
+  | "candidate_news"
+  | "election_news";
+
 export interface NewsItem {
   id: string;
   race_id: string | null;
+  candidate_id: string | null;
   metro: string | null;
-  item_type: "pipeline_event" | "official_link";
+  item_type: NewsItemType;
   title: string;
   summary: string | null;
   url: string | null;

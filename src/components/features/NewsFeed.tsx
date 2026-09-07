@@ -5,14 +5,23 @@ import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { readLocation } from "@/lib/location";
 
+import type { NewsItemType } from "@/types/app";
+
 interface FeedItem {
   id: string;
-  itemType: "pipeline_event" | "official_link";
+  itemType: NewsItemType;
   title: string;
   summary: string | null;
   url: string | null;
   raceId: string | null;
+  candidateId: string | null;
   publishedAt: string;
+  /* Source labelling (news-fairness.md §1). Null when the item has no source
+     row — official_link / pipeline_event rows legitimately have none. */
+  publisher: string | null;
+  kind: string | null;
+  lean: string | null;
+  isOpinion: boolean;
 }
 
 type Stage =
@@ -97,10 +106,28 @@ export function NewsFeed() {
     <ul className="flex flex-col gap-3">
       {stage.items.map((item) => (
         <li key={item.id}>
-          <Card className="flex flex-col gap-1">
-            <p className="font-mono text-mono text-on-surface-muted">
-              {formatDate(item.publishedAt)}
-              {item.itemType === "official_link" ? " · official resource" : " · update"}
+          {/* Opinion pieces get a visually distinct container, not just a word
+              in the byline (news-fairness.md §1) — so a column is never read as
+              a report. Deliberately neutral styling: a muted ground and a rule,
+              never a colour that would imply a verdict about the piece. */}
+          <Card
+            className={`flex flex-col gap-1${
+              item.isOpinion ? " border-l-2 border-l-border-strong bg-surface-muted" : ""
+            }`}
+          >
+            <p className="flex flex-wrap items-center gap-x-2 font-mono text-mono text-on-surface-muted">
+              <span>{formatDate(item.publishedAt)}</span>
+              {item.publisher && <span>· {item.publisher}</span>}
+              {item.kind && (
+                <span className={item.isOpinion ? "text-on-surface" : undefined}>
+                  · {item.kind}
+                </span>
+              )}
+              {/* Lean is disclosed, never judged — same muted style as
+                  everything else, never colour-coded (README neutrality rule). */}
+              {item.lean && <span>· {item.lean}</span>}
+              {!item.kind &&
+                (item.itemType === "official_link" ? <span>· official resource</span> : <span>· update</span>)}
             </p>
             <h2 className="text-h3">{item.title}</h2>
             {item.summary && (
@@ -114,7 +141,7 @@ export function NewsFeed() {
                   rel="noreferrer"
                   className="text-primary underline underline-offset-2"
                 >
-                  Open official source
+                  {item.publisher ? `Read at ${item.publisher}` : "Open official source"}
                 </a>
               )}
               {item.raceId && (
