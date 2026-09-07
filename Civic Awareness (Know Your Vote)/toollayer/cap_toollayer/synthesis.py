@@ -84,38 +84,61 @@ def build_synthesis_handlers(
         try:
             rows = store.read_named_news_counts(roster)
         except Exception as err:  # noqa: BLE001
-            # Degrade honestly: a missing coverage number is reported as
-            # missing. It must not take the scrutiny audit down with it.
+            # Store (store.py) runs one psycopg transaction across the whole
+            # handler -- no autocommit, and write_balance_result's UPDATEs
+            # share this connection. After a failed statement psycopg raises
+            # InFailedSqlTransaction on every later statement until a
+            # rollback, so leaving this transaction dirty would make the
+            # write-back loop in balance_audit() below fail too and turn a
+            # coverage-read failure into an audit failure -- coverage gating
+            # the audit, which the plan forbids. Roll back here: the only
+            # statement issued so far is this SELECT (middleware.dispatch
+            # issues no DB statement before the handler runs, and the log row
+            # is written after the handler returns), so the rollback discards
+            # no work and leaves a clean transaction for the write-backs.
+            store.rollback()
             return {"error": errors.UPSTREAM_FAILED,
                     "reasons": [f"coverage read failed ({type(err).__name__})"]}
-        # Zero-fill every roster candidate, the same rule as
-        # namedCountsByCandidate() in src/lib/news-match.ts: a candidate the
-        # press ignored is the widest gap in the report, and dropping them
-        # would silently exclude it from the variance.
-        counts = {cid: 0 for cid in roster}
-        for row in rows:
-            if row["candidate_id"] in counts:
-                counts[row["candidate_id"]] = int(row["n"])
-        # An adapter, not a reimplementation. The variance belongs to
-        # balance_audit_core (`_variance_pct` is private and the core is locked
-        # — never edited), but its public entry takes Schema-v1 Profiles, not
-        # raw counts. So each count rides in as a synthetic profile's
-        # word_count and we read that one metric back out. The threshold is
-        # forced below zero purely so the core always fills in `candidates`
-        # (low/high); the breach flag it computes is meaningless here and
-        # dropped, because coverage never gates.
-        entry = audit_core(
-            [{"candidate_id": cid, "race_id": race_id,
-              "facts": [], "positions": [],
-              "audit": {"word_count": n, "fact_checks_performed": 0}}
-             for cid, n in counts.items()],
-            {"word_count_pct": -1.0},
-        )["metrics"]["word_count"]
-        coverage = {"counts": counts, "variance_pct": entry["variance_pct"],
-                    "min": entry["min"], "max": entry["max"]}
-        if entry["max"] > entry["min"]:
-            coverage["candidates"] = entry["candidates"]
-        return coverage
+        try:
+            # Everything below reads a SELECT that already succeeded -- a
+            # malformed row or a core error here is a pure-Python failure, not
+            # a poisoned transaction, so it degrades the same way but does not
+            # need (or get) a rollback.
+            # Zero-fill every roster candidate, the same rule as
+            # namedCountsByCandidate() in src/lib/news-match.ts: a candidate
+            # the press ignored is the widest gap in the report, and dropping
+            # them would silently exclude it from the variance.
+            counts = {cid: 0 for cid in roster}
+            for row in rows:
+                if row["candidate_id"] in counts:
+                    counts[row["candidate_id"]] = int(row["n"])
+            # An adapter, not a reimplementation. The variance belongs to
+            # balance_audit_core (`_variance_pct` is private and the core is
+            # locked — never edited), but its public entry takes Schema-v1
+            # Profiles, not raw counts. So each count rides in as a synthetic
+            # profile's word_count and we read that one metric back out. The
+            # threshold is forced below zero purely so the core always fills
+            # in `candidates` (low/high); the breach flag it computes is
+            # meaningless here and dropped, because coverage never gates.
+            entry = audit_core(
+                [{"candidate_id": cid, "race_id": race_id,
+                  "facts": [], "positions": [],
+                  "audit": {"word_count": n, "fact_checks_performed": 0}}
+                 for cid, n in counts.items()],
+                {"word_count_pct": -1.0},
+            )["metrics"]["word_count"]
+            coverage = {"counts": counts, "variance_pct": entry["variance_pct"],
+                        "min": entry["min"], "max": entry["max"]}
+            if entry["max"] > entry["min"]:
+                # .get, not [] -- a malformed/absent `candidates` here must
+                # degrade this report-only fact, not KeyError the whole audit.
+                candidates = entry.get("candidates")
+                if candidates is not None:
+                    coverage["candidates"] = candidates
+            return coverage
+        except Exception as err:  # noqa: BLE001
+            return {"error": errors.UPSTREAM_FAILED,
+                    "reasons": [f"coverage computation failed ({type(err).__name__})"]}
 
     def balance_audit(payload: Mapping[str, Any]) -> dict:
         race_id = payload.get("race_id")

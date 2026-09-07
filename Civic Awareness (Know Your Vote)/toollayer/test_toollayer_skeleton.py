@@ -1305,6 +1305,15 @@ class TestBalanceAudit(unittest.TestCase):
         self.assertFalse(layer.halted)
         self.assertEqual(len(profile_updates(db)), 2)
         self.assertEqual(committed_log_rows(db)[-1]["status"], "success")
+        # FakeDb has no transaction-poisoning model -- unlike real psycopg it
+        # happily executes the write-back UPDATEs after a "failed" SELECT
+        # (fail_at just raises once, it doesn't leave the connection dirty).
+        # So it cannot demonstrate InFailedSqlTransaction directly; the
+        # rollback count is the closest observable proxy: it confirms
+        # _coverage's except block actually called store.rollback() before
+        # returning the error dict, which on a real connection is what keeps
+        # the later write_balance_result loop from being poisoned.
+        self.assertEqual(db.rolled_back, 1)
 
     def test_unopposed_race_has_zero_coverage_variance(self):
         db = (FakeDb()
@@ -1334,6 +1343,36 @@ class TestBalanceAudit(unittest.TestCase):
         # a coverage gap the pipeline itself created.
         self.assertEqual(res["result"]["coverage"]["counts"],
                          {"cand_001": 4, "cand_002": 4})
+
+    def test_coverage_ignores_a_count_row_for_an_off_roster_candidate_id(self):
+        """The `if row["candidate_id"] in counts` guard (mirrors
+        namedCountsByCandidate() verbatim) is unreachable given the SQL's
+        `ANY(%s)` filter -- but FakeDb returns primed rows regardless of SQL,
+        so this pins the guard's own behaviour rather than trusting the SQL
+        to enforce it: an off-roster row must not leak into `counts` or shift
+        the variance."""
+        db = self._uneven_coverage_db([{"candidate_id": "cand_001", "n": 4},
+                                       {"candidate_id": "cand_002", "n": 4},
+                                       {"candidate_id": "cand_999", "n": 999}])
+        layer, db = make_synthesis_layer(db=db)
+        res = layer.dispatch("balance_audit", {"race_id": "FL-15-general"})
+        cov = res["result"]["coverage"]
+        self.assertEqual(cov["counts"], {"cand_001": 4, "cand_002": 4})
+        self.assertEqual(cov["variance_pct"], 0.0)
+        self.assertNotIn("candidates", cov)
+
+    def test_coverage_with_no_named_items_at_all_is_zero_variance(self):
+        """No `named` row for any roster candidate -- the counts read comes
+        back empty, not absent. Every roster candidate must still be zero-
+        filled (not dropped), and equal zeros is zero variance, not an
+        upstream failure."""
+        db = self._uneven_coverage_db([])
+        layer, db = make_synthesis_layer(db=db)
+        res = layer.dispatch("balance_audit", {"race_id": "FL-15-general"})
+        cov = res["result"]["coverage"]
+        self.assertEqual(cov["counts"], {"cand_001": 0, "cand_002": 0})
+        self.assertEqual(cov["variance_pct"], 0.0)
+        self.assertNotIn("candidates", cov)
 
     def test_no_profiles_degrades(self):
         db = FakeDb().prime_read([])
