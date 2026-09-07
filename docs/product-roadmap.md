@@ -19,7 +19,7 @@ changes the critical path more than any code change this week.
 | # | Step | Owner | State |
 |---|---|---|---|
 | 1 | Deploy to Vercel | founder | **unblocked as of today** |
-| 2 | TASK-058 verify the five `general_2026` dates | founder | not started |
+| 2 | TASK-058 verify the five `general_2026` dates | founder | **done 2026-09-07** |
 | 3 | Cron fires the T-7 registration reminder | automatic | **due 2026-09-28** |
 
 Step 2 is a design gate, not an oversight: `election_event.verified_by` exists
@@ -60,6 +60,12 @@ content work, not engineering.
 ### Next, in order
 
 Engineering, none of it blocked:
+
+0. **TASK-058 is done** (2026-09-07). The five `general_2026` dates are
+   verified and stamped, so the deadline banner, the ICS feed and the
+   voting-info email are live. The T-7 registration reminder now depends only
+   on the cron running on **2026-09-28** — that is the next hard date, and it
+   cannot be re-sent if missed.
 
 1. **Phase 7 is complete.** TASK-067 through TASK-071 all landed 2026-09-07:
    no surface gates on ZIP, no device-stored location, and a privacy page that
