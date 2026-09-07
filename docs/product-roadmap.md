@@ -32,7 +32,7 @@ September 28 and that reminder cannot be re-sent.
 | # | Step | Owner | State |
 |---|---|---|---|
 | 1 | TASK-066 — 9 races, ~18–20 candidates, 3 measures through the Balance Audit | founder | not started |
-| 2 | Remove every `demo-` row (`scripts/demo-teardown.sql`) | founder | not started |
+| 2 | Remove every `demo-` row (`scripts/demo-teardown.sql`) | founder | not started — script fixed 2026-09-07, see TASK-066 |
 
 The app cannot go public on demo fixtures. This is the longest pole and it is
 content work, not engineering.
@@ -52,16 +52,28 @@ content work, not engineering.
 | TASK-064 | Deadline banner, cached so `/` stays static; silent until TASK-058 verifies the dates |
 | TASK-065 | Quiz reframed from alignment to stances, with `COMPARATIVE_RE` as a second guardrail |
 | TASK-067 | `SharedBallot` on `/` — statewide races and measures with no ZIP; ZIP demoted to an upgrade |
+| TASK-068 | Quiz un-gated — opens on question one, runs statewide; ZIP offered at the results step |
+| TASK-069 | News feed un-gated — statewide items with no location; the route already allowed it |
+| TASK-070 | `kyv.location` removed — no device-stored location; the landing page can finally say so |
+| TASK-071 | Privacy page matches the code; `ballot_viewed` replaces `zip_resolved` as the funnel entry |
 
 ### Next, in order
 
 Engineering, none of it blocked:
 
-1. **TASK-068 → 071** — the rest of Phase 7. TASK-067 landed 2026-09-07: the
-   landing page renders the shared ballot with no ZIP, and the ZIP field is an
-   upgrade beside it. TASK-068 (quiz) and TASK-069 (news feed) are the two
-   remaining gates; TASK-070 removes `kyv.location` once nothing reads it, and
-   TASK-071 makes the privacy page and the analytics funnel match.
+1. **Phase 7 is complete.** TASK-067 through TASK-071 all landed 2026-09-07:
+   no surface gates on ZIP, no device-stored location, and a privacy page that
+   describes what the code actually does.
+
+   Three follow-ups it left behind, none blocking: `/news` is statewide for
+   everyone until something links to it with a location; the quiz no longer
+   prefills a confirmed district for split ZIPs; and analytics comparisons
+   across the ship date are not meaningful, since `zip_resolved` now counts a
+   different thing — read the funnel from `ballot_viewed` instead.
+
+   **The critical path is now content, not code**: TASK-066's races,
+   candidates and measures through the Balance Audit, and TASK-058's date
+   verification. Both need a human.
 
 Partially blocked: **TASK-060** needs the Census ZCTA crosswalk files, and
 `www2.census.gov` is unreachable from the Claude Code session (403 at the

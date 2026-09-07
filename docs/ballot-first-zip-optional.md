@@ -195,22 +195,94 @@ than a paragraph of assurance.
     not get an error page — but it is the reason a missing table looked like an
     unpublished ballot for a day.
 
-- [ ] **TASK-068** — Un-gate the quiz
+- [x] **TASK-068** — Un-gate the quiz
   Files: `src/components/features/Quiz.tsx`
   Notes: Delete the `{ kind: "zip" }` stage; start at the first question and
   run against the statewide races. Offer ZIP at the *results* step to add the
   district race. Sequence after Phase 6 TASK-065 (the neutrality reframe) so
   the result shape is settled before this touches the same file.
   Verify: the quiz completes end to end with no ZIP ever entered.
+  **Done 2026-09-07** — the ZIP stage is gone; the quiz opens on question one
+  and runs against `getStatewideRaces()`, and ZIP moved to the results step
+  where it adds the district race to a result already on screen.
 
-- [ ] **TASK-069** — Un-gate the news feed
+  **The file list was short by two.** `src/app/api/quiz/route.ts` required
+  `zip` (`z.string().regex(ZIP_RE)`) and `runQuiz` took it as a required
+  positional, so deleting the stage alone would have produced a 400 on every
+  submission. Both now treat it as optional; the route additionally *rejects*
+  a `district` sent without a `zip` rather than ignoring it, since that can
+  only come from a malformed client and silently dropping it would answer a
+  different question than the one asked.
+
+  **What un-gating cost, and where it was paid.** The ZIP stage did real work
+  besides collecting a ZIP: it checked coverage before the voter answered
+  anything, so an out-of-coverage voter heard it on question zero rather than
+  five questions in. That check now happens at the results step — and costs
+  nothing when it fails, because the statewide results are already rendered
+  and stay put. `addDistrictRace` never replaces the results stage on error;
+  it only sets a notice. Failing to add a race a voter did not have a moment
+  ago is a much smaller loss than failing before they had anything.
+
+  **Copy moved with it**, on the same honesty rule as TASK-067: the disclaimer
+  said "every candidate on your ballot", which a statewide-only run does not
+  deliver. It now says "in these races", and the page subtitle names the
+  statewide scope and the ZIP upgrade. The intro also lost "candidates whose
+  stated positions line up" — that is the alignment framing TASK-065 removed
+  from the results, still sitting in the invitation, promising exactly what
+  the answer refuses to give.
+
+  `scripts/verify-quiz-ungated.ts` guards the nine structural facts that would
+  regress silently: no `{ kind: "zip" }` stage, the intro entering the
+  questions directly, question one going back to the intro, the route's
+  optional `zip` and its district refinement, `runQuiz`'s optional parameter,
+  the statewide read on the no-ZIP path, the results-step upgrade still
+  existing, and the disclaimer not reclaiming the whole ballot. Re-adding a
+  ZIP gate is a one-line change that reads as harmless; this fails on it.
+  (Regression-tested by re-adding the stage, which fails the script.)
+
+  **Not verified here:** the end-to-end run. It needs a database and an
+  `ANTHROPIC_API_KEY`, and this session has neither — the live check is a
+  no-ZIP quiz on the preview deploy.
+
+- [x] **TASK-069** — Un-gate the news feed
   Files: `src/components/features/NewsFeed.tsx`, `src/app/api/news/route.ts`
   Notes: Replace the `noLocation` dead end with statewide items; metro scoping
   becomes a narrowing filter when a location is present in the URL, not a
   precondition.
   Verify: `/news` with empty storage renders statewide items, not an empty state.
+  **Done 2026-09-07** — the last of Phase 7's gates.
 
-- [ ] **TASK-070** — Remove `kyv.location`
+  **`route.ts` needed no change at all.** Every parameter was already optional
+  and a request with none already returns the statewide scope
+  (`and(race_id.is.null,metro.is.null)`). The gate lived entirely in the
+  component: the effect `return`ed before fetching when no location was
+  stored, and the render replaced the feed with an "Add your ZIP" prompt. Both
+  are gone; the file is otherwise untouched, and `verify-news-ungated` pins
+  the three parameters as optional so the feed cannot be re-gated from the
+  server side without anyone noticing.
+
+  **The data was checked before the code was written**, which is the lesson
+  TASK-067 paid for: querying `news_item` as `anon` first confirmed three
+  genuinely statewide rows — voter registration, the Division of Elections,
+  and statewide election news (HB 991). Un-gating therefore produces a real
+  feed rather than an honest-looking empty state, and that was known going in
+  rather than discovered on a deploy.
+
+  **Deviation from the plan's wording:** it says metro scoping "becomes a
+  narrowing filter". The route ORs statewide, metro, and race scopes, so a ZIP
+  *adds* local items rather than hiding statewide ones — kept as is. A voter
+  who enters a ZIP should not thereby lose the voter-registration link, which
+  is what narrowing would do.
+
+  **Not moved to the URL.** The plan says "when a location is present in the
+  URL", but `/news` is a static route and `useSearchParams` here would force a
+  Suspense bailout for no gain today. It still reads `kyv.location`; TASK-070
+  owns that migration and already lists this file.
+
+  Copy followed TASK-067's honesty rule: the page was titled *Local electoral
+  news*, and with no location it is statewide, so "Local" came off.
+
+- [x] **TASK-070** — Remove `kyv.location`
   Files: `src/lib/location.ts` (delete), `ZipEntry.tsx`, `Quiz.tsx`, `NewsFeed.tsx`, `SavedCandidates.tsx`
   Notes: Drop the read/write/clear helpers and every `readLocation()` call;
   keep `locationQuery()`'s URL behavior, which is what actually carries state.
@@ -218,8 +290,56 @@ than a paragraph of assurance.
   on stored location when it disappears.
   Verify: `grep -r "kyv.location" src` returns nothing; a full ZIP → races →
   polling-place flow works with `localStorage` disabled entirely.
+  **Done 2026-09-07** — `src/lib/location.ts` deleted, net −101 lines.
 
-- [ ] **TASK-071** — Update the privacy page and analytics funnel
+  **Two corrections to the file list.** `locationQuery()` had **no callers** —
+  the note to keep it because it "is what actually carries state" described an
+  intent, not the code; the URL is built inline at each `router.push`. It went
+  with the rest of the module. And `SavedCandidates.tsx` needed no change at
+  all: it only ever touched `kyv.saved`, which this task deliberately keeps.
+
+  **What this costs, beyond re-entering a ZIP.** Two capabilities were only
+  reachable through the store, and both are now gone rather than merely
+  unused:
+
+  1. **Metro-scoped news.** `NewsFeed` read a stored location to send `?zip=`
+     or `?metro=`. The route still supports both and 7 of 10 `news_item` rows
+     carry a metro, but the section nav is the only link to `/news` and has no
+     location to pass — so `/news` is statewide for everyone now. A link from
+     the races view carrying the location already in *that* URL restores it in
+     one line; left as a deliberate follow-up rather than built speculatively
+     here.
+  2. **The quiz's district prefill.** `post()` sent a stored district so a
+     voter who had confirmed one on a split ZIP did not have to again. Without
+     it, a split ZIP entered at the quiz's results step comes back asking for
+     confirmation. That is the honest answer once nothing is remembered
+     between pages, and it is the cost the proposal explicitly accepted.
+
+  **The payoff lands on the landing page.** TASK-067 deliberately made no
+  storage claim next to the ZIP field, because `writeLocation` made "never
+  stored" false. It is true now, so the claim is there: *"We use it to find
+  your district; nothing is saved on your device."* Scoped to the device on
+  purpose — that is the half a skeptic can verify in devtools in ten seconds.
+  A broader "we never see it" would be false for a lookup the server answers.
+
+  `scripts/verify-no-stored-location.ts` is the task's grep, made durable:
+  comments are stripped (several files now explain the absence, and that must
+  not read as presence), and it also fails on a device-stored location under
+  any *other* key — re-adding the behaviour as `kyv.loc` would pass a literal
+  grep while undoing the task. `kyv.saved` and the InstallCard dismiss flag
+  are the two allowed keys. Regression-tested by writing a `kyv.loc` key,
+  which fails it.
+
+  `verify-news-ungated` was updated, not merely kept passing: two of its
+  checks pinned TASK-069's code shape (a pre-hydration guard, a conditional
+  query string) that this task deleted. What they protected — that the request
+  is always issued — is asserted directly now.
+
+  `saved.ts` already wraps every storage call in try/catch, so the second half
+  of the verify criterion holds structurally: with `localStorage` disabled the
+  app degrades rather than throwing.
+
+- [x] **TASK-071** — Update the privacy page and analytics funnel
   Files: `src/app/(public)/privacy/page.tsx`, `src/lib/analytics.ts`
   Notes: The privacy page's "What stays on your device" section becomes
   narrower and truer — say plainly that ZIP is used for the request and not
@@ -227,6 +347,51 @@ than a paragraph of assurance.
   the magic moment now precedes it; add a `ballot_viewed` event or the funnel
   will read as a cliff-edge drop the day this ships.
   Verify: no claim on the privacy page describes storage that no longer exists.
+  **Done 2026-09-07** — Phase 7 complete.
+
+  **The privacy page carried a claim that was never true.** It said quiz
+  answers were "stored in your browser only". They never were: `Quiz.tsx`
+  keeps them in React state, and the only two `localStorage` keys the app has
+  ever written are `kyv.saved` and the install-prompt flag. That predates
+  Phase 7 entirely — the verify criterion says "no claim describes storage
+  that no longer exists", and this one described storage that never existed.
+  For a page whose entire value is being checkable, that is the worst kind of
+  error to carry.
+
+  The section now names **every** key the app writes and says plainly that
+  neither the quiz answers nor the ZIP are kept. The ZIP paragraph names its
+  own exception inline rather than leaving it to the next section: "your ZIP
+  isn't stored" sitting directly above "we store your ZIP" reads as a
+  contradiction even though both are true of different things, and a privacy
+  page that needs careful reading to be accurate is not doing its job.
+
+  The AI section also said the model receives "your ZIP-resolved races", which
+  stopped being true in TASK-068 — it now receives the races on your ballot,
+  statewide when no ZIP is given.
+
+  **`ballot_viewed` is the funnel's new entry event**, ahead of `zip_resolved`.
+  It fires only when a ballot actually rendered, not merely when the landing
+  page loaded — the landing page re-reads the same two `unstable_cache` calls
+  `SharedBallot` makes in that render, so it costs a cache hit rather than a
+  query. Mounted on the page rather than inside `SharedBallot`: the tracker is
+  a client component, and `verify-shared-ballot` enforces that nothing the
+  ballot reaches needs JavaScript.
+
+  Worth being honest about what the funnel can and cannot tell you: `zip_resolved`
+  now measures how many voters *want* their district race, which is a smaller
+  number by design. Comparisons across the ship date are misleading in both
+  directions and no renaming fixes that — the honest reading is a new funnel
+  starting at `ballot_viewed`.
+
+  `TrackBriefView` became the generic `TrackView` rather than gaining a
+  near-identical twin; the event name was the only thing that ever differed.
+  Its two existing call sites moved with it.
+
+  `verify-no-stored-location` grew the claim checks: the two assertions that
+  were actually wrong, the two keys actually written, and the funnel order.
+  Deliberately narrow — it pins facts, and does not pretend to validate
+  English. Regression-tested by restoring the false quiz-answer claim, which
+  fails it.
 
 ---
 

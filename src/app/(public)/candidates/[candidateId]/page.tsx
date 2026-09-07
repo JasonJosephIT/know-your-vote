@@ -2,7 +2,7 @@ import Link from "next/link";
 import { CandidateBrief } from "@/components/features/CandidateBrief";
 import { CandidateContact } from "@/components/features/CandidateContact";
 import { CandidateNews } from "@/components/features/CandidateNews";
-import { TrackBriefView } from "@/components/features/TrackBriefView";
+import { TrackView } from "@/components/features/TrackView";
 import { getCandidateDetail } from "@/lib/briefs";
 
 export const revalidate = 3600;
@@ -58,7 +58,7 @@ export default async function CandidatePage({
           {detail.office}
         </Link>
       </p>
-      <TrackBriefView />
+      <TrackView event="brief_viewed" />
       <CandidateBrief
         data={detail.brief}
         headingLevel="h2"

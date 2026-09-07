@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { CountyPicker, DistrictConfirm } from "@/components/features/CountyPicker";
 import { track } from "@/lib/analytics";
-import { writeLocation } from "@/lib/location";
 import type { ResolveResult } from "@/types/app";
 
 type Stage =
@@ -62,12 +61,6 @@ export function ZipEntry({
         return;
       }
 
-      writeLocation({
-        zip: data.zip,
-        county: data.county ?? "",
-        district: data.district,
-        metro: data.metro,
-      });
       track("zip_resolved");
       const q = new URLSearchParams({ view: "races", zip: data.zip });
       if (data.district) q.set("district", data.district);
@@ -141,10 +134,9 @@ export function ZipEntry({
             covered county:
           </p>
           <CountyPicker
-            onPick={(county) => {
-              writeLocation({ county: county.name });
-              router.push(`/candidates?view=races&county=${county.fips}`);
-            }}
+            onPick={(county) =>
+              router.push(`/candidates?view=races&county=${county.fips}`)
+            }
           />
         </div>
       )}
@@ -168,10 +160,9 @@ export function ZipEntry({
 
       {showCounties && stage.kind !== "outOfCoverage" && (
         <CountyPicker
-          onPick={(county) => {
-            writeLocation({ county: county.name });
-            router.push(`/candidates?view=races&county=${county.fips}`);
-          }}
+          onPick={(county) =>
+            router.push(`/candidates?view=races&county=${county.fips}`)
+          }
         />
       )}
     </div>

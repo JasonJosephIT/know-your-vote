@@ -1,11 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { formatNewsDate, safeHttpUrl } from "@/lib/format";
-import { readLocation } from "@/lib/location";
-import type { StoredLocation } from "@/lib/location";
 
 import type { NewsItemType } from "@/types/app";
 
@@ -40,53 +38,37 @@ type Stage =
   | { kind: "error" }
   | { kind: "ready"; items: FeedItem[] };
 
-/* Location is written on other pages before navigating here, so there is no
-   change event to subscribe to — the empty subscription still lets
-   useSyncExternalStore swap the server snapshot for the device value right
-   after hydration. */
-const subscribeToNothing = () => () => {};
+/* Un-gated in TASK-069, then un-scoped in TASK-070.
+
+   The feed used to refuse to fetch without a stored location. TASK-069
+   removed that gate; TASK-070 removed the store it read. What is left is the
+   simplest thing that is true: /news requests the statewide scope and shows
+   what comes back.
+
+   That costs the metro filter. The route still supports ?metro= and ?zip=,
+   and 7 of the 10 news_item rows carry a metro — but nothing links to /news
+   with parameters (the section nav is the only link, and it has no location
+   to pass), so metro scoping was reachable only through kyv.location. It is
+   unreachable now rather than removed: a link from the races view carrying
+   the location already in that URL would restore it in one line, and that is
+   a deliberate follow-up rather than something to build speculatively here.
+
+   Dropping the store also removes the useSyncExternalStore dance that existed
+   only to read device storage after hydration. */
 
 export function NewsFeed() {
-  /* undefined = server/hydration render (device storage not readable yet, so
-     keep the loading skeleton); null = hydrated with no stored location. */
-  const location = useSyncExternalStore<StoredLocation | null | undefined>(
-    subscribeToNothing,
-    readLocation,
-    () => undefined,
-  );
   const [stage, setStage] = useState<Stage>({ kind: "loading" });
 
   useEffect(() => {
-    const params = new URLSearchParams();
-    if (location?.zip) {
-      params.set("zip", location.zip);
-      if (location.district) params.set("district", location.district);
-    } else if (location?.metro) {
-      params.set("metro", location.metro);
-    } else {
-      return;
-    }
-
     const controller = new AbortController();
-    fetch(`/api/news?${params}`, { signal: controller.signal })
+    fetch("/api/news", { signal: controller.signal })
       .then((r) => (r.ok ? (r.json() as Promise<{ items?: FeedItem[] }>) : Promise.reject()))
       .then((data) => setStage({ kind: "ready", items: data.items ?? [] }))
       .catch(() => {
         if (!controller.signal.aborted) setStage({ kind: "error" });
       });
     return () => controller.abort();
-  }, [location]);
-
-  if (location !== undefined && !location?.zip && !location?.metro) {
-    return (
-      <p className="text-body text-on-surface-muted">
-        Add your ZIP or county and we&apos;ll show updates for your races.{" "}
-        <Link href="/" className="text-primary underline underline-offset-2">
-          Enter your ZIP
-        </Link>
-      </p>
-    );
-  }
+  }, []);
 
   if (stage.kind === "loading") {
     return (
@@ -116,8 +98,8 @@ export function NewsFeed() {
   if (stage.items.length === 0) {
     return (
       <p className="text-body text-on-surface-muted">
-        No updates yet for your area — quiet is honest. Check back after the
-        next daily refresh.
+        No updates yet — quiet is honest. Check back after the next daily
+        refresh.
       </p>
     );
   }

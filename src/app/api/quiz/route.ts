@@ -4,8 +4,12 @@ import { runQuiz } from "@/lib/quiz";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { ZIP_RE } from "@/lib/resolve";
 
+/* ZIP optional since TASK-068: with none, runQuiz uses the statewide races.
+   District without ZIP is rejected rather than ignored — it can only come
+   from a malformed client, and silently dropping it would answer a different
+   question than the one asked. */
 const body = z.object({
-  zip: z.string().regex(ZIP_RE),
+  zip: z.string().regex(ZIP_RE).optional(),
   district: z
     .string()
     .regex(/^FL-\d{1,2}$/)
@@ -19,7 +23,11 @@ const body = z.object({
       })
     )
     .max(20),
-});
+})
+  .refine((b) => !b.district || b.zip, {
+    message: "district requires zip",
+    path: ["district"],
+  });
 
 export async function POST(request: NextRequest) {
   const { allowed } = rateLimit(`quiz:${clientKey(request)}`, 10, 60_000);
