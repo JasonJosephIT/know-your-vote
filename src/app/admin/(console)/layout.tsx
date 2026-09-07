@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { AdminNav } from "@/components/admin/AdminNav";
 import { createAdminServerClient, requireAdmin } from "@/lib/admin/guard";
+import { getPendingReviewCount } from "@/lib/admin/monitor";
 
 /* The authed console shell: header (operator identity + sign-out) and section
    nav, wrapping the overview and the five section pages. requireAdmin() gates
@@ -14,6 +15,7 @@ export default async function ConsoleLayout({
   children: React.ReactNode;
 }) {
   const { email } = await requireAdmin();
+  const pendingCount = await getPendingReviewCount();
 
   async function signOut(): Promise<void> {
     "use server";
@@ -48,7 +50,7 @@ export default async function ConsoleLayout({
         </div>
       </header>
 
-      <AdminNav />
+      <AdminNav pendingCount={pendingCount} />
 
       <main className="mx-auto w-full max-w-[1120px] flex-1 px-4 py-6 md:px-5">
         {children}
