@@ -4,7 +4,8 @@ Both are orchestrator-only (Tool Spec §2); check_tool_access denies them for
 every other identity before a handler is reached.
 
 T10 balance_audit
-  Reads every Profile for the race, runs the deterministic
+  Reads every Profile for the race, audits only the BALLOT tier, runs the
+  deterministic
   `balance_audit_core` (four-metric split: word_count / verifiable_fact_count
   / fact_checks gate → HALT; stated_position / spine coverage → flag), and
   writes `balance_check_passed` + `flag_reason` + `flagged_at` back onto each
@@ -32,6 +33,15 @@ from . import cores, errors
 from .store import Store
 
 SYNTHESIS_AGENTS = frozenset({"orchestrator"})
+
+# A3 / data-architecture.md section 3. The audit measures symmetry of scrutiny
+# among candidates we brief, and we brief printed ballot lines only. A write-in
+# or a defeated filer has no public material, so it enters with zero claims --
+# and (12-0)/12 is 100% variance against a 10% threshold, which HALTs the race
+# permanently. B1 measured 87 such filers against 22 real ballot lines, at
+# least one in every target race, so without this filter the pipeline's default
+# outcome is that nothing publishes at all.
+BALLOT_TIER = "ballot"
 
 _TWILIO_ENV = ("TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_OWNER_PHONE")
 
@@ -68,10 +78,33 @@ def build_synthesis_handlers(
         if not profiles:
             return {"ok": False, "error": errors.UPSTREAM_FAILED,
                     "reasons": [f"no profiles found for race {race_id!r}"]}
+
+        audited = [p for p in profiles if p.get("ballot_status") == BALLOT_TIER]
+        # Recorded, not discarded: an exclusion nobody can see is not auditable.
+        excluded = [{"candidate_id": p["candidate_id"],
+                     "ballot_status": p.get("ballot_status")}
+                    for p in profiles if p.get("ballot_status") != BALLOT_TIER]
+        if not audited:
+            # Degrade honestly rather than pass a race with nothing in it. An
+            # empty population is not a balanced one.
+            return {"ok": False, "error": errors.UPSTREAM_FAILED, "reasons": [
+                f"race {race_id!r} has {len(profiles)} profile(s) but no "
+                f"ballot-tier candidate to audit; excluded: "
+                + ", ".join(f"{e['candidate_id']}={e['ballot_status']}"
+                            for e in excluded)]}
+
         try:
-            result = audit_core(profiles, payload.get("thresholds"))
+            result = audit_core(audited, payload.get("thresholds"))
         except ValueError as err:
             return {"ok": False, "error": errors.UPSTREAM_FAILED, "reasons": [str(err)]}
+
+        result["audited_candidates"] = [p["candidate_id"] for p in audited]
+        result["excluded_candidates"] = excluded
+        # Variance over one candidate is 0.0 and passes trivially -- correct
+        # arithmetic, vacuous claim. B1 found FL-10 has exactly one ballot
+        # candidate, so this is live, not hypothetical. Recorded, never gated:
+        # the audit reports, it does not decide publication.
+        result["unopposed"] = len(audited) == 1
 
         halted = result["verdict"] == "HALT"
         flag_reason = ("scrutiny_halt" if halted
@@ -79,7 +112,11 @@ def build_synthesis_handlers(
         patch = {"balance_check_passed": not halted, "flag_reason": flag_reason,
                  "flagged_at": result.get("flagged_at")}
         try:
-            for p in profiles:
+            # Only the audited profiles. Writing balance_check_passed onto an
+            # excluded candidate would claim they passed an audit they were
+            # never in -- and that field is exactly what the publication gate
+            # reads.
+            for p in audited:
                 store.write_balance_result(p["candidate_id"], race_id, patch)
         except Exception as err:  # noqa: BLE001
             store.rollback()
