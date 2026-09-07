@@ -168,6 +168,37 @@ await check("a county-scoped item is not statewide", async () => {
   if (scoped.rows[0].n !== 1) throw new Error("county-scoped row not returned for its own county");
   await db.query("DELETE FROM news_item WHERE url = 'https://example.org/scope-test';");
 });
+await check("0017 news_item.relation exists and is nullable", async () => {
+  const r = await db.query(
+    `SELECT is_nullable FROM information_schema.columns
+      WHERE table_name='news_item' AND column_name='relation';`
+  );
+  if (r.rows.length !== 1) throw new Error("news_item.relation missing");
+  /* Nullable is load-bearing and is NOT a third tier: NULL means the row is
+     not a candidate match at all (official_link, pipeline_event, unattached
+     election_news). The 10 live rows predate the matcher. */
+  if (r.rows[0].is_nullable !== "YES") throw new Error("relation must stay nullable");
+});
+await check("0017 relation admits only named/related (plus NULL)", async () => {
+  await db.query(
+    `INSERT INTO news_item (item_type, title, url, relation)
+     VALUES ('candidate_news','named row','https://example.org/rel-a','named'),
+            ('candidate_news','related row','https://example.org/rel-b','related'),
+            ('official_link','no relation','https://example.org/rel-c',NULL);`
+  );
+  let rejected = false;
+  try {
+    await db.query(
+      `INSERT INTO news_item (item_type, title, url, relation)
+       VALUES ('candidate_news','third tier','https://example.org/rel-d','maybe');`
+    );
+  } catch (err) {
+    if (!/news_item_relation_check/.test(String(err))) throw err;
+    rejected = true;
+  }
+  if (!rejected) throw new Error("a third relation value was accepted");
+  await db.query("DELETE FROM news_item WHERE url LIKE 'https://example.org/rel-%';");
+});
 /* 0015 UPDATEs a row seeded by 0004, which is already applied live. A wrong
    URL in that WHERE clause would match zero rows and still "pass" every other
    check, so assert the row actually changed rather than that the file ran. */
@@ -382,6 +413,44 @@ await check("service_role reads voting_info_subscription", async () => {
   if (r.rows[0].n !== 1) throw new Error(`count ${r.rows[0].n}`);
 });
 
+/* CN-R10's denominator, at the storage layer: the query the audit runs must
+   be able to separate the tiers. A story attached to every candidate in a
+   race (all 'related') and one that named a single candidate must not count
+   the same, or the published variance flatters our own coverage. */
+await check("named and related rows are separable for the audit", async () => {
+  await db.query(
+    `INSERT INTO news_item (candidate_id, item_type, title, url, relation) VALUES
+       ('c-pub','candidate_news','named','https://example.org/aud-a','named'),
+       ('c-pub','candidate_news','race','https://example.org/aud-b','related'),
+       ('c-draft','candidate_news','race','https://example.org/aud-b','related');`
+  );
+  const named = await db.query(
+    `SELECT count(*)::int AS n FROM news_item
+      WHERE relation='named' AND url LIKE 'https://example.org/aud-%';`
+  );
+  const all = await db.query(
+    `SELECT count(*)::int AS n FROM news_item
+      WHERE relation IS NOT NULL AND url LIKE 'https://example.org/aud-%';`
+  );
+  if (named.rows[0].n !== 1 || all.rows[0].n !== 3) {
+    throw new Error(`expected 1 named of 3 matched, got ${named.rows[0].n} of ${all.rows[0].n}`);
+  }
+  await db.query("DELETE FROM news_item WHERE url LIKE 'https://example.org/aud-%';");
+});
+/* The same article reaching several candidates is the §6 shape, and 0005's
+   index has to keep permitting it — one row per (url, candidate_id). */
+await check("one article may attach to several candidates", async () => {
+  await db.query(
+    `INSERT INTO news_item (candidate_id, item_type, title, url, relation) VALUES
+       ('c-pub','candidate_news','shared','https://example.org/multi','related'),
+       ('c-draft','candidate_news','shared','https://example.org/multi','related');`
+  );
+  const r = await db.query(
+    "SELECT count(*)::int AS n FROM news_item WHERE url='https://example.org/multi';"
+  );
+  if (r.rows[0].n !== 2) throw new Error(`expected 2 rows for one url, got ${r.rows[0].n}`);
+  await db.query("DELETE FROM news_item WHERE url='https://example.org/multi';");
+});
 /* 0005_refresh_agents constraint probes, run as service_role (the role
    R1/R2/R3 write through). The fixture already has a news_item row with
    candidate_id='c-pub' and url='https://example.gov/story-1'; re-inserting

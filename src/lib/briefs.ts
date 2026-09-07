@@ -266,7 +266,16 @@ async function fetchCandidateNews(candidateId: string): Promise<NewsItem[]> {
     .eq("item_type", "candidate_news")
     .order("published_at", { ascending: false })
     .limit(10);
-  return (data ?? []) as NewsItem[];
+  /* `named` before `related` (PRD §6): a story that named this candidate
+     outranks one that is merely about their race, whatever the dates say, so
+     the slots fill from the stronger tier first. Recency decides within a
+     tier — the query already sorted by it, and sort() is stable.
+
+     Rows written before 0017 have relation NULL. They are pre-matcher R1
+     output, already candidate-scoped, so they sort with `named` rather than
+     being demoted to a tier they were never assigned. */
+  const rank = (n: NewsItem) => (n.relation === "related" ? 1 : 0);
+  return ((data ?? []) as NewsItem[]).sort((a, b) => rank(a) - rank(b));
 }
 
 export function getCandidateNews(candidateId: string) {

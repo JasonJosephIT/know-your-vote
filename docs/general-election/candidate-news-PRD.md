@@ -134,8 +134,8 @@ in the prompt.
 | **CN-R6** | Ops plane written on every run (`agent_run`), skip-and-note if `0006` absent. | **Gap** — this is exactly TASK-A15, unbuilt. |
 | **CN-R7** | Gated by default: agent news routes through `review_item` before it is publicly readable. | **Gap, and a reversal.** design.md § 7 recorded the opposite decision ("Manual + gated only … revisit via per-agent flag"). This PRD asks the founder to flip that flag for R1. Also note: the read path publishes `news_item` rows the moment they exist (anon SELECT); "gated" therefore means *don't INSERT until approved*, i.e. R1 writes a `review_item(kind='manual_news', source='agent:R1')` and the approve effect does the insert. That effect exists as `src/lib/admin/effects.ts` (on `main` via PR #14). |
 | **CN-R8** | Degrade honestly: `status='failed'` on the run row; `ok_empty` for "ran fine, found nothing". | **Partial.** Fail-closed is in the prompt, but with no `agent_run` row there is no status anywhere a machine can read. Same fix as CN-R6. |
-| **CN-R9** *(v1.2)* | Every candidate-scoped row records **how** it matched: `relation` is `named` (deterministic full-name match) or `related` (ambiguous). `related` attaches to **every** candidate the ambiguity admits, never to one picked by judgment. | **Gap** — column does not exist (`0016`, §6). R1 today writes one row per candidate from a per-candidate search, so "how it matched" is unrecorded. |
-| **CN-R10** *(v1.2)* | Coverage variance (`news-fairness.md` §2) is computed over **`named` rows only**. | **Gap** — no variance is computed at all yet; the rule exists so it cannot be got wrong later. |
+| **CN-R9** *(v1.2)* | Every candidate-scoped row records **how** it matched: `relation` is `named` (deterministic full-name match) or `related` (ambiguous). `related` attaches to **every** candidate the ambiguity admits, never to one picked by judgment. | **Met in code 2026-09-07 (C8)**, unwired: `0017` adds the column, `src/lib/news-match.ts` assigns it, the candidate page renders the tiers apart. Nothing calls the matcher in production yet — its inputs are C7's sweep (gates open) and a real roster (B2). |
+| **CN-R10** *(v1.2)* | Coverage variance (`news-fairness.md` §2) is computed over **`named` rows only**. | **Met in code 2026-09-07 (C8)**: `namedCountsByCandidate()` is the denominator selection, and the guardrail proves that including `related` would move the variance from 1.00 to 0.75 on a fixture where one candidate has no coverage at all. The variance itself stays `balance_audit_core`'s (N5) — never reimplemented. |
 | **CN-R11** *(v1.2)* | Every feed-eligible row carries a `county_fips`, or is explicitly statewide (`NULL`). The feed scopes to any county without a schema change. | **Met in code 2026-09-07 (C9)**, unpopulated in data: `0016` adds the column and index, `/api/news?county=` scopes on it, and the statewide clause now excludes county-scoped rows. No live row carries a county yet — the writers are C7's sweep and C8's matcher. |
 
 **What §5 changes about CN-R4.** Under the corpus sweep, "same query pattern and
@@ -485,6 +485,41 @@ the column that lets it reach 67 without a second migration.
   and without `related` differs, and the reported number is the `named` one.
   **Blocked** on roster (C6's blocker) for a live run; the matcher itself is
   fixture-testable now.
+  ~ **Done as code 2026-09-07; nothing calls it yet.** `0017_news_relation.sql`
+  (written, **not applied** — `relation TEXT` nullable, CHECK admits only
+  `named`/`related`, plus `idx_news_item_candidate_relation`). Safe to merge
+  unapplied: `fetchCandidateNews` selects `*`, so a missing column reads as
+  absent and every row falls to the `named` side — no 500, unlike `0016`.
+  `src/lib/news-match.ts` is the matcher: full-name match allowing only the
+  candidate's **own** middle tokens or their initials between first and last
+  (so "Maria met John Smith" is not a match for Maria Smith), accent folding,
+  honorific and suffix stripping, and — the subtle one — full-name spans are
+  **masked before the surname pass**, so naming Maria Vasquez does not spray
+  `related` rows across every other Vasquez on the ballot.
+  `namedCountsByCandidate()` is CN-R10: a selection, not a calculation, since
+  the variance stays `balance_audit_core`'s. Every roster candidate appears,
+  including at zero — the candidate the press ignored is the widest gap in the
+  report and must not be dropped from it.
+  `CandidateNews.tsx` renders `named` first, then `related` under an "Also
+  about this race" heading with a sentence saying these did not name the
+  candidate; `briefs.ts` sorts `named` ahead of `related` (stable, so recency
+  still decides within a tier) and NULL-relation rows sort with `named`
+  because they are pre-matcher R1 output, not a tier they were never given.
+  Shortfall is stated where `named` is empty.
+  Verified: `node scripts/verify-news-match.ts` (new, mutation-checked — six
+  mutations, including "`related` picks only when unique", "do not mask
+  resolved full names", "count `related` rows in the audit", "drop
+  zero-coverage candidates", "attach the race story even when someone is
+  named", and "allow any filler between first and last", each makes it fail);
+  `verify-migrations.mjs` (four new invariants, mutation-checked against a
+  third tier, a NOT NULL default, and no constraint at all); the other three
+  news guardrails; `npx tsc --noEmit`; `npm run build`.
+  **Still not done:** nothing calls `matchArticle()` in production. The writer
+  is R1's sweep → match → insert, and both its inputs are gated — C7's outlet
+  list needs `leanTag` and `feed` filled, and the roster is still 29 demo
+  rows until B2. `N` (the per-candidate slot count) is still unchosen, so the
+  ordering rule ships and the cap does not — picking `N` before N5 measures
+  anything would be a guess.
 
 - [ ] **C9** *(v1.2)* — County-scoped feed + switcher (§7, CN-R11).
   Migration `0016` adds `news_item.county_fips` + index; `/api/news` takes
