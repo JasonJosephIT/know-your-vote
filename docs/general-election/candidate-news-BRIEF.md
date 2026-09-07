@@ -18,7 +18,7 @@
 | Governing spec `CAP_Refresh_Agents_Plan_v1` | ✅ found — `refresh-agents-plan.md` here; HTML original on `main` via PR #14 |
 | `TASK-A14` dispatcher / `TASK-A15` prompts v1.1 | ⬜ both unbuilt (confirmed: no `cap-r0-dispatcher`; no prompt writes `agent_run`) |
 | Real candidate roster (`ballot_status='ballot'`, 22 candidates) | ⬜ ingest branch A0/A1/B2/B3 — **the actual blocker** |
-| `news-fairness.md` | ⬜ **does not exist anywhere C0 could see** |
+| `news-fairness.md` | ✅ on `main` via PR #10 — N2/N3 built; N1 (migration `0013`) not written |
 
 **Zero `candidate_news` rows have ever been written**, and that is *correct
 behaviour*: R1 refuses to attach real people's news to fictional profiles.
@@ -45,7 +45,7 @@ unblock the ingest branch's A0.
    v1.1; lint as a library), §7 (the "don't queue agent news" decision CN-R7
    asks to reverse).
 5. `supabase/migrations/0005_refresh_agents.sql` and `0006_admin_ops.sql`.
-6. `news-fairness.md` — when it exists.
+6. `news-fairness.md` §1 (labelling), §3 (migration `0013`), §5 (names this PRD as the producer).
 
 Do not read the S-plane specs (`CAP_Runtime_PRD`, the three agent packages).
 That pipeline is **idle**. Useful only as prior art for guard patterns.
@@ -77,8 +77,8 @@ node scripts/verify-news-neutrality.ts --self-test
   (Constitution 5); keep it.
 - **No source, no card.** A row without a real `source` row is not written.
   This is *new* relative to the plan (which only requires an allowlisted URL)
-  — it is the PRD's CN-R1, and it needs a migration with a fresh number
-  (`0011` is taken).
+  — it is the PRD's CN-R1 and `news-fairness.md` §1, enforced by
+  `0013_news_fairness.sql` once N1 is written.
 - **Let the database dedupe.** `uq_news_item_url_candidate` exists. The plan
   also pre-queries; either is fine, the index decides.
 - **Fail closed, report honestly.** `status='failed'` with a reason;
@@ -105,8 +105,8 @@ node scripts/verify-news-neutrality.ts --self-test
   on 2026-09-06.** The July run reports did not: that PR gitignores
   `Agents/RunReports/`, so they live only on `wip/raw-worktree` and the
   operator's disk. Un-ignore them if they should be the tracked audit trail.
-- **Migrations `0009`–`0011` are on `main` but not applied live.** The ingest
-  branch also wants `0010`. Numbering needs reconciling before anyone applies.
+- **Migrations `0009`–`0011` are on `main` but not applied live.** Planned
+  next: `0012_general_election` (ingest A1), `0013_news_fairness` (N1).
 - `node` on this Mac is x64 under Rosetta; `verify-migrations.mjs` (PGlite)
   crashes. Use `/usr/bin/python3` for stdlib HTTPS scripts (ingest memory).
 - **`0004_official_links.sql` is applied.** Editing a seed changes nothing —
@@ -117,13 +117,13 @@ node scripts/verify-news-neutrality.ts --self-test
 | Gate | Blocks | Status |
 |---|---|---|
 | ~~Locate `CAP_Refresh_Agents_Plan` + R1 prompt~~ | — | ✅ C0 |
-| **Q0** — where is `news-fairness.md`, or write it | N-tasks; CN-R1's `type`/`lean_tag` semantics | ⬜ |
+| ~~**Q0** — where is `news-fairness.md`~~ | — | ✅ on `main` (PR #10) |
 | **Q5** — queue agent news through `review_item` (reverses design.md §7) | C5 | ⬜ |
 | **C1 rec.** — move R1's write path to `scripts/r1-ingest.mjs`, search stays in Cowork | C3, C4 shape | ⬜ (recommended yes) |
 | Ingest **A0** — three-tier `ballot_status` sign-off (on the ingest branch) | A1 → B2 → every R1 run | ⬜ |
 | Ingest **B2/B3** — real roster + official sites | C2, C3, C6 | ⬜ |
 | **Q6** — check R1's 08-01 / 08-15 / 09-01 runs in the Claude app | trust in cadence | ⬜ |
-| **Q7** — record "briefs retired 2026-09-06" in `docs/scope-changes.md` | honesty of the docs | ⬜ |
+| **Q7** — retirement is recorded in `news-fairness.md`; add the one-line `docs/scope-changes.md` entry | errata index completeness | ⬜ (minor) |
 | `N`, slots per candidate | N4 — **pick after C6 measures** | ⬜ |
 | Biography source (hand / agent / assembled) | the other half of the candidate page | ⬜ |
 | ~~Run `reconcile-git.sh`~~ | — | ✅ PR #14, 2026-09-06 |

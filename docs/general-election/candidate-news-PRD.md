@@ -1,7 +1,7 @@
 # Candidate News — PRD
 
 **Status:** Draft v1.1 · **Created:** 2026-09-06 · **Revised:** 2026-09-06 (C0) · **Owner:** Jason (founder)
-**Companion:** `news-fairness.md` (owns labelling + fairness rules — **not yet written, see §6 Q0**),
+**Companion:** `news-fairness.md` (owns labelling + fairness rules; founder decision 2026-09-06, N2/N3 built),
 `refresh-agents-plan.md` (the governing R1–R4 spec, brought into this directory by C0),
 `agents/r1-candidate-news.prompt.txt` (snapshot of the live R1 contract),
 `CAP_Runtime_PRD_v1.md` (the S-plane, now idle)
@@ -48,7 +48,8 @@ blocker is the roster, and the roster is the ingest branch's job (§2).
 | `candidate_contact` (+ `verified_by` default `agent:R2`) | `0005` | applied |
 | `agent_run`, `agent_run_request`, `review_item`, `admin_action` | `0006_admin_ops.sql` | **applied live** (`20260704003235`); all four tables have **0 rows** |
 | `source.type` (incl. `opinion`) + `source.lean_tag`, both `NOT NULL` + CHECK | `0000` | applied — the labelling axes exist; 87 rows, all demo |
-| `verify-news-neutrality.ts` — banned-terms lint + self-test | `scripts/` | built; self-test and live lint green 2026-09-06 |
+| `verify-news-neutrality.ts` — banned-terms lint + self-test | `scripts/` | built; self-test and live lint green 2026-09-06; N6 (assert source + labels) pending |
+| **N2 + N3** — feed API joins `source` and returns `publisher` / `type` / `lean_tag`; cards render them, opinion cards visually distinct | `src/app/api/news/route.ts`, `src/lib/news-labels.ts`, `src/components/features/NewsFeed.tsx`, `scripts/verify-news-labels.ts` | on `main` (PR #10, 2026-09-06); the PostgREST embed is unverified against a live DB |
 | `verify-refresh-schema.mjs`, `verify-admin-ops.mjs` | `scripts/` | built; refresh-schema green live 2026-09-06 |
 | Admin console Phase A1 (schema, auth, shell) | `main` (`2fcfc49`) | merged — the Agents page on `main` is the A4 placeholder |
 | **Admin console Phases A2–A5** — `/api/admin/*` routes, agents run-request API (TASK-A13), `src/lib/admin/{effects,monitor,review}.ts`, **`src/lib/neutrality.ts`** (TASK-A05), `src/types/admin.ts` | on `main` via PR #14 (`admin/console-a2-a5`, reconciled 2026-09-06; it had lived only on `wip/raw-worktree`). PR #14 also scopes the console's two `race` reads to the active election | built |
@@ -63,10 +64,10 @@ v1.0's numbering claim:
 
 - Live migrations are `0000`–`0008`. Repo `main` also holds `0009_action_log_roles`,
   `0010_ballot_measure`, `0011_measure_rls` — **written, not applied live.**
-- v1.0 said "`0011`, agent news must carry a source" belongs to
-  `news-fairness.md`. `0011` is already `measure_rls` on `main`, and the ingest
-  branch has claimed `0010` for `general_election`. The source constraint needs
-  a fresh number, assigned when written.
+- Planned, not written: **`0012_general_election.sql`** (`candidate.ballot_status`,
+  ingest A1) and **`0013_news_fairness.sql`** (agent news must carry a source,
+  `news-fairness.md` §3 / N1). v1.0 had numbered these `0010`/`0011`; PR #10
+  renumbered them off the collision with the ballot-measure migrations.
 
 ## 3. The architecture, confirmed (was "inferred" in v1.0)
 
@@ -194,16 +195,16 @@ in the prompt.
    and the operator's disk only.
 2. Ingest
    branch `claude/data-architecture-ingest-plan-u9b1fq` — A0 (founder decides the
-   three-tier `ballot_status`), A1 (migration), B2 (parser writes real
+   three-tier `ballot_status`), A1 (migration `0012`), B2 (parser writes real
    candidates), B3 (official sites). Until B2 lands, every R1 run will keep
    writing honest zeros, correctly.
 
 ## 6. Open questions
 
-- **Q0 — `news-fairness.md` does not exist.** Not in this repo, not on any
-  branch, not on the operator's Mac or in Downloads. v1.0 cites it for §1
-  labelling and §2 equal slots and tasks N2–N7. Either it is unwritten or it
-  lives somewhere C0 could not see. Founder gate.
+- **Q0 — `news-fairness.md`.** *Answered:* it landed on `main` with PR #10
+  (`docs/general-election/news-fairness.md`) after C0 had searched for it. Its
+  §1 is the labelling rule CN-R1/CN-R3 implement, §3 is migration `0013`, and
+  its §5 names this PRD as the producer.
 - **Q1 — search backend + budget.** *Answered by C0:* R1 uses the Claude
   app's web search; there is no separate API key or budget line. Cost is
   Cowork session time. The T5 `web_search` path in the S-plane is not involved.
@@ -225,9 +226,10 @@ in the prompt.
   progress log warned first scheduled runs may), or they ran and wrote no
   report. Worth opening the task's run history in the Claude app before
   trusting the cadence.
-- **Q7 — "briefs retired" is undocumented (new).** The candidate page still
-  renders `CandidateBrief`; `docs/scope-changes.md` has no 2026-09-06
-  retirement entry. Record it there before N-tasks build on it.
+- **Q7 — "briefs retired".** *Answered:* the decision is recorded at the top
+  of `news-fairness.md` (founder, 2026-09-06, reversible). The candidate page
+  still renders `CandidateBrief` until N4 replaces it, and `docs/scope-changes.md`
+  has no entry yet — worth one line there since that file is the errata index.
 
 ## 7. C0 evidence (2026-09-06)
 
