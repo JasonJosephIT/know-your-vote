@@ -23,7 +23,8 @@ Rules:
 | 0012 | `0012_measure_function_search_path.sql` | applied 2026-09-07 |
 | **0013** | `0013_general_election.sql` — `candidate.ballot_status`, party CHECK dropped (`docs/general-election/data-architecture.md` §2, ingest A1) | **reserved, not written** |
 | **0014** | `0014_news_fairness.sql` — agent news rows must carry a `source_id` (`docs/general-election/news-fairness.md` §3, N1) | **reserved, not written** |
-| 0015+ | free | — |
+| **0015** | `0015_general_election_copy.sql` — UPDATEs the seeded registration-link `news_item` row off primary-era copy (`docs/general-election/data-ingest.md` B6) | **written, not applied** |
+| 0016+ | free | — |
 
 Verify applied state with `SELECT version, name FROM supabase_migrations.schema_migrations`
 (read-only) rather than trusting this table; update the table when it drifts.
