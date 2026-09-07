@@ -491,9 +491,9 @@ the column that lets it reach 67 without a second migration.
 **External prerequisites (not C-tasks, but on the critical path):**
 
 1. ~~`reconcile-git.sh`~~ — done 2026-09-06 as PR #14: admin console A2–A5
-   and the plan HTML are on `main`. The July run reports are gitignored by
-   that PR's `.gitignore` (script default) and remain on `wip/raw-worktree`
-   and the operator's disk only.
+   and the plan HTML are on `main`. The July run reports were gitignored by
+   that PR's `.gitignore` (script default) and are tracked since 2026-09-07 at
+   `Civic Awareness (Know Your Vote)/Agents/RunReports/`.
 2. Ingest
    branch `claude/data-architecture-ingest-plan-u9b1fq` — A0 (founder decides the
    three-tier `ballot_status`), A1 (migration `0013`), B2 (parser writes real
@@ -575,7 +575,7 @@ nextRunAt `2026-09-15`. No `cap-r0-dispatcher`.
 Prompt fidelity: `diff <(SKILL.md body) .superpowers/sdd/r1-scheduled-prompt.txt`
 → trailing-newline only.
 
-Run reports (gitignored since PR #14; on `wip/raw-worktree` and the operator's disk at `Civic Awareness (Know Your Vote)/Agents/RunReports/`):
+Run reports (tracked on `main` at `Civic Awareness (Know Your Vote)/Agents/RunReports/`):
 `2026-07-03-R1-DRYRUN.md` (0005 unapplied + fixture roster),
 `2026-07-06-R1.md` (0005 applied; 26/26 zeros; three WebSearch spot-checks found no such people),
 `2026-07-15-R1.md` (26/26 zeros; all 29 `candidate.fec_id IS NULL`, sites `example.org/demo/*`).

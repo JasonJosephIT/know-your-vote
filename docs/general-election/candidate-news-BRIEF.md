@@ -104,9 +104,9 @@ node scripts/verify-news-neutrality.ts --self-test
   (gitignored by `.superpowers/sdd/.gitignore`). Snapshots for repo agents live
   in `agents/` here.
 - **The plan HTML and the admin console A2–A5 reached `main` via PR #14
-  on 2026-09-06.** The July run reports did not: that PR gitignores
-  `Agents/RunReports/`, so they live only on `wip/raw-worktree` and the
-  operator's disk. Un-ignore them if they should be the tracked audit trail.
+  on 2026-09-06.** The July run reports followed on 2026-09-07: `Agents/RunReports/`
+  is tracked on `main` as the R1–R4 audit trail (only the regenerated ops
+  digest HTML stays ignored).
 - **Migrations `0000`–`0012` are applied live** (`0009`–`0012` on 2026-09-07).
   Planned next: `0013_general_election` (ingest A1), `0014_news_fairness` (N1) —
   reserved in `supabase/migrations/README.md`; reserve there before writing one.
@@ -130,7 +130,7 @@ node scripts/verify-news-neutrality.ts --self-test
 | `N`, slots per candidate | N4 — **pick after C6 measures** | ⬜ |
 | Biography source (hand / agent / assembled) | the other half of the candidate page | ⬜ |
 | ~~Run `reconcile-git.sh`~~ | — | ✅ PR #14, 2026-09-06 |
-| Track the July run reports (un-ignore `Agents/RunReports/`)? | audit-trail visibility | ⬜ |
+| ~~Track the July run reports (un-ignore `Agents/RunReports/`)~~ | — | ✅ 2026-09-07 |
 
 ## 7. Definition of done
 
