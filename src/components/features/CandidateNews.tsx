@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/Card";
 import { getCandidateNews, type CandidateNewsItem } from "@/lib/briefs";
 import { formatNewsDate, safeHttpUrl } from "@/lib/format";
+import { newsLabels } from "@/lib/news-labels";
 import { selectNewsSlots } from "@/lib/news-slots";
 
 /* Candidate-scoped news written by the R1 curator: neutral restatements of
@@ -17,11 +18,33 @@ import { selectNewsSlots } from "@/lib/news-slots";
    exists to prevent. So the divider is a heading, not a styling cue. */
 function NewsCard({ item }: { item: CandidateNewsItem }) {
   const url = safeHttpUrl(item.url);
+  /* Source labelling (news-fairness.md §1), the same treatment NewsFeed.tsx
+     gives a feed card: publisher, Reporting/Opinion, and the lean — all plain
+     muted text. `newsLabels` returns nothing at all for a sourceless item, so
+     an unattributed card can never look attributed. */
+  const { kind, lean, isOpinion } = newsLabels(item.source);
+  const publisher = item.source?.publisher ?? null;
   return (
     <li>
-      <Card className="flex flex-col gap-1">
-        <p className="font-mono text-mono text-on-surface-muted">
-          {formatNewsDate(item.published_at)}
+      {/* Opinion cards get a visually distinct container, not just a word in
+          the byline (news-fairness.md §1) — a muted ground and a rule, never a
+          colour, which would imply a verdict about the piece. */}
+      <Card
+        className={`flex flex-col gap-1${
+          isOpinion ? " border-l-2 border-l-border-strong bg-surface-muted" : ""
+        }`}
+      >
+        <p className="flex flex-wrap items-center gap-x-2 font-mono text-mono text-on-surface-muted">
+          <span>{formatNewsDate(item.published_at)}</span>
+          {publisher && <span>· {publisher}</span>}
+          {kind && (
+            <span className={isOpinion ? "text-on-surface" : undefined}>
+              · {kind}
+            </span>
+          )}
+          {/* Lean is disclosed, never judged — same muted style as everything
+              else, never colour-coded (README neutrality rule). */}
+          {lean && <span>· {lean}</span>}
         </p>
         <h4 className="text-h3">{item.title}</h4>
         {item.summary && (
@@ -96,10 +119,17 @@ export async function CandidateNews({
         <>
           <header className="flex flex-col gap-1 border-t border-border pt-3">
             <h3 className="text-h3">Also about this race</h3>
+            {/* Not "the same ones": the lean and type spread carries across
+                the named→related boundary by design (news-slots.ts header,
+                pinned by fixture Q in scripts/verify-news-slots.ts), so once a
+                slot count is set two candidates can be handed different
+                related stories out of the one race-wide pool. The pool is
+                shared; the selection from it is per candidate. */}
             <p className="text-body-sm text-on-surface-muted">
               These stories did not name this candidate — they cover the race,
               or a name that could have been more than one person on the
-              ballot. Every candidate in the race gets the same ones.
+              ballot. They are drawn from the same pool for every candidate in
+              the race.
             </p>
           </header>
           <ul className="flex flex-col gap-3">

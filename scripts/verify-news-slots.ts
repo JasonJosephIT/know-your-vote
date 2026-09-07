@@ -14,9 +14,12 @@
      6. `n` undefined means "order everything, cap nothing".
      7. The selector is deterministic.
 
-   The two "mutation" fixtures (B and C) exist so that replacing the greedy
-   pick with plain recency makes this script exit 1 — see the header of
-   src/lib/news-slots.ts.
+   These are mutation-checked: replacing the greedy pick with plain recency
+   makes this script exit 1. Fixture A catches the lean-spread mutation (its
+   newest five items are all one lean, so plain recency returns them) and
+   fixture P catches dropping lean below type; fixture C catches the type
+   mutation (one lean throughout, so only the type rule can act). See the
+   header of src/lib/news-slots.ts.
 
    Pure and offline: no DB, no network, no browser. Same idiom as
    verify-news-labels.ts (Node >= 22 strips types natively).

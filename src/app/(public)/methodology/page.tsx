@@ -151,8 +151,9 @@ export default async function MethodologyPage() {
           The state&apos;s filing list includes everyone who ever ran for a
           seat, not everyone who will appear on Election Day. We show only the
           candidates with a printed line on the ballot &mdash; those marked
-          Qualified or Unopposed. We leave out candidates who were Defeated in
-          the primary (DEF), who Did Not Qualify (DNQ), who Withdrew (WIT), or
+          Qualified (QUA) or Unopposed (UNO). We leave out candidates who were
+          Defeated in the primary (DEF), who Did Not Qualify (DNQ), who
+          Withdrew (WIT), or
           who were Removed (REM). We also leave out qualified write-in
           candidates: a write-in has no printed name on the ballot, only a
           blank line for voters to fill in themselves, so there is nothing on
@@ -173,10 +174,13 @@ export default async function MethodologyPage() {
           the story itself; we don&apos;t do anything to a lean beyond
           disclosing it. Every candidate on the ballot gets the same number of
           news slots as every other candidate in their race, so heavier press
-          coverage for one candidate never crowds the others off the page. If
-          we can&apos;t fill a candidate&apos;s slots with sourced stories, we
-          say so plainly &mdash; a shortfall is stated, never padded with
-          unrelated or unsourced items.
+          coverage for one candidate never crowds the others off the page. That
+          number comes from measuring how much coverage candidates actually
+          get, and we have not measured it yet &mdash; until we do, every
+          sourced story we have is shown, in the same spread order for every
+          candidate. If we can&apos;t fill a candidate&apos;s slots with
+          sourced stories, we say so plainly &mdash; a shortfall is stated,
+          never padded with unrelated or unsourced items.
         </p>
       </section>
 

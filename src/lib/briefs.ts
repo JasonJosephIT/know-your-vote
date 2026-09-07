@@ -2,6 +2,7 @@ import { unstable_cache } from "next/cache";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 import type { NewsSource } from "@/lib/news-labels";
+import { RECENT_WINDOW_DAYS } from "@/lib/neutrality";
 import type { CandidateContact, NewsItem } from "@/types/app";
 import type {
   Candidate,
@@ -291,10 +292,16 @@ export type CandidateNewsItem = NewsItem & { source: NewsSource | null };
    filter keeps pipeline/official rows (race-scoped, not candidate-scoped)
    out by construction.
 
-   Deliberately UNLIMITED. This used to take the 10 newest rows; the 10 newest
+   Deliberately UNCOUNTED. This used to take the 10 newest rows; the 10 newest
    can all share one lean, which would hand the selector a pool it cannot
    spread and quietly defeat news-fairness.md §2. selectNewsSlots is the only
-   cap, and the 30-day window plus one candidate keeps the row count small.
+   cap on how many cards appear.
+
+   Bounded by DATE instead, and really bounded: the query asks only for rows
+   published within RECENT_WINDOW_DAYS. That window is imported from
+   src/lib/neutrality.ts so the page, the copy ("in the last 30 days") and the
+   neutrality lint cannot drift apart, and it is what keeps an uncounted query
+   for one candidate small.
 
    Ordering — `named` before `related`, then lean spread — lives in
    news-slots.ts and nowhere else. The published_at sort here only feeds that
@@ -303,11 +310,15 @@ async function fetchCandidateNews(
   candidateId: string,
 ): Promise<CandidateNewsItem[]> {
   const supabase = await createAnonServerClient();
+  const sinceIso = new Date(
+    Date.now() - RECENT_WINDOW_DAYS * 24 * 60 * 60 * 1000,
+  ).toISOString();
   const { data } = await supabase
     .from("news_item")
     .select("*, source(publisher, type, lean_tag)")
     .eq("candidate_id", candidateId)
     .eq("item_type", "candidate_news")
+    .gte("published_at", sinceIso)
     .order("published_at", { ascending: false });
   /* PostgREST returns a to-one embed as an object, but some relationship
      shapes return a one-element array. Normalize both rather than trusting
