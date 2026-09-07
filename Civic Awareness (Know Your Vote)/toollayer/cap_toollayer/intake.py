@@ -38,7 +38,7 @@ from __future__ import annotations
 import os
 import re
 from datetime import datetime, timezone
-from typing import Any, Callable, Mapping
+from typing import Any, Callable, Mapping, Sequence
 
 from . import errors
 from .discovery import DiskCache, NotConfigured, _strip_scripts
@@ -258,7 +258,15 @@ def parse_candidate_list(text: str) -> dict:
 #   `unresolved` (which is for roster candidates).
 #
 # Refusals (`status: "refused"`, nothing written for the race, `is_open_seat`
-# absent entirely so a caller cannot read a missing answer as a negative one):
+# absent entirely so a caller cannot read a missing answer as a negative one --
+# every refusal is built by `_refused()` so that absence is structural):
+#   * a row with a missing/empty `office` or a missing/null/non-list
+#     `election_years` -- this filter cannot tell whether such a row belongs
+#     in the 2026 House field at all, and it might be the incumbent's own
+#     row. Dropping it the way an ordinary other-year/other-office row is
+#     dropped would risk publishing `is_open_seat: True` by omission, so it
+#     refuses the whole race instead, naming the FEC candidate_id and the
+#     missing/malformed field;
 #   * a null or unknown `incumbent_challenge` on ANY row, matched or not --
 #     null means "we do not know whether this is the incumbent", and an
 #     unrecognised code is a schema change; the fail-closed rule
@@ -268,6 +276,13 @@ def parse_candidate_list(text: str) -> dict:
 #     case where calling the seat open would be wrong;
 #   * two "I" rows -- the district cannot have two sitting members;
 #   * no 2026 House rows at all. Empty is not evidence of an open seat.
+#
+# `dropped_rows` (`{"other_year": n, "other_office": n}`, on every return --
+# resolved or refused): a row that legitimately names a different office or a
+# different election year is still dropped silently, same as always, but the
+# count is recorded so a partial-schema surprise (e.g. a field FEC quietly
+# renames) is visible in the run report rather than only showing up as a
+# shorter-than-expected `fec_rows` array with no explanation.
 #
 # Unresolved (recorded with a reason, that candidate simply not written; does
 # NOT block `is_open_seat` -- the incumbent's own FEC row, if any, is still
@@ -316,6 +331,19 @@ def _names_match(doe_name: str, fec_name: str) -> bool:
     return len(doe) > n and doe[-n:] == surname and doe[0] == given[0]
 
 
+def _refused(race_id: Any, reasons: list[str], *,
+             unresolved: Sequence[Mapping[str, Any]] = (),
+             unmatched: Sequence[Mapping[str, Any]] = ()) -> dict:
+    """The one shape every B4 refusal returns. No `is_open_seat` key at all
+    -- structural, so a caller cannot read a missing answer as a negative
+    one -- but everything classified before the refusal is still carried,
+    so a refused race stays auditable from the run report."""
+    return {"race_id": race_id, "status": "refused",
+            "reasons": list(reasons),
+            "unresolved": list(unresolved),
+            "unmatched_fec_rows": list(unmatched)}
+
+
 def resolve_incumbency(
     race: Mapping[str, Any],
     candidates: list[Mapping[str, Any]],
@@ -328,9 +356,11 @@ def resolve_incumbency(
       {"race_id", "status": "resolved", "incumbent_id", "is_open_seat",
        "candidates": {cid: {"is_incumbent", "fec_id"}}, "unresolved": [...],
        "unmatched_fec_rows": [{"fec_candidate_id", "name",
-                                "incumbent_challenge", "note"}]}
+                                "incumbent_challenge", "note"}],
+       "dropped_rows": {"other_year": n, "other_office": n}}
     or {"race_id", "status": "refused", "reasons": [...], "unresolved": [...],
-        "unmatched_fec_rows": [...]}
+        "unmatched_fec_rows": [...], "dropped_rows": {...}}
+    (`_refused()` builds the common part of the second shape)
     — a refusal carries no `is_open_seat` at all, so a caller cannot read a
     missing answer as a False one, but it does carry everything classified
     before the refusal so the run report stays auditable. `is_open_seat` is a
@@ -343,14 +373,44 @@ def resolve_incumbency(
     # election exactly; `cycles` is the two-year FEC reporting bucket and a
     # 2025 special-election filer also carries cycle 2026. The narrower field
     # is the right one for "who is on the November 2026 ballot".
-    rows = [r for r in fec_rows
-            if str(r.get("office") or "").upper() == "H"
-            and _TARGET_ELECTION_YEAR in (r.get("election_years") or [])]
+    #
+    # A row missing `office`, or whose `election_years` is missing/null/not a
+    # list, cannot be classified by this filter at all -- it might be the
+    # incumbent's own row, so it refuses the whole race rather than being
+    # dropped the way an ordinary other-year/other-office row is (see the
+    # section comment). Those ordinary drops are still silent, but counted.
+    dropped_rows = {"other_year": 0, "other_office": 0}
+    malformed: list[str] = []
+    rows: list[Mapping[str, Any]] = []
+    for r in fec_rows:
+        office = r.get("office")
+        election_years = r.get("election_years")
+        missing_office = not str(office or "").strip()
+        bad_years = not isinstance(election_years, list)
+        if missing_office or bad_years:
+            fields = " and ".join(
+                name for name, bad in
+                (("office", missing_office), ("election_years", bad_years))
+                if bad)
+            malformed.append(
+                f"FEC row {r.get('candidate_id')!r} is missing or has a "
+                f"malformed {fields}; refusing rather than silently "
+                "dropping a row that might be the incumbent's")
+            continue
+        if str(office).upper() != "H":
+            dropped_rows["other_office"] += 1
+            continue
+        if _TARGET_ELECTION_YEAR not in election_years:
+            dropped_rows["other_year"] += 1
+            continue
+        rows.append(r)
+    if malformed:
+        return {**_refused(race_id, malformed), "dropped_rows": dropped_rows}
     if not rows:
-        return {"race_id": race_id, "status": "refused", "unresolved": [],
-                "unmatched_fec_rows": [],
-                "reasons": [f"no FEC House rows for {_TARGET_ELECTION_YEAR} in "
-                            f"district {race.get('district')!r}"]}
+        return {**_refused(race_id, [
+                    f"no FEC House rows for {_TARGET_ELECTION_YEAR} in "
+                    f"district {race.get('district')!r}"]),
+                "dropped_rows": dropped_rows}
 
     # Fail closed on every row's code first, before any matching: a null or
     # unrecognised `incumbent_challenge` refuses the whole race regardless of
@@ -463,11 +523,11 @@ def resolve_incumbency(
             f"{race_id} ({', '.join(repr(f) for f in incumbent_fec_ids)}); "
             "a district has one")
     if reasons:
-        return {"race_id": race_id, "status": "refused",
-                "reasons": reasons, "unresolved": unresolved,
+        return {**_refused(race_id, reasons, unresolved=unresolved,
+                           unmatched=unmatched_fec_rows),
                 # Everything classified before the refusal, so the run report
                 # still shows which filings were read and how.
-                "unmatched_fec_rows": unmatched_fec_rows}
+                "dropped_rows": dropped_rows}
 
     per_candidate = {
         cid: {"is_incumbent": rows[i].get("incumbent_challenge") == "I",
@@ -477,6 +537,7 @@ def resolve_incumbency(
     return {
         "race_id": race_id,
         "status": "resolved",
+        "dropped_rows": dropped_rows,
         "incumbent_id": incumbent_ids[0] if incumbent_ids else None,
         # Every row's code is known and non-null at this point (checked
         # above, fail-closed). So an open seat is simply: no row is "I" —
@@ -563,23 +624,39 @@ def build_intake_handlers(
             stored = store.read_candidate_fec_ids(
                 [c.get("candidate_id") for c in roster])
         except Exception as err:  # noqa: BLE001
-            # Same shape as a FEC fetch failure and for the same reason: the
-            # DoE intake already succeeded and must not be rolled back for a
-            # read that only improves matching. This race is simply not
-            # resolved, and the reason names the read.
+            # Unlike a FEC fetch failure (an ordinary HTTP call, isolated
+            # from the DB), this read shares the store's one psycopg
+            # connection with the DoE upserts above. A real driver error
+            # poisons that transaction, so claiming the DoE intake "stands"
+            # would be dishonest -- the next statement on this connection
+            # (even the action_log write) would hit an already-aborted
+            # transaction and fail opaquely. `transaction_poisoned` tells
+            # `doe_file_intake` to roll back and fail the whole call, the
+            # same shape as the write-failure path below.
             return {"ok": False, "error": errors.UPSTREAM_FAILED,
-                    "reasons": [f"read_candidate_fec_ids failed for {race_id} "
-                                f"({type(err).__name__})"]}
+                    "transaction_poisoned": True,
+                    "reasons": [f"incumbency: read_candidate_fec_ids failed "
+                                f"({type(err).__name__}) for {race_id}"]}
         by_stored_id = {r.get("candidate_id"): r.get("fec_id")
                         for r in (stored or []) if r.get("fec_id")}
         if by_stored_id:
             roster = [dict(c, fec_id=by_stored_id[c.get("candidate_id")])
                       if c.get("candidate_id") in by_stored_id else c
                       for c in roster]
+        # `district` is two digits on the wire; parse_candidate_list has
+        # already stripped the leading zero for the race_id. A federal race
+        # is guaranteed a truthy `district` by the guard above, but not
+        # necessarily a numeric one -- refuse rather than let a stray
+        # ValueError escape this handler uncaught.
+        try:
+            district_param = f"{int(race['district']):02d}"
+        except (TypeError, ValueError):
+            return _refused(race_id, [
+                f"district {race.get('district')!r} on federal race "
+                f"{race_id} is not a plain integer; refusing rather than "
+                "raising"])
         data = _fec_with_backoff(fec_get, _FEC_ENDPOINTS["candidates"], {
-            # `district` is two digits on the wire; parse_candidate_list has
-            # already stripped the leading zero for the race_id.
-            "state": "FL", "district": f"{int(race['district']):02d}",
+            "state": "FL", "district": district_param,
             "office": "H", "election_year": _TARGET_ELECTION_YEAR,
             "per_page": 100, "api_key": key,
         }, sleep)
@@ -597,18 +674,16 @@ def build_intake_handlers(
         pagination = data.get("pagination")
         count = pagination.get("count") if isinstance(pagination, dict) else None
         if not isinstance(count, int) or isinstance(count, bool):
-            return {"race_id": race_id, "status": "refused", "unresolved": [],
-                    "unmatched_fec_rows": [],
-                    "reasons": ["FEC response carries no pagination.count, so "
-                                "we cannot tell whether the field is complete; "
-                                f"refusing {race_id}"]}
+            return _refused(race_id, [
+                "FEC response carries no pagination.count, so "
+                "we cannot tell whether the field is complete; "
+                f"refusing {race_id}"])
         if count > len(results):
-            return {"race_id": race_id, "status": "refused", "unresolved": [],
-                    "unmatched_fec_rows": [],
-                    "reasons": [f"FEC reports {count} candidates for {race_id} "
-                                f"but returned {len(results)}; the field is "
-                                "truncated and a later page could hold the "
-                                "incumbent"]}
+            return _refused(race_id, [
+                f"FEC reports {count} candidates for {race_id} "
+                f"but returned {len(results)}; the field is "
+                "truncated and a later page could hold the "
+                "incumbent"])
         return resolve_incumbency(race, roster, results)
 
     def doe_file_intake(payload: Mapping[str, Any]) -> dict:
@@ -655,6 +730,16 @@ def build_intake_handlers(
                 # already holds exactly that set (D1).
                 roster = [by_id[cid] for cid in race["candidate_ids"]]
                 out = _incumbency_for_race(race, roster)
+                if out.get("transaction_poisoned"):
+                    # The hydration read shares this call's one connection
+                    # with the DoE upserts above; a real driver error
+                    # poisons that transaction, so it cannot be left to
+                    # stand as if only this one race were affected. Roll
+                    # back and fail the whole call — the same shape as the
+                    # write-failure path below.
+                    store.rollback()
+                    return {"ok": False, "error": out["error"],
+                            "reasons": out["reasons"]}
                 incumbency[race_id] = out
                 if out.get("status") != "resolved":
                     continue        # refused / not_applicable / upstream error

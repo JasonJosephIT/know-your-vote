@@ -1100,12 +1100,6 @@ class TestIncumbencyResolver(unittest.TestCase):
         self.assertEqual(out["status"], "refused", out)
         self.assertIn("'X'", " ".join(out["reasons"]))
 
-    def test_two_incumbent_rows_refuse(self):
-        rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "I"),
-                _fec_cand("H4FL28002", "RIVERA, ANA", "I", party="DEM")]
-        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
-        self.assertEqual(out["status"], "refused", out)
-
     def test_a_candidate_matching_two_rows_is_unresolved(self):
         rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "C"),
                 _fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM"),
@@ -1224,6 +1218,52 @@ class TestIncumbencyResolver(unittest.TestCase):
         self.assertEqual(out["status"], "refused", out)
         self.assertNotIn("is_open_seat", out)
 
+    def test_null_election_years_refuses_naming_the_row_and_field(self):
+        """A row this filter cannot classify might be the incumbent's own --
+        dropping it silently the way an ordinary other-year row is dropped
+        could publish `is_open_seat: True` by omission. Refuse instead."""
+        rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "I")]
+        rows[0]["election_years"] = None
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
+        self.assertEqual(out["status"], "refused", out)
+        self.assertNotIn("is_open_seat", out)
+        joined = " ".join(out["reasons"])
+        self.assertIn("H0FL28001", joined)
+        self.assertIn("election_years", joined)
+
+    def test_missing_office_refuses_naming_the_row_and_field(self):
+        rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "I")]
+        del rows[0]["office"]
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
+        self.assertEqual(out["status"], "refused", out)
+        self.assertNotIn("is_open_seat", out)
+        joined = " ".join(out["reasons"])
+        self.assertIn("H0FL28001", joined)
+        self.assertIn("office", joined)
+
+    def test_a_non_list_election_years_also_refuses(self):
+        """Not just null -- any shape that is not a list is unclassifiable."""
+        rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "I")]
+        rows[0]["election_years"] = 2026    # a bare int, not a list
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
+        self.assertEqual(out["status"], "refused", out)
+        self.assertIn("election_years", " ".join(out["reasons"]))
+
+    def test_a_different_year_row_still_drops_silently_but_is_counted(self):
+        """Well-formed, just not this election -- the drop stays silent, but
+        `dropped_rows` is what makes it visible in the run report."""
+        rows = [_fec_cand("H8FL28999", "RETIRED, ROBERT", "I",
+                          election_years=(2022,), cycles=(2022,))]
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
+        self.assertEqual(out["status"], "refused", out)   # nothing left to read
+        self.assertEqual(out["dropped_rows"], {"other_year": 1, "other_office": 0})
+
+    def test_dropped_rows_is_on_the_resolved_shape_too(self):
+        # _FL28_ROWS carries one stale 2022 "I" row -> one other_year drop.
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, _FL28_ROWS)
+        self.assertEqual(out["status"], "resolved", out)
+        self.assertEqual(out["dropped_rows"], {"other_year": 1, "other_office": 0})
+
     def test_every_unresolved_entry_names_a_reason(self):
         rows = [_fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM"),
                 _fec_cand("H9FL28004", "GHOST, GARY", "C")]
@@ -1335,7 +1375,16 @@ class TestIntakeIncumbencyHandler(unittest.TestCase):
             res["result"]["incumbency"]["FL-28-general"]["incumbent_id"],
             _GIMENEZ)
 
-    def test_a_failed_hydration_read_is_upstream_failed_and_intake_stands(self):
+    def test_a_failed_hydration_read_is_upstream_failed_and_the_whole_call_rolls_back(self):
+        """Unlike a FEC fetch failure, this read shares the store's one
+        connection with the DoE upserts above it in the same call -- a real
+        driver error poisons that transaction, so the DoE intake cannot be
+        said to "stand". FakeDb has no transaction-poisoning model (unlike
+        real psycopg it would happily let a later statement succeed on a
+        connection a real driver would have aborted), so it cannot
+        demonstrate InFailedSqlTransaction directly; the rollback count is
+        the closest observable proxy, same approach as the P2 test
+        `test_coverage_read_failure_is_recorded_without_failing_the_audit`."""
         db = FakeDb()
         st = store.Store("postgres://unused", connect=lambda dsn: db)
         def explode(*a, **kw):
@@ -1347,11 +1396,11 @@ class TestIntakeIncumbencyHandler(unittest.TestCase):
             "record", st, doe_fetch=lambda office=None: _DOE_INCUMBENCY_FIXTURE,
             fec_api_key="testkey", fec_get=_fec_get_map({"28": _FL28_ROWS})))
         res = layer.dispatch("doe_file_intake", {"fill_incumbency": True})
-        self.assertTrue(res["ok"], res)
-        out = res["result"]["incumbency"]["FL-28-general"]
-        self.assertEqual(out["error"], errors.UPSTREAM_FAILED)
-        self.assertIn("read_candidate_fec_ids", " ".join(out["reasons"]))
-        self.assertEqual(len(committed_into(db, "candidate")), 3)  # DoE stands
+        self.assertIs(res["ok"], False, res)
+        self.assertEqual(res["error"], errors.UPSTREAM_FAILED)
+        self.assertIn("read_candidate_fec_ids", " ".join(res["reasons"]))
+        self.assertEqual(db.rolled_back, 1)
+        self.assertEqual(committed_into(db, "candidate"), [])  # DoE rolled back
         self.assertEqual(committed_updates(db, "race"), [])
 
     def test_a_truncated_fec_page_refuses_rather_than_publishing_it(self):
@@ -1364,7 +1413,7 @@ class TestIntakeIncumbencyHandler(unittest.TestCase):
         self.assertEqual(out["status"], "refused", out)
         self.assertNotIn("is_open_seat", out)
         self.assertIn("137", " ".join(out["reasons"]))
-        self.assertIn("3", " ".join(out["reasons"]))       # rows returned
+        self.assertIn("returned 3", " ".join(out["reasons"]))  # rows returned
         self.assertEqual(committed_updates(db, "race"), [])
         self.assertEqual(committed_updates(db, "candidate"), [])
 
@@ -1384,6 +1433,64 @@ class TestIntakeIncumbencyHandler(unittest.TestCase):
         out = res["result"]["incumbency"]["FL-28-general"]
         self.assertEqual(out["status"], "resolved", out)
         self.assertEqual(len(committed_updates(db, "race")), 1)
+
+    def _parsed_for_race(self, race, candidates):
+        """Bypass parse_candidate_list's DoE-file gate to hand
+        `_incumbency_for_race` a race dict directly -- the parser only ever
+        emits `district` as `str(int(Juris1num))`, so a non-numeric or
+        single/unusual-width district can't arise from the ordinary DoE
+        pipeline (`_TARGET_US_HOUSE` only has 2-digit codes). This is the
+        shape a hand-edited or otherwise corrupted row would produce."""
+        def fake_parse(text):
+            return {"races": {race["race_id"]: race}, "candidates": candidates,
+                    "skipped": 0, "tiers": {"ballot": len(candidates),
+                                            "write_in": 0, "excluded": 0}}
+        return fake_parse
+
+    def test_single_digit_district_is_zero_padded_in_the_fec_query(self):
+        race = {"race_id": "FL-8-general", "office": "United States Representative",
+                "level": "federal", "district": "8", "election": "general",
+                "candidate_ids": ["FL-DOE-90020"]}
+        cand = {"candidate_id": "FL-DOE-90020", "legal_name": "Cody Test",
+                "party": "REP", "office_sought": "United States Representative",
+                "qualifying_status": "Qualified", "ballot_status": "ballot"}
+        original = intake.parse_candidate_list
+        intake.parse_candidate_list = self._parsed_for_race(race, [cand])
+        calls = []
+        try:
+            layer, db = make_intake_layer(
+                "record", doe_fetch=lambda office=None: "unused",
+                fec_api_key="testkey",
+                fec_get=_fec_get_map({"08": []}, calls))
+            res = layer.dispatch("doe_file_intake", {"fill_incumbency": True})
+        finally:
+            intake.parse_candidate_list = original
+        self.assertTrue(res["ok"], res)
+        self.assertEqual(len(calls), 1)
+        _, params = calls[0]
+        self.assertEqual(params["district"], "08")
+
+    def test_non_numeric_district_refuses_rather_than_raising(self):
+        race = {"race_id": "FL-AB-general", "office": "United States Representative",
+                "level": "federal", "district": "AB", "election": "general",
+                "candidate_ids": ["FL-DOE-90099"]}
+        cand = {"candidate_id": "FL-DOE-90099", "legal_name": "Cody Test",
+                "party": "REP", "office_sought": "United States Representative",
+                "qualifying_status": "Qualified", "ballot_status": "ballot"}
+        original = intake.parse_candidate_list
+        intake.parse_candidate_list = self._parsed_for_race(race, [cand])
+        try:
+            layer, db = make_intake_layer(
+                "record", doe_fetch=lambda office=None: "unused",
+                fec_api_key="testkey", fec_get=_fec_get_map({}))
+            res = layer.dispatch("doe_file_intake", {"fill_incumbency": True})
+        finally:
+            intake.parse_candidate_list = original
+        self.assertTrue(res["ok"], res)
+        out = res["result"]["incumbency"]["FL-AB-general"]
+        self.assertEqual(out["status"], "refused", out)
+        self.assertNotIn("is_open_seat", out)
+        self.assertIn("'AB'", " ".join(out["reasons"]))
 
     def test_statewide_race_is_not_applicable(self):
         layer, db = self._layer()
