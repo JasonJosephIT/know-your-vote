@@ -339,7 +339,7 @@ than a paragraph of assurance.
   of the verify criterion holds structurally: with `localStorage` disabled the
   app degrades rather than throwing.
 
-- [ ] **TASK-071** — Update the privacy page and analytics funnel
+- [x] **TASK-071** — Update the privacy page and analytics funnel
   Files: `src/app/(public)/privacy/page.tsx`, `src/lib/analytics.ts`
   Notes: The privacy page's "What stays on your device" section becomes
   narrower and truer — say plainly that ZIP is used for the request and not
@@ -347,6 +347,51 @@ than a paragraph of assurance.
   the magic moment now precedes it; add a `ballot_viewed` event or the funnel
   will read as a cliff-edge drop the day this ships.
   Verify: no claim on the privacy page describes storage that no longer exists.
+  **Done 2026-09-07** — Phase 7 complete.
+
+  **The privacy page carried a claim that was never true.** It said quiz
+  answers were "stored in your browser only". They never were: `Quiz.tsx`
+  keeps them in React state, and the only two `localStorage` keys the app has
+  ever written are `kyv.saved` and the install-prompt flag. That predates
+  Phase 7 entirely — the verify criterion says "no claim describes storage
+  that no longer exists", and this one described storage that never existed.
+  For a page whose entire value is being checkable, that is the worst kind of
+  error to carry.
+
+  The section now names **every** key the app writes and says plainly that
+  neither the quiz answers nor the ZIP are kept. The ZIP paragraph names its
+  own exception inline rather than leaving it to the next section: "your ZIP
+  isn't stored" sitting directly above "we store your ZIP" reads as a
+  contradiction even though both are true of different things, and a privacy
+  page that needs careful reading to be accurate is not doing its job.
+
+  The AI section also said the model receives "your ZIP-resolved races", which
+  stopped being true in TASK-068 — it now receives the races on your ballot,
+  statewide when no ZIP is given.
+
+  **`ballot_viewed` is the funnel's new entry event**, ahead of `zip_resolved`.
+  It fires only when a ballot actually rendered, not merely when the landing
+  page loaded — the landing page re-reads the same two `unstable_cache` calls
+  `SharedBallot` makes in that render, so it costs a cache hit rather than a
+  query. Mounted on the page rather than inside `SharedBallot`: the tracker is
+  a client component, and `verify-shared-ballot` enforces that nothing the
+  ballot reaches needs JavaScript.
+
+  Worth being honest about what the funnel can and cannot tell you: `zip_resolved`
+  now measures how many voters *want* their district race, which is a smaller
+  number by design. Comparisons across the ship date are misleading in both
+  directions and no renaming fixes that — the honest reading is a new funnel
+  starting at `ballot_viewed`.
+
+  `TrackBriefView` became the generic `TrackView` rather than gaining a
+  near-identical twin; the event name was the only thing that ever differed.
+  Its two existing call sites moved with it.
+
+  `verify-no-stored-location` grew the claim checks: the two assertions that
+  were actually wrong, the two keys actually written, and the funnel order.
+  Deliberately narrow — it pins facts, and does not pretend to validate
+  English. Regression-tested by restoring the false quiz-answer claim, which
+  fails it.
 
 ---
 

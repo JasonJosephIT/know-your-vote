@@ -55,21 +55,25 @@ content work, not engineering.
 | TASK-068 | Quiz un-gated — opens on question one, runs statewide; ZIP offered at the results step |
 | TASK-069 | News feed un-gated — statewide items with no location; the route already allowed it |
 | TASK-070 | `kyv.location` removed — no device-stored location; the landing page can finally say so |
+| TASK-071 | Privacy page matches the code; `ballot_viewed` replaces `zip_resolved` as the funnel entry |
 
 ### Next, in order
 
 Engineering, none of it blocked:
 
-1. **TASK-071** — the last of Phase 7. TASK-067 through TASK-070 landed
-   2026-09-07: **no surface gates on ZIP, and no device-stored location.** The
-   privacy page and the analytics funnel are now the only things still
-   describing the old product — TASK-071 makes them match, and the `zip_resolved`
-   funnel needs a `ballot_viewed` entry event or it will read as a cliff-edge
-   drop the day this ships.
+1. **Phase 7 is complete.** TASK-067 through TASK-071 all landed 2026-09-07:
+   no surface gates on ZIP, no device-stored location, and a privacy page that
+   describes what the code actually does.
 
-   Two follow-ups TASK-070 left behind, neither blocking: `/news` is statewide
-   for everyone until something links to it with a location, and the quiz no
-   longer prefills a confirmed district for split ZIPs.
+   Three follow-ups it left behind, none blocking: `/news` is statewide for
+   everyone until something links to it with a location; the quiz no longer
+   prefills a confirmed district for split ZIPs; and analytics comparisons
+   across the ship date are not meaningful, since `zip_resolved` now counts a
+   different thing — read the funnel from `ballot_viewed` instead.
+
+   **The critical path is now content, not code**: TASK-066's races,
+   candidates and measures through the Balance Audit, and TASK-058's date
+   verification. Both need a human.
 
 Partially blocked: **TASK-060** needs the Census ZCTA crosswalk files, and
 `www2.census.gov` is unreachable from the Claude Code session (403 at the

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { RaceCompare } from "@/components/features/RaceCompare";
-import { TrackBriefView } from "@/components/features/TrackBriefView";
+import { TrackView } from "@/components/features/TrackView";
 import { getRaceBrief } from "@/lib/briefs";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
@@ -89,7 +89,7 @@ export default async function RacePage({
         </p>
       </header>
 
-      <TrackBriefView />
+      <TrackView event="brief_viewed" />
       <RaceCompare brief={brief} />
 
       <footer className="flex flex-wrap gap-4 text-caption text-on-surface-muted">

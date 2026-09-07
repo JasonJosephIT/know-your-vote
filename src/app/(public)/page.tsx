@@ -2,7 +2,10 @@ import Link from "next/link";
 import { DeadlineBanner } from "@/components/features/DeadlineBanner";
 import { InstallCard } from "@/components/features/InstallCard";
 import { SharedBallot } from "@/components/features/SharedBallot";
+import { TrackView } from "@/components/features/TrackView";
 import { ZipEntry } from "@/components/features/ZipEntry";
+import { getActiveMeasures } from "@/lib/measures";
+import { getStatewideRaces } from "@/lib/races";
 
 /* Ballot first, ZIP optional (TASK-067).
 
@@ -16,7 +19,21 @@ import { ZipEntry } from "@/components/features/ZipEntry";
    which is most of yours but not all of it. The ZIP prompt below says what it
    adds rather than the headline overclaiming what is already there. */
 
-export default function Home() {
+export default async function Home() {
+  /* ballot_viewed is the funnel's new entry event (TASK-071), so it must mean
+     "a ballot was on screen" — not "the landing page loaded". Both reads are
+     the same unstable_cache calls SharedBallot makes in this render, so this
+     costs a cache hit rather than a second query.
+
+     Deliberately mounted here rather than inside SharedBallot: the tracker is
+     a client component, and SharedBallot's whole point is that nothing it
+     reaches needs JavaScript. verify-shared-ballot enforces exactly that. */
+  const [races, measures] = await Promise.all([
+    getStatewideRaces(),
+    getActiveMeasures(),
+  ]);
+  const ballotRendered = races.length > 0 || measures.length > 0;
+
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-6 px-5 py-8">
       <h1 className="text-display">Everything on every Florida ballot.</h1>
@@ -27,6 +44,7 @@ export default function Home() {
       </p>
       <DeadlineBanner />
 
+      {ballotRendered && <TrackView event="ballot_viewed" />}
       <SharedBallot />
 
       <section className="flex flex-col gap-3 border-t border-border pt-6">

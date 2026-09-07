@@ -1,7 +1,20 @@
 /* Plausible custom events — aggregate funnel only, never identifiers
    (PRD § 12: no ZIP values, no emails, no user ids in properties). */
 
+/* Funnel order, and it changed in Phase 7 (TASK-071).
+
+   zip_resolved used to be the entry event, because entering a ZIP was the
+   only way into the product. It no longer is: the ballot renders first and a
+   ZIP is optional, so zip_resolved now measures how many voters want their
+   district race — a much smaller number by design. Without ballot_viewed
+   above it, the day this ships the funnel reads as a cliff-edge collapse
+   rather than a gate coming down.
+
+   Comparisons across the ship date are misleading either way. The two events
+   count different things before and after, and no renaming fixes that; the
+   honest reading is a new funnel starting at ballot_viewed. */
 export type AnalyticsEvent =
+  | "ballot_viewed"
   | "zip_resolved"
   | "brief_viewed"
   | "quiz_completed"

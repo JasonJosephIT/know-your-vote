@@ -15,6 +15,13 @@
    the voter builds by pressing a button, not location the app accumulates on
    its own. The proposal keeps it deliberately.
 
+   Extended by TASK-071 to cover the claims *about* that storage. The privacy
+   page said quiz answers were stored in the browser; they never were, and a
+   page whose whole value is being checkable cannot carry a claim that fails
+   the check. The funnel assertions live here too, because "ballot_viewed
+   before zip_resolved" is the same fact from the analytics side: the ballot,
+   not the ZIP, is where a visit now begins.
+
    Run: node scripts/verify-no-stored-location.ts */
 
 import { readdirSync, readFileSync, statSync, existsSync } from "node:fs";
@@ -83,6 +90,50 @@ assert(
   "no unexpected localStorage keys",
   keyed.length === 0,
   keyed.map((k) => `${k.path}: ${k.key}`).join(", ")
+);
+
+/* 4. TASK-071: the privacy page must not describe storage that does not
+      exist, and must name the storage that does. This is prose, so the check
+      is deliberately narrow — it pins the two claims that were actually
+      wrong, and the two keys that are actually written, rather than pretending
+      to validate English. */
+const privacy = readFileSync(join(SRC, "app", "(public)", "privacy", "page.tsx"), "utf8");
+const privacyText = stripComments(privacy);
+
+assert(
+  "privacy page no longer claims quiz answers are stored",
+  !/quiz answers are\s+stored/i.test(privacyText.replace(/\s+/g, " ")),
+  "quiz answers live in React state and are never persisted"
+);
+assert(
+  "privacy page says the ZIP is not retained",
+  /ZIP isn&apos;t stored/i.test(privacyText)
+);
+assert(
+  "privacy page names the keep-in-mind list",
+  /keep in\s+mind/i.test(privacyText.replace(/\s+/g, " "))
+);
+assert(
+  "privacy page names the install-prompt flag",
+  /get the app/i.test(privacyText)
+);
+
+/* 5. ballot_viewed exists and precedes zip_resolved: the funnel's entry event
+      is the ballot now, not the ZIP. */
+const analytics = stripComments(readFileSync(join(SRC, "lib", "analytics.ts"), "utf8"));
+assert(
+  "ballot_viewed is a declared analytics event",
+  /"ballot_viewed"/.test(analytics)
+);
+assert(
+  "ballot_viewed precedes zip_resolved in the funnel",
+  analytics.indexOf('"ballot_viewed"') < analytics.indexOf('"zip_resolved"')
+);
+
+const landing = stripComments(readFileSync(join(SRC, "app", "(public)", "page.tsx"), "utf8"));
+assert(
+  "landing page fires ballot_viewed only when a ballot rendered",
+  /ballotRendered && <TrackView event="ballot_viewed" \/>/.test(landing)
 );
 
 if (failures) {

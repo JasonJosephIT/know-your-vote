@@ -12,11 +12,37 @@ export default function PrivacyPage() {
       </p>
 
       <section className="flex flex-col gap-2">
+        {/* Rewritten in TASK-071 to describe what the code actually does.
+            Two claims here were wrong. Quiz answers were never stored at all
+            — they live in React state and vanish on refresh — and the list
+            omitted the install-prompt flag. The section now names every key
+            the app writes, which is the point: a claim you can check in
+            devtools beats a claim you have to trust. */}
         <h2 className="text-h2">What stays on your device</h2>
         <p className="text-body">
-          Candidates you &quot;keep in mind&quot; and your quiz answers are
-          stored in your browser only. They never reach our servers, and
+          Two things, and you can check both: the candidates you &quot;keep in
+          mind&quot;, and whether you dismissed the &quot;get the app&quot;
+          prompt. That is the whole list. They never reach our servers, and
           clearing your browser data removes them completely.
+        </p>
+        <p className="text-body">
+          Your quiz answers aren&apos;t stored anywhere — not on your device,
+          not with us. They exist while you are answering and are gone when
+          you close the tab.
+        </p>
+        {/* The one exception has to be named here, not left to the next
+            section. "Your ZIP isn't stored" directly above "we store your
+            ZIP" reads as a contradiction even though both are true of
+            different things, and a privacy page that needs careful reading
+            to be accurate is not doing its job. */}
+        <p className="text-body">
+          Your ZIP isn&apos;t stored either. We use it to look up your
+          district and show your races, and that is the end of it — we
+          don&apos;t keep it on your device or remember it for next time. That
+          is why a return visit asks again: nothing about where you live
+          carries over. The single exception is below, and only if you ask for
+          it: an email reminder needs a ZIP to know which polling place to
+          send you.
         </p>
       </section>
 
@@ -49,10 +75,11 @@ export default function PrivacyPage() {
       <section className="flex flex-col gap-2">
         <h2 className="text-h2">The quiz and AI</h2>
         <p className="text-body">
-          Quiz answers are interpreted by an AI model. We send it only your
-          ZIP-resolved races and your issue answers — never your name, email,
-          or any identifier. Candidates are even anonymized in that request,
-          so the model can&apos;t favor anyone it recognizes.
+          Quiz answers are interpreted by an AI model. We send it only the
+          races on your ballot and your issue answers — never your name,
+          email, or any identifier. Candidates are even anonymized in that
+          request, so the model can&apos;t favor anyone it recognizes. Take
+          the quiz without a ZIP and the races are simply the statewide ones.
         </p>
       </section>
 
