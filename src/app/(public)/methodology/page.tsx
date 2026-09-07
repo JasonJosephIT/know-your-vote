@@ -146,6 +146,45 @@ export default async function MethodologyPage() {
       </section>
 
       <section className="flex flex-col gap-2">
+        <h2 className="text-h2">We show the ballot, not the filing list</h2>
+        <p className="text-body">
+          The state&apos;s filing list includes everyone who ever ran for a
+          seat, not everyone who will appear on Election Day. We show only the
+          candidates with a printed line on the ballot &mdash; those marked
+          Qualified (QUA) or Unopposed (UNO). We leave out candidates who were
+          Defeated in the primary (DEF), who Did Not Qualify (DNQ), who
+          Withdrew (WIT), or
+          who were Removed (REM). We also leave out qualified write-in
+          candidates: a write-in has no printed name on the ballot, only a
+          blank line for voters to fill in themselves, so there is nothing on
+          the ballot itself for us to show. This page shows the ballot as it
+          will look in the booth, not every name that was ever in the race.
+        </p>
+      </section>
+
+      <section className="flex flex-col gap-2">
+        <h2 className="text-h2">How we label the news</h2>
+        <p className="text-body">
+          Every news card shows its publisher and whether the piece is
+          reporting or opinion, so you always know what kind of writing
+          you&apos;re looking at, and opinion pieces are set apart visually
+          from reporting rather than left to blend in. Each card also
+          discloses the source&apos;s political lean, when one is known
+          &mdash; that is a label on where the outlet sits, not a verdict on
+          the story itself; we don&apos;t do anything to a lean beyond
+          disclosing it. Every candidate on the ballot gets the same number of
+          news slots as every other candidate in their race, so heavier press
+          coverage for one candidate never crowds the others off the page. That
+          number comes from measuring how much coverage candidates actually
+          get, and we have not measured it yet &mdash; until we do, every
+          sourced story from the last 30 days is shown, ordered by the same
+          rule for every candidate. If we can&apos;t fill a candidate&apos;s slots with
+          sourced stories, we say so plainly &mdash; a shortfall is stated,
+          never padded with unrelated or unsourced items.
+        </p>
+      </section>
+
+      <section className="flex flex-col gap-2">
         <h2 className="text-h2">We describe. You decide.</h2>
         <p className="text-body">
           We never tell you who to vote for, never rank candidates, and never

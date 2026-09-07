@@ -1,6 +1,8 @@
 import { unstable_cache } from "next/cache";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
+import type { NewsSource } from "@/lib/news-labels";
+import { RECENT_WINDOW_DAYS } from "@/lib/neutrality";
 import type { CandidateContact, NewsItem } from "@/types/app";
 import type {
   Candidate,
@@ -279,30 +281,56 @@ export function getCandidateDetail(candidateId: string) {
   )();
 }
 
+/* A candidate_news row with the source it is attributed to. The embed carries
+   the two fairness axes (news-fairness.md §0): `type` drives Reporting /
+   Opinion, `lean_tag` drives the lean spread in src/lib/news-slots.ts. */
+export type CandidateNewsItem = NewsItem & { source: NewsSource | null };
+
 /* Candidate-scoped feed items written by the R1 curator (CAP_Refresh_Agents
    _Plan §6). The page this renders on is already publication-gated by
    getCandidateDetail, and R1 only covers published races; the item_type
    filter keeps pipeline/official rows (race-scoped, not candidate-scoped)
-   out by construction. */
-async function fetchCandidateNews(candidateId: string): Promise<NewsItem[]> {
+   out by construction.
+
+   Deliberately UNCOUNTED. This used to take the 10 newest rows; the 10 newest
+   can all share one lean, which would hand the selector a pool it cannot
+   spread and quietly defeat news-fairness.md §2. selectNewsSlots is the only
+   cap on how many cards appear.
+
+   Bounded by DATE instead, and really bounded: the query asks only for rows
+   published within RECENT_WINDOW_DAYS. That window is imported from
+   src/lib/neutrality.ts so the page, the copy ("in the last 30 days") and the
+   neutrality lint cannot drift apart, and it is what keeps an uncounted query
+   for one candidate small.
+
+   Ordering — `named` before `related`, then lean spread — lives in
+   news-slots.ts and nowhere else. The published_at sort here only feeds that
+   rule's recency tiebreak. */
+async function fetchCandidateNews(
+  candidateId: string,
+): Promise<CandidateNewsItem[]> {
   const supabase = await createAnonServerClient();
+  const sinceIso = new Date(
+    Date.now() - RECENT_WINDOW_DAYS * 24 * 60 * 60 * 1000,
+  ).toISOString();
   const { data } = await supabase
     .from("news_item")
-    .select("*")
+    .select("*, source(publisher, type, lean_tag)")
     .eq("candidate_id", candidateId)
     .eq("item_type", "candidate_news")
-    .order("published_at", { ascending: false })
-    .limit(10);
-  /* `named` before `related` (PRD §6): a story that named this candidate
-     outranks one that is merely about their race, whatever the dates say, so
-     the slots fill from the stronger tier first. Recency decides within a
-     tier — the query already sorted by it, and sort() is stable.
-
-     Rows written before 0017 have relation NULL. They are pre-matcher R1
-     output, already candidate-scoped, so they sort with `named` rather than
-     being demoted to a tier they were never assigned. */
-  const rank = (n: NewsItem) => (n.relation === "related" ? 1 : 0);
-  return ((data ?? []) as NewsItem[]).sort((a, b) => rank(a) - rank(b));
+    .gte("published_at", sinceIso)
+    .order("published_at", { ascending: false });
+  /* PostgREST returns a to-one embed as an object, but some relationship
+     shapes return a one-element array. Normalize both rather than trusting
+     one — the same guard /api/news/route.ts uses. */
+  type Row = NewsItem & { source: NewsSource | NewsSource[] | null };
+  return ((data ?? []) as unknown as Row[]).map((row) => {
+    const raw = row.source;
+    return {
+      ...row,
+      source: Array.isArray(raw) ? (raw[0] ?? null) : (raw ?? null),
+    };
+  });
 }
 
 export function getCandidateNews(candidateId: string) {
