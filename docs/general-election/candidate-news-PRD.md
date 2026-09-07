@@ -1,6 +1,6 @@
 # Candidate News — PRD
 
-**Status:** Draft v1.1 · **Created:** 2026-09-06 · **Revised:** 2026-09-06 (C0) · **Owner:** Jason (founder)
+**Status:** Draft v1.2 · **Created:** 2026-09-06 · **Revised:** 2026-09-07 (§5–§7) · **Owner:** Jason (founder)
 **Companion:** `news-fairness.md` (owns labelling + fairness rules; founder decision 2026-09-06, N2/N3 built),
 `refresh-agents-plan.md` (the governing R1–R4 spec, brought into this directory by C0),
 `agents/r1-candidate-news.prompt.txt` (snapshot of the live R1 contract),
@@ -8,10 +8,17 @@
 
 > **v1.1 note.** v1.0 was written from schema defaults and console docs
 > because the R-agent spec could not be found. C0 found it. Several v1.0
-> premises were wrong; the corrections are inline and the evidence is in §7.
+> premises were wrong; the corrections are inline and the evidence is in §10.
 > The one that matters most: **R1 already exists and has run four times.** It
 > has written nothing because every candidate in the database is a demo
 > fixture, not because nothing writes news.
+
+> **v1.2 note (2026-09-07).** Three founder decisions added as §5–§7: news
+> intake sweeps a fixed corpus of outlets rather than searching per candidate;
+> association gains a `related` tier beside the deterministic name match; and
+> the election news feed is scoped by county with a switcher. Together they
+> cost **two columns on `news_item`** — migration `0016` — which is why the
+> "schema cost: zero" line in §2 no longer holds.
 
 ## 1. Why this exists
 
@@ -58,9 +65,14 @@ blocker is the roster, and the roster is the ingest branch's job (§2).
 | `allowlist_b_core` — Tier-1/Tier-2 source classification | `Civic Awareness (Know Your Vote)/Agents/The Fact-Checker/` | built + tested |
 | `candidate.ballot_status` (`ballot` / `write_in` / `excluded`) — what "ballot-tier" means | ingest branch `claude/data-architecture-ingest-plan-u9b1fq`, `data-architecture.md` D1, task A1 (`0010_general_election.sql`) | **designed, founder gate A0 open, migration not written** |
 | Real candidate roster (22 ballot-tier candidates, 8 races) | ingest branch tasks B2 (parser) + B3 (official sites) | **not ingested** — live `candidate` has 29 rows, 29 demo |
+| **County switcher parts** — `COVERED_COUNTIES`, `resolveCounty()`, a rendered county picker, `zip_district.county_fips` | `src/lib/resolve.ts`, `src/components/features/CandidateBrowser.tsx`, `0001` | **all exist** — only the news feed is county-blind (§7) |
+| **Outlet corpus list** (`src/lib/news-sources.ts`) | — | **does not exist** (§5, C7) |
 
-**Schema cost of this PRD: zero** — for the news table. Two corrections to
-v1.0's numbering claim:
+**Schema cost of this PRD (v1.2): two columns on `news_item`.** v1.0 and v1.1
+said zero, and that was true of them. §6 adds `relation` and §7 adds
+`county_fips`, both nullable, both additive — reserved as **`0016`** in
+`supabase/migrations/README.md`. Nothing else in the news plane changes shape.
+Two corrections to v1.0's numbering claim:
 
 - Live migrations are `0000`–`0012` (`0009`–`0012` applied 2026-09-07; `0012`
   is `measure_function_search_path` from PR #13).
@@ -122,8 +134,240 @@ in the prompt.
 | **CN-R6** | Ops plane written on every run (`agent_run`), skip-and-note if `0006` absent. | **Gap** — this is exactly TASK-A15, unbuilt. |
 | **CN-R7** | Gated by default: agent news routes through `review_item` before it is publicly readable. | **Gap, and a reversal.** design.md § 7 recorded the opposite decision ("Manual + gated only … revisit via per-agent flag"). This PRD asks the founder to flip that flag for R1. Also note: the read path publishes `news_item` rows the moment they exist (anon SELECT); "gated" therefore means *don't INSERT until approved*, i.e. R1 writes a `review_item(kind='manual_news', source='agent:R1')` and the approve effect does the insert. That effect exists as `src/lib/admin/effects.ts` (on `main` via PR #14). |
 | **CN-R8** | Degrade honestly: `status='failed'` on the run row; `ok_empty` for "ran fine, found nothing". | **Partial.** Fail-closed is in the prompt, but with no `agent_run` row there is no status anywhere a machine can read. Same fix as CN-R6. |
+| **CN-R9** *(v1.2)* | Every candidate-scoped row records **how** it matched: `relation` is `named` (deterministic full-name match) or `related` (ambiguous). `related` attaches to **every** candidate the ambiguity admits, never to one picked by judgment. | **Gap** — column does not exist (`0016`, §6). R1 today writes one row per candidate from a per-candidate search, so "how it matched" is unrecorded. |
+| **CN-R10** *(v1.2)* | Coverage variance (`news-fairness.md` §2) is computed over **`named` rows only**. | **Gap** — no variance is computed at all yet; the rule exists so it cannot be got wrong later. |
+| **CN-R11** *(v1.2)* | Every feed-eligible row carries a `county_fips`, or is explicitly statewide (`NULL`). The feed scopes to any county without a schema change. | **Gap** — `news_item` has `metro` (four values) and no county column (`0016`, §7). |
 
-## 5. Tasks
+**What §5 changes about CN-R4.** Under the corpus sweep, "same query pattern and
+effort per candidate" stops being an instruction the agent is trusted to obey
+and becomes a property of the design — one pool, one matching rule, applied to
+everyone. The prompt line stays; it just stops being the enforcement mechanism.
+That is the same trade CN-R2 and CN-R5 already make (lint and unique index over
+prose).
+
+## 5. News intake: sweep a fixed corpus, don't search per candidate
+
+**Founder question (2026-09-07):** *"When it comes to our news intake, would
+having a large pool of local news channels and papers, and then having a
+biweekly scan of those, mean we have actual articles that the refresh agent can
+use, or that the refresh agent can look for news articles from those
+preselected sites?"*
+
+**Decision: the first one — sweep the pool, then match.** R1 stops asking a
+search engine about each candidate and starts reading a fixed list of outlets,
+then matches what it finds against the roster (§6).
+
+### Why, in two arguments
+
+1. **Symmetry becomes structural instead of promised.** R1's Constitution 5
+   says *"search every candidate in a race with the same query pattern and
+   effort."* Under per-candidate search that promise **cannot be verified from
+   the outside**: an opaque ranker decides what comes back, so per-candidate
+   count variance measures the ranker at least as much as it measures the
+   press. Under a sweep, every candidate is matched against the **same pool by
+   the same rule**, so equal effort is a property of the design rather than an
+   instruction the agent is trusted to follow. This is the move S1 made when it
+   removed identity from the tool arguments (ADR-R1): make the guarantee
+   unforgeable rather than well-worded.
+2. **The corpus is the denominator.** `news-fairness.md` §2 asks for
+   `(max-min)/max` variance over items-available-per-candidate, and reports it
+   publicly. A variance number over per-candidate search results has no
+   denominator — "14 stories for one, 3 for another" out of *what*? Over a
+   swept corpus it does: out of the N articles the listed outlets published in
+   the window. Without the corpus, the one number `news-fairness.md` promises
+   to publish means nothing.
+
+### What this is not
+
+It is **not** evidence that R1's current search backend is broken. C0 found
+four runs and a 26-row zero table, and that zero is the **roster** blocker
+(§1), not a search failure — the three WebSearch spot-checks worked and
+correctly found that the demo people don't exist. This is a change of
+*mechanism for a property we want to be able to prove*, and it is a real
+change to a live scheduled task, so it needs the founder's go the same way any
+prompt edit does (§3).
+
+### Shape of the sweep
+
+| Decision | Choice | Why |
+|---|---|---|
+| **The list** | A frozen in-repo module, `src/lib/news-sources.ts`, one row per outlet: domain, publisher name, `type`, `lean_tag`, `county_fips`, feed URL. Changes land by PR with a stated reason — Allowlist B's discipline (`data-architecture.md`, `allowlist_b_core`). | The list *is* the editorial decision. In the repo it is reviewable, diffable and blameable; in a prompt it is none of those. |
+| **Retrieval order** | RSS/Atom → `sitemap.xml` / news sitemap → HTML listing page → search API. Take the first that works per outlet and record which. | RSS is published *for* syndication: cheapest, most stable, least likely to break or to be unwelcome. Scraping is the fallback, not the plan. |
+| **Window** | Publish date within the last 14 days, same as R1 today. | Unchanged; the sweep changes where articles come from, not how fresh they must be. |
+| **What is stored** | Title, dek/summary, canonical URL, publish date, outlet. **Never the full article text.** | Copyright, and the cards only ever show a headline plus a line. Storing more creates an obligation with no product behind it. |
+| **Where sweep results live** | Nowhere new. One run sweeps, matches (§6), and inserts; the pool is in-run memory. | YAGNI. A `news_corpus` staging table is the change to make *if* the sweep and the match ever run on different schedules — not before. |
+| **`lean_tag`** | Assigned **once per outlet, in the list**. The agent never classifies an article. | Closes CN-R3 by construction: there is nothing left for the agent to editorialise about. |
+
+### Cadence — biweekly is now too slow
+
+The general is **2026-11-03**. Registration closes **2026-10-05**; early voting
+runs **2026-10-24 – 10-31**. R1's cron is `0 9 1,15 * *` — on the 15th of
+October a voter can already have voted before the next sweep. Recommended, for
+the founder to apply (editing a live scheduled task is a config change, §3):
+
+| Window | Cadence |
+|---|---|
+| now → 2026-10-04 | weekly |
+| 2026-10-05 → 2026-11-03 | daily |
+| after 2026-11-03 | back to biweekly |
+
+A sweep costs one pass over the outlet list regardless of roster size, so
+tightening the cadence scales with the press, not with the 26 candidates —
+which is the other reason the sweep is the affordable option.
+
+### The honest cost
+
+A story on an outlet that is not on the list is **invisible**, and no amount of
+searching inside a run will find it. That is a real loss of recall. It is also
+the point: the boundary is a file in the repo that anyone can read and argue
+with, rather than a ranker nobody can inspect. Recall is traded for an
+auditable denominator, deliberately. The remedy for a missed outlet is a PR.
+
+---
+
+## 6. Association: a hard name match, and a `related` tier
+
+**Founder direction (2026-09-07):** keep the deterministic name match, and add
+a second tier — *"if it's a bit ambiguous, we can still relate to that user
+rather than requiring a hard match."*
+
+### Storage: no join table, no new table
+
+`0005` already made this legal:
+
+```sql
+CREATE UNIQUE INDEX IF NOT EXISTS uq_news_item_url_candidate
+  ON news_item (url, (COALESCE(candidate_id, ''))) WHERE url IS NOT NULL;
+```
+
+The key is `(url, candidate_id)`, not `url` — **the same article may already
+exist once per candidate**, plus once with `candidate_id NULL`. So one article
+matched to three candidates is three `news_item` rows, and nothing needs to be
+built for that. The only addition is a column saying *how* each row was
+matched:
+
+```sql
+ALTER TABLE news_item ADD COLUMN relation TEXT
+  CHECK (relation IN ('named','related'));   -- NULL for non-candidate rows
+```
+
+### The two tiers
+
+| Tier | Rule | Attaches to |
+|---|---|---|
+| **`named`** | The candidate's **full name** appears in the title or dek. One rule, applied identically to every candidate. | that candidate |
+| **`related`** | Either (a) the article is about the race, office, jurisdiction, or a measure on that ballot and names no candidate; or (b) it names a person-token that matches a candidate without being a full-name match — surname only, a nickname, `title + surname`. | **every** ballot-tier candidate the ambiguity admits |
+
+That second column is the load-bearing part. `related` never resolves ambiguity
+by picking the most likely candidate — a judgment call there would reintroduce
+exactly the editorial discretion this project removes, one row at a time.
+Ambiguity resolves **toward symmetry**: a race story attaches to everyone in
+the race; a "Commissioner Smith" story attaches to every Smith it could mean.
+Case (b) attaches to one candidate only when exactly one candidate could match,
+and it is still `related`, because the match was not deterministic.
+
+Explicitly out of scope for v1: embedding similarity, topical relevance
+scoring, or any model judgment about whether an article "feels" like it is
+about someone. Two values, one column, deterministic rules.
+
+### Display and slots
+
+- The candidate page shows **`named` cards first**, then `related` under a
+  labelled divider — *"Also about this race"*. A voter must never read a
+  race-level story as one that named the candidate. Never mixed silently.
+- `news-fairness.md` §2's `N` slots fill from `named` first; `related` fills
+  what is left. Showing a real race story beats showing an empty rectangle,
+  and it beats padding with an older `named` item from a different window.
+- Shortfall is still stated: *"No stories naming this candidate in the last 30
+  days"* is different from, and more informative than, an empty page.
+
+### The audit rule that keeps this honest
+
+> **Coverage variance is computed on `named` rows only.**
+
+`related` rows are, by construction, equal across a race — every candidate gets
+them. Feeding them into `balance_audit_core` would drag `(max-min)/max` toward
+zero and make coverage look fairer than the press actually was. The `related`
+tier exists to fill a voter's page, **not** to improve the number we publish
+about ourselves.
+
+### What this replaces
+
+Q3's answer ("a race-scoped story becomes `election_news` with `candidate_id
+NULL`") still stands **for the feed** (§7), but it is no longer the whole
+answer for the candidate page: the same article now also gets a `related` row
+per candidate. Write the `candidate_id NULL` row only for articles that matched
+**no** candidate at any tier — otherwise the feed's URL dedupe (§7) covers it
+and the extra row is waste.
+
+---
+
+## 7. The election news feed, filtered by county
+
+**Founder direction (2026-09-07):** everything the sweep finds also lands in an
+election news feed that is *"filtered based on your given location county and
+can be changed if you want to look into another county."*
+
+### Most of the switcher already exists
+
+| Piece | Where | State |
+|---|---|---|
+| County list — `{ fips, name, metro }` × 4 | `src/lib/resolve.ts` `COVERED_COUNTIES` | exists |
+| `resolveCounty(countyFips)` → races for that county | `src/lib/resolve.ts` | exists, used by `YourRaces.tsx` |
+| A rendered county picker off that list | `src/components/features/CandidateBrowser.tsx` | exists |
+| ZIP → county | `zip_district.county_fips CHAR(5) NOT NULL` + `county_name` | seeded |
+| The feed's scope filter | `/api/news` `metro` + `race_id` + statewide | **county-blind** |
+
+So this is a plumbing task, not a design task. The feed is the one surface that
+never learned about counties.
+
+### The one schema addition
+
+```sql
+ALTER TABLE news_item ADD COLUMN county_fips CHAR(5);   -- NULL = statewide
+CREATE INDEX idx_news_item_county ON news_item (county_fips, published_at DESC);
+```
+
+**Keep `metro`.** It has live rows and `idx_news_item_scope` depends on it;
+dropping it is a separate decision with no benefit here. But `county_fips` is
+the **durable** key: `zip_district` is already keyed on it, the DoE files are
+keyed on it, and it grows to 67 counties, whereas `metro` is a four-value
+display grouping that cannot.
+
+Population: a candidate-scoped row inherits the county of its race; an
+unmatched `election_news` row takes the county of the outlet that published it
+(the outlet list carries `county_fips`, §5); genuinely statewide items stay
+`NULL`.
+
+### API and UI
+
+- `/api/news?county=12086`, alongside the existing `zip` / `metro` / `district`.
+  The PostgREST scope list gains `county_fips.eq.<fips>`; statewide stays the
+  `race_id is null and metro is null` clause, extended with `county_fips is
+  null`.
+- `resolveZip` already **selects** `county_fips` and returns only `county_name`
+  — return the FIPS too, so a ZIP lands the voter in their county with no
+  lookup by name.
+- The feed selects **both** `election_news` and `candidate_news` and
+  **dedupes on `url`**, so a story matched to three candidates is one card in
+  the feed and three cards across three candidate pages.
+- The switcher reuses `COVERED_COUNTIES` and the `CandidateBrowser` picker
+  pattern. Default to the stored location's county.
+
+> **Switching county is a view, not a move.** Looking at Broward must not
+> overwrite the device's stored location — the voter is reading about another
+> county, not relocating. Keep it in component state (or a `?county=` search
+> param), never in `readLocation`/`writeLocation`.
+
+### Honest limit
+
+`COVERED_COUNTIES` has four rows, so *"switch to another county"* means four
+counties until the roster and the outlet list grow. `county_fips` is precisely
+the column that lets it reach 67 without a second migration.
+
+---
+
+## 8. Tasks
 
 - [x] **C0** — Locate `CAP_Refresh_Agents_Plan` and the R1–R4 stored prompts; bring
   the plan into the repo; quote R1's real contract; confirm or correct §3.
@@ -132,7 +376,7 @@ in the prompt.
   `docs/general-election/refresh-agents-plan.md`. Stored R1 prompt read via
   `list_scheduled_tasks` → `SKILL.md`, diffed against `.superpowers/sdd/`
   mirror (identical), snapshotted to `agents/r1-candidate-news.prompt.txt`.
-  §3 table confirmed for R1/R2/R4, corrected for R3. Evidence in §7.
+  §3 table confirmed for R1/R2/R4, corrected for R3. Evidence in §10.
 
 - [x] **C1** — Decide where R1 runs.
   ~ Done 2026-09-06 by inheritance: plan §3 **ADR-001 = Option A, Cowork**
@@ -188,6 +432,40 @@ in the prompt.
   Verify: every `ballot` candidate in that race searched; counts recorded;
   `verify-news-neutrality.ts` passes live. **Blocked** on roster.
 
+- [ ] **C7** *(v1.2)* — Build the outlet corpus and the sweep (§5).
+  `src/lib/news-sources.ts`: one frozen row per outlet — domain, publisher,
+  `type`, `lean_tag`, `county_fips`, feed URL, retrieval mode. Then the sweep
+  itself: RSS/Atom → sitemap → listing page, 14-day window, title + dek + URL +
+  date + outlet, no full text, results held in-run.
+  Verify: two sweeps over the same window return the same article set; an
+  off-list domain never appears; every returned article carries a publisher,
+  `type` and `lean_tag` taken **from the list**, never from the agent.
+  **Not blocked on the roster** — the sweep has no candidates in it. This is
+  the one v1.2 task that can start today.
+
+- [ ] **C8** *(v1.2)* — Association: `named` + `related` (§6, CN-R9/CN-R10).
+  Migration `0016` adds `news_item.relation`; the matcher assigns it; the
+  candidate page renders `named` first and `related` under an *"Also about this
+  race"* divider; slot-filling takes `named` first; `balance_audit_core` is
+  called on `named` counts only.
+  Verify: a race-level article produces one row per ballot candidate, all
+  `related`; a full-name article produces exactly one `named` row; a
+  surname-only collision attaches to both candidates; variance computed with
+  and without `related` differs, and the reported number is the `named` one.
+  **Blocked** on roster (C6's blocker) for a live run; the matcher itself is
+  fixture-testable now.
+
+- [ ] **C9** *(v1.2)* — County-scoped feed + switcher (§7, CN-R11).
+  Migration `0016` adds `news_item.county_fips` + index; `/api/news` takes
+  `county`; `resolveZip` also returns `countyFips`; the feed selects
+  `election_news` **and** `candidate_news` deduped on `url`; the switcher
+  reuses `COVERED_COUNTIES` and does **not** write the device location.
+  Verify: `?county=12011` returns Broward + statewide and excludes
+  Miami-Dade-only items; a story matched to three candidates appears once;
+  switching county then reloading the app returns the voter to their own
+  county. **Not blocked** — the four live `election_news` rows are enough to
+  test the filter.
+
 **External prerequisites (not C-tasks, but on the critical path):**
 
 1. ~~`reconcile-git.sh`~~ — done 2026-09-06 as PR #14: admin console A2–A5
@@ -200,7 +478,7 @@ in the prompt.
    candidates), B3 (official sites). Until B2 lands, every R1 run will keep
    writing honest zeros, correctly.
 
-## 6. Open questions
+## 9. Open questions
 
 - **Q0 — `news-fairness.md`.** *Answered:* it landed on `main` with PR #10
   (`docs/general-election/news-fairness.md`) after C0 had searched for it. Its
@@ -209,14 +487,21 @@ in the prompt.
 - **Q1 — search backend + budget.** *Answered by C0:* R1 uses the Claude
   app's web search; there is no separate API key or budget line. Cost is
   Cowork session time. The T5 `web_search` path in the S-plane is not involved.
+  **Superseded by §5 (v1.2):** the backend becomes a sweep of a frozen outlet
+  list; the Claude app's search stays available for spot-checks, not for
+  discovery.
 - **Q2 — cadence.** *Answered:* plan §8 Q1 default — every two weeks, 1st and
   15th at 09:00. The dispatcher's `*/30` cadence (A14) is for on-demand
-  requests, not sweeps.
+  requests, not sweeps. **Reopened by §5 (v1.2)** — biweekly misses early
+  voting; see Q8.
 - **Q3 — `election_news` vs `candidate_news`.** *Answered by plan §4.2:* a
   story naming two candidates in one race becomes either one neutral item per
   candidate or one race-scoped item, never one item centring one candidate's
   view of the other. Race-scoped ⇒ `election_news` with `race_id` set,
-  `candidate_id NULL`.
+  `candidate_id NULL`. **Amended by §6 (v1.2):** that remains the feed's row,
+  but a race-scoped story now *also* gets a `related` row per ballot candidate
+  so it reaches the candidate page. Write the `candidate_id NULL` row only when
+  an article matched no candidate at any tier.
 - **Q4 — retention.** Still open. Nothing prunes `news_item`;
   `verify-news-neutrality.ts` lints a 30-day window, which hints at the shape.
 - **Q5 — gate agent news? (new)** design.md § 7 chose *not* to queue agent
@@ -231,8 +516,20 @@ in the prompt.
   of `news-fairness.md` (founder, 2026-09-06, reversible). The candidate page
   still renders `CandidateBrief` until N4 replaces it, and `docs/scope-changes.md`
   has no entry yet — worth one line there since that file is the errata index.
+- **Q8 — sweep cadence, and who changes it. (new, v1.2)** §5 recommends
+  weekly now and daily from 2026-10-05. R1's cron is `0 9 1,15 * *` and lives
+  in a Cowork scheduled task on the operator's Mac; per §3 this PRD drafts and
+  stops. Founder decision, and it has a deadline: the 10-15 sweep is the last
+  one before early voting opens.
+- **Q9 — retrieval fallback for outlets with no feed. (new, v1.2)** §5 orders
+  RSS → sitemap → listing page → search API, but does not say what to do with
+  an outlet where all four are hostile (JS-only listing, aggressive bot block).
+  Options: drop the outlet from the list (honest, loses a real local paper), or
+  keep a narrow per-candidate search for exactly those outlets (recovers
+  recall, reopens the denominator hole for that slice). Decide when C7 finds
+  the first one; do not pre-solve.
 
-## 7. C0 evidence (2026-09-06)
+## 10. C0 evidence (2026-09-06)
 
 Live project `pqracitpmzpiqfnzlngw`, read-only queries.
 

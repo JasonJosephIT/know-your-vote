@@ -181,6 +181,11 @@ needs one live request to confirm.
   `TASK-A14`/`A15` are both unchecked.
 - **What is `N`?** Pick it from real data once N5 reports actual per-candidate
   counts. Choosing it before measuring is guessing.
+- **Which rows does N5 count?** *Answered 2026-09-07* by
+  `candidate-news-PRD.md` §6: **`named` rows only**. `related` rows attach to
+  every candidate in a race by construction, so counting them would drag
+  `(max-min)/max` toward zero and flatter our own coverage. They fill a
+  voter's slots; they do not enter the audit.
 - **Where does the biography come from?** No `bio` field exists on `candidate`
   or `profile`. Out of scope here — it belongs in `data-architecture.md` once
   the founder says whether it is hand-written, agent-written, or assembled from

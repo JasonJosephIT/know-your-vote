@@ -37,7 +37,9 @@ unblock the ingest branch's A0.
 
 ## 2. Read order
 
-1. `candidate-news-PRD.md` — the task list you maintain. §7 has the evidence.
+1. `candidate-news-PRD.md` — the task list you maintain. §5–§7 are the
+   2026-09-07 founder decisions (corpus sweep, `named`/`related`, county feed);
+   §10 has the C0 evidence.
 2. `refresh-agents-plan.md` §4 (constitution), §4.1 (sources), §4.2 (wording),
    §6 R1 — the contract you are extending.
 3. `agents/r1-candidate-news.prompt.txt` — the live prompt, verbatim.
