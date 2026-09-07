@@ -1064,14 +1064,16 @@ class TestIncumbencyResolver(unittest.TestCase):
         """Open seat is a property of the FEC field for the district, not of
         our roster's coverage of it. Live FL-28 returns 7 filers against a
         2-3 name ballot roster (primary losers / never-qualified filers who
-        still have a 2026 filing), so unmatched non-"I" rows must not block
+        still have a 2026 filing), so unmatched "O" rows must not block
         the verdict -- they are recorded under `unmatched_fec_rows` instead
-        of blocking `is_open_seat` or landing in `unresolved`."""
+        of blocking `is_open_seat` or landing in `unresolved`. Every row is
+        "O": a "C" row would mean the FEC believes there is an incumbent to
+        challenge, which refuses (see the C-without-I test below)."""
         rows = [_fec_cand("H4FL28002", "RIVERA, ANA", "O", party="DEM"),
                 _fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "O"),
-                _fec_cand("H6FL28039", "CAMPIONE, THOMAS", "C"),
+                _fec_cand("H6FL28039", "CAMPIONE, THOMAS", "O"),
                 _fec_cand("H6FL28047", "MUJICA, HECTOR", "O"),
-                _fec_cand("H6FL28021", "ROJAS, EDDY", "C")]
+                _fec_cand("H6FL28021", "ROJAS, EDDY", "O")]
         out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
         self.assertEqual(out["status"], "resolved", out)
         self.assertIs(out["is_open_seat"], True)
@@ -1080,8 +1082,35 @@ class TestIncumbencyResolver(unittest.TestCase):
         unmatched_ids = {u["fec_candidate_id"] for u in out["unmatched_fec_rows"]}
         self.assertEqual(unmatched_ids, {"H6FL28039", "H6FL28047", "H6FL28021"})
         for u in out["unmatched_fec_rows"]:
-            self.assertIn(u["incumbent_challenge"], ("C", "O"))
+            self.assertEqual(u["incumbent_challenge"], "O")
             self.assertTrue(u["name"])
+
+    def test_challengers_with_no_incumbent_row_refuse_rather_than_open(self):
+        """FEC "C" is "challenger TO an incumbent", not "not the incumbent".
+        A field of "C"s with no "I" is the FEC asserting an incumbent this
+        run did not see -- a member whose own filing carries a stale
+        `election_years`, or FEC lag. Reading that absence as an open seat
+        publishes the resolver's strongest claim off the one missing row."""
+        rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "C"),
+                _fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM")]
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
+        self.assertEqual(out["status"], "refused", out)
+        self.assertNotIn("is_open_seat", out)
+        joined = " ".join(out["reasons"])
+        self.assertIn("C (challenger)", joined)
+        self.assertIn("I (incumbent)", joined)
+        self.assertIn("H0FL28001", joined)
+        self.assertIn("H4FL28002", joined)
+
+    def test_one_challenger_among_open_filers_still_refuses(self):
+        """The contradiction is one "C" row, not a majority of them: a single
+        challenger filing still asserts someone to challenge."""
+        rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "O"),
+                _fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM")]
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
+        self.assertEqual(out["status"], "refused", out)
+        self.assertNotIn("is_open_seat", out)
+        self.assertIn("H4FL28002", " ".join(out["reasons"]))
 
     def test_unmatched_incumbent_refuses_and_never_calls_the_seat_open(self):
         """A retiring member who still filed with the FEC is exactly this
@@ -1101,15 +1130,15 @@ class TestIncumbencyResolver(unittest.TestCase):
         self.assertIn("'X'", " ".join(out["reasons"]))
 
     def test_a_candidate_matching_two_rows_is_unresolved(self):
-        rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "C"),
-                _fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM"),
-                _fec_cand("H4FL28003", "RIVERA, ANA M", "C", party="DEM")]
+        rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "O"),
+                _fec_cand("H4FL28002", "RIVERA, ANA", "O", party="DEM"),
+                _fec_cand("H4FL28003", "RIVERA, ANA M", "O", party="DEM")]
         out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
         self.assertEqual(out["status"], "resolved", out)
         self.assertNotIn(_RIVERA, out["candidates"])       # nothing written
         self.assertIn(_RIVERA, [u.get("candidate_id") for u in out["unresolved"]])
         # An unresolved roster candidate does not block the open-seat
-        # verdict: every FEC row here has a known, non-"I" code.
+        # verdict: every FEC row here is a known "O".
         self.assertIs(out["is_open_seat"], True)
 
     def test_two_candidates_on_one_non_incumbent_row_are_both_unresolved(self):
@@ -1120,7 +1149,7 @@ class TestIncumbencyResolver(unittest.TestCase):
         `candidates`, empty `unresolved`."""
         roster = [{"candidate_id": "FL-DOE-90010", "legal_name": "Ana Rivera"},
                   {"candidate_id": "FL-DOE-90011", "legal_name": "Ana B Rivera"}]
-        rows = [_fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM"),
+        rows = [_fec_cand("H4FL28002", "RIVERA, ANA", "O", party="DEM"),
                 _fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "O")]
         out = intake.resolve_incumbency(_RACE_28, roster, rows)
         self.assertEqual(out["status"], "resolved", out)
@@ -1265,8 +1294,8 @@ class TestIncumbencyResolver(unittest.TestCase):
         self.assertEqual(out["dropped_rows"], {"other_year": 1, "other_office": 0})
 
     def test_every_unresolved_entry_names_a_reason(self):
-        rows = [_fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM"),
-                _fec_cand("H9FL28004", "GHOST, GARY", "C")]
+        rows = [_fec_cand("H4FL28002", "RIVERA, ANA", "O", party="DEM"),
+                _fec_cand("H9FL28004", "GHOST, GARY", "O")]
         out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
         self.assertTrue(out["unresolved"])
         for entry in out["unresolved"]:
@@ -1322,8 +1351,10 @@ class TestIntakeIncumbencyHandler(unittest.TestCase):
         self.assertEqual(params["api_key"], "testkey")
 
     def test_open_seat_sets_the_flag(self):
+        # All "O": a "C" row would assert an incumbent to challenge and the
+        # resolver would refuse (TestIncumbencyResolver covers that).
         rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "O"),
-                _fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM")]
+                _fec_cand("H4FL28002", "RIVERA, ANA", "O", party="DEM")]
         layer, db = self._layer(by_district={"28": rows})
         res = layer.dispatch("doe_file_intake", {"fill_incumbency": True})
         out = res["result"]["incumbency"]["FL-28-general"]
@@ -1425,6 +1456,43 @@ class TestIntakeIncumbencyHandler(unittest.TestCase):
         self.assertEqual(out["status"], "refused", out)
         self.assertIn("pagination.count", " ".join(out["reasons"]))
         self.assertEqual(committed_updates(db, "race"), [])
+
+    def _layer_returning_results(self, results):
+        """A well-formed envelope whose `results` is the wrong shape. The
+        `"results" in data` check upstream only proves the key exists."""
+        def fec_get(path, params):
+            return {"api_version": "1.0", "results": results,
+                    "pagination": {"count": 1, "per_page": 100, "page": 1}}
+        return make_intake_layer(
+            "record", doe_fetch=lambda office=None: _DOE_INCUMBENCY_FIXTURE,
+            fec_api_key="testkey", fec_get=fec_get)
+
+    def test_a_null_results_refuses_the_race_rather_than_raising(self):
+        """Nothing wraps this handler, so a TypeError here would escape
+        `dispatch` and leave the DoE upserts uncommitted on the shared
+        connection. Refuse the race, like the pagination checks do."""
+        layer, db = self._layer_returning_results(None)
+        res = layer.dispatch("doe_file_intake", {"fill_incumbency": True})
+        self.assertTrue(res["ok"], res)
+        out = res["result"]["incumbency"]["FL-28-general"]
+        self.assertEqual(out["status"], "refused", out)
+        self.assertNotIn("is_open_seat", out)
+        self.assertIn("'results'", " ".join(out["reasons"]))
+        self.assertEqual(committed_updates(db, "race"), [])
+        self.assertEqual(committed_updates(db, "candidate"), [])
+
+    def test_a_results_list_of_non_objects_refuses_the_race(self):
+        """The other half: a list is not enough -- every item has to be a
+        mapping or the resolver's `.get()` calls raise AttributeError."""
+        layer, db = self._layer_returning_results(["x"])
+        res = layer.dispatch("doe_file_intake", {"fill_incumbency": True})
+        self.assertTrue(res["ok"], res)
+        out = res["result"]["incumbency"]["FL-28-general"]
+        self.assertEqual(out["status"], "refused", out)
+        self.assertNotIn("is_open_seat", out)
+        self.assertIn("'results'", " ".join(out["reasons"]))
+        self.assertEqual(committed_updates(db, "race"), [])
+        self.assertEqual(committed_updates(db, "candidate"), [])
 
     def test_a_complete_page_resolves(self):
         """The other side of the check: count == rows returned is complete."""
@@ -1914,6 +1982,21 @@ class TestBalanceAudit(unittest.TestCase):
         # returning the error dict, which on a real connection is what keeps
         # the later write_balance_result loop from being poisoned.
         self.assertEqual(db.rolled_back, 1)
+
+    def test_coverage_computation_failure_degrades_without_rolling_back(self):
+        """The second `except` in `_coverage`: the SELECT succeeded, so the
+        failure is pure Python (here a non-numeric `n`) and the transaction
+        is clean. It must degrade the report-only coverage block without
+        rolling back the profiles read the write-backs depend on -- the
+        distinction the read-failure test above is the other half of."""
+        db = self._uneven_coverage_db([{"candidate_id": "cand_001", "n": "x"}])
+        layer, db = make_synthesis_layer(db=db)
+        res = layer.dispatch("balance_audit", {"race_id": "FL-15-general"})
+        self.assertTrue(res["ok"], res)
+        self.assertEqual(res["result"]["coverage"]["error"], errors.UPSTREAM_FAILED)
+        self.assertEqual(res["result"]["verdict"], "PASS")
+        self.assertFalse(layer.halted)
+        self.assertEqual(db.rolled_back, 0)
 
     def test_unopposed_race_has_zero_coverage_variance(self):
         db = (FakeDb()

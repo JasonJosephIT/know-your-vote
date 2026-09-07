@@ -251,8 +251,12 @@ def parse_candidate_list(text: str) -> dict:
 # this resolver exists. So:
 #
 #   `is_open_seat = True` iff (a) at least one 2026 House row exists for the
-#   district, (b) no row has `incumbent_challenge == "I"`, and (c) every
-#   row's `incumbent_challenge` is a known value (I/C/O). A non-"I" row that
+#   district, (b) no row has `incumbent_challenge == "I"`, (c) no row has
+#   `incumbent_challenge == "C"` either, and (d) every row's
+#   `incumbent_challenge` is a known value (I/C/O). A genuinely open seat is
+#   therefore an all-"O" field: "C" is "challenger TO an incumbent", so a
+#   C-without-I field is the FEC asserting an incumbent this run did not see
+#   and it refuses instead (below). A non-"I" row that
 #   matches no roster candidate does NOT block the open-seat verdict --
 #   it is recorded under `unmatched_fec_rows` for auditability, not under
 #   `unresolved` (which is for roster candidates).
@@ -275,6 +279,12 @@ def parse_candidate_list(text: str) -> dict:
 #     retiring still has an FEC record, so an unmatched "I" is precisely the
 #     case where calling the seat open would be wrong;
 #   * two "I" rows -- the district cannot have two sitting members;
+#   * a "C" row with no "I" row anywhere in the field. FEC's "C" is
+#     "challenger to an incumbent", so such a field asserts an incumbent
+#     this run did not see -- a member whose own filing carries a stale
+#     `election_years`, or FEC lag on updating it. Resolving that as an open
+#     seat would publish the strongest claim the resolver can make off the
+#     one row that is missing;
 #   * no 2026 House rows at all. Empty is not evidence of an open seat.
 #
 # `dropped_rows` (`{"other_year": n, "other_office": n}`, on every return --
@@ -337,11 +347,17 @@ def _refused(race_id: Any, reasons: list[str], *,
     """The one shape every B4 refusal returns. No `is_open_seat` key at all
     -- structural, so a caller cannot read a missing answer as a negative
     one -- but everything classified before the refusal is still carried,
-    so a refused race stays auditable from the run report."""
+    so a refused race stays auditable from the run report.
+
+    `dropped_rows` defaults to zeroes so the promise in the section comment
+    ("on every return") holds for the handler-level refusals too, which
+    refuse before any row is classified and so have nothing to count. A
+    caller that HAS counted rows overrides the key on the way out."""
     return {"race_id": race_id, "status": "refused",
             "reasons": list(reasons),
             "unresolved": list(unresolved),
-            "unmatched_fec_rows": list(unmatched)}
+            "unmatched_fec_rows": list(unmatched),
+            "dropped_rows": {"other_year": 0, "other_office": 0}}
 
 
 def resolve_incumbency(
@@ -365,7 +381,10 @@ def resolve_incumbency(
     missing answer as a False one, but it does carry everything classified
     before the refusal so the run report stays auditable. `is_open_seat` is a
     property of the FEC field for the district: a non-"I" row with no roster
-    match goes to `unmatched_fec_rows` and does not block it (see the section
+    match goes to `unmatched_fec_rows` and does not block it, but an
+    all-non-"I" field is only open when every row is coded "O" -- a "C"
+    ("challenger to an incumbent") row with no "I" row refuses, because the
+    field is asserting an incumbent this run did not see (see the section
     comment).
     """
     race_id = race.get("race_id")
@@ -522,6 +541,25 @@ def resolve_incumbency(
             f"{len(incumbent_ids)} FEC rows claim to be the incumbent in "
             f"{race_id} ({', '.join(repr(f) for f in incumbent_fec_ids)}); "
             "a district has one")
+
+    # "C" does not mean "not the incumbent" -- it means "challenger TO an
+    # incumbent". A field with a "C" row and no "I" row is the FEC asserting
+    # an incumbent this run did not see (a stale `election_years` on the
+    # member's own filing, or FEC lag), so the seat is not open and the
+    # absence is not evidence. Only an all-"O" field is a genuinely open one.
+    # (`incumbent_ids` is necessarily empty when no row is coded "I"; the
+    # "I" test is what keeps the reason below from claiming something false
+    # about a field whose "I" row merely failed to match.)
+    codes = [row.get("incumbent_challenge") for row in rows]
+    if "I" not in codes and "C" in codes:
+        challengers = [row.get("candidate_id") for row in rows
+                       if row.get("incumbent_challenge") == "C"]
+        reasons.append(
+            f"{len(challengers)} FEC rows in {race_id} "
+            f"({', '.join(repr(c) for c in challengers)}) are coded C "
+            "(challenger) but no row is coded I (incumbent); the field "
+            "claims an incumbent this run did not see, so this is not an "
+            "open seat")
     if reasons:
         return {**_refused(race_id, reasons, unresolved=unresolved,
                            unmatched=unmatched_fec_rows),
@@ -539,10 +577,12 @@ def resolve_incumbency(
         "status": "resolved",
         "dropped_rows": dropped_rows,
         "incumbent_id": incumbent_ids[0] if incumbent_ids else None,
-        # Every row's code is known and non-null at this point (checked
-        # above, fail-closed). So an open seat is simply: no row is "I" —
-        # unmatched non-"I" rows and unresolved roster candidates do not
-        # count against it (see the section comment).
+        # Every row's code is known and non-null at this point, and a
+        # "C"-without-"I" field has already refused (both checked above,
+        # fail-closed). So reaching here with no incumbent means every row
+        # is "O": a genuinely open seat. Unmatched "O" rows and unresolved
+        # roster candidates do not count against it (see the section
+        # comment).
         "is_open_seat": not incumbent_ids,
         "candidates": per_candidate,
         "unresolved": unresolved,
@@ -666,6 +706,16 @@ def build_intake_handlers(
             return {"ok": False, "error": errors.UPSTREAM_FAILED,
                     "reasons": ["FEC response missing expected 'results' envelope"]}
         results = data["results"]
+        # The envelope check above only proves the KEY is there. A null or
+        # otherwise wrong-shaped `results` would reach `len()` below and the
+        # resolver's `.get()` calls as a TypeError/AttributeError -- and
+        # nothing wraps this handler, so it would escape `dispatch` entirely
+        # and leave the DoE upserts uncommitted on the shared connection.
+        # Refuse this race the way the pagination checks do instead.
+        if not isinstance(results, list) or not all(
+                isinstance(row, Mapping) for row in results):
+            return _refused(race_id,
+                            ["FEC 'results' is not a list of objects; refusing"])
         # One page only, and we never page: a second page could hold the "I"
         # row that makes this a challenge rather than an open seat, so a
         # truncated field is refused outright rather than published from the

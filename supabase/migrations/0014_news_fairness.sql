@@ -20,6 +20,21 @@
 -- pipeline_event are NOT constrained: an official resource link and a
 -- pipeline status event legitimately have no publisher to attribute.
 --
+-- PRECONDITION — DO NOT APPLY LIVE UNTIL BOTH HOLD:
+--   (a) the admin console's manual-news approve path sets `source_id` on the
+--       `news_item` rows it inserts, and its `describeNewsInsertError`
+--       distinguishes `news_item_agent_source_check` from the 0005 checks.
+--       Today (`src/lib/admin/effects.ts`, Stream S) that path inserts with
+--       NO source_id and maps EVERY 23514 CHECK violation to "migration 0005
+--       not applied". Applying this file before that fix turns every approved
+--       manual news item into a failure described as the wrong migration --
+--       an operator would chase 0005 while the real cause is this CHECK.
+--   (b) the REST check for NULL-source `candidate_news`/`election_news` rows
+--       has been re-run IMMEDIATELY BEFORE applying. The count below is from
+--       2026-09-07; a row added since then makes `ADD CONSTRAINT` fail loudly,
+--       which is the intended behaviour, but it should be a known outcome and
+--       not a surprise mid-apply.
+--
 -- Idempotent: the source INSERTs below are ON CONFLICT (url_norm) DO
 -- NOTHING, the UPDATE is scoped to WHERE source_id IS NULL so a re-run
 -- touches nothing, and the CHECK is added inside a DO $$ guard exactly like
