@@ -108,7 +108,7 @@ than a paragraph of assurance.
 
 ## 5. Tasks
 
-- [ ] **TASK-067** — Landing page renders the shared ballot
+- [x] **TASK-067** — Landing page renders the shared ballot
   Files: `src/app/(public)/page.tsx`, `src/components/features/SharedBallot.tsx` (new)
   Notes: Server-render the statewide races and published measures directly on
   `/`. Keep the ZIP field, demoted from gate to upgrade: *"Add your U.S. House
@@ -121,6 +121,79 @@ than a paragraph of assurance.
   TASK-063 is the real prerequisite, and only so the two link together.
   Verify: a first visit with JavaScript disabled and no stored state shows all
   eight shared ballot items.
+  **Done 2026-09-07** — `src/components/features/SharedBallot.tsx` renders the
+  statewide races and mounts `BallotQuestions`; `src/lib/races.ts` is the
+  location-free read behind it, kept out of `resolve.ts` for the same reason
+  measures were kept out of `ResolveResult` in TASK-063 — that file answers
+  "what does this ZIP get", and a statewide race is nobody's ZIP question.
+  `resolveCounty` now reads through it too, so "statewide" has one definition,
+  one cache, and one ordering.
+
+  Three things the plan did not anticipate:
+
+  1. **The build broke before the page did.** Moving a database read onto a
+     prerendered route made `createAnonServerClient`'s throw-on-missing-config
+     a *build-time* failure: a checkout with no `.env` could no longer
+     `next build` at all. Both landing-page reads now degrade to empty the way
+     `election-dates.ts` already did around `createServiceClient`. `/` is still
+     `○` static with a 1h revalidate.
+  2. **An empty ballot had to become visible.** With both reads degrading, a
+     misconfigured deploy would have shipped a silently blank landing page —
+     the one failure nobody would notice. `SharedBallot` now says the ballot
+     isn't published yet rather than rendering an empty div.
+  3. **The ZIP field works without JavaScript.** It is a client component, so
+     with scripts off it was a field that did nothing. Adding
+     `action="/candidates" method="get"` and a hidden `view=races` makes the
+     browser's plain GET land on the same server-rendered result; `submit()`
+     still preventDefaults, so the split-district prompt is unchanged. The
+     county fallback is preserved but remains JavaScript-only — it is a button
+     with an onClick, and rewriting it is TASK-070's neighbourhood, not this
+     task's.
+
+  Copy changed with the framing: the headline is now "Everything on every
+  Florida ballot" rather than "Your ballot, laid out fairly", because without
+  a ZIP this page cannot keep the second promise. The site title and OG card
+  moved with it — every other public page sets its own title, so `title.default`
+  in the root layout *is* the landing page's, and a shared link should make the
+  same honest claim the page does. The ZIP prompt deliberately makes **no**
+  storage claim: `writeLocation` still writes `kyv.location` until TASK-070
+  drops it, so "never stored" would be false today.
+
+  `scripts/verify-shared-ballot.ts` guards the structural half of the verify
+  criterion — that nothing the ballot reaches is a client component, and that
+  the ZIP form keeps its no-JavaScript GET.
+
+  **Verified on the preview deploy 2026-09-07: the five statewide races render.**
+  The three amendments do not, and could not have — see the note below.
+
+  **The verify criterion was wrong, and finding out took a deploy.** "All eight
+  shared ballot items" assumed the measure tables existed in the project
+  database. They did not: migrations `0009`–`0011` had never been applied
+  there, so `ballot_measure` was missing entirely and `getActiveMeasures`
+  returned `[]` — because `fetchActiveMeasures` destructures `const { data }`
+  and drops `error`, PostgREST's "relation does not exist" was indistinguishable
+  from "nothing published". That had been true since TASK-062 shipped, on
+  `/candidates` as well as here; nothing surfaced it because nothing looked.
+
+  0009–0011 were applied on 2026-09-07 (plus `0012`, which pins `search_path`
+  on the three balance functions — the linter flagged them, and a SECURITY
+  INVOKER function whose table references resolve against the caller's
+  search_path is a poor guard for the one part of the ballot no campaign is
+  checking). The schema is now correct and anon-readable. **The amendments
+  still need TASK-066**: 0010/0011 create tables, not content, so eight items
+  is unreachable until the measures are authored and pass the Balance Audit.
+
+  Two things this leaves behind:
+
+  - `scripts/verify-migrations.mjs` applies the migration files to an embedded
+    pglite instance, so it proves the *files* are right while saying nothing
+    about what the real database has. It passed throughout the drift. Detecting
+    that needs a check against the deployed project, which does not exist yet.
+  - Reads that swallow `error` as an empty result (`fetchActiveMeasures`, and
+    `fetchStatewideRaces` as written here) trade a loud failure for a silent
+    wrong answer. On the landing page that is the right trade — a voter should
+    not get an error page — but it is the reason a missing table looked like an
+    unpublished ballot for a day.
 
 - [ ] **TASK-068** — Un-gate the quiz
   Files: `src/components/features/Quiz.tsx`

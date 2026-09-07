@@ -26,16 +26,20 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://know-your-vote-chazak.vercel.app"
   ),
+  /* Every public page sets its own title, so `default` is in practice the
+     landing page's — and since TASK-067 that page no longer claims to show
+     "your ballot" without a ZIP. The shared link is the landing page, so the
+     title and the OG card have to make the same honest claim it does. */
   title: {
-    default: "Know Your Vote, Know Your Ballot, Know Your Options",
+    default: "Know Your Vote — everything on every Florida ballot",
     template: "%s",
   },
   description:
-    "See everyone on your ballot, what they say, what they've done, and all facts no cap. Every claim linked to a source.",
+    "See everyone you can vote for — what they say, what they've done, and what's been verified. Equal space, equal scrutiny, every claim linked to a source. No ZIP needed.",
   openGraph: {
-    title: "Know Your Vote — Your Ballot, Your Options",
+    title: "Know Your Vote — everything on every Florida ballot",
     description:
-      "See everyone on your ballot what they say, what they've done, and all facts no cap.",
+      "See everyone you can vote for — what they say, what they've done, and what's been verified. No ZIP needed.",
     type: "website",
     siteName: "Know Your Vote",
     images: [

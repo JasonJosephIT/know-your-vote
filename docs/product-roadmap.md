@@ -51,13 +51,17 @@ content work, not engineering.
 | TASK-063 | `BallotQuestions` — measures surfaced in the races view, reusable for Phase 7 |
 | TASK-064 | Deadline banner, cached so `/` stays static; silent until TASK-058 verifies the dates |
 | TASK-065 | Quiz reframed from alignment to stances, with `COMPARATIVE_RE` as a second guardrail |
+| TASK-067 | `SharedBallot` on `/` — statewide races and measures with no ZIP; ZIP demoted to an upgrade |
 
 ### Next, in order
 
 Engineering, none of it blocked:
 
-1. **TASK-067 → 071** — Phase 7, the ZIP wall. TASK-067 does not depend on
-   TASK-060: the eight statewide ballot items need no ZIP at all.
+1. **TASK-068 → 071** — the rest of Phase 7. TASK-067 landed 2026-09-07: the
+   landing page renders the shared ballot with no ZIP, and the ZIP field is an
+   upgrade beside it. TASK-068 (quiz) and TASK-069 (news feed) are the two
+   remaining gates; TASK-070 removes `kyv.location` once nothing reads it, and
+   TASK-071 makes the privacy page and the analytics funnel match.
 
 Partially blocked: **TASK-060** needs the Census ZCTA crosswalk files, and
 `www2.census.gov` is unreachable from the Claude Code session (403 at the

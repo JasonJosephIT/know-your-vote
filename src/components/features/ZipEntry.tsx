@@ -16,7 +16,18 @@ type Stage =
   | { kind: "split"; zip: string; districts: string[] }
   | { kind: "outOfCoverage" };
 
-export function ZipEntry() {
+/* One ZIP field, two framings. On /candidates it is still the way in ("See
+   my ballot"); on the landing page it is an upgrade offered beside a ballot
+   the voter can already read ("Add my House race"), which is the whole of
+   TASK-067's demotion. Same resolution logic either way — a second component
+   would be two copies of the split-district handling. */
+export function ZipEntry({
+  submitLabel = "See my ballot",
+  placeholder = "Enter your ZIP code",
+}: {
+  submitLabel?: string;
+  placeholder?: string;
+} = {}) {
   const router = useRouter();
   const [zip, setZip] = useState("");
   const [stage, setStage] = useState<Stage>({ kind: "idle" });
@@ -83,7 +94,17 @@ export function ZipEntry() {
 
   return (
     <div className="flex w-full flex-col gap-4">
-      <form onSubmit={submit} className="flex w-full flex-col gap-3 sm:flex-row">
+      {/* action/method are the no-JavaScript path: the browser does a plain
+          GET to /candidates?view=races&zip=… and YourRaces resolves it server
+          side. With JavaScript on, submit() preventDefaults and the client
+          route runs instead, so the split-district prompt still works. */}
+      <form
+        onSubmit={submit}
+        action="/candidates"
+        method="get"
+        className="flex w-full flex-col gap-3 sm:flex-row"
+      >
+        <input type="hidden" name="view" value="races" />
         <label htmlFor="zip" className="sr-only">
           ZIP code
         </label>
@@ -93,7 +114,7 @@ export function ZipEntry() {
           inputMode="numeric"
           autoComplete="postal-code"
           maxLength={5}
-          placeholder="Enter your ZIP code"
+          placeholder={placeholder}
           value={zip}
           onChange={(e) => {
             setZip(e.target.value.replace(/\D/g, ""));
@@ -102,7 +123,7 @@ export function ZipEntry() {
           className="sm:max-w-[260px]"
         />
         <Button type="submit" disabled={stage.kind === "loading"}>
-          {stage.kind === "loading" ? "Looking up…" : "See my ballot"}
+          {stage.kind === "loading" ? "Looking up…" : submitLabel}
         </Button>
       </form>
 
