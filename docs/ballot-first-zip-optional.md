@@ -195,13 +195,54 @@ than a paragraph of assurance.
     not get an error page — but it is the reason a missing table looked like an
     unpublished ballot for a day.
 
-- [ ] **TASK-068** — Un-gate the quiz
+- [x] **TASK-068** — Un-gate the quiz
   Files: `src/components/features/Quiz.tsx`
   Notes: Delete the `{ kind: "zip" }` stage; start at the first question and
   run against the statewide races. Offer ZIP at the *results* step to add the
   district race. Sequence after Phase 6 TASK-065 (the neutrality reframe) so
   the result shape is settled before this touches the same file.
   Verify: the quiz completes end to end with no ZIP ever entered.
+  **Done 2026-09-07** — the ZIP stage is gone; the quiz opens on question one
+  and runs against `getStatewideRaces()`, and ZIP moved to the results step
+  where it adds the district race to a result already on screen.
+
+  **The file list was short by two.** `src/app/api/quiz/route.ts` required
+  `zip` (`z.string().regex(ZIP_RE)`) and `runQuiz` took it as a required
+  positional, so deleting the stage alone would have produced a 400 on every
+  submission. Both now treat it as optional; the route additionally *rejects*
+  a `district` sent without a `zip` rather than ignoring it, since that can
+  only come from a malformed client and silently dropping it would answer a
+  different question than the one asked.
+
+  **What un-gating cost, and where it was paid.** The ZIP stage did real work
+  besides collecting a ZIP: it checked coverage before the voter answered
+  anything, so an out-of-coverage voter heard it on question zero rather than
+  five questions in. That check now happens at the results step — and costs
+  nothing when it fails, because the statewide results are already rendered
+  and stay put. `addDistrictRace` never replaces the results stage on error;
+  it only sets a notice. Failing to add a race a voter did not have a moment
+  ago is a much smaller loss than failing before they had anything.
+
+  **Copy moved with it**, on the same honesty rule as TASK-067: the disclaimer
+  said "every candidate on your ballot", which a statewide-only run does not
+  deliver. It now says "in these races", and the page subtitle names the
+  statewide scope and the ZIP upgrade. The intro also lost "candidates whose
+  stated positions line up" — that is the alignment framing TASK-065 removed
+  from the results, still sitting in the invitation, promising exactly what
+  the answer refuses to give.
+
+  `scripts/verify-quiz-ungated.ts` guards the nine structural facts that would
+  regress silently: no `{ kind: "zip" }` stage, the intro entering the
+  questions directly, question one going back to the intro, the route's
+  optional `zip` and its district refinement, `runQuiz`'s optional parameter,
+  the statewide read on the no-ZIP path, the results-step upgrade still
+  existing, and the disclaimer not reclaiming the whole ballot. Re-adding a
+  ZIP gate is a one-line change that reads as harmless; this fails on it.
+  (Regression-tested by re-adding the stage, which fails the script.)
+
+  **Not verified here:** the end-to-end run. It needs a database and an
+  `ANTHROPIC_API_KEY`, and this session has neither — the live check is a
+  no-ZIP quiz on the preview deploy.
 
 - [ ] **TASK-069** — Un-gate the news feed
   Files: `src/components/features/NewsFeed.tsx`, `src/app/api/news/route.ts`

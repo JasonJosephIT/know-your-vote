@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { getRaceBrief } from "@/lib/briefs";
+import { getStatewideRaces } from "@/lib/races";
 import { resolveZip } from "@/lib/resolve";
 import { QUIZ_QUESTIONS } from "@/lib/quiz-questions";
 import { normalizeQuizResults } from "@/lib/quiz-guardrails";
@@ -19,8 +20,11 @@ import type { QuizResponse, QuizResultCandidate } from "@/types/app";
    candidate has SAID about the issues the voter picked, on its own terms.
    Same evidence, same full field, no comparison to the voter. */
 
+/* "in these races", not "on your ballot": since TASK-068 the quiz can run
+   with no ZIP, and a statewide-only result is most of a voter's ballot but
+   not all of it. The same honesty rule the landing page follows. */
 export const QUIZ_DISCLAIMER =
-  "Here is what every candidate on your ballot has said about the issues you picked, in their own stated positions. We don't score the match — that part is yours.";
+  "Here is what every candidate in these races has said about the issues you picked, in their own stated positions. We don't score the match — that part is yours.";
 
 export const QUIZ_UNAVAILABLE_MESSAGE =
   "The quiz is taking a quick break — try again shortly. Every candidate's full brief is still open below.";
@@ -41,12 +45,20 @@ interface CandidateForQuiz {
   positions: Array<{ issue: string; stance: string; says: string[] }>;
 }
 
-export async function collectQuizCandidates(zip: string, district?: string) {
-  const resolved = await resolveZip(zip, district);
-  if (!resolved.inCoverage || resolved.needsCountyConfirm) return { resolved, candidates: [] };
+/* ZIP is optional since TASK-068. With one, the voter gets their district
+   race too; without one, the quiz runs against the statewide races — five of
+   the six candidate races, which is most of the ballot and needs no location
+   at all. Asking for a ZIP before the first question gated the whole feature
+   on a question that changes one race. */
+export async function collectQuizCandidates(zip?: string, district?: string) {
+  const resolved = zip ? await resolveZip(zip, district) : null;
+  if (resolved && (!resolved.inCoverage || resolved.needsCountyConfirm)) {
+    return { resolved, races: [], candidates: [] };
+  }
+  const races = resolved ? resolved.races : await getStatewideRaces();
 
   const candidates: CandidateForQuiz[] = [];
-  for (const race of resolved.races) {
+  for (const race of races) {
     const brief = await getRaceBrief(race.raceId);
     if (!brief) continue;
     for (const c of brief.candidates) {
@@ -67,7 +79,7 @@ export async function collectQuizCandidates(zip: string, district?: string) {
       });
     }
   }
-  return { resolved, candidates };
+  return { resolved, races, candidates };
 }
 
 function sanitizeFreeText(text: string): string {
@@ -181,25 +193,27 @@ async function callClaude(
 }
 
 export async function runQuiz(
-  zip: string,
+  zip: string | undefined,
   district: string | undefined,
   answers: QuizAnswerInput[]
 ): Promise<
   | { ok: true; response: QuizResponse }
   | { ok: false; status: number; error: string; races?: QuizResponse["races"] }
 > {
-  const { resolved, candidates } = await collectQuizCandidates(zip, district);
-  if (!resolved.inCoverage) {
+  const { resolved, races: raceRows, candidates } = await collectQuizCandidates(zip, district);
+  /* Only reachable with a ZIP — without one there is no coverage question to
+     answer, which is the point of making it optional. */
+  if (resolved && !resolved.inCoverage) {
     return { ok: false, status: 400, error: "We don't cover this area yet." };
   }
-  if (resolved.needsCountyConfirm) {
+  if (resolved?.needsCountyConfirm) {
     return {
       ok: false,
       status: 400,
       error: "That ZIP spans more than one district — confirm your district first.",
     };
   }
-  const races = resolved.races.map((r) => ({ raceId: r.raceId, office: r.office }));
+  const races = raceRows.map((r) => ({ raceId: r.raceId, office: r.office }));
   if (candidates.length === 0) {
     return {
       ok: false,

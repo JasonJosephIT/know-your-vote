@@ -68,7 +68,7 @@ export function QuizResults({ response }: { response: QuizResponse }) {
       })}
 
       <p className="text-caption text-on-surface-muted">
-        Every candidate in your races is shown, in ballot order. We describe
+        Every candidate in these races is shown, in ballot order. We describe
         stated positions only — you decide.
       </p>
     </div>
