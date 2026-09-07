@@ -1,7 +1,7 @@
 <!-- Text extraction of CAP_Refresh_Agents_Plan_v1.html for repo-agent
      visibility. SOURCE OF TRUTH is the HTML: on the operator's Mac at
-     "Civic Awareness (Know Your Vote)/CAP_Refresh_Agents_Plan_v1.html", and in
-     git only on branch wip/raw-worktree (commit ebf27cb). Extracted
+     "Civic Awareness (Know Your Vote)/CAP_Refresh_Agents_Plan_v1.html", on
+     main via PR #14 (it had lived only on wip/raw-worktree). Extracted
      2026-09-06 by candidate-news C0; §6 prompt blocks are verbatim.
      Tables lost their header rows in extraction; read the HTML for layout. -->
 

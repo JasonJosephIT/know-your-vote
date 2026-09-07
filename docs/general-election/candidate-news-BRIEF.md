@@ -13,9 +13,9 @@
 | Labelling axes (`source.type`, `source.lean_tag`) | ✅ applied (`0000`) — exist, unused by the app; 87 `source` rows, all demo |
 | Neutrality lint (`verify-news-neutrality.ts`) | ✅ built, `--self-test` green |
 | Admin console A1 (shell) | ✅ on `main` |
-| Admin console A2–A5 (agents API A13, `src/lib/neutrality.ts` A05, approve effects A11) | ⚠️ built on **`wip/raw-worktree` only** — `reconcile-git.sh` lands it |
+| Admin console A2–A5 (agents API A13, `src/lib/neutrality.ts` A05, approve effects A11) | ✅ on `main` via PR #14 (reconciled 2026-09-06) |
 | **R1 agent that writes news** | ✅ **exists** — Cowork task `cap-r1-candidate-news`, 4 runs, **0 rows written because the roster is demo fixtures** |
-| Governing spec `CAP_Refresh_Agents_Plan_v1` | ✅ found — `refresh-agents-plan.md` here; HTML original on branch `wip/raw-worktree` |
+| Governing spec `CAP_Refresh_Agents_Plan_v1` | ✅ found — `refresh-agents-plan.md` here; HTML original on `main` via PR #14 |
 | `TASK-A14` dispatcher / `TASK-A15` prompts v1.1 | ⬜ both unbuilt (confirmed: no `cap-r0-dispatcher`; no prompt writes `agent_run`) |
 | Real candidate roster (`ballot_status='ballot'`, 22 candidates) | ⬜ ingest branch A0/A1/B2/B3 — **the actual blocker** |
 | `news-fairness.md` | ⬜ **does not exist anywhere C0 could see** |
@@ -26,11 +26,10 @@ behaviour*: R1 refuses to attach real people's news to fictional profiles.
 ## 1. The single next task
 
 **C0 is done.** Every remaining C-task is blocked on something outside this
-branch: C2/C3/C6 on the real roster (ingest B2/B3), C4 on `reconcile-git.sh`
-landing the shared neutrality library, C5 on TASK-A15 plus founder gate Q5.
-The useful next moves are the founder gates in §6, in this order: run
-`reconcile-git.sh`, answer Q5 and the C1 recommendation, then unblock the
-ingest branch's A0.
+branch: C2/C3/C6 on the real roster (ingest B2/B3), C4 on the C1 write-path
+decision, C5 on TASK-A15 plus founder gate Q5. The useful next moves are the
+founder gates in §6, in this order: answer Q5 and the C1 recommendation, then
+unblock the ingest branch's A0.
 
 > The single most expensive mistake available here is still writing a second,
 > divergent R1. The first one is `agents/r1-candidate-news.prompt.txt`.
@@ -102,10 +101,10 @@ node scripts/verify-news-neutrality.ts --self-test
 - **The R-prompt mirrors are at `.superpowers/sdd/`** on the operator's Mac
   (gitignored by `.superpowers/sdd/.gitignore`). Snapshots for repo agents live
   in `agents/` here.
-- **The plan HTML and the `Agents/` tree (run reports, allowlist cores) are
-  on branch `wip/raw-worktree` only.** `main` does not have them. There is a
-  `reconcile-git.sh` at the repo root for this; the plan and reports should
-  come across when it runs.
+- **The plan HTML and the admin console A2–A5 reached `main` via PR #14
+  on 2026-09-06.** The July run reports did not: that PR gitignores
+  `Agents/RunReports/`, so they live only on `wip/raw-worktree` and the
+  operator's disk. Un-ignore them if they should be the tracked audit trail.
 - **Migrations `0009`–`0011` are on `main` but not applied live.** The ingest
   branch also wants `0010`. Numbering needs reconciling before anyone applies.
 - `node` on this Mac is x64 under Rosetta; `verify-migrations.mjs` (PGlite)
@@ -127,7 +126,8 @@ node scripts/verify-news-neutrality.ts --self-test
 | **Q7** — record "briefs retired 2026-09-06" in `docs/scope-changes.md` | honesty of the docs | ⬜ |
 | `N`, slots per candidate | N4 — **pick after C6 measures** | ⬜ |
 | Biography source (hand / agent / assembled) | the other half of the candidate page | ⬜ |
-| **Run `reconcile-git.sh`** — lands admin console A2–A5, the plan HTML, `Agents/` + run reports on `main` | C4, C5, repo visibility of the spec | ⬜ **first** |
+| ~~Run `reconcile-git.sh`~~ | — | ✅ PR #14, 2026-09-06 |
+| Track the July run reports (un-ignore `Agents/RunReports/`)? | audit-trail visibility | ⬜ |
 
 ## 7. Definition of done
 

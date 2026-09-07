@@ -41,7 +41,7 @@ blocker is the roster, and the roster is the ingest branch's job (§2).
 
 | Asset | Where | State |
 |---|---|---|
-| **`CAP_Refresh_Agents_Plan_v1`** — the governing spec for R1–R4 | HTML on the operator's Mac at `Civic Awareness (Know Your Vote)/CAP_Refresh_Agents_Plan_v1.html`; in git **only** on branch `wip/raw-worktree` (`ebf27cb`), not on `main`. Text extraction: `docs/general-election/refresh-agents-plan.md` | found (C0) |
+| **`CAP_Refresh_Agents_Plan_v1`** — the governing spec for R1–R4 | HTML at `Civic Awareness (Know Your Vote)/CAP_Refresh_Agents_Plan_v1.html` — on `main` via PR #14 (it had lived only on `wip/raw-worktree` until 2026-09-06). Text extraction: `docs/general-election/refresh-agents-plan.md` | found (C0) |
 | **R1 Candidate News Curator** — the agent this PRD is about | Cowork scheduled task `cap-r1-candidate-news`, cron `0 9 1,15 * *`, enabled. Mirror `.superpowers/sdd/r1-scheduled-prompt.txt` (gitignored). Snapshot: `agents/r1-candidate-news.prompt.txt` | **exists; 4 runs; 0 rows (roster blocker)** |
 | R2 / R3 / R4 | `cap-r2-contact-refresher` (`0 8 * * 1`), `cap-r3-election-news` (`0 9 * * 3`), `cap-r4-ops-digest` (`30 7 * * 1`) | exist, enabled |
 | `news_item.candidate_id`, `candidate_news` / `election_news` types, `idx_news_item_candidate`, `uq_news_item_url_candidate` | `0005_refresh_agents.sql` | **applied live** (`20260704003152`) |
@@ -51,10 +51,10 @@ blocker is the roster, and the roster is the ingest branch's job (§2).
 | `verify-news-neutrality.ts` — banned-terms lint + self-test | `scripts/` | built; self-test and live lint green 2026-09-06 |
 | `verify-refresh-schema.mjs`, `verify-admin-ops.mjs` | `scripts/` | built; refresh-schema green live 2026-09-06 |
 | Admin console Phase A1 (schema, auth, shell) | `main` (`2fcfc49`) | merged — the Agents page on `main` is the A4 placeholder |
-| **Admin console Phases A2–A5** — `/api/admin/*` routes, agents run-request API (TASK-A13), `src/lib/admin/{effects,monitor,review}.ts`, **`src/lib/neutrality.ts`** (TASK-A05), `src/types/admin.ts` | **branch `wip/raw-worktree` only** (89 `src/` files ahead of `main`); `reconcile-git.sh` at the repo root is written to land it as PR branch `admin/console-a2-a5` | built, not on `main` |
+| **Admin console Phases A2–A5** — `/api/admin/*` routes, agents run-request API (TASK-A13), `src/lib/admin/{effects,monitor,review}.ts`, **`src/lib/neutrality.ts`** (TASK-A05), `src/types/admin.ts` | on `main` via PR #14 (`admin/console-a2-a5`, reconciled 2026-09-06; it had lived only on `wip/raw-worktree`). PR #14 also scopes the console's two `race` reads to the active election | built |
 | `cap-r0-dispatcher` (TASK-A14) | — | **does not exist** |
 | Agent prompts v1.1: `agent_run` dual-write (TASK-A15) | — | **not applied** — no R prompt writes `agent_run`; 0 rows |
-| `allowlist_b_core` — Tier-1/Tier-2 source classification | `Agents/The Fact-Checker/` (on `wip/raw-worktree`) | built + tested |
+| `allowlist_b_core` — Tier-1/Tier-2 source classification | `Civic Awareness (Know Your Vote)/Agents/The Fact-Checker/` | built + tested |
 | `candidate.ballot_status` (`ballot` / `write_in` / `excluded`) — what "ballot-tier" means | ingest branch `claude/data-architecture-ingest-plan-u9b1fq`, `data-architecture.md` D1, task A1 (`0010_general_election.sql`) | **designed, founder gate A0 open, migration not written** |
 | Real candidate roster (22 ballot-tier candidates, 8 races) | ingest branch tasks B2 (parser) + B3 (official sites) | **not ingested** — live `candidate` has 29 rows, 29 demo |
 
@@ -118,7 +118,7 @@ in the prompt.
 | **CN-R4** | Symmetric search, per-candidate counts recorded. | **Met** in the prompt (Constitution 5, run-report step 6). Three run reports carry the 26-row zero table. |
 | **CN-R5** | Dedupe is the database's job; never pre-query and branch. | **Conflict with the plan.** Plan §4 says "Dedupe on (url, candidate_id) before insert" with the unique index as backstop, and the prompt does both. Harmless either way; the index is authoritative. Drop the "never pre-query" wording or accept the plan's. |
 | **CN-R6** | Ops plane written on every run (`agent_run`), skip-and-note if `0006` absent. | **Gap** — this is exactly TASK-A15, unbuilt. |
-| **CN-R7** | Gated by default: agent news routes through `review_item` before it is publicly readable. | **Gap, and a reversal.** design.md § 7 recorded the opposite decision ("Manual + gated only … revisit via per-agent flag"). This PRD asks the founder to flip that flag for R1. Also note: the read path publishes `news_item` rows the moment they exist (anon SELECT); "gated" therefore means *don't INSERT until approved*, i.e. R1 writes a `review_item(kind='manual_news', source='agent:R1')` and the approve effect does the insert. That effect exists as `src/lib/admin/effects.ts` — on `wip/raw-worktree`, not yet on `main`. |
+| **CN-R7** | Gated by default: agent news routes through `review_item` before it is publicly readable. | **Gap, and a reversal.** design.md § 7 recorded the opposite decision ("Manual + gated only … revisit via per-agent flag"). This PRD asks the founder to flip that flag for R1. Also note: the read path publishes `news_item` rows the moment they exist (anon SELECT); "gated" therefore means *don't INSERT until approved*, i.e. R1 writes a `review_item(kind='manual_news', source='agent:R1')` and the approve effect does the insert. That effect exists as `src/lib/admin/effects.ts` (on `main` via PR #14). |
 | **CN-R8** | Degrade honestly: `status='failed'` on the run row; `ok_empty` for "ran fine, found nothing". | **Partial.** Fail-closed is in the prompt, but with no `agent_run` row there is no status anywhere a machine can read. Same fix as CN-R6. |
 
 ## 5. Tasks
@@ -126,7 +126,7 @@ in the prompt.
 - [x] **C0** — Locate `CAP_Refresh_Agents_Plan` and the R1–R4 stored prompts; bring
   the plan into the repo; quote R1's real contract; confirm or correct §3.
   ~ Done 2026-09-06: plan found on the operator's Mac and on branch
-  `wip/raw-worktree` (never on `main`); extracted to
+  `wip/raw-worktree` (it had never reached `main`; PR #14 lands it); extracted to
   `docs/general-election/refresh-agents-plan.md`. Stored R1 prompt read via
   `list_scheduled_tasks` → `SKILL.md`, diffed against `.superpowers/sdd/`
   mirror (identical), snapshotted to `agents/r1-candidate-news.prompt.txt`.
@@ -166,14 +166,13 @@ in the prompt.
   a source; per-candidate counts logged. **Blocked** on roster.
 
 - [ ] **C4** — Wording lint in the write path (CN-R2).
-  The library half is **already done on `wip/raw-worktree`** (TASK-A05:
+  The library half is **already done** (TASK-A05, on `main` via PR #14:
   `src/lib/neutrality.ts` exports `findBannedTermMatch` /
   `findAllBannedTermMatches`, and the ingest + decision routes use it). Do not
-  re-extract it on this branch — that would collide with the reconciliation.
-  What remains is calling it from R1's write path, whose shape is C1's
-  recommendation.
+  re-extract it. What remains is calling it from R1's write path, whose shape
+  is C1's recommendation.
   Verify: a banned-term fixture is rejected before insert. **Blocked** on
-  `reconcile-git.sh` landing A2–A5 on `main`, then on C1's founder answer.
+  C1's founder answer.
 
 - [ ] **C5** — Ops-plane writes (CN-R6) + review-queue routing (CN-R7).
   The `agent_run` half is TASK-A15 (prompt appendix, needs the scheduled-tasks
@@ -189,9 +188,10 @@ in the prompt.
 
 **External prerequisites (not C-tasks, but on the critical path):**
 
-1. `reconcile-git.sh` — lands the admin console A2–A5, the plan HTML, the
-   `Agents/` tree and the run reports on `main`. Until then this branch and the
-   console code cannot see each other.
+1. ~~`reconcile-git.sh`~~ — done 2026-09-06 as PR #14: admin console A2–A5
+   and the plan HTML are on `main`. The July run reports are gitignored by
+   that PR's `.gitignore` (script default) and remain on `wip/raw-worktree`
+   and the operator's disk only.
 2. Ingest
    branch `claude/data-architecture-ingest-plan-u9b1fq` — A0 (founder decides the
    three-tier `ballot_status`), A1 (migration), B2 (parser writes real
@@ -253,7 +253,7 @@ nextRunAt `2026-09-15`. No `cap-r0-dispatcher`.
 Prompt fidelity: `diff <(SKILL.md body) .superpowers/sdd/r1-scheduled-prompt.txt`
 → trailing-newline only.
 
-Run reports (on `wip/raw-worktree`, `Civic Awareness (Know Your Vote)/Agents/RunReports/`):
+Run reports (gitignored since PR #14; on `wip/raw-worktree` and the operator's disk at `Civic Awareness (Know Your Vote)/Agents/RunReports/`):
 `2026-07-03-R1-DRYRUN.md` (0005 unapplied + fixture roster),
 `2026-07-06-R1.md` (0005 applied; 26/26 zeros; three WebSearch spot-checks found no such people),
 `2026-07-15-R1.md` (26/26 zeros; all 29 `candidate.fec_id IS NULL`, sites `example.org/demo/*`).
