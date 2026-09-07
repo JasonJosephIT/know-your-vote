@@ -18,7 +18,7 @@
 | Governing spec `CAP_Refresh_Agents_Plan_v1` | ✅ found — `refresh-agents-plan.md` here; HTML original on `main` via PR #14 |
 | `TASK-A14` dispatcher / `TASK-A15` prompts v1.1 | ⬜ both unbuilt (confirmed: no `cap-r0-dispatcher`; no prompt writes `agent_run`) |
 | Real candidate roster (`ballot_status='ballot'`, 22 candidates) | ⬜ ingest branch A0/A1/B2/B3 — **the actual blocker** |
-| `news-fairness.md` | ✅ on `main` via PR #10 — N2/N3 built; N1 (migration `0013`) not written |
+| `news-fairness.md` | ✅ on `main` via PR #10 — N2/N3 built; N1 (migration `0014`) not written |
 
 **Zero `candidate_news` rows have ever been written**, and that is *correct
 behaviour*: R1 refuses to attach real people's news to fictional profiles.
@@ -45,7 +45,7 @@ unblock the ingest branch's A0.
    v1.1; lint as a library), §7 (the "don't queue agent news" decision CN-R7
    asks to reverse).
 5. `supabase/migrations/0005_refresh_agents.sql` and `0006_admin_ops.sql`.
-6. `news-fairness.md` §1 (labelling), §3 (migration `0013`), §5 (names this PRD as the producer).
+6. `news-fairness.md` §1 (labelling), §3 (migration `0014`), §5 (names this PRD as the producer).
 
 Do not read the S-plane specs (`CAP_Runtime_PRD`, the three agent packages).
 That pipeline is **idle**. Useful only as prior art for guard patterns.
@@ -78,7 +78,7 @@ node scripts/verify-news-neutrality.ts --self-test
 - **No source, no card.** A row without a real `source` row is not written.
   This is *new* relative to the plan (which only requires an allowlisted URL)
   — it is the PRD's CN-R1 and `news-fairness.md` §1, enforced by
-  `0013_news_fairness.sql` once N1 is written.
+  `0014_news_fairness.sql` once N1 is written.
 - **Let the database dedupe.** `uq_news_item_url_candidate` exists. The plan
   also pre-queries; either is fine, the index decides.
 - **Fail closed, report honestly.** `status='failed'` with a reason;
@@ -105,8 +105,9 @@ node scripts/verify-news-neutrality.ts --self-test
   on 2026-09-06.** The July run reports did not: that PR gitignores
   `Agents/RunReports/`, so they live only on `wip/raw-worktree` and the
   operator's disk. Un-ignore them if they should be the tracked audit trail.
-- **Migrations `0009`–`0011` are on `main` but not applied live.** Planned
-  next: `0012_general_election` (ingest A1), `0013_news_fairness` (N1).
+- **Migrations `0000`–`0012` are applied live** (`0009`–`0012` on 2026-09-07).
+  Planned next: `0013_general_election` (ingest A1), `0014_news_fairness` (N1) —
+  reserved in `supabase/migrations/README.md`; reserve there before writing one.
 - `node` on this Mac is x64 under Rosetta; `verify-migrations.mjs` (PGlite)
   crashes. Use `/usr/bin/python3` for stdlib HTTPS scripts (ingest memory).
 - **`0004_official_links.sql` is applied.** Editing a seed changes nothing —
