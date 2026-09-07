@@ -32,14 +32,17 @@ export default function Home() {
       <section className="flex flex-col gap-3 border-t border-border pt-6">
         <div className="flex flex-col gap-1">
           <h2 className="text-h3">Add your U.S. House race</h2>
-          {/* No storage claim here on purpose. ZIP still goes through
-              writeLocation into kyv.location until TASK-070 drops it, so
-              "never stored" would be false today; TASK-070/071 own that
-              claim and the privacy page that has to match it. */}
+          {/* The storage claim TASK-067 deliberately withheld. It is true as
+              of TASK-070: kyv.location is gone, so a ZIP reaches the district
+              lookup and the URL and nothing else on the device. Deliberately
+              scoped to the device — the claim a skeptic can check in devtools
+              in ten seconds — rather than a broader "we never see it", which
+              a request the server answers cannot honestly make. */}
           <p className="text-caption text-on-surface-muted">
             Your congressional district race is the one part of your ballot
             that isn&apos;t on this list, because it depends on where you live.
             Add your ZIP and we&apos;ll add it — or skip it and read the rest.
+            We use it to find your district; nothing is saved on your device.
           </p>
         </div>
         <ZipEntry submitLabel="Add my House race" placeholder="Your ZIP code" />

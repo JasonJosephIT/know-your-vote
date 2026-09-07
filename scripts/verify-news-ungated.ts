@@ -7,9 +7,15 @@
    prompt instead of the feed, puts the gate straight back.
 
    The route needed no change for this task — every parameter is already
-   optional and a request with none returns the statewide scope. Check 4
+   optional and a request with none returns the statewide scope. Check 5
    pins that, since making one required again would re-gate the feed from the
    server side without touching this component at all.
+
+   Updated by TASK-070, which removed kyv.location and with it the last
+   location source this component had. The checks that pinned the pre-hydration
+   guard and the conditional query string described a shape that no longer
+   exists; what they were really protecting — that the request is always
+   issued — is asserted directly now.
 
    Run: node scripts/verify-news-ungated.ts */
 
@@ -34,35 +40,38 @@ const feed = stripComments(read("src/components/features/NewsFeed.tsx"));
 const route = stripComments(read("src/app/api/news/route.ts"));
 const page = stripComments(read("src/app/(public)/news/page.tsx"));
 
-/* 1. The effect must not bail out when there is no location. The only
-      permitted early return is the pre-hydration one. */
-const effect = feed.slice(feed.indexOf("useEffect("), feed.indexOf("}, [location]);"));
-const earlyReturns = [...effect.matchAll(/\breturn\b(?!\s*\(\)\s*=>)/g)];
+/* 1. The effect must fetch unconditionally. TASK-070 removed the stored
+      location entirely, so there is no longer any condition to gate on — the
+      only statement before the fetch should be the abort controller. Any
+      early return reintroduced here is a gate by definition. */
+const effect = feed.slice(feed.indexOf("useEffect("), feed.indexOf("}, []);"));
 assert(
-  "effect has no location-conditional early return",
-  !/}\s*else\s*{\s*return;/.test(effect),
-  "an `else { return; }` is back in the fetch effect"
-);
-assert(
-  "the only guard left is the pre-hydration one",
-  /if \(location === undefined\) return;/.test(effect),
-  `found ${earlyReturns.length} return(s)`
+  "fetch effect has no early return",
+  !/\breturn\b(?!\s*\(\)\s*=>)/.test(effect.slice(0, effect.indexOf("fetch("))),
+  "something returns before the fetch is issued"
 );
 
-/* 2. The fetch must be issued with an empty query string, not skipped. */
+/* 2. The request carries no location parameters, and is issued every time.
+      A query string here would mean a location source came back. */
 assert(
-  "fetch omits the query string rather than the request",
-  /fetch\(`\/api\/news\$\{query \? `\?\$\{query\}` : ""\}`/.test(feed)
+  "fetch requests the statewide scope with no parameters",
+  /fetch\("\/api\/news", \{ signal: controller\.signal \}\)/.test(feed)
 );
 
-/* 3. No render-time dead end that replaces the feed with a location prompt. */
+/* 3. The effect does not depend on a location value. */
+assert(
+  "effect has no location dependency",
+  /\}, \[\]\);/.test(feed)
+);
+
+/* 4. No render-time dead end that replaces the feed with a location prompt. */
 assert(
   "no location prompt short-circuits the feed",
   !/location !== undefined && !location\?\.zip/.test(feed),
   "the pre-TASK-069 dead end is back"
 );
 
-/* 4. Every route parameter stays optional — a required one re-gates the feed
+/* 5. Every route parameter stays optional — a required one re-gates the feed
       from the server without touching the component. */
 for (const field of ["zip", "metro", "district"]) {
   assert(
@@ -71,7 +80,7 @@ for (const field of ["zip", "metro", "district"]) {
   );
 }
 
-/* 5. Copy honesty (TASK-067's rule): with no location this page is statewide,
+/* 6. Copy honesty (TASK-067's rule): with no location this page is statewide,
       so it must not call itself local. */
 assert(
   "page does not call a statewide feed local",

@@ -54,17 +54,22 @@ content work, not engineering.
 | TASK-067 | `SharedBallot` on `/` — statewide races and measures with no ZIP; ZIP demoted to an upgrade |
 | TASK-068 | Quiz un-gated — opens on question one, runs statewide; ZIP offered at the results step |
 | TASK-069 | News feed un-gated — statewide items with no location; the route already allowed it |
+| TASK-070 | `kyv.location` removed — no device-stored location; the landing page can finally say so |
 
 ### Next, in order
 
 Engineering, none of it blocked:
 
-1. **TASK-070 → 071** — the rest of Phase 7. TASK-067, TASK-068 and TASK-069
-   landed 2026-09-07, so **no surface gates on ZIP any more**: the landing page
-   renders the shared ballot, the quiz runs from question one, and the news
-   feed shows statewide items. What remains is cleanup that depends on that
-   being true — TASK-070 removes `kyv.location` now that nothing needs it, and
-   TASK-071 makes the privacy page and the analytics funnel match the product.
+1. **TASK-071** — the last of Phase 7. TASK-067 through TASK-070 landed
+   2026-09-07: **no surface gates on ZIP, and no device-stored location.** The
+   privacy page and the analytics funnel are now the only things still
+   describing the old product — TASK-071 makes them match, and the `zip_resolved`
+   funnel needs a `ballot_viewed` entry event or it will read as a cliff-edge
+   drop the day this ships.
+
+   Two follow-ups TASK-070 left behind, neither blocking: `/news` is statewide
+   for everyone until something links to it with a location, and the quiz no
+   longer prefills a confirmed district for split ZIPs.
 
 Partially blocked: **TASK-060** needs the Census ZCTA crosswalk files, and
 `www2.census.gov` is unreachable from the Claude Code session (403 at the

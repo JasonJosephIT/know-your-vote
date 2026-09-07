@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { QuizResults } from "@/components/features/QuizResult";
 import { track } from "@/lib/analytics";
-import { readLocation } from "@/lib/location";
 import { QUIZ_QUESTIONS } from "@/lib/quiz-questions";
 import type { QuizResponse } from "@/types/app";
 
@@ -40,16 +39,18 @@ export function Quiz() {
   const [zipNotice, setZipNotice] = useState<string | null>(null);
 
   /* One request shape for both paths — the results-step upgrade is the same
-     quiz with a ZIP attached, not a second feature. */
+     quiz with a ZIP attached, not a second feature.
+
+     No district is sent since TASK-070 dropped kyv.location: it was only ever
+     a prefill from a district the voter had confirmed elsewhere. A ZIP that
+     spans districts now comes back asking for confirmation, which is the
+     honest answer when nothing is remembered between pages. */
   async function post(zipToUse?: string) {
-    const stored = readLocation();
     const res = await fetch("/api/quiz", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         zip: zipToUse,
-        district:
-          zipToUse && stored?.zip === zipToUse ? stored?.district : undefined,
         answers: Object.entries(answers).map(([questionId, a]) => ({
           questionId,
           ...a,

@@ -282,7 +282,7 @@ than a paragraph of assurance.
   Copy followed TASK-067's honesty rule: the page was titled *Local electoral
   news*, and with no location it is statewide, so "Local" came off.
 
-- [ ] **TASK-070** — Remove `kyv.location`
+- [x] **TASK-070** — Remove `kyv.location`
   Files: `src/lib/location.ts` (delete), `ZipEntry.tsx`, `Quiz.tsx`, `NewsFeed.tsx`, `SavedCandidates.tsx`
   Notes: Drop the read/write/clear helpers and every `readLocation()` call;
   keep `locationQuery()`'s URL behavior, which is what actually carries state.
@@ -290,6 +290,54 @@ than a paragraph of assurance.
   on stored location when it disappears.
   Verify: `grep -r "kyv.location" src` returns nothing; a full ZIP → races →
   polling-place flow works with `localStorage` disabled entirely.
+  **Done 2026-09-07** — `src/lib/location.ts` deleted, net −101 lines.
+
+  **Two corrections to the file list.** `locationQuery()` had **no callers** —
+  the note to keep it because it "is what actually carries state" described an
+  intent, not the code; the URL is built inline at each `router.push`. It went
+  with the rest of the module. And `SavedCandidates.tsx` needed no change at
+  all: it only ever touched `kyv.saved`, which this task deliberately keeps.
+
+  **What this costs, beyond re-entering a ZIP.** Two capabilities were only
+  reachable through the store, and both are now gone rather than merely
+  unused:
+
+  1. **Metro-scoped news.** `NewsFeed` read a stored location to send `?zip=`
+     or `?metro=`. The route still supports both and 7 of 10 `news_item` rows
+     carry a metro, but the section nav is the only link to `/news` and has no
+     location to pass — so `/news` is statewide for everyone now. A link from
+     the races view carrying the location already in *that* URL restores it in
+     one line; left as a deliberate follow-up rather than built speculatively
+     here.
+  2. **The quiz's district prefill.** `post()` sent a stored district so a
+     voter who had confirmed one on a split ZIP did not have to again. Without
+     it, a split ZIP entered at the quiz's results step comes back asking for
+     confirmation. That is the honest answer once nothing is remembered
+     between pages, and it is the cost the proposal explicitly accepted.
+
+  **The payoff lands on the landing page.** TASK-067 deliberately made no
+  storage claim next to the ZIP field, because `writeLocation` made "never
+  stored" false. It is true now, so the claim is there: *"We use it to find
+  your district; nothing is saved on your device."* Scoped to the device on
+  purpose — that is the half a skeptic can verify in devtools in ten seconds.
+  A broader "we never see it" would be false for a lookup the server answers.
+
+  `scripts/verify-no-stored-location.ts` is the task's grep, made durable:
+  comments are stripped (several files now explain the absence, and that must
+  not read as presence), and it also fails on a device-stored location under
+  any *other* key — re-adding the behaviour as `kyv.loc` would pass a literal
+  grep while undoing the task. `kyv.saved` and the InstallCard dismiss flag
+  are the two allowed keys. Regression-tested by writing a `kyv.loc` key,
+  which fails it.
+
+  `verify-news-ungated` was updated, not merely kept passing: two of its
+  checks pinned TASK-069's code shape (a pre-hydration guard, a conditional
+  query string) that this task deleted. What they protected — that the request
+  is always issued — is asserted directly now.
+
+  `saved.ts` already wraps every storage call in try/catch, so the second half
+  of the verify criterion holds structurally: with `localStorage` disabled the
+  app degrades rather than throwing.
 
 - [ ] **TASK-071** — Update the privacy page and analytics funnel
   Files: `src/app/(public)/privacy/page.tsx`, `src/lib/analytics.ts`
