@@ -193,6 +193,31 @@ class Store(logsink.PostgresSink):
 
     # -- B4 incumbency (separate UPDATEs, deliberately) --------------------
 
+    def read_candidate_fec_ids(self, candidate_ids: Sequence[str]) -> list[dict]:
+        """{candidate_id, fec_id} for the ids that exist, so the incumbency
+        resolver can match on a stored FEC id before it falls back to names.
+
+        The DoE export carries no FEC id at all, so without this read the
+        resolver's id-first rule is dead code and a name is always what
+        decides. The link this returns is one an earlier B4 run (or an
+        operator fixing a spelling mismatch) wrote to `candidate.fec_id`;
+        upsert_candidate COALESCEs rather than overwriting it, so a DoE
+        re-run never loses it. Called on the same connection *after* the
+        intake upserts, so it sees this run's rows too.
+
+        A candidate with no row, or a row whose fec_id is NULL, simply comes
+        back with fec_id NULL — the caller reads that as "no stored id" and
+        matches by name, which is the ordinary case.
+        """
+        ids = list(candidate_ids or [])
+        if not ids:
+            return []
+        return self._fetchall(
+            "SELECT candidate_id, fec_id FROM candidate "
+            "WHERE candidate_id = ANY(%s)",
+            (ids,),
+        )
+
     def write_incumbency(
         self,
         race_id: str,
