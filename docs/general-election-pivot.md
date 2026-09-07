@@ -150,6 +150,43 @@ Worth stating plainly, because it shrinks the job:
   task here.
   Verify: `/api/calendar/general_2026.ics` returns 5 VEVENTs; `dueReminders()`
   yields the T-7 registration reminder for 2026-09-28.
+  **Done 2026-09-07** — the founder verified all five dates against
+  `dos.fl.gov/elections/for-voters/election-dates/` and they are stamped:
+  `verified_by = joseph.jasonjj@gmail.com`, `verified_at = 2026-09-07T03:22Z`.
+
+  | event_type | date |
+  |---|---|
+  | `registration_deadline` | 2026-10-05 |
+  | `vbm_request_deadline` | 2026-10-22 |
+  | `early_voting_start` | 2026-10-24 |
+  | `early_voting_end` | 2026-10-31 |
+  | `election_day` | 2026-11-03 |
+
+  Both acceptance criteria checked against the real dates rather than assumed:
+  `buildElectionCalendar` emits **5 VEVENTs** with a valid VCALENDAR envelope,
+  and `dueReminders(events, "2026-09-28")` returns exactly one reminder —
+  `reg_deadline_t7`, dedupe key
+  `general_2026:registration_deadline:T-7:email`. A day with nothing scheduled
+  returns zero, so the matcher is not firing indiscriminately.
+
+  The resulting send calendar:
+
+  | fires | template | rule |
+  |---|---|---|
+  | 2026-09-28 | `reg_deadline_t7` | registration deadline T-7 |
+  | 2026-10-04 | `reg_deadline_t1` | registration deadline T-1 |
+  | 2026-10-21 | `vbm_deadline_t1` | vote-by-mail deadline T-1 |
+  | 2026-10-24 | `early_voting_start` | day-of |
+  | 2026-11-03 | `election_day` | day-of |
+
+  `early_voting_end` has no reminder rule by design — it is on the calendar
+  file but nothing emails about it.
+
+  **Nothing sent, and nothing can yet.** `voting_info_subscription` holds zero
+  rows and `notification_send_log` zero sends, so stamping lit up the banner,
+  the ICS feed and the voting-info email path without any message going to
+  anyone. What it did remove is the *gate*: from here the T-7 reminder depends
+  only on the cron actually running on 2026-09-28.
 
 - [x] **TASK-059** — Retire the closed-primary copy
   Files: `src/components/features/YourRaces.tsx`, `src/app/api/voting-info/route.ts`
