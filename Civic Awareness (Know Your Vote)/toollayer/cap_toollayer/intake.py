@@ -228,27 +228,45 @@ def parse_candidate_list(text: str) -> dict:
 #      number of trailing DoE tokens, so a two-word surname still matches)
 #      AND the first given token.
 #
-# Refusals (`status: "refused"`, nothing written for the race):
-#   * an `incumbent_challenge` outside I/C/O/null -- an unrecognised code is a
-#     schema change, and the fail-closed rule (AGENT_BRIEF §4) says stop;
+# Open seat is a property of the FEC field for the district, not of our
+# roster coverage of it. Live FL-28 (checked 2026-09-07, `election_year=2026,
+# office=H`) returns 7 filers -- Campione, Ehr, Gimenez[I], Henry, Lara,
+# Mujica, Rojas -- against a general-election roster of 2-3 ballot names:
+# primary losers and never-qualified filers keep their 2026 FEC filings. A
+# rule that required every FEC row to resolve to a roster candidate could
+# therefore never mark a genuinely open seat live, which defeats the reason
+# this resolver exists. So:
+#
+#   `is_open_seat = True` iff (a) at least one 2026 House row exists for the
+#   district, (b) no row has `incumbent_challenge == "I"`, and (c) every
+#   row's `incumbent_challenge` is a known value (I/C/O). A non-"I" row that
+#   matches no roster candidate does NOT block the open-seat verdict --
+#   it is recorded under `unmatched_fec_rows` for auditability, not under
+#   `unresolved` (which is for roster candidates).
+#
+# Refusals (`status: "refused"`, nothing written for the race, `is_open_seat`
+# absent entirely so a caller cannot read a missing answer as a negative one):
+#   * a null or unknown `incumbent_challenge` on ANY row, matched or not --
+#     null means "we do not know whether this is the incumbent", and an
+#     unrecognised code is a schema change; the fail-closed rule
+#     (AGENT_BRIEF §4) says stop either way;
 #   * an "I" row matching zero or several roster candidates. A member who is
 #     retiring still has an FEC record, so an unmatched "I" is precisely the
 #     case where calling the seat open would be wrong;
 #   * two "I" rows -- the district cannot have two sitting members;
 #   * no 2026 House rows at all. Empty is not evidence of an open seat.
 #
-# Unresolved (recorded with a reason, that row/candidate simply not written):
-#   * a roster candidate matching zero or several FEC rows;
-#   * a non-"I" FEC row matching zero or several roster candidates (a primary
-#     loser who still has a 2026 filing is the ordinary case);
-#   * a matched row whose `incumbent_challenge` is null -- null is "the FEC
-#     does not say", and writing `is_incumbent = false` for it would be the
-#     silent default the house rules forbid.
+# Unresolved (recorded with a reason, that candidate simply not written; does
+# NOT block `is_open_seat` -- the incumbent's own FEC row, if any, is still
+# in the field and would refuse via the unmatched-"I" rule above):
+#   * a roster candidate matching zero or several FEC rows. Two or more
+#     including an "I" row still refuses (see above): that is the incumbent
+#     matching ambiguously, not a spectator filing.
 #
-# `is_open_seat` is True only when every 2026 House row resolved to exactly
-# one roster candidate with a known challenge code and none of them is "I".
-# Anything less leaves it False: the column already defaults to false, so
-# False is "not established as open", never "we looked away".
+# `unmatched_fec_rows` (recorded for auditability, never blocks anything):
+#   * a non-"I" FEC row matching zero (or several) roster candidates -- a
+#     primary loser or never-qualified filer who still has a 2026 filing is
+#     the ordinary live-data case above.
 
 _TARGET_ELECTION_YEAR = 2026
 _CHALLENGE_CODES = frozenset({"I", "C", "O"})
@@ -288,10 +306,14 @@ def resolve_incumbency(
     See the section comment above for the matching order and every refusal.
     Returns either
       {"race_id", "status": "resolved", "incumbent_id", "is_open_seat",
-       "candidates": {cid: {"is_incumbent", "fec_id"}}, "unresolved": [...]}
+       "candidates": {cid: {"is_incumbent", "fec_id"}}, "unresolved": [...],
+       "unmatched_fec_rows": [{"fec_candidate_id", "name",
+                                "incumbent_challenge"}]}
     or {"race_id", "status": "refused", "reasons": [...], "unresolved": [...]}
     — a refusal carries no `is_open_seat` at all, so a caller cannot read a
-    missing answer as a False one.
+    missing answer as a False one. `is_open_seat` is a property of the FEC
+    field for the district: a non-"I" row with no roster match goes to
+    `unmatched_fec_rows` and does not block it (see the section comment).
     """
     race_id = race.get("race_id")
     # `election_years` is the year the candidate ran, so it names this
@@ -306,10 +328,19 @@ def resolve_incumbency(
                 "reasons": [f"no FEC House rows for {_TARGET_ELECTION_YEAR} in "
                             f"district {race.get('district')!r}"]}
 
+    # Fail closed on every row's code first, before any matching: a null or
+    # unrecognised `incumbent_challenge` refuses the whole race regardless of
+    # whether that row ever matches a roster candidate, because we cannot
+    # tell from an unknown code whether it names the incumbent.
     reasons: list[str] = []
     for row in rows:
         code = row.get("incumbent_challenge")
-        if code is not None and code not in _CHALLENGE_CODES:
+        if code is None:
+            reasons.append(
+                f"FEC row {row.get('candidate_id')!r} carries a null "
+                "incumbent_challenge; refusing because we do not know "
+                "whether this is the incumbent")
+        elif code not in _CHALLENGE_CODES:
             reasons.append(
                 f"FEC row {row.get('candidate_id')!r} carries an unrecognised "
                 f"incumbent_challenge {code!r}; expected I, C, O or null")
@@ -330,7 +361,6 @@ def resolve_incumbency(
             matched.setdefault(i, []).append(cid)
 
     unresolved: list[dict] = []
-    resolved_pairs: dict[str, int] = {}      # cid -> row index, 1:1 and coded
     for cid, hits in per_candidate_rows.items():
         if len(hits) != 1:
             unresolved.append({"candidate_id": cid, "reason": (
@@ -338,35 +368,36 @@ def resolve_incumbency(
                 "exactly one filing to be written")})
 
     incumbent_ids: list[str] = []
-    all_rows_clean = True
+    unmatched_fec_rows: list[dict] = []
+    resolved_pairs: dict[str, int] = {}      # cid -> row index, 1:1 and coded
     for i, row in enumerate(rows):
         cids = matched.get(i, [])
         code = row.get("incumbent_challenge")
         is_incumbent_row = code == "I"
-        if len(cids) != 1 or len(per_candidate_rows.get(cids[0], [])) != 1:
-            all_rows_clean = False
-            why = (f"matched {len(cids)} ballot-tier candidates in {race_id}"
-                   if len(cids) != 1 else
-                   f"matched {cids[0]}, who also matches "
-                   f"{len(per_candidate_rows[cids[0]])} FEC rows")
-            note = {"fec_candidate_id": row.get("candidate_id"), "reason": why}
+        clean = len(cids) == 1 and len(per_candidate_rows.get(cids[0], [])) == 1
+        if not clean:
             if is_incumbent_row:
+                why = (f"matched {len(cids)} ballot-tier candidates in "
+                       f"{race_id}" if len(cids) != 1 else
+                       f"matched {cids[0]}, who also matches "
+                       f"{len(per_candidate_rows[cids[0]])} FEC rows")
                 reasons.append(
                     f"FEC row {row.get('candidate_id')!r} is the incumbent "
-                    f"({note['reason']}); refusing rather than reporting an "
-                    "open seat")
-            else:
-                unresolved.append(note)
+                    f"({why}); refusing rather than reporting an open seat")
+            elif not cids:
+                # A primary loser or never-qualified filer who still has a
+                # 2026 FEC filing but matches no roster candidate at all.
+                # Recorded for auditability; never blocks the open-seat
+                # verdict — that is the whole point of this rule.
+                unmatched_fec_rows.append({
+                    "fec_candidate_id": row.get("candidate_id"),
+                    "name": row.get("name"),
+                    "incumbent_challenge": code,
+                })
+            # else: this row DID match a roster candidate, just ambiguously
+            # (that candidate also matches another row) — already recorded
+            # from the roster side in `unresolved` above. Nothing new to add.
             continue
-        if code is None:
-            all_rows_clean = False
-            unresolved.append({"fec_candidate_id": row.get("candidate_id"),
-                               "reason": "incumbent_challenge is null — the "
-                                         "FEC does not state a status"})
-            continue
-        if code not in _CHALLENGE_CODES:
-            all_rows_clean = False
-            continue                      # already refused above
         if is_incumbent_row:
             incumbent_ids.append(cids[0])
         resolved_pairs[cids[0]] = i
@@ -387,9 +418,14 @@ def resolve_incumbency(
         "race_id": race_id,
         "status": "resolved",
         "incumbent_id": incumbent_ids[0] if incumbent_ids else None,
-        "is_open_seat": all_rows_clean and not incumbent_ids,
+        # Every row's code is known and non-null at this point (checked
+        # above, fail-closed). So an open seat is simply: no row is "I" —
+        # unmatched non-"I" rows and unresolved roster candidates do not
+        # count against it (see the section comment).
+        "is_open_seat": not incumbent_ids,
         "candidates": per_candidate,
         "unresolved": unresolved,
+        "unmatched_fec_rows": unmatched_fec_rows,
     }
 
 

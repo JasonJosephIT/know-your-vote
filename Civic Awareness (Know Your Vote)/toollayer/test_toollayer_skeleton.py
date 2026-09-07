@@ -1054,12 +1054,27 @@ class TestIncumbencyResolver(unittest.TestCase):
         self.assertEqual(out["incumbent_id"], "c1")
 
     def test_open_seat_only_when_every_row_resolved_and_none_incumbent(self):
+        """Open seat is a property of the FEC field for the district, not of
+        our roster's coverage of it. Live FL-28 returns 7 filers against a
+        2-3 name ballot roster (primary losers / never-qualified filers who
+        still have a 2026 filing), so unmatched non-"I" rows must not block
+        the verdict -- they are recorded under `unmatched_fec_rows` instead
+        of blocking `is_open_seat` or landing in `unresolved`."""
         rows = [_fec_cand("H4FL28002", "RIVERA, ANA", "O", party="DEM"),
-                _fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "O")]
+                _fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "O"),
+                _fec_cand("H6FL28039", "CAMPIONE, THOMAS", "C"),
+                _fec_cand("H6FL28047", "MUJICA, HECTOR", "O"),
+                _fec_cand("H6FL28021", "ROJAS, EDDY", "C")]
         out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
         self.assertEqual(out["status"], "resolved", out)
         self.assertIs(out["is_open_seat"], True)
         self.assertIsNone(out["incumbent_id"])
+        self.assertEqual(out["unresolved"], [])
+        unmatched_ids = {u["fec_candidate_id"] for u in out["unmatched_fec_rows"]}
+        self.assertEqual(unmatched_ids, {"H6FL28039", "H6FL28047", "H6FL28021"})
+        for u in out["unmatched_fec_rows"]:
+            self.assertIn(u["incumbent_challenge"], ("C", "O"))
+            self.assertTrue(u["name"])
 
     def test_unmatched_incumbent_refuses_and_never_calls_the_seat_open(self):
         """A retiring member who still filed with the FEC is exactly this
@@ -1092,7 +1107,9 @@ class TestIncumbencyResolver(unittest.TestCase):
         self.assertEqual(out["status"], "resolved", out)
         self.assertNotIn(_RIVERA, out["candidates"])       # nothing written
         self.assertIn(_RIVERA, [u.get("candidate_id") for u in out["unresolved"]])
-        self.assertIs(out["is_open_seat"], False)          # not cleanly resolved
+        # An unresolved roster candidate does not block the open-seat
+        # verdict: every FEC row here has a known, non-"I" code.
+        self.assertIs(out["is_open_seat"], True)
 
     def test_a_candidate_matching_no_row_is_unresolved(self):
         roster = _ROSTER_28 + [{"candidate_id": "FL-DOE-90009",
@@ -1103,13 +1120,29 @@ class TestIncumbencyResolver(unittest.TestCase):
         self.assertIn("FL-DOE-90009",
                       [u.get("candidate_id") for u in out["unresolved"]])
 
-    def test_null_incumbent_challenge_is_unresolved_not_a_default(self):
+    def test_null_incumbent_challenge_on_a_matched_row_refuses(self):
+        """Null means the FEC does not state a status -- even on a row that
+        matches a roster candidate cleanly, this refuses the whole race
+        rather than writing a silent default or waving it through as an
+        established open seat."""
         rows = [_fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", None),
                 _fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM")]
         out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
-        self.assertEqual(out["status"], "resolved", out)
-        self.assertNotIn(_GIMENEZ, out["candidates"])
-        self.assertIs(out["is_open_seat"], False)
+        self.assertEqual(out["status"], "refused", out)
+        self.assertNotIn("is_open_seat", out)
+        self.assertIn("H0FL28001", " ".join(out["reasons"]))
+
+    def test_null_incumbent_challenge_on_an_unmatched_row_refuses(self):
+        """The null-code refusal applies to every row, not only ones that
+        match a roster candidate -- an unmatched row with a null code is
+        exactly as unreadable as a matched one."""
+        rows = [_fec_cand("H4FL28002", "RIVERA, ANA", "C", party="DEM"),
+                _fec_cand("H0FL28001", "GIMENEZ, CARLOS A.", "O"),
+                _fec_cand("H9FL28999", "GHOST, GARY", None)]
+        out = intake.resolve_incumbency(_RACE_28, _ROSTER_28, rows)
+        self.assertEqual(out["status"], "refused", out)
+        self.assertNotIn("is_open_seat", out)
+        self.assertIn("H9FL28999", " ".join(out["reasons"]))
 
     def test_non_house_rows_are_ignored(self):
         rows = [_fec_cand("S4FL00123", "GIMENEZ, CARLOS A.", "I", office="S",
