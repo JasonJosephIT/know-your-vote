@@ -168,6 +168,57 @@ await check("a county-scoped item is not statewide", async () => {
   if (scoped.rows[0].n !== 1) throw new Error("county-scoped row not returned for its own county");
   await db.query("DELETE FROM news_item WHERE url = 'https://example.org/scope-test';");
 });
+/* --- 0013 (A2). Written after 0014-0017 but numbered before them, so it
+   applies first on a fresh database. These four invariants are the whole of
+   D1/D2 as the schema can express them. */
+await check("0013 candidate.ballot_status defaults to ballot", async () => {
+  const r = await db.query(
+    `SELECT column_default, is_nullable FROM information_schema.columns
+      WHERE table_name='candidate' AND column_name='ballot_status';`
+  );
+  if (r.rows.length !== 1) throw new Error("candidate.ballot_status missing");
+  /* The default is what makes this migration a no-op for existing rows; drop
+     it and every demo candidate becomes NOT NULL with no value. */
+  if (!/'ballot'/.test(r.rows[0].column_default ?? "")) {
+    throw new Error(`default is ${r.rows[0].column_default}, expected 'ballot'`);
+  }
+  if (r.rows[0].is_nullable !== "NO") throw new Error("ballot_status must be NOT NULL");
+});
+await check("0013 ballot_status rejects a bogus tier", async () => {
+  let rejected = false;
+  try {
+    await db.query(
+      `INSERT INTO candidate (candidate_id, legal_name, party, office_sought, qualifying_status, ballot_status)
+       VALUES ('c-tier','Tier Test','NPA','Governor','qualified','maybe');`
+    );
+  } catch (err) {
+    if (!/candidate_ballot_status_check/.test(String(err))) throw err;
+    rejected = true;
+  }
+  if (!rejected) throw new Error("a fourth ballot_status value was accepted");
+});
+/* D2: the whole point is that a real minor party stops being flattened to
+   'other'. LPF and CPF are on the target ballots; MGT ships from the DoE with
+   an EMPTY description, so the column must take a code nothing can label. */
+await check("0013 party CHECK is gone and real DoE codes store verbatim", async () => {
+  await db.query(
+    `INSERT INTO candidate (candidate_id, legal_name, party, office_sought, qualifying_status) VALUES
+       ('c-lpf','LPF Filer','LPF','Governor','qualified'),
+       ('c-mgt','MGT Filer','MGT','Governor','qualified');`
+  );
+  const r = await db.query(
+    "SELECT party FROM candidate WHERE candidate_id IN ('c-lpf','c-mgt') ORDER BY candidate_id;"
+  );
+  const got = r.rows.map((x) => x.party).join(",");
+  if (got !== "LPF,MGT") throw new Error(`stored ${got}, expected LPF,MGT`);
+  await db.query("DELETE FROM candidate WHERE candidate_id IN ('c-lpf','c-mgt');");
+});
+await check("0013 ballot_status index exists", async () => {
+  const r = await db.query(
+    "SELECT count(*)::int AS n FROM pg_indexes WHERE tablename='candidate' AND indexname='idx_candidate_ballot_status';"
+  );
+  if (r.rows[0].n !== 1) throw new Error("idx_candidate_ballot_status missing");
+});
 await check("0017 news_item.relation exists and is nullable", async () => {
   const r = await db.query(
     `SELECT is_nullable FROM information_schema.columns

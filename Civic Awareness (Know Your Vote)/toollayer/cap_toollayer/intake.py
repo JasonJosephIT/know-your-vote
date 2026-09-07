@@ -57,8 +57,45 @@ _STATEWIDE_RACES = {
 }
 _TARGET_US_HOUSE = {"010", "015", "023", "028"}
 
-_PARTY = {"REP": "REP", "DEM": "DEM", "NPA": "NPA"}          # else -> 'other'
-_STATUS = {"QUA": "qualified", "WIT": "withdrawn"}           # else -> 'other'
+# D2 (founder 2026-09-07): no party map. The DoE PartyCode is stored verbatim
+# and the UI maps codes to labels with a raw-code fallback. The old
+# {REP,DEM,NPA} -> else "other" map erased IND, LPF and CPF -- all real printed
+# ballot lines in the target races -- into one bucket. Migration 0013 drops the
+# CHECK that made the map necessary.
+
+# candidate.qualifying_status is CHECK-constrained to three values, so this map
+# is a real narrowing and not a display choice.
+_STATUS = {
+    "QUA": "qualified", "UNO": "qualified",
+    "WIT": "withdrawn", "DEF": "withdrawn", "DNQ": "withdrawn", "REM": "withdrawn",
+}
+
+# D1 (founder 2026-09-07): ballot status tier. Status decides first, party
+# second -- B1's whole-file cross-tab found WRI rows carrying DNQ, REM and WIT
+# as well as QUA, so a write-in that withdrew is excluded for withdrawing
+# rather than filed as a write-in.
+_ON_BALLOT_STATUS = frozenset({"QUA", "UNO"})
+_EXCLUDED_STATUS = frozenset({"DEF", "DNQ", "WIT", "REM"})
+_WRITE_IN_PARTY = "WRI"
+
+
+def _ballot_status(status_code: str, party_code: str) -> str:
+    """Tier for one filed row, or raise on a code we have never seen.
+
+    Fail loud rather than guess (Risk R1): the DoE form also offers ACT and
+    ELE, neither present in today's export. ELE appears after certification
+    and means the race is decided -- silently bucketing it would publish a
+    settled race as a live one. An unknown code is a file change, and a file
+    change should stop the run, not pick a default.
+    """
+    if status_code in _EXCLUDED_STATUS:
+        return "excluded"
+    if status_code in _ON_BALLOT_STATUS:
+        return "write_in" if party_code == _WRITE_IN_PARTY else "ballot"
+    raise DoEFormatError(
+        f"unrecognised StatusCode {status_code!r} -- the DoE file changed; "
+        "map it in data-ingest.md section 1 Q1 before re-running"
+    )
 _DOE_REQUIRED_COLS = (
     "AcctNum", "OfficeCode", "OfficeDesc", "Juris1num",
     "StatusCode", "PartyCode", "NameLast", "NameFirst",
@@ -112,6 +149,7 @@ def parse_candidate_list(text: str) -> dict:
     races: dict[str, dict] = {}
     candidates: list[dict] = []
     skipped = 0
+    tiers: dict[str, int] = {"ballot": 0, "write_in": 0, "excluded": 0}
     for line in lines[1:]:
         row = line.split("\t")
         office_code = col(row, "OfficeCode")
@@ -133,12 +171,17 @@ def parse_candidate_list(text: str) -> dict:
         candidate_id = f"FL-DOE-{acct}"
         name = " ".join(p for p in (col(row, "NameFirst"), col(row, "NameMiddle"),
                                     col(row, "NameLast")) if p)
+        status_code = col(row, "StatusCode")
+        party_code = col(row, "PartyCode")
+        ballot_status = _ballot_status(status_code, party_code)
+        tiers[ballot_status] += 1
         candidates.append({
             "candidate_id": candidate_id,
             "legal_name": name,
-            "party": _PARTY.get(col(row, "PartyCode"), "other"),
+            "party": party_code,          # verbatim (D2)
             "office_sought": col(row, "OfficeDesc"),
-            "qualifying_status": _STATUS.get(col(row, "StatusCode"), "other"),
+            "qualifying_status": _STATUS[status_code],
+            "ballot_status": ballot_status,
             # PII columns (Addr*/Phone/Email/Trs*) are intentionally dropped.
         })
         race = races.setdefault(race_id, {
@@ -146,11 +189,20 @@ def parse_candidate_list(text: str) -> dict:
             "level": level, "district": district, "election": "general",
             "candidate_ids": [],
         })
-        race["candidate_ids"].append(candidate_id)
+        # D1: only printed ballot lines enter candidate_ids. Everyone else is
+        # still stored as a candidate row -- the filing is a public fact, and
+        # dropping it would make the exclusion invisible -- but they are not
+        # part of the race, so they never reach the Balance Audit denominator
+        # or a side-by-side. B1 measured 87 non-ballot names against 22 real
+        # ones, in every one of the eight races; without this line the
+        # pipeline HALTs on all of them forever.
+        if ballot_status == "ballot":
+            race["candidate_ids"].append(candidate_id)
 
     for race in races.values():  # stable order -> idempotent arrays
         race["candidate_ids"] = sorted(set(race["candidate_ids"]))
-    return {"races": races, "candidates": candidates, "skipped": skipped}
+    return {"races": races, "candidates": candidates, "skipped": skipped,
+            "tiers": tiers}
 
 
 def _default_doe_fetch(office: str = "FED") -> str:
@@ -236,6 +288,10 @@ def build_intake_handlers(
             "races": sorted(parsed["races"]),
             "candidate_count": len(parsed["candidates"]),
             "skipped": parsed["skipped"],
+            # Per-tier counts make the D1 exclusion auditable from the run
+            # report rather than only from the database: a caller can see that
+            # 87 filings were parsed and 22 became ballot lines.
+            "tiers": parsed["tiers"],
         }}
 
     def fec_api_query(payload: Mapping[str, Any]) -> dict:

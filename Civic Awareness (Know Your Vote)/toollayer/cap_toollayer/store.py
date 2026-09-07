@@ -173,17 +173,22 @@ class Store(logsink.PostgresSink):
     def upsert_candidate(self, cand: Mapping[str, Any]) -> None:
         """Idempotent by candidate_id (PK). A later FEC linkage (fec_id) is
         preserved if this DoE row doesn't carry one."""
+        # ballot_status defaults to 'ballot' in 0013, so a caller that does not
+        # carry one (a pre-B2 fixture) still writes a valid row.
         self._execute(
             "INSERT INTO candidate "
-            "(candidate_id, legal_name, party, office_sought, qualifying_status, fec_id) "
-            "VALUES (%s, %s, %s, %s, %s, %s) "
+            "(candidate_id, legal_name, party, office_sought, qualifying_status, "
+            "ballot_status, fec_id) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s) "
             "ON CONFLICT (candidate_id) DO UPDATE SET "
             "legal_name = EXCLUDED.legal_name, party = EXCLUDED.party, "
             "office_sought = EXCLUDED.office_sought, "
             "qualifying_status = EXCLUDED.qualifying_status, "
+            "ballot_status = EXCLUDED.ballot_status, "
             "fec_id = COALESCE(EXCLUDED.fec_id, candidate.fec_id)",
             (cand["candidate_id"], cand["legal_name"], cand["party"],
-             cand["office_sought"], cand["qualifying_status"], cand.get("fec_id")),
+             cand["office_sought"], cand["qualifying_status"],
+             cand.get("ballot_status", "ballot"), cand.get("fec_id")),
         )
 
     # -- T4 jurisdiction_resolve (read zip_district; one mapping, no copy) --

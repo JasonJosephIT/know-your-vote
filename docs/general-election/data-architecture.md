@@ -113,6 +113,47 @@ letting them block every race.
 **This is a neutrality decision, not just a schema one — it needs the founder's
 explicit sign-off and belongs in the public methodology page.**
 
+### D1 — FOUNDER DECISION, 2026-09-07 (A0 answered)
+
+**Write-ins are excluded, not listed.** The founder's rule: *"I want to stick
+solely to people that will be visible on the ballot."* A qualified write-in
+appears as a blank line with no printed name, so nothing about one reaches a
+voter — not a name, not a section, not a note.
+
+The founder asked whether the general has write-ins at all. It does: B1's live
+run on `20261103-GEN` found **4** in the target races, `QUA`/`UNO` with
+`PartyCode='WRI'`. Florida runs write-in qualification for the general and
+those candidates hold real ballot access. That fact was put to the founder and
+did not change the answer — it is exactly the case the rule decides.
+
+**What changes from the recommendation above:** the middle row. Write-ins move
+from "listed but not briefed" to the same treatment as a defeated filer —
+out of `candidate_ids`, out of the audit, off the page.
+
+| Tier | Definition | In `candidate_ids`? | Briefed? | In audit? | Shown to a voter? |
+|---|---|---|---|---|---|
+| `ballot` | `QUA`/`UNO` and not `WRI` | yes | yes | **yes** | yes |
+| `write_in` | `QUA`/`UNO` with `PartyCode='WRI'` | **no** | no | no | **no** |
+| `excluded` | `DEF` · `DNQ` · `WIT` · `REM` | no | no | no | no |
+
+**The column keeps three values even though two behave identically**, and that
+is deliberate rather than leftover: the parser must already distinguish `WRI`
+to apply the status-then-party precedence rule, so the tier falls out for
+free, and collapsing it would destroy a measured fact — a defeated primary
+loser and a qualified write-in are different things, and only one of them was
+ever on a general ballot. Nothing reads `write_in` except as "not `ballot`".
+
+**Cost of this decision, stated plainly:** a voter using the app will not learn
+that a qualified write-in exists in their race. That is a real omission, and
+it is the founder's call to make — the app shows the ballot, and a write-in is
+not on it. A5 (methodology page) must say so in plain language rather than
+leaving the omission silent.
+
+### D2 — FOUNDER DECISION, 2026-09-07 (A0 answered)
+
+**Approved as recommended:** drop the party CHECK, store the DoE `PartyCode`
+verbatim, and let the UI map known codes to labels with a raw-code fallback.
+
 ### D2 — Minor parties
 
 `candidate.party CHECK (party IN ('REP','DEM','NPA','other'))`. In a closed
@@ -287,9 +328,12 @@ it done. **A1 must land before A3 or A4** — both read the column it adds.
 
 | ID | Task | Files | Verify | Depends |
 |---|---|---|---|---|
-| **A0** | Get founder sign-off on **D1** (three tiers) and **D2** (drop party CHECK). Both are now backed by measured data, not a guess — see D1's 22/4/83 table and D2's confirmed codes. Do not start A1 until D1 is answered: it defines the column. | — | Written decision recorded in this file | — |
-| **A1** | Write migration `0013_general_election.sql` exactly as §2 | `supabase/migrations/0013_general_election.sql` | `node scripts/verify-migrations.mjs` green, incl. existing RLS invariants | A0 |
-| **A2** | Extend `verify-migrations.mjs` with 0013 invariants: default is `'ballot'`, CHECK rejects a bogus tier, party CHECK is gone, index exists | `scripts/verify-migrations.mjs` | New checks fail against pre-0013 schema, pass after | A1 |
+| ~~**A0**~~ | ~~Get founder sign-off on **D1** and **D2**~~ | — | — | — |
+| | **✅ Done 2026-09-07.** D1 answered *against* the recommendation: write-ins are **excluded, not listed**. D2 approved as recommended. Both decisions are recorded in §1 above. | | | |
+| ~~**A1**~~ | ~~Write migration `0013_general_election.sql`~~ | `supabase/migrations/0013_general_election.sql` | — | — |
+| | **✅ Done and applied live 2026-09-07.** Written idempotently (`IF NOT EXISTS`, `DROP CONSTRAINT IF EXISTS`, a `DO $$` guard on the CHECK) because it lands after 0014–0017 on the live database though numbered before them — safe only because nothing in 0014–0017 touches `candidate`, which was checked before writing. The live constraint name was confirmed to be `candidate_party_check` **before** applying: `DROP CONSTRAINT IF EXISTS` on a wrong name is a silent no-op that would have left the CHECK in place and D2 unimplemented while every check reported success. Verified after: default `'ballot'::text`, `NOT NULL`, tier CHECK present, party CHECK gone (0 rows), index present, and all 29 existing candidates defaulted to `ballot` — a true no-op for current data. | | | |
+| ~~**A2**~~ | ~~0013 invariants in `verify-migrations.mjs`~~ | `scripts/verify-migrations.mjs` | — | — |
+| | **✅ Done 2026-09-07.** Four checks: the `'ballot'` default (drop it and every existing row becomes NOT NULL with no value), a fourth tier is rejected, `LPF` and `MGT` store verbatim (D2's whole point — `MGT` ships from the DoE with an empty description, so the column must take a code nothing can label), and the index exists. | | | |
 | **A3** | T10 filters the audit population to `ballot_status='ballot'`; record excluded IDs + `unopposed` on the result. **Do not touch `balance_audit_core.py`** | `toollayer/cap_toollayer/synthesis.py` | `python3 toollayer/test_toollayer_skeleton.py` (100) green; new cases: a write-in with 0 claims no longer HALTs a race that otherwise passes, and a one-candidate race (FL-10's real shape) comes back `unopposed` rather than a silent 0.0-variance pass | A1 |
 | **A4** | Read model: widen `Party`, add `ballot_status`, filter briefs/directory to briefed tier, render write-ins as a labelled list | `src/types/schema.ts`, `src/lib/briefs.ts`, `src/lib/directory.ts`, `src/app/(public)/races/[raceId]/page.tsx` | `npm run build` clean; a seeded write-in appears in its own section, not in the side-by-side, and with no party chip; `LPF` renders its label and `MGT` (no label) renders its raw code without an empty chip | A1 |
 | **A5** | Methodology page states the write-in and exclusion policy in plain language | `src/app/(public)/methodology/page.tsx` | Page renders; wording matches the D1 decision | A0 |
