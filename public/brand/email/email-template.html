@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!--
+  KYV Reference Email Template — transactional / civic-reminder.
+  Colorway: OFFICIAL (Green #2F6B4F + Cream #F5EBD8 + Ink #22271F) on background #F6F3EC.
+
+  EMAIL HARD RULES honored here (from docs/brand-assets-roadmap.md §4 + asset-generation-guide.md):
+    - Content width capped at 600px (table width="600").
+    - Table-based, fully INLINE-STYLED. No <style> variables, NO kyv-artifact-theme.css — email
+      clients strip CSS variables and external CSS, so every color is a resolved inline hex.
+    - Images are FEW and LIGHT: only the header banner, the reminder hero, three tiny 48px icon
+      chips, and the footer mark. The BODY COPY is live inline-styled HTML (not one giant image).
+    - Every <img> has real alt text so the email reads with images off.
+    - The call-to-action is a BULLETPROOF HTML/TABLE button in #2f6b4f — NOT an image.
+    - Resolved brand hex: green #2f6b4f, cream #f5ebd8, ink #22271f, background #f6f3ec,
+      accent clay #b26836, harvest-gold #e3a72e (marketing support only).
+
+  DARK-MODE FALLBACK LOGO:
+    Some clients (Apple Mail, Outlook dark mode) force-invert colors, and KYV Green inverts
+    poorly. For a dark-mode header, swap the header banner / footer mark for the Mono Cream
+    monogram at public/brand/email/logo-dark-mode.png (cream on transparent, no green) using a
+    <picture> + prefers-color-scheme swap, e.g.:
+      <picture>
+        <source srcset="logo-dark-mode.png" media="(prefers-color-scheme: dark)">
+        <img src="email-header-banner.png" alt="Know Your Vote" width="600" height="150">
+      </picture>
+    (Kept as a comment so the base template stays maximally client-compatible.)
+-->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <meta name="supported-color-schemes" content="light dark">
+  <title>Know Your Vote — Register by Oct 5</title>
+</head>
+<body style="margin:0; padding:0; background-color:#f6f3ec;">
+  <!-- Preheader (hidden, reads first in inbox preview) -->
+  <div style="display:none; max-height:0; overflow:hidden; opacity:0; color:#f6f3ec; font-size:1px; line-height:1px;">
+    Florida&rsquo;s voter-registration deadline is Oct 5 — a friendly, nonpartisan reminder.
+  </div>
+
+  <!-- Outer wrapper -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f6f3ec;">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+
+        <!-- 600px content table -->
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"
+               style="width:600px; max-width:600px; background-color:#ffffff; border:1px solid #e4ded2; border-radius:12px; overflow:hidden;">
+
+          <!-- Header banner (image, alt-texted). Displays 600x150 from the 1200x300 @2x master. -->
+          <tr>
+            <td align="center" style="background-color:#f5ebd8;">
+              <img src="email-header-banner.png" alt="Know Your Vote"
+                   width="600" height="150"
+                   style="display:block; width:600px; max-width:600px; height:auto; border:0;">
+            </td>
+          </tr>
+
+          <!-- Reminder hero (image, alt-texted). Displays 600x300 from the 1200x600 @2x master. -->
+          <tr>
+            <td align="center" style="background-color:#f5ebd8;">
+              <img src="reminder-hero.png" alt="A friendly reminder: register by October 5, so you're ready when the ballot arrives."
+                   width="600" height="300"
+                   style="display:block; width:600px; max-width:600px; height:auto; border:0;">
+            </td>
+          </tr>
+
+          <!-- BODY COPY — live, inline-styled HTML (not baked into an image) -->
+          <tr>
+            <td style="padding:32px 40px 8px 40px; font-family:Figtree, Arial, sans-serif;">
+              <h1 style="margin:0 0 12px 0; font-size:26px; line-height:1.2; font-weight:700; letter-spacing:-0.5px; color:#22271f;">
+                You have until Oct&nbsp;5 to register
+              </h1>
+              <p style="margin:0; font-family:Inter, Arial, sans-serif; font-size:16px; line-height:1.6; color:#585e52;">
+                Know Your Vote is a nonpartisan tool for Florida voters. Enter your ZIP and see
+                every candidate on your ballot — what they say, what they&rsquo;ve done, and what&rsquo;s
+                been verified — presented fairly, with equal space for each.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Inline icon chips (48px images, alt-texted) with live text beside them -->
+          <tr>
+            <td style="padding:16px 40px 8px 40px; font-family:Inter, Arial, sans-serif;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td width="34" valign="middle" style="padding:8px 0;">
+                    <img src="icon-chip-calendar.png" alt="" width="24" height="24" style="display:block; border:0;">
+                  </td>
+                  <td valign="middle" style="padding:8px 0; font-size:15px; line-height:1.5; color:#22271f;">
+                    Registration deadline: <strong style="color:#2f6b4f;">October 5</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="34" valign="middle" style="padding:8px 0;">
+                    <img src="icon-chip-pin.png" alt="" width="24" height="24" style="display:block; border:0;">
+                  </td>
+                  <td valign="middle" style="padding:8px 0; font-size:15px; line-height:1.5; color:#22271f;">
+                    Check what&rsquo;s on your ballot by ZIP code
+                  </td>
+                </tr>
+                <tr>
+                  <td width="34" valign="middle" style="padding:8px 0;">
+                    <img src="icon-chip-check.png" alt="" width="24" height="24" style="display:block; border:0;">
+                  </td>
+                  <td valign="middle" style="padding:8px 0; font-size:15px; line-height:1.5; color:#22271f;">
+                    Every candidate, verified and equal
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- BULLETPROOF HTML/TABLE BUTTON — #2f6b4f, NOT an image -->
+          <tr>
+            <td align="center" style="padding:20px 40px 36px 40px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" bgcolor="#2f6b4f" style="border-radius:8px;">
+                    <a href="https://knowyourvote.example/register"
+                       style="display:inline-block; padding:14px 28px; font-family:Figtree, Arial, sans-serif; font-size:16px; font-weight:600; line-height:1; color:#ffffff; text-decoration:none; border-radius:8px;">
+                      Check my registration
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Divider -->
+          <tr>
+            <td style="padding:0 40px;">
+              <div style="border-top:1px solid #e4ded2; line-height:1px; font-size:1px;">&nbsp;</div>
+            </td>
+          </tr>
+
+          <!-- Footer: footer mark image (alt-texted) + live legal/unsubscribe copy -->
+          <tr>
+            <td align="center" style="padding:28px 40px 32px 40px; font-family:Inter, Arial, sans-serif;">
+              <img src="footer-mark.png" alt="Know Your Vote — nonpartisan, Florida"
+                   width="240" height="80"
+                   style="display:block; margin:0 auto 14px auto; border:0;">
+              <p style="margin:0 0 8px 0; font-size:13px; line-height:1.5; color:#585e52;">
+                A nonpartisan civic-information project. We never favor a candidate or party.
+              </p>
+              <p style="margin:0; font-size:12px; line-height:1.5; color:#585e52;">
+                You&rsquo;re receiving this because you signed up for Florida voting reminders.
+                <a href="https://knowyourvote.example/unsubscribe" style="color:#2f6b4f; text-decoration:underline;">Unsubscribe</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+        <!-- /600px content table -->
+
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

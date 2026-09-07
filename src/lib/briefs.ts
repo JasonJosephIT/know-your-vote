@@ -1,6 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
+import type { CandidateContact, NewsItem } from "@/types/app";
 import type {
   Candidate,
   CandidateSocialAccount,
@@ -55,10 +56,9 @@ type ClaimRow = Claim & { claim_source: Array<{ source: Source }> };
 /* Fixed neutral order rule, identical for every race: the pipeline's
    candidate_ids array is ballot order; when absent, alphabetical by
    legal name (FR-003). */
-export function orderCandidates<T extends { candidate_id: string; legal_name: string }>(
-  candidates: T[],
-  ballotOrder: string[]
-): T[] {
+export function orderCandidates<
+  T extends { candidate_id: string; legal_name: string },
+>(candidates: T[], ballotOrder: string[]): T[] {
   if (ballotOrder.length > 0) {
     const rank = new Map(ballotOrder.map((id, i) => [id, i]));
     return [...candidates].sort(
@@ -66,7 +66,9 @@ export function orderCandidates<T extends { candidate_id: string; legal_name: st
         (rank.get(a.candidate_id) ?? 999) - (rank.get(b.candidate_id) ?? 999)
     );
   }
-  return [...candidates].sort((a, b) => a.legal_name.localeCompare(b.legal_name));
+  return [...candidates].sort((a, b) =>
+    a.legal_name.localeCompare(b.legal_name)
+  );
 }
 
 function toSourced(rows: ClaimRow[]): SourcedClaim[] {
@@ -129,7 +131,11 @@ async function fetchRaceBrief(raceId: string): Promise<RaceBrief | null> {
   const profiles = profilesRes.data ?? [];
   if (profiles.length === 0) return null;
   /* FR-005: all profiles must pass the Balance Audit, not just be present. */
-  if (!profiles.every((p) => (p.audit as ProfileAudit)?.balance_check_passed === true)) {
+  if (
+    !profiles.every(
+      (p) => (p.audit as ProfileAudit)?.balance_check_passed === true
+    )
+  ) {
     return null;
   }
 
@@ -189,11 +195,10 @@ async function fetchRaceBrief(raceId: string): Promise<RaceBrief | null> {
 /* Race/brief pages change at most daily; cache with tags so the news cron
    and publication changes can revalidate on demand (TASK-024). */
 export function getRaceBrief(raceId: string) {
-  return unstable_cache(
-    () => fetchRaceBrief(raceId),
-    ["race-brief", raceId],
-    { revalidate: 3600, tags: ["races", `race:${raceId}`] }
-  )();
+  return unstable_cache(() => fetchRaceBrief(raceId), ["race-brief", raceId], {
+    revalidate: 3600,
+    tags: ["races", `race:${raceId}`],
+  })();
 }
 
 export interface CandidateDetail {
@@ -204,7 +209,9 @@ export interface CandidateDetail {
   brief: CandidateBriefData | null;
 }
 
-async function fetchCandidateDetail(candidateId: string): Promise<CandidateDetail | null> {
+async function fetchCandidateDetail(
+  candidateId: string
+): Promise<CandidateDetail | null> {
   const supabase = await createAnonServerClient();
   const { data: candidate } = await supabase
     .from("candidate")
@@ -224,8 +231,9 @@ async function fetchCandidateDetail(candidateId: string): Promise<CandidateDetai
   const raceBrief = await fetchRaceBrief(profile.race_id);
   if (!raceBrief) return null;
   const brief =
-    raceBrief.candidates.find((c) => c.candidate.candidate_id === candidateId) ??
-    null;
+    raceBrief.candidates.find(
+      (c) => c.candidate.candidate_id === candidateId
+    ) ?? null;
 
   return {
     candidate,
@@ -240,6 +248,54 @@ export function getCandidateDetail(candidateId: string) {
   return unstable_cache(
     () => fetchCandidateDetail(candidateId),
     ["candidate-detail", candidateId],
+    { revalidate: 3600, tags: ["races", `candidate:${candidateId}`] }
+  )();
+}
+
+/* Candidate-scoped feed items written by the R1 curator (CAP_Refresh_Agents
+   _Plan §6). The page this renders on is already publication-gated by
+   getCandidateDetail, and R1 only covers published races; the item_type
+   filter keeps pipeline/official rows (race-scoped, not candidate-scoped)
+   out by construction. */
+async function fetchCandidateNews(candidateId: string): Promise<NewsItem[]> {
+  const supabase = await createAnonServerClient();
+  const { data } = await supabase
+    .from("news_item")
+    .select("*")
+    .eq("candidate_id", candidateId)
+    .eq("item_type", "candidate_news")
+    .order("published_at", { ascending: false })
+    .limit(10);
+  return (data ?? []) as NewsItem[];
+}
+
+export function getCandidateNews(candidateId: string) {
+  return unstable_cache(
+    () => fetchCandidateNews(candidateId),
+    ["candidate-news", candidateId],
+    { revalidate: 3600, tags: ["races", `candidate:${candidateId}`] }
+  )();
+}
+
+/* Contact & logistics row kept fresh by the R2 refresher (weekly upsert
+   with last_verified_at). Missing row is the normal state until R2 has
+   covered the candidate. */
+async function fetchCandidateContact(
+  candidateId: string
+): Promise<CandidateContact | null> {
+  const supabase = await createAnonServerClient();
+  const { data } = await supabase
+    .from("candidate_contact")
+    .select("*")
+    .eq("candidate_id", candidateId)
+    .maybeSingle<CandidateContact>();
+  return data ?? null;
+}
+
+export function getCandidateContact(candidateId: string) {
+  return unstable_cache(
+    () => fetchCandidateContact(candidateId),
+    ["candidate-contact", candidateId],
     { revalidate: 3600, tags: ["races", `candidate:${candidateId}`] }
   )();
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV Play Feature Graphic — BASE (background + one baked line). Colorway: OFFICIAL on cream #F5EBD8.
+     1024x500. The official WORDMARK (kyv-logo-official.svg) is composited on top of this base as a
+     PNG (ImageMagick can't resolve the wordmark's inline art via <image href>, so it is overlaid in
+     a compositing step). ONE short standfirst line only, not crammed, lots of breathing room.
+     Colors are design.md tokens. Type: Inter. Inline attributes (ImageMagick-safe). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 500" width="1024" height="500" font-family="Inter, sans-serif">
+  <rect width="1024" height="500" fill="#F5EBD8"/>
+  <!-- ONE line of copy, right of the wordmark, nonpartisan, calm -->
+  <text x="540" y="230" font-family="Figtree, sans-serif" font-weight="700" font-size="44" fill="#22271F">See who&#8217;s on your</text>
+  <text x="540" y="288" font-family="Figtree, sans-serif" font-weight="700" font-size="44" fill="#22271F">Florida ballot.</text>
+  <text x="540" y="345" font-family="Inter, sans-serif" font-weight="400" font-size="27" fill="#2F6B4F">Nonpartisan. Every candidate, equal.</text>
+</svg>

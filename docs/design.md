@@ -1,7 +1,17 @@
 ---
-version: alpha
+version: 1.0
 name: Know Your Vote
-description: A calm, trustworthy, deliberately non-partisan design system for the Know Your Vote civic web app — sage green and warm sand, humanist type, minimalist and straight-lined but never governmental.
+description: The official KYV design system — anchored to the official logo (sage green / cream / ink). Calm, trustworthy, deliberately non-partisan; sage green and warm sand, humanist type, minimalist and straight-lined but never governmental. Governs web, mobile, and marketing.
+brand:
+  logo:
+    official: "public/brand/kyv-logo-official.svg"
+    acronym: "public/brand/kyv-logo-acronym.svg"
+    green: "#2F6B4F"
+    cream: "#F5EBD8"
+    ink: "#22271F"
+    clearspace: "height of the logo's letter O on all sides"
+    min-width-digital: "120px"
+    min-width-print: "1in"
 colors:
   background: "#F6F3EC"
   surface: "#FFFFFF"
@@ -23,12 +33,19 @@ colors:
   error: "#B4402E"
   info: "#2F6E7A"
   focus-ring: "#2F6B4F"
+  brand-cream: "#F5EBD8"
   verdict-accurate: "#2F6B4F"
   verdict-mostly-accurate: "#5E8C6B"
   verdict-mixed: "#B07A1E"
   verdict-mostly-inaccurate: "#B4692E"
   verdict-inaccurate: "#B4402E"
   verdict-unverifiable: "#6B6F66"
+marketing-colors:
+  harvest-gold: "#E3A72E"
+  burnt-orange: "#C1541C"
+  brick: "#7A2E1E"
+  olive: "#6B7A3A"
+  cream: "#F5EBD8"
 typography:
   display:
     fontFamily: "Figtree, sans-serif"
@@ -108,6 +125,14 @@ spacing:
   "7": "48px"
   "8": "64px"
   "9": "96px"
+elevation:
+  "1": "0 1px 3px rgba(34,39,31,0.06)"
+  "2": "0 4px 12px rgba(34,39,31,0.08)"
+motion:
+  fast: "120ms"
+  base: "200ms"
+  slow: "320ms"
+  easing: "cubic-bezier(0.2, 0, 0, 1)"
 components:
   button-primary:
     backgroundColor: "{colors.primary}"
@@ -205,6 +230,24 @@ components:
 
 Know Your Vote is a nonpartisan civic web app that lets a Florida voter enter a ZIP code and see every candidate on their ballot presented fairly — what they say, what they've done, and what's been verified. The design must make a nervous, busy voter of *any* political stripe feel calm, welcomed, and capable. The emotional target is **trustworthy, warm, and quietly confident** — the visual equivalent of a great poll worker or reference librarian. Two anti-patterns govern everything: it must never look like a **government website** (cold, dense, bureaucratic), and it must never look **partisan** (no red-vs-blue coding, no candidate visually favored over another). Warmth carries the neutrality so it never reads as cold both-sidesing.
 
+This document is the single source of truth for **web, mobile, and marketing** artifacts. Every color, type, spacing, and component decision in any KYV asset — app screen, social post, flyer, SMS landing page — must map to a token here or be added here first.
+
+## Brand & Logo
+
+The **official KYV logo** (`public/brand/kyv-logo-official.svg`) is a hand-drawn retro "groovy" wordmark — three stacked lines (KNOW / YOUR / VOTE) with bulbous 70s-style letterforms. It is warm and human on purpose: the brand's friendliness lives in the logo so the product UI can stay calm and restrained. Its three colors are the canonical brand palette: **KYV Green** `#2F6B4F` (outlines), **Cream** `#F5EBD8` (letter fills), and **Ink** `#22271F` (offset shadow letters). These map directly to the system tokens `primary`, `brand-cream`, and `on-surface` — the app and the logo always agree.
+
+**Colorways.** Four approved renderings, nothing else: (1) **Official** — green/cream/ink on light backgrounds (`background`, `surface`, or cream); (2) **Reversed** — cream and ink letterforms on a solid KYV Green or Ink field; (3) **Mono Ink** — single-color `#22271F` for fax/print/stamp contexts; (4) **Mono Cream** — single-color `#F5EBD8` on dark photography with a scrim. Never recolor the logo red, blue, or any partisan hue, and never rebuild the wordmark in a font — it is artwork, not type.
+
+**Acronym monogram.** The **KYV acronym logo** (`public/brand/kyv-logo-acronym.svg`) is the compact companion to the wordmark — a stacked "KYV" monogram for the small and square contexts the full wordmark can't serve (app icon, favicon, avatar, stamp, small header lockup). It carries the same green/cream/ink palette and non-partisan rules as the official logo; it is a substitute at small sizes, never a second brand. Use it below the wordmark's minimum width, or wherever a square/1:1 mark is required.
+
+**Clearspace & size.** Keep clearspace equal to the height of the logo's "O" on all sides. Minimum width: 120px digital, 1in print. Below that, legibility of the wordmark's outline strokes fails — use the **KYV acronym monogram** (above) or plain text instead.
+
+**Placement.** In the app, the logo appears small and quiet (header, about, methodology). In marketing it can be the hero. Never stretch, rotate, add effects, outline further, or crowd it against candidate imagery — the logo must never appear to endorse.
+
+## Marketing & Campaign Use
+
+Marketing assets (social posts, flyers, stickers, event banners) may turn the warmth up beyond what the app allows. The **marketing palette** extends the brand with retro-harvest tones pulled from the approved logo explorations: `harvest-gold` `#E3A72E`, `burnt-orange` `#C1541C`, `brick` `#7A2E1E`, `olive` `#6B7A3A`, on `cream` `#F5EBD8`. Rules: KYV Green and Cream must still anchor every piece (the marketing tones are supporting, never the identity); text always sits at WCAG AA (use `ink` or `brick` on cream, cream on green/brick); and the palette is **never used to code parties, candidates, or positions** — the non-partisan rule follows the brand everywhere, including a sticker. The retro display styling (groovy shapes, wavy type) is a **marketing-only** voice; product UI never uses novelty display faces.
+
 ## Colors
 
 The palette is built to be **calm, optimistic, and pointedly non-partisan**. The primary is a muted **sage green** (`primary` `#2F6B4F`) — trustworthy and growth-associated without belonging to either party — reserved for primary actions, active states, and key emphasis. Neutrals are **warm sand**, not cold gray: `background` `#F6F3EC` is a soft paper tone, `surface` is white for cards, and `surface-muted` provides quiet fills; text is a warm near-black (`on-surface` `#22271F`) with `on-surface-muted` for secondary copy. A warm clay **accent** (`#B26836`) adds cheerful, human punctuation — use it for small highlights, illustrative marks, and the nav's active indicator, not for large blocks (for accent-colored text use `accent-strong` to hold WCAG AA). Semantic states are deliberately muted (`success`, `warning`, `error` as a warm brick rather than a fire-engine red, `info` as a calm teal) so nothing feels alarmist. The six **verdict** colors run a restrained green→amber→brick scale for fact-check outcomes — but color is always paired with the verdict's text label; it is never the only signal. All text pairings meet at least WCAG AA (`primary` on white ≈ 5.8:1, `on-surface` on `background` ≈ 13:1).
@@ -219,7 +262,7 @@ Spacing follows a **4px base scale** (`spacing.1` = 4px through `spacing.9` = 96
 
 ## Elevation & Depth
 
-Depth is **border-led and mostly flat**, which reads clean and modern rather than heavy or officious. Separation comes primarily from the warm `border`/`border-strong` tokens and surface/background contrast, not drop shadows. Reserve soft shadows for genuinely floating elements: `elevation-1` (a barely-there `0 1px 3px rgba(34,39,31,0.06)`) for raised cards on hover, and `elevation-2` (`0 4px 12px rgba(34,39,31,0.08)`) for the docked nav bar, popovers, and dialogs. Avoid stacked or hard shadows entirely — the brand is airy and trustworthy, and over-elevation would make it feel like a dashboard or a government portal.
+Depth is **border-led and mostly flat**, which reads clean and modern rather than heavy or officious. Separation comes primarily from the warm `border`/`border-strong` tokens and surface/background contrast, not drop shadows. Reserve soft shadows for genuinely floating elements: `elevation.1` (a barely-there `0 1px 3px rgba(34,39,31,0.06)`) for raised cards on hover, and `elevation.2` (`0 4px 12px rgba(34,39,31,0.08)`) for the docked nav bar, popovers, and dialogs. Motion follows the same restraint: `motion.fast` (120ms) for hovers and toggles, `motion.base` (200ms) for reveals, `motion.slow` (320ms) for page-level transitions, all on the standard easing — nothing bounces or springs. Avoid stacked or hard shadows entirely — the brand is airy and trustworthy, and over-elevation would make it feel like a dashboard or a government portal.
 
 ## Shapes
 
@@ -237,8 +280,12 @@ The shape language is **minimalist and straight-lined with a small, consistent s
 - Always pair verdict and status color with a text label or icon — never rely on color alone.
 - Use warm sand neutrals and generous whitespace to keep the tone human and unhurried.
 - Reserve the clay accent for small, cheerful moments (active nav, highlights, illustrative marks).
+- Use only the four approved logo colorways, with full clearspace, at or above minimum size.
+- Anchor every marketing piece in KYV Green + Cream before reaching for the harvest tones.
 
 **Don't:**
+- Never recolor the logo, rebuild it in a font, stretch it, or place it near candidate imagery where it could read as endorsement.
+- Never let marketing's retro voice (novelty display type, harvest palette) leak into product UI.
 - Never color-code parties or candidates red/blue (or any partisan hue). Party chips are uniform and neutral, always.
 - Never adopt a government-portal look — no dense tables of cold gray, no hard shadows, no Public Sans / USWDS styling.
 - Never let the accent or verdict reds dominate; they punctuate, they don't drive.

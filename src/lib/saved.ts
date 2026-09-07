@@ -4,14 +4,29 @@
 const KEY = "kyv.saved";
 const EVENT = "kyv:saved-changed";
 
+/* readSaved doubles as a useSyncExternalStore getSnapshot, which requires a
+   referentially stable result while the stored value is unchanged — hence the
+   raw-string cache and the shared EMPTY. Callers must not mutate the list. */
+const EMPTY: string[] = [];
+let cache: { raw: string; list: string[] } | null = null;
+
 export function readSaved(): string[] {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return EMPTY;
   try {
     const raw = window.localStorage.getItem(KEY);
-    const list = raw ? JSON.parse(raw) : [];
-    return Array.isArray(list) ? list.filter((x) => typeof x === "string") : [];
+    if (raw === null) return EMPTY;
+    if (!cache || cache.raw !== raw) {
+      const list = JSON.parse(raw);
+      cache = {
+        raw,
+        list: Array.isArray(list)
+          ? list.filter((x) => typeof x === "string")
+          : EMPTY,
+      };
+    }
+    return cache.list;
   } catch {
-    return [];
+    return EMPTY;
   }
 }
 

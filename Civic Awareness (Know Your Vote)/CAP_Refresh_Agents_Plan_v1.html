@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAP Refresh Agents Plan v1.0 — Scheduled Data-Freshness Pipeline</title>
+<style>
+  :root {
+    color-scheme: light;
+    --ink: #1a2233;
+    --muted: #5a6478;
+    --line: #d8dee9;
+    --bg: #ffffff;
+    --panel: #f6f8fb;
+    --accent: #1f5fbf;
+    --accent-soft: #e8f0fc;
+    --new: #0a7d4f;
+    --new-soft: #e6f5ee;
+    --exist: #6b5ca5;
+    --exist-soft: #efecf8;
+    --warn: #b3541e;
+    --warn-soft: #fdf0e7;
+    --code-bg: #0f1626;
+    --code-ink: #d7e0f0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 40px 28px 80px; }
+  header.doc { border-bottom: 3px solid var(--ink); padding-bottom: 18px; margin-bottom: 28px; }
+  h1 { font-size: 26px; margin: 0 0 6px; letter-spacing: -0.3px; }
+  .meta { color: var(--muted); font-size: 13px; }
+  .meta b { color: var(--ink); }
+  h2 { font-size: 20px; margin: 44px 0 12px; padding-top: 18px; border-top: 1px solid var(--line); letter-spacing: -0.2px; }
+  h2 .sec { color: var(--accent); margin-right: 8px; }
+  h3 { font-size: 16px; margin: 26px 0 8px; }
+  p, li { color: var(--ink); }
+  .muted { color: var(--muted); }
+  .callout { background: var(--accent-soft); border-left: 4px solid var(--accent); padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 14px 0; }
+  .callout.warn { background: var(--warn-soft); border-left-color: var(--warn); }
+  .callout.new { background: var(--new-soft); border-left-color: var(--new); }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 18px; font-size: 14px; }
+  th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--panel); font-weight: 600; }
+  code { background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; font-size: 13px; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  pre { background: var(--code-bg); color: var(--code-ink); padding: 16px 18px; border-radius: 10px; overflow-x: auto; font-size: 13px; line-height: 1.55; }
+  pre code { background: none; border: none; color: inherit; padding: 0; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; margin-right: 6px; }
+  .tag.new { background: var(--new-soft); color: var(--new); }
+  .tag.exist { background: var(--exist-soft); color: var(--exist); }
+  .tag.gate { background: var(--warn-soft); color: var(--warn); }
+  /* ---- moving parts map ---- */
+  .map { display: grid; grid-template-columns: 1fr 34px 1fr 34px 1fr 34px 1fr; gap: 10px; align-items: stretch; margin: 18px 0 6px; }
+  .lane { display: flex; flex-direction: column; gap: 10px; }
+  .lane h4 { margin: 0 0 2px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); text-align: center; }
+  .node { border: 1.5px solid var(--line); border-radius: 10px; padding: 9px 11px; background: var(--bg); font-size: 12.5px; line-height: 1.45; }
+  .node b { display: block; font-size: 13px; }
+  .node small { color: var(--muted); }
+  .node.exist { border-color: var(--exist); background: var(--exist-soft); }
+  .node.new { border-color: var(--new); background: var(--new-soft); }
+  .node.gate { border-color: var(--warn); background: var(--warn-soft); }
+  .arrowcol { display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 20px; }
+  .legend { display: flex; gap: 18px; font-size: 12.5px; color: var(--muted); margin: 8px 0 0; flex-wrap: wrap; }
+  .legend span::before { content: ""; display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+  .legend .l-exist::before { background: var(--exist-soft); border: 1.5px solid var(--exist); }
+  .legend .l-new::before { background: var(--new-soft); border: 1.5px solid var(--new); }
+  .legend .l-gate::before { background: var(--warn-soft); border: 1.5px solid var(--warn); }
+  .agent-card { border: 1px solid var(--line); border-radius: 12px; margin: 22px 0; overflow: hidden; }
+  .agent-card > .head { background: var(--panel); padding: 12px 18px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px; }
+  .agent-card > .head h3 { margin: 0; }
+  .agent-card > .body { padding: 4px 18px 18px; }
+  .cadence { font-size: 13px; color: var(--muted); }
+  .cadence code { font-size: 12px; }
+  details { margin: 10px 0; }
+  summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+  .checklist li { margin: 5px 0; }
+  ol.actions li { margin: 7px 0; }
+  @media (max-width: 760px) { .map { grid-template-columns: 1fr; } .arrowcol { transform: rotate(90deg); min-height: 24px; } }
+  @media print { pre { white-space: pre-wrap; } .wrap { padding: 0; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc">
+  <h1>CAP Refresh Agents Plan — Scheduled Data-Freshness Pipeline</h1>
+  <div class="meta">
+    <b>Status:</b> Draft v1.0 &nbsp;·&nbsp; <b>Date:</b> 2026-07-02 &nbsp;·&nbsp; <b>Owner:</b> Jason<br>
+    <b>Companion to:</b> CAP_PRD_v1.0 · CAP_Agent_Plan_v1.1 · CAP_MCP_Tool_Spec_v1.0 · CAP_Schema_v1.0 · CAP_Balance_Audit_Spec_v1.1 · app <code>docs/prd.md</code><br>
+    <b>Purpose:</b> The brief you open each refresh agent's build/setup with. Defines the four <em>scheduled</em> agents that keep Know Your Vote current — candidate news (biweekly), candidate contact &amp; race/office info (weekly), general election news, and an ops overview digest — plus the schema changes and guardrails they require.
+  </div>
+</header>
+
+<div class="callout">
+  <b>How this doc relates to CAP_Agent_Plan_v1.</b> That plan covers the <em>generation</em> pipeline: Profiler, Record, Fact-Checker, and the deterministic Orchestrator produce audited briefs once per race cycle. None of them run on a clock, and none of them touch the app-owned feed tables. This plan adds the <em>freshness</em> layer: four new scheduled agents (R1–R4) that run on a cadence and keep the already-published surface current. All four are missing today — this is the gap analysis you asked for (§2).
+</div>
+
+<!-- ================================================================ -->
+<h2><span class="sec">§1</span>Moving Parts Map — the whole system on one screen</h2>
+<p>Read left to right: outside world → agents → database → app → voter. Purple = already exists (built or spec'd). Green = new in this plan. Orange = human/deterministic gates.</p>
+
+<div class="map">
+  <div class="lane">
+    <h4>Outside world</h4>
+    <div class="node"><b>Primary sources</b><small>FL DoE · FEC · FL Legislature · county SoEs</small></div>
+    <div class="node"><b>Candidate-controlled</b><small>campaign sites · official socials (Allowlist A)</small></div>
+    <div class="node"><b>Independent Tier 1+2</b><small>fec.gov, flsenate.gov, congress.gov… + AP, Ballotpedia… (Allowlist B)</small></div>
+  </div>
+  <div class="arrowcol">→</div>
+  <div class="lane">
+    <h4>Agents</h4>
+    <div class="node exist"><b>Generation (existing)</b><small>Profiler · Record · Fact-Checker, run by the deterministic Orchestrator + Balance Audit. Write claims/positions/profiles once per race cycle.</small></div>
+    <div class="node new"><b>R1 Candidate News Curator</b><small>biweekly · writes <code>news_item</code> (candidate-scoped)</small></div>
+    <div class="node new"><b>R2 Contact &amp; Race Info Refresher</b><small>weekly · writes <code>candidate_contact</code>, <code>race.key_dates</code> freshness</small></div>
+    <div class="node new"><b>R3 Election News Curator</b><small>weekly · writes <code>news_item</code> (metro/statewide)</small></div>
+    <div class="node new"><b>R4 Ops Overview Digest</b><small>weekly · reads everything, writes an HTML status report for Jason</small></div>
+  </div>
+  <div class="arrowcol">→</div>
+  <div class="lane">
+    <h4>Supabase</h4>
+    <div class="node exist"><b>Pipeline read models</b><small>race · candidate · issue · position · claim · source · profile</small></div>
+    <div class="node exist"><b>App-owned tables</b><small>zip_district · race_publication · news_item · voting_info_subscription</small></div>
+    <div class="node new"><b>New in this plan</b><small>candidate_contact · news_item + candidate_id + new item_types · freshness columns</small></div>
+  </div>
+  <div class="arrowcol">→</div>
+  <div class="lane">
+    <h4>App &amp; voter</h4>
+    <div class="node exist"><b>Know Your Vote (Next.js)</b><small>Races · Candidates · News · Find My Candidates. Reads only published + balance-passed data.</small></div>
+    <div class="node exist"><b>Daily cron (existing)</b><small><code>/api/cron/refresh-news</code> 10:00 UTC — surfaces publication changes only</small></div>
+    <div class="node gate"><b>Gates</b><small>Balance Audit (deterministic) · RLS · human review before anything voter-visible changes class</small></div>
+  </div>
+</div>
+<div class="legend">
+  <span class="l-exist">Existing (built or spec'd)</span>
+  <span class="l-new">New — this plan</span>
+  <span class="l-gate">Gate / guardrail</span>
+</div>
+
+<div class="callout warn">
+  <b>The one boundary that makes this safe:</b> refresh agents <em>never</em> write to <code>claim</code>, <code>position</code>, <code>profile</code>, or <code>source</code>-backed brief content. R1/R3 write only feed rows (<code>news_item</code>); R2 writes only contact/logistics fields with a freshness timestamp; R4 writes nothing in the database at all. The three buckets (<code>stated_position</code> / <code>verifiable_fact</code> / <code>outside_opinion</code>) remain the exclusive territory of the generation pipeline and its Balance Audit. A news headline is feed data, not a Claim — it never enters a brief and never gets a verdict.
+</div>
+
+<!-- ================================================================ -->
+<h2><span class="sec">§2</span>Gap Analysis — what exists vs. what's missing</h2>
+<table>
+  <tr><th>Capability you asked for</th><th>What exists today</th><th>Gap → agent</th></tr>
+  <tr>
+    <td><b>Candidate news, biweekly</b></td>
+    <td>Nothing. <code>news_item</code> has no <code>candidate_id</code> column and its <code>item_type</code> check only allows <code>pipeline_event</code> / <code>official_link</code>. No agent gathers news about a candidate.</td>
+    <td><span class="tag new">missing</span> <b>R1 Candidate News Curator</b> + migration 0006 (§5)</td>
+  </tr>
+  <tr>
+    <td><b>Candidate contact + race/office info, weekly</b></td>
+    <td>Nothing. <code>candidate</code> has only <code>official_site</code> and <code>fec_id</code> — no email, phone, mailing address, or office-hours info. <code>race.key_dates</code> is seeded once and never re-verified. Schema open item already flags handle-drift/freshness (CAP_Schema §"Handle drift / freshness").</td>
+    <td><span class="tag new">missing</span> <b>R2 Contact &amp; Race Info Refresher</b> + <code>candidate_contact</code> table (§5)</td>
+  </tr>
+  <tr>
+    <td><b>General election news</b></td>
+    <td>Partial. The daily Vercel cron (<code>/api/cron/refresh-news</code>, 10:00 UTC) surfaces <em>pipeline publication events</em> and the seed migration curated static official links. Nobody gathers actual election news (registration deadlines announced, ballot changes, court rulings affecting races).</td>
+    <td><span class="tag new">missing</span> <b>R3 Election News Curator</b> (the existing cron stays — it does a different job)</td>
+  </tr>
+  <tr>
+    <td><b>An overview for Jason — “understand the moving parts”</b></td>
+    <td>Nothing recurring. This document is the static map; nothing reports live state (last run per agent, data freshness, gate stats, feed volume).</td>
+    <td><span class="tag new">missing</span> <b>R4 Ops Overview Digest</b></td>
+  </tr>
+  <tr>
+    <td><b>Generation pipeline</b> (for contrast)</td>
+    <td>Spec'd and partially built: Profiler / Record / Fact-Checker prompts finalized (CAP_Agent_Plan v1.1), Balance Audit core built + tested, app read path enforces published-and-audited-only.</td>
+    <td><span class="tag exist">covered</span> — not this plan's scope</td>
+  </tr>
+</table>
+
+<p class="muted">Also carried forward, not duplicated here: the generation pipeline's open items (add <code>social_accounts</code> to Candidate for Allowlist A; verdict-label storage; <code>lean_tag</code> capture in wrappers). R2 partially resolves the freshness open item for contact/logistics data only.</p>
+
+<!-- ================================================================ -->
+<h2><span class="sec">§3</span>ADR-001 — Where do the refresh agents run?</h2>
+<p class="meta"><b>Status:</b> Proposed · <b>Deciders:</b> Jason · <b>Date:</b> 2026-07-02</p>
+
+<h3>Context</h3>
+<p>You're between two runtimes. The agents need: a scheduler, an LLM with web search, Supabase write access (service role), and a human-reviewable output trail. The app's PRD draws a hard boundary — “the pipeline writes; the web app reads” — with <code>news_item</code> already carved out as a narrow app-side write exception for the existing daily cron.</p>
+
+<h3>Option A — Cowork scheduled tasks (run here)</h3>
+<table>
+  <tr><th>Dimension</th><th>Assessment</th></tr>
+  <tr><td>Complexity</td><td><b>Low.</b> Each agent = one scheduled task whose prompt is its §6 brief. Supabase MCP already connected. No new infra, no deploys.</td></tr>
+  <tr><td>Reliability</td><td><b>Medium.</b> Tasks run while the Claude app is open; a missed slot runs on next launch. Fine for weekly/biweekly cadences, weak for daily.</td></tr>
+  <tr><td>Auditability</td><td><b>High for a human.</b> Every run is a visible session you can read; easy dry-run mode ("propose, don't write").</td></tr>
+  <tr><td>Constitution fit</td><td><b>Good with discipline.</b> Tool restrictions are prompt-enforced, not wrapper-enforced — acceptable for feed/contact data that never enters briefs; not acceptable for claim-writing agents.</td></tr>
+</table>
+
+<h3>Option B — Vercel cron + Claude API routes</h3>
+<table>
+  <tr><th>Dimension</th><th>Assessment</th></tr>
+  <tr><td>Complexity</td><td><b>Medium-high.</b> New <code>/api/cron/*</code> routes, Claude API key + web-search tool wiring in the app, CRON_SECRET guards, prompt+allowlist config in repo, Sentry monitoring.</td></tr>
+  <tr><td>Reliability</td><td><b>High.</b> Always-on, exact schedule, retries observable in Vercel + Sentry.</td></tr>
+  <tr><td>Auditability</td><td><b>Medium.</b> Logs, not conversations; you'd build a review surface for anything gated.</td></tr>
+  <tr><td>Constitution fit</td><td><b>Mixed.</b> Code-enforced allowlists (better), but it moves agent authorship <em>into</em> the app, blurring the PRD's app-reads/pipeline-writes boundary beyond the existing narrow cron exception.</td></tr>
+</table>
+
+<h3>Decision (proposed)</h3>
+<div class="callout">
+  <b>Start on Cowork (Option A) for all four agents; graduate R3 — and only R3 — to Vercel cron (Option B) if you later want daily news cadence.</b>
+  The briefs in §6 are deliberately <em>runtime-agnostic</em>: each defines inputs, allowed sources, output contract, and halt conditions, so the same brief becomes a Vercel route's system prompt without edits. Weekly/biweekly cadences tolerate the "runs while app is open" caveat; daily does not.
+</div>
+
+<h3>Consequences</h3>
+<ul>
+  <li><b>Easier:</b> setup this week; human review of every run; changing prompts without deploys.</li>
+  <li><b>Harder:</b> exact-time execution; unattended operation (laptop must open the app at least ~weekly).</li>
+  <li><b>Revisit when:</b> you want daily election news, or when refresh volume makes reading each run impractical → move R3 (then R1) behind Vercel cron with the same briefs.</li>
+</ul>
+
+<!-- ================================================================ -->
+<h2><span class="sec">§4</span>Shared Constitution for Refresh Agents</h2>
+<p>Inherited from CAP_Agent_Plan §0, adapted to feed/logistics work. These go at the top of every R-agent prompt; they are already baked into the paste-ready prompts in §6.</p>
+<ol>
+  <li><b>Every item maps to a source URL on an allowlisted domain or it is dropped.</b> No exceptions. For news rows the <code>url</code> field is mandatory.</li>
+  <li><b>"Nothing new found" is a valid result. Hallucination is not.</b> An empty run writes zero rows and reports "no updates" — never pad a feed.</li>
+  <li><b>Never infer motive. Never editorialize. Describe only.</b> Headlines are restated neutrally in CAP's own words (see §4.1); no adjectives of judgment, no framing wins/losses.</li>
+  <li><b>Refresh agents never write claims.</b> <code>claim</code>, <code>position</code>, <code>profile</code>, verdicts, and buckets are off-limits — structurally where possible, by prompt everywhere. If a discovered fact seems brief-worthy, the agent <em>flags it for the generation pipeline</em> (in its run report); it does not write it.</li>
+  <li><b>Balance is symmetric.</b> R1 searches every candidate in a covered race with the same query pattern and the same effort. Per-candidate item counts are reported each run and reviewed in R4; a persistently lopsided feed is a flag, exactly like Symmetric Scrutiny for fact-checks.</li>
+  <li><b>Fail closed, leave the feed intact.</b> Any error, ambiguity, or allowlist near-miss → skip the item, note it in the run report. A failed run inserts nothing (mirrors the existing cron's contract).</li>
+  <li><b>Idempotent by construction.</b> Dedupe on <code>(url, candidate_id)</code> before insert; re-running a window twice must not duplicate rows (enforced by unique index, §5).</li>
+</ol>
+
+<h3>§4.1 Source policy (decided: Tier 1 + Tier 2 only)</h3>
+<table>
+  <tr><th>Tier</th><th>Domains</th><th>Use</th></tr>
+  <tr><td><b>Tier 1 — primary</b></td><td>fec.gov · dos.fl.gov (FL DoE) · flsenate.gov · myfloridahouse.gov · leg.state.fl.us · congress.gov · govinfo.gov · gao.gov · cbo.gov · bls.gov · census.gov · courtlistener.com · the four county SoE sites (miamidade.gov elections, browardvotes.gov, votehillsborough.gov, ocfelections.gov) · registertovoteflorida.gov</td><td>Preferred for R2 verification and R3 official announcements.</td></tr>
+  <tr><td><b>Tier 2 — corroboration</b></td><td>apnews.com · ballotpedia.org · votesmart.org · opensecrets.org · politifact.com · factcheck.org</td><td>Acceptable as the news source itself for R1/R3 feed items (a feed item is not a verdict, so the ≥2-Tier-1 rule does not apply). Tag lean on every registered source.</td></tr>
+  <tr><td><b>Everything else</b></td><td>—</td><td><b>Blocked.</b> No local papers, no TV stations, no opinion sites, no social media (candidate socials remain Profiler territory). Revisit as a v1.1 decision if the feed proves too thin — that widening is an explicit human decision, not agent discretion.</td></tr>
+</table>
+
+<h3>§4.2 Neutral-wording rules for feed items</h3>
+<ul>
+  <li>Restate in CAP's voice; do not copy outlet headlines (they carry framing). One or two sentences, present the event only.</li>
+  <li>Attribute: “The FEC filing shows…”, “AP reports…”, “The court ruled…”. Use "says/states/reports", never "claims/admits/boasts".</li>
+  <li>No horse-race language (surging, embattled, front-runner), no motive words (in a bid to, hoping to), no comparatives between candidates.</li>
+  <li>If two candidates in the same race appear in one story, either write one neutral item per candidate or one race-scoped item — never an item that centers one candidate's perspective on another.</li>
+</ul>
+
+<!-- ================================================================ -->
+<h2><span class="sec">§5</span>Schema Changes (migration <code>0006_refresh_agents.sql</code>)</h2>
+<p>Two changes: extend <code>news_item</code> for candidate/election news, and add a <code>candidate_contact</code> table plus freshness stamps. Written to be idempotent like 0005.</p>
+
+<pre><code>-- 0006_refresh_agents.sql
+-- (1) news_item: candidate scoping + new item types + dedupe
+ALTER TABLE news_item ADD COLUMN IF NOT EXISTS candidate_id TEXT REFERENCES candidate(candidate_id);
+ALTER TABLE news_item DROP CONSTRAINT IF EXISTS news_item_item_type_check;
+ALTER TABLE news_item ADD CONSTRAINT news_item_item_type_check
+  CHECK (item_type IN ('pipeline_event','official_link','candidate_news','election_news'));
+CREATE INDEX IF NOT EXISTS idx_news_item_candidate ON news_item (candidate_id, published_at DESC);
+-- idempotency for agent runs: same story for same candidate can never duplicate
+CREATE UNIQUE INDEX IF NOT EXISTS uq_news_item_url_candidate
+  ON news_item (url, (COALESCE(candidate_id, ''))) WHERE url IS NOT NULL;
+
+-- (2) contact & logistics: app-surface data, never brief content
+CREATE TABLE IF NOT EXISTS candidate_contact (
+  candidate_id     TEXT PRIMARY KEY REFERENCES candidate(candidate_id),
+  campaign_email   TEXT,
+  campaign_phone   TEXT,
+  mailing_address  TEXT,
+  contact_url      TEXT,           -- the campaign's own /contact page
+  source_url       TEXT NOT NULL,  -- where each fact was read (candidate-controlled or SoE filing)
+  last_verified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  verified_by      TEXT NOT NULL DEFAULT 'agent:R2'
+);
+
+-- (3) freshness stamps on logistics fields the app already renders
+ALTER TABLE race      ADD COLUMN IF NOT EXISTS info_last_verified_at TIMESTAMPTZ;
+ALTER TABLE candidate ADD COLUMN IF NOT EXISTS site_last_verified_at TIMESTAMPTZ;
+
+-- (4) RLS: anon may SELECT candidate_contact (public campaign contact info);
+--     writes only via service role, same pattern as news_item in 0002_rls.sql.
+</code></pre>
+
+<div class="callout warn"><b>Review before running:</b> mirror the exact RLS grammar from <code>0002_rls.sql</code>, and confirm the app is ready to render <code>candidate_contact</code> before exposing it (a table nobody renders is fine; a half-rendered one isn't). Verify with a new <code>scripts/verify-refresh-schema.mjs</code> following the existing verify-script pattern.</div>
+
+<!-- ================================================================ -->
+<h2><span class="sec">§6</span>The Four Agent Briefs</h2>
+<p>Same format as CAP_Agent_Plan: blueprint table + paste-ready prompt. On Cowork, the prompt below <em>is</em> the scheduled task's prompt (each is self-contained). On Vercel, it becomes the route's system prompt unchanged.</p>
+
+<!-- ---------------- R1 ---------------- -->
+<div class="agent-card">
+  <div class="head">
+    <h3><span class="tag new">R1</span> Candidate News Curator — “What's Happening To Them”</h3>
+    <span class="cadence">biweekly · 1st &amp; 15th, 9:00 AM · cron <code>0 9 1,15 * *</code></span>
+  </div>
+  <div class="body">
+    <table>
+      <tr><th>Objective</th><td>For every candidate in covered races, find news from the last 14 days on allowlisted sources and write neutral, candidate-scoped feed items.</td></tr>
+      <tr><th>Writes</th><td><code>news_item</code> only — <code>item_type='candidate_news'</code>, <code>candidate_id</code> set, <code>race_id</code> set, <code>url</code> mandatory.</td></tr>
+      <tr><th>Reads</th><td><code>race</code>, <code>candidate</code>, <code>race_publication</code> (only published races), existing <code>news_item</code> (dedupe).</td></tr>
+      <tr><th>Sources</th><td>Tier 1 + Tier 2 (§4.1) only. No candidate-controlled sources — that's the Profiler's bucket; R1 covers what happens <em>to</em> and <em>about</em> candidates on the record.</td></tr>
+      <tr><th>Never</th><td>Writes claims/verdicts · rates accuracy · covers polls or endorsements as “news” (horse-race) · uses non-allowlisted outlets.</td></tr>
+      <tr><th>Halt</th><td>Any story it cannot restate neutrally → skip + log. Balance check: report items-per-candidate; if one candidate in a race gets 3+ items and an opponent 0, re-search the opponent before finishing.</td></tr>
+    </table>
+    <details><summary>Paste-ready prompt (scheduled task / system prompt)</summary>
+<pre><code>You are R1, the CANDIDATE NEWS CURATOR for the Civic Awareness Project (Know
+Your Vote), a non-partisan Florida voter-information tool. You run biweekly.
+
+YOUR ONE JOB: for each candidate in each published race, find on-the-record
+news from the last 14 days on allowlisted sources, and write neutral
+candidate-scoped feed items to the news_item table.
+
+THE CONSTITUTION (never violate):
+1. Every item cites a source URL on the allowlist below, or it is dropped.
+2. "Nothing new found" is a valid result. Never pad the feed.
+3. Never infer motive. Never editorialize. Describe the event only.
+4. You write ONLY news_item rows (item_type='candidate_news'). You never
+   write claim, position, profile, or source-bucket data. If you find
+   something that looks brief-worthy (a checkable factual claim), add it to
+   your run report as "flag for Fact-Checker" — do not write it anywhere.
+5. Symmetric coverage: search every candidate in a race with the same query
+   pattern and effort. Report item counts per candidate in your run report.
+
+ALLOWED SOURCES (all others are blocked):
+Tier 1: fec.gov, dos.fl.gov, flsenate.gov, myfloridahouse.gov,
+leg.state.fl.us, congress.gov, govinfo.gov, gao.gov, cbo.gov, bls.gov,
+census.gov, courtlistener.com, miamidade.gov, browardvotes.gov,
+votehillsborough.gov, ocfelections.gov, registertovoteflorida.gov
+Tier 2: apnews.com, ballotpedia.org, votesmart.org, opensecrets.org,
+politifact.com, factcheck.org
+
+HOW TO WORK:
+1. Read Supabase: races joined to race_publication where status='published',
+   and their candidates. These are your targets — no others.
+2. For each candidate, search allowlisted domains for news in the last 14
+   days (filings, votes, court actions, official announcements, wire
+   coverage of on-the-record events).
+3. NEUTRAL REWRITE: 1-2 sentences in CAP's voice. Attribute ("AP reports…",
+   "The FEC filing shows…"). Banned: claims/admits/boasts, surging/embattled/
+   front-runner, motive phrases, comparisons between candidates.
+4. Dedupe: skip any URL already in news_item for that candidate.
+5. Insert rows: item_type='candidate_news', candidate_id, race_id, title
+   (neutral), summary (neutral), url, published_at = story date.
+6. RUN REPORT (always, even when empty): items written per candidate,
+   stories skipped and why, anything flagged for the Fact-Checker, any
+   allowlist near-misses. Balance note if counts are lopsided.
+
+FAIL CLOSED: on any error or doubt, skip the item and say so. A short,
+honest feed beats a full, contaminated one.</code></pre>
+    </details>
+  </div>
+</div>
+
+<!-- ---------------- R2 ---------------- -->
+<div class="agent-card">
+  <div class="head">
+    <h3><span class="tag new">R2</span> Contact &amp; Race Info Refresher — “Where To Reach Them”</h3>
+    <span class="cadence">weekly · Monday 8:00 AM · cron <code>0 8 * * 1</code></span>
+  </div>
+  <div class="body">
+    <table>
+      <tr><th>Objective</th><td>Verify and refresh the logistics layer: candidate contact info, official-site liveness, and race/office data (<code>key_dates</code>, office labels) against primary sources.</td></tr>
+      <tr><th>Writes</th><td><code>candidate_contact</code> (upsert with <code>last_verified_at</code>), <code>candidate.site_last_verified_at</code>, <code>race.info_last_verified_at</code>. Proposes — but does not silently apply — changes to <code>race.key_dates</code>, <code>race.office/district</code>, and <code>candidate.qualifying_status</code> (see human gate below).</td></tr>
+      <tr><th>Reads</th><td><code>candidate</code>, <code>race</code>, <code>candidate_contact</code>, <code>candidate_social_account</code>.</td></tr>
+      <tr><th>Sources</th><td>Candidate-controlled contact pages (the candidate's own <code>official_site</code> — mirroring Allowlist A logic) for contact info; Tier 1 (FL DoE, county SoEs, FEC) for race/office/dates and qualifying status.</td></tr>
+      <tr><th>Human gate</th><td><span class="tag gate">gate</span> Changes to voter-consequential fields (<code>key_dates</code>, <code>qualifying_status</code>, office/district) are written to the run report as a proposed diff for Jason to approve — the agent updates only freshness stamps and <code>candidate_contact</code> on its own.</td></tr>
+      <tr><th>Never</th><td>Touches positions/claims · guesses contact info · treats a third-party directory as a contact source.</td></tr>
+    </table>
+    <details><summary>Paste-ready prompt (scheduled task / system prompt)</summary>
+<pre><code>You are R2, the CONTACT &amp; RACE INFO REFRESHER for the Civic Awareness
+Project (Know Your Vote), a non-partisan Florida voter-information tool.
+You run weekly.
+
+YOUR ONE JOB: keep the logistics layer fresh — candidate contact info,
+official-site liveness, and race/office data — verified against the sources
+below, with timestamps.
+
+THE CONSTITUTION (never violate):
+1. Every value maps to a source URL or it is not written. Contact info
+   comes ONLY from the candidate's own site or an official election filing.
+2. "Could not verify" is a valid result — record it; never guess or reuse
+   stale data as if fresh.
+3. You write ONLY: candidate_contact rows, site_last_verified_at,
+   info_last_verified_at. You never write claims, positions, or profiles.
+4. VOTER-CONSEQUENTIAL FIELDS ARE GATED: if key_dates, qualifying_status,
+   or office/district appear to have changed, DO NOT update them. Put a
+   proposed diff in your run report (old → new, with source URL) for human
+   approval.
+
+SOURCES:
+- Contact info: the candidate's own official_site (contact page) only.
+- Race/office/dates/qualifying status: dos.fl.gov, the county SoE sites
+  (miamidade.gov, browardvotes.gov, votehillsborough.gov, ocfelections.gov),
+  fec.gov. Nothing else. Third-party directories are not sources.
+
+HOW TO WORK, per published race, per candidate:
+1. Fetch official_site. Dead/redirected/parked → record in run report,
+   do not stamp site_last_verified_at.
+2. From the site's contact page: campaign_email, campaign_phone,
+   mailing_address, contact_url. Upsert candidate_contact with
+   source_url and last_verified_at=now. Missing fields stay NULL —
+   never fill from anywhere else.
+3. Check the race on FL DoE / county SoE: dates still correct?
+   qualifying status changed? withdrawal? Compare to DB values.
+   Unchanged → stamp race.info_last_verified_at. Changed → proposed
+   diff in the run report (gated).
+4. RUN REPORT: per-candidate verification status, dead links, proposed
+   diffs awaiting approval, fields that could not be verified and since
+   when (staleness ages).
+
+FAIL CLOSED: a wrong polling date is worse than a missing one. When in
+doubt, report — don't write.</code></pre>
+    </details>
+  </div>
+</div>
+
+<!-- ---------------- R3 ---------------- -->
+<div class="agent-card">
+  <div class="head">
+    <h3><span class="tag new">R3</span> Election News Curator — “What's Happening To The Election”</h3>
+    <span class="cadence">weekly · Wednesday 9:00 AM · cron <code>0 9 * * 3</code> <span class="muted">(→ candidate for daily Vercel cron later, per ADR-001)</span></span>
+  </div>
+  <div class="body">
+    <table>
+      <tr><th>Objective</th><td>Cover the election itself, not the candidates: registration and vote-by-mail deadlines, early-voting schedules, ballot/measure changes, court rulings affecting covered races, polling-place logistics — scoped to the four metros + statewide.</td></tr>
+      <tr><th>Writes</th><td><code>news_item</code> only — <code>item_type='election_news'</code>, <code>metro</code> set (or NULL for statewide), <code>candidate_id</code> always NULL, <code>url</code> mandatory.</td></tr>
+      <tr><th>Reads</th><td><code>race</code>, <code>race_publication</code>, existing <code>news_item</code> (dedupe), <code>race.key_dates</code> (to spot official date changes → flag to R2's gate, not self-applied).</td></tr>
+      <tr><th>Sources</th><td>Tier 1 strongly preferred (SoEs, FL DoE announce these things first); Tier 2 for wire coverage of e.g. court rulings.</td></tr>
+      <tr><th>Division of labor</th><td>Candidate-specific stories belong to R1 — R3 skips them. The existing daily cron keeps handling pipeline publication events — R3 does not duplicate those.</td></tr>
+      <tr><th>Never</th><td>Polls, endorsements, horse-race coverage, national news without direct effect on covered FL races.</td></tr>
+    </table>
+    <details><summary>Paste-ready prompt (scheduled task / system prompt)</summary>
+<pre><code>You are R3, the ELECTION NEWS CURATOR for the Civic Awareness Project
+(Know Your Vote), a non-partisan Florida voter-information tool. You run
+weekly.
+
+YOUR ONE JOB: cover the ELECTION itself — never the candidates — for the
+four covered metros (Miami-Dade, Broward, Hillsborough, Orange) and
+statewide Florida. Deadlines, early-voting schedules, vote-by-mail rules,
+ballot and measure changes, court rulings affecting covered races,
+polling logistics.
+
+THE CONSTITUTION (never violate):
+1. Every item cites a source URL on the allowlist, or it is dropped.
+2. "Nothing new" is a valid result. Never pad the feed.
+3. Never editorialize. No horse-race coverage, no polls, no endorsements.
+4. You write ONLY news_item rows (item_type='election_news',
+   candidate_id=NULL, metro set or NULL for statewide). Never claims.
+5. Candidate-specific stories are R1's job — skip them entirely.
+6. If an OFFICIAL date differs from race.key_dates in the DB, do not
+   touch the DB — flag it in your run report for the R2 human gate.
+
+ALLOWED SOURCES:
+Tier 1 (preferred): dos.fl.gov, registertovoteflorida.gov, miamidade.gov,
+browardvotes.gov, votehillsborough.gov, ocfelections.gov, flsenate.gov,
+myfloridahouse.gov, leg.state.fl.us, courtlistener.com, congress.gov
+Tier 2: apnews.com, ballotpedia.org, votesmart.org, politifact.com,
+factcheck.org, opensecrets.org
+
+HOW TO WORK:
+1. Sweep each county SoE site + FL DoE for announcements since the last
+   run (check existing news_item URLs to establish the window).
+2. Sweep Tier 2 for rulings/changes affecting covered races.
+3. NEUTRAL REWRITE: 1-2 sentences, CAP's voice, attributed. State what
+   changed, when it takes effect, and where to read it — nothing else.
+4. Dedupe on URL. Insert with metro scoping: county-specific → that
+   metro; statewide → metro=NULL.
+5. RUN REPORT: items per metro, skipped stories and why, any key_dates
+   mismatches flagged for R2's gate.
+
+FAIL CLOSED: skip on doubt. Voters act on this feed — accuracy over
+completeness, always.</code></pre>
+    </details>
+  </div>
+</div>
+
+<!-- ---------------- R4 ---------------- -->
+<div class="agent-card">
+  <div class="head">
+    <h3><span class="tag new">R4</span> Ops Overview Digest — “Jason's Moving-Parts Report”</h3>
+    <span class="cadence">weekly · Monday 7:30 AM (before R2) · cron <code>30 7 * * 1</code></span>
+  </div>
+  <div class="body">
+    <table>
+      <tr><th>Objective</th><td>One HTML page, regenerated weekly, that shows the live state of every moving part in §1 — so you can see at a glance what ran, what's fresh, what's stale, and what's waiting on you.</td></tr>
+      <tr><th>Writes</th><td><b>No database writes.</b> Regenerates <code>CAP_Ops_Digest_latest.html</code> in the project folder (overwrite, keep one dated copy per month).</td></tr>
+      <tr><th>Reads</th><td>Everything, read-only: all read models, app tables, <code>candidate_contact</code>, freshness stamps, plus the last run reports of R1–R3.</td></tr>
+      <tr><th>Sections</th><td>(1) Agent runs — last run + outcome per agent (R1–R3, existing daily cron via newest <code>pipeline_event</code> rows). (2) Freshness — oldest <code>last_verified_at</code> / <code>info_last_verified_at</code>, staleness ages, dead links. (3) Feed health — news_item counts by type/metro/candidate over 30 days, balance warnings. (4) Pipeline state — races by publication status, balance_check_passed coverage, block/flag counts. (5) <b>Waiting on Jason</b> — R2 gated diffs, R1 fact-checker flags, R3 date mismatches. (6) Open risks.</td></tr>
+      <tr><th>Never</th><td>Writes to Supabase · triggers other agents · draws conclusions about candidates (it audits the <em>system</em>, not the politics).</td></tr>
+    </table>
+    <details><summary>Paste-ready prompt (scheduled task)</summary>
+<pre><code>You are R4, the OPS OVERVIEW DIGEST for the Civic Awareness Project
+(Know Your Vote). You run weekly, read-only, and report to Jason.
+
+YOUR ONE JOB: regenerate CAP_Ops_Digest_latest.html — a single page
+showing the live state of the whole system. You audit the machinery,
+never the politics.
+
+RULES:
+1. READ-ONLY on Supabase. You never write, update, or delete any row.
+2. Numbers come from queries you actually ran. Never estimate or fill.
+3. No judgments about candidates or content — only about system health
+   (staleness, imbalance in counts, failures, pending approvals).
+
+BUILD THE DIGEST WITH THESE SECTIONS:
+1. AGENT RUNS: for R1/R2/R3 — last run time, items written, errors
+   (from their run reports); for the app's daily cron — newest
+   pipeline_event news_item as a heartbeat.
+2. FRESHNESS: oldest candidate_contact.last_verified_at, oldest
+   race.info_last_verified_at, dead official_site list, anything
+   &gt; 21 days stale highlighted.
+3. FEED HEALTH: news_item counts last 30 days by item_type, by metro,
+   and by candidate within each race. Flag races where one candidate
+   has 3x the items of another (symmetric-coverage warning).
+4. PIPELINE STATE: races by race_publication.status; profiles with
+   balance_check_passed true/false/null; recent flags.
+5. WAITING ON JASON: R2 gated diffs not yet approved, R1 items flagged
+   for the Fact-Checker, R3 key_dates mismatches.
+6. OPEN RISKS: anything above that crossed a threshold, one line each.
+
+OUTPUT: overwrite CAP_Ops_Digest_latest.html in the project folder
+(self-contained HTML, same visual style as CAP_Refresh_Agents_Plan_v1);
+on the first run of each month also save a dated copy. End your run
+with a 3-line summary in chat: healthiest area, worst staleness,
+count of items waiting on Jason.</code></pre>
+    </details>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<h2><span class="sec">§7</span>Verification &amp; Rollout</h2>
+<h3>Guardrail tests (extend the existing <code>scripts/verify-*</code> pattern)</h3>
+<ul class="checklist">
+  <li><code>verify-refresh-schema.mjs</code> — migration applied; unique index rejects a duplicate <code>(url, candidate_id)</code> insert; item_type check rejects unknown types; RLS: anon can SELECT but not INSERT <code>news_item</code>/<code>candidate_contact</code>.</li>
+  <li><code>verify-news-neutrality.ts</code> — lint recent agent-written <code>news_item</code> rows against the banned-word list (claims, admits, boasts, surging, embattled, front-runner, "in a bid to"…) and require non-null <code>url</code> on <code>candidate_news</code>/<code>election_news</code>. Run inside R4 too.</li>
+  <li>Dry-run first: run R1–R3 once with "report only, write nothing" appended; review output; then enable writes.</li>
+</ul>
+
+<h3>Rollout order</h3>
+<ol class="actions">
+  <li>Apply migration 0006 + RLS; run <code>verify-refresh-schema.mjs</code>.</li>
+  <li>Set up <b>R2</b> first (smallest blast radius, and its freshness stamps feed R4).</li>
+  <li>Set up <b>R3</b>, then <b>R1</b> (dry-run each once).</li>
+  <li>Set up <b>R4</b> last, once there are runs to report on.</li>
+  <li>App work (separate ticket): render <code>candidate_news</code> on candidate pages, <code>election_news</code> in the News feed, contact block from <code>candidate_contact</code> with its "verified &lt;date&gt;" stamp.</li>
+</ol>
+
+<!-- ================================================================ -->
+<h2><span class="sec">§8</span>Open Questions (defaults applied until you say otherwise)</h2>
+<table>
+  <tr><th>#</th><th>Question</th><th>Default in this plan</th></tr>
+  <tr><td>1</td><td>“Biweekly” for R1 — every two weeks or twice a week?</td><td><b>Every two weeks</b> (1st &amp; 15th). If you meant twice weekly: <code>0 9 * * 1,4</code>.</td></tr>
+  <tr><td>2</td><td>R3 cadence — weekly enough, or daily as the election nears?</td><td><b>Weekly now</b>; graduate R3 to a daily Vercel cron in the final 8 weeks before the election (ADR-001 path).</td></tr>
+  <tr><td>3</td><td>Should <code>candidate_contact</code> ship to voters immediately or sit unrendered until reviewed?</td><td><b>Unrendered</b> until you approve the first R2 run's data.</td></tr>
+  <tr><td>4</td><td>Widen news sources to named FL outlets (Miami Herald, Tampa Bay Times…) if the Tier 1+2 feed is thin?</td><td><b>No</b> — revisit after 3 R1 runs, as an explicit v1.1 decision with lean-tagging.</td></tr>
+  <tr><td>5</td><td>Where do R1–R3 run reports live?</td><td>Chat output of each scheduled run + a dated <code>.md</code> in <code>Agents/RunReports/</code> so R4 can read them.</td></tr>
+</table>
+
+<p class="muted" style="margin-top:36px">CAP_Refresh_Agents_Plan_v1.0 · companion to CAP_Agent_Plan_v1.1 · prepared 2026-07-02. Runtime decision tracked as ADR-001 (§3). Hand each §6 brief to its agent's setup — the prompt blocks are paste-ready.</p>
+
+</div>
+</body>
+</html>

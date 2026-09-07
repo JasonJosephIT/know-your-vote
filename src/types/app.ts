@@ -42,6 +42,19 @@ export interface NewsItem {
   published_at: string;
 }
 
+/* Contact & logistics layer written by the R2 refresher (migration 0005) —
+   same anon-read visibility class as news_item, never brief content. */
+export interface CandidateContact {
+  candidate_id: string;
+  campaign_email: string | null;
+  campaign_phone: string | null;
+  mailing_address: string | null;
+  contact_url: string | null;
+  source_url: string;
+  last_verified_at: string;
+  verified_by: string;
+}
+
 export interface VotingInfoSubscription {
   id: string;
   email: string;

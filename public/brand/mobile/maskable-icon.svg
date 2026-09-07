@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KYV Maskable Icon (PWA) — Colorway: REVERSED (cream monogram #F5EBD8 on solid KYV Green #2F6B4F).
+     512x512. Maskable spec: content must live inside the 80% SAFE ZONE — a circle of radius ~205px
+     (0.4*512) about center (256,256) — because the platform may crop to a circle. Full-bleed green
+     so any crop shape stays on-brand; K/Y/V monogram centered small enough to never clip.
+     Reuses the favicon/app-icon monogram. No text, no edge detail. Inline attributes (ImageMagick-safe).
+     Tokens: primary #2F6B4F, brand-cream #F5EBD8. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Know Your Vote">
+  <rect width="512" height="512" fill="#2F6B4F"/>
+  <!-- Monogram spans ~x:186-326, y:158-370 => max radius from center ~114px, safely inside the 205px safe circle. -->
+  <g stroke="#F5EBD8" stroke-width="29" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- K -->
+    <path d="M202 158 V242 M202 200 L276 158 M221.5 196.5 L283 242"/>
+    <!-- Y -->
+    <path d="M192 264 L238 306 L284 264 M238 306 V347"/>
+    <!-- V -->
+    <path d="M192 317 L238 390 L284 317"/>
+  </g>
+</svg>

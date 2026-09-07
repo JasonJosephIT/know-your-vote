@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Know Your Vote — Embeddable race card</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+  <!-- Shared KYV token theme — the single source every artifact imports -->
+  <link rel="stylesheet" href="../kyv-artifact-theme.css">
+  <style>
+    /* Artifact-SPECIFIC layout only. No colors, no new brand values. */
+    body { margin: 0; padding: var(--spacing-6) 0; }
+    .rc-eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--text-overline);
+      font-weight: var(--text-overline--font-weight);
+      letter-spacing: var(--text-overline--letter-spacing);
+      text-transform: uppercase;
+      color: var(--color-on-surface-muted);
+      margin: 0 0 var(--spacing-2);
+    }
+    .rc-title {
+      font-family: var(--font-heading);
+      font-size: var(--text-h2);
+      font-weight: var(--text-h2--font-weight);
+      letter-spacing: var(--text-h2--letter-spacing);
+      line-height: var(--text-h2--line-height);
+      color: var(--color-on-surface);
+      margin: 0 0 var(--spacing-5);
+    }
+    /* Equal columns — fairness is a layout invariant, enforced structurally. */
+    .rc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-5);
+      align-items: stretch;
+    }
+    .rc-candidate {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-2);
+      padding: var(--spacing-4);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background-color: var(--color-background);
+    }
+    .rc-chips { display: flex; gap: var(--spacing-2); flex-wrap: wrap; margin-bottom: var(--spacing-1); }
+    .rc-name {
+      font-family: var(--font-heading);
+      font-size: var(--text-h3);
+      font-weight: var(--text-h3--font-weight);
+      line-height: var(--text-h3--line-height);
+      color: var(--color-on-surface);
+      margin: 0;
+    }
+    .rc-office {
+      font-family: var(--font-body);
+      font-size: var(--text-body-sm);
+      color: var(--color-on-surface-muted);
+      margin: 0;
+    }
+    .rc-statement {
+      font-family: var(--font-body);
+      font-size: var(--text-body-sm);
+      line-height: var(--text-body-sm--line-height);
+      color: var(--color-on-surface);
+      margin: var(--spacing-1) 0 var(--spacing-3);
+    }
+    .rc-verdict-row {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      padding-top: var(--spacing-3);
+      border-top: 1px solid var(--color-border);
+    }
+    .rc-verdict-label {
+      font-family: var(--font-body);
+      font-size: var(--text-caption);
+      color: var(--color-on-surface-muted);
+    }
+    .rc-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--spacing-4);
+      margin-top: var(--spacing-5);
+      padding-top: var(--spacing-5);
+      border-top: 1px solid var(--color-border);
+      flex-wrap: wrap;
+    }
+    .rc-source {
+      font-family: var(--font-mono);
+      font-size: var(--text-mono);
+      color: var(--color-on-surface-muted);
+    }
+    .rc-brand {
+      font-family: var(--font-heading);
+      font-size: var(--text-caption);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+    }
+    @media (max-width: 560px) {
+      /* Equal-treatment stacked layout on narrow screens — still identical weight. */
+      .rc-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="kyv-container">
+    <section class="kyv-card" aria-labelledby="rc-heading">
+      <p class="rc-eyebrow">On your ballot</p>
+      <h2 class="rc-title" id="rc-heading">U.S. House &middot; District 10</h2>
+
+      <div class="rc-grid">
+        <!-- Candidate A — identical structure, type, and spacing to Candidate B -->
+        <article class="rc-candidate" aria-label="Candidate A">
+          <div class="rc-chips">
+            <span class="kyv-party-chip">Party X</span>
+          </div>
+          <h3 class="rc-name">Candidate A</h3>
+          <p class="rc-office">Candidate for U.S. House</p>
+          <p class="rc-statement">Stated position: supports expanding early-voting hours and mail-ballot drop boxes statewide.</p>
+          <div class="rc-verdict-row">
+            <span class="kyv-verdict-badge" style="color: var(--color-verdict-accurate)">Accurate</span>
+            <span class="rc-verdict-label">on their voting-record claim</span>
+          </div>
+        </article>
+
+        <!-- Candidate B — identical structure, type, and spacing to Candidate A -->
+        <article class="rc-candidate" aria-label="Candidate B">
+          <div class="rc-chips">
+            <span class="kyv-party-chip">Party Y</span>
+          </div>
+          <h3 class="rc-name">Candidate B</h3>
+          <p class="rc-office">Candidate for U.S. House</p>
+          <p class="rc-statement">Stated position: supports expanding early-voting hours and mail-ballot drop boxes statewide.</p>
+          <div class="rc-verdict-row">
+            <span class="kyv-verdict-badge" style="color: var(--color-verdict-mixed)">Mixed</span>
+            <span class="rc-verdict-label">on their voting-record claim</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="rc-footer">
+        <span class="rc-source">Verified 2026-07-05 &middot; source-linked</span>
+        <!-- One primary action per view. -->
+        <a class="kyv-btn-primary" href="#" role="button">See full comparison</a>
+      </div>
+    </section>
+    <p style="text-align:center; margin-top: var(--spacing-4);">
+      <span class="rc-brand">Know Your Vote</span>
+      <span class="rc-source"> &middot; nonpartisan Florida ballot info</span>
+    </p>
+  </main>
+</body>
+</html>

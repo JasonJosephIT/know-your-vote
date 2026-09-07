@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { Card } from "@/components/ui/Card";
+import { formatNewsDate, safeHttpUrl } from "@/lib/format";
 import { readLocation } from "@/lib/location";
+import type { StoredLocation } from "@/lib/location";
 
 import type { NewsItemType } from "@/types/app";
 
@@ -24,25 +26,37 @@ interface FeedItem {
   isOpinion: boolean;
 }
 
+/* candidate_news/election_news cite allowlisted outlets (AP, Ballotpedia…),
+   which are sources but not official ones — label those links honestly when
+   the row carries no source row to name the publisher. */
+function sourceLinkText(itemType: NewsItemType) {
+  return itemType === "candidate_news" || itemType === "election_news"
+    ? "Read the source"
+    : "Open official source";
+}
+
 type Stage =
   | { kind: "loading" }
-  | { kind: "noLocation" }
   | { kind: "error" }
   | { kind: "ready"; items: FeedItem[] };
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
+/* Location is written on other pages before navigating here, so there is no
+   change event to subscribe to — the empty subscription still lets
+   useSyncExternalStore swap the server snapshot for the device value right
+   after hydration. */
+const subscribeToNothing = () => () => {};
 
 export function NewsFeed() {
+  /* undefined = server/hydration render (device storage not readable yet, so
+     keep the loading skeleton); null = hydrated with no stored location. */
+  const location = useSyncExternalStore<StoredLocation | null | undefined>(
+    subscribeToNothing,
+    readLocation,
+    () => undefined,
+  );
   const [stage, setStage] = useState<Stage>({ kind: "loading" });
 
   useEffect(() => {
-    const location = readLocation();
     const params = new URLSearchParams();
     if (location?.zip) {
       params.set("zip", location.zip);
@@ -50,31 +64,20 @@ export function NewsFeed() {
     } else if (location?.metro) {
       params.set("metro", location.metro);
     } else {
-      setStage({ kind: "noLocation" });
       return;
     }
 
-    fetch(`/api/news?${params}`)
-      .then((r) =>
-        r.ok
-          ? (r.json() as Promise<{ items?: FeedItem[] }>)
-          : Promise.reject()
-      )
+    const controller = new AbortController();
+    fetch(`/api/news?${params}`, { signal: controller.signal })
+      .then((r) => (r.ok ? (r.json() as Promise<{ items?: FeedItem[] }>) : Promise.reject()))
       .then((data) => setStage({ kind: "ready", items: data.items ?? [] }))
-      .catch(() => setStage({ kind: "error" }));
-  }, []);
+      .catch(() => {
+        if (!controller.signal.aborted) setStage({ kind: "error" });
+      });
+    return () => controller.abort();
+  }, [location]);
 
-  if (stage.kind === "loading") {
-    return (
-      <div className="flex flex-col gap-3" role="status" aria-label="Loading news">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="h-20 animate-pulse rounded-lg bg-surface-muted" />
-        ))}
-      </div>
-    );
-  }
-
-  if (stage.kind === "noLocation") {
+  if (location !== undefined && !location?.zip && !location?.metro) {
     return (
       <p className="text-body text-on-surface-muted">
         Add your ZIP or county and we&apos;ll show updates for your races.{" "}
@@ -82,6 +85,23 @@ export function NewsFeed() {
           Enter your ZIP
         </Link>
       </p>
+    );
+  }
+
+  if (stage.kind === "loading") {
+    return (
+      <div
+        className="flex flex-col gap-3"
+        role="status"
+        aria-label="Loading news"
+      >
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            className="h-20 animate-pulse rounded-lg bg-surface-muted"
+          />
+        ))}
+      </div>
     );
   }
 
@@ -104,58 +124,69 @@ export function NewsFeed() {
 
   return (
     <ul className="flex flex-col gap-3">
-      {stage.items.map((item) => (
-        <li key={item.id}>
-          {/* Opinion pieces get a visually distinct container, not just a word
-              in the byline (news-fairness.md §1) — so a column is never read as
-              a report. Deliberately neutral styling: a muted ground and a rule,
-              never a colour that would imply a verdict about the piece. */}
-          <Card
-            className={`flex flex-col gap-1${
-              item.isOpinion ? " border-l-2 border-l-border-strong bg-surface-muted" : ""
-            }`}
-          >
-            <p className="flex flex-wrap items-center gap-x-2 font-mono text-mono text-on-surface-muted">
-              <span>{formatDate(item.publishedAt)}</span>
-              {item.publisher && <span>· {item.publisher}</span>}
-              {item.kind && (
-                <span className={item.isOpinion ? "text-on-surface" : undefined}>
-                  · {item.kind}
-                </span>
+      {stage.items.map((item) => {
+        const url = safeHttpUrl(item.url);
+        return (
+          <li key={item.id}>
+            {/* Opinion pieces get a visually distinct container, not just a word
+                in the byline (news-fairness.md §1) — so a column is never read as
+                a report. Deliberately neutral styling: a muted ground and a rule,
+                never a colour that would imply a verdict about the piece. */}
+            <Card
+              className={`flex flex-col gap-1${
+                item.isOpinion ? " border-l-2 border-l-border-strong bg-surface-muted" : ""
+              }`}
+            >
+              <p className="flex flex-wrap items-center gap-x-2 font-mono text-mono text-on-surface-muted">
+                <span>{formatNewsDate(item.publishedAt)}</span>
+                {item.publisher && <span>· {item.publisher}</span>}
+                {item.kind && (
+                  <span className={item.isOpinion ? "text-on-surface" : undefined}>
+                    · {item.kind}
+                  </span>
+                )}
+                {/* Lean is disclosed, never judged — same muted style as
+                    everything else, never colour-coded (README neutrality rule). */}
+                {item.lean && <span>· {item.lean}</span>}
+                {!item.kind &&
+                  (item.itemType === "official_link" ? <span>· official resource</span> : <span>· update</span>)}
+              </p>
+              <h2 className="text-h3">{item.title}</h2>
+              {item.summary && (
+                <p className="text-body-sm text-on-surface-muted">{item.summary}</p>
               )}
-              {/* Lean is disclosed, never judged — same muted style as
-                  everything else, never colour-coded (README neutrality rule). */}
-              {item.lean && <span>· {item.lean}</span>}
-              {!item.kind &&
-                (item.itemType === "official_link" ? <span>· official resource</span> : <span>· update</span>)}
-            </p>
-            <h2 className="text-h3">{item.title}</h2>
-            {item.summary && (
-              <p className="text-body-sm text-on-surface-muted">{item.summary}</p>
-            )}
-            <p className="flex flex-wrap gap-3 text-caption">
-              {item.url && (
-                <a
-                  href={item.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-primary underline underline-offset-2"
-                >
-                  {item.publisher ? `Read at ${item.publisher}` : "Open official source"}
-                </a>
-              )}
-              {item.raceId && (
-                <Link
-                  href={`/races/${item.raceId}`}
-                  className="text-primary underline underline-offset-2"
-                >
-                  View the race
-                </Link>
-              )}
-            </p>
-          </Card>
-        </li>
-      ))}
+              <p className="flex flex-wrap gap-3 text-caption">
+                {url && (
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-primary underline underline-offset-2"
+                  >
+                    {item.publisher ? `Read at ${item.publisher}` : sourceLinkText(item.itemType)}
+                  </a>
+                )}
+                {item.candidateId && (
+                  <Link
+                    href={`/candidates/${item.candidateId}`}
+                    className="text-primary underline underline-offset-2"
+                  >
+                    View the candidate
+                  </Link>
+                )}
+                {item.raceId && (
+                  <Link
+                    href={`/races/${item.raceId}`}
+                    className="text-primary underline underline-offset-2"
+                  >
+                    View the race
+                  </Link>
+                )}
+              </p>
+            </Card>
+          </li>
+        );
+      })}
     </ul>
   );
 }

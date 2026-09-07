@@ -47,6 +47,7 @@ const RACES = [
       { id: "demo-cand-boone", name: "Gregory Boone", party: "REP", skipIssue: 2 },
       { id: "demo-cand-villanueva", name: "Marta Villanueva", party: "DEM" },
       { id: "demo-cand-okafor", name: "Simone Okafor", party: "NPA", extraIssue: "Government Transparency" },
+      { id: "demo-cand-frank", name: "Wesley Frank", party: "other" },
     ],
   },
   {
@@ -59,6 +60,7 @@ const RACES = [
     candidates: [
       { id: "demo-cand-crane", name: "Thomas Crane", party: "REP" },
       { id: "demo-cand-vargas", name: "Elena Vargas", party: "DEM" },
+      { id: "demo-cand-lin", name: "Grace Lin", party: "NPA" },
     ],
   },
   {
@@ -71,6 +73,7 @@ const RACES = [
     candidates: [
       { id: "demo-cand-bell", name: "Raymond Bell", party: "REP" },
       { id: "demo-cand-foster", name: "Diane Foster", party: "DEM" },
+      { id: "demo-cand-haddad", name: "Omar Haddad", party: "NPA" },
     ],
   },
   {
@@ -83,6 +86,7 @@ const RACES = [
     candidates: [
       { id: "demo-cand-sutter", name: "Hank Sutter", party: "REP" },
       { id: "demo-cand-mora", name: "Cecilia Mora", party: "DEM" },
+      { id: "demo-cand-kowalski", name: "Ruth Kowalski", party: "other" },
     ],
   },
   {
@@ -95,6 +99,8 @@ const RACES = [
     candidates: [
       { id: "demo-cand-reyes", name: "Daniel Reyes", party: "REP" },
       { id: "demo-cand-chen", name: "Priscilla Chen", party: "DEM" },
+      { id: "demo-cand-pruitt", name: "Victor Pruitt", party: "NPA" },
+      { id: "demo-cand-schmidt", name: "Lena Schmidt", party: "other" },
     ],
   },
   {
@@ -107,6 +113,7 @@ const RACES = [
     candidates: [
       { id: "demo-cand-marsh", name: "Alejandro Marsh", party: "REP" },
       { id: "demo-cand-pierce", name: "Yolanda Pierce", party: "DEM" },
+      { id: "demo-cand-torres", name: "Isabel Torres", party: "NPA" },
     ],
   },
   {
@@ -119,6 +126,7 @@ const RACES = [
     candidates: [
       { id: "demo-cand-alvarado", name: "Nina Alvarado", party: "REP" },
       { id: "demo-cand-kessler", name: "Robert Kessler", party: "DEM" },
+      { id: "demo-cand-patel", name: "Dev Patel", party: "other" },
     ],
   },
   {
@@ -131,6 +139,7 @@ const RACES = [
     candidates: [
       { id: "demo-cand-delgado", name: "Trish Delgado", party: "REP" },
       { id: "demo-cand-webb", name: "Marcus Webb", party: "DEM" },
+      { id: "demo-cand-nguyen", name: "Fred Nguyen", party: "NPA" },
     ],
   },
   {
@@ -143,6 +152,7 @@ const RACES = [
     candidates: [
       { id: "demo-cand-strand", name: "Carol Strand", party: "REP" },
       { id: "demo-cand-ortiz", name: "Jamal Ortiz", party: "DEM" },
+      { id: "demo-cand-sanders", name: "Gloria Sanders", party: "NPA" },
     ],
   },
 ];
@@ -263,6 +273,16 @@ const onlyArg = process.argv.find((a) => a.startsWith("--only="));
 const onlyIds = onlyArg ? onlyArg.slice(7).split(",").filter(Boolean) : null;
 const ACTIVE_RACES = onlyIds ? RACES.filter((r) => onlyIds.includes(r.id)) : RACES;
 
+/* --candidates=id,id emits scripts/demo-candidates-delta.sql: ONLY those
+   candidates' rows plus an idempotent UPDATE appending each to its race's
+   candidate_ids — for adding new candidates to an already-seeded live DB
+   without touching existing rows. Existing races/issues are left as-is. */
+const candArg = process.argv.find((a) => a.startsWith("--candidates="));
+const candFilter = candArg
+  ? new Set(candArg.slice("--candidates=".length).split(",").filter(Boolean))
+  : null;
+const raceUpdates = [];
+
 const sql = [];
 const sources = [];
 const sourceId = (id, publisher, type, lean, slug) => {
@@ -284,22 +304,34 @@ const publications = [];
 
 for (const race of ACTIVE_RACES) {
   const candIds = race.candidates.map((c) => c.id);
-  races.push(
-    `(${q(race.id)}, ${q(race.office)}, ${q(race.level)}, ${race.district ? q(race.district) : "NULL"}, 'general', true, NULL, ARRAY[${candIds.map(q).join(",")}]::text[], ${q(JSON.stringify(KEY_DATES))}::jsonb)`
-  );
-  publications.push(
-    race.published
-      ? `(${q(race.id)}, 'published', NOW(), 'DEMO DATA — fictional candidates and claims for development; not real people.')`
-      : `(${q(race.id)}, 'in_review', NULL, 'DEMO DATA — held in review: verifiable_fact scrutiny variance breached the 15% gate (scrutiny_halt).')`
-  );
-
-  race.spine.forEach((title, i) => {
-    issues.push(
-      `(${q(`${race.id}-issue-${i + 1}`)}, ${q(race.id)}, 'spine', NULL, ${q(title)}, NULL, NULL, ${i + 1})`
+  /* In candidate-delta mode the race, its publication, and its spine issues
+     already exist in the DB — don't re-insert them. */
+  if (!candFilter) {
+    races.push(
+      `(${q(race.id)}, ${q(race.office)}, ${q(race.level)}, ${race.district ? q(race.district) : "NULL"}, 'general', true, NULL, ARRAY[${candIds.map(q).join(",")}]::text[], ${q(JSON.stringify(KEY_DATES))}::jsonb)`
     );
-  });
+    publications.push(
+      race.published
+        ? `(${q(race.id)}, 'published', NOW(), 'DEMO DATA — fictional candidates and claims for development; not real people.')`
+        : `(${q(race.id)}, 'in_review', NULL, 'DEMO DATA — held in review: verifiable_fact scrutiny variance breached the 15% gate (scrutiny_halt).')`
+    );
+
+    race.spine.forEach((title, i) => {
+      issues.push(
+        `(${q(`${race.id}-issue-${i + 1}`)}, ${q(race.id)}, 'spine', NULL, ${q(title)}, NULL, NULL, ${i + 1})`
+      );
+    });
+  }
 
   race.candidates.forEach((cand, ci) => {
+    /* Skip candidates outside the delta filter — but keep ci as the true
+       index so verdict rotation + audit shape match the full seed exactly. */
+    if (candFilter && !candFilter.has(cand.id)) return;
+    if (candFilter) {
+      raceUpdates.push(
+        `UPDATE race SET candidate_ids = candidate_ids || ARRAY[${q(cand.id)}]::text[] WHERE race_id = ${q(race.id)} AND NOT (${q(cand.id)} = ANY(candidate_ids));`
+      );
+    }
     const first = cand.name.split(" ")[0];
     const slug = cand.id.replace("demo-cand-", "");
     candidates.push(
@@ -468,7 +500,30 @@ DELETE FROM news_item WHERE title LIKE 'DEMO:%' OR race_id LIKE 'demo-%';
 DELETE FROM source WHERE source_id LIKE 'demo-%';
 `;
 
-if (onlyIds) {
+if (candFilter) {
+  const blocks = [header.trim()];
+  const add = (cols, rows, tail = ";") => {
+    if (rows.length) blocks.push(`INSERT INTO ${cols} VALUES\n${rows.join(",\n")}${tail}`);
+  };
+  add(
+    "source (source_id, url, url_norm, publisher, type, lean_tag, retrieved_at)",
+    sources,
+    "\nON CONFLICT (source_id) DO NOTHING;"
+  );
+  add("issue (issue_id, race_id, tier, candidate_id, title, description, source_id, display_order)", issues);
+  add("candidate (candidate_id, legal_name, party, office_sought, is_incumbent, qualifying_status, prior_offices, official_site, fec_id)", candidates);
+  add("claim (claim_id, candidate_id, race_id, issue_id, text, bucket, attributed, derived_from, verdict, verification)", claims);
+  add("claim_source (claim_id, source_id)", claimSources);
+  add("position (position_id, candidate_id, race_id, issue_id, stance_summary, claim_ids, attributed, coverage)", positions);
+  add("candidate_social_account (candidate_id, platform, handle, handle_norm, url, provenance, provenance_source_id, status, verified_at)", socials);
+  add("profile (candidate_id, race_id, facts, positions, opinions, audit)", profiles);
+  if (raceUpdates.length) blocks.push(raceUpdates.join("\n"));
+  const delta = `BEGIN;\n\n${blocks.join("\n\n")}\n\nCOMMIT;\n`;
+  writeFileSync(path.join(root, "scripts", "demo-candidates-delta.sql"), delta);
+  console.log(
+    `demo-candidates-delta.sql: ${candidates.length} candidates, ${claims.length} claims, ${raceUpdates.length} race updates`
+  );
+} else if (onlyIds) {
   writeFileSync(path.join(root, "scripts", "demo-seed-delta.sql"), seed);
   console.log(
     `demo-seed-delta.sql (${onlyIds.join(",")}): ${races.length} races, ${candidates.length} candidates, ${claims.length} claims`
