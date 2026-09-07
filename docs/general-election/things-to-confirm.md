@@ -11,79 +11,64 @@ head already handles one, delete the entry rather than re-fixing it.
 
 ---
 
-## TC-1 — `test_toollayer_skeleton.py` is red on `claude/stream-pipeline`
+## TC-1 — ~~`test_toollayer_skeleton.py` is red on `claude/stream-pipeline`~~ ✅ RESOLVED
 
-**Observed at** `b74820c` (PR #32 head), 2026-09-07.
-**Status: unfixed at that commit; fix verified locally but deliberately not pushed** —
-another session was working the branch and a competing push would conflict.
+**Observed at** `b74820c`. **Fixed at `e1fd96a`** by the session that owns the
+branch, ~20 minutes later. Suite confirmed **170 OK**, `--selfcheck` passed.
 
-```
-Ran 170 tests — FAILED (errors=1)
+Kept as a worked example rather than deleted, because the two sessions
+converged on the same fix independently and the second half of it is the part
+worth remembering.
 
-ERROR: test_senate_race_is_not_implemented_not_misfiled_as_non_federal
-  KeyError: 'FL-SEN-general'
-  test_toollayer_skeleton.py:1594
-    sen = res["result"]["incumbency"]["FL-SEN-general"]
-```
+The failure was `KeyError: 'FL-SEN-general'` — the test asserted on a Senate
+race that `_DOE_INCUMBENCY_FIXTURE` could not produce, because the fixture had
+no `USS` row.
 
-### Why GitHub does not show this
-
-**Vercel does not run the Python suite.** The only check on the PR is the
-Vercel preview build, which compiles the Next.js app and never touches
-`toollayer/`. So the PR reads green while the toollayer baseline is broken.
-Anything relying on the PR's checks to catch a Python regression will not
-catch one.
-
-### Root cause
-
-The test asserts on `FL-SEN-general`, but `_DOE_INCUMBENCY_FIXTURE`
-(line ~1022) contains only two `USR`/028 rows and one `GOV` row. There is no
-`USS` row, so the Senate race is never parsed and the key is absent. The test
-was written against a fixture that cannot produce the thing it asserts.
-
-### The fix, verified locally (170 tests green)
-
-Two changes, and the second is the interesting one.
-
-**1. Give the fixture a Senate row.**
+Adding the row is the obvious half. The non-obvious half is what it then
+breaks:
 
 ```python
-# in _DOE_INCUMBENCY_FIXTURE, after the GOV row
-_doe_row("90004", "USS", "United States Senator", "", "QUA", "DEM",
-         "Reed", "Dana"),
+self.assertEqual(committed_updates(db, "race"), [])   # no race UPDATE at all
 ```
 
-**2. Two assertions then need updating — one is stale, one is wrong.**
-
-`test_fec_failure_is_recorded_and_the_intake_still_stands` counts committed
-candidates. The fixture grew by one, so `3` becomes `4`. Stale, not wrong.
-
-`test_senate_race_is_not_implemented_not_misfiled_as_non_federal` ends with:
-
-```python
-self.assertEqual(committed_updates(db, "race"), [])
-```
-
-That asserts **no race UPDATE at all**, but FL-28 is in the same fixture and
-legitimately fills its incumbency in the same run. The broad form was passing
-only because the fixture had no Senate row — it never actually exercised the
-Senate path. Scope it to the race under test:
+That assertion is not stale — it is **wrong**. FL-28 is in the same fixture
+and legitimately fills its incumbency in the same run. It was passing only
+because the fixture had no Senate row, so it never exercised the Senate path
+it was written for. Both sessions arrived at the same correction: scope it to
+the race under test.
 
 ```python
 self.assertEqual(
     [p for _, p in committed_updates(db, "race") if "FL-SEN-general" in p], [])
 ```
 
-**Mutation-checked:** removing the fixture row again fails the suite, so the
-row is doing the work rather than sitting there.
+> **The general shape:** a fixture that cannot produce the thing under test
+> makes its assertions vacuous, and the broadest assertion in the test is the
+> one most likely to be hiding it. When a fixture gains a row and an unrelated
+> assertion starts failing, check whether it was ever true rather than just
+> updating the number.
 
-### Confirm
+---
 
-```
-cd "Civic Awareness (Know Your Vote)/toollayer" && python3 test_toollayer_skeleton.py
-```
+## TC-0 — Vercel is the only PR check, and it does not run the Python suite
 
-Expect **170 OK**. If it already says that, this entry is done — delete it.
+**Standing, not a bug to fix.** Confirmed 2026-09-07.
+
+The only check on a PR here is the Vercel preview build, which compiles the
+Next.js app and never touches `toollayer/`. TC-1 was a **red Python suite on a
+PR that GitHub showed as green** — for ~20 minutes the PR's checks said
+nothing was wrong.
+
+Consequences worth holding:
+
+- A PR's green checks are **not** evidence the toollayer baseline is intact.
+  Run `python3 test_toollayer_skeleton.py` and `--selfcheck` locally before
+  trusting a Python-touching branch.
+- The same applies to `verify-migrations.mjs` and every `scripts/verify-*.ts`
+  guardrail: none of them run in CI either.
+
+Whether that is worth a GitHub Action is a founder call, not something to
+quietly add.
 
 ---
 
