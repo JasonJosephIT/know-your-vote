@@ -3,7 +3,7 @@
 > ⚠️ **Superseded in part — read `news-fairness.md` first.** The founder retired
 > candidate **briefs** on 2026-09-06 (bio + per-candidate news cards instead), so
 > anything here about briefing, the audit population, or the Balance Audit as a
-> publication gate no longer applies. **Still live:** migration `0010` (`candidate.ballot_status`, party CHECK dropped) and the
+> publication gate no longer applies. **Still live:** migration `0012` (`candidate.ballot_status`, party CHECK dropped) and the
 > read model — `ballot_status` now defines who gets a candidate page and news
 > slots rather than the audit denominator. **D1 is moot**: no briefs, no audit
 > population.
@@ -153,17 +153,37 @@ links seeded in `0004_official_links.sql`. Modelling amendments means inventing
 a whole second neutrality regime (what is a "balanced" summary of an
 amendment?) eight weeks before an election.
 
-*Revisit after 2026-11-03, and only if voters actually ask for it.*
+> ⚠️ **D3 was overtaken by shipped code — this recommendation is dead.** While
+> this branch was open, another session built the ballot-measure model on
+> `main`: `0010_ballot_measure.sql`, `0011_measure_rls.sql`,
+> `src/lib/measures.ts`, `src/lib/measure-balance.ts`, a
+> `/measures/[measureId]` page and `MeasureCompare` / `MeasureThreshold`
+> components (TASK-061/062/063).
+>
+> They also answered the question D3 said was too hard to answer in eight
+> weeks — "what is a balanced summary of an amendment?" — with a symmetry rule
+> rather than a summary: `sidesBalanced()` requires at least one argument per
+> side and a difference of at most one, enforced **twice**, by
+> `measure_sides_balanced()` in the migration and again in the read layer. That
+> is the same shape as the Balance Audit, applied to a thing with no
+> candidates. It is a better answer than "build nothing", and it is live.
+>
+> **Do not build a second measure model.** Anything here about skipping ballot
+> measures is superseded; read `docs/general-election-pivot.md` and
+> `docs/scope-changes.md` on `main` before touching that area.
+
+*Original recommendation, retained only to show what changed:* revisit after
+2026-11-03, and only if voters actually ask for it.
 
 ---
 
-## 2. Schema changes — migration `0010_general_election.sql`
+## 2. Schema changes — migration `0012_general_election.sql`
 
 One migration, three statements. Everything else in this document is policy or
 code, not DDL.
 
 ```sql
--- 0010_general_election.sql
+-- 0012_general_election.sql
 -- Primary -> general. See docs/general-election/data-architecture.md.
 
 -- D1: ballot status tier. Drives audit population and display.
@@ -237,7 +257,7 @@ unopposed race says so rather than showing a one-column comparison (§3).
 `race_publication.status = 'published'`, which is orthogonal to primary vs
 general. The new column inherits the existing `anon_read_candidate` policy.
 
-Confirm rather than assume: `node scripts/verify-migrations.mjs` after 0010.
+Confirm rather than assume: `node scripts/verify-migrations.mjs` after 0012.
 
 ---
 
@@ -247,7 +267,7 @@ Recorded so nobody rediscovers them as gaps. None block 2026-11-03.
 
 | Deferred | Add when |
 |---|---|
-| Amendment / ballot-measure model (D3) | voters ask post-election |
+| ~~Amendment / ballot-measure model (D3)~~ | **already built on `main`** — see the D3 notice |
 | Judicial merit retention | same |
 | `race.level` widened past federal/state | coverage adds county or judicial races |
 | Primary-results ingest | never — the general DoE export already carries the resolved field (`data-ingest.md` §1) |
@@ -264,8 +284,8 @@ it done. **A1 must land before A3 or A4** — both read the column it adds.
 | ID | Task | Files | Verify | Depends |
 |---|---|---|---|---|
 | **A0** | Get founder sign-off on **D1** (three tiers) and **D2** (drop party CHECK). Both are now backed by measured data, not a guess — see D1's 22/4/83 table and D2's confirmed codes. Do not start A1 until D1 is answered: it defines the column. | — | Written decision recorded in this file | — |
-| **A1** | Write migration `0010_general_election.sql` exactly as §2 | `supabase/migrations/0010_general_election.sql` | `node scripts/verify-migrations.mjs` green, incl. existing RLS invariants | A0 |
-| **A2** | Extend `verify-migrations.mjs` with 0010 invariants: default is `'ballot'`, CHECK rejects a bogus tier, party CHECK is gone, index exists | `scripts/verify-migrations.mjs` | New checks fail against pre-0010 schema, pass after | A1 |
+| **A1** | Write migration `0012_general_election.sql` exactly as §2 | `supabase/migrations/0012_general_election.sql` | `node scripts/verify-migrations.mjs` green, incl. existing RLS invariants | A0 |
+| **A2** | Extend `verify-migrations.mjs` with 0012 invariants: default is `'ballot'`, CHECK rejects a bogus tier, party CHECK is gone, index exists | `scripts/verify-migrations.mjs` | New checks fail against pre-0012 schema, pass after | A1 |
 | **A3** | T10 filters the audit population to `ballot_status='ballot'`; record excluded IDs + `unopposed` on the result. **Do not touch `balance_audit_core.py`** | `toollayer/cap_toollayer/synthesis.py` | `python3 toollayer/test_toollayer_skeleton.py` (100) green; new cases: a write-in with 0 claims no longer HALTs a race that otherwise passes, and a one-candidate race (FL-10's real shape) comes back `unopposed` rather than a silent 0.0-variance pass | A1 |
 | **A4** | Read model: widen `Party`, add `ballot_status`, filter briefs/directory to briefed tier, render write-ins as a labelled list | `src/types/schema.ts`, `src/lib/briefs.ts`, `src/lib/directory.ts`, `src/app/(public)/races/[raceId]/page.tsx` | `npm run build` clean; a seeded write-in appears in its own section, not in the side-by-side, and with no party chip; `LPF` renders its label and `MGT` (no label) renders its raw code without an empty chip | A1 |
 | **A5** | Methodology page states the write-in and exclusion policy in plain language | `src/app/(public)/methodology/page.tsx` | Page renders; wording matches the D1 decision | A0 |

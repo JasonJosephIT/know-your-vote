@@ -342,7 +342,7 @@ every registered voter regardless of party.
 |---|---|---|
 | `src/components/features/YourRaces.tsx` (~line 132) | "Florida is a closed-primary state — you vote in a party's primary only if you're registered with that party…" | Lead with the general: open to every registered voter; keep the registration deadline |
 | `src/app/api/voting-info/route.ts` (~line 137) | Same note in the email body | Same |
-| `0004_official_links.sql` (~line 24) | Same sentence in a seeded `news_item` row | **`0004` is already applied to the live DB — editing the file changes nothing.** Ship an `UPDATE news_item SET summary = …` in migration `0010` |
+| `0004_official_links.sql` (~line 24) | Same sentence in a seeded `news_item` row | **`0004` is already applied to the live DB — editing the file changes nothing.** Ship an `UPDATE news_item SET summary = …` in migration `0012` |
 
 The `0004` case is the one to watch: an agent that edits the seed file and sees
 tests pass will believe it fixed live copy that is still wrong.
@@ -374,7 +374,7 @@ adds the column it writes.
 | **B3** | Populate `official_site` for briefed candidates — manual seed, one row per candidate, each URL human-verified | `scripts/` seed SQL | Every `ballot`-tier candidate in the 8 races has a non-NULL `official_site`; `store.candidate_scope` returns non-empty scope for each | B1 |
 | **B4** | Fill `is_incumbent` / `incumbent_id` / `is_open_seat` from the existing T2 FEC candidates endpoint | `toollayer/cap_toollayer/intake.py`, `store.py` | Known FL-28 incumbent resolves correctly; a genuinely open seat sets `is_open_seat` | B2 |
 | **B5** | Add Congress.gov as a T3-sibling read tool for federal incumbent records (P0 gap, §4) | `toollayer/cap_toollayer/intake.py` | Returns a schema-valid vote/bill payload for a known FL US-House member; unknown query type ⇒ `not_implemented`; missing key ⇒ `not_configured` | B1 |
-| **B6** | Copy: both app strings + the `UPDATE news_item` in migration `0010` | `YourRaces.tsx`, `voting-info/route.ts`, `supabase/migrations/0010_general_election.sql` | `npm run build` clean; live `news_item` row shows general-election wording after 0010 | A1 |
+| **B6** | Copy: both app strings + the `UPDATE news_item` in migration `0012` | `YourRaces.tsx`, `voting-info/route.ts`, `supabase/migrations/0012_general_election.sql` | `npm run build` clean; live `news_item` row shows general-election wording after 0012 | A1 |
 | **B7** | Re-run the S2-01 acceptance end to end on real general data once B2–B4 land | `runtime/` | Profiler completes one real candidate: non-empty `stated_position` claims, each with a `candidate_self` source | B2, B3, B4 |
 
 **Baseline that must stay green after every task** (AGENT_BRIEF §3):

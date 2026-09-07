@@ -35,7 +35,7 @@ queue.
 | `allowlist_b_core` — Tier-1/Tier-2 source classification | `Agents/The Fact-Checker/` | built + tested |
 
 **Schema cost of this PRD: zero.** Everything needed is applied. The one
-constraint the pivot adds (`0011`, agent news must carry a source) belongs to
+constraint the pivot adds (`0013`, agent news must carry a source) belongs to
 `news-fairness.md` §3, not here.
 
 ## 3. The architecture asymmetry (read before designing anything)
@@ -77,7 +77,7 @@ Not authoritative — confirm against the real plan in C0.
 - **CN-R1 — every written row is attributable.** A `candidate_news` row must
   carry a `source_id` whose `source` row has a real `publisher`, `type` and
   `lean_tag`. No source → the item is dropped, not written unlabelled.
-  (`news-fairness.md` §1; enforced by `0011`.)
+  (`news-fairness.md` §1; enforced by `0013`.)
 - **CN-R2 — neutral wording is linted, not promised.** Every written title and
   summary passes `verify-news-neutrality.ts`'s banned-term list. A row that
   fails is not written.

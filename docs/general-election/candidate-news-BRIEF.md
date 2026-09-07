@@ -103,7 +103,7 @@ node scripts/verify-news-neutrality.ts --self-test
 - **`0004_official_links.sql` is already applied live.** Editing an applied
   seed file changes nothing in the database — ship an `UPDATE`. The same trap
   applies to any seed you touch.
-- Migrations `0005` and `0006` are applied; `0010`/`0011` are planned, not written.
+- Migrations `0005` and `0006` are applied; `0012`/`0013` are planned, not written.
 
 ## 6. Founder gates — park, don't block
 
