@@ -161,8 +161,39 @@ than a paragraph of assurance.
 
   `scripts/verify-shared-ballot.ts` guards the structural half of the verify
   criterion — that nothing the ballot reaches is a client component, and that
-  the ZIP form keeps its no-JavaScript GET. The data half (all eight items
-  actually published) still needs a live database.
+  the ZIP form keeps its no-JavaScript GET.
+
+  **Verified on the preview deploy 2026-09-07: the five statewide races render.**
+  The three amendments do not, and could not have — see the note below.
+
+  **The verify criterion was wrong, and finding out took a deploy.** "All eight
+  shared ballot items" assumed the measure tables existed in the project
+  database. They did not: migrations `0009`–`0011` had never been applied
+  there, so `ballot_measure` was missing entirely and `getActiveMeasures`
+  returned `[]` — because `fetchActiveMeasures` destructures `const { data }`
+  and drops `error`, PostgREST's "relation does not exist" was indistinguishable
+  from "nothing published". That had been true since TASK-062 shipped, on
+  `/candidates` as well as here; nothing surfaced it because nothing looked.
+
+  0009–0011 were applied on 2026-09-07 (plus `0012`, which pins `search_path`
+  on the three balance functions — the linter flagged them, and a SECURITY
+  INVOKER function whose table references resolve against the caller's
+  search_path is a poor guard for the one part of the ballot no campaign is
+  checking). The schema is now correct and anon-readable. **The amendments
+  still need TASK-066**: 0010/0011 create tables, not content, so eight items
+  is unreachable until the measures are authored and pass the Balance Audit.
+
+  Two things this leaves behind:
+
+  - `scripts/verify-migrations.mjs` applies the migration files to an embedded
+    pglite instance, so it proves the *files* are right while saying nothing
+    about what the real database has. It passed throughout the drift. Detecting
+    that needs a check against the deployed project, which does not exist yet.
+  - Reads that swallow `error` as an empty result (`fetchActiveMeasures`, and
+    `fetchStatewideRaces` as written here) trade a loud failure for a silent
+    wrong answer. On the landing page that is the right trade — a voter should
+    not get an error page — but it is the reason a missing table looked like an
+    unpublished ballot for a day.
 
 - [ ] **TASK-068** — Un-gate the quiz
   Files: `src/components/features/Quiz.tsx`
