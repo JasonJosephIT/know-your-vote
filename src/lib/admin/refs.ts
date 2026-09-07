@@ -2,6 +2,7 @@ import "server-only";
 
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
+import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
 /* Scope reference lists for the Submit forms' race/candidate/metro selects
    (handoff A3 §A). The operator attaches a manual submission to a race,
@@ -35,7 +36,11 @@ export async function getScopeRefs(): Promise<{
   }
 
   const [racesRes, candsRes] = await Promise.all([
-    client.from("race").select("race_id, office, district").order("office"),
+    client
+      .from("race")
+      .select("race_id, office, district")
+      .eq("election", ACTIVE_ELECTION_KIND)
+      .order("office"),
     client.from("candidate").select("candidate_id, legal_name").order("legal_name"),
   ]);
 

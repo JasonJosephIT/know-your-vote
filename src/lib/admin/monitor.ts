@@ -10,6 +10,7 @@ import {
   isMissingRequiredUrl,
 } from "@/lib/neutrality";
 import { ageHours } from "./format";
+import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
 /* The monitor data layer (design.md § 2 flow 4, § 4; PRD AFR-001…004). Both
    the /api/health + /api/admin/overview route handlers AND the Overview RSC
@@ -327,6 +328,7 @@ async function buildFreshness(
     content
       .from("race")
       .select("info_last_verified_at")
+      .eq("election", ACTIVE_ELECTION_KIND)
       .not("info_last_verified_at", "is", null)
       .order("info_last_verified_at", { ascending: false })
       .limit(1),
