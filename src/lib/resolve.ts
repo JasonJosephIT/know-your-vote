@@ -1,4 +1,5 @@
 import { createAnonServerClient } from "@/lib/supabase/server";
+import { getStatewideRaces } from "@/lib/races";
 import type { ResolveRaceSummary, ResolveResult } from "@/types/app";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
@@ -106,29 +107,27 @@ export async function resolveZip(
 
 /* County-picker path: statewide races always apply; district races need a
    ZIP (a county spans several districts), so callers route back through
-   ZIP entry for district-level results. */
+   ZIP entry for district-level results.
+
+   The race half of this is exactly what the landing page renders with no
+   input at all, so it reads through getStatewideRaces (TASK-067) rather than
+   repeating the query — one definition of "statewide", one cache, one
+   ordering. Only the county and metro are location-specific here. */
 export async function resolveCounty(countyFips: string): Promise<ResolveResult | null> {
   const county = COVERED_COUNTIES.find((c) => c.fips === countyFips);
   if (!county) return null;
-  const supabase = await createAnonServerClient();
-  const { data, error } = await supabase
-    .from("race")
-    .select("race_id, office, level, district")
-    .eq("election", ACTIVE_ELECTION_KIND)
-    .is("district", null)
-    .order("race_id");
-  if (error) throw new Error(`race lookup failed: ${error.message}`);
+  const races = await getStatewideRaces();
   return {
     zip: "",
     inCoverage: true,
     county: county.name,
     metro: county.metro,
-    races: (data ?? []).map((r) => ({
-      raceId: r.race_id,
-      office: r.office,
-      level: r.level,
-      district: r.district,
-      published: true,
+    races: races.map(({ raceId, office, level, district, published }) => ({
+      raceId,
+      office,
+      level,
+      district,
+      published,
     })),
   };
 }

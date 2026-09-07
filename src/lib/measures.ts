@@ -83,7 +83,15 @@ export function getMeasureBrief(measureId: string) {
 }
 
 async function fetchActiveMeasures(): Promise<BallotMeasure[]> {
-  const supabase = await createAnonServerClient();
+  let supabase;
+  try {
+    supabase = await createAnonServerClient();
+  } catch {
+    /* Unconfigured environment. Since TASK-067 this read is on the landing
+       page, which is prerendered — an unset NEXT_PUBLIC_SUPABASE_URL would
+       otherwise fail the build outright rather than render no measures. */
+    return [];
+  }
   const { data } = await supabase
     .from("ballot_measure")
     .select("*")
