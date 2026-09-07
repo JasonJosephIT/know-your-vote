@@ -485,11 +485,16 @@ the column that lets it reach 67 without a second migration.
   and without `related` differs, and the reported number is the `named` one.
   **Blocked** on roster (C6's blocker) for a live run; the matcher itself is
   fixture-testable now.
-  ~ **Done as code 2026-09-07; nothing calls it yet.** `0017_news_relation.sql`
-  (written, **not applied** — `relation TEXT` nullable, CHECK admits only
-  `named`/`related`, plus `idx_news_item_candidate_relation`). Safe to merge
-  unapplied: `fetchCandidateNews` selects `*`, so a missing column reads as
-  absent and every row falls to the `named` side — no 500, unlike `0016`.
+  ~ **Done as code 2026-09-07; nothing calls it yet.** `0017_news_relation.sql`,
+  **applied live the same day** — `relation TEXT` nullable, CHECK admits only
+  `named`/`related`, plus `idx_news_item_candidate_relation`. Verified over
+  the wire: `is_nullable=YES`, the CHECK reads
+  `relation IS NULL OR relation = ANY (ARRAY['named','related'])`, the index
+  exists, and all 10 live rows carry NULL — correct, since they predate the
+  matcher and sort with `named` rather than into a tier they were never
+  given. (This one did not need applying first, unlike `0016`:
+  `fetchCandidateNews` selects `*`, so a missing column would have read as
+  absent rather than 500ing.)
   `src/lib/news-match.ts` is the matcher: full-name match allowing only the
   candidate's **own** middle tokens or their initials between first and last
   (so "Maria met John Smith" is not a match for Maria Smith), accent folding,
