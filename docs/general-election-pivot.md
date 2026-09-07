@@ -183,7 +183,7 @@ Worth stating plainly, because it shrinks the job:
 ## 6. Day 2 — amendments and urgency
 
 - [x] **TASK-061** — `ballot_measure` data model (app-owned)
-  Files: `supabase/migrations/0012_ballot_measure.sql`, `0013_measure_rls.sql`
+  Files: `supabase/migrations/0010_ballot_measure.sql`, `0011_measure_rls.sql` (as shipped — see the Done note)
   Notes: App-owned, because the app never modifies pipeline tables. Three
   tables mirroring the race pattern:
   `ballot_measure` (`measure_id`, `election`, `number`, `official_title`,
