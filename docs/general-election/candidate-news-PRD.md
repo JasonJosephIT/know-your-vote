@@ -496,8 +496,10 @@ the column that lets it reach 67 without a second migration.
   switching county then reloading the app returns the voter to their own
   county. **Not blocked** — the four live `election_news` rows are enough to
   test the filter.
-  ~ **Done 2026-09-07.** `0016_news_county.sql` (written, **not applied** —
-  `county_fips CHAR(5)` nullable + `idx_news_item_county`); `/api/news` takes
+  ~ **Done 2026-09-07.** `0016_news_county.sql`, **applied live the same day**
+  (`county_fips CHAR(5)` nullable + `idx_news_item_county`; verified over the
+  wire: `character(5)`, `is_nullable=YES`, index present, and all 10 existing
+  rows read NULL so the statewide bucket still holds the same 3); `/api/news` takes
   `?county=` validated against `COVERED_COUNTIES`, adds `county_fips.eq.` to
   the scope list, and — the regression that would otherwise be invisible —
   the statewide clause now reads `race_id IS NULL AND metro IS NULL AND
@@ -518,8 +520,9 @@ the column that lets it reach 67 without a second migration.
   static to server-rendered because it now reads `searchParams` — the page
   shell is tiny and the feed was always client-fetched, so the cost is a
   round trip, but it is a real change.
-  **Founder step:** apply `0016` to the live database. Until then `/api/news`
-  selects a column production does not have and the feed will 500.
+  The apply had to come **before** the merge: `/api/news` selects
+  `county_fips`, and against a database without it PostgREST errors and the
+  feed returns its 500 path — a green build proves nothing about that.
 
 **External prerequisites (not C-tasks, but on the critical path):**
 
