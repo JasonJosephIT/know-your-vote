@@ -77,7 +77,7 @@ Do NOT read the whole spec corpus up front; each task names what it needs.
 4. Run the task's **Verify** step. It must actually pass — no "should work."
    Baseline that must stay green after every task:
    ```
-   python3 toollayer/test_toollayer_skeleton.py        # 168
+   python3 toollayer/test_toollayer_skeleton.py        # 170
    (cd toollayer && python3 -m cap_toollayer.server --selfcheck)
    python3 runtime/test_runtime.py   # 39
    node ../scripts/verify-migrations.mjs               # if you touched SQL

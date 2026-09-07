@@ -1585,6 +1585,18 @@ class TestIntakeIncumbencyHandler(unittest.TestCase):
         self.assertEqual(gov["status"], "not_applicable")
         self.assertIn("federal", gov["reason"])
 
+    def test_senate_race_is_not_implemented_not_misfiled_as_non_federal(self):
+        # FL-SEN-general is federal but has no district. FEC covers it; this
+        # fill only knows the House query shape. Degrade honestly: name the
+        # missing thing instead of claiming the Senate is not a federal race.
+        layer, db = self._layer()
+        res = layer.dispatch("doe_file_intake", {"fill_incumbency": True})
+        sen = res["result"]["incumbency"]["FL-SEN-general"]
+        self.assertEqual(sen["status"], "not_implemented", sen)
+        self.assertIn("office=S", sen["reason"])
+        self.assertNotIn("is_open_seat", sen)
+        self.assertEqual(committed_updates(db, "race"), [])
+
     def test_refused_race_writes_nothing(self):
         rows = [_fec_cand("H0FL28777", "STRANGER, SAM", "I")]
         layer, db = self._layer(by_district={"28": rows})

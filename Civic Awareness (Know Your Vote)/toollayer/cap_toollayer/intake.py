@@ -668,9 +668,21 @@ def build_intake_handlers(
     def _incumbency_for_race(race: Mapping[str, Any],
                              roster: list[Mapping[str, Any]]) -> dict:
         race_id = race.get("race_id")
-        if race.get("level") != "federal" or not race.get("district"):
+        if race.get("level") != "federal":
             return {"status": "not_applicable",
                     "reason": "FEC covers federal races only"}
+        if not race.get("district"):
+            # A federal race with no district is the U.S. Senate seat
+            # (FL-SEN-general, added by the Senate-race intake fix). FEC does
+            # cover it, but this fill queries the House field only
+            # (office=H, district=NN); a Senate lookup (office=S, no district)
+            # is a separate query shape that is not built. Say so, rather
+            # than filing the Senate under "not a federal race".
+            return {"status": "not_implemented",
+                    "reason": (f"{race_id} has no district: the incumbency "
+                               "fill queries the FEC House field only "
+                               "(office=H); a U.S. Senate lookup (office=S) "
+                               "is not implemented")}
         # Hydrate the roster with any FEC id already stored on the candidate
         # row, so the resolver's id-first rule can actually fire: the DoE file
         # never carries one, and the dicts here came straight out of
