@@ -156,8 +156,18 @@ every ingested row, not only the target field:
 
 | Office group | Rows | StatusCode | PartyCode |
 |---|---|---|---|
-| `FED` (269 USR + 14 USS) | 283 | DEF 107 · QUA 86 · DNQ 57 · WIT 32 · UNO 1 | REP 134 · DEM 106 · NPA 22 · WRI 11 · LPF 5 · IND 3 · FFP 1 · **MGT 1 (empty `PartyDesc`)** |
+| `FED` (269 USR + **14 USS**) | 283 | DEF 107 · QUA 86 · DNQ 57 · WIT 32 · UNO 1 | REP 134 · DEM 106 · NPA 22 · WRI 11 · LPF 5 · IND 3 · FFP 1 · **MGT 1 (empty `PartyDesc`)** |
 | `CAB` (63 GOV + 9 AGR + 7 CFO + 4 ATG) | 83 | DNQ 28 · DEF 19 · QUA 17 · WIT 17 · REM 2 | REP 31 · DEM 23 · NPA 16 · WRI 8 · IND 3 · LPF 1 · CPF 1 |
+
+> ⚠️ **Read the USS number.** Those 14 U.S. Senate filings were skipped by
+> `parse_candidate_list` until 2026-09-07 — `USS` was in neither office map,
+> so a statewide federal race was absent from every ballot with nothing in the
+> run report to say so. This table recorded the count all along. Fixed in
+> `intake.py` (`_NO_DISTRICT_RACES`, race `FL-SEN-general`, level `federal`);
+> full write-up in `db-audit-2026-09-07.md` §1. **The per-race tier table below
+> covers the 8 races the parser targeted at the time and therefore says nothing
+> about the Senate race** — the next DoE run is what splits those 14 filings
+> into ballot / write_in / excluded.
 
 #### Q1 — which status codes appear post-primary
 
