@@ -177,8 +177,8 @@ export default async function MethodologyPage() {
           coverage for one candidate never crowds the others off the page. That
           number comes from measuring how much coverage candidates actually
           get, and we have not measured it yet &mdash; until we do, every
-          sourced story we have is shown, in the same spread order for every
-          candidate. If we can&apos;t fill a candidate&apos;s slots with
+          sourced story from the last 30 days is shown, ordered by the same
+          rule for every candidate. If we can&apos;t fill a candidate&apos;s slots with
           sourced stories, we say so plainly &mdash; a shortfall is stated,
           never padded with unrelated or unsourced items.
         </p>
