@@ -32,7 +32,7 @@ September 28 and that reminder cannot be re-sent.
 | # | Step | Owner | State |
 |---|---|---|---|
 | 1 | TASK-066 — 9 races, ~18–20 candidates, 3 measures through the Balance Audit | founder | not started |
-| 2 | Remove every `demo-` row (`scripts/demo-teardown.sql`) | founder | not started |
+| 2 | Remove every `demo-` row (`scripts/demo-teardown.sql`) | founder | not started — script fixed 2026-09-07, see TASK-066 |
 
 The app cannot go public on demo fixtures. This is the longest pole and it is
 content work, not engineering.

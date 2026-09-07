@@ -293,6 +293,48 @@ Worth stating plainly, because it shrinks the job:
   until this is done** — the README's launch gate is unchanged by this pivot.
   Start it in parallel on Day 1; don't leave it to Day 2.
 
+  **Preparation, 2026-09-07.** The content itself is unchanged — still open,
+  still needs a human. What was done is everything around it that does not
+  require judgement about real candidates.
+
+  *Measured state of the database.* Every voter-facing row is a fixture:
+  9/9 races, 29/29 candidates, 261/261 claims, 88 positions, 87 sources and
+  38 social accounts all carry the `demo-` prefix. `ballot_measure` is empty —
+  the tables exist as of 0010/0011 but hold nothing. There is no partial real
+  content to build on; intake starts from zero.
+
+  *A latent bug in the teardown, fixed.* `scripts/demo-teardown.sql` predates
+  two tables. `candidate_contact` (PR #12) holds a `candidate_id` foreign key
+  with `ON DELETE NO ACTION`, and was not in the script — so the moment intake
+  populates contacts, `DELETE FROM candidate WHERE candidate_id LIKE 'demo-%'`
+  fails with a foreign-key violation. Zero rows today, which is why nothing
+  has caught it; it fires on launch day and nowhere earlier. The three measure
+  tables were missing too. Both are now covered, in dependency order. Verified
+  by schema inspection rather than execution — dry-run it inside
+  `BEGIN … ROLLBACK` before trusting it live.
+
+  *What the roster does and does not give you.*
+  `CAP_Target_Race_Candidates_2026_v1.csv` is the **qualifying** list, not the
+  general-election field: 24 candidates for Governor, 12 across the four
+  House districts. The August primary settled those fields and the CSV
+  predates it. It also contains **no U.S. Senate rows**, while the app models
+  a `demo-fl-us-senate` race — that discrepancy needs resolving before the
+  race list is final, because it changes whether the shared ballot is five
+  statewide races or four. And it carries identity only: no issues, no stated
+  positions, no records, no sources.
+
+  *What still needs a human, and why no agent should shortcut it.* Every claim
+  this product publishes is about a real, named person standing in a live
+  election. The design already says so — sourced claims, fact-check verdicts,
+  the Balance Audit, and a human verification gate. Generating plausible
+  positions or records for Donalds, Jolly, Frankel, Giménez or anyone else,
+  from a model whose training predates the primary and with the official
+  sources (`dos.myflorida.com`, `results.elections.myflorida.com`,
+  `ballotpedia.org`) all denied at this session's egress gateway, would
+  produce exactly the failure the Balance Audit exists to prevent — and it
+  would be indistinguishable from real content once loaded. The pipeline
+  agents plus a human are the path; there is no faster one worth taking.
+
 ---
 
 ## 7. Explicitly deferred
