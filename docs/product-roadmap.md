@@ -142,6 +142,35 @@ Engineering, none of it blocked:
    `official_site` rows. Both are listed in
    `docs/general-election/local-session.md`.
 
+5. **The remaining work is split into two parallel packages**, so two
+   sessions can run at once: `docs/general-election/stream-surface.md`
+   (voter-facing `src/**`) and `stream-pipeline.md` (toollayer + migrations).
+
+   The boundary is not thematic. It follows the one collision this repo has
+   actually suffered — **`supabase/migrations/` collided three times in a
+   week**, every time because two planning docs assigned "the next number"
+   independently — so the ledger gets exactly one owner, and everything else
+   follows from that.
+
+   | | Stream S | Stream P |
+   |---|---|---|
+   | Owns | `src/**`, `verify-news-neutrality.ts`, `news-fairness.md`, `candidate-news-PRD.md` | `toollayer/**`, `supabase/migrations/**` + ledger, `data-architecture.md`, `data-ingest.md` |
+   | Tasks | **A5+N7** methodology page · **N6** sourced-ness lint · **N4** equal-slot selector | **N1** migration `0014` · **N5** coverage variance · **B4** FEC incumbency (network-gated) |
+
+   One shared file remains — `news-fairness.md`'s N-task table has rows on
+   both sides. Each stream appends only to its own rows; different lines merge
+   cleanly, and if they conflict, take both.
+
+   Two cross-stream notes worth knowing before either starts:
+
+   - **N4 must take `N` as a parameter, not choose it.** `N` comes from N5's
+     real per-candidate counts, and N5 is in the other stream with no data
+     yet. Picking a number now would be a guess dressed as a decision.
+   - **`0014` is numbered below `0015`–`0017`, which are already applied**, so
+     it lands first on a fresh database and last on the live one. `0013` had
+     the same shape and its header records the compatibility check; `0014`
+     needs its own.
+
 Partially blocked: **TASK-060** needs the Census ZCTA crosswalk files, and
 `www2.census.gov` is unreachable from the Claude Code session (403 at the
 egress proxy). The resolution logic can be written; the seed data has to be
