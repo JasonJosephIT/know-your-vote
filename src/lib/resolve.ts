@@ -61,6 +61,9 @@ export async function resolveZip(
   }
 
   const county = rows[0].county_name;
+  /* Already selected; returning it saves every caller a second lookup by
+     name — the news feed scopes on FIPS, not on the display name. */
+  const countyFips = rows[0].county_fips;
   const metro = rows[0].metro;
   const districts = [...new Set(rows.map((r) => r.congressional_district))].sort(
     (a, b) => districtNumber(a) - districtNumber(b)
@@ -76,6 +79,7 @@ export async function resolveZip(
         zip,
         inCoverage: true,
         county,
+        countyFips,
         metro,
         isSplit: true,
         candidateDistricts: districts,
@@ -87,6 +91,7 @@ export async function resolveZip(
       zip,
       inCoverage: true,
       county,
+      countyFips,
       metro,
       district: confirmed,
       isSplit: true,
@@ -98,6 +103,7 @@ export async function resolveZip(
     zip,
     inCoverage: true,
     county,
+    countyFips,
     metro,
     district: districts[0],
     isSplit: false,
@@ -121,6 +127,7 @@ export async function resolveCounty(countyFips: string): Promise<ResolveResult |
     zip: "",
     inCoverage: true,
     county: county.name,
+    countyFips: county.fips,
     metro: county.metro,
     races: races.map(({ raceId, office, level, district, published }) => ({
       raceId,

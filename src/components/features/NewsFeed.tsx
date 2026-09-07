@@ -56,19 +56,24 @@ type Stage =
    Dropping the store also removes the useSyncExternalStore dance that existed
    only to read device storage after hydration. */
 
-export function NewsFeed() {
+export function NewsFeed({ county }: { county?: string }) {
   const [stage, setStage] = useState<Stage>({ kind: "loading" });
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch("/api/news", { signal: controller.signal })
+    /* The county comes from the URL, not from device storage — TASK-070
+       removed the store, and §7's "switching county is a view, not a move"
+       rule is satisfied by construction: there is nothing to overwrite, and
+       the choice is shareable and survives a reload. */
+    const qs = county ? `?county=${encodeURIComponent(county)}` : "";
+    fetch(`/api/news${qs}`, { signal: controller.signal })
       .then((r) => (r.ok ? (r.json() as Promise<{ items?: FeedItem[] }>) : Promise.reject()))
       .then((data) => setStage({ kind: "ready", items: data.items ?? [] }))
       .catch(() => {
         if (!controller.signal.aborted) setStage({ kind: "error" });
       });
     return () => controller.abort();
-  }, []);
+  }, [county]);
 
   if (stage.kind === "loading") {
     return (
@@ -98,8 +103,9 @@ export function NewsFeed() {
   if (stage.items.length === 0) {
     return (
       <p className="text-body text-on-surface-muted">
-        No updates yet — quiet is honest. Check back after the next daily
-        refresh.
+        {county
+          ? "No county news yet — quiet is honest. Statewide items still appear here once there are any."
+          : "No updates yet — quiet is honest. Check back after the next daily refresh."}
       </p>
     );
   }

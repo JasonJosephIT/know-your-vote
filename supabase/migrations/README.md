@@ -24,8 +24,9 @@ Rules:
 | **0013** | `0013_general_election.sql` — `candidate.ballot_status`, party CHECK dropped (`docs/general-election/data-architecture.md` §2, ingest A1) | **reserved, not written** |
 | **0014** | `0014_news_fairness.sql` — agent news rows must carry a `source_id` (`docs/general-election/news-fairness.md` §3, N1) | **reserved, not written** |
 | 0015 | `0015_general_election_copy.sql` — UPDATEs the seeded registration-link `news_item` row off primary-era copy (`docs/general-election/data-ingest.md` B6) | applied 2026-09-07 |
-| **0016** | `0016_news_association_county.sql` — `news_item.relation` (`named`/`related`) + `news_item.county_fips` + `idx_news_item_county` (`docs/general-election/candidate-news-PRD.md` §6/§7, tasks C8/C9) | **reserved, not written** |
-| 0017+ | free | — |
+| 0016 | `0016_news_county.sql` — `news_item.county_fips` + `idx_news_item_county` (`docs/general-election/candidate-news-PRD.md` §7, task C9) | written 2026-09-07, **not yet applied** |
+| **0017** | `0017_news_relation.sql` — `news_item.relation` (`named`/`related`) (`docs/general-election/candidate-news-PRD.md` §6, task C8) | **reserved, not written** |
+| 0018+ | free | — |
 
 Verify applied state with `SELECT version, name FROM supabase_migrations.schema_migrations`
 (read-only) rather than trusting this table; update the table when it drifts.

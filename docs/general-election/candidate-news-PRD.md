@@ -136,7 +136,7 @@ in the prompt.
 | **CN-R8** | Degrade honestly: `status='failed'` on the run row; `ok_empty` for "ran fine, found nothing". | **Partial.** Fail-closed is in the prompt, but with no `agent_run` row there is no status anywhere a machine can read. Same fix as CN-R6. |
 | **CN-R9** *(v1.2)* | Every candidate-scoped row records **how** it matched: `relation` is `named` (deterministic full-name match) or `related` (ambiguous). `related` attaches to **every** candidate the ambiguity admits, never to one picked by judgment. | **Gap** — column does not exist (`0016`, §6). R1 today writes one row per candidate from a per-candidate search, so "how it matched" is unrecorded. |
 | **CN-R10** *(v1.2)* | Coverage variance (`news-fairness.md` §2) is computed over **`named` rows only**. | **Gap** — no variance is computed at all yet; the rule exists so it cannot be got wrong later. |
-| **CN-R11** *(v1.2)* | Every feed-eligible row carries a `county_fips`, or is explicitly statewide (`NULL`). The feed scopes to any county without a schema change. | **Gap** — `news_item` has `metro` (four values) and no county column (`0016`, §7). |
+| **CN-R11** *(v1.2)* | Every feed-eligible row carries a `county_fips`, or is explicitly statewide (`NULL`). The feed scopes to any county without a schema change. | **Met in code 2026-09-07 (C9)**, unpopulated in data: `0016` adds the column and index, `/api/news?county=` scopes on it, and the statewide clause now excludes county-scoped rows. No live row carries a county yet — the writers are C7's sweep and C8's matcher. |
 
 **What §5 changes about CN-R4.** Under the corpus sweep, "same query pattern and
 effort per candidate" stops being an instruction the agent is trusted to obey
@@ -359,6 +359,15 @@ unmatched `election_news` row takes the county of the outlet that published it
 > county, not relocating. Keep it in component state (or a `?county=` search
 > param), never in `readLocation`/`writeLocation`.
 
+**Amended 2026-09-07 (C9).** There is no device location store any more —
+TASK-070 removed `kyv.location` and the `useSyncExternalStore` dance that read
+it, and the feed now requests the statewide scope with no parameters. So the
+rule above is satisfied by construction rather than by discipline: there is
+nothing to overwrite. Two consequences: the default is **statewide**, not "the
+stored county" (which is also the honest default the page copy already
+claims), and the choice lives in `?county=` — shareable, reload-stable, and
+working without JavaScript, which localStorage never was.
+
 ### Honest limit
 
 `COVERED_COUNTIES` has four rows, so *"switch to another county"* means four
@@ -487,6 +496,30 @@ the column that lets it reach 67 without a second migration.
   switching county then reloading the app returns the voter to their own
   county. **Not blocked** — the four live `election_news` rows are enough to
   test the filter.
+  ~ **Done 2026-09-07.** `0016_news_county.sql` (written, **not applied** —
+  `county_fips CHAR(5)` nullable + `idx_news_item_county`); `/api/news` takes
+  `?county=` validated against `COVERED_COUNTIES`, adds `county_fips.eq.` to
+  the scope list, and — the regression that would otherwise be invisible —
+  the statewide clause now reads `race_id IS NULL AND metro IS NULL AND
+  county_fips IS NULL`, so one county's news cannot reach the whole state.
+  `resolveZip`/`resolveCounty` return `countyFips` (already selected; callers
+  no longer look it up by name). `src/lib/news-feed.ts` `dedupeByUrl()` makes
+  one story one card and, when the story spans several candidates, drops the
+  candidate link rather than picking one — the same discretion §6 removes from
+  the matcher would otherwise come back one card later. The switcher is a
+  plain GET form on `/news`, matching `CandidateBrowser`'s picker.
+  Verified: `node scripts/verify-news-feed.ts` (new, mutation-checked — no
+  dedupe, no no-claim rule, merging null URLs, and losing spread fields each
+  make it fail); `node scripts/verify-migrations.mjs` (three new invariants,
+  mutation-checked against NOT NULL, wrong width, renamed index);
+  `npx tsc --noEmit`; `npm run build`.
+  Two honest notes: the `.limit(50)` counts **rows, not cards**, so once C8
+  lands a three-candidate story spends three of them; and `/news` moved from
+  static to server-rendered because it now reads `searchParams` — the page
+  shell is tiny and the feed was always client-fetched, so the cost is a
+  round trip, but it is a real change.
+  **Founder step:** apply `0016` to the live database. Until then `/api/news`
+  selects a column production does not have and the feed will 500.
 
 **External prerequisites (not C-tasks, but on the critical path):**
 
