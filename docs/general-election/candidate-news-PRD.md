@@ -442,6 +442,28 @@ the column that lets it reach 67 without a second migration.
   `type` and `lean_tag` taken **from the list**, never from the agent.
   **Not blocked on the roster** — the sweep has no candidates in it. This is
   the one v1.2 task that can start today.
+  ~ **Mechanism done 2026-09-07; two data gates open.** Shipped
+  `src/lib/news-sources.ts` (23 outlets across the four counties + statewide,
+  host matching copied in behaviour from `allowlist_b_core`, shorteners
+  blocked), `src/lib/news-sweep.ts` (RSS 2.0 + Atom parsing, 14-day window,
+  URL normalisation, dedupe, deterministic ordering — pure, no network, no
+  clock), `scripts/verify-news-sweep.ts` (offline; pins C7's three acceptance
+  clauses and both gates) and `scripts/news-sweep.ts` (`--probe` to discover
+  feeds, default to sweep). Verify passes and was mutation-checked: breaking
+  the boundary check, the lean gate, dedupe, the window floor, `utm`
+  stripping, the label-boundary host rule, or feed-supplied attribution each
+  makes it fail. One redundant line was deleted when a mutation proved it
+  changed nothing.
+  **`usableOutlets()` returns 0 by design** — every outlet ships with
+  `leanTag: null` and `feed: null`, and the sweep fail-closed skips both:
+    - **Gate C7-a (`leanTag`)** — founder. Assigning a lean to a named news
+      organisation is an editorial act with a real reputational cost for a
+      nonpartisan product; it is not something a coding agent should assert
+      from memory. Each entry carries a `leanBasis` saying what would settle
+      it. Nothing renders until these are filled.
+    - **Gate C7-b (`feed`)** — local session. A feed URL that 404s fails
+      silently and looks exactly like "no news this week", and the session
+      that wrote the list had no egress to check one. `--probe` fills these.
 
 - [ ] **C8** *(v1.2)* — Association: `named` + `related` (§6, CN-R9/CN-R10).
   Migration `0016` adds `news_item.relation`; the matcher assigns it; the

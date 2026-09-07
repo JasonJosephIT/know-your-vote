@@ -105,10 +105,18 @@ so nobody schedules them into a remote session and watches them 403.
 | **B4** | live FEC (T2) for incumbency / open-seat | `FEC_API_KEY` (already in `.env.local`) |
 | **B5** | live Congress.gov for federal incumbent voting records | a free `api.data.gov` key |
 | **B7** | the full S2-01 acceptance through real S1 | the AGENT_BRIEF §7 gates: arm64 Python 3.12 venv with `mcp`+`psycopg`, `SUPABASE_DB_URL` password, demo seed loaded, Anthropic spend |
+| **C7-b** | `node scripts/news-sweep.ts --probe` — confirms the RSS/Atom feed URL for each of the 23 outlets in `src/lib/news-sources.ts` (they ship `feed: null`; the remote session refused to guess) | nothing — one command, ~1 minute |
 
 B3 is worth doing while you're here — it needs no network tooling at all, and
 it clears defect I3, which is the one that would otherwise publish hollow
 briefs without tripping a single audit gate.
+
+**C7-b is the cheapest thing on this list.** `--probe` fetches each outlet's
+homepage and prints the feeds it advertises; paste the confirmed URLs into the
+`feed:` fields and open a PR. It does not fill `leanTag` — that is a founder
+call, not a lookup (see `candidate-news-PRD.md` §5 and the C7 note). Until both
+are filled, `scripts/news-sweep.ts` exits 1 and says so rather than reporting an
+empty sweep as a success.
 
 ---
 
