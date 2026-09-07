@@ -342,6 +342,9 @@ class FakeDb:
     def __init__(self, fail_at=None):
         self.pending = []
         self.committed = []
+        # SELECTs are not writes, so they never reach `pending` -- but the
+        # query shape is sometimes the thing under test (A3's LEFT JOIN).
+        self.selects = []
         self._results = []
         self.fail_at = fail_at
         self.execute_count = 0
@@ -381,6 +384,7 @@ class FakeDbCursor:
         if self.db.fail_at == self.db.execute_count:
             raise RuntimeError("server closed the connection unexpectedly")
         if sql.lstrip().upper().startswith("SELECT"):
+            self.db.selects.append((sql, params))
             self._rows = self.db._results.pop(0) if self.db._results else []
         else:
             self.db.pending.append((sql, params))
@@ -1059,13 +1063,16 @@ class TestIntakeFLSenateAndJurisdiction(unittest.TestCase):
         self.assertEqual(res["error"], errors.UPSTREAM_FAILED)
 
 
-def _profile(cid, race, wc, facts, positions, fc, covered):
+def _profile(cid, race, wc, facts, positions, fc, covered, ballot_status="ballot"):
+    # ballot_status rides the profile read (A3): store.read_profiles LEFT JOINs
+    # candidate so T10 can audit the printed ballot lines only.
     return {"candidate_id": cid, "race_id": race,
             "facts": [f"f{i}" for i in range(facts)],
             "positions": [f"p{i}" for i in range(positions)],
             "opinions": [],
             "audit": {"word_count": wc, "fact_checks_performed": fc,
-                      "spine_issues_covered": covered}}
+                      "spine_issues_covered": covered},
+            "ballot_status": ballot_status}
 
 
 def make_synthesis_layer(db=None, **kw):
@@ -1110,6 +1117,112 @@ class TestBalanceAudit(unittest.TestCase):
         self.assertEqual(res["result"]["verdict"], "PASS")
         self.assertFalse(layer.halted)
         self.assertFalse(committed_log_rows(db)[-1]["guard_triggered"])
+
+    # --- A3: the audit population is the ballot tier only ---------------
+
+    def test_write_in_with_no_claims_no_longer_halts_the_race(self):
+        """The defect this task exists to fix. A write-in has no public
+        material, so it enters with zero claims -- (5-0)/5 is 100% variance
+        against a 10% threshold, and the race HALTs permanently. B1 found at
+        least one such filer in every one of the eight target races."""
+        db = FakeDb().prime_read([
+            _profile("cand_001", "FL-15-general", 450, 5, 4, 5, 4),
+            _profile("cand_002", "FL-15-general", 448, 5, 4, 5, 4),
+            _profile("cand_wri", "FL-15-general", 0, 0, 0, 0, 0, ballot_status="write_in"),
+        ])
+        layer, db = make_synthesis_layer(db=db)
+        res = layer.dispatch("balance_audit", {"race_id": "FL-15-general"})
+        self.assertTrue(res["ok"], res)
+        self.assertEqual(res["result"]["verdict"], "PASS")
+        self.assertFalse(layer.halted)
+        # PASS is itself the proof the core never saw the write-in: had it,
+        # (5-0)/5 would be 100% variance and the verdict HALT. The filter is in
+        # the caller, so balance_audit_core stays a pure function over what it
+        # is handed (AGENT_BRIEF section 3: do not edit a core).
+        self.assertEqual(res["result"]["audited_candidates"], ["cand_001", "cand_002"])
+        self.assertEqual(res["result"]["excluded_candidates"],
+                         [{"candidate_id": "cand_wri", "ballot_status": "write_in"}])
+        # The write-in never passed an audit, so nothing may claim it did --
+        # balance_check_passed is what the publication gate reads.
+        self.assertEqual(len(profile_updates(db)), 2)
+
+    def test_defeated_filer_is_excluded_and_recorded(self):
+        db = FakeDb().prime_read([
+            _profile("cand_001", "FL-23-general", 450, 5, 4, 5, 4),
+            _profile("cand_002", "FL-23-general", 448, 5, 4, 5, 4),
+            _profile("cand_def", "FL-23-general", 10, 0, 0, 0, 0, ballot_status="excluded"),
+        ])
+        layer, db = make_synthesis_layer(db=db)
+        res = layer.dispatch("balance_audit", {"race_id": "FL-23-general"})
+        self.assertEqual(res["result"]["verdict"], "PASS")
+        self.assertEqual([e["candidate_id"] for e in res["result"]["excluded_candidates"]],
+                         ["cand_def"])
+
+    def test_orphan_profile_is_excluded_not_silently_dropped(self):
+        """LEFT JOIN, so a profile whose candidate row is gone arrives with
+        ballot_status None. Fail closed -- excluded, and visibly so."""
+        db = FakeDb().prime_read([
+            _profile("cand_001", "FL-23-general", 450, 5, 4, 5, 4),
+            _profile("cand_002", "FL-23-general", 448, 5, 4, 5, 4),
+            _profile("orphan", "FL-23-general", 0, 0, 0, 0, 0, ballot_status=None),
+        ])
+        layer, db = make_synthesis_layer(db=db)
+        res = layer.dispatch("balance_audit", {"race_id": "FL-23-general"})
+        self.assertEqual(res["result"]["excluded_candidates"],
+                         [{"candidate_id": "orphan", "ballot_status": None}])
+
+    def test_one_candidate_race_reports_unopposed(self):
+        """FL-10's real shape: the file's only UNO row, so exactly one ballot
+        line. Variance over one candidate is 0.0 and passes trivially --
+        arithmetically right, but 'equal scrutiny' is vacuous with a sample of
+        one. Recorded, never gated."""
+        db = FakeDb().prime_read([
+            _profile("cand_solo", "FL-10-general", 450, 5, 4, 5, 4),
+        ])
+        layer, db = make_synthesis_layer(db=db)
+        res = layer.dispatch("balance_audit", {"race_id": "FL-10-general"})
+        self.assertTrue(res["result"]["unopposed"])
+        self.assertEqual(res["result"]["verdict"], "PASS")   # reports, never gates
+        self.assertFalse(layer.halted)
+
+    def test_a_contested_race_is_not_unopposed(self):
+        db = FakeDb().prime_read([
+            _profile("cand_001", "FL-15-general", 450, 5, 4, 5, 4),
+            _profile("cand_002", "FL-15-general", 448, 5, 4, 5, 4),
+        ])
+        layer, db = make_synthesis_layer(db=db)
+        res = layer.dispatch("balance_audit", {"race_id": "FL-15-general"})
+        self.assertFalse(res["result"]["unopposed"])
+
+    def test_race_with_no_ballot_candidate_degrades_not_passes(self):
+        """Every filer excluded is not a balanced race, it is an empty one.
+        Variance over zero candidates must never read as a pass."""
+        db = FakeDb().prime_read([
+            _profile("cand_def", "FL-28-general", 10, 0, 0, 0, 0, ballot_status="excluded"),
+            _profile("cand_wri", "FL-28-general", 0, 0, 0, 0, 0, ballot_status="write_in"),
+        ])
+        layer, db = make_synthesis_layer(db=db)
+        res = layer.dispatch("balance_audit", {"race_id": "FL-28-general"})
+        self.assertFalse(res["ok"])
+        self.assertEqual(res["error"], errors.UPSTREAM_FAILED)
+        self.assertIn("no ballot-tier candidate", res["reasons"][0])
+        self.assertIn("cand_def=excluded", res["reasons"][0])
+        self.assertEqual(len(profile_updates(db)), 0)
+
+    def test_profile_read_left_joins_so_an_orphan_survives_the_query(self):
+        """Structural, not behavioural: FakeDb returns primed rows and never
+        executes SQL, so this pins the emitted query rather than Postgres's
+        answer. It earns its place because INNER JOIN here would drop an
+        orphan profile from the result set entirely -- the same invisible
+        filter the ballot tier exists to replace with a recorded one. Real
+        semantics are exercised when S2-01 runs against live Postgres."""
+        db = FakeDb().prime_read([_profile("cand_001", "FL-15-general", 450, 5, 4, 5, 4)])
+        layer, db = make_synthesis_layer(db=db)
+        layer.dispatch("balance_audit", {"race_id": "FL-15-general"})
+        profile_reads = [sql for sql, _ in db.selects if "FROM profile" in sql]
+        self.assertEqual(len(profile_reads), 1)
+        self.assertIn("LEFT JOIN candidate", profile_reads[0])
+        self.assertIn("c.ballot_status", profile_reads[0])
 
     def test_no_profiles_degrades(self):
         db = FakeDb().prime_read([])

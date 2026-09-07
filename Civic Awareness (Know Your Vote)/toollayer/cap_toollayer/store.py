@@ -256,9 +256,18 @@ class Store(logsink.PostgresSink):
     # -- T10 balance_audit (orchestrator reads profiles, writes results) ---
 
     def read_profiles(self, race_id: str) -> list[dict]:
+        """Profiles for a race, each carrying its candidate's ballot tier.
+
+        LEFT JOIN, not INNER: a profile whose candidate row is missing must
+        show up with ballot_status NULL and be excluded visibly by the caller,
+        rather than vanish from the query. A silent filter here would be the
+        same class of bug the tier exists to fix.
+        """
         return self._fetchall(
-            "SELECT candidate_id, race_id, facts, positions, opinions, audit "
-            "FROM profile WHERE race_id = %s ORDER BY candidate_id",
+            "SELECT p.candidate_id, p.race_id, p.facts, p.positions, p.opinions, "
+            "p.audit, c.ballot_status "
+            "FROM profile p LEFT JOIN candidate c ON c.candidate_id = p.candidate_id "
+            "WHERE p.race_id = %s ORDER BY p.candidate_id",
             (race_id,),
         )
 
