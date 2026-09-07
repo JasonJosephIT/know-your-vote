@@ -33,6 +33,10 @@
         claims (published or not — traceability needs both) but writes
         nothing; anon has zero log access; the log is append-only even
         for service_role; the agent_id/status/bucket CHECKs hold.
+    16. 0014_news_fairness invariants (news-fairness.md N1): a candidate_news
+        or election_news row with source_id NULL is rejected; an
+        official_link row with source_id NULL still inserts; a candidate_news
+        row with a valid source_id inserts.
 
    Supabase provides the anon/authenticated/service_role roles out of the box;
    the harness creates them first so the same SQL runs in both environments.
@@ -109,6 +113,14 @@ if (failures > 0) {
   process.exit(1);
 }
 
+/* A source row usable by the constraint probes below, which run before the
+   main fixture block (line ~330) exists — 0014's news_item_agent_source_check
+   now requires every candidate_news/election_news test row to carry one. */
+await db.exec(`
+  INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag)
+  VALUES ('src-early-test', 'https://example.gov/early', 'example.gov/early', 'Example Gov', 'primary_doc', 'N/A');
+`);
+
 /* 0005_refresh_agents: confirm the objects R1-R4 will write to actually
    exist, independent of the fixture data below (plan §7 "migration
    applied"). information_schema queries never throw for a missing column —
@@ -152,8 +164,8 @@ await check("0016 county index exists", async () => {
    cause, and it is invisible in the UI. */
 await check("a county-scoped item is not statewide", async () => {
   await db.query(
-    `INSERT INTO news_item (item_type, title, url, county_fips)
-     VALUES ('election_news','Broward only','https://example.org/scope-test','12011');`
+    `INSERT INTO news_item (item_type, title, url, county_fips, source_id)
+     VALUES ('election_news','Broward only','https://example.org/scope-test','12011','src-early-test');`
   );
   const statewide = await db.query(
     `SELECT count(*)::int AS n FROM news_item
@@ -232,16 +244,18 @@ await check("0017 news_item.relation exists and is nullable", async () => {
 });
 await check("0017 relation admits only named/related (plus NULL)", async () => {
   await db.query(
-    `INSERT INTO news_item (item_type, title, url, relation)
-     VALUES ('candidate_news','named row','https://example.org/rel-a','named'),
-            ('candidate_news','related row','https://example.org/rel-b','related'),
-            ('official_link','no relation','https://example.org/rel-c',NULL);`
+    `INSERT INTO news_item (item_type, title, url, relation, source_id)
+     VALUES ('candidate_news','named row','https://example.org/rel-a','named','src-early-test'),
+            ('candidate_news','related row','https://example.org/rel-b','related','src-early-test'),
+            ('official_link','no relation','https://example.org/rel-c',NULL,NULL);`
   );
   let rejected = false;
   try {
+    /* Carries a valid source_id too, so a rejection here can only be the
+       relation CHECK — not 0014's news_item_agent_source_check. */
     await db.query(
-      `INSERT INTO news_item (item_type, title, url, relation)
-       VALUES ('candidate_news','third tier','https://example.org/rel-d','maybe');`
+      `INSERT INTO news_item (item_type, title, url, relation, source_id)
+       VALUES ('candidate_news','third tier','https://example.org/rel-d','maybe','src-early-test');`
     );
   } catch (err) {
     if (!/news_item_relation_check/.test(String(err))) throw err;
@@ -266,6 +280,58 @@ await check("0015 rewrote the registration link's primary-era copy", async () =>
   }
   if (!summary.includes("same ballot in the general election")) {
     throw new Error("registration link is missing the general-election wording");
+  }
+});
+/* 0014_news_fairness (N1): "no source, no card" — candidate_news and
+   election_news rows must carry a source_id; official_link and
+   pipeline_event stay unconstrained (news-fairness.md §1). */
+await expectConstraintViolation(
+  "0014 rejects a candidate_news row with source_id NULL",
+  `INSERT INTO news_item (item_type, title, url)
+   VALUES ('candidate_news', 'no source', 'https://example.org/n1-a');`,
+  /violates check constraint "news_item_agent_source_check"/
+);
+await expectConstraintViolation(
+  "0014 rejects an election_news row with source_id NULL",
+  `INSERT INTO news_item (item_type, title, url)
+   VALUES ('election_news', 'no source', 'https://example.org/n1-b');`,
+  /violates check constraint "news_item_agent_source_check"/
+);
+await check("0014 an official_link row with source_id NULL still inserts", async () => {
+  await db.query(
+    `INSERT INTO news_item (item_type, title, url)
+     VALUES ('official_link', 'still fine', 'https://example.org/n1-c');`
+  );
+  const r = await db.query(
+    "SELECT count(*)::int AS n FROM news_item WHERE url = 'https://example.org/n1-c';"
+  );
+  if (r.rows[0].n !== 1) throw new Error("official_link row with NULL source_id was not inserted");
+});
+await check("0014 a candidate_news row with a valid source_id inserts", async () => {
+  await db.query(
+    `INSERT INTO news_item (item_type, title, url, source_id)
+     VALUES ('candidate_news', 'has a source', 'https://example.org/n1-d', 'src-early-test');`
+  );
+  const r = await db.query(
+    "SELECT count(*)::int AS n FROM news_item WHERE url = 'https://example.org/n1-d' AND source_id = 'src-early-test';"
+  );
+  if (r.rows[0].n !== 1) throw new Error("candidate_news row with a valid source_id was not inserted");
+});
+await check("0014 data fix: the four government-source rows landed", async () => {
+  /* The live rows these sources are matched to by id do not exist in this
+     fresh-database harness — the migration's UPDATE is a no-op here, by
+     design (WHERE source_id IS NULL). This checks the half that DOES run on
+     a fresh database: the INSERT ... ON CONFLICT (url_norm) DO NOTHING rows
+     the live UPDATE (by id, applied separately on the live database) needs
+     already in place. */
+  const r = await db.query(
+    `SELECT source_id, url_norm FROM source WHERE source_id IN (
+       'src_gov_miamidade_early_voting_2026','src_gov_broward_early_voting_2026',
+       'src_gov_hillsborough_early_voting_2026','src_gov_flsenate_hb991_2026'
+     ) ORDER BY source_id;`
+  );
+  if (r.rows.length !== 4) {
+    throw new Error(`expected 4 data-fix source rows, found ${r.rows.length}`);
   }
 });
 await check("race.info_last_verified_at column exists", async () => {
@@ -339,8 +405,8 @@ await db.exec(`
   INSERT INTO voting_info_subscription (email, zip5) VALUES ('voter@example.com', '33101');
   INSERT INTO candidate_contact (candidate_id, campaign_email, source_url) VALUES
     ('c-pub', 'press@pub-candidate.example', 'https://pub-candidate.example/contact');
-  INSERT INTO news_item (candidate_id, race_id, item_type, title, url) VALUES
-    ('c-pub', 'r-pub', 'candidate_news', 'Filing shows X.', 'https://example.gov/story-1');
+  INSERT INTO news_item (candidate_id, race_id, item_type, title, url, source_id) VALUES
+    ('c-pub', 'r-pub', 'candidate_news', 'Filing shows X.', 'https://example.gov/story-1', 's1');
   -- county-scoped fixture row: statewide rows come from 0008_election_seed
   INSERT INTO election_event (county_fips, event_type, election, event_date, details_url) VALUES
     ('12086', 'early_voting_start', 'general_2026', '2026-10-19', 'https://www.miamidade.gov/elections/');
@@ -470,10 +536,10 @@ await check("service_role reads voting_info_subscription", async () => {
    the same, or the published variance flatters our own coverage. */
 await check("named and related rows are separable for the audit", async () => {
   await db.query(
-    `INSERT INTO news_item (candidate_id, item_type, title, url, relation) VALUES
-       ('c-pub','candidate_news','named','https://example.org/aud-a','named'),
-       ('c-pub','candidate_news','race','https://example.org/aud-b','related'),
-       ('c-draft','candidate_news','race','https://example.org/aud-b','related');`
+    `INSERT INTO news_item (candidate_id, item_type, title, url, relation, source_id) VALUES
+       ('c-pub','candidate_news','named','https://example.org/aud-a','named','s1'),
+       ('c-pub','candidate_news','race','https://example.org/aud-b','related','s1'),
+       ('c-draft','candidate_news','race','https://example.org/aud-b','related','s1');`
   );
   const named = await db.query(
     `SELECT count(*)::int AS n FROM news_item
@@ -492,9 +558,9 @@ await check("named and related rows are separable for the audit", async () => {
    index has to keep permitting it — one row per (url, candidate_id). */
 await check("one article may attach to several candidates", async () => {
   await db.query(
-    `INSERT INTO news_item (candidate_id, item_type, title, url, relation) VALUES
-       ('c-pub','candidate_news','shared','https://example.org/multi','related'),
-       ('c-draft','candidate_news','shared','https://example.org/multi','related');`
+    `INSERT INTO news_item (candidate_id, item_type, title, url, relation, source_id) VALUES
+       ('c-pub','candidate_news','shared','https://example.org/multi','related','s1'),
+       ('c-draft','candidate_news','shared','https://example.org/multi','related','s1');`
   );
   const r = await db.query(
     "SELECT count(*)::int AS n FROM news_item WHERE url='https://example.org/multi';"
@@ -508,8 +574,10 @@ await check("one article may attach to several candidates", async () => {
    the same (url, candidate_id) pair must hit uq_news_item_url_candidate. */
 await expectConstraintViolation(
   "unique index rejects duplicate (url, candidate_id) news_item",
-  `INSERT INTO news_item (candidate_id, race_id, item_type, title, url)
-   VALUES ('c-pub', 'r-pub', 'candidate_news', 'Filing shows X (dup).', 'https://example.gov/story-1');`,
+  /* Carries a valid source_id so the expected failure is the unique index,
+     not 0014's news_item_agent_source_check. */
+  `INSERT INTO news_item (candidate_id, race_id, item_type, title, url, source_id)
+   VALUES ('c-pub', 'r-pub', 'candidate_news', 'Filing shows X (dup).', 'https://example.gov/story-1', 's1');`,
   /duplicate key value violates unique constraint "uq_news_item_url_candidate"/
 );
 await expectConstraintViolation(

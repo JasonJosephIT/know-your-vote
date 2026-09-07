@@ -156,8 +156,18 @@ every ingested row, not only the target field:
 
 | Office group | Rows | StatusCode | PartyCode |
 |---|---|---|---|
-| `FED` (269 USR + 14 USS) | 283 | DEF 107 · QUA 86 · DNQ 57 · WIT 32 · UNO 1 | REP 134 · DEM 106 · NPA 22 · WRI 11 · LPF 5 · IND 3 · FFP 1 · **MGT 1 (empty `PartyDesc`)** |
+| `FED` (269 USR + **14 USS**) | 283 | DEF 107 · QUA 86 · DNQ 57 · WIT 32 · UNO 1 | REP 134 · DEM 106 · NPA 22 · WRI 11 · LPF 5 · IND 3 · FFP 1 · **MGT 1 (empty `PartyDesc`)** |
 | `CAB` (63 GOV + 9 AGR + 7 CFO + 4 ATG) | 83 | DNQ 28 · DEF 19 · QUA 17 · WIT 17 · REM 2 | REP 31 · DEM 23 · NPA 16 · WRI 8 · IND 3 · LPF 1 · CPF 1 |
+
+> ⚠️ **Read the USS number.** Those 14 U.S. Senate filings were skipped by
+> `parse_candidate_list` until 2026-09-07 — `USS` was in neither office map,
+> so a statewide federal race was absent from every ballot with nothing in the
+> run report to say so. This table recorded the count all along. Fixed in
+> `intake.py` (`_NO_DISTRICT_RACES`, race `FL-SEN-general`, level `federal`);
+> full write-up in `db-audit-2026-09-07.md` §1. **The per-race tier table below
+> covers the 8 races the parser targeted at the time and therefore says nothing
+> about the Senate race** — the next DoE run is what splits those 14 filings
+> into ballot / write_in / excluded.
 
 #### Q1 — which status codes appear post-primary
 
@@ -300,7 +310,7 @@ with tools we already have; the fourth needs a new source.
 |---|---|---|
 | `official_site` | manual seed (§1 I3) | ~30 rows, one sitting |
 | `is_incumbent`, `incumbent_id` | **T2 FEC** — the `candidates` endpoint returns an incumbent/challenger/open-seat status per candidate | none; T2 exists and the key is live |
-| `race.is_open_seat` | derived from the same T2 field — no incumbent in the field ⇒ open seat | none |
+| `race.is_open_seat` | derived from the same T2 field — open **only** when the validated 2026 House field has no `I` row *and* no `C` row (all `O`); `C` is "challenger *to* an incumbent", so a C-without-I field asserts an incumbent the run did not see and refuses instead | none |
 | `prior_offices` | leave empty | — |
 
 `prior_offices` is worth naming as a deliberate skip: it is display-only, it has
@@ -374,6 +384,7 @@ adds the column it writes.
 | | **✅ B2 done 2026-09-07.** `_ballot_status(status, party)` tiers each row, status before party (B1's cross-tab found `WRI` rows carrying `DNQ`, `REM` and `WIT`, so a write-in that withdrew is excluded for withdrawing). Only `ballot` rows enter `candidate_ids`; everyone else is still **stored** as a candidate, because an invisible exclusion is not an auditable one. `_PARTY` is deleted — the DoE `PartyCode` is stored verbatim (D2). `_STATUS` gains the four post-primary codes; an unrecognised one raises rather than defaulting, so `ELE` (which arrives after certification and means the race is decided) stops the run instead of publishing a settled race as a live one. `ballot_status` rides the `upsert_candidate` ON CONFLICT, defaulting to `'ballot'` for pre-B2 callers. The parse result and the tool result both carry per-tier counts, so the exclusion is visible in a run report and not only in the database. **107 tests green** (was 100; the fixture moved off `ACT`, which is on the DoE form but not in the file, and gained `UNO`/`DEF`/`WRI`/`LPF` rows). Mutation-checked: removing the ballot filter, treating write-ins as ballot lines, checking party before status, silently excluding an unknown status, and re-flattening minor parties each fail the suite. `--selfcheck` green. |
 | **B3** | Populate `official_site` for briefed candidates — manual seed, one row per candidate, each URL human-verified | `scripts/` seed SQL | Every `ballot`-tier candidate in the 8 races has a non-NULL `official_site`; `store.candidate_scope` returns non-empty scope for each | B1 |
 | **B4** | Fill `is_incumbent` / `incumbent_id` / `is_open_seat` from the existing T2 FEC candidates endpoint | `toollayer/cap_toollayer/intake.py`, `store.py` | Known FL-28 incumbent resolves correctly; a genuinely open seat sets `is_open_seat` | B2 |
+| | **Code done 2026-09-07 — live DB write still pending (`local-session.md`).** Built behind the existing `doe_file_intake` handler with a `fill_incumbency: true` payload flag, **not a new tool**: every guard core enumerates `ALL_TOOLS`/`GRANTED_TOOLS` by name and cores are never edited, so a new `fec_incumbency` tool would be denied by every identity. Flag absent ⇒ byte-identical to pre-B4 behaviour and the FEC is never called; no key ⇒ `not_configured` before anything is fetched. A pure `resolve_incumbency(race, candidates, fec_rows)` does the matching (`fec_id` first, then `LAST, FIRST` name match); `store.write_incumbency` writes `race` and `candidate` in separate UPDATEs so a later DoE re-run cannot wipe incumbency. `is_open_seat` is true **only** when the validated 2026 House field has no `I` and no `C` — all `O`. **Refusal classes** (nothing written for the race, `is_open_seat` absent entirely so a caller cannot read a missing answer as a negative one): unmatched or duplicate `I` row; two `I` rows; unknown or null `incumbent_challenge`; a `C` row with no `I` row anywhere (the field asserts an incumbent this run did not see); a malformed row (missing `office`, or `election_years` missing/null/not a list); a truncated FEC page (or one with no `pagination.count`); a malformed `results` envelope; a non-numeric district; a name collision on an `I` row. Unresolved-but-not-refused: a roster candidate matching 0 or ≥2 rows, or two roster candidates on one non-`I` row — recorded with a reason, nothing written for them, and they do not block the field's verdict. |
 | **B5** | Add Congress.gov as a T3-sibling read tool for federal incumbent records (P0 gap, §4) | `toollayer/cap_toollayer/intake.py` | Returns a schema-valid vote/bill payload for a known FL US-House member; unknown query type ⇒ `not_implemented`; missing key ⇒ `not_configured` | B1 |
 | ~~**B6**~~ ✅ | Copy: both app strings + the `UPDATE news_item` | `voting-info/route.ts`, `YourRaces.tsx` (both **already fixed on `main` by another session**), `supabase/migrations/0015_general_election_copy.sql` (this change) | `node scripts/verify-migrations.mjs` green, including a new invariant asserting the row actually changed — mutation-checked: a trailing-slash typo in the `WHERE` makes it fail |
 | **B7** | Re-run the S2-01 acceptance end to end on real general data once B2–B4 land | `runtime/` | Profiler completes one real candidate: non-empty `stated_position` claims, each with a `candidate_self` source | B2, B3, B4 |
@@ -381,7 +392,7 @@ adds the column it writes.
 **Baseline that must stay green after every task** (AGENT_BRIEF §3):
 
 ```
-python3 toollayer/test_toollayer_skeleton.py        # 100
+python3 toollayer/test_toollayer_skeleton.py        # 170
 (cd toollayer && python3 -m cap_toollayer.server --selfcheck)
 python3 runtime/test_runtime.py                     # 39
 node scripts/verify-migrations.mjs                  # if SQL changed

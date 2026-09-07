@@ -191,6 +191,62 @@ class Store(logsink.PostgresSink):
              cand.get("ballot_status", "ballot"), cand.get("fec_id")),
         )
 
+    # -- B4 incumbency (separate UPDATEs, deliberately) --------------------
+
+    def read_candidate_fec_ids(self, candidate_ids: Sequence[str]) -> list[dict]:
+        """{candidate_id, fec_id} for the ids that exist, so the incumbency
+        resolver can match on a stored FEC id before it falls back to names.
+
+        The DoE export carries no FEC id at all, so without this read the
+        resolver's id-first rule is dead code and a name is always what
+        decides. The link this returns is one an earlier B4 run (or an
+        operator fixing a spelling mismatch) wrote to `candidate.fec_id`;
+        upsert_candidate COALESCEs rather than overwriting it, so a DoE
+        re-run never loses it. Called on the same connection *after* the
+        intake upserts, so it sees this run's rows too.
+
+        A candidate with no row, or a row whose fec_id is NULL, simply comes
+        back with fec_id NULL — the caller reads that as "no stored id" and
+        matches by name, which is the ordinary case.
+        """
+        ids = list(candidate_ids or [])
+        if not ids:
+            return []
+        return self._fetchall(
+            "SELECT candidate_id, fec_id FROM candidate "
+            "WHERE candidate_id = ANY(%s)",
+            (ids,),
+        )
+
+    def write_incumbency(
+        self,
+        race_id: str,
+        incumbent_id: str | None,
+        is_open_seat: bool,
+        per_candidate: Mapping[str, Mapping[str, Any]],
+    ) -> None:
+        """Write the resolved FEC incumbency onto `race` and `candidate`.
+
+        Not folded into upsert_race/upsert_candidate: those replace the row
+        from the DoE file, which carries no incumbency at all, so a later DoE
+        re-run would wipe these three columns. upsert_race deliberately does
+        not name them; this is the only writer. Uncommitted, like every other
+        content write — the tool-call log write is the transaction boundary.
+        """
+        self._execute(
+            "UPDATE race SET incumbent_id = %s, is_open_seat = %s "
+            "WHERE race_id = %s",
+            (incumbent_id, is_open_seat, race_id),
+        )
+        for candidate_id, vals in sorted(per_candidate.items()):
+            # COALESCE so a row we could not link this run keeps the fec_id an
+            # earlier run established.
+            self._execute(
+                "UPDATE candidate SET is_incumbent = %s, "
+                "fec_id = COALESCE(%s, fec_id) WHERE candidate_id = %s",
+                (bool(vals.get("is_incumbent")), vals.get("fec_id"), candidate_id),
+            )
+
     # -- T4 jurisdiction_resolve (read zip_district; one mapping, no copy) --
 
     def jurisdiction_resolve(self, zip5: str) -> list[dict]:
@@ -269,6 +325,27 @@ class Store(logsink.PostgresSink):
             "FROM profile p LEFT JOIN candidate c ON c.candidate_id = p.candidate_id "
             "WHERE p.race_id = %s ORDER BY p.candidate_id",
             (race_id,),
+        )
+
+    def read_named_news_counts(self, candidate_ids: Sequence[str]) -> list[dict]:
+        """Per-candidate count of `named` news items, for N5 coverage variance.
+
+        `named` only, and filtered in SQL rather than in Python: a `related`
+        row attaches to every candidate the ambiguity admits, so those counts
+        are equal across a race by construction and would drag the variance
+        toward zero — the tier that exists to fill a voter's page flattering
+        the number we publish about our own fairness. (0017 added the column;
+        idx_news_item_candidate_relation serves exactly this shape.)
+
+        A candidate with no `named` rows simply does not come back. The caller
+        zero-fills, because a candidate the press ignored is the widest gap in
+        the report and must not vanish from the denominator.
+        """
+        return self._fetchall(
+            "SELECT candidate_id, COUNT(*) AS n FROM news_item "
+            "WHERE relation = 'named' AND candidate_id = ANY(%s) "
+            "GROUP BY candidate_id",
+            (list(candidate_ids),),
         )
 
     def write_balance_result(
