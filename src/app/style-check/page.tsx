@@ -15,7 +15,11 @@ const verdicts: Verdict[] = [
   "unverifiable",
 ];
 
-const parties: Party[] = ["REP", "DEM", "NPA", "other"];
+/* Includes the two that forced PartyChip's fallback: LPF is a real printed
+   ballot line the old CHECK flattened to 'other', and MGT arrives from the
+   DoE with an empty description, so it must render its raw code rather than
+   a blank chip. WRI renders nothing at all — it is not a party. */
+const parties: Party[] = ["REP", "DEM", "NPA", "IND", "LPF", "CPF", "MGT", "other", "WRI"];
 
 /* Dev-only mirror of docs/design.html for comparing primitives to spec. */
 export default function StyleCheck() {

@@ -61,7 +61,10 @@ export async function browseCandidates(options: {
   let candidateQuery = supabase
     .from("candidate")
     .select("candidate_id, legal_name, party, official_site, office_sought")
-    .in("candidate_id", candidateIds);
+    .in("candidate_id", candidateIds)
+    /* Printed ballot lines only (D1). The directory is a browse surface, so an
+       excluded filer here would be a name a voter can never vote for. */
+    .eq("ballot_status", "ballot");
   if (q) {
     candidateQuery = candidateQuery.or(
       `legal_name.ilike.%${q}%,office_sought.ilike.%${q}%,party.ilike.%${q}%`

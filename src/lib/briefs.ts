@@ -8,6 +8,7 @@ import type {
   Claim,
   Issue,
   Position,
+  Profile,
   ProfileAudit,
   Race,
   Source,
@@ -115,7 +116,12 @@ async function fetchRaceBrief(raceId: string): Promise<RaceBrief | null> {
   if (!race) return null;
 
   const [profilesRes, issuesRes, positionsRes, claimsRes] = await Promise.all([
-    supabase.from("profile").select("*").eq("race_id", raceId),
+    /* The embed carries the candidate's ballot tier so the filter below can
+       run before the audit check (A3's handoff). */
+    supabase
+      .from("profile")
+      .select("*, candidate(ballot_status)")
+      .eq("race_id", raceId),
     supabase
       .from("issue")
       .select("*")
@@ -128,7 +134,28 @@ async function fetchRaceBrief(raceId: string): Promise<RaceBrief | null> {
       .eq("race_id", raceId),
   ]);
 
-  const profiles = profilesRes.data ?? [];
+  /* Only printed ballot lines are briefed (data-architecture.md D1). This is
+     the third and last layer of the same rule: B2 keeps non-ballot filers out
+     of race.candidate_ids, A3 keeps them out of the Balance Audit, and this
+     keeps them out of the read.
+
+     Without it the audit fix is undone here: A3 deliberately does NOT write
+     balance_check_passed onto an excluded candidate (they passed no audit),
+     so a stale profile for one would fail the .every() below and make the
+     whole race permanently unpublishable — the same symptom, reached by a
+     different path.
+
+     PostgREST returns a to-one embed as an object, but some relationship
+     shapes return a one-element array; normalize both rather than trusting
+     one. A profile with no candidate row resolves to null and is dropped —
+     fail closed. */
+  const allProfiles = (profilesRes.data ?? []) as Array<
+    Profile & { candidate?: { ballot_status?: string } | Array<{ ballot_status?: string }> | null }
+  >;
+  const profiles = allProfiles.filter((p) => {
+    const embed = Array.isArray(p.candidate) ? p.candidate[0] : p.candidate;
+    return embed?.ballot_status === "ballot";
+  });
   if (profiles.length === 0) return null;
   /* FR-005: all profiles must pass the Balance Audit, not just be present. */
   if (
