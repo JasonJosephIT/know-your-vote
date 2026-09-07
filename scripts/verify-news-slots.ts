@@ -160,6 +160,23 @@ const N: Item[] = [
 check("null relation counts as named", ids(selectNewsSlots(N, 1).slots) === "n-null",
   ids(selectNewsSlots(N, 1).slots));
 
+/* Lean counts carry ACROSS the tier boundary (news-slots.ts header, lines
+   24-26): the `named` pick already spent the "left" bucket, so the related
+   tier must prefer the untaken "right" lean even though the "left" related
+   item is newer and plain recency would pick it. Same `type` on every item
+   so only the carried lean count can be doing the work. If leanTaken/typeTaken
+   were built fresh per tier instead of once outside the loop, this would fail. */
+const Q: Item[] = [
+  item("q-nam-left", "2026-09-01T00:00:00Z", "named", src("left", "factual_reporting")),
+  item("q-rel-left", "2026-09-20T00:00:00Z", "related", src("left", "factual_reporting")),
+  item("q-rel-right", "2026-09-10T00:00:00Z", "related", src("right", "factual_reporting")),
+];
+check(
+  "carried lean count makes the related tier prefer the untaken lean over a newer same-lean item",
+  ids(selectNewsSlots(Q, 2).slots) === "q-nam-left,q-rel-right",
+  ids(selectNewsSlots(Q, 2).slots),
+);
+
 // (e) — a sourceless item is its own bucket and is never dropped here.
 const E: Item[] = [
   item("e-src-1", "2026-09-10T00:00:00Z", "named", src("left", "factual_reporting")),

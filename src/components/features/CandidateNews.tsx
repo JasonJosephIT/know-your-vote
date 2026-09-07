@@ -115,8 +115,8 @@ export async function CandidateNews({
           stories there were, not to fill the gap with something else. */}
       {shortfall > 0 && (
         <p className="text-body-sm text-on-surface-muted">
-          Only {selected.length} stories found for this candidate in the last 30
-          days.
+          Only {selected.length} {selected.length === 1 ? "story" : "stories"} found
+          for this candidate in the last 30 days.
         </p>
       )}
     </section>
