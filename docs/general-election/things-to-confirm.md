@@ -1,10 +1,13 @@
 # Things to confirm
 
-Findings from one session that **another session may already be fixing**.
-Nothing here has been pushed as a fix. Each entry says what was observed, how
-it was reproduced, and the change that was verified locally — so whoever owns
-the file can confirm it is already handled, or apply it, without rediscovering
-it from scratch.
+Findings from one session that **another session may already be fixing**. Each
+entry says what was observed, how it was reproduced, and the change that was
+verified locally — so whoever owns the file can confirm it is already handled,
+or apply it, without rediscovering it from scratch.
+
+An entry is written **before** anyone fixes it, and is only marked resolved
+once the fix is confirmed on the current head — by the owning session, or here
+when the file turns out to be ours after all (TC-3).
 
 **Check before acting.** These were true at the stated commit. If the current
 head already handles one, delete the entry rather than re-fixing it.
@@ -72,39 +75,49 @@ quietly add.
 
 ---
 
-## TC-2 — PR #32's description no longer matches its contents
+## TC-2 — ~~PR #32's description no longer matches its contents~~ ✅ RESOLVED
 
-**Observed at** `b74820c`, 2026-09-07. **Not corrected.**
+**Observed at** `b74820c`. **Fixed by the branch owner** the same day.
 
 I opened #32 for a two-commit change (the Senate-race intake fix and the
-database audit). It now carries **13 commits and 11 files**, because another
-session pushed Stream P's real work onto the same branch: migration `0014`
-(N1), coverage variance (N5), FEC incumbency (B4) and several
-degrade-honestly fixes.
+database audit). It grew to 17 commits because another session pushed Stream
+P's real work onto the same branch, and the body still described only the
+original two — including saying nothing about the fact that the diff had
+gained a **schema change** (`0014`), the most review-worthy thing in it.
 
-The description still describes only the original two commits. A reviewer
-reading it would not know `0014` or B4 are in the diff — including that the
-PR now contains a **schema change**, which is the single most review-worthy
-thing in it.
+The body now leads with P1/P2/P3 — `0014` and its **not applied live**
+precondition, coverage variance (N5), FEC incumbency (B4) — and keeps the
+original Senate-fix text below a divider. Nothing left to do.
 
-**Confirm:** whoever lands #32 should rewrite the body to cover the whole
-branch, or split it. Not done here because the branch is in flight and the
-body is not mine to describe on their behalf.
+> **The general shape:** a shared branch makes the PR body stale without
+> anyone editing it. The description is a claim about the diff, and the diff
+> moved. Whoever pushes onto someone else's PR branch owns re-reading the body
+> against it.
 
 ---
 
-## TC-3 — TASK-066's race count is still wrong in the roadmap
+## TC-3 — ~~TASK-066's race count is still wrong in the roadmap~~ ✅ FIXED HERE
 
-**Observed** 2026-09-07. **Not corrected — was blocked, and is now unblocked.**
+**Observed** 2026-09-07. **Corrected 2026-09-07**, once the block expired.
 
-`product-roadmap.md` says TASK-066 covers *"8 target races, 22 ballot
-candidates"*. I wrote that, citing B1. It is wrong: B1 measured the eight
+`product-roadmap.md` said TASK-066 covered *"8 target races, 22 ballot
+candidates"*. I wrote that, citing B1. It was wrong: B1 measured the eight
 races the parser targeted, and the parser was skipping the U.S. Senate race
-(see `db-audit-2026-09-07.md` §1). The real ballot has **nine**.
+(`db-audit-2026-09-07.md` §1). The real ballot has **nine**.
 
 It was left alone because PR #31 also edited that file and a competing edit
-would have recreated the collision the stream split exists to prevent.
-**PR #31 has since merged (`0283bf1`), so that reason has expired.**
+would have recreated the collision the stream split exists to prevent. #31
+merged as `0283bf1`, so the reason expired and the fix landed:
 
-**Confirm:** correct the count to nine races, and note that the candidate
-total is unknown until a DoE run tiers the 14 `USS` filings.
+- The launch table now reads **9 races**, and states plainly that the Senate
+  race's share of the 14 `USS` filings is **unknown** until a DoE run tiers
+  them. The 22 is kept where it is true — across the other eight.
+- The B1 paragraph now says *"each of the eight races B1 covered"* and points
+  at the audit, rather than implying eight is the ballot.
+- A short paragraph records the missing-race bug itself, so the 9 is sourced
+  in the file that asserts it.
+
+> **The general shape:** the fix and the number it invalidates usually live in
+> different files, and the second one is the one nobody re-reads. A count
+> asserted in a doc is a measurement with a scope — write the scope next to
+> it, or the next reader inherits the blind spot.

@@ -31,7 +31,7 @@ September 28 and that reminder cannot be re-sent.
 
 | # | Step | Owner | State |
 |---|---|---|---|
-| 1 | TASK-066 — **8 target races, 22 ballot candidates** (measured by B1, not estimated), 3 measures through the Balance Audit | founder | not started — but the pipeline can now produce the right roster; see below |
+| 1 | TASK-066 — **9 races** (the 8 B1 measured, plus U.S. Senate), 3 measures through the Balance Audit | founder | not started — 22 ballot candidates across the 8; the Senate race's share of 14 `USS` filings is unknown until a DoE run tiers them. See below |
 | 2 | Remove every `demo-` row (`scripts/demo-teardown.sql`) | founder | not started — script fixed 2026-09-07, see TASK-066 |
 
 The app cannot go public on demo fixtures. This is the longest pole and it is
@@ -92,7 +92,9 @@ Engineering, none of it blocked:
    filed, with a status code. `parse_candidate_list` appended every row to
    `race.candidate_ids` with no status filter, so **87 non-ballot names
    (83 defeated/withdrawn/disqualified + 4 qualified write-ins) sat alongside
-   22 real ballot lines**, at least one in every one of the eight races. The
+   22 real ballot lines**, at least one in each of the eight races B1 covered
+   (the U.S. Senate race was not among them —
+   `general-election/db-audit-2026-09-07.md` §1). The
    Balance Audit HALTs at 10% variance and a candidate with zero claims
    against an incumbent with twelve is 100% — so **the pipeline's default
    outcome was that nothing publishes at all**. Running TASK-066 before this
@@ -117,6 +119,13 @@ Engineering, none of it blocked:
    | `0013` | `candidate.ballot_status`; party CHECK dropped | applied live |
    | `0016` | `news_item.county_fips` | applied live |
    | `0017` | `news_item.relation` (`named`/`related`) | applied live |
+
+   **And a ninth race was missing entirely.** `parse_candidate_list` had no
+   `USS` entry, so all 14 U.S. Senate filings fell through to `skipped` —
+   silently, because skipping is the normal path for the ~90% of the DoE file
+   that is not a target race. Fixed 2026-09-07;
+   `general-election/db-audit-2026-09-07.md` §1 has the measurement, the
+   mechanism that hid it, and why the ballot count above is 9 and not 8.
 
    **Two founder decisions are recorded** in `data-architecture.md` §1:
    write-ins are **excluded, not listed** (D1 — answered against the
