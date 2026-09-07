@@ -6,7 +6,7 @@
 **Status:** 59/71 tasks complete · **Host:** Vercel · **Election:** November 3, 2026
 **Current Phase:** Phase 6 — The General Election Pivot
 
-## Where this stands (2026-09-06)
+## Where this stands (2026-09-07)
 
 Hosting is Vercel again — Vercel Pro is available, so the Cloudflare detour is
 reverted (`docs/scope-changes.md`). **Deploying is no longer blocked**, which
@@ -31,7 +31,7 @@ September 28 and that reminder cannot be re-sent.
 
 | # | Step | Owner | State |
 |---|---|---|---|
-| 1 | TASK-066 — 9 races, ~18–20 candidates, 3 measures through the Balance Audit | founder | not started |
+| 1 | TASK-066 — **8 target races, 22 ballot candidates** (measured by B1, not estimated), 3 measures through the Balance Audit | founder | not started — but the pipeline can now produce the right roster; see below |
 | 2 | Remove every `demo-` row (`scripts/demo-teardown.sql`) | founder | not started — script fixed 2026-09-07, see TASK-066 |
 
 The app cannot go public on demo fixtures. This is the longest pole and it is
@@ -77,9 +77,99 @@ Engineering, none of it blocked:
    across the ship date are not meaningful, since `zip_resolved` now counts a
    different thing — read the funnel from `ballot_viewed` instead.
 
-   **The critical path is now content, not code**: TASK-066's races,
-   candidates and measures through the Balance Audit, and TASK-058's date
-   verification. Both need a human.
+   **The critical path is content, not app code** — TASK-066's races,
+   candidates and measures through the Balance Audit. (Written 2026-09-06 of
+   the *app surface*, and still true of it. The pivot's ingest and audit half
+   was outstanding at the time and landed the next day; see item 2.)
+
+2. **The general-election pivot's engineering landed 2026-09-07.** Tracked as
+   A/B/C tasks in `docs/general-election/`, not as TASK-0xx, so the 59/71
+   count above is unchanged — but this is the work that makes TASK-066
+   possible at all.
+
+   **The defect it fixes, measured on the live DoE file (B1).** The general
+   export is a *filing list*, not a ballot: it still carries everyone who
+   filed, with a status code. `parse_candidate_list` appended every row to
+   `race.candidate_ids` with no status filter, so **87 non-ballot names
+   (83 defeated/withdrawn/disqualified + 4 qualified write-ins) sat alongside
+   22 real ballot lines**, at least one in every one of the eight races. The
+   Balance Audit HALTs at 10% variance and a candidate with zero claims
+   against an incumbent with twelve is 100% — so **the pipeline's default
+   outcome was that nothing publishes at all**. Running TASK-066 before this
+   would have halted every race.
+
+   Fixed in three layers, because one is not enough:
+
+   | Layer | Task | Keeps non-ballot filers out of |
+   |---|---|---|
+   | Ingest | B2 | `race.candidate_ids` |
+   | Audit | A3 | the Balance Audit population |
+   | Read | A4 | briefs and the candidate directory |
+
+   The read layer matters on its own: A3 deliberately does *not* write
+   `balance_check_passed` onto a candidate it never audited, and
+   `getRaceDetail` requires **every** profile in a race to carry that flag —
+   so without A4 a stale profile would have made a race permanently
+   unpublishable by a different route.
+
+   | Migration | What | State |
+   |---|---|---|
+   | `0013` | `candidate.ballot_status`; party CHECK dropped | applied live |
+   | `0016` | `news_item.county_fips` | applied live |
+   | `0017` | `news_item.relation` (`named`/`related`) | applied live |
+
+   **Two founder decisions are recorded** in `data-architecture.md` §1:
+   write-ins are **excluded, not listed** (D1 — answered against the
+   recommendation; the cost is that a voter never learns a qualified write-in
+   exists, and **A5 must state that on the methodology page**), and the party
+   CHECK is dropped so IND/LPF/CPF keep their identity instead of collapsing
+   into `other` (D2).
+
+3. **The news plane is built and gated.** `candidate-news-PRD.md` §5–§7:
+   a corpus sweep over a frozen outlet list (C7), a `named`/`related`
+   association matcher (C8), and a county-filterable election news feed (C9).
+   All three are on `main` with guardrails; **none of them runs yet**, and the
+   blockers are deliberate rather than incidental:
+
+   | Gate | Owner | Why it is a gate |
+   |---|---|---|
+   | `leanTag` on 23 outlets | founder | Assigning a lean to a named news organisation is an editorial act with a real reputational cost for a nonpartisan product — not something to assert from memory |
+   | `feed` URL on 23 outlets | local session | A feed URL that 404s fails silently and looks exactly like "no news this week"; the session that wrote the list had no egress and guessed none. `node scripts/news-sweep.ts --probe` fills them |
+   | R1's cron (`0 9 1,15 * *`) | founder | The 15 October sweep lands **after** registration closes (Oct 5) and days before early voting opens (Oct 24). This one has a date on it |
+
+4. **Still needs a machine with network access**, unchanged in kind from
+   TASK-060: the live DoE fetch that feeds B2's parser, and B3's 22
+   `official_site` rows. Both are listed in
+   `docs/general-election/local-session.md`.
+
+5. **The remaining work is split into two parallel packages**, so two
+   sessions can run at once: `docs/general-election/stream-surface.md`
+   (voter-facing `src/**`) and `stream-pipeline.md` (toollayer + migrations).
+
+   The boundary is not thematic. It follows the one collision this repo has
+   actually suffered — **`supabase/migrations/` collided three times in a
+   week**, every time because two planning docs assigned "the next number"
+   independently — so the ledger gets exactly one owner, and everything else
+   follows from that.
+
+   | | Stream S | Stream P |
+   |---|---|---|
+   | Owns | `src/**`, `verify-news-neutrality.ts`, `news-fairness.md`, `candidate-news-PRD.md` | `toollayer/**`, `supabase/migrations/**` + ledger, `data-architecture.md`, `data-ingest.md` |
+   | Tasks | **A5+N7** methodology page · **N6** sourced-ness lint · **N4** equal-slot selector | **N1** migration `0014` · **N5** coverage variance · **B4** FEC incumbency (network-gated) |
+
+   One shared file remains — `news-fairness.md`'s N-task table has rows on
+   both sides. Each stream appends only to its own rows; different lines merge
+   cleanly, and if they conflict, take both.
+
+   Two cross-stream notes worth knowing before either starts:
+
+   - **N4 must take `N` as a parameter, not choose it.** `N` comes from N5's
+     real per-candidate counts, and N5 is in the other stream with no data
+     yet. Picking a number now would be a guess dressed as a decision.
+   - **`0014` is numbered below `0015`–`0017`, which are already applied**, so
+     it lands first on a fresh database and last on the live one. `0013` had
+     the same shape and its header records the compatibility check; `0014`
+     needs its own.
 
 Partially blocked: **TASK-060** needs the Census ZCTA crosswalk files, and
 `www2.census.gov` is unreachable from the Claude Code session (403 at the
