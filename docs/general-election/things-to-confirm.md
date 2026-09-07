@@ -121,3 +121,39 @@ merged as `0283bf1`, so the reason expired and the fix landed:
 > different files, and the second one is the one nobody re-reads. A count
 > asserted in a doc is a measurement with a scope — write the scope next to
 > it, or the next reader inherits the blind spot.
+
+---
+
+## TC-4 — `verify-news-ungated.ts` is red on `main`, and has been since C9
+
+**Observed** 2026-09-07 on `origin/main` (`0283bf1`) and on every branch off it.
+**Not corrected** — the fix is a judgment call about what the rule now means.
+
+Two of its eight checks fail:
+
+```
+FAIL  fetch requests the statewide scope with no parameters
+FAIL  effect has no location dependency
+```
+
+The guardrail asserts a literal `fetch("/api/news", { signal: ... })` and an
+empty `useEffect` dependency array. C9 changed `NewsFeed.tsx` to send
+`?county=` and to depend on `[county]` — which is **candidate-news-PRD.md §7,
+built on purpose**, not a regression.
+
+**The rule the guardrail exists to protect still holds.** It was written for
+TASK-070: the feed must never be gated behind a device-storage location. The
+county now comes from the **URL**, it is optional, and the fetch is issued
+unconditionally on every render path — so there is no gate. What broke is the
+regex, which encoded "no parameters at all" as a proxy for "no location gate".
+Those were the same thing until §7 shipped.
+
+**Confirm before changing it:** the replacement has to keep forbidding a
+`kyv.location` / storage read from reaching this fetch while allowing a URL
+parameter. Loosening it to "any parameter is fine" would retire the check
+rather than update it. Mutation-check the new form against a reintroduced
+storage gate.
+
+Not fixed while merging #32 because it is red on `main` independently of that
+branch — carrying it into an unrelated merge would have hidden which change
+owned it.
