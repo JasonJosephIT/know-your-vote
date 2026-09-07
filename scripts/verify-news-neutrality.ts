@@ -247,6 +247,28 @@ function runSelfTest(): number {
     JSON.stringify(sourcednessViolation(nullLeanTagRow))
   );
 
+  const emptyTypeRow = {
+    item_type: "candidate_news",
+    source_id: "src-6",
+    source: { type: "" as SourceType, lean_tag: "center" as LeanTag },
+  };
+  assert(
+    "sourcedness: agent row with a source but empty type is flagged",
+    sourcednessViolation(emptyTypeRow) !== null,
+    JSON.stringify(sourcednessViolation(emptyTypeRow))
+  );
+
+  const emptyLeanTagRow = {
+    item_type: "candidate_news",
+    source_id: "src-7",
+    source: { type: "factual_reporting" as SourceType, lean_tag: "" as LeanTag },
+  };
+  assert(
+    "sourcedness: agent row with a source but empty lean_tag is flagged",
+    sourcednessViolation(emptyLeanTagRow) !== null,
+    JSON.stringify(sourcednessViolation(emptyLeanTagRow))
+  );
+
   const fullyPopulatedRow = {
     item_type: "election_news",
     source_id: "src-4",
