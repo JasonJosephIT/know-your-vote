@@ -64,8 +64,8 @@ v1.0's numbering claim:
 
 - Live migrations are `0000`–`0008`. Repo `main` also holds `0009_action_log_roles`,
   `0010_ballot_measure`, `0011_measure_rls` — **written, not applied live.**
-- Planned, not written: **`0012_general_election.sql`** (`candidate.ballot_status`,
-  ingest A1) and **`0013_news_fairness.sql`** (agent news must carry a source,
+- Planned, not written: the **`general_election`** migration (`candidate.ballot_status`,
+  ingest A1) and the **`news_fairness`** migration (agent news must carry a source,
   `news-fairness.md` §3 / N1). v1.0 had numbered these `0010`/`0011`; PR #10
   renumbered them off the collision with the ballot-measure migrations.
 
@@ -195,7 +195,7 @@ in the prompt.
    and the operator's disk only.
 2. Ingest
    branch `claude/data-architecture-ingest-plan-u9b1fq` — A0 (founder decides the
-   three-tier `ballot_status`), A1 (migration `0012`), B2 (parser writes real
+   three-tier `ballot_status`), A1 (the `general_election` migration), B2 (parser writes real
    candidates), B3 (official sites). Until B2 lands, every R1 run will keep
    writing honest zeros, correctly.
 
@@ -203,7 +203,7 @@ in the prompt.
 
 - **Q0 — `news-fairness.md`.** *Answered:* it landed on `main` with PR #10
   (`docs/general-election/news-fairness.md`) after C0 had searched for it. Its
-  §1 is the labelling rule CN-R1/CN-R3 implement, §3 is migration `0013`, and
+  §1 is the labelling rule CN-R1/CN-R3 implement, §3 is the `news_fairness` migration, and
   its §5 names this PRD as the producer.
 - **Q1 — search backend + budget.** *Answered by C0:* R1 uses the Claude
   app's web search; there is no separate API key or budget line. Cost is

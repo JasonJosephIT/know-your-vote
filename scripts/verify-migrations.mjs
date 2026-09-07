@@ -125,6 +125,24 @@ await check("news_item.candidate_id column exists", async () => {
   );
   if (r.rows[0].n !== 1) throw new Error("news_item.candidate_id missing");
 });
+/* 0013 UPDATEs a row seeded by 0004, which is already applied live. A wrong
+   URL in that WHERE clause would match zero rows and still "pass" every other
+   check, so assert the row actually changed rather than that the file ran. */
+await check("0013 rewrote the registration link's primary-era copy", async () => {
+  const r = await db.query(
+    "SELECT summary FROM news_item WHERE url = 'https://registertovoteflorida.gov';"
+  );
+  if (r.rows.length !== 1) {
+    throw new Error(`expected exactly 1 registration link row, got ${r.rows.length}`);
+  }
+  const summary = r.rows[0].summary ?? "";
+  if (/closed-primary|primary ballot/i.test(summary)) {
+    throw new Error("registration link still carries primary-era copy — the UPDATE did not match");
+  }
+  if (!summary.includes("same ballot in the general election")) {
+    throw new Error("registration link is missing the general-election wording");
+  }
+});
 await check("race.info_last_verified_at column exists", async () => {
   const r = await db.query(
     "SELECT count(*)::int AS n FROM information_schema.columns WHERE table_name='race' AND column_name='info_last_verified_at';"
