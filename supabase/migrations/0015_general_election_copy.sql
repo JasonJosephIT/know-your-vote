@@ -1,4 +1,4 @@
--- 0013_general_election_copy.sql
+-- 0015_general_election_copy.sql
 -- Fix voter-facing copy that still described the primary.
 --
 -- WHY A MIGRATION AND NOT A FILE EDIT: 0004_official_links.sql is already

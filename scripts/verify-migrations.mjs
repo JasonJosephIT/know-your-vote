@@ -125,10 +125,10 @@ await check("news_item.candidate_id column exists", async () => {
   );
   if (r.rows[0].n !== 1) throw new Error("news_item.candidate_id missing");
 });
-/* 0013 UPDATEs a row seeded by 0004, which is already applied live. A wrong
+/* 0015 UPDATEs a row seeded by 0004, which is already applied live. A wrong
    URL in that WHERE clause would match zero rows and still "pass" every other
    check, so assert the row actually changed rather than that the file ran. */
-await check("0013 rewrote the registration link's primary-era copy", async () => {
+await check("0015 rewrote the registration link's primary-era copy", async () => {
   const r = await db.query(
     "SELECT summary FROM news_item WHERE url = 'https://registertovoteflorida.gov';"
   );

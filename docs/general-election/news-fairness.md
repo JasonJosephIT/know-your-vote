@@ -113,12 +113,16 @@ it, as `data-architecture.md` §3 already requires.
 
 ---
 
-## 3. Schema change — the `news_fairness` migration
+## 3. Schema change — migration `0014_news_fairness.sql`
+
+> **Number reserved in `supabase/migrations/README.md`** (was `0011`, then
+> `0013`; `0013` is now `general_election`). Check the ledger before creating
+> the file.
 
 One constraint. Everything else in this document is application code.
 
 ```sql
--- <next free number>_news_fairness.sql
+-- 0014_news_fairness.sql
 -- No source, no card. Agent-written news must be attributable; the seeded
 -- official_link / pipeline_event rows predate this and are unaffected.
 ALTER TABLE news_item ADD CONSTRAINT news_item_agent_rows_need_source
@@ -126,7 +130,7 @@ ALTER TABLE news_item ADD CONSTRAINT news_item_agent_rows_need_source
          OR source_id IS NOT NULL);
 ```
 
-the `general_election` migration (`candidate.ballot_status`, party CHECK dropped)
+`0013_general_election.sql` (`candidate.ballot_status`, party CHECK dropped)
 **survives the pivot unchanged** — `ballot_status` still decides who gets a
 candidate page and news slots. Only its *justification* moves: it defines the
 slot population rather than the audit denominator. The B1 findings behind it
@@ -140,7 +144,7 @@ Dependency-ordered. N1 gates N2–N4.
 
 | ID | Task | Files | Verify |
 |---|---|---|---|
-| **N1** | The `news_fairness` migration exactly as §3, at the next free number | `supabase/migrations/<next>_news_fairness.sql` | `node scripts/verify-migrations.mjs` green; a `candidate_news` row with `source_id NULL` is rejected; an `official_link` row with NULL still inserts |
+| **N1** | Migration `0014` exactly as §3 | `supabase/migrations/0014_news_fairness.sql` | `node scripts/verify-migrations.mjs` green; a `candidate_news` row with `source_id NULL` is rejected; an `official_link` row with NULL still inserts |
 | ~~**N2**~~ ✅ | News read joins `source`; API returns `publisher`, `type`, `lean_tag`. `item_type` widened to the four values 0005 allows; `candidate_id` added | `src/app/api/news/route.ts`, `src/types/app.ts`, `src/lib/news-labels.ts` | `npx tsc --noEmit` clean, `npm run build` clean, `node scripts/verify-news-labels.ts` passes |
 | ~~**N3**~~ ✅ | Card renders publisher + Reporting/Opinion + lean; opinion cards visually distinct | `src/components/features/NewsFeed.tsx` | `npm run build` clean; opinion rows get a muted ground + left rule, and say "Opinion" in words |
 ~ **N2/N3 done 2026-09-06.** Label logic lives in `src/lib/news-labels.ts`
