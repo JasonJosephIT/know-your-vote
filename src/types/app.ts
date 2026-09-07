@@ -78,6 +78,10 @@ export interface ResolveResult {
   zip: string;
   inCoverage: boolean;
   county?: string;
+  /* County FIPS — the durable location key (zip_district, the DoE files and
+     COVERED_COUNTIES are all keyed on it, and it reaches all 67 counties).
+     `county` above is its display name. */
+  countyFips?: string;
   district?: string;
   metro?: Metro | null;
   isSplit?: boolean;

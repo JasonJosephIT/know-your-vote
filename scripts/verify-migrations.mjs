@@ -125,6 +125,49 @@ await check("news_item.candidate_id column exists", async () => {
   );
   if (r.rows[0].n !== 1) throw new Error("news_item.candidate_id missing");
 });
+await check("0016 news_item.county_fips exists, is CHAR(5) and is nullable", async () => {
+  const r = await db.query(
+    `SELECT data_type, character_maximum_length AS len, is_nullable
+       FROM information_schema.columns
+      WHERE table_name='news_item' AND column_name='county_fips';`
+  );
+  if (r.rows.length !== 1) throw new Error("news_item.county_fips missing");
+  const { data_type, len, is_nullable } = r.rows[0];
+  /* CHAR(5) matches zip_district.county_fips exactly; nullable is load-bearing
+     because NULL is how the feed says "statewide" (candidate-news-PRD.md §7). */
+  if (data_type !== "character" || Number(len) !== 5) {
+    throw new Error(`county_fips is ${data_type}(${len}), expected character(5)`);
+  }
+  if (is_nullable !== "YES") throw new Error("county_fips must stay nullable — NULL means statewide");
+});
+await check("0016 county index exists", async () => {
+  const r = await db.query(
+    "SELECT count(*)::int AS n FROM pg_indexes WHERE tablename='news_item' AND indexname='idx_news_item_county';"
+  );
+  if (r.rows[0].n !== 1) throw new Error("idx_news_item_county missing");
+});
+/* The scope clause the feed reads with. A county-scoped row that carried no
+   race and no metro used to fall into the statewide bucket, which would show
+   one county's news to the whole state — the one regression this column can
+   cause, and it is invisible in the UI. */
+await check("a county-scoped item is not statewide", async () => {
+  await db.query(
+    `INSERT INTO news_item (item_type, title, url, county_fips)
+     VALUES ('election_news','Broward only','https://example.org/scope-test','12011');`
+  );
+  const statewide = await db.query(
+    `SELECT count(*)::int AS n FROM news_item
+      WHERE race_id IS NULL AND metro IS NULL AND county_fips IS NULL
+        AND url = 'https://example.org/scope-test';`
+  );
+  if (statewide.rows[0].n !== 0) throw new Error("county-scoped row leaked into the statewide scope");
+  const scoped = await db.query(
+    `SELECT count(*)::int AS n FROM news_item
+      WHERE county_fips = '12011' AND url = 'https://example.org/scope-test';`
+  );
+  if (scoped.rows[0].n !== 1) throw new Error("county-scoped row not returned for its own county");
+  await db.query("DELETE FROM news_item WHERE url = 'https://example.org/scope-test';");
+});
 /* 0015 UPDATEs a row seeded by 0004, which is already applied live. A wrong
    URL in that WHERE clause would match zero rows and still "pass" every other
    check, so assert the row actually changed rather than that the file ran. */
