@@ -180,7 +180,7 @@ amendment?) eight weeks before an election.
 ## 2. Schema changes — migration `0013_general_election.sql`
 
 > **Number reserved in `supabase/migrations/README.md`.** This was `0010`,
-> then `0013`; both were taken by other work before it was written. Check the
+> then `0012`; both were taken by other work before it was written. Check the
 > ledger, not this heading, before creating the file.
 
 One migration, three statements. Everything else in this document is policy or
