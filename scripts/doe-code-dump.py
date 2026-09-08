@@ -26,11 +26,14 @@ URL = "https://dos.elections.myflorida.com/candidates/extractCanList.asp"
 ELECTION = "20261103-GEN"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")  # the DoE WAF wants one
-# Statewide + the sixteen US House districts covering the four target
-# counties under Florida's enacted 2026 congressional map (D-A, founder,
-# 2026-09-07). Must stay in step with _TARGET_US_HOUSE in
-# cap_toollayer/intake.py -- that is the source of truth; this is a copy.
-TARGET_OFFICES = {"GOV", "ATG", "CFO", "AGR"}
+# The at-large races plus the sixteen US House districts covering the four
+# target counties under Florida's enacted 2026 congressional map (D-A,
+# founder, 2026-09-07). Must stay in step with _NO_DISTRICT_RACES and
+# _TARGET_US_HOUSE in cap_toollayer/intake.py -- that is the source of truth;
+# this is a copy. USS is here because the Senate line was always a target
+# race: its absence from the older "eight races" framing was a parser bug,
+# not a scope decision (docs/general-election/db-audit-2026-09-07.md).
+TARGET_OFFICES = {"GOV", "ATG", "CFO", "AGR", "USS"}
 TARGET_USR = {
     # Orange (7, 8, 9, 10, 11)
     "007", "008", "009", "010", "011",
