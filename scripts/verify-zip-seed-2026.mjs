@@ -55,7 +55,7 @@ const seedByZip = new Map();
 for (const r of rows) seedByZip.set(r.zip5, [...(seedByZip.get(r.zip5) ?? []), r.district]);
 check("235 distinct ZIPs", seedByZip.size === 235, `saw ${seedByZip.size}`);
 
-const offMetro = [...new Set(rows.filter((r) => !METRO_FIPS.includes(r.countyFips)))];
+const offMetro = rows.filter((r) => !METRO_FIPS.includes(r.countyFips));
 check(
   "every county_fips is one of the four covered metros",
   offMetro.length === 0,
@@ -64,7 +64,7 @@ check(
 
 /* is_split is what stops the resolver auto-picking a district (FR-001), and
    the oracle has no column for it, so it is checked here against row counts. */
-const badSplit = rows.filter((r) => r.isSplit !== seedByZip.get(r.zip5).length > 1);
+const badSplit = rows.filter((r) => r.isSplit !== (seedByZip.get(r.zip5).length > 1));
 check(
   "is_split is set on exactly the multi-district ZIPs",
   badSplit.length === 0,

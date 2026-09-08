@@ -56,10 +56,23 @@ function dominantKey(landByKey) {
 /** Rows for zip_district, ordered by ZIP then by descending district overlap. */
 export function zipDistrictRows(blockAssignmentText, zctaBlockText) {
   const districtByBlock = new Map();
-  for (const line of blockAssignmentText.split("\n")) {
+  const blockLines = blockAssignmentText.split("\n");
+  for (let i = 0; i < blockLines.length; i++) {
+    const line = blockLines[i];
     if (!line) continue;
-    const [block, district] = line.split(",");
-    districtByBlock.set(block, Number(district));
+    const fields = line.split(",");
+    const district = Number(fields[1]);
+    /* A missing/extra field or a non-numeric district silently produced
+       district = NaN and poisoned one ZIP's output. Fail closed instead:
+       name the line so the bad extract is easy to find and re-pull. */
+    if (fields.length !== 2 || !Number.isFinite(district)) {
+      throw new Error(
+        `block assignment line ${i + 1} is malformed, expected ` +
+          `"<15-digit block GEOID>,<district number>": ${JSON.stringify(line)} ` +
+          `— re-extract EOGPCRP2026_block_assignment.txt and re-run`
+      );
+    }
+    districtByBlock.set(fields[0], district);
   }
 
   const lines = zctaBlockText.replace(/^﻿/, "").split("\n");
@@ -82,14 +95,24 @@ export function zipDistrictRows(blockAssignmentText, zctaBlockText) {
     const zcta = parts[ZCTA];
     /* Blocks that fall in no ZCTA carry empty ZCTA fields — no ZIP to seed. */
     if (!zcta) continue;
-    const district = districtByBlock.get(parts[BLOCK]);
-    if (district === undefined) continue;
     const land = Number(parts[LAND]) || 0;
     let agg = byZcta.get(zcta);
     if (!agg) byZcta.set(zcta, (agg = { counties: new Map(), districts: new Map() }));
+    /* County comes from the block GEOID alone and is summed for every block
+       that has a ZCTA, whether or not the block is in the enacted plan. A
+       block absent from the block-assignment file is still real land
+       belonging to a county (most likely water, or a vintage gap between
+       the 2020 block file and EOGPCRP2026) — gating the county total on
+       plan coverage would let that gap silently shrink a county's land and
+       could flip a border ZIP's dominant-county call. Verified output-
+       neutral against the real 2026 inputs; see 33102 in
+       scripts/fixtures/zip-seed/ for the case where it isn't. */
     const county = parts[BLOCK].slice(0, 5);
     agg.counties.set(county, (agg.counties.get(county) ?? 0) + land);
-    agg.districts.set(district, (agg.districts.get(district) ?? 0) + land);
+    const district = districtByBlock.get(parts[BLOCK]);
+    if (district !== undefined) {
+      agg.districts.set(district, (agg.districts.get(district) ?? 0) + land);
+    }
   }
 
   const rows = [];

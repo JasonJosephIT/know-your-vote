@@ -6,8 +6,9 @@
 
    The fixture pins, in order: coverage by dominant county, county derived
    from the block GEOID, the 5% split threshold at the boundary, the dominant
-   district's inclusion below that threshold, is_split, and the skip of
-   blocks that fall in no ZCTA.
+   district's inclusion below that threshold, is_split, the skip of blocks
+   that fall in no ZCTA, and county aggregation staying independent of
+   whether a block is in the enacted plan.
 
    Run: node scripts/verify-zip-seed-rules.mjs */
 
@@ -88,9 +89,24 @@ check(
   rows.every((r) => /^\d{5}$/.test(r.zip5)),
   show(rows.filter((r) => !/^\d{5}$/.test(r.zip5)))
 );
+/* 33102: the land-majority block (Orange, 5000) has no entry in the
+   block-assignment file — a plan gap, not a missing ZIP — while the smaller
+   block (Hillsborough, 1000) does. County totals are summed from every
+   block with a ZCTA regardless of plan coverage, so Orange must still win
+   the county call; only the district total (which has no meaning off the
+   plan) skips the gap block. */
+check(
+  "33102: the land-majority county wins even though its block sits outside the enacted plan",
+  forZip("33102").length === 1 &&
+    forZip("33102")[0].countyFips === "12095" &&
+    forZip("33102")[0].countyName === "Orange" &&
+    forZip("33102")[0].metro === "orlando",
+  show(forZip("33102"))
+);
+
 check(
   "no other ZIP appears",
-  rows.length === 5 && new Set(rows.map((r) => r.zip5)).size === 3,
+  rows.length === 6 && new Set(rows.map((r) => r.zip5)).size === 4,
   `${rows.length} rows: ${show(rows)}`
 );
 check(
@@ -114,6 +130,38 @@ check(
   sql.split("VALUES\n")[1]
 );
 check("SQL statement is terminated", sql.trimEnd().endsWith(";"));
+
+/* A malformed block-assignment line must fail loudly, not poison a ZIP with
+   district = NaN. Exercised against inline text, not the committed fixture
+   files, since the point is the parse guard in isolation. */
+function throws(fn) {
+  try {
+    fn();
+    return null;
+  } catch (e) {
+    return e;
+  }
+}
+const extraFieldErr = throws(() =>
+  zipDistrictRows("120860101001000,24,extra\n", "")
+);
+check(
+  "an extra-field block-assignment line throws, citing the line number and content",
+  extraFieldErr instanceof Error &&
+    /line 1/.test(extraFieldErr.message) &&
+    extraFieldErr.message.includes("120860101001000,24,extra"),
+  extraFieldErr ? extraFieldErr.message : "did not throw"
+);
+const nonNumericErr = throws(() =>
+  zipDistrictRows("120860101001001,24\n120860101001002,notanumber\n", "")
+);
+check(
+  "a non-numeric district throws, citing the line number and content",
+  nonNumericErr instanceof Error &&
+    /line 2/.test(nonNumericErr.message) &&
+    nonNumericErr.message.includes("120860101001002,notanumber"),
+  nonNumericErr ? nonNumericErr.message : "did not throw"
+);
 
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed`);
