@@ -72,7 +72,22 @@ _NO_DISTRICT_RACES = {
     "AGR": ("FL-AGR-general", "state"),
     "USS": ("FL-SEN-general", "federal"),
 }
-_TARGET_US_HOUSE = {"010", "015", "023", "028"}
+# D-A (founder 2026-09-07): enacted-2026-map coverage. Candidates qualified
+# under this map in June 2026, and the four counties this app covers now
+# touch sixteen U.S. House districts -- not the four this set held before.
+# FL-23 leaves the set entirely: under the enacted map it falls in no ZIP
+# this app covers (docs/general-election/ballots-handoff.md section 4.2).
+# Grouped by county, so this can be checked against the handoff at a glance:
+_TARGET_US_HOUSE = {
+    # Orange (7, 8, 9, 10, 11)
+    "007", "008", "009", "010", "011",
+    # Hillsborough (12, 14, 15, 16)
+    "012", "014", "015", "016",
+    # Broward (20, 22, 24, 25, 26)
+    "020", "022", "024", "025", "026",
+    # Miami-Dade (27, 28)
+    "027", "028",
+}
 
 # D2 (founder 2026-09-07): no party map. The DoE PartyCode is stored verbatim
 # and the UI maps codes to labels with a raw-code fallback. The old
