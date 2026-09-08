@@ -118,6 +118,8 @@ Goal: one composite ballot per county (all contests and questions), then the pre
 
 ### 4.3 Parser: map `XTL` and `DEC` before the next live run
 
+This work is already done on `claude/intake-xtl-dec` (not yet merged).
+
 `toollayer/cap_toollayer/intake.py` `_STATUS` (B2) — both ⇒ `excluded`. Add fixture rows and a mutation test (removing the mapping must fail on an `XTL` fixture). Update `data-ingest.md` §1 Q1 and the per-race tier table with the Senate row (3 / 0 / 11).
 
 ### 4.4 Read model: "not printed" state for unopposed races
