@@ -85,15 +85,18 @@ incumbent with twelve is `(12-0)/12*100 = 100%` variance → **HALT**.
 > nothing publishes at all.**
 
 **B1 measured exactly how bad this is** (live DoE run 2026-09-06, per-race
-table in `data-ingest.md` §1). Across the eight target races:
+table in `data-ingest.md` §1). Across the eight target races B1 ran against —
+D-A (founder 2026-09-07) has since widened US House coverage from four
+districts to sixteen, twenty races today, not eight:
 
 | | `ballot` | `write_in` | `excluded` |
 |---|---|---|---|
 | Candidates | **22** | **4** | **83** |
 
 Without the filter, **87 non-ballot names join 22 real ballot lines**. Every
-one of the eight target races carries at least one, so this is not an edge
-case to handle later — it is the ordinary case, in every race we cover.
+one of the eight races B1 measured carries at least one, so this is not an
+edge case to handle later — it is the ordinary case in the races B1 covered;
+D-A's twelve additional districts have not been measured.
 
 **Recommendation (adopt unless the founder objects):** three tiers, one column.
 
@@ -251,6 +254,14 @@ a no-op for current data.
 > municipal, and nonpartisan judicial contests — but the eight target races
 > (Gov/AG/CFO/AgComm + FL-10/15/23/28) are all federal or state, so the
 > constraint is not binding. Widen it if and only if coverage expands.
+>
+> ⚠️ **Coverage expanded under D-A (founder 2026-09-07) — the trigger this
+> note names actually fired.** Target races are now four statewide + sixteen
+> U.S. House districts (`intake.py` `_TARGET_US_HOUSE`), twenty races, not
+> eight. The conclusion still holds on today's facts: all twenty remain
+> federal or state — no county, municipal, or judicial race entered scope —
+> so `race.level`'s CHECK is still not binding. Re-check this note the next
+> time coverage moves.
 
 ---
 

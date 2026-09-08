@@ -255,8 +255,10 @@ def parse_candidate_list(text: str) -> dict:
         # dropping it would make the exclusion invisible -- but they are not
         # part of the race, so they never reach the Balance Audit denominator
         # or a side-by-side. B1 measured 87 non-ballot names against 22 real
-        # ones, in every one of the eight races; without this line the
-        # pipeline HALTs on all of them forever.
+        # ones, in every one of the eight races (then Gov/AG/CFO/AgComm +
+        # FL-10/15/23/28); without this line the pipeline HALTs on all of
+        # them forever. D-A (founder, 2026-09-07) has since widened US House
+        # coverage to sixteen districts -- the finding is unrestudied there.
         if ballot_status == "ballot":
             race["candidate_ids"].append(candidate_id)
 

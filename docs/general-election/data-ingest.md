@@ -28,7 +28,10 @@ by ID, never restated.
 - `_STATEWIDE_RACES` already emits `FL-GOV-general` etc.; `"election": "general"`
   is already stamped on every parsed race.
 - T2 (FEC) and T3 (FL Legislature) are election-agnostic read tools.
-- The eight target races are unchanged (Gov/AG/CFO/AgComm + FL-10/15/23/28).
+- The target races are unchanged by this pivot itself — the count has since
+  moved under D-A (founder 2026-09-07, see below) to four statewide
+  (Gov/AG/CFO/AgComm) + sixteen U.S. House districts, not the eight this
+  section originally counted.
 
 **No new tool, no new endpoint, and no re-pointing is required.** What changed
 is that a *filing list* fetched after a primary no longer equals a *ballot*.
@@ -372,7 +375,7 @@ tier-classified (Allowlist B). A source is not usable just because it is good.
 
 | Gap | Source | Why it fits | Auth / cost | Priority |
 |---|---|---|---|---|
-| **US House incumbents have no reachable voting record.** T3 covers `flsenate.gov` only, so FL-10/15/23/28 incumbents' federal records are unreachable — the Recorder cannot do its job for half the target races | **Congress.gov API** | Primary-source bill and vote data; `api.data.gov` key — the same key infrastructure T2 already uses for FEC | free key | **P0** |
+| **US House incumbents have no reachable voting record.** T3 covers `flsenate.gov` only, so incumbents across all sixteen target US House districts (widened from four under D-A, founder 2026-09-07) have unreachable federal records — the Recorder cannot do its job for any US House race, a bigger gap than when this was written | **Congress.gov API** | Primary-source bill and vote data; `api.data.gov` key — the same key infrastructure T2 already uses for FEC | free key | **P0** |
 | Statewide incumbents (Gov/AG/CFO/AgComm) hold executive office — no bills, no votes | FL agency sites + FL DoE official actions | Executive records are documents, not roll calls; treat as `primary_doc` | free | P1 |
 | "What else is on my ballot" (amendments, retention, local) | **County SOE sample ballots** — Miami-Dade, Broward, Hillsborough, Orange | Authoritative per-ballot content; **already linked** in `0004_official_links.sql`, so this closes as a link-out with zero new modelling (`data-architecture.md` D3) | free | P1 |
 | Campaign finance context | T2 FEC `candidate_totals` | Already-built endpoint, unused | none | P2 |

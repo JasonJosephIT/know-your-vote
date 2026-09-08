@@ -26,9 +26,21 @@ URL = "https://dos.elections.myflorida.com/candidates/extractCanList.asp"
 ELECTION = "20261103-GEN"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")  # the DoE WAF wants one
-# Statewide + the four target US House districts (CAP_PRD Target Races).
+# Statewide + the sixteen US House districts covering the four target
+# counties under Florida's enacted 2026 congressional map (D-A, founder,
+# 2026-09-07). Must stay in step with _TARGET_US_HOUSE in
+# cap_toollayer/intake.py -- that is the source of truth; this is a copy.
 TARGET_OFFICES = {"GOV", "ATG", "CFO", "AGR"}
-TARGET_USR = {"010", "015", "023", "028"}
+TARGET_USR = {
+    # Orange (7, 8, 9, 10, 11)
+    "007", "008", "009", "010", "011",
+    # Hillsborough (12, 14, 15, 16)
+    "012", "014", "015", "016",
+    # Broward (20, 22, 24, 25, 26)
+    "020", "022", "024", "025", "026",
+    # Miami-Dade (27, 28)
+    "027", "028",
+}
 
 
 def fetch(office):

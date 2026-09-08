@@ -163,8 +163,10 @@ FEC candidates endpoint.
   staging table is the change to make *if* those ever run on different
   schedules, not before.
 - **Anything that widens `race.level`.** It still reads
-  `CHECK (level IN ('federal','state'))`. All eight target races are federal
-  or state, so it is not binding. Widen it if and only if coverage expands.
+  `CHECK (level IN ('federal','state'))`. Coverage already expanded once
+  (D-A, founder 2026-09-07: four statewide + sixteen U.S. House districts,
+  twenty races, not eight) and all twenty are still federal or state, so it
+  remains not binding. Widen it if and only if that stops being true.
 
 ---
 

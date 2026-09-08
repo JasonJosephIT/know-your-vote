@@ -1960,7 +1960,10 @@ class TestBalanceAudit(unittest.TestCase):
         """The defect this task exists to fix. A write-in has no public
         material, so it enters with zero claims -- (5-0)/5 is 100% variance
         against a 10% threshold, and the race HALTs permanently. B1 found at
-        least one such filer in every one of the eight target races."""
+        least one such filer in every one of the eight target races (then
+        Gov/AG/CFO/AgComm + FL-10/15/23/28). D-A (founder, 2026-09-07) has
+        since widened US House coverage to sixteen districts -- the finding
+        is unrestudied there."""
         db = FakeDb().prime_read([
             _profile("cand_001", "FL-15-general", 450, 5, 4, 5, 4),
             _profile("cand_002", "FL-15-general", 448, 5, 4, 5, 4),
