@@ -89,13 +89,16 @@ for (const status of ["qualified", "withdrawn", "other"] as const) {
   );
 }
 
-/* The two page states must stay distinct: "one candidate" is not the same
-   question as "not on the ballot". If this ever holds, the stronger copy has
-   silently swallowed the weaker one. */
+/* FL-10 satisfies BOTH the naive "one candidate" check and the stronger
+   isUnopposedContest — that overlap is exactly why the page's branch order
+   is load-bearing (src/app/(public)/races/[raceId]/page.tsx:110 checks
+   notPrintedOnBallot before candidates.length === 1). If the weaker check
+   ran first, FL-10 would render "nothing to compare" instead of "not on
+   your ballot". */
 check(
-  "'exactly one candidate' and 'not on the ballot' are different predicates",
-  [cand("qualified")].length === 1 &&
-    !isUnopposedContest([cand("qualified")], NO_WRITE_IN)
+  "a lone unopposed candidate is both 'one candidate' and 'not on the ballot' -- page.tsx must check the stronger predicate first",
+  [cand("unopposed")].length === 1 &&
+    isUnopposedContest([cand("unopposed")], NO_WRITE_IN)
 );
 
 if (failures > 0) {

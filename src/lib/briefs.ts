@@ -228,9 +228,15 @@ async function fetchRaceBrief(raceId: string): Promise<RaceBrief | null> {
      (data-architecture.md D1). A qualified write-in is opposition, so the
      office IS printed — the candidate's name with a blank line under it — and
      the claim below must not be made. `profile` is the only race-to-candidate
-     link a non-ballot filer has: D1 keeps them out of race.candidate_ids, and
-     A3 still writes them a profile row precisely so the exclusion stays
-     visible. */
+     link a non-ballot filer has, since D1 keeps them out of
+     race.candidate_ids — so this conjunct depends on the pipeline (A3)
+     writing them a profile row; this repo has no such write outside demo
+     seeds and the migration harness, so that guarantee lives upstream and
+     cannot be checked here. Readable if written (0002_rls.sql gates anon
+     reads on publication status, not ballot_status). If the row is ever
+     absent, this conjunct is silently inert and the claim rests on the
+     carried `UNO` code alone — acceptable, since a DoE `UNO` already implies
+     no qualified write-in; this conjunct is belt-and-braces. */
   const hasWriteIn = allProfiles.some((p) => tierOf(p) === "write_in");
 
   return {
