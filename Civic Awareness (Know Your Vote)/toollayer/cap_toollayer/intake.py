@@ -218,9 +218,19 @@ def parse_candidate_list(text: str) -> dict:
         if office_code in _NO_DISTRICT_RACES:
             race_id, level = _NO_DISTRICT_RACES[office_code]
             district = None
-        elif office_code == "USR" and juris in _TARGET_US_HOUSE:
-            race_id = f"FL-{int(juris)}-general"
-            level, district = "federal", str(int(juris))
+        # zfill(3): _TARGET_US_HOUSE holds zero-padded codes ("007", not
+        # "7"), and the live 2026-09-07 roster (`git show
+        # claude/ballots-handoff-docs-835025:docs/general-election/ballots/
+        # roster_2026gen_public.json`, keys USR|007|, USR|008|, USR|009|)
+        # shows the DoE export itself zero-pads Juris1num, so an unpadded
+        # single-digit district has never actually reached this branch. This
+        # is belt-and-braces against a format change, not a fix for observed
+        # breakage -- and it cannot change the race IDs below: int() already
+        # strips leading zeros from any padded input, padded or not.
+        elif office_code == "USR" and juris.zfill(3) in _TARGET_US_HOUSE:
+            n = int(juris)
+            race_id = f"FL-{n}-general"
+            level, district = "federal", str(n)
         else:
             skipped += 1
             continue

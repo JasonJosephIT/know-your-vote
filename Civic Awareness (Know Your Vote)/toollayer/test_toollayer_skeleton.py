@@ -904,6 +904,38 @@ class TestIntakeDoEParser(unittest.TestCase):
         self.assertEqual(p["candidates"], [])
         self.assertNotIn("FL-23-general", p["races"])
 
+    def test_unpadded_juris_is_zero_padded_before_the_membership_test(self):
+        """Finding 1 (whole-branch review, pre-merge): _TARGET_US_HOUSE holds
+        zero-padded codes ("007" not "7"), and every district exercised so far
+        has been two- or three-digit, so a single-digit district has never hit
+        this path. The live 2026-09-07 roster (`git show
+        claude/ballots-handoff-docs-835025:docs/general-election/ballots/
+        roster_2026gen_public.json`) shows the DoE export itself zero-pads
+        Juris1num -- keys `USR|007|`, `USR|008|`, `USR|009|` -- so this is
+        insurance against a format change, not a fix for something observed
+        broken. Without the zfill, an unpadded "7" would fail the membership
+        test and the row would fall to `skipped`, same as any other
+        non-target district."""
+        row = _doe_row("91013", "USR", "United States Representative", "7",
+                       "QUA", "REP", "Unpadded", "Uma")
+        p = intake.parse_candidate_list("\n".join([_DOE_HEADER, row]))
+        self.assertEqual(p["skipped"], 0)
+        self.assertEqual(p["races"]["FL-7-general"]["candidate_ids"],
+                         ["FL-DOE-91013"])
+        self.assertEqual(p["races"]["FL-7-general"]["district"], "7")
+
+    def test_prepadded_juris_still_works(self):
+        """The live-export shape (see the test above): Juris1num already
+        zero-padded to three characters. Must keep working after the zfill is
+        added -- this is the case the branch has actually exercised."""
+        row = _doe_row("91014", "USR", "United States Representative", "007",
+                       "QUA", "REP", "Padded", "Pat")
+        p = intake.parse_candidate_list("\n".join([_DOE_HEADER, row]))
+        self.assertEqual(p["skipped"], 0)
+        self.assertEqual(p["races"]["FL-7-general"]["candidate_ids"],
+                         ["FL-DOE-91014"])
+        self.assertEqual(p["races"]["FL-7-general"]["district"], "7")
+
     def test_field_mapping_and_pii_dropped(self):
         p = intake.parse_candidate_list(_DOE_FIXTURE)
         by_id = {c["candidate_id"]: c for c in p["candidates"]}

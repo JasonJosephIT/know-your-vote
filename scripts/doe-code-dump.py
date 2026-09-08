@@ -80,9 +80,13 @@ def summarize(text, label):
         return row[i].strip() if 0 <= i < len(row) else ""
 
     rows = [l.split("\t") for l in lines[1:]]
+    # zfill(3): TARGET_USR holds zero-padded codes, matching intake.py's
+    # _TARGET_US_HOUSE. Same insurance, same evidence -- see the comment
+    # there. Keep the two in step.
     target = [r for r in rows
               if col(r, "OfficeCode") in TARGET_OFFICES
-              or (col(r, "OfficeCode") == "USR" and col(r, "Juris1num") in TARGET_USR)]
+              or (col(r, "OfficeCode") == "USR"
+                  and col(r, "Juris1num").zfill(3) in TARGET_USR)]
     n_races = len(TARGET_OFFICES) + len(TARGET_USR)
     print(f"   rows in the {n_races} target races: {len(target)}")
 

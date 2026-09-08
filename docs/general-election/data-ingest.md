@@ -276,6 +276,13 @@ has no label at all. Note `NPA`'s description is
 What B2's parser must produce from today's file, and what B3 must seed.
 Aggregate only — race IDs are public.
 
+This table is the nine races measured to date — B1's original eight (still
+including FL-23, run before D-A dropped it) plus U.S. Senate, measured
+separately once USS was added to the parser. D-A (founder 2026-09-07) has
+since widened US House coverage from four districts to sixteen; D-A's twelve
+additional districts have not been measured, and FL-23 is no longer in scope
+(§0 above) despite the row below.
+
 | Race | `ballot` | `write_in` | `excluded` | Note |
 |---|---|---|---|---|
 | FL-GOV | 8 | 2 | 53 | 15 DEF · 22 DNQ · 14 WIT · 2 REM |
@@ -289,8 +296,10 @@ Aggregate only — race IDs are public.
 | FL-SEN | 3 | 0 | 11 | measured 2026-09-07; Moody (REP) · Nixon (DEM) · Gillespie (NPA) |
 | **Total** | **25** | **4** | **94** | B3 seed = 25 `official_site` rows |
 
-Without I1 fixed, 83 excluded filers plus 4 write-ins would enter
-`race.candidate_ids` for 22 real ballot lines.
+Without I1 fixed, 94 excluded filers plus 4 write-ins would enter
+`race.candidate_ids` for 25 real ballot lines (the totals row above; 83
+excluded / 22 ballot is the same claim scoped to the eight races B1 first
+measured, before U.S. Senate was added to the table).
 
 #### Two corrections the run surfaced
 

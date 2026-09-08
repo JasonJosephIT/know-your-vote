@@ -31,7 +31,7 @@ September 28 and that reminder cannot be re-sent.
 
 | # | Step | Owner | State |
 |---|---|---|---|
-| 1 | TASK-066 — **9 races** (the 8 B1 measured, plus U.S. Senate), 3 measures through the Balance Audit | founder | not started — 22 ballot candidates across the 8; the Senate race's share of 14 `USS` filings is unknown until a DoE run tiers them. See below |
+| 1 | TASK-066 — **21 races** (5 statewide/at-large incl. U.S. Senate + 16 U.S. House districts under the enacted 2026 map, D-A founder 2026-09-07), 3 measures through the Balance Audit | founder | not started — Senate's `USS` filings split 3 ballot / 0 write-in / 11 excluded (measured 2026-09-07, `data-ingest.md` §1); candidate counts for the twelve districts D-A added are unmeasured, pending a DoE intake run. See below |
 | 2 | Remove every `demo-` row (`scripts/demo-teardown.sql`) | founder | not started — script fixed 2026-09-07, see TASK-066 |
 
 The app cannot go public on demo fixtures. This is the longest pole and it is

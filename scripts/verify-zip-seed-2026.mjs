@@ -73,14 +73,55 @@ check(
     .join(", ")
 );
 
-/* The oracle. It lives on the ballots-handoff branch until that merges. */
-const csv = existsSync(path.join(root, ORACLE))
-  ? readFileSync(path.join(root, ORACLE), "utf8")
-  : execFileSync("git", ["show", `${ORACLE_REF}:${ORACLE}`], {
+/* The oracle. It lives on the ballots-handoff branch until that merges, so a
+   fresh clone -- or a checkout taken after that branch is pruned post-merge --
+   won't have the CSV on disk. Fall back to reading it out of the branch via
+   `git show`. If that also fails (branch pruned, ref unreachable, no
+   network), the comparison cannot run at all -- which is a different fact
+   from "the seed doesn't match the oracle" and must be reported as neither
+   a pass nor a mismatch. */
+let csv;
+let oracleUnavailable = null; // set to an error message, not just a boolean, so the report can say why
+if (existsSync(path.join(root, ORACLE))) {
+  csv = readFileSync(path.join(root, ORACLE), "utf8");
+} else {
+  try {
+    csv = execFileSync("git", ["show", `${ORACLE_REF}:${ORACLE}`], {
       cwd: root,
       encoding: "utf8",
       maxBuffer: 1 << 24,
     });
+  } catch (err) {
+    oracleUnavailable = err.message.split("\n")[0];
+  }
+}
+
+const seedPairs = new Set(
+  [...seedByZip].flatMap(([z, ds]) => ds.map((d) => `${z} ${d}`))
+);
+
+if (oracleUnavailable) {
+  console.error(
+    `\nORACLE UNAVAILABLE: ${ORACLE} is not in the working tree, and ` +
+      `\`git show ${ORACLE_REF}:${ORACLE}\` failed:\n      ${oracleUnavailable}`
+  );
+  console.error(
+    `  It lives on branch ${ORACLE_REF} until that branch merges and is ` +
+      `pruned. If it has already been pruned, restore the CSV (or point ` +
+      `ORACLE_REF at wherever it now lives) before re-running.`
+  );
+  console.error(
+    `\nSkipped: pair-count / extra-pair / missing-pair checks against the ` +
+      `oracle -- they need the CSV. ${failures} check(s) failed among the ` +
+      `checks that don't need it.`
+  );
+  console.error(
+    `\nThis run is INCONCLUSIVE, not a pass: the seed was never compared ` +
+      `against the oracle.`
+  );
+  process.exit(2);
+}
+
 const csvLines = csv.split("\n").filter(Boolean);
 const csvHeader = csvLines[0].split(",");
 const ZIP = csvHeader.indexOf("zip5");
@@ -93,9 +134,6 @@ for (const line of csvLines.slice(1)) {
 }
 const oraclePairs = new Set(
   [...oracleByZip].flatMap(([z, ds]) => ds.map((d) => `${z} ${d}`))
-);
-const seedPairs = new Set(
-  [...seedByZip].flatMap(([z, ds]) => ds.map((d) => `${z} ${d}`))
 );
 
 const sorted = (m, z) => [...(m.get(z) ?? [])].sort().join("|") || "-";
