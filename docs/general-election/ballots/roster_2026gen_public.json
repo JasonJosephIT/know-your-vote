@@ -1,0 +1,3960 @@
+{
+ "AGR||": [
+  {
+   "name": "Joey Mendoza Atkins",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Wilton Simpson",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "ATG||": [
+  {
+   "name": "Jose Javier Rodriguez",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "James Uthmeier",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "CFO||": [
+  {
+   "name": "Blaise Ingoglia",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Annette Taddeo",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "CHI||001": [
+  {
+   "name": "Gary W. Purvis",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CHI||005": [
+  {
+   "name": "Jimmy Cox",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|001|008": [
+  {
+   "name": "J. Scott Duncan",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|001|009": [
+  {
+   "name": "John Ryan Love",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|001|010": [
+  {
+   "name": "Stephanie Sansing White",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|001|017": [
+  {
+   "name": "Stephen Pitre",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|001|019": [
+  {
+   "name": "John F. Simon Jr.",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|001|022": [
+  {
+   "name": "Jennie Kinsey",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|001|023": [
+  {
+   "name": "Jonathan Vincent Schlechter",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|001|026": [
+  {
+   "name": "David L. Stevens",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|002|004": [
+  {
+   "name": "Tiffany Baker",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|002|007": [
+  {
+   "name": "Jason Jones",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|002|009": [
+  {
+   "name": "Stephen S. Everett",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|002|013": [
+  {
+   "name": "J. Lee Marsh",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|003|004": [
+  {
+   "name": "John Weed",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|003|006": [
+  {
+   "name": "Mark E. Feagle",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|004|003": [
+  {
+   "name": "Larry E. Hutton Jr.",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|004|004": [
+  {
+   "name": "James H. Daniel",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|004|006": [
+  {
+   "name": "Lester Bernard Bass",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|004|008": [
+  {
+   "name": "Michael Kalil",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|004|010": [
+  {
+   "name": "Lance M. Day",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|004|021": [
+  {
+   "name": "Meredith Charbula",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|004|026": [
+  {
+   "name": "Tatiana Radi Salvador",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|004|027": [
+  {
+   "name": "Michael Mike Sharrit",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|004|028": [
+  {
+   "name": "Virginia Norton",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|004|030": [
+  {
+   "name": "Waddell Wallace",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|005|002": [
+  {
+   "name": "Brian Welke",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|005|003": [
+  {
+   "name": "Mary P. Hatcher",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|005|010": [
+  {
+   "name": "R. Gregg Jerald",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|005|012": [
+  {
+   "name": "Danny Ray Mosley",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|005|017": [
+  {
+   "name": "Timothy T. McCourt",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|005|018": [
+  {
+   "name": "Lisa Diane Herndon",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|005|024": [
+  {
+   "name": "Stacy M. Youmans",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|005|026": [
+  {
+   "name": "Charles L. W. Helm",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|005|027": [
+  {
+   "name": "Nicole M. Morris",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|005|028": [
+  {
+   "name": "James R. Baxley",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|001": [
+  {
+   "name": "Susan St. John",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|002": [
+  {
+   "name": "Alicia Polk",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|006": [
+  {
+   "name": "Mary Morrissey Handsel",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|007": [
+  {
+   "name": "Pamela A. M. Campbell",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|008": [
+  {
+   "name": "Susan G. Barthle",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|016": [
+  {
+   "name": "Kimberly Sharpe Byrd",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|017": [
+  {
+   "name": "Fred Pollack",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|021": [
+  {
+   "name": "Phil Matthey",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|025": [
+  {
+   "name": "Shawn Crane",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|026": [
+  {
+   "name": "Linda H. Babb",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|028": [
+  {
+   "name": "Evan Frayman",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|033": [
+  {
+   "name": "Ben Thomas",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|037": [
+  {
+   "name": "Mark F. Robens",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|038": [
+  {
+   "name": "Christopher M. LaBruzzo",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|039": [
+  {
+   "name": "Elizabeth Liz Constantine",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|042": [
+  {
+   "name": "Aaron Weston Hubbard",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|006|044": [
+  {
+   "name": "Elizabeth Liz Jack",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|007|003": [
+  {
+   "name": "Lauren P. Blocker",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|007|006": [
+  {
+   "name": "Mike Orfinger",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|007|007": [
+  {
+   "name": "Robert W. Pickens III",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|007|009": [
+  {
+   "name": "Chris Miller",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|007|010": [
+  {
+   "name": "Christopher S. Ferebee",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|007|014": [
+  {
+   "name": "Joan May Anthony",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|007|018": [
+  {
+   "name": "Karen Adams Foxman",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|007|019": [
+  {
+   "name": "Howard M. Maltz",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|007|020": [
+  {
+   "name": "Kathy Weston",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|007|024": [
+  {
+   "name": "Sandra Christine Upchurch",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|007|025": [
+  {
+   "name": "David S. Wainer III",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|007|026": [
+  {
+   "name": "Jeanne Stratis",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|007|027": [
+  {
+   "name": "Alicia Regina Washington",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|008|004": [
+  {
+   "name": "Craig C. DeThomasis",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|008|007": [
+  {
+   "name": "Phillip Andrew Pena",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|008|009": [
+  {
+   "name": "Kristine Van Vorst",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|008|011": [
+  {
+   "name": "Adam J. Lee",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|001": [
+  {
+   "name": "Temika Hampton-Johnson",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Charles Hart",
+   "party": "NOP",
+   "status": "QUA"
+  }
+ ],
+ "CTJ|009|002": [
+  {
+   "name": "Christina Arguelles",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|006": [
+  {
+   "name": "Chad K. Alvaro",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|008": [
+  {
+   "name": "Christine Arendas",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|010": [
+  {
+   "name": "Denise Kim Beamer",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|012": [
+  {
+   "name": "Tiffany Marie Faddis",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|016": [
+  {
+   "name": "Heather Higbee",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|018": [
+  {
+   "name": "Ginger Miranda",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|021": [
+  {
+   "name": "Christy C. Collins",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|022": [
+  {
+   "name": "Wayne Wooten",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|023": [
+  {
+   "name": "Brian S. Sandor",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|024": [
+  {
+   "name": "Diego Madrigal",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|030": [
+  {
+   "name": "Kevin B. Weiss",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|031": [
+  {
+   "name": "Kamilah Perry",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|032": [
+  {
+   "name": "Deb Barra",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|033": [
+  {
+   "name": "Heather Pinder Rodriguez",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|034": [
+  {
+   "name": "Mike Kraynick",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|035": [
+  {
+   "name": "Barbara Leach",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|036": [
+  {
+   "name": "Keith Carsten",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|039": [
+  {
+   "name": "Vincent Falcone",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|040": [
+  {
+   "name": "Alicia L. Latimore",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|009|042": [
+  {
+   "name": "Hal C. Epperson Jr.",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|010|002": [
+  {
+   "name": "Michelle Oakes Pincket",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|010|008": [
+  {
+   "name": "Sharon M. Franklin",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|010|014": [
+  {
+   "name": "John C. Waters",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|010|019": [
+  {
+   "name": "Cassandra Larkin Denmark",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|010|021": [
+  {
+   "name": "Gerald P. Hill II",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|010|023": [
+  {
+   "name": "Chris P. Spath",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|010|024": [
+  {
+   "name": "Andrea DeMichael",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|010|026": [
+  {
+   "name": "Jalal A. Harb",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|001": [
+  {
+   "name": "Ivonne Cuesta",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|005": [
+  {
+   "name": "Arthur LeMar \"Marty\" McNeil",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Monica Segura",
+   "party": "NOP",
+   "status": "QUA"
+  }
+ ],
+ "CTJ|011|011": [
+  {
+   "name": "Jorge E. Cueto",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|017": [
+  {
+   "name": "Daryl Evan Trawick",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|018": [
+  {
+   "name": "Migna Sanchez-Llorens",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|019": [
+  {
+   "name": "Yvonne Colodny",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|021": [
+  {
+   "name": "Tanya Jeanette Brinkley",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|022": [
+  {
+   "name": "Laura Anne Stuzin",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|023": [
+  {
+   "name": "Peter R. Lopez",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|027": [
+  {
+   "name": "Alberto Milian",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|028": [
+  {
+   "name": "Christine Hernandez",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|030": [
+  {
+   "name": "Spencer Multack",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|033": [
+  {
+   "name": "Michelle Alvarez Barakat",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|035": [
+  {
+   "name": "Renee Gordon",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|037": [
+  {
+   "name": "Michelle Delancy",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|038": [
+  {
+   "name": "Stacy Daryl Glick",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|044": [
+  {
+   "name": "Dawn Veronica Denaro",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|048": [
+  {
+   "name": "Cristina M. Miranda",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|050": [
+  {
+   "name": "Abby Cynamon",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|055": [
+  {
+   "name": "Joe Perkins",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|057": [
+  {
+   "name": "Carmen Cabarga",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|060": [
+  {
+   "name": "Laura Gonzalez-Marques",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|065": [
+  {
+   "name": "Denise Martinez-Scanziani",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|067": [
+  {
+   "name": "Destiny Alvarez",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|069": [
+  {
+   "name": "Rita Maria Baez",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Bonita Jones-Peabody",
+   "party": "NOP",
+   "status": "QUA"
+  }
+ ],
+ "CTJ|011|070": [
+  {
+   "name": "Veronica A. Diaz",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|072": [
+  {
+   "name": "Reemberto Diaz",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|073": [
+  {
+   "name": "Carlos M. Guzman",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|075": [
+  {
+   "name": "Carlos H. Gamez",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|076": [
+  {
+   "name": "Spencer Eig",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|077": [
+  {
+   "name": "Beatrice Betty Butchko Sanchez",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|011|079": [
+  {
+   "name": "Andrea Ricker Wolfson",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|012|005": [
+  {
+   "name": "Ryan Felix",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|012|010": [
+  {
+   "name": "Stephen M. Walker",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|012|015": [
+  {
+   "name": "Charles Sniffen",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|012|017": [
+  {
+   "name": "Bryan S. Kessler",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|012|018": [
+  {
+   "name": "Kevin Bruning",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|012|019": [
+  {
+   "name": "Natalya Evans",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|001": [
+  {
+   "name": "Dawn Myers",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|002": [
+  {
+   "name": "Jeffrey Rich",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|005": [
+  {
+   "name": "Michael Williams",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|007": [
+  {
+   "name": "Sara Peacock",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|008": [
+  {
+   "name": "Leland Ann Baldwin",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|009": [
+  {
+   "name": "Kelly Ayers",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|010": [
+  {
+   "name": "Michael J. Hooi",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|011": [
+  {
+   "name": "Lindsay Alvarez",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|013": [
+  {
+   "name": "Nina McGucken Alvarez",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|015": [
+  {
+   "name": "Lawrence M. Lefler",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|019": [
+  {
+   "name": "Michael J. Scionti",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|020": [
+  {
+   "name": "Laura E. Ward",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|021": [
+  {
+   "name": "Lisa D. Campbell",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|026": [
+  {
+   "name": "J. Logan Murphy",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|027": [
+  {
+   "name": "Joseph Tompkins",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|029": [
+  {
+   "name": "Nick Nazaretian",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|030": [
+  {
+   "name": "Helene Daniel",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|031": [
+  {
+   "name": "Greg Green",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|033": [
+  {
+   "name": "Jessica Costello",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|034": [
+  {
+   "name": "Robert A. Bauman",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|035": [
+  {
+   "name": "Richard H. Martin",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|038": [
+  {
+   "name": "Michelle Sisco",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|039": [
+  {
+   "name": "Wendy Joy DePaul",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|040": [
+  {
+   "name": "Christopher Carmel Sabella",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|013|041": [
+  {
+   "name": "Thomas N. Palermo",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|014|007": [
+  {
+   "name": "James J. Goodman Jr.",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|014|010": [
+  {
+   "name": "Dustin Stephenson",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|015|003": [
+  {
+   "name": "James Sherman",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|015|005": [
+  {
+   "name": "Rosemarie Scher",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|015|008": [
+  {
+   "name": "G. Joseph Curley",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|015|020": [
+  {
+   "name": "James Edward Nutt",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|015|021": [
+  {
+   "name": "Carolyn Bell",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|015|027": [
+  {
+   "name": "Glenn D. Kelley",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|015|030": [
+  {
+   "name": "Jaimie Goodman",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|015|032": [
+  {
+   "name": "Samantha Schosberg Feuer",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|015|034": [
+  {
+   "name": "Karen M. Miller",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|015|035": [
+  {
+   "name": "Charles E. Burton",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|016|001": [
+  {
+   "name": "Mark Wilson",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|016|003": [
+  {
+   "name": "James Morgan III",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|016|004": [
+  {
+   "name": "Bonnie Jean Helms",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|017|003": [
+  {
+   "name": "Bernard Isaac \"Bernie\" Bober",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|017|011": [
+  {
+   "name": "Michael J. Orlando",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|017|012": [
+  {
+   "name": "Jeffrey R. Levenson",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|017|016": [
+  {
+   "name": "George Odom Jr.",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|017|017": [
+  {
+   "name": "Stacey Schulman",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|017|021": [
+  {
+   "name": "N. Hunter Davis",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|017|026": [
+  {
+   "name": "John Bowman",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|017|027": [
+  {
+   "name": "Frank David Ledee",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|017|029": [
+  {
+   "name": "Kevin P. Tynan",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|017|030": [
+  {
+   "name": "Catalina M. Avalos",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|017|037": [
+  {
+   "name": "Andrew L. \"Andy\" Siegel",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|017|046": [
+  {
+   "name": "Christopher Wigand",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|017|047": [
+  {
+   "name": "Peter Holden",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|017|052": [
+  {
+   "name": "David Andrew Fry",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Tamar Hamilton",
+   "party": "NOP",
+   "status": "QUA"
+  }
+ ],
+ "CTJ|017|054": [
+  {
+   "name": "Martin J. Bidwill",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|017|055": [
+  {
+   "name": "Marlon Jay Weiss",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|018|002": [
+  {
+   "name": "Melanie Chase",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|018|004": [
+  {
+   "name": "Robert Alan Segal",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|018|005": [
+  {
+   "name": "Mark E. Herr",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|018|013": [
+  {
+   "name": "Andrea Fant",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|018|014": [
+  {
+   "name": "Curt Jacobus",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|018|015": [
+  {
+   "name": "Tesha Scolaro Ballou",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|018|018": [
+  {
+   "name": "Steve Henderson",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|018|019": [
+  {
+   "name": "Susan Stacy",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|018|021": [
+  {
+   "name": "Donna M. Goerner",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|018|023": [
+  {
+   "name": "Laura Moody",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|018|025": [
+  {
+   "name": "Samuel Bookhardt III",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|019|004": [
+  {
+   "name": "Michael C. Heisey",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|019|005": [
+  {
+   "name": "Michael Linn",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|019|007": [
+  {
+   "name": "Steven J. Levin",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|019|008": [
+  {
+   "name": "Michael David Porter",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|019|010": [
+  {
+   "name": "Laurie Buchanan",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|019|011": [
+  {
+   "name": "Victoria L. Griffin",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|019|012": [
+  {
+   "name": "Lillian B. Ewen",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|019|013": [
+  {
+   "name": "Cynthia L. Cox",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|019|018": [
+  {
+   "name": "Elizabeth Ann Metzger",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|020|009": [
+  {
+   "name": "Trent Reichling",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|020|011": [
+  {
+   "name": "Andrew Marcus",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|020|016": [
+  {
+   "name": "Amy Hawthorne",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|020|017": [
+  {
+   "name": "Chris Brown",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|020|019": [
+  {
+   "name": "James Stewart",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|020|023": [
+  {
+   "name": "Rachael Spring Loukonen",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|020|025": [
+  {
+   "name": "Michael T. McHugh",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|020|027": [
+  {
+   "name": "Amanda Levy-Reis",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "CTJ|020|032": [
+  {
+   "name": "Darrell Hill",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "DCA|001|": [
+  {
+   "name": "Joseph Lewis Jr.",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Rachel Nordby",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Tim Osterhaus",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Clay Roberts",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Raymond Treadwell",
+   "party": "NOP",
+   "status": "QUA"
+  }
+ ],
+ "DCA|002|": [
+  {
+   "name": "Drew Atkinson",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Morris Silberman",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Daniel H. Sleet",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Andrea Teves Smith",
+   "party": "NOP",
+   "status": "QUA"
+  }
+ ],
+ "DCA|003|": [
+  {
+   "name": "Kansas R. Gooden",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Monica Gordo",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Fleur Jeannine Lobree",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Thomas Logue",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Bronwyn Catherine Miller",
+   "party": "NOP",
+   "status": "QUA"
+  }
+ ],
+ "DCA|004|": [
+  {
+   "name": "Alan O. Forst",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Mark W. Klingensmith",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Johnathan D. Lott",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Shannon K. Shaw",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Caroline Cahill Shepherd",
+   "party": "NOP",
+   "status": "QUA"
+  }
+ ],
+ "DCA|005|": [
+  {
+   "name": "John M. Harris",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Scott D. Makar",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "F. Rand Wallis",
+   "party": "NOP",
+   "status": "QUA"
+  }
+ ],
+ "ECW||002": [
+  {
+   "name": "David Deetscreek",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "ECW||004": [
+  {
+   "name": "Mike Bonacolta",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Derek Felder",
+   "party": "NOP",
+   "status": "QUA"
+  }
+ ],
+ "EWC||004": [
+  {
+   "name": "Tony Babington",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "GBA||002": [
+  {
+   "name": "John Jay Feinberg",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "GBA||004": [
+  {
+   "name": "Virginia Watkins",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "GOV||": [
+  {
+   "name": "Dean Ocean Abrams",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Charles Burkett",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Jeffrey Peter \"Dr. Jeff\" Datto",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Moliere Moe Dimanche",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Byron Donalds",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Scott Eckhard Jewett",
+   "party": "LPF",
+   "status": "QUA"
+  },
+  {
+   "name": "David Jolly",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Frank J. Russo",
+   "party": "NPA",
+   "status": "QUA"
+  }
+ ],
+ "LOX||002": [
+  {
+   "name": "Jill W. Abbey",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "LOX||003": [
+  {
+   "name": "Matt H. Rostock",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "LOX||004": [
+  {
+   "name": "Kevin L. Baker",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "MED||002": [
+  {
+   "name": "Kenneth J. Tarr",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "PLB||003": [
+  {
+   "name": "Tina De La Rosa",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "PLB||005": [
+  {
+   "name": "Rebekah Lewis",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Alexandra Platonova",
+   "party": "NOP",
+   "status": "QUA"
+  }
+ ],
+ "PUB|020|": [
+  {
+   "name": "Kathleen A. Smith",
+   "party": "REP",
+   "status": "UNO"
+  }
+ ],
+ "SCJ||": [
+  {
+   "name": "Carlos G. Muniz",
+   "party": "NOP",
+   "status": "QUA"
+  }
+ ],
+ "SEB||004": [
+  {
+   "name": "David Barney",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "SEB||005": [
+  {
+   "name": "Calvin Holton",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Lisa Leger Frazier",
+   "party": "NOP",
+   "status": "QUA"
+  }
+ ],
+ "STA|020|": [
+  {
+   "name": "Amira Fox",
+   "party": "REP",
+   "status": "UNO"
+  }
+ ],
+ "STR|001|": [
+  {
+   "name": "Michelle Salzman",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Francesca Yabraian",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|002|": [
+  {
+   "name": "Jon Fay",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Johnny Austin Thompson",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|003|": [
+  {
+   "name": "Nathan Boyles",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Ingrid D. Wadsworth",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|004|": [
+  {
+   "name": "John Peter Emerling",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Patt Maney",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|005|": [
+  {
+   "name": "Shane Abbott",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Alex Finney",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|006|": [
+  {
+   "name": "Tricia Berry",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Stephanie Lyn Leonard",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|007|": [
+  {
+   "name": "Jason Shoaf",
+   "party": "REP",
+   "status": "UNO"
+  }
+ ],
+ "STR|008|": [
+  {
+   "name": "Gallop P. Franklin",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|009|": [
+  {
+   "name": "Tracy Robinson",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Allison Tant",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|010|": [
+  {
+   "name": "Merrillee Malwitz Jipson",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Marshall Rawson",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|011|": [
+  {
+   "name": "Sam Garrison",
+   "party": "REP",
+   "status": "UNO"
+  }
+ ],
+ "STR|012|": [
+  {
+   "name": "Terrance Freeman",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Benjamin Sandlin",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|013|": [
+  {
+   "name": "Audrey Gibson",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|014|": [
+  {
+   "name": "Kimberly Daniels",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|015|": [
+  {
+   "name": "Dean Black",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Chadd Charland",
+   "party": "NPA",
+   "status": "QUA"
+  }
+ ],
+ "STR|016|": [
+  {
+   "name": "Kiyan Helen Michael",
+   "party": "REP",
+   "status": "UNO"
+  }
+ ],
+ "STR|017|": [
+  {
+   "name": "Jessica Baker",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Jacob Guerrero",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|018|": [
+  {
+   "name": "Kim Kendall",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Art Stresing",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|019|": [
+  {
+   "name": "Sam Greco",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Suzanna Pavelle",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|020|": [
+  {
+   "name": "Lee Butler",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Judson Sapp",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|021|": [
+  {
+   "name": "Jacquelyn Jackie Randall",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|022|": [
+  {
+   "name": "Chad Johnson",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Amy Trask",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|023|": [
+  {
+   "name": "Mark Leland Baker",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "J.J. Grow",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|024|": [
+  {
+   "name": "Ryan Chamberlin",
+   "party": "REP",
+   "status": "UNO"
+  }
+ ],
+ "STR|025|": [
+  {
+   "name": "Farmer Banks Helfrich",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Taylor Yarkosky",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|026|": [
+  {
+   "name": "Nan Cobb",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Robyn Elaine Lawrence",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|027|": [
+  {
+   "name": "Andy Ferrari",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Richard Gentry",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|028|": [
+  {
+   "name": "Joseph Joe Hannoush",
+   "party": "LPF",
+   "status": "QUA"
+  },
+  {
+   "name": "Sammy Jackson",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Bill Partington",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|029|": [
+  {
+   "name": "Webster Barnaby",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Don Kanfer",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|030|": [
+  {
+   "name": "Edwin Munoz",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Chase Tramont",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|031|": [
+  {
+   "name": "Daniel Lewis Cicirelli",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Matt Woodside",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|032|": [
+  {
+   "name": "Juan J. Hinojosa",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Brian Hodgers",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|033|": [
+  {
+   "name": "Daniel R. McDow",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Monique Miller",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|034|": [
+  {
+   "name": "Jordyn Guadalupe Balderas",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Robert Brackett",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|035|": [
+  {
+   "name": "Erika Booth",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Eric Gray",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|036|": [
+  {
+   "name": "Darryl Block",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Rachel Plakon",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|037|": [
+  {
+   "name": "Jane Aman",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Robert Prater",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|038|": [
+  {
+   "name": "Nik Dean",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Emily Duda Buckley",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|039|": [
+  {
+   "name": "Doug Bankson",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Jarod Fox",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|040|": [
+  {
+   "name": "Tuan Le",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Ra'Shon Young",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|041|": [
+  {
+   "name": "Bruce Antone",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|042|": [
+  {
+   "name": "Bonnie Jackson",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Felipe Sousa Lazaballet",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|043|": [
+  {
+   "name": "Jorge Malavet",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Samuel Vilchez Santiago",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|044|": [
+  {
+   "name": "Rita Harris",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|045|": [
+  {
+   "name": "Erin Huntley",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Leonard Spencer",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|046|": [
+  {
+   "name": "Jose Alvarez",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Michael Cruz",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Ivan A. Rivera",
+   "party": "NPA",
+   "status": "QUA"
+  }
+ ],
+ "STR|047|": [
+  {
+   "name": "Anthony Nieves",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|048|": [
+  {
+   "name": "Jonathan Albert",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Alethea Pugh",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|049|": [
+  {
+   "name": "Robert Anzalone",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Jennifer Kincart Jonsson",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|050|": [
+  {
+   "name": "Jennifer Canady",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Ricky Santiago",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Jarvis Washington",
+   "party": "NPA",
+   "status": "QUA"
+  }
+ ],
+ "STR|051|": [
+  {
+   "name": "Octavio E. Hernandez",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Hilary Holley",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|052|": [
+  {
+   "name": "Pamala Kaye Bivins",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Samantha Scott",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|053|": [
+  {
+   "name": "Christopher Anger",
+   "party": "CPF",
+   "status": "QUA"
+  },
+  {
+   "name": "Tony Claude",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Brian Hawkins",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|054|": [
+  {
+   "name": "Randy Maggard",
+   "party": "REP",
+   "status": "UNO"
+  }
+ ],
+ "STR|055|": [
+  {
+   "name": "Zach Funkhouser",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Walter Price",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|056|": [
+  {
+   "name": "Jose Freites",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Brad Yeager",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|057|": [
+  {
+   "name": "Adam C. Anderson",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Wendy Hoy",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|058|": [
+  {
+   "name": "Bryan Beckman",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Kimberly Kim Berfield",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|059|": [
+  {
+   "name": "Berny Jacques",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Susan Rochelle Leff",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|060|": [
+  {
+   "name": "Lindsay Polega-Quigley",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Melissa Rutland",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|061|": [
+  {
+   "name": "Linda Chaney",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "May Thach",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|062|": [
+  {
+   "name": "Kyandra Darling",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|063|": [
+  {
+   "name": "Jacqueline Coffie-Leeks",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|064|": [
+  {
+   "name": "Luis Salazar",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Dan Weldon",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|065|": [
+  {
+   "name": "Ben Braver",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Karen Gonzalez Pittman",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|066|": [
+  {
+   "name": "Traci Koster",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Jose A. \"Dante\" Sanchez Sanchez",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|067|": [
+  {
+   "name": "Lisette Bonano",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Luis Viera",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|068|": [
+  {
+   "name": "Ryan Gill",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Tony Smith",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|069|": [
+  {
+   "name": "Daniel Danny Alvarez",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Ashley Elizabeth Herrmann",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|070|": [
+  {
+   "name": "Michael Owen",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Luther Keith Wilkins",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|071|": [
+  {
+   "name": "Ocean Fitts",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Joseph Hoolihan",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Jordan Varnadore",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|072|": [
+  {
+   "name": "William Bill Conerly",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Harvey Shifrin",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|073|": [
+  {
+   "name": "Lisa Klein",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Fiona McFarland",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|074|": [
+  {
+   "name": "Ryan Neill",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Nick Pachota",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|075|": [
+  {
+   "name": "Cynthia L. Butler",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Danny Nix Jr.",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|076|": [
+  {
+   "name": "Phillip Ray Carter",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Vanessa Oliver",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|077|": [
+  {
+   "name": "Tiffany Esposito",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Cornelius Fowler",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|078|": [
+  {
+   "name": "Cindy Banyai",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Susan Frantz",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|079|": [
+  {
+   "name": "Mike Giallombardo",
+   "party": "REP",
+   "status": "UNO"
+  }
+ ],
+ "STR|080|": [
+  {
+   "name": "Adam Botana",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "William Moskal",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|081|": [
+  {
+   "name": "Yvette Benarroch",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Kim Finer",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|082|": [
+  {
+   "name": "Arthur Boyer",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Liesa Priddy",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|083|": [
+  {
+   "name": "Leigh Estes",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Kaylee Tuck",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|084|": [
+  {
+   "name": "Jennifer Massey",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Dana Trabulsy",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|085|": [
+  {
+   "name": "Anthony Bonna",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Amr Metwally",
+   "party": "MGT",
+   "status": "QUA"
+  },
+  {
+   "name": "Wayne Richter",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|086|": [
+  {
+   "name": "Elizabeth Brendel Pandich",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "John Snyder",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|087|": [
+  {
+   "name": "Emily Gregory",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Jon Maples",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|088|": [
+  {
+   "name": "Jervonte Tae Edmonds",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "William Joseph",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|089|": [
+  {
+   "name": "Cathy Higgins",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Debra Tendrich",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|090|": [
+  {
+   "name": "Rob Long",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Ionel Roiban",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|091|": [
+  {
+   "name": "Luis Garcia",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Peggy Gossett-Seidman",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|092|": [
+  {
+   "name": "Steve Byers",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Kelly Skidmore",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|093|": [
+  {
+   "name": "Anne Gerwig",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "August Mangeney",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|094|": [
+  {
+   "name": "Doug Barrow",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Elizabeth Holmes",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Megan Weinberger",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|095|": [
+  {
+   "name": "Christine Hunschofsky",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|096|": [
+  {
+   "name": "Dan Daley",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|097|": [
+  {
+   "name": "Lisa Dunkley",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|098|": [
+  {
+   "name": "Mitch Rosenwald",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|099|": [
+  {
+   "name": "Daryl Nevroy Campbell",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|100|": [
+  {
+   "name": "Yoni Anijar",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Michael Terence Ferguson",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|101|": [
+  {
+   "name": "Hillary Cassel",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Todd Delmay",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|102|": [
+  {
+   "name": "Michael Mike Friend",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Mery Lopez-Palma",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|103|": [
+  {
+   "name": "Robin Bartleman",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Imtiaz Mohammad",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|104|": [
+  {
+   "name": "Felicia Simone Robinson",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|105|": [
+  {
+   "name": "Marie Woodson",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|106|": [
+  {
+   "name": "Lucia Baez-Geller",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Fabian Basabe",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|107|": [
+  {
+   "name": "Wallace Aristide",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|108|": [
+  {
+   "name": "Daphne Campbell",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Wancito Francius",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|109|": [
+  {
+   "name": "James Bush III",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STR|110|": [
+  {
+   "name": "Tom Fabricio",
+   "party": "REP",
+   "status": "UNO"
+  }
+ ],
+ "STR|111|": [
+  {
+   "name": "David Borrero",
+   "party": "REP",
+   "status": "UNO"
+  }
+ ],
+ "STR|112|": [
+  {
+   "name": "Alex Rizo",
+   "party": "REP",
+   "status": "UNO"
+  }
+ ],
+ "STR|113|": [
+  {
+   "name": "Bruno A. Barreiro",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Gloria Romero Roses",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|114|": [
+  {
+   "name": "Demi Busatta",
+   "party": "REP",
+   "status": "UNO"
+  }
+ ],
+ "STR|115|": [
+  {
+   "name": "Omar Blanco",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Marcos Reyes",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|116|": [
+  {
+   "name": "Ashley Perez-Biliskov",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Nicolas Ramos",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|117|": [
+  {
+   "name": "Kevin Chambliss",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Miguel Granda",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|118|": [
+  {
+   "name": "Armando A.C. Castillo",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Mike Redondo",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STR|119|": [
+  {
+   "name": "Juan Carlos Porras",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Rey Lazaro Sordo",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STR|120|": [
+  {
+   "name": "James Vernon \"Jim\" Mooney Jr.",
+   "party": "REP",
+   "status": "UNO"
+  }
+ ],
+ "STS|002|": [
+  {
+   "name": "Lauren Donahoo",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Jay Trumbull",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STS|004|": [
+  {
+   "name": "Clay Yarborough",
+   "party": "REP",
+   "status": "UNO"
+  }
+ ],
+ "STS|006|": [
+  {
+   "name": "Jason Bellamy-Fults",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Jennifer Bradley",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Joseph Thornton",
+   "party": "ASP",
+   "status": "QUA"
+  }
+ ],
+ "STS|008|": [
+  {
+   "name": "Jake Johansson",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Judy M. Ngying",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Gabriel Jude Wozniak",
+   "party": "LPF",
+   "status": "QUA"
+  }
+ ],
+ "STS|010|": [
+  {
+   "name": "Jason Brodeur",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "John Lowndes",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STS|012|": [
+  {
+   "name": "Colleen Burton",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Alfred Reynolds",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STS|014|": [
+  {
+   "name": "Brian Nathan",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Josie Tomkow",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STS|016|": [
+  {
+   "name": "Fentrice Driskell",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "STS|018|": [
+  {
+   "name": "Nick DiCeglie",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Karla Kemp",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STS|020|": [
+  {
+   "name": "Gerald Baldi",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Jim Boyd",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STS|022|": [
+  {
+   "name": "James Buchanan",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Martin Hyde",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Lew Wasserman",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STS|024|": [
+  {
+   "name": "Mack Bernard",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Jackie Green",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STS|026|": [
+  {
+   "name": "Rick Roth",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "David Silvers",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STS|028|": [
+  {
+   "name": "Lauren Uhlich Melo",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "David Silverberg",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STS|030|": [
+  {
+   "name": "Lauren Book",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Hector Rivera",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STS|032|": [
+  {
+   "name": "Crescente Furnaguera",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Rosalind Osgood",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STS|034|": [
+  {
+   "name": "Ashley Viola Gantt",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Elizabeth Jeanty",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "STS|036|": [
+  {
+   "name": "Ileana Garcia",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "George Lavin",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "STS|038|": [
+  {
+   "name": "Alexis Maria Calatayud",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Richard Lamondin Jr.",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Jeffrey Doc Solomon",
+   "party": "NPA",
+   "status": "QUA"
+  }
+ ],
+ "STS|040|": [
+  {
+   "name": "Ramiro Orta",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Ana Maria Rodriguez",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Jose Antonio Stoute",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "TOL||002": [
+  {
+   "name": "Richard T. Ray",
+   "party": "NOP",
+   "status": "UNO"
+  }
+ ],
+ "TOL||005": [
+  {
+   "name": "Ronald Howland",
+   "party": "NOP",
+   "status": "QUA"
+  },
+  {
+   "name": "Anthony Vetter",
+   "party": "NOP",
+   "status": "QUA"
+  }
+ ],
+ "USR|001|": [
+  {
+   "name": "Tyler L. Davis",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Jimmy Patronis",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Gay Valimont",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "USR|002|": [
+  {
+   "name": "Amanda Marie Green",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Austin Rogers",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "USR|003|": [
+  {
+   "name": "Kat Cammack",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Seth Harp",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Mike Klein",
+   "party": "NPA",
+   "status": "QUA"
+  }
+ ],
+ "USR|004|": [
+  {
+   "name": "Aaron Bean",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "LaShonda L.J. Holloway",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Todd Schaefer",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Mike Sell",
+   "party": "FFP",
+   "status": "QUA"
+  }
+ ],
+ "USR|005|": [
+  {
+   "name": "Rachel Grage",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "John H. Rutherford",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "USR|006|": [
+  {
+   "name": "Randy Fine",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Michael Gist",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Andrew Parrott",
+   "party": "LPF",
+   "status": "QUA"
+  },
+  {
+   "name": "Eric Yonce",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "USR|007|": [
+  {
+   "name": "Bale Dalton",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Christopher Dennison",
+   "party": "LPF",
+   "status": "QUA"
+  },
+  {
+   "name": "Ryan Elijah",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "USR|008|": [
+  {
+   "name": "Mike Haridopolos",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Jennifer Jenkins",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "USR|009|": [
+  {
+   "name": "Dan Green",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Darren Soto",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "USR|010|": [
+  {
+   "name": "Maxwell Alejandro Frost",
+   "party": "DEM",
+   "status": "UNO"
+  }
+ ],
+ "USR|011|": [
+  {
+   "name": "Ralph Groves",
+   "party": "LPF",
+   "status": "QUA"
+  },
+  {
+   "name": "James Pericola",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Joe Strada",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "USR|012|": [
+  {
+   "name": "Gus Michael Bilirakis",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Kimberly Overman",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Branden Scrivener",
+   "party": "NPA",
+   "status": "QUA"
+  }
+ ],
+ "USR|013|": [
+  {
+   "name": "Tony D'Arrigo",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Leela Gray",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Anna Paulina Luna",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "USR|014|": [
+  {
+   "name": "Mike Beltran",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Kathy Castor",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Brian Lambert",
+   "party": "LPF",
+   "status": "QUA"
+  }
+ ],
+ "USR|015|": [
+  {
+   "name": "Laurel Lee",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Robert People",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "USR|016|": [
+  {
+   "name": "Mark Davis",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Sydney Gruters",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Kelly Kirschner",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "USR|017|": [
+  {
+   "name": "Matthew Montavon",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Michael J. Quirk",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Greg Steube",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "USR|018|": [
+  {
+   "name": "Scott Franklin",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Curtis Gibson",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Deva Simmons",
+   "party": "NPA",
+   "status": "QUA"
+  }
+ ],
+ "USR|019|": [
+  {
+   "name": "Victor Arias",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Seth Haskin",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Jim Schwartzel",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "USR|020|": [
+  {
+   "name": "Brent Andersen",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Kedner Maxime",
+   "party": "IND",
+   "status": "QUA"
+  },
+  {
+   "name": "Debbie Wasserman Schultz",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "USR|021|": [
+  {
+   "name": "Alexander Cooke",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "James T. Martin",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Brian Mast",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "USR|022|": [
+  {
+   "name": "Casey Askar",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Pia Dandiya",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "USR|023|": [
+  {
+   "name": "Deborah Adeimy",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Lois Frankel",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "USR|024|": [
+  {
+   "name": "Te Mayonna Brown",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Oliver G. Gilbert III",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ],
+ "USR|025|": [
+  {
+   "name": "Peter Jassenoff",
+   "party": "LPF",
+   "status": "QUA"
+  },
+  {
+   "name": "Jared Moskowitz",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Scott Singer",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "USR|026|": [
+  {
+   "name": "Mario Diaz-Balart",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Nicole Locklin",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Deborah Ann Meidinger Hosey",
+   "party": "NPA",
+   "status": "QUA"
+  }
+ ],
+ "USR|027|": [
+  {
+   "name": "Eliott Rodriguez",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Maria Elvira Salazar",
+   "party": "REP",
+   "status": "QUA"
+  }
+ ],
+ "USR|028|": [
+  {
+   "name": "Phil Felipe Ehr",
+   "party": "DEM",
+   "status": "QUA"
+  },
+  {
+   "name": "Carlos A. Gimenez",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Eddy Rojas",
+   "party": "NPA",
+   "status": "QUA"
+  }
+ ],
+ "USS||": [
+  {
+   "name": "Neil J. Gillespie",
+   "party": "NPA",
+   "status": "QUA"
+  },
+  {
+   "name": "Ashley Moody",
+   "party": "REP",
+   "status": "QUA"
+  },
+  {
+   "name": "Angie Nixon",
+   "party": "DEM",
+   "status": "QUA"
+  }
+ ]
+}
