@@ -215,6 +215,19 @@ original three-value CHECK rejects `unopposed`.
 > races would do. Mapped now, with a test that fails if either half of the
 > mapping is removed.
 
+**D-A (founder 2026-09-07)** is that widening. Candidates qualified under the
+enacted 2026 congressional map in June 2026, and the four counties this app
+covers now touch sixteen U.S. House districts — not the four
+`_TARGET_US_HOUSE` held before: Orange 7/8/9/10/11, Hillsborough 12/14/15/16,
+Broward 20/22/24/25/26, Miami-Dade 27/28 (`intake.py`; `ballots-handoff.md`
+§4.2). FL-23 leaves the set entirely — under the enacted map it falls in no
+ZIP this app covers. D-A is what makes the mapping above load-bearing rather
+than precautionary: `_ballot_status` now runs over `USR` rows in twelve more
+districts than before, and an unmapped `XTL` or `DEC` among them would raise
+`DoEFormatError` — exactly the trap `4c3b115` already closed. That fix landed
+first; D-A widened coverage after it (`c6439de`), so the run that actually
+reaches the wider field never meets the gap.
+
 The form's status filter also offers `ACT` Active and `ELE` Elected; neither
 is in the export today. B2 must **not** pre-map them: `ELE` will appear after
 certification and means the race is decided. Leave both unrecognised → fail

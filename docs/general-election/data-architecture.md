@@ -276,6 +276,19 @@ would render a single column implying a comparison that never happened. Record
 `unopposed` on the audit result and have the race view say so plainly. This
 ships in the first run — it cannot be deferred.
 
+> ⚠️ **This assumed the race still appears on the ballot; D-B says otherwise
+> for a true `UNO`.** `result["unopposed"]` here is the audit's own flag —
+> "there was one candidate to look at" — and a race whose other candidates
+> withdrew *after* qualifying sets it too, even though that race's ballot
+> **is** printed. Under D-B (founder 2026-09-07) the DoE's `UNO` code is
+> carried as its own value, `candidate.qualifying_status = 'unopposed'`
+> (migration `0019` widens the CHECK to allow it; `data-ingest.md` §1), and
+> only a true `UNO` means the contest is not printed at all (F.S.
+> 101.151(7)). The two facts read the same off `len(audited) == 1` but are
+> not the same claim — "nothing to compare" is not "not on your ballot" —
+> so the race view (`src/lib/unopposed.ts`) checks the stronger, carried fact
+> first and falls back to this section's weaker one only when it doesn't hold.
+
 ---
 
 ## 4. Read model
