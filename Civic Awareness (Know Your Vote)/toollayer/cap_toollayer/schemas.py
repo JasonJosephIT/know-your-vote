@@ -45,8 +45,11 @@ _STR = {"type": "string"}
 
 TOOL_SCHEMAS: dict[str, dict[str, Any]] = {
     "doe_file_intake": {
-        "description": "Download + parse the FL DoE candidate file and upsert the "
-                       "8 target races. Idempotent by natural key.",
+        "description": "Download + parse the FL DoE candidate file and upsert "
+                       "the target races -- five statewide/at-large "
+                       "(Gov/AG/CFO/AgComm + U.S. Senate) plus sixteen U.S. "
+                       "House districts, twenty-one today. Idempotent by "
+                       "natural key.",
         "input_schema": _obj({
             "office": {"type": "string", "enum": DOE_OFFICES,
                        "description": "DoE office filter"},

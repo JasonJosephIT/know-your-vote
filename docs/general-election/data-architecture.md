@@ -87,7 +87,9 @@ incumbent with twelve is `(12-0)/12*100 = 100%` variance → **HALT**.
 **B1 measured exactly how bad this is** (live DoE run 2026-09-06, per-race
 table in `data-ingest.md` §1). Across the eight target races B1 ran against —
 D-A (founder 2026-09-07) has since widened US House coverage from four
-districts to sixteen, twenty races today, not eight:
+districts to sixteen. Current scope is five statewide/at-large races
+(Gov/AG/CFO/AgComm + U.S. Senate, `FL-SEN-general`) + sixteen U.S. House
+districts — twenty-one races today, not eight:
 
 | | `ballot` | `write_in` | `excluded` |
 |---|---|---|---|
@@ -256,12 +258,15 @@ a no-op for current data.
 > constraint is not binding. Widen it if and only if coverage expands.
 >
 > ⚠️ **Coverage expanded under D-A (founder 2026-09-07) — the trigger this
-> note names actually fired.** Target races are now four statewide + sixteen
-> U.S. House districts (`intake.py` `_TARGET_US_HOUSE`), twenty races, not
-> eight. The conclusion still holds on today's facts: all twenty remain
-> federal or state — no county, municipal, or judicial race entered scope —
-> so `race.level`'s CHECK is still not binding. Re-check this note the next
-> time coverage moves.
+> note names actually fired.** Target races are now five statewide/at-large
+> (Gov/AG/CFO/AgComm + U.S. Senate, `FL-SEN-general`) + sixteen U.S. House
+> districts (`intake.py` `_NO_DISTRICT_RACES`, `_TARGET_US_HOUSE`),
+> twenty-one races, not eight. The conclusion still holds on today's facts:
+> all twenty-one remain federal or state — `FL-SEN-general` is level
+> `"federal"`, same as the sixteen U.S. House races, and the four cabinet
+> races stay `"state"` — no county, municipal, or judicial race entered
+> scope, so `race.level`'s CHECK is still not binding. Re-check this note
+> the next time coverage moves.
 
 ---
 

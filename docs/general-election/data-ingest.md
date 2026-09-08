@@ -29,9 +29,13 @@ by ID, never restated.
   is already stamped on every parsed race.
 - T2 (FEC) and T3 (FL Legislature) are election-agnostic read tools.
 - The target races are unchanged by this pivot itself — the count has since
-  moved under D-A (founder 2026-09-07, see below) to four statewide
-  (Gov/AG/CFO/AgComm) + sixteen U.S. House districts, not the eight this
-  section originally counted.
+  moved under D-A (founder 2026-09-07, see below) to five statewide/at-large
+  races (Gov/AG/CFO/AgComm + U.S. Senate, `FL-SEN-general`) + sixteen U.S.
+  House districts — twenty-one races, not the eight this section originally
+  counted. The Senate seat was always a real target race; its absence from
+  that original eight was `USS` falling through `parse_candidate_list`
+  unmapped — a parser bug, not a scope decision (`db-audit-2026-09-07.md`
+  §1).
 
 **No new tool, no new endpoint, and no re-pointing is required.** What changed
 is that a *filing list* fetched after a primary no longer equals a *ballot*.
@@ -80,7 +84,8 @@ write-in from a printed ballot line, which is exactly the distinction
 
 **Do not guess the codes.** Look at the real file first. That is what
 `scripts/doe-code-dump.py` does — it fetches `20261103-GEN` for each office
-group (`FED`, `CAB`, `LEG`) and prints, for the 8 target races only, the
+group (`FED`, `CAB`, `LEG`) and prints, for the target races only (the
+script's `TARGET_OFFICES` + `TARGET_USR`, kept in step with `intake.py`), the
 distinct `StatusCode`/`StatusDesc` and `PartyCode`/`PartyDesc` counts plus any
 column the current parser doesn't know about (a candidate-type column would be
 the clean write-in signal). If no column distinguishes write-ins, fetch twice
@@ -256,8 +261,9 @@ state-level ones, not write-ins from printed lines. No diff fetch was needed.
 
 #### Q3 — party codes beyond REP/DEM/NPA
 
-In the 8 target races: `WRI` Write-In, `IND` Independent Party of Florida,
-`LPF` Libertarian Party of Florida, `CPF` Constitution Party of Florida.
+In the target races B1 measured (then eight): `WRI` Write-In, `IND`
+Independent Party of Florida, `LPF` Libertarian Party of Florida, `CPF`
+Constitution Party of Florida.
 Whole-file adds `FFP` Florida Forward Party and `MGT`, which arrives with an
 **empty `PartyDesc`** (one FED row). **D2 confirmed:** three real minor
 parties in the target field alone would be flattened into `other` by the

@@ -80,7 +80,8 @@ def summarize(text, label):
     target = [r for r in rows
               if col(r, "OfficeCode") in TARGET_OFFICES
               or (col(r, "OfficeCode") == "USR" and col(r, "Juris1num") in TARGET_USR)]
-    print(f"   rows in the 8 target races: {len(target)}")
+    n_races = len(TARGET_OFFICES) + len(TARGET_USR)
+    print(f"   rows in the {n_races} target races: {len(target)}")
 
     for pair in (("StatusCode", "StatusDesc"), ("PartyCode", "PartyDesc")):
         if pair[0] not in idx:
@@ -108,7 +109,8 @@ def selftest():
     with contextlib.redirect_stdout(buf):
         summarize(FIXTURE, "SELFTEST")
     out = buf.getvalue()
-    assert "rows in the 8 target races: 4" in out, out   # row 5 (FL-99) excluded
+    n_races = len(TARGET_OFFICES) + len(TARGET_USR)
+    assert f"rows in the {n_races} target races: 4" in out, out   # row 5 (FL-99) excluded
     assert "'DEF'" in out and "'LPF'" in out, out        # both survive raw
     assert "PartyDesc" in out
     print("selftest OK — target filter and raw code counts behave")

@@ -164,9 +164,10 @@ FEC candidates endpoint.
   schedules, not before.
 - **Anything that widens `race.level`.** It still reads
   `CHECK (level IN ('federal','state'))`. Coverage already expanded once
-  (D-A, founder 2026-09-07: four statewide + sixteen U.S. House districts,
-  twenty races, not eight) and all twenty are still federal or state, so it
-  remains not binding. Widen it if and only if that stops being true.
+  (D-A, founder 2026-09-07: five statewide/at-large races — Gov/AG/CFO/AgComm
+  + U.S. Senate — + sixteen U.S. House districts, twenty-one races, not
+  eight) and all twenty-one are still federal or state, so it remains not
+  binding. Widen it if and only if that stops being true.
 
 ---
 
