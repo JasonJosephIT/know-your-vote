@@ -90,11 +90,28 @@ export default async function RacePage({
             (data-architecture.md §3, recorded as `unopposed` by A3). B1 found
             FL-10 in exactly this shape: the file's only UNO row. Say it
             plainly rather than let the standard line imply a fairness check
-            that had nothing to weigh. */}
+            that had nothing to weigh.
+
+            D-B (founder 2026-09-07) splits that into two states, because "one
+            candidate" turned out to be two different facts. The line above
+            stays exactly right for a race whose other candidates withdrew
+            after qualifying: the survivor is `qualified`, their ballot is
+            already printed, and the voter will see this contest. The stronger
+            line below is for the case that is not on the ballot at all —
+            nobody filed, so F.S. 101.151(7) leaves the contest off it and the
+            candidate takes the office. That is a fact about the ballot in the
+            voter's hand, not about our comparison, so it is said first and
+            said plainly; a voter looking for this race and not finding it
+            deserves to know why. Which state a race is in comes from the DoE's
+            own `UNO` code (src/lib/unopposed.ts) — the two are
+            indistinguishable by candidate count, which is why deriving it was
+            rejected. */}
         <p className="text-body-sm text-on-surface-muted">
-          {brief.candidates.length === 1
-            ? "One candidate qualified for this race, so there is nothing to compare — here's what we have on them."
-            : "Here's your race — every candidate, same space, same scrutiny."}
+          {brief.notPrintedOnBallot
+            ? "No one filed against this candidate, so they are elected without opposition and this contest will not appear on your ballot — here's what we have on them."
+            : brief.candidates.length === 1
+              ? "One candidate qualified for this race, so there is nothing to compare — here's what we have on them."
+              : "Here's your race — every candidate, same space, same scrutiny."}
         </p>
       </header>
 

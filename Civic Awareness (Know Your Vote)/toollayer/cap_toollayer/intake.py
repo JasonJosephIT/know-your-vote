@@ -95,8 +95,18 @@ _TARGET_US_HOUSE = {
 # ballot lines in the target races -- into one bucket. Migration 0013 drops the
 # CHECK that made the map necessary.
 
-# candidate.qualifying_status is CHECK-constrained to three values, so this map
-# is a real narrowing and not a display choice.
+# candidate.qualifying_status is CHECK-constrained, so this map is a real
+# narrowing and not a display choice. Migration 0019 widened the CHECK to four
+# values and MUST be applied before the next live run -- 'unopposed' below is
+# rejected by the original three-value constraint.
+#
+# D-B (founder 2026-09-07): UNO takes its own status rather than collapsing
+# into 'qualified'. Florida marks a candidate UNO when nobody filed against
+# them, and F.S. 101.151(7) then keeps the contest off the printed ballot
+# entirely. Collapsing the code erased the only evidence of that, and it cannot
+# be recovered downstream: a race whose other candidates withdrew after
+# qualifying looks identical -- one ballot line, no write-in -- but its ballot
+# is printed. The DoE publishes the distinction; the read model keeps it.
 #
 # XTL and DEC (added 2026-09-07) take 'other', not 'withdrawn': "Transferred to
 # Local" means the filing moved to a county office and "Deceased" means the
@@ -104,7 +114,7 @@ _TARGET_US_HOUSE = {
 # social-account ingestion gate reads this column (CAP_Schema_v1.md), and a
 # withdrawal is a candidate's own act in a way that these two are not.
 _STATUS = {
-    "QUA": "qualified", "UNO": "qualified",
+    "QUA": "qualified", "UNO": "unopposed",
     "WIT": "withdrawn", "DEF": "withdrawn", "DNQ": "withdrawn", "REM": "withdrawn",
     "XTL": "other", "DEC": "other",
 }
@@ -113,6 +123,12 @@ _STATUS = {
 # second -- B1's whole-file cross-tab found WRI rows carrying DNQ, REM and WIT
 # as well as QUA, so a write-in that withdrew is excluded for withdrawing
 # rather than filed as a write-in.
+#
+# UNO stays in this set under D-B. The tier is a separate axis from
+# `qualifying_status`: an unopposed candidate holds the seat, so they are
+# briefed, audited and shown like any other ballot line -- the contest simply
+# is not printed. Move UNO out of here and FL-10's only candidate disappears
+# from the app.
 _ON_BALLOT_STATUS = frozenset({"QUA", "UNO"})
 # XTL "Transferred to Local" (7 legislative rows) and DEC "Deceased" (1 circuit
 # judge) were found in the live 20261103-GEN file on 2026-09-07 by the

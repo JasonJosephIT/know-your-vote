@@ -3,6 +3,7 @@ import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 import type { NewsSource } from "@/lib/news-labels";
 import { RECENT_WINDOW_DAYS } from "@/lib/neutrality";
+import { isUnopposedContest } from "@/lib/unopposed";
 import type { CandidateContact, NewsItem } from "@/types/app";
 import type {
   Candidate,
@@ -52,6 +53,14 @@ export interface RaceBrief {
   race: Race;
   spineIssues: Issue[];
   candidates: CandidateBriefData[];
+  /* D-B (founder 2026-09-07): nobody filed against the sole ballot line, so
+     F.S. 101.151(7) keeps the contest off the printed ballot entirely. Carried
+     from the DoE's `UNO` code, never derived — see src/lib/unopposed.ts.
+
+     Optional because getRaceBrief is memoized with unstable_cache across
+     deploys: an entry written before this field existed comes back without it,
+     and `undefined` has to mean "printed", the weaker and safer claim. */
+  notPrintedOnBallot?: boolean;
 }
 
 type ClaimRow = Claim & { claim_source: Array<{ source: Source }> };
@@ -151,13 +160,14 @@ async function fetchRaceBrief(raceId: string): Promise<RaceBrief | null> {
      shapes return a one-element array; normalize both rather than trusting
      one. A profile with no candidate row resolves to null and is dropped —
      fail closed. */
-  const allProfiles = (profilesRes.data ?? []) as Array<
-    Profile & { candidate?: { ballot_status?: string } | Array<{ ballot_status?: string }> | null }
-  >;
-  const profiles = allProfiles.filter((p) => {
-    const embed = Array.isArray(p.candidate) ? p.candidate[0] : p.candidate;
-    return embed?.ballot_status === "ballot";
-  });
+  type ProfileWithTier = Profile & {
+    candidate?: { ballot_status?: string } | Array<{ ballot_status?: string }> | null;
+  };
+  const tierOf = (p: ProfileWithTier) =>
+    (Array.isArray(p.candidate) ? p.candidate[0] : p.candidate)?.ballot_status;
+
+  const allProfiles = (profilesRes.data ?? []) as ProfileWithTier[];
+  const profiles = allProfiles.filter((p) => tierOf(p) === "ballot");
   if (profiles.length === 0) return null;
   /* FR-005: all profiles must pass the Balance Audit, not just be present. */
   if (
@@ -214,10 +224,20 @@ async function fetchRaceBrief(raceId: string): Promise<RaceBrief | null> {
     };
   };
 
+  /* The one thing that reads `write_in` as more than "not ballot"
+     (data-architecture.md D1). A qualified write-in is opposition, so the
+     office IS printed — the candidate's name with a blank line under it — and
+     the claim below must not be made. `profile` is the only race-to-candidate
+     link a non-ballot filer has: D1 keeps them out of race.candidate_ids, and
+     A3 still writes them a profile row precisely so the exclusion stays
+     visible. */
+  const hasWriteIn = allProfiles.some((p) => tierOf(p) === "write_in");
+
   return {
     race,
     spineIssues,
     candidates: candidates.map(briefFor),
+    notPrintedOnBallot: isUnopposedContest(candidates, hasWriteIn),
   };
 }
 

@@ -181,7 +181,7 @@ them: `XTL` Transferred to Local (7 state-legislative rows) and `DEC` Deceased
 | `StatusCode` | `StatusDesc` | Tier | `qualifying_status` |
 |---|---|---|---|
 | `QUA` | Qualified | `ballot` — or `write_in`, see Q2 | `qualified` |
-| `UNO` | Unopposed | `ballot` | `qualified` |
+| `UNO` | Unopposed | `ballot` | `unopposed` |
 | `DEF` | Defeated | `excluded` | `withdrawn` |
 | `DNQ` | Did Not Qualify | `excluded` | `withdrawn` |
 | `WIT` | Withdrew | `excluded` | `withdrawn` |
@@ -193,6 +193,17 @@ them: `XTL` Transferred to Local (7 state-legislative rows) and `DEC` Deceased
 `XTL` and `DEC` take `other` rather than `withdrawn`: the filing moved to a
 county office, or the filer died. Neither is the candidate's own withdrawal,
 and the column gates social-account ingestion (`CAP_Schema_v1.md`).
+
+`UNO` takes its own `unopposed` status rather than folding into `qualified`
+(**D-B, founder 2026-09-07**; it used to be `qualified` here). Nobody filed
+against the candidate, so F.S. 101.151(7) keeps the contest off the printed
+ballot entirely — `ballots-handoff.md` F2, which is FL-10 this cycle. The code
+is *carried*, not derived: a race whose other candidates withdrew after
+qualifying leaves one `qualified` survivor with no write-in, which is
+indistinguishable by composition and whose ballot **is** printed. The tier
+stays `ballot` — an unopposed candidate still holds the seat and is still
+briefed. **Migration `0019` must be applied before the next live run**; the
+original three-value CHECK rejects `unopposed`.
 
 > **Correction to `ballots-handoff.md` F3.** That note said an unmapped `XTL`
 > would stop the next live run. It would not have. Every `XTL` row is

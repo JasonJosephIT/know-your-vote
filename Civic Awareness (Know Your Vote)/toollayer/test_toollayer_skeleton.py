@@ -910,7 +910,7 @@ class TestIntakeDoEParser(unittest.TestCase):
         jane = by_id["FL-DOE-89111"]
         self.assertEqual(jane["legal_name"], "Jane Q Smith")
         self.assertEqual(jane["party"], "DEM")
-        self.assertEqual(jane["qualifying_status"], "qualified")  # UNO -> qualified
+        self.assertEqual(jane["qualifying_status"], "unopposed")  # UNO -> unopposed
         # PII must not survive into the candidate row
         for pii in ("email", "phone", "Addr1", "City", "Zip"):
             self.assertNotIn(pii, jane)
@@ -999,6 +999,35 @@ class TestIntakeDoEParser(unittest.TestCase):
         self.assertEqual(p["skipped"], 2)
         self.assertEqual(p["candidates"], [])
         self.assertEqual(p["tiers"], {"ballot": 0, "write_in": 0, "excluded": 0})
+
+    def test_uno_survives_ingest_as_its_own_qualifying_status(self):
+        """D-B (founder 2026-09-07): carry the DoE's UNO code, do not derive
+        it. Collapsing UNO into `qualified` erased the one fact F.S. 101.151(7)
+        turns on -- nobody filed against this candidate, so the contest is not
+        printed on any ballot. The rejected alternative was inferring it from
+        "one ballot-tier candidate and no write-in", which is wrong for a race
+        whose other candidates withdrew AFTER qualifying: the survivor is QUA,
+        the ballot is already printed, and the derivation would hide it."""
+        p = intake.parse_candidate_list(_DOE_FIXTURE)
+        by_id = {c["candidate_id"]: c for c in p["candidates"]}
+        self.assertEqual(by_id["FL-DOE-89111"]["qualifying_status"], "unopposed")
+        # The QUA survivor case the derivation would have got wrong: same race
+        # shape (one ballot line), different fact.
+        self.assertEqual(by_id["FL-DOE-89070"]["qualifying_status"], "qualified")
+
+    def test_unopposed_is_still_a_ballot_tier_filing(self):
+        """The two axes stay independent. `qualifying_status` says why the
+        candidate is on the ballot; `ballot_status` says whether they get a
+        printed line at all. An unopposed candidate is elected to the office,
+        so they are briefed and audited like any other ballot line -- UNO
+        leaving `_ON_BALLOT_STATUS` would drop FL-10's only candidate off the
+        page entirely."""
+        self.assertIn("UNO", intake._ON_BALLOT_STATUS)
+        p = intake.parse_candidate_list(_DOE_FIXTURE)
+        by_id = {c["candidate_id"]: c for c in p["candidates"]}
+        self.assertEqual(by_id["FL-DOE-89111"]["ballot_status"], "ballot")
+        self.assertEqual(p["races"]["FL-10-general"]["candidate_ids"],
+                         ["FL-DOE-89111"])
 
     def test_every_tiered_status_code_has_a_qualifying_status(self):
         """The two maps are separate and must not drift. A code tiered by
