@@ -4,6 +4,7 @@ import { BallotQuestions } from "@/components/features/BallotQuestions";
 import { VotingInfo } from "@/components/features/VotingInfo";
 import { ZipEntry } from "@/components/features/ZipEntry";
 import { createAnonServerClient } from "@/lib/supabase/server";
+import { districtRaceMissing } from "@/lib/coverage";
 import { resolveCounty, resolveZip, ZIP_RE } from "@/lib/resolve";
 import type { ResolveResult } from "@/types/app";
 
@@ -128,6 +129,24 @@ export async function YourRaces({
           })}
         </ul>
       )}
+
+      {/* The ZIP resolved and the district race is not here. Without this the
+          list reads as a finished ballot: the voter asked for their House race,
+          got five statewide races, and nothing said which part is missing.
+          Sits directly under the list because it is a statement about the
+          list — the county path's counterpart is the caption further down. */}
+      {districtRaceMissing(result.district, result.races) &&
+        result.races.length > 0 && (
+          <p
+            role="status"
+            className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
+          >
+            We don&apos;t have the U.S. House race for {result.district} yet.
+            What&apos;s above is the statewide ballot every Florida voter
+            shares — your district&apos;s race will appear here once it&apos;s
+            published.
+          </p>
+        )}
 
       {/* Statewide, so they belong below the location-specific races rather
           than inside that list — a voter scanning for candidates should not
