@@ -186,24 +186,57 @@ links — a B3-shaped task, not a code task.
 
 ---
 
-## 5. Decisions this session did not make
+## 5. Decisions
 
-1. **Which gap is worth closing first.** §1 (the promise already broken inside
-   the four metros) is a correctness problem in production today. §2 (TASK-060)
-   is a reach problem, blocked on a download. They are independent, and §1 is
-   cheaper: it is copy plus a resolver branch, no Census file, no migration.
-2. **What the honest answer is when a district has no race.** The resolver
-   returns `inCoverage: true` and an empty House slot; nothing tells the voter
-   why. The options are (a) say it — "we don't have your House race yet" — or
-   (b) make `in_coverage` mean it, per §3.3, and let the existing out-of-coverage
-   copy fire. (b) is tidier but currently routes to a county picker that is the
-   wrong offer for a Florida voter who already has their statewide ballot.
+1. ~~**Which gap is worth closing first.**~~ **Decided 2026-09-09 (founder): §1,
+   the Orlando case, first.** §1 was the promise already broken inside the four
+   metros — a correctness problem in production today; §2 (TASK-060) is a reach
+   problem, blocked on a download. They are independent, and §1 was the cheaper
+   of the two: copy plus a predicate, no Census file, no migration.
+2. ~~**What the honest answer is when a district has no race.**~~ **Decided and
+   shipped 2026-09-09: option (a), say it.** The rejected option (b) — make
+   `in_coverage` mean it, per §3.3, and let the existing out-of-coverage copy
+   fire — is tidier but routes to a county picker that is the wrong offer for a
+   Florida voter who already has their statewide ballot. See the done-note
+   below.
 3. **Whether the ZIP field should appear at all where it cannot pay off.**
    Orlando is the sharp case: 45 ZIPs, zero possible House races, and a heading
    that promises one.
 4. **Whether FL-10's `in_review` is deliberate.** One published district would
    move 28 Orange County ZIPs out of the "never" column. It may be a content
-   gate; nobody in this session knew.
+   gate; nobody in this session knew. **Still open** — publishing a race is a
+   content call, and the fix below is deliberately independent of it.
+
+### Done-note — §1, the honest answer (2026-09-09)
+
+`src/lib/coverage.ts` adds `districtRaceMissing(district, races)`: true when a
+ZIP resolved to a district and no district-scoped race came back with it. Kept
+dependency-free, like `measure-balance.ts`, so the rule is testable under Node's
+type stripping — importing it from `resolve.ts` would drag in `next/cache`.
+
+`YourRaces` renders, directly under the race list and only when the list is
+non-empty:
+
+> We don't have the U.S. House race for FL-9 yet. What's above is the statewide
+> ballot every Florida voter shares — your district's race will appear here once
+> it's published.
+
+Three facts the query cannot tell apart — no race row, an unpublished row, a row
+in another election — all arrive as absence, and all get this one answer. That
+is deliberate: they are the same answer to a voter, and distinguishing them
+would claim knowledge the read does not have.
+
+`scripts/verify-coverage.ts` pins it, including that the notice never fires on
+an empty race set (where the "not published yet" copy already owns the message).
+Mutation-checked four ways: predicate → `false`, predicate → `Boolean(district)`,
+empty-string handling dropped, and the `races.length > 0` composition removed at
+the call site. Each fails the script; all four restored pass.
+
+**What did NOT change:** the landing page still reads "Add your U.S. House race".
+Hedging it would degrade the 47 ZIPs where the promise is kept, so the honest
+answer is delivered where the ballot is, not where the offer is made. `zip_district`,
+`COVERED_COUNTIES`, the resolver's return shape, and the four-metro copy in §4
+are all untouched — this notice is what makes the gap visible, not what closes it.
 
 ---
 
@@ -217,12 +250,15 @@ Blocked-free, in order:
 2. Land the **§3 corrections** into `general-election-pivot.md` TASK-060 —
    migration `0018` not `0011`, data-only not DDL, the `in_coverage` finding,
    the `build-zip-seed.mjs` reverse-lookup bug. Claim `0018` in the ledger.
-3. Put **§1 to the founder** with the table. It is a live product defect and
-   the decision in §5.2 is theirs, not an implementer's.
-4. Consider a guardrail — `scripts/verify-coverage.ts` in the style of the
-   existing `verify-*.ts` — asserting that every district in `zip_district`
-   has a published `race`, or is flagged. Nothing checks this today, and §1 is
-   what "nothing checks this" produced. Note TC-0: it would not run in CI.
+3. ~~Put **§1** to the founder.~~ **Done** — answered, and the fix shipped; see
+   the §5 done-note.
+4. ~~Consider a guardrail.~~ **Done** — `scripts/verify-coverage.ts` exists and
+   is mutation-checked. It pins the *display* rule (a resolved district with no
+   race is reported), not a data invariant over `zip_district`; the data-level
+   assertion is still unwritten. Note TC-0: neither runs in CI.
+5. Still open: **FL-10's `in_review`** (§5.4), and whether the ZIP field should
+   appear where it cannot pay off (§5.3). The notice makes the gap honest; it
+   does not close it.
 
 **Do not** widen `COVERED_COUNTIES` or reseed `zip_district` before §5.1 is
 answered. Widening the map without widening the races makes §1 worse by
