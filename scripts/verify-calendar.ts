@@ -2,9 +2,12 @@
    with a minimal RFC 5545 structure parse — no server or env needed; the
    builder is pure (src/lib/notifications/ics.ts).
 
-     1. Two sample events -> two well-formed VEVENT blocks: UID, DTSTAMP,
-        DTSTART/DTEND all-day pair (DTEND exclusive = start + 1 day),
-        SUMMARY, URL; CRLF line endings throughout.
+     1. Three sample events -> three well-formed VEVENT blocks: UID,
+        DTSTAMP, DTSTART/DTEND all-day pair (DTEND exclusive = start + 1
+        day), SUMMARY, URL; CRLF line endings throughout.
+     1b. The `rule` column (0021) reaches the voter: a received-by event
+        says a postmark does not count, a postmarked-by event does not,
+        and a rule-less event carries neither.
      2. Zero events -> a valid, empty VCALENDAR (the "nothing verified yet"
         response body).
      3. Unknown election ids never reach the builder — the route 404s them —
@@ -30,13 +33,23 @@ const SAMPLE = [
     event_type: "registration_deadline" as const,
     election: "general_2026",
     event_date: "2026-10-05",
+    rule: "postmarked_by" as const,
     details_url: "https://dos.fl.gov/elections/for-voters/election-dates/",
+  },
+  {
+    id: "33333333-3333-3333-3333-333333333333",
+    event_type: "ballot_return_deadline" as const,
+    election: "general_2026",
+    event_date: "2026-11-03",
+    rule: "received_by" as const,
+    details_url: "https://dos.fl.gov/elections/for-voters/voting/vote-by-mail/",
   },
   {
     id: "22222222-2222-2222-2222-222222222222",
     event_type: "election_day" as const,
     election: "general_2026",
     event_date: "2026-11-03",
+    rule: null,
     details_url: "https://dos.fl.gov/elections/for-voters/election-dates/",
   },
 ];
@@ -90,6 +103,29 @@ for (const [i, block] of blocks.entries()) {
   const end = block.match(/DTEND;VALUE=DATE:(\d{8})/)?.[1];
   check(`event ${i + 1}: DTEND after DTSTART`, !!start && !!end && end > start, `${start} -> ${end}`);
 }
+
+/* (1b) rule -> copy. The whole reason election_event carries a rule is that
+   a date alone lets a voter believe a postmark counts on a returned ballot;
+   assert the sentence that says otherwise actually ships. */
+const returnBlock = blocks.find((b) => b.includes("received by 7 p.m.")) ?? "";
+check("ballot return VEVENT titles the 7 p.m. hour", returnBlock !== "", ics);
+check(
+  "received_by event tells the voter a postmark does not count",
+  /DESCRIPTION:[^\r]*postmark does not count/.test(returnBlock),
+  returnBlock
+);
+check(
+  "postmarked_by event does not claim a postmark is worthless",
+  !/postmark does not count/.test(blocks[0] ?? "") &&
+    /DESCRIPTION:[^\r]*postmarked by this date/.test(blocks[0] ?? ""),
+  blocks[0]
+);
+const dayBlock = blocks.find((b) => b.includes("SUMMARY:Election Day")) ?? "";
+check(
+  "rule-less event carries no rule sentence",
+  dayBlock !== "" && /DESCRIPTION:Official source:/.test(dayBlock),
+  dayBlock
+);
 
 const empty = buildElectionCalendar("general_2026", []);
 check(

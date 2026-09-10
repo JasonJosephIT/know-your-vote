@@ -1,146 +1,303 @@
-# Session handoff — enacted 2026 map, 16-district coverage, `unopposed` carried
+# Map-coverage handoff — what "we cover this area" actually means
 
-**Written:** 2026-09-08 · **Worktree:** `.claude/worktrees/session-handoff-intake-58b27d`
-**Branch:** `claude/general-election-2026-map` (PR #35). Run `git branch --show-current` before anything else.
+> **Not to be confused with** `session-handoff-2026-09-08-enacted-map-uno.md`, written the same day from the PR #35 worktree. Both were called "the map coverage handoff" and collided on this filename at merge. This file is the *audit* — what "we cover this area" delivers today. That one is the *change* — the enacted map, the sixteen districts, and `unopposed`. `coverage.ts`, `verify-coverage.ts` and `intake.py` cite the sections in THIS file.
 
-Three PRs are open and they are **stacked**. Read §1 before merging anything.
+
+**Written:** 2026-09-08 · **Branch:** `claude/map-coverage-handoff-gc39rq`
+(at `0cebc42`, **zero commits over `origin/main`**) · **Scope of this session:**
+audit only — no code, no migration, no copy change.
+
+This file exists because "map coverage" turned out not to be one gap but
+**two, pointing in opposite directions**, and only one of them is written down
+anywhere. Every number below was measured — against the seed file in the repo
+and against the live project `pqracitpmzpiqfnzlngw` — not inferred from a plan
+doc. Queries are included so the next session can re-run them rather than
+trust this file (the standing rule in `supabase/migrations/README.md`).
 
 ---
 
-## 1. The three PRs, and why the order matters
+## 1. The headline
 
-| PR | Branch | Base | Contents |
-|---|---|---|---|
-| [#33](https://github.com/JasonJosephIT/know-your-vote/pull/33) | `claude/ballots-handoff-docs-835025` | `main` | `ballots-handoff.md` + `docs/general-election/ballots/` (README, CSV, 2 JSON, HTML) and the `.gitignore` rules |
-| [#34](https://github.com/JasonJosephIT/know-your-vote/pull/34) | `claude/intake-xtl-dec` | `main` | the XTL/DEC parser fix, its tests, `data-ingest.md` |
-| [#35](https://github.com/JasonJosephIT/know-your-vote/pull/35) | `claude/general-election-2026-map` | **`claude/intake-xtl-dec`** | migrations `0022` + `0023`, the 16-district widening, the "not printed" read model, docs |
+`zip_district` promises **more** than the race data can deliver, and the
+promise is broken for **69% of the ZIPs we advertise as covered**.
 
-**Merge #33 → #34 → #35.** Three hard dependencies, not stylistic preference:
+The landing page renders the shared statewide ballot with no ZIP at all
+(TASK-067), then offers a ZIP field under the heading **"Add your U.S. House
+race"** (`src/app/(public)/page.tsx:52`). For 161 of the 235 ZIPs in
+`zip_district`, that button cannot add anything — the district it resolves to
+has no voter-visible House race, and the voter is returned a resolution that
+succeeded and a ballot that did not grow.
 
-1. `scripts/verify-zip-seed-2026.mjs` reads #33's `zip_districts_2026.csv` **at runtime** — it is the oracle the ZIP seed is checked against. Merge #35 first and that check has no oracle. (It now fails with a clear message rather than an unhandled child-process error, but it still cannot verify.)
-2. `0022`'s ledger row, `intake.py` and several doc passages cite `ballots-handoff.md` §4.2, which exists only on #33.
-3. The `.gitignore` rules protecting `EOGPCRP2026_block_assignment.txt` (7.6 MB) and `doe_*.tsv` (**the raw DoE export carries addresses, phones, emails and treasurer names**) are on #33. #35 is the branch that tells an operator to run the generator.
+| County (metro) | ZIPs seeded | Always gets a House race | Only if the split-confirm picks right | **Never** |
+|---|---:|---:|---:|---:|
+| Miami-Dade (Miami) | 80 | 16 | 9 | **55** |
+| Broward (Fort Lauderdale) | 55 | 15 | 10 | **30** |
+| Hillsborough (Tampa) | 55 | 16 | 8 | **31** |
+| Orange (Orlando) | 45 | 0 | 0 | **45** |
+| **Total** | **235** | **47** | **27** | **161** |
 
-#35's base is `claude/intake-xtl-dec`, so GitHub will retarget it to `main` when #34 merges. If you merge #34 by squash, retarget #35 manually first.
+**The entire Orlando metro is in the "never" column.** It is one of the four
+metros the out-of-coverage copy names by name as somewhere we *do* cover
+(`ZipEntry.tsx:132`, `YourRaces.tsx:67`).
 
-## 2. What shipped
-
-### Two founder decisions, taken 2026-09-07
-
-**D-A — coverage becomes sixteen U.S. House districts.** Orange 7/8/9/10/11, Hillsborough 12/14/15/16, Broward 20/22/24/25/26, Miami-Dade 27/28. FL-23 leaves: under the enacted map it falls in no covered ZIP.
-
-**Total scope is now 21 races: 5 at-large + 16 House.** The five includes `USS` → `FL-SEN-general`. The old "eight target races" framing was always short by the Senate — that was a parser bug (`_NO_DISTRICT_RACES` had no `USS`), not a scope decision, and `db-audit-2026-09-07.md` had already recorded the real number as nine.
-
-**D-B — the DoE's `UNO` code is *carried* into the read model, not derived.** See §3.
-
-### The changes
-
-| Area | What |
-|---|---|
-| `scripts/build-zip-seed.mjs` | rebuilt on the enacted plan's per-block assignment + the Census ZCTA↔tabblock file. County now comes from the block GEOID (state 2 + county 3 + tract 6 + block 4) instead of a third Census download |
-| `0022_zip_seed_2026.sql` | 316 rows / 235 ZIPs / 75 split. Supersedes `0003`, which stays applied and untouched |
-| `0023_candidate_unopposed.sql` | widens `candidate.qualifying_status`'s CHECK to admit `unopposed` |
-| `intake.py` | `_TARGET_US_HOUSE` 4 → 16; `_STATUS["UNO"] = "unopposed"`; `juris.zfill(3)` normalisation |
-| `src/lib/unopposed.ts`, `briefs.ts`, race page | the "elected without opposition / not on the ballot" state |
-| `scripts/doe-code-dump.py` | targets brought back into step with the parser, including the missing `USS` |
-| docs | both decisions recorded; the stale "eight target races" framing swept out of current-state claims |
-
-### Verification at `efca022`
-
-```
-toollayer                180/180 OK
-verify-zip-seed-rules    pass (16 fixture assertions)
-verify-zip-seed-2026     316 pairs over 235 ZIPs — matches the oracle exactly
-verify-unopposed         pass
-doe-code-dump --selftest pass
-verify-migrations        137 ok / 0 FAIL over 19 migrations (embedded PGlite)
-tsc --noEmit             clean
-next build               succeeds
-```
-
-`0022` is reproduced **byte-identically** by re-running the generator from the raw inputs, and the oracle check was mutation-tested three ways (changed district / dropped row / flipped `is_split`) — each mutation fails it. The oracle was derived independently by a different session from the same two inputs; two derivations agree on all 316 pairs.
-
-## 3. Migration `0023` — what it is and why intake needs it
-
-**The problem it solves.** Florida marks a candidate `UNO` when nobody filed against them. Under **F.S. 101.151(7)** that contest is then **not printed on the general ballot at all** — there is no line to vote on and the candidate takes the office. FL-10 is in exactly that shape this cycle, as are state senate districts 4 and 16 and 28 state house districts.
-
-The app could not say that, because the distinction died at ingest: `_STATUS` in `intake.py` mapped **both** `QUA` and `UNO` to `"qualified"`. It did that because the CHECK on `candidate.qualifying_status`, written inline in `0000_pipeline_read_models.sql`, admitted only three values. So `0023` widens it:
+Reproduce:
 
 ```sql
-CHECK (qualifying_status IN ('qualified','unopposed','withdrawn','other'))
+WITH visible AS (
+  SELECT r.district FROM race r
+  JOIN race_publication p ON p.race_id = r.race_id
+  WHERE r.election='general' AND p.status='published' AND r.district IS NOT NULL
+), z AS (
+  SELECT zip5, county_name,
+         bool_or(congressional_district IN (SELECT district FROM visible)) AS any_visible,
+         bool_and(congressional_district IN (SELECT district FROM visible)) AS all_visible
+  FROM zip_district GROUP BY zip5, county_name
+)
+SELECT county_name, count(*) zips,
+       count(*) FILTER (WHERE all_visible) always_ok,
+       count(*) FILTER (WHERE any_visible AND NOT all_visible) depends_on_split,
+       count(*) FILTER (WHERE NOT any_visible) never
+FROM z GROUP BY county_name;
 ```
 
-**Why carried and not derived.** The obvious substitute is "exactly one ballot-tier candidate and no write-in". That is wrong for a race whose other candidates withdrew *after* qualifying: the survivor is `QUA`, the ballot is already printed with their name on it, and the derivation would tell a voter their race does not exist. The two races are **indistinguishable by composition** and distinguishable only by the code the DoE already publishes — so the column has to keep it. That is decision D-B.
+### Why: the ZIP map covers 16 districts, the race table covers 3
 
-**Why it is a precondition for the next intake run.** `intake.py` now writes `qualifying_status = 'unopposed'`, and `store.py` puts that value on the row at upsert. The live three-value CHECK **refuses** it. Run an intake against a database that has not had `0023` applied and every `UNO` row fails. Recorded in the ledger row, the migration header, `intake.py` and `data-ingest.md`.
-
-**Not `ballot_status`.** That column (`0013`) is a different axis — whether a filing gets a printed line. An unopposed candidate is still a ballot-tier filing: briefed, audited, shown. `unopposed` is a *qualifying* status.
-
-**The unnamed-constraint guard.** Unlike `0013`'s `candidate_ballot_status_check`, this CHECK was written inline in `0000` and named by Postgres, so nothing in the repo ever asserted its name. Dropping the wrong name would leave the old three-value CHECK standing beside the new one — the migration would report success and every `UNO` row would still be rejected, with the constraint list as the only evidence. `0023` drops the auto-generated name, then scans `pg_constraint` and **RAISEs** if any CHECK mentioning `qualifying_status` survived. Verified against `0000_pipeline_read_models.sql:26`; the abort path always leaves at least the old CHECK standing, so it cannot leave the column unconstrained. Idempotent.
-
-**One consequence, stated so it is not discovered later.** `CAP_Schema_v1.md` says social accounts are ingested "only when `qualifying_status = 'qualified'`". No code implements that as a literal comparison today (checked across `src/` and `toollayer/`), but **whoever writes it must treat `unopposed` as ballot-tier alongside `qualified`** — an unopposed candidate is the one who will hold the office, so an equality test would mute exactly the candidate a voter cannot vote against.
-
-## 4. Where the uncontested-seat metadata actually lives
-
-Confirmed working as intended, and worth knowing precisely:
-
-- **The candidate row is kept**, with `candidate.qualifying_status = 'unopposed'`. The filing is a public fact and stays queryable.
-- **The race row is kept**, and the candidate **enters `race.candidate_ids`** — because `UNO` is still in `_ON_BALLOT_STATUS`, so `_ballot_status` tiers them `ballot`. They are briefed and audited like anyone else.
-- **"Is this contest printed" is derived at read time**, not stored: `isUnopposedContest()` in `src/lib/unopposed.ts` requires one ballot-tier candidate **whose status is `unopposed`** *and* no qualified write-in. `briefs.ts` sets `notPrintedOnBallot` from it.
-
-The write-in half cannot be read off the brief's candidates: a qualified write-in **is** opposition, so the office appears on the ballot with a blank write-in line under it, and D1's filtering removes write-ins before the brief is built. `briefs.ts` looks for them separately.
-
-> **If you want a race-level column** (`race.printed_on_ballot`, say) rather than a read-time derivation, that is a new migration and a small `store.py` change. The candidate-level metadata you asked for is already there; the race-level fact is currently computed. Worth deciding before the first live run writes rows either way.
-
-`notPrintedOnBallot` is **optional** on the interface on purpose: `getRaceBrief` is memoised with `unstable_cache` across deploys, so an entry written before the field existed comes back without it, and `undefined` must mean "printed" — the weaker, safer claim.
-
-## 5. Open decisions — yours, not the next session's
-
-### 5.1 The layout call (small, reversible, blocks nothing)
-
-A not-printed race currently renders the "does not appear on the ballot" copy **and** still shows the candidate card. `ballots-handoff.md` §4.4 says render the message ***instead of*** the single-candidate view.
-
-Two reviewers preferred keeping the card: an unopposed candidate takes the office, so hiding their brief hides the person who will hold it. `RaceCompare.tsx` is a pure grid over `brief.candidates` and the flag lives on the brief, so switching is **one conditional** at `page.tsx`. Whichever you pick, **amend §4.4 on #33 to match** or the two documents disagree the moment both merge.
-
-### 5.2 `docs/prd.md:22`
-
-Still scopes the MVP to "statewide + FL-28/FL-23/FL-15/FL-10". Left deliberately — an MVP definition is a founder decision, not a documentation sweep. D-A makes it stale.
-
-### 5.3 Applying `0022` and `0023`
-
-Both read **"written, NOT yet applied"**. Neither has touched the live database. Note that **applying `0022` alone** re-points 133 ZIPs at districts whose `race` rows do not exist yet (races come from the intake run, never from a migration). It degrades gracefully — `resolve.ts` returns statewide races only and `directory.ts` filters the rest out — but plan the two together with an intake run.
-
-## 6. Known gaps, deliberately not closed
-
-| # | Gap | Why left |
+| Layer | Coverage | Source |
 |---|---|---|
-| G1 | **No CI runs any of this.** No `.github/workflows`, no `test` script in `package.json`. This branch adds four `verify-*` scripts and 180 Python tests that only run when a human runs them | Pre-existing; the project tracks it as **TC-0**. It is now a bigger gap than it was |
-| G2 | `scripts/build-zip-seed.mjs` has two silent paths: a covered ZIP whose blocks are *all* absent from the plan emits no rows (reads as out-of-coverage to a voter), and a ZIP whose plan-attributable land is fragmented below 5% everywhere still emits the dominant district with `is_split=false`, auto-picking against FR-001 | Neither occurred with the real inputs — output matched the oracle exactly. A `throw` naming the ZIP when `covered && districts.size === 0` closes the first cheaply |
-| G3 | `verify-migrations.mjs` asserts `0023`'s post-state but never exercises its RAISE | Pre-creating a second differently-named CHECK and asserting the abort would demonstrate the guard rather than assert it |
-| G4 | Task 3's original fixture tests have **no RED/GREEN transcript** — that implementer was killed by an API rate limit before writing a report | The controller verified the left-behind work independently (byte-identical regeneration, three-way mutation test) before committing. Later fix rounds do have transcripts |
-| G5 | `_TARGET_US_HOUSE` (`intake.py`) and `TARGET_USR`/`TARGET_OFFICES` (`doe-code-dump.py`) are duplicated sets kept in step by a comment | They had already silently drifted once — that is how the missing `USS` was found. An import is awkward: the toollayer path has spaces and parentheses, and `_TARGET_US_HOUSE` is underscore-private |
+| ZIP → district map | 235 ZIPs, **4** of 67 counties, **16** of 28 districts, 65 split ZIPs | `0003_zip_seed.sql`, confirmed live |
+| House races that exist at all | **4** — FL-10, FL-15, FL-23, FL-28 | `race` where `district IS NOT NULL` |
+| House races a voter can see | **3** — FL-15, FL-23, FL-28 (FL-10 is `in_review`) | `race_publication.status` |
 
-## 7. Next, in order
+Twelve seeded districts have no `race` row whatsoever: FL-7, FL-8, FL-9,
+FL-11, FL-12, FL-14, FL-16, FL-20, FL-24, FL-25, FL-26, FL-27.
 
-1. **Merge #33, then #34, then #35** (§1). Retarget #35 if #34 is squashed.
-2. **Decide §5.1** and amend `ballots-handoff.md` §4.4 to match.
-3. **Apply `0022` + `0023` and run a live intake** — together, not separately (§5.3). This is the first run that exercises twelve new districts and the `unopposed` value. Expect new `race` rows for FL-7/8/9/11/12/14/16/20/22/24/25/26/27.
-4. **§4.4 follow-through:** verify a real FL-10 brief renders the not-printed state end to end once real rows exist.
-5. **§4.1 — county sample ballots.** Gated to **on or after 2026-09-24**. Orange, Broward, Hillsborough, Miami-Dade; goal is one composite ballot per county, then precinct → ZIP overlap so each ZIP gains `county_and_municipal.contests[]`. Recipes in `ballots-handoff.md` §4.1.
-6. **§4.5 — amendments and retention content** (3 amendments at 60%; Muñiz statewide; DCA judges by county).
-7. **Close G1** if you want any of this to survive a careless merge.
+**Every one of the nine general-election races in the live database is a demo
+row** (`race_id LIKE 'demo-%'`, 9 of 9, 29 candidate slots). So this measures
+the demo seed, not a content decision that has been made and gone wrong —
+TASK-066 ("Publish the content — *the real critical path*") is still open and
+is what would populate real races. The point stands anyway, for two reasons:
+this is what production serves **today**, and nothing in TASK-066 says which
+districts it covers, so the mismatch is scheduled to survive it by default.
 
-## 8. Gotchas that cost time
+> **The general shape:** two coverage tables that must agree were widened by
+> different tasks (TASK-013 seeded the map, the pipeline fills the races), and
+> nothing asserts they agree. The map is the one voters see, so the map is the
+> one that lies.
 
-- **There is no pytest on this Mac** — not under `/usr/bin/python3` (3.9) and not under `/usr/local/bin/python3`. The toollayer suite is stdlib `unittest`: `cd "Civic Awareness (Know Your Vote)/toollayer" && /usr/bin/python3 test_toollayer_skeleton.py`.
-- Use `/usr/bin/python3` for anything that fetches — the python.org 3.11 on `PATH` has no CA bundle.
-- `node scripts/verify-migrations.mjs` uses **embedded PGlite**, not a live database. Safe to run, and it is the right way to prove a migration applies in order. Takes 2+ minutes.
-- Every `verify-*.ts` prints a `MODULE_TYPELESS_PACKAGE_JSON` warning because the repo has no `"type": "module"`. Pre-existing; not a regression to chase.
-- **Never run `scripts/build-zip-seed.mjs` casually** — it overwrites `0022_zip_seed_2026.sql`. **Never run `scripts/doe-code-dump.py` without `--selftest`** — it makes live DoE requests.
-- Census ranged GETs return `520`; stream whole files. The ZCTA↔block national file is 1.06 GB; filter on the **10th** `|` column (`GEOID_TABBLOCK_20`), not the 9th (`OID_`).
-- DoE `Juris1num` **is** zero-padded — the live roster has `USR|007|`, `USR|008|`, `USR|009|`. `zfill(3)` now normalises anyway.
-- Give each concurrent agent its **own worktree**. A shared tree across sessions is a branch-yank hazard.
+---
 
-## 9. Paste-ready prompt
+## 2. The other direction — TASK-060, and why it is stuck
 
-> "Read `docs/general-election/session-handoff-2026-09-08-map-coverage.md` first, then `ballots-handoff.md`. Three PRs are stacked — merge #33 → #34 → #35 and retarget #35 if #34 squashes. Then take §7 in order. Ask me the §5.1 layout question before touching the race page. Never commit the raw DoE export. There is no pytest here: run the toollayer suite as `/usr/bin/python3 test_toollayer_skeleton.py`. `verify-migrations.mjs` is embedded PGlite and safe; `build-zip-seed.mjs` overwrites a migration and `doe-code-dump.py` hits the live DoE, so don't run either casually."
+`docs/general-election-pivot.md:203` (**TASK-060**, open) wants the opposite
+widening: open ZIP resolution to all of Florida so a Tallahassee voter gets an
+honest partial answer instead of a dead end.
+
+Today a Leon County voter reads their entire statewide ballot on the landing
+page, types their ZIP into "Add my House race", and is told:
+
+> "We don't cover that area yet — right now we cover the Miami, Fort
+> Lauderdale, Tampa, and Orlando metros."
+
+…followed by a county picker offering four counties, none of them theirs, that
+routes to `/candidates?view=races&county=…` (`ZipEntry.tsx:129-141`). That is the pre-Phase-7 framing
+(ZIP as the gate to the product) surviving inside a page that has already
+un-gated itself. The component is correct about the data and wrong about the
+product.
+
+### The blocker is real and still live — re-verified today
+
+TASK-060's note says `www2.census.gov` returns 403 through the session proxy.
+**Confirmed again 2026-09-08**, both crosswalk files:
+
+```
+curl: (56) CONNECT tunnel failed, response 403   # tab20_cd11920_zcta520_natl.txt
+curl: (56) CONNECT tunnel failed, response 403   # tab20_zcta520_county20_natl.txt
+```
+
+`$HTTPS_PROXY/__agentproxy/status` logs both as
+`connect_rejected — gateway answered 403 to CONNECT (policy denial)`. This is
+the environment's network policy, not a flake or a retry candidate.
+
+### It is scheduled nowhere
+
+`local-session.md` §"The other local-only tasks" is the table that exists
+precisely "so nobody schedules them into a remote session and watches them
+403". It lists B3, B4, B5, B7 and C7-b. **TASK-060 is not in it**, and not in
+`data-ingest.md` §7 either. The one network-blocked task on the voter-facing
+side is missing from the only list a founder-machine session reads.
+
+**Done 2026-09-10.** `local-session.md` now carries a TASK-060 row, the two
+crosswalk URLs, and the migration number (0019). The row does not just say
+"download and run" — it names the trap, because the run looks like a success
+without it: `build-zip-seed.mjs` filters every ZCTA down to the four metro
+counties and derives `county_fips` by reverse-lookup through `metro`, so
+unedited it reproduces the same 304 rows and reports no error. The note also
+carries §3's data-only and `in_coverage` corrections, and states that every ZIP
+the task adds arrives with no published House race until its district's race
+publishes — widening the map does not close §1.
+
+```bash
+node scripts/build-zip-seed.mjs <zcta_cd.txt> <zcta_county.txt>
+```
+
+---
+
+## 3. Corrections to TASK-060 as written
+
+Three things in the task text are now wrong. Fix them before working it.
+
+1. **Migration number.** It pencils `supabase/migrations/0011_zip_statewide.sql`.
+   `0011` is `0011_measure_rls.sql`, applied 2026-09-07. Per the ledger, the
+   next free number is **`0019`**. (This originally read `0018`; that number
+   was claimed on 2026-09-10 by `0018_publication_audit.sql`, so TASK-060 takes
+   the one after it.) Claim it in `supabase/migrations/README.md` first, in the
+   same PR.
+2. **It is a data migration, not a schema one.** No DDL is needed. `metro` is
+   already `TEXT` and nullable with no CHECK (`0001_app_tables.sql:16`), so
+   non-metro counties store `NULL` today; `anon_read_zip_district` is already
+   `USING (true)`. `0019` is a `DELETE FROM zip_district` + `INSERT`, exactly
+   like `0003`. The listed file `src/types/app.ts` needs no change either —
+   `metro: Metro | null` already permits it.
+3. **`in_coverage` is dead today.** `resolveZip` filters `rows.filter(r => r.in_coverage)`,
+   but **0 of 304 live rows have `in_coverage = false`**. "Not covered" is
+   currently signalled by row *absence*, never by the flag. TASK-060's plan to
+   redefine the flag as "we have this ZIP's congressional race" is therefore
+   not a change of meaning — it is the first use of the column. Worth saying
+   out loud, because it means the flag can be given §1's meaning without
+   migrating any existing semantics.
+
+`scripts/build-zip-seed.mjs` also needs a real edit, not just a wider `METROS`
+map: it currently *filters* ZCTAs down to the four counties (`if (METROS[county])`)
+and derives `countyFips` by reverse-lookup through `metro`, which cannot work
+when `metro` is `NULL` for 63 counties. Statewide, the county FIPS must come
+from the crosswalk row directly and `metro` becomes a lookup that may miss.
+
+---
+
+## 4. Where the four-metro assumption is baked in
+
+Ten places, only one of which is the canonical list. Any widening touches all
+of them; this is the checklist.
+
+| File | What | Note |
+|---|---|---|
+| `src/lib/resolve.ts:8` | `COVERED_COUNTIES` — 4 × `{fips, name, metro}` | **canonical** |
+| `src/components/features/CountyPicker.tsx:6` | the same 4 counties as a **second literal** | duplicate; its `metro` holds display names ("Miami") vs the enum (`miami`) |
+| `src/types/app.ts:8` | `type Metro` — 4-value union | |
+| `src/app/api/news/route.ts:30` | `z.enum(["miami",…])` — a **third** copy of that union | drifts from `Metro` silently |
+| `src/lib/admin/refs.ts:25` | `METROS` runtime list — a **fourth** copy | |
+| `scripts/build-zip-seed.mjs:27` | `METROS` filter map | see §3 |
+| `src/app/api/voting-info/route.ts:14` | `OFFICIAL_SOURCES` — 4 Supervisor-of-Elections URLs, keyed by county **name** | 63 more needed, or the email flow stays metro-only |
+| `src/lib/news-sources.ts:53` | 23 outlets keyed to the 4 FIPS + statewide | statewide expansion ≠ statewide *news* |
+| `src/lib/directory.ts:31`, `src/components/features/CandidateBrowser.tsx:49`, `src/app/(public)/news/page.tsx:20` | county switcher / filter reads | fall out of `COVERED_COUNTIES` |
+
+`voting-info` is the one with a hard floor: it refuses out-of-coverage ZIPs
+with *"we can only send info for the four covered metros"* and needs a real
+SOE URL per county before it can say anything else. That is 67 human-verified
+links — a B3-shaped task, not a code task.
+
+---
+
+## 5. Decisions
+
+1. ~~**Which gap is worth closing first.**~~ **Decided 2026-09-09 (founder): §1,
+   the Orlando case, first.** §1 was the promise already broken inside the four
+   metros — a correctness problem in production today; §2 (TASK-060) is a reach
+   problem, blocked on a download. They are independent, and §1 was the cheaper
+   of the two: copy plus a predicate, no Census file, no migration.
+2. ~~**What the honest answer is when a district has no race.**~~ **Decided and
+   shipped 2026-09-09: option (a), say it.** The rejected option (b) — make
+   `in_coverage` mean it, per §3.3, and let the existing out-of-coverage copy
+   fire — is tidier but routes to a county picker that is the wrong offer for a
+   Florida voter who already has their statewide ballot. See the done-note
+   below.
+3. **Whether the ZIP field should appear at all where it cannot pay off.**
+   Orlando is the sharp case: 45 ZIPs, zero possible House races, and a heading
+   that promises one.
+4. **Whether FL-10's `in_review` is deliberate.** One published district would
+   move 28 Orange County ZIPs out of the "never" column. It may be a content
+   gate; nobody in this session knew. **Still open** — publishing a race is a
+   content call, and the fix below is deliberately independent of it.
+
+### Done-note — §1, the honest answer (2026-09-09)
+
+`src/lib/coverage.ts` adds `districtRaceMissing(district, races)`: true when a
+ZIP resolved to a district and no district-scoped race came back with it. Kept
+dependency-free, like `measure-balance.ts`, so the rule is testable under Node's
+type stripping — importing it from `resolve.ts` would drag in `next/cache`.
+
+`YourRaces` renders, directly under the race list and only when the list is
+non-empty:
+
+> We don't have the U.S. House race for FL-9 yet. What's above is the statewide
+> ballot every Florida voter shares — your district's race will appear here once
+> it's published.
+
+Three facts the query cannot tell apart — no race row, an unpublished row, a row
+in another election — all arrive as absence, and all get this one answer. That
+is deliberate: they are the same answer to a voter, and distinguishing them
+would claim knowledge the read does not have.
+
+`scripts/verify-coverage.ts` pins it, including that the notice never fires on
+an empty race set (where the "not published yet" copy already owns the message).
+Mutation-checked four ways: predicate → `false`, predicate → `Boolean(district)`,
+empty-string handling dropped, and the `races.length > 0` composition removed at
+the call site. Each fails the script; all four restored pass.
+
+**What did NOT change:** the landing page still reads "Add your U.S. House race".
+Hedging it would degrade the 47 ZIPs where the promise is kept, so the honest
+answer is delivered where the ballot is, not where the offer is made. `zip_district`,
+`COVERED_COUNTIES`, the resolver's return shape, and the four-metro copy in §4
+are all untouched — this notice is what makes the gap visible, not what closes it.
+
+---
+
+## 6. What the next session should do
+
+Blocked-free, in order:
+
+1. ~~Add the **TASK-060 row** to `local-session.md`.~~ **Done 2026-09-10** —
+   with the `build-zip-seed.mjs` trap named, since the unedited run reproduces
+   the four-county output and looks like it worked. See the §2 done-note.
+2. Land the **§3 corrections** into `general-election-pivot.md` TASK-060 —
+   migration `0019` not `0011`, data-only not DDL, the `in_coverage` finding,
+   the `build-zip-seed.mjs` reverse-lookup bug. Claim `0019` in the ledger.
+3. ~~Put **§1** to the founder.~~ **Done** — answered, and the fix shipped; see
+   the §5 done-note.
+4. ~~Consider a guardrail.~~ **Done** — `scripts/verify-coverage.ts` exists and
+   is mutation-checked. It pins the *display* rule (a resolved district with no
+   race is reported), not a data invariant over `zip_district`; the data-level
+   assertion is still unwritten. Note TC-0: neither runs in CI.
+5. Still open: **FL-10's `in_review`** (§5.4), and whether the ZIP field should
+   appear where it cannot pay off (§5.3). The notice makes the gap honest; it
+   does not close it.
+
+**Do not** widen `COVERED_COUNTIES` or reseed `zip_district` before §5.1 is
+answered. Widening the map without widening the races makes §1 worse by
+exactly the number of ZIPs added.
+
+---
+
+## 7. Verification notes
+
+Read-only SQL against `pqracitpmzpiqfnzlngw` (2026-09-08). The seed file and
+the live table agree exactly — 304 rows / 235 ZIPs / 4 counties / 16 districts
+/ 65 split ZIPs / 0 `in_coverage=false` / 0 `metro IS NULL` — measured both
+ways, so `0003` is applied and unmodified.
+
+No build or test baseline is quoted here: `node_modules` is absent in this
+session and this branch changes no code, so there was nothing to regress. The
+next session should run the `data-ingest.md` §7 baseline before touching code.
+
+---
+
+## 8. Paste-ready prompt for the next session
+
+> "Read `docs/general-election/session-handoff-2026-09-08-map-coverage.md`.
+> Do §6.1 and §6.2 — add TASK-060 to the local-session runbook table, and
+> correct TASK-060 in `general-election-pivot.md` (migration **0019**, claimed
+> in the ledger; data-only, no DDL; `in_coverage` is unused today; the
+> `build-zip-seed.mjs` county reverse-lookup breaks statewide). Then put §1 to
+> the founder with the table as written and get a decision on §5.1 and §5.2
+> before writing any resolver or copy change. Do not reseed `zip_district` or
+> widen `COVERED_COUNTIES` first."

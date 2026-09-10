@@ -12,11 +12,16 @@ export type ElectionEvent = {
   event_type:
     | "registration_deadline"
     | "vbm_request_deadline"
+    | "ballot_return_deadline"
     | "early_voting_start"
     | "early_voting_end"
     | "election_day";
   election: string;
   event_date: string; // ISO date
+  /* How the deadline is satisfied (0021). A machine token, never rendered
+     raw — ics.ts turns it into the sentence a voter reads. NULL for the
+     rows that are not deadlines: early voting bounds and election day. */
+  rule: "postmarked_by" | "received_by" | null;
   details_url: string;
 };
 
@@ -26,7 +31,7 @@ export async function verifiedStatewideEvents(
 ): Promise<ElectionEvent[]> {
   let query = service
     .from("election_event")
-    .select("id, event_type, election, event_date, details_url")
+    .select("id, event_type, election, event_date, rule, details_url")
     .is("county_fips", null)
     .not("verified_by", "is", null)
     .order("event_date");
