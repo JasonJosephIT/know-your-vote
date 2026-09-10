@@ -36,6 +36,22 @@ succeeded and a ballot that did not grow.
 | Orange (Orlando) | 45 | 0 | 0 | **45** |
 | **Total** | **235** | **47** | **27** | **161** |
 
+> **Update 2026-09-10 — the data half is closed, the visible half is not.**
+> An intake run against the live DoE export for `20261103-GEN` created race
+> rows for all **16** covered districts (21 races, 247 candidates). The "no race
+> row" cause behind this table is gone: **235 of 235** covered ZIPs now resolve
+> to a district that has a race row, Orlando included.
+>
+> The table above counts *voter-visible* races, and it has not moved yet:
+> intake writes no `race_publication` row, so only **65** of 235 ZIPs reach a
+> published race — still the four demo races. This section stays open until
+> those 21 races are published through `set_race_publication()`, which is also
+> the point at which the published `demo-fl-*` races need a decision.
+>
+> Getting here required a parser fix (PR #45): `parse_candidate_list` wrote
+> `race.district` as a bare `"27"` while `zip_district` and `block_district`
+> store `FL-27`, so the races it created would have joined to nothing.
+
 **The entire Orlando metro is in the "never" column.** It is one of the four
 metros the out-of-coverage copy names by name as somewhere we *do* cover
 (`ZipEntry.tsx:132`, `YourRaces.tsx:67`).
