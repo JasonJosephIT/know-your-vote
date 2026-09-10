@@ -161,7 +161,16 @@ assert(
 );
 assert("privacy page names the cookie", /kyv\.district/.test(privacyText));
 assert("privacy page shows the stored value", /FL-27\|12086/.test(privacyText));
-assert("privacy page names Google Places", /Google Places/.test(privacyText));
+/* The vendor paragraph is rendered from PELIAS_BASE_URL (a deployment fact),
+   so what is pinned here is that the page still NAMES a geocoder and still
+   offers the no-third-party route -- not a hard-coded company. Pinning
+   "Google Places" is what made this assertion wrong the moment the geocoder
+   changed. */
+assert("privacy page names the geocoder", /Pelias/.test(privacyText));
+assert(
+  "privacy page still offers a no-third-party path",
+  /no third party at all/.test(privacyText)
+);
 assert(
   "privacy page names the Census Bureau",
   /Census Bureau/.test(privacyText)

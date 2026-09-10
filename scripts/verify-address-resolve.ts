@@ -13,7 +13,6 @@ import {
   parseBlockResponse,
   districtFromBlockRows,
   parseSuggestions,
-  parsePlaceLocation,
 } from "../src/lib/address-lookup.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -88,41 +87,53 @@ assert(
     districtFromBlockRows(rows, "120860036061999")?.district === "FL-27"
 );
 
-/* ---- Places: suggestions and coordinates ---- */
-const suggestions = parseSuggestions(fixture("places-autocomplete.json"));
+/* ---- Pelias: suggestions carry their own coordinates ---- */
+const suggestions = parseSuggestions(fixture("pelias-autocomplete.json"));
 assert(
-  "both place predictions are read",
+  "only the address features survive",
   suggestions.length === 2,
   `got ${suggestions.length}`
 );
+/* The fixture holds a `locality` feature on purpose. A locality (or street)
+   result is a centroid, and a centroid can sit in a different district than the
+   house does -- which is the exact ambiguity address lookup exists to remove.
+   Answering confidently from one would be worse than not answering. */
 assert(
-  "a query prediction is dropped",
-  suggestions.every((s) => Boolean(s.placeId))
+  "a locality centroid is refused",
+  suggestions.every((s) => !s.id.includes("whosonfirst"))
 );
-assert("the place id is carried", suggestions[0].placeId === "ChIJ_place_one");
+/* And an address feature with no geometry: Pelias would have nothing to resolve
+   and the old Google path had a second call to fall back on. This one does not,
+   so a coordinate-less suggestion must never reach the dropdown. */
 assert(
-  "the full text is carried for display",
-  suggestions[0].text === "444 SW 2nd Ave, Miami, FL 33130, USA"
+  "an address with no geometry is refused",
+  suggestions.every((s) => !s.id.endsWith("nogeom"))
 );
 assert(
-  "the secondary line is carried",
-  suggestions[0].secondary === "Miami, FL 33130, USA"
+  "the stable id is carried",
+  suggestions[0].id === "openaddresses:address:us/fl/miami:4a1b2c3d"
 );
+assert("the display name is carried", suggestions[0].text === "444 SW 2nd Ave");
+assert(
+  "the secondary line is composed from the address parts",
+  suggestions[0].secondary === "Miami, FL, 33130",
+  suggestions[0].secondary ?? "null"
+);
+/* GeoJSON is [longitude, latitude]. Reversed, this Miami address lands off the
+   coast of Somalia -- and both numbers stay plausible, so nothing else in the
+   pipeline would notice. */
+assert("the latitude is read from position 1", suggestions[0].lat === 25.769463071522);
+assert("the longitude is read from position 0", suggestions[0].lon === -80.197602442738);
 assert(
   "a malformed payload yields no suggestions",
   parseSuggestions({ nope: 1 }).length === 0
 );
 
-const place = parsePlaceLocation(fixture("places-details.json"));
-assert("the latitude is read", place?.lat === 25.769463071522);
-assert("the longitude is read", place?.lng === -80.197602442738);
-assert("details with no location yields null", parsePlaceLocation({}) === null);
-
 /* The coordinate must reach Census exactly. Rounding one can move it across a
    block boundary, and a block boundary is a district boundary. */
 assert(
   "the coordinate is not rounded on the way through",
-  String(place?.lat).length > 8 && String(place?.lng).length > 8
+  String(suggestions[0].lat).length > 8 && String(suggestions[0].lon).length > 8
 );
 
 /* ---- The routes' privacy contract, asserted structurally ---- */

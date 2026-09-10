@@ -61,7 +61,6 @@ export function LocationEntry({
 
   /* One session token per autocomplete session, spent on the resolve call and
      then replaced. This is what makes the paired calls bill as one session. */
-  const sessionToken = useRef<string>("");
   const abort = useRef<AbortController | null>(null);
 
   const trimmed = value.trim();
@@ -84,15 +83,11 @@ export function LocationEntry({
       abort.current?.abort();
       const controller = new AbortController();
       abort.current = controller;
-      if (!sessionToken.current) sessionToken.current = crypto.randomUUID();
       try {
         const res = await fetch("/api/address/suggest", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            q: trimmed,
-            sessionToken: sessionToken.current,
-          }),
+          body: JSON.stringify({ q: trimmed }),
           signal: controller.signal,
         });
         if (!res.ok) {
@@ -126,20 +121,17 @@ export function LocationEntry({
     router.push(`/candidates?${q}`);
   }
 
-  async function resolveAddress(placeId: string) {
+  /* The suggestion already carries its coordinate, so this posts the point and
+     nothing else -- the address itself never leaves the browser on this call. */
+  async function resolveAddress(pick: { lat: number; lon: number }) {
     setStage({ kind: "loading" });
     setSuggestions([]);
     try {
       const res = await fetch("/api/address/resolve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          placeId,
-          sessionToken: sessionToken.current || crypto.randomUUID(),
-        }),
+        body: JSON.stringify({ lat: pick.lat, lon: pick.lon }),
       });
-      /* The session ends with this call whether it succeeded or not. */
-      sessionToken.current = "";
       if (!res.ok) {
         setStage({
           kind: "error",
@@ -227,7 +219,7 @@ export function LocationEntry({
        first if none is highlighted. */
     const picked = visible[highlighted] ?? visible[0];
     if (picked) {
-      void resolveAddress(picked.placeId);
+      void resolveAddress(picked);
       return;
     }
     setStage({
@@ -297,7 +289,7 @@ export function LocationEntry({
             >
               {visible.map((s, i) => (
                 <li
-                  key={s.placeId}
+                  key={s.id}
                   id={`${listId}-${i}`}
                   role="option"
                   aria-selected={i === highlighted}
@@ -310,7 +302,7 @@ export function LocationEntry({
                   onMouseDown={(e) => {
                     /* mousedown, not click: blur would close the list first. */
                     e.preventDefault();
-                    void resolveAddress(s.placeId);
+                    void resolveAddress(s);
                   }}
                 >
                   {s.text}

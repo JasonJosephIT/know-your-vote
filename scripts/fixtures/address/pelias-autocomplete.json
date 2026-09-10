@@ -1,0 +1,69 @@
+{
+  "geocoding": {
+    "version": "0.2",
+    "attribution": "https://geocode.earth/guidelines",
+    "query": { "text": "444 SW 2nd", "layers": ["address"], "size": 5 }
+  },
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-80.197602442738, 25.769463071522]
+      },
+      "properties": {
+        "gid": "openaddresses:address:us/fl/miami:4a1b2c3d",
+        "layer": "address",
+        "source": "openaddresses",
+        "name": "444 SW 2nd Ave",
+        "housenumber": "444",
+        "street": "SW 2nd Ave",
+        "postalcode": "33130",
+        "locality": "Miami",
+        "region": "Florida",
+        "region_a": "FL",
+        "label": "444 SW 2nd Ave, Miami, FL, USA",
+        "confidence": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-80.19012, 25.77441]
+      },
+      "properties": {
+        "gid": "openaddresses:address:us/fl/miami:9f8e7d6c",
+        "layer": "address",
+        "source": "openaddresses",
+        "name": "444 SW 2nd St",
+        "postalcode": "33130",
+        "locality": "Miami",
+        "region_a": "FL",
+        "label": "444 SW 2nd St, Miami, FL, USA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-80.1918, 25.7743] },
+      "properties": {
+        "gid": "whosonfirst:locality:85977539",
+        "layer": "locality",
+        "source": "whosonfirst",
+        "name": "Miami",
+        "label": "Miami, FL, USA"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "gid": "openaddresses:address:us/fl/miami:nogeom",
+        "layer": "address",
+        "name": "444 SW 2nd Terrace",
+        "label": "444 SW 2nd Terrace, Miami, FL, USA"
+      }
+    }
+  ],
+  "bbox": [-80.1976, 25.7694, -80.1901, 25.7744]
+}

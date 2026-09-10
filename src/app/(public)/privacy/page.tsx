@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { geocoderHost } from "@/lib/geocode";
 
 export const metadata = { title: "Privacy — Know Your Vote" };
 
 export default function PrivacyPage() {
+  const geocoder = geocoderHost();
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
       <h1 className="text-h1">Privacy, in plain language</h1>
@@ -53,21 +55,41 @@ export default function PrivacyPage() {
 
       <section className="flex flex-col gap-2">
         <h2 className="text-h2">When you type an address</h2>
-        <p className="text-body">
-          Address completion is Google Places. What you type goes to Google so
-          it can finish the address — that is the whole of what Google is for
-          here, and it is the only company that ever sees it. We don&apos;t log
-          it and we don&apos;t store it.
-        </p>
-        <p className="text-body">
-          Turning that address into a district takes one more step, and it is
-          deliberately blind: we ask Google only for the map coordinates of the
-          address you picked, and send just those coordinates to the U.S. Census
-          Bureau to find which census block they fall in. The Census Bureau
-          never receives your address. The block tells us your district, using
-          Florida&apos;s enacted 2026 map, and the district is the only thing
-          that is kept.
-        </p>
+        {/* This section states who sees an address, and that is a deployment
+            fact rather than a constant: PELIAS_BASE_URL points either at an
+            instance we run or at a hosted one. Prose cannot know which, and a
+            paragraph that is wrong on half of the deployments is worse than no
+            paragraph — so the host is read from the configuration. */}
+        {geocoder ? (
+          <>
+            <p className="text-body">
+              Address completion is{" "}
+              <a
+                href="https://pelias.io"
+                className="text-primary underline underline-offset-2"
+              >
+                Pelias
+              </a>
+              , an open-source geocoder built on public address data. What you
+              type goes to <strong>{geocoder}</strong> so it can finish the
+              address. We don&apos;t log it and we don&apos;t store it.
+            </p>
+            <p className="text-body">
+              Turning that address into a district takes no second lookup:
+              Pelias returns the map coordinates along with the suggestion you
+              picked, and we send just those coordinates to the U.S. Census
+              Bureau to find which census block they fall in. The Census Bureau
+              never receives your address. The block tells us your district,
+              using Florida&apos;s enacted 2026 map, and the district is the
+              only thing that is kept.
+            </p>
+          </>
+        ) : (
+          <p className="text-body">
+            Address completion is switched off on this deployment — the field
+            takes a ZIP only, and nothing you type reaches anyone else.
+          </p>
+        )}
         <p className="text-body">
           Prefer neither? Enter your ZIP, or pick your district from the list —
           both work with no third party at all.

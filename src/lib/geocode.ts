@@ -1,91 +1,82 @@
 import "server-only";
-import {
-  parseSuggestions,
-  parsePlaceLocation,
-  type AddressSuggestion,
-  type PlaceLocation,
-} from "@/lib/address-lookup";
+import { parseSuggestions, type AddressSuggestion } from "@/lib/address-lookup";
 
-/* Google Places (New), reached only from the server.
+/* Pelias (https://pelias.io), reached only from the server.
 
-   The key never goes to the browser: a referrer-restricted browser key is
-   readable from any page's source, and proxying also keeps the voter's IP out of
-   Google's logs. The trade-off, stated plainly in the spec §8, is that the typed
-   fragment transits our server -- it lives in memory for one request, is passed
-   straight back, and is never logged or stored.
+   Pelias replaced Google Places, and the reason is structural rather than
+   ideological: `/v1/autocomplete` returns the coordinate *with* each
+   suggestion, so picking an address needs no second call. The Google path was
+   autocomplete -> place details -> coordinate, with a session token threaded
+   through both to make the billing work. That entire step is gone.
 
-   Details asks for `location` and nothing else. Not formattedAddress, not
-   addressComponents: we do not need the address, so we do not receive it. That
-   also keeps the call in the Place Details Essentials SKU. */
+   WHERE IT RUNS IS CONFIGURATION, NOT CODE. `PELIAS_BASE_URL` points either at
+   an instance we host -- in which case no third party ever sees a voter's
+   address -- or at Geocode Earth, the hosted Pelias run by its maintainers, in
+   which case a geocoding company does. The API is identical; only the privacy
+   claim differs, which is why the privacy page reads the configured host rather
+   than asserting one (see `geocoderHost`).
 
-const AUTOCOMPLETE_URL = "https://places.googleapis.com/v1/places:autocomplete";
-const DETAILS_URL = "https://places.googleapis.com/v1/places";
-
-const AUTOCOMPLETE_MASK =
-  "suggestions.placePrediction.placeId,suggestions.placePrediction.text,suggestions.placePrediction.structuredFormat";
+   Unlike the Google client this one issues a GET, because that is the only
+   shape Pelias offers. The typed fragment is therefore in the URL of the
+   OUTBOUND request. Inbound from the browser it stays a POST, so it never
+   reaches our own access log, Referer or history. */
 
 /* Florida's bounding box. Restriction, not bias: a Florida voter guide has no
-   use for a Georgia address, and a suggestion we never ask for is one we never
-   pay for. */
-const FLORIDA = {
-  rectangle: {
-    low: { latitude: 24.3963, longitude: -87.6349 },
-    high: { latitude: 31.0011, longitude: -79.9743 },
-  },
+   use for a Georgia address. */
+const FLORIDA_RECT = {
+  "boundary.rect.min_lat": "24.3963",
+  "boundary.rect.max_lat": "31.0011",
+  "boundary.rect.min_lon": "-87.6349",
+  "boundary.rect.max_lon": "-79.9743",
 };
 
-export function placesConfigured(): boolean {
-  return Boolean(process.env.GOOGLE_PLACES_API_KEY);
+function baseUrl(): string | null {
+  const raw = process.env.PELIAS_BASE_URL?.trim();
+  return raw ? raw.replace(/\/+$/, "") : null;
 }
 
-export async function suggestAddresses(
-  input: string,
-  sessionToken: string
-): Promise<AddressSuggestion[]> {
-  const key = process.env.GOOGLE_PLACES_API_KEY;
-  if (!key) return [];
+export function geocoderConfigured(): boolean {
+  return baseUrl() !== null;
+}
+
+/* The privacy page states who sees an address, and that is a deployment fact,
+   not a constant. Returning the host keeps the page honest across both
+   deployments without anyone remembering to edit prose. */
+export function geocoderHost(): string | null {
+  const base = baseUrl();
+  if (!base) return null;
   try {
-    const res = await fetch(AUTOCOMPLETE_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Goog-Api-Key": key,
-        "X-Goog-FieldMask": AUTOCOMPLETE_MASK,
-      },
-      body: JSON.stringify({
-        input,
-        sessionToken,
-        includedPrimaryTypes: ["street_address", "premise", "subpremise"],
-        includedRegionCodes: ["us"],
-        locationRestriction: FLORIDA,
-        languageCode: "en",
-      }),
-      signal: AbortSignal.timeout(2500),
-    });
-    if (!res.ok) return [];
-    return parseSuggestions(await res.json());
+    return new URL(base).host;
   } catch {
-    /* Never logged: the request body is a partial home address. */
-    return [];
+    return null;
   }
 }
 
-export async function placeLocation(
-  placeId: string,
-  sessionToken: string
-): Promise<PlaceLocation | null> {
-  const key = process.env.GOOGLE_PLACES_API_KEY;
-  if (!key) return null;
-  const url = new URL(`${DETAILS_URL}/${encodeURIComponent(placeId)}`);
-  url.searchParams.set("sessionToken", sessionToken);
+export async function suggestAddresses(
+  input: string
+): Promise<AddressSuggestion[]> {
+  const base = baseUrl();
+  if (!base) return [];
+
+  const url = new URL(`${base}/v1/autocomplete`);
+  url.searchParams.set("text", input);
+  url.searchParams.set("boundary.country", "USA");
+  /* Addresses only. A street or locality result would resolve to a centroid,
+     and a centroid can sit in a different district than the house does. */
+  url.searchParams.set("layers", "address");
+  url.searchParams.set("size", "5");
+  for (const [k, v] of Object.entries(FLORIDA_RECT)) url.searchParams.set(k, v);
+  /* Geocode Earth authenticates by query parameter; a self-hosted instance
+     usually needs nothing, so an absent key is normal rather than an error. */
+  const key = process.env.PELIAS_API_KEY?.trim();
+  if (key) url.searchParams.set("api_key", key);
+
   try {
-    const res = await fetch(url, {
-      headers: { "X-Goog-Api-Key": key, "X-Goog-FieldMask": "location" },
-      signal: AbortSignal.timeout(2500),
-    });
-    if (!res.ok) return null;
-    return parsePlaceLocation(await res.json());
+    const res = await fetch(url, { signal: AbortSignal.timeout(2500) });
+    if (!res.ok) return [];
+    return parseSuggestions(await res.json());
   } catch {
-    return null;
+    /* Never logged: the request carries a partial home address. */
+    return [];
   }
 }

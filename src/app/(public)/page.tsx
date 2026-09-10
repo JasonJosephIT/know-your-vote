@@ -9,7 +9,7 @@ import { LocationEntry } from "@/components/features/LocationEntry";
 import { getActiveMeasures } from "@/lib/measures";
 import { getStatewideRaces } from "@/lib/races";
 import { getCoveredDistricts } from "@/lib/resolve";
-import { placesConfigured } from "@/lib/geocode";
+import { geocoderConfigured } from "@/lib/geocode";
 
 /* Ballot first, ZIP optional (TASK-067).
 
@@ -100,7 +100,7 @@ export default async function Home() {
             <LocationEntry
               submitLabel="Add my House race"
               placeholder="Your address or ZIP code"
-              addressEnabled={placesConfigured()}
+              addressEnabled={geocoderConfigured()}
               districts={districts}
             />
           </>

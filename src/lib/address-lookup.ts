@@ -7,7 +7,7 @@ import { z } from "zod";
    it cannot do for a module that imports `server-only` or an @/-aliased value.
    src/lib/news-match.ts is arranged the same way and for the same reason.
 
-   Three response shapes and one lookup live here. The fetching lives in
+   Two response shapes and one lookup live here. The fetching lives in
    census-block.ts and geocode.ts, which are thin by design. */
 
 export interface CensusBlock {
@@ -15,15 +15,15 @@ export interface CensusBlock {
   state: string;
 }
 
-export interface PlaceLocation {
-  lat: number;
-  lng: number;
-}
-
 export interface AddressSuggestion {
-  placeId: string;
+  id: string;
   text: string;
   secondary: string | null;
+  /* Pelias returns the coordinate with the suggestion, so picking one needs no
+     second call to anybody. This is the whole reason the Google two-step
+     (autocomplete -> place details) is gone. */
+  lat: number;
+  lon: number;
 }
 
 const blockSchema = z.object({
@@ -46,19 +46,30 @@ export function parseBlockResponse(json: unknown): CensusBlock | null {
   return { geoid: block.GEOID, state: block.STATE };
 }
 
-const autocompleteSchema = z.object({
-  suggestions: z
+/* Pelias answers in GeoJSON: a FeatureCollection whose features carry the
+   coordinate in `geometry` and the address parts in `properties`. */
+const peliasSchema = z.object({
+  features: z
     .array(
       z.object({
-        placePrediction: z
+        geometry: z
           .object({
-            placeId: z.string(),
-            text: z.object({ text: z.string() }),
-            structuredFormat: z
-              .object({
-                secondaryText: z.object({ text: z.string() }).optional(),
-              })
-              .optional(),
+            /* GeoJSON order is [longitude, latitude]. Reversing these puts a
+               Miami address in the Indian Ocean, and the failure is silent
+               because both are plausible numbers -- so the tuple is destructured
+               by position exactly once, here. */
+            coordinates: z.tuple([z.number(), z.number()]),
+          })
+          .optional(),
+        properties: z
+          .object({
+            gid: z.string().optional(),
+            layer: z.string().optional(),
+            name: z.string().optional(),
+            label: z.string().optional(),
+            locality: z.string().optional(),
+            region_a: z.string().optional(),
+            postalcode: z.string().optional(),
           })
           .optional(),
       })
@@ -67,36 +78,24 @@ const autocompleteSchema = z.object({
 });
 
 export function parseSuggestions(json: unknown): AddressSuggestion[] {
-  const parsed = autocompleteSchema.safeParse(json);
+  const parsed = peliasSchema.safeParse(json);
   if (!parsed.success) return [];
-  return parsed.data.suggestions.flatMap((s) => {
-    /* Query predictions carry no placePrediction. They are search strings, not
-       addresses, and cannot be resolved to a block. */
-    if (!s.placePrediction) return [];
-    return [
-      {
-        placeId: s.placePrediction.placeId,
-        text: s.placePrediction.text.text,
-        secondary:
-          s.placePrediction.structuredFormat?.secondaryText?.text ?? null,
-      },
-    ];
+  return parsed.data.features.flatMap((f, i) => {
+    const p = f.properties;
+    const coords = f.geometry?.coordinates;
+    if (!p || !coords) return [];
+    /* `layers=address` is already on the request, but a street or locality
+       centroid that slipped through would resolve to whichever district the
+       midpoint of the street happens to sit in -- the exact ambiguity this
+       feature exists to remove. Refuse it rather than answer confidently. */
+    if (p.layer !== "address") return [];
+    const text = p.name ?? p.label;
+    if (!text) return [];
+    const [lon, lat] = coords;
+    const secondary =
+      [p.locality, p.region_a, p.postalcode].filter(Boolean).join(", ") || null;
+    return [{ id: p.gid ?? `${text}:${i}`, text, secondary, lat, lon }];
   });
-}
-
-const detailsSchema = z.object({
-  location: z
-    .object({ latitude: z.number(), longitude: z.number() })
-    .optional(),
-});
-
-export function parsePlaceLocation(json: unknown): PlaceLocation | null {
-  const parsed = detailsSchema.safeParse(json);
-  if (!parsed.success || !parsed.data.location) return null;
-  return {
-    lat: parsed.data.location.latitude,
-    lng: parsed.data.location.longitude,
-  };
 }
 
 /* The range lookup's own logic, so it can be tested without a database.
