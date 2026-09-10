@@ -3,7 +3,8 @@
    DRY RUN (always, no env needed): the pure due-today matcher the cron
    route uses (src/lib/notifications/schedule.ts) against fixture events —
    T-7 / T-1 / day-of matching, nothing due on other days, dedupe_key
-   format. This is the "route logic against a fake sender" check: the only
+   format, and the ballot-return pair (0021) firing on its own two days
+   without doubling up on election day, whose date it shares. This is the "route logic against a fake sender" check: the only
    code between dueReminders() and Resend is claim + render, both covered
    elsewhere (claim: idempotency probes; render: verify-notification-
    templates.ts).
@@ -49,6 +50,7 @@ const EVENTS = [
     event_type: "registration_deadline",
     election: "general_2026",
     event_date: "2026-10-05",
+    rule: "postmarked_by",
     details_url: "https://dos.fl.gov/elections/for-voters/election-dates/",
   },
   {
@@ -56,7 +58,19 @@ const EVENTS = [
     event_type: "election_day",
     election: "general_2026",
     event_date: "2026-11-03",
+    rule: null,
     details_url: "https://dos.fl.gov/elections/for-voters/election-dates/",
+  },
+  /* Shares election day's date on purpose — that shared date is the reason
+     the return deadline has no T-0 offset (0021), and the day-of check
+     below is what proves the two do not both fire on Nov 3. */
+  {
+    id: "e3",
+    event_type: "ballot_return_deadline",
+    election: "general_2026",
+    event_date: "2026-11-03",
+    rule: "received_by",
+    details_url: "https://dos.fl.gov/elections/for-voters/voting/vote-by-mail/",
   },
 ];
 
@@ -72,11 +86,35 @@ check(
   t1.length === 1 && t1[0].template_id === "reg_deadline_t1",
   JSON.stringify(t1)
 );
+const returnT7 = dueReminders(EVENTS, "2026-10-27");
+check(
+  "T-7: ballot-return reminder due a week out (mail still works)",
+  returnT7.length === 1 && returnT7[0].template_id === "ballot_return_t7",
+  JSON.stringify(returnT7)
+);
+const returnT1 = dueReminders(EVENTS, "2026-11-02");
+check(
+  "T-1: ballot-return reminder due the day before (mail may not)",
+  returnT1.length === 1 && returnT1[0].template_id === "ballot_return_t1",
+  JSON.stringify(returnT1)
+);
 const dayOf = dueReminders(EVENTS, "2026-11-03");
 check(
   "day-of: election-day reminder due on the day",
   dayOf.length === 1 && dayOf[0].template_id === "election_day",
   JSON.stringify(dayOf)
+);
+/* The return deadline shares election day's date; if it ever grows a T-0
+   offset, two emails land the same morning. That is the check. */
+check(
+  "day-of: the return deadline does NOT also fire on election day",
+  !dayOf.some((d) => d.event.event_type === "ballot_return_deadline"),
+  JSON.stringify(dayOf)
+);
+check(
+  "ballot-return dedupe_key format",
+  returnT1[0]?.dedupe_key === "general_2026:ballot_return_deadline:T-1:email",
+  returnT1[0]?.dedupe_key
 );
 check("quiet day: nothing due", dueReminders(EVENTS, "2026-09-01").length === 0);
 check(

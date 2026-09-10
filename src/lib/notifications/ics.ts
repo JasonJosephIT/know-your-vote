@@ -14,9 +14,25 @@ export const ELECTION_LABEL: Record<string, string> = {
 const SUMMARY: Record<ElectionEvent["event_type"], string> = {
   registration_deadline: "Voter registration deadline",
   vbm_request_deadline: "Vote-by-mail request deadline",
+  /* The hour is in the title, not the schema: event_date is a bare DATE and
+     a timed VEVENT would need a VTIMEZONE block for "local time" to mean
+     anything (0021 header). 7 p.m. is poll-closing time, identical for every
+     Florida election. */
+  ballot_return_deadline: "Vote-by-mail ballot must be received by 7 p.m.",
   early_voting_start: "Early voting begins (statewide window)",
   early_voting_end: "Early voting ends (statewide window)",
   election_day: "Election Day",
+};
+
+/* The `rule` column (0021) rendered into the sentence a voter actually
+   reads. This is what the column is FOR — a date with the wrong rule beside
+   it still misinforms, and "a postmark counts" is the specific wrong belief
+   that costs people their vote on a returned ballot. */
+const RULE_NOTE: Record<NonNullable<ElectionEvent["rule"]>, string> = {
+  received_by:
+    "This is a RECEIVED-BY deadline: it must be in your Supervisor of Elections' hands by this date. A postmark does not count.",
+  postmarked_by:
+    "A mailed application counts if it is postmarked by this date. Registering online or in person must be completed by this date.",
 };
 
 /* ICS structure is line-oriented: a stray CR/LF in any interpolated value
@@ -59,7 +75,7 @@ export function buildElectionCalendar(
       `DTEND;VALUE=DATE:${icsDate(nextDay(event.event_date))}`,
       `SUMMARY:${SUMMARY[event.event_type]} — ${icsText(label)}`,
       `URL:${icsText(event.details_url)}`,
-      `DESCRIPTION:Official source: ${icsText(event.details_url)}`,
+      `DESCRIPTION:${event.rule ? `${RULE_NOTE[event.rule]} ` : ""}Official source: ${icsText(event.details_url)}`,
       "END:VEVENT"
     );
   }

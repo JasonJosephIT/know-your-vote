@@ -151,7 +151,13 @@ CREATE TABLE election_event (
   county_fips  CHAR(5),                -- NULL = statewide
   event_type   TEXT NOT NULL CHECK (event_type IN
                  ('registration_deadline','vbm_request_deadline',
+                  'ballot_return_deadline',            -- added by 0021
                   'early_voting_start','early_voting_end','election_day')),
+  rule         TEXT,                                   -- added by 0021:
+                 -- 'postmarked_by' | 'received_by', NOT NULL on the three
+                 -- deadline types and NULL on the other three. A machine
+                 -- token; ics.ts renders it into the sentence a voter reads,
+                 -- so no database string is ever shown verbatim.
   election     TEXT NOT NULL,          -- 'primary_2026' | 'general_2026'
   event_date   DATE NOT NULL,
   details_url  TEXT NOT NULL,          -- official source, shown in every send

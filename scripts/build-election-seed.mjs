@@ -22,7 +22,13 @@ const SOURCE = "https://dos.fl.gov/elections/for-voters/election-dates/";
      General — November 3, 2026; register by October 5; request vote-by-mail
      ballot by October 22; early voting October 24–31.
    Early-voting rows are the statewide mandatory window; counties may offer
-   more days at their supervisor's discretion. */
+   more days at their supervisor's discretion.
+
+   NOT THE WHOLE TABLE. 0008 is applied live and can never be regenerated
+   with different content (see supabase/migrations/README.md rule 1), so
+   election_event has grown since: 0021 adds the ballot_return_deadline rows
+   and the `rule` column, by hand. Adding an event here would silently
+   rewrite an applied migration — put new rows in a new migration instead. */
 const EVENTS = [
   ["primary_2026", "registration_deadline", "2026-07-20"],
   ["primary_2026", "vbm_request_deadline", "2026-08-06"],
