@@ -125,6 +125,30 @@ assert(
   String(place?.lat).length > 8 && String(place?.lng).length > 8
 );
 
+/* ---- The routes' privacy contract, asserted structurally ---- */
+const stripComments = (src: string) =>
+  src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
+
+for (const rel of [
+  "src/app/api/address/suggest/route.ts",
+  "src/app/api/address/resolve/route.ts",
+]) {
+  const code = stripComments(readFileSync(join(ROOT, rel), "utf8"));
+  assert(`${rel} is POST`, /export async function POST\(/.test(code), rel);
+  assert(
+    `${rel} exposes no GET`,
+    !/export async function GET\(/.test(code),
+    "a GET would put the address in the URL, the access log and the referrer"
+  );
+  assert(`${rel} logs nothing`, !/console\./.test(code), rel);
+  assert(`${rel} rate-limits`, /rateLimit\(/.test(code), rel);
+  assert(
+    `${rel} writes nothing to the database`,
+    !/\.insert\(|\.upsert\(|serviceClient/.test(code),
+    rel
+  );
+}
+
 if (failures) {
   console.error(`\n${failures} address-resolve check(s) failed`);
   process.exit(1);
