@@ -138,12 +138,14 @@ Three things in the task text are now wrong. Fix them before working it.
 
 1. **Migration number.** It pencils `supabase/migrations/0011_zip_statewide.sql`.
    `0011` is `0011_measure_rls.sql`, applied 2026-09-07. Per the ledger, the
-   next free number is **`0018`**. Claim it in `supabase/migrations/README.md`
-   first, in the same PR.
+   next free number is **`0019`**. (This originally read `0018`; that number
+   was claimed on 2026-09-10 by `0018_publication_audit.sql`, so TASK-060 takes
+   the one after it.) Claim it in `supabase/migrations/README.md` first, in the
+   same PR.
 2. **It is a data migration, not a schema one.** No DDL is needed. `metro` is
    already `TEXT` and nullable with no CHECK (`0001_app_tables.sql:16`), so
    non-metro counties store `NULL` today; `anon_read_zip_district` is already
-   `USING (true)`. `0018` is a `DELETE FROM zip_district` + `INSERT`, exactly
+   `USING (true)`. `0019` is a `DELETE FROM zip_district` + `INSERT`, exactly
    like `0003`. The listed file `src/types/app.ts` needs no change either —
    `metro: Metro | null` already permits it.
 3. **`in_coverage` is dead today.** `resolveZip` filters `rows.filter(r => r.in_coverage)`,
@@ -248,8 +250,8 @@ Blocked-free, in order:
    (§2 above). It is two downloads and one command, and it is the only reason
    that task has sat still.
 2. Land the **§3 corrections** into `general-election-pivot.md` TASK-060 —
-   migration `0018` not `0011`, data-only not DDL, the `in_coverage` finding,
-   the `build-zip-seed.mjs` reverse-lookup bug. Claim `0018` in the ledger.
+   migration `0019` not `0011`, data-only not DDL, the `in_coverage` finding,
+   the `build-zip-seed.mjs` reverse-lookup bug. Claim `0019` in the ledger.
 3. ~~Put **§1** to the founder.~~ **Done** — answered, and the fix shipped; see
    the §5 done-note.
 4. ~~Consider a guardrail.~~ **Done** — `scripts/verify-coverage.ts` exists and
@@ -283,7 +285,7 @@ next session should run the `data-ingest.md` §7 baseline before touching code.
 
 > "Read `docs/general-election/session-handoff-2026-09-08-map-coverage.md`.
 > Do §6.1 and §6.2 — add TASK-060 to the local-session runbook table, and
-> correct TASK-060 in `general-election-pivot.md` (migration **0018**, claimed
+> correct TASK-060 in `general-election-pivot.md` (migration **0019**, claimed
 > in the ledger; data-only, no DDL; `in_coverage` is unused today; the
 > `build-zip-seed.mjs` county reverse-lookup breaks statewide). Then put §1 to
 > the founder with the table as written and get a decision on §5.1 and §5.2

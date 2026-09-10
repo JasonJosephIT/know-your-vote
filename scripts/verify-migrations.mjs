@@ -33,6 +33,13 @@
         claims (published or not — traceability needs both) but writes
         nothing; anon has zero log access; the log is append-only even
         for service_role; the agent_id/status/bucket CHECKs hold.
+    17. 0018_publication_audit: set_race_publication flips race_publication
+        and writes its admin_action row in one statement; published_at is
+        stamped entering publication and survives leaving it; actor, reason
+        and a known status are required; a missing race is refused; the
+        subject is exactly one of subject_id / subject_ref; and only
+        service_role may execute it (not anon, not cap_tool_wrapper —
+        publication never moves through a tool call, 0009).
     16. 0014_news_fairness invariants (news-fairness.md N1): a candidate_news
         or election_news row with source_id NULL is rejected; an
         official_link row with source_id NULL still inserts; a candidate_news
@@ -510,6 +517,14 @@ for (const t of opsTables) {
   await expectDenied(`anon cannot INSERT ${t}`, opsInsert[t]);
 }
 
+/* 0018: the publication door is service-role only. anon holds no EXECUTE, so
+   the flip is unreachable even though the function is SECURITY DEFINER — the
+   definer's rights apply only once the call is allowed to happen at all. */
+await expectDenied(
+  "anon cannot EXECUTE set_race_publication",
+  "SELECT set_race_publication('r-draft','published','x@x.com','because');"
+);
+
 await db.exec("RESET ROLE;");
 
 /* authenticated: this app has no accounts, and the ops plane is doubly off
@@ -673,6 +688,90 @@ await check("send_log ON CONFLICT DO NOTHING dedupes", async () => {
     throw new Error(`expected 1 untouched row, saw n=${r.rows[0].n} c=${r.rows[0].c}`);
 });
 
+/* 0018_publication_audit (invariant 17). The flip and its audit row are one
+   statement, so the pair either both happened or neither did. These pin the
+   properties that make the log trustworthy rather than merely present. */
+await check("set_race_publication flips the status and logs it as one action", async () => {
+  await db.exec(
+    "SELECT set_race_publication('r-draft','published','op@example.com','audit test');"
+  );
+  const r = await db.query(`
+    SELECT rp.status, rp.published_at IS NOT NULL AS stamped,
+           a.actor, a.action, a.subject_kind, a.subject_ref,
+           a.subject_id IS NULL AS uuid_subject_null,
+           a.detail->>'prior_status' AS prior, a.detail->>'reason' AS reason
+      FROM race_publication rp
+      JOIN admin_action a ON a.subject_ref = rp.race_id
+     WHERE rp.race_id = 'r-draft';`);
+  if (r.rows.length !== 1) throw new Error(`expected exactly 1 audit row, saw ${r.rows.length}`);
+  const g = r.rows[0];
+  if (g.status !== "published") throw new Error(`status=${g.status}`);
+  if (!g.stamped) throw new Error("published_at was not stamped on the transition");
+  if (g.action !== "publish") throw new Error(`action=${g.action}`);
+  if (g.subject_kind !== "race_publication") throw new Error(`subject_kind=${g.subject_kind}`);
+  if (!g.uuid_subject_null) throw new Error("subject_id should be NULL for a text subject");
+  if (g.prior !== "draft") throw new Error(`prior_status=${g.prior}`);
+  if (g.reason !== "audit test") throw new Error(`reason=${g.reason}`);
+});
+
+await check("unpublishing logs an unpublish and keeps the last-published time", async () => {
+  const before = await db.query(
+    "SELECT published_at FROM race_publication WHERE race_id='r-draft';"
+  );
+  await db.exec(
+    "SELECT set_race_publication('r-draft','in_review','op@example.com','pulled back');"
+  );
+  const r = await db.query(`
+    SELECT rp.status, rp.published_at,
+           (SELECT action FROM admin_action WHERE subject_ref='r-draft'
+             ORDER BY created_at DESC, action LIMIT 1) AS latest_action,
+           (SELECT count(*)::int FROM admin_action WHERE subject_ref='r-draft') AS n
+      FROM race_publication rp WHERE rp.race_id='r-draft';`);
+  const g = r.rows[0];
+  if (g.status !== "in_review") throw new Error(`status=${g.status}`);
+  if (String(g.published_at) !== String(before.rows[0].published_at))
+    throw new Error("published_at must survive an unpublish");
+  if (g.latest_action !== "unpublish") throw new Error(`latest_action=${g.latest_action}`);
+  if (g.n !== 2) throw new Error(`expected 2 audit rows, saw ${g.n}`);
+});
+
+/* A row that says who but not why is the record we already had in
+   race_publication.note, and it is not enough after the fact. */
+await expectConstraintViolation(
+  "set_race_publication requires an actor",
+  "SELECT set_race_publication('r-pub','published','','because');",
+  /actor is required/
+);
+await expectConstraintViolation(
+  "set_race_publication requires a reason",
+  "SELECT set_race_publication('r-pub','published','op@example.com','   ');",
+  /reason is required/
+);
+await expectConstraintViolation(
+  "set_race_publication rejects an unknown status",
+  "SELECT set_race_publication('r-pub','live','op@example.com','because');",
+  /invalid status/
+);
+await expectConstraintViolation(
+  "set_race_publication refuses a race with no publication row",
+  "SELECT set_race_publication('r-nope','published','op@example.com','because');",
+  /no race_publication row/
+);
+
+/* The subject is exactly one of the two identifier columns — never both,
+   never neither, so a reader always knows which key to join on. */
+await expectConstraintViolation(
+  "admin_action rejects a row with neither subject identifier",
+  "INSERT INTO admin_action (actor, action, subject_kind) VALUES ('x','publish','race_publication');",
+  /admin_action_subject_one_of/
+);
+await expectConstraintViolation(
+  "admin_action rejects a row with both subject identifiers",
+  `INSERT INTO admin_action (actor, action, subject_kind, subject_id, subject_ref)
+   VALUES ('x','publish','race_publication', gen_random_uuid(), 'r-pub');`,
+  /admin_action_subject_one_of/
+);
+
 await db.exec("RESET ROLE;");
 
 /* 0009_action_log_roles (invariant 15). Object existence first. */
@@ -747,6 +846,12 @@ await expectDenied(
 await expectDenied(
   "cap_tool_wrapper cannot UPDATE race_publication",
   "UPDATE race_publication SET status='published' WHERE race_id='r-draft';"
+);
+/* 0018: and it cannot reach the same flip through the new door either —
+   0009's rule is that publication never moves through a tool call. */
+await expectDenied(
+  "cap_tool_wrapper cannot EXECUTE set_race_publication",
+  "SELECT set_race_publication('r-draft','published','x@x.com','because');"
 );
 await expectDenied(
   "cap_tool_wrapper cannot read voting_info_subscription (PII)",
