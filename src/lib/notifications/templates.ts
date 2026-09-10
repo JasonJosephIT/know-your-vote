@@ -35,6 +35,9 @@ const correctionParams = dateParams.extend({
   event_label: z.enum([
     "voter registration deadline",
     "vote-by-mail request deadline",
+    /* Every date we can publish must be correctable — the ballot return
+       deadline reaches voters through the .ics calendar (0021). */
+    "vote-by-mail ballot return deadline",
     "early voting start date",
     "early voting end date",
     "election day",

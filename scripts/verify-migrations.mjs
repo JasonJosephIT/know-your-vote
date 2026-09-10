@@ -25,6 +25,11 @@
         notification_send_log); anon can neither read nor write them;
         the event_type CHECK and the statewide-scope unique index reject
         bad rows; send_log ON CONFLICT DO NOTHING dedupes.
+    14b. 0021_ballot_return_deadline: event_type admits
+        ballot_return_deadline; the rule CHECK rejects unknown tokens; a
+        deadline cannot be stored without a rule and a non-deadline cannot
+        carry one; the seeded return deadlines land on election day with
+        rule 'received_by'.
     15. 0009_action_log_roles invariants (CAP_Runtime_PRD_v1 S1-01):
         action_log exists with its guard partial index; cap_tool_wrapper
         is INSERT-only on the log (no SELECT/UPDATE/DELETE) and can
@@ -685,11 +690,73 @@ await expectConstraintViolation(
   /violates check constraint/
 );
 await expectConstraintViolation(
+  /* Carries a rule deliberately: without one, 0021's rule-required CHECK
+     fires during the tuple insert and this probe would pass for the wrong
+     reason, never reaching the unique index it exists to test. */
   "unique index rejects a duplicate statewide election_event",
-  `INSERT INTO election_event (event_type, election, event_date, details_url)
-   VALUES ('registration_deadline', 'general_2026', '2026-10-06', 'https://x.example');`,
+  `INSERT INTO election_event (event_type, election, event_date, rule, details_url)
+   VALUES ('registration_deadline', 'general_2026', '2026-10-06', 'postmarked_by', 'https://x.example');`,
   /duplicate key value violates unique constraint "uq_election_event_scope"/
 );
+
+/* 0021_ballot_return_deadline constraint probes. */
+await check("ballot_return_deadline is an accepted event_type", async () => {
+  await db.exec(
+    `INSERT INTO election_event (event_type, election, event_date, rule, details_url)
+     VALUES ('ballot_return_deadline', 'probe_2027', '2027-01-05', 'received_by', 'https://x.example');`
+  );
+  const r = await db.query(
+    "SELECT count(*)::int AS n FROM election_event WHERE election='probe_2027';"
+  );
+  if (r.rows[0].n !== 1) throw new Error("ballot_return_deadline row not inserted");
+  await db.exec("DELETE FROM election_event WHERE election='probe_2027';");
+});
+await expectConstraintViolation(
+  "rule CHECK rejects a rule token that is not postmarked_by/received_by",
+  `INSERT INTO election_event (event_type, election, event_date, rule, details_url)
+   VALUES ('ballot_return_deadline', 'probe_2027', '2027-01-05', 'whenever', 'https://x.example');`,
+  /election_event_rule_check/
+);
+await expectConstraintViolation(
+  "a deadline may not be stored without a rule",
+  `INSERT INTO election_event (event_type, election, event_date, details_url)
+   VALUES ('ballot_return_deadline', 'probe_2027', '2027-01-05', 'https://x.example');`,
+  /election_event_rule_required_check/
+);
+await expectConstraintViolation(
+  "a non-deadline may not carry a rule",
+  `INSERT INTO election_event (event_type, election, event_date, rule, details_url)
+   VALUES ('election_day', 'probe_2027', '2027-01-05', 'received_by', 'https://x.example');`,
+  /election_event_rule_required_check/
+);
+await check("0021 seeded a ballot_return_deadline on election day for both elections", async () => {
+  const r = await db.query(
+    `SELECT e.election, e.rule, e.event_date = d.event_date AS same_day
+       FROM election_event e
+       JOIN election_event d
+         ON d.election = e.election AND d.event_type = 'election_day'
+      WHERE e.event_type = 'ballot_return_deadline' ORDER BY e.election;`
+  );
+  if (r.rows.length !== 2) throw new Error(`expected 2 rows, saw ${r.rows.length}`);
+  for (const row of r.rows) {
+    if (!row.same_day) throw new Error(`${row.election}: return deadline is not election day`);
+    if (row.rule !== "received_by") throw new Error(`${row.election}: rule is ${row.rule}`);
+  }
+});
+await check("every seeded deadline carries a rule and nothing else does", async () => {
+  const r = await db.query(
+    `SELECT count(*) FILTER (
+       WHERE event_type IN ('registration_deadline','vbm_request_deadline','ballot_return_deadline')
+         AND rule IS NULL)::int AS missing,
+            count(*) FILTER (
+       WHERE event_type IN ('early_voting_start','early_voting_end','election_day')
+         AND rule IS NOT NULL)::int AS spurious
+       FROM election_event;`
+  );
+  const { missing, spurious } = r.rows[0];
+  if (missing !== 0) throw new Error(`${missing} deadline row(s) with no rule`);
+  if (spurious !== 0) throw new Error(`${spurious} non-deadline row(s) carrying a rule`);
+});
 await check("send_log ON CONFLICT DO NOTHING dedupes", async () => {
   await db.exec(
     `INSERT INTO notification_send_log (dedupe_key, recipient_count)
