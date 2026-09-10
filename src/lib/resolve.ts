@@ -1,5 +1,7 @@
 import { createAnonServerClient } from "@/lib/supabase/server";
-import { COVERED_COUNTIES } from "@/lib/counties";
+import { unstable_cache } from "next/cache";
+import { COVERED_COUNTIES, coveredCounty } from "@/lib/counties";
+import { districtFromBlockRows } from "@/lib/address-lookup";
 import { getStatewideRaces } from "@/lib/races";
 import type { ResolveRaceSummary, ResolveResult } from "@/types/app";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
@@ -142,4 +144,102 @@ export async function resolveCounty(
       published,
     })),
   };
+}
+
+/* Address path. A census block sits in exactly one district, so unlike a ZIP
+   there is nothing to confirm -- which is the whole reason this path exists.
+   null means the block is outside the four covered counties, which is also the
+   honest answer for a Florida address we do not cover yet. */
+export async function resolveBlock(
+  blockGeoid: string
+): Promise<{ district: string; countyFips: string } | null> {
+  const supabase = await createAnonServerClient();
+  const { data, error } = await supabase
+    .from("block_district")
+    .select("block_start, block_end, county_fips, congressional_district")
+    .lte("block_start", blockGeoid)
+    .gte("block_end", blockGeoid)
+    .limit(1);
+  if (error) throw new Error(`block lookup failed: ${error.message}`);
+  return districtFromBlockRows(data ?? [], blockGeoid);
+}
+
+/* A district the voter has already established -- from an address, a confirmed
+   ZIP, or the picker -- plus the county it sits in.
+
+   Also serves /candidates?view=races&district=FL-27&county=12086, which is how
+   an address result stays shareable and refreshable with no address anywhere in
+   the URL. Returning null for an uncovered county is what makes a stale or
+   hand-edited district cookie harmless: no ballot is produced from it. */
+export async function resolveDistrict(
+  countyFips: string,
+  district: string
+): Promise<ResolveResult | null> {
+  const county = coveredCounty(countyFips);
+  if (!county) return null;
+  return {
+    zip: "",
+    inCoverage: true,
+    county: county.name,
+    countyFips: county.fips,
+    metro: county.metro,
+    district,
+    races: await racesForDistrict(district),
+  };
+}
+
+export interface CoveredDistrict {
+  countyFips: string;
+  countyName: string;
+  district: string;
+}
+
+/* The picker's options: every county+district pair coverage actually contains.
+
+   Read from zip_district rather than block_district for size -- hundreds of rows
+   against thousands -- and it is the same answer either way: 0018_zip_seed_2026
+   is aggregated from the same enacted-plan block file 0026 is built from, and
+   scripts/verify-block-seed.mjs asserts the two agree. block_district stays the
+   authority for resolving a voter; this is only the list of choices. */
+async function fetchCoveredDistricts(): Promise<CoveredDistrict[]> {
+  let supabase;
+  try {
+    supabase = await createAnonServerClient();
+  } catch {
+    /* Unconfigured environment. This read is on the landing page, which is
+       prerendered -- the same guard fetchActiveMeasures uses. */
+    return [];
+  }
+  const { data } = await supabase
+    .from("zip_district")
+    .select("county_fips, county_name, congressional_district")
+    .eq("in_coverage", true);
+
+  const seen = new Map<string, CoveredDistrict>();
+  for (const row of data ?? []) {
+    const key = `${row.county_fips}:${row.congressional_district}`;
+    if (!seen.has(key)) {
+      seen.set(key, {
+        countyFips: row.county_fips,
+        countyName: row.county_name,
+        district: row.congressional_district,
+      });
+    }
+  }
+  /* County in COVERED_COUNTIES order, then district ascending, so the list reads
+     the way the county picker does. */
+  const countyOrder = new Map(COVERED_COUNTIES.map((c, i) => [c.fips, i]));
+  return [...seen.values()].sort(
+    (a, b) =>
+      (countyOrder.get(a.countyFips) ?? 99) -
+        (countyOrder.get(b.countyFips) ?? 99) ||
+      districtNumber(a.district) - districtNumber(b.district)
+  );
+}
+
+export function getCoveredDistricts() {
+  return unstable_cache(fetchCoveredDistricts, ["covered-districts"], {
+    revalidate: 3600,
+    tags: ["districts"],
+  })();
 }
