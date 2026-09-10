@@ -17,6 +17,7 @@ ANTHROPIC_API_KEY, the `anthropic` + `mcp` packages, and a stable Python
 from __future__ import annotations
 
 import json
+import os
 import sys
 import time
 from dataclasses import dataclass
@@ -126,6 +127,12 @@ def _usage_tokens(resp: Any) -> int:
     return int(getattr(u, "input_tokens", 0) or 0) + int(getattr(u, "output_tokens", 0) or 0)
 
 
+# Credentials the Anthropic SDK reads from the environment. An INJECTED client
+# is the escape hatch for anything else (an `ant auth login` profile, a proxy
+# client, a mock).
+_CREDENTIAL_VARS = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")
+
+
 class LiveAnthropicBackend:
     """The real agent loop: the Anthropic Messages tool-use loop over the S1
     tool surface. The model is given `tools` + the system prompt; each
@@ -133,9 +140,10 @@ class LiveAnthropicBackend:
     back as a `tool_result`, until the model answers with no tool call — that
     final text is the completion report.
 
-    `client` is INJECTABLE (default: a lazily-imported `anthropic.Anthropic`,
-    which reads ANTHROPIC_API_KEY from the env), so this loop is unit-tested
-    with a mock — no API spend, no `anthropic` install. `tools` are the
+    `client` is INJECTABLE (default: a lazily-imported `anthropic.Anthropic`),
+    so this loop is unit-tested with a mock — no API spend, no `anthropic`
+    install. With no client injected the backend refuses to build one unless a
+    credential is actually configured: see `_client_or_default`. `tools` are the
     Anthropic tool schemas for the caller's granted S1 tools; in production
     they come from the MCP client that also supplies `dispatch`. That MCP-
     stdio client + an actual live run still need `mcp` on a stable Python
@@ -144,15 +152,33 @@ class LiveAnthropicBackend:
 
     def __init__(self, *, model: str, tools: list[dict], client: Any = None,
                  max_tokens: int | None = None, max_output_tokens: int = 4096,
-                 max_turns: int = 50):
+                 max_turns: int = 50, env: Mapping[str, str] | None = None):
         self._model = model
         self._tools = tools
         self._client = client
         self._max_tokens = max_tokens
         self._max_output_tokens = max_output_tokens
         self._max_turns = max_turns
+        # Injectable so the credential gate below is testable without mutating
+        # the process environment.
+        self._env: Mapping[str, str] = os.environ if env is None else env
 
     def _client_or_default(self):
+        """The live gate. Two ways to be configured, and nothing else counts:
+        an injected `client`, or a credential in the environment.
+
+        This used to gate on whether `anthropic` could be imported, which made
+        the guarantee a property of the MACHINE rather than of the
+        configuration — and inverted exactly where it matters. On the alpha box
+        the SDK is absent, so it refused and the test passed; on the arm64 3.12
+        venv the runtime actually needs (BRIEFS/00 installs `anthropic` by
+        design), the import succeeds, a client is built, and the loop reaches
+        the network and bills real money. A gate that only holds on machines
+        that cannot run the pipeline is not a gate.
+
+        So the credential check is the gate, and it mirrors
+        `orchestration.ReadPlane.from_env`: name the variable, say what it is
+        for, refuse. A missing SDK stays a separate, equally loud refusal."""
         if self._client is not None:
             return self._client
         try:
@@ -161,7 +187,15 @@ class LiveAnthropicBackend:
             raise NotConfigured(
                 "the `anthropic` package is not installed (needs a stable "
                 "Python >=3.11): pip install anthropic") from err
-        return anthropic.Anthropic()  # ANTHROPIC_API_KEY from env
+        if not any(self._env.get(k) for k in _CREDENTIAL_VARS):
+            raise NotConfigured(
+                "no Anthropic credential is configured: set ANTHROPIC_API_KEY "
+                "(or ANTHROPIC_AUTH_TOKEN) in the environment, or inject a "
+                "client. Refusing to construct one — every live session bills "
+                "real money, so being unconfigured must fail loudly here rather "
+                "than surface later as an auth error mid-run."
+            )
+        return anthropic.Anthropic()  # credential resolved from the env above
 
     def run(self, *, system, kickoff, dispatch, transcript) -> BackendResult:
         client = self._client_or_default()

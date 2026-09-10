@@ -14,6 +14,8 @@ import json
 import sys
 import tempfile
 import unittest
+import importlib.util
+from unittest import mock
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -714,9 +716,27 @@ class TestDiscoveryAllowlistA(unittest.TestCase):
         self.assertTrue(res["ok"], res)
 
     def test_default_psl_falls_back_when_tldextract_absent(self):
-        # tldextract is not installed here: load_psl() degrades to None so the
-        # core uses its embedded fail-closed subset (S1-R5), never a guess.
-        self.assertIsNone(discovery.load_psl())
+        """load_psl() degrades to None so the core uses its embedded
+        fail-closed subset (S1-R5), never a guess.
+
+        The absence is simulated rather than assumed. This test used to read
+        "tldextract is not installed here" and assert against the ambient
+        environment — which inverts on the arm64 3.12 venv the runtime needs,
+        because BRIEFS/00 installs tldextract by design. A test whose premise is
+        false on the machine that matters is not testing anything there.
+        """
+        with mock.patch.dict(sys.modules, {"tldextract": None}):
+            self.assertIsNone(discovery.load_psl())
+
+    def test_default_psl_is_used_when_tldextract_is_present(self):
+        """The other half, which nothing covered: with tldextract available the
+        loader returns a real extractor rather than silently degrading."""
+        if importlib.util.find_spec("tldextract") is None:
+            self.skipTest("tldextract not installed in this environment")
+        psl = discovery.load_psl()
+        self.assertIsNotNone(psl)
+        self.assertEqual(psl("www.house.gov"), "house.gov")
+        self.assertEqual(psl("not-a-host"), "")  # fail closed
 
 
 class TestDiscoveryAllowlistB(unittest.TestCase):
