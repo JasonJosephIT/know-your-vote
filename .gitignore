@@ -68,3 +68,6 @@ Civic Awareness (Know Your Vote)/CAP_Ops_Digest_*.html
 docs/general-election/ballots/EOGPCRP2026_block_assignment.txt
 # The raw DoE candidate export carries addresses, phones and emails. Never commit it.
 docs/general-election/ballots/doe_*.tsv
+
+# Local pipeline venv (Brief 00)
+.venv/
