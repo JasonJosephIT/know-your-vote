@@ -66,15 +66,14 @@ _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
 # thing that makes a race exist; check this map against the ballot, not
 # against the last run's counts.
 #
-# `_TARGET_US_HOUSE` below is the SAME SHAPE OF TRAP for districts, and as of
-# 2026-09-10 it still holds only the four districts the primary-era scope
-# covered. Twelve of the sixteen districts seeded in `zip_district` therefore
-# have no race at all, and the voter-facing consequence is measured in
-# docs/general-election/session-handoff-2026-09-08-map-coverage.md §1. Nothing
-# here decides which districts are right — that is a scope call — but the
-# parse result now reports WHICH districts it dropped rather than folding
-# them into one `skipped` total, so the next reader cannot miss it the way
-# the Senate was missed.
+# `_TARGET_US_HOUSE` below was the SAME SHAPE OF TRAP for districts. Until
+# 2026-09-10 it held only {010, 015, 023, 028} — the four districts the
+# primary-era scope covered, one per metro — so twelve of the sixteen
+# districts seeded in `zip_district` had no race at all and every ZIP in them
+# resolved to a ballot missing its U.S. House line
+# (docs/general-election/session-handoff-2026-09-08-map-coverage.md §1).
+# Widened to all 28 on founder instruction: Florida's whole delegation, so
+# there is no longer a district the parser declines on scope grounds.
 _NO_DISTRICT_RACES = {
     "GOV": ("FL-GOV-general", "state"),
     "ATG": ("FL-ATG-general", "state"),
@@ -82,7 +81,12 @@ _NO_DISTRICT_RACES = {
     "AGR": ("FL-AGR-general", "state"),
     "USS": ("FL-SEN-general", "federal"),
 }
-_TARGET_US_HOUSE = {"010", "015", "023", "028"}
+# Florida sends 28 members to the U.S. House (post-2022 map, CD119 — the same
+# vintage as the Census crosswalk `build-zip-seed.mjs` reads). Derived rather
+# than written out so the count is stated once and a reader can check it
+# against one number instead of counting a literal.
+_FL_US_HOUSE_DISTRICTS = 28
+_TARGET_US_HOUSE = {f"{n:03d}" for n in range(1, _FL_US_HOUSE_DISTRICTS + 1)}
 
 # D2 (founder 2026-09-07): no party map. The DoE PartyCode is stored verbatim
 # and the UI maps codes to labels with a raw-code fallback. The old
@@ -161,8 +165,9 @@ def parse_candidate_list(text: str) -> dict:
              "dropped_us_house_districts": [str], "tiers": {tier: int}}.
 
     `skipped` stays the single total it always was; `skipped_detail` says why,
-    and `dropped_us_house_districts` names the U.S. House districts the file
-    contained and `_TARGET_US_HOUSE` excluded. An undifferentiated total is
+    and `dropped_us_house_districts` names any U.S. House district the file
+    contained that `_TARGET_US_HOUSE` does not — which, now that all 28 are
+    carried, means a district number Florida does not have. An undifferentiated total is
     how the missing U.S. Senate race hid for weeks (see the comment on
     `_NO_DISTRICT_RACES`) — one number cannot distinguish "this file is 90%
     other races, as expected" from "a race we should be carrying is gone".
@@ -189,7 +194,7 @@ def parse_candidate_list(text: str) -> dict:
     skipped = 0
     skipped_detail: dict[str, int] = {
         "office_not_targeted": 0,
-        "us_house_district_not_targeted": 0,
+        "us_house_district_unknown": 0,
         "no_acct_num": 0,
     }
     dropped_us_house: set[str] = set()
@@ -207,10 +212,12 @@ def parse_candidate_list(text: str) -> dict:
         else:
             skipped += 1
             if office_code == "USR":
-                # A real House district in the file that we chose not to carry.
-                # Recorded by number: this is the one skip a scope change makes
-                # wrong, and the only one worth naming individually.
-                skipped_detail["us_house_district_not_targeted"] += 1
+                # Now that all 28 districts are carried, a USR row landing here
+                # is a district number Florida does not have — a data error, not
+                # a scope decision. Still counted and still named rather than
+                # raised: one malformed row should not cost the whole run, and
+                # the run report is where it gets seen.
+                skipped_detail["us_house_district_unknown"] += 1
                 if juris:
                     dropped_us_house.add(juris)
             else:

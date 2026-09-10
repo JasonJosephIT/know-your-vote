@@ -26,9 +26,16 @@ URL = "https://dos.elections.myflorida.com/candidates/extractCanList.asp"
 ELECTION = "20261103-GEN"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")  # the DoE WAF wants one
-# Statewide + the four target US House districts (CAP_PRD Target Races).
-TARGET_OFFICES = {"GOV", "ATG", "CFO", "AGR"}
-TARGET_USR = {"010", "015", "023", "028"}
+# Every race the parser carries, so this dump can be checked against the
+# ballot. USS was absent here until 2026-09-10 — the same omission that kept
+# the U.S. Senate race out of the pipeline until 2026-09-07, in the one script
+# whose job is to reveal what the file contains. A diagnostic narrower than the
+# thing it diagnoses cannot show you what you are missing.
+TARGET_OFFICES = {"GOV", "ATG", "CFO", "AGR", "USS"}
+# All 28 Florida U.S. House districts, matching intake.py's _TARGET_US_HOUSE.
+# These two lists are the same scope decision in two places; a dump narrower
+# than the parser hides exactly the rows a scope change is meant to reveal.
+TARGET_USR = {f"{n:03d}" for n in range(1, 29)}
 
 
 def fetch(office):
