@@ -115,9 +115,22 @@ if (blockFile && relFile) {
     rangeMismatches(realBlocks, realRanges).length === 0
   );
 
-  /* Every non-split ZIP in 0018 asserts one district for its whole ZCTA, so
-     every covered block in that ZCTA must agree. This is the independent
-     check: a different derivation of the same truth. */
+  /* The cross-check, and it has to respect how 0018 was built.
+
+     build-zip-seed.mjs marks a ZIP is_split only when two districts each cover
+     >= 5% of its land (SPLIT_SHARE). So a non-split ZIP is NOT "every block in
+     one district" -- it is "one district over at least 95% of the land", and
+     the sliver below that threshold genuinely belongs to another district.
+
+     The invariant that actually ties the two derivations together is therefore:
+     for every non-split ZIP, the district 0018 recorded must be the dominant one
+     by land, and every other district present must sit under the 5% threshold
+     that made the ZIP non-split. A wrong plan file fails this loudly -- it would
+     move whole ZIPs, not slivers -- while the real one passes.
+
+     Those slivers are not a rounding error to the voter in one: they are exactly
+     who the ZIP path answers wrongly and address lookup answers exactly. */
+  const SPLIT_SHARE = 0.05;
   const zipSql = readFileSync(
     path.join(root, "supabase", "migrations", "0018_zip_seed_2026.sql"),
     "utf8"
@@ -138,32 +151,72 @@ if (blockFile && relFile) {
   );
 
   const districtByBlock = new Map(realBlocks.map((b) => [b.geoid, b.district]));
-  const lines = readFileSync(relFile, "utf8").replace(/^﻿/, "").split("\n");
+  const lines = readFileSync(relFile, "utf8")
+    .replace(/^\ufeff/, "")
+    .split("\n");
   const header = lines[0].split("|").map((h) => h.trim());
   const ZCTA = header.indexOf("GEOID_ZCTA5_20");
   const BLOCK = header.indexOf("GEOID_TABBLOCK_20");
-  assert("relationship file has the expected columns", ZCTA >= 0 && BLOCK >= 0);
+  const LAND = header.indexOf("AREALAND_PART");
+  assert(
+    "relationship file has the expected columns",
+    ZCTA >= 0 && BLOCK >= 0 && LAND >= 0
+  );
 
-  const disagreements = [];
-  let checked = 0;
+  /* Land per district, per non-split ZIP. */
+  const perZip = new Map();
   for (const line of lines.slice(1)) {
     if (!line.trim()) continue;
     const cols = line.split("|");
     const zip = cols[ZCTA]?.trim();
     const block = cols[BLOCK]?.trim();
-    const expected = districtByZip.get(zip);
-    if (!expected || splitZips.has(zip)) continue;
-    const actual = districtByBlock.get(block);
-    if (!actual) continue;
-    checked++;
-    if (actual !== expected)
-      disagreements.push(`${zip}/${block}: ${actual} != ${expected}`);
+    const district = districtByBlock.get(block);
+    if (!district) continue;
+    if (!districtByZip.has(zip) || splitZips.has(zip)) continue;
+    if (!perZip.has(zip)) perZip.set(zip, new Map());
+    const byDistrict = perZip.get(zip);
+    byDistrict.set(
+      district,
+      (byDistrict.get(district) ?? 0) + (Number(cols[LAND]) || 0)
+    );
   }
-  assert("the cross-check actually compared blocks", checked > 0, `${checked}`);
   assert(
-    "every block in a non-split ZIP matches that ZIP's district",
-    disagreements.length === 0,
-    `${disagreements.length} disagreements, e.g. ${disagreements.slice(0, 3).join("; ")}`
+    "the cross-check actually compared ZIPs",
+    perZip.size > 0,
+    `${perZip.size}`
+  );
+
+  const notDominant = [];
+  const overThreshold = [];
+  for (const [zip, byDistrict] of perZip) {
+    const recorded = districtByZip.get(zip);
+    const total = [...byDistrict.values()].reduce((a, b) => a + b, 0);
+    if (total === 0) continue;
+    let best = null;
+    let bestLand = -1;
+    for (const [d, land] of byDistrict) {
+      if (land > bestLand) {
+        best = d;
+        bestLand = land;
+      }
+      if (d !== recorded && land / total >= SPLIT_SHARE) {
+        overThreshold.push(
+          `${zip}: ${d} holds ${((land / total) * 100).toFixed(1)}% but 0018 calls the ZIP ${recorded} and not split`
+        );
+      }
+    }
+    if (best !== recorded)
+      notDominant.push(`${zip}: blocks say ${best}, 0018 says ${recorded}`);
+  }
+  assert(
+    "0018's district is the dominant one in every non-split ZIP",
+    notDominant.length === 0,
+    `${notDominant.length}, e.g. ${notDominant.slice(0, 3).join("; ")}`
+  );
+  assert(
+    "every other district in a non-split ZIP is under the 5% split threshold",
+    overThreshold.length === 0,
+    `${overThreshold.length}, e.g. ${overThreshold.slice(0, 3).join("; ")}`
   );
 }
 

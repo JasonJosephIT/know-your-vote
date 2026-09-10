@@ -107,6 +107,23 @@ Before writing anything it **replays every kept source block through the
 generated ranges and refuses to write on a single mismatch.** That exhaustive
 round-trip is what makes range encoding safe rather than clever.
 
+### What the cross-check measured
+
+Run against the real inputs on 2026-09-09, it also quantified the problem this
+feature exists to solve. `build-zip-seed.mjs` marks a ZIP `is_split` only when
+two districts each cover **≥5%** of its land, so a "non-split" ZIP is not one
+district everywhere — it is one district over at least 95% of the land.
+
+Across the 160 non-split covered ZIPs, **29 contain blocks belonging to a
+different district**, every one of them under that 5% line (the largest is
+33308, where 20 blocks — 4.7% of the ZIP's land — are in FL-20 while the ZIP
+resolves to FL-25). Both datasets are correct; the threshold is doing what it
+was designed to do.
+
+But a voter living in one of those slivers is told a district that is
+confidently wrong, and today has no way to find out. That is the case for
+address lookup stated in numbers rather than in principle.
+
 ### Independent verification
 
 `scripts/verify-block-seed.mjs` checks the generated ranges against a source the

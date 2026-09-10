@@ -827,7 +827,11 @@ The encoding compresses 91.5×, so the migration lands around 50 KB. If the gene
 node scripts/verify-block-seed.mjs /tmp/kyv-plan/EOGPCRP2026_block_assignment.txt /tmp/kyv-plan/zcta_fl.txt
 ```
 
-Expected: PASS, including `the real plan replays exactly` and `every block in a non-split ZIP matches that ZIP's district`. A disagreement here means the address path and the ZIP path would answer differently — **do not proceed**. The likely causes, in order: the wrong plan file, a `zip_district` regex that missed rows (check `parsed some non-split ZIPs from 0018` reported a plausible count), or a relationship file from a different vintage.
+Expected: PASS, including `the real plan replays exactly`, `0018's district is the dominant one in every non-split ZIP`, and `every other district in a non-split ZIP is under the 5% split threshold`.
+
+Note what that second pair asserts, because the obvious stricter check is *wrong*: `build-zip-seed.mjs` marks a ZIP `is_split` only when two districts each cover ≥5% of its land, so a non-split ZIP legitimately contains blocks of another district below that line — 29 of the 160 non-split covered ZIPs do, the largest at 4.7%. Asserting "every block matches its ZIP's district" fails on real, correct data. The invariant that holds is dominance plus the threshold.
+
+A failure here means the address path and the ZIP path would genuinely disagree — **do not proceed**. Likely causes, in order: the wrong plan file (it would move whole ZIPs, not slivers), a `zip_district` regex that missed rows (check the reported ZIP count is plausible), or a relationship file from a different vintage.
 
 - [ ] **Step 6: Apply and confirm the seed loads**
 
