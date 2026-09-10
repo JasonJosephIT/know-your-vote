@@ -25,6 +25,11 @@
         notification_send_log); anon can neither read nor write them;
         the event_type CHECK and the statewide-scope unique index reject
         bad rows; send_log ON CONFLICT DO NOTHING dedupes.
+    14b. 0021_ballot_return_deadline: event_type admits
+        ballot_return_deadline; the rule CHECK rejects unknown tokens; a
+        deadline cannot be stored without a rule and a non-deadline cannot
+        carry one; the seeded return deadlines land on election day with
+        rule 'received_by'.
     15. 0009_action_log_roles invariants (CAP_Runtime_PRD_v1 S1-01):
         action_log exists with its guard partial index; cap_tool_wrapper
         is INSERT-only on the log (no SELECT/UPDATE/DELETE) and can
@@ -33,6 +38,19 @@
         claims (published or not — traceability needs both) but writes
         nothing; anon has zero log access; the log is append-only even
         for service_role; the agent_id/status/bucket CHECKs hold.
+    18. 0020_publication_door_only: anon/authenticated hold no EXECUTE on
+        set_race_publication even with Supabase's default privileges in
+        force (0018 granted it to them on the live project and this file
+        said otherwise); service_role holds no direct UPDATE on
+        race_publication, not even on `note`; and the SECURITY DEFINER
+        function still flips without it.
+    17. 0018_publication_audit: set_race_publication flips race_publication
+        and writes its admin_action row in one statement; published_at is
+        stamped entering publication and survives leaving it; actor, reason
+        and a known status are required; a missing race is refused; the
+        subject is exactly one of subject_id / subject_ref; and only
+        service_role may execute it (not anon, not cap_tool_wrapper —
+        publication never moves through a tool call, 0009).
     16. 0014_news_fairness invariants (news-fairness.md N1): a candidate_news
         or election_news row with source_id NULL is rejected; an
         official_link row with source_id NULL still inserts; a candidate_news
@@ -103,6 +121,15 @@ await db.exec(`
   CREATE ROLE authenticated NOLOGIN;
   CREATE ROLE service_role NOLOGIN BYPASSRLS;
   GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+  /* Supabase's default privileges, modelled deliberately. Without these the
+     harness is more permissive than production is: every migration's explicit
+     REVOKE looks redundant, and an object that forgets one still passes here
+     while shipping open. That is exactly how 0018 shipped set_race_publication
+     with EXECUTE granted to anon — a SECURITY DEFINER function owned by
+     postgres — and this file said it was denied. 0020 has the post-mortem. */
+  ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO anon, authenticated, service_role;
+  ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO anon, authenticated, service_role;
+  ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO anon, authenticated, service_role;
 `);
 
 const files = (await readdir(migrationsDir)).filter((f) => f.endsWith(".sql")).sort();
@@ -559,6 +586,14 @@ for (const t of opsTables) {
   await expectDenied(`anon cannot INSERT ${t}`, opsInsert[t]);
 }
 
+/* 0018: the publication door is service-role only. anon holds no EXECUTE, so
+   the flip is unreachable even though the function is SECURITY DEFINER — the
+   definer's rights apply only once the call is allowed to happen at all. */
+await expectDenied(
+  "anon cannot EXECUTE set_race_publication",
+  "SELECT set_race_publication('r-draft','published','x@x.com','because');"
+);
+
 await db.exec("RESET ROLE;");
 
 /* authenticated: this app has no accounts, and the ops plane is doubly off
@@ -704,11 +739,73 @@ await expectConstraintViolation(
   /violates check constraint/
 );
 await expectConstraintViolation(
+  /* Carries a rule deliberately: without one, 0021's rule-required CHECK
+     fires during the tuple insert and this probe would pass for the wrong
+     reason, never reaching the unique index it exists to test. */
   "unique index rejects a duplicate statewide election_event",
-  `INSERT INTO election_event (event_type, election, event_date, details_url)
-   VALUES ('registration_deadline', 'general_2026', '2026-10-06', 'https://x.example');`,
+  `INSERT INTO election_event (event_type, election, event_date, rule, details_url)
+   VALUES ('registration_deadline', 'general_2026', '2026-10-06', 'postmarked_by', 'https://x.example');`,
   /duplicate key value violates unique constraint "uq_election_event_scope"/
 );
+
+/* 0021_ballot_return_deadline constraint probes. */
+await check("ballot_return_deadline is an accepted event_type", async () => {
+  await db.exec(
+    `INSERT INTO election_event (event_type, election, event_date, rule, details_url)
+     VALUES ('ballot_return_deadline', 'probe_2027', '2027-01-05', 'received_by', 'https://x.example');`
+  );
+  const r = await db.query(
+    "SELECT count(*)::int AS n FROM election_event WHERE election='probe_2027';"
+  );
+  if (r.rows[0].n !== 1) throw new Error("ballot_return_deadline row not inserted");
+  await db.exec("DELETE FROM election_event WHERE election='probe_2027';");
+});
+await expectConstraintViolation(
+  "rule CHECK rejects a rule token that is not postmarked_by/received_by",
+  `INSERT INTO election_event (event_type, election, event_date, rule, details_url)
+   VALUES ('ballot_return_deadline', 'probe_2027', '2027-01-05', 'whenever', 'https://x.example');`,
+  /election_event_rule_check/
+);
+await expectConstraintViolation(
+  "a deadline may not be stored without a rule",
+  `INSERT INTO election_event (event_type, election, event_date, details_url)
+   VALUES ('ballot_return_deadline', 'probe_2027', '2027-01-05', 'https://x.example');`,
+  /election_event_rule_required_check/
+);
+await expectConstraintViolation(
+  "a non-deadline may not carry a rule",
+  `INSERT INTO election_event (event_type, election, event_date, rule, details_url)
+   VALUES ('election_day', 'probe_2027', '2027-01-05', 'received_by', 'https://x.example');`,
+  /election_event_rule_required_check/
+);
+await check("0021 seeded a ballot_return_deadline on election day for both elections", async () => {
+  const r = await db.query(
+    `SELECT e.election, e.rule, e.event_date = d.event_date AS same_day
+       FROM election_event e
+       JOIN election_event d
+         ON d.election = e.election AND d.event_type = 'election_day'
+      WHERE e.event_type = 'ballot_return_deadline' ORDER BY e.election;`
+  );
+  if (r.rows.length !== 2) throw new Error(`expected 2 rows, saw ${r.rows.length}`);
+  for (const row of r.rows) {
+    if (!row.same_day) throw new Error(`${row.election}: return deadline is not election day`);
+    if (row.rule !== "received_by") throw new Error(`${row.election}: rule is ${row.rule}`);
+  }
+});
+await check("every seeded deadline carries a rule and nothing else does", async () => {
+  const r = await db.query(
+    `SELECT count(*) FILTER (
+       WHERE event_type IN ('registration_deadline','vbm_request_deadline','ballot_return_deadline')
+         AND rule IS NULL)::int AS missing,
+            count(*) FILTER (
+       WHERE event_type IN ('early_voting_start','early_voting_end','election_day')
+         AND rule IS NOT NULL)::int AS spurious
+       FROM election_event;`
+  );
+  const { missing, spurious } = r.rows[0];
+  if (missing !== 0) throw new Error(`${missing} deadline row(s) with no rule`);
+  if (spurious !== 0) throw new Error(`${spurious} non-deadline row(s) carrying a rule`);
+});
 await check("send_log ON CONFLICT DO NOTHING dedupes", async () => {
   await db.exec(
     `INSERT INTO notification_send_log (dedupe_key, recipient_count)
@@ -721,6 +818,113 @@ await check("send_log ON CONFLICT DO NOTHING dedupes", async () => {
   if (r.rows[0].n !== 1 || r.rows[0].c !== 1)
     throw new Error(`expected 1 untouched row, saw n=${r.rows[0].n} c=${r.rows[0].c}`);
 });
+
+/* 0018_publication_audit (invariant 17). The flip and its audit row are one
+   statement, so the pair either both happened or neither did. These pin the
+   properties that make the log trustworthy rather than merely present. */
+await check("set_race_publication flips the status and logs it as one action", async () => {
+  await db.exec(
+    "SELECT set_race_publication('r-draft','published','op@example.com','audit test');"
+  );
+  const r = await db.query(`
+    SELECT rp.status, rp.published_at IS NOT NULL AS stamped,
+           a.actor, a.action, a.subject_kind, a.subject_ref,
+           a.subject_id IS NULL AS uuid_subject_null,
+           a.detail->>'prior_status' AS prior, a.detail->>'reason' AS reason
+      FROM race_publication rp
+      JOIN admin_action a ON a.subject_ref = rp.race_id
+     WHERE rp.race_id = 'r-draft';`);
+  if (r.rows.length !== 1) throw new Error(`expected exactly 1 audit row, saw ${r.rows.length}`);
+  const g = r.rows[0];
+  if (g.status !== "published") throw new Error(`status=${g.status}`);
+  if (!g.stamped) throw new Error("published_at was not stamped on the transition");
+  if (g.action !== "publish") throw new Error(`action=${g.action}`);
+  if (g.subject_kind !== "race_publication") throw new Error(`subject_kind=${g.subject_kind}`);
+  if (!g.uuid_subject_null) throw new Error("subject_id should be NULL for a text subject");
+  if (g.prior !== "draft") throw new Error(`prior_status=${g.prior}`);
+  if (g.reason !== "audit test") throw new Error(`reason=${g.reason}`);
+});
+
+await check("unpublishing logs an unpublish and keeps the last-published time", async () => {
+  const before = await db.query(
+    "SELECT published_at FROM race_publication WHERE race_id='r-draft';"
+  );
+  await db.exec(
+    "SELECT set_race_publication('r-draft','in_review','op@example.com','pulled back');"
+  );
+  const r = await db.query(`
+    SELECT rp.status, rp.published_at,
+           (SELECT action FROM admin_action WHERE subject_ref='r-draft'
+             ORDER BY created_at DESC, action LIMIT 1) AS latest_action,
+           (SELECT count(*)::int FROM admin_action WHERE subject_ref='r-draft') AS n
+      FROM race_publication rp WHERE rp.race_id='r-draft';`);
+  const g = r.rows[0];
+  if (g.status !== "in_review") throw new Error(`status=${g.status}`);
+  if (String(g.published_at) !== String(before.rows[0].published_at))
+    throw new Error("published_at must survive an unpublish");
+  if (g.latest_action !== "unpublish") throw new Error(`latest_action=${g.latest_action}`);
+  if (g.n !== 2) throw new Error(`expected 2 audit rows, saw ${g.n}`);
+});
+
+/* A row that says who but not why is the record we already had in
+   race_publication.note, and it is not enough after the fact. */
+await expectConstraintViolation(
+  "set_race_publication requires an actor",
+  "SELECT set_race_publication('r-pub','published','','because');",
+  /actor is required/
+);
+await expectConstraintViolation(
+  "set_race_publication requires a reason",
+  "SELECT set_race_publication('r-pub','published','op@example.com','   ');",
+  /reason is required/
+);
+await expectConstraintViolation(
+  "set_race_publication rejects an unknown status",
+  "SELECT set_race_publication('r-pub','live','op@example.com','because');",
+  /invalid status/
+);
+await expectConstraintViolation(
+  "set_race_publication refuses a race with no publication row",
+  "SELECT set_race_publication('r-nope','published','op@example.com','because');",
+  /no race_publication row/
+);
+
+/* 0020: the door is the only way in. service_role holds no direct UPDATE, and
+   the flip above still worked — SECURITY DEFINER runs the function as postgres,
+   which does. Asserting both is the point: the revoke is only safe because the
+   second half holds, so a change that broke it must fail here. */
+await expectDenied(
+  "service_role cannot UPDATE race_publication directly (0020)",
+  "UPDATE race_publication SET status='draft' WHERE race_id='r-pub';"
+);
+await expectDenied(
+  "service_role cannot even touch race_publication.note directly (0020)",
+  "UPDATE race_publication SET note='x' WHERE race_id='r-pub';"
+);
+await check("the door still flips without the privilege it just lost", async () => {
+  await db.exec(
+    "SELECT set_race_publication('r-pub','in_review','op@example.com','door survives the revoke');"
+  );
+  const r = await db.query("SELECT status FROM race_publication WHERE race_id='r-pub';");
+  if (r.rows[0].status !== "in_review") throw new Error(`status=${r.rows[0].status}`);
+  await db.exec(
+    "SELECT set_race_publication('r-pub','published','op@example.com','restore fixture');"
+  );
+});
+
+/* The subject is exactly one of the two identifier columns — never both,
+   never neither, so a reader always knows which key to join on. */
+await expectConstraintViolation(
+  "admin_action rejects a row with neither subject identifier",
+  "INSERT INTO admin_action (actor, action, subject_kind) VALUES ('x','publish','race_publication');",
+  /admin_action_subject_one_of/
+);
+await expectConstraintViolation(
+  "admin_action rejects a row with both subject identifiers",
+  `INSERT INTO admin_action (actor, action, subject_kind, subject_id, subject_ref)
+   VALUES ('x','publish','race_publication', gen_random_uuid(), 'r-pub');`,
+  /admin_action_subject_one_of/
+);
 
 await db.exec("RESET ROLE;");
 
@@ -796,6 +1000,12 @@ await expectDenied(
 await expectDenied(
   "cap_tool_wrapper cannot UPDATE race_publication",
   "UPDATE race_publication SET status='published' WHERE race_id='r-draft';"
+);
+/* 0018: and it cannot reach the same flip through the new door either —
+   0009's rule is that publication never moves through a tool call. */
+await expectDenied(
+  "cap_tool_wrapper cannot EXECUTE set_race_publication",
+  "SELECT set_race_publication('r-draft','published','x@x.com','because');"
 );
 await expectDenied(
   "cap_tool_wrapper cannot read voting_info_subscription (PII)",

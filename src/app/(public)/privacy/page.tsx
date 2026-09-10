@@ -56,11 +56,11 @@ export default function PrivacyPage() {
         </p>
         <p className="text-body">
           That same signup also gets you a handful of deadline reminders by
-          email — voter registration, vote-by-mail request, early voting, and
-          election day. Every reminder contains only dates and official
-          links, every date is verified against its official source before
-          anything sends, and every email carries the same instant
-          unsubscribe link. Our send records store counts, never addresses.
+          email — voter registration, vote-by-mail request, early voting,
+          returning your vote-by-mail ballot, and election day. Every
+          reminder contains only dates and official links, every date is
+          verified against its official source before anything sends, and
+          every email carries the same instant unsubscribe link. Our send records store counts, never addresses.
           Prefer zero email? The same dates are available as a{" "}
           <a
             href="/api/calendar/general_2026.ics"
