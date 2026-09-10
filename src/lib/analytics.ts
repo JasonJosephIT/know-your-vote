@@ -13,9 +13,14 @@
    Comparisons across the ship date are misleading either way. The two events
    count different things before and after, and no renaming fixes that; the
    honest reading is a new funnel starting at ballot_viewed. */
+/* district_set fires whenever the voter establishes a district -- by address, by
+   ZIP, or from the picker. Its only prop is which of those three it was: a
+   method label, never a location. PRD § 12 forbids ZIP values in properties and
+   an address would be far worse. */
 export type AnalyticsEvent =
   | "ballot_viewed"
   | "zip_resolved"
+  | "district_set"
   | "brief_viewed"
   | "quiz_completed"
   | "candidate_saved"

@@ -3,9 +3,11 @@ import { DeadlineBanner } from "@/components/features/DeadlineBanner";
 import { InstallCard } from "@/components/features/InstallCard";
 import { SharedBallot } from "@/components/features/SharedBallot";
 import { TrackView } from "@/components/features/TrackView";
-import { ZipEntry } from "@/components/features/ZipEntry";
+import { LocationEntry } from "@/components/features/LocationEntry";
 import { getActiveMeasures } from "@/lib/measures";
 import { getStatewideRaces } from "@/lib/races";
+import { getCoveredDistricts } from "@/lib/resolve";
+import { placesConfigured } from "@/lib/geocode";
 
 /* Ballot first, ZIP optional (TASK-067).
 
@@ -28,9 +30,10 @@ export default async function Home() {
      Deliberately mounted here rather than inside SharedBallot: the tracker is
      a client component, and SharedBallot's whole point is that nothing it
      reaches needs JavaScript. verify-shared-ballot enforces exactly that. */
-  const [races, measures] = await Promise.all([
+  const [races, measures, districts] = await Promise.all([
     getStatewideRaces(),
     getActiveMeasures(),
+    getCoveredDistricts(),
   ]);
   const ballotRendered = races.length > 0 || measures.length > 0;
 
@@ -57,13 +60,18 @@ export default async function Home() {
               in ten seconds — rather than a broader "we never see it", which
               a request the server answers cannot honestly make. */}
           <p className="text-caption text-on-surface-muted">
-            Your congressional district race is the one part of your ballot
-            that isn&apos;t on this list, because it depends on where you live.
-            Add your ZIP and we&apos;ll add it — or skip it and read the rest.
-            We use it to find your district; nothing is saved on your device.
+            Your congressional district race is the one part of your ballot that
+            isn&apos;t on this list, because it depends on where you live. Add
+            your ZIP and we&apos;ll add it — or skip it and read the rest. We
+            use it to find your district; nothing is saved on your device.
           </p>
         </div>
-        <ZipEntry submitLabel="Add my House race" placeholder="Your ZIP code" />
+        <LocationEntry
+          submitLabel="Add my House race"
+          placeholder="Your address or ZIP code"
+          addressEnabled={placesConfigured()}
+          districts={districts}
+        />
       </section>
 
       <InstallCard />
@@ -71,11 +79,17 @@ export default async function Home() {
       <p className="text-caption text-on-surface-muted">
         We describe what each candidate says, has done, and what&apos;s
         verified. You decide.{" "}
-        <Link href="/methodology" className="underline underline-offset-2 hover:text-on-surface">
+        <Link
+          href="/methodology"
+          className="underline underline-offset-2 hover:text-on-surface"
+        >
           How we stay fair
         </Link>{" "}
         ·{" "}
-        <Link href="/privacy" className="underline underline-offset-2 hover:text-on-surface">
+        <Link
+          href="/privacy"
+          className="underline underline-offset-2 hover:text-on-surface"
+        >
           Privacy
         </Link>
       </p>
