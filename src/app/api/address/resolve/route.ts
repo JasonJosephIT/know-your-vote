@@ -1,19 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
-import { placeLocation, placesConfigured } from "@/lib/geocode";
 import { blockForCoordinates } from "@/lib/census-block";
 import { resolveBlock, resolveDistrict } from "@/lib/resolve";
 import type { ResolveResult } from "@/types/app";
 
-/* Place -> coordinate -> census block -> district -> ballot.
+/* Coordinate -> census block -> district -> ballot.
 
-   The address is never part of this: the request carries a place id, Google
-   answers with a coordinate, and Census sees only that coordinate. Nothing on
-   this path is logged or stored. */
+   No address is on this path at all. Pelias returned the coordinate alongside
+   the suggestion, so the browser posts the coordinate of the address the voter
+   picked and the Census Bureau sees only that. Nothing here is logged or
+   stored.
+
+   Trusting a client-supplied coordinate costs nothing: the district picker
+   already lets anyone choose any district outright, so there is no privilege to
+   escalate -- only a ballot to look at. The bounds check below is a sanity
+   guard against nonsense, not a security control. */
 const body = z.object({
-  placeId: z.string().min(1).max(300),
-  sessionToken: z.string().uuid(),
+  lat: z.number().gte(24.3963).lte(31.0011),
+  lon: z.number().gte(-87.6349).lte(-79.9743),
 });
 
 const OUT_OF_COVERAGE: ResolveResult = {
@@ -35,13 +40,6 @@ export async function POST(request: NextRequest) {
       { status: 429 }
     );
   }
-  if (!placesConfigured()) {
-    return NextResponse.json(
-      { error: "Address lookup is unavailable." },
-      { status: 503 }
-    );
-  }
-
   let parsed;
   try {
     parsed = body.safeParse(await request.json());
@@ -53,21 +51,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const place = await placeLocation(
-      parsed.data.placeId,
-      parsed.data.sessionToken
-    );
-    if (!place) {
-      return NextResponse.json(
-        {
-          error:
-            "We couldn't pin that address — try your ZIP or pick your district.",
-        },
-        { status: 502 }
-      );
-    }
-
-    const block = await blockForCoordinates(place.lat, place.lng);
+    const block = await blockForCoordinates(parsed.data.lat, parsed.data.lon);
     if (!block) {
       return NextResponse.json(
         {

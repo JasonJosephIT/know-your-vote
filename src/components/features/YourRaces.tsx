@@ -12,7 +12,7 @@ import {
   resolveZip,
   ZIP_RE,
 } from "@/lib/resolve";
-import { placesConfigured } from "@/lib/geocode";
+import { geocoderConfigured } from "@/lib/geocode";
 import type { ResolveResult } from "@/types/app";
 
 const DISTRICT_RE = /^FL-\d{1,2}$/;
@@ -72,7 +72,7 @@ export async function YourRaces({
           Add your ZIP and we&apos;ll show every race on your ballot.
         </p>
         <LocationEntry
-          addressEnabled={placesConfigured()}
+          addressEnabled={geocoderConfigured()}
           districts={districts}
         />
       </div>
@@ -88,7 +88,7 @@ export async function YourRaces({
           county:
         </p>
         <LocationEntry
-          addressEnabled={placesConfigured()}
+          addressEnabled={geocoderConfigured()}
           districts={districts}
         />
       </div>
@@ -104,7 +104,7 @@ export async function YourRaces({
           we&apos;ll ask which district is yours:
         </p>
         <LocationEntry
-          addressEnabled={placesConfigured()}
+          addressEnabled={geocoderConfigured()}
           districts={districts}
         />
       </div>
