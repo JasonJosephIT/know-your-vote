@@ -12,9 +12,16 @@
 
 ## Status — built 2026-09-09
 
-Tasks 0–13 are **done and committed** on `claude/address-district-lookup`. Task
-14 (the live gate) is the only one left and needs a founder: it cannot start
-without a billing-enabled Google Cloud project.
+Tasks 0–13 are **done and committed** on `claude/address-district-lookup`
+(PR #44). Task 14 (the live gate) is the only one left and needs a founder: it
+cannot start without a billing-enabled Google Cloud project.
+
+**`0024`, `0025` and `0026` are applied live** (2026-09-10, project
+`pqracitpmzpiqfnzlngw`). The seed was checked byte-exact, not merely present: an
+`md5` over the sorted rows in the database is `82072f50e7b5fdd5ee93ad1b65a12741`,
+identical to the digest computed from the repo file. Block `120860036061055` —
+what the Census geocoder returns for 444 SW 2nd Ave, Miami — resolves to `FL-27`
+in production, and `anon` can read all 982 rows but is refused on INSERT.
 
 Verified along the way, on a machine with **no `.env.local` and no Google key**:
 
