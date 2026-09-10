@@ -32,10 +32,13 @@ migration `0005` (applied 2026-07-04), and not one row has ever been written.
 > `news-fairness.md` (N2–N7) styles, selects from, and audits a table that is
 > currently empty.
 
-**Goal:** for each `ballot`-tier candidate in the eight target races, keep a
-current set of sourced, neutrally-worded, lean-labelled news items in
-`news_item`, written by a scheduled agent and gated by the existing operator
-queue.
+**Goal:** for each `ballot`-tier candidate in the target races — five
+statewide/at-large races (Gov/AG/CFO/AgComm + U.S. Senate) + sixteen U.S.
+House districts under D-A (founder 2026-09-07, `intake.py`
+`_NO_DISTRICT_RACES` + `_TARGET_US_HOUSE`) — twenty-one races — keep a
+current set of sourced,
+neutrally-worded, lean-labelled news items in `news_item`, written by a
+scheduled agent and gated by the existing operator queue.
 
 **Why the table is empty (C0):** R1 (`cap-r1-candidate-news`) ran on
 2026-07-03 (dry), 07-06, 07-15 and 09-01. Each run read the 8 published races,

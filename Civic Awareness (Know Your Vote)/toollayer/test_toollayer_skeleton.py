@@ -820,7 +820,9 @@ def _doe_row(acct, office, desc, juris, status, party, last, first, middle="",
 # the fixture below deliberately contains none.
 _DOE_FIXTURE = "\n".join([
     _DOE_HEADER,
-    _doe_row("89070", "USR", "United States Representative", "023", "QUA", "REP", "Adeimy", "Deborah"),
+    # 022 (Broward) is one of the twelve districts D-A added; it was skipped
+    # under the old four-district set.
+    _doe_row("89070", "USR", "United States Representative", "022", "QUA", "REP", "Adeimy", "Deborah"),
     # UNO is FL-10's real shape: the file's only unopposed row.
     _doe_row("89111", "USR", "United States Representative", "010", "UNO", "DEM", "Smith", "Jane", "Q"),
     _doe_row("89222", "USR", "United States Representative", "001", "QUA", "REP", "Doe", "John"),   # non-target
@@ -834,7 +836,7 @@ _DOE_FIXTURE = "\n".join([
     # The post-primary case B1 found 83 of: a defeated filer still in the file.
     _doe_row("89555", "USR", "United States Representative", "028", "DEF", "DEM", "Lost", "Lee"),
     # Qualified write-in: blank ballot line, so excluded from the race (D1).
-    _doe_row("89666", "USR", "United States Representative", "023", "QUA", "WRI", "Penn", "Wri"),
+    _doe_row("89666", "USR", "United States Representative", "022", "QUA", "WRI", "Penn", "Wri"),
     # Status beats party: a write-in that did not qualify is excluded for
     # that, not filed as a write-in.
     _doe_row("89888", "USR", "United States Representative", "028", "DNQ", "WRI", "Nope", "Nora"),
@@ -863,11 +865,76 @@ class TestIntakeDoEParser(unittest.TestCase):
     def test_filters_to_target_races_and_drops_nontarget(self):
         p = intake.parse_candidate_list(_DOE_FIXTURE)
         self.assertEqual(sorted(p["races"]), [
-            "FL-10-general", "FL-15-general", "FL-23-general", "FL-28-general",
+            "FL-10-general", "FL-15-general", "FL-22-general", "FL-28-general",
             "FL-GOV-general", "FL-SEN-general"])
         self.assertEqual(len(p["candidates"]), 11)
         self.assertEqual(p["skipped"], 1)  # FL-01 is not a target
 
+    def test_newly_covered_district_is_now_parsed(self):
+        """D-A (founder 2026-09-07): the enacted map puts Broward's district
+        22 among the sixteen covered districts, where the old four-district
+        set had it falling through to `skipped`."""
+        row = _doe_row("91010", "USR", "United States Representative", "022",
+                       "QUA", "REP", "Newly", "Nadia")
+        p = intake.parse_candidate_list("\n".join([_DOE_HEADER, row]))
+        self.assertEqual(p["skipped"], 0)
+        self.assertEqual(p["races"]["FL-22-general"]["candidate_ids"],
+                         ["FL-DOE-91010"])
+        self.assertEqual(p["races"]["FL-22-general"]["district"], "22")
+
+    def test_usr_row_outside_the_sixteen_is_still_skipped(self):
+        """013 touches none of the four counties this app covers under the
+        enacted map, so widening to sixteen districts must not become
+        widening to every district."""
+        row = _doe_row("91011", "USR", "United States Representative", "013",
+                       "QUA", "REP", "Faraway", "Fred")
+        p = intake.parse_candidate_list("\n".join([_DOE_HEADER, row]))
+        self.assertEqual(p["skipped"], 1)
+        self.assertEqual(p["candidates"], [])
+        self.assertEqual(p["races"], {})
+
+    def test_fl23_is_no_longer_a_target_district(self):
+        """D-A (founder 2026-09-07): under the enacted map FL-23 falls in no
+        ZIP this app covers, so a 023 row -- which the old four-district set
+        targeted -- must now be skipped like any other non-target district."""
+        row = _doe_row("91012", "USR", "United States Representative", "023",
+                       "QUA", "REP", "Stale", "Sam")
+        p = intake.parse_candidate_list("\n".join([_DOE_HEADER, row]))
+        self.assertEqual(p["skipped"], 1)
+        self.assertEqual(p["candidates"], [])
+        self.assertNotIn("FL-23-general", p["races"])
+
+    def test_unpadded_juris_is_zero_padded_before_the_membership_test(self):
+        """Finding 1 (whole-branch review, pre-merge): _TARGET_US_HOUSE holds
+        zero-padded codes ("007" not "7"), and every district exercised so far
+        has been two- or three-digit, so a single-digit district has never hit
+        this path. The live 2026-09-07 roster (`git show
+        claude/ballots-handoff-docs-835025:docs/general-election/ballots/
+        roster_2026gen_public.json`) shows the DoE export itself zero-pads
+        Juris1num -- keys `USR|007|`, `USR|008|`, `USR|009|` -- so this is
+        insurance against a format change, not a fix for something observed
+        broken. Without the zfill, an unpadded "7" would fail the membership
+        test and the row would fall to `skipped`, same as any other
+        non-target district."""
+        row = _doe_row("91013", "USR", "United States Representative", "7",
+                       "QUA", "REP", "Unpadded", "Uma")
+        p = intake.parse_candidate_list("\n".join([_DOE_HEADER, row]))
+        self.assertEqual(p["skipped"], 0)
+        self.assertEqual(p["races"]["FL-7-general"]["candidate_ids"],
+                         ["FL-DOE-91013"])
+        self.assertEqual(p["races"]["FL-7-general"]["district"], "7")
+
+    def test_prepadded_juris_still_works(self):
+        """The live-export shape (see the test above): Juris1num already
+        zero-padded to three characters. Must keep working after the zfill is
+        added -- this is the case the branch has actually exercised."""
+        row = _doe_row("91014", "USR", "United States Representative", "007",
+                       "QUA", "REP", "Padded", "Pat")
+        p = intake.parse_candidate_list("\n".join([_DOE_HEADER, row]))
+        self.assertEqual(p["skipped"], 0)
+        self.assertEqual(p["races"]["FL-7-general"]["candidate_ids"],
+                         ["FL-DOE-91014"])
+        self.assertEqual(p["races"]["FL-7-general"]["district"], "7")
     def test_skip_breakdown_names_the_dropped_house_district(self):
         """The Senate hid inside an undifferentiated `skipped` for weeks. A
         district we choose not to carry is the same shape of omission, so the
@@ -918,9 +985,15 @@ class TestIntakeDoEParser(unittest.TestCase):
         of this test. Six makes an accidental match ~1/720, and the assertion
         can never false-fail on correct code because sorted input compares
         equal to a sorted expectation either way."""
-        rows = [("89901", "014"), ("89902", "002"), ("89903", "014"),
-                ("89904", "027"), ("89905", "009"), ("89906", "011"),
-                ("89907", "025")]
+        # Districts re-picked when D-A widened the target set to sixteen:
+        # main wrote this with 014/027/009/011/025, all of which are now
+        # CARRIED, so the test would have asserted the parser dropped races it
+        # keeps. These six (002, 004, 006, 013, 019, 023) are outside the
+        # sixteen, and 013 repeats so the dedupe half still has something to
+        # dedupe. Six, not two, for the reason in the docstring.
+        rows = [("89901", "013"), ("89902", "002"), ("89903", "013"),
+                ("89904", "023"), ("89905", "004"), ("89906", "006"),
+                ("89907", "019")]
         text = "\n".join([_DOE_HEADER] + [
             _doe_row(acct, "USR", "United States Representative", d,
                      "QUA", "REP", f"L{acct}", "First")
@@ -928,7 +1001,7 @@ class TestIntakeDoEParser(unittest.TestCase):
         ])
         p = intake.parse_candidate_list(text)
         self.assertEqual(p["dropped_us_house_districts"],
-                         ["002", "009", "011", "014", "025", "027"])
+                         ["002", "004", "006", "013", "019", "023"])
         self.assertEqual(p["skipped_detail"]["us_house_district_not_targeted"],
                          len(rows))
 
@@ -938,7 +1011,7 @@ class TestIntakeDoEParser(unittest.TestCase):
         jane = by_id["FL-DOE-89111"]
         self.assertEqual(jane["legal_name"], "Jane Q Smith")
         self.assertEqual(jane["party"], "DEM")
-        self.assertEqual(jane["qualifying_status"], "qualified")  # UNO -> qualified
+        self.assertEqual(jane["qualifying_status"], "unopposed")  # UNO -> unopposed
         # PII must not survive into the candidate row
         for pii in ("email", "phone", "Addr1", "City", "Zip"):
             self.assertNotIn(pii, jane)
@@ -988,8 +1061,8 @@ class TestIntakeDoEParser(unittest.TestCase):
         p = intake.parse_candidate_list(_DOE_FIXTURE)
         by_id = {c["candidate_id"]: c for c in p["candidates"]}
         self.assertEqual(by_id["FL-DOE-89666"]["ballot_status"], "write_in")
-        self.assertNotIn("FL-DOE-89666", p["races"]["FL-23-general"]["candidate_ids"])
-        self.assertEqual(p["races"]["FL-23-general"]["candidate_ids"], ["FL-DOE-89070"])
+        self.assertNotIn("FL-DOE-89666", p["races"]["FL-22-general"]["candidate_ids"])
+        self.assertEqual(p["races"]["FL-22-general"]["candidate_ids"], ["FL-DOE-89070"])
 
     def test_status_beats_party_for_a_disqualified_write_in(self):
         p = intake.parse_candidate_list(_DOE_FIXTURE)
@@ -1027,6 +1100,35 @@ class TestIntakeDoEParser(unittest.TestCase):
         self.assertEqual(p["skipped"], 2)
         self.assertEqual(p["candidates"], [])
         self.assertEqual(p["tiers"], {"ballot": 0, "write_in": 0, "excluded": 0})
+
+    def test_uno_survives_ingest_as_its_own_qualifying_status(self):
+        """D-B (founder 2026-09-07): carry the DoE's UNO code, do not derive
+        it. Collapsing UNO into `qualified` erased the one fact F.S. 101.151(7)
+        turns on -- nobody filed against this candidate, so the contest is not
+        printed on any ballot. The rejected alternative was inferring it from
+        "one ballot-tier candidate and no write-in", which is wrong for a race
+        whose other candidates withdrew AFTER qualifying: the survivor is QUA,
+        the ballot is already printed, and the derivation would hide it."""
+        p = intake.parse_candidate_list(_DOE_FIXTURE)
+        by_id = {c["candidate_id"]: c for c in p["candidates"]}
+        self.assertEqual(by_id["FL-DOE-89111"]["qualifying_status"], "unopposed")
+        # The QUA survivor case the derivation would have got wrong: same race
+        # shape (one ballot line), different fact.
+        self.assertEqual(by_id["FL-DOE-89070"]["qualifying_status"], "qualified")
+
+    def test_unopposed_is_still_a_ballot_tier_filing(self):
+        """The two axes stay independent. `qualifying_status` says why the
+        candidate is on the ballot; `ballot_status` says whether they get a
+        printed line at all. An unopposed candidate is elected to the office,
+        so they are briefed and audited like any other ballot line -- UNO
+        leaving `_ON_BALLOT_STATUS` would drop FL-10's only candidate off the
+        page entirely."""
+        self.assertIn("UNO", intake._ON_BALLOT_STATUS)
+        p = intake.parse_candidate_list(_DOE_FIXTURE)
+        by_id = {c["candidate_id"]: c for c in p["candidates"]}
+        self.assertEqual(by_id["FL-DOE-89111"]["ballot_status"], "ballot")
+        self.assertEqual(p["races"]["FL-10-general"]["candidate_ids"],
+                         ["FL-DOE-89111"])
 
     def test_every_tiered_status_code_has_a_qualifying_status(self):
         """The two maps are separate and must not drift. A code tiered by
@@ -1657,10 +1759,12 @@ class TestIntakeIncumbencyHandler(unittest.TestCase):
     def _parsed_for_race(self, race, candidates):
         """Bypass parse_candidate_list's DoE-file gate to hand
         `_incumbency_for_race` a race dict directly -- the parser only ever
-        emits `district` as `str(int(Juris1num))`, so a non-numeric or
-        single/unusual-width district can't arise from the ordinary DoE
-        pipeline (`_TARGET_US_HOUSE` only has 2-digit codes). This is the
-        shape a hand-edited or otherwise corrupted row would produce."""
+        emits `district` as `str(int(Juris1num))`, so a non-numeric district
+        can't arise from the ordinary DoE pipeline; this is the shape a
+        hand-edited or otherwise corrupted row would produce. (A single-digit
+        district can now arise ordinarily too -- Orange's 7/8/9 joined
+        `_TARGET_US_HOUSE` under the enacted 2026 map -- but the bypass below
+        keeps this fixture minimal for both cases.)"""
         def fake_parse(text):
             # Must carry every key the real parser emits, or this fake drifts
             # from the contract the handler reads and the drift shows up as a
@@ -1976,7 +2080,10 @@ class TestBalanceAudit(unittest.TestCase):
         """The defect this task exists to fix. A write-in has no public
         material, so it enters with zero claims -- (5-0)/5 is 100% variance
         against a 10% threshold, and the race HALTs permanently. B1 found at
-        least one such filer in every one of the eight target races."""
+        least one such filer in every one of the eight target races (then
+        Gov/AG/CFO/AgComm + FL-10/15/23/28). D-A (founder, 2026-09-07) has
+        since widened US House coverage to sixteen districts -- the finding
+        is unrestudied there."""
         db = FakeDb().prime_read([
             _profile("cand_001", "FL-15-general", 450, 5, 4, 5, 4),
             _profile("cand_002", "FL-15-general", 448, 5, 4, 5, 4),

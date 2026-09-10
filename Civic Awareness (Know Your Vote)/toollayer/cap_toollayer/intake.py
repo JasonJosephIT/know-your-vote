@@ -66,15 +66,17 @@ _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
 # thing that makes a race exist; check this map against the ballot, not
 # against the last run's counts.
 #
-# `_TARGET_US_HOUSE` below is the SAME SHAPE OF TRAP for districts, and as of
-# 2026-09-10 it still holds only the four districts the primary-era scope
-# covered. Twelve of the sixteen districts seeded in `zip_district` therefore
-# have no race at all, and the voter-facing consequence is measured in
-# docs/general-election/session-handoff-2026-09-08-map-coverage.md §1. Nothing
-# here decides which districts are right — that is a scope call — but the
-# parse result now reports WHICH districts it dropped rather than folding
-# them into one `skipped` total, so the next reader cannot miss it the way
-# the Senate was missed.
+# `_TARGET_US_HOUSE` below is the SAME SHAPE OF TRAP for districts. It held
+# only the four districts the primary-era scope covered until D-A widened it
+# to sixteen (the set below, landed with this merge) — so the twelve-district
+# gap that
+# docs/general-election/session-handoff-2026-09-08-map-coverage.md §1 measures
+# is closed at the parser. §1 still describes the gap as open; read it as the
+# record of why the set moved, not as current state. Nothing here decides
+# which districts are right — that is a scope call — but the parse result
+# reports WHICH districts it dropped rather than folding them into one
+# `skipped` total, so the next reader cannot miss it the way the Senate was
+# missed.
 _NO_DISTRICT_RACES = {
     "GOV": ("FL-GOV-general", "state"),
     "ATG": ("FL-ATG-general", "state"),
@@ -82,7 +84,22 @@ _NO_DISTRICT_RACES = {
     "AGR": ("FL-AGR-general", "state"),
     "USS": ("FL-SEN-general", "federal"),
 }
-_TARGET_US_HOUSE = {"010", "015", "023", "028"}
+# D-A (founder 2026-09-07): enacted-2026-map coverage. Candidates qualified
+# under this map in June 2026, and the four counties this app covers now
+# touch sixteen U.S. House districts -- not the four this set held before.
+# FL-23 leaves the set entirely: under the enacted map it falls in no ZIP
+# this app covers (docs/general-election/ballots-handoff.md section 4.2).
+# Grouped by county, so this can be checked against the handoff at a glance:
+_TARGET_US_HOUSE = {
+    # Orange (7, 8, 9, 10, 11)
+    "007", "008", "009", "010", "011",
+    # Hillsborough (12, 14, 15, 16)
+    "012", "014", "015", "016",
+    # Broward (20, 22, 24, 25, 26)
+    "020", "022", "024", "025", "026",
+    # Miami-Dade (27, 28)
+    "027", "028",
+}
 
 # D2 (founder 2026-09-07): no party map. The DoE PartyCode is stored verbatim
 # and the UI maps codes to labels with a raw-code fallback. The old
@@ -90,8 +107,18 @@ _TARGET_US_HOUSE = {"010", "015", "023", "028"}
 # ballot lines in the target races -- into one bucket. Migration 0013 drops the
 # CHECK that made the map necessary.
 
-# candidate.qualifying_status is CHECK-constrained to three values, so this map
-# is a real narrowing and not a display choice.
+# candidate.qualifying_status is CHECK-constrained, so this map is a real
+# narrowing and not a display choice. Migration 0023 widened the CHECK to four
+# values and MUST be applied before the next live run -- 'unopposed' below is
+# rejected by the original three-value constraint.
+#
+# D-B (founder 2026-09-07): UNO takes its own status rather than collapsing
+# into 'qualified'. Florida marks a candidate UNO when nobody filed against
+# them, and F.S. 101.151(7) then keeps the contest off the printed ballot
+# entirely. Collapsing the code erased the only evidence of that, and it cannot
+# be recovered downstream: a race whose other candidates withdrew after
+# qualifying looks identical -- one ballot line, no write-in -- but its ballot
+# is printed. The DoE publishes the distinction; the read model keeps it.
 #
 # XTL and DEC (added 2026-09-07) take 'other', not 'withdrawn': "Transferred to
 # Local" means the filing moved to a county office and "Deceased" means the
@@ -99,7 +126,7 @@ _TARGET_US_HOUSE = {"010", "015", "023", "028"}
 # social-account ingestion gate reads this column (CAP_Schema_v1.md), and a
 # withdrawal is a candidate's own act in a way that these two are not.
 _STATUS = {
-    "QUA": "qualified", "UNO": "qualified",
+    "QUA": "qualified", "UNO": "unopposed",
     "WIT": "withdrawn", "DEF": "withdrawn", "DNQ": "withdrawn", "REM": "withdrawn",
     "XTL": "other", "DEC": "other",
 }
@@ -108,6 +135,12 @@ _STATUS = {
 # second -- B1's whole-file cross-tab found WRI rows carrying DNQ, REM and WIT
 # as well as QUA, so a write-in that withdrew is excluded for withdrawing
 # rather than filed as a write-in.
+#
+# UNO stays in this set under D-B. The tier is a separate axis from
+# `qualifying_status`: an unopposed candidate holds the seat, so they are
+# briefed, audited and shown like any other ballot line -- the contest simply
+# is not printed. Move UNO out of here and FL-10's only candidate disappears
+# from the app.
 _ON_BALLOT_STATUS = frozenset({"QUA", "UNO"})
 # XTL "Transferred to Local" (7 legislative rows) and DEC "Deceased" (1 circuit
 # judge) were found in the live 20261103-GEN file on 2026-09-07 by the
@@ -214,9 +247,19 @@ def parse_candidate_list(text: str) -> dict:
         if office_code in _NO_DISTRICT_RACES:
             race_id, level = _NO_DISTRICT_RACES[office_code]
             district = None
-        elif office_code == "USR" and juris in _TARGET_US_HOUSE:
-            race_id = f"FL-{int(juris)}-general"
-            level, district = "federal", str(int(juris))
+        # zfill(3): _TARGET_US_HOUSE holds zero-padded codes ("007", not
+        # "7"), and the live 2026-09-07 roster (`git show
+        # claude/ballots-handoff-docs-835025:docs/general-election/ballots/
+        # roster_2026gen_public.json`, keys USR|007|, USR|008|, USR|009|)
+        # shows the DoE export itself zero-pads Juris1num, so an unpadded
+        # single-digit district has never actually reached this branch. This
+        # is belt-and-braces against a format change, not a fix for observed
+        # breakage -- and it cannot change the race IDs below: int() already
+        # strips leading zeros from any padded input, padded or not.
+        elif office_code == "USR" and juris.zfill(3) in _TARGET_US_HOUSE:
+            n = int(juris)
+            race_id = f"FL-{n}-general"
+            level, district = "federal", str(n)
         else:
             skipped += 1
             if office_code == "USR":
@@ -264,8 +307,10 @@ def parse_candidate_list(text: str) -> dict:
         # dropping it would make the exclusion invisible -- but they are not
         # part of the race, so they never reach the Balance Audit denominator
         # or a side-by-side. B1 measured 87 non-ballot names against 22 real
-        # ones, in every one of the eight races; without this line the
-        # pipeline HALTs on all of them forever.
+        # ones, in every one of the eight races (then Gov/AG/CFO/AgComm +
+        # FL-10/15/23/28); without this line the pipeline HALTs on all of
+        # them forever. D-A (founder, 2026-09-07) has since widened US House
+        # coverage to sixteen districts -- the finding is unrestudied there.
         if ballot_status == "ballot":
             race["candidate_ids"].append(candidate_id)
 

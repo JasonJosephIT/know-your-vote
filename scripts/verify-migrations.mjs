@@ -55,6 +55,9 @@
         or election_news row with source_id NULL is rejected; an
         official_link row with source_id NULL still inserts; a candidate_news
         row with a valid source_id inserts.
+    17. 0023_candidate_unopposed (decision D-B): candidate.qualifying_status
+        admits 'unopposed' and still rejects an unknown value, and exactly one
+        CHECK on that column survives — the widening cannot half-apply.
 
    Supabase provides the anon/authenticated/service_role roles out of the box;
    the harness creates them first so the same SQL runs in both environments.
@@ -257,6 +260,52 @@ await check("0013 ballot_status index exists", async () => {
     "SELECT count(*)::int AS n FROM pg_indexes WHERE tablename='candidate' AND indexname='idx_candidate_ballot_status';"
   );
   if (r.rows[0].n !== 1) throw new Error("idx_candidate_ballot_status missing");
+});
+/* --- 0023 (D-B). The DoE's UNO code has to survive ingest: nobody filed
+   against the candidate, so F.S. 101.151(7) keeps the contest off the printed
+   ballot. intake.py now writes 'unopposed', which the original three-value
+   CHECK from 0000 refuses. */
+await check("0023 qualifying_status admits unopposed", async () => {
+  await db.query(
+    `INSERT INTO candidate (candidate_id, legal_name, party, office_sought, qualifying_status)
+     VALUES ('c-uno','Uno Filer','DEM','United States Representative','unopposed');`
+  );
+  const r = await db.query(
+    "SELECT qualifying_status FROM candidate WHERE candidate_id = 'c-uno';"
+  );
+  if (r.rows[0]?.qualifying_status !== "unopposed") {
+    throw new Error(`stored ${r.rows[0]?.qualifying_status}, expected unopposed`);
+  }
+  await db.query("DELETE FROM candidate WHERE candidate_id = 'c-uno';");
+});
+await check("0023 widened the CHECK without opening it", async () => {
+  let rejected = false;
+  try {
+    await db.query(
+      `INSERT INTO candidate (candidate_id, legal_name, party, office_sought, qualifying_status)
+       VALUES ('c-bogus-status','Bogus','DEM','Governor','maybe');`
+    );
+  } catch (err) {
+    if (!/candidate_qualifying_status_check/.test(String(err))) throw err;
+    rejected = true;
+  }
+  if (!rejected) throw new Error("a fifth qualifying_status value was accepted");
+});
+/* The half-application 0023's own RAISE guards against, asserted from the
+   outside: the CHECK it replaces was created unnamed by 0000, so dropping the
+   wrong name would leave the old three-value constraint standing beside the
+   new one. Both would be enforced, every UNO row would still be rejected, and
+   the check above would be the only thing to notice. */
+await check("0023 leaves exactly one qualifying_status CHECK", async () => {
+  const r = await db.query(
+    `SELECT conname FROM pg_constraint
+      WHERE conrelid='candidate'::regclass AND contype='c'
+        AND pg_get_constraintdef(oid) ILIKE '%qualifying_status%';`
+  );
+  const names = r.rows.map((x) => x.conname);
+  if (names.length !== 1) {
+    throw new Error(`expected 1 qualifying_status CHECK, found ${names.length}: ${names.join(", ")}`);
+  }
 });
 await check("0017 news_item.relation exists and is nullable", async () => {
   const r = await db.query(

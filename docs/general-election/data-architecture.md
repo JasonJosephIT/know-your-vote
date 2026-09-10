@@ -85,15 +85,20 @@ incumbent with twelve is `(12-0)/12*100 = 100%` variance → **HALT**.
 > nothing publishes at all.**
 
 **B1 measured exactly how bad this is** (live DoE run 2026-09-06, per-race
-table in `data-ingest.md` §1). Across the eight target races:
+table in `data-ingest.md` §1). Across the eight target races B1 ran against —
+D-A (founder 2026-09-07) has since widened US House coverage from four
+districts to sixteen. Current scope is five statewide/at-large races
+(Gov/AG/CFO/AgComm + U.S. Senate, `FL-SEN-general`) + sixteen U.S. House
+districts — twenty-one races today, not eight:
 
 | | `ballot` | `write_in` | `excluded` |
 |---|---|---|---|
 | Candidates | **22** | **4** | **83** |
 
 Without the filter, **87 non-ballot names join 22 real ballot lines**. Every
-one of the eight target races carries at least one, so this is not an edge
-case to handle later — it is the ordinary case, in every race we cover.
+one of the eight races B1 measured carries at least one, so this is not an
+edge case to handle later — it is the ordinary case in the races B1 covered;
+D-A's twelve additional districts have not been measured.
 
 **Recommendation (adopt unless the founder objects):** three tiers, one column.
 
@@ -251,6 +256,17 @@ a no-op for current data.
 > municipal, and nonpartisan judicial contests — but the eight target races
 > (Gov/AG/CFO/AgComm + FL-10/15/23/28) are all federal or state, so the
 > constraint is not binding. Widen it if and only if coverage expands.
+>
+> ⚠️ **Coverage expanded under D-A (founder 2026-09-07) — the trigger this
+> note names actually fired.** Target races are now five statewide/at-large
+> (Gov/AG/CFO/AgComm + U.S. Senate, `FL-SEN-general`) + sixteen U.S. House
+> districts (`intake.py` `_NO_DISTRICT_RACES`, `_TARGET_US_HOUSE`),
+> twenty-one races, not eight. The conclusion still holds on today's facts:
+> all twenty-one remain federal or state — `FL-SEN-general` is level
+> `"federal"`, same as the sixteen U.S. House races, and the four cabinet
+> races stay `"state"` — no county, municipal, or judicial race entered
+> scope, so `race.level`'s CHECK is still not binding. Re-check this note
+> the next time coverage moves.
 
 ---
 
@@ -275,6 +291,19 @@ but "equal scrutiny" is vacuous with a sample of one, and a side-by-side view
 would render a single column implying a comparison that never happened. Record
 `unopposed` on the audit result and have the race view say so plainly. This
 ships in the first run — it cannot be deferred.
+
+> ⚠️ **This assumed the race still appears on the ballot; D-B says otherwise
+> for a true `UNO`.** `result["unopposed"]` here is the audit's own flag —
+> "there was one candidate to look at" — and a race whose other candidates
+> withdrew *after* qualifying sets it too, even though that race's ballot
+> **is** printed. Under D-B (founder 2026-09-07) the DoE's `UNO` code is
+> carried as its own value, `candidate.qualifying_status = 'unopposed'`
+> (migration `0023` widens the CHECK to allow it; `data-ingest.md` §1), and
+> only a true `UNO` means the contest is not printed at all (F.S.
+> 101.151(7)). The two facts read the same off `len(audited) == 1` but are
+> not the same claim — "nothing to compare" is not "not on your ballot" —
+> so the race view (`src/lib/unopposed.ts`) checks the stronger, carried fact
+> first and falls back to this section's weaker one only when it doesn't hold.
 
 ---
 
