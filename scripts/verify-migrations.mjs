@@ -33,6 +33,12 @@
         claims (published or not — traceability needs both) but writes
         nothing; anon has zero log access; the log is append-only even
         for service_role; the agent_id/status/bucket CHECKs hold.
+    18. 0020_publication_door_only: anon/authenticated hold no EXECUTE on
+        set_race_publication even with Supabase's default privileges in
+        force (0018 granted it to them on the live project and this file
+        said otherwise); service_role holds no direct UPDATE on
+        race_publication, not even on `note`; and the SECURITY DEFINER
+        function still flips without it.
     17. 0018_publication_audit: set_race_publication flips race_publication
         and writes its admin_action row in one statement; published_at is
         stamped entering publication and survives leaving it; actor, reason
@@ -107,6 +113,15 @@ await db.exec(`
   CREATE ROLE authenticated NOLOGIN;
   CREATE ROLE service_role NOLOGIN BYPASSRLS;
   GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+  /* Supabase's default privileges, modelled deliberately. Without these the
+     harness is more permissive than production is: every migration's explicit
+     REVOKE looks redundant, and an object that forgets one still passes here
+     while shipping open. That is exactly how 0018 shipped set_race_publication
+     with EXECUTE granted to anon — a SECURITY DEFINER function owned by
+     postgres — and this file said it was denied. 0020 has the post-mortem. */
+  ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO anon, authenticated, service_role;
+  ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO anon, authenticated, service_role;
+  ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO anon, authenticated, service_role;
 `);
 
 const files = (await readdir(migrationsDir)).filter((f) => f.endsWith(".sql")).sort();
@@ -757,6 +772,29 @@ await expectConstraintViolation(
   "SELECT set_race_publication('r-nope','published','op@example.com','because');",
   /no race_publication row/
 );
+
+/* 0020: the door is the only way in. service_role holds no direct UPDATE, and
+   the flip above still worked — SECURITY DEFINER runs the function as postgres,
+   which does. Asserting both is the point: the revoke is only safe because the
+   second half holds, so a change that broke it must fail here. */
+await expectDenied(
+  "service_role cannot UPDATE race_publication directly (0020)",
+  "UPDATE race_publication SET status='draft' WHERE race_id='r-pub';"
+);
+await expectDenied(
+  "service_role cannot even touch race_publication.note directly (0020)",
+  "UPDATE race_publication SET note='x' WHERE race_id='r-pub';"
+);
+await check("the door still flips without the privilege it just lost", async () => {
+  await db.exec(
+    "SELECT set_race_publication('r-pub','in_review','op@example.com','door survives the revoke');"
+  );
+  const r = await db.query("SELECT status FROM race_publication WHERE race_id='r-pub';");
+  if (r.rows[0].status !== "in_review") throw new Error(`status=${r.rows[0].status}`);
+  await db.exec(
+    "SELECT set_race_publication('r-pub','published','op@example.com','restore fixture');"
+  );
+});
 
 /* The subject is exactly one of the two identifier columns — never both,
    never neither, so a reader always knows which key to join on. */
