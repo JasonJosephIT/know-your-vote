@@ -271,7 +271,16 @@ def parse_candidate_list(text: str) -> dict:
         elif office_code == "USR" and juris.zfill(3) in _TARGET_US_HOUSE:
             n = int(juris)
             race_id = f"FL-{n}-general"
-            level, district = "federal", str(n)
+            # `FL-nn`, not the bare number: this value is written to
+            # race.district, and the app resolves a voter by joining it
+            # against zip_district / block_district, both of which store
+            # `FL-27`. A bare "27" parses and stores fine and then matches
+            # NOTHING -- every U.S. House race would exist in the table and be
+            # unreachable from a ZIP or an address, with no error anywhere.
+            # (Checked live 2026-09-10: the join yields 65 rows as `FL-nn` and
+            # 0 as bare numbers.) The FEC district parameter still needs the
+            # bare two-digit form and derives it back in _incumbency_for_race.
+            level, district = "federal", f"FL-{n}"
         else:
             skipped += 1
             if office_code == "USR":
@@ -829,13 +838,13 @@ def build_intake_handlers(
             roster = [dict(c, fec_id=by_stored_id[c.get("candidate_id")])
                       if c.get("candidate_id") in by_stored_id else c
                       for c in roster]
-        # `district` is two digits on the wire; parse_candidate_list has
-        # already stripped the leading zero for the race_id. A federal race
-        # is guaranteed a truthy `district` by the guard above, but not
-        # necessarily a numeric one -- refuse rather than let a stray
+        # `district` is two digits on the wire; the race row carries it as
+        # `FL-nn` (the shape the app joins on), so the prefix comes off here.
+        # A federal race is guaranteed a truthy `district` by the guard above,
+        # but not necessarily a numeric one -- refuse rather than let a stray
         # ValueError escape this handler uncaught.
         try:
-            district_param = f"{int(race['district']):02d}"
+            district_param = f"{int(str(race['district']).removeprefix('FL-')):02d}"
         except (TypeError, ValueError):
             return _refused(race_id, [
                 f"district {race.get('district')!r} on federal race "

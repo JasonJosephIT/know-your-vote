@@ -36,6 +36,33 @@ succeeded and a ballot that did not grow.
 | Orange (Orlando) | 45 | 0 | 0 | **45** |
 | **Total** | **235** | **47** | **27** | **161** |
 
+> **Update 2026-09-10 — the data half is closed, the visible half is not.**
+> An intake run against the live DoE export for `20261103-GEN` created race
+> rows for all **16** covered districts (21 races, 247 candidates). The "no race
+> row" cause behind this table is gone: **235 of 235** covered ZIPs now resolve
+> to a district that has a race row, Orlando included.
+>
+> The table above counts *voter-visible* races, and it has moved — downward.
+> The nine `demo-*` races were retired to `draft` on 2026-09-10 (founder
+> request): they were fabricated candidates — "Gregory Boone", "Marta
+> Villanueva" — published as real 2026 ballot lines. **Nothing is published
+> now**, so 0 of 235 ZIPs reach a visible race, and the app shows its honest
+> "the ballot isn't published yet" state.
+>
+> The 21 real races cannot be published in their place yet, and the blocker is
+> not the publication flip. `getRaceBrief` returns `null` unless **every**
+> ballot-tier profile carries `audit.balance_check_passed === true`
+> (`src/lib/briefs.ts:172`, FR-005). The 247 intake candidates have **no
+> `profile` rows at all**, so publishing them would produce races whose pages
+> render nothing. The only way to make them pass today would be to write that
+> audit flag by hand, which fabricates the product's central claim — so the
+> gate stands. What clears it is the R1–R4 pipeline producing real profiles,
+> claims and a genuine Balance Audit.
+>
+> Getting here required a parser fix (PR #45): `parse_candidate_list` wrote
+> `race.district` as a bare `"27"` while `zip_district` and `block_district`
+> store `FL-27`, so the races it created would have joined to nothing.
+
 **The entire Orlando metro is in the "never" column.** It is one of the four
 metros the out-of-coverage copy names by name as somewhere we *do* cover
 (`ZipEntry.tsx:132`, `YourRaces.tsx:67`).
