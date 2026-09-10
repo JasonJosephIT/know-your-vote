@@ -1,11 +1,15 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { DISTRICT_COOKIE, parseDistrictCookie } from "@/lib/district-cookie";
 import { DeadlineBanner } from "@/components/features/DeadlineBanner";
 import { InstallCard } from "@/components/features/InstallCard";
 import { SharedBallot } from "@/components/features/SharedBallot";
 import { TrackView } from "@/components/features/TrackView";
-import { ZipEntry } from "@/components/features/ZipEntry";
+import { LocationEntry } from "@/components/features/LocationEntry";
 import { getActiveMeasures } from "@/lib/measures";
 import { getStatewideRaces } from "@/lib/races";
+import { getCoveredDistricts } from "@/lib/resolve";
+import { placesConfigured } from "@/lib/geocode";
 
 /* Ballot first, ZIP optional (TASK-067).
 
@@ -28,10 +32,19 @@ export default async function Home() {
      Deliberately mounted here rather than inside SharedBallot: the tracker is
      a client component, and SharedBallot's whole point is that nothing it
      reaches needs JavaScript. verify-shared-ballot enforces exactly that. */
-  const [races, measures] = await Promise.all([
+  const [races, measures, districts] = await Promise.all([
     getStatewideRaces(),
     getActiveMeasures(),
+    getCoveredDistricts(),
   ]);
+
+  /* The saved district. Reading cookies opts this route into dynamic rendering,
+     which is why only this page and /candidates do it — the data behind the
+     ballot still comes through unstable_cache, so what changes is the shell, not
+     the queries. */
+  const saved = parseDistrictCookie(
+    (await cookies()).get(DISTRICT_COOKIE)?.value
+  );
   const ballotRendered = races.length > 0 || measures.length > 0;
 
   return (
@@ -48,22 +61,50 @@ export default async function Home() {
       <SharedBallot />
 
       <section className="flex flex-col gap-3 border-t border-border pt-6">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-h3">Add your U.S. House race</h2>
-          {/* The storage claim TASK-067 deliberately withheld. It is true as
-              of TASK-070: kyv.location is gone, so a ZIP reaches the district
-              lookup and the URL and nothing else on the device. Deliberately
-              scoped to the device — the claim a skeptic can check in devtools
-              in ten seconds — rather than a broader "we never see it", which
-              a request the server answers cannot honestly make. */}
-          <p className="text-caption text-on-surface-muted">
-            Your congressional district race is the one part of your ballot
-            that isn&apos;t on this list, because it depends on where you live.
-            Add your ZIP and we&apos;ll add it — or skip it and read the rest.
-            We use it to find your district; nothing is saved on your device.
-          </p>
-        </div>
-        <ZipEntry submitLabel="Add my House race" placeholder="Your ZIP code" />
+        {saved ? (
+          <>
+            <div className="flex flex-col gap-1">
+              <h2 className="text-h3">Your U.S. House race</h2>
+              <p className="text-caption text-on-surface-muted">
+                You&apos;re set to {saved.district}. That&apos;s the one part of
+                your ballot that depends on where you live — the rest of this
+                page is the same for every Florida voter. We remember the
+                district, never your address or ZIP; the chip at the top of the
+                page changes it or forgets it.
+              </p>
+            </div>
+            <Link
+              href={`/candidates?view=races&district=${saved.district}&county=${saved.countyFips}`}
+              className="w-fit text-body-sm text-primary underline underline-offset-2 hover:text-primary-hover"
+            >
+              See your full ballot for {saved.district}
+            </Link>
+          </>
+        ) : (
+          <>
+            <div className="flex flex-col gap-1">
+              <h2 className="text-h3">Add your U.S. House race</h2>
+              {/* The storage claim, rewritten for the district cookie. TASK-070
+                  removed kyv.location and this line said nothing was saved on
+                  the device; that stopped being true when the district became
+                  something we remember. What is still true, and is the sharper
+                  claim, is that the address and the ZIP are never kept. */}
+              <p className="text-caption text-on-surface-muted">
+                Your congressional district race is the one part of your ballot
+                that isn&apos;t on this list, because it depends on where you
+                live. Give us your address or ZIP and we&apos;ll add it — or
+                skip it and read the rest. We use it to find your district and
+                keep only the district itself, never the address or the ZIP.
+              </p>
+            </div>
+            <LocationEntry
+              submitLabel="Add my House race"
+              placeholder="Your address or ZIP code"
+              addressEnabled={placesConfigured()}
+              districts={districts}
+            />
+          </>
+        )}
       </section>
 
       <InstallCard />
@@ -71,11 +112,17 @@ export default async function Home() {
       <p className="text-caption text-on-surface-muted">
         We describe what each candidate says, has done, and what&apos;s
         verified. You decide.{" "}
-        <Link href="/methodology" className="underline underline-offset-2 hover:text-on-surface">
+        <Link
+          href="/methodology"
+          className="underline underline-offset-2 hover:text-on-surface"
+        >
           How we stay fair
         </Link>{" "}
         ·{" "}
-        <Link href="/privacy" className="underline underline-offset-2 hover:text-on-surface">
+        <Link
+          href="/privacy"
+          className="underline underline-offset-2 hover:text-on-surface"
+        >
           Privacy
         </Link>
       </p>

@@ -2,11 +2,20 @@ import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { BallotQuestions } from "@/components/features/BallotQuestions";
 import { VotingInfo } from "@/components/features/VotingInfo";
-import { ZipEntry } from "@/components/features/ZipEntry";
+import { LocationEntry } from "@/components/features/LocationEntry";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { districtRaceMissing } from "@/lib/coverage";
-import { resolveCounty, resolveZip, ZIP_RE } from "@/lib/resolve";
+import {
+  getCoveredDistricts,
+  resolveCounty,
+  resolveDistrict,
+  resolveZip,
+  ZIP_RE,
+} from "@/lib/resolve";
+import { placesConfigured } from "@/lib/geocode";
 import type { ResolveResult } from "@/types/app";
+
+const DISTRICT_RE = /^FL-\d{1,2}$/;
 
 /* The "Your races" view inside the Candidates hub: ZIP/county in, the
    voter's ballot out. Formerly the standalone /races page. */
@@ -43,9 +52,15 @@ export async function YourRaces({
   district?: string;
   county?: string;
 }) {
+  const districts = await getCoveredDistricts();
+
   let result: ResolveResult | null = null;
   if (zip && ZIP_RE.test(zip)) {
     result = await resolveZip(zip, district);
+  } else if (district && DISTRICT_RE.test(district) && county) {
+    /* An address result, a confirmed ZIP, or the saved district — the district
+       is already known, so there is nothing to look up but the races. */
+    result = await resolveDistrict(county, district);
   } else if (county) {
     result = await resolveCounty(county);
   }
@@ -56,7 +71,10 @@ export async function YourRaces({
         <p className="text-body text-on-surface-muted">
           Add your ZIP and we&apos;ll show every race on your ballot.
         </p>
-        <ZipEntry />
+        <LocationEntry
+          addressEnabled={placesConfigured()}
+          districts={districts}
+        />
       </div>
     );
   }
@@ -69,7 +87,10 @@ export async function YourRaces({
           Fort Lauderdale, Tampa, and Orlando metros. Try another ZIP or pick a
           county:
         </p>
-        <ZipEntry />
+        <LocationEntry
+          addressEnabled={placesConfigured()}
+          districts={districts}
+        />
       </div>
     );
   }
@@ -82,7 +103,10 @@ export async function YourRaces({
           {result.candidateDistricts?.join(", ")}). Re-enter it below and
           we&apos;ll ask which district is yours:
         </p>
-        <ZipEntry />
+        <LocationEntry
+          addressEnabled={placesConfigured()}
+          districts={districts}
+        />
       </div>
     );
   }
@@ -142,8 +166,8 @@ export async function YourRaces({
             className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
           >
             We don&apos;t have the U.S. House race for {result.district} yet.
-            What&apos;s above is the statewide ballot every Florida voter
-            shares — your district&apos;s race will appear here once it&apos;s
+            What&apos;s above is the statewide ballot every Florida voter shares
+            — your district&apos;s race will appear here once it&apos;s
             published.
           </p>
         )}
@@ -156,8 +180,8 @@ export async function YourRaces({
       <p className="text-caption text-on-surface-muted">
         Every registered Florida voter gets the same ballot in the general
         election, whatever party you&apos;re registered with — including no
-        party at all. If you couldn&apos;t vote in August&apos;s closed
-        primary, you can vote on all of this.
+        party at all. If you couldn&apos;t vote in August&apos;s closed primary,
+        you can vote on all of this.
       </p>
 
       {!result.district && result.races.length > 0 && (

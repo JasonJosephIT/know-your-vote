@@ -1,7 +1,12 @@
 /* PII scrubbing for every Sentry event and breadcrumb (PRD § 2 Security).
    Drops ZIPs, email addresses, and IPs from all payloads before send.
    The app never *needs* these in errors — a report that loses one is
-   strictly better than one that leaks one. */
+   strictly better than one that leaks one.
+
+   Address-route request bodies are dropped whole rather than pattern-matched. A
+   street address looks like ordinary prose — no regex catches "444 SW 2nd Ave"
+   without catching half the app's copy — so /api/address/* bodies never reach
+   Sentry at all. */
 
 const EMAIL_RE = /[\w.+-]+@[\w-]+\.[\w.-]+/g;
 const IPV4_RE = /\b(?:\d{1,3}\.){3}\d{1,3}\b/g;
@@ -44,11 +49,25 @@ type AnyEvent = {
   exception?: { values?: Array<{ value?: string }> };
 };
 
+const ADDRESS_ROUTE_RE = /\/api\/address\//;
+
+/* The body of an address request is the voter's home address. Nothing about it
+   is safe to keep, so it is replaced rather than scrubbed. */
+function dropAddressBody(request: unknown): unknown {
+  if (!request || typeof request !== "object") return request;
+  const req = request as Record<string, unknown>;
+  if (typeof req.url === "string" && ADDRESS_ROUTE_RE.test(req.url)) {
+    return { ...req, data: "[dropped]" };
+  }
+  return request;
+}
+
 export function scrubEvent<E extends AnyEvent>(event: E): E {
   /* No accounts exist; user context can only ever be incidental PII. */
   delete event.user;
-  if (event.request) event.request = scrubValue(event.request);
-  if (typeof event.message === "string") event.message = scrubString(event.message);
+  if (event.request) event.request = scrubValue(dropAddressBody(event.request));
+  if (typeof event.message === "string")
+    event.message = scrubString(event.message);
   if (event.exception?.values) {
     for (const ex of event.exception.values) {
       if (typeof ex.value === "string") ex.value = scrubString(ex.value);

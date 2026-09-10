@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { DISTRICT_COOKIE, parseDistrictCookie } from "@/lib/district-cookie";
 import { CandidateBrowser } from "@/components/features/CandidateBrowser";
 import { SavedCandidates } from "@/components/features/SavedCandidates";
 import { YourRaces } from "@/components/features/YourRaces";
@@ -29,21 +31,37 @@ export default async function CandidatesPage({
     county?: string;
     zip?: string;
     district?: string;
+    change?: string;
   }>;
 }) {
   const sp = await searchParams;
+
+  /* The saved district, unless the URL already carries a location or the voter
+     came here to change it. Reading cookies makes this route dynamic — which is
+     why only this page and the landing page do it, and why the chip reads them
+     client-side instead. A URL location always wins, and never writes the
+     cookie: sharing a ballot must not move someone else's district. */
+  const saved = sp.change
+    ? null
+    : parseDistrictCookie((await cookies()).get(DISTRICT_COOKIE)?.value);
+  const hasUrlLocation = Boolean(sp.zip || sp.county || sp.district);
+  const zip = sp.zip;
+  const district =
+    sp.district ?? (hasUrlLocation ? undefined : saved?.district);
+  const county = sp.county ?? (hasUrlLocation ? undefined : saved?.countyFips);
+
   const requested = TABS.find((t) => t.view === sp.view)?.view;
   /* Arriving with a location (from the landing page's ZIP entry) means the
      voter wants their races even without an explicit view param. */
-  const view: View = requested ?? (sp.zip || sp.county ? "races" : "browse");
+  const view: View = requested ?? (zip || county ? "races" : "browse");
 
   /* The races tab keeps any location already in the URL. */
   const tabHref = (tab: View) => {
     if (tab === "races") {
       const params = new URLSearchParams({ view: "races" });
-      if (sp.zip) params.set("zip", sp.zip);
-      if (sp.district) params.set("district", sp.district);
-      if (!sp.zip && sp.county) params.set("county", sp.county);
+      if (zip) params.set("zip", zip);
+      if (district) params.set("district", district);
+      if (!zip && county) params.set("county", county);
       return `/candidates?${params}`;
     }
     return tab === "browse" ? "/candidates" : `/candidates?view=${tab}`;
@@ -80,11 +98,7 @@ export default async function CandidatesPage({
         <CandidateBrowser q={sp.q} countyFips={sp.county} />
       )}
       {view === "races" && (
-        <YourRaces
-          zip={sp.zip}
-          district={sp.district}
-          county={sp.zip ? undefined : sp.county}
-        />
+        <YourRaces zip={zip} district={district} county={county} />
       )}
       {view === "saved" && <SavedCandidates />}
     </main>

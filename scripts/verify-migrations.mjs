@@ -58,6 +58,11 @@
     17. 0023_candidate_unopposed (decision D-B): candidate.qualifying_status
         admits 'unopposed' and still rejects an unknown value, and exactly one
         CHECK on that column survives — the widening cannot half-apply.
+    17. 0024/0025 block_district invariants (address lookup): the table and its
+        range index exist; the CHECK rejects an inverted range; a GEOID inside a
+        seeded range resolves; anon can SELECT it (it is a public district map)
+        but cannot INSERT.
+
 
    Supabase provides the anon/authenticated/service_role roles out of the box;
    the harness creates them first so the same SQL runs in both environments.
@@ -1190,6 +1195,45 @@ await expectConstraintViolation(
    VALUES ('a-bad','m-pub','maybe','X','s-m');`,
   /side/
 );
+/* 17. block_district — public reference data for address lookup. */
+await db.exec("SET ROLE service_role;");
+await check("a seeded range resolves a GEOID inside it", async () => {
+  const res = await db.query(
+    "SELECT congressional_district FROM block_district WHERE block_start <= '120860036061055' AND block_end >= '120860036061055';"
+  );
+  if (res.rows[0]?.congressional_district !== "FL-27") {
+    throw new Error(
+      `expected the seeded ranges to put block 120860036061055 in FL-27, got ${res.rows[0]?.congressional_district ?? "no row"}`
+    );
+  }
+});
+await check("the seed covers the four counties and 16 districts", async () => {
+  const res = await db.query(
+    "SELECT count(DISTINCT county_fips)::int AS counties, count(DISTINCT congressional_district)::int AS districts, count(*)::int AS ranges FROM block_district;"
+  );
+  const { counties, districts, ranges } = res.rows[0];
+  if (counties !== 4 || districts !== 16) {
+    throw new Error(`expected 4 counties and 16 districts, got ${counties} and ${districts}`);
+  }
+  if (ranges < 100) throw new Error(`only ${ranges} ranges — the seed looks truncated`);
+});
+await expectConstraintViolation(
+  "a range cannot end before it starts",
+  `INSERT INTO block_district (block_start, block_end, county_fips, congressional_district)
+   VALUES ('129990036061999','129990036061000','12999','FL-27');`,
+  /block_district_range_ordered|check/i
+);
+await db.exec("SET ROLE anon;");
+await check("anon can read the district map", async () => {
+  const res = await db.query("SELECT count(*)::int AS n FROM block_district;");
+  if (res.rows[0].n < 1) throw new Error("anon saw no block_district rows");
+});
+await expectDenied(
+  "anon cannot write block_district",
+  `INSERT INTO block_district (block_start, block_end, county_fips, congressional_district)
+   VALUES ('129990201001000','129990201001999','12999','FL-23');`
+);
+
 await db.exec("RESET ROLE;");
 
 if (failures > 0) {
