@@ -176,7 +176,7 @@ def build_synthesis_handlers(
         # arithmetic, vacuous claim. B1 found FL-10 has exactly one ballot
         # candidate, so this is live, not hypothetical. Recorded, never gated:
         # the audit reports, it does not decide publication.
-        # NOT the DoE's UNO (candidate.qualifying_status, migration 0019, D-B):
+        # NOT the DoE's UNO (candidate.qualifying_status, migration 0023, D-B):
         # that is the stronger "not printed on the ballot" claim. This is only
         # "nothing to compare against" -- see the disambiguation in
         # src/lib/unopposed.ts.

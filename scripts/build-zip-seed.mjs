@@ -1,4 +1,4 @@
-/* Generates supabase/migrations/0018_zip_seed_2026.sql — the ZIP -> county /
+/* Generates supabase/migrations/0022_zip_seed_2026.sql — the ZIP -> county /
    congressional district crosswalk for the four covered metros — from the
    enacted 2026 Florida congressional plan and the Census 2020 block geography:
 
@@ -11,7 +11,7 @@
    This replaces the CD119-based build that produced 0003_zip_seed.sql. CD119
    is the 2024 map; Florida enacted a new congressional plan in HB 1-D (signed
    2026-05-04, published as EOGPCRP2026), and the November 2026 general is run
-   on it. 0003 stays in the tree — it is applied and immutable — and 0018
+   on it. 0003 stays in the tree — it is applied and immutable — and 0022
    supersedes it by running later.
 
    The enacted plan is published per block rather than per ZCTA, so the ZIP ->
@@ -188,7 +188,7 @@ if (path.resolve(process.argv[1] ?? "") === fileURLToPath(import.meta.url)) {
     process.exit(1);
   }
   const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-  const out = path.join(root, "supabase", "migrations", "0018_zip_seed_2026.sql");
+  const out = path.join(root, "supabase", "migrations", "0022_zip_seed_2026.sql");
   writeFileSync(out, seedSql(rows));
   const zips = new Set(rows.map((r) => r.zip5));
   const split = new Set(rows.filter((r) => r.isSplit).map((r) => r.zip5));

@@ -37,7 +37,7 @@
         or election_news row with source_id NULL is rejected; an
         official_link row with source_id NULL still inserts; a candidate_news
         row with a valid source_id inserts.
-    17. 0019_candidate_unopposed (decision D-B): candidate.qualifying_status
+    17. 0023_candidate_unopposed (decision D-B): candidate.qualifying_status
         admits 'unopposed' and still rejects an unknown value, and exactly one
         CHECK on that column survives — the widening cannot half-apply.
 
@@ -234,11 +234,11 @@ await check("0013 ballot_status index exists", async () => {
   );
   if (r.rows[0].n !== 1) throw new Error("idx_candidate_ballot_status missing");
 });
-/* --- 0019 (D-B). The DoE's UNO code has to survive ingest: nobody filed
+/* --- 0023 (D-B). The DoE's UNO code has to survive ingest: nobody filed
    against the candidate, so F.S. 101.151(7) keeps the contest off the printed
    ballot. intake.py now writes 'unopposed', which the original three-value
    CHECK from 0000 refuses. */
-await check("0019 qualifying_status admits unopposed", async () => {
+await check("0023 qualifying_status admits unopposed", async () => {
   await db.query(
     `INSERT INTO candidate (candidate_id, legal_name, party, office_sought, qualifying_status)
      VALUES ('c-uno','Uno Filer','DEM','United States Representative','unopposed');`
@@ -251,7 +251,7 @@ await check("0019 qualifying_status admits unopposed", async () => {
   }
   await db.query("DELETE FROM candidate WHERE candidate_id = 'c-uno';");
 });
-await check("0019 widened the CHECK without opening it", async () => {
+await check("0023 widened the CHECK without opening it", async () => {
   let rejected = false;
   try {
     await db.query(
@@ -264,12 +264,12 @@ await check("0019 widened the CHECK without opening it", async () => {
   }
   if (!rejected) throw new Error("a fifth qualifying_status value was accepted");
 });
-/* The half-application 0019's own RAISE guards against, asserted from the
+/* The half-application 0023's own RAISE guards against, asserted from the
    outside: the CHECK it replaces was created unnamed by 0000, so dropping the
    wrong name would leave the old three-value constraint standing beside the
    new one. Both would be enforced, every UNO row would still be rejected, and
    the check above would be the only thing to notice. */
-await check("0019 leaves exactly one qualifying_status CHECK", async () => {
+await check("0023 leaves exactly one qualifying_status CHECK", async () => {
   const r = await db.query(
     `SELECT conname FROM pg_constraint
       WHERE conrelid='candidate'::regclass AND contype='c'

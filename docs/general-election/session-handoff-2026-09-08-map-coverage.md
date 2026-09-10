@@ -13,12 +13,12 @@ Three PRs are open and they are **stacked**. Read §1 before merging anything.
 |---|---|---|---|
 | [#33](https://github.com/JasonJosephIT/know-your-vote/pull/33) | `claude/ballots-handoff-docs-835025` | `main` | `ballots-handoff.md` + `docs/general-election/ballots/` (README, CSV, 2 JSON, HTML) and the `.gitignore` rules |
 | [#34](https://github.com/JasonJosephIT/know-your-vote/pull/34) | `claude/intake-xtl-dec` | `main` | the XTL/DEC parser fix, its tests, `data-ingest.md` |
-| [#35](https://github.com/JasonJosephIT/know-your-vote/pull/35) | `claude/general-election-2026-map` | **`claude/intake-xtl-dec`** | migrations `0018` + `0019`, the 16-district widening, the "not printed" read model, docs |
+| [#35](https://github.com/JasonJosephIT/know-your-vote/pull/35) | `claude/general-election-2026-map` | **`claude/intake-xtl-dec`** | migrations `0022` + `0023`, the 16-district widening, the "not printed" read model, docs |
 
 **Merge #33 → #34 → #35.** Three hard dependencies, not stylistic preference:
 
 1. `scripts/verify-zip-seed-2026.mjs` reads #33's `zip_districts_2026.csv` **at runtime** — it is the oracle the ZIP seed is checked against. Merge #35 first and that check has no oracle. (It now fails with a clear message rather than an unhandled child-process error, but it still cannot verify.)
-2. `0018`'s ledger row, `intake.py` and several doc passages cite `ballots-handoff.md` §4.2, which exists only on #33.
+2. `0022`'s ledger row, `intake.py` and several doc passages cite `ballots-handoff.md` §4.2, which exists only on #33.
 3. The `.gitignore` rules protecting `EOGPCRP2026_block_assignment.txt` (7.6 MB) and `doe_*.tsv` (**the raw DoE export carries addresses, phones, emails and treasurer names**) are on #33. #35 is the branch that tells an operator to run the generator.
 
 #35's base is `claude/intake-xtl-dec`, so GitHub will retarget it to `main` when #34 merges. If you merge #34 by squash, retarget #35 manually first.
@@ -38,8 +38,8 @@ Three PRs are open and they are **stacked**. Read §1 before merging anything.
 | Area | What |
 |---|---|
 | `scripts/build-zip-seed.mjs` | rebuilt on the enacted plan's per-block assignment + the Census ZCTA↔tabblock file. County now comes from the block GEOID (state 2 + county 3 + tract 6 + block 4) instead of a third Census download |
-| `0018_zip_seed_2026.sql` | 316 rows / 235 ZIPs / 75 split. Supersedes `0003`, which stays applied and untouched |
-| `0019_candidate_unopposed.sql` | widens `candidate.qualifying_status`'s CHECK to admit `unopposed` |
+| `0022_zip_seed_2026.sql` | 316 rows / 235 ZIPs / 75 split. Supersedes `0003`, which stays applied and untouched |
+| `0023_candidate_unopposed.sql` | widens `candidate.qualifying_status`'s CHECK to admit `unopposed` |
 | `intake.py` | `_TARGET_US_HOUSE` 4 → 16; `_STATUS["UNO"] = "unopposed"`; `juris.zfill(3)` normalisation |
 | `src/lib/unopposed.ts`, `briefs.ts`, race page | the "elected without opposition / not on the ballot" state |
 | `scripts/doe-code-dump.py` | targets brought back into step with the parser, including the missing `USS` |
@@ -58,13 +58,13 @@ tsc --noEmit             clean
 next build               succeeds
 ```
 
-`0018` is reproduced **byte-identically** by re-running the generator from the raw inputs, and the oracle check was mutation-tested three ways (changed district / dropped row / flipped `is_split`) — each mutation fails it. The oracle was derived independently by a different session from the same two inputs; two derivations agree on all 316 pairs.
+`0022` is reproduced **byte-identically** by re-running the generator from the raw inputs, and the oracle check was mutation-tested three ways (changed district / dropped row / flipped `is_split`) — each mutation fails it. The oracle was derived independently by a different session from the same two inputs; two derivations agree on all 316 pairs.
 
-## 3. Migration `0019` — what it is and why intake needs it
+## 3. Migration `0023` — what it is and why intake needs it
 
 **The problem it solves.** Florida marks a candidate `UNO` when nobody filed against them. Under **F.S. 101.151(7)** that contest is then **not printed on the general ballot at all** — there is no line to vote on and the candidate takes the office. FL-10 is in exactly that shape this cycle, as are state senate districts 4 and 16 and 28 state house districts.
 
-The app could not say that, because the distinction died at ingest: `_STATUS` in `intake.py` mapped **both** `QUA` and `UNO` to `"qualified"`. It did that because the CHECK on `candidate.qualifying_status`, written inline in `0000_pipeline_read_models.sql`, admitted only three values. So `0019` widens it:
+The app could not say that, because the distinction died at ingest: `_STATUS` in `intake.py` mapped **both** `QUA` and `UNO` to `"qualified"`. It did that because the CHECK on `candidate.qualifying_status`, written inline in `0000_pipeline_read_models.sql`, admitted only three values. So `0023` widens it:
 
 ```sql
 CHECK (qualifying_status IN ('qualified','unopposed','withdrawn','other'))
@@ -72,11 +72,11 @@ CHECK (qualifying_status IN ('qualified','unopposed','withdrawn','other'))
 
 **Why carried and not derived.** The obvious substitute is "exactly one ballot-tier candidate and no write-in". That is wrong for a race whose other candidates withdrew *after* qualifying: the survivor is `QUA`, the ballot is already printed with their name on it, and the derivation would tell a voter their race does not exist. The two races are **indistinguishable by composition** and distinguishable only by the code the DoE already publishes — so the column has to keep it. That is decision D-B.
 
-**Why it is a precondition for the next intake run.** `intake.py` now writes `qualifying_status = 'unopposed'`, and `store.py` puts that value on the row at upsert. The live three-value CHECK **refuses** it. Run an intake against a database that has not had `0019` applied and every `UNO` row fails. Recorded in the ledger row, the migration header, `intake.py` and `data-ingest.md`.
+**Why it is a precondition for the next intake run.** `intake.py` now writes `qualifying_status = 'unopposed'`, and `store.py` puts that value on the row at upsert. The live three-value CHECK **refuses** it. Run an intake against a database that has not had `0023` applied and every `UNO` row fails. Recorded in the ledger row, the migration header, `intake.py` and `data-ingest.md`.
 
 **Not `ballot_status`.** That column (`0013`) is a different axis — whether a filing gets a printed line. An unopposed candidate is still a ballot-tier filing: briefed, audited, shown. `unopposed` is a *qualifying* status.
 
-**The unnamed-constraint guard.** Unlike `0013`'s `candidate_ballot_status_check`, this CHECK was written inline in `0000` and named by Postgres, so nothing in the repo ever asserted its name. Dropping the wrong name would leave the old three-value CHECK standing beside the new one — the migration would report success and every `UNO` row would still be rejected, with the constraint list as the only evidence. `0019` drops the auto-generated name, then scans `pg_constraint` and **RAISEs** if any CHECK mentioning `qualifying_status` survived. Verified against `0000_pipeline_read_models.sql:26`; the abort path always leaves at least the old CHECK standing, so it cannot leave the column unconstrained. Idempotent.
+**The unnamed-constraint guard.** Unlike `0013`'s `candidate_ballot_status_check`, this CHECK was written inline in `0000` and named by Postgres, so nothing in the repo ever asserted its name. Dropping the wrong name would leave the old three-value CHECK standing beside the new one — the migration would report success and every `UNO` row would still be rejected, with the constraint list as the only evidence. `0023` drops the auto-generated name, then scans `pg_constraint` and **RAISEs** if any CHECK mentioning `qualifying_status` survived. Verified against `0000_pipeline_read_models.sql:26`; the abort path always leaves at least the old CHECK standing, so it cannot leave the column unconstrained. Idempotent.
 
 **One consequence, stated so it is not discovered later.** `CAP_Schema_v1.md` says social accounts are ingested "only when `qualifying_status = 'qualified'`". No code implements that as a literal comparison today (checked across `src/` and `toollayer/`), but **whoever writes it must treat `unopposed` as ballot-tier alongside `qualified`** — an unopposed candidate is the one who will hold the office, so an equality test would mute exactly the candidate a voter cannot vote against.
 
@@ -106,9 +106,9 @@ Two reviewers preferred keeping the card: an unopposed candidate takes the offic
 
 Still scopes the MVP to "statewide + FL-28/FL-23/FL-15/FL-10". Left deliberately — an MVP definition is a founder decision, not a documentation sweep. D-A makes it stale.
 
-### 5.3 Applying `0018` and `0019`
+### 5.3 Applying `0022` and `0023`
 
-Both read **"written, NOT yet applied"**. Neither has touched the live database. Note that **applying `0018` alone** re-points 133 ZIPs at districts whose `race` rows do not exist yet (races come from the intake run, never from a migration). It degrades gracefully — `resolve.ts` returns statewide races only and `directory.ts` filters the rest out — but plan the two together with an intake run.
+Both read **"written, NOT yet applied"**. Neither has touched the live database. Note that **applying `0022` alone** re-points 133 ZIPs at districts whose `race` rows do not exist yet (races come from the intake run, never from a migration). It degrades gracefully — `resolve.ts` returns statewide races only and `directory.ts` filters the rest out — but plan the two together with an intake run.
 
 ## 6. Known gaps, deliberately not closed
 
@@ -116,7 +116,7 @@ Both read **"written, NOT yet applied"**. Neither has touched the live database.
 |---|---|---|
 | G1 | **No CI runs any of this.** No `.github/workflows`, no `test` script in `package.json`. This branch adds four `verify-*` scripts and 180 Python tests that only run when a human runs them | Pre-existing; the project tracks it as **TC-0**. It is now a bigger gap than it was |
 | G2 | `scripts/build-zip-seed.mjs` has two silent paths: a covered ZIP whose blocks are *all* absent from the plan emits no rows (reads as out-of-coverage to a voter), and a ZIP whose plan-attributable land is fragmented below 5% everywhere still emits the dominant district with `is_split=false`, auto-picking against FR-001 | Neither occurred with the real inputs — output matched the oracle exactly. A `throw` naming the ZIP when `covered && districts.size === 0` closes the first cheaply |
-| G3 | `verify-migrations.mjs` asserts `0019`'s post-state but never exercises its RAISE | Pre-creating a second differently-named CHECK and asserting the abort would demonstrate the guard rather than assert it |
+| G3 | `verify-migrations.mjs` asserts `0023`'s post-state but never exercises its RAISE | Pre-creating a second differently-named CHECK and asserting the abort would demonstrate the guard rather than assert it |
 | G4 | Task 3's original fixture tests have **no RED/GREEN transcript** — that implementer was killed by an API rate limit before writing a report | The controller verified the left-behind work independently (byte-identical regeneration, three-way mutation test) before committing. Later fix rounds do have transcripts |
 | G5 | `_TARGET_US_HOUSE` (`intake.py`) and `TARGET_USR`/`TARGET_OFFICES` (`doe-code-dump.py`) are duplicated sets kept in step by a comment | They had already silently drifted once — that is how the missing `USS` was found. An import is awkward: the toollayer path has spaces and parentheses, and `_TARGET_US_HOUSE` is underscore-private |
 
@@ -124,7 +124,7 @@ Both read **"written, NOT yet applied"**. Neither has touched the live database.
 
 1. **Merge #33, then #34, then #35** (§1). Retarget #35 if #34 is squashed.
 2. **Decide §5.1** and amend `ballots-handoff.md` §4.4 to match.
-3. **Apply `0018` + `0019` and run a live intake** — together, not separately (§5.3). This is the first run that exercises twelve new districts and the `unopposed` value. Expect new `race` rows for FL-7/8/9/11/12/14/16/20/22/24/25/26/27.
+3. **Apply `0022` + `0023` and run a live intake** — together, not separately (§5.3). This is the first run that exercises twelve new districts and the `unopposed` value. Expect new `race` rows for FL-7/8/9/11/12/14/16/20/22/24/25/26/27.
 4. **§4.4 follow-through:** verify a real FL-10 brief renders the not-printed state end to end once real rows exist.
 5. **§4.1 — county sample ballots.** Gated to **on or after 2026-09-24**. Orange, Broward, Hillsborough, Miami-Dade; goal is one composite ballot per county, then precinct → ZIP overlap so each ZIP gains `county_and_municipal.contests[]`. Recipes in `ballots-handoff.md` §4.1.
 6. **§4.5 — amendments and retention content** (3 amendments at 60%; Muñiz statewide; DCA judges by county).
@@ -136,7 +136,7 @@ Both read **"written, NOT yet applied"**. Neither has touched the live database.
 - Use `/usr/bin/python3` for anything that fetches — the python.org 3.11 on `PATH` has no CA bundle.
 - `node scripts/verify-migrations.mjs` uses **embedded PGlite**, not a live database. Safe to run, and it is the right way to prove a migration applies in order. Takes 2+ minutes.
 - Every `verify-*.ts` prints a `MODULE_TYPELESS_PACKAGE_JSON` warning because the repo has no `"type": "module"`. Pre-existing; not a regression to chase.
-- **Never run `scripts/build-zip-seed.mjs` casually** — it overwrites `0018_zip_seed_2026.sql`. **Never run `scripts/doe-code-dump.py` without `--selftest`** — it makes live DoE requests.
+- **Never run `scripts/build-zip-seed.mjs` casually** — it overwrites `0022_zip_seed_2026.sql`. **Never run `scripts/doe-code-dump.py` without `--selftest`** — it makes live DoE requests.
 - Census ranged GETs return `520`; stream whole files. The ZCTA↔block national file is 1.06 GB; filter on the **10th** `|` column (`GEOID_TABBLOCK_20`), not the 9th (`OID_`).
 - DoE `Juris1num` **is** zero-padded — the live roster has `USR|007|`, `USR|008|`, `USR|009|`. `zfill(3)` now normalises anyway.
 - Give each concurrent agent its **own worktree**. A shared tree across sessions is a branch-yank hazard.

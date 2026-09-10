@@ -96,7 +96,7 @@ _TARGET_US_HOUSE = {
 # CHECK that made the map necessary.
 
 # candidate.qualifying_status is CHECK-constrained, so this map is a real
-# narrowing and not a display choice. Migration 0019 widened the CHECK to four
+# narrowing and not a display choice. Migration 0023 widened the CHECK to four
 # values and MUST be applied before the next live run -- 'unopposed' below is
 # rejected by the original three-value constraint.
 #

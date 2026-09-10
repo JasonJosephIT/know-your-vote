@@ -210,7 +210,7 @@ is *carried*, not derived: a race whose other candidates withdrew after
 qualifying leaves one `qualified` survivor with no write-in, which is
 indistinguishable by composition and whose ballot **is** printed. The tier
 stays `ballot` — an unopposed candidate still holds the seat and is still
-briefed. **Migration `0019` must be applied before the next live run**; the
+briefed. **Migration `0023` must be applied before the next live run**; the
 original three-value CHECK rejects `unopposed`.
 
 > **Correction to `ballots-handoff.md` F3.** That note said an unmapped `XTL`

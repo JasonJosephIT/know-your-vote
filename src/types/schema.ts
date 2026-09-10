@@ -14,7 +14,7 @@ export type Party = string;
    or shown — see data-architecture.md D1, decided by the founder 2026-09-07. */
 export type BallotStatus = "ballot" | "write_in" | "excluded";
 
-/* candidate.qualifying_status. `unopposed` was added by migration 0019: it is
+/* candidate.qualifying_status. `unopposed` was added by migration 0023: it is
    the DoE's `UNO` code carried through ingest rather than derived, because
    nobody filing against a candidate is what F.S. 101.151(7) turns on — that
    contest is not printed on the ballot at all. It lives here and not on

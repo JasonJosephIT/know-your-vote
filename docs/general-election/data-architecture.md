@@ -298,7 +298,7 @@ ships in the first run — it cannot be deferred.
 > withdrew *after* qualifying sets it too, even though that race's ballot
 > **is** printed. Under D-B (founder 2026-09-07) the DoE's `UNO` code is
 > carried as its own value, `candidate.qualifying_status = 'unopposed'`
-> (migration `0019` widens the CHECK to allow it; `data-ingest.md` §1), and
+> (migration `0023` widens the CHECK to allow it; `data-ingest.md` §1), and
 > only a true `UNO` means the contest is not printed at all (F.S.
 > 101.151(7)). The two facts read the same off `len(audited) == 1` but are
 > not the same claim — "nothing to compare" is not "not on your ballot" —
