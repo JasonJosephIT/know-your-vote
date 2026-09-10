@@ -880,7 +880,7 @@ class TestIntakeDoEParser(unittest.TestCase):
         self.assertEqual(p["skipped"], 0)
         self.assertEqual(p["races"]["FL-22-general"]["candidate_ids"],
                          ["FL-DOE-91010"])
-        self.assertEqual(p["races"]["FL-22-general"]["district"], "22")
+        self.assertEqual(p["races"]["FL-22-general"]["district"], "FL-22")
 
     def test_usr_row_outside_the_sixteen_is_still_skipped(self):
         """013 touches none of the four counties this app covers under the
@@ -904,6 +904,28 @@ class TestIntakeDoEParser(unittest.TestCase):
         self.assertEqual(p["candidates"], [])
         self.assertNotIn("FL-23-general", p["races"])
 
+    def test_house_district_is_stored_in_the_shape_the_app_joins_on(self):
+        """race.district must be `FL-nn`, because that is what resolves a voter.
+
+        The app never looks a race up by district number. It resolves a ZIP
+        through zip_district, or an address through block_district, and both
+        store `FL-27`; racesForDistrict then asks for `district = 'FL-27'`. A
+        bare "27" parses, stores, and matches nothing -- the race exists and is
+        unreachable from every ZIP and every address, with no error raised
+        anywhere. Checked against the live database on 2026-09-10: that join
+        returns 65 rows with `FL-nn` and 0 with bare numbers.
+
+        Pinned here because the bug is invisible in this layer's own output:
+        every count, tier and skip reason is identical either way. The FEC
+        House query still needs the bare two-digit form and strips the prefix
+        back off in _incumbency_for_race.
+        """
+        row = _doe_row("91099", "USR", "United States Representative", "027",
+                       "QUA", "REP", "Reyes", "Rosa")
+        p = intake.parse_candidate_list("\n".join([_DOE_HEADER, row]))
+        self.assertEqual(p["races"]["FL-27-general"]["district"], "FL-27")
+        self.assertIsNone(p["races"].get("FL-27-general", {}).get("district_bare"))
+
     def test_unpadded_juris_is_zero_padded_before_the_membership_test(self):
         """Finding 1 (whole-branch review, pre-merge): _TARGET_US_HOUSE holds
         zero-padded codes ("007" not "7"), and every district exercised so far
@@ -922,7 +944,7 @@ class TestIntakeDoEParser(unittest.TestCase):
         self.assertEqual(p["skipped"], 0)
         self.assertEqual(p["races"]["FL-7-general"]["candidate_ids"],
                          ["FL-DOE-91013"])
-        self.assertEqual(p["races"]["FL-7-general"]["district"], "7")
+        self.assertEqual(p["races"]["FL-7-general"]["district"], "FL-7")
 
     def test_prepadded_juris_still_works(self):
         """The live-export shape (see the test above): Juris1num already
@@ -934,7 +956,7 @@ class TestIntakeDoEParser(unittest.TestCase):
         self.assertEqual(p["skipped"], 0)
         self.assertEqual(p["races"]["FL-7-general"]["candidate_ids"],
                          ["FL-DOE-91014"])
-        self.assertEqual(p["races"]["FL-7-general"]["district"], "7")
+        self.assertEqual(p["races"]["FL-7-general"]["district"], "FL-7")
     def test_skip_breakdown_names_the_dropped_house_district(self):
         """The Senate hid inside an undifferentiated `skipped` for weeks. A
         district we choose not to carry is the same shape of omission, so the
@@ -1066,7 +1088,7 @@ class TestIntakeDoEParser(unittest.TestCase):
         self.assertEqual(p["races"]["FL-GOV-general"]["candidate_ids"],
                          ["FL-DOE-89333", "FL-DOE-89777"])
         self.assertEqual(p["races"]["FL-GOV-general"]["level"], "state")
-        self.assertEqual(p["races"]["FL-10-general"]["district"], "10")
+        self.assertEqual(p["races"]["FL-10-general"]["district"], "FL-10")
 
     # --- B2: the D1 ballot-status filter -------------------------------
 
@@ -1293,7 +1315,7 @@ _DOE_INCUMBENCY_FIXTURE = "\n".join([
     _doe_row("90004", "USS", "United States Senator", "", "QUA", "DEM", "Reed", "Dana"),
 ])
 
-_RACE_28 = {"race_id": "FL-28-general", "level": "federal", "district": "28"}
+_RACE_28 = {"race_id": "FL-28-general", "level": "federal", "district": "FL-28"}
 _ROSTER_28 = [
     {"candidate_id": _GIMENEZ, "legal_name": "Carlos A Gimenez", "party": "REP"},
     {"candidate_id": _RIVERA, "legal_name": "Ana Rivera", "party": "DEM"},
