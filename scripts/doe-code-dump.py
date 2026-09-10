@@ -26,16 +26,24 @@ URL = "https://dos.elections.myflorida.com/candidates/extractCanList.asp"
 ELECTION = "20261103-GEN"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")  # the DoE WAF wants one
-# Every race the parser carries, so this dump can be checked against the
-# ballot. USS was absent here until 2026-09-10 — the same omission that kept
-# the U.S. Senate race out of the pipeline until 2026-09-07, in the one script
-# whose job is to reveal what the file contains. A diagnostic narrower than the
-# thing it diagnoses cannot show you what you are missing.
+# The at-large races plus the sixteen US House districts covering the four
+# target counties under Florida's enacted 2026 congressional map (D-A,
+# founder, 2026-09-07). Must stay in step with _NO_DISTRICT_RACES and
+# _TARGET_US_HOUSE in cap_toollayer/intake.py -- that is the source of truth;
+# this is a copy. USS is here because the Senate line was always a target
+# race: its absence from the older "eight races" framing was a parser bug,
+# not a scope decision (docs/general-election/db-audit-2026-09-07.md).
 TARGET_OFFICES = {"GOV", "ATG", "CFO", "AGR", "USS"}
-# All 28 Florida U.S. House districts, matching intake.py's _TARGET_US_HOUSE.
-# These two lists are the same scope decision in two places; a dump narrower
-# than the parser hides exactly the rows a scope change is meant to reveal.
-TARGET_USR = {f"{n:03d}" for n in range(1, 29)}
+TARGET_USR = {
+    # Orange (7, 8, 9, 10, 11)
+    "007", "008", "009", "010", "011",
+    # Hillsborough (12, 14, 15, 16)
+    "012", "014", "015", "016",
+    # Broward (20, 22, 24, 25, 26)
+    "020", "022", "024", "025", "026",
+    # Miami-Dade (27, 28)
+    "027", "028",
+}
 
 
 def fetch(office):
@@ -72,10 +80,15 @@ def summarize(text, label):
         return row[i].strip() if 0 <= i < len(row) else ""
 
     rows = [l.split("\t") for l in lines[1:]]
+    # zfill(3): TARGET_USR holds zero-padded codes, matching intake.py's
+    # _TARGET_US_HOUSE. Same insurance, same evidence -- see the comment
+    # there. Keep the two in step.
     target = [r for r in rows
               if col(r, "OfficeCode") in TARGET_OFFICES
-              or (col(r, "OfficeCode") == "USR" and col(r, "Juris1num") in TARGET_USR)]
-    print(f"   rows in the 8 target races: {len(target)}")
+              or (col(r, "OfficeCode") == "USR"
+                  and col(r, "Juris1num").zfill(3) in TARGET_USR)]
+    n_races = len(TARGET_OFFICES) + len(TARGET_USR)
+    print(f"   rows in the {n_races} target races: {len(target)}")
 
     for pair in (("StatusCode", "StatusDesc"), ("PartyCode", "PartyDesc")):
         if pair[0] not in idx:
@@ -103,7 +116,8 @@ def selftest():
     with contextlib.redirect_stdout(buf):
         summarize(FIXTURE, "SELFTEST")
     out = buf.getvalue()
-    assert "rows in the 8 target races: 4" in out, out   # row 5 (FL-99) excluded
+    n_races = len(TARGET_OFFICES) + len(TARGET_USR)
+    assert f"rows in the {n_races} target races: 4" in out, out   # row 5 (FL-99) excluded
     assert "'DEF'" in out and "'LPF'" in out, out        # both survive raw
     assert "PartyDesc" in out
     print("selftest OK — target filter and raw code counts behave")

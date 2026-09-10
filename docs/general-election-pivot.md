@@ -215,7 +215,11 @@ Worth stating plainly, because it shrinks the job:
   the Claude Code session's egress proxy, so neither ZCTA crosswalk file can
   be fetched from there. The resolution logic and copy are writable; the seed
   SQL needs the two files downloaded by someone who can reach them, then
-  `node scripts/build-zip-seed.mjs <zcta_cd.txt> <zcta_county.txt>`.
+  `node scripts/build-zip-seed.mjs <block_assignment.txt> <zcta_tabblock.txt>`.
+  (The generator moved to the enacted 2026 map on 2026-09-07 — its inputs are
+  now the EOGPCRP2026 block assignment and the ZCTA/tabblock relationship
+  file, and it writes `0022_zip_seed_2026.sql`. A statewide build widens the
+  `METROS` filter there rather than reviving the CD119 build.)
 
 ## 6. Day 2 — amendments and urgency
 
@@ -323,12 +327,17 @@ Worth stating plainly, because it shrinks the job:
   the word "your" without comparing (all survive) — 16 checks, all passing.
 
 - [ ] **TASK-066** — Publish the content *(the real critical path)*
-  Notes: Not a code task, and the one most likely to slip. Nine races
-  (5 statewide + FL-10/15/23/28), roughly 18–20 candidates, plus 3 measures,
-  each through the Balance Audit, each publication flag flipped. Then remove
-  every `demo-` row via `scripts/demo-teardown.sql`. **The app cannot go public
-  until this is done** — the README's launch gate is unchanged by this pivot.
-  Start it in parallel on Day 1; don't leave it to Day 2.
+  Notes: Not a code task, and the one most likely to slip. Twenty-one races
+  (5 statewide/at-large incl. U.S. Senate + 16 U.S. House districts under the
+  enacted 2026 map, D-A founder 2026-09-07 — FL-23 is no longer in scope),
+  plus 3 measures, each through the Balance Audit, each publication flag
+  flipped. Candidates measured so far: 25 ballot / 4 write-in / 94 excluded
+  across the nine races run to date (`data-ingest.md` §1, includes FL-23's
+  now-stale count); the twelve districts D-A added are unmeasured, pending a
+  DoE intake run. Then remove every `demo-` row via
+  `scripts/demo-teardown.sql`. **The app cannot go public until this is
+  done** — the README's launch gate is unchanged by this pivot. Start it in
+  parallel on Day 1; don't leave it to Day 2.
 
   **Preparation, 2026-09-07.** The content itself is unchanged — still open,
   still needs a human. What was done is everything around it that does not

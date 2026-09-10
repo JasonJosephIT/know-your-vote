@@ -59,3 +59,12 @@ Civic Awareness (Know Your Vote)/CAP_Ops_Digest_*.html
 
 # This script
 /reconcile-git.sh
+
+# --- ballots by ZIP, 2026 general ---
+# The derived files under docs/general-election/ballots/ ARE tracked: they are
+# the ZIP → district → contest crosswalk the app reads from. Only the bulky
+# upstream source is ignored — re-fetch it from flsenate.gov when §4.2 of
+# docs/general-election/ballots-handoff.md needs it.
+docs/general-election/ballots/EOGPCRP2026_block_assignment.txt
+# The raw DoE candidate export carries addresses, phones and emails. Never commit it.
+docs/general-election/ballots/doe_*.tsv
