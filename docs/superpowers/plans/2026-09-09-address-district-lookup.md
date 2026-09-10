@@ -80,38 +80,43 @@
 
 **Interfaces:**
 - Consumes: nothing.
-- Produces: a working branch containing migrations `0018`/`0019` and PR #36's `resolve.ts` fix.
+- Produces: `claude/address-district-lookup`, containing migrations `0018`/`0019` and PR #36's `resolve.ts` fix, with no shared branch rewritten.
 
-- [ ] **Step 1: Rebase the map branch on current main**
+- [ ] **Step 1: Branch from the map branch, without rewriting it**
 
-The enacted-map migrations live only on `claude/general-election-2026-map` (PR #35), which predates `19a2324` (PR #36's "a resolved ZIP has no House race" fix). Both that fix and this work touch `resolve.ts`, so rebase once, now.
+The enacted-map migrations live only on `claude/general-election-2026-map` (PR #35). That branch is a published PR head and other sessions may share it, so **do not rebase it** — branch from it instead:
 
 ```bash
 git fetch origin
-git checkout claude/general-election-2026-map
-git rebase origin/main
+git checkout -b claude/address-district-lookup origin/claude/general-election-2026-map
 ```
 
-Expected: rebase completes. If `resolve.ts` conflicts, keep **both** — main's no-House-race copy fix and the map branch's changes.
+- [ ] **Step 2: Bring in main's resolve.ts fix by merging, not rebasing**
 
-- [ ] **Step 2: Branch this work off it**
+The map branch predates `19a2324` (PR #36's "a resolved ZIP has no House race" copy fix), and both it and this work touch `resolve.ts`. Merge `main` in now, so that fix is present before Task 7 edits the same file:
 
 ```bash
-git checkout -b claude/address-district-lookup
-git log --oneline -3
+git merge origin/main
+```
+
+Expected: a merge commit. If `resolve.ts` conflicts, keep **both** sides — main's no-House-race copy fix and the map branch's changes. Verify the fix arrived:
+
+```bash
+git log --oneline --all --grep="no House race" -1
+grep -n "House race" src/lib/resolve.ts src/components/features/YourRaces.tsx | head -5
+```
+
+- [ ] **Step 3: Confirm the baseline is green before adding to it**
+
+```bash
 ls supabase/migrations/ | tail -3
-```
-
-Expected: `0018_zip_seed_2026.sql` and `0019_candidate_unopposed.sql` are present, and `git log` shows main's recent commits beneath the map branch's.
-
-- [ ] **Step 3: Confirm the baseline is green**
-
-```bash
 node scripts/verify-migrations.mjs
 npx tsc --noEmit
 ```
 
-Expected: both pass. If they fail here, fix that before writing anything new — you must not inherit a red baseline.
+Expected: `0018_zip_seed_2026.sql` and `0019_candidate_unopposed.sql` are present, and both checks pass. If they fail here, fix that first — you must not inherit a red baseline and then wonder which task broke it.
+
+
 
 ---
 
