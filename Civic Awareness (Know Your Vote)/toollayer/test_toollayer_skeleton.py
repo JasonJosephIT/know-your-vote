@@ -974,6 +974,31 @@ class TestIntakeDoEParser(unittest.TestCase):
         self.assertEqual(p["dropped_us_house_districts"], ["001"])
         self.assertEqual(p["candidates"], [])
 
+    def test_membership_is_the_set_not_a_range(self):
+        """PR #42 pinned 000/001/028/029, which only says something while
+        every number 1..28 is carried. The carried set is the sixteen the
+        covered counties contain, and it has HOLES — 013 sits between 012 and
+        014, all three real districts — so a range check would quietly carry
+        013 and create a race no covered ZIP resolves to. Pins both edges and
+        one hole."""
+        for juris, expect_race in (("006", None),          # below the lowest
+                                   ("007", "FL-7-general"),  # the lowest
+                                   ("013", None),          # a hole, not a gap
+                                   ("028", "FL-28-general"),  # the highest
+                                   ("029", None)):         # not a district
+            with self.subTest(juris=juris):
+                row = _doe_row("89100", "USR", "United States Representative",
+                               juris, "QUA", "REP", "Edge", "Eve")
+                p = intake.parse_candidate_list("\n".join([_DOE_HEADER, row]))
+                if expect_race is None:
+                    self.assertEqual(p["skipped"], 1)
+                    self.assertEqual(p["races"], {})
+                    self.assertEqual(p["dropped_us_house_districts"], [juris])
+                else:
+                    self.assertEqual(p["skipped"], 0)
+                    self.assertIn(expect_race, p["races"])
+                    self.assertEqual(p["dropped_us_house_districts"], [])
+
     def test_dropped_districts_are_deduped_and_sorted(self):
         """Deterministic output is a documented promise of this parser, and
         re-intake idempotency rests on it: a raw `list(set)` would reorder
@@ -985,15 +1010,18 @@ class TestIntakeDoEParser(unittest.TestCase):
         of this test. Six makes an accidental match ~1/720, and the assertion
         can never false-fail on correct code because sorted input compares
         equal to a sorted expectation either way."""
-        # Districts re-picked when D-A widened the target set to sixteen:
-        # main wrote this with 014/027/009/011/025, all of which are now
-        # CARRIED, so the test would have asserted the parser dropped races it
-        # keeps. These six (002, 004, 006, 013, 019, 023) are outside the
-        # sixteen, and 013 repeats so the dedupe half still has something to
-        # dedupe. Six, not two, for the reason in the docstring.
-        rows = [("89901", "013"), ("89902", "002"), ("89903", "013"),
-                ("89904", "023"), ("89905", "004"), ("89906", "006"),
-                ("89907", "019")]
+        # These six are deliberately numbers Florida does not have (>28), not
+        # real out-of-scope districts. This fixture has now been re-picked
+        # twice — 014/027/009/011/025 became carried when D-A widened to
+        # sixteen, and any real district picked to replace them would be
+        # carried by the next county expansion, which is the stated plan.
+        # A non-existent number can never become carried, so this is the last
+        # time. (Idea from PR #42, which needed it for the same reason.)
+        # 044 repeats so the dedupe half still has something to dedupe; six,
+        # not two, for the reason in the docstring.
+        rows = [("89901", "044"), ("89902", "032"), ("89903", "044"),
+                ("89904", "057"), ("89905", "029"), ("89906", "041"),
+                ("89907", "055")]
         text = "\n".join([_DOE_HEADER] + [
             _doe_row(acct, "USR", "United States Representative", d,
                      "QUA", "REP", f"L{acct}", "First")
@@ -1001,7 +1029,7 @@ class TestIntakeDoEParser(unittest.TestCase):
         ])
         p = intake.parse_candidate_list(text)
         self.assertEqual(p["dropped_us_house_districts"],
-                         ["002", "004", "006", "013", "019", "023"])
+                         ["029", "032", "041", "044", "055", "057"])
         self.assertEqual(p["skipped_detail"]["us_house_district_not_targeted"],
                          len(rows))
 

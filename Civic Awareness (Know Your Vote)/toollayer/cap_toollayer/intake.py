@@ -66,17 +66,26 @@ _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
 # thing that makes a race exist; check this map against the ballot, not
 # against the last run's counts.
 #
-# `_TARGET_US_HOUSE` below is the SAME SHAPE OF TRAP for districts. It held
-# only the four districts the primary-era scope covered until D-A widened it
-# to sixteen (the set below, landed with this merge) — so the twelve-district
-# gap that
-# docs/general-election/session-handoff-2026-09-08-map-coverage.md §1 measures
-# is closed at the parser. §1 still describes the gap as open; read it as the
-# record of why the set moved, not as current state. Nothing here decides
-# which districts are right — that is a scope call — but the parse result
-# reports WHICH districts it dropped rather than folding them into one
-# `skipped` total, so the next reader cannot miss it the way the Senate was
-# missed.
+# `_TARGET_US_HOUSE` below was the SAME SHAPE OF TRAP for districts. Until
+# 2026-09-10 it held only {010, 015, 023, 028} — the four districts the
+# primary-era scope covered, one per metro — so twelve of the sixteen
+# districts seeded in `zip_district` had no race at all and every ZIP in them
+# resolved to a ballot missing its U.S. House line
+# (docs/general-election/session-handoff-2026-09-08-map-coverage.md §1, which
+# describes that gap as open; it is closed at the parser now).
+#
+# The set is DERIVED FROM THE COUNTIES, never picked district by district, and
+# never widened to all 28 as a shortcut. Founder decision 2026-09-10, after
+# the four counties were checked against the enacted plan's block assignment
+# (block GEOID digits 1-5 are state+county, so county membership is read
+# straight off the key, with no ZIP and no land-share threshold in the way):
+# exactly these sixteen districts contain at least one block in Orange,
+# Hillsborough, Broward or Miami-Dade, and the other twelve contain none. That
+# agrees exactly with the ZIP-derived set in 0022_zip_seed_2026.sql — two
+# independent derivations, same answer. Carrying all 28 would create races for
+# twelve districts no covered ZIP resolves to. Coverage grows by adding a
+# COUNTY here and in build-zip-seed.mjs's METROS, with the districts following
+# from what that county contains.
 _NO_DISTRICT_RACES = {
     "GOV": ("FL-GOV-general", "state"),
     "ATG": ("FL-ATG-general", "state"),
@@ -207,8 +216,11 @@ def parse_candidate_list(text: str) -> dict:
              "dropped_us_house_districts": [str], "tiers": {tier: int}}.
 
     `skipped` stays the single total it always was; `skipped_detail` says why,
-    and `dropped_us_house_districts` names the U.S. House districts the file
-    contained and `_TARGET_US_HOUSE` excluded. An undifferentiated total is
+    and `dropped_us_house_districts` names any U.S. House district the file
+    contained that `_TARGET_US_HOUSE` does not — a real Florida district
+    outside the covered counties, or a number Florida does not have at all.
+    That list is how the next county expansion gets checked: the districts it
+    should stop naming are the ones the new county contains. An undifferentiated total is
     how the missing U.S. Senate race hid for weeks (see the comment on
     `_NO_DISTRICT_RACES`) — one number cannot distinguish "this file is 90%
     other races, as expected" from "a race we should be carrying is gone".
@@ -263,9 +275,15 @@ def parse_candidate_list(text: str) -> dict:
         else:
             skipped += 1
             if office_code == "USR":
-                # A real House district in the file that we chose not to carry.
-                # Recorded by number: this is the one skip a scope change makes
-                # wrong, and the only one worth naming individually.
+                # A House district in the file that this scope does not carry.
+                # NOT renamed to "unknown": the set is the sixteen the covered
+                # counties contain, so a row landing here is usually a REAL
+                # Florida district outside those counties (001-006, 013, 017-
+                # 019, 021, 023) — a scope decision, not a data error. It also
+                # catches a number Florida does not have; both are counted and
+                # named rather than raised, because one malformed row should
+                # not cost the whole run and the run report is where a scope
+                # gap gets noticed.
                 skipped_detail["us_house_district_not_targeted"] += 1
                 if juris:
                     dropped_us_house.add(juris)
