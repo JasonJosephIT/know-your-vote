@@ -115,7 +115,7 @@ check(
   rows.map((r) => r.zip5).join(",")
 );
 
-/* Output shape: 0018 must be loadable over an applied 0003. */
+/* Output shape: 0022 must be loadable over an applied 0003. */
 const sql = seedSql(rows);
 check("SQL clears the table first", sql.includes("DELETE FROM zip_district;"));
 check(

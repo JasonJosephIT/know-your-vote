@@ -1,7 +1,7 @@
 /* Checks the block -> district seed generator (scripts/build-block-seed.mjs).
 
    Part A is fixture unit checks. Part B is the cross-check against
-   0018_zip_seed_2026.sql, and runs only when the real inputs are passed:
+   0022_zip_seed_2026.sql, and runs only when the real inputs are passed:
 
      node scripts/verify-block-seed.mjs <block_assignment.txt> <zcta_tabblock.txt>
 
@@ -105,7 +105,7 @@ assert(
   /\(block_start, block_end, county_fips, congressional_district\)/.test(sql)
 );
 
-/* ---- Part B: cross-check against 0018 (only with the real inputs) ---- */
+/* ---- Part B: cross-check against 0022 (only with the real inputs) ---- */
 const [blockFile, relFile] = process.argv.slice(2);
 if (blockFile && relFile) {
   const realBlocks = coveredBlocks(readFileSync(blockFile, "utf8"));
@@ -132,7 +132,7 @@ if (blockFile && relFile) {
      who the ZIP path answers wrongly and address lookup answers exactly. */
   const SPLIT_SHARE = 0.05;
   const zipSql = readFileSync(
-    path.join(root, "supabase", "migrations", "0018_zip_seed_2026.sql"),
+    path.join(root, "supabase", "migrations", "0022_zip_seed_2026.sql"),
     "utf8"
   );
   const districtByZip = new Map();
@@ -145,7 +145,7 @@ if (blockFile && relFile) {
     else districtByZip.set(zip, district);
   }
   assert(
-    "parsed some non-split ZIPs from 0018",
+    "parsed some non-split ZIPs from 0022",
     districtByZip.size > 0,
     `${districtByZip.size}`
   );
@@ -209,7 +209,7 @@ if (blockFile && relFile) {
       notDominant.push(`${zip}: blocks say ${best}, 0018 says ${recorded}`);
   }
   assert(
-    "0018's district is the dominant one in every non-split ZIP",
+    "0022's district is the dominant one in every non-split ZIP",
     notDominant.length === 0,
     `${notDominant.length}, e.g. ${notDominant.slice(0, 3).join("; ")}`
   );

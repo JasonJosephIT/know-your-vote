@@ -197,7 +197,7 @@ export interface CoveredDistrict {
 /* The picker's options: every county+district pair coverage actually contains.
 
    Read from zip_district rather than block_district for size -- hundreds of rows
-   against thousands -- and it is the same answer either way: 0018_zip_seed_2026
+   against thousands -- and it is the same answer either way: 0022_zip_seed_2026
    is aggregated from the same enacted-plan block file 0026 is built from, and
    scripts/verify-block-seed.mjs asserts the two agree. block_district stays the
    authority for resolving a voter; this is only the list of choices. */

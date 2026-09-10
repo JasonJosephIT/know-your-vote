@@ -1,4 +1,4 @@
--- 0019_candidate_unopposed.sql
+-- 0023_candidate_unopposed.sql
 -- Carry the DoE's UNO code into the read model.
 -- See docs/general-election/ballots-handoff.md §2 (finding F2).
 --
@@ -58,7 +58,7 @@ BEGIN
      AND pg_get_constraintdef(oid) ILIKE '%qualifying_status%';
   IF stale IS NOT NULL THEN
     RAISE EXCEPTION
-      'candidate.qualifying_status still carries CHECK constraint(s) %; drop them by name before re-running 0019, or UNO rows will keep being rejected', stale;
+      'candidate.qualifying_status still carries CHECK constraint(s) %; drop them by name before re-running 0023, or UNO rows will keep being rejected', stale;
   END IF;
 END $$;
 

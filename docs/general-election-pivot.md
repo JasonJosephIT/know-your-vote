@@ -218,7 +218,7 @@ Worth stating plainly, because it shrinks the job:
   `node scripts/build-zip-seed.mjs <block_assignment.txt> <zcta_tabblock.txt>`.
   (The generator moved to the enacted 2026 map on 2026-09-07 — its inputs are
   now the EOGPCRP2026 block assignment and the ZCTA/tabblock relationship
-  file, and it writes `0018_zip_seed_2026.sql`. A statewide build widens the
+  file, and it writes `0022_zip_seed_2026.sql`. A statewide build widens the
   `METROS` filter there rather than reviving the CD119 build.)
 
 ## 6. Day 2 — amendments and urgency

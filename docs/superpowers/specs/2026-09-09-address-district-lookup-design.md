@@ -127,7 +127,7 @@ address lookup stated in numbers rather than in principle.
 ### Independent verification
 
 `scripts/verify-block-seed.mjs` checks the generated ranges against a source the
-project already trusts: for every ZIP that 0018 marks `is_split = false`, every
+project already trusts: for every ZIP that 0022 marks `is_split = false`, every
 covered block in that ZCTA must resolve to that ZIP's single district. It reuses
 the ZCTA/tabblock relationship file 0018 is built from. A wrong plan file, a bad
 county filter, or an off-by-one range fails loudly.
@@ -327,7 +327,7 @@ Every one of these ends with the voter still able to reach their ballot.
 The project has no test runner; checks are `scripts/verify-*` run directly with
 `node`. Two new ones plus a rewrite, all the same shape:
 
-- **`verify-block-seed.mjs`** — §4's cross-check against 0018.
+- **`verify-block-seed.mjs`** — §4's cross-check against 0022.
 - **`verify-address-resolve.ts`** — fixture-driven, no network: a Places
   autocomplete fixture, a Details fixture, the real Census coordinates response
   captured for `444 SW 2nd Ave`, and a small `block_district` fixture. Asserts

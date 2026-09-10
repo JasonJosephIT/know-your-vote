@@ -38,7 +38,7 @@ take both sides.
    why**, and land that row in the same commit as the file.
 3. Only then write the `.sql`.
 
-`0018` is next. `0013`–`0017` are all applied live.
+`0024` is next. `0013`–`0018`, `0020` and `0021` are applied live on `main`; `0019` is reserved for TASK-060; `0022`/`0023` are this branch's, written and not yet applied. Re-read `supabase/migrations/README.md` before claiming a number — this line has been wrong once already.
 
 ---
 

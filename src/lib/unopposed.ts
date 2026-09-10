@@ -6,7 +6,7 @@
    exactly that shape this cycle, as are state senate districts 4 and 16 and 28
    state house districts (ballots-handoff.md §2, finding F2).
 
-   The founder's decision was to CARRY the DoE's code — migration 0019 widened
+   The founder's decision was to CARRY the DoE's code — migration 0023 widened
    `candidate.qualifying_status` and `intake.py` maps `UNO -> 'unopposed'` —
    rather than derive the state here. The derivation ("one ballot-tier
    candidate and no write-in") was rejected because it cannot see the

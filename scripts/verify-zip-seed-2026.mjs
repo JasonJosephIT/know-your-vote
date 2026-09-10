@@ -1,4 +1,4 @@
-/* Checks supabase/migrations/0018_zip_seed_2026.sql — the ZIP -> district
+/* Checks supabase/migrations/0022_zip_seed_2026.sql — the ZIP -> district
    crosswalk rebuilt for the enacted 2026 congressional map — against
    docs/general-election/ballots/zip_districts_2026.csv, an answer to the same
    question derived independently from the same two Census/plan inputs.
@@ -16,7 +16,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const seedFile = path.join(root, "supabase", "migrations", "0018_zip_seed_2026.sql");
+const seedFile = path.join(root, "supabase", "migrations", "0022_zip_seed_2026.sql");
 const ORACLE = "docs/general-election/ballots/zip_districts_2026.csv";
 const ORACLE_REF = "claude/ballots-handoff-docs-835025";
 const METRO_FIPS = ["12086", "12011", "12057", "12095"];

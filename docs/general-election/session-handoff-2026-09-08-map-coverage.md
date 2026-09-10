@@ -1,5 +1,8 @@
 # Map-coverage handoff — what "we cover this area" actually means
 
+> **Not to be confused with** `session-handoff-2026-09-08-enacted-map-uno.md`, written the same day from the PR #35 worktree. Both were called "the map coverage handoff" and collided on this filename at merge. This file is the *audit* — what "we cover this area" delivers today. That one is the *change* — the enacted map, the sixteen districts, and `unopposed`. `coverage.ts`, `verify-coverage.ts` and `intake.py` cite the sections in THIS file.
+
+
 **Written:** 2026-09-08 · **Branch:** `claude/map-coverage-handoff-gc39rq`
 (at `0cebc42`, **zero commits over `origin/main`**) · **Scope of this session:**
 audit only — no code, no migration, no copy change.
