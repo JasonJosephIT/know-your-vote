@@ -24,7 +24,8 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://know-your-vote-chazak.vercel.app"
+    process.env.NEXT_PUBLIC_SITE_URL ??
+      "https://know-your-vote-chazak.vercel.app"
   ),
   /* Every public page sets its own title, so `default` is in practice the
      landing page's — and since TASK-067 that page no longer claims to show
@@ -60,7 +61,13 @@ export const metadata: Metadata = {
       { url: "/brand/site/favicon-32.png", sizes: "32x32", type: "image/png" },
       { url: "/brand/site/favicon-16.png", sizes: "16x16", type: "image/png" },
     ],
-    apple: [{ url: "/brand/mobile/app-icon-ios-180.png", sizes: "180x180", type: "image/png" }],
+    apple: [
+      {
+        url: "/brand/mobile/app-icon-ios-180.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
   },
   manifest: "/manifest.webmanifest",
   appleWebApp: {
@@ -89,7 +96,7 @@ export default function RootLayout({
     >
       {/* Bottom padding clears the fixed nav plus the home-indicator inset in
           standalone PWA mode; top inset keeps content out of the status bar. */}
-      <body className="flex min-h-full flex-col pt-[env(safe-area-inset-top)] pb-[calc(88px+env(safe-area-inset-bottom))] md:pt-[72px] md:pb-0">
+      <body className="flex min-h-full flex-col pt-[calc(40px+env(safe-area-inset-top))] pb-[calc(88px+env(safe-area-inset-bottom))] md:pt-[72px] md:pb-0">
         {plausibleDomain && (
           <Script
             src="https://plausible.io/js/script.js"

@@ -56,15 +56,51 @@ export function writeDistrictCookie(choice: DistrictChoice): void {
   if (typeof document === "undefined") return;
   const secure = window.location.protocol === "https:" ? "; secure" : "";
   document.cookie = `${DISTRICT_COOKIE}=${formatDistrictCookie(choice)}; path=/; max-age=${DISTRICT_COOKIE_MAX_AGE}; samesite=lax${secure}`;
+  notify();
 }
 
 export function readDistrictCookie(): DistrictChoice | null {
-  if (typeof document === "undefined") return null;
-  const match = document.cookie.match(/(?:^|; )kyv\.district=([^;]*)/);
-  return parseDistrictCookie(match ? decodeURIComponent(match[1]) : null);
+  return parseDistrictCookie(districtCookieSnapshot());
 }
 
 export function clearDistrictCookie(): void {
   if (typeof document === "undefined") return;
   document.cookie = `${DISTRICT_COOKIE}=; path=/; max-age=0; samesite=lax`;
+  notify();
+}
+
+/* The chip reads this through useSyncExternalStore, because document.cookie is
+   exactly what that hook is for: an external store React does not own. Reading
+   it in an effect and calling setState works, but it is the cascading-render
+   pattern React 19 lints against, and it cannot express "not known yet" without
+   a second state variable.
+
+   Snapshots are strings so they compare by value -- returning a fresh parsed
+   object each call would re-render forever. `null` means "server, or not yet
+   hydrated", which is how the chip renders nothing rather than flashing "Set
+   your district" and then swapping in a district. */
+
+const listeners = new Set<() => void>();
+
+function notify(): void {
+  for (const listener of listeners) listener();
+}
+
+export function subscribeDistrictCookie(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+/** The raw cookie value, or "" when absent. Client-only. */
+export function districtCookieSnapshot(): string {
+  if (typeof document === "undefined") return "";
+  const match = document.cookie.match(/(?:^|; )kyv\.district=([^;]*)/);
+  return match ? decodeURIComponent(match[1]) : "";
+}
+
+/** On the server nothing is known yet -- deliberately not "absent". */
+export function districtCookieServerSnapshot(): null {
+  return null;
 }
