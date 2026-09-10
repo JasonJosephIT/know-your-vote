@@ -10,6 +10,11 @@
         query (county_fips IS NULL AND verified_by IS NOT NULL) — the gate
         every send/render path uses — returns 0 rows as seeded and all rows
         once verified_by is set. Nothing sends before founder task F4.
+     5. The rows 0021 adds on top of 0008 (ballot_return_deadline, and the
+        `rule` on every deadline) are present and internally consistent.
+        These are checked against the DATABASE, not by re-parsing SQL: 0008
+        is frozen (applied live, never regenerated) so the static checks
+        above deliberately still describe exactly its ten rows.
 
    Run: node scripts/verify-election-seed.mjs */
 
@@ -92,7 +97,72 @@ const before = (await db.query(GATE)).rows[0].n;
 check("verified gate: 0 rows sendable as seeded", before === 0, `saw ${before}`);
 await db.exec("UPDATE election_event SET verified_by='probe@example.com', verified_at=NOW();");
 const after = (await db.query(GATE)).rows[0].n;
-check("verified gate: 10 rows sendable once verified", after === 10, `saw ${after}`);
+/* 10 from 0008 + 2 ballot_return_deadline rows from 0021. */
+const EXPECTED_ROWS = rows.length + 2;
+check(
+  `verified gate: ${EXPECTED_ROWS} rows sendable once verified`,
+  after === EXPECTED_ROWS,
+  `saw ${after}`
+);
+
+/* (5): 0021's additions, read back from the applied schema. */
+const returns = (
+  await db.query(
+    `SELECT e.election, e.rule, e.details_url,
+            e.event_date::text AS event_date,
+            d.event_date::text AS election_day
+       FROM election_event e
+       JOIN election_event d
+         ON d.election = e.election AND d.event_type = 'election_day'
+      WHERE e.event_type = 'ballot_return_deadline'
+      ORDER BY e.election;`
+  )
+).rows;
+check(
+  "ballot_return_deadline seeded for both elections",
+  returns.length === 2,
+  `saw ${returns.length}`
+);
+for (const r of returns) {
+  check(
+    `${r.election}: return deadline is election day itself`,
+    r.event_date === r.election_day,
+    `${r.event_date} vs ${r.election_day}`
+  );
+  check(`${r.election}: return rule is received_by`, r.rule === "received_by", String(r.rule));
+  check(
+    `${r.election}: return cites the page that states the rule`,
+    r.details_url.includes("vote-by-mail"),
+    r.details_url
+  );
+}
+
+const ruleAudit = (
+  await db.query(
+    `SELECT event_type, rule, count(*)::int AS n
+       FROM election_event GROUP BY event_type, rule ORDER BY event_type;`
+  )
+).rows;
+const EXPECTED_RULE = {
+  registration_deadline: "postmarked_by",
+  vbm_request_deadline: "received_by",
+  ballot_return_deadline: "received_by",
+  early_voting_start: null,
+  early_voting_end: null,
+  election_day: null,
+};
+for (const r of ruleAudit) {
+  check(
+    `rule for ${r.event_type} is ${String(EXPECTED_RULE[r.event_type])}`,
+    r.rule === EXPECTED_RULE[r.event_type],
+    `saw ${String(r.rule)} on ${r.n} row(s)`
+  );
+}
+check(
+  "every event_type is covered by the rule audit",
+  new Set(ruleAudit.map((r) => r.event_type)).size === Object.keys(EXPECTED_RULE).length,
+  ruleAudit.map((r) => r.event_type).join(", ")
+);
 
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed`);

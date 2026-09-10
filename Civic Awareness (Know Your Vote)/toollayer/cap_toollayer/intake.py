@@ -65,6 +65,16 @@ _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
 # with nothing in the output to say so. Adding an office here is the only
 # thing that makes a race exist; check this map against the ballot, not
 # against the last run's counts.
+#
+# `_TARGET_US_HOUSE` below is the SAME SHAPE OF TRAP for districts, and as of
+# 2026-09-10 it still holds only the four districts the primary-era scope
+# covered. Twelve of the sixteen districts seeded in `zip_district` therefore
+# have no race at all, and the voter-facing consequence is measured in
+# docs/general-election/session-handoff-2026-09-08-map-coverage.md §1. Nothing
+# here decides which districts are right — that is a scope call — but the
+# parse result now reports WHICH districts it dropped rather than folding
+# them into one `skipped` total, so the next reader cannot miss it the way
+# the Senate was missed.
 _NO_DISTRICT_RACES = {
     "GOV": ("FL-GOV-general", "state"),
     "ATG": ("FL-ATG-general", "state"),
@@ -159,8 +169,19 @@ class DoEFormatError(ValueError):
 def parse_candidate_list(text: str) -> dict:
     """Parse the tab-separated DoE export into target-race rows.
 
-    Returns {"races": {race_id: race}, "candidates": [candidate], "skipped": int}.
-    Deterministic: same input -> same output (so re-intake is idempotent).
+    Returns {"races": {race_id: race}, "candidates": [candidate],
+             "skipped": int, "skipped_detail": {reason: int},
+             "dropped_us_house_districts": [str], "tiers": {tier: int}}.
+
+    `skipped` stays the single total it always was; `skipped_detail` says why,
+    and `dropped_us_house_districts` names the U.S. House districts the file
+    contained and `_TARGET_US_HOUSE` excluded. An undifferentiated total is
+    how the missing U.S. Senate race hid for weeks (see the comment on
+    `_NO_DISTRICT_RACES`) — one number cannot distinguish "this file is 90%
+    other races, as expected" from "a race we should be carrying is gone".
+
+    Deterministic: same input -> same output (so re-intake is idempotent),
+    including the sorted district list.
     Raises DoEFormatError if the expected header columns are absent.
     """
     lines = [ln for ln in text.splitlines() if ln.strip()]
@@ -179,6 +200,12 @@ def parse_candidate_list(text: str) -> dict:
     races: dict[str, dict] = {}
     candidates: list[dict] = []
     skipped = 0
+    skipped_detail: dict[str, int] = {
+        "office_not_targeted": 0,
+        "us_house_district_not_targeted": 0,
+        "no_acct_num": 0,
+    }
+    dropped_us_house: set[str] = set()
     tiers: dict[str, int] = {"ballot": 0, "write_in": 0, "excluded": 0}
     for line in lines[1:]:
         row = line.split("\t")
@@ -192,11 +219,24 @@ def parse_candidate_list(text: str) -> dict:
             level, district = "federal", str(int(juris))
         else:
             skipped += 1
+            if office_code == "USR":
+                # A real House district in the file that we chose not to carry.
+                # Recorded by number: this is the one skip a scope change makes
+                # wrong, and the only one worth naming individually.
+                skipped_detail["us_house_district_not_targeted"] += 1
+                if juris:
+                    dropped_us_house.add(juris)
+            else:
+                skipped_detail["office_not_targeted"] += 1
             continue
 
         acct = col(row, "AcctNum")
         if not acct:
+            # Malformed rather than out of scope — it would have been a
+            # candidate. Kept separate so a parser problem never hides inside
+            # the expected out-of-scope volume.
             skipped += 1
+            skipped_detail["no_acct_num"] += 1
             continue
         candidate_id = f"FL-DOE-{acct}"
         name = " ".join(p for p in (col(row, "NameFirst"), col(row, "NameMiddle"),
@@ -232,6 +272,8 @@ def parse_candidate_list(text: str) -> dict:
     for race in races.values():  # stable order -> idempotent arrays
         race["candidate_ids"] = sorted(set(race["candidate_ids"]))
     return {"races": races, "candidates": candidates, "skipped": skipped,
+            "skipped_detail": skipped_detail,
+            "dropped_us_house_districts": sorted(dropped_us_house),
             "tiers": tiers}
 
 
@@ -808,6 +850,12 @@ def build_intake_handlers(
             "races": sorted(parsed["races"]),
             "candidate_count": len(parsed["candidates"]),
             "skipped": parsed["skipped"],
+            # Why, not just how many. A run report that says "skipped: 283"
+            # cannot be checked against the ballot; one that says 269 were
+            # other offices, 14 were House districts we do not carry, and
+            # names them, can.
+            "skipped_detail": parsed["skipped_detail"],
+            "dropped_us_house_districts": parsed["dropped_us_house_districts"],
             # Per-tier counts make the D1 exclusion auditable from the run
             # report rather than only from the database: a caller can see that
             # 87 filings were parsed and 22 became ballot lines.

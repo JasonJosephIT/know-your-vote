@@ -35,6 +35,9 @@ const correctionParams = dateParams.extend({
   event_label: z.enum([
     "voter registration deadline",
     "vote-by-mail request deadline",
+    /* Every date we can publish must be correctable — the ballot return
+       deadline reaches voters through the .ics calendar (0021). */
+    "vote-by-mail ballot return deadline",
     "early voting start date",
     "early voting end date",
     "election day",
@@ -86,6 +89,36 @@ export const TEMPLATES = {
       subject: "Vote-by-mail request deadline is tomorrow",
       title: "Vote-by-mail deadline is tomorrow",
       body: `Tomorrow, ${longDate(p.date)}, is the last day to request a vote-by-mail ballot for the ${ELECTION_LABEL[p.election]}. Official info: ${p.details_url}`,
+      url: p.details_url,
+    }),
+  }),
+  /* The return deadline (0021). Two sends, mirroring the registration
+     deadline's T-7/T-1 shape because this is the other deadline with no
+     second chance — but the two bodies give DIFFERENT advice, which is the
+     reason there are two. At T-7 mail still works and the Postal Service
+     asks for a week; at T-1 it may not, so the useful instruction changes
+     to returning it in person. Both say a postmark does not count, because
+     that is the specific wrong belief this deadline punishes. Neither
+     names a drop-off mechanism — those vary by county and by whether early
+     voting has ended, so both defer to the Supervisor of Elections, the
+     same way early_voting_start defers on days and sites. */
+  ballot_return_t7: template({
+    channel: "email",
+    schema: dateParams,
+    render: (p) => ({
+      subject: "Mail your ballot back this week",
+      title: "One week to return your ballot",
+      body: `Your voted ballot for the ${ELECTION_LABEL[p.election]} must be RECEIVED by your county Supervisor of Elections by 7 p.m. on ${longDate(p.date)} — one week away. A postmark does not count, and the Postal Service recommends mailing it back at least a week ahead. Official info: ${p.details_url}`,
+      url: p.details_url,
+    }),
+  }),
+  ballot_return_t1: template({
+    channel: "email",
+    schema: dateParams,
+    render: (p) => ({
+      subject: "Your ballot must be back by 7 p.m. tomorrow",
+      title: "Ballot due back tomorrow",
+      body: `Your voted ballot for the ${ELECTION_LABEL[p.election]} must be RECEIVED by 7 p.m. tomorrow, ${longDate(p.date)} — a postmark does not count. Mail may no longer arrive in time, so returning it in person is the surest way; your county Supervisor of Elections lists locations and hours. Official info: ${p.details_url}`,
       url: p.details_url,
     }),
   }),

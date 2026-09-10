@@ -96,8 +96,9 @@ ingest plan unblocks.
 
 ## The other local-only tasks
 
-Same network constraint, all detailed in `data-ingest.md` §7 — listed here only
-so nobody schedules them into a remote session and watches them 403.
+Same network constraint, all detailed in `data-ingest.md` §7 (TASK-060 is the
+exception — it lives in `general-election-pivot.md`) — listed here only so
+nobody schedules them into a remote session and watches them 403.
 
 | ID | Needs | Also needs |
 |---|---|---|
@@ -106,10 +107,42 @@ so nobody schedules them into a remote session and watches them 403.
 | **B5** | live Congress.gov for federal incumbent voting records | a free `api.data.gov` key |
 | **B7** | the full S2-01 acceptance through real S1 | the AGENT_BRIEF §7 gates: arm64 Python 3.12 venv with `mcp`+`psycopg`, `SUPABASE_DB_URL` password, demo seed loaded, Anthropic spend |
 | **C7-b** | `node scripts/news-sweep.ts --probe` — confirms the RSS/Atom feed URL for each of the 23 outlets in `src/lib/news-sources.ts` (they ship `feed: null`; the remote session refused to guess) | nothing — one command, ~1 minute |
+| **TASK-060** | the two Census ZCTA crosswalk files, downloaded on any machine with real network, then `node scripts/build-zip-seed.mjs <zcta_cd.txt> <zcta_county.txt>` | **a script edit first — see the note below.** The output is migration **0019**; claim it in `supabase/migrations/README.md` before writing the file |
 
 B3 is worth doing while you're here — it needs no network tooling at all, and
 it clears defect I3, which is the one that would otherwise publish hollow
 briefs without tripping a single audit gate.
+
+**TASK-060 is the one with a trap.** The two files are named in the header of
+`scripts/build-zip-seed.mjs`:
+
+```
+https://www2.census.gov/geo/docs/maps-data/data/rel2020/cd-sld/tab20_cd11920_zcta520_natl.txt
+https://www2.census.gov/geo/docs/maps-data/data/rel2020/zcta520/tab20_zcta520_county20_natl.txt
+```
+
+`www2.census.gov` answers **403** to CONNECT through the remote session's proxy
+— a policy denial, re-confirmed 2026-09-08, not a flake worth retrying. But
+downloading the files is the easy half. The script as written **filters every
+ZCTA down to the four metro counties** (`if (METROS[county])`) and then derives
+each row's `county_fips` by searching `METROS` for a matching `metro` value —
+which cannot work when `metro` is NULL for the other 63 counties. Run unedited,
+it reproduces the same 304 rows it produced in July and looks like a success.
+A statewide run needs the FIPS taken straight from the crosswalk row, and
+`metro` allowed to be NULL.
+
+Two more corrections worth having before you start, both from
+`session-handoff-2026-09-08-map-coverage.md` §3: the migration is **data-only**
+(no DDL — `metro` is already nullable with no CHECK and `anon_read_zip_district`
+is already `USING (true)`), and `in_coverage` is **unused today** — 0 of 304
+rows are false, so "not covered" is currently signalled by row absence and
+redefining the flag is its first use, not a migration of meaning.
+
+**And the thing widening the map does NOT fix:** 133 of the 235 currently
+seeded ZIPs resolve to a district with no published House race. Since 2026-09-09
+the app says so out loud rather than rendering a silently short ballot
+(`src/lib/coverage.ts`), but every ZIP this task adds arrives in that same state
+until its district's race is published. Widen the map knowing that.
 
 **C7-b is the cheapest thing on this list.** `--probe` fetches each outlet's
 homepage and prints the feeds it advertises; paste the confirmed URLs into the

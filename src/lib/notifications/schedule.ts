@@ -22,6 +22,12 @@ export const REMINDER_OFFSETS: ReadonlyArray<{
   { event_type: "registration_deadline", offset_days: 1, template_id: "reg_deadline_t1", channel: "email" },
   { event_type: "vbm_request_deadline", offset_days: 1, template_id: "vbm_deadline_t1", channel: "email" },
   { event_type: "early_voting_start", offset_days: 0, template_id: "early_voting_start", channel: "email" },
+  /* Chronological: for general_2026 these land Oct 27 and Nov 2, after early
+     voting opens and before election day. T-0 is deliberately absent — the
+     return deadline shares its date with election_day, and two emails on the
+     same morning is how a reminder stream gets muted. */
+  { event_type: "ballot_return_deadline", offset_days: 7, template_id: "ballot_return_t7", channel: "email" },
+  { event_type: "ballot_return_deadline", offset_days: 1, template_id: "ballot_return_t1", channel: "email" },
   { event_type: "election_day", offset_days: 0, template_id: "election_day", channel: "email" },
 ];
 

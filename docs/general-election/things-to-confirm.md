@@ -53,6 +53,56 @@ self.assertEqual(
 
 ---
 
+## TC-5 — a SECURITY DEFINER function shipped with EXECUTE granted to `anon`
+
+**Introduced** 2026-09-09 by `0018_publication_audit.sql` (mine). **Found and
+closed on live** 2026-09-10, roughly 24 hours later. **Fix-forward migration
+`0020` is written and harness-verified; its second half is not yet applied.**
+
+0018 ended with the revoke that reads correct:
+
+```sql
+REVOKE ALL ON FUNCTION set_race_publication(...) FROM PUBLIC;
+GRANT  EXECUTE ON FUNCTION set_race_publication(...) TO service_role;
+```
+
+The live ACL was `postgres=X | anon=X | authenticated=X | service_role=X`.
+
+Supabase ships `ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON
+FUNCTIONS TO anon, authenticated, service_role`, so `CREATE FUNCTION` wrote
+**explicit** grants to those roles immediately. `REVOKE ... FROM PUBLIC`
+removes the PUBLIC pseudo-role's grant and does not touch an explicit grant to
+a named role. The function is `SECURITY DEFINER` owned by `postgres`, so
+EXECUTE by anon meant the public browser key could publish or unpublish any
+race — the gate that decides what a voter sees. RLS is not involved; a definer
+function runs around it.
+
+**Nothing was exploited.** `admin_action` held only this session's two rows and
+all nine races were still published. That is answerable *only* because the
+function writes its audit row in the same statement it flips — a design whose
+value showed up first as forensics on its own hole.
+
+**Why the harness said the opposite.** `verify-migrations.mjs` ran migrations
+in PGlite with no default privileges, so `REVOKE FROM PUBLIC` really was
+sufficient there and `anon cannot EXECUTE set_race_publication` passed
+honestly. The harness modelled a **stricter** world than production, so a real
+hole read as sealed. It now installs Supabase's default privileges before
+applying migrations; that alone reproduces the defect as three failures.
+
+**The repo already knew this — for tables.** 0002/0005/0006 carry explicit
+REVOKEs from anon/authenticated and call it "the 0005 lesson". Nobody had
+applied it to FUNCTIONS because until 0018 no function was ever granted to a
+role: 0010's and 0012's are reached through triggers, which never consult
+EXECUTE. The first function to need a grant walked straight into it.
+
+> **The general shape:** a test environment that is stricter than production
+> turns a missing defence into a passing assertion. When a platform grants
+> privileges by default, the harness has to grant them too, or every explicit
+> REVOKE in the codebase is being verified against a world where it was never
+> needed. Check what your fixtures *do not* have that production does.
+
+---
+
 ## TC-0 — Vercel is the only PR check, and it does not run the Python suite
 
 **Standing, not a bug to fix.** Confirmed 2026-09-07.
