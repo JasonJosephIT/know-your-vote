@@ -25,6 +25,11 @@
    Run: node scripts/verify-no-stored-location.ts */
 
 import { readdirSync, readFileSync, statSync, existsSync } from "node:fs";
+import {
+  parseDistrictCookie,
+  formatDistrictCookie,
+  DISTRICT_COOKIE,
+} from "../src/lib/district-cookie.ts";
 import { join, resolve } from "node:path";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -49,7 +54,10 @@ function walk(dir: string): string[] {
   });
 }
 
-const files = walk(SRC).map((f) => ({ path: f.slice(ROOT.length + 1), code: stripComments(readFileSync(f, "utf8")) }));
+const files = walk(SRC).map((f) => ({
+  path: f.slice(ROOT.length + 1),
+  code: stripComments(readFileSync(f, "utf8")),
+}));
 
 /* 1. The module itself is gone. */
 assert(
@@ -74,11 +82,15 @@ for (const [label, re] of [
 const ALLOWED = new Set(["kyv.saved", "kyv.install-dismissed"]);
 const keyed: Array<{ path: string; key: string }> = [];
 for (const f of files) {
-  for (const m of f.code.matchAll(/localStorage\.(?:setItem|getItem|removeItem)\(\s*([A-Za-z_$][\w$]*|"[^"]*"|'[^']*')/g)) {
+  for (const m of f.code.matchAll(
+    /localStorage\.(?:setItem|getItem|removeItem)\(\s*([A-Za-z_$][\w$]*|"[^"]*"|'[^']*')/g
+  )) {
     let key = m[1];
     if (!/^["']/.test(key)) {
       /* a constant — resolve it within the same file */
-      const decl = f.code.match(new RegExp(`(?:const|let)\\s+${key}\\s*=\\s*["']([^"']+)["']`));
+      const decl = f.code.match(
+        new RegExp(`(?:const|let)\\s+${key}\\s*=\\s*["']([^"']+)["']`)
+      );
       key = decl ? decl[1] : `<${key}: unresolved>`;
     } else {
       key = key.slice(1, -1);
@@ -97,7 +109,10 @@ assert(
       is deliberately narrow — it pins the two claims that were actually
       wrong, and the two keys that are actually written, rather than pretending
       to validate English. */
-const privacy = readFileSync(join(SRC, "app", "(public)", "privacy", "page.tsx"), "utf8");
+const privacy = readFileSync(
+  join(SRC, "app", "(public)", "privacy", "page.tsx"),
+  "utf8"
+);
 const privacyText = stripComments(privacy);
 
 assert(
@@ -120,7 +135,9 @@ assert(
 
 /* 5. ballot_viewed exists and precedes zip_resolved: the funnel's entry event
       is the ballot now, not the ZIP. */
-const analytics = stripComments(readFileSync(join(SRC, "lib", "analytics.ts"), "utf8"));
+const analytics = stripComments(
+  readFileSync(join(SRC, "lib", "analytics.ts"), "utf8")
+);
 assert(
   "ballot_viewed is a declared analytics event",
   /"ballot_viewed"/.test(analytics)
@@ -130,11 +147,61 @@ assert(
   analytics.indexOf('"ballot_viewed"') < analytics.indexOf('"zip_resolved"')
 );
 
-const landing = stripComments(readFileSync(join(SRC, "app", "(public)", "page.tsx"), "utf8"));
+const landing = stripComments(
+  readFileSync(join(SRC, "app", "(public)", "page.tsx"), "utf8")
+);
 assert(
   "landing page fires ballot_viewed only when a ballot rendered",
   /ballotRendered && <TrackView event="ballot_viewed" \/>/.test(landing)
 );
+
+/* 6. The district cookie is the one thing that outlives a visit, and its value
+      shape is the guarantee that it holds a district rather than a location. */
+assert("the cookie is named kyv.district", DISTRICT_COOKIE === "kyv.district");
+assert(
+  "a well-formed value parses",
+  parseDistrictCookie("FL-27|12086")?.district === "FL-27" &&
+    parseDistrictCookie("FL-27|12086")?.countyFips === "12086"
+);
+assert(
+  "a single-digit district parses",
+  parseDistrictCookie("FL-7|12011")?.district === "FL-7"
+);
+for (const bad of [
+  "",
+  "FL-27",
+  "12086",
+  "FL-27|1208",
+  "33130|12086",
+  "FL-27|12086; evil=1",
+  "444 SW 2nd Ave|12086",
+  "FL-abc|12086",
+  "FL-27|12086|extra",
+]) {
+  assert(
+    `a malformed value is treated as absent: ${JSON.stringify(bad)}`,
+    parseDistrictCookie(bad) === null
+  );
+}
+/* A well-shaped value for a county we do not cover parses here and is refused
+   downstream: resolveDistrict returns null, so it produces no ballot. Shape is
+   this module's job; coverage is the ballot's. */
+assert(
+  "an uncovered county still parses, and is refused where it matters",
+  parseDistrictCookie("FL-1|12087")?.countyFips === "12087"
+);
+assert(
+  "formatting round-trips",
+  formatDistrictCookie({ district: "FL-27", countyFips: "12086" }) ===
+    "FL-27|12086"
+);
+let refusedMalformed = false;
+try {
+  formatDistrictCookie({ district: "33130", countyFips: "12086" });
+} catch {
+  refusedMalformed = true;
+}
+assert("formatting refuses a value that is not a district", refusedMalformed);
 
 if (failures) {
   console.error(`\n${failures} stored-location check(s) failed`);
