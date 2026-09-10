@@ -62,11 +62,11 @@ Digits-only input never reaches Google: five digits go straight to the existing
 ## 4. Data: `block_district`
 
 Three migrations, because a generated file should not carry schema — the same
-split 0001/0003 and 0018 already use. 0019 is the highest on the map branch.
+split 0001/0003 and 0018 already use. Numbers claimed in `supabase/migrations/README.md` first, per that ledger's rule 2.
 
-- `0020_block_district.sql` — table and index
-- `0021_block_district_rls.sql` — grants and policy, following 0010/0011
-- `0022_block_seed_2026.sql` — generated `DELETE` + `INSERT`
+- `0024_block_district.sql` — table and index
+- `0025_block_district_rls.sql` — grants and policy, following 0010/0011
+- `0026_block_seed_2026.sql` — generated `DELETE` + `INSERT`
 
 ```sql
 CREATE TABLE block_district (
