@@ -61,9 +61,12 @@ Digits-only input never reaches Google: five digits go straight to the existing
 
 ## 4. Data: `block_district`
 
-`0020_block_district.sql` (table + generated seed) and
-`0021_block_district_rls.sql` (grants and policy, following the 0010/0011
-pattern). 0019 is the highest migration on the map branch.
+Three migrations, because a generated file should not carry schema — the same
+split 0001/0003 and 0018 already use. 0019 is the highest on the map branch.
+
+- `0020_block_district.sql` — table and index
+- `0021_block_district_rls.sql` — grants and policy, following 0010/0011
+- `0022_block_seed_2026.sql` — generated `DELETE` + `INSERT`
 
 ```sql
 CREATE TABLE block_district (
@@ -186,8 +189,12 @@ shared by client and server:
 - Name `kyv.district`, value `FL-27|12086`, `path=/`, `max-age=15552000` (180
   days), `samesite=lax`, `secure`. Deliberately **not** `HttpOnly`: it holds no
   secret, and JS-readable means the chip renders and clears without a round trip.
-- `parseDistrictCookie(raw)` validates `/^FL-\d{1,2}\|\d{5}$/` **and** that the
-  county is in `COVERED_COUNTIES`; anything else is treated as absent.
+- `parseDistrictCookie(raw)` validates the shape `/^FL-\d{1,2}\|\d{5}$/`;
+  anything else is treated as absent. That regex is what keeps a ZIP or an
+  address out of the cookie. Whether the county is *covered* is enforced where a
+  ballot is produced — `resolveDistrict` returns `null` for an uncovered county —
+  which keeps this module import-free so it can be parsed in the browser, on the
+  server, and under plain `node` by the verify script.
 - Written only by an explicit user action — a resolved address, a resolved ZIP,
   or a picker choice. **A shared link never writes it**, or sharing your ballot
   would silently move someone else's district.
@@ -251,6 +258,11 @@ easy to overclaim:
 The privacy page's "What stays on your device" section gains the cookie as a
 third item, and the "return visit asks again" paragraph is replaced. The
 paragraph that says the ZIP is not stored stays true and gets stronger.
+
+One more line goes false and must move with it: `src/app/(public)/page.tsx:63`
+tells the voter *"We use it to find your district; nothing is saved on your
+device."* The first half stays true, the second does not. The "No ZIP needed"
+claims in the layout metadata, `/where-i-stand` and `Quiz` are unaffected.
 `docs/product-roadmap.md` records the partial reversal of TASK-070 so the
 decision is not silently undone.
 
