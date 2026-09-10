@@ -23,6 +23,14 @@ identical to the digest computed from the repo file. Block `120860036061055` —
 what the Census geocoder returns for 444 SW 2nd Ave, Miami — resolves to `FL-27`
 in production, and `anon` can read all 982 rows but is refused on INSERT.
 
+**What the live check surfaced.** Address lookup resolves to any of the **16**
+districts `block_district` covers, but only **4** of them have a House race row
+in `race` today — FL-10, FL-15, FL-23 and FL-28, all published. So a voter in
+the other 12 resolves correctly and is told, honestly, that their House race
+isn't up yet (PR #36's copy fix). This is the same consequence `0022`'s ledger
+entry already records for the ZIP path — it needs an intake run to create the
+district race rows, and no part of this work can substitute for that.
+
 Verified along the way, on a machine with **no `.env.local` and no Google key**:
 
 - Every offline check passes: `verify-counties`, `verify-address-resolve`,
