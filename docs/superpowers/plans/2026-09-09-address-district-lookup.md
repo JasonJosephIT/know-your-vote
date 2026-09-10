@@ -10,6 +10,40 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-09-address-district-lookup-design.md` — read it before Task 1.
 
+## Status — built 2026-09-09
+
+Tasks 0–13 are **done and committed** on `claude/address-district-lookup`. Task
+14 (the live gate) is the only one left and needs a founder: it cannot start
+without a billing-enabled Google Cloud project.
+
+Verified along the way, on a machine with **no `.env.local` and no Google key**:
+
+- Every offline check passes: `verify-counties`, `verify-address-resolve`,
+  `verify-block-seed` (including the cross-check against `0018` with the real
+  1 GB Census relationship file), `verify-migrations` (invariant 17 resolves the
+  real Miami block to FL-27 in a live Postgres), `verify-no-stored-location`,
+  `verify-sentry-scrub`, `verify-shared-ballot`. `tsc --noEmit` and `eslint` are
+  clean; `next build` succeeds.
+- The build's route table confirms the caching stayed contained: `/` and
+  `/candidates` dynamic, `/races/[raceId]` and `/measures/[measureId]` still SSG,
+  `/methodology` still ISR at 1h.
+- In the browser: the chip's empty state, set state, menu, and **Forget** (cookie
+  deleted, chip and the server-rendered section both revert), and a shared
+  `?district=FL-25&county=12086` link renders **without writing the cookie**.
+- Both routes degrade correctly with no key — `503 {unavailable: true}` — and
+  `GET /api/address/suggest` returns **405**, so an address cannot reach a URL.
+
+Not verified here, and honestly cannot be without credentials: anything behind
+Supabase (`/candidates` errors identically on the untouched `?county=` path
+without `.env.local`) and everything behind the Google key.
+
+Three checks fail on this machine for missing `NEXT_PUBLIC_SUPABASE_URL`
+(`verify-news-neutrality`, `verify-admin-ops`, `verify-refresh-schema`), and
+`verify-news-ungated` fails on files byte-identical to `origin/main` — a
+pre-existing failure on main, not from this work.
+
+---
+
 ## Global Constraints
 
 - **This is not the Next.js you know.** Read the relevant guide in `node_modules/next/dist/docs/` before using any Next API (`AGENTS.md`). Notably: `cookies()` is **async**, using it in a page or layout **opts that route into dynamic rendering**, and cookies **cannot be set during render** — only in a Server Function or Route Handler, or client-side.
@@ -82,7 +116,7 @@
 - Consumes: nothing.
 - Produces: `claude/address-district-lookup`, containing migrations `0018`/`0019` and PR #36's `resolve.ts` fix, with no shared branch rewritten.
 
-- [ ] **Step 1: Branch from the map branch, without rewriting it**
+- [x] **Step 1: Branch from the map branch, without rewriting it**
 
 The enacted-map migrations live only on `claude/general-election-2026-map` (PR #35). That branch is a published PR head and other sessions may share it, so **do not rebase it** — branch from it instead:
 
@@ -91,7 +125,7 @@ git fetch origin
 git checkout -b claude/address-district-lookup origin/claude/general-election-2026-map
 ```
 
-- [ ] **Step 2: Bring in main's resolve.ts fix by merging, not rebasing**
+- [x] **Step 2: Bring in main's resolve.ts fix by merging, not rebasing**
 
 The map branch predates `19a2324` (PR #36's "a resolved ZIP has no House race" copy fix), and both it and this work touch `resolve.ts`. Merge `main` in now, so that fix is present before Task 7 edits the same file:
 
@@ -106,7 +140,7 @@ git log --oneline --all --grep="no House race" -1
 grep -n "House race" src/lib/resolve.ts src/components/features/YourRaces.tsx | head -5
 ```
 
-- [ ] **Step 3: Confirm the baseline is green before adding to it**
+- [x] **Step 3: Confirm the baseline is green before adding to it**
 
 ```bash
 ls supabase/migrations/ | tail -3
@@ -134,7 +168,7 @@ Expected: `0018_zip_seed_2026.sql` and `0019_candidate_unopposed.sql` are presen
 
 **Why:** `CountyPicker` is a client component, so it keeps a second copy of the four counties rather than importing `@/lib/resolve` (which pulls the Supabase client into the browser bundle). Task 9's cookie parser needs to validate a county in the browser too — a third copy. One dependency-free module retires all of it.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `scripts/verify-counties.ts`:
 
@@ -191,7 +225,7 @@ if (failures) {
 console.log("\nAll county checks passed.");
 ```
 
-- [ ] **Step 2: Run it to make sure it fails**
+- [x] **Step 2: Run it to make sure it fails**
 
 ```bash
 node scripts/verify-counties.ts
@@ -199,7 +233,7 @@ node scripts/verify-counties.ts
 
 Expected: FAIL — cannot resolve `../src/lib/counties.ts`.
 
-- [ ] **Step 3: Create the module**
+- [x] **Step 3: Create the module**
 
 Create `src/lib/counties.ts`:
 
@@ -235,7 +269,7 @@ export function coveredCounty(fips: string): CoveredCounty | undefined {
 }
 ```
 
-- [ ] **Step 4: Point the two existing readers at it**
+- [x] **Step 4: Point the two existing readers at it**
 
 In `src/lib/resolve.ts`, delete the `COVERED_COUNTIES` const (lines 8-13) and re-export instead, keeping every existing consumer's import path working (`news/page.tsx`, `api/news/route.ts`, `CandidateBrowser.tsx`, `directory.ts` all import it from `@/lib/resolve`):
 
@@ -257,7 +291,7 @@ import { COVERED_COUNTIES } from "@/lib/counties";
 
 Then replace `COUNTIES.map((c) => (` with `COVERED_COUNTIES.map((c) => (`, and the metro line's `{c.metro}` with `{c.metroLabel}`.
 
-- [ ] **Step 5: Run the test and the type check**
+- [x] **Step 5: Run the test and the type check**
 
 ```bash
 node scripts/verify-counties.ts
@@ -267,7 +301,7 @@ node scripts/verify-migrations.mjs
 
 Expected: all pass. `tsc` is the one that catches a missed `COVERED_COUNTIES` consumer.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 npx prettier --write src/lib/counties.ts src/lib/resolve.ts src/components/features/CountyPicker.tsx scripts/verify-counties.ts
@@ -294,7 +328,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 - Consumes: nothing.
 - Produces: `coveredBlocks(text) → { geoid, district }[]` (sorted), `blockRanges(blocks) → { blockStart, blockEnd, countyFips, district }[]`, `rangeMismatches(blocks, ranges) → { geoid, expected, found }[]`, `seedSql(ranges) → string`. Task 4 runs the CLI.
 
-- [ ] **Step 1: Create the fixture**
+- [x] **Step 1: Create the fixture**
 
 Create `scripts/fixtures/block-seed/block_assignment.txt`. Deliberately includes an uncovered county (Monroe, `12087`), a malformed line, and a district change inside one county so the range collapsing is actually exercised:
 
@@ -313,7 +347,7 @@ Create `scripts/fixtures/block-seed/block_assignment.txt`. Deliberately includes
 120950401001001,10
 ```
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 Create `scripts/verify-block-seed.mjs`:
 
@@ -444,7 +478,7 @@ if (failures) {
 console.log("\nAll block-seed checks passed.");
 ```
 
-- [ ] **Step 3: Run it to make sure it fails**
+- [x] **Step 3: Run it to make sure it fails**
 
 ```bash
 node scripts/verify-block-seed.mjs
@@ -452,7 +486,7 @@ node scripts/verify-block-seed.mjs
 
 Expected: FAIL — cannot find module `./build-block-seed.mjs`.
 
-- [ ] **Step 4: Write the generator**
+- [x] **Step 4: Write the generator**
 
 Create `scripts/build-block-seed.mjs`:
 
@@ -585,7 +619,7 @@ if (path.resolve(process.argv[1] ?? "") === fileURLToPath(import.meta.url)) {
 }
 ```
 
-- [ ] **Step 5: Run the test to verify it passes**
+- [x] **Step 5: Run the test to verify it passes**
 
 ```bash
 node scripts/verify-block-seed.mjs
@@ -593,7 +627,7 @@ node scripts/verify-block-seed.mjs
 
 Expected: PASS — every Part A check ok, Part B skipped (no arguments).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 npx prettier --write scripts/build-block-seed.mjs scripts/verify-block-seed.mjs
@@ -622,7 +656,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 - Consumes: nothing.
 - Produces: table `block_district(block_start CHAR(15) PK, block_end CHAR(15), county_fips CHAR(5), congressional_district TEXT)`, readable by `anon`. Task 7 queries it.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 In `scripts/verify-migrations.mjs`, add to the numbered list in the header comment:
 
@@ -667,7 +701,7 @@ await expectDenied(
 );
 ```
 
-- [ ] **Step 2: Run it to make sure it fails**
+- [x] **Step 2: Run it to make sure it fails**
 
 ```bash
 node scripts/verify-migrations.mjs
@@ -675,7 +709,7 @@ node scripts/verify-migrations.mjs
 
 Expected: FAIL — `relation "block_district" does not exist`.
 
-- [ ] **Step 3: Write the migrations**
+- [x] **Step 3: Write the migrations**
 
 Create `supabase/migrations/0024_block_district.sql`:
 
@@ -721,7 +755,7 @@ CREATE POLICY anon_read_block_district ON block_district
   USING (true);
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 ```bash
 node scripts/verify-migrations.mjs
@@ -729,7 +763,7 @@ node scripts/verify-migrations.mjs
 
 Expected: PASS, including `migration applies: 0024_block_district.sql`, `0025_block_district_rls.sql`, and the four new invariant-17 lines.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add supabase/migrations/0024_block_district.sql supabase/migrations/0025_block_district_rls.sql scripts/verify-migrations.mjs
@@ -754,7 +788,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 - Consumes: `build-block-seed.mjs` from Task 2, `0018_zip_seed_2026.sql` from the map branch.
 - Produces: a populated `block_district`. Task 7's queries return rows because of this.
 
-- [ ] **Step 1: Download the enacted plan's block assignment**
+- [x] **Step 1: Download the enacted plan's block assignment**
 
 The Florida Senate publishes it, and PR #33's handoff records the URL. It is 7.6 MB and **must not be committed** — keep it outside the repo:
 
@@ -766,7 +800,7 @@ curl -s -o /tmp/kyv-plan/EOGPCRP2026_block_assignment.txt \
 
 Do **not** substitute a Census congressional shapefile. Census publishes the 2024 map — its geocoder still answers "116th Congressional District 27" for a Miami address — and using it would silently seed the wrong districts for every voter.
 
-- [ ] **Step 2: Verify the file before trusting it**
+- [x] **Step 2: Verify the file before trusting it**
 
 ```bash
 wc -l /tmp/kyv-plan/EOGPCRP2026_block_assignment.txt
@@ -784,7 +818,7 @@ Expected, measured from the real file on 2026-09-09 — exact, not approximate:
 **Any deviation means the wrong file.** Districts running past 28 or stopping short is the loudest signal; a different line count is the next. Stop and re-check rather than generating a seed from it.
 
 
-- [ ] **Step 3: Download the ZCTA/tabblock relationship file for the cross-check**
+- [x] **Step 3: Download the ZCTA/tabblock relationship file for the cross-check**
 
 ```bash
 curl -s -o /tmp/kyv-plan/zcta_tabblock_natl.txt \
@@ -805,7 +839,7 @@ head -1 /tmp/kyv-plan/zcta_tabblock_natl.txt > /tmp/kyv-plan/zcta_fl.txt
 cat /tmp/kyv-plan/zcta_tabblock_fl.txt >> /tmp/kyv-plan/zcta_fl.txt
 ```
 
-- [ ] **Step 4: Generate the seed**
+- [x] **Step 4: Generate the seed**
 
 ```bash
 node scripts/build-block-seed.mjs /tmp/kyv-plan/EOGPCRP2026_block_assignment.txt
@@ -821,7 +855,7 @@ Those three numbers are exact. Blocks split by county as Miami-Dade 31,622 · Br
 
 The encoding compresses 91.5×, so the migration lands around 50 KB. If the generator refuses to write, its mismatch report means the range encoding is wrong: fix `blockRanges`, never bypass the check.
 
-- [ ] **Step 5: Run the cross-check against 0018**
+- [x] **Step 5: Run the cross-check against 0018**
 
 ```bash
 node scripts/verify-block-seed.mjs /tmp/kyv-plan/EOGPCRP2026_block_assignment.txt /tmp/kyv-plan/zcta_fl.txt
@@ -833,7 +867,7 @@ Note what that second pair asserts, because the obvious stricter check is *wrong
 
 A failure here means the address path and the ZIP path would genuinely disagree — **do not proceed**. Likely causes, in order: the wrong plan file (it would move whole ZIPs, not slivers), a `zip_district` regex that missed rows (check the reported ZIP count is plausible), or a relationship file from a different vintage.
 
-- [ ] **Step 6: Apply and confirm the seed loads**
+- [x] **Step 6: Apply and confirm the seed loads**
 
 ```bash
 node scripts/verify-migrations.mjs
@@ -841,7 +875,7 @@ node scripts/verify-migrations.mjs
 
 Expected: PASS. This applies `0022` in PGlite, so it also proves the generated SQL parses and satisfies the CHECK on every row.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add supabase/migrations/0026_block_seed_2026.sql
@@ -870,7 +904,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 **Why the split:** `verify-*` scripts run under plain `node`, where `server-only` throws and `@/` value imports do not resolve. So everything with logic worth testing goes in one import-clean module and the fetching wrappers stay thin — exactly how `src/lib/news-match.ts` is arranged.
 
-- [ ] **Step 1: Create the fixture from a real response**
+- [x] **Step 1: Create the fixture from a real response**
 
 Create `scripts/fixtures/address/census-block.json`. This is a real capture for `444 SW 2nd Ave, Miami, FL 33130` (trimmed, with a few original extra fields kept so the parser is proven tolerant of them):
 
@@ -898,7 +932,7 @@ Create `scripts/fixtures/address/census-block.json`. This is a real capture for 
 }
 ```
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 Create `scripts/verify-address-resolve.ts`. Tasks 6 and 8 append to this file:
 
@@ -975,7 +1009,7 @@ if (failures) {
 console.log("\nAll address-resolve checks passed.");
 ```
 
-- [ ] **Step 3: Run it to make sure it fails**
+- [x] **Step 3: Run it to make sure it fails**
 
 ```bash
 node scripts/verify-address-resolve.ts
@@ -983,7 +1017,7 @@ node scripts/verify-address-resolve.ts
 
 Expected: FAIL — cannot resolve `../src/lib/address-lookup.ts`.
 
-- [ ] **Step 4: Write the pure module**
+- [x] **Step 4: Write the pure module**
 
 Create `src/lib/address-lookup.ts`:
 
@@ -1096,7 +1130,7 @@ export function districtFromBlockRows(
 }
 ```
 
-- [ ] **Step 5: Write the Census fetch wrapper**
+- [x] **Step 5: Write the Census fetch wrapper**
 
 Create `src/lib/census-block.ts`:
 
@@ -1142,7 +1176,7 @@ export async function blockForCoordinates(lat: number, lng: number): Promise<Cen
 }
 ```
 
-- [ ] **Step 6: Run the test to verify it passes**
+- [x] **Step 6: Run the test to verify it passes**
 
 ```bash
 node scripts/verify-address-resolve.ts
@@ -1151,7 +1185,7 @@ npx tsc --noEmit
 
 Expected: both pass.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 npx prettier --write src/lib/address-lookup.ts src/lib/census-block.ts scripts/verify-address-resolve.ts
@@ -1183,7 +1217,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 **Caveat to carry:** both Places fixtures are written from the documented response shape (verified against the Places API (New) reference on 2026-09-09), not from a live call — there is no key yet. Task 14 re-captures them. Treat a mismatch found then as a fixture bug, not a code bug.
 
-- [ ] **Step 1: Create the fixtures**
+- [x] **Step 1: Create the fixtures**
 
 Create `scripts/fixtures/address/places-autocomplete.json`:
 
@@ -1227,7 +1261,7 @@ Create `scripts/fixtures/address/places-details.json`:
 }
 ```
 
-- [ ] **Step 2: Append the failing tests**
+- [x] **Step 2: Append the failing tests**
 
 In `scripts/verify-address-resolve.ts`, extend the existing import from `address-lookup.ts` to include `parseSuggestions` and `parsePlaceLocation`, then insert this section **before** the final `if (failures)` block:
 
@@ -1257,7 +1291,7 @@ assert(
 );
 ```
 
-- [ ] **Step 3: Run it to make sure it fails**
+- [x] **Step 3: Run it to make sure it fails**
 
 ```bash
 node scripts/verify-address-resolve.ts
@@ -1265,7 +1299,7 @@ node scripts/verify-address-resolve.ts
 
 Expected: FAIL — `parseSuggestions` is not exported from `address-lookup.ts`… unless you wrote it in Task 5, in which case this step fails on the **fixtures** being absent. Either way, do not proceed until you have seen it fail.
 
-- [ ] **Step 4: Write the client**
+- [x] **Step 4: Write the client**
 
 Create `src/lib/geocode.ts`:
 
@@ -1363,7 +1397,7 @@ export async function placeLocation(
 }
 ```
 
-- [ ] **Step 5: Add the env var**
+- [x] **Step 5: Add the env var**
 
 In `.env.example`, under `# --- Web app: features ---`, after the `ANTHROPIC_API_KEY` line:
 
@@ -1375,7 +1409,7 @@ In `.env.example`, under `# --- Web app: features ---`, after the `ANTHROPIC_API
 GOOGLE_PLACES_API_KEY=
 ```
 
-- [ ] **Step 6: Run the test to verify it passes**
+- [x] **Step 6: Run the test to verify it passes**
 
 ```bash
 node scripts/verify-address-resolve.ts
@@ -1384,7 +1418,7 @@ npx tsc --noEmit
 
 Expected: both pass.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 npx prettier --write src/lib/geocode.ts scripts/verify-address-resolve.ts
@@ -1412,7 +1446,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 **No new test file:** the logic worth unit-testing is `districtFromBlockRows`, already covered in Task 5. What is added here is database wiring, which `verify-migrations.mjs` (invariant 17) and Task 14's live gate cover between them. Do not fake a test that only asserts the Supabase query builder was called.
 
-- [ ] **Step 1: Write the implementation**
+- [x] **Step 1: Write the implementation**
 
 In `src/lib/resolve.ts`, extend the imports:
 
@@ -1525,7 +1559,7 @@ export function getCoveredDistricts() {
 
 `districtNumber` already exists at the top of `resolve.ts` — reuse it rather than declaring a second one.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 ```bash
 npx tsc --noEmit
@@ -1535,7 +1569,7 @@ node scripts/verify-migrations.mjs
 
 Expected: all pass.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 npx prettier --write src/lib/resolve.ts
@@ -1563,7 +1597,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 - Consumes: `suggestAddresses`, `placeLocation`, `placesConfigured` (Task 6); `blockForCoordinates` (Task 5); `resolveBlock`, `resolveDistrict` (Task 7); `rateLimit`, `clientKey` (existing).
 - Produces: `POST /api/address/suggest` → `{ suggestions: AddressSuggestion[], unavailable?: true }`; `POST /api/address/resolve` → `ResolveResult`. Task 10 calls both.
 
-- [ ] **Step 1: Append the failing structural tests**
+- [x] **Step 1: Append the failing structural tests**
 
 These assert the privacy contract, which is a property of the files themselves — there is no HTTP harness in this repo. Add to `scripts/verify-address-resolve.ts` before the final `if (failures)` block:
 
@@ -1590,7 +1624,7 @@ for (const rel of routeFiles) {
 }
 ```
 
-- [ ] **Step 2: Run it to make sure it fails**
+- [x] **Step 2: Run it to make sure it fails**
 
 ```bash
 node scripts/verify-address-resolve.ts
@@ -1598,7 +1632,7 @@ node scripts/verify-address-resolve.ts
 
 Expected: FAIL — `ENOENT` on `src/app/api/address/suggest/route.ts`.
 
-- [ ] **Step 3: Write the suggest route**
+- [x] **Step 3: Write the suggest route**
 
 Create `src/app/api/address/suggest/route.ts`:
 
@@ -1654,7 +1688,7 @@ export async function POST(request: NextRequest) {
 }
 ```
 
-- [ ] **Step 4: Write the resolve route**
+- [x] **Step 4: Write the resolve route**
 
 Create `src/app/api/address/resolve/route.ts`:
 
@@ -1744,7 +1778,7 @@ export async function POST(request: NextRequest) {
 }
 ```
 
-- [ ] **Step 5: Run the test to verify it passes**
+- [x] **Step 5: Run the test to verify it passes**
 
 ```bash
 node scripts/verify-address-resolve.ts
@@ -1754,7 +1788,7 @@ npx eslint src/app/api/address
 
 Expected: all three pass.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 npx prettier --write src/app/api/address/suggest/route.ts src/app/api/address/resolve/route.ts scripts/verify-address-resolve.ts
@@ -1783,7 +1817,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 **Where coverage is checked:** not here. This module validates the *shape* (`FL-nn|ccccc`) — which is what keeps a ZIP or an address out of the cookie — while whether that county is actually covered is enforced where a ballot is produced: `resolveDistrict` returns `null` for an uncovered county, so a stale or hand-edited cookie yields no ballot rather than a wrong one. The chip guards its own display with `coveredCounty`.
 
-- [ ] **Step 1: Append the failing tests**
+- [x] **Step 1: Append the failing tests**
 
 At the top of `scripts/verify-no-stored-location.ts`, add:
 
@@ -1833,7 +1867,7 @@ try {
 assert("formatting refuses a value that is not a district", refused);
 ```
 
-- [ ] **Step 2: Run it to make sure it fails**
+- [x] **Step 2: Run it to make sure it fails**
 
 ```bash
 node scripts/verify-no-stored-location.ts
@@ -1841,7 +1875,7 @@ node scripts/verify-no-stored-location.ts
 
 Expected: FAIL — cannot resolve `../src/lib/district-cookie.ts`.
 
-- [ ] **Step 3: Write the module**
+- [x] **Step 3: Write the module**
 
 Create `src/lib/district-cookie.ts`:
 
@@ -1911,7 +1945,7 @@ export function clearDistrictCookie(): void {
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 ```bash
 node scripts/verify-no-stored-location.ts
@@ -1920,7 +1954,7 @@ npx tsc --noEmit
 
 Expected: both pass. (The existing assertions in that script still pass — nothing has been stored yet.)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 npx prettier --write src/lib/district-cookie.ts scripts/verify-no-stored-location.ts
@@ -1950,7 +1984,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 **Where the type comes from:** `AddressSuggestion` lives in `src/lib/address-lookup.ts`, which has no `server-only`, so a client component can import it. Use `import type` regardless — the runtime value is never needed in the browser.
 
-- [ ] **Step 1: Add the analytics event**
+- [x] **Step 1: Add the analytics event**
 
 In `src/lib/analytics.ts`, extend the union — after `"zip_resolved"`, so the funnel order in `verify-no-stored-location.ts` still holds:
 
@@ -1974,7 +2008,7 @@ Add above the type:
    an address would be far worse. */
 ```
 
-- [ ] **Step 2: Write the component**
+- [x] **Step 2: Write the component**
 
 Create `src/components/features/LocationEntry.tsx`:
 
@@ -2338,7 +2372,7 @@ export function LocationEntry({
 }
 ```
 
-- [ ] **Step 3: Swap the call sites and delete ZipEntry**
+- [x] **Step 3: Swap the call sites and delete ZipEntry**
 
 In `src/app/(public)/page.tsx`, replace the import and the usage. The landing page must pass the two new props, which means it needs the district list and the key check:
 
@@ -2383,7 +2417,7 @@ Then delete the old component:
 git rm src/components/features/ZipEntry.tsx
 ```
 
-- [ ] **Step 4: Verify**
+- [x] **Step 4: Verify**
 
 ```bash
 npx tsc --noEmit
@@ -2394,7 +2428,7 @@ grep -rn "ZipEntry" src || echo "no ZipEntry references remain"
 
 Expected: type check and lint pass, the storage checks pass, and no `ZipEntry` references remain.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 npx prettier --write src/components/features/LocationEntry.tsx src/lib/analytics.ts "src/app/(public)/page.tsx" src/components/features/YourRaces.tsx
@@ -2425,7 +2459,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 **Why client-side:** reading `cookies()` in a layout would opt **every route** into dynamic rendering and cost the `revalidate = 3600` pages their caching. The chip reads `document.cookie` after mount instead, which keeps the shell static. Task 12 accepts dynamic rendering on exactly the two pages that need the district server-side.
 
-- [ ] **Step 1: Write the component**
+- [x] **Step 1: Write the component**
 
 Create `src/components/features/DistrictChip.tsx`:
 
@@ -2530,7 +2564,7 @@ export function DistrictChip({ className = "" }: { className?: string }) {
 }
 ```
 
-- [ ] **Step 2: Give it a home in the nav**
+- [x] **Step 2: Give it a home in the nav**
 
 In `src/components/nav/SectionNav.tsx`, import it:
 
@@ -2572,7 +2606,7 @@ The nav is fixed to the bottom on mobile and the top on `md:`, so the chip needs
 
 Keep the existing `/admin` early return above this — the console has its own chrome and must not get either bar.
 
-- [ ] **Step 3: Make room for the mobile bar**
+- [x] **Step 3: Make room for the mobile bar**
 
 In `src/app/layout.tsx`, the body currently reserves only the safe-area inset at the top on mobile. The new bar is about 40px, so replace the top padding:
 
@@ -2580,7 +2614,7 @@ In `src/app/layout.tsx`, the body currently reserves only the safe-area inset at
 <body className="flex min-h-full flex-col pt-[calc(40px+env(safe-area-inset-top))] pb-[calc(88px+env(safe-area-inset-bottom))] md:pt-[72px] md:pb-0">
 ```
 
-- [ ] **Step 4: Verify in the browser**
+- [x] **Step 4: Verify in the browser**
 
 ```bash
 npx tsc --noEmit
@@ -2595,7 +2629,7 @@ Then start the preview (use the Browser pane's `preview_start`, never a bare `np
 4. On mobile, the bar does not cover the page heading.
 5. `/admin` shows neither bar.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 npx prettier --write src/components/features/DistrictChip.tsx src/components/nav/SectionNav.tsx src/app/layout.tsx
@@ -2622,7 +2656,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 - Consumes: `parseDistrictCookie`, `DISTRICT_COOKIE` (Task 9); `resolveDistrict` (Task 7).
 - Produces: nothing new — this is wiring.
 
-- [ ] **Step 1: Teach YourRaces the district path**
+- [x] **Step 1: Teach YourRaces the district path**
 
 In `src/components/features/YourRaces.tsx`, import `resolveDistrict` alongside the existing imports, and replace the resolution block (currently lines 45-50):
 
@@ -2643,7 +2677,7 @@ In `src/components/features/YourRaces.tsx`, import `resolveDistrict` alongside t
 
 Declare `DISTRICT_RE` at module scope rather than inside the function.
 
-- [ ] **Step 2: Read the cookie on /candidates**
+- [x] **Step 2: Read the cookie on /candidates**
 
 In `src/app/(public)/candidates/page.tsx`, import and read it:
 
@@ -2693,7 +2727,7 @@ and use the same values in `tabHref`, so a saved district survives a tab switch 
   };
 ```
 
-- [ ] **Step 3: Show the saved district on the landing page**
+- [x] **Step 3: Show the saved district on the landing page**
 
 In `src/app/(public)/page.tsx`, add the same two imports, then read it in the body:
 
@@ -2751,7 +2785,7 @@ The old line 63 claim — *"nothing is saved on your device"* — is gone with t
 
 **Scope call:** the landing page links to the ballot rather than rendering the House race inline. Rendering it here would duplicate `YourRaces`, and the ballot with that race is one click away. Noted as a follow-up in the spec's §12, not built now.
 
-- [ ] **Step 4: Verify the caching consequence is contained**
+- [x] **Step 4: Verify the caching consequence is contained**
 
 ```bash
 npx tsc --noEmit
@@ -2760,11 +2794,11 @@ npm run build
 
 In the build output's route table, confirm: `/` and `/candidates` are dynamic (`ƒ`), while `/races/[raceId]`, `/candidates/[candidateId]`, `/measures/[measureId]` and `/methodology` are **still** static or ISR. If a detail page turned dynamic, something imported `cookies()` transitively — find it and move the read.
 
-- [ ] **Step 5: Verify the behaviour**
+- [x] **Step 5: Verify the behaviour**
 
 With the preview running: resolve a district, confirm `/candidates` opens on **Your races** with that district on a fresh visit and no query string; confirm `?change=1` shows the field again; confirm **Forget** returns both pages to their no-district state; and confirm a shared `/candidates?view=races&district=FL-25&county=12086` link renders FL-25 **without** changing the chip.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 npx prettier --write "src/app/(public)/candidates/page.tsx" "src/app/(public)/page.tsx" src/components/features/YourRaces.tsx
@@ -2794,7 +2828,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 **This task is not documentation.** The privacy page is the product's credibility surface, and a verify script is what keeps it honest. Do not skip it because the feature already works.
 
-- [ ] **Step 1: Rewrite the privacy page's storage sections**
+- [x] **Step 1: Rewrite the privacy page's storage sections**
 
 In `src/app/(public)/privacy/page.tsx`:
 
@@ -2857,7 +2891,7 @@ Add a section naming the third parties, because the address path has two:
       </section>
 ```
 
-- [ ] **Step 2: Rewrite the storage invariants**
+- [x] **Step 2: Rewrite the storage invariants**
 
 In `scripts/verify-no-stored-location.ts`, rewrite the header comment and the assertions. The invariant is no longer "nothing is stored" — it is "**only a district is stored**". Keep sections 1, 2 and 5 (the `kyv.location` module and helpers must still be absent; the funnel order still holds), keep the Task 9 cookie-parsing section, and replace section 3 and the privacy-copy section 4:
 
@@ -2981,7 +3015,7 @@ assert(
 
 Then delete the now-duplicated `const privacy` / `const privacyText` / `const landing` / `const analytics` lines further down in the original sections 4 and 5 — the assertions there keep working against the definitions you just moved up.
 
-- [ ] **Step 3: Run it to see the failures, then fix them**
+- [x] **Step 3: Run it to see the failures, then fix them**
 
 ```bash
 node scripts/verify-no-stored-location.ts
@@ -2989,7 +3023,7 @@ node scripts/verify-no-stored-location.ts
 
 Expected: FAIL on any privacy-page phrasing you have not written yet. Fix the **page**, not the assertion, unless the assertion is genuinely wrong about the design.
 
-- [ ] **Step 4: Scrub the address routes from Sentry**
+- [x] **Step 4: Scrub the address routes from Sentry**
 
 In `src/lib/sentry-scrub.ts`, the existing regexes redact ZIPs, emails and IPs from strings. Request bodies on the address routes need dropping wholesale — a street address matches none of those patterns. Add to the event scrubber, and extend the file's header comment to say so:
 
@@ -3012,7 +3046,7 @@ function dropAddressBody(request: unknown): unknown {
 
 Call it on `event.request` inside the existing event scrubber, before the generic string scrubbing.
 
-- [ ] **Step 5: Record the reversal in the roadmap**
+- [x] **Step 5: Record the reversal in the roadmap**
 
 In `docs/product-roadmap.md`, under the Phase 7 completion note that says "no device-stored location", add:
 
@@ -3030,7 +3064,7 @@ In `docs/product-roadmap.md`, under the Phase 7 completion note that says "no de
    `docs/superpowers/specs/2026-09-09-address-district-lookup-design.md` § 8.
 ```
 
-- [ ] **Step 6: Run everything**
+- [x] **Step 6: Run everything**
 
 ```bash
 node scripts/verify-no-stored-location.ts
@@ -3047,7 +3081,7 @@ npm run build
 
 Expected: all pass. `verify-shared-ballot.ts` and `verify-sentry-scrub.ts` are in this list because Tasks 11-13 touched the landing page and the scrubber — a green suite you did not run is not a green suite.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 npx prettier --write "src/app/(public)/privacy/page.tsx" src/lib/sentry-scrub.ts scripts/verify-no-stored-location.ts
