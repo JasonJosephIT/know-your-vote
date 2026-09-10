@@ -857,6 +857,70 @@ class TestIntakeDoEParser(unittest.TestCase):
         self.assertEqual(len(p["candidates"]), 9)
         self.assertEqual(p["skipped"], 1)  # FL-01 is not a target
 
+    def test_skip_breakdown_names_the_dropped_house_district(self):
+        """The Senate hid inside an undifferentiated `skipped` for weeks. A
+        district we choose not to carry is the same shape of omission, so the
+        parser has to say which one rather than only how many."""
+        p = intake.parse_candidate_list(_DOE_FIXTURE)
+        self.assertEqual(p["skipped_detail"], {
+            "office_not_targeted": 0,
+            "us_house_district_not_targeted": 1,
+            "no_acct_num": 0,
+        })
+        # The number, not just the count — this is the whole point.
+        self.assertEqual(p["dropped_us_house_districts"], ["001"])
+
+    def test_skip_detail_always_accounts_for_every_skip(self):
+        """If a new skip path forgets to increment a reason, the breakdown
+        stops adding up and this fails — rather than quietly under-reporting."""
+        p = intake.parse_candidate_list(_DOE_FIXTURE)
+        self.assertEqual(sum(p["skipped_detail"].values()), p["skipped"])
+
+    def test_malformed_row_is_not_counted_as_out_of_scope(self):
+        """A row with no AcctNum would have been a candidate. Folding it in
+        with the ~90% of the file that is other races hides a parser problem
+        inside expected volume."""
+        text = "\n".join([
+            _DOE_HEADER,
+            _doe_row("", "USR", "United States Representative", "010", "QUA", "REP", "NoAcct", "Ann"),
+            _doe_row("89222", "USR", "United States Representative", "001", "QUA", "REP", "Doe", "John"),
+            _doe_row("89333", "SOS", "Secretary of State", "", "QUA", "NPA", "Other", "Office"),
+        ])
+        p = intake.parse_candidate_list(text)
+        self.assertEqual(p["skipped_detail"], {
+            "office_not_targeted": 1,          # SOS
+            "us_house_district_not_targeted": 1,  # FL-01
+            "no_acct_num": 1,                  # the malformed row
+        })
+        self.assertEqual(p["skipped"], 3)
+        self.assertEqual(p["dropped_us_house_districts"], ["001"])
+        self.assertEqual(p["candidates"], [])
+
+    def test_dropped_districts_are_deduped_and_sorted(self):
+        """Deterministic output is a documented promise of this parser, and
+        re-intake idempotency rests on it: a raw `list(set)` would reorder
+        between runs because CPython randomises str hashing per process.
+
+        Deliberately six districts, not two. With two, set iteration matches
+        sorted order often enough that a `sorted()` -> `list()` regression
+        slips through — verified: that mutation passed a two-element version
+        of this test. Six makes an accidental match ~1/720, and the assertion
+        can never false-fail on correct code because sorted input compares
+        equal to a sorted expectation either way."""
+        rows = [("89901", "014"), ("89902", "002"), ("89903", "014"),
+                ("89904", "027"), ("89905", "009"), ("89906", "011"),
+                ("89907", "025")]
+        text = "\n".join([_DOE_HEADER] + [
+            _doe_row(acct, "USR", "United States Representative", d,
+                     "QUA", "REP", f"L{acct}", "First")
+            for acct, d in rows
+        ])
+        p = intake.parse_candidate_list(text)
+        self.assertEqual(p["dropped_us_house_districts"],
+                         ["002", "009", "011", "014", "025", "027"])
+        self.assertEqual(p["skipped_detail"]["us_house_district_not_targeted"],
+                         len(rows))
+
     def test_field_mapping_and_pii_dropped(self):
         p = intake.parse_candidate_list(_DOE_FIXTURE)
         by_id = {c["candidate_id"]: c for c in p["candidates"]}
@@ -964,6 +1028,13 @@ class TestIntakeDoEHandler(unittest.TestCase):
         self.assertEqual(res["result"]["skipped"], 1)
         self.assertEqual(res["result"]["tiers"],
                          {"ballot": 5, "write_in": 1, "excluded": 3})
+        # The run report is where a scope gap gets noticed, so the breakdown
+        # has to reach it and not stop at the parser.
+        self.assertEqual(res["result"]["skipped_detail"],
+                         {"office_not_targeted": 0,
+                          "us_house_district_not_targeted": 1,
+                          "no_acct_num": 0})
+        self.assertEqual(res["result"]["dropped_us_house_districts"], ["001"])
         races = committed_into(db, "race")
         cands = committed_into(db, "candidate")
         self.assertEqual(len(races), 5)
@@ -1531,9 +1602,17 @@ class TestIntakeIncumbencyHandler(unittest.TestCase):
         pipeline (`_TARGET_US_HOUSE` only has 2-digit codes). This is the
         shape a hand-edited or otherwise corrupted row would produce."""
         def fake_parse(text):
+            # Must carry every key the real parser emits, or this fake drifts
+            # from the contract the handler reads and the drift shows up as a
+            # KeyError in an unrelated test (it did, for skipped_detail).
             return {"races": {race["race_id"]: race}, "candidates": candidates,
-                    "skipped": 0, "tiers": {"ballot": len(candidates),
-                                            "write_in": 0, "excluded": 0}}
+                    "skipped": 0,
+                    "skipped_detail": {"office_not_targeted": 0,
+                                       "us_house_district_not_targeted": 0,
+                                       "no_acct_num": 0},
+                    "dropped_us_house_districts": [],
+                    "tiers": {"ballot": len(candidates),
+                              "write_in": 0, "excluded": 0}}
         return fake_parse
 
     def test_single_digit_district_is_zero_padded_in_the_fec_query(self):
