@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 /* Two jobs (FR-001): the "or pick your county" path, and district
    confirmation for split ZIPs — we never auto-pick a district. */
 
@@ -62,16 +64,14 @@ export function DistrictConfirm({
           </button>
         ))}
       </div>
+      {/* This link used to point at fldoe.org — the Department of *Education*.
+          It now goes to our own county-office directory, which carries the
+          real Supervisor of Elections for all 67 counties. */}
       <p className="text-caption text-on-surface-muted">
         Not sure? Your voter registration card or{" "}
-        <a
-          className="underline"
-          href="https://www.fldoe.org"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <Link className="underline" href="/election-office">
           your county Supervisor of Elections
-        </a>{" "}
+        </Link>{" "}
         lists your district.
       </p>
     </div>

@@ -6,6 +6,11 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    /* Lets src/lib/election-office.ts import the generated
+       ./election-offices.ts by explicit extension, so the module loads
+       under plain `node scripts/verify-election-offices.ts` as well as
+       through the bundler. Safe with noEmit. */
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",

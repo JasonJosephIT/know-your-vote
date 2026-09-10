@@ -3,6 +3,7 @@ import { Resend } from "resend";
 import { z } from "zod";
 import { verifiedStatewideEvents } from "@/lib/notifications/election-events";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
+import { officeByCounty } from "@/lib/election-office";
 import { resolveZip, ZIP_RE } from "@/lib/resolve";
 import { createServiceClient } from "@/lib/supabase/service";
 
@@ -10,24 +11,27 @@ import { createServiceClient } from "@/lib/supabase/service";
    data. Stores exactly email + zip + consent timestamp + unsubscribe token,
    nothing else, and never claims success when delivery failed (PRD § 11). */
 
-const OFFICIAL_SOURCES: Record<string, { name: string; url: string }> = {
-  "Miami-Dade": {
-    name: "Miami-Dade Supervisor of Elections",
-    url: "https://www.miamidade.gov/global/elections/home.page",
-  },
-  Broward: {
-    name: "Broward Supervisor of Elections",
-    url: "https://www.browardvotes.gov",
-  },
-  Hillsborough: {
-    name: "Hillsborough Supervisor of Elections",
-    url: "https://www.votehillsborough.gov",
-  },
-  Orange: {
-    name: "Orange County Supervisor of Elections",
-    url: "https://www.ocfelections.gov",
-  },
-};
+/* The county office block. This used to be a four-entry hardcoded map of
+   names and URLs; two of those URLs had gone stale (Orange had moved to
+   voteorangefl.gov, Miami-Dade's elections page had moved), which is exactly
+   what hand-maintained contact data does. It now reads the generated table,
+   which covers all 67 counties and carries phone and email as well — a
+   voter with a question about their polling place is better served by a
+   number they can call than by one more link. */
+function officeBlock(countyName: string): string[] {
+  const office = officeByCounty(countyName);
+  if (!office) {
+    return [
+      `Your county Supervisor of Elections — https://dos.fl.gov/elections/contacts/supervisor-of-elections/`,
+    ];
+  }
+  return [
+    `${office.county} County Supervisor of Elections`,
+    `Website: ${office.website}`,
+    `Phone: ${office.phone}`,
+    `Email: ${office.email}`,
+  ];
+}
 
 const body = z.object({
   zip: z.string().regex(ZIP_RE, "Invalid ZIP"),
@@ -73,7 +77,6 @@ export async function POST(request: NextRequest) {
       { status: 400 }
     );
   }
-  const source = OFFICIAL_SOURCES[resolved.county];
 
   if (!process.env.RESEND_API_KEY || !process.env.EMAIL_FROM) {
     return NextResponse.json(
@@ -126,8 +129,8 @@ export async function POST(request: NextRequest) {
       `Here's your voting info for ZIP ${zip} (${resolved.county} County${resolved.district ? `, ${resolved.district}` : ""}).`,
       ``,
       `Your polling place and sample ballot:`,
-      `${source?.name ?? "Your county Supervisor of Elections"} — ${source?.url ?? "https://dos.fl.gov/elections/"}`,
-      `(Precinct lookup on that site shows your exact polling place.)`,
+      ...officeBlock(resolved.county),
+      `(Precinct lookup on their site shows your exact polling place, and they can tell you over the phone.)`,
       ``,
       registration ? `Registration deadline: ${registration}` : ``,
       general ? `General election: ${general}` : ``,

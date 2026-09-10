@@ -1,0 +1,1211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<VotingAssistanceGuide xmlns="https://www.fvap.gov/xml-api/v2/evag-schema.xsd">
+    <ElectionOffices>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>515 N. Main St., Suite 300</StreetAddress>
+                <City>Gainesville</City>
+                <State>Florida</State>
+                <ZipCode>32601</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>kbarton@alachuacounty.us</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>352-374-5252</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>352-374-5264</Number>
+            </PhoneNumber>
+            <Jurisdiction>Alachua</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 505</StreetAddress>
+                <City>Macclenny</City>
+                <State>Florida</State>
+                <ZipCode>32063</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>vote@bakercountyfl.org</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>904-259-6339</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>904-259-2799</Number>
+            </PhoneNumber>
+            <Jurisdiction>Baker</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>830 West 11th Street</StreetAddress>
+                <City>Panama City</City>
+                <State>Florida</State>
+                <ZipCode>32401</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>Registration@bayvotesfl.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-784-6100</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-784-6141</Number>
+            </PhoneNumber>
+            <Jurisdiction>Bay</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 58</StreetAddress>
+                <City>Starke</City>
+                <State>Florida</State>
+                <ZipCode>32091</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>bradsoe@votebradfordfl.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>904-966-6266</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>904-966-6165</Number>
+            </PhoneNumber>
+            <Jurisdiction>Bradford</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 410819</StreetAddress>
+                <City>Melbourne</City>
+                <State>Florida</State>
+                <ZipCode>32941</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>mailballotstaff@votebrevard.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>321-290-8683</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>321-637-5460</Number>
+            </PhoneNumber>
+            <Jurisdiction>Brevard</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 29001</StreetAddress>
+                <City>Fort Lauderdale</City>
+                <State>Florida</State>
+                <ZipCode>33302</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>elections@browardvotes.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>954-357-7050</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>954-357-7070</Number>
+            </PhoneNumber>
+            <Jurisdiction>Broward</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>20859 Central Avenue E., Room 117</StreetAddress>
+                <City>Blountstown</City>
+                <State>Florida</State>
+                <ZipCode>32424</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>soe@votecalhounfl.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-674-8568</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-674-2449</Number>
+            </PhoneNumber>
+            <Jurisdiction>Calhoun</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>226 Taylor Street, Unit 120</StreetAddress>
+                <City>Punta Gorda</City>
+                <State>Florida</State>
+                <ZipCode>33950</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>soe@soecharlottecountyfl.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>941-833-5400</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>941-833-5422</Number>
+            </PhoneNumber>
+            <Jurisdiction>Charlotte</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 1870</StreetAddress>
+                <City>Lecanto</City>
+                <State>Florida</State>
+                <ZipCode>34460</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>vote@votecitrus.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>352-564-7120</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>352-564-7121</Number>
+            </PhoneNumber>
+            <Jurisdiction>Citrus</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 337</StreetAddress>
+                <City>Green Cove Spring</City>
+                <State>Florida</State>
+                <ZipCode>32043</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>mail@ClayElections.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>904-269-6350</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>904-284-0935</Number>
+            </PhoneNumber>
+            <Jurisdiction>Clay</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>3750 Enterprise Avenue</StreetAddress>
+                <City>Naples</City>
+                <State>Florida</State>
+                <ZipCode>34104</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>mailballot@colliervotes.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>239-252-8683</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>239-774-9468</Number>
+            </PhoneNumber>
+            <Jurisdiction>Collier</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>971 W. Duval Street, Suite 102</StreetAddress>
+                <City>Lake City</City>
+                <State>Florida</State>
+                <ZipCode>32055</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>vote@votecolumbiafl.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>386-758-1026</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>386-755-7233</Number>
+            </PhoneNumber>
+            <Jurisdiction>Columbia</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 89</StreetAddress>
+                <City>Arcadia</City>
+                <State>Florida</State>
+                <ZipCode>34265</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>mnegley@votedesoto.com</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>863-993-4871</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>863-993-4875</Number>
+            </PhoneNumber>
+            <Jurisdiction>DeSoto</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 2057</StreetAddress>
+                <City>Cross City</City>
+                <State>Florida</State>
+                <ZipCode>32628</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>elections@dixievotes.com</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>352-498-1216</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>352-498-1218</Number>
+            </PhoneNumber>
+            <Jurisdiction>Dixie</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>105 E. Monroe Street</StreetAddress>
+                <City>Jacksonville</City>
+                <State>Florida</State>
+                <ZipCode>32202</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>duvaluocava@duvalelections.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>904-255-8683</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>904-255-3434</Number>
+            </PhoneNumber>
+            <Jurisdiction>Duval</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 12601</StreetAddress>
+                <City>Pensacola</City>
+                <State>Florida</State>
+                <ZipCode>32591</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>soe@escambiavotes.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-595-3900</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-595-3914</Number>
+            </PhoneNumber>
+            <Jurisdiction>Escambia</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 901</StreetAddress>
+                <City>Bunnell</City>
+                <State>Florida</State>
+                <ZipCode>32110</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>info@flaglerelections.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>386-313-4170</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>386-313-4171</Number>
+            </PhoneNumber>
+            <Jurisdiction>Flagler</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>47 Avenue F</StreetAddress>
+                <City>Apalachicola</City>
+                <State>Florida</State>
+                <ZipCode>32320</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>Heather@votefranklinfl.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-653-9520</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-653-9092</Number>
+            </PhoneNumber>
+            <Jurisdiction>Franklin</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 186</StreetAddress>
+                <City>Quincy</City>
+                <State>Florida</State>
+                <ZipCode>32353</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>info@gadsdensoefl.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-627-9910</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-627-6144</Number>
+            </PhoneNumber>
+            <Jurisdiction>Gadsden</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>112 S. Main Street, Room 137</StreetAddress>
+                <City>Trenton</City>
+                <State>Florida</State>
+                <ZipCode>32693</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>elections@gilchrist.fl.us</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>352-463-3194</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>352-463-3196</Number>
+            </PhoneNumber>
+            <Jurisdiction>Gilchrist</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 668</StreetAddress>
+                <City>Moore Haven</City>
+                <State>Florida</State>
+                <ZipCode>33471</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>vote@voteglades.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>863-946-6005</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>863-946-0313</Number>
+            </PhoneNumber>
+            <Jurisdiction>Glades</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>401 Long Avenue</StreetAddress>
+                <City>Port St. Joe</City>
+                <State>Florida</State>
+                <ZipCode>32456</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>gulfsoe@votegulf.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-229-6117</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-229-8975</Number>
+            </PhoneNumber>
+            <Jurisdiction>Gulf</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>1153 US Hwy 41 NW, Suite 1</StreetAddress>
+                <City>Jasper</City>
+                <State>Florida</State>
+                <ZipCode>32052</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>elect@hamiltonvotesfl.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>386-792-1426</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>386-792-3205</Number>
+            </PhoneNumber>
+            <Jurisdiction>Hamilton</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>131 K.D. Revell Road</StreetAddress>
+                <City>Wauchula</City>
+                <State>Florida</State>
+                <ZipCode>33873</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>info@hardeecountyelections.com</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>863-773-6061</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>863-773-6813</Number>
+            </PhoneNumber>
+            <Jurisdiction>Hardee</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 174</StreetAddress>
+                <City>LaBelle</City>
+                <State>Florida</State>
+                <ZipCode>33975</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>Supervisor@hendryelections.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>863-675-5230</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>863-675-7803</Number>
+            </PhoneNumber>
+            <Jurisdiction>Hendry</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>16264 Spring Hill Drive</StreetAddress>
+                <City>Brooksville</City>
+                <State>Florida</State>
+                <ZipCode>34604</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>Elections@hernandovotes.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>352-754-4125</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>352-754-4425</Number>
+            </PhoneNumber>
+            <Jurisdiction>Hernando</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Drawer 3448</StreetAddress>
+                <City>Sebring</City>
+                <State>Florida</State>
+                <ZipCode>33871</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>soe@votehighlands.com</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>863-402-6655</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>863-402-6657</Number>
+            </PhoneNumber>
+            <Jurisdiction>Highlands</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>2514 N. Falkenburg Rd.</StreetAddress>
+                <City>Tampa</City>
+                <State>Florida</State>
+                <ZipCode>33619</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>voter@votehillsborough.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>813-744-5900</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>813-744-5843</Number>
+            </PhoneNumber>
+            <Jurisdiction>Hillsborough</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>201 N. Oklahoma Street, Ste 102</StreetAddress>
+                <City>Bonifay</City>
+                <State>Florida</State>
+                <ZipCode>32425</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>rusty@holmeselectionsfl.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-547-1107</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-547-4168</Number>
+            </PhoneNumber>
+            <Jurisdiction>Holmes</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>4375 43rd Avenue</StreetAddress>
+                <City>Vero Beach</City>
+                <State>Florida</State>
+                <ZipCode>32967</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>info@voteindianriver.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>772-226-4700</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>772-770-5367</Number>
+            </PhoneNumber>
+            <Jurisdiction>Indian River</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>2851 Jefferson Street</StreetAddress>
+                <City>Marianna</City>
+                <State>Florida</State>
+                <ZipCode>32448</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>email@votejacksonfl.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-482-9652</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-482-9102</Number>
+            </PhoneNumber>
+            <Jurisdiction>Jackson</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>1175 W. Washington Street</StreetAddress>
+                <City>Monticello</City>
+                <State>Florida</State>
+                <ZipCode>32344</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>soe@jeffersoncountyfl.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-997-3348</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-997-6958</Number>
+            </PhoneNumber>
+            <Jurisdiction>Jefferson</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 76</StreetAddress>
+                <City>Mayo</City>
+                <State>Florida</State>
+                <ZipCode>32066</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>travis@lafayettevotes.com</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>386-294-1261</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>386-294-2164</Number>
+            </PhoneNumber>
+            <Jurisdiction>Lafayette</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box  457</StreetAddress>
+                <City>Tavares</City>
+                <State>Florida</State>
+                <ZipCode>32778</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>mailballots@lakevotes.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>352-343-9734</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>(352) 253-1422</Number>
+            </PhoneNumber>
+            <Jurisdiction>Lake</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 2545</StreetAddress>
+                <City>Fort Myers</City>
+                <State>Florida</State>
+                <ZipCode>33902</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>elections@lee.vote</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>239-533-8683</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>239-533-6310</Number>
+            </PhoneNumber>
+            <Jurisdiction>Lee</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 7357</StreetAddress>
+                <City>Tallahassee</City>
+                <State>Florida</State>
+                <ZipCode>32314</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>Vote@LeonVotes.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-606-8683</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-606-8601</Number>
+            </PhoneNumber>
+            <Jurisdiction>Leon</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>421 S. Court Street</StreetAddress>
+                <City>Bronson</City>
+                <State>Florida</State>
+                <ZipCode>32621</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>elections@votelevy.com</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>352-486-5163</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>352-486-5146</Number>
+            </PhoneNumber>
+            <Jurisdiction>Levy</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 597</StreetAddress>
+                <City>Bristol</City>
+                <State>Florida</State>
+                <ZipCode>32321</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>vote@libertycountyflsoe.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-643-5226</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-643-5648</Number>
+            </PhoneNumber>
+            <Jurisdiction>Liberty</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>239 SW Pinckney St.</StreetAddress>
+                <City>Madison</City>
+                <State>Florida</State>
+                <ZipCode>32340</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>hdriggers@votemadison.com</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-973-6507</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-973-3780</Number>
+            </PhoneNumber>
+            <Jurisdiction>Madison</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 1000</StreetAddress>
+                <City>Bradenton</City>
+                <State>Florida</State>
+                <ZipCode>34206</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>info@votemanatee.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>941-741-3823</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>941-741-3820</Number>
+            </PhoneNumber>
+            <Jurisdiction>Manatee</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 289</StreetAddress>
+                <City>Ocala</City>
+                <State>Florida</State>
+                <ZipCode>34478</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>Elections@VoteMarion.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>352-620-3290</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>352-620-3286</Number>
+            </PhoneNumber>
+            <Jurisdiction>Marion</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 1257</StreetAddress>
+                <City>Stuart</City>
+                <State>Florida</State>
+                <ZipCode>34995</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>elections@martinvotes.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>772-288-5637</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>772-288-5765</Number>
+            </PhoneNumber>
+            <Jurisdiction>Martin</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 521250</StreetAddress>
+                <City>Miami</City>
+                <State>Florida</State>
+                <ZipCode>33152</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>votebymail@votemiamidade.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>(305) 499-8444</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>(305) 499-8401</Number>
+            </PhoneNumber>
+            <Jurisdiction>Miami-Dade</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>5200 College Rd</StreetAddress>
+                <City>Key West</City>
+                <State>Florida</State>
+                <ZipCode>33040-6577</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>info@votemonroeflkeys.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>305-292-3416</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>305-292-3406</Number>
+            </PhoneNumber>
+            <Jurisdiction>Monroe</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>96135 Nassau Place, Ste 3</StreetAddress>
+                <City>Yulee</City>
+                <State>Florida</State>
+                <ZipCode>32097</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>info@votenassaufl.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>904-491-7500</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>904-432-1400</Number>
+            </PhoneNumber>
+            <Jurisdiction>Nassau</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>302 N. Wilson St., Ste 102</StreetAddress>
+                <City>Crestview</City>
+                <State>Florida</State>
+                <ZipCode>32536</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>plux@myokaloosa.com</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-689-5600</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-689-5644</Number>
+            </PhoneNumber>
+            <Jurisdiction>Okaloosa</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>307 NW 5th Avenue</StreetAddress>
+                <City>Okeechobee</City>
+                <State>Florida</State>
+                <ZipCode>34972</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>Elections@voteokeechobee.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>863-763-4014</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>863-763-0152</Number>
+            </PhoneNumber>
+            <Jurisdiction>Okeechobee</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 562001</StreetAddress>
+                <City>Orlando</City>
+                <State>Florida</State>
+                <ZipCode>32856</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>vbmrequest@ocfelections.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>407-836-2070</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>407-254-6596</Number>
+            </PhoneNumber>
+            <Jurisdiction>Orange</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>2509 E. Irlo Bronson Memorial Hwy</StreetAddress>
+                <City>Kissimmee</City>
+                <State>Florida</State>
+                <ZipCode>34744</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>soe@voteosceola.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>407-742-6000</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>407-742-6001</Number>
+            </PhoneNumber>
+            <Jurisdiction>Osceola</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 22309</StreetAddress>
+                <City>West Palm Beach</City>
+                <State>Florida</State>
+                <ZipCode>33416</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>votebymail@votepalmbeach.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>561-656-6200</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>561-656-6287</Number>
+            </PhoneNumber>
+            <Jurisdiction>Palm Beach</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 450</StreetAddress>
+                <City>Dade City</City>
+                <State>Florida</State>
+                <ZipCode>33526-0450</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>webcomment@pascovotes.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>800-851-8754</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>352-521-4127</Number>
+            </PhoneNumber>
+            <Jurisdiction>Pasco</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>13001 Starkey Road</StreetAddress>
+                <City>Largo</City>
+                <State>Florida</State>
+                <ZipCode>33773</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>Election@VotePinellas.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>727-464-8683</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>727-464-7636</Number>
+            </PhoneNumber>
+            <Jurisdiction>Pinellas</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 1460</StreetAddress>
+                <City>Bartow</City>
+                <State>Florida</State>
+                <ZipCode>33831</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>votebymail@polkelections.com</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>863-534-5888</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>863-845-2719</Number>
+            </PhoneNumber>
+            <Jurisdiction>Polk</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>2509 Crill Ave, Ste 900</StreetAddress>
+                <City>Palatka</City>
+                <State>Florida</State>
+                <ZipCode>32177</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>electionsoffice@putnam-fl.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>386-329-0224</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>386-329-0455</Number>
+            </PhoneNumber>
+            <Jurisdiction>Putnam</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>6495 Caroline Street, Ste F</StreetAddress>
+                <City>Milton</City>
+                <State>Florida</State>
+                <ZipCode>32570</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>villane@santarosa.fl.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-983-1900</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-983-1829</Number>
+            </PhoneNumber>
+            <Jurisdiction>Santa Rosa</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 4194</StreetAddress>
+                <City>Sarasota</City>
+                <State>Florida</State>
+                <ZipCode>34230</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>rturner@sarasotavotes.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>941-861-8600</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>941-861-8609</Number>
+            </PhoneNumber>
+            <Jurisdiction>Sarasota</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 1479</StreetAddress>
+                <City>Sanford</City>
+                <State>Florida</State>
+                <ZipCode>32772</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>Elections@VoteSeminole.org</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>407-585-8683</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>407-708-7705</Number>
+            </PhoneNumber>
+            <Jurisdiction>Seminole</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>4455 Avenue A, Ste 101</StreetAddress>
+                <City>St. Augustine</City>
+                <State>Florida</State>
+                <ZipCode>32095</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>elections@votesjc.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>904-823-2238</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>904-823-2249</Number>
+            </PhoneNumber>
+            <Jurisdiction>St. Johns</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>4132 Okeechobee Rd.</StreetAddress>
+                <City>Fort Pierce</City>
+                <State>Florida</State>
+                <ZipCode>34947</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>elections@slcelections.com</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>772-462-1500</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>772-462-1439</Number>
+            </PhoneNumber>
+            <Jurisdiction>St. Lucie</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>7375 Powell Road, Ste 125</StreetAddress>
+                <City>Wildwood</City>
+                <State>Florida</State>
+                <ZipCode>34785</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>electioninfo@sumtercountyfl.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>352-569-1540</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>352-569-1541</Number>
+            </PhoneNumber>
+            <Jurisdiction>Sumter</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>302 Pine Avenue, SW</StreetAddress>
+                <City>Live Oak</City>
+                <State>Florida</State>
+                <ZipCode>32064</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>suwanneesoe@suwanneevotes.com</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>386-362-2616</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>386-364-5185</Number>
+            </PhoneNumber>
+            <Jurisdiction>Suwannee</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 1060</StreetAddress>
+                <City>Perry</City>
+                <State>Florida</State>
+                <ZipCode>32348</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>vote@taylorelections.com</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-838-3515</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-838-3516</Number>
+            </PhoneNumber>
+            <Jurisdiction>Taylor</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>175 W. Main Street</StreetAddress>
+                <City>Lake Butler</City>
+                <State>Florida</State>
+                <ZipCode>32054</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>debbie.osborne@unionflvotes.com</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>386-496-2236</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>386-496-1535</Number>
+            </PhoneNumber>
+            <Jurisdiction>Union</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>1588 N. Woodland Blvd.</StreetAddress>
+                <City>DeLand</City>
+                <State>Florida</State>
+                <ZipCode>32720</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>elections@volusia.org</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>386-736-5930</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>386-740-8850</Number>
+            </PhoneNumber>
+            <Jurisdiction>Volusia</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>PO Box 305</StreetAddress>
+                <City>Crawfordville</City>
+                <State>Florida</State>
+                <ZipCode>32326</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>JMorgan@WakullaVotes.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-926-7575</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-926-8104</Number>
+            </PhoneNumber>
+            <Jurisdiction>Wakulla</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>571 US Hwy 90 E., Ste. 102</StreetAddress>
+                <City>DeFuniak Springs</City>
+                <State>Florida</State>
+                <ZipCode>32433</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>Info@votewalton.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-892-8112</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-892-8113</Number>
+            </PhoneNumber>
+            <Jurisdiction>Walton</Jurisdiction>
+        </ElectionOffice>
+        <ElectionOffice locationType="County">
+            <Address>
+                <StreetAddress>1424 Jackson Ave., Ste C</StreetAddress>
+                <City>Chipley</City>
+                <State>Florida</State>
+                <ZipCode>32428</ZipCode>
+            </Address>
+            <Email isPrimaryAddress="true">
+                <EmailAddress>dpettis@wcsoe.gov</EmailAddress>
+            </Email>
+            <PhoneNumber isFax="false">
+                <Number>850-638-6230</Number>
+            </PhoneNumber>
+            <PhoneNumber isFax="true">
+                <Number>850-638-6238</Number>
+            </PhoneNumber>
+            <Jurisdiction>Washington</Jurisdiction>
+        </ElectionOffice>
+    </ElectionOffices>
+</VotingAssistanceGuide>

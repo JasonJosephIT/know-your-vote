@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
@@ -126,12 +127,31 @@ export function ZipEntry({
         </p>
       )}
 
+      {/* This used to end here, at "we don't cover you". Race coverage is four
+          counties, but the county-office table is all 67 — so the voter we
+          can't show a ballot to can still be handed the office that answers
+          registration, polling place and vote-by-mail questions. That is a
+          real answer instead of a dead end, and it leads with it. */}
       {stage.kind === "outOfCoverage" && (
         <div className="flex flex-col gap-3" role="status">
           <p className="text-body-sm text-on-surface-muted">
             We don&apos;t cover that area yet — right now we cover the Miami,
-            Fort Lauderdale, Tampa, and Orlando metros. You can still browse a
-            covered county:
+            Fort Lauderdale, Tampa, and Orlando metros.
+          </p>
+          <p className="text-body-sm text-on-surface-muted">
+            Wherever you are in Florida, your county election office can
+            confirm your registration, your polling place and your sample
+            ballot —{" "}
+            <Link
+              href="/election-office"
+              className="text-primary underline underline-offset-2 hover:text-primary-hover"
+            >
+              find your county election office
+            </Link>
+            .
+          </p>
+          <p className="text-body-sm text-on-surface-muted">
+            You can still browse a covered county:
           </p>
           <CountyPicker
             onPick={(county) =>

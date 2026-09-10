@@ -75,6 +75,13 @@ export default async function Home() {
           How we stay fair
         </Link>{" "}
         ·{" "}
+        {/* Statewide, unlike the ballot above it — worth its own entry here
+            because it is the one thing on the site that serves a voter in
+            any of the 67 counties. */}
+        <Link href="/election-office" className="underline underline-offset-2 hover:text-on-surface">
+          Your county election office
+        </Link>{" "}
+        ·{" "}
         <Link href="/privacy" className="underline underline-offset-2 hover:text-on-surface">
           Privacy
         </Link>
