@@ -1,0 +1,21 @@
+{
+  "result": {
+    "geographies": {
+      "Census Blocks": [
+        {
+          "GEOID": "120860036061055",
+          "STATE": "12",
+          "COUNTY": "086",
+          "TRACT": "003606",
+          "BLOCK": "1055",
+          "NAME": "Block 1055",
+          "AREALAND": 15423,
+          "POP100": 0
+        }
+      ]
+    },
+    "input": {
+      "location": { "x": -80.197602442738, "y": 25.769463071522 }
+    }
+  }
+}
