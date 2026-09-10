@@ -79,8 +79,11 @@ CREATE INDEX idx_block_district_range ON block_district (block_start, block_end)
 ```
 
 Rows are **run-length ranges** over the sorted 15-digit block GEOIDs of the four
-covered counties. Districts cluster by tract, so roughly 100k blocks collapse to
-a few thousand rows and the migration stays readable. GEOIDs are fixed-width, so
+covered counties. Districts cluster by tract, so this compresses
+hard — measured against the enacted plan on 2026-09-09, the four counties'
+**89,816 blocks collapse to 982 ranges** (91.5×), a ~50 KB migration, with zero
+mismatches on an exhaustive replay. Those ranges span exactly the **16
+districts** `0019` widens coverage to. GEOIDs are fixed-width, so
 lexicographic `BETWEEN` is numerically correct:
 
 ```sql

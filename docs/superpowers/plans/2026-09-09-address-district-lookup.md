@@ -749,22 +749,17 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 - Consumes: `build-block-seed.mjs` from Task 2, `0018_zip_seed_2026.sql` from the map branch.
 - Produces: a populated `block_district`. Task 7's queries return rows because of this.
 
-- [ ] **Step 1: Obtain the enacted plan's block assignment**
+- [ ] **Step 1: Download the enacted plan's block assignment**
 
-The file is `EOGPCRP2026_block_assignment.txt` — the block equivalency file for the plan enacted by HB 1-D. It is **not in git** (only a 30-line fixture is). Get it from the Florida Legislature's redistricting site, which answered 200 on 2026-09-09:
-
-```bash
-curl -sI https://www.floridaredistricting.gov/ | head -1
-```
-
-Find the block equivalency / block assignment download for plan **EOGPCRP2026** and save it outside the repo (it is large and must not be committed):
+The Florida Senate publishes it, and PR #33's handoff records the URL. It is 7.6 MB and **must not be committed** — keep it outside the repo:
 
 ```bash
 mkdir -p /tmp/kyv-plan
-# save the downloaded file as /tmp/kyv-plan/EOGPCRP2026_block_assignment.txt
+curl -s -o /tmp/kyv-plan/EOGPCRP2026_block_assignment.txt \
+  https://www.flsenate.gov/PublishedContent/Session/Congressional/EOGPCRP2026.txt
 ```
 
-**Fallback if the file cannot be located:** ask the founder for the exact file used to build `0018` — that build already consumed it, so it exists on their machine. Do not substitute a Census CD shapefile: Census publishes the 2024 map (the geocoder still answers "116th Congressional District" for a Miami address), and using it would silently seed the wrong districts.
+Do **not** substitute a Census congressional shapefile. Census publishes the 2024 map — its geocoder still answers "116th Congressional District 27" for a Miami address — and using it would silently seed the wrong districts for every voter.
 
 - [ ] **Step 2: Verify the file before trusting it**
 
@@ -775,7 +770,14 @@ grep -cE '^[0-9]{15},[0-9]+$' /tmp/kyv-plan/EOGPCRP2026_block_assignment.txt
 awk -F, '{print $2}' /tmp/kyv-plan/EOGPCRP2026_block_assignment.txt | sort -un | tr '\n' ' '
 ```
 
-Expected: on the order of 480,000 lines (Florida had 484,481 2020 census blocks); every line matching `<15 digits>,<number>`; and the district numbers being exactly `1` through `28` — Florida's congressional delegation. **If districts run past 28 or stop short of it, this is the wrong file.** Stop and re-check.
+Expected, measured from the real file on 2026-09-09 — exact, not approximate:
+
+- **390,066 lines**, and **390,066** of them well-formed
+- first line `120010002011000,3`
+- districts exactly **`1` … `28`**, Florida's full congressional delegation
+
+**Any deviation means the wrong file.** Districts running past 28 or stopping short is the loudest signal; a different line count is the next. Stop and re-check rather than generating a seed from it.
+
 
 - [ ] **Step 3: Download the ZCTA/tabblock relationship file for the cross-check**
 
@@ -804,7 +806,15 @@ cat /tmp/kyv-plan/zcta_tabblock_fl.txt >> /tmp/kyv-plan/zcta_fl.txt
 node scripts/build-block-seed.mjs /tmp/kyv-plan/EOGPCRP2026_block_assignment.txt
 ```
 
-Expected: `wrote .../0022_block_seed_2026.sql: N ranges over M blocks, D districts`. Sanity-check the output: `M` should be roughly 60,000–150,000 (the four counties' share of Florida's blocks), `N` far smaller than `M` (the encoding is doing its job), and `D` should be **16** — the districts the four counties span, matching the coverage widening in `0019`. If the generator refuses to write, the mismatch report tells you the encoding is wrong; fix `blockRanges`, do not bypass the check.
+Expected, from running this exact logic against the real file on 2026-09-09:
+
+```
+wrote .../0022_block_seed_2026.sql: 982 ranges over 89816 blocks, 16 districts
+```
+
+Those three numbers are exact. Blocks split by county as Miami-Dade 31,622 · Broward 20,939 · Hillsborough 19,461 · Orange 17,794, and the 16 districts are FL-7, 8, 9, 10, 11, 12, 14, 15, 16, 20, 22, 24, 25, 26, 27, 28 — **the same 16 that `0019`'s coverage widening assumes**, which is independent confirmation the file is the right one.
+
+The encoding compresses 91.5×, so the migration lands around 50 KB. If the generator refuses to write, its mismatch report means the range encoding is wrong: fix `blockRanges`, never bypass the check.
 
 - [ ] **Step 5: Run the cross-check against 0018**
 
@@ -3122,4 +3132,6 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 **One caveat carried into Task 14:** the Places fixtures are written from the documented response shape, verified against the Places API (New) reference on 2026-09-09, but not from a live call — there is no key yet. Task 14 re-captures them.
 
-**The highest-risk task is 4**, not any of the code. Everything else has a test that runs offline; Task 4 depends on obtaining the right external file, and the failure mode of the *wrong* file is silent and severe — a voter shown the wrong district. Its district-number check (1-28) and the cross-check against `0018` are the two things standing between that file and production. Do not weaken either.
+**The highest-risk task is 4**, not any of the code. Everything else has a test that runs offline; Task 4 depends on obtaining the right external file, and the failure mode of the *wrong* file is silent and severe — a voter shown the wrong district. Its district-number check (1-28), the exact expected counts, and the cross-check against `0018` are what stand between that file and production. Do not weaken any of them.
+
+That risk is smaller than when this plan was drafted: the file was downloaded and its encoding run for real on 2026-09-09, which is where Task 4's exact numbers come from. What is **not** yet proven is the cross-check against `0018` (it needs the Census relationship file alongside it) and everything behind the Google key.
