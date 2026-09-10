@@ -12,6 +12,8 @@ import { join, resolve } from "node:path";
 import {
   parseBlockResponse,
   districtFromBlockRows,
+  parseSuggestions,
+  parsePlaceLocation,
 } from "../src/lib/address-lookup.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -84,6 +86,43 @@ assert(
   "the range boundaries are inclusive",
   districtFromBlockRows(rows, "120860036061000")?.district === "FL-27" &&
     districtFromBlockRows(rows, "120860036061999")?.district === "FL-27"
+);
+
+/* ---- Places: suggestions and coordinates ---- */
+const suggestions = parseSuggestions(fixture("places-autocomplete.json"));
+assert(
+  "both place predictions are read",
+  suggestions.length === 2,
+  `got ${suggestions.length}`
+);
+assert(
+  "a query prediction is dropped",
+  suggestions.every((s) => Boolean(s.placeId))
+);
+assert("the place id is carried", suggestions[0].placeId === "ChIJ_place_one");
+assert(
+  "the full text is carried for display",
+  suggestions[0].text === "444 SW 2nd Ave, Miami, FL 33130, USA"
+);
+assert(
+  "the secondary line is carried",
+  suggestions[0].secondary === "Miami, FL 33130, USA"
+);
+assert(
+  "a malformed payload yields no suggestions",
+  parseSuggestions({ nope: 1 }).length === 0
+);
+
+const place = parsePlaceLocation(fixture("places-details.json"));
+assert("the latitude is read", place?.lat === 25.769463071522);
+assert("the longitude is read", place?.lng === -80.197602442738);
+assert("details with no location yields null", parsePlaceLocation({}) === null);
+
+/* The coordinate must reach Census exactly. Rounding one can move it across a
+   block boundary, and a block boundary is a district boundary. */
+assert(
+  "the coordinate is not rounded on the way through",
+  String(place?.lat).length > 8 && String(place?.lng).length > 8
 );
 
 if (failures) {
