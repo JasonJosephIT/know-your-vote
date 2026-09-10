@@ -8,11 +8,14 @@ import { districtRaceMissing } from "@/lib/coverage";
 import {
   getCoveredDistricts,
   resolveCounty,
+  resolveDistrict,
   resolveZip,
   ZIP_RE,
 } from "@/lib/resolve";
 import { placesConfigured } from "@/lib/geocode";
 import type { ResolveResult } from "@/types/app";
+
+const DISTRICT_RE = /^FL-\d{1,2}$/;
 
 /* The "Your races" view inside the Candidates hub: ZIP/county in, the
    voter's ballot out. Formerly the standalone /races page. */
@@ -54,6 +57,10 @@ export async function YourRaces({
   let result: ResolveResult | null = null;
   if (zip && ZIP_RE.test(zip)) {
     result = await resolveZip(zip, district);
+  } else if (district && DISTRICT_RE.test(district) && county) {
+    /* An address result, a confirmed ZIP, or the saved district — the district
+       is already known, so there is nothing to look up but the races. */
+    result = await resolveDistrict(county, district);
   } else if (county) {
     result = await resolveCounty(county);
   }
