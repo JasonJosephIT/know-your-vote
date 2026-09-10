@@ -164,26 +164,45 @@ every ingested row, not only the target field:
 > so a statewide federal race was absent from every ballot with nothing in the
 > run report to say so. This table recorded the count all along. Fixed in
 > `intake.py` (`_NO_DISTRICT_RACES`, race `FL-SEN-general`, level `federal`);
-> full write-up in `db-audit-2026-09-07.md` §1. **The per-race tier table below
-> covers the 8 races the parser targeted at the time and therefore says nothing
-> about the Senate race** — the next DoE run is what splits those 14 filings
-> into ballot / write_in / excluded.
+> full write-up in `db-audit-2026-09-07.md` §1. **Answered 2026-09-07:** the
+> ballots-by-ZIP read split those 14 filings **3 ballot / 0 write-in / 11
+> excluded**, and the per-race tier table below now carries the row. The demo
+> fixture's guess of four Senate candidates was wrong.
 
 #### Q1 — which status codes appear post-primary
 
-Six: `QUA` Qualified, `UNO` Unopposed, `DEF` Defeated, `DNQ` Did Not Qualify,
-`WIT` Withdrew, `REM` Removed. **The primary loser is `DEF`.** Mapping onto
-the D1 tiers (`data-architecture.md`):
+**Eight.** Six in the target races B1 measured — `QUA` Qualified, `UNO`
+Unopposed, `DEF` Defeated, `DNQ` Did Not Qualify, `WIT` Withdrew, `REM`
+Removed — plus two the 2026-09-07 ballots-by-ZIP whole-file read found outside
+them: `XTL` Transferred to Local (7 state-legislative rows) and `DEC` Deceased
+(1 circuit judge). **The primary loser is `DEF`.** Mapping onto the D1 tiers
+(`data-architecture.md`):
 
-| `StatusCode` | `StatusDesc` | Tier |
-|---|---|---|
-| `QUA` | Qualified | `ballot` — or `write_in`, see Q2 |
-| `UNO` | Unopposed | `ballot` |
-| `DEF` | Defeated | `excluded` |
-| `DNQ` | Did Not Qualify | `excluded` |
-| `WIT` | Withdrew | `excluded` |
-| `REM` | Removed | `excluded` |
-| anything else | — | loud `status='fail'` (Risk R1) |
+| `StatusCode` | `StatusDesc` | Tier | `qualifying_status` |
+|---|---|---|---|
+| `QUA` | Qualified | `ballot` — or `write_in`, see Q2 | `qualified` |
+| `UNO` | Unopposed | `ballot` | `qualified` |
+| `DEF` | Defeated | `excluded` | `withdrawn` |
+| `DNQ` | Did Not Qualify | `excluded` | `withdrawn` |
+| `WIT` | Withdrew | `excluded` | `withdrawn` |
+| `REM` | Removed | `excluded` | `withdrawn` |
+| `XTL` | Transferred to Local | `excluded` | `other` |
+| `DEC` | Deceased | `excluded` | `other` |
+| anything else | — | loud `status='fail'` (Risk R1) | — |
+
+`XTL` and `DEC` take `other` rather than `withdrawn`: the filing moved to a
+county office, or the filer died. Neither is the candidate's own withdrawal,
+and the column gates social-account ingestion (`CAP_Schema_v1.md`).
+
+> **Correction to `ballots-handoff.md` F3.** That note said an unmapped `XTL`
+> would stop the next live run. It would not have. Every `XTL` row is
+> state-legislative and the `DEC` row is a circuit judge, so the office filter
+> in `parse_candidate_list` drops all eight *before* `_ballot_status` is
+> consulted — verified by running the parser against rows of both shapes. The
+> trap is real but latent: it springs the first time a targeted office carries
+> one of these codes, which is exactly what widening coverage past the eight
+> races would do. Mapped now, with a test that fails if either half of the
+> mapping is removed.
 
 The form's status filter also offers `ACT` Active and `ELE` Elected; neither
 is in the export today. B2 must **not** pre-map them: `ELE` will appear after
@@ -234,7 +253,8 @@ Aggregate only — race IDs are public.
 | FL-15 | 2 | 1 | 2 | |
 | FL-23 | 2 | 0 | 5 | |
 | FL-28 | 3 | 0 | 4 | |
-| **Total** | **22** | **4** | **83** | B3 seed = 22 `official_site` rows |
+| FL-SEN | 3 | 0 | 11 | measured 2026-09-07; Moody (REP) · Nixon (DEM) · Gillespie (NPA) |
+| **Total** | **25** | **4** | **94** | B3 seed = 25 `official_site` rows |
 
 Without I1 fixed, 83 excluded filers plus 4 write-ins would enter
 `race.candidate_ids` for 22 real ballot lines.

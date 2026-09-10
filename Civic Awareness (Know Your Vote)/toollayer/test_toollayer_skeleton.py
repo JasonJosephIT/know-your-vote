@@ -807,15 +807,17 @@ def _doe_row(acct, office, desc, juris, status, party, last, first, middle="",
     return "\t".join([
         acct, "0", "20261103-GEN", office, desc, juris, "", status,
         {"QUA": "Qualified", "UNO": "Unopposed", "DEF": "Defeated",
-         "DNQ": "Did Not Qualify", "WIT": "Withdrew", "REM": "Removed"}.get(status, status),
+         "DNQ": "Did Not Qualify", "WIT": "Withdrew", "REM": "Removed",
+         "XTL": "Transferred to Local", "DEC": "Deceased"}.get(status, status),
         party, party + " Party", last, first, middle, "N", "PO Box 1", "",
         "Miami", "FL", "33101", "MDA", phone, "", "", "", email])
 
 
-# Status codes are the six B1 measured in the live 20261103-GEN export
-# (data-ingest.md section 1 Q1). ACT and ELE are on the download form but not
-# in the file, so the parser must reject them rather than pre-map them -- the
-# fixture below deliberately contains none.
+# Status codes are the eight now known in the live 20261103-GEN export: the six
+# B1 measured plus XTL and DEC, found 2026-09-07 by the ballots-by-ZIP whole-file
+# read (data-ingest.md section 1 Q1). ACT and ELE are on the download form but
+# not in the file, so the parser must reject them rather than pre-map them --
+# the fixture below deliberately contains none.
 _DOE_FIXTURE = "\n".join([
     _DOE_HEADER,
     _doe_row("89070", "USR", "United States Representative", "023", "QUA", "REP", "Adeimy", "Deborah"),
@@ -836,6 +838,15 @@ _DOE_FIXTURE = "\n".join([
     # Status beats party: a write-in that did not qualify is excluded for
     # that, not filed as a write-in.
     _doe_row("89888", "USR", "United States Representative", "028", "DNQ", "WRI", "Nope", "Nora"),
+    # XTL and DEC sit in a TARGET race on purpose. In the live file they appear
+    # only on state-legislative (XTL, 7 rows) and circuit-judge (DEC, 1) rows,
+    # which the office filter drops before the tier mapper ever sees them --
+    # so the office filter, not the status map, is what keeps today's run
+    # green. A target race is the only path that reaches _ballot_status, and
+    # it is the path that opens the moment coverage grows past the eight
+    # races (ballots-handoff.md section 4.2 proposes exactly that).
+    _doe_row("89100", "USR", "United States Representative", "015", "XTL", "REP", "Local", "Lou"),
+    _doe_row("89200", "USR", "United States Representative", "015", "DEC", "DEM", "Late", "Lee"),
 ])
 
 
@@ -852,9 +863,9 @@ class TestIntakeDoEParser(unittest.TestCase):
     def test_filters_to_target_races_and_drops_nontarget(self):
         p = intake.parse_candidate_list(_DOE_FIXTURE)
         self.assertEqual(sorted(p["races"]), [
-            "FL-10-general", "FL-23-general", "FL-28-general",
+            "FL-10-general", "FL-15-general", "FL-23-general", "FL-28-general",
             "FL-GOV-general", "FL-SEN-general"])
-        self.assertEqual(len(p["candidates"]), 9)
+        self.assertEqual(len(p["candidates"]), 11)
         self.assertEqual(p["skipped"], 1)  # FL-01 is not a target
 
     def test_skip_breakdown_names_the_dropped_house_district(self):
@@ -985,6 +996,51 @@ class TestIntakeDoEParser(unittest.TestCase):
         by_id = {c["candidate_id"]: c for c in p["candidates"]}
         self.assertEqual(by_id["FL-DOE-89888"]["ballot_status"], "excluded")
 
+    def test_transferred_to_local_and_deceased_are_excluded(self):
+        """XTL and DEC, found in the live file on 2026-09-07 by the
+        ballots-by-ZIP whole-file read. Neither is a withdrawal: XTL means the
+        filing moved to a county office, DEC means the filer died. Both are off
+        the printed ballot, so the tier is `excluded`; neither chose to leave,
+        so `qualifying_status` is `other` rather than `withdrawn`."""
+        p = intake.parse_candidate_list(_DOE_FIXTURE)
+        by_id = {c["candidate_id"]: c for c in p["candidates"]}
+        for cid in ("FL-DOE-89100", "FL-DOE-89200"):
+            self.assertEqual(by_id[cid]["ballot_status"], "excluded")
+            self.assertEqual(by_id[cid]["qualifying_status"], "other")
+            self.assertNotIn(cid, p["races"]["FL-15-general"]["candidate_ids"])
+        # Still stored -- an invisible exclusion is not auditable (D1).
+        self.assertIn("FL-DOE-89100", by_id)
+
+    def test_live_xtl_rows_are_skipped_by_office_not_by_the_status_map(self):
+        """Corrects ballots-handoff.md F3, which said the next live run would
+        stop on the first XTL row. It would not have: every XTL row in the file
+        is state-legislative and every DEC row is a circuit judge, and the
+        office filter drops both before `_ballot_status` is reached. The trap is
+        real but latent -- it springs when a targeted office carries the code,
+        which is what section 4.2's coverage expansion would do."""
+        legislative = _doe_row("90001", "STS", "State Senator", "010", "XTL",
+                               "REP", "Leg", "Lena")
+        judicial = _doe_row("90002", "CIRJUD", "Circuit Judge", "11", "DEC",
+                            "NOP", "Judge", "Jo")
+        p = intake.parse_candidate_list(
+            "\n".join([_DOE_HEADER, legislative, judicial]))
+        self.assertEqual(p["skipped"], 2)
+        self.assertEqual(p["candidates"], [])
+        self.assertEqual(p["tiers"], {"ballot": 0, "write_in": 0, "excluded": 0})
+
+    def test_every_tiered_status_code_has_a_qualifying_status(self):
+        """The two maps are separate and must not drift. A code tiered by
+        `_ballot_status` but missing from `_STATUS` does not fail closed with
+        the DoEFormatError the parser promises -- it dies on a bare KeyError
+        one line later, which reads as a crash rather than a file change.
+        Delete either half of the XTL/DEC mapping and this fails."""
+        tiered = intake._ON_BALLOT_STATUS | intake._EXCLUDED_STATUS
+        self.assertEqual(tiered - set(intake._STATUS), set())
+        self.assertEqual(set(intake._STATUS) - tiered, set())
+        for code in ("XTL", "DEC"):
+            self.assertIn(code, intake._EXCLUDED_STATUS)
+            self.assertEqual(intake._STATUS[code], "other")
+
     def test_a_race_whose_filers_all_lost_has_no_ballot_lines(self):
         p = intake.parse_candidate_list(_DOE_FIXTURE)
         self.assertEqual(p["races"]["FL-28-general"]["candidate_ids"], [])
@@ -999,7 +1055,7 @@ class TestIntakeDoEParser(unittest.TestCase):
 
     def test_tier_counts_are_reported(self):
         p = intake.parse_candidate_list(_DOE_FIXTURE)
-        self.assertEqual(p["tiers"], {"ballot": 5, "write_in": 1, "excluded": 3})
+        self.assertEqual(p["tiers"], {"ballot": 5, "write_in": 1, "excluded": 5})
 
     def test_unknown_status_code_fails_loudly(self):
         """ACT and ELE are on the DoE form but not in the file. ELE arrives
@@ -1024,10 +1080,14 @@ class TestIntakeDoEHandler(unittest.TestCase):
         layer, db = make_intake_layer("record", doe_fetch=lambda office=None: _DOE_FIXTURE)
         res = layer.dispatch("doe_file_intake", {"office": "FED"})
         self.assertTrue(res["ok"], res)
-        self.assertEqual(res["result"]["candidate_count"], 9)
+        self.assertEqual(res["result"]["candidate_count"], 11)
         self.assertEqual(res["result"]["skipped"], 1)
         self.assertEqual(res["result"]["tiers"],
-                         {"ballot": 5, "write_in": 1, "excluded": 3})
+                         # excluded is 5, not main's 3: this branch maps XTL
+                         # and DEC, so two filings that used to fall through
+                         # now land in excluded like every other non-ballot
+                         # status.
+                         {"ballot": 5, "write_in": 1, "excluded": 5})
         # The run report is where a scope gap gets noticed, so the breakdown
         # has to reach it and not stop at the parser.
         self.assertEqual(res["result"]["skipped_detail"],
@@ -1037,8 +1097,8 @@ class TestIntakeDoEHandler(unittest.TestCase):
         self.assertEqual(res["result"]["dropped_us_house_districts"], ["001"])
         races = committed_into(db, "race")
         cands = committed_into(db, "candidate")
-        self.assertEqual(len(races), 5)
-        self.assertEqual(len(cands), 9)
+        self.assertEqual(len(races), 6)
+        self.assertEqual(len(cands), 11)
         # ballot_status rides the upsert, so the tier is in the database and
         # not only in the run report.
         self.assertIn("ballot_status", cands[0][0])

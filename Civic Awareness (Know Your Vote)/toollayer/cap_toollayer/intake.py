@@ -92,9 +92,16 @@ _TARGET_US_HOUSE = {"010", "015", "023", "028"}
 
 # candidate.qualifying_status is CHECK-constrained to three values, so this map
 # is a real narrowing and not a display choice.
+#
+# XTL and DEC (added 2026-09-07) take 'other', not 'withdrawn': "Transferred to
+# Local" means the filing moved to a county office and "Deceased" means the
+# filer died. Neither withdrew, and the distinction is not cosmetic -- the
+# social-account ingestion gate reads this column (CAP_Schema_v1.md), and a
+# withdrawal is a candidate's own act in a way that these two are not.
 _STATUS = {
     "QUA": "qualified", "UNO": "qualified",
     "WIT": "withdrawn", "DEF": "withdrawn", "DNQ": "withdrawn", "REM": "withdrawn",
+    "XTL": "other", "DEC": "other",
 }
 
 # D1 (founder 2026-09-07): ballot status tier. Status decides first, party
@@ -102,7 +109,13 @@ _STATUS = {
 # as well as QUA, so a write-in that withdrew is excluded for withdrawing
 # rather than filed as a write-in.
 _ON_BALLOT_STATUS = frozenset({"QUA", "UNO"})
-_EXCLUDED_STATUS = frozenset({"DEF", "DNQ", "WIT", "REM"})
+# XTL "Transferred to Local" (7 legislative rows) and DEC "Deceased" (1 circuit
+# judge) were found in the live 20261103-GEN file on 2026-09-07 by the
+# ballots-by-ZIP whole-file read. Today every row carrying either sits in an
+# office the filter drops before this map is consulted, so nothing was broken;
+# they are mapped now because that office filter is the only thing standing
+# between them and a raised DoEFormatError, and coverage is set to widen.
+_EXCLUDED_STATUS = frozenset({"DEF", "DNQ", "WIT", "REM", "XTL", "DEC"})
 _WRITE_IN_PARTY = "WRI"
 
 
