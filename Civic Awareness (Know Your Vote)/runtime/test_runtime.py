@@ -16,7 +16,9 @@ import importlib.util
 import json
 import sys
 import tempfile
+import types
 import unittest
+from unittest import mock
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -311,11 +313,51 @@ class TestLiveBackendLoop(unittest.TestCase):
                           transcript=[])
         self.assertTrue(res.halted)
 
+    # A stub `anthropic` module, so these three tests describe the GATE and not
+    # the machine they run on. The original test asserted the gate by relying on
+    # `anthropic` being absent — true on the alpha box, false on the arm64 3.12
+    # venv the runtime actually needs — so on a correctly provisioned machine the
+    # backend built a real client and the loop reached the network unchecked.
+    @staticmethod
+    def _stub_anthropic():
+        sentinel = object()
+        mod = types.SimpleNamespace(Anthropic=lambda *a, **k: sentinel)
+        return mod, sentinel
+
+    def test_no_client_and_no_credential_is_not_configured(self):
+        """SDK available, credential absent -> refuse. This is the case the old
+        test could not see, and the one that costs money when it is missed."""
+        mod, _ = self._stub_anthropic()
+        backend = session.LiveAnthropicBackend(model="m", tools=[], env={})
+        with mock.patch.dict(sys.modules, {"anthropic": mod}):
+            with self.assertRaises(session.NotConfigured) as ctx:
+                backend.run(system="s", kickoff="k",
+                            dispatch=lambda *a: {}, transcript=[])
+        self.assertIn("ANTHROPIC_API_KEY", str(ctx.exception))
+
+    def test_either_credential_variable_satisfies_the_gate(self):
+        """Refusing a box authenticated by token rather than key would be a
+        false positive, so both names the SDK reads are accepted."""
+        for var in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN"):
+            mod, sentinel = self._stub_anthropic()
+            backend = session.LiveAnthropicBackend(
+                model="m", tools=[], env={var: "sk-test-not-a-real-key"})
+            with mock.patch.dict(sys.modules, {"anthropic": mod}):
+                # The gate itself is the unit under test; driving the whole loop
+                # would only exercise the stub's missing `messages`.
+                self.assertIs(backend._client_or_default(), sentinel,
+                              f"{var} should satisfy the gate")
+
     def test_no_client_and_no_sdk_is_not_configured(self):
-        # `anthropic` isn't installed here -> honest gate, not a fake success
-        backend = session.LiveAnthropicBackend(model="m", tools=[])
-        with self.assertRaises(session.NotConfigured):
-            backend.run(system="s", kickoff="k", dispatch=lambda *a: {}, transcript=[])
+        """The missing-SDK refusal is separate and stays loud. A credential is
+        present, proving it is the SDK being reported and not the credential."""
+        backend = session.LiveAnthropicBackend(
+            model="m", tools=[], env={"ANTHROPIC_API_KEY": "sk-test"})
+        with mock.patch.dict(sys.modules, {"anthropic": None}):
+            with self.assertRaises(session.NotConfigured) as ctx:
+                backend.run(system="s", kickoff="k",
+                            dispatch=lambda *a: {}, transcript=[])
+        self.assertIn("not installed", str(ctx.exception))
 
     def test_live_backend_drives_full_runner_end_to_end(self):
         with tempfile.TemporaryDirectory() as tmp:
