@@ -1,23 +1,24 @@
 import { createAnonServerClient } from "@/lib/supabase/server";
+import { COVERED_COUNTIES } from "@/lib/counties";
 import { getStatewideRaces } from "@/lib/races";
 import type { ResolveRaceSummary, ResolveResult } from "@/types/app";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
 export const ZIP_RE = /^\d{5}$/;
 
-export const COVERED_COUNTIES = [
-  { fips: "12086", name: "Miami-Dade", metro: "miami" },
-  { fips: "12011", name: "Broward", metro: "fort_lauderdale" },
-  { fips: "12057", name: "Hillsborough", metro: "tampa" },
-  { fips: "12095", name: "Orange", metro: "orlando" },
-] as const;
+/* Re-exported: several server surfaces import it from here, and the list itself
+   now lives in a module the browser can import too (CountyPicker used to carry
+   a second copy for exactly that reason). */
+export { COVERED_COUNTIES };
 
 const districtNumber = (d: string) => Number(d.replace(/\D/g, "")) || 0;
 
 /* Races visible to anon are published by construction (RLS filters the
    rest), so "your district has no race yet" and "not published yet" are the
    same honest answer here. */
-async function racesForDistrict(district: string): Promise<ResolveRaceSummary[]> {
+async function racesForDistrict(
+  district: string
+): Promise<ResolveRaceSummary[]> {
   const supabase = await createAnonServerClient();
   const { data, error } = await supabase
     .from("race")
@@ -46,7 +47,9 @@ export async function resolveZip(
   const supabase = await createAnonServerClient();
   const { data, error } = await supabase
     .from("zip_district")
-    .select("zip5, county_fips, county_name, congressional_district, metro, is_split, in_coverage")
+    .select(
+      "zip5, county_fips, county_name, congressional_district, metro, is_split, in_coverage"
+    )
     .eq("zip5", zip);
   if (error) throw new Error(`zip lookup failed: ${error.message}`);
 
@@ -65,9 +68,9 @@ export async function resolveZip(
      name — the news feed scopes on FIPS, not on the display name. */
   const countyFips = rows[0].county_fips;
   const metro = rows[0].metro;
-  const districts = [...new Set(rows.map((r) => r.congressional_district))].sort(
-    (a, b) => districtNumber(a) - districtNumber(b)
-  );
+  const districts = [
+    ...new Set(rows.map((r) => r.congressional_district)),
+  ].sort((a, b) => districtNumber(a) - districtNumber(b));
 
   if (districts.length > 1) {
     const confirmed =
@@ -119,7 +122,9 @@ export async function resolveZip(
    input at all, so it reads through getStatewideRaces (TASK-067) rather than
    repeating the query — one definition of "statewide", one cache, one
    ordering. Only the county and metro are location-specific here. */
-export async function resolveCounty(countyFips: string): Promise<ResolveResult | null> {
+export async function resolveCounty(
+  countyFips: string
+): Promise<ResolveResult | null> {
   const county = COVERED_COUNTIES.find((c) => c.fips === countyFips);
   if (!county) return null;
   const races = await getStatewideRaces();

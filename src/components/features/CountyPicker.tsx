@@ -1,14 +1,9 @@
 "use client";
 
+import { COVERED_COUNTIES } from "@/lib/counties";
+
 /* Two jobs (FR-001): the "or pick your county" path, and district
    confirmation for split ZIPs — we never auto-pick a district. */
-
-const COUNTIES = [
-  { fips: "12086", name: "Miami-Dade", metro: "Miami" },
-  { fips: "12011", name: "Broward", metro: "Fort Lauderdale" },
-  { fips: "12057", name: "Hillsborough", metro: "Tampa" },
-  { fips: "12095", name: "Orange", metro: "Orlando" },
-];
 
 export function CountyPicker({
   onPick,
@@ -19,7 +14,7 @@ export function CountyPicker({
     <div className="flex flex-col gap-2">
       <p className="text-body-sm text-on-surface-muted">Pick your county:</p>
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-        {COUNTIES.map((c) => (
+        {COVERED_COUNTIES.map((c) => (
           <button
             key={c.fips}
             type="button"
@@ -28,7 +23,7 @@ export function CountyPicker({
           >
             {c.name}
             <span className="block text-caption font-normal text-on-surface-muted">
-              {c.metro} metro
+              {c.metroLabel} metro
             </span>
           </button>
         ))}
