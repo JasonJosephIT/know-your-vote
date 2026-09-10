@@ -123,8 +123,15 @@ precisely "so nobody schedules them into a remote session and watches them
 `data-ingest.md` §7 either. The one network-blocked task on the voter-facing
 side is missing from the only list a founder-machine session reads.
 
-**Cheapest possible fix, and the first thing the next session should do:** add
-a TASK-060 row to that table. It needs two file downloads and one command:
+**Done 2026-09-10.** `local-session.md` now carries a TASK-060 row, the two
+crosswalk URLs, and the migration number (0019). The row does not just say
+"download and run" — it names the trap, because the run looks like a success
+without it: `build-zip-seed.mjs` filters every ZCTA down to the four metro
+counties and derives `county_fips` by reverse-lookup through `metro`, so
+unedited it reproduces the same 304 rows and reports no error. The note also
+carries §3's data-only and `in_coverage` corrections, and states that every ZIP
+the task adds arrives with no published House race until its district's race
+publishes — widening the map does not close §1.
 
 ```bash
 node scripts/build-zip-seed.mjs <zcta_cd.txt> <zcta_county.txt>
@@ -246,9 +253,9 @@ are all untouched — this notice is what makes the gap visible, not what closes
 
 Blocked-free, in order:
 
-1. Add the **TASK-060 row** to `local-session.md` §"The other local-only tasks"
-   (§2 above). It is two downloads and one command, and it is the only reason
-   that task has sat still.
+1. ~~Add the **TASK-060 row** to `local-session.md`.~~ **Done 2026-09-10** —
+   with the `build-zip-seed.mjs` trap named, since the unedited run reproduces
+   the four-county output and looks like it worked. See the §2 done-note.
 2. Land the **§3 corrections** into `general-election-pivot.md` TASK-060 —
    migration `0019` not `0011`, data-only not DDL, the `in_coverage` finding,
    the `build-zip-seed.mjs` reverse-lookup bug. Claim `0019` in the ledger.
