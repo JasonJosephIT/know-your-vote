@@ -1,0 +1,101 @@
+# Florida-only Pelias, adapted from pelias/docker projects/los-angeles-metro.
+#
+# Dropped from the reference, deliberately:
+#   transit / polylines  — LA-specific and irrelevant to address lookup
+#   geonames             — populated places; we resolve addresses, not place names
+#   interpolation        — see deploy/pelias/README.md §"Why interpolation is off"
+#   csv-importer         — no custom CSV source
+networks:
+  default:
+    driver: bridge
+services:
+  libpostal:
+    image: pelias/libpostal-service
+    container_name: pelias_libpostal
+    user: "${DOCKER_USER}"
+    restart: always
+    ports: ["127.0.0.1:4400:4400"]
+  schema:
+    image: pelias/schema:master
+    container_name: pelias_schema
+    user: "${DOCKER_USER}"
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "./synonyms/custom_name.txt:/code/pelias/schema/synonyms/custom_name.txt"
+      - "./synonyms/custom_street.txt:/code/pelias/schema/synonyms/custom_street.txt"
+  api:
+    image: pelias/api:master
+    container_name: pelias_api
+    user: "${DOCKER_USER}"
+    restart: always
+    environment: ["PORT=4000"]
+    # Bound to loopback, not 0.0.0.0 as the reference does. This instance exists
+    # so that voters' addresses reach nobody else; a geocoder listening on every
+    # interface is the one mistake that would undo the entire point of hosting
+    # it. Put a TLS reverse proxy in front and let that be the public surface.
+    ports: ["127.0.0.1:4000:4000"]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+  placeholder:
+    image: pelias/placeholder:master
+    container_name: pelias_placeholder
+    user: "${DOCKER_USER}"
+    restart: always
+    environment: ["PORT=4100"]
+    ports: ["127.0.0.1:4100:4100"]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "${DATA_DIR}:/data"
+      - "./blacklist/:/data/blacklist"
+  whosonfirst:
+    image: pelias/whosonfirst:master
+    container_name: pelias_whosonfirst
+    user: "${DOCKER_USER}"
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "${DATA_DIR}:/data"
+  openstreetmap:
+    image: pelias/openstreetmap:master
+    container_name: pelias_openstreetmap
+    user: "${DOCKER_USER}"
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "${DATA_DIR}:/data"
+  openaddresses:
+    image: pelias/openaddresses:master
+    container_name: pelias_openaddresses
+    user: "${DOCKER_USER}"
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "${DATA_DIR}:/data"
+  pip:
+    image: pelias/pip-service:master
+    container_name: pelias_pip-service
+    user: "${DOCKER_USER}"
+    restart: always
+    environment: ["PORT=4200"]
+    ports: ["127.0.0.1:4200:4200"]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "${DATA_DIR}:/data"
+  elasticsearch:
+    image: pelias/elasticsearch:7.17.27
+    container_name: pelias_elasticsearch
+    user: "${DOCKER_USER}"
+    restart: always
+    ports: ["127.0.0.1:9200:9200", "127.0.0.1:9300:9300"]
+    volumes:
+      - "${DATA_DIR}/elasticsearch:/usr/share/elasticsearch/data"
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+      nofile: { soft: 65536, hard: 65536 }
+    cap_add: ["IPC_LOCK"]
+  fuzzy-tester:
+    image: pelias/fuzzy-tester:master
+    container_name: pelias_fuzzy_tester
+    user: "${DOCKER_USER}"
+    restart: "no"
+    command: "--help"
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "./test_cases:/code/pelias/fuzzy-tester/test_cases"
