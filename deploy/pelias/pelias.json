@@ -1,0 +1,60 @@
+{
+  "logger": { "level": "info", "timestamp": false },
+  "esclient": {
+    "apiVersion": "7.5",
+    "hosts": [{ "host": "elasticsearch" }]
+  },
+  "elasticsearch": {
+    "settings": {
+      "index": {
+        "refresh_interval": "10s",
+        "number_of_replicas": "0",
+        "number_of_shards": "1"
+      }
+    }
+  },
+  "acceptance-tests": {
+    "endpoints": { "docker": "http://api:4000/v1/" }
+  },
+  "api": {
+    "services": {
+      "pip": { "url": "http://pip:4200" },
+      "libpostal": { "url": "http://libpostal:4400" },
+      "placeholder": { "url": "http://placeholder:4100" }
+    },
+    "defaultParameters": {
+      "focus.point.lat": 27.9944,
+      "focus.point.lon": -81.7603
+    }
+  },
+  "imports": {
+    "adminLookup": { "enabled": true },
+    "openstreetmap": {
+      "download": [
+        {
+          "sourceURL": "https://download.geofabrik.de/north-america/us/florida-latest.osm.pbf"
+        }
+      ],
+      "leveldbpath": "/tmp",
+      "datapath": "/data/openstreetmap",
+      "import": [{ "filename": "florida-latest.osm.pbf" }]
+    },
+    "openaddresses": {
+      "datapath": "/data/openaddresses",
+      "files": [
+        "us/fl/statewide",
+        "us/fl/miami",
+        "us/fl/broward",
+        "us/fl/hillsborough",
+        "us/fl/orange_county",
+        "us/fl/city_of_fort_lauderdale"
+      ]
+    },
+    "whosonfirst": {
+      "datapath": "/data/whosonfirst",
+      "importPostalcodes": true,
+      "countryCode": "US",
+      "importPlace": ["85688651"]
+    }
+  }
+}
