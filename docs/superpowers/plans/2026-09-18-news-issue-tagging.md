@@ -623,7 +623,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 **Interfaces:**
 - Produces: `news_item.issues TEXT[]`, `news_item.characterized_by TEXT`, `news_item.characterized_at TIMESTAMPTZ`, `idx_news_item_issues` (GIN).
 
-- [ ] **Step 1: Claim the number in the ledger first**
+- [x] **Step 1: Claim the number in the ledger first**
 
 `supabase/migrations/README.md` rule 2: claim the number, then write the file. Add this row immediately **above** the `| 0027+ | free |` row, and change that row to `| 0028+ | free | — |`:
 
@@ -631,7 +631,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 | 0027      | `0027_news_issues.sql` — `news_item.issues TEXT[]`, `characterized_by`, `characterized_at`, `idx_news_item_issues` (GIN) (`docs/superpowers/specs/2026-09-18-news-characterization-design.md` §4.6, Unit 1) | **written, not applied** — additive and nullable; no backfill. `issues IS NULL` means "not characterized", `issues = '{}'` means "characterized, nothing over threshold". These are different facts and queries must not conflate them. |
 ```
 
-- [ ] **Step 2: Write the migration**
+- [x] **Step 2: Write the migration**
 
 Create `supabase/migrations/0027_news_issues.sql`:
 
@@ -671,7 +671,7 @@ COMMENT ON COLUMN news_item.characterized_by IS
   'engine:model/tax-VERSION/q-HASH — everything needed to reproduce and compare a run.';
 ```
 
-- [ ] **Step 3: Verify the migration parses**
+- [x] **Step 3: Verify the migration parses**
 
 ```bash
 node scripts/verify-migrations.mjs
@@ -679,7 +679,7 @@ node scripts/verify-migrations.mjs
 
 Expected: PASS. (This runs the migrations against embedded PGlite — see the memory note "verify-migrations is embedded PGlite".) If the script takes a filter argument, run it unfiltered; the whole chain must still apply in order.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add supabase/migrations/0027_news_issues.sql supabase/migrations/README.md
