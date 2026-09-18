@@ -859,7 +859,37 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 - Consumes: everything from Tasks 1–4, plus `@supabase/supabase-js` and `SUPABASE_SERVICE_ROLE_KEY` / `NEXT_PUBLIC_SUPABASE_URL` following the pattern already in `scripts/verify-news-neutrality.ts`.
 - Produces: nothing importable. A script.
 
-- [ ] **Step 1: Write the runner**
+> **Partially complete (2026-09-18).** Steps 1, 2 and 5 are done; **Steps 3 and 4
+> cannot run yet** and are left unticked. Two things block them, neither of them
+> code:
+> 1. **Gate G3.** This script is the composition root — it is where the concrete
+>    taxonomy is injected — so it imports `src/lib/news-issues.ts`, which does not
+>    exist while G3 is open. `scripts/` is excluded from `tsc`, so this breaks no
+>    build; the script simply refuses to load. It was exercised against a
+>    throwaway stub taxonomy that was deleted rather than committed, so no
+>    taxonomy decision is pre-empted.
+> 2. **No `.env.local` in this worktree.** Worktrees do not share one with the
+>    main checkout, so `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`
+>    and `TYPESAFE_API_KEY` must be set here before any dry-run.
+>
+> **Two deviations applied during implementation:**
+> - **Engine construction moved before the database query.** As drafted, the
+>   `TYPESAFE_API_KEY` check ran *after* the query, so a missing key cost a
+>   round trip whose results were then discarded. Every fail-closed check now
+>   precedes the first byte of I/O.
+> - **A missing key exits 2 with one clean line**, not 1 with a stack trace —
+>   consistent with every other credential failure. The runner catches what
+>   `jevEngine()` throws.
+> - **No `--engine` flag.** One engine exists; a flag accepting a single value is
+>   cruft. It arrives with the second engine, if the evaluation asks for one.
+>
+> **Verified without a database** (fail-closed matrix, all exit 2 with a clean
+> message and no I/O): `--threshold` of 2, `abc`, a missing value, and 0;
+> `--limit` of 0 and 2.5; absent Supabase env; absent `TYPESAFE_API_KEY`.
+> **Not yet verified:** the dry-run JSON shape and the update payload — those are
+> Steps 3 and 4, and they need a real row.
+
+- [x] **Step 1: Write the runner**
 
 Create `scripts/news-characterize.ts`:
 
@@ -931,6 +961,18 @@ if (!url || !key) {
   console.error("NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required");
   process.exit(2);
 }
+/* Build the engine BEFORE touching the database: jevEngine() is where the
+   TYPESAFE_API_KEY check lives, and a missing key should cost nothing. */
+let engine;
+try {
+  engine = jevEngine();
+} catch (e) {
+  console.error((e as Error).message);
+  process.exit(2);
+}
+const questions = buildQuestions(ISSUES);
+const by = provenance(engine.modelId, questions, TAXONOMY_VERSION);
+
 const db = createClient(url, key);
 
 /* Only rows we have never characterized. issues IS NULL is the "never looked"
@@ -953,9 +995,6 @@ if (!rows || rows.length === 0) {
   process.exit(1);
 }
 
-const engine = jevEngine();
-const questions = buildQuestions(ISSUES);
-const by = provenance(engine.modelId, questions, TAXONOMY_VERSION);
 console.error(
   `characterizing ${rows.length} row(s) at threshold ${threshold} as ${by}${dryRun ? " (DRY RUN)" : ""}`,
 );
@@ -1013,7 +1052,7 @@ console.error(
 if (failed > 0) process.exit(1);
 ```
 
-- [ ] **Step 2: Run the pure guardrails first**
+- [x] **Step 2: Run the pure guardrails first**
 
 ```bash
 node scripts/verify-news-characterize.ts && node scripts/verify-news-issues.ts
@@ -1021,7 +1060,7 @@ node scripts/verify-news-characterize.ts && node scripts/verify-news-issues.ts
 
 Expected: both OK. The runner is not worth running otherwise.
 
-- [ ] **Step 3: Dry-run against the live database**
+- [ ] **Step 3: Dry-run against the live database** ⛔ BLOCKED — needs G3 answered (so `news-issues.ts` exists) and a `.env.local` in this worktree
 
 ```bash
 node scripts/news-characterize.ts --dry-run --limit 5
@@ -1029,7 +1068,7 @@ node scripts/news-characterize.ts --dry-run --limit 5
 
 Expected: five JSON lines of `{id, title, summary, url, issues, sitemapOnly}` on stdout, and on stderr a `characterizing 5 row(s) at threshold 0.7 as jev:jev-1.13.0/tax-1/q-XXXXXXXX (DRY RUN)` header plus a `done:` line. **Read the five results by hand before going further** — if the tags look wrong, that is a taxonomy or question-wording problem and it belongs in Task 1 or 2, not here.
 
-- [ ] **Step 4: Confirm nothing was written**
+- [ ] **Step 4: Confirm nothing was written** ⛔ BLOCKED — same two blockers as Step 3
 
 ```bash
 node --input-type=module -e "
@@ -1042,7 +1081,7 @@ console.log('rows with issues set:', count);
 
 Expected: `rows with issues set: 0`. A dry run that writes is the one bug this mode exists to prevent.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add scripts/news-characterize.ts
