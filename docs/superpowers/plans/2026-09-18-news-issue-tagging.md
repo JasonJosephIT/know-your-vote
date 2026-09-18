@@ -93,6 +93,7 @@ Create `scripts/verify-news-issues.ts`:
    Pure and offline. Run: node scripts/verify-news-issues.ts */
 
 import { ISSUES, ISSUE_IDS, TAXONOMY_VERSION } from "../src/lib/news-issues.ts";
+/* The core's guardrail already proves the core; this one proves the DATA. */
 import { QUIZ_QUESTIONS } from "../src/lib/quiz-questions.ts";
 import { findBannedTermMatch } from "../src/lib/neutrality.ts";
 
@@ -179,16 +180,12 @@ Create `src/lib/news-issues.ts`:
 
    Pure and dependency-free; scripts/verify-news-issues.ts drives it. */
 
-export interface NewsIssue {
-  /** Stable id, shared with QUIZ_QUESTIONS[].id. Never renamed — only added to.
-      A rename silently orphans every row already tagged with the old id. */
-  id: string;
-  /** Voter-facing label. Must equal the quiz's issueTitle. Neutrality-linted. */
-  label: string;
-  /** Surface forms that mean this issue. They go into the question text the
-      model sees, so they are how the taxonomy explains itself. */
-  aliases: readonly string[];
-}
+/* NewsIssue is defined by the core (src/lib/news-characterize.ts), not here:
+   the core owns the contract, and this module is the data that conforms to it.
+   That is what lets the core be built and verified while this list is still
+   under review. */
+export type { NewsIssue } from "./news-characterize.ts";
+import type { NewsIssue } from "./news-characterize.ts";
 
 /** Bumped in the SAME PR as any change to ISSUES below, and recorded on every
     characterized row — so a tag written under one version is distinguishable
@@ -257,19 +254,31 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 - Create: `scripts/verify-news-characterize.ts`
 
 **Interfaces:**
-- Consumes: `ISSUES`, `ISSUE_IDS`, `TAXONOMY_VERSION`, `type NewsIssue` from `src/lib/news-issues.ts`.
+- Consumes: **nothing** but `node:crypto`. Deliberately — see the note below.
 - Produces:
+  - `interface NewsIssue { id: string; label: string; aliases: readonly string[] }`
   - `interface CharacterizableArticle { title: string; summary?: string | null; url: string }`
   - `interface ArticleState { headline: string; dek: string | null; slug: string | null }`
   - `type NoulQuestion = { type: "noul"; instructions: string; criteria: { true: string; false: string } }`
   - `function slugPath(url: string): string | null`
   - `function buildState(article: CharacterizableArticle): ArticleState`
-  - `function buildQuestions(issues?: readonly NewsIssue[]): Record<string, NoulQuestion>`
-  - `function applyThreshold(answers: Record<string, unknown>, threshold: number): string[]`
-  - `function provenance(modelId: string, questions: Record<string, NoulQuestion>): string`
+  - `function buildQuestions(issues: readonly NewsIssue[]): Record<string, NoulQuestion>`
+  - `function applyThreshold(answers: Record<string, unknown>, threshold: number, issueIds: readonly string[]): string[]`
+  - `function provenance(modelId: string, questions: Record<string, NoulQuestion>, taxonomyVersion: string): string`
   - `const DEFAULT_THRESHOLD: number`
 
-- [ ] **Step 1: Write the failing guardrail**
+> **Deviation from the original draft, applied during implementation.** The core
+> was first written to `import { ISSUE_IDS } from "./news-issues.ts"`. That was
+> wrong twice over: it made Task 2 depend on G3-blocked Task 1, and "taxonomy-
+> agnostic" was not actually true — the dependency was just hidden. **The
+> taxonomy is now a parameter**, `NewsIssue` is defined here (the core owns the
+> contract its consumers conform to), and the guardrail drives everything with a
+> *fixture* taxonomy that is deliberately not the real list. Task 2 therefore
+> completes while G3 is still open, and nothing in it changes when G3 is
+> answered. Tasks 1, 5 and 6 pass the taxonomy in; their call sites below
+> reflect that.
+
+- [x] **Step 1: Write the failing guardrail**
 
 Create `scripts/verify-news-characterize.ts`:
 
@@ -406,7 +415,7 @@ if (failures > 0) {
 console.log("verify-news-characterize: OK — no identity in the state, closed response set, reproducible provenance");
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 ```bash
 node scripts/verify-news-characterize.ts
@@ -414,7 +423,7 @@ node scripts/verify-news-characterize.ts
 
 Expected: FAIL — `Cannot find module '../src/lib/news-characterize.ts'`.
 
-- [ ] **Step 3: Write the core**
+- [x] **Step 3: Write the core**
 
 Create `src/lib/news-characterize.ts`:
 
@@ -563,7 +572,7 @@ export function provenance(
 }
 ```
 
-- [ ] **Step 4: Run it to verify it passes**
+- [x] **Step 4: Run it to verify it passes**
 
 ```bash
 node scripts/verify-news-characterize.ts
@@ -571,7 +580,7 @@ node scripts/verify-news-characterize.ts
 
 Expected: `verify-news-characterize: OK — no identity in the state, closed response set, reproducible provenance`
 
-- [ ] **Step 5: Run the mutation checks**
+- [x] **Step 5: Run the mutation checks**
 
 Make each change, run the guardrail, confirm it FAILS, then revert:
 
@@ -585,7 +594,7 @@ Make each change, run the guardrail, confirm it FAILS, then revert:
 
 Run after each: `node scripts/verify-news-characterize.ts` — expected FAIL, then `git checkout src/lib/news-characterize.ts`.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/lib/news-characterize.ts scripts/verify-news-characterize.ts
@@ -889,6 +898,8 @@ import {
   provenance,
 } from "../src/lib/news-characterize.ts";
 import { jevEngine } from "../src/lib/news-characterize-engines.ts";
+/* The taxonomy is injected, never imported by the core (Task 2's note). */
+import { ISSUES, ISSUE_IDS, TAXONOMY_VERSION } from "../src/lib/news-issues.ts";
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
@@ -939,8 +950,8 @@ if (!rows || rows.length === 0) {
 }
 
 const engine = jevEngine();
-const questions = buildQuestions();
-const by = provenance(engine.modelId, questions);
+const questions = buildQuestions(ISSUES);
+const by = provenance(engine.modelId, questions, TAXONOMY_VERSION);
 console.error(
   `characterizing ${rows.length} row(s) at threshold ${threshold} as ${by}${dryRun ? " (DRY RUN)" : ""}`,
 );
@@ -963,7 +974,7 @@ for (const row of rows) {
     continue;
   }
 
-  const issues = applyThreshold(answers, threshold);
+  const issues = applyThreshold(answers, threshold, ISSUE_IDS);
   if (issues.length > 0) tagged++;
   else empty++;
 
@@ -1105,7 +1116,7 @@ Create `scripts/news-characterize-eval.ts`:
 import { readFileSync } from "node:fs";
 import { applyThreshold, buildQuestions, buildState } from "../src/lib/news-characterize.ts";
 import { jevEngine } from "../src/lib/news-characterize-engines.ts";
-import { ISSUE_IDS } from "../src/lib/news-issues.ts";
+import { ISSUES, ISSUE_IDS } from "../src/lib/news-issues.ts";
 
 const path = process.argv[2];
 if (!path) {
@@ -1136,7 +1147,7 @@ for (const row of gold) {
 }
 
 const engine = jevEngine();
-const questions = buildQuestions();
+const questions = buildQuestions(ISSUES);
 
 /* One model call per article, reused across every threshold — the answers do
    not depend on the threshold, so sweeping it must not re-bill the run. */
@@ -1155,7 +1166,7 @@ for (const threshold of THRESHOLDS) {
   let sitemapTp = 0, sitemapFp = 0, sitemapFn = 0;
 
   for (const row of gold) {
-    const predicted = applyThreshold(answersById.get(row.id)!, threshold);
+    const predicted = applyThreshold(answersById.get(row.id)!, threshold, ISSUE_IDS);
     const expected = new Set(row.issues);
     for (const id of ISSUE_IDS) {
       const p = predicted.includes(id);
