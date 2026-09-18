@@ -169,10 +169,28 @@ news may enter `review_item`). Specified in §5, not built.
 
 ## 4. Unit 1 — issue tagging
 
-### 4.1 Taxonomy (gate G3) — reuse the quiz's eight
+### 4.1 Taxonomy (gate G3) — **REOPENED 2026-09-18, founder reviewing**
 
-**Decision: promote the quiz's issue list to `src/lib/news-issues.ts` as the single
-frozen taxonomy, and have `quiz-questions.ts` import it.** One list, two consumers.
+> **This section's decision was premature and is withdrawn.** It closed G3 on the
+> strength of two taxonomies. There is a **third** — `CAP_Issue_List_FL_2026_v1.md`,
+> a sourced, balance-checked, versioned 15-issue research artifact — and
+> `CAP_Change_Spec_Stances_and_RelatedNews_v1.md` §14.3 already records the common
+> issues set as an open question. Four CAP issues (A7 elections administration,
+> B4 Social Security/Medicare, B5 abortion, B6 election integrity) have **no quiz
+> equivalent**, so under the quiz's list those articles are untaggable and return
+> `{}` — a silent hole that looks like a working system.
+>
+> The options, the full mapping and the recommendation are in
+> `docs/general-election/news-issue-taxonomy-options-2026-09-18.md`.
+> **Founder is reviewing. Task 1 of the plan is blocked until this is answered.**
+>
+> Everything below is retained as the argument for the quiz-list option, which is
+> Option 2 in that document. The rest of this spec is taxonomy-agnostic: the core,
+> the migration, the adapter, the runner and the evaluation all iterate whatever
+> `ISSUES` contains, so no other section changes whichever list wins.
+
+**Withdrawn decision (now Option 2): promote the quiz's issue list to
+`src/lib/news-issues.ts` as the single frozen taxonomy.** One list, two consumers.
 
 Why this and not a new list:
 
@@ -435,7 +453,7 @@ judged, never colour-coded.
 |---|---|
 | **G1 — authority** | **CLOSED 2026-09-18: A, C dropped** (founder: "A now, drop C"). The model never decides candidate attachment |
 | **G2 — input** | **CLOSED by this document:** title + dek, never a body; and only stored rows, not the raw sweep pool. Reopening needs a per-outlet `bodyFetch` flag |
-| **G3 — taxonomy** | **CLOSED by this document:** reuse the quiz's 8 ids via `src/lib/news-issues.ts`; ballot measures attach to `ballot_measure`, not to pseudo-issues. Needs founder confirmation that reusing the voter-facing list is intended |
+| **G3 — taxonomy** | **REOPENED 2026-09-18 — founder reviewing.** A third list exists (`CAP_Issue_List_FL_2026_v1.md`, 15 sourced issues) and covers four issues the quiz misses entirely. Options in `docs/general-election/news-issue-taxonomy-options-2026-09-18.md`. Blocks plan Task 1 only |
 | **G4 — surface** | **OPEN, deliberately.** Decided after §6 reports, not before |
 | **G5 / Q5 — queue** | **OPEN.** Blocks Unit 2 only. Unit 1 does not touch `review_item` |
 | **D2 — which System One** | **Narrowed 2026-09-18.** Founder has Jev access; pricing and limits published. Build the TypeSafe arm first; §6 item 6 decides whether the Anthropic arm is ever built |
