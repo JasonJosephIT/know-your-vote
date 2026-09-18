@@ -513,6 +513,27 @@ the column that lets it reach 67 without a second migration.
   design against CN-R3/CN-R4 and news-fairness.md before any code.
   **Session brief for that design: `news-characterization-BRIEF.md`** (gates
   G1–G5, proposed tasks C10–C15, read order).
+  ~ **Confirmed against the code 2026-09-18, not against these notes.** Counted
+  from `OUTLETS` rather than read off the paragraphs above: 37 outlets, **31
+  feeds**, **2 sitemaps** (both Tribune dailies, retrieval mode 2), **4 rows
+  with no retrieval path at all** (Miami Herald, el Nuevo Herald, OutSFL, AP),
+  **3 fail-closed flagged rows** (Miami Times `syndicated`; Florida Phoenix and
+  Florida Politics `mixedFeed`), and **`leanTag` non-null on 0 of 37**. So
+  `usableOutlets()` returns **0**, and every one of the eight offline news
+  guardrails passes on that fact — `verify-news-sweep.ts` asserts the zero
+  deliberately. C7's mechanism is complete and its data gate is fully open.
+  **What that means downstream, measured the same day:** the sweep yields no
+  articles, so nothing has ever been inserted by it — live `news_item` holds
+  **14 rows, all election-administration or official-resource items, 0
+  candidate-scoped** (`candidate_id`, `relation`, `county_fips` NULL on all 14).
+  `matchArticle()` still has no production caller, and C14's gold set has no
+  population to draw from. **Gate C7-a is therefore the single gate holding the
+  whole candidate-news pipeline shut**, and it cannot be closed by an agent:
+  CN-R3 forbids it, and the schema still has no `unrated` lean value, so even a
+  founder cannot sign off the 31 unrated rows as they stand. The `LeanTag` union
+  in `src/lib/news-labels.ts` remains `left | center-left | center |
+  center-right | right | N/A`, with `N/A` documented as "does not apply" and
+  deliberately printed as nothing — it is not a stand-in for "unrated".
 
 - [ ] **C8** *(v1.2)* — Association: `named` + `related` (§6, CN-R9/CN-R10).
   Migration `0016` adds `news_item.relation`; the matcher assigns it; the

@@ -1074,7 +1074,7 @@ node scripts/verify-news-characterize.ts && node scripts/verify-news-issues.ts
 
 Expected: both OK. The runner is not worth running otherwise.
 
-- [ ] **Step 3: Dry-run against the live database** ⛔ BLOCKED — needs G3 answered (so `news-issues.ts` exists) and a `.env.local` in this worktree
+- [ ] **Step 3: Dry-run against the live database** ⛔ BLOCKED — **both original blockers are cleared; a third one is now the live blocker.** G3 was answered and `news-issues.ts` exists (`88fd7d9`), and `scripts/env-local.ts` (`61f1102`) falls back to the main checkout's `.env.local`, so the keys load. Attempted 2026-09-18 on branch `claude/c7-pipeline-completion-98ae33` and the query failed with `column news_item.issues does not exist`: **migration `0027` is written but not applied to the live project**, which "After this plan" records as a founder action. Nothing else stands in the way — the SDK installs, the runner's fail-closed checks all pass, and the engine seam reaches Jev (proved by `scripts/news-characterize-demo.ts`).
 
 ```bash
 node scripts/news-characterize.ts --dry-run --limit 5
@@ -1082,7 +1082,7 @@ node scripts/news-characterize.ts --dry-run --limit 5
 
 Expected: five JSON lines of `{id, title, summary, url, issues, sitemapOnly}` on stdout, and on stderr a `characterizing 5 row(s) at threshold 0.7 as jev:jev-1.13.0/tax-1/q-XXXXXXXX (DRY RUN)` header plus a `done:` line. **Read the five results by hand before going further** — if the tags look wrong, that is a taxonomy or question-wording problem and it belongs in Task 1 or 2, not here.
 
-- [ ] **Step 4: Confirm nothing was written** ⛔ BLOCKED — same two blockers as Step 3
+- [ ] **Step 4: Confirm nothing was written** ⛔ BLOCKED — on Step 3. Note that this step's own query (`.not('issues','is',null)`) needs `0027` too, so it cannot even report a clean zero today.
 
 ```bash
 node --input-type=module -e "
@@ -1127,7 +1127,11 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 > **This task decides the threshold and feeds gate G4. Nothing renders to a voter before it reports.** It also decides whether the Anthropic arm is ever built (spec §6 item 6).
 
-- [ ] **Step 1: Build the gold set**
+- [ ] **Step 1: Build the gold set** ⛔ BLOCKED — **and the blocker is content, not tooling.** Counted live on 2026-09-18: `news_item` holds **14 rows**, every one of them an election-administration or official-resource item (statewide deadlines, early-voting sites, SoE resource links, the three certified amendments, HB 991). **Zero rows are candidate-scoped** — `candidate_id`, `relation` and `county_fips` are NULL on all 14, because they predate the matcher and no swept article has ever been inserted. All 14 have a dek, so the no-dek slice would be empty too.
+
+  So `--limit 100` cannot produce 100 rows, and the 14 that exist are the wrong population: a gold set built from them would measure issue tagging over election logistics, where nearly every correct label is `elections`/`A7`/`B6`, and would say nothing about tagging candidate news. **The gold set needs the sweep to have run**, which needs gate C7-a (`leanTag`) — `usableOutlets()` is 0 today, verified in the same session.
+
+  This remains founder time when it is unblocked. The runner's `--dry-run` output is still the right raw material; nothing about the format changed.
 
 ```bash
 node scripts/news-characterize.ts --dry-run --limit 100 > /tmp/pool.jsonl
@@ -1153,7 +1157,15 @@ This is **founder time, not agent time** — it is the only thing in this design
 can say whether a tag is right. Rows with `"sitemapOnly": true` have no dek; they
 are spec §4.2's input floor and are reported separately.
 
-- [ ] **Step 2: Write the evaluation script**
+- [x] **Step 2: Write the evaluation script** — done `f12623d`, but **not as drafted below.** The draft was written before Tasks 1 and 4 landed and no longer matched the code: it imported an `ISSUES` export that does not exist (it is `ASKABLE`/`ASKABLE_IDS`), passed it to `buildQuestions`, treated `engine.characterize()` as returning a bare answers map when `61f1102` changed it to `{ answers, usage }`, and expected "eight per-issue lines" from what is now a 26-question taxonomy. Keep the draft below as the record of what was intended; the shipped version differs as follows:
+
+  - The arithmetic moved to `src/lib/news-characterize-eval.ts` and is verified offline by `scripts/verify-news-characterize-eval.ts` (mutation-checked: zero-denominator ratios, true-negative counting, out-of-taxonomy gold ids, a missing `issues` key read as `[]`, unearned parent credit, unmeasured cost reported as zero, and the evidence floor — each mutation fails the guardrail). An evaluation script's output is a number nobody can check by eye, so the scoring could not stay untested inside a network-bound script.
+  - Ratios with a zero denominator report `n/a`, never 0% and never 100%. True negatives are never counted — with 26 questions and ~2 tags per article, accuracy would read ~96% for a scorer that predicted nothing.
+  - Cost is taken from the vendor's reported `usage` and is `null` when nothing was reported, satisfying §6 item 5 without dressing an estimate as a measurement.
+  - Adds the measure `news-issues.ts` asks for in its own comment: `parentOnlyCatches` counts gold rows where a category question fired alone AND the labeller agreed, which is the evidence for keeping or dropping the eleven parent questions.
+  - Adds `--save-answers`/`--answers` so re-cutting the curve or re-reading the report costs nothing, mirroring the runner's rule that a re-run never re-bills a row.
+  - §6 item 3 (per-candidate tag distribution over `named` rows) is deliberately excluded and the script says why: it is a query over stored `candidate_id`/`relation`, not a property of a gold set.
+  - Smoke-tested end to end offline against a synthetic four-row gold set through the `--answers` replay path, exercising every slice (dek / no-dek, category / sub-issue, parent-only, suspects, cost). No spend.
 
 Create `scripts/news-characterize-eval.ts`:
 
@@ -1244,7 +1256,7 @@ for (const threshold of THRESHOLDS) {
 }
 ```
 
-- [ ] **Step 3: Run the evaluation**
+- [ ] **Step 3: Run the evaluation** ⛔ BLOCKED — on Step 1's gold set. The harness itself is ready and was exercised offline; it needs labelled rows, not code.
 
 ```bash
 node scripts/news-characterize-eval.ts docs/general-election/news-characterization-goldset-2026-09-18.jsonl
@@ -1252,7 +1264,7 @@ node scripts/news-characterize-eval.ts docs/general-election/news-characterizati
 
 Expected: one block per threshold, each with an overall line, a sitemap-only line, and eight per-issue lines.
 
-- [ ] **Step 4: Write the report**
+- [ ] **Step 4: Write the report** ⛔ BLOCKED — on Step 3. Two of its seven items are now known to be unreportable even once rows exist: item 3 (per-candidate distribution) needs `candidate_id`/`relation`, which only the matcher writes, and the no-dek slice will stay empty until a sitemap-retrieved article is actually inserted. When it is written, it must say that `sitemapOnly` is inferred from a null dek because `news_item` has no `retrieval` column — an RSS item with an empty dek is indistinguishable from a sitemap-retrieved one, so the slice cannot honestly be called "sitemap rows".
 
 Create `docs/general-election/news-characterization-eval-2026-09-18.md` covering, per spec §6:
 
@@ -1264,7 +1276,7 @@ Create `docs/general-election/news-characterization-eval-2026-09-18.md` covering
 6. **Whether the Anthropic arm should be built at all**, and if so, naming the specific dissatisfaction it would answer.
 7. Any issue whose precision or recall is poor enough to be a taxonomy or question-wording problem — that is a Task 1/2 fix, not a threshold fix.
 
-- [ ] **Step 5: Update `DEFAULT_THRESHOLD` if the curve disagrees with 0.7**
+- [ ] **Step 5: Update `DEFAULT_THRESHOLD` if the curve disagrees with 0.7** ⛔ BLOCKED — on Step 3. `DEFAULT_THRESHOLD` stays at 0.7 as an unvalidated default until a curve exists, and nothing renders off it (G4).
 
 If the report chooses a different threshold, change `DEFAULT_THRESHOLD` in `src/lib/news-characterize.ts` and re-run:
 
@@ -1274,7 +1286,7 @@ node scripts/verify-news-characterize.ts
 
 Expected: OK (the guardrail only asserts it is in range).
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: Commit** ⛔ PARTIAL — the script and its guardrail are committed (`f12623d`); the gold set, the report and any threshold change are not, because they do not exist yet.
 
 ```bash
 git add docs/general-election/news-characterization-eval-2026-09-18.md \
