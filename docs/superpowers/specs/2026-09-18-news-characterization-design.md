@@ -3,9 +3,10 @@
 _Written 2026-09-18, answering `docs/general-election/news-characterization-BRIEF.md`.
 Branch `claude/determined-nobel-a8886d`, base `ea2fe76` (main). No code written._
 
-**Status: two founder decisions are open (§2). Everything else in this document is
-decided and buildable.** The two open decisions are deliberately isolated so that
-neither blocks the other, and §3's architecture is the same under every answer.
+**Status: D1 resolved 2026-09-18 — option A, C dropped (§2.1). D2 narrowed the same
+day: the founder has Jev access, so the engine question is now which to build
+*first*, not whether one exists (§2.2).** Everything in this document is decided
+and buildable.
 
 ---
 
@@ -67,29 +68,25 @@ Claim 0027 in the ledger in the same PR as the file, per that file's rule 2.
 
 ## 2. The two open founder decisions
 
-### D1 — Authority (gate G1, unresolved)
+### 2.1 D1 — Authority (gate G1) — **RESOLVED: A, C dropped**
 
-Asked as A / A-then-B / A+B / C; answered *"Revision C for A"*, which reads both
-ways. The clarifying question was dismissed. Both branches are specified here.
+Founder, 2026-09-18: *"A now, drop C."*
 
-- **A — issue tags only.** `news-match.ts` keeps owning `named`/`related`.
-  CN-R4's structural guarantee and CN-R10's denominator are untouched. No PRD
-  revision. This is §4, and it is buildable today.
-- **C — the model decides attachment.** Replaces the deterministic matcher. This
-  is not an implementation task; it is a PRD §6 revision that must answer, in
-  writing, three questions the current design answers by construction:
-  1. What replaces CN-R4's structural symmetry, given that a model's attachment
-     decision cannot be re-derived from the inputs the way a regex can?
-  2. What denominator does CN-R10 publish, given that `namedCountsByCandidate()`
-     exists precisely to keep model-ish tiers out of the variance?
-  3. What does `related` mean once "ambiguity resolves toward symmetry"
-     (`news-match.ts` header) is no longer enforced by the rule itself?
+**A — issue tags only.** `news-match.ts` keeps owning `named`/`related`.
+CN-R4's structural guarantee and CN-R10's denominator are untouched. No PRD §6
+revision is needed or wanted. This is §4.
 
-  **Recommendation: A now.** Not because C is wrong, but because C trades away the
-  project's central published claim, and that trade deserves its own document and
-  its own decision — not a task inside a characterization build.
+**C is dropped**, not deferred. The model does not decide candidate attachment.
+Recorded here so a later session does not reopen it as an obvious extension: the
+reason C was on the table at all is that the regex misses nicknames and "the
+incumbent", and the answer to that is §5's operator-gated suggestions, never a
+model writing `candidate_id`.
 
-### D2 — Which "System 1" (new; not in the brief)
+Unit 2 (§5) is unaffected by this answer — it was gated on D1 **and** Q5, and Q5
+is still open. Nothing in Unit 2 is C: a suggestion an operator approves is not
+the model deciding attachment.
+
+### 2.2 D2 — Which "System 1" (new; not in the brief)
 
 The brief reads the founder's "System 1" as Kahneman's fast/cheap metaphor. The
 founder asked whether "model" meant an Anthropic model or **System One** — which
@@ -108,11 +105,29 @@ does **not** document calibration — it says to start with conservative thresho
 and validate on your own data. The honest statement of the advantage is narrower,
 and it is in §4.4.
 
-**Recommendation: do not decide D2 in this document.** Make the engine a seam and
-let §6's evaluation decide it with numbers. Cost cannot decide it (§4.5), so
-quality must, and neither of us has measured either engine on this corpus. The
-taxonomy, the input rule, the storage, the threshold policy and the evaluation
-are all engine-independent; only a ~40-line adapter differs.
+**Updated 2026-09-18: the founder has Jev access, and the pricing and limits are
+published after all** (on `docs.typesafe.ai/models.md`, not a pricing page — two
+claims made earlier in this document's session were wrong and are corrected in
+§4.4). `jev-1.13.0` (alias `jev-latest`) is the only System One model; the same
+weights serve every account.
+
+**Recommendation: keep the engine a seam, but build the TypeSafe arm first and
+build the Anthropic arm only if the evaluation is unsatisfying.** Three reasons,
+in order of weight:
+
+1. **Noul is literally this task's primitive.** "Define one Noul per label" is the
+   documented multi-label recipe. The Anthropic arm reaches the same shape by
+   constraining a text model with a tool schema and a validator.
+2. **There is no free-text channel to police.** A Noul returns a number. A lean,
+   a summary or a sentiment cannot be emitted even if the question text is wrong.
+   §4.4 expands on why that is worth more here than in most products.
+3. **~100× cheaper** (§4.5) — not decisive on its own, since both are cheap in
+   absolute terms, but it stops mattering entirely if the sweep goes daily and
+   the pool grows.
+
+Building both adapters up front would double the work to answer a question the
+first arm's numbers may settle on its own. The seam stays so the second arm is a
+~40-line addition whenever it is wanted.
 
 ---
 
@@ -135,8 +150,8 @@ Two units, built in order, with a shared pure core.
                                       │
                     ┌─────────────────┴──────────────────┐
                     ▼                                     ▼
-          engine: anthropic                       engine: typesafe
-          (adapter, ~40 lines)                    (adapter, ~40 lines)
+       engine: typesafe (built first)          engine: anthropic (only if §6
+       jev-latest, one Noul per issue           item 6 asks for it)
                     │                                     │
                     └─────────────────┬───────────────────┘
                                       ▼
@@ -144,11 +159,11 @@ Two units, built in order, with a shared pure core.
                           review_item suggestions  (Unit 2, gated)
 ```
 
-**Unit 1 — issue tagging.** Buildable now under D1=A. Not blocked on B2, on the
-`leanTag` sign-off, or on Q5.
+**Unit 1 — issue tagging.** This is the work. Not blocked on B2, on the `leanTag`
+sign-off, or on Q5.
 
-**Unit 2 — candidate suggestions.** Blocked on D1 and on Q5 (reverse
-`design.md` §7 so agent news may enter `review_item`). Specified in §5, not built.
+**Unit 2 — candidate suggestions.** Blocked on Q5 (reverse `design.md` §7 so agent
+news may enter `review_item`). Specified in §5, not built.
 
 ---
 
@@ -268,8 +283,10 @@ should decide D2 — not price:
 | Output channel | Tool-use JSON. A `string` field could carry prose if the schema ever loosened; the validator is what stops it | Noul returns a **number**. There is no free-text channel to loosen |
 | The confidence number | Self-reported by the model — a token it wrote. Not calibrated; thresholding it is thresholding a claim | A probability from the scoring mechanism, not a generated token. Calibration is **not documented** — the docs say validate on your own data |
 | In the repo today | Yes: `@anthropic-ai/sdk` ^0.109.1, pattern at `src/lib/quiz.ts:120–190` | No. New dependency (`@typesafe-ai/sdk`, Node 20+), new key, new vendor |
-| Pricing | Published: $1/MTok in, $5/MTok out | **No public pricing page.** Open item before any commitment |
-| Rate limits | Documented | Not documented in the public docs |
+| Pricing | $1/MTok in, $5/MTok out | **$0.042/MTok input; output free.** ~100× cheaper (§4.5) |
+| Rate limits | Documented | 1,200 req/min, 250k tok/s — a whole sweep in seconds |
+| Context | 200k | 64k total, 32k for state + longest question — ample for headlines |
+| Model choice | Several tiers | One: `jev-1.13.0` (`jev-latest`). Same weights for every account |
 
 The structural point stands on its own: a primitive that returns a number cannot
 emit a lean even if the prompt is wrong. That is worth more to this project than
@@ -288,8 +305,13 @@ silently not cache. Assert `usage.cache_read_input_tokens > 0` in the runner's
 dry-run output; if it is zero, drop the `cache_control` rather than reporting a
 discount that is not happening.
 
-TypeSafe's cost is unknown pending pricing. Unless it is wildly out of line, this
-is a rounding error either way — which is precisely why §6 decides on quality.
+**Jev, same article:** ~850 input tokens at $0.042/MTok, output free ≈
+**$0.0000357** — about **$0.007 per 200-row sweep**, or **~$0.32 for the whole
+run-up**. Roughly 100× cheaper than the Anthropic arm.
+
+Both are cheap in absolute terms, so cost does not decide §6 on today's volumes.
+It would start to matter if the sweep goes daily against a growing pool, which
+the cadence table in PRD §5 already anticipates.
 
 ### 4.6 Storage
 
@@ -322,7 +344,7 @@ CREATE INDEX idx_news_item_issues ON news_item USING GIN (issues);
 |---|---|---|
 | `src/lib/news-issues.ts` | The frozen taxonomy + `TAXONOMY_VERSION`. Pure data. | `scripts/verify-news-issues.ts` |
 | `src/lib/news-characterize.ts` | Pure: `buildQuestions(article, taxonomy)` (deterministic), `validate(response)` (shape, threshold, abstain), `provenance()`. **No network, no clock, no DB** | `scripts/verify-news-characterize.ts`, fixtures with recorded responses |
-| `src/lib/news-characterize-engines.ts` | The two adapters behind one interface. The only file that touches a vendor SDK | integration-only; excluded from the pure self-test |
+| `src/lib/news-characterize-engines.ts` | The engine adapters behind one interface. The only file that touches a vendor SDK. TypeSafe built first; the interface exists so a second arm is a ~40-line addition, not a refactor | integration-only; excluded from the pure self-test |
 | `scripts/news-characterize.ts` | The runner: reads stored rows, calls an engine with a fixed per-article budget, writes `issues`. `--dry-run` prints without writing; `--engine=` selects | run manually; dry-run output is the evidence |
 
 This mirrors the split the sweep already uses (`src/lib/news-sweep.ts` pure,
@@ -342,8 +364,9 @@ runner and any future route are affected; the pure modules are plain TypeScript.
 
 ## 5. Unit 2 — candidate suggestions (specified, not built)
 
-Blocked on **D1** and on **Q5** (`design.md` §7 currently says do not queue agent
-news; CN-R7 asks to reverse it — open since 2026-09-06).
+Blocked on **Q5** (`design.md` §7 currently says do not queue agent news; CN-R7
+asks to reverse it — open since 2026-09-06). D1 is resolved and does not block
+this: an operator-approved suggestion is not the model deciding attachment.
 
 - The model proposes attachments the regex missed — nicknames, "the incumbent",
   "the Republican nominee". It never writes `news_item.candidate_id` or `relation`.
@@ -365,10 +388,18 @@ news; CN-R7 asks to reverse it — open since 2026-09-06).
 
 ## 6. Evaluation — before any rendering (gate G4 stays shut until this reports)
 
-Run both engines over the same stored rows, same taxonomy version, and report:
+**The measure is a hand-labelled gold set, not engine agreement.** Two models
+agreeing does not make either right, and with one engine built first there is
+nothing to agree with. Label **100 stored rows by hand** against the taxonomy —
+drawn across outlets and including sitemap-only rows — and treat that as ground
+truth. It is a couple of hours of founder time and it is the only thing in this
+design that can actually say whether a tag is correct.
 
-1. **Agreement between engines** — per-issue, per-article. Where they disagree,
-   a hand-read sample. This is what decides D2.
+Report:
+
+1. **Precision and recall per issue** against the gold set, at the chosen
+   threshold. Per issue, not averaged: a taxonomy where `economy` works and
+   `insurance` does not is a fixable problem, and an average hides it.
 2. **Issue-tag distribution per candidate**, over `named` rows only, using
    `namedCountsByCandidate()`'s selection rule. The question is whether tags are
    distributed as evenly as coverage is. **This is a new fairness axis: report it,
@@ -377,14 +408,20 @@ Run both engines over the same stored rows, same taxonomy version, and report:
 3. **Tag rate and abstain rate**, with **sitemap-only rows (no dek) reported
    separately** — that is the input floor from §4.2, and averaging over it would
    hide it.
-4. **Threshold sweep.** The docs tell us to validate thresholds on our own data;
-   this is where that happens. Report tag rate at several thresholds rather than
-   asserting one.
+4. **Threshold sweep** against the gold set. The docs tell us to validate
+   thresholds on our own data; this is where that happens. Report precision and
+   recall at several thresholds rather than asserting one, and pick the threshold
+   from that curve — tagging is low-stakes and disclosed, so recall is worth more
+   here than it would be in a gating decision, but say so rather than assuming it.
 5. **Cost and latency per article and per sweep**, measured, not estimated.
+6. **Whether to build the second engine at all.** If precision and recall against
+   the gold set are acceptable, the Anthropic arm is never built and the seam
+   simply goes unused. Build it only to answer a specific dissatisfaction, and say
+   in the report which one.
 
-Unit 1's evaluation needs **no roster** for items 1, 3, 4 and 5 — only item 2 wants
-real candidates, and it can run on whatever `named` rows exist. So this is not
-blocked on B2, unlike the brief's §6 C14.
+Unit 1's evaluation needs **no roster** for items 1, 3, 4, 5 and 6 — only item 2
+wants real candidates, and it can run on whatever `named` rows exist. So this is
+not blocked on B2, unlike the brief's C14.
 
 Nothing reaches a voter until the founder reads this and answers G4. If issue tags
 ever do render, they inherit `news-fairness.md` §1's discipline: disclosed, never
@@ -396,12 +433,14 @@ judged, never colour-coded.
 
 | Gate | Status |
 |---|---|
-| **G1 — authority** | **OPEN.** D1 above. "Revision C for A" ambiguous; recommendation is A now, C as its own §6 revision |
+| **G1 — authority** | **CLOSED 2026-09-18: A, C dropped** (founder: "A now, drop C"). The model never decides candidate attachment |
 | **G2 — input** | **CLOSED by this document:** title + dek, never a body; and only stored rows, not the raw sweep pool. Reopening needs a per-outlet `bodyFetch` flag |
 | **G3 — taxonomy** | **CLOSED by this document:** reuse the quiz's 8 ids via `src/lib/news-issues.ts`; ballot measures attach to `ballot_measure`, not to pseudo-issues. Needs founder confirmation that reusing the voter-facing list is intended |
 | **G4 — surface** | **OPEN, deliberately.** Decided after §6 reports, not before |
 | **G5 / Q5 — queue** | **OPEN.** Blocks Unit 2 only. Unit 1 does not touch `review_item` |
-| **D2 — which System One** | **OPEN by design.** Engine is a seam; §6 decides it |
+| **D2 — which System One** | **Narrowed 2026-09-18.** Founder has Jev access; pricing and limits published. Build the TypeSafe arm first; §6 item 6 decides whether the Anthropic arm is ever built |
+| Founder confirmation on G3 | Reusing the **voter-facing** quiz list for news tags is a product decision as much as a technical one. C11 is a PR-reviewed file, so the review is the gate — but flag it explicitly rather than letting it land silently |
+| `TYPESAFE_API_KEY` | Not in `.env.example`; `@typesafe-ai/sdk` not installed. Both are C13 steps |
 | Roster (ingest B2) | Blocks Unit 2's evaluation. **Does not block Unit 1** |
 | `leanTag` sign-off (C7-a), `unrated` value | Blocks rendering any card at all. Independent of this work |
 
@@ -413,12 +452,13 @@ judged, never colour-coded.
 |---|---|---|
 | **C11** — `src/lib/news-issues.ts` + guardrail; `quiz-questions.ts` imports it | G3 confirmed | One taxonomy, drift-proof |
 | **C12** — `src/lib/news-characterize.ts`, pure, fixture-tested, mutation-checked | C11 | No network |
-| **C13a** — Anthropic adapter | C12 | `claude-haiku-4-5`, temperature 0, forced tool use |
-| **C13b** — TypeSafe adapter | C12 | One Noul per issue over shared state |
+| **C13** — TypeSafe adapter; `@typesafe-ai/sdk`, `TYPESAFE_API_KEY` in `.env.example` | C12 | One Noul per issue over shared state, one request per article |
 | **C13c** — migration 0027 + ledger row; runner with `--dry-run`/`--engine` | C12, 0027 claimed | Writes `issues` + provenance |
-| **C14** — evaluation (§6), both engines | C13a–c | The numbers that decide D2 and G4 |
-| **C15** — founder decision on G4 | C14 | — |
-| **C16** — Unit 2 | D1, Q5, B2 | §5 |
+| **C14a** — hand-label 100 stored rows as the gold set | C11 | Ground truth; founder time, not agent time |
+| **C14b** — evaluation (§6) against the gold set | C13, C13c, C14a | The numbers that decide the threshold and G4 |
+| **C15** — founder decision on G4 | C14b | — |
+| **C13-alt** — Anthropic adapter | only if C14b says so | `claude-haiku-4-5`, temperature 0, forced tool use |
+| **C16** — Unit 2 | Q5, B2 | §5 |
 
 ---
 
