@@ -511,6 +511,8 @@ the column that lets it reach 67 without a second migration.
   `named`/`related` matching into a model judgement and would require
   fetching article text, which §5 today forbids storing. It needs its own
   design against CN-R3/CN-R4 and news-fairness.md before any code.
+  **Session brief for that design: `news-characterization-BRIEF.md`** (gates
+  G1–G5, proposed tasks C10–C15, read order).
 
 - [ ] **C8** *(v1.2)* — Association: `named` + `related` (§6, CN-R9/CN-R10).
   Migration `0016` adds `news_item.relation`; the matcher assigns it; the
