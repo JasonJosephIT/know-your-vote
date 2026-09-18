@@ -88,15 +88,24 @@ export const OUTLETS: readonly Outlet[] = Object.freeze([
     "miamiherald.com",
     "Miami Herald",
     "12086",
-    null, // Arc RSS path 404s; every other path timed out for the sweep UA. No RSS found 2026-09-17 — sitemap only.
+    null, // Arc RSS path is a real 404 (confirmed via Firecrawl); every other path timed out for the sweep UA. No RSS 2026-09-17 — sitemap only.
     "Raters disagree: MBFC Left-Center (-3.4, High); AllSides Lean Left (low confidence, Sep 2026); Ad Fontes Middle/Reliable. " +
       "Corpus 2026-09-17 proposes center-left; endorsed Democratic presidential candidates since 2000 (MBFC). Founder decides.",
   ),
   /* McClatchy eliminated el Nuevo Herald's entire writing staff on 2026-09-10
      (AP via WLRN). Kept for auditability; expect near-zero original output. */
-  o("elnuevoherald.com", "el Nuevo Herald", "12086", null), // same McClatchy CMS as the Herald; timed out 2026-09-17.
-  o("americateve.com", "América TeVé", "12086", null), // /rss, /feed/, /rss.xml, /noticias/rss all 404 2026-09-17; homepage advertises no feed.
-  o("miamitimesonline.com", "The Miami Times", "12086", null), // BLOX search RSS is advertised, but every fetch returned HTTP 429 on 2026-09-17.
+  o("elnuevoherald.com", "el Nuevo Herald", "12086", null), // same McClatchy CMS as the Herald; Arc RSS path is a real 404 (Firecrawl), sweep UA times out. 2026-09-17.
+  /* Spanish-language TV (Canal 41). Same CMS as Diario Las Américas; the
+     feed index at /contenidos/rss.html lists section feeds (found via
+     Firecrawl site map, then verified with the sweep UA). The Miami section
+     is the local one; /rss/pages/opinion.xml exists but was 23 days stale. */
+  o("americateve.com", "América TeVé", "12086", "https://www.americateve.com/rss/pages/miami.xml"),
+  /* Black-owned weekly, founded 1923. BLOX/TownNews search feed — same
+     platform and same rate-limit caveat as News Service of Florida below.
+     The feed is heavily syndicated (Florida Politics, Florida Phoenix, AP,
+     press-release wires), with the origin in <dc:creator>; see the
+     verification doc on republisher attribution. */
+  o("miamitimesonline.com", "The Miami Times", "12086", "https://www.miamitimesonline.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc"),
 
   // --- Broward ---
   /* Fort Lauderdale nonprofit investigative newsroom. Low cadence (five items
@@ -111,7 +120,8 @@ export const OUTLETS: readonly Outlet[] = Object.freeze([
     "sun-sentinel.com",
     "South Florida Sun Sentinel",
     "12011",
-    null, // /feed/ (advertised on the homepage) returns HTTP 403 to the sweep UA AND to a browser UA 2026-09-17 — a WAF, not a path problem.
+    null, // /feed/ (advertised on the homepage) returns HTTP 403 to the sweep UA, a browser UA, and Firecrawl's stealth proxy 2026-09-17 — a WAF, not a path problem.
+    //       BUT /sitemap.xml?yyyy=&mm=&dd= (Google News sitemap: title + publication_date, ~115 URLs/day) is OPEN to the sweep UA. Needs retrieval mode 2 (PRD §5) in the runner.
     "Mild disagreement: AllSides Center (low confidence, Apr 2026); MBFC Least Biased (High); Ad Fontes Lean Left per Ground News. " +
       "Corpus 2026-09-17 proposes center. Founder decides.",
   ),
@@ -149,7 +159,8 @@ export const OUTLETS: readonly Outlet[] = Object.freeze([
     "orlandosentinel.com",
     "Orlando Sentinel",
     "12095",
-    null, // same Tribune/Alden WAF as the Sun Sentinel: HTTP 403 to every UA 2026-09-17.
+    null, // same Tribune/Alden WAF as the Sun Sentinel: HTTP 403 to every UA 2026-09-17 (Firecrawl declines the site entirely).
+    //       Same open per-day Google News sitemap as the Sun Sentinel (~130 URLs/day). Needs retrieval mode 2 in the runner.
     "Raters disagree: MBFC Left-Center (-2.8, High); Ad Fontes Skews Left/Reliable; AllSides Center (low confidence, Aug 2026). " +
       "Corpus 2026-09-17 proposes center-left. Founder decides.",
   ),

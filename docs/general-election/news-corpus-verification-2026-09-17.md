@@ -8,7 +8,8 @@ agent (`KnowYourVote/1.0`) and parsing the body with `src/lib/news-sweep.ts`.
 The corpus's promotion threshold was applied: **XML parses and the newest item
 is dated within the last 7 days.** One exception is flagged below.
 
-What this closes: **gate C7-b (`feed`)** for 29 of 37 listed outlets.
+What this closes: **gate C7-b (`feed`)** for 31 of 37 listed outlets (29 on
+the plain-fetch pass, two more on the Firecrawl pass in §6).
 What it does not close: **gate C7-a (`leanTag`)**. Every lean is still null.
 `usableOutlets()` still returns 0, by design, until the founder signs off.
 
@@ -29,10 +30,10 @@ one fetch reaches. Compare it with the 14-day window before reading §3.
 | CBS News Miami | `cbsnews.com/miami/latest/rss/main` | 30 | 0 d | — | Includes one evergreen item (281 d); the rest is current. **Moved to Miami-Dade** (§2). |
 | Diario Las Américas | `diariolasamericas.com/rss/pages/florida.xml` | 20 | 0.1 d | 2.2 d | Spanish. `/rss/home.xml` last updated 2019; the Florida section feed is live. |
 | Le Floridien | `lefloridien.com/feed/` | 10 | 0.5 d | 7.3 d | Biweekly; first item is the e-edition post. |
-| Miami Herald | **null** | | | | Arc RSS path returns 404 to a browser UA and times out (45 s) for the sweep UA. No RSS. |
-| el Nuevo Herald | **null** | | | | Same CMS, same timeout. Writing staff eliminated 2026-09-10; kept for auditability. |
-| América TeVé | **null** | | | | `/rss`, `/feed/`, `/rss.xml`, `/noticias/rss` all 404; homepage advertises no feed. |
-| The Miami Times | **null** | | | | BLOX search RSS is advertised on the homepage; every fetch this session returned HTTP 429 (see §3). |
+| América TeVé | `americateve.com/rss/pages/miami.xml` | 20 | 0.2 d | 22.2 d | Spanish. Feed index at `/contenidos/rss.html` found by Firecrawl site map (§6); verified with the sweep UA. `/rss/pages/opinion.xml` exists but is 23 d stale. |
+| The Miami Times | `miamitimesonline.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc` | 25 | 0 d | 0.7 d | BLOX. 200 via Firecrawl and via `curl` with the sweep UA; the next request 429'd (§3). Heavily syndicated — see §3 item 6. |
+| Miami Herald | **null** | | | | Arc RSS path is a real 404 page (confirmed through Firecrawl, §6); times out for the sweep UA. No RSS. |
+| el Nuevo Herald | **null** | | | | Same CMS, same 404. Writing staff eliminated 2026-09-10; kept for auditability. |
 
 ### Broward (12011)
 
@@ -41,7 +42,7 @@ one fetch reaches. Compare it with the 14-day window before reading §3.
 | Florida Bulldog | `floridabulldog.org/feed/` | 5 | 0.8 d | 18.8 d | Investigative cadence. robots: `Crawl-Delay: 10`. |
 | The Westside Gazette | `thewestsidegazette.com/feed/` | 10 | **7.6 d** | 8.6 d | **Over the 7-day threshold by half a day.** A weekly's normal cadence; included, founder may veto. |
 | South Florida Times | `sfltimes.com/feed` | 10 | 0.4 d | 1.3 d | |
-| Sun Sentinel | **null** | | | | `/feed/` and `/opinion/feed/` (both advertised on the homepage) return **HTTP 403 to the sweep UA and to a browser UA**. A WAF, not a wrong path. |
+| Sun Sentinel | **null** | | | | `/feed/` and `/opinion/feed/` (both advertised on the homepage) return **HTTP 403 to the sweep UA, a browser UA, and Firecrawl's stealth proxy**. A WAF, not a wrong path. **The per-day Google News sitemap is open** (§6). |
 | OutSFL | **null** | | | | Every feed path 302s to the HTML homepage. |
 
 Broward now has **no daily and no television outlet** with a working feed.
@@ -68,7 +69,7 @@ The three weeklies are what remains. This is the corpus's "acute gap", worse.
 | Orlando Weekly | `orlandoweekly.com/feed/?partner-feed=all` | 25 | 0.2 d | 2.5 d | |
 | **WKMG News 6** (new) | `clickorlando.com/arc/outboundfeeds/rss/?outputType=xml` | 20 | 0 d | 1.0 d | Corpus: "add after verification". Verified. |
 | **FOX 35 Orlando** (new) | `fox35orlando.com/rss/category/news` | 25 | 0 d | 1.6 d | Corpus: same. Studios in Lake Mary (Seminole) — see §2. |
-| Orlando Sentinel | **null** | | | | Same Tribune/Alden WAF as the Sun Sentinel: 403 to every UA. |
+| Orlando Sentinel | **null** | | | | Same Tribune/Alden WAF as the Sun Sentinel: 403 to every UA; Firecrawl declines the site outright. **Per-day Google News sitemap is open** (§6). |
 
 ### Statewide
 
@@ -111,8 +112,8 @@ The three weeklies are what remains. This is the corpus's "acute gap", worse.
 
 ## 3. Findings the PRD should absorb
 
-1. **Feed depth, not the 14-day window, bounds recall.** Eighteen of the
-   twenty-nine verified feeds reach back less than three days; Florida
+1. **Feed depth, not the 14-day window, bounds recall.** Nineteen of the
+   thirty-one verified feeds reach back less than three days; Florida
    Politics, the highest-volume political outlet in the state, reaches back
    five hours. A weekly sweep over these feeds would see only a fraction of
    what they published. The cadence table in PRD §5 (weekly now, daily from 2026-10-05)
@@ -140,7 +141,28 @@ The three weeklies are what remains. This is the corpus's "acute gap", worse.
    bodies. Whether a Claude-run pipeline doing that is within those publishers'
    intent is a policy question for the founder, not a robots.txt question.
    Crawl delays to honour: Florida Bulldog 10 s, WESH 10 s, The Floridian 600 s.
-5. **Three national-tier outlets in the corpus (Table 3) were not added.** The
+5. **Both Tribune dailies are reachable through their sitemaps.**
+   `https://www.sun-sentinel.com/sitemap.xml?yyyy=2026&mm=09&dd=17` (and the
+   Orlando Sentinel equivalent) answer the sweep UA with a Google News sitemap:
+   per URL a `<news:title>`, `<news:publication_date>` and `<lastmod>`, about
+   115–130 URLs per day including obituaries and wire sports. That is title,
+   URL and date — everything the sweep stores except a dek. Retrieval mode 2
+   in PRD §5 ("RSS/Atom → sitemap") is the designed fallback and is not yet
+   implemented; a `parseNewsSitemap()` beside `parseFeed()` plus a per-day
+   loop over the 14-day window would bring both papers back. This is the
+   single highest-value mechanism change available: it restores the only
+   daily in Broward and the only daily in Orange.
+6. **Republisher attribution.** The Miami Times feed is mostly syndicated:
+   Florida Politics, Florida Phoenix (Creative Commons), AP, and press-release
+   wires, with the origin named in `<dc:creator>` ("A.G. Gancarski, Florida
+   Politics"). The sweep attributes by feed owner, so a Florida Politics story
+   republished there becomes a Miami Times row with the Miami Times' lean, and
+   is counted a second time under a second URL. Wire copy on the TV feeds has
+   the same shape (the same UN story appeared on Local 10 and WKMG the same
+   hour). Per-candidate counts will include these duplicates until the sweep
+   either dedupes on title within a window or reads `dc:creator` / a byline
+   for a syndication marker. Flag for §6, not a reason to drop the outlet.
+7. **Three national-tier outlets in the corpus (Table 3) were not added.** The
    list is four counties plus statewide; a national row would carry
    `countyFips: null` and be indistinguishable from a Florida statewide outlet
    in the county feed. Adding a tier needs a schema decision first.
@@ -163,7 +185,31 @@ The corpus's own rule: do not set a tag until two raters agree or the founder
 explicitly signs off a single-rater or "no rating" designation. Until at least
 one row is signed off, the sweep produces nothing.
 
-## 5. Method
+## 5. Firecrawl pass (second fetcher, same day)
+
+Everything that failed the plain-fetch pass was retried through Firecrawl,
+which fetches from its own proxies with a browser profile. A Firecrawl 200 is
+evidence the feed exists; it is not evidence the sweep can read it, so every
+promotion below was re-fetched with the sweep UA before entering the list.
+
+| Target | Firecrawl | Sweep UA afterwards | Outcome |
+|---|---|---|---|
+| Sun Sentinel `/feed/`, `/opinion/feed/` | 403 (stealth proxy) | 403 | Edge block confirmed. |
+| Orlando Sentinel `/feed/` | "we do not support this site" | 403 | Blocked. |
+| Miami Herald, el Nuevo Herald Arc RSS | 200, but the body is the site's 404 page | timeout | No RSS exists at that path. |
+| News Service of Florida BLOX RSS | 200, 25 items, newest same day | 200 then 429 | Already listed; rate-limit caveat stands. |
+| The Miami Times BLOX RSS | 200, 25 items, newest same day | 200 (curl) then 429 (node) | **Promoted.** |
+| AP `/hub/florida` | 200 HTML listing, no feed | 403 | Stays null; HTML listing is retrieval mode 3, unbuilt. |
+| América TeVé site map | found `/contenidos/rss.html` → eight `/rss/pages/*.xml` feeds | `miami.xml` 200, 20 items, 0.2 d | **Promoted.** |
+| OutSFL site map | one URL, no feed | — | Stays null. |
+| Tribune `/sitemap.xml` | — | 200 sitemap index + open per-day news sitemaps | §3 item 5. |
+
+Firecrawl changed the answer for two outlets (América TeVé, Miami Times) and
+confirmed the answer for the rest. BLOX's 429 is a per-IP burst limit, not a
+UA gate: the same URL answered `curl` with the sweep UA twice, then refused
+the third request seconds later.
+
+## 6. Method
 
 Three passes, all with `User-Agent: KnowYourVote/1.0`, 20–45 s timeouts,
 redirects followed. Pass 1: 158 URL/robots fetches across 40 hosts. Pass 2:

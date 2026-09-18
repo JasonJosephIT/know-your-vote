@@ -476,7 +476,7 @@ the column that lets it reach 67 without a second migration.
     - **Gate C7-b (`feed`)** — local session. A feed URL that 404s fails
       silently and looks exactly like "no news this week", and the session
       that wrote the list had no egress to check one. `--probe` fills these.
-  ~ **Gate C7-b closed for 29 of 37 outlets, 2026-09-17.** The founder's
+  ~ **Gate C7-b closed for 31 of 37 outlets, 2026-09-17.** The founder's
   outlet corpus (`news-corpus-2026-09-17.md`) was applied: every proposed
   feed was fetched with the sweep's own UA and parsed with `news-sweep.ts`;
   only feeds with an item inside 7 days were promoted
@@ -484,13 +484,15 @@ the column that lets it reach 67 without a second migration.
   grew 23 → 37 (Spanish and Haitian-diaspora outlets, three Broward weeklies,
   WKMG, FOX 35, three statewide political sites). CBS Miami reclassified to
   Miami-Dade (WFOR is in Doral). Still null after trying: Miami Herald and el
-  Nuevo Herald (no RSS), Sun Sentinel and Orlando Sentinel (403 to every UA),
-  AP (no RSS), América TeVé, OutSFL, Miami Times (BLOX 429). **Gate C7-a is
+  Nuevo Herald (no RSS, confirmed via Firecrawl), Sun Sentinel and Orlando
+  Sentinel (403 to every UA and to Firecrawl — **but their per-day Google News
+  sitemaps are open to the sweep UA**, which makes retrieval mode 2 the next
+  mechanism task), AP (no RSS), OutSFL. **Gate C7-a is
   untouched** — every `leanTag` is still null; the corpus's proposals and
   their cited raters are now in each row's `leanBasis`, so sign-off is a
   one-word edit. Verify script gained three list invariants (unique feed
   URLs, feed on the outlet's own host, county in the covered set).
-  **Finding for §5's cadence table:** 18 of 29 feeds reach back under three
+  **Finding for §5's cadence table:** 19 of 31 feeds reach back under three
   days (Florida Politics: five hours). Feed depth, not the 14-day window,
   bounds recall; sweep daily now, and add WordPress `?paged=N` to the runner.
 
