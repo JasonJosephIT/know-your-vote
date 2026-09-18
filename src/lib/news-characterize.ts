@@ -50,12 +50,17 @@ export interface CharacterizableArticle {
   url: string;
 }
 
-export interface ArticleState {
+/* A type alias, NOT an interface, and that is load-bearing: TypeScript gives
+   type aliases an implicit index signature but not interfaces, so only this
+   form is assignable to the SDK's `EntryType` (`{ [key: string]: JsonValue }`).
+   As an interface it forces a cast in the adapter, and a cast there would be
+   the one place a stray field could slip into the request unchecked. */
+export type ArticleState = {
   headline: string;
   dek: string | null;
   /** URL path only. Never the host — see the header. */
   slug: string | null;
-}
+};
 
 /** A TypeSafe NoulQuestion, structurally. Declared here rather than imported so
     the core stays free of the vendor SDK; the adapter passes these straight
