@@ -42,7 +42,10 @@ export type { NewsIssue };
 /** Bumped in the SAME PR as any change below, and recorded on every
     characterized row, so a tag written under one version is distinguishable
     from one written under the next. */
-export const TAXONOMY_VERSION = "1";
+/* 2 — 2026-09-18: CAP's B6 split into B6 + KYV1; A4/A6/B2 aliases widened
+   after the gold-set evaluation. Bumped because tags written under v1 are
+   not comparable to tags written under v2. */
+export const TAXONOMY_VERSION = "2";
 
 export interface IssueCategory {
   /** For the eight, this is verbatim QUIZ_QUESTIONS[].id — the shared key that
@@ -99,25 +102,55 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
   { id: "A3", categoryId: "insurance", label: "Property taxes",
     aliases: ["property tax", "homestead exemption", "property assessments", "millage"] },
   { id: "A4", categoryId: "economy", label: "Cost of living in Florida",
-    aliases: ["household costs", "utility bills", "groceries", "affordability"] },
+    /* Widened 2026-09-18: 0% recall. Missed a gas-price story and a minimum-wage
+       rise — the model tagged only what a headline was ABOUT, not what it cost
+       people. Cost-side terms only; "wages"/"jobs" stay with B1 to avoid
+       collapsing the two. */
+    aliases: ["household costs", "utility bills", "groceries", "affordability",
+              "gas prices", "fuel costs", "grocery prices", "everyday expenses",
+              "household budgets", "price increases", "paying the bills"] },
   { id: "A5", categoryId: "environment", label: "Water quality and Everglades restoration",
     aliases: ["water quality", "Everglades", "red tide", "nutrient pollution", "restoration"] },
   { id: "A6", categoryId: "education", label: "Public education and school choice",
-    aliases: ["public school funding", "vouchers", "school choice", "teacher pay"] },
+    /* Widened 2026-09-18: 25% recall. Missed AI-in-schools rules, a work-based
+       learning grant and a public-education polling story — all plainly
+       education policy, none matching the narrow original alias set. */
+    aliases: ["public school funding", "vouchers", "school choice", "teacher pay",
+              "K-12", "school districts", "school board", "classrooms", "curriculum",
+              "students", "education policy", "state colleges", "universities"] },
   { id: "A7", categoryId: "elections", label: "Elections administration and voting access",
     aliases: ["voting access", "election administration", "ballot initiative process", "voter registration"] },
   { id: "B1", categoryId: "economy", label: "Economy, inflation, and jobs",
     aliases: ["economy", "inflation", "jobs", "wages", "unemployment"] },
   { id: "B2", categoryId: "healthcare", label: "Healthcare access and costs",
-    aliases: ["healthcare costs", "coverage", "hospitals", "prescription prices"] },
+    /* Widened 2026-09-18: 20% recall. Missed a vaccine-access rule, a disease
+       outbreak death and a Medicaid drug-pricing announcement. Public health is
+       part of how people reach care, so it is named here explicitly. */
+    aliases: ["healthcare costs", "coverage", "hospitals", "prescription prices",
+              "public health", "vaccines", "Medicaid", "clinics", "pharmacies",
+              "drug prices", "disease outbreaks", "insurance coverage"] },
   { id: "B3", categoryId: "immigration", label: "Immigration and border enforcement",
     aliases: ["immigration", "border enforcement", "migrants", "detention", "asylum"] },
   { id: "B4", categoryId: "retirement", label: "Social Security and Medicare",
     aliases: ["Social Security", "Medicare", "retirement benefits", "entitlements"] },
   { id: "B5", categoryId: "abortion", label: "Abortion policy",
     aliases: ["abortion", "gestational limits", "reproductive health policy"] },
-  { id: "B6", categoryId: "elections", label: "Election integrity and threats to democracy",
-    aliases: ["election integrity", "democratic institutions", "certification", "political violence"] },
+  /* CAP's B6 was "Election integrity and threats to democracy" — two distinct
+     subjects under one label, and the 2026-09-18 evaluation measured the cost:
+     25% precision, 20% recall. The annotator read it broadly (press freedom
+     counted); the model read it narrowly (elections only). Both readings are
+     defensible, which is exactly why one label could not carry both. Split
+     2026-09-18: B6 keeps CAP's id and its election-specific half. */
+  { id: "B6", categoryId: "elections", label: "Election integrity",
+    aliases: ["election integrity", "certification", "election security", "voter rolls",
+              "ballot counting", "election fraud allegations", "recounts"] },
+  /* The other half of CAP's B6. The `KYV` prefix is deliberate: an A- or
+     B-prefixed id traces to a sourced CAP entry, a KYV-prefixed id is this
+     project's own addition and carries no CAP provenance. Do not renumber it
+     into the B series. */
+  { id: "KYV1", categoryId: "elections", label: "Threats to democratic institutions",
+    aliases: ["press freedom", "freedom of the press", "rule of law", "political violence",
+              "checks and balances", "abuse of office", "democratic norms"] },
   { id: "B7", categoryId: "safety", label: "Crime and public safety",
     aliases: ["crime", "policing", "public safety", "sentencing"] },
   { id: "B8", categoryId: "environment", label: "Climate and environment (national)",

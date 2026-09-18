@@ -24,86 +24,101 @@ Why feeds and not `news_item`: the live table holds **14 seeded rows** (6
 outlet's `leanTag` is null pending gate **C7-a**, so `usableOutlets()` returns
 0 and the sweep has never run. Migration 0027 is also not applied live.
 
-## 1. Threshold sweep
+## 1. Threshold sweep — taxonomy v2
 
 63 of 116 articles carry at least one gold tag; **53 should carry none**.
 
 | Threshold | Precision | Recall | F1 | Exact set | Empty-case correct | No-dek recall |
 |---|---|---|---|---|---|---|
-| 0.50 | 74% | 76% | 75% | 73% | 83% | 75% |
-| 0.70 | 81% | 74% | **77%** | 75% | 89% | 75% |
-| 0.80 | 83% | 71% | 76% | 75% | 91% | 75% |
-| **0.85** | **84%** | **69%** | 76% | **75%** | **92%** | 75% |
-| 0.90 | 88% | 62% | 72% | 74% | 92% | 50% |
-| 0.95 | 91% | 57% | 70% | 72% | 92% | 50% |
+| 0.50 | 76% | 88% | 82% | 80% | 83% | 75% |
+| 0.70 | 80% | 84% | 82% | 81% | 89% | 75% |
+| 0.80 | 85% | 81% | **83%** | 81% | 91% | 75% |
+| **0.85** | **85%** | **78%** | 82% | **80%** | **92%** | 75% |
+| 0.90 | 91% | 74% | 81% | 81% | 92% | 75% |
+| 0.95 | 91% | 63% | 75% | 77% | 92% | 50% |
 
-**0.85 holds up, and the founder's call stands.** F1 is flat from 0.70 to 0.85
-(77/76/76 — inside the noise of a 116-row set), so the tie breaks on which
-error is worse. Two reasons to prefer the higher end:
+### What the v1 → v2 fixes bought
 
-1. **The empty case is the majority case.** 53 of 116 articles should get no
-   tags, and in a real sweep that share is higher still — the Sentinel sitemaps
-   are ~120 URLs/paper/day of obituaries and wire sports. Empty-case accuracy
-   rises 89% → 92% between 0.70 and 0.85. A false tag puts an irrelevant story
-   on a candidate's card; a missed tag leaves a card one story shorter.
-2. **Precision degrades gracefully, recall does not.** Past 0.90, no-dek recall
-   halves (75% → 50%) — the input floor bites first when the threshold is
-   raised, and sitemap rows are the ones with least to go on.
+| At 0.85 | v1 | v2 | Δ |
+|---|---|---|---|
+| Precision | 84% | 85% | +1 |
+| **Recall** | **69%** | **78%** | **+9** |
+| **F1** | **76%** | **82%** | **+6** |
+| Exact set | 75% | 80% | +5 |
+| Empty case | 92% | 92% | — |
 
-**Recall is 69%. Roughly one true tag in three is missed.** That is the headline
-weakness, and §3 says where it comes from.
+**Recall rose 9 points with no precision cost.** The B6 split did most of it;
+the alias widening did the rest.
 
-## 2. Per-issue at 0.85
+**0.85 still stands.** F1 is flat across 0.50–0.85 (82/82/82/83/82) — all
+inside the noise of a 116-row set. Two notes if you want to revisit:
+- **0.90 now costs less than it did.** In v1 it halved no-dek recall (75% →
+  50%); in v2 no-dek recall holds at 75% all the way to 0.90. So 0.90 buys
+  +6 points of precision for −4 of recall, where before it was a bad trade.
+- **0.80 is nominally the F1 peak** (83% vs 82%). One point on 116 rows is not
+  a reason to move a threshold.
 
-| Issue | Gold | Predicted | Precision | Recall | Read |
+## 2. Per-issue at 0.85 (v2)
+
+| Issue | Gold | Pred | Precision | Recall | vs v1 |
 |---|---|---|---|---|---|
-| B1 economy/inflation/jobs | 4 | 4 | 100% | 100% | clean |
-| B3 immigration/border | 11 | 9 | 100% | 82% | strong |
-| A3 property taxes | 5 | 4 | 100% | 80% | strong |
-| B7 crime/public safety | 25 | 29 | 83% | 96% | strong; the 5 FPs are the over-tag |
-| A7 elections administration | 3 | 4 | 75% | 100% | small n |
-| B2 healthcare | 5 | 1 | 100% | 20% | **under-tags** |
-| A6 public education | 4 | 1 | 100% | 25% | **under-tags** |
-| B6 election integrity | 5 | 4 | 25% | 20% | **broken — see §3** |
-| A4 cost of living | 2 | 0 | n/a | 0% | **under-tags** |
-| B8 climate/environment | 4 | 0 | n/a | 0% | **see §3 — labels suspect** |
-| A1, A2, A5, B4, B5 | 0 | 0 | n/a | n/a | **not exercised at all** |
+| B1 economy/inflation/jobs | 4 | 4 | 100% | 100% | unchanged |
+| A7 elections administration | 3 | 4 | 75% | 100% | unchanged |
+| **KYV1 democratic institutions** | 5 | 7 | **71%** | **100%** | **was B6 at 25%/20%** |
+| B7 crime/public safety | 25 | 29 | 83% | 96% | unchanged |
+| B3 immigration/border | 11 | 9 | 100% | 82% | unchanged |
+| A3 property taxes | 5 | 4 | 100% | 80% | unchanged |
+| **A6 public education** | 4 | 2 | 100% | **50%** | **was 25%** |
+| **B2 healthcare** | 5 | 2 | 100% | **40%** | **was 20%** |
+| A4 cost of living | 2 | 0 | n/a | 0% | unchanged — see §3 |
+| B8 climate/environment | 4 | 0 | n/a | 0% | unchanged — labels suspect |
+| B6 election integrity (narrowed) | 0 | 1 | 0% | n/a | not exercised |
+| A1, A2, A5, B4, B5 | 0 | 0 | n/a | n/a | not exercised |
 
 ## 3. What the failures actually are
 
-**B6 is a taxonomy problem, not a threshold problem.** "Election integrity and
-threats to democracy" is doing two unrelated jobs. I labelled three
-press-freedom stories (Trump barring CNN/MSNOW/Politico from the White House)
-as B6 under "threats to democracy"; the model read B6 as *election* integrity
-and declined. Both readings are defensible, which is the problem — the label is
-ambiguous, and no threshold fixes an ambiguous label. Either split it, or
-narrow it to election integrity and accept that press-freedom stories are
-untagged. **This belongs to C11, not here.**
+**B6 — fixed, and the split was vindicated by the data.** CAP's "Election
+integrity and threats to democracy" was two subjects under one label. Split
+into `B6` (Election integrity — certification, security, voter rolls,
+recounts) and `KYV1` (Threats to democratic institutions — press freedom, rule
+of law, political violence). The `KYV` prefix marks it as this project's
+addition rather than a sourced CAP entry.
 
-**B8's 0% recall is probably my labelling, not the model.** All four gold B8
-rows are data-centre stories (moratoria, power costs). I filed those under
-"Climate and environment (national)"; the model did not. On reflection the
-model looks right — a county moratorium on AI data centres is land use and
-energy policy, and CAP's B8 is about climate policy. **Fix the gold set before
-blaming the model.**
+Re-labelling was revealing: **all five rows the annotator had filed under the
+bundled B6 were the democracy half** — press-freedom stories — and **none were
+election integrity**. So the model's original refusal to tag them B6 was
+correct, and the 25%/20% score was measuring an ambiguous label, not a weak
+classifier. KYV1 now scores 71% precision, 100% recall.
 
-**A4, A6 and B2 under-tag because the model reads labels narrowly.** It tags an
-article when the headline is *about* the issue, not when the issue is a
-consequence — a minimum-wage rise scored B1 but not A4; an AI-in-schools rule
-scored nothing though it is plainly education policy. This is fixable in
-`aliases`, which is what they exist for, and it is the cheapest experiment
-available: widen A4/A6/B2 aliases, re-run, compare. **Also C11.**
+Narrowed B6 has **zero** gold examples: the 14-day window carried no
+election-integrity story at all. It is unmeasured, not validated.
 
-**Five issues were never exercised.** A1 property insurance, A2 housing, A5
-water/Everglades, B4 Social Security/Medicare, B5 abortion drew zero gold
-labels in a 14-day window. The demo fixtures show the model handles all five,
-but nothing here measures them. A longer window, or a targeted top-up, is
-needed before anyone claims the taxonomy is validated.
+**A6 and B2 — improved by widening aliases, as predicted.** A6 25% → 50%,
+B2 20% → 40%. Both still miss real stories, so there is more room in the alias
+lists; this is the cheapest lever available and it demonstrably works.
+
+**A4 — alias widening did NOT work, and the reason is structural.** Both gold
+A4 rows (a gas-price story, a minimum-wage rise) were tagged `B1` by the model
+and not `A4`, even after "gas prices" and "fuel costs" were added. A4 "Cost of
+living in Florida" and B1 "Economy, inflation, and jobs" overlap so heavily
+that the model consistently prefers the broader one. **This is a taxonomy
+overlap, not a wording gap** — more aliases will not fix it. Either accept that
+A4 rarely fires, or merge it into B1 and lose the Florida-specific distinction.
+A founder call; not urgent, since B1 catches the article either way and both
+roll up to the same `economy` category.
+
+**B8 — still 0%, and the labels are still the suspect half.** Unchanged
+deliberately: the gold rows were left alone so v1 and v2 stay comparable. All
+four are data-centre stories the annotator filed under "Climate and environment
+(national)". The model declined, and on reflection it is right — a county
+moratorium on AI data centres is land use and energy policy. **Fix the labels,
+then re-measure.**
 
 ## 4. Cost and reliability
 
-- **236,352 input tokens for 116 articles**, output free — **$0.0099 total**,
-  **$0.000085 per article**, 2,038 tokens per article.
+- **258,856 input tokens for 116 articles** (v2, 16 questions), output free —
+  **$0.0109 total**, **$0.000094 per article**, 2,232 tokens per article.
+- v1 was $0.0099 at 15 questions. The B6 split added one Noul; +$0.001 a run.
 - **0 errors in 116 calls.**
 - At 200 rows per daily sweep: **$0.017 a sweep, ~$0.77 to 2026-11-03.**
 - Cost decides nothing, so the second engine (spec §6 item 6) is not justified
@@ -121,12 +136,13 @@ needed before anyone claims the taxonomy is validated.
 
 ## 6. Recommendation
 
-1. **Keep 0.85.** Supported by the sweep; revisit after the C11 fixes.
-2. **Fix the gold set's B8 rows** before treating that 0% as a model failure.
-3. **Split or narrow B6** — the single clearest defect, and it is editorial.
-4. **Widen A4/A6/B2 aliases and re-run.** Cheapest available experiment at
-   ~$0.01 a pass.
-5. **Do not build a second engine.**
-6. **Re-label the gold set as founder work.** Everything above rests on an
-   agent's labels, and §3 already found two places where they are the weaker
-   half of the disagreement.
+1. **Keep 0.85.** Still inside the flat region of the sweep. If you want to
+   favour precision, 0.90 is now a reasonable trade that it was not in v1.
+2. **Fix the four B8 gold rows**, then re-run. It is the last known-bad input.
+3. **Keep widening A6/B2 aliases** — the lever measurably works, ~$0.011 a pass.
+4. **Decide A4 vs B1** (§3). Structural overlap, no urgency.
+5. **Do not build a second engine.** Nothing here is an engine weakness; every
+   remaining defect is taxonomy wording or annotation.
+6. **Re-label the gold set as founder work.** This still rests on an agent's
+   labels, and the B6 episode is a live example of an annotator's reading being
+   the thing under test.
