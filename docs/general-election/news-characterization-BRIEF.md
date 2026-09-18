@@ -8,22 +8,14 @@ the constraints and the open questions, not from the idea alone._
 
 ## 0. State of the branch you are inheriting
 
-- Branch `claude/compass-artifact-workflow-41aa89`, head `ef73578`, base
-  `ea2fe76` (main). It carries retrieval mode 2 (Google News sitemaps for
-  the Sun Sentinel and Orlando Sentinel). Final whole-branch review verdict:
-  **merge with fixes**. The fix wave was dispatched and cut off by a rate
-  limit; the five fixes are NOT applied. They are listed in
-  `.superpowers/sdd/progress.md` (last "Final review" line) and are, in
-  short: (1) the verify fixture writes the same timestamp into `lastmod` and
-  `news:publication_date`, so the "date from publication_date" check cannot
-  fail — make `lastmod` differ and add a no-`news:news` fallback case;
-  (2) a stale "acute gap, worse" sentence in the verification doc's Broward
-  paragraph; (3) the runner's no-usable-outlets message still says "verified
-  feed" only; (4) `sitemapUrlFor` should use `replaceAll`; (5) a one-line
-  open question in the verification doc on whether the papers' `+00:00`
-  publication timestamps are truly UTC. Apply them, run the two checks, commit,
-  push, open the PR (the plan's Task 4 Step 3 has the PR body), then merge.
-- Do that first. This brief is the work AFTER that PR lands.
+- Branch `claude/compass-artifact-workflow-41aa89`, base `ea2fe76` (main),
+  carries retrieval mode 2 (Google News sitemaps for the Sun Sentinel and
+  Orlando Sentinel). Built subagent-driven, per-task reviews approved, final
+  whole-branch review "with fixes", fixes applied and mutation-checked in
+  `ec89b2a`. **PR #52 is open** against main; the founder merges it. The SDD
+  ledger is `.superpowers/sdd/progress.md`.
+- This brief is the work AFTER that PR lands. Do not start it on the same
+  branch.
 
 ## 1. The idea, restated precisely
 
