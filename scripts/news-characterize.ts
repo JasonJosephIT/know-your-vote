@@ -35,6 +35,7 @@
    outcome this script must never produce, because it looks exactly like
    "the press wrote nothing about these people this week". */
 
+import { loadEnvLocal } from "./env-local.ts";
 import { createClient } from "@supabase/supabase-js";
 import {
   DEFAULT_THRESHOLD,
@@ -48,6 +49,9 @@ import { jevEngine } from "../src/lib/news-characterize-engines.ts";
    parameter so it never depends on which list wins gate G3. This import is the
    composition root, and it is why this script cannot run until Task 1 lands. */
 import { ASKABLE, ASKABLE_IDS, TAXONOMY_VERSION, categoriesFor } from "../src/lib/news-issues.ts";
+
+/* Before anything reads process.env. */
+loadEnvLocal(import.meta.url);
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
@@ -140,7 +144,7 @@ for (const row of rows) {
   const state = buildState({ title: row.title, summary: row.summary, url: row.url });
   let answers: Record<string, unknown>;
   try {
-    answers = await engine.characterize(state, questions);
+    ({ answers } = await engine.characterize(state, questions));
   } catch (e) {
     /* One article's failure is not the run's failure — but it is never a
        silent zero either. The row keeps `issues IS NULL`, so the next run

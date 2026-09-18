@@ -323,9 +323,17 @@ silently not cache. Assert `usage.cache_read_input_tokens > 0` in the runner's
 dry-run output; if it is zero, drop the `cache_control` rather than reporting a
 discount that is not happening.
 
-**Jev, same article:** ~850 input tokens at $0.042/MTok, output free ≈
-**$0.0000357** — about **$0.007 per 200-row sweep**, or **~$0.32 for the whole
-run-up**. Roughly 100× cheaper than the Anthropic arm.
+**MEASURED 2026-09-18** (10 fixtures, `scripts/news-characterize-demo.ts`,
+two-level taxonomy = 26 Nouls per article, one request):
+
+- **3,111 input tokens per article**, output free.
+- **$0.00013 per article** at Jev's $0.042/MTok.
+- At 200 stored rows per daily sweep: **$0.026 a sweep, ~$1.18 for the whole
+  run-up** to 2026-11-03.
+
+This replaces the earlier estimate of ~$0.32 for the run-up, which was low
+because it assumed 15 questions; the two-level taxonomy asks 26. Both figures
+are small enough that cost decides nothing — which remains the point.
 
 Both are cheap in absolute terms, so cost does not decide §6 on today's volumes.
 It would start to matter if the sweep goes daily against a growing pool, which

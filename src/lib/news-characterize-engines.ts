@@ -25,14 +25,23 @@ import type { ArticleState, NoulQuestion } from "./news-characterize.ts";
     deliberately, and re-run the gold-set evaluation when you do. */
 export const JEV_MODEL_ID = "jev-1.13.0";
 
+/** What an engine hands back: the raw answers, plus whatever the vendor
+    reported about cost. Usage is carried deliberately — spec §6 item 5 wants
+    cost per article MEASURED, and an engine that drops it makes that
+    impossible to report honestly. */
+export interface CharacterizeResult {
+  answers: Record<string, unknown>;
+  usage?: { input_tokens?: number; output_tokens?: number };
+}
+
 export interface CharacterizeEngine {
   readonly modelId: string;
-  /** Returns the raw answers map. Thresholding and validation are NOT done
-      here — they belong to news-characterize.ts, which is testable offline. */
+  /** Returns the raw answers. Thresholding and validation are NOT done here —
+      they belong to news-characterize.ts, which is testable offline. */
   characterize(
     state: ArticleState,
     questions: Record<string, NoulQuestion>,
-  ): Promise<Record<string, unknown>>;
+  ): Promise<CharacterizeResult>;
 }
 
 export function jevEngine(modelId: string = JEV_MODEL_ID): CharacterizeEngine {
@@ -55,12 +64,12 @@ export function jevEngine(modelId: string = JEV_MODEL_ID): CharacterizeEngine {
          "define one Noul per label", and independent questions over the same
          state are evaluated together — so this is one request per article,
          never one per issue. */
-      const { answers } = await client.systemOne({
+      const { answers, usage } = await client.systemOne({
         model: modelId,
         state,
         questions,
       });
-      return answers as Record<string, unknown>;
+      return { answers: answers as Record<string, unknown>, usage };
     },
   };
 }
