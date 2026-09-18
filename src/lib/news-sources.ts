@@ -334,7 +334,7 @@ export function sitemapUrlFor(template: string, day: Date): string {
   const yyyy = String(day.getUTCFullYear());
   const mm = String(day.getUTCMonth() + 1).padStart(2, "0");
   const dd = String(day.getUTCDate()).padStart(2, "0");
-  return template.replace("{yyyy}", yyyy).replace("{mm}", mm).replace("{dd}", dd);
+  return template.replaceAll("{yyyy}", yyyy).replaceAll("{mm}", mm).replaceAll("{dd}", dd);
 }
 
 /* Same posture as Allowlist A/B: a shortener is blocked outright and a

@@ -72,7 +72,7 @@ if (args.includes("--probe")) {
 const usable = usableOutlets();
 if (usable.length === 0) {
   console.error(
-    `No usable outlets: ${OUTLETS.length} listed, 0 with both a signed-off leanTag and a verified feed.\n` +
+    `No usable outlets: ${OUTLETS.length} listed, 0 with both a signed-off leanTag and a retrieval path (verified feed or sitemap).\n` +
       `Fill those in (see the header of src/lib/news-sources.ts) — run --probe to find the feeds.`,
   );
   process.exit(1);

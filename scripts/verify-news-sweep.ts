@@ -270,7 +270,7 @@ const sentinel: Outlet = {
 };
 const dayIso = (daysAgo: number) => new Date(NOW.getTime() - daysAgo * 86_400_000).toISOString();
 const smUrl = (loc: string, title: string, daysAgo: number) =>
-  `<url><loc>${loc}</loc><changefreq>monthly</changefreq><lastmod>${dayIso(daysAgo)}</lastmod>` +
+  `<url><loc>${loc}</loc><changefreq>monthly</changefreq><lastmod>${dayIso(daysAgo - 0.5)}</lastmod>` +
   `<news:news><news:publication><news:name>Sun Sentinel</news:name><news:language>en-US</news:language></news:publication>` +
   `<news:publication_date>${dayIso(daysAgo)}</news:publication_date><news:title>${title}</news:title></news:news></url>`;
 const daySitemap = (urls: string) =>
@@ -290,6 +290,15 @@ check("sitemap: title from news:title, entities decoded", smParsed[0]?.title ===
 check("sitemap: link from loc", smParsed[0]?.link === "https://www.sun-sentinel.com/2026/09/17/council-vote/");
 check("sitemap: date from news:publication_date", smParsed[0]?.published === dayIso(1), smParsed[0]?.published);
 check("sitemap: summary is empty", smParsed[0]?.summary === "");
+const noNews = daySitemap(`<url><loc>https://www.sun-sentinel.com/2026/09/17/plain/</loc><lastmod>${dayIso(1)}</lastmod></url>`);
+check(
+  "sitemap: no news:news block falls back to lastmod with an empty title",
+  parseNewsSitemap(noNews)[0]?.published === dayIso(1) && parseNewsSitemap(noNews)[0]?.title === "",
+);
+check(
+  "sitemap sweep: an entry without a title is dropped",
+  sweep({ feeds: [{ outlet: sentinel, xml: noNews, format: "news-sitemap" }], now: NOW, belongsTo: urlBelongsTo }).length === 0,
+);
 check("sitemap: garbage parses to nothing", parseNewsSitemap("<html>no</html>").length === 0);
 check("sitemap: an RSS body parses to nothing as a sitemap", parseNewsSitemap(feed).length === 0);
 

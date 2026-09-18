@@ -50,7 +50,7 @@ host 403s, so the difference is real).
 
 Broward's daily is reachable again through retrieval mode 2 (below); it still has no television outlet with a working feed.
 CBS Miami moved to Miami-Dade.
-The three weeklies remain. This is the corpus's "acute gap", worse.
+The three weeklies remain the only RSS sources; the daily reaches the pool by sitemap.
 
 ### Hillsborough (12057)
 
@@ -172,7 +172,7 @@ The three weeklies remain. This is the corpus's "acute gap", worse.
    Orlando Sentinel equivalent) answer the sweep UA with a Google News sitemap:
    per URL a `<news:title>`, `<news:publication_date>` and `<lastmod>`, about
    115–130 URLs per day including obituaries and wire sports. That is title,
-   URL and date — everything the sweep stores except a dek. **Built 2026-09-18** (spec `docs/superpowers/specs/2026-09-18-news-sitemap-retrieval-design.md`): both papers now have a retrieval path; the dated-path filter drops obituaries only.
+   URL and date — everything the sweep stores except a dek. **Built 2026-09-18** (spec `docs/superpowers/specs/2026-09-18-news-sitemap-retrieval-design.md`): both papers now have a retrieval path; the dated-path filter drops obituaries only. Open question for the first real run: the sitemaps label `news:publication_date` as `+00:00`; if that is local time mislabelled, card timestamps would shift by four hours, though day selection and windowing are unaffected because the day buckets use the same clock.
 6. **Republisher attribution.** The Miami Times feed is mostly syndicated:
    Florida Politics, Florida Phoenix (Creative Commons), AP, and press-release
    wires, with the origin named in `<dc:creator>` ("A.G. Gancarski, Florida
