@@ -127,6 +127,33 @@ check(
   new Set(OUTLETS.map((o) => o.domain)).size === OUTLETS.length,
 );
 
+/* ---- the list's own invariants (2026-09-17, once feeds were filled) --- */
+
+/* The sweep dedupes by URL, last writer wins. Two outlets sharing one feed
+   would silently relabel each other's articles — which is exactly why there
+   are no `opinion` rows yet: no daily exposes a distinct opinion feed. */
+const feeds = OUTLETS.map((o) => o.feed).filter((f): f is string => f !== null);
+check("no two outlets share a feed URL", new Set(feeds).size === feeds.length);
+check("at least one feed is verified", feeds.length > 0);
+
+/* A feed must live on the outlet it is attributed to, under the same
+   label-boundary rule the articles are held to; otherwise a feed hosted
+   elsewhere could smuggle attribution past urlBelongsTo. */
+for (const o of OUTLETS) {
+  if (o.feed === null) continue;
+  check(`feed for ${o.domain} is https`, o.feed.startsWith("https://"), o.feed);
+  check(`feed for ${o.domain} is on the outlet's own host`, urlBelongsTo(o.feed, o), o.feed);
+}
+
+/* Four covered counties (src/lib/resolve.ts COVERED_COUNTIES) or statewide.
+   Hard-coded rather than imported so this script stays free of app imports. */
+const COUNTIES = new Set(["12086", "12011", "12057", "12095"]);
+check(
+  "every countyFips is a covered county or null",
+  OUTLETS.every((o) => o.countyFips === null || COUNTIES.has(o.countyFips)),
+  OUTLETS.filter((o) => o.countyFips !== null && !COUNTIES.has(o.countyFips!)).map((o) => o.domain).join(","),
+);
+
 /* ---- windowing ------------------------------------------------------- */
 
 const aged = rss(
