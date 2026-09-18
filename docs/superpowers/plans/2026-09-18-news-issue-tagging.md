@@ -258,7 +258,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 - Produces:
   - `interface NewsIssue { id: string; label: string; aliases: readonly string[] }`
   - `interface CharacterizableArticle { title: string; summary?: string | null; url: string }`
-  - `interface ArticleState { headline: string; dek: string | null; slug: string | null }`
+  - `type ArticleState = { headline: string; dek: string | null; slug: string | null }` — a **type alias, not an interface**: TS gives aliases an implicit index signature but not interfaces, so only this form is assignable to the SDK's `EntryType`. As an interface the adapter needs a cast, and that cast is the one place a stray field could enter the request unchecked.
   - `type NoulQuestion = { type: "noul"; instructions: string; criteria: { true: string; false: string } }`
   - `function slugPath(url: string): string | null`
   - `function buildState(article: CharacterizableArticle): ArticleState`
@@ -713,7 +713,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 
 > **Why there is an interface for one implementation:** spec §2.2 — the Anthropic arm is built only if the evaluation asks for it. The seam exists so that is a ~40-line addition rather than a refactor. Do not add a second engine in this task.
 
-- [ ] **Step 1: Install the SDK and add the key to the example env**
+- [x] **Step 1: Install the SDK and add the key to the example env**
 
 ```bash
 npm install @typesafe-ai/sdk
@@ -729,7 +729,7 @@ TYPESAFE_API_KEY=
 
 Then set the real value in `.env.local` (not committed).
 
-- [ ] **Step 2: Write the adapter**
+- [x] **Step 2: Write the adapter**
 
 Create `src/lib/news-characterize-engines.ts`:
 
@@ -783,22 +783,26 @@ export function jevEngine(modelId: string = JEV_MODEL_ID): CharacterizeEngine {
       /* All issues in ONE request: the docs' multi-label recipe is "define one
          Noul per label", and independent questions over the same state run in
          parallel server-side. One request per article, not one per issue. */
-      const response = await client.systemOne({
+      const { answers } = await client.systemOne({
         model: modelId,
-        state: state as unknown as Record<string, unknown>,
-        questions: questions as unknown as Parameters<
-          TypeSafeClient["systemOne"]
-        >[0]["questions"],
+        state,
+        questions,
       });
-      return response.answers as unknown as Record<string, unknown>;
+      return answers as Record<string, unknown>;
     },
   };
 }
 ```
 
-> **If the SDK's `systemOne` signature differs** (e.g. it does not accept `model`, or `questions` needs the exported `noul()` helper rather than an object literal): read `node_modules/@typesafe-ai/sdk/dist/*.d.ts` and adjust **this file only**. The literal matches the documented `NoulQuestion` type — `{ type: "noul"; instructions?; criteria?: { true?; false? } }` — so it should typecheck; the casts above exist only to bridge the core's local type to the SDK's. Do not change `news-characterize.ts` to suit the SDK.
+> **SDK shape, verified against `@typesafe-ai/sdk@0.6.0`'s own `dist/index.d.mts`** — not the docs summary, which cost the draft above a set of casts it did not need:
+> - `systemOne<const Q extends Questions>(request: SystemOneRequest<Q>, options?)`, where `SystemOneRequest = { state: EntryType; questions: Q; model?: string }`. `model` **is** accepted.
+> - `EntryType = string | { [key: string]: JsonValue } | JsonValue[] | null`.
+> - `NoulQuestion = { type: "noul"; instructions?: EntryType; criteria?: { true?; false? } }` — the core's stricter literal is structurally assignable, so **no cast is needed anywhere**.
+> - `noul()`, `choice()` and `score()` helpers are exported, but the core builds plain literals so it stays free of the vendor SDK. Do not change `news-characterize.ts` to suit the SDK.
+> - The client reads `TYPESAFE_API_KEY` from the environment itself; the explicit check exists to fail once at startup rather than once per article.
+> - The one thing that genuinely had to change: `ArticleState` became a type alias — see Task 2's interface block.
 
-- [ ] **Step 3: Verify it typechecks and the pure guardrails still pass**
+- [x] **Step 3: Verify it typechecks and the pure guardrails still pass**
 
 ```bash
 npx tsc --noEmit
@@ -812,7 +816,7 @@ node scripts/verify-news-characterize.ts && node scripts/verify-news-issues.ts
 
 Expected: both OK — the adapter must not have changed any pure behaviour.
 
-- [ ] **Step 4: Confirm the key check fails loudly**
+- [x] **Step 4: Confirm the key check fails loudly**
 
 ```bash
 node --input-type=module -e "
@@ -825,7 +829,7 @@ catch (e) { console.log('OK:', e.message.slice(0, 60)); }
 
 Expected: `OK: TYPESAFE_API_KEY is not set — refusing to run. A missing key...`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/news-characterize-engines.ts .env.example package.json package-lock.json
