@@ -485,9 +485,7 @@ the column that lets it reach 67 without a second migration.
   WKMG, FOX 35, three statewide political sites). CBS Miami reclassified to
   Miami-Dade (WFOR is in Doral). Still null after trying: Miami Herald and el
   Nuevo Herald (no RSS, confirmed via Firecrawl), Sun Sentinel and Orlando
-  Sentinel (403 to every UA and to Firecrawl — **but their per-day Google News
-  sitemaps are open to the sweep UA**, which makes retrieval mode 2 the next
-  mechanism task), AP (no RSS), OutSFL. **Gate C7-a is
+  Sentinel (RSS 403 to every UA and to Firecrawl; **read via their per-day Google News sitemaps — retrieval mode 2, built 2026-09-18**, dated-path filter drops obituaries; `retrieval` is now recorded on every swept article), AP (no RSS), OutSFL. **Gate C7-a is
   untouched** — every `leanTag` is still null; the corpus's proposals and
   their cited raters are now in each row's `leanBasis`, so sign-off is a
   one-word edit — **except on three rows that are flagged and fail-closed**:
