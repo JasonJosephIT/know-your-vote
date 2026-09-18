@@ -476,6 +476,37 @@ the column that lets it reach 67 without a second migration.
     - **Gate C7-b (`feed`)** — local session. A feed URL that 404s fails
       silently and looks exactly like "no news this week", and the session
       that wrote the list had no egress to check one. `--probe` fills these.
+  ~ **Gate C7-b closed for 31 of 37 outlets, 2026-09-17.** The founder's
+  outlet corpus (`news-corpus-2026-09-17.md`) was applied: every proposed
+  feed was fetched with the sweep's own UA and parsed with `news-sweep.ts`;
+  only feeds with an item inside 7 days were promoted
+  (`news-corpus-verification-2026-09-17.md` has the per-URL evidence). List
+  grew 23 → 37 (Spanish and Haitian-diaspora outlets, three Broward weeklies,
+  WKMG, FOX 35, three statewide political sites). CBS Miami reclassified to
+  Miami-Dade (WFOR is in Doral). Still null after trying: Miami Herald and el
+  Nuevo Herald (no RSS, confirmed via Firecrawl), Sun Sentinel and Orlando
+  Sentinel (403 to every UA and to Firecrawl — **but their per-day Google News
+  sitemaps are open to the sweep UA**, which makes retrieval mode 2 the next
+  mechanism task), AP (no RSS), OutSFL. **Gate C7-a is
+  untouched** — every `leanTag` is still null; the corpus's proposals and
+  their cited raters are now in each row's `leanBasis`, so sign-off is a
+  one-word edit — **except on three rows that are flagged and fail-closed**:
+  Florida Phoenix and Florida Politics (`mixedFeed`: commentary shares the
+  reporting feed, so a lean would render opinion as Reporting) and The Miami
+  Times (`syndicated`: mostly republished Florida Politics / Phoenix / AP
+  copy, so a lean would be applied to another outlet's journalism). Lifting
+  a flag is a runner change (split on `<category>`, re-attribute on
+  `<dc:creator>`), not an edit. Also surfaced for the founder: the schema has
+  no `unrated` lean value (only `N/A` = "does not apply"), so the 31 unrated
+  rows cannot be signed off at all until that is decided; and after every
+  corpus proposal is signed off, exactly one rated in-county outlet (Tampa
+  Bay Times) has a working feed. Verify script gained list invariants
+  (unique feed URLs, feed on the outlet's own host, county in the covered
+  set, non-default `leanBasis` cites a rater and defers to the founder,
+  flagged rows never usable).
+  **Finding for §5's cadence table:** 19 of 31 feeds reach back under three
+  days (Florida Politics: five hours). Feed depth, not the 14-day window,
+  bounds recall; sweep daily now, and add WordPress `?paged=N` to the runner.
 
 - [ ] **C8** *(v1.2)* — Association: `named` + `related` (§6, CN-R9/CN-R10).
   Migration `0016` adds `news_item.relation`; the matcher assigns it; the

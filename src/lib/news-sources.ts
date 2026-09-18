@@ -8,23 +8,55 @@
    allowlist_b_core.py`), and the host-matching rule here is deliberately the
    same one, so the two allowlists cannot disagree about what a domain is.
 
-   Two fields are FOUNDER GATES and ship null on purpose:
+   Two fields are FOUNDER GATES:
 
      leanTag  — assigning a lean to a named news organisation is an editorial
                 act with a real reputational cost for a nonpartisan product.
                 It is not something a coding agent should assert from memory.
-                Null until a human fills it in from a stated basis.
+                Null until a human fills it in from a stated basis. Every
+                `leanBasis` below records what the 2026-09-17 corpus
+                (docs/general-election/news-corpus-2026-09-17.md) cited, so
+                the sign-off is a one-word edit per row, not a research task.
      feed     — a feed URL that 404s fails silently and looks exactly like
-                "no news this week". Null until someone has actually fetched
-                it. (The session that wrote this file had no network egress
-                and could not, so it guessed nothing.)
+                "no news this week". Every non-null value below was fetched on
+                2026-09-17 with the sweep's own user agent, parsed with
+                src/lib/news-sweep.ts, and had an item dated within the last
+                week (one weekly's 7.6-day exception is noted inline;
+                docs/general-election/news-corpus-verification-2026-09-17.md
+                has the per-URL evidence). Null means it was TRIED and failed;
+                the inline comment says how.
 
-   `usableOutlets()` fail-closed skips any entry missing either. An empty
-   result means the sweep does nothing and says so — never a silent success.
+   Two row flags are FAIL-CLOSED and are not the founder's to lift by edit:
+
+     mixedFeed  — the outlet's only feed carries commentary alongside
+                  reporting. Signing off a lean would render opinion pieces
+                  as "Reporting" (news-fairness.md §1). Lifted when the
+                  runner splits items on the feed's <category>.
+     syndicated — the feed is mostly republished copy from other outlets.
+                  Signing off a lean would stamp this outlet's lean on
+                  another outlet's journalism. Lifted when the runner reads
+                  <dc:creator> / a byline and drops or re-attributes.
+
+   `usableOutlets()` skips any entry missing a gate or carrying a flag. An
+   empty result means the sweep does nothing and says so — never a silent
+   success.
 
    Pure and dependency-free; scripts/verify-news-sweep.ts drives it. */
 
 import type { LeanTag, SourceType } from "./news-labels";
+
+/** What the host's robots.txt said on 2026-09-17. The sweep's own UA
+    (`KnowYourVote/1.0`) falls under `User-agent: *`, which permits every
+    feed path used here; this field exists so the founder sees the
+    publisher's stated stance on AI crawlers at the row they are signing
+    off, not buried in a doc. */
+export interface OutletRobots {
+  /** AI / LLM user agents the host disallows by name. */
+  aiDisallow?: readonly string[];
+  /** `Crawl-delay` under `User-agent: *`, in seconds. */
+  crawlDelaySec?: number;
+  note?: string;
+}
 
 export interface Outlet {
   /** Registrable host. Matched exactly or at a label boundary. */
@@ -45,60 +77,229 @@ export interface Outlet {
   leanBasis: string;
   /** Verified feed URL (RSS/Atom). NULL = not yet confirmed to resolve. */
   feed: string | null;
+  /** See the header. Fail-closed; not lifted by editing this file. */
+  mixedFeed?: boolean;
+  /** See the header. Fail-closed; not lifted by editing this file. */
+  syndicated?: boolean;
+  robots?: OutletRobots;
 }
 
-const UNRATED =
-  "Unrated. Settle from a published nonpartisan media-bias rating, cited in the PR that fills this in.";
+/* The corpus cited AllSides, Ad Fontes and Media Bias/Fact Check ratings only
+   for the four legacy dailies, and noted that ratings exist for AP. For every
+   other outlet it recorded "no independent rating found", never a reasoned
+   value. This text is exported so the guardrail can tell a default basis from
+   a cited one. */
+export const UNRATED =
+  "No independent bias rating cited in the 2026-09-17 corpus (which searched AllSides / Ad Fontes / MBFC). " +
+  "Settle from a published nonpartisan rating cited in the PR that fills this in, or the founder signs off an explicit 'no rating' designation.";
+
+interface RowOptions {
+  leanBasis?: string;
+  mixedFeed?: boolean;
+  syndicated?: boolean;
+  robots?: OutletRobots;
+}
 
 /* Four covered counties (src/lib/resolve.ts COVERED_COUNTIES) plus statewide.
    A broadcaster's countyFips is its newsroom base, not its signal footprint —
    several of these cover two counties, and a story that names a candidate is
-   scoped by that candidate's race anyway (§6). */
+   scoped by that candidate's race anyway (§6).
+
+   Ordering inside a county is by verified feed first, then the nulls, so the
+   gaps read at a glance. */
 export const OUTLETS: readonly Outlet[] = Object.freeze([
   // --- Miami-Dade ---
-  o("miamiherald.com", "Miami Herald", "12086"),
-  o("wlrn.org", "WLRN", "12086"),
-  o("local10.com", "WPLG Local 10", "12086"),
-  o("wsvn.com", "WSVN 7News", "12086"),
-  o("nbcmiami.com", "NBC6 South Florida", "12086"),
-  o("miaminewtimes.com", "Miami New Times", "12086"),
+  o("wlrn.org", "WLRN", "12086", "https://www.wlrn.org/tags/news.rss"),
+  o("local10.com", "WPLG Local 10", "12086", "https://www.local10.com/arc/outboundfeeds/rss/?outputType=xml", {
+    robots: { aiDisallow: ["GPTBot"] },
+  }),
+  o("wsvn.com", "WSVN 7News", "12086", "https://wsvn.com/news/feed/"),
+  o("nbcmiami.com", "NBC6 South Florida", "12086", "https://www.nbcmiami.com/?rss=y"),
+  o("miaminewtimes.com", "Miami New Times", "12086", "https://www.miaminewtimes.com/feed/", {
+    robots: {
+      aiDisallow: ["GPTBot", "anthropic-ai", "ClaudeBot", "Claude-Web", "Claude-User", "Google-Extended", "PerplexityBot", "CCBot", "cohere-ai"],
+      note: "One grouped block of ~35 AI/scraper agents ending in Disallow: /.",
+    },
+  }),
+  /* WFOR's studios are on NW 18th Terrace in Doral (Miami-Dade), so this moves
+     here from Broward, where the first draft had it. Broward loses its only
+     television entry as a result — see the verification doc. Under the
+     "placement by market" reading used for FOX 35 below, WFOR also serves
+     Broward and this move is a choice; the founder should pick one rule. */
+  o("cbsnews.com/miami", "CBS News Miami", "12086", "https://www.cbsnews.com/miami/latest/rss/main", {
+    robots: { aiDisallow: ["GPTBot"] },
+  }),
+  /* Spanish-language daily. The Florida section feed is live; the site-wide
+     /rss/home.xml last updated in 2019. */
+  o("diariolasamericas.com", "Diario Las Américas", "12086", "https://www.diariolasamericas.com/rss/pages/florida.xml"),
+  /* Spanish-language TV (Canal 41). Same CMS as Diario Las Américas; the
+     feed index at /contenidos/rss.html lists section feeds (found via
+     Firecrawl site map, then verified with the sweep UA). The Miami section
+     is the local one; /rss/pages/opinion.xml exists but was 23 days stale. */
+  o("americateve.com", "América TeVé", "12086", "https://www.americateve.com/rss/pages/miami.xml"),
+  /* Bilingual English/French Haitian-diaspora biweekly, North Miami. Runs
+     clearly labelled political advertisements — a reviewer should know. */
+  o("lefloridien.com", "Le Floridien", "12086", "https://lefloridien.com/feed/"),
+  /* Black-owned weekly, founded 1923. BLOX/TownNews search feed — same
+     platform and same rate-limit caveat as News Service of Florida below.
+     FLAGGED `syndicated`: the 25-item sample was mostly Florida Politics,
+     Florida Phoenix, AP and press-release wire copy, with the origin in
+     <dc:creator>. See the header. */
+  o("miamitimesonline.com", "The Miami Times", "12086", "https://www.miamitimesonline.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc", {
+    syndicated: true,
+  }),
+  o("miamiherald.com", "Miami Herald", "12086",
+    null, // Arc RSS path is a real 404 (confirmed via Firecrawl); every other path timed out for the sweep UA. No RSS 2026-09-17 — sitemap only.
+    {
+      leanBasis:
+        "Raters disagree: MBFC Left-Center (-3.4, High; notes it has endorsed Democratic presidential candidates since 2000); " +
+        "AllSides Lean Left (low confidence, Sep 2026); Ad Fontes Middle/Reliable. Corpus 2026-09-17 proposes center-left. Founder decides.",
+    }),
+  /* McClatchy eliminated el Nuevo Herald's entire writing staff on 2026-09-10
+     (AP via WLRN). Kept for auditability; expect near-zero original output. */
+  o("elnuevoherald.com", "el Nuevo Herald", "12086", null), // same McClatchy CMS as the Herald; Arc RSS path is a real 404 (Firecrawl), sweep UA times out. 2026-09-17.
+  /* NOT LISTED, on purpose — The Haitian Times (haitiantimes.com). Its feed
+     verifies (10 items, 0.3 d) but the newsroom is in Brooklyn and the feed
+     is mostly non-Florida; a Miami-Dade countyFips would fill that county's
+     feed (§7) with New York stories, and null would call it a Florida
+     statewide outlet. Founder call, per the corpus. Add it here by PR. */
 
   // --- Broward ---
-  o("sun-sentinel.com", "South Florida Sun Sentinel", "12011"),
-  o("cbsnews.com/miami", "CBS News Miami", "12011"),
+  /* Fort Lauderdale nonprofit investigative newsroom. Low cadence (five items
+     span ~19 days). */
+  o("floridabulldog.org", "Florida Bulldog", "12011", "https://www.floridabulldog.org/feed/", {
+    robots: { crawlDelaySec: 10 },
+  }),
+  /* Black weekly, Fort Lauderdale, founded 1971. Newest item was 7.6 days old
+     at verification — a weekly's normal cadence, but over the corpus's 7-day
+     threshold by half a day. Included; founder may veto. */
+  o("thewestsidegazette.com", "The Westside Gazette", "12011", "https://thewestsidegazette.com/feed/"),
+  o("sfltimes.com", "South Florida Times", "12011", "https://www.sfltimes.com/feed"),
+  o("sun-sentinel.com", "South Florida Sun Sentinel", "12011",
+    null, // /feed/ (advertised on the homepage) returns HTTP 403 to the sweep UA, a browser UA, and Firecrawl's stealth proxy 2026-09-17 — a WAF, not a path problem.
+    //       BUT /sitemap.xml?yyyy=&mm=&dd= (Google News sitemap: title + publication_date, ~115 URLs/day) is OPEN to the sweep UA. Needs retrieval mode 2 (PRD §5) in the runner.
+    {
+      leanBasis:
+        "Mild disagreement: AllSides Center (low confidence, Apr 2026); MBFC Least Biased (High); Ad Fontes Lean Left per Ground News. " +
+        "Corpus 2026-09-17 proposes center. Founder decides.",
+      robots: { aiDisallow: ["anthropic-ai", "ClaudeBot", "GPTBot", "CCBot", "Google-Extended", "PerplexityBot", "Applebot-Extended", "Bytespider"] },
+    }),
+  o("outsfl.com", "OutSFL", "12011", null), // every feed path redirects to the HTML homepage 2026-09-17; no feed advertised; Firecrawl site map finds none.
 
   // --- Hillsborough ---
-  o("tampabay.com", "Tampa Bay Times", "12057"),
-  o("wusf.org", "WUSF", "12057"),
-  o("wfla.com", "WFLA News Channel 8", "12057"),
-  o("wtsp.com", "10 Tampa Bay", "12057"),
-  o("cltampa.com", "Creative Loafing Tampa Bay", "12057"),
+  /* The news-section feed is the only one deep enough to cover a 14-day
+     window (100 items, ~25 days); the site-wide Arc feed holds ~2.4 days. */
+  o("tampabay.com", "Tampa Bay Times", "12057", "https://www.tampabay.com/arc/outboundfeeds/rss/category/news/?outputType=xml", {
+    leanBasis: "Single rater: AllSides Center (low confidence, Aug 2026). No corroboration found. Corpus 2026-09-17 proposes center. Founder decides.",
+    robots: { aiDisallow: ["GPTBot", "anthropic-ai", "ClaudeBot", "CCBot", "Bytespider"], note: "Google-Extended explicitly allowed." },
+  }),
+  o("wusf.org", "WUSF", "12057", "https://www.wusf.org/news.rss"),
+  o("wfla.com", "WFLA News Channel 8", "12057", "https://www.wfla.com/news/florida/feed/", {
+    robots: { aiDisallow: ["GPTBot", "anthropic-ai", "ClaudeBot", "CCBot", "Google-Extended", "PerplexityBot", "Applebot-Extended", "Bytespider"] },
+  }),
+  o("wtsp.com", "10 Tampa Bay", "12057", "https://www.wtsp.com/feeds/syndication/rss/news"),
+  o("cltampa.com", "Creative Loafing Tampa Bay", "12057", "https://www.cltampa.com/feed/?partner-feed=all"),
 
   // --- Orange ---
-  o("orlandosentinel.com", "Orlando Sentinel", "12095"),
-  o("cfpublic.org", "Central Florida Public Media", "12095"),
-  o("wftv.com", "WFTV Channel 9", "12095"),
-  o("wesh.com", "WESH 2 News", "12095"),
-  o("orlandoweekly.com", "Orlando Weekly", "12095"),
+  /* Brightspot section feeds are shallow; politics.rss (12 items, ~10 days)
+     is the deepest live ARTICLE feed. The "Engage" podcast RSS the corpus
+     verified is episodes, not articles, so it is not used. */
+  o("cfpublic.org", "Central Florida Public Media", "12095", "https://www.cfpublic.org/politics.rss"),
+  o("wftv.com", "WFTV Channel 9", "12095", "https://www.wftv.com/arc/outboundfeeds/rss/?outputType=xml"),
+  /* Hearst. The robots.txt header states Hearst's terms prohibit any robot,
+     crawler or aggregation tool on the site — a stance broader than the
+     rules below it. Founder policy item. */
+  o("wesh.com", "WESH 2 News", "12095", "https://www.wesh.com/topstories-rss", {
+    robots: {
+      aiDisallow: ["GPTBot", "anthropic-ai", "ClaudeBot", "Claude-Web", "CCBot", "Google-Extended", "PerplexityBot", "Applebot-Extended", "Bytespider", "cohere-ai"],
+      crawlDelaySec: 10,
+      note: "Hearst terms in the robots.txt header prohibit crawlers and aggregation outright.",
+    },
+  }),
+  o("orlandoweekly.com", "Orlando Weekly", "12095", "https://www.orlandoweekly.com/feed/?partner-feed=all"),
+  /* Added 2026-09-17 on the corpus's recommendation once the feed verified. */
+  o("clickorlando.com", "WKMG News 6", "12095", "https://www.clickorlando.com/arc/outboundfeeds/rss/?outputType=xml", {
+    robots: { aiDisallow: ["GPTBot", "Bytespider"] },
+  }),
+  /* Added 2026-09-17. Studios are in Lake Mary (Seminole), like WTSP's are in
+     St. Petersburg (Pinellas): placed by market, consistent with those rows.
+     Note the corpus rejected Bay News 9 on the OPPOSITE rule (base county,
+     Pinellas). The list is inconsistent on this and the founder should pick
+     one reading before more broadcasters are added. */
+  o("fox35orlando.com", "FOX 35 Orlando", "12095", "https://www.fox35orlando.com/rss/category/news", {
+    robots: { aiDisallow: ["GPTBot"] },
+  }),
+  o("orlandosentinel.com", "Orlando Sentinel", "12095",
+    null, // same Tribune/Alden WAF as the Sun Sentinel: HTTP 403 to every UA 2026-09-17 (Firecrawl declines the site entirely).
+    //       Same open per-day Google News sitemap as the Sun Sentinel (~130 URLs/day). Needs retrieval mode 2 in the runner.
+    {
+      leanBasis:
+        "Raters disagree: MBFC Left-Center (-2.8, High); Ad Fontes Skews Left/Reliable; AllSides Center (low confidence, Aug 2026). " +
+        "Corpus 2026-09-17 proposes center-left. Founder decides.",
+      robots: { aiDisallow: ["anthropic-ai", "ClaudeBot", "GPTBot", "CCBot", "Google-Extended", "PerplexityBot", "Applebot-Extended", "Bytespider"] },
+    }),
 
   // --- Statewide ---
-  o("floridaphoenix.com", "Florida Phoenix", null),
-  o("newsserviceflorida.com", "News Service of Florida", null),
-  o("wfsu.org", "WFSU Public Media", null),
-  o("floridapolitics.com", "Florida Politics", null),
-  o("apnews.com", "The Associated Press", null),
+  /* FLAGGED `mixedFeed`: the corpus records that this one feed carries the
+     Phoenix's commentary as well as its reporting, and the site has a
+     /category/commentary/ section whose own feed 403s. See the header. */
+  o("floridaphoenix.com", "Florida Phoenix", null, "https://floridaphoenix.com/feed/", {
+    leanBasis: "No outlet-specific rating captured; part of the States Newsroom network. Corpus 2026-09-17 proposes center-left without a citation. Founder decides.",
+    mixedFeed: true,
+    robots: { aiDisallow: ["GPTBot", "anthropic-ai", "ClaudeBot", "Claude-Web", "CCBot", "Google-Extended", "PerplexityBot", "Applebot-Extended", "Bytespider", "cohere-ai"] },
+  }),
+  /* BLOX/TownNews search feed. Verified once; the platform rate-limits per IP
+     burst (HTTP 429 after two or three quick requests), so fetch it once per
+     sweep and never retry inside a run. */
+  o("newsserviceflorida.com", "News Service of Florida", null, "https://www.newsserviceflorida.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc"),
+  /* The corpus's podcast path last updated in 2022; the state-news section
+     feed is live. */
+  o("wfsu.org", "WFSU Public Media", null, "https://news.wfsu.org/state-news.rss"),
+  /* Highest-volume political outlet in the state and the shallowest feed: ten
+     items covering ~five hours. WordPress `?paged=N` works here — see the
+     verification doc for the depth finding.
+     FLAGGED `mixedFeed`: the main feed carries an "Emails & Opinions"
+     category and "Guest Author" bylines alongside reporting (3 of 10 items
+     on 2026-09-17); the opinion category's own feed 404s. See the header. */
+  o("floridapolitics.com", "Florida Politics", null, "https://floridapolitics.com/feed/", { mixedFeed: true }),
+  o("floridadaily.com", "Florida Daily", null, "https://floridadaily.com/feed/"),
+  o("flvoicenews.com", "Florida's Voice", null, "https://flvoicenews.com/feed/", {
+    // apex host only; www. returns 403.
+    robots: { note: "robots.txt itself returns 403; policy unknown." },
+  }),
+  o("floridianpress.com", "The Floridian", null, "https://floridianpress.com/feed/", {
+    robots: { crawlDelaySec: 600 },
+  }),
+  o("apnews.com", "The Associated Press", null,
+    null, // no public RSS; robots.txt disallows /*.rss; hub pages 403 to the sweep UA 2026-09-17. HTML listing (retrieval mode 3) only.
+    {
+      leanBasis:
+        "Ratings exist at AllSides, Ad Fontes and MBFC per the corpus, but no rating page was fetched. " +
+        "Corpus 2026-09-17 proposes center pending that fetch. Founder confirms.",
+      robots: { note: "Disallows /*.rss for all agents." },
+    }),
 ]);
 
-function o(domain: string, publisher: string, countyFips: string | null): Outlet {
-  return {
+function o(
+  domain: string,
+  publisher: string,
+  countyFips: string | null,
+  feed: string | null,
+  opts: RowOptions = {},
+): Outlet {
+  const row: Outlet = {
     domain,
     publisher,
     type: "factual_reporting",
     countyFips,
     leanTag: null,
-    leanBasis: UNRATED,
-    feed: null,
+    leanBasis: opts.leanBasis ?? UNRATED,
+    feed,
   };
+  if (opts.mixedFeed) row.mixedFeed = true;
+  if (opts.syndicated) row.syndicated = true;
+  if (opts.robots) row.robots = opts.robots;
+  return row;
 }
 
 /* Same posture as Allowlist A/B: a shortener is blocked outright and a
@@ -152,7 +353,10 @@ export function outletForUrl(url: string, outlets: readonly Outlet[] = OUTLETS):
   return outlets.find((o) => urlBelongsTo(url, o)) ?? null;
 }
 
-/** Outlets the sweep may actually read: both founder gates filled in. */
+/** Outlets the sweep may actually read: both founder gates filled in and no
+    fail-closed flag set. */
 export function usableOutlets(outlets: readonly Outlet[] = OUTLETS): Outlet[] {
-  return outlets.filter((x) => x.leanTag !== null && x.feed !== null);
+  return outlets.filter(
+    (x) => x.leanTag !== null && x.feed !== null && !x.mixedFeed && !x.syndicated,
+  );
 }

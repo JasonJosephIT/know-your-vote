@@ -20,7 +20,7 @@
 
    Run: node scripts/verify-news-sweep.ts */
 
-import { OUTLETS, urlBelongsTo, usableOutlets, type Outlet } from "../src/lib/news-sources.ts";
+import { OUTLETS, UNRATED, urlBelongsTo, usableOutlets, type Outlet } from "../src/lib/news-sources.ts";
 import { normalizeUrl, parseFeed, sweep } from "../src/lib/news-sweep.ts";
 
 let failures = 0;
@@ -125,6 +125,63 @@ check(
 check(
   "no duplicate domains",
   new Set(OUTLETS.map((o) => o.domain)).size === OUTLETS.length,
+);
+
+/* ---- the list's own invariants (2026-09-17, once feeds were filled) --- */
+
+/* The sweep dedupes by URL, last writer wins. Two outlets sharing one feed
+   would silently relabel each other's articles — which is exactly why there
+   are no `opinion` rows yet: no daily exposes a distinct opinion feed. */
+const feeds = OUTLETS.map((o) => o.feed).filter((f): f is string => f !== null);
+check(
+  "no two outlets share a feed URL",
+  new Set(feeds.map((f) => new URL(f).toString())).size === feeds.length,
+);
+check("at least one feed is verified", feeds.length > 0);
+
+/* A basis that departs from the shared UNRATED text must be a citation, not
+   an argument: it names a rater and hands the decision back. This is what
+   keeps a lean from being smuggled into prose the founder skims. */
+for (const o of OUTLETS) {
+  if (o.leanBasis === UNRATED) continue;
+  check(
+    `non-default leanBasis for ${o.domain} cites a rater`,
+    /AllSides|MBFC|Ad Fontes|States Newsroom|ratings exist/i.test(o.leanBasis),
+    o.leanBasis,
+  );
+  check(
+    `non-default leanBasis for ${o.domain} defers to the founder`,
+    /Founder (decides|confirms)/.test(o.leanBasis),
+    o.leanBasis,
+  );
+}
+
+/* Row-level flags are fail-closed: a mixed or syndicated feed cannot produce
+   a card even with a lean filled in, because the card would carry the wrong
+   type or the wrong outlet's lean. */
+const flagged = OUTLETS.filter((o) => o.mixedFeed || o.syndicated);
+check("the known flagged rows carry their flags (Phoenix, Florida Politics, Miami Times)", flagged.length >= 3);
+check(
+  "a flagged row is never usable, even with a lean",
+  usableOutlets(flagged.map((o) => ({ ...o, leanTag: "center" as const }))).length === 0,
+);
+
+/* A feed must live on the outlet it is attributed to, under the same
+   label-boundary rule the articles are held to; otherwise a feed hosted
+   elsewhere could smuggle attribution past urlBelongsTo. */
+for (const o of OUTLETS) {
+  if (o.feed === null) continue;
+  check(`feed for ${o.domain} is https`, o.feed.startsWith("https://"), o.feed);
+  check(`feed for ${o.domain} is on the outlet's own host`, urlBelongsTo(o.feed, o), o.feed);
+}
+
+/* Four covered counties (src/lib/resolve.ts COVERED_COUNTIES) or statewide.
+   Hard-coded rather than imported so this script stays free of app imports. */
+const COUNTIES = new Set(["12086", "12011", "12057", "12095"]);
+check(
+  "every countyFips is a covered county or null",
+  OUTLETS.every((o) => o.countyFips === null || COUNTIES.has(o.countyFips)),
+  OUTLETS.filter((o) => o.countyFips !== null && !COUNTIES.has(o.countyFips!)).map((o) => o.domain).join(","),
 );
 
 /* ---- windowing ------------------------------------------------------- */
