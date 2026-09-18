@@ -39,9 +39,13 @@ export interface NewsIssue {
   aliases: readonly string[];
 }
 
-/** Starting point only. The real value comes from the threshold sweep against
-    the hand-labelled gold set (spec §6 item 4) — this is not a tuned number. */
-export const DEFAULT_THRESHOLD = 0.7;
+/** Founder-set 2026-09-18, from the first live run rather than from taste.
+    At 0.7 a property-insurance story over-tagged into "Housing affordability"
+    (A2) and "Cost of living" (A4), dragging `housing` in as a category; at
+    0.85 that collapses to A1 alone and no true positive was lost anywhere in
+    the sample. Ten fixtures is a signal, not a tuning: the gold-set sweep
+    (spec §6 item 4) is still what settles it. */
+export const DEFAULT_THRESHOLD = 0.85;
 
 export interface CharacterizableArticle {
   title: string;

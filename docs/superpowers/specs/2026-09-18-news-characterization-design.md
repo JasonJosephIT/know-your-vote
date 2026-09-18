@@ -323,17 +323,40 @@ silently not cache. Assert `usage.cache_read_input_tokens > 0` in the runner's
 dry-run output; if it is zero, drop the `cache_control` rather than reporting a
 discount that is not happening.
 
-**MEASURED 2026-09-18** (10 fixtures, `scripts/news-characterize-demo.ts`,
-two-level taxonomy = 26 Nouls per article, one request):
+**MEASURED 2026-09-18**, `scripts/news-characterize-demo.ts`, 10 fixtures
+against `jev-1.13.0`, one request per article:
 
-- **3,111 input tokens per article**, output free.
-- **$0.00013 per article** at Jev's $0.042/MTok.
-- At 200 stored rows per daily sweep: **$0.026 a sweep, ~$1.18 for the whole
-  run-up** to 2026-11-03.
+| Configuration | Nouls/article | Input tokens/article | $/article | Run-up total* |
+|---|---|---|---|---|
+| Both levels, threshold 0.70 | 26 | 3,111 | $0.00013 | ~$1.18 |
+| **Sub-issues only, threshold 0.85** (chosen) | **15** | **1,965** | **$0.0000825** | **~$0.74** |
 
-This replaces the earlier estimate of ~$0.32 for the run-up, which was low
-because it assumed 15 questions; the two-level taxonomy asks 26. Both figures
-are small enough that cost decides nothing — which remains the point.
+\* 200 stored rows per daily sweep to 2026-11-03.
+
+**Founder decisions taken from that run, 2026-09-18:**
+
+1. **Drop the category questions.** In all 10 rows a parent never fired alone —
+   whenever a category cleared, one of its children cleared too, including on
+   the fixture written specifically to need a parent (a deliberately broad
+   "Florida's economy is slowing", which B1 caught at 0.98 unaided). Eleven of
+   26 questions were doing no work. Categories remain in the taxonomy as a
+   derived display layer via `categoriesFor()`; they are simply never asked and
+   never stored. Reversing this is adding `CATEGORIES` back to `ASKABLE`.
+2. **Threshold 0.85, not 0.70.** At 0.70 a property-insurance story over-tagged
+   into A2 (housing affordability) and A4 (cost of living), pulling `housing`
+   in as a category; at 0.85 it collapses to A1 alone with no true positive
+   lost anywhere in the sample.
+
+Both are ten-fixture signals, not tunings. The gold-set sweep (§6 item 4)
+remains what settles the threshold, and item 6 remains what decides whether a
+second engine is ever built.
+
+**Reproducibility caveat, found in the same run.** Two runs of the same input
+gave `economy` 0.71 once and below-threshold the next. Provenance pins the
+*inputs* — model id, taxonomy version, question hash — but not the answers, so
+a score near the threshold can flip between runs. Do not describe a stored tag
+as deterministic. Raising the threshold to 0.85 also widens the margin around
+most decisions, which reduces how often this matters.
 
 Both are cheap in absolute terms, so cost does not decide §6 on today's volumes.
 It would start to matter if the sweep goes daily against a growing pool, which

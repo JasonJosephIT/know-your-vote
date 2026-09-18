@@ -48,8 +48,13 @@ check("sub-issue ids are unique", new Set(SUB_ISSUE_IDS).size === SUB_ISSUE_IDS.
 const collisions = CATEGORY_IDS.filter((c) => SUB_ISSUE_IDS.includes(c));
 check("no id is both a category and a sub-issue", collisions.length === 0, collisions.join(","));
 check("ASKABLE ids are unique", new Set(ASKABLE_IDS).size === ASKABLE_IDS.length);
-check("ASKABLE is exactly categories + sub-issues",
-  ASKABLE.length === CATEGORIES.length + SUB_ISSUES.length);
+/* Sub-issues only: the categories are derived for display, never asked and
+   never stored (news-issues.ts explains why, and what would reverse it). */
+check("ASKABLE is exactly the sub-issues", ASKABLE.length === SUB_ISSUES.length);
+check("no category is asked as a question",
+  !ASKABLE_IDS.some((id) => CATEGORY_IDS.includes(id)));
+check("every sub-issue is asked",
+  SUB_ISSUE_IDS.every((id) => ASKABLE_IDS.includes(id)));
 
 /* ---- the hierarchy is total: no orphans, no childless parent --------- */
 for (const sub of SUB_ISSUES) {

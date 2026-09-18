@@ -53,7 +53,7 @@ const FIXTURES: DemoRow[] = [
   { title: "Florida's economy is slowing, state economists tell legislative panel",
     summary: "Revenue estimates were revised down, with no single sector named as the driver.",
     url: "https://example.com/2026/09/18/economy-slowing/",
-    want: "THE PARENT TEST — broad enough that neither A4 nor B1 may clear alone. If only `economy` fires, the parent questions earned their place." },
+    want: "B1 → economy. Deliberately broad: this is the fixture that was meant to need a parent question. B1 caught it at 0.98 unaided, which is why the parent questions were dropped. If this ever returns {}, that decision needs revisiting." },
   { title: "Appeals court hears challenge to Florida's gestational limit",
     summary: "Both sides argued over the standard applied by the lower court.",
     url: "https://example.com/2026/09/18/gestational-limit-appeal/",

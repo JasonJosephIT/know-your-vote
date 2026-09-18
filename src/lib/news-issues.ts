@@ -124,22 +124,26 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
     aliases: ["climate policy", "emissions", "environmental regulation", "energy"] },
 ];
 
-/* What the model is actually asked about: BOTH levels, in one request.
+/* What the model is asked about: THE SUB-ISSUES ONLY.
 
-   Asking the parents too is not redundancy. Fifteen narrow questions can each
-   individually miss what one broad question catches — a general "Florida's
-   economy is slowing" piece may clear neither "Cost of living in Florida" nor
-   "Economy, inflation, and jobs" on its own, and would otherwise come back
-   with nothing. The parent Noul catches it.
+   The categories above are a derived display layer, not questions. They are
+   never asked and never stored — `categoriesFor()` computes them from the
+   sub-issue tags on a row.
 
-   Whether the parents actually earn their place is a question for the gold-set
-   evaluation (spec §6), not an assumption: if no article is ever caught by a
-   parent alone, drop these eleven questions in a later PR. Measuring it costs
-   ~$0.02 per sweep, so it is measured rather than argued about. */
-export const ASKABLE: readonly NewsIssue[] = [
-  ...CATEGORIES.map(({ id, label, aliases }) => ({ id, label, aliases })),
-  ...SUB_ISSUES,
-];
+   This was measured, not assumed. The first live run (2026-09-18, 10 fixtures,
+   jev-1.13.0) asked both levels — 26 Nouls — and in every single row where a
+   parent fired, one of its children fired too. The parent never caught
+   anything alone, including the fixture written specifically to need it: a
+   deliberately broad "Florida's economy is slowing" headline, which B1 caught
+   at 0.98 without help. Eleven of twenty-six questions were doing no work, so
+   the founder dropped them.
+
+   If a later evaluation finds broad articles slipping through with no tags,
+   the fix is to put these back — add CATEGORIES to ASKABLE and re-measure.
+   The rest of the pipeline does not care: the core takes whatever list this
+   exports, and `categoriesFor()` already handles a category id appearing as a
+   stored tag, which is what a restored parent question would produce. */
+export const ASKABLE: readonly NewsIssue[] = SUB_ISSUES;
 
 export const ASKABLE_IDS: readonly string[] = ASKABLE.map((i) => i.id);
 export const CATEGORY_IDS: readonly string[] = CATEGORIES.map((c) => c.id);
