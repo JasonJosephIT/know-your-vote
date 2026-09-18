@@ -490,8 +490,20 @@ the column that lets it reach 67 without a second migration.
   mechanism task), AP (no RSS), OutSFL. **Gate C7-a is
   untouched** — every `leanTag` is still null; the corpus's proposals and
   their cited raters are now in each row's `leanBasis`, so sign-off is a
-  one-word edit. Verify script gained three list invariants (unique feed
-  URLs, feed on the outlet's own host, county in the covered set).
+  one-word edit — **except on three rows that are flagged and fail-closed**:
+  Florida Phoenix and Florida Politics (`mixedFeed`: commentary shares the
+  reporting feed, so a lean would render opinion as Reporting) and The Miami
+  Times (`syndicated`: mostly republished Florida Politics / Phoenix / AP
+  copy, so a lean would be applied to another outlet's journalism). Lifting
+  a flag is a runner change (split on `<category>`, re-attribute on
+  `<dc:creator>`), not an edit. Also surfaced for the founder: the schema has
+  no `unrated` lean value (only `N/A` = "does not apply"), so the 31 unrated
+  rows cannot be signed off at all until that is decided; and after every
+  corpus proposal is signed off, exactly one rated in-county outlet (Tampa
+  Bay Times) has a working feed. Verify script gained list invariants
+  (unique feed URLs, feed on the outlet's own host, county in the covered
+  set, non-default `leanBasis` cites a rater and defers to the founder,
+  flagged rows never usable).
   **Finding for §5's cadence table:** 19 of 31 feeds reach back under three
   days (Florida Politics: five hours). Feed depth, not the 14-day window,
   bounds recall; sweep daily now, and add WordPress `?paged=N` to the runner.
