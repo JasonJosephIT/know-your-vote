@@ -485,9 +485,7 @@ the column that lets it reach 67 without a second migration.
   WKMG, FOX 35, three statewide political sites). CBS Miami reclassified to
   Miami-Dade (WFOR is in Doral). Still null after trying: Miami Herald and el
   Nuevo Herald (no RSS, confirmed via Firecrawl), Sun Sentinel and Orlando
-  Sentinel (403 to every UA and to Firecrawl — **but their per-day Google News
-  sitemaps are open to the sweep UA**, which makes retrieval mode 2 the next
-  mechanism task), AP (no RSS), OutSFL. **Gate C7-a is
+  Sentinel (RSS 403 to every UA and to Firecrawl; **read via their per-day Google News sitemaps — retrieval mode 2, built 2026-09-18**, dated-path filter drops obituaries; `retrieval` is now recorded on every swept article), AP (no RSS), OutSFL. **Gate C7-a is
   untouched** — every `leanTag` is still null; the corpus's proposals and
   their cited raters are now in each row's `leanBasis`, so sign-off is a
   one-word edit — **except on three rows that are flagged and fail-closed**:
@@ -507,6 +505,14 @@ the column that lets it reach 67 without a second migration.
   **Finding for §5's cadence table:** 19 of 31 feeds reach back under three
   days (Florida Politics: five hours). Feed depth, not the 14-day window,
   bounds recall; sweep daily now, and add WordPress `?paged=N` to the runner.
+  **Follow-up recorded 2026-09-18 (founder idea, not designed):** send each
+  swept article's text to a model that characterises which candidate it
+  names or which issue it relates to. This would change §6's deterministic
+  `named`/`related` matching into a model judgement and would require
+  fetching article text, which §5 today forbids storing. It needs its own
+  design against CN-R3/CN-R4 and news-fairness.md before any code.
+  **Session brief for that design: `news-characterization-BRIEF.md`** (gates
+  G1–G5, proposed tasks C10–C15, read order).
 
 - [ ] **C8** *(v1.2)* — Association: `named` + `related` (§6, CN-R9/CN-R10).
   Migration `0016` adds `news_item.relation`; the matcher assigns it; the

@@ -20,8 +20,8 @@
 
    Run: node scripts/verify-news-sweep.ts */
 
-import { OUTLETS, UNRATED, urlBelongsTo, usableOutlets, type Outlet } from "../src/lib/news-sources.ts";
-import { normalizeUrl, parseFeed, sweep } from "../src/lib/news-sweep.ts";
+import { OUTLETS, UNRATED, sitemapUrlFor, urlBelongsTo, usableOutlets, type Outlet } from "../src/lib/news-sources.ts";
+import { normalizeUrl, parseFeed, parseNewsSitemap, sweep } from "../src/lib/news-sweep.ts";
 
 let failures = 0;
 function check(name: string, cond: boolean, detail = "") {
@@ -252,6 +252,108 @@ const scoped: Outlet = { ...times, domain: "cbsnews.com/miami" };
 check("path-scoped matches its path", urlBelongsTo("https://www.cbsnews.com/miami/news/x", scoped));
 check("path-scoped rejects the rest of the site", !urlBelongsTo("https://www.cbsnews.com/news/x", scoped));
 check("path-scoped rejects a prefix collision", !urlBelongsTo("https://www.cbsnews.com/miamibeach/x", scoped));
+
+/* ---- retrieval mode 2: Google News sitemaps ------------------------- */
+
+const sentinel: Outlet = {
+  domain: "sun-sentinel.com",
+  publisher: "South Florida Sun Sentinel",
+  type: "factual_reporting",
+  countyFips: "12011",
+  leanTag: "center",
+  leanBasis: "fixture",
+  feed: null,
+  sitemap: {
+    daily: "https://www.sun-sentinel.com/sitemap.xml?yyyy={yyyy}&mm={mm}&dd={dd}",
+    include: /^\/\d{4}\/\d{2}\/\d{2}\//,
+  },
+};
+const dayIso = (daysAgo: number) => new Date(NOW.getTime() - daysAgo * 86_400_000).toISOString();
+const smUrl = (loc: string, title: string, daysAgo: number) =>
+  `<url><loc>${loc}</loc><changefreq>monthly</changefreq><lastmod>${dayIso(daysAgo - 0.5)}</lastmod>` +
+  `<news:news><news:publication><news:name>Sun Sentinel</news:name><news:language>en-US</news:language></news:publication>` +
+  `<news:publication_date>${dayIso(daysAgo)}</news:publication_date><news:title>${title}</news:title></news:news></url>`;
+const daySitemap = (urls: string) =>
+  `<?xml version="1.0" encoding="utf-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">${urls}</urlset>`;
+
+const smFixture = daySitemap(
+  smUrl("https://www.sun-sentinel.com/2026/09/17/council-vote/", "Council &amp; mayor vote", 1) +
+    smUrl("https://www.sun-sentinel.com/obituaries/jane-doe/", "Jane Doe", 1) +
+    smUrl("https://www.sun-sentinel.com/2026/09/16/second-story/", "Second story", 2) +
+    smUrl("https://example.com/2026/09/17/off-list/", "Off list", 1) +
+    smUrl("https://www.sun-sentinel.com/2026/08/01/too-old/", "Too old", 40),
+);
+
+const smParsed = parseNewsSitemap(smFixture);
+check("sitemap: five url entries parsed", smParsed.length === 5, `got ${smParsed.length}`);
+check("sitemap: title from news:title, entities decoded", smParsed[0]?.title === "Council & mayor vote", smParsed[0]?.title);
+check("sitemap: link from loc", smParsed[0]?.link === "https://www.sun-sentinel.com/2026/09/17/council-vote/");
+check("sitemap: date from news:publication_date", smParsed[0]?.published === dayIso(1), smParsed[0]?.published);
+check("sitemap: summary is empty", smParsed[0]?.summary === "");
+const noNews = daySitemap(`<url><loc>https://www.sun-sentinel.com/2026/09/17/plain/</loc><lastmod>${dayIso(1)}</lastmod></url>`);
+check(
+  "sitemap: no news:news block falls back to lastmod with an empty title",
+  parseNewsSitemap(noNews)[0]?.published === dayIso(1) && parseNewsSitemap(noNews)[0]?.title === "",
+);
+check(
+  "sitemap sweep: an entry without a title is dropped",
+  sweep({ feeds: [{ outlet: sentinel, xml: noNews, format: "news-sitemap" }], now: NOW, belongsTo: urlBelongsTo }).length === 0,
+);
+check("sitemap: garbage parses to nothing", parseNewsSitemap("<html>no</html>").length === 0);
+check("sitemap: an RSS body parses to nothing as a sitemap", parseNewsSitemap(feed).length === 0);
+
+const smA = sweep({ feeds: [{ outlet: sentinel, xml: smFixture, format: "news-sitemap" }], now: NOW, belongsTo: urlBelongsTo });
+const smB = sweep({ feeds: [{ outlet: sentinel, xml: smFixture, format: "news-sitemap" }], now: NOW, belongsTo: urlBelongsTo });
+check("sitemap sweep: reproducible", JSON.stringify(smA) === JSON.stringify(smB));
+check("sitemap sweep: dated articles kept, obituary/off-list/stale dropped", smA.length === 2, smA.map((x) => x.title).join(","));
+check("sitemap sweep: obituary is not present", !smA.some((x) => x.url.includes("/obituaries/")));
+check("sitemap sweep: off-list domain is not present", !smA.some((x) => x.url.includes("example.com")));
+check("sitemap sweep: retrieval recorded", smA.every((x) => x.retrieval === "news-sitemap"));
+check("sitemap sweep: attribution from the list", smA.every((x) => x.publisher === sentinel.publisher && x.leanTag === "center" && x.countyFips === "12011"));
+check("sitemap sweep: summary null", smA.every((x) => x.summary === null));
+
+const mixed = sweep({
+  feeds: [
+    { outlet: sentinel, xml: smFixture, format: "news-sitemap" },
+    { outlet: times, xml: feed },
+  ],
+  now: NOW,
+  belongsTo: urlBelongsTo,
+});
+check("rss entries record retrieval rss", mixed.filter((x) => x.publisher === times.publisher).every((x) => x.retrieval === "rss"));
+check("both formats coexist in one sweep", mixed.length === 5, `got ${mixed.length}`);
+
+check(
+  "a news-sitemap entry for an outlet without a sitemap yields nothing",
+  sweep({ feeds: [{ outlet: times, xml: smFixture, format: "news-sitemap" }], now: NOW, belongsTo: urlBelongsTo }).length === 0,
+);
+check(
+  "a sitemap body passed as a feed yields nothing",
+  sweep({ feeds: [{ outlet: sentinel, xml: smFixture }], now: NOW, belongsTo: urlBelongsTo }).length === 0,
+);
+
+/* ---- list invariants for sitemap outlets ---------------------------- */
+
+check(
+  "sitemapUrlFor fills placeholders in UTC",
+  sitemapUrlFor("https://x.com/sitemap.xml?yyyy={yyyy}&mm={mm}&dd={dd}", new Date("2026-09-07T23:30:00-04:00")) ===
+    "https://x.com/sitemap.xml?yyyy=2026&mm=09&dd=08",
+);
+
+const withSitemap = OUTLETS.filter((o) => o.sitemap !== undefined);
+check("both Tribune dailies carry a sitemap", withSitemap.map((o) => o.domain).sort().join(",") === "orlandosentinel.com,sun-sentinel.com");
+for (const o of withSitemap) {
+  const t = o.sitemap!.daily;
+  check(`sitemap template for ${o.domain} has all placeholders`, t.includes("{yyyy}") && t.includes("{mm}") && t.includes("{dd}"), t);
+  check(`sitemap template for ${o.domain} is https on the outlet's own host`, t.startsWith("https://") && urlBelongsTo(sitemapUrlFor(t, NOW), o), t);
+  check(`sitemap outlet ${o.domain} has no feed (no tie-break rule needed)`, o.feed === null);
+  check(`sitemap include for ${o.domain} is the dated-path filter`, o.sitemap!.include.source === "^\\/\\d{4}\\/\\d{2}\\/\\d{2}\\/");
+}
+check(
+  "a sitemap outlet becomes usable once a lean is signed off",
+  usableOutlets(withSitemap.map((o) => ({ ...o, leanTag: "center" as const }))).length === withSitemap.length,
+);
+check("usableOutlets is still empty (leans null)", usableOutlets().length === 0);
 
 if (failures > 0) {
   console.error(`\nverify-news-sweep: ${failures} failure(s)`);

@@ -45,12 +45,12 @@ host 403s, so the difference is real).
 | Florida Bulldog | `floridabulldog.org/feed/` | 5 | 0.8 d | 18.8 d | Investigative cadence. robots: `Crawl-Delay: 10`. |
 | The Westside Gazette | `thewestsidegazette.com/feed/` | 10 | **7.6 d** | 8.6 d | **Over the 7-day threshold by half a day.** A weekly's normal cadence; included, founder may veto. |
 | South Florida Times | `sfltimes.com/feed` | 10 | 0.4 d | 1.3 d | |
-| Sun Sentinel | **null** | | | | `/feed/` and `/opinion/feed/` (both advertised on the homepage) return **HTTP 403 to the sweep UA, a browser UA, and Firecrawl's stealth proxy**. A WAF, not a wrong path. **The per-day Google News sitemap is open** (§5). |
+| Sun Sentinel | **sitemap (mode 2)** `sun-sentinel.com/sitemap.xml?yyyy=&mm=&dd=` | | | | `/feed/` and `/opinion/feed/` (both advertised on the homepage) return **HTTP 403 to the sweep UA, a browser UA, and Firecrawl's stealth proxy**. A WAF, not a wrong path. Built 2026-09-18; smoke run: 1126 dated articles over 15 days, 0 obituaries. Today's UTC day may 404 until the paper publishes; the runner skips it. |
 | OutSFL | **null** | | | | Every feed path 302s to the HTML homepage. |
 
-Broward now has **no daily and no television outlet** with a working feed.
-The Sun Sentinel is blocked at the edge, and CBS Miami moved to Miami-Dade.
-The three weeklies are what remains. This is the corpus's "acute gap", worse.
+Broward's daily is reachable again through retrieval mode 2 (below); it still has no television outlet with a working feed.
+CBS Miami moved to Miami-Dade.
+The three weeklies remain the only RSS sources; the daily reaches the pool by sitemap.
 
 ### Hillsborough (12057)
 
@@ -72,7 +72,7 @@ The three weeklies are what remains. This is the corpus's "acute gap", worse.
 | Orlando Weekly | `orlandoweekly.com/feed/?partner-feed=all` | 25 | 0.2 d | 2.5 d | |
 | **WKMG News 6** (new) | `clickorlando.com/arc/outboundfeeds/rss/?outputType=xml` | 20 | 0 d | 1.0 d | Corpus: "add after verification". Verified. |
 | **FOX 35 Orlando** (new) | `fox35orlando.com/rss/category/news` | 25 | 0 d | 1.6 d | Corpus: same. Studios in Lake Mary (Seminole) — see §2. |
-| Orlando Sentinel | **null** | | | | Same Tribune/Alden WAF as the Sun Sentinel: 403 to every UA; Firecrawl declines the site outright. **Per-day Google News sitemap is open** (§5). |
+| Orlando Sentinel | **sitemap (mode 2)** `orlandosentinel.com/sitemap.xml?yyyy=&mm=&dd=` | | | | Same Tribune/Alden WAF as the Sun Sentinel: 403 to every UA; Firecrawl declines the site outright. Built 2026-09-18; smoke run: 1366 dated articles over 15 days, 0 obituaries. Today's UTC day may 404 until the paper publishes; the runner skips it. |
 
 ### Statewide
 
@@ -172,12 +172,7 @@ The three weeklies are what remains. This is the corpus's "acute gap", worse.
    Orlando Sentinel equivalent) answer the sweep UA with a Google News sitemap:
    per URL a `<news:title>`, `<news:publication_date>` and `<lastmod>`, about
    115–130 URLs per day including obituaries and wire sports. That is title,
-   URL and date — everything the sweep stores except a dek. Retrieval mode 2
-   in PRD §5 ("RSS/Atom → sitemap") is the designed fallback and is not yet
-   implemented; a `parseNewsSitemap()` beside `parseFeed()` plus a per-day
-   loop over the 14-day window would bring both papers back. This is the
-   single highest-value mechanism change available: it restores the only
-   daily in Broward and the only daily in Orange.
+   URL and date — everything the sweep stores except a dek. **Built 2026-09-18** (spec `docs/superpowers/specs/2026-09-18-news-sitemap-retrieval-design.md`): both papers now have a retrieval path; the dated-path filter drops obituaries only. Open question for the first real run: the sitemaps label `news:publication_date` as `+00:00`; if that is local time mislabelled, card timestamps would shift by four hours, though day selection and windowing are unaffected because the day buckets use the same clock.
 6. **Republisher attribution.** The Miami Times feed is mostly syndicated:
    Florida Politics, Florida Phoenix (Creative Commons), AP, and press-release
    wires, with the origin named in `<dc:creator>` ("A.G. Gancarski, Florida
@@ -230,15 +225,13 @@ one row is signed off, the sweep produces nothing.
    | County | Rated outlets in list | …with a working feed |
    |---|---|---|
    | Miami-Dade | Miami Herald | **0** (no RSS) |
-   | Broward | Sun Sentinel | **0** (403; sitemap open, mode 2 unbuilt) |
+   | Broward | Sun Sentinel | **1** (sitemap, mode 2) |
    | Hillsborough | Tampa Bay Times | **1** |
-   | Orange | Orlando Sentinel | **0** (403; sitemap open, mode 2 unbuilt) |
+   | Orange | Orlando Sentinel | **1** (sitemap, mode 2) |
    | Statewide | Florida Phoenix (uncited), AP (unfetched) | 0 usable (Phoenix gated; AP no RSS) |
 
-   Signing off every corpus proposal today yields exactly one rated
-   in-county outlet that can produce a card. Everything else that renders
-   would be an unrated outlet, which brings in fact 2. Retrieval mode 2
-   (§3 item 5) changes this table more than any lean decision does.
+   Signing off every corpus proposal today yields three rated in-county outlets that can produce cards (Tampa Bay Times by RSS; both Sentinels by sitemap). Miami-Dade still has none. Everything else that renders
+   would be an unrated outlet, which brings in fact 2.
 
 2. **"No rating" is not a value the schema can hold.** `LeanTag` admits
    `left … right` and `N/A`; `N/A` is defined as "lean does not apply" (a

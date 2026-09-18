@@ -11,7 +11,8 @@
    - It does not match candidates. That is §6 (task C8).
    - It does not store article text. Title, dek, link, date, outlet — no more.
      The cards only ever show a headline and a line; storing the body would
-     create a copyright obligation with no product behind it. */
+     create a copyright obligation with no product behind it.
+   - It does not decide what a sitemap "article" is. That is the outlet's `sitemap.include`, in news-sources.ts. */
 
 import type { LeanTag, SourceType } from "./news-labels";
 import type { Outlet } from "./news-sources";
@@ -25,6 +26,9 @@ export interface FeedEntry {
   published: string;
 }
 
+/** How an article reached the pool — PRD §5 "record which". */
+export type Retrieval = "rss" | "news-sitemap";
+
 export interface SweptArticle {
   title: string;
   /** Normalised, deduped URL. */
@@ -35,6 +39,7 @@ export interface SweptArticle {
   type: SourceType;
   leanTag: LeanTag;
   countyFips: string | null;
+  retrieval: Retrieval;
 }
 
 /* ---------- feed parsing ---------------------------------------------- */
@@ -96,6 +101,26 @@ export function parseFeed(xml: string): FeedEntry[] {
   return out;
 }
 
+/** Google News sitemap (`urlset` of `url` entries carrying `news:news`).
+    This is retrieval mode 2 in PRD §5: for outlets whose RSS is blocked but
+    whose sitemap is open (both Tribune dailies). Same output shape as
+    `parseFeed` so the sweep treats both alike; summary is empty because a
+    sitemap carries no dek. Unknown shapes yield nothing. */
+export function parseNewsSitemap(xml: string): FeedEntry[] {
+  const out: FeedEntry[] = [];
+  for (const m of xml.matchAll(/<url(?:\s[^>]*)?>([\s\S]*?)<\/url>/gi)) {
+    const block = m[1];
+    const news = block.match(/<news:news(?:\s[^>]*)?>([\s\S]*?)<\/news:news>/i)?.[1] ?? "";
+    out.push({
+      title: pick(news, "news:title"),
+      link: pick(block, "loc"),
+      summary: "",
+      published: pick(news, "news:publication_date") || pick(block, "lastmod"),
+    });
+  }
+  return out;
+}
+
 /* ---------- normalisation + windowing ---------------------------------- */
 
 /** Strip the things that make one article look like several: fragments,
@@ -119,10 +144,12 @@ export function normalizeUrl(url: string): string | null {
 }
 
 export interface SweepInput {
-  /** One fetched feed body per outlet. The caller has already decided which
-      outlets are usable (`usableOutlets()`), so an outlet arriving here is
-      one the sweep is allowed to read. */
-  feeds: readonly { outlet: Outlet; xml: string }[];
+  /** One fetched body per outlet (or per sitemap day). The caller has already
+      decided which outlets are usable (`usableOutlets()`), so an outlet
+      arriving here is one the sweep is allowed to read. `format` defaults to
+      an RSS/Atom feed; `"news-sitemap"` bodies are parsed with
+      `parseNewsSitemap` and filtered by the outlet's `sitemap.include`. */
+  feeds: readonly { outlet: Outlet; xml: string; format?: "feed" | "news-sitemap" }[];
   /** Sweep time. Passed in, never read from the clock, so a sweep is
       reproducible from its inputs. */
   now: Date;
@@ -139,15 +166,25 @@ export function sweep(input: SweepInput): SweptArticle[] {
   const cutoff = input.now.getTime() - windowDays * 86_400_000;
   const seen = new Map<string, SweptArticle>();
 
-  for (const { outlet, xml } of input.feeds) {
+  for (const { outlet, xml, format = "feed" } of input.feeds) {
     /* Fail closed: an outlet with no signed-off lean cannot produce a card
        (news-fairness.md §1 — no source, no card), so it produces no row. */
     const leanTag = outlet.leanTag;
     if (leanTag === null) continue;
 
-    for (const entry of parseFeed(xml)) {
+    /* A sitemap body is only readable for an outlet the list says has a
+       sitemap; the include pattern lives there and is the editorial boundary
+       for what counts as an article on that site. */
+    const isSitemap = format === "news-sitemap";
+    if (isSitemap && !outlet.sitemap) continue;
+    const retrieval: Retrieval = isSitemap ? "news-sitemap" : "rss";
+    const entries = isSitemap ? parseNewsSitemap(xml) : parseFeed(xml);
+
+    for (const entry of entries) {
       const url = normalizeUrl(entry.link);
       if (!url || !entry.title) continue;
+
+      if (isSitemap && !outlet.sitemap!.include.test(new URL(url).pathname)) continue;
 
       /* The link must belong to the outlet whose feed we are reading. A feed
          that syndicates someone else's story must not smuggle an off-list
@@ -169,6 +206,7 @@ export function sweep(input: SweepInput): SweptArticle[] {
         type: outlet.type,
         leanTag,
         countyFips: outlet.countyFips,
+        retrieval,
       });
     }
   }

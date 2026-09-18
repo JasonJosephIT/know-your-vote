@@ -24,7 +24,7 @@
                 week (one weekly's 7.6-day exception is noted inline;
                 docs/general-election/news-corpus-verification-2026-09-17.md
                 has the per-URL evidence). Null means it was TRIED and failed;
-                the inline comment says how.
+                the inline comment says how. Two rows have no feed but a `sitemap` (retrieval mode 2); that counts as a retrieval path for `usableOutlets()`.
 
    Two row flags are FAIL-CLOSED and are not the founder's to lift by edit:
 
@@ -58,6 +58,16 @@ export interface OutletRobots {
   note?: string;
 }
 
+/** Retrieval mode 2 (PRD §5): a per-day Google News sitemap, for an outlet
+    whose RSS is blocked but whose sitemap is open. Both Tribune dailies. */
+export interface OutletSitemap {
+  /** URL template; `{yyyy}` `{mm}` `{dd}` are filled in UTC by `sitemapUrlFor`. */
+  daily: string;
+  /** Tested against each entry's URL path. Non-matching entries never enter
+      the pool. This is the editorial line for "what is an article here". */
+  include: RegExp;
+}
+
 export interface Outlet {
   /** Registrable host. Matched exactly or at a label boundary. */
   domain: string;
@@ -82,6 +92,8 @@ export interface Outlet {
   /** See the header. Fail-closed; not lifted by editing this file. */
   syndicated?: boolean;
   robots?: OutletRobots;
+  /** Set only when `feed` is null. See `OutletSitemap`. */
+  sitemap?: OutletSitemap;
 }
 
 /* The corpus cited AllSides, Ad Fontes and Media Bias/Fact Check ratings only
@@ -98,7 +110,18 @@ interface RowOptions {
   mixedFeed?: boolean;
   syndicated?: boolean;
   robots?: OutletRobots;
+  sitemap?: OutletSitemap;
 }
+
+/* Tribune Publishing sites: RSS is WAF-blocked to every UA; the per-day
+   Google News sitemap is open. News articles live under a dated path;
+   obituaries (the only other shape seen) do not, so the dated-path filter is
+   the founder-chosen boundary (spec 2026-09-18). */
+const TRIBUNE_DATED_PATH = /^\/\d{4}\/\d{2}\/\d{2}\//;
+const tribuneSitemap = (host: string): OutletSitemap => ({
+  daily: `https://${host}/sitemap.xml?yyyy={yyyy}&mm={mm}&dd={dd}`,
+  include: TRIBUNE_DATED_PATH,
+});
 
 /* Four covered counties (src/lib/resolve.ts COVERED_COUNTIES) plus statewide.
    A broadcaster's countyFips is its newsroom base, not its signal footprint —
@@ -177,12 +200,13 @@ export const OUTLETS: readonly Outlet[] = Object.freeze([
   o("sfltimes.com", "South Florida Times", "12011", "https://www.sfltimes.com/feed"),
   o("sun-sentinel.com", "South Florida Sun Sentinel", "12011",
     null, // /feed/ (advertised on the homepage) returns HTTP 403 to the sweep UA, a browser UA, and Firecrawl's stealth proxy 2026-09-17 — a WAF, not a path problem.
-    //       BUT /sitemap.xml?yyyy=&mm=&dd= (Google News sitemap: title + publication_date, ~115 URLs/day) is OPEN to the sweep UA. Needs retrieval mode 2 (PRD §5) in the runner.
+    //       Read via its per-day Google News sitemap instead (retrieval mode 2) — see `sitemap` below.
     {
       leanBasis:
         "Mild disagreement: AllSides Center (low confidence, Apr 2026); MBFC Least Biased (High); Ad Fontes Lean Left per Ground News. " +
         "Corpus 2026-09-17 proposes center. Founder decides.",
       robots: { aiDisallow: ["anthropic-ai", "ClaudeBot", "GPTBot", "CCBot", "Google-Extended", "PerplexityBot", "Applebot-Extended", "Bytespider"] },
+      sitemap: tribuneSitemap("www.sun-sentinel.com"),
     }),
   o("outsfl.com", "OutSFL", "12011", null), // every feed path redirects to the HTML homepage 2026-09-17; no feed advertised; Firecrawl site map finds none.
 
@@ -231,12 +255,13 @@ export const OUTLETS: readonly Outlet[] = Object.freeze([
   }),
   o("orlandosentinel.com", "Orlando Sentinel", "12095",
     null, // same Tribune/Alden WAF as the Sun Sentinel: HTTP 403 to every UA 2026-09-17 (Firecrawl declines the site entirely).
-    //       Same open per-day Google News sitemap as the Sun Sentinel (~130 URLs/day). Needs retrieval mode 2 in the runner.
+    //       Read via its per-day Google News sitemap instead (retrieval mode 2) — see `sitemap` below.
     {
       leanBasis:
         "Raters disagree: MBFC Left-Center (-2.8, High); Ad Fontes Skews Left/Reliable; AllSides Center (low confidence, Aug 2026). " +
         "Corpus 2026-09-17 proposes center-left. Founder decides.",
       robots: { aiDisallow: ["anthropic-ai", "ClaudeBot", "GPTBot", "CCBot", "Google-Extended", "PerplexityBot", "Applebot-Extended", "Bytespider"] },
+      sitemap: tribuneSitemap("www.orlandosentinel.com"),
     }),
 
   // --- Statewide ---
@@ -299,7 +324,17 @@ function o(
   if (opts.mixedFeed) row.mixedFeed = true;
   if (opts.syndicated) row.syndicated = true;
   if (opts.robots) row.robots = opts.robots;
+  if (opts.sitemap) row.sitemap = opts.sitemap;
   return row;
+}
+
+/** Fill a sitemap template for one UTC day. Pure; the runner and the
+    guardrail both use it so they cannot disagree on the date format. */
+export function sitemapUrlFor(template: string, day: Date): string {
+  const yyyy = String(day.getUTCFullYear());
+  const mm = String(day.getUTCMonth() + 1).padStart(2, "0");
+  const dd = String(day.getUTCDate()).padStart(2, "0");
+  return template.replaceAll("{yyyy}", yyyy).replaceAll("{mm}", mm).replaceAll("{dd}", dd);
 }
 
 /* Same posture as Allowlist A/B: a shortener is blocked outright and a
@@ -353,10 +388,14 @@ export function outletForUrl(url: string, outlets: readonly Outlet[] = OUTLETS):
   return outlets.find((o) => urlBelongsTo(url, o)) ?? null;
 }
 
-/** Outlets the sweep may actually read: both founder gates filled in and no
-    fail-closed flag set. */
+/** Outlets the sweep may actually read: lean signed off, a retrieval path
+    (RSS feed or news sitemap), and no fail-closed flag. */
 export function usableOutlets(outlets: readonly Outlet[] = OUTLETS): Outlet[] {
   return outlets.filter(
-    (x) => x.leanTag !== null && x.feed !== null && !x.mixedFeed && !x.syndicated,
+    (x) =>
+      x.leanTag !== null &&
+      (x.feed !== null || x.sitemap !== undefined) &&
+      !x.mixedFeed &&
+      !x.syndicated,
   );
 }
