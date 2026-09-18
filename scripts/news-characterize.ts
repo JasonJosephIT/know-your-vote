@@ -47,7 +47,7 @@ import { jevEngine } from "../src/lib/news-characterize-engines.ts";
 /* The taxonomy is injected here and nowhere else: the core takes it as a
    parameter so it never depends on which list wins gate G3. This import is the
    composition root, and it is why this script cannot run until Task 1 lands. */
-import { ISSUES, ISSUE_IDS, TAXONOMY_VERSION } from "../src/lib/news-issues.ts";
+import { ASKABLE, ASKABLE_IDS, TAXONOMY_VERSION, categoriesFor } from "../src/lib/news-issues.ts";
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
@@ -75,7 +75,7 @@ if (!Number.isInteger(limit) || limit < 1) {
   console.error("--limit must be a positive integer");
   process.exit(2);
 }
-if (ISSUES.length === 0) {
+if (ASKABLE.length === 0) {
   console.error("the taxonomy is empty — refusing to run, every row would be tagged {}");
   process.exit(2);
 }
@@ -102,7 +102,7 @@ try {
   console.error((e as Error).message);
   process.exit(2);
 }
-const questions = buildQuestions(ISSUES);
+const questions = buildQuestions(ASKABLE);
 const by = provenance(engine.modelId, questions, TAXONOMY_VERSION);
 
 const db = createClient(url, key);
@@ -150,7 +150,7 @@ for (const row of rows) {
     continue;
   }
 
-  const issues = applyThreshold(answers, threshold, ISSUE_IDS);
+  const issues = applyThreshold(answers, threshold, ASKABLE_IDS);
   if (issues.length > 0) tagged++;
   else empty++;
 
@@ -164,6 +164,11 @@ for (const row of rows) {
         summary: row.summary,
         url: row.url,
         issues,
+        /* Rolled up for a human labelling the gold set: reading eleven
+           category names is quicker than decoding A1/B7, and Task 6 needs
+           labels at both levels to tell whether the parent questions earn
+           their place. */
+        categories: categoriesFor(issues),
         sitemapOnly: state.dek === null,
       }),
     );

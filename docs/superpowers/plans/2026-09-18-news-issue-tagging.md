@@ -45,21 +45,35 @@
 
 ### Task 1: The frozen taxonomy
 
-> ## ⛔ BLOCKED — do not start
+> ## ✅ DONE 2026-09-18 — built two-level, per founder direction
 >
-> **Gate G3 is open.** Three issue lists exist, not two, and the founder is
-> reviewing which one news tags come from:
-> `docs/general-election/news-issue-taxonomy-options-2026-09-18.md`.
+> G3 resolved by the founder's own proposal: **the quiz's 8 became CATEGORIES,
+> CAP's 15 became SUB_ISSUES underneath them.** That dissolves the either/or in
+> `docs/general-election/news-issue-taxonomy-options-2026-09-18.md` — it keeps
+> CAP's granularity (which cannot be recovered once collapsed) *and* the quiz's
+> vocabulary (which the voter already uses), and it gives the four orphaned
+> issues a home.
 >
-> The `ISSUES` array in Step 3 below is written from the **quiz's 8** (Option 2).
-> If the founder picks Option 1 (CAP's 15 with a roll-up map), replace that array
-> with the CAP ids and labels **verbatim from `CAP_Issue_List_FL_2026_v1.md`**,
-> add a `rollsUpTo` field carrying the quiz id, and update the guardrail's drift
-> check to assert the roll-up covers every quiz id instead of asserting equality.
-> Do not draft issue labels: copy them.
+> Three categories are deliberately **not** in the quiz — Elections & Voting,
+> Retirement & Benefits, Abortion Policy — so those articles are taggable
+> without redesigning a live voter-facing quiz, and without filing abortion
+> under "Healthcare", which is a contested framing this project does not make
+> quietly. The quiz is untouched: still 8 questions.
 >
-> **Tasks 2–6 are unaffected and taxonomy-agnostic** — they iterate whatever
-> `ISSUES` contains. Task 2 can start now.
+> Labels are copied, not drafted: the 8 verbatim from `quiz-questions.ts`, the
+> 15 verbatim from `CAP_Issue_List_FL_2026_v1.md`. Only the 3 new category
+> labels and the `aliases` arrays were written, and those are what a human
+> should read in review.
+>
+> **Both levels are asked of the model**, in one request (26 Nouls). Narrow
+> questions can each miss what a broad one catches; whether the parents earn
+> their ~$0.02/sweep is a question for the gold-set evaluation, not an
+> assumption — if nothing is ever caught by a parent alone, drop them.
+>
+> Store sub-issue ids AND any category that fires; `categoriesFor()` derives the
+> display set. Mutation-checked: rename a quiz-linked id, orphan a sub-issue,
+> slip a banned term into a label, collide ids across levels, or drift a label
+> from the quiz — each fails.
 
 **Files:**
 - Create: `src/lib/news-issues.ts`
@@ -72,7 +86,7 @@
 
 > **Founder review gate:** the `aliases` arrays below are editorial content drafted by an agent. They are the part of this file a human must actually read in the PR. The `id` and `label` values are not drafted — they are copied verbatim from the live quiz.
 
-- [ ] **Step 1: Write the failing guardrail**
+- [x] **Step 1: Write the failing guardrail**
 
 Create `scripts/verify-news-issues.ts`:
 
@@ -147,7 +161,7 @@ if (failures > 0) {
 console.log("verify-news-issues: OK — one vocabulary, neutral wording, no drift from the quiz");
 ```
 
-- [ ] **Step 2: Run it to verify it fails**
+- [x] **Step 2: Run it to verify it fails**
 
 ```bash
 node scripts/verify-news-issues.ts
@@ -155,7 +169,7 @@ node scripts/verify-news-issues.ts
 
 Expected: FAIL — `Cannot find module '../src/lib/news-issues.ts'`.
 
-- [ ] **Step 3: Write the taxonomy**
+- [x] **Step 3: Write the taxonomy**
 
 Create `src/lib/news-issues.ts`:
 
@@ -216,7 +230,7 @@ export const ISSUES: readonly NewsIssue[] = [
 export const ISSUE_IDS: readonly string[] = ISSUES.map((i) => i.id);
 ```
 
-- [ ] **Step 4: Run it to verify it passes**
+- [x] **Step 4: Run it to verify it passes**
 
 ```bash
 node scripts/verify-news-issues.ts
@@ -224,13 +238,13 @@ node scripts/verify-news-issues.ts
 
 Expected: `verify-news-issues: OK — one vocabulary, neutral wording, no drift from the quiz`
 
-- [ ] **Step 5: Prove the drift check actually bites**
+- [x] **Step 5: Prove the drift check actually bites**
 
 Temporarily change `{ id: "housing", label: "Housing",` to `{ id: "homes", label: "Housing",` and re-run.
 
 Expected: FAIL on `every quiz issue has a taxonomy entry — housing` and `every taxonomy entry has a quiz issue — homes`. **Revert the edit.**
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/lib/news-issues.ts scripts/verify-news-issues.ts
