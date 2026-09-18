@@ -507,6 +507,12 @@ the column that lets it reach 67 without a second migration.
   **Finding for §5's cadence table:** 19 of 31 feeds reach back under three
   days (Florida Politics: five hours). Feed depth, not the 14-day window,
   bounds recall; sweep daily now, and add WordPress `?paged=N` to the runner.
+  **Follow-up recorded 2026-09-18 (founder idea, not designed):** send each
+  swept article's text to a model that characterises which candidate it
+  names or which issue it relates to. This would change §6's deterministic
+  `named`/`related` matching into a model judgement and would require
+  fetching article text, which §5 today forbids storing. It needs its own
+  design against CN-R3/CN-R4 and news-fairness.md before any code.
 
 - [ ] **C8** *(v1.2)* — Association: `named` + `related` (§6, CN-R9/CN-R10).
   Migration `0016` adds `news_item.relation`; the matcher assigns it; the
