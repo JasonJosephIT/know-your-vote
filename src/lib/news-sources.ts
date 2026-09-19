@@ -22,10 +22,13 @@
                 rating. The remaining 31 rows carry `UNRATED` below and are NOT
                 a backlog — see that report on why AllSides / Ad Fontes / MBFC
                 do not rate a community weekly or a local broadcaster. The
-                `unrated` lean value those rows need now EXISTS (migration 0027,
+                `unrated` lean value those rows need EXISTS (migration 0027,
                 src/lib/news-labels.ts rule 3) and renders as "No independent
-                rating"; assigning it to a row is still this gate, and nothing
-                here assigns it yet.
+                rating". The founder designated those 31 rows `'unrated'` on
+                2026-09-19 — see `UNRATED_DESIGNATED` below for the list, the
+                evidence and why it is a list rather than a default. Six rows
+                remain null: the four legacy dailies and AP, which have cited
+                ratings and need a lean chosen, and Florida Phoenix.
      feed     — a feed URL that 404s fails silently and looks exactly like
                 "no news this week". Every non-null value below was fetched on
                 2026-09-17 with the sweep's own user agent, parsed with
@@ -121,6 +124,53 @@ export interface Outlet {
 export const UNRATED =
   "No independent bias rating cited in the 2026-09-17 corpus (which searched AllSides / Ad Fontes / MBFC). " +
   "Settle from a published nonpartisan rating cited in the PR that fills this in, or the founder signs off an explicit 'no rating' designation.";
+
+/* FOUNDER DESIGNATION, gate C7-a, 2026-09-19. These 31 outlets carry
+   `leanTag: 'unrated'` — "a lean applies to this outlet and no rating agency
+   has published one" — and their cards say "No independent rating"
+   (src/lib/news-labels.ts rule 3, migration 0027).
+
+   WHY A LIST AND NOT A DEFAULT. `o()` could have derived this from
+   `leanBasis === UNRATED`, and that would have been shorter. It would also mean
+   a row added later with no cited rating is designated by whoever adds it,
+   which is exactly the editorial act the `leanTag` gate exists to keep away
+   from a coding agent. With an explicit list, a new row is `null` until a human
+   puts its domain here — fail-closed, and the designation stays diffable and
+   blameable like every other editorial decision in this file.
+
+   THE EVIDENCE THIS RESTS ON, so a reviewer does not have to take it on trust:
+   docs/general-election/lean-ratings-fetched-2026-09-19.md. AllSides, Ad Fontes
+   and MBFC rate national and large-metro outlets. All 36 rating pages sought
+   for the 12 outlets that have them were found, and there is no equivalent page
+   to find for a community weekly or a local broadcaster. This is not a backlog
+   that waiting clears.
+
+   NOT ON THIS LIST, and why:
+     - the four legacy dailies and AP — they have fetched, cited ratings, and
+       their `leanTag` is the founder's remaining call;
+     - floridaphoenix.com — its basis is a States Newsroom network note rather
+       than the shared UNRATED text, so it is not one of the 31. In substance it
+       has no outlet-specific rating either; it is `mixedFeed`-flagged and so
+       unusable regardless, and designating it is a separate call.
+
+   scripts/verify-news-sweep.ts pins the count and asserts every domain here
+   exists, carries the UNRATED basis, and never a cited one. */
+const UNRATED_DESIGNATED: ReadonlySet<string> = new Set([
+  // Miami-Dade
+  "wlrn.org", "local10.com", "wsvn.com", "nbcmiami.com", "miaminewtimes.com",
+  "cbsnews.com/miami", "diariolasamericas.com", "americateve.com",
+  "lefloridien.com", "miamitimesonline.com", "elnuevoherald.com",
+  // Broward
+  "floridabulldog.org", "thewestsidegazette.com", "sfltimes.com", "outsfl.com",
+  // Hillsborough
+  "wusf.org", "wfla.com", "wtsp.com", "cltampa.com",
+  // Orange
+  "cfpublic.org", "wftv.com", "wesh.com", "orlandoweekly.com",
+  "clickorlando.com", "fox35orlando.com",
+  // Statewide
+  "newsserviceflorida.com", "wfsu.org", "floridapolitics.com",
+  "floridadaily.com", "flvoicenews.com", "floridianpress.com",
+]);
 
 interface RowOptions {
   leanBasis?: string;
@@ -368,7 +418,11 @@ function o(
     publisher,
     type: "factual_reporting",
     countyFips,
-    leanTag: null,
+    /* Null unless the founder designated this domain above. Null means "no
+       human has decided" and `usableOutlets()` skips it; 'unrated' is a human
+       recording that no rating agency covers the outlet. An agent adding a row
+       gets null. */
+    leanTag: UNRATED_DESIGNATED.has(domain) ? "unrated" : null,
     leanBasis: opts.leanBasis ?? UNRATED,
     feed,
   };

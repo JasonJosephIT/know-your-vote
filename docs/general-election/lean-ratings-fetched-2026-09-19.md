@@ -1,10 +1,14 @@
 # Lean ratings — fetched 2026-09-19
 
-_Retrieval and transcription only. Every value below was read off the rating
-agency's own published page during this session, on the date in the access
-column. Nothing here is this session's estimate of any outlet's lean, and no
-`leanTag` was set. Closes the research half of founder gate **C7-a**; it does
-not close the gate (§7)._
+_The ratings half of this document is retrieval and transcription only: every
+value was read off the rating agency's own published page during this session,
+on the date in the access column, and nothing here is this session's estimate of
+any outlet's lean. It grew two further change sets on the same day, both founder
+decisions: the `unrated` lean value (migration `0027`), and the designation of
+31 rows as `unrated`, which **unblocked the sweep to 27 outlets**. Gate
+**C7-a** is now partly open — six rows still need a lean chosen. Read §7 for
+where things actually stand, including two policy questions the unblock makes
+live._
 
 Companion to `news-corpus-2026-09-17.md`, whose Recommendation 5 asked for
 exactly this fetch, and to `news-corpus-verification-2026-09-17.md`.
@@ -259,68 +263,130 @@ requiring credit.
 
 ---
 
-## 7. The sweep is still blocked. This did not unblock it.
+## 7. The sweep is unblocked — 27 outlets, as of 2026-09-19
 
-Stated plainly, because a reader of §2 could reasonably think otherwise.
+**This section said "the sweep is still blocked" for most of its life.** That is
+no longer true, and the history matters for reading the rest of this document:
+the fetch alone did not unblock it, the `unrated` value alone did not either,
+and the founder designation did.
 
-`usableOutlets()` requires a non-null `leanTag`. **No `leanTag` was changed by
-this session — all 37 rows are still `null`** — so the sweep still selects
-**0 outlets**. `node scripts/verify-news-sweep.ts` reports exactly that:
-`37 outlets listed, 0 usable`.
+### Where it stands
 
-Even after the founder signs off the four Group A rows, the arithmetic does not
-improve much:
+`node scripts/verify-news-sweep.ts` reports **`37 outlets listed, 27 usable`**.
 
 | | |
 |---|---|
-| Rows with a fetched, cited basis | **5** (4 Group A + AP) |
-| Rows the founder could sign off on this evidence | **4** (AP has no retrieval path — no RSS, hub pages 403) |
-| Rows still carrying `UNRATED` | **31** of 37 |
+| Rows designated `leanTag: 'unrated'` | **31** |
+| Of those, usable | **27** |
+| Rows still `null` | **6** — the 5 with cited ratings, plus Florida Phoenix |
 | National rows added to `OUTLETS` | **0** — tier decision still open |
 
-A sweep of four large metro dailies is the opposite of what a local-news corpus
-is for. Worse, two of the four (Sun Sentinel, Orlando Sentinel) reach the
-runner only through the Tribune sitemap path, and their county feeds would be
-the only ones populated.
+The four designated rows that are **not** usable are held out by the
+fail-closed flags and the retrieval-path requirement, exactly as intended —
+signing off a lean was never supposed to lift either:
 
-**The actual unblock is a schema value for "no rater covers this outlet."**
-`lean_tag` was CHECK-constrained to `left | center-left | center | center-right |
-right | N/A`, and `N/A` means "lean does not apply" — a government primary
-document — not "nobody has rated this". Conflating them puts a small untruth on
-a voter-facing card, against `news-fairness.md` §1, where the lean exists so
-"the reader judges the outlet themselves".
+| Row | Held out by |
+|---|---|
+| `miamitimesonline.com` | `syndicated` — the feed is mostly republished copy |
+| `floridapolitics.com` | `mixedFeed` — commentary alongside reporting |
+| `elnuevoherald.com` | no feed and no sitemap |
+| `outsfl.com` | no feed and no sitemap |
 
-**That value now exists** (founder, 2026-09-19). Migration `0027` adds
-`unrated`, `newsLabels()` renders it as **"No independent rating"**, and
-`usableOutlets()` accepts it as signed off. What it does NOT do is designate a
-single row: every `leanTag` is still `null`, so the sweep still selects 0
-outlets. Assigning `unrated` to a row remains this gate — but it is now the
-one-word edit per row the module header always claimed it was, because the word
-exists to write.
+The six rows still `null` are the ones where a lean must actually be *chosen*
+rather than recorded as absent: Miami Herald, Sun Sentinel, Tampa Bay Times,
+Orlando Sentinel and AP have fetched, cited ratings (§2, §3), and Florida
+Phoenix carries a States Newsroom network note rather than the shared `UNRATED`
+text. **Gate C7-a is therefore partly open, not closed.**
 
-This fetch also supplies the evidence that the 31 are **not a backlog**.
-AllSides, Ad Fontes and MBFC rate national and large-metro outlets; all 36
-pages sought for the 12 outlets in scope exist, and this is exactly the set of
-nationals and metro dailies. There is no equivalent page to find for WSVN,
-WFTV, Le Floridien, The Westside Gazette or América TeVé, and waiting will not
-produce one. That is the evidence the founder took the `unrated` decision on.
+### Why a list rather than a default
 
-One consequence of designating those rows, recorded before anyone is surprised
-by it: `news-slots.ts` rule 2 rotates slots across distinct leans, and
-`unrated` is one bucket like any other — correct behaviour, verified by
+`o()` could have derived the designation from `leanBasis === UNRATED` in one
+line. It does not, deliberately. That would mean a row added later with no cited
+rating is designated by whoever adds it — the editorial act the `leanTag` gate
+exists to keep away from a coding agent. `UNRATED_DESIGNATED` in
+`src/lib/news-sources.ts` is an explicit list of 31 domains: a new row is `null`
+until a human adds its domain, and the designation stays diffable and blameable
+like every other editorial decision in that file. `verify-news-sweep.ts` pins
+the count at 31, asserts every designated row carries the `UNRATED` basis and
+never a cited one, and asserts that **no row carries an asserted lean** — every
+value in the file is `null` or `'unrated'`.
+
+### What the designation rests on
+
+That the 31 are **not a backlog**. AllSides, Ad Fontes and MBFC rate national
+and large-metro outlets. All 36 pages sought for the 12 outlets in scope exist,
+and that is exactly the set of nationals and metro dailies. There is no
+equivalent page to find for WSVN, WFTV, Le Floridien, The Westside Gazette or
+América TeVé, and waiting will not produce one. `N/A` could not carry this: it
+means "a lean does not apply", and a lean applies perfectly well to a local
+television newsroom.
+
+### Two consequences, recorded before anyone is surprised by them
+
+**1. The AI-crawler policy question is now live, not theoretical.**
+`news-corpus-verification-2026-09-17.md` §3 item 4 left it open: the sweep's own
+UA (`KnowYourVote/1.0`) falls under `User-agent: *`, which permits every feed
+path used, and the sweep reads headline and dek from syndication feeds and links
+back rather than fetching article bodies. Whether a Claude-run pipeline doing
+that is within a publisher's intent was called "a policy question for the
+founder, not a robots.txt question". Until today no outlet was sweepable, so the
+question could wait. **Three of the 27 now-sweepable outlets name a
+Claude/Anthropic agent in robots.txt as disallowed:**
+
+| Outlet | Agents named |
+|---|---|
+| `miaminewtimes.com` | `anthropic-ai`, `ClaudeBot`, `Claude-Web`, `Claude-User` |
+| `wfla.com` | `anthropic-ai`, `ClaudeBot` |
+| `wesh.com` | `anthropic-ai`, `ClaudeBot`, `Claude-Web` |
+
+**WESH is the sharpest case:** its `robots` note records that Hearst's terms in
+the robots.txt header "prohibit crawlers and aggregation outright" — broader
+than the agent rules below it. `flvoicenews.com` is sweepable with its policy
+**unknown**, because its robots.txt itself returns 403. This session did not
+resolve any of that and did not run a live sweep; the founder decides before one
+runs.
+
+**2. Crawl delays are still satisfied only by accident.** Three now-sweepable
+outlets declare one — `floridabulldog.org` 10 s, `wesh.com` 10 s,
+`floridianpress.com` **600 s** — and the runner does not honour them. It makes
+one request per host per run, which satisfies them incidentally. That property
+is now load-bearing across 27 hosts rather than 0, and it breaks the moment feed
+paging is added (`news-corpus-verification-2026-09-17.md` §3 items 1 and 4).
+
+**3. Lean spread has little left to rotate between.** `news-slots.ts` rule 2
+takes the newest item per distinct lean before a second from any one lean, and
+`unrated` is one bucket like any other — correct, verified by
 `verify-news-slots.ts` fixture U, and it does not over-represent unrated
-outlets. But with 31 of 37 outlets in that bucket, the spectrum rotation has
-little left to rotate between. That is a fact about Florida local-news rating
-coverage, not a defect in the selector, and `news-fairness.md` §5's
-per-candidate variance work is where it lands.
+outlets. But with 31 of 37 outlets in that bucket, the intended spectrum
+rotation has almost nothing to rotate across. That is a fact about Florida
+local-news rating coverage rather than a defect in the selector, and it will not
+improve until the national tier exists — which is blocked on the Gate A question
+in §3. `news-fairness.md` §5's per-candidate variance work is where it lands.
 
 ---
 
 ## 8. What this session changed
 
+**Third change set — the designation (founder, gate C7-a, 2026-09-19).**
+
+- `src/lib/news-sources.ts` — `UNRATED_DESIGNATED`, an explicit set of the 31
+  domains, read by `o()`. A domain not in it gets `leanTag: null`, so a row added
+  later is fail-closed until a human designates it. `usableOutlets()` goes from
+  **0 to 27**; the other four designated rows stay out on `syndicated`,
+  `mixedFeed`, or having no retrieval path.
+- `scripts/verify-news-sweep.ts` — the two `usableOutlets().length === 0` checks
+  replaced. One carried its own instruction for this moment ("if that is
+  intended, this check should change with them"). Six assertions now pin the
+  shape the gate closed into: the count is 31, the six undesignated rows are
+  named, **no row carries an asserted lean** (every value is `null` or
+  `'unrated'`), every designated row carries the `UNRATED` basis and never a
+  cited one, `usableOutlets()` is 27, and the four held-out rows are exactly the
+  flagged and path-less ones — including a repeat of the flagged-row check using
+  `'unrated'` rather than `'center'`.
+
 **Second change set — the `unrated` lean value (founder, 2026-09-19).** Scope
-was the value and its plumbing only, by explicit decision; no row was
-designated.
+was the value and its plumbing only, by explicit decision; no row was designated
+in that set.
 
 - `supabase/migrations/0027_source_lean_unrated.sql` — adds `unrated` to
   `source.lean_tag`'s CHECK. Widening only: no existing row is rewritten and
@@ -352,7 +418,7 @@ designated.
 
 | Script | Result |
 |---|---|
-| `verify-news-sweep.ts` | **OK** — "reproducible, boundary holds, labels come from the list (37 outlets listed, 0 usable)". Its two non-default-`leanBasis` assertions still hold: each cites a rater, and each defers to the founder. |
+| `verify-news-sweep.ts` | **OK** — "reproducible, boundary holds, labels come from the list (**37 outlets listed, 27 usable**)". Its two non-default-`leanBasis` assertions still hold (each cites a rater, each defers to the founder), and the six new designation assertions pass. |
 | `verify-news-labels.ts` | **OK** — lean disclosure + unattributed-item rules hold |
 | `verify-news-match.ts` | **OK** |
 | `verify-news-slots.ts` | **OK** |
@@ -391,11 +457,9 @@ in `scripts/`. The news guardrails present are the ones listed above plus
    national tier.
 2. **National-tier `countyFips`** — unchanged from
    `news-corpus-verification-2026-09-17.md` §3 item 7. Schema decision.
-3. ~~**`unrated` lean value** — the real unblock.~~ **Done 2026-09-19**
-   (migration `0027`, `LeanTag`, `newsLabels()`, `usableOutlets()`). What
-   remains is the founder act it enables: **designating the 31 rows
-   `leanTag: 'unrated'`**, which turns the sweep on and changes what 31
-   voter-facing cards say. Deliberately not done here.
+3. ~~**`unrated` lean value**, then ~~**designating the 31 rows**~~.~~ **Both
+   done 2026-09-19** (migration `0027`; `UNRATED_DESIGNATED`). The sweep is
+   unblocked to 27 outlets. What this opens in turn is items 9 and 10 below.
 4. **Where the AllSides CC BY-NC line sits in the UI** (§6) — spec §12 item 4,
    now a launch blocker for news cards.
 5. **BY-NC non-commercial term** against the product's plans (§6).
@@ -404,6 +468,16 @@ in `scripts/`. The news guardrails present are the ones listed above plus
 7. **Florida Phoenix** was out of this brief's scope and was not fetched. Its
    `leanBasis` still records a States Newsroom network note with no
    outlet-specific rating, and it is `mixedFeed`-flagged besides.
+9. **The AI-crawler policy question, now live** (§7). Three of the 27
+   sweepable outlets name a Claude/Anthropic agent in robots.txt, and WESH
+   carries Hearst terms prohibiting crawlers and aggregation outright.
+   `flvoicenews.com` is sweepable with its policy unknown (robots.txt 403s).
+   **Decide before running a live sweep.** No live sweep was run here.
+10. **Crawl delays are honoured only by accident** (§7) — one request per host
+   per run, across 27 hosts now instead of 0, and it breaks when feed paging is
+   added. `floridianpress.com` declares 600 s.
+11. **Six rows still need a lean chosen** — the 5 with cited ratings and
+   Florida Phoenix. That is the rest of gate C7-a.
 8. **Re-check near launch.** Ad Fontes publishes no dates at all; MBFC's Sun
    Sentinel entry was last updated 2023-07-31, and its POLITICO and NYT entries
    in 2024. AllSides states all four Group A confidences as low or initial.
