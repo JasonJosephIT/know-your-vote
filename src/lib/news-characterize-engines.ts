@@ -18,7 +18,7 @@
    kind this project prefers over a well-worded instruction. */
 
 import { TypeSafeClient } from "@typesafe-ai/sdk";
-import type { ArticleState, NoulQuestion } from "./news-characterize.ts";
+import type { EngineState, NoulQuestion } from "./news-characterize.ts";
 
 /** Pinned, not `jev-latest`. A run's provenance records the model, so the
     model must not change underneath two runs we intend to compare. Bump this
@@ -39,7 +39,7 @@ export interface CharacterizeEngine {
   /** Returns the raw answers. Thresholding and validation are NOT done here —
       they belong to news-characterize.ts, which is testable offline. */
   characterize(
-    state: ArticleState,
+    state: EngineState,
     questions: Record<string, NoulQuestion>,
   ): Promise<CharacterizeResult>;
 }

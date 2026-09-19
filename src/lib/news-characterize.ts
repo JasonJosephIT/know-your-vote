@@ -66,6 +66,18 @@ export type ArticleState = {
   slug: string | null;
 };
 
+/** A JSON object an engine can carry as state. Structural, so a caller with a
+    different input shape (a passage from a candidate's site, say) uses the
+    same adapter without the adapter learning about it — and so the rule that
+    matters stays where it is: what goes in the state is decided by the module
+    that builds it, and that module is verified offline.
+
+    A type alias, not an interface, for the same reason ArticleState is one:
+    only an alias gets the implicit index signature the SDK's EntryType wants. */
+export type EngineState = {
+  [key: string]: string | number | boolean | null | EngineState | EngineState[] | string[];
+};
+
 /** A TypeSafe NoulQuestion, structurally. Declared here rather than imported so
     the core stays free of the vendor SDK; the adapter passes these straight
     through and is where the shape meets the SDK's own types. */
