@@ -50,23 +50,75 @@ enforced** — and the app uses neither.
 pipeline's existing "no Source → no Claim" constitution, and it is the whole
 mechanism. An article the system cannot attribute is not shown.
 
-Every card displays three things from its `source` row, always, never on hover
-and never collapsed:
+### Amended by the founder, 2026-09-19 — lean moved off the card
 
-| Shown | From | Why |
+**This clause used to require lean on every card.** It read: "Every card
+displays three things from its `source` row, always, never on hover and never
+collapsed", and listed publisher, Reporting/Opinion, and lean. That is no longer
+the rule. The original text is kept here because the reasoning for changing it
+only makes sense against it.
+
+**Why it changed.** The clause was written expecting a corpus where most outlets
+carry a rating. The corpus is the opposite: **31 of the 37 outlets in
+`src/lib/news-sources.ts` are `unrated`**, because AllSides, Ad Fontes and MBFC
+rate national and large-metro outlets and do not rate local newsrooms
+(`lean-ratings-fetched-2026-09-19.md` — 36 rating pages sought for the 12
+outlets that have them, 36 found, and no equivalent page exists for a community
+weekly). A lean chip on every card therefore meant most cards reading "No
+independent rating" and a handful reading "Center", which **foregrounds the
+rated minority and makes an absence look like a finding.** That is bias by
+display — the exact harm this section exists to prevent, arriving through the
+mechanism meant to prevent it.
+
+**The rule now.** Disclosure is split across two surfaces:
+
+| Surface | Shows | Why |
 |---|---|---|
-| Publisher | `source.publisher` | the reader judges the outlet themselves |
-| **Reporting** or **Opinion** | `source.type` | an opinion column and a news report are not the same object |
-| Lean | `source.lean_tag` | disclosed, not corrected — `N/A` is a legitimate value |
+| **Card** | a cropped 2:1 image, the publisher, the headline | the reader judges the outlet themselves, and the card is scannable |
+| **Card, when not ordinary reporting** | **Opinion** / **Official document** / **From the candidate** | an opinion column and a news report are not the same object |
+| **Outlet page** (`/news/outlet/[slug]`) | the lean in full, its recorded basis, and that outlet's stories | a page about one outlet has room to say what the rating is, who published it, when — and that nobody has rated it |
 
-**Opinion cards are visually distinct from reporting cards** — a different
+**Ordinary reporting is deliberately unmarked.** It is the default case, and a
+"Reporting" chip on every card is noise in front of the two things the card
+exists to show. Everything that is *not* ordinary reporting still says so.
+
+**Opinion cards remain visually distinct from reporting cards** — a different
 container treatment, not merely a word in the byline. The failure this prevents
 is a voter reading a columnist's argument as established fact because both
-arrived in the same grey rectangle.
+arrived in the same grey rectangle. This did **not** change, and the reason it
+did not is the mirror of why lean did: `source.type` is populated on every row,
+so marking it creates no sparse-label problem. The lean failure was an absence
+masquerading as information; the opinion failure is information withheld.
+
+**Lean is still never optional and never hidden** — it is one tap away, stated
+in full, and stated when it does not exist. Four states, never collapsed into
+two (`src/lib/news-outlets.ts`):
+
+| State | Means |
+|---|---|
+| rated | a rating agency published a lean; shown as they published it |
+| `unrated` | no rating agency covers this outlet — not a judgement about it |
+| `N/A` | a lean does not apply (a primary document has none) |
+| pending | `leanTag` is still null; **our** review has not happened, which is a gap on our side and not a fact about the outlet |
 
 **Lean is disclosed, never scored.** The app labels what a source is; it never
 rates an article as biased, and it never "corrects" a lean. Neutrality here is
 transparency about provenance, not a verdict on content.
+
+**Enforced by type, not by memory.** `newsCardLabels()` returns a shape with no
+`lean` field, so a card component cannot print a lean even by accident, and the
+feed API no longer sends one. `scripts/verify-news-labels.ts` pins both halves —
+that no card leaks a lean word, and that the outlet surface still discloses one.
+`scripts/verify-news-outlets.ts` pins the four states and the outlet-page slugs.
+
+**Images.** The card's hero image comes from the outlet's own feed
+(`media:content` / `media:thumbnail` / an image `enclosure`; migration `0029`)
+and never from the article page, which the sweep still does not fetch — so the
+image cost zero extra requests to any publisher. A URL is stored, not an image:
+the reader's browser loads it from the publisher, nothing is re-hosted. Many
+feeds carry none, and both Tribune dailies reach us by sitemap, which carries
+none at all, so **a missing image is a normal state with its own text-only card
+variant** and never drops a story.
 
 ---
 

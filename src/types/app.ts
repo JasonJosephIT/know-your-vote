@@ -49,6 +49,10 @@ export interface NewsItem {
   /* How this row was matched to its candidate (migration 0017, PRD §6).
      NULL on rows that are not a candidate match at all. */
   relation: NewsRelation | null;
+  /* Hero image for the story card, from the outlet's own feed (migration 0029).
+     NULL is a real and common state, not a backlog — many feeds carry no image
+     and the card has a text-only variant. */
+  image_url: string | null;
 }
 
 /* Contact & logistics layer written by the R2 refresher (migration 0005) —

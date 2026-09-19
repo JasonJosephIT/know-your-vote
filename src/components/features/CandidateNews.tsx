@@ -1,8 +1,8 @@
-import { Card } from "@/components/ui/Card";
+import { NewsStoryCard } from "@/components/features/NewsStoryCard";
 import { getCandidateNews, type CandidateNewsItem } from "@/lib/briefs";
-import { formatNewsDate, safeHttpUrl } from "@/lib/format";
-import { newsLabels } from "@/lib/news-labels";
+import { formatNewsDate } from "@/lib/format";
 import { selectNewsSlots } from "@/lib/news-slots";
+import { outletForUrl } from "@/lib/news-sources";
 
 /* Candidate-scoped news written by the R1 curator: neutral restatements of
    on-the-record events, every item cited to an allowlisted source. Renders
@@ -17,52 +17,22 @@ import { selectNewsSlots } from "@/lib/news-slots";
    race" as "about this candidate", which is the one misreading the tier
    exists to prevent. So the divider is a heading, not a styling cue. */
 function NewsCard({ item }: { item: CandidateNewsItem }) {
-  const url = safeHttpUrl(item.url);
-  /* Source labelling (news-fairness.md §1), the same treatment NewsFeed.tsx
-     gives a feed card: publisher, Reporting/Opinion, and the lean — all plain
-     muted text. `newsLabels` returns nothing at all for a sourceless item, so
-     an unattributed card can never look attributed. */
-  const { kind, lean, isOpinion } = newsLabels(item.source);
-  const publisher = item.source?.publisher ?? null;
+  /* One card component for the whole product — the image / outlet / headline
+     shape, the opinion treatment and the no-lean rule all live in
+     NewsStoryCard (news-fairness.md §1, amended 2026-09-19). This used to be a
+     near-copy of NewsFeed.tsx's card body, and the two had already drifted. */
+  const outlet = item.url ? outletForUrl(item.url) : null;
   return (
     <li>
-      {/* Opinion cards get a visually distinct container, not just a word in
-          the byline (news-fairness.md §1) — a muted ground and a rule, never a
-          colour, which would imply a verdict about the piece. */}
-      <Card
-        className={`flex flex-col gap-1${
-          isOpinion ? " border-l-2 border-l-border-strong bg-surface-muted" : ""
-        }`}
-      >
-        <p className="flex flex-wrap items-center gap-x-2 font-mono text-mono text-on-surface-muted">
-          <span>{formatNewsDate(item.published_at)}</span>
-          {publisher && <span>· {publisher}</span>}
-          {kind && (
-            <span className={isOpinion ? "text-on-surface" : undefined}>
-              · {kind}
-            </span>
-          )}
-          {/* Lean is disclosed, never judged — same muted style as everything
-              else, never colour-coded (README neutrality rule). */}
-          {lean && <span>· {lean}</span>}
-        </p>
-        <h4 className="text-h3">{item.title}</h4>
-        {item.summary && (
-          <p className="text-body-sm text-on-surface-muted">{item.summary}</p>
-        )}
-        {url && (
-          <p className="text-caption">
-            <a
-              href={url}
-              target="_blank"
-              rel="noreferrer"
-              className="text-primary underline underline-offset-2"
-            >
-              Read the source
-            </a>
-          </p>
-        )}
-      </Card>
+      <NewsStoryCard
+        title={item.title}
+        url={item.url}
+        imageUrl={item.image_url}
+        source={item.source}
+        outletDomain={outlet?.domain ?? null}
+        summary={item.summary}
+        dateLabel={formatNewsDate(item.published_at)}
+      />
     </li>
   );
 }
@@ -101,7 +71,7 @@ export async function CandidateNews({
       </header>
 
       {named.length > 0 ? (
-        <ul className="flex flex-col gap-3">
+        <ul className="flex flex-col gap-4">
           {named.map((item) => (
             <NewsCard key={item.id} item={item} />
           ))}
@@ -132,7 +102,7 @@ export async function CandidateNews({
               the race.
             </p>
           </header>
-          <ul className="flex flex-col gap-3">
+          <ul className="flex flex-col gap-4">
             {related.map((item) => (
               <NewsCard key={item.id} item={item} />
             ))}
