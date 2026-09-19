@@ -117,11 +117,68 @@ positions:
 - passages that state no policy,
 - passages whose request failed (counted, named, and they set the exit code).
 
+## Comparing two runs
+
+Every run writes one JSON file (`--json`), and two of them are compared with:
+
+```bash
+node scripts/compare-policy-runs.ts a.json b.json [--tolerance 0.05] [--all] [--json diff.json]
+```
+
+The format is `src/lib/policy-run.ts`. It exists because `diff` answers
+neither question anyone actually has of two runs:
+
+**1. Are these comparable?** Only when the schema, the provenance
+(`jev:MODEL/tax-VERSION/q-HASH`) and the threshold all match. The provenance
+hash covers the question wording, so a reworded Noul makes two runs
+incomparable even at the same model and taxonomy. The report says this first
+and refuses to imply otherwise: a change in our wording reported as "the model
+is stable" is the one output this tool must never produce.
+
+**2. What moved, the site or the model?** A campaign editing its housing
+paragraph and Jev changing its mind about the same paragraph produce the same
+shaped diff and are opposite findings, so **corpus** changes and **verdict**
+changes are reported separately and never merged.
+
+A passage id is a hash of url plus text, so edited text arrives as a removal
+plus an addition. The comparer re-pairs those on url and heading and reports
+them as `EDITED`, one pairing per slot — a page that gained a second block
+under the same heading is not reported as an edit of the first.
+
+Three states a passage can be in, kept distinct because two of them look
+identical in a careless format:
+
+| `verdict` | means |
+|---|---|
+| `null` in a `not_run` file | nobody asked (a manifest) |
+| `null` in a `partial` file | the request failed; `counts.failed` says how many |
+| `{ states_policy: false }` | asked, and it states no policy |
+
+### The manifest
+
+`--dry-run --json` writes a run file with `status: "not_run"`: the corpus and
+the questions, every verdict null. It is worth writing before any key exists,
+because "did the other run see the same passages and ask the same questions?"
+is answerable from it alone, and that is the first thing to check when two
+runs disagree.
+
+One is committed at
+[`policy-runs/2026-09-19-davidjolly-manifest.json`](policy-runs/2026-09-19-davidjolly-manifest.json):
+120 passages from four pages, 17 questions, provenance
+`jev:jev-1.13.0/tax-2/q-e09d4597`. A real run at that provenance is directly
+comparable to it.
+
+**Ingest is reproducible, measured rather than assumed.** Two independent
+ingests of the same site minutes apart compared as 120 shared passages, zero
+edited, zero added, zero dropped. So a corpus difference in a later comparison
+is a change on the candidate's site, not churn in the extractor.
+
 ## Verified
 
 ```bash
 node scripts/verify-candidate-site.ts   # quotes verbatim, crawl on-site, capped, robots-aware
 node scripts/verify-policy-noul.ts      # no identity in the state, symmetric questions, fail-closed reads
+node scripts/verify-policy-run.ts       # comparability first, corpus and verdict changes kept apart
 ```
 
 Both are pure and offline. Ingest was exercised against a live campaign site

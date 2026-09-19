@@ -16,9 +16,12 @@
    Modes:
 
      node scripts/candidate-policy-noul.ts --in passages.jsonl --dry-run
+       [--json manifest.json]
        Print the exact request that WOULD be sent for each passage: the state,
        the questions, the model, the provenance. No network, no key needed.
-       This is how the wording is reviewed before it is billed.
+       This is how the wording is reviewed before it is billed. With --json it
+       also writes a run MANIFEST: the corpus and the questions with every
+       verdict null, which is what a later real run is compared against.
 
      node scripts/candidate-policy-noul.ts --in passages.jsonl [--limit N]
        [--threshold 0.85] [--json report.json]
@@ -43,6 +46,7 @@ import {
   unmatched,
   type PolicyCitation,
 } from "../src/lib/policy-noul.ts";
+import { buildRun } from "../src/lib/policy-run.ts";
 
 /* Before anything reads process.env. */
 loadEnvLocal(import.meta.url);
@@ -121,6 +125,31 @@ if (dryRun) {
       2,
     ),
   );
+  if (jsonPath) {
+    /* The MANIFEST: the corpus and the questions, every verdict null. Worth
+       writing even though nothing was asked — "did the other run see the same
+       passages and ask the same questions?" is answerable from this alone,
+       and it is the first thing to check when two runs disagree. */
+    writeFileSync(
+      jsonPath,
+      `${JSON.stringify(
+        buildRun({
+          passages,
+          answered: [],
+          status: "not_run",
+          createdAt: new Date().toISOString(),
+          model: JEV_MODEL_ID,
+          taxonomyVersion: TAXONOMY_VERSION,
+          threshold,
+          provenance: by,
+          questionIds: Object.keys(questions),
+        }),
+        null,
+        2,
+      )}\n`,
+    );
+    console.error(`manifest -> ${jsonPath}`);
+  }
   console.error(
     `DRY RUN — ${passages.length} passage(s), ${Object.keys(questions).length} question(s) each. Nothing was sent.`,
   );
@@ -200,28 +229,31 @@ console.error(
 console.error(`tokens: ${inputTokens} in, ${outputTokens} out`);
 
 if (jsonPath) {
+  /* The run file, not an ad-hoc summary: every passage with its verdict, the
+     provenance that says whether another run is comparable, and a status that
+     tells a failed request apart from a question never asked. Compare two of
+     these with scripts/compare-policy-runs.ts. */
   writeFileSync(
     jsonPath,
     `${JSON.stringify(
-      {
-        provenance: by,
+      buildRun({
+        passages,
+        answered: citations,
+        status: failed > 0 ? "partial" : "complete",
+        createdAt: new Date().toISOString(),
         model: JEV_MODEL_ID,
+        taxonomyVersion: TAXONOMY_VERSION,
         threshold,
-        taxonomy_version: TAXONOMY_VERSION,
-        asked: citations.length,
+        provenance: by,
+        questionIds: Object.keys(questions),
         failed,
         usage: { input_tokens: inputTokens, output_tokens: outputTokens },
-        areas,
-        unmatched: {
-          states_policy_no_issue: rest.noIssue.map((c) => c.passage),
-          states_no_policy: rest.noPolicy.length,
-        },
-      },
+      }),
       null,
       2,
     )}\n`,
   );
-  console.error(`report -> ${jsonPath}`);
+  console.error(`run -> ${jsonPath}`);
 }
 
 if (failed > 0) process.exit(1);
