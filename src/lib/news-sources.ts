@@ -13,10 +13,22 @@
      leanTag  — assigning a lean to a named news organisation is an editorial
                 act with a real reputational cost for a nonpartisan product.
                 It is not something a coding agent should assert from memory.
-                Null until a human fills it in from a stated basis. Every
-                `leanBasis` below records what the 2026-09-17 corpus
-                (docs/general-election/news-corpus-2026-09-17.md) cited, so
-                the sign-off is a one-word edit per row, not a research task.
+                Null until a human fills it in from a stated basis. Five rows
+                (the four legacy dailies and AP) now cite rating pages fetched
+                on 2026-09-19 with a value, a confidence level or score where
+                the rater publishes one, a URL and the access date; see
+                docs/general-election/lean-ratings-fetched-2026-09-19.md.
+                Florida Phoenix carries a network note with no outlet-specific
+                rating. The remaining 31 rows carry `UNRATED` below and are NOT
+                a backlog — see that report on why AllSides / Ad Fontes / MBFC
+                do not rate a community weekly or a local broadcaster. The
+                `unrated` lean value those rows need EXISTS (migration 0028,
+                src/lib/news-labels.ts rule 3) and renders as "No independent
+                rating". The founder designated those 31 rows `'unrated'` on
+                2026-09-19 — see `UNRATED_DESIGNATED` below for the list, the
+                evidence and why it is a list rather than a default. Six rows
+                remain null: the four legacy dailies and AP, which have cited
+                ratings and need a lean chosen, and Florida Phoenix.
      feed     — a feed URL that 404s fails silently and looks exactly like
                 "no news this week". Every non-null value below was fetched on
                 2026-09-17 with the sweep's own user agent, parsed with
@@ -40,6 +52,14 @@
    `usableOutlets()` skips any entry missing a gate or carrying a flag. An
    empty result means the sweep does nothing and says so — never a silent
    success.
+
+   ATTRIBUTION OWED. Several `leanBasis` values below carry AllSides Media
+   Bias Ratings. The AllSides chart is Creative Commons BY-NC 4.0, and
+   CAP_Change_Spec_Stances_and_RelatedNews_v1.md §7 requires a line such as
+   "Source credibility ratings via AllSides (CC BY-NC 4.0)." wherever that
+   data renders. Nothing in the app reads `leanBasis` today, so nothing is
+   owed yet; the obligation attaches the moment a lean or its basis reaches a
+   card. Where that line sits in the UI is open (spec §12 item 4).
 
    Pure and dependency-free; scripts/verify-news-sweep.ts drives it. */
 
@@ -104,6 +124,53 @@ export interface Outlet {
 export const UNRATED =
   "No independent bias rating cited in the 2026-09-17 corpus (which searched AllSides / Ad Fontes / MBFC). " +
   "Settle from a published nonpartisan rating cited in the PR that fills this in, or the founder signs off an explicit 'no rating' designation.";
+
+/* FOUNDER DESIGNATION, gate C7-a, 2026-09-19. These 31 outlets carry
+   `leanTag: 'unrated'` — "a lean applies to this outlet and no rating agency
+   has published one" — and their cards say "No independent rating"
+   (src/lib/news-labels.ts rule 3, migration 0028).
+
+   WHY A LIST AND NOT A DEFAULT. `o()` could have derived this from
+   `leanBasis === UNRATED`, and that would have been shorter. It would also mean
+   a row added later with no cited rating is designated by whoever adds it,
+   which is exactly the editorial act the `leanTag` gate exists to keep away
+   from a coding agent. With an explicit list, a new row is `null` until a human
+   puts its domain here — fail-closed, and the designation stays diffable and
+   blameable like every other editorial decision in this file.
+
+   THE EVIDENCE THIS RESTS ON, so a reviewer does not have to take it on trust:
+   docs/general-election/lean-ratings-fetched-2026-09-19.md. AllSides, Ad Fontes
+   and MBFC rate national and large-metro outlets. All 36 rating pages sought
+   for the 12 outlets that have them were found, and there is no equivalent page
+   to find for a community weekly or a local broadcaster. This is not a backlog
+   that waiting clears.
+
+   NOT ON THIS LIST, and why:
+     - the four legacy dailies and AP — they have fetched, cited ratings, and
+       their `leanTag` is the founder's remaining call;
+     - floridaphoenix.com — its basis is a States Newsroom network note rather
+       than the shared UNRATED text, so it is not one of the 31. In substance it
+       has no outlet-specific rating either; it is `mixedFeed`-flagged and so
+       unusable regardless, and designating it is a separate call.
+
+   scripts/verify-news-sweep.ts pins the count and asserts every domain here
+   exists, carries the UNRATED basis, and never a cited one. */
+const UNRATED_DESIGNATED: ReadonlySet<string> = new Set([
+  // Miami-Dade
+  "wlrn.org", "local10.com", "wsvn.com", "nbcmiami.com", "miaminewtimes.com",
+  "cbsnews.com/miami", "diariolasamericas.com", "americateve.com",
+  "lefloridien.com", "miamitimesonline.com", "elnuevoherald.com",
+  // Broward
+  "floridabulldog.org", "thewestsidegazette.com", "sfltimes.com", "outsfl.com",
+  // Hillsborough
+  "wusf.org", "wfla.com", "wtsp.com", "cltampa.com",
+  // Orange
+  "cfpublic.org", "wftv.com", "wesh.com", "orlandoweekly.com",
+  "clickorlando.com", "fox35orlando.com",
+  // Statewide
+  "newsserviceflorida.com", "wfsu.org", "floridapolitics.com",
+  "floridadaily.com", "flvoicenews.com", "floridianpress.com",
+]);
 
 interface RowOptions {
   leanBasis?: string;
@@ -175,8 +242,15 @@ export const OUTLETS: readonly Outlet[] = Object.freeze([
     null, // Arc RSS path is a real 404 (confirmed via Firecrawl); every other path timed out for the sweep UA. No RSS 2026-09-17 — sitemap only.
     {
       leanBasis:
-        "Raters disagree: MBFC Left-Center (-3.4, High; notes it has endorsed Democratic presidential candidates since 2000); " +
-        "AllSides Lean Left (low confidence, Sep 2026); Ad Fontes Middle/Reliable. Corpus 2026-09-17 proposes center-left. Founder decides.",
+        "Rating pages fetched 2026-09-19. Raters disagree. " +
+        "AllSides: Lean Left, bias meter -2.00, low or initial confidence as of Sep 2026 " +
+        "(allsides.com/news-source/miami-herald-media-bias). " +
+        "MBFC: Left-Center, score -3.4, factual High, last updated 2025-03-25; its entry records Democratic presidential endorsements since 2000 " +
+        "(mediabiasfactcheck.com/miami-herald). " +
+        "Ad Fontes: Skews Left, bias -8.01, reliability 39.10 (scales -42..+42 and 0..64), no rating date published " +
+        "(adfontesmedia.com/miami-herald-bias-and-reliability). " +
+        "The 2026-09-17 corpus recorded Ad Fontes as Middle/Reliable; this fetch does not confirm that. " +
+        "Corpus proposed center-left. Founder decides.",
     }),
   /* McClatchy eliminated el Nuevo Herald's entire writing staff on 2026-09-10
      (AP via WLRN). Kept for auditability; expect near-zero original output. */
@@ -203,8 +277,15 @@ export const OUTLETS: readonly Outlet[] = Object.freeze([
     //       Read via its per-day Google News sitemap instead (retrieval mode 2) — see `sitemap` below.
     {
       leanBasis:
-        "Mild disagreement: AllSides Center (low confidence, Apr 2026); MBFC Least Biased (High); Ad Fontes Lean Left per Ground News. " +
-        "Corpus 2026-09-17 proposes center. Founder decides.",
+        "Rating pages fetched 2026-09-19. All three raters place it at or near the centre. " +
+        "AllSides: Center, low or initial confidence as of Sep 2026, no numeric meter value published " +
+        "(allsides.com/news-source/sun-sentinel-media-bias). " +
+        "MBFC: Least Biased, no numeric score published, factual High, last updated 2023-07-31 " +
+        "(mediabiasfactcheck.com/south-florida-sun-sentinel). " +
+        "Ad Fontes, FIRST-HAND this time: Middle, bias -5.87, reliability 44.04, no rating date published " +
+        "(adfontesmedia.com/sun-sentinel-bias-and-reliability). " +
+        "That replaces the corpus's second-hand \"Ad Fontes Lean Left per Ground News\", which Ad Fontes itself does not corroborate. " +
+        "Corpus proposed center. Founder decides.",
       robots: { aiDisallow: ["anthropic-ai", "ClaudeBot", "GPTBot", "CCBot", "Google-Extended", "PerplexityBot", "Applebot-Extended", "Bytespider"] },
       sitemap: tribuneSitemap("www.sun-sentinel.com"),
     }),
@@ -214,7 +295,15 @@ export const OUTLETS: readonly Outlet[] = Object.freeze([
   /* The news-section feed is the only one deep enough to cover a 14-day
      window (100 items, ~25 days); the site-wide Arc feed holds ~2.4 days. */
   o("tampabay.com", "Tampa Bay Times", "12057", "https://www.tampabay.com/arc/outboundfeeds/rss/category/news/?outputType=xml", {
-    leanBasis: "Single rater: AllSides Center (low confidence, Aug 2026). No corroboration found. Corpus 2026-09-17 proposes center. Founder decides.",
+    leanBasis:
+      "Rating pages fetched 2026-09-19. Not a single-rater row — the corpus recorded AllSides only, and the other two raters both carry entries. " +
+      "AllSides: Center, low or initial confidence as of Sep 2026, no numeric meter value published " +
+      "(allsides.com/news-source/tampa-bay-times-media-bias). " +
+      "MBFC: Left-Center, score -3.4, factual High, last updated 2025-05-27 " +
+      "(mediabiasfactcheck.com/tampa-bay-times). " +
+      "Ad Fontes: Middle, bias -3.28, reliability 45.56, no rating date published " +
+      "(adfontesmedia.com/tampa-bay-times-bias-and-reliability). " +
+      "Corpus proposed center. Founder decides.",
     robots: { aiDisallow: ["GPTBot", "anthropic-ai", "ClaudeBot", "CCBot", "Bytespider"], note: "Google-Extended explicitly allowed." },
   }),
   o("wusf.org", "WUSF", "12057", "https://www.wusf.org/news.rss"),
@@ -258,8 +347,14 @@ export const OUTLETS: readonly Outlet[] = Object.freeze([
     //       Read via its per-day Google News sitemap instead (retrieval mode 2) — see `sitemap` below.
     {
       leanBasis:
-        "Raters disagree: MBFC Left-Center (-2.8, High); Ad Fontes Skews Left/Reliable; AllSides Center (low confidence, Aug 2026). " +
-        "Corpus 2026-09-17 proposes center-left. Founder decides.",
+        "Rating pages fetched 2026-09-19. Raters disagree. " +
+        "AllSides: Center, low or initial confidence as of Sep 2026, no numeric meter value and no review method listed " +
+        "(allsides.com/news-source/orlando-sentinel-media-bias). " +
+        "MBFC: Left-Center, score -2.8, factual High, last updated 2025-04-25 " +
+        "(mediabiasfactcheck.com/orlando-sentinel). " +
+        "Ad Fontes: Skews Left, bias -6.70, reliability 44.94, no rating date published " +
+        "(adfontesmedia.com/orlando-sentinel-bias-and-reliability). " +
+        "Corpus proposed center-left. Founder decides.",
       robots: { aiDisallow: ["anthropic-ai", "ClaudeBot", "GPTBot", "CCBot", "Google-Extended", "PerplexityBot", "Applebot-Extended", "Bytespider"] },
       sitemap: tribuneSitemap("www.orlandosentinel.com"),
     }),
@@ -299,8 +394,14 @@ export const OUTLETS: readonly Outlet[] = Object.freeze([
     null, // no public RSS; robots.txt disallows /*.rss; hub pages 403 to the sweep UA 2026-09-17. HTML listing (retrieval mode 3) only.
     {
       leanBasis:
-        "Ratings exist at AllSides, Ad Fontes and MBFC per the corpus, but no rating page was fetched. " +
-        "Corpus 2026-09-17 proposes center pending that fetch. Founder confirms.",
+        "Rating pages fetched 2026-09-19, closing the corpus's \"rating exists; not fetched\" note for this row. " +
+        "AllSides: Lean Left, bias meter -2.93, medium confidence as of Sep 2026 " +
+        "(allsides.com/news-source/associated-press-media-bias). " +
+        "MBFC: Left-Center, score -2.1, factual High, last updated 2026-04-09 " +
+        "(mediabiasfactcheck.com/associated-press). " +
+        "Ad Fontes: Middle, bias -2.60, reliability 44.29, no rating date published " +
+        "(adfontesmedia.com/ap-bias-and-reliability). " +
+        "The corpus proposed center pending this fetch; AllSides rates it Lean Left, so the proposal is not confirmed. Founder confirms.",
       robots: { note: "Disallows /*.rss for all agents." },
     }),
 ]);
@@ -317,7 +418,11 @@ function o(
     publisher,
     type: "factual_reporting",
     countyFips,
-    leanTag: null,
+    /* Null unless the founder designated this domain above. Null means "no
+       human has decided" and `usableOutlets()` skips it; 'unrated' is a human
+       recording that no rating agency covers the outlet. An agent adding a row
+       gets null. */
+    leanTag: UNRATED_DESIGNATED.has(domain) ? "unrated" : null,
     leanBasis: opts.leanBasis ?? UNRATED,
     feed,
   };
@@ -389,7 +494,13 @@ export function outletForUrl(url: string, outlets: readonly Outlet[] = OUTLETS):
 }
 
 /** Outlets the sweep may actually read: lean signed off, a retrieval path
-    (RSS feed or news sitemap), and no fail-closed flag. */
+    (RSS feed or news sitemap), and no fail-closed flag.
+
+    `leanTag: 'unrated'` counts as signed off, deliberately — that is the whole
+    point of the value (migration 0028). It is not a hole in the gate: null
+    means "no human has decided", while `'unrated'` is a human recording that no
+    rating agency covers this outlet, and the card says so in those words. An
+    agent still cannot produce it, because an agent does not edit `leanTag`. */
 export function usableOutlets(outlets: readonly Outlet[] = OUTLETS): Outlet[] {
   return outlets.filter(
     (x) =>
