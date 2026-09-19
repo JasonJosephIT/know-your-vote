@@ -4,7 +4,7 @@ _The ratings half of this document is retrieval and transcription only: every
 value was read off the rating agency's own published page during this session,
 on the date in the access column, and nothing here is this session's estimate of
 any outlet's lean. It grew two further change sets on the same day, both founder
-decisions: the `unrated` lean value (migration `0027`), and the designation of
+decisions: the `unrated` lean value (migration `0028`), and the designation of
 31 rows as `unrated`, which **unblocked the sweep to 27 outlets**. Gate
 **C7-a** is now partly open — six rows still need a lean chosen. Read §7 for
 where things actually stand, including two policy questions the unblock makes
@@ -388,13 +388,25 @@ in §3. `news-fairness.md` §5's per-candidate variance work is where it lands.
 was the value and its plumbing only, by explicit decision; no row was designated
 in that set.
 
-- `supabase/migrations/0027_source_lean_unrated.sql` — adds `unrated` to
+- `supabase/migrations/0028_source_lean_unrated.sql` — **renumbered from 0027
+  on 2026-09-19**, see below — adds `unrated` to
   `source.lean_tag`'s CHECK. Widening only: no existing row is rewritten and
   nothing is backfilled. Follows `0023`'s shape, including the `RAISE` guard
   against the silent half-application that dropping an unnamed constraint by the
   wrong name would cause.
-- `supabase/migrations/README.md` — `0027` claimed in the ledger (rule 2: the
+- `supabase/migrations/README.md` — `0028` claimed in the ledger (rule 2: the
   row lands in the same PR as the file).
+
+**The migration was renumbered 0027 → 0028.** `0027_news_issues.sql` was written
+against a copy of the ledger reading "0027+ free" and merged to `main` (PR #53)
+while this one sat on a branch carrying the same number — the fifth collision the
+ledger exists to prevent, and the second to hit a branch that could not see it
+happening. Neither had been applied anywhere, so ledger rule 1 pinned neither;
+theirs had landed on the default branch, where a `git mv` would break every
+checkout, so this one moved. The cost was a `git mv` and a grep across five
+files plus this report. Both migrations now apply cleanly in sequence, verified
+against embedded Postgres. The ledger's own advice stands: re-check that table
+immediately before applying, not just before writing.
 - `src/lib/news-labels.ts` — `unrated` added to `LeanTag` and to `LEAN`,
   rendering as **"No independent rating"**. A third load-bearing rule documents
   why it prints when `N/A` does not.
@@ -423,7 +435,7 @@ in that set.
 | `verify-news-match.ts` | **OK** |
 | `verify-news-slots.ts` | **OK** |
 | Banned-terms lint over all 37 `leanBasis` values, using `findAllBannedTermMatches` from `src/lib/neutrality.ts` | **Clean** — 0 hits |
-| `verify-migrations.mjs` — every migration applied to embedded Postgres (PGlite), including `0027` | **All migration + RLS checks passed.** Five new `0027` assertions: `unrated` stores and reads back; `N/A` still works beside it; an eighth value is still rejected by `source_lean_tag_check`; `lean_tag` stays `NOT NULL`; and exactly **one** `lean_tag` CHECK survives — the half-application the migration's own `RAISE` guards against, asserted from outside |
+| `verify-migrations.mjs` — every migration applied to embedded Postgres (PGlite), including `0028` | **All migration + RLS checks passed.** Five new `0028` assertions: `unrated` stores and reads back; `N/A` still works beside it; an eighth value is still rejected by `source_lean_tag_check`; `lean_tag` stays `NOT NULL`; and exactly **one** `lean_tag` CHECK survives — the half-application the migration's own `RAISE` guards against, asserted from outside |
 | `verify-news-labels.ts` — new `unrated` cases | **OK** — prints the exact string, does not print like `N/A`, does not leak the raw code, does not flip the opinion container, and contains none of "Left" / "Right" / "Center" |
 | `verify-news-slots.ts` — new fixture U | **OK** — an older *rated* item beats a second `unrated` one, and `unrated` does not collapse into the no-source bucket |
 | `verify-news-neutrality.ts --self-test` | **All news-neutrality self-test checks passed** |
@@ -444,9 +456,13 @@ after — "fetch requests the statewide scope with no parameters" and "effect ha
 no location dependency". Unrelated to anything here; it concerns the news feed's
 location gating.
 
-The brief asked for `scripts/verify-news-issues.ts`; **no such script exists**
-in `scripts/`. The news guardrails present are the ones listed above plus
-`verify-news-feed.ts`.
+**On `scripts/verify-news-issues.ts`.** The brief asked for it and it did not
+exist when this work started; an earlier draft of this document said so. It
+arrived on `main` in PR #53 (news characterization, Unit 1) while this branch was
+open, and it passes here after the merge: *"11 categories (8 in the quiz), 16
+sub-issues, no orphans, no drift from the quiz"*. So does `main`'s other new
+guardrail, `verify-news-characterize.ts`. The brief was right and this document
+was briefly wrong.
 
 ---
 
@@ -458,7 +474,7 @@ in `scripts/`. The news guardrails present are the ones listed above plus
 2. **National-tier `countyFips`** — unchanged from
    `news-corpus-verification-2026-09-17.md` §3 item 7. Schema decision.
 3. ~~**`unrated` lean value**, then ~~**designating the 31 rows**~~.~~ **Both
-   done 2026-09-19** (migration `0027`; `UNRATED_DESIGNATED`). The sweep is
+   done 2026-09-19** (migration `0028`; `UNRATED_DESIGNATED`). The sweep is
    unblocked to 27 outlets. What this opens in turn is items 9 and 10 below.
 4. **Where the AllSides CC BY-NC line sits in the UI** (§6) — spec §12 item 4,
    now a launch blocker for news cards.

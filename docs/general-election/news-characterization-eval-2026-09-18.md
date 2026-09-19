@@ -1,0 +1,148 @@
+# Characterizer evaluation — 2026-09-18
+
+_Task C14 of `docs/superpowers/plans/2026-09-18-news-issue-tagging.md`, per
+spec §6. Engine `jev-1.13.0`, provenance `jev:jev-1.13.0/tax-1/q-4598c359`,
+15 sub-issue Nouls per article, one request each._
+
+## 0. Read this before the numbers
+
+**The gold set was annotated by Claude Opus 5, not by the founder.** An agent
+grading an agent's output is circular, and these figures are a smoke test, not
+ground truth. Where the model and the labels disagree, it is genuinely open
+which one is wrong — §3 flags two cases where the labels are probably the
+weaker of the two. Correct the labels in
+`news-characterization-goldset-2026-09-18.jsonl` and re-run; the script is
+deterministic given the same answers.
+
+**The corpus is real.** 116 articles pulled from 29 of the 31 verified feeds on
+2026-09-18 (`scripts/news-eval-pool.ts`), 14-day window, up to 4 per outlet.
+Not fixtures. Two feeds failed: `diariolasamericas.com` (connection),
+`miamitimesonline.com` (429 — the known BLOX rate-limit, verification §3.3).
+
+Why feeds and not `news_item`: the live table holds **14 seeded rows** (6
+`official_link`, 8 `election_news`) and no swept articles, because every
+outlet's `leanTag` is null pending gate **C7-a**, so `usableOutlets()` returns
+0 and the sweep has never run. Migration 0027 is also not applied live.
+
+## 1. Threshold sweep — taxonomy v2
+
+63 of 116 articles carry at least one gold tag; **53 should carry none**.
+
+| Threshold | Precision | Recall | F1 | Exact set | Empty-case correct | No-dek recall |
+|---|---|---|---|---|---|---|
+| 0.50 | 76% | 88% | 82% | 80% | 83% | 75% |
+| 0.70 | 80% | 84% | 82% | 81% | 89% | 75% |
+| 0.80 | 85% | 81% | **83%** | 81% | 91% | 75% |
+| **0.85** | **85%** | **78%** | 82% | **80%** | **92%** | 75% |
+| 0.90 | 91% | 74% | 81% | 81% | 92% | 75% |
+| 0.95 | 91% | 63% | 75% | 77% | 92% | 50% |
+
+### What the v1 → v2 fixes bought
+
+| At 0.85 | v1 | v2 | Δ |
+|---|---|---|---|
+| Precision | 84% | 85% | +1 |
+| **Recall** | **69%** | **78%** | **+9** |
+| **F1** | **76%** | **82%** | **+6** |
+| Exact set | 75% | 80% | +5 |
+| Empty case | 92% | 92% | — |
+
+**Recall rose 9 points with no precision cost.** The B6 split did most of it;
+the alias widening did the rest.
+
+**0.85 still stands.** F1 is flat across 0.50–0.85 (82/82/82/83/82) — all
+inside the noise of a 116-row set. Two notes if you want to revisit:
+- **0.90 now costs less than it did.** In v1 it halved no-dek recall (75% →
+  50%); in v2 no-dek recall holds at 75% all the way to 0.90. So 0.90 buys
+  +6 points of precision for −4 of recall, where before it was a bad trade.
+- **0.80 is nominally the F1 peak** (83% vs 82%). One point on 116 rows is not
+  a reason to move a threshold.
+
+## 2. Per-issue at 0.85 (v2)
+
+| Issue | Gold | Pred | Precision | Recall | vs v1 |
+|---|---|---|---|---|---|
+| B1 economy/inflation/jobs | 4 | 4 | 100% | 100% | unchanged |
+| A7 elections administration | 3 | 4 | 75% | 100% | unchanged |
+| **KYV1 democratic institutions** | 5 | 7 | **71%** | **100%** | **was B6 at 25%/20%** |
+| B7 crime/public safety | 25 | 29 | 83% | 96% | unchanged |
+| B3 immigration/border | 11 | 9 | 100% | 82% | unchanged |
+| A3 property taxes | 5 | 4 | 100% | 80% | unchanged |
+| **A6 public education** | 4 | 2 | 100% | **50%** | **was 25%** |
+| **B2 healthcare** | 5 | 2 | 100% | **40%** | **was 20%** |
+| A4 cost of living | 2 | 0 | n/a | 0% | unchanged — see §3 |
+| B8 climate/environment | 4 | 0 | n/a | 0% | unchanged — labels suspect |
+| B6 election integrity (narrowed) | 0 | 1 | 0% | n/a | not exercised |
+| A1, A2, A5, B4, B5 | 0 | 0 | n/a | n/a | not exercised |
+
+## 3. What the failures actually are
+
+**B6 — fixed, and the split was vindicated by the data.** CAP's "Election
+integrity and threats to democracy" was two subjects under one label. Split
+into `B6` (Election integrity — certification, security, voter rolls,
+recounts) and `KYV1` (Threats to democratic institutions — press freedom, rule
+of law, political violence). The `KYV` prefix marks it as this project's
+addition rather than a sourced CAP entry.
+
+Re-labelling was revealing: **all five rows the annotator had filed under the
+bundled B6 were the democracy half** — press-freedom stories — and **none were
+election integrity**. So the model's original refusal to tag them B6 was
+correct, and the 25%/20% score was measuring an ambiguous label, not a weak
+classifier. KYV1 now scores 71% precision, 100% recall.
+
+Narrowed B6 has **zero** gold examples: the 14-day window carried no
+election-integrity story at all. It is unmeasured, not validated.
+
+**A6 and B2 — improved by widening aliases, as predicted.** A6 25% → 50%,
+B2 20% → 40%. Both still miss real stories, so there is more room in the alias
+lists; this is the cheapest lever available and it demonstrably works.
+
+**A4 — alias widening did NOT work, and the reason is structural.** Both gold
+A4 rows (a gas-price story, a minimum-wage rise) were tagged `B1` by the model
+and not `A4`, even after "gas prices" and "fuel costs" were added. A4 "Cost of
+living in Florida" and B1 "Economy, inflation, and jobs" overlap so heavily
+that the model consistently prefers the broader one. **This is a taxonomy
+overlap, not a wording gap** — more aliases will not fix it. Either accept that
+A4 rarely fires, or merge it into B1 and lose the Florida-specific distinction.
+A founder call; not urgent, since B1 catches the article either way and both
+roll up to the same `economy` category.
+
+**B8 — still 0%, and the labels are still the suspect half.** Unchanged
+deliberately: the gold rows were left alone so v1 and v2 stay comparable. All
+four are data-centre stories the annotator filed under "Climate and environment
+(national)". The model declined, and on reflection it is right — a county
+moratorium on AI data centres is land use and energy policy. **Fix the labels,
+then re-measure.**
+
+## 4. Cost and reliability
+
+- **258,856 input tokens for 116 articles** (v2, 16 questions), output free —
+  **$0.0109 total**, **$0.000094 per article**, 2,232 tokens per article.
+- v1 was $0.0099 at 15 questions. The B6 split added one Noul; +$0.001 a run.
+- **0 errors in 116 calls.**
+- At 200 rows per daily sweep: **$0.017 a sweep, ~$0.77 to 2026-11-03.**
+- Cost decides nothing, so the second engine (spec §6 item 6) is not justified
+  on price. Nor on quality yet: **do not build the Anthropic arm.** The failures
+  above are taxonomy-wording problems, and a second engine would inherit every
+  one of them.
+
+## 5. Not measured here
+
+- **Per-candidate tag distribution (spec §6 item 2).** Needs a real roster
+  (ingest B2) and `named` rows, which need the sweep, which needs C7-a. When it
+  runs: report it, never publish it, and never feed it to `balance_audit_core`
+  — CN-R10's variance stays over deterministic `named` counts.
+- **Rendering.** Gate G4 is untouched. Nothing here reaches a voter.
+
+## 6. Recommendation
+
+1. **Keep 0.85.** Still inside the flat region of the sweep. If you want to
+   favour precision, 0.90 is now a reasonable trade that it was not in v1.
+2. **Fix the four B8 gold rows**, then re-run. It is the last known-bad input.
+3. **Keep widening A6/B2 aliases** — the lever measurably works, ~$0.011 a pass.
+4. **Decide A4 vs B1** (§3). Structural overlap, no urgency.
+5. **Do not build a second engine.** Nothing here is an engine weakness; every
+   remaining defect is taxonomy wording or annotation.
+6. **Re-label the gold set as founder work.** This still rests on an agent's
+   labels, and the B6 episode is a live example of an annotator's reading being
+   the thing under test.

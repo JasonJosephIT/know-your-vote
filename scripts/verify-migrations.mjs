@@ -55,9 +55,9 @@
         or election_news row with source_id NULL is rejected; an
         official_link row with source_id NULL still inserts; a candidate_news
         row with a valid source_id inserts.
-    17b. 0027_source_lean_unrated: source.lean_tag admits 'unrated', still
+    17b. 0028_source_lean_unrated: source.lean_tag admits 'unrated', still
         admits 'N/A' beside it, still rejects an unknown value, stays NOT NULL,
-        and carries exactly one lean_tag CHECK (the half-application 0027's
+        and carries exactly one lean_tag CHECK (the half-application 0028's
         RAISE guard exists to prevent).
     17. 0023_candidate_unopposed (decision D-B): candidate.qualifying_status
         admits 'unopposed' and still rejects an unknown value, and exactly one
@@ -316,13 +316,13 @@ await check("0023 leaves exactly one qualifying_status CHECK", async () => {
     throw new Error(`expected 1 qualifying_status CHECK, found ${names.length}: ${names.join(", ")}`);
   }
 });
-/* --- 0027. 'unrated' is the recorded absence of a rating, and it is NOT the
+/* --- 0028. 'unrated' is the recorded absence of a rating, and it is NOT the
    same fact as 'N/A' ("a lean does not apply"). Most of a local-news corpus has
    no published rating because AllSides / Ad Fontes / MBFC do not rate local
    outlets, and forcing those into 'N/A' would tell a voter a lean does not
    apply to a television newsroom. Same shape as 0023: a value added to a CHECK
    that 0000 created unnamed. */
-await check("0027 lean_tag admits unrated", async () => {
+await check("0028 lean_tag admits unrated", async () => {
   await db.query(
     `INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag)
      VALUES ('s-unrated','https://wsvn.com/x','wsvn.com/x','WSVN 7News','factual_reporting','unrated');`
@@ -333,14 +333,14 @@ await check("0027 lean_tag admits unrated", async () => {
   }
   await db.query("DELETE FROM source WHERE source_id = 's-unrated';");
 });
-await check("0027 kept 'N/A' working alongside it", async () => {
+await check("0028 kept 'N/A' working alongside it", async () => {
   await db.query(
     `INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag)
      VALUES ('s-na-still','https://example.gov/z','example.gov/z','Example Gov','primary_doc','N/A');`
   );
   await db.query("DELETE FROM source WHERE source_id = 's-na-still';");
 });
-await check("0027 widened the CHECK without opening it", async () => {
+await check("0028 widened the CHECK without opening it", async () => {
   let rejected = false;
   try {
     await db.query(
@@ -353,22 +353,22 @@ await check("0027 widened the CHECK without opening it", async () => {
   }
   if (!rejected) throw new Error("an eighth lean_tag value was accepted");
 });
-/* lean_tag is NOT NULL (0000) and 0027 must not have relaxed that — null is
+/* lean_tag is NOT NULL (0000) and 0028 must not have relaxed that — null is
    what `usableOutlets()` reads as "no human has decided", and a null in the DB
    would be an unlabelled card. */
-await check("0027 left lean_tag NOT NULL", async () => {
+await check("0028 left lean_tag NOT NULL", async () => {
   const r = await db.query(
     `SELECT is_nullable FROM information_schema.columns
       WHERE table_name='source' AND column_name='lean_tag';`
   );
   if (r.rows[0]?.is_nullable !== "NO") throw new Error("lean_tag must stay NOT NULL");
 });
-/* The half-application 0027's own RAISE guards against, asserted from outside:
+/* The half-application 0028's own RAISE guards against, asserted from outside:
    0000 created this CHECK unnamed, so dropping the wrong name would leave the
    old six-value constraint standing beside the new one. Both would be enforced,
    every 'unrated' row would still be rejected, and the migration would have
    reported success. */
-await check("0027 leaves exactly one lean_tag CHECK", async () => {
+await check("0028 leaves exactly one lean_tag CHECK", async () => {
   const r = await db.query(
     `SELECT conname FROM pg_constraint
       WHERE conrelid='source'::regclass AND contype='c'

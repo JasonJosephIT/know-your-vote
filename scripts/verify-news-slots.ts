@@ -215,7 +215,7 @@ check("input array is not mutated", ids(A) ===
   "a01,a02,a03,a04,a05,a06,a07,a08,a09,a10,a11,a12,a13,a14", ids(A));
 
 /* ── Fixture U — 'unrated' is one bucket, not a wildcard and not a blank ─────
-   Migration 0027 added 'unrated' for outlets no rating agency covers, which is
+   Migration 0028 added 'unrated' for outlets no rating agency covers, which is
    most of a local-news corpus. Two things could go wrong in the selector and
    neither would be visible on a card:
 

@@ -31,7 +31,7 @@ export type SourceType =
   | "primary_doc"
   | "candidate_self";
 
-/** `source.lean_tag` — CHECK-constrained in migration 0000, widened by 0027.
+/** `source.lean_tag` — CHECK-constrained in migration 0000, widened by 0028.
     Six of the seven are ratings; `unrated` is the recorded absence of one
     (rule 3 above). */
 export type LeanTag =

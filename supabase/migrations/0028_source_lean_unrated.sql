@@ -1,4 +1,4 @@
--- 0027_source_lean_unrated.sql
+-- 0028_source_lean_unrated.sql
 -- Add 'unrated' to source.lean_tag's CHECK.
 -- See docs/general-election/lean-ratings-fetched-2026-09-19.md §7 and
 -- src/lib/news-labels.ts rule 3.
@@ -69,7 +69,7 @@ BEGIN
      AND pg_get_constraintdef(oid) ILIKE '%lean_tag%';
   IF stale IS NOT NULL THEN
     RAISE EXCEPTION
-      'source.lean_tag still carries CHECK constraint(s) %; drop them by name before re-running 0027, or unrated rows will keep being rejected', stale;
+      'source.lean_tag still carries CHECK constraint(s) %; drop them by name before re-running 0028, or unrated rows will keep being rejected', stale;
   END IF;
 END $$;
 

@@ -22,7 +22,7 @@
                 rating. The remaining 31 rows carry `UNRATED` below and are NOT
                 a backlog — see that report on why AllSides / Ad Fontes / MBFC
                 do not rate a community weekly or a local broadcaster. The
-                `unrated` lean value those rows need EXISTS (migration 0027,
+                `unrated` lean value those rows need EXISTS (migration 0028,
                 src/lib/news-labels.ts rule 3) and renders as "No independent
                 rating". The founder designated those 31 rows `'unrated'` on
                 2026-09-19 — see `UNRATED_DESIGNATED` below for the list, the
@@ -128,7 +128,7 @@ export const UNRATED =
 /* FOUNDER DESIGNATION, gate C7-a, 2026-09-19. These 31 outlets carry
    `leanTag: 'unrated'` — "a lean applies to this outlet and no rating agency
    has published one" — and their cards say "No independent rating"
-   (src/lib/news-labels.ts rule 3, migration 0027).
+   (src/lib/news-labels.ts rule 3, migration 0028).
 
    WHY A LIST AND NOT A DEFAULT. `o()` could have derived this from
    `leanBasis === UNRATED`, and that would have been shorter. It would also mean
@@ -497,7 +497,7 @@ export function outletForUrl(url: string, outlets: readonly Outlet[] = OUTLETS):
     (RSS feed or news sitemap), and no fail-closed flag.
 
     `leanTag: 'unrated'` counts as signed off, deliberately — that is the whole
-    point of the value (migration 0027). It is not a hole in the gate: null
+    point of the value (migration 0028). It is not a hole in the gate: null
     means "no human has decided", while `'unrated'` is a human recording that no
     rating agency covers this outlet, and the card says so in those words. An
     agent still cannot produce it, because an agent does not edit `leanTag`. */

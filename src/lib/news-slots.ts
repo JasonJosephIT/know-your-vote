@@ -31,7 +31,7 @@
    hide that failure instead of surfacing it. `'N/A'` is a real, legitimate
    lean value (a government primary document has no editorial lean) and gets
    its own bucket too; it is not a missing value. So is `'unrated'` (migration
-   0027 — a lean applies and no rating agency has published one), and it is a
+   0028 — a lean applies and no rating agency has published one), and it is a
    DIFFERENT bucket from both `'N/A'` and null: collapsing it into null would
    let a sourced item and an unattributed one compete as one lean, and treating
    it as matching any lean would let two unrated outlets take slots before a
