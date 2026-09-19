@@ -34,6 +34,20 @@ export interface NewsInsertRow {
   race_id: string | null;
   candidate_id: string | null;
   published_at: string;
+  /* The candidate-match tier (migration 0017, PRD §6). This plan used to drop
+     it, which was a quiet correctness bug rather than an omission: CandidateNews
+     renders `relation !== "related"` under "In the news", so an approved row
+     arriving with null presented an ambiguous surname match as a story that
+     named the candidate — the one misreading §6's tier exists to prevent. Null
+     still means "not a candidate match at all"; the payload schema refuses null
+     whenever a candidate is named. */
+  relation: "named" | "related" | null;
+  /* Hero image for the card (migration 0029). Null is a normal state. */
+  image_url: string | null;
+  /* Migration 0014 requires a source on every candidate_news / election_news
+     row. Carried here so an approved insert satisfies that CHECK instead of
+     failing with the wrong migration named. */
+  source_id: string | null;
 }
 
 export type EffectPlan =
@@ -85,6 +99,12 @@ export function planEffect(content: ReviewItemContent): EffectPlan {
           race_id: p.race_id ?? null,
           candidate_id: p.candidate_id ?? null,
           published_at: p.published_at,
+          /* Passed through, never defaulted. A default of "named" would be the
+             bug this field exists to fix, and a default of "related" would
+             demote a real name match. */
+          relation: p.relation ?? null,
+          image_url: p.image_url ?? null,
+          source_id: p.source_id ?? null,
         },
       };
     }

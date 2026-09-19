@@ -30,6 +30,11 @@ const validNews = {
   url: "https://example.gov/certified",
   candidate_id: "cand-123",
   published_at: "2026-07-01",
+  /* Required on a candidate-scoped payload since 2026-09-19. Without a tier,
+     CandidateNews renders `relation !== "related"` under "In the news", so an
+     ambiguous surname match would read as a story that named the candidate —
+     PRD §6's tier exists to prevent exactly that. */
+  relation: "named",
 };
 
 /* ---- manual_news payload ------------------------------------------------ */
@@ -61,7 +66,50 @@ assert(
   ManualNewsPayloadSchema.safeParse({
     ...validNews,
     candidate_id: undefined,
+    relation: undefined,
     metro: "miami",
+  }).success
+);
+
+/* ---- the relation tier (migration 0017, PRD §6) ------------------------- */
+assert(
+  "manual_news: a candidate-scoped payload with no relation is REJECTED",
+  !ManualNewsPayloadSchema.safeParse({ ...validNews, relation: undefined }).success
+);
+assert(
+  "manual_news: relation 'related' is accepted",
+  ManualNewsPayloadSchema.safeParse({ ...validNews, relation: "related" }).success
+);
+assert(
+  "manual_news: an invented relation tier is rejected",
+  !ManualNewsPayloadSchema.safeParse({ ...validNews, relation: "probably" }).success
+);
+/* A metro-scoped election_news row is not a candidate match, so null is the
+   correct value there and must stay allowed — null is not a third tier. */
+assert(
+  "manual_news: a metro-scoped row may omit relation",
+  ManualNewsPayloadSchema.safeParse({
+    item_type: "election_news",
+    title: "Early voting sites announced",
+    url: "https://example.gov/early",
+    metro: "miami",
+    published_at: "2026-07-01",
+  }).success
+);
+/* The card fields carried through the approval boundary. */
+assert(
+  "manual_news: image_url and source_id are accepted",
+  ManualNewsPayloadSchema.safeParse({
+    ...validNews,
+    image_url: "https://cdn.example.com/photo.jpg",
+    source_id: "src-wlrn",
+  }).success
+);
+assert(
+  "manual_news: a non-http image_url is rejected",
+  !ManualNewsPayloadSchema.safeParse({
+    ...validNews,
+    image_url: "javascript:alert(1)",
   }).success
 );
 assert(

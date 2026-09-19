@@ -30,6 +30,9 @@ const news = planEffect({
     race_id: "race-1",
     candidate_id: "cand-1",
     published_at: "2026-07-01",
+    relation: "related",
+    image_url: "https://cdn.example.com/p.jpg",
+    source_id: "src-1",
   },
 });
 assert("manual_news → insert_news", news.type === "insert_news");
@@ -41,6 +44,81 @@ assert(
     news.row.candidate_id === "cand-1" &&
     !("verified_by" in news.row),
   JSON.stringify(news)
+);
+
+/* ---- the relation tier survives the boundary (migration 0017, PRD §6) ----
+   This plan used to drop `relation`, which was a correctness bug rather than an
+   omission: CandidateNews renders `relation !== "related"` under "In the news",
+   so an approved row arriving with null presented an ambiguous surname match as
+   a story that named the candidate. These pin that it now passes through
+   untouched, in both directions and with no default. */
+assert(
+  "insert_news carries relation 'related' through unchanged",
+  news.type === "insert_news" && news.row.relation === "related",
+  JSON.stringify(news),
+);
+const namedPlan = planEffect({
+  kind: "manual_news",
+  payload: {
+    item_type: "candidate_news",
+    title: "Smith wins",
+    summary: null,
+    url: "https://example.gov/y",
+    metro: null,
+    race_id: "race-1",
+    candidate_id: "cand-1",
+    published_at: "2026-07-01",
+    relation: "named",
+  },
+});
+assert(
+  "insert_news carries relation 'named' through unchanged",
+  namedPlan.type === "insert_news" && namedPlan.row.relation === "named",
+  JSON.stringify(namedPlan),
+);
+/* A metro-scoped election_news row is not a candidate match, so null is right
+   there — and it must stay null rather than being defaulted to a tier. A
+   default of "named" would be the original bug; "related" would demote a real
+   name match. */
+const metroPlan = planEffect({
+  kind: "manual_news",
+  payload: {
+    item_type: "election_news",
+    title: "Early voting sites announced",
+    summary: null,
+    url: "https://example.gov/early",
+    metro: "miami",
+    race_id: null,
+    candidate_id: null,
+    published_at: "2026-07-01",
+  },
+});
+assert(
+  "insert_news leaves relation null when there is no candidate match",
+  metroPlan.type === "insert_news" && metroPlan.row.relation === null,
+  JSON.stringify(metroPlan),
+);
+assert(
+  "insert_news never defaults a missing relation to a tier",
+  metroPlan.type === "insert_news"
+    && metroPlan.row.relation !== "named"
+    && metroPlan.row.relation !== "related",
+);
+
+/* The two card fields, and 0014's required source. */
+assert(
+  "insert_news carries image_url and source_id",
+  news.type === "insert_news"
+    && news.row.image_url === "https://cdn.example.com/p.jpg"
+    && news.row.source_id === "src-1",
+  JSON.stringify(news),
+);
+assert(
+  "insert_news leaves image_url and source_id null when absent",
+  metroPlan.type === "insert_news"
+    && metroPlan.row.image_url === null
+    && metroPlan.row.source_id === null,
+  JSON.stringify(metroPlan),
 );
 
 /* ---- gated_diff whitelist ----------------------------------------------- */
