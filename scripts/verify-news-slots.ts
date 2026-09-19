@@ -214,6 +214,45 @@ check("deterministic on a copy of the input", ids(selectNewsSlots([...A], 5).slo
 check("input array is not mutated", ids(A) ===
   "a01,a02,a03,a04,a05,a06,a07,a08,a09,a10,a11,a12,a13,a14", ids(A));
 
+/* ── Fixture U — 'unrated' is one bucket, not a wildcard and not a blank ─────
+   Migration 0027 added 'unrated' for outlets no rating agency covers, which is
+   most of a local-news corpus. Two things could go wrong in the selector and
+   neither would be visible on a card:
+
+     - 'unrated' collapsing into the null bucket (an item with no source), which
+       would let a sourced item and an unattributed one compete as one lean; or
+     - 'unrated' being treated as matching any lean, which would let the spread
+       rule pick two of them before a rated outlet got a slot.
+
+   Three unrated items and one rated one. Lean spread must take one unrated
+   item and then the rated one, not two unrated items — even though both
+   unrated items are newer. */
+const U: Item[] = [
+  item("u1", "2026-09-14T00:00:00Z", "named", src("unrated", "factual_reporting")),
+  item("u2", "2026-09-13T00:00:00Z", "named", src("unrated", "factual_reporting")),
+  item("u3", "2026-09-12T00:00:00Z", "named", src("unrated", "factual_reporting")),
+  item("r1", "2026-09-01T00:00:00Z", "named", src("center", "factual_reporting")),
+];
+const u2 = selectNewsSlots(U, 2);
+check("unrated is a bucket: the older rated item beats a second unrated one",
+  ids(u2.slots) === "u1,r1", ids(u2.slots));
+check("unrated and center are distinct leans", leansOf(u2.slots).size === 2,
+  [...leansOf(u2.slots)].join(","));
+
+/* And 'unrated' is not the same bucket as "no source at all". One of each,
+   both newest-first: two slots must hold both, and the spread must see two
+   distinct leans rather than one. */
+const UN: Item[] = [
+  item("us", "2026-09-14T00:00:00Z", "named", src("unrated", "factual_reporting")),
+  item("un", "2026-09-13T00:00:00Z", "named", null),
+  item("us2", "2026-09-12T00:00:00Z", "named", src("unrated", "factual_reporting")),
+];
+const un2 = selectNewsSlots(UN, 2);
+check("unrated does not collapse into the no-source bucket",
+  ids(un2.slots) === "us,un", ids(un2.slots));
+check("unrated and no-source are two leans", leansOf(un2.slots).size === 2,
+  [...leansOf(un2.slots)].join(","));
+
 if (failures > 0) {
   console.error(`\nverify-news-slots: ${failures} failure(s)`);
   process.exit(1);

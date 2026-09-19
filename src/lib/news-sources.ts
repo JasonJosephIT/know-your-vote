@@ -21,8 +21,11 @@
                 Florida Phoenix carries a network note with no outlet-specific
                 rating. The remaining 31 rows carry `UNRATED` below and are NOT
                 a backlog — see that report on why AllSides / Ad Fontes / MBFC
-                do not rate a community weekly or a local broadcaster, and on
-                the `unrated` schema value the sign-off actually needs.
+                do not rate a community weekly or a local broadcaster. The
+                `unrated` lean value those rows need now EXISTS (migration 0027,
+                src/lib/news-labels.ts rule 3) and renders as "No independent
+                rating"; assigning it to a row is still this gate, and nothing
+                here assigns it yet.
      feed     — a feed URL that 404s fails silently and looks exactly like
                 "no news this week". Every non-null value below was fetched on
                 2026-09-17 with the sweep's own user agent, parsed with
@@ -437,7 +440,13 @@ export function outletForUrl(url: string, outlets: readonly Outlet[] = OUTLETS):
 }
 
 /** Outlets the sweep may actually read: lean signed off, a retrieval path
-    (RSS feed or news sitemap), and no fail-closed flag. */
+    (RSS feed or news sitemap), and no fail-closed flag.
+
+    `leanTag: 'unrated'` counts as signed off, deliberately — that is the whole
+    point of the value (migration 0027). It is not a hole in the gate: null
+    means "no human has decided", while `'unrated'` is a human recording that no
+    rating agency covers this outlet, and the card says so in those words. An
+    agent still cannot produce it, because an agent does not edit `leanTag`. */
 export function usableOutlets(outlets: readonly Outlet[] = OUTLETS): Outlet[] {
   return outlets.filter(
     (x) =>

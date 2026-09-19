@@ -284,24 +284,62 @@ runner only through the Tribune sitemap path, and their county feeds would be
 the only ones populated.
 
 **The actual unblock is a schema value for "no rater covers this outlet."**
-`lean_tag` is CHECK-constrained to `left | center-left | center | center-right |
+`lean_tag` was CHECK-constrained to `left | center-left | center | center-right |
 right | N/A`, and `N/A` means "lean does not apply" — a government primary
 document — not "nobody has rated this". Conflating them puts a small untruth on
 a voter-facing card, against `news-fairness.md` §1, where the lean exists so
 "the reader judges the outlet themselves".
+
+**That value now exists** (founder, 2026-09-19). Migration `0027` adds
+`unrated`, `newsLabels()` renders it as **"No independent rating"**, and
+`usableOutlets()` accepts it as signed off. What it does NOT do is designate a
+single row: every `leanTag` is still `null`, so the sweep still selects 0
+outlets. Assigning `unrated` to a row remains this gate — but it is now the
+one-word edit per row the module header always claimed it was, because the word
+exists to write.
 
 This fetch also supplies the evidence that the 31 are **not a backlog**.
 AllSides, Ad Fontes and MBFC rate national and large-metro outlets; all 36
 pages sought for the 12 outlets in scope exist, and this is exactly the set of
 nationals and metro dailies. There is no equivalent page to find for WSVN,
 WFTV, Le Floridien, The Westside Gazette or América TeVé, and waiting will not
-produce one. Adding `unrated` — the migration, the `LeanTag` type,
-`newsLabels()` rendering and `usableOutlets()` — is a separate task and a
-founder decision, because it changes what 31 of 37 cards say.
+produce one. That is the evidence the founder took the `unrated` decision on.
+
+One consequence of designating those rows, recorded before anyone is surprised
+by it: `news-slots.ts` rule 2 rotates slots across distinct leans, and
+`unrated` is one bucket like any other — correct behaviour, verified by
+`verify-news-slots.ts` fixture U, and it does not over-represent unrated
+outlets. But with 31 of 37 outlets in that bucket, the spectrum rotation has
+little left to rotate between. That is a fact about Florida local-news rating
+coverage, not a defect in the selector, and `news-fairness.md` §5's
+per-candidate variance work is where it lands.
 
 ---
 
 ## 8. What this session changed
+
+**Second change set — the `unrated` lean value (founder, 2026-09-19).** Scope
+was the value and its plumbing only, by explicit decision; no row was
+designated.
+
+- `supabase/migrations/0027_source_lean_unrated.sql` — adds `unrated` to
+  `source.lean_tag`'s CHECK. Widening only: no existing row is rewritten and
+  nothing is backfilled. Follows `0023`'s shape, including the `RAISE` guard
+  against the silent half-application that dropping an unnamed constraint by the
+  wrong name would cause.
+- `supabase/migrations/README.md` — `0027` claimed in the ledger (rule 2: the
+  row lands in the same PR as the file).
+- `src/lib/news-labels.ts` — `unrated` added to `LeanTag` and to `LEAN`,
+  rendering as **"No independent rating"**. A third load-bearing rule documents
+  why it prints when `N/A` does not.
+- `src/types/schema.ts` — the `lean_tag` union widened to match.
+- `src/lib/news-slots.ts`, `src/lib/news-sources.ts` — documentation only: how
+  `unrated` behaves in lean spread, and why `usableOutlets()` treats it as
+  signed off while `null` stays "no human has decided".
+- `scripts/verify-news-labels.ts`, `verify-news-slots.ts`,
+  `verify-migrations.mjs` — guardrails for all of it (see the table below).
+
+**First change set — the ratings fetch.**
 
 - `src/lib/news-sources.ts` — `leanBasis` rewritten on 5 rows
   (`miamiherald.com`, `sun-sentinel.com`, `tampabay.com`, `orlandosentinel.com`,
@@ -319,18 +357,26 @@ founder decision, because it changes what 31 of 37 cards say.
 | `verify-news-match.ts` | **OK** |
 | `verify-news-slots.ts` | **OK** |
 | Banned-terms lint over all 37 `leanBasis` values, using `findAllBannedTermMatches` from `src/lib/neutrality.ts` | **Clean** — 0 hits |
+| `verify-migrations.mjs` — every migration applied to embedded Postgres (PGlite), including `0027` | **All migration + RLS checks passed.** Five new `0027` assertions: `unrated` stores and reads back; `N/A` still works beside it; an eighth value is still rejected by `source_lean_tag_check`; `lean_tag` stays `NOT NULL`; and exactly **one** `lean_tag` CHECK survives — the half-application the migration's own `RAISE` guards against, asserted from outside |
+| `verify-news-labels.ts` — new `unrated` cases | **OK** — prints the exact string, does not print like `N/A`, does not leak the raw code, does not flip the opinion container, and contains none of "Left" / "Right" / "Center" |
+| `verify-news-slots.ts` — new fixture U | **OK** — an older *rated* item beats a second `unrated` one, and `unrated` does not collapse into the no-source bucket |
+| `verify-news-neutrality.ts --self-test` | **All news-neutrality self-test checks passed** |
+| `npx tsc --noEmit` | **Clean, exit 0** |
+| `npx eslint` on the four changed source files | **Clean, exit 0** |
 
-Two pre-existing failures, both reproduced on the unmodified baseline by
-stashing this session's diff, and neither related to it:
+**On the environment.** This session began with no `node_modules`, which made
+`verify-news-neutrality.ts` and `npx tsc --noEmit` fail to start at all
+(`ERR_MODULE_NOT_FOUND`). Installing the dependency tree to run the migration
+verifier resolved both, and both now pass — so neither was ever a real failure,
+and an earlier note in this document saying `tsc` fails was an artefact of the
+empty environment. Install dependencies before reading either as a signal.
 
-- `verify-news-ungated.ts` — 2 checks fail, the first being "effect has no
-  location dependency". Identical before and after.
-- `verify-news-neutrality.ts --self-test` — cannot start
-  (`ERR_MODULE_NOT_FOUND` on `@supabase/supabase-js`; project dependencies are
-  not installed in this environment). `npx tsc --noEmit` fails for the same
-  reason, on files this session did not touch. The banned-terms check in the
-  table above exercises the same matcher library that script imports, which is
-  the part that applies to `leanBasis` prose.
+**One genuinely pre-existing failure**, reproduced on the unmodified baseline by
+stashing this session's diff *with dependencies installed*, so the comparison is
+like-for-like: `verify-news-ungated.ts` fails the same 2 named checks before and
+after — "fetch requests the statewide scope with no parameters" and "effect has
+no location dependency". Unrelated to anything here; it concerns the news feed's
+location gating.
 
 The brief asked for `scripts/verify-news-issues.ts`; **no such script exists**
 in `scripts/`. The news guardrails present are the ones listed above plus
@@ -345,8 +391,11 @@ in `scripts/`. The news guardrails present are the ones listed above plus
    national tier.
 2. **National-tier `countyFips`** — unchanged from
    `news-corpus-verification-2026-09-17.md` §3 item 7. Schema decision.
-3. **`unrated` lean value** (§7) — the real unblock. Migration + type +
-   rendering + `usableOutlets()`.
+3. ~~**`unrated` lean value** — the real unblock.~~ **Done 2026-09-19**
+   (migration `0027`, `LeanTag`, `newsLabels()`, `usableOutlets()`). What
+   remains is the founder act it enables: **designating the 31 rows
+   `leanTag: 'unrated'`**, which turns the sweep on and changes what 31
+   voter-facing cards say. Deliberately not done here.
 4. **Where the AllSides CC BY-NC line sits in the UI** (§6) — spec §12 item 4,
    now a launch blocker for news cards.
 5. **BY-NC non-commercial term** against the product's plans (§6).

@@ -30,7 +30,18 @@
    the 0014 CHECK constraint — a selector that silently swallowed rows would
    hide that failure instead of surfacing it. `'N/A'` is a real, legitimate
    lean value (a government primary document has no editorial lean) and gets
-   its own bucket too; it is not a missing value.
+   its own bucket too; it is not a missing value. So is `'unrated'` (migration
+   0027 — a lean applies and no rating agency has published one), and it is a
+   DIFFERENT bucket from both `'N/A'` and null: collapsing it into null would
+   let a sourced item and an unattributed one compete as one lean, and treating
+   it as matching any lean would let two unrated outlets take slots before a
+   rated one. scripts/verify-news-slots.ts fixture U pins both.
+
+   Worth knowing when reading a real card set: most of a LOCAL news corpus has
+   no published rating, so once the founder designates those rows the
+   `'unrated'` bucket holds the bulk of the corpus and rule 2 has little left to
+   rotate between. The rule still behaves correctly; there is simply less
+   spectrum in the data than the rule can express (news-fairness.md §5).
 
    WHAT `n` IS NOT: this module picks no number. news-fairness.md §5 says `N`
    comes from real per-candidate counts once N5 measures them, and N5 has no
