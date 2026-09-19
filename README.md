@@ -26,9 +26,122 @@ npm run dev                  # http://localhost:3000
 
 ## Environment variables
 
-See [.env.example](.env.example). `SUPABASE_SERVICE_ROLE_KEY`,
-`ANTHROPIC_API_KEY`, `RESEND_API_KEY`, and `CRON_SECRET` are server-only —
-never give them a `NEXT_PUBLIC_` prefix.
+[.env.example](.env.example) is the canonical list of **names**; it never
+holds a value. Locally the values go in `.env.local` (gitignored — `.gitignore`
+matches `.env*`). For the deployed app they live in Vercel → Settings →
+Environment Variables and nowhere else. A secret that reaches a git history or
+a chat transcript is burned: rotate it, don't delete it.
+
+`NEXT_PUBLIC_` is a one-way door — Next.js inlines those values into the
+browser bundle at build time. Everything else is server-only and must never
+gain that prefix. `src/lib/supabase/service.ts` and `src/lib/geocode.ts` import
+`server-only`, so pulling them into a client component is a build error rather
+than a leak.
+
+### Required to boot
+
+- `NEXT_PUBLIC_SUPABASE_URL` — the Supabase project this app reads.
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` — the key behind every public read. Public
+  by design: RLS, not secrecy, is the boundary (`0002_rls.sql`).
+
+Nothing else is needed to run `npm run dev`. Every other variable turns one
+feature on, and each feature says so plainly when its key is absent — a
+missing key degrades a surface, it never fakes one.
+
+### Feature keys, and what happens without them
+
+- `SUPABASE_SERVICE_ROLE_KEY` — the two app-owned write paths: voting-info
+  signups and the news cron's `news_item` upserts. Bypasses RLS, so it is
+  server-only in the strongest sense. Unset → `POST /api/voting-info` returns
+  503 with nothing sent or stored, and the news cron returns 503 with
+  yesterday's feed left intact.
+- `ANTHROPIC_API_KEY` — the Find My Candidates quiz. Unset → the quiz returns
+  503 ("the quiz is taking a quick break") and every candidate's full brief
+  stays open below it.
+- `PELIAS_BASE_URL` — address completion in the location field. **Where it
+  points is the privacy decision, and it is made here rather than in code:**
+  an instance you host (`deploy/pelias/`) means no third party ever sees a
+  voter's address; `https://api.geocode.earth` means a geocoding company
+  does. `/privacy` reads the configured host, so the page stays true without
+  anyone remembering to edit the prose. Unset → `/api/address/suggest`
+  answers 503 `unavailable`, the field takes a ZIP, and the district picker
+  still works.
+- `PELIAS_API_KEY` — hosted Pelias only; Geocode Earth authenticates by query
+  parameter. A self-hosted instance normally needs nothing here, so an absent
+  key is normal rather than an error.
+- `RESEND_API_KEY` + `EMAIL_FROM` — opt-in transactional email: the
+  voting-info reply and the deadline reminders. Both are required; one alone
+  counts as unconfigured. Unset → the voting-info POST and the reminder cron
+  both return 503 without sending or storing anything.
+- `CRON_SECRET` — authenticates both cron routes. Vercel Cron invokes with
+  `GET` + `Authorization: Bearer …`; the manual contract is `POST` +
+  `x-cron-secret`. Compared in constant time (`secretEquals`), never `===`.
+  Unset → fail-closed: every cron request gets 401, Vercel's included.
+- `ADMIN_EMAILS` — the admin console's entire authorization surface: a
+  comma-separated, case-folded allowlist of Supabase Auth emails. Unset →
+  sign-in is closed and `/admin/login` says "Admin sign-in isn't configured
+  yet." rather than pretending otherwise.
+- `TYPESAFE_API_KEY` — the news issue characterizer
+  (`scripts/news-characterize.ts`). Unset → the run refuses to start, loudly,
+  because a silent skip looks exactly like "no issues found".
+
+### Switches
+
+- `NOTIFICATIONS_PAUSED` — pauses outbound reminder sends without a redeploy.
+  **Any non-empty value pauses**, including the string `false`; to resume,
+  remove the variable.
+- `SHOW_CANDIDATE_CONTACT` — renders the campaign-contact block, and only
+  when set to exactly `true`. Held until the first real R2 refresher run has
+  been reviewed.
+
+### Optional — URLs, analytics, error reporting
+
+- `NEXT_PUBLIC_SITE_URL` — canonical origin for `sitemap.xml`, `robots.txt`,
+  the OG metadata base, and the admin magic-link fallback. Falls back to the
+  Vercel URL, so set it once a custom domain exists.
+- `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` — loads the cookieless analytics script.
+  Unset → no script at all.
+- `NEXT_PUBLIC_SENTRY_DSN` — browser error reporting, loaded lazily after
+  hydration so the SDK stays out of the initial bundle. Unset → never loaded.
+- `SENTRY_DSN` — server error reporting, PII-scrubbed (verified by
+  `node scripts/verify-sentry-scrub.ts`). Unset → Sentry stays disabled.
+
+### Admin console integrations (optional)
+
+The admin Site page pulls deploy health and recent errors. Each panel names
+the exact variable it is missing instead of going blank, so "not wired" and
+"wired but quiet" stay tellable apart.
+
+- `VERCEL_API_TOKEN` + `VERCEL_PROJECT_ID` — the Deployments panel; add
+  `VERCEL_TEAM_ID` when the project sits in a team.
+- `SENTRY_AUTH_TOKEN` + `SENTRY_ORG` + `SENTRY_PROJECT` — the Errors panel.
+  `SENTRY_URL` only for self-hosted Sentry (defaults to `https://sentry.io`).
+
+### Not the web app
+
+The tail of `.env.example` — `SUPABASE_DB_URL`, `FEC_API_KEY`, `TWILIO_*`,
+`CAP_*` — belongs to the CAP pipeline, which runs locally under
+`Civic Awareness (Know Your Vote)/toollayer/`. Vercel never needs them.
+`CAP_AGENT_ID`, `CAP_LOG_SINK`, and `CAP_DISPATCH_TOKEN` are set by the
+launcher per process, never by hand.
+
+### Scripts and local development
+
+Scripts that need keys load `.env.local` themselves — most with
+`process.loadEnvFile`, the news characterizers through
+`scripts/env-local.ts`, which also falls back to the main checkout's file
+when run from a `.claude/worktrees/…` worktree and prints to stderr which
+file it used. The migration and Sentry-scrub checks under
+[Database](#database) need no keys at all.
+
+Address completion can be exercised without a geocoder account or a 20GB
+Elasticsearch import — `scripts/pelias-stub.mjs` serves a handful of real
+Florida addresses in the exact shape `/v1/autocomplete` returns:
+
+```bash
+node scripts/pelias-stub.mjs             # listens on 127.0.0.1:4000
+PELIAS_BASE_URL=http://127.0.0.1:4000 npm run dev
+```
 
 ## Database
 
@@ -61,9 +174,14 @@ pipeline output before public launch.
 ## Going live — the short list
 
 1. Fill in `.env.local` / Vercel env: `SUPABASE_SERVICE_ROLE_KEY` (enables
-   voting-info storage + the news cron), `ANTHROPIC_API_KEY` (enables the
-   quiz), `RESEND_API_KEY` + `EMAIL_FROM` (enables the email), and optionally
-   `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` / `NEXT_PUBLIC_SENTRY_DSN` + `SENTRY_DSN`.
+   voting-info storage + the news cron), `CRON_SECRET` (without it both cron
+   routes 401, Vercel's own invocation included), `ANTHROPIC_API_KEY` (enables
+   the quiz), `RESEND_API_KEY` + `EMAIL_FROM` (enables the email),
+   `ADMIN_EMAILS` (opens admin sign-in), and optionally
+   `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` /
+   `NEXT_PUBLIC_SENTRY_DSN` + `SENTRY_DSN`. See
+   [Environment variables](#environment-variables) for what each one degrades
+   to when it's absent.
 2. In Vercel → Settings → Deployment Protection, set Vercel Authentication to
    "Only Preview Deployments" so the production URL is public.
 3. Run real races through the pipeline's Balance Audit and publish only
