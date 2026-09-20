@@ -146,3 +146,49 @@ then re-measure.**
 6. **Re-label the gold set as founder work.** This still rests on an agent's
    labels, and the B6 episode is a live example of an annotator's reading being
    the thing under test.
+
+---
+
+## 7. Follow-up — taxonomy v3 (2026-09-20)
+
+**Every number above is a v2 number and stays one.** This section records what
+changed afterwards so the report is not read as covering a taxonomy it never
+ran against.
+
+**Recommendation 2 is done: the four B8 gold rows are fixed.** All four were
+data-centre stories — one Orange County moratorium and the same David Jolly
+interview from three outlets — filed under "Climate and environment
+(national)". They now carry `["KYV2", "KYV3"]`.
+
+**That required new issues, not new labels.** There was nowhere correct to put
+them: the taxonomy had `A5` (Florida water and Everglades) and `B8` (national
+climate) and nothing for energy or land use. So `environment` gained three
+sub-issues, and `TAXONOMY_VERSION` went to `3`:
+
+| id | label | why |
+|---|---|---|
+| `KYV2` | Energy and utilities | The measured gap. Half of what a data-centre story is about; nothing else in the taxonomy covers electricity, the grid or utility rates. |
+| `KYV3` | Growth, development and land conservation | The other half — a county moratorium is a land-use decision. Also the quiz's "balancing environmental rules with growth and development", which had no sub-issue. |
+| `KYV4` | Storm resilience and flooding | The quiz's "preparing infrastructure for storms and flooding", which had no sub-issue either. No gold examples — see below. |
+
+**B8 was deliberately not widened**, against the shape of recommendation 3.
+The lever works on A6/B2 because those were wording gaps. B8 was not: the model
+declined the four rows because they were not national climate policy, and it
+was right. `energy` moved out of B8's aliases to KYV2 so the broad label cannot
+swallow the narrow one the way B1 swallows A4 (§3).
+
+### What this is not
+
+- **Not measured.** Nothing in §1–§2 was re-run. Three new Nouls per article
+  (16 → 19) and four re-labelled rows both move the numbers, in unknown
+  directions. Re-running needs `TYPESAFE_API_KEY`, which is a founder action:
+  `node scripts/news-characterize-eval.ts docs/general-election/news-characterization-goldset-2026-09-18.jsonl`.
+  Expect roughly $0.013 at 19 questions (§4), and treat the result as the first
+  v3 baseline rather than a comparison — v2 could not express these tags at all.
+- **Not founder-labelled.** §0 still holds, and recommendation 6 is still open:
+  these four rows were re-labelled by an agent, the same as the other 112.
+- **KYV4 is unexercised.** The 14-day window carried no storm-resilience story,
+  so it sits where A1, A2, A5, B4 and B5 sit — present and unscored. It is in
+  because the quiz asks about it, not because the evaluation found it missing.
+- **Recommendation 4 (A4 vs B1) is untouched.** Still a founder call, still not
+  urgent.

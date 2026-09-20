@@ -4,7 +4,9 @@
 
    Founder direction 2026-09-18: the quiz's eight become CATEGORIES; the
    fifteen researched issues from CAP_Issue_List_FL_2026_v1.md become the
-   SUB_ISSUES underneath them.
+   SUB_ISSUES underneath them. Four `KYV`-prefixed sub-issues have been added
+   since, each where a measured gap or the quiz's own wording showed a subject
+   with nowhere to go — see TAXONOMY_VERSION and the KYV entries below.
 
    WHY TWO LEVELS. Tagging at the coarse level loses information that cannot be
    recovered: tag an article "Insurance & Property Costs" and you can never
@@ -23,11 +25,13 @@
    parent is a contested editorial judgment, and this project does not make
    contested editorial judgments quietly. The quiz still asks eight questions.
 
-   LABELS ARE COPIED, NOT DRAFTED. Category labels for the eight are verbatim
-   from src/lib/quiz-questions.ts (TASK-032, neutrality-reviewed). Sub-issue
-   labels are verbatim from CAP_Issue_List_FL_2026_v1.md (2026-07-15, sourced
-   and balance-checked). Only the three new category labels and the `aliases`
-   arrays were written here, and they are the part a human must read in review.
+   LABELS ARE COPIED WHERE THEY EXIST, DRAFTED WHERE THEY DO NOT. Category
+   labels for the eight are verbatim from src/lib/quiz-questions.ts (TASK-032,
+   neutrality-reviewed). A- and B-prefixed sub-issue labels are verbatim from
+   CAP_Issue_List_FL_2026_v1.md (2026-07-15, sourced and balance-checked). The
+   three non-quiz category labels, the four `KYV` sub-issue labels and every
+   `aliases` array were written here — that is the part a human must read in
+   review, because nothing upstream has vetted them.
 
    Ballot amendments are NOT issues. `ballot_measure` (migration 0010) holds
    them with a measure_id and an official title. A3 "Property taxes" is the
@@ -45,7 +49,13 @@ export type { NewsIssue };
 /* 2 — 2026-09-18: CAP's B6 split into B6 + KYV1; A4/A6/B2 aliases widened
    after the gold-set evaluation. Bumped because tags written under v1 are
    not comparable to tags written under v2. */
-export const TAXONOMY_VERSION = "2";
+/* 3 — 2026-09-20: the `environment` category gained KYV2 (energy and
+   utilities), KYV3 (growth, development and land conservation) and KYV4
+   (storm resilience and flooding). Bumped because a v2 row tagged `{}` on an
+   energy or land-use article was a miss the taxonomy could not express, and a
+   v3 row tagged `{}` on the same article is a real negative. The two are not
+   comparable, so the version has to say which one you are reading. */
+export const TAXONOMY_VERSION = "3";
 
 export interface IssueCategory {
   /** For the eight, this is verbatim QUIZ_QUESTIONS[].id — the shared key that
@@ -153,8 +163,61 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
               "checks and balances", "abuse of office", "democratic norms"] },
   { id: "B7", categoryId: "safety", label: "Crime and public safety",
     aliases: ["crime", "policing", "public safety", "sentencing"] },
+  /* B8 stays NATIONAL in scope, and its alias list is deliberately not
+     widened: the 2026-09-18 evaluation scored it 0% recall, and the diagnosis
+     was that all four gold rows were mislabelled rather than missed (eval §3).
+     They were county moratoria on AI data centres, which the report reads as
+     energy and land-use stories. Those rows now sit under KYV2/KYV3, and
+     `energy` moves out of this list with them — leaving it here would recreate
+     the A4/B1 overlap, where a broad label swallows every story a narrow one
+     was added to catch. */
   { id: "B8", categoryId: "environment", label: "Climate and environment (national)",
-    aliases: ["climate policy", "emissions", "environmental regulation", "energy"] },
+    aliases: ["climate policy", "emissions", "environmental regulation",
+              "federal environmental rules", "offshore drilling"] },
+
+  /* ── The environment category, expanded 2026-09-20 ──────────────────────
+     Two independent readings asked for the same three issues.
+
+     THE EVALUATION. B8 was the only issue scoring 0% recall with gold rows to
+     its name, and no alias list could have fixed it: a county moratorium on a
+     data centre is not national climate policy, so the model's refusal was
+     correct and the label was the defect. The missing thing was an issue, not
+     a word.
+
+     THE QUIZ. Its environment question (quiz-questions.ts, TASK-032) offers
+     three priorities — water quality and restoration projects, balancing
+     environmental rules with growth and development, and preparing
+     infrastructure for storms and flooding. Only the first had a sub-issue. A
+     voter who picked either of the other two got no news matching the
+     priority they had just named, which is the one thing a shared vocabulary
+     between the quiz and the feed is for.
+
+     KYV prefix, per KYV1: an A- or B-prefixed id traces to a sourced CAP
+     entry, a KYV id is this project's own addition and carries no CAP
+     provenance. Do not renumber these into the A or B series.
+
+     SCOPE IS THE SEAM. These three are state and local; B8 is national. That
+     split is what keeps them from competing for the same article the way A4
+     and B1 do (eval §3) — and it is also the line to check first if a later
+     evaluation finds one of them never firing. */
+  { id: "KYV2", categoryId: "environment", label: "Energy and utilities",
+    aliases: ["electricity", "power grid", "utility rates", "rate increase",
+              "power plants", "solar", "natural gas", "energy policy",
+              "data centers", "data center power demand"] },
+  { id: "KYV3", categoryId: "environment", label: "Growth, development and land conservation",
+    aliases: ["land use", "zoning", "development moratorium", "growth management",
+              "wetlands", "permitting", "state parks", "conservation land",
+              "rural boundary", "suburban development", "data centers"] },
+  /* Unmeasured, not validated — the position A1, A2, A5, B4 and B5 are also
+     in. The gold set's 14-day window carried no storm-resilience story at
+     all, so nothing here has been scored. It exists because the quiz asks
+     about it and Florida votes on it, not because the evaluation demanded
+     it. */
+  { id: "KYV4", categoryId: "environment", label: "Storm resilience and flooding",
+    aliases: ["storm resilience", "hurricane preparedness", "flooding",
+              "flood mitigation", "sea-level rise", "coastal flooding",
+              "stormwater", "beach renourishment", "sea walls",
+              "evacuation routes"] },
 ];
 
 /* What the model is asked about: THE SUB-ISSUES ONLY.
