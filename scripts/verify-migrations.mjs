@@ -55,6 +55,14 @@
         or election_news row with source_id NULL is rejected; an
         official_link row with source_id NULL still inserts; a candidate_news
         row with a valid source_id inserts.
+    17b. 0028_source_lean_unrated: source.lean_tag admits 'unrated', still
+        admits 'N/A' beside it, still rejects an unknown value, stays NOT NULL,
+        and carries exactly one lean_tag CHECK (the half-application 0028's
+        RAISE guard exists to prevent).
+    17c. 0029_news_item_image: news_item.image_url exists and stays NULLABLE
+        (a story with no photo must still be storable), stores a feed URL back
+        verbatim, and carries NO CHECK — https validation lives in the parser,
+        which drops a bad image and keeps the article.
     17. 0023_candidate_unopposed (decision D-B): candidate.qualifying_status
         admits 'unopposed' and still rejects an unknown value, and exactly one
         CHECK on that column survives — the widening cannot half-apply.
@@ -310,6 +318,119 @@ await check("0023 leaves exactly one qualifying_status CHECK", async () => {
   const names = r.rows.map((x) => x.conname);
   if (names.length !== 1) {
     throw new Error(`expected 1 qualifying_status CHECK, found ${names.length}: ${names.join(", ")}`);
+  }
+});
+/* --- 0028. 'unrated' is the recorded absence of a rating, and it is NOT the
+   same fact as 'N/A' ("a lean does not apply"). Most of a local-news corpus has
+   no published rating because AllSides / Ad Fontes / MBFC do not rate local
+   outlets, and forcing those into 'N/A' would tell a voter a lean does not
+   apply to a television newsroom. Same shape as 0023: a value added to a CHECK
+   that 0000 created unnamed. */
+await check("0028 lean_tag admits unrated", async () => {
+  await db.query(
+    `INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag)
+     VALUES ('s-unrated','https://wsvn.com/x','wsvn.com/x','WSVN 7News','factual_reporting','unrated');`
+  );
+  const r = await db.query("SELECT lean_tag FROM source WHERE source_id = 's-unrated';");
+  if (r.rows[0]?.lean_tag !== "unrated") {
+    throw new Error(`stored ${r.rows[0]?.lean_tag}, expected unrated`);
+  }
+  await db.query("DELETE FROM source WHERE source_id = 's-unrated';");
+});
+await check("0028 kept 'N/A' working alongside it", async () => {
+  await db.query(
+    `INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag)
+     VALUES ('s-na-still','https://example.gov/z','example.gov/z','Example Gov','primary_doc','N/A');`
+  );
+  await db.query("DELETE FROM source WHERE source_id = 's-na-still';");
+});
+await check("0028 widened the CHECK without opening it", async () => {
+  let rejected = false;
+  try {
+    await db.query(
+      `INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag)
+       VALUES ('s-bogus-lean','https://example.com/q','example.com/q','Bogus','factual_reporting','centrist');`
+    );
+  } catch (err) {
+    if (!/source_lean_tag_check/.test(String(err))) throw err;
+    rejected = true;
+  }
+  if (!rejected) throw new Error("an eighth lean_tag value was accepted");
+});
+/* lean_tag is NOT NULL (0000) and 0028 must not have relaxed that — null is
+   what `usableOutlets()` reads as "no human has decided", and a null in the DB
+   would be an unlabelled card. */
+await check("0028 left lean_tag NOT NULL", async () => {
+  const r = await db.query(
+    `SELECT is_nullable FROM information_schema.columns
+      WHERE table_name='source' AND column_name='lean_tag';`
+  );
+  if (r.rows[0]?.is_nullable !== "NO") throw new Error("lean_tag must stay NOT NULL");
+});
+/* The half-application 0028's own RAISE guards against, asserted from outside:
+   0000 created this CHECK unnamed, so dropping the wrong name would leave the
+   old six-value constraint standing beside the new one. Both would be enforced,
+   every 'unrated' row would still be rejected, and the migration would have
+   reported success. */
+await check("0028 leaves exactly one lean_tag CHECK", async () => {
+  const r = await db.query(
+    `SELECT conname FROM pg_constraint
+      WHERE conrelid='source'::regclass AND contype='c'
+        AND pg_get_constraintdef(oid) ILIKE '%lean_tag%';`
+  );
+  const names = r.rows.map((x) => x.conname);
+  if (names.length !== 1) {
+    throw new Error(`expected 1 lean_tag CHECK, found ${names.length}: ${names.join(", ")}`);
+  }
+});
+/* --- 0029. news_item.image_url — the story card's hero image
+   (news-fairness.md §1 as amended 2026-09-19). Additive and nullable, and both
+   halves of that are load-bearing in a way nothing else asserts. */
+await check("0029 news_item.image_url exists and is nullable", async () => {
+  const r = await db.query(
+    `SELECT is_nullable FROM information_schema.columns
+      WHERE table_name='news_item' AND column_name='image_url';`
+  );
+  if (r.rows.length !== 1) throw new Error("news_item.image_url missing");
+  /* NULL is a REAL STATE, not a backlog: many feeds carry no image at all and
+     both Tribune dailies reach us by sitemap, which carries none. The card has
+     a deliberate text-only variant for it, so a NOT NULL here would mean a
+     story without a photo could not be stored — losing the story over its
+     illustration. */
+  if (r.rows[0].is_nullable !== "YES") throw new Error("image_url must stay nullable");
+});
+await check("0029 stores a feed image and accepts a row with none", async () => {
+  await db.query(
+    `INSERT INTO news_item (item_type, title, url, relation, source_id, image_url)
+     VALUES ('candidate_news','with image','https://example.org/img-a','named','src-early-test','https://cdn.example.org/photo.jpg'),
+            ('candidate_news','without image','https://example.org/img-b','named','src-early-test',NULL);`
+  );
+  const r = await db.query(
+    "SELECT url, image_url FROM news_item WHERE url LIKE 'https://example.org/img-%' ORDER BY url;"
+  );
+  if (r.rows[0]?.image_url !== "https://cdn.example.org/photo.jpg") {
+    throw new Error(`stored ${r.rows[0]?.image_url}, expected the feed URL back verbatim`);
+  }
+  if (r.rows[1]?.image_url !== null) throw new Error("a story with no image must store NULL");
+  await db.query("DELETE FROM news_item WHERE url LIKE 'https://example.org/img-%';");
+});
+/* NO CHECK ON image_url, on purpose — asserted so nobody adds one thinking it
+   is a missing safeguard. https-only is enforced in the parser
+   (src/lib/news-sweep.ts `feedImage`, and again in the card via safeHttpUrl),
+   which DROPS a bad image URL and keeps the article. A CHECK would instead
+   reject the whole row at write time, losing a real story over a cosmetic
+   defect in someone else's feed. */
+await check("0029 puts no CHECK on image_url — the parser drops, the row survives", async () => {
+  const r = await db.query(
+    `SELECT conname FROM pg_constraint
+      WHERE conrelid='news_item'::regclass AND contype='c'
+        AND pg_get_constraintdef(oid) ILIKE '%image_url%';`
+  );
+  if (r.rows.length !== 0) {
+    throw new Error(
+      `image_url carries ${r.rows.length} CHECK(s) (${r.rows.map((x) => x.conname).join(", ")}) — `
+        + "https validation belongs in the parser, which drops the image and keeps the story"
+    );
   }
 });
 await check("0017 news_item.relation exists and is nullable", async () => {

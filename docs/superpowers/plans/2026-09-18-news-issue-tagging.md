@@ -1300,5 +1300,5 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 ## After this plan
 
 - **Gate G4 (surface)** is the founder's, with Task 6's numbers in hand. Nothing renders to a voter before that. If issue tags ever do render, they inherit `news-fairness.md` §1: disclosed, never judged, never colour-coded.
-- **Unit 2 (candidate suggestions)** stays blocked on Q5 and ingest B2. Spec §5.
+- **Unit 2 (candidate suggestions)** is **no longer blocked on Q5** — the founder reversed admin-dashboard/design.md § 7 on 2026-09-19 and agent news now enters `review_item` (PR #54). It stays blocked on ingest **B2**: precision and recall are meaningless against 29 demo fixtures. Spec §5.
 - **Migration 0027 is written, not applied.** Applying it to the live project is a founder action, recorded in the ledger when it happens.

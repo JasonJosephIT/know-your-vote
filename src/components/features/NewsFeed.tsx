@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/Card";
-import { formatNewsDate, safeHttpUrl } from "@/lib/format";
+import { NewsStoryCard } from "@/components/features/NewsStoryCard";
+import { formatNewsDate } from "@/lib/format";
 
 import type { NewsItemType } from "@/types/app";
+import type { LeanTag, SourceType } from "@/lib/news-labels";
 
 interface FeedItem {
   id: string;
@@ -16,22 +17,21 @@ interface FeedItem {
   raceId: string | null;
   candidateId: string | null;
   publishedAt: string;
-  /* Source labelling (news-fairness.md §1). Null when the item has no source
-     row — official_link / pipeline_event rows legitimately have none. */
-  publisher: string | null;
-  kind: string | null;
-  lean: string | null;
-  isOpinion: boolean;
+  /** Hero image from the outlet's feed (migration 0029); null is common. */
+  imageUrl: string | null;
+  /* The card's source labels come from `newsCardLabels` inside NewsStoryCard,
+     so the raw source row travels instead of pre-rendered strings. Null when
+     the item has no source row — official_link / pipeline_event rows
+     legitimately have none.
+
+     There is deliberately NO `lean` here. The API stopped sending one
+     (news-fairness.md §1, amended 2026-09-19): lean belongs to the outlet page,
+     and a field the client never receives is a field no card can leak. */
+  source: { publisher: string; type: SourceType; lean_tag: LeanTag } | null;
+  /** Outlet domain for the outlet-page link, or null for non-article rows. */
+  outletDomain: string | null;
 }
 
-/* candidate_news/election_news cite allowlisted outlets (AP, Ballotpedia…),
-   which are sources but not official ones — label those links honestly when
-   the row carries no source row to name the publisher. */
-function sourceLinkText(itemType: NewsItemType) {
-  return itemType === "candidate_news" || itemType === "election_news"
-    ? "Read the source"
-    : "Open official source";
-}
 
 type Stage =
   | { kind: "loading" }
@@ -111,49 +111,32 @@ export function NewsFeed({ county }: { county?: string }) {
   }
 
   return (
-    <ul className="flex flex-col gap-3">
-      {stage.items.map((item) => {
-        const url = safeHttpUrl(item.url);
-        return (
-          <li key={item.id}>
-            {/* Opinion pieces get a visually distinct container, not just a word
-                in the byline (news-fairness.md §1) — so a column is never read as
-                a report. Deliberately neutral styling: a muted ground and a rule,
-                never a colour that would imply a verdict about the piece. */}
-            <Card
-              className={`flex flex-col gap-1${
-                item.isOpinion ? " border-l-2 border-l-border-strong bg-surface-muted" : ""
-              }`}
-            >
-              <p className="flex flex-wrap items-center gap-x-2 font-mono text-mono text-on-surface-muted">
-                <span>{formatNewsDate(item.publishedAt)}</span>
-                {item.publisher && <span>· {item.publisher}</span>}
-                {item.kind && (
-                  <span className={item.isOpinion ? "text-on-surface" : undefined}>
-                    · {item.kind}
-                  </span>
-                )}
-                {/* Lean is disclosed, never judged — same muted style as
-                    everything else, never colour-coded (README neutrality rule). */}
-                {item.lean && <span>· {item.lean}</span>}
-                {!item.kind &&
-                  (item.itemType === "official_link" ? <span>· official resource</span> : <span>· update</span>)}
-              </p>
-              <h2 className="text-h3">{item.title}</h2>
-              {item.summary && (
-                <p className="text-body-sm text-on-surface-muted">{item.summary}</p>
-              )}
-              <p className="flex flex-wrap gap-3 text-caption">
-                {url && (
-                  <a
-                    href={url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-primary underline underline-offset-2"
-                  >
-                    {item.publisher ? `Read at ${item.publisher}` : sourceLinkText(item.itemType)}
-                  </a>
-                )}
+    <ul className="flex flex-col gap-4">
+      {stage.items.map((item) => (
+        <li key={item.id}>
+          {/* One card component for the whole product (NewsStoryCard). The
+              image / outlet / headline shape and the opinion treatment live
+              there, so this list cannot drift from the candidate page's. */}
+          <NewsStoryCard
+            title={item.title}
+            url={item.url}
+            imageUrl={item.imageUrl}
+            source={item.source}
+            outletDomain={item.outletDomain}
+            summary={item.summary}
+            dateLabel={formatNewsDate(item.publishedAt)}
+            /* Only reaches the card for rows with no source of their own — an
+                official resource or a pipeline update is not journalism and
+                should not sit there unlabelled. */
+            kindFallback={
+              item.itemType === "official_link"
+                ? "Official resource"
+                : item.itemType === "pipeline_event"
+                  ? "Update"
+                  : null
+            }
+            footer={
+              <>
                 {item.candidateId && (
                   <Link
                     href={`/candidates/${item.candidateId}`}
@@ -170,11 +153,11 @@ export function NewsFeed({ county }: { county?: string }) {
                     View the race
                   </Link>
                 )}
-              </p>
-            </Card>
-          </li>
-        );
-      })}
+              </>
+            }
+          />
+        </li>
+      ))}
     </ul>
   );
 }
