@@ -44,7 +44,7 @@ the design.
 | Coverage variance over `named` only | `namedCountsByCandidate()`; the variance itself is `balance_audit_core` (N5) | CN-R10 |
 | Storage | `news_item(url, candidate_id)` unique; `relation` (`named`/`related`, migration 0017); `county_fips` (0016) | applied live |
 | Neutrality lint | `scripts/verify-news-neutrality.ts` | banned terms; self-test green |
-| Operator review queue | `review_item` (0006), admin console A2–A5 | exists; agent news is NOT queued today (design.md §7, gate Q5 asks to reverse) |
+| Operator review queue | `review_item` (0006), admin console A2–A5 | exists, **and agent news now enters it** — founder reversed `admin-dashboard/design.md` §7 on 2026-09-19; `scripts/news-enqueue.ts` writes `review_item(kind='manual_news', source='agent:R1', status='pending')`. Gate G5/Q5 is closed |
 | R1 Candidate News Curator | Cowork scheduled task `cap-r1-candidate-news`, snapshot `agents/r1-candidate-news.prompt.txt` | exists; extend, never replace |
 | S-plane runtime (Python toollayer, three agents, MCP-stdio) | `Civic Awareness (Know Your Vote)/toollayer/`, `CAP_Runtime_PRD_v1` | merged, idle; prior art for guard patterns only (ADR-R1: identity removed from tool arguments) |
 | Roster | live `candidate` table | **still 29 demo fixtures** — ingest B2 unshipped; this blocks any live evaluation |
@@ -80,7 +80,7 @@ the design.
 | Option | What changes | Conflicts |
 |---|---|---|
 | **A. Issue tags only** | New capability; `named`/`related` untouched | None of the three above, if the taxonomy is in-repo and the input is title + dek |
-| **B. Candidate suggestions for review** | Model proposes candidate attachments the deterministic matcher missed (nicknames, "the incumbent", "the Republican nominee"); they land in `review_item`, never directly on a card | Touches §6 only as an additive, human-gated tier; needs Q5 (queue agent news) reversed |
+| **B. Candidate suggestions for review** | Model proposes candidate attachments the deterministic matcher missed (nicknames, "the incumbent", "the Republican nominee"); they land in `review_item`, never directly on a card | Touches §6 only as an additive, human-gated tier; **Q5 is now reversed** (2026-09-19), so the queue path B needs exists and is in use by the deterministic matcher |
 | **C. Model replaces the matcher** | `named`/`related` become model output | Breaks CN-R4's structural guarantee and CN-R10's denominator; needs a PRD revision, not a task |
 
 Recommendation to put to the founder: **A first, then B; C only with an
@@ -157,12 +157,29 @@ separately.
   (`src/lib/news-issues.ts`, PR-reviewed, versioned)?
 - **G4 — Surface.** Do model outputs ever reach a voter, or only the operator
   console? If voters: label wording and the news-fairness.md §1 treatment.
-- **G5 — Queue.** Reverse design.md §7 so agent news can enter `review_item`
-  (this is existing gate Q5, unanswered since 2026-09-06).
+- **G5 — Queue. ANSWERED 2026-09-19: reversed.** Agent news may enter
+  `review_item`. Asked whether swept articles matched to candidates should
+  publish directly or be enqueued, the founder chose **enqueue for review**, and
+  `scripts/news-enqueue.ts` implements exactly the shape CN-R7 specified and
+  `admin-dashboard/design.md` §8 anticipated —
+  `review_item(kind='manual_news', source='agent:R1', status='pending')`, with
+  the approve effect doing the insert. Nothing reaches a voter unapproved.
+  Open since 2026-09-06; closed in PR #54.
+
+  Note what this does **not** license: the reversal is about the *route*, not
+  about authority. G1 stands — the model still never writes `candidate_id` or
+  `relation` (§9 of the design spec). What now queues is the deterministic
+  matcher's output, human-gated.
 - **Dependencies still open regardless:** the real roster (ingest B2) — the
   matcher and any evaluation are meaningless against 29 demo fixtures; the
-  `leanTag` sign-off (C7-a) and the missing `unrated` lean value — no card
-  renders until then; the runner's feed-depth finding (sweep daily now).
+  runner's feed-depth finding (sweep daily now).
+- **No longer a dependency (2026-09-19, PR #54):** the missing `unrated` lean
+  value shipped as migration **0028**, and the founder designated **31** outlets
+  `unrated`, taking `usableOutlets()` from **0 to 27**. So cards can render.
+  C7-a is **partly** open, not closed: six rows (Miami Herald, Sun Sentinel,
+  Tampa Bay Times, Orlando Sentinel, AP, Florida Phoenix) still need a lean
+  *chosen* rather than recorded as absent — all but Florida Phoenix now have
+  fetched, cited ratings to choose from.
 
 ## 6. Proposed tasks, once gates are answered
 
