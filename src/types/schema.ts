@@ -39,7 +39,11 @@ export type ClaimBucket = "verifiable_fact" | "stated_position" | "outside_opini
 
 export type VerificationStatus = "verified" | "single_source" | "unverified";
 
-export type RaceLevel = "federal" | "state";
+/* 'county' arrived with 0031 (county commission, school board, county mayor,
+   clerk of the courts). These come from the county Supervisors of Elections,
+   not the DoE export, and they are the only level whose `district` is not a
+   bare number — see 0031 on why nothing resolves a voter to one yet. */
+export type RaceLevel = "federal" | "state" | "county";
 
 export type ElectionKind = "primary" | "general";
 
