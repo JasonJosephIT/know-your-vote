@@ -218,3 +218,53 @@ swallow the narrow one the way B1 swallows A4 (§3).
   who made these labels.
 - **Recommendation 4 (A4 vs B1) is untouched.** Still a founder call, still not
   urgent.
+
+---
+
+## 8. Follow-up — taxonomy v4 (2026-09-21)
+
+**Weaker footing than §7, and the difference matters.** Version 3 was prompted
+by `B8`'s 0% recall over four real gold rows — a measured miss. Version 4 is
+prompted by the quiz's wording and by Florida's issue space. **This corpus
+contains no housing story, no insurance story, no condo story, no eviction
+story and no homelessness story at all**, and `A1` and `A2` were already at
+zero gold rows in §2. Nothing below is validated by anything in this report.
+
+| id | label | parent | why |
+|---|---|---|---|
+| `KYV6` | Renters and evictions | `housing` | The quiz's "stronger protections and stability for renters" had no sub-issue. `A2` is a price; a tenancy is not. |
+| `KYV7` | Homelessness | `housing` | The `housing` category has listed `homelessness` among its aliases since it was written, with no sub-issue able to catch it. A tag that can never fire is a promise the taxonomy doesn't keep. |
+| `KYV8` | Condominium and HOA costs | `insurance` | Post-Surfside milestone inspections, reserve funding and special assessments. No quiz option names it and no gold row exercises it — the most speculative entry in the taxonomy. |
+
+`A1` gained flood, windstorm, residual-market and reinsurance aliases — in
+Florida those are three different policies and three different arguments, and
+the original four aliases named only wind. `A2` gained home prices, down-payment
+assistance, affordable housing, mortgage rates and homeownership, and stays
+deliberately on cost, supply and buying.
+
+### The `KYV8` parent is a judgment call, and a cheap one to reverse today
+
+It rolls up to `insurance` because that category's quiz question reads "On
+property insurance and what it costs to keep a home", and a five-figure special
+assessment is the sharpest example of that cost Florida currently offers. The
+argument for `housing` — a condominium is a home, and milestone inspections are
+building safety — is not weak. Moving it costs nothing while the sweep has never
+run and no row carries the tag; it stops being free the moment one does.
+
+### Deliberately not added
+
+- **Auto insurance** (PIP repeal and its successors). No quiz option, no gold
+  row, and lower salience than the property-insurance argument. Adding an issue
+  because it exists somewhere in the state's politics is how a taxonomy grows
+  past what anyone can evaluate.
+- **A3 untouched.** It measured 100% precision / 80% recall in §2 — the only
+  housing-or-property issue in this report with real numbers. Leave it alone.
+
+### What the re-run should show
+
+23 Nouls per article now, up from 16 at the time of §1, so roughly $0.016 a
+pass at the §4 rate. Expect `KYV6`, `KYV7` and `KYV8` to report `n/a` on a
+corpus like this one; that is not a pass, it is silence. A window containing an
+actual condo-assessment or encampment-ordinance story is what would test them,
+and pulling one deliberately (`scripts/news-eval-pool.ts` over a wider date
+range) is a cheaper way to find out than waiting for the daily sweep.

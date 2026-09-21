@@ -4,7 +4,7 @@
 
    Founder direction 2026-09-18: the quiz's eight become CATEGORIES; the
    fifteen researched issues from CAP_Issue_List_FL_2026_v1.md become the
-   SUB_ISSUES underneath them. Five `KYV`-prefixed sub-issues have been added
+   SUB_ISSUES underneath them. Eight `KYV`-prefixed sub-issues have been added
    since, each where a measured gap or the quiz's own wording showed a subject
    with nowhere to go — see TAXONOMY_VERSION and the KYV entries below.
 
@@ -29,7 +29,7 @@
    labels for the eight are verbatim from src/lib/quiz-questions.ts (TASK-032,
    neutrality-reviewed). A- and B-prefixed sub-issue labels are verbatim from
    CAP_Issue_List_FL_2026_v1.md (2026-07-15, sourced and balance-checked). The
-   three non-quiz category labels, the five `KYV` sub-issue labels and every
+   three non-quiz category labels, the eight `KYV` sub-issue labels and every
    `aliases` array were written here — that is the part a human must read in
    review, because nothing upstream has vetted them.
 
@@ -57,7 +57,19 @@ export type { NewsIssue };
    article was a miss the taxonomy could not express, and a v3 row tagged `{}`
    on the same article is a real negative. The two are not comparable, so the
    version has to say which one you are reading. */
-export const TAXONOMY_VERSION = "3";
+/* 4 — 2026-09-21: `housing` gained KYV6 (renters and evictions) and KYV7
+   (homelessness); `insurance` gained KYV8 (condominium and HOA costs). A1 and
+   A2 aliases widened. Bumped for the same reason as 3: a v3 row tagged `{}` on
+   an eviction-ordinance or special-assessment story was a gap the taxonomy
+   could not express, and a v4 row tagged `{}` on one is a real negative.
+
+   UNLIKE 3, NOTHING HERE IS MEASURED. Version 3 was prompted by B8's 0%
+   recall over four real gold rows. The 2026-09-18 corpus contains no housing
+   story, no insurance story, no condo story, no eviction story and no
+   homelessness story — A1 and A2 already sat at zero gold rows before this.
+   These three rest on the quiz's own wording and on Florida's issue space,
+   which is the standing KYV4 justification, not on evidence of a miss. */
+export const TAXONOMY_VERSION = "4";
 
 export interface IssueCategory {
   /** For the eight, this is verbatim QUIZ_QUESTIONS[].id — the shared key that
@@ -108,9 +120,21 @@ export const CATEGORIES: readonly IssueCategory[] = [
    voters weigh) and are kept so a tag traces back to a sourced entry. */
 export const SUB_ISSUES: readonly TaxonomyIssue[] = [
   { id: "A1", categoryId: "insurance", label: "Property insurance costs",
-    aliases: ["property insurance", "premiums", "hurricane coverage", "Citizens Property Insurance"] },
+    /* Widened 2026-09-21. In Florida wind, flood and the residual market are
+       three different policies and three different arguments; the original
+       four aliases named only the first. Condominium and association costs
+       are KYV8's, not A1's. */
+    aliases: ["property insurance", "premiums", "hurricane coverage",
+              "Citizens Property Insurance", "flood insurance", "windstorm coverage",
+              "rate filing", "insurer insolvency", "reinsurance"] },
   { id: "A2", categoryId: "housing", label: "Housing affordability",
-    aliases: ["housing costs", "rent", "housing supply", "first-time buyers"] },
+    /* Widened 2026-09-21, and deliberately kept to COST, SUPPLY and BUYING:
+       what a home costs and whether enough are being built. The landlord-
+       tenant relationship is KYV6, having nowhere to live is KYV7. `rent`
+       stays here because a rent level is a price. */
+    aliases: ["housing costs", "rent", "housing supply", "first-time buyers",
+              "home prices", "down payment assistance", "affordable housing",
+              "mortgage rates", "homeownership"] },
   { id: "A3", categoryId: "insurance", label: "Property taxes",
     aliases: ["property tax", "homestead exemption", "property assessments", "millage"] },
   { id: "A4", categoryId: "economy", label: "Cost of living in Florida",
@@ -257,6 +281,47 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
               "water restrictions", "desalination", "water utility",
               "water rates", "water main", "reclaimed water",
               "drinking water contamination"] },
+
+  /* ── Housing and property costs, 2026-09-21 ────────────────────────────
+     TWO CATEGORIES, THREE SUB-ISSUES BETWEEN THEM, AND A QUIZ THAT ASKS
+     ABOUT MORE THAN THAT. `housing` had one child (A2, affordability) while
+     its quiz question offers three priorities: building more, help for
+     first-time buyers, and stronger protections for renters. The first two
+     are A2's and KYV3's. The third had nothing. And the category's own alias
+     list has named `homelessness` since it was written, with no sub-issue
+     able to catch it — a tag that can never fire is a promise the taxonomy
+     does not keep.
+
+     NOTHING HERE IS MEASURED, and that is a weaker footing than the energy
+     work stood on. The 2026-09-18 corpus holds no housing, insurance, condo,
+     eviction or homelessness story at all; A1 and A2 were already at zero
+     gold rows. These rest on the quiz's wording and on Florida's issue space
+     — the KYV4 standard, not the B8 standard. Whoever reads the first v4
+     evaluation should expect these three to be the least validated rows in
+     it. */
+  { id: "KYV6", categoryId: "housing", label: "Renters and evictions",
+    /* The quiz's "stronger protections and stability for renters". Aliases
+       name the TENANCY, not the price — a rent level is A2's. */
+    aliases: ["renters", "tenants", "eviction", "landlord-tenant law",
+              "rental assistance", "security deposits", "tenant protections",
+              "lease terms", "rent stabilization"] },
+  { id: "KYV7", categoryId: "housing", label: "Homelessness",
+    aliases: ["homelessness", "homeless services", "encampments",
+              "public camping", "emergency shelters", "unsheltered",
+              "transitional housing", "street homelessness"] },
+  /* PARENT IS `insurance`, NOT `housing`, AND IT IS A JUDGMENT CALL. That
+     category's quiz question reads "On property insurance and what it costs
+     to keep a home" — and a five-figure special assessment is the sharpest
+     example of what it costs to keep a home that Florida currently offers.
+     The argument for `housing` is that a condominium is a home and milestone
+     inspections are building safety; it is not a weak argument. It is cheap
+     to move today, because the sweep has never run and no row carries this
+     tag yet; it stops being cheap once one does. */
+  { id: "KYV8", categoryId: "insurance", label: "Condominium and HOA costs",
+    aliases: ["condominium association", "HOA", "homeowners association",
+              "special assessment", "milestone inspection",
+              "structural integrity reserve", "condo fees", "association dues",
+              "condo board", "reserve funding"] },
 ];
 
 /* What the model is asked about: THE SUB-ISSUES ONLY.
