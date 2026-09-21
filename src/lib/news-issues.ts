@@ -376,24 +376,41 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
     aliases: ["renters", "tenants", "eviction", "landlord-tenant law",
               "rental assistance", "security deposits", "tenant protections",
               "lease terms", "rent stabilization"] },
-  /* The one entry here with a measured case. "homelessness" was a `housing`
-     CATEGORY alias, and when categories stopped being asked on 2026-09-18 it
-     stopped being asked at all: A2 then scored 0.0% across 834 articles that
-     carried two homelessness stories. v4 restored the term by adding it to
-     A2; v5 gives it a label that means it. `unhoused` comes across from that
-     fold. */
+  /* THE ONE ENTRY HERE WITH A MEASURED CASE, and the alias route was measured
+     to fail before this one was written. A2 scored 0.0% across 834 articles
+     that carried two homelessness stories, and
+     docs/general-election/news-corpus-analysis-2026-09-19.md says why, in its
+     own words: the two articles "are about homelessness *services*, not
+     housing **affordability**, which is A2's label. Adding 'homelessness' as
+     an alias did not change it, and the label is right to resist. CAP's 15 has
+     no concept for housing insecurity — a taxonomy gap to note, not a tagging
+     failure."
+
+     So this is not a second opinion about A2's label. It is the missing
+     concept that analysis asked for. `unhoused` comes across from the v4 fold
+     for the same reason "homelessness" does. */
   { id: "KYV7", categoryId: "housing", label: "Homelessness",
     aliases: ["homelessness", "unhoused", "homeless services", "encampments",
               "public camping", "emergency shelters", "unsheltered",
               "transitional housing"] },
-  /* PARENT IS `insurance`, NOT `housing`, AND IT IS A JUDGMENT CALL. That
-     category's quiz question reads "On property insurance and what it costs
-     to keep a home" — and a five-figure special assessment is the sharpest
-     example of what it costs to keep a home that Florida currently offers.
-     The argument for `housing` is that a condominium is a home and milestone
-     inspections are building safety; it is not a weak argument. It is cheap
-     to move today, because the sweep has never run and no row carries this
-     tag yet; it stops being cheap once one does. */
+  /* THE WEAKEST ENTRY IN THE TAXONOMY, and the 834-article corpus is why.
+     Its `Insurance & Property Costs` category totals 13 articles, and A1 (3)
+     plus A3 (10) account for all 13 — nothing unexplained is sitting there
+     waiting for a condo issue. Twenty-five days of 29 Florida outlets produced
+     no condominium story that any issue caught.
+
+     That is evidence against URGENCY, not against correctness: a special-
+     assessment story could be sitting in the corpus's 531 untagged articles,
+     which is exactly what this would catch, and the pool file was not
+     preserved so nobody can look. The test is to label rows, which is what
+     that report says to do about every zero in it.
+
+     PARENT IS `insurance`, NOT `housing`, AND THAT IS A JUDGMENT CALL. The
+     category's quiz question reads "On property insurance and what it costs to
+     keep a home", and a five-figure special assessment is the sharpest example
+     of that cost Florida offers. The argument for `housing` — a condominium is
+     a home, milestone inspections are building safety — is not weak. Moving it
+     is free while the sweep has never run and no row carries the tag. */
   { id: "KYV8", categoryId: "insurance", label: "Condominium and HOA costs",
     aliases: ["condominium association", "HOA", "homeowners association",
               "special assessment", "milestone inspection",
