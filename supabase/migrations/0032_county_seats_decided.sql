@@ -1,4 +1,4 @@
--- County offices already settled: 25 seats that will NOT appear on the
+-- County offices already settled: 15 seats that will NOT appear on the
 -- November ballot, and the officials who hold them.
 --
 -- WHY: a Broward voter in County Commission District 2 has a commissioner
@@ -13,11 +13,11 @@
 --
 -- TWO STATES, AND CONFLATING THEM WOULD PUBLISH A FALSEHOOD:
 --
---   unopposed (13)          nobody filed. F.S. 101.151(7) keeps the contest
+--   unopposed (5)           nobody filed. F.S. 101.151(7) keeps the contest
 --                           off the ballot entirely. Mark D. Bogen, Broward
 --                           County Commission District 2, drew no opponent.
 --
---   elected_in_primary (12) they BEAT someone. Florida's nonpartisan county
+--   elected_in_primary (10) they BEAT someone. Florida's nonpartisan county
 --                           races -- school board everywhere, county offices
 --                           in charter counties -- end in August when a
 --                           candidate clears 50%. Caryl Sandler Shuham won
@@ -42,10 +42,14 @@
 -- shown tier, and 0023 is explicit that unopposed is a QUALIFYING status on a
 -- different axis. These people hold the office; they are not excluded filings.
 --
--- COUNTY JUDGES: 10 of the 25 are Orange County Judge groups. They are county
--- ballot offices and are included for completeness; if the founder wants the
--- county surface limited to commission and school board, drop the FL-ORA-CJ*
--- rows -- nothing else depends on them.
+-- COUNTY JUDGES ARE DELIBERATELY EXCLUDED. Ten Orange County Judge groups
+-- (8 unopposed, 2 elected in the primary) were in an earlier draft and were
+-- removed on the founder's call 2026-09-21: this surface is county commission
+-- and school board. A county judge is a state trial judge elected countywide
+-- -- a county BALLOT office, not a county GOVERNMENT office -- so it does not
+-- belong to the local-government gap this file exists to fill. If they are
+-- ever wanted they come from the same VoterFocus read; nothing depends on
+-- their absence.
 --
 -- NOT PUBLISHED: no race_publication rows, so RLS hides all of it, exactly as
 -- for 0031's 17 contested races.
@@ -72,16 +76,6 @@ VALUES
   ('FL-VF-ORA-1245', 'Angie Gallo', '', 'Orange County School Board Chair', false, 'elected_in_primary', 'ballot'),
   ('FL-VF-ORA-1270', 'Melissa Lopez Marantes', '', 'Orange County School Board, District 1', false, 'elected_in_primary', 'ballot'),
   ('FL-VF-ORA-1318', 'Gloria Reina O''Neal', '', 'Orange County School Board, District 2', false, 'elected_in_primary', 'ballot'),
-  ('FL-VF-ORA-1248', 'Jeramy Beasley', '', 'Orange County Judge, Group 2', false, 'unopposed', 'ballot'),
-  ('FL-VF-ORA-1243', 'Ayana Barrow', '', 'Orange County Judge, Group 3', false, 'unopposed', 'ballot'),
-  ('FL-VF-ORA-1259', 'Asima Azam', '', 'Orange County Judge, Group 5', false, 'elected_in_primary', 'ballot'),
-  ('FL-VF-ORA-1313', 'Jeanette D. Bigney', '', 'Orange County Judge, Group 7', false, 'unopposed', 'ballot'),
-  ('FL-VF-ORA-1282', 'Tina Caraballo', '', 'Orange County Judge, Group 10', false, 'unopposed', 'ballot'),
-  ('FL-VF-ORA-1312', 'Brian F. Duckworth', '', 'Orange County Judge, Group 15', false, 'unopposed', 'ballot'),
-  ('FL-VF-ORA-1307', 'Carly Wish', '', 'Orange County Judge, Group 16', false, 'unopposed', 'ballot'),
-  ('FL-VF-ORA-1238', 'Cherish Adams', '', 'Orange County Judge, Group 17', false, 'elected_in_primary', 'ballot'),
-  ('FL-VF-ORA-1237', 'Heather Guarch', '', 'Orange County Judge, Group 20', false, 'unopposed', 'ballot'),
-  ('FL-VF-ORA-1258', 'Judi Garabo Hayes', '', 'Orange County Judge, Group 21', false, 'unopposed', 'ballot'),
   ('FL-VF-DAD-2926', 'Dorothy Bendross-Mindingall', 'NOP', 'Miami-Dade County School Board, District 2', false, 'unopposed', 'ballot'),
   ('FL-VF-DAD-2953', 'Monica Colucci', 'NOP', 'Miami-Dade County School Board, District 8', false, 'elected_in_primary', 'ballot'),
   ('FL-VF-DAD-2964', 'Marleine Bastien', 'NOP', 'Miami-Dade County Commission, District 2', false, 'elected_in_primary', 'ballot'),
@@ -106,16 +100,6 @@ VALUES
   ('FL-ORA-SBCHAIR-general', 'Orange County School Board Chair', 'county', 'ORA-SBCHAIR', 'general', ARRAY['FL-VF-ORA-1245']),
   ('FL-ORA-SB1-general', 'Orange County School Board, District 1', 'county', 'ORA-SB-1', 'general', ARRAY['FL-VF-ORA-1270']),
   ('FL-ORA-SB2-general', 'Orange County School Board, District 2', 'county', 'ORA-SB-2', 'general', ARRAY['FL-VF-ORA-1318']),
-  ('FL-ORA-CJ2-general', 'Orange County Judge, Group 2', 'county', 'ORA-CJ-2', 'general', ARRAY['FL-VF-ORA-1248']),
-  ('FL-ORA-CJ3-general', 'Orange County Judge, Group 3', 'county', 'ORA-CJ-3', 'general', ARRAY['FL-VF-ORA-1243']),
-  ('FL-ORA-CJ5-general', 'Orange County Judge, Group 5', 'county', 'ORA-CJ-5', 'general', ARRAY['FL-VF-ORA-1259']),
-  ('FL-ORA-CJ7-general', 'Orange County Judge, Group 7', 'county', 'ORA-CJ-7', 'general', ARRAY['FL-VF-ORA-1313']),
-  ('FL-ORA-CJ10-general', 'Orange County Judge, Group 10', 'county', 'ORA-CJ-10', 'general', ARRAY['FL-VF-ORA-1282']),
-  ('FL-ORA-CJ15-general', 'Orange County Judge, Group 15', 'county', 'ORA-CJ-15', 'general', ARRAY['FL-VF-ORA-1312']),
-  ('FL-ORA-CJ16-general', 'Orange County Judge, Group 16', 'county', 'ORA-CJ-16', 'general', ARRAY['FL-VF-ORA-1307']),
-  ('FL-ORA-CJ17-general', 'Orange County Judge, Group 17', 'county', 'ORA-CJ-17', 'general', ARRAY['FL-VF-ORA-1238']),
-  ('FL-ORA-CJ20-general', 'Orange County Judge, Group 20', 'county', 'ORA-CJ-20', 'general', ARRAY['FL-VF-ORA-1237']),
-  ('FL-ORA-CJ21-general', 'Orange County Judge, Group 21', 'county', 'ORA-CJ-21', 'general', ARRAY['FL-VF-ORA-1258']),
   ('FL-DAD-SB2-general', 'Miami-Dade County School Board, District 2', 'county', 'DAD-SB-2', 'general', ARRAY['FL-VF-DAD-2926']),
   ('FL-DAD-SB8-general', 'Miami-Dade County School Board, District 8', 'county', 'DAD-SB-8', 'general', ARRAY['FL-VF-DAD-2953']),
   ('FL-DAD-CC2-general', 'Miami-Dade County Commission, District 2', 'county', 'DAD-CC-2', 'general', ARRAY['FL-VF-DAD-2964']),

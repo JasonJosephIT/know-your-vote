@@ -80,16 +80,16 @@ await check("no measure is published (arguments do not exist yet)",
   "SELECT count(*)::int n FROM measure_publication", 0);
 
 console.log("0031 + 0032 — Tier A local races");
-await check("forty-two county races (17 contested + 25 decided)",
-  "SELECT count(*)::int n FROM race WHERE level='county'", 42);
-await check("fifty-nine local candidates (34 contested + 25 decided)",
-  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%'", 59);
+await check("thirty-two county races (17 contested + 15 decided)",
+  "SELECT count(*)::int n FROM race WHERE level='county'", 32);
+await check("forty-nine local candidates (34 contested + 15 decided)",
+  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%'", 49);
 await check("seventeen contested county races, each with exactly two candidates",
   `SELECT count(*)::int n FROM race r
     WHERE r.level='county' AND cardinality(r.candidate_ids) = 2`, 17);
-await check("twenty-five decided county seats, each with exactly one",
+await check("fifteen decided county seats, each with exactly one",
   `SELECT count(*)::int n FROM race r
-    WHERE r.level='county' AND cardinality(r.candidate_ids) = 1`, 25);
+    WHERE r.level='county' AND cardinality(r.candidate_ids) = 1`, 15);
 await check("no county race has some other candidate count",
   `SELECT count(*)::int n FROM race
     WHERE level='county' AND cardinality(candidate_ids) NOT IN (1,2)`, 0);
@@ -114,10 +114,10 @@ await check("thirty-four contested local candidates are 'qualified'",
    about each -- "no one filed against this candidate" is false about someone
    who won a contested August primary. A drift that collapsed one into the
    other would publish that falsehood with nothing else noticing. */
-await check("thirteen unopposed county officials",
-  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND qualifying_status = 'unopposed'", 13);
-await check("twelve elected-in-primary county officials",
-  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND qualifying_status = 'elected_in_primary'", 12);
+await check("five unopposed county officials",
+  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND qualifying_status = 'unopposed'", 5);
+await check("ten elected-in-primary county officials",
+  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND qualifying_status = 'elected_in_primary'", 10);
 await check("every decided seat holds exactly one settled candidate",
   `SELECT count(*)::int n FROM race r
     WHERE r.level='county' AND cardinality(r.candidate_ids) = 1
@@ -141,6 +141,14 @@ await check("no county race is published",
    write-in would print a line we never brief. */
 await check("no local candidate is a write-in",
   "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND party = 'WRI'", 0);
+
+/* County judges were dropped on the founder's call: a county judge is a state
+   trial judge elected countywide, a county BALLOT office but not a county
+   GOVERNMENT one, so it is outside the surface 0032 fills. Pinned so a
+   re-import from the same VoterFocus read is a deliberate act. */
+await check("no county judge seats on the county surface",
+  `SELECT count(*)::int n FROM race
+    WHERE level='county' AND office ILIKE '%county judge%'`, 0);
 
 if (failures > 0) {
   console.error(`\nverify-ballot-seeds: ${failures} failure(s)`);
