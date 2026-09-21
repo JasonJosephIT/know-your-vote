@@ -79,13 +79,20 @@ await check("Amendment 3 still carries its dollar figures",
 await check("no measure is published (arguments do not exist yet)",
   "SELECT count(*)::int n FROM measure_publication", 0);
 
-console.log("0031 — Tier A local races");
-await check("seventeen county races",
-  "SELECT count(*)::int n FROM race WHERE level='county'", 17);
-await check("thirty-four local candidates",
-  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%'", 34);
-await check("every county race is a two-candidate contest",
-  "SELECT count(*)::int n FROM race WHERE level='county' AND cardinality(candidate_ids) <> 2", 0);
+console.log("0031 + 0032 — Tier A local races");
+await check("thirty-two county races (17 contested + 15 decided)",
+  "SELECT count(*)::int n FROM race WHERE level='county'", 32);
+await check("forty-nine local candidates (34 contested + 15 decided)",
+  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%'", 49);
+await check("seventeen contested county races, each with exactly two candidates",
+  `SELECT count(*)::int n FROM race r
+    WHERE r.level='county' AND cardinality(r.candidate_ids) = 2`, 17);
+await check("fifteen decided county seats, each with exactly one",
+  `SELECT count(*)::int n FROM race r
+    WHERE r.level='county' AND cardinality(r.candidate_ids) = 1`, 15);
+await check("no county race has some other candidate count",
+  `SELECT count(*)::int n FROM race
+    WHERE level='county' AND cardinality(candidate_ids) NOT IN (1,2)`, 0);
 await check("no county race has a NULL district (NULL reads as statewide)",
   "SELECT count(*)::int n FROM race WHERE level='county' AND district IS NULL", 0);
 await check("no county district is a bare number (would collide with congressional)",
@@ -100,8 +107,33 @@ await check("no local candidate is orphaned from its race",
       AND NOT EXISTS (SELECT 1 FROM race r WHERE c.candidate_id = ANY(r.candidate_ids))`, 0);
 await check("all local candidates are ballot tier",
   "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND ballot_status <> 'ballot'", 0);
-await check("all local candidates are qualifying-status qualified",
-  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND qualifying_status <> 'qualified'", 0);
+await check("thirty-four contested local candidates are 'qualified'",
+  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND qualifying_status = 'qualified'", 34);
+/* The distinction 0032 exists to protect. Both states are absent from the
+   November ballot for OPPOSITE reasons, and the page says different things
+   about each -- "no one filed against this candidate" is false about someone
+   who won a contested August primary. A drift that collapsed one into the
+   other would publish that falsehood with nothing else noticing. */
+await check("five unopposed county officials",
+  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND qualifying_status = 'unopposed'", 5);
+await check("ten elected-in-primary county officials",
+  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND qualifying_status = 'elected_in_primary'", 10);
+await check("every decided seat holds exactly one settled candidate",
+  `SELECT count(*)::int n FROM race r
+    WHERE r.level='county' AND cardinality(r.candidate_ids) = 1
+      AND NOT EXISTS (
+        SELECT 1 FROM candidate c
+         WHERE c.candidate_id = r.candidate_ids[1]
+           AND c.qualifying_status IN ('unopposed','elected_in_primary'))`, 0);
+await check("no contested county race carries a settled candidate",
+  `SELECT count(*)::int n FROM race r, unnest(r.candidate_ids) cid
+     JOIN candidate c ON c.candidate_id = cid
+    WHERE r.level='county' AND cardinality(r.candidate_ids) = 2
+      AND c.qualifying_status IN ('unopposed','elected_in_primary')`, 0);
+await check("settled county officials are still ballot tier (0023: briefed, audited, shown)",
+  `SELECT count(*)::int n FROM candidate
+    WHERE qualifying_status IN ('unopposed','elected_in_primary')
+      AND candidate_id LIKE 'FL-VF-%' AND ballot_status <> 'ballot'`, 0);
 await check("no county race is published",
   `SELECT count(*)::int n FROM race_publication rp
      JOIN race r USING (race_id) WHERE r.level='county'`, 0);
@@ -109,6 +141,14 @@ await check("no county race is published",
    write-in would print a line we never brief. */
 await check("no local candidate is a write-in",
   "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND party = 'WRI'", 0);
+
+/* County judges were dropped on the founder's call: a county judge is a state
+   trial judge elected countywide, a county BALLOT office but not a county
+   GOVERNMENT one, so it is outside the surface 0032 fills. Pinned so a
+   re-import from the same VoterFocus read is a deliberate act. */
+await check("no county judge seats on the county surface",
+  `SELECT count(*)::int n FROM race
+    WHERE level='county' AND office ILIKE '%county judge%'`, 0);
 
 if (failures > 0) {
   console.error(`\nverify-ballot-seeds: ${failures} failure(s)`);

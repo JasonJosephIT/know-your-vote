@@ -3,7 +3,7 @@ import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 import type { NewsSource } from "@/lib/news-labels";
 import { RECENT_WINDOW_DAYS } from "@/lib/neutrality";
-import { isUnopposedContest } from "@/lib/unopposed";
+import { isUnopposedContest, isDecidedInPrimary } from "@/lib/unopposed";
 import { categorizeIssue, type PolicyAreaRef } from "@/lib/policy-areas";
 import type { CandidateContact, NewsItem } from "@/types/app";
 import type {
@@ -68,6 +68,11 @@ export interface RaceBrief {
      deploys: an entry written before this field existed comes back without it,
      and `undefined` has to mean "printed", the weaker and safer claim. */
   notPrintedOnBallot?: boolean;
+  /* Settled in the August primary rather than uncontested — see
+     isDecidedInPrimary. Optional for the same cache reason as the field
+     above, and `undefined` again has to mean the weaker claim: a race we
+     cannot prove was decided is treated as a normal race. */
+  decidedInPrimary?: boolean;
 }
 
 type ClaimRow = Claim & { claim_source: Array<{ source: Source }> };
@@ -255,6 +260,7 @@ async function fetchRaceBrief(raceId: string): Promise<RaceBrief | null> {
     spineIssues,
     candidates: candidates.map(briefFor),
     notPrintedOnBallot: isUnopposedContest(candidates, hasWriteIn),
+    decidedInPrimary: isDecidedInPrimary(candidates, hasWriteIn),
   };
 }
 
