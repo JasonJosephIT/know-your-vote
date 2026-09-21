@@ -22,7 +22,7 @@ Not fixtures. Two feeds failed: `diariolasamericas.com` (connection),
 Why feeds and not `news_item`: the live table holds **14 seeded rows** (6
 `official_link`, 8 `election_news`) and no swept articles, because every
 outlet's `leanTag` is null pending gate **C7-a**, so `usableOutlets()` returns
-0 and the sweep has never run. Migration 0027 is also not applied live.
+0 and the sweep has never run. Migration 0027 was applied live on 2026-09-19 (recorded as `news_issues`); this line said otherwise until 2026-09-21.
 
 ## 1. Threshold sweep — taxonomy v2
 
