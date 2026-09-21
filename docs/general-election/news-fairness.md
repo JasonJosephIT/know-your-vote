@@ -59,7 +59,7 @@ the rule. The original text is kept here because the reasoning for changing it
 only makes sense against it.
 
 **Why it changed.** The clause was written expecting a corpus where most outlets
-carry a rating. The corpus is the opposite: **31 of the 37 outlets in
+carry a rating. The corpus is the opposite: **32 of the 37 outlets in
 `src/lib/news-sources.ts` are `unrated`**, because AllSides, Ad Fontes and MBFC
 rate national and large-metro outlets and do not rate local newsrooms
 (`lean-ratings-fetched-2026-09-19.md` — 36 rating pages sought for the 12

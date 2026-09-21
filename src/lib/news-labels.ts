@@ -89,7 +89,7 @@ const LEAN: Record<LeanTag, string | null> = {
                statement when no rating exists. `newsLabels` serves this.
 
    WHY LEAN LEFT THE CARD. §1 originally required it on every card, and that
-   was written expecting a mostly-rated corpus. It is not one: 31 of the 37
+   was written expecting a mostly-rated corpus. It is not one: 32 of the 37
    outlets in news-sources.ts carry `unrated`, because AllSides / Ad Fontes /
    MBFC do not rate local outlets (docs/general-election/
    lean-ratings-fetched-2026-09-19.md). A lean chip on every card would mean

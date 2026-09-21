@@ -11,7 +11,7 @@ import { safeHttpUrl } from "@/lib/format";
    NO LEAN HERE, and not by omission — `newsCardLabels` returns a type with no
    `lean` field, so this component could not print one if it tried. Lean is
    disclosed on the outlet page, one tap away, in full, including when no rating
-   exists. §1 and src/lib/news-labels.ts carry the reasoning: with 31 of 37
+   exists. §1 and src/lib/news-labels.ts carry the reasoning: with 32 of 37
    outlets unrated, a per-card lean chip would read "No independent rating" on
    most cards and "Center" on a few, foregrounding the rated minority and making
    an absence look like a finding.

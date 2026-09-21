@@ -10,6 +10,34 @@ decisions: the `unrated` lean value (migration `0028`), and the designation of
 where things actually stand, including two policy questions the unblock makes
 live._
 
+> **Addendum, 2026-09-21.** The founder designated **`floridaphoenix.com`
+> `unrated`** as well, making **32**. The counts below are left as they stood on
+> 2026-09-19 — this is a dated report of that session, and rewriting its numbers
+> would falsify what was actually done then. What changed:
+>
+> - **The remaining gate is now five rows, not six**, and they are exactly the
+>   ones with fetched, cited ratings: Miami Herald, Sun Sentinel, Tampa Bay
+>   Times, Orlando Sentinel, AP. There a lean must be *chosen*; "no rating
+>   exists" is not available as an answer.
+> - **`usableOutlets()` did not move.** It is still **27**. Florida Phoenix is
+>   `mixedFeed`-flagged, so designating it changed nothing about what the sweep
+>   reads — the cleanest demonstration that a lean is necessary for a card and
+>   never sufficient.
+> - **It is the one designated row with a bespoke `leanBasis`**, keeping its
+>   States Newsroom note rather than the shared `UNRATED` text, because that
+>   note explains *why* no outlet-specific rating exists for a newsroom inside a
+>   national network. `verify-news-sweep.ts` allows that one domain **by name**,
+>   so a second bespoke-basis designation still fails until someone adds it
+>   deliberately.
+> - **The uncited `center-left` proposal was declined, not adopted.** The
+>   2026-09-17 corpus proposed it with no citation; the founder recorded
+>   `unrated` instead. That is this brief's central rule holding under pressure:
+>   an uncited value is not a rating, and the honest record is that nobody
+>   published one. The guardrail now asserts a designated row's bespoke basis
+>   never adopts a lean word without declining or disclaiming it.
+> - Guardrail counts moved with it: **32** designated, **five** undesignated,
+>   **five** designated-but-held-out.
+
 Companion to `news-corpus-2026-09-17.md`, whose Recommendation 5 asked for
 exactly this fetch, and to `news-corpus-verification-2026-09-17.md`.
 
@@ -307,9 +335,10 @@ exists to keep away from a coding agent. `UNRATED_DESIGNATED` in
 `src/lib/news-sources.ts` is an explicit list of 31 domains: a new row is `null`
 until a human adds its domain, and the designation stays diffable and blameable
 like every other editorial decision in that file. `verify-news-sweep.ts` pins
-the count at 31, asserts every designated row carries the `UNRATED` basis and
-never a cited one, and asserts that **no row carries an asserted lean** — every
-value in the file is `null` or `'unrated'`.
+the count (31 then; **32 since 2026-09-21** — see the addendum), asserts every
+designated row carries the `UNRATED` basis bar the one allowed by name, and
+asserts that **no row carries an asserted lean** — every value in the file is
+`null` or `'unrated'`.
 
 ### What the designation rests on
 

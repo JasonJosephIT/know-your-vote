@@ -201,7 +201,8 @@ if (listedNullLean.length > 0) {
 }
 
 /* And every outlet the sweep can actually read does have a lean — the property
-   the designation of the 31 locals as `unrated` bought, since before it a swept
+   the designation of the locals as `unrated` bought (31 on 2026-09-19, 32 with
+   floridaphoenix.com on 2026-09-21), since before it a swept
    local article had no legal lean value at all. */
 const readable = OUTLETS.filter(
   (o) => o.leanTag !== null && (o.feed !== null || o.sitemap !== undefined) && !o.mixedFeed && !o.syndicated,
