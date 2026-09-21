@@ -49,7 +49,27 @@ export type { NewsIssue };
 /* 2 — 2026-09-18: CAP's B6 split into B6 + KYV1; A4/A6/B2 aliases widened
    after the gold-set evaluation. Bumped because tags written under v1 are
    not comparable to tags written under v2. */
-/* 3 — 2026-09-20: the `environment` category gained KYV2 (energy and
+/* 4 — 2026-09-21: the CATEGORY aliases were folded into their sub-issues.
+   When the category questions were dropped on 2026-09-18 (measured redundant:
+   a parent never fired alone across 10 fixtures), 20 alias terms silently
+   stopped being asked anywhere, because they lived only on a category —
+   "homelessness", "police", "sheriff", "courts", "public schools", "teachers",
+   "classroom funding", "property taxes", "visas", "redistricting" and more.
+
+   This was not caught by the 116-row gold set, because the worst-hit issues
+   had zero gold examples there. It surfaced in an 834-article corpus run where
+   A2 housing scored 0.0% while the corpus carried two homelessness stories.
+
+   `verify-news-issues.ts` now asserts no category alias is orphaned, so this
+   cannot recur silently.
+
+   MEASURE BEFORE TRUSTING IT. The one previous time aliases were widened, A6
+   went 14 -> 11 on the same corpus: more vocabulary is not monotonically
+   better, and past roughly a dozen terms it appears to blur a question rather
+   than sharpen it. This restores what was lost; it does not claim to improve
+   recall. Re-run the gold set.
+
+   3 — 2026-09-20: the `environment` category gained KYV2 (energy and
    utilities), KYV3 (growth, development and land conservation), KYV4 (storm
    resilience and flood protection) and KYV5 (water supply and drinking
    water); A5's aliases widened to the ambient-quality vocabulary it lacked.
@@ -57,7 +77,7 @@ export type { NewsIssue };
    article was a miss the taxonomy could not express, and a v3 row tagged `{}`
    on the same article is a real negative. The two are not comparable, so the
    version has to say which one you are reading. */
-export const TAXONOMY_VERSION = "3";
+export const TAXONOMY_VERSION = "4";
 
 export interface IssueCategory {
   /** For the eight, this is verbatim QUIZ_QUESTIONS[].id — the shared key that
@@ -84,7 +104,12 @@ export const CATEGORIES: readonly IssueCategory[] = [
   { id: "healthcare", label: "Healthcare", inQuiz: true,
     aliases: ["hospitals", "clinics", "coverage", "prescription costs"] },
   { id: "housing", label: "Housing", inQuiz: true,
-    aliases: ["rent", "homebuying", "development", "homelessness"] },
+    /* "development" was dropped in v4 rather than folded into a sub-issue: as
+       a question word it is too generic, and it made "Economic Development"
+       classify as an environment issue. Its specific senses live on KYV3
+       ("suburban development", "development moratorium") and A2
+       ("housing supply"). */
+    aliases: ["rent", "homebuying", "homelessness"] },
   { id: "environment", label: "Environment & Water", inQuiz: true,
     aliases: ["water quality", "conservation", "climate", "coastal flooding"] },
   { id: "immigration", label: "Immigration", inQuiz: true,
@@ -110,9 +135,15 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
   { id: "A1", categoryId: "insurance", label: "Property insurance costs",
     aliases: ["property insurance", "premiums", "hurricane coverage", "Citizens Property Insurance"] },
   { id: "A2", categoryId: "housing", label: "Housing affordability",
-    aliases: ["housing costs", "rent", "housing supply", "first-time buyers"] },
+    /* +homebuying/homelessness/unhoused (v4 fold). A2 scored 0 across 834
+       articles while the corpus carried two homelessness stories; "homelessness"
+       was a `housing` CATEGORY alias, and categories stopped being asked.
+       "zoning" is not added here — it is already KYV3's. */
+    aliases: ["housing costs", "rent", "housing supply", "first-time buyers",
+              "homebuying", "homelessness", "unhoused"] },
   { id: "A3", categoryId: "insurance", label: "Property taxes",
-    aliases: ["property tax", "homestead exemption", "property assessments", "millage"] },
+    aliases: ["property tax", "property taxes", "homestead exemption",
+              "property assessments", "millage"] },
   { id: "A4", categoryId: "economy", label: "Cost of living in Florida",
     /* Widened 2026-09-18: 0% recall. Missed a gas-price story and a minimum-wage
        rise — the model tagged only what a headline was ABOUT, not what it cost
@@ -120,7 +151,8 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
        collapsing the two. */
     aliases: ["household costs", "utility bills", "groceries", "affordability",
               "gas prices", "fuel costs", "grocery prices", "everyday expenses",
-              "household budgets", "price increases", "paying the bills"] },
+              "household budgets", "price increases", "paying the bills",
+              "cost of living"] },
   { id: "A5", categoryId: "environment", label: "Water quality and Everglades restoration",
     /* Widened 2026-09-20 — the aliases named the Everglades and red tide but
        not the everyday ways water quality reaches the news. AMBIENT quality
@@ -135,9 +167,11 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
        education policy, none matching the narrow original alias set. */
     aliases: ["public school funding", "vouchers", "school choice", "teacher pay",
               "K-12", "school districts", "school board", "classrooms", "curriculum",
-              "students", "education policy", "state colleges", "universities"] },
+              "students", "education policy", "state colleges", "universities",
+              "public schools", "teachers", "classroom funding"] },
   { id: "A7", categoryId: "elections", label: "Elections administration and voting access",
-    aliases: ["voting access", "election administration", "ballot initiative process", "voter registration"] },
+    aliases: ["voting access", "election administration", "ballot initiative process",
+              "voter registration", "ballot access", "redistricting"] },
   { id: "B1", categoryId: "economy", label: "Economy, inflation, and jobs",
     aliases: ["economy", "inflation", "jobs", "wages", "unemployment"] },
   { id: "B2", categoryId: "healthcare", label: "Healthcare access and costs",
@@ -146,13 +180,17 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
        part of how people reach care, so it is named here explicitly. */
     aliases: ["healthcare costs", "coverage", "hospitals", "prescription prices",
               "public health", "vaccines", "Medicaid", "clinics", "pharmacies",
-              "drug prices", "disease outbreaks", "insurance coverage"] },
+              "drug prices", "disease outbreaks", "insurance coverage",
+              "prescription costs"] },
   { id: "B3", categoryId: "immigration", label: "Immigration and border enforcement",
-    aliases: ["immigration", "border enforcement", "migrants", "detention", "asylum"] },
+    aliases: ["immigration", "border enforcement", "migrants", "detention", "asylum",
+              "visas"] },
   { id: "B4", categoryId: "retirement", label: "Social Security and Medicare",
-    aliases: ["Social Security", "Medicare", "retirement benefits", "entitlements"] },
+    aliases: ["Social Security", "Medicare", "retirement benefits", "entitlements",
+              "retirement income", "benefits"] },
   { id: "B5", categoryId: "abortion", label: "Abortion policy",
-    aliases: ["abortion", "gestational limits", "reproductive health policy"] },
+    aliases: ["abortion", "gestational limits", "reproductive health policy",
+              "abortion law"] },
   /* CAP's B6 was "Election integrity and threats to democracy" — two distinct
      subjects under one label, and the 2026-09-18 evaluation measured the cost:
      25% precision, 20% recall. The annotator read it broadly (press freedom
@@ -170,7 +208,8 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
     aliases: ["press freedom", "freedom of the press", "rule of law", "political violence",
               "checks and balances", "abuse of office", "democratic norms"] },
   { id: "B7", categoryId: "safety", label: "Crime and public safety",
-    aliases: ["crime", "policing", "public safety", "sentencing"] },
+    aliases: ["crime", "policing", "public safety", "sentencing",
+              "police", "sheriff", "courts"] },
   /* B8 stays NATIONAL in scope, and its alias list is deliberately not
      widened: the 2026-09-18 evaluation scored it 0% recall, and the diagnosis
      was that all four gold rows were mislabelled rather than missed (eval §3).
@@ -180,8 +219,12 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
      the A4/B1 overlap, where a broad label swallows every story a narrow one
      was added to catch. */
   { id: "B8", categoryId: "environment", label: "Climate and environment (national)",
+    /* v4 adds the bare word "climate" only. That is B8's own subject — its
+       label begins with it — not a broadening into a neighbour's territory,
+       which is what the note above guards against. "energy" still stays out,
+       with KYV2. */
     aliases: ["climate policy", "emissions", "environmental regulation",
-              "federal environmental rules", "offshore drilling"] },
+              "federal environmental rules", "offshore drilling", "climate"] },
 
   /* ── The environment category, expanded 2026-09-20 ──────────────────────
      Two independent readings asked for the same three issues.
@@ -216,9 +259,19 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
               "rate case", "power plants", "solar", "natural gas",
               "energy policy", "data centers", "data center power demand"] },
   { id: "KYV3", categoryId: "environment", label: "Growth, development and land conservation",
+    /* v4 adds the bare "conservation" — in this issue's own label, and an
+       `environment` category alias that stopped being asked.
+
+       "development" was tried here and REVERTED. It is in the label too, but
+       as a question word it is too generic: `verify-policy-areas.ts` caught
+       "Economic Development" classifying as an environment issue. The
+       specific senses are already covered — "suburban development" and
+       "development moratorium" here, "housing supply" on A2 — so the bare
+       word buys nothing and costs a false positive. */
     aliases: ["land use", "zoning", "development moratorium", "growth management",
               "wetlands", "permitting", "state parks", "conservation land",
-              "rural boundary", "suburban development", "data centers"] },
+              "rural boundary", "suburban development", "data centers",
+              "conservation"] },
   /* No gold row scores this — the position A1, A2, A5, B4 and B5 are also in.
      It exists because the quiz asks about it and Florida votes on it, not
      because the evaluation demanded it.
