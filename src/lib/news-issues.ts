@@ -4,7 +4,7 @@
 
    Founder direction 2026-09-18: the quiz's eight become CATEGORIES; the
    fifteen researched issues from CAP_Issue_List_FL_2026_v1.md become the
-   SUB_ISSUES underneath them. Eight `KYV`-prefixed sub-issues have been added
+   SUB_ISSUES underneath them. Ten `KYV`-prefixed sub-issues have been added
    since, each where a measured gap or the quiz's own wording showed a subject
    with nowhere to go — see TAXONOMY_VERSION and the KYV entries below.
 
@@ -29,7 +29,7 @@
    labels for the eight are verbatim from src/lib/quiz-questions.ts (TASK-032,
    neutrality-reviewed). A- and B-prefixed sub-issue labels are verbatim from
    CAP_Issue_List_FL_2026_v1.md (2026-07-15, sourced and balance-checked). The
-   three non-quiz category labels, the eight `KYV` sub-issue labels and every
+   three non-quiz category labels, the ten `KYV` sub-issue labels and every
    `aliases` array were written here — that is the part a human must read in
    review, because nothing upstream has vetted them.
 
@@ -105,7 +105,18 @@ export type { NewsIssue };
    terms the vocabulary blurs the question. A1 lands at 7 and A2 at 8, and
    terms that were merely adjacent (mortgage rates, homeownership, rate
    filing, insurer insolvency) were dropped rather than kept for completeness. */
-export const TAXONOMY_VERSION = "5";
+/* 6 — 2026-09-21: A6 split three ways — A6 keeps CAP's id and the
+   public-school half, KYV9 takes school choice, KYV10 takes career,
+   vocational and higher education. Bumped because an A6 tag under v5 could
+   mean a voucher story or a teacher-pay story and under v6 it can only mean
+   the second: the two are not comparable, and every A6 row written before
+   today needs re-reading rather than re-labelling.
+
+   THE RECALL NUMBERS DO NOT CARRY OVER. A6's measured 100%/50% was for the
+   two-subject label. The split is justified by an alias count past a measured
+   threshold and by the B6 precedent, not by a number that predicts the
+   outcome. Re-run the gold set before quoting anything about education. */
+export const TAXONOMY_VERSION = "6";
 
 export interface IssueCategory {
   /** For the eight, this is verbatim QUIZ_QUESTIONS[].id — the shared key that
@@ -202,14 +213,46 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
     aliases: ["water quality", "Everglades", "red tide", "nutrient pollution", "restoration",
               "algae blooms", "blue-green algae", "sewage spill", "wastewater discharge",
               "septic to sewer", "nutrient runoff", "water pollution", "springs", "seagrass"] },
-  { id: "A6", categoryId: "education", label: "Public education and school choice",
-    /* Widened 2026-09-18: 25% recall. Missed AI-in-schools rules, a work-based
-       learning grant and a public-education polling story — all plainly
-       education policy, none matching the narrow original alias set. */
-    aliases: ["public school funding", "vouchers", "school choice", "teacher pay",
-              "K-12", "school districts", "school board", "classrooms", "curriculum",
-              "students", "education policy", "state colleges", "universities",
-              "public schools", "teachers", "classroom funding"] },
+  /* ── A6 SPLIT THREE WAYS, 2026-09-21 ───────────────────────────────────
+     CAP's label was "Public education and school choice", and that is two
+     subjects — in Florida it is the two SIDES of one argument, which is worse.
+     The history is the same as B6's:
+
+       v1  narrow aliases          25% recall
+       v2  widened to 13 terms     50% recall, 100% precision
+       v4  fold added 3 more, 16   the 834-corpus count fell 14 -> 11
+
+     So the alias lever is spent: A6 sat at 16 terms, past the ~dozen where
+     that corpus measured vocabulary starting to blur a question rather than
+     sharpen it, and it still missed half of the real education stories in the
+     gold set. B6 was in exactly this position and the split bought +9 points
+     of recall at no cost to precision. This is the fourth application of the
+     rule those episodes established: when an issue underperforms, suspect the
+     label before the vocabulary.
+
+     WHY THREE AND NOT TWO. `universities` is an `education` CATEGORY alias, so
+     the v4 invariant requires some sub-issue to ask about it. Splitting
+     funding from choice leaves higher education with no honest home — its
+     terms would have to sit under a label about K-12 funding, which is the
+     defect being fixed. KYV10 is therefore not an optional third: the
+     invariant makes it necessary, and it happens to fill the quiz's third
+     education option ("More vocational and career-path programs"), which had
+     no vocabulary anywhere, and to cover the work-based learning grant the
+     gold set recorded A6 missing.
+
+     A6 KEEPS CAP'S ID AND THE PUBLIC-SCHOOL HALF, exactly as B6 kept its id
+     and the election-specific half. `education policy` is dropped rather than
+     reassigned, on the v4 precedent that retired bare `development`: as a
+     question word it is too generic to sharpen anything. */
+  { id: "A6", categoryId: "education", label: "Public school funding and teachers",
+    aliases: ["public school funding", "teacher pay", "teachers", "classroom funding",
+              "public schools", "school districts", "school board", "K-12"] },
+  { id: "KYV9", categoryId: "education", label: "School choice and vouchers",
+    aliases: ["vouchers", "school choice", "scholarship programs", "charter schools",
+              "open enrollment", "private school enrollment"] },
+  { id: "KYV10", categoryId: "education", label: "Career, vocational and higher education",
+    aliases: ["vocational training", "career and technical education", "apprenticeships",
+              "workforce training", "state colleges", "universities", "financial aid"] },
   { id: "A7", categoryId: "elections", label: "Elections administration and voting access",
     aliases: ["voting access", "election administration", "ballot initiative process",
               "voter registration", "ballot access", "redistricting"] },
@@ -218,7 +261,23 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
   { id: "B2", categoryId: "healthcare", label: "Healthcare access and costs",
     /* Widened 2026-09-18: 20% recall. Missed a vaccine-access rule, a disease
        outbreak death and a Medicaid drug-pricing announcement. Public health is
-       part of how people reach care, so it is named here explicitly. */
+       part of how people reach care, so it is named here explicitly.
+
+       DELIBERATELY NOT SPLIT ALONGSIDE A6, though it shows two of the same
+       symptoms: 13 aliases, 40% recall, and a vocabulary that has quietly
+       absorbed public health (vaccines, disease outbreaks) which is arguably
+       its own subject — plus the quiz's third healthcare option, "keeping
+       hospitals and clinics open where they're scarce", has no vocabulary
+       beyond the bare words `hospitals` and `clinics`.
+
+       The reason to wait is that a split is only adjudicable against labelled
+       rows, and B2 has five of them. news-corpus-analysis-2026-09-19.md is
+       explicit: 116 rows with several issues at n=0 is "too thin for a ±3
+       swing. Label more rows first." A6 could go ahead of that because its
+       alias count had passed a measured threshold, which is a defect visible
+       without new labels. B2's case rests on its recall number, and that
+       number is what more labels would move. Splitting it now would spend the
+       only healthcare measurement this project has. */
     aliases: ["healthcare costs", "coverage", "hospitals", "prescription prices",
               "public health", "vaccines", "Medicaid", "clinics", "pharmacies",
               "drug prices", "disease outbreaks", "insurance coverage",

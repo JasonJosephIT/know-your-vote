@@ -328,3 +328,81 @@ needs the gold set, and the gold set needs more rows. A window containing an
 actual condo-assessment or encampment-ordinance story is what would test them,
 and pulling one deliberately (`scripts/news-eval-pool.ts` over a wider date
 range) is a cheaper way to find out than waiting for the daily sweep.
+
+---
+
+## 9. Follow-up — taxonomy v6, the A6 split (2026-09-21)
+
+**§2's education row is retired by this change.** `A6` measured 100% precision
+and 50% recall *as a two-subject label*. It is now three labels, and that
+number predicts nothing about them.
+
+### Why split rather than widen again
+
+`A6`'s own history is the argument:
+
+| | aliases | result |
+|---|---|---|
+| v1 | 5 | 25% recall |
+| v2 | 13 | **50% recall, 100% precision** (§2) |
+| v4 | 16 | the 834-corpus count fell **14 → 11** |
+
+The lever is spent. Sixteen terms is past the point where that corpus measured
+vocabulary starting to blur a question instead of sharpening it, and `A6` still
+missed half the education stories in this gold set. `B6` sat in exactly this
+position — a CAP label carrying two subjects, scoring badly — and splitting it
+bought **+9 points of recall at no cost to precision** (§3). This is the fourth
+application of the rule those episodes established: **when an issue
+underperforms, suspect the label before the vocabulary.**
+
+In Florida the two halves of CAP's label are not merely distinct, they are the
+two *sides* of one argument. A voter who picked "Raising teacher pay and
+classroom funding" and a voter who picked "Expanding families' options for
+where students enroll" were shown the same tag.
+
+| id | label | takes |
+|---|---|---|
+| `A6` | Public school funding and teachers | CAP's id and the public-school half, as `B6` kept its id and the election half |
+| `KYV9` | School choice and vouchers | vouchers, scholarships, charters, open enrollment |
+| `KYV10` | Career, vocational and higher education | vocational and technical training, apprenticeships, state colleges, universities, financial aid |
+
+**`KYV10` is not an optional third.** `universities` is an `education` *category*
+alias, so the v4 invariant requires some sub-issue to ask about it. Once funding
+splits from choice, higher education has no honest home — its terms would sit
+under a label about K-12 funding, which is the defect being fixed. It also fills
+the quiz's third education option ("More vocational and career-path programs"),
+which had no vocabulary anywhere, and covers the work-based learning grant §3
+recorded `A6` missing.
+
+`education policy` was dropped rather than reassigned, on the v4 precedent that
+retired bare `development`: too generic to sharpen anything.
+
+### `B2` healthcare: deliberately not split
+
+It shows two of the same symptoms — 13 aliases, 40% recall, and a vocabulary
+that has quietly absorbed public health (vaccines, disease outbreaks), which is
+arguably its own subject. The quiz's third healthcare option, *"keeping
+hospitals and clinics open where they're scarce"*, has no vocabulary beyond the
+bare words `hospitals` and `clinics`.
+
+**It waits, and the reason is measurement discipline rather than doubt.** A
+split is only adjudicable against labelled rows, and `B2` has five. The corpus
+analysis is explicit that 116 rows with several issues at n=0 is *"too thin for
+a ±3 swing. Label more rows first."* `A6` could go ahead of that because its
+alias count had crossed a measured threshold — a defect visible without new
+labels. `B2`'s case rests on its recall number, and that number is exactly what
+more labels would move. Splitting it now would spend the only healthcare
+measurement this project has.
+
+Named candidates for when the gold set is bigger: **public health** as its own
+issue, and **rural and hospital access** for that orphaned quiz option.
+
+### This should be the last growth round before labelling
+
+The taxonomy has gone 15 → 25 sub-issues in four days. Two of those additions
+have measured support (`KYV7`, and this split's premise); the rest rest on the
+quiz's wording and Florida's issue space. Twenty-five Nouls is ~$0.018 a pass,
+so cost is not the constraint — **evaluability is**. The gold set has not grown
+since 2026-09-18, and every question added since then is unmeasurable against
+it. The highest-value work in this area is no longer taxonomy design; it is
+labelling rows, and §0's point about who labelled them still stands.
