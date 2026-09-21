@@ -106,12 +106,22 @@ export default async function RacePage({
             own `UNO` code (src/lib/unopposed.ts) — the two are
             indistinguishable by candidate count, which is why deriving it was
             rejected. */}
+        {/* 0032 adds the third absent-from-November state, and it is the one
+            the two lines below would have got wrong. Florida's nonpartisan
+            county races end in August when someone clears 50%, so the seat
+            never reaches this ballot — but that candidate BEAT people. The
+            unopposed line ("no one filed against this candidate") would be a
+            flat untruth about an election that happened, and the
+            one-candidate line would imply nobody else ran. Said before both,
+            because it is the more specific fact. */}
         <p className="text-body-sm text-on-surface-muted">
-          {brief.notPrintedOnBallot
-            ? "No one filed against this candidate, so they are elected without opposition and this contest will not appear on your ballot — here's what we have on them."
-            : brief.candidates.length === 1
-              ? "One candidate qualified for this race, so there is nothing to compare — here's what we have on them."
-              : "Here's your race — every candidate, same space, same scrutiny."}
+          {brief.decidedInPrimary
+            ? "This contest was decided in the August primary, so it will not appear on your November ballot — here's what we have on the winner."
+            : brief.notPrintedOnBallot
+              ? "No one filed against this candidate, so they are elected without opposition and this contest will not appear on your ballot — here's what we have on them."
+              : brief.candidates.length === 1
+                ? "One candidate qualified for this race, so there is nothing to compare — here's what we have on them."
+                : "Here's your race — every candidate, same space, same scrutiny."}
         </p>
       </header>
 
