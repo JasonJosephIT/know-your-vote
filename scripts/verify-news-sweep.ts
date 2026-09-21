@@ -20,7 +20,7 @@
 
    Run: node scripts/verify-news-sweep.ts */
 
-import { OUTLETS, UNRATED, sitemapUrlFor, urlBelongsTo, usableOutlets, type Outlet } from "../src/lib/news-sources.ts";
+import { AI_POLICY_HOLD, OUTLETS, UNRATED, sitemapUrlFor, urlBelongsTo, usableOutlets, type Outlet } from "../src/lib/news-sources.ts";
 import { normalizeUrl, parseFeed, parseNewsSitemap, sweep } from "../src/lib/news-sweep.ts";
 
 let failures = 0;
@@ -425,9 +425,24 @@ for (const o of withSitemap) {
   check(`sitemap outlet ${o.domain} has no feed (no tie-break rule needed)`, o.feed === null);
   check(`sitemap include for ${o.domain} is the dated-path filter`, o.sitemap!.include.source === "^\\/\\d{4}\\/\\d{2}\\/\\d{2}\\/");
 }
+/* Hold-free rows only: both Tribune sitemap outlets are on the AI-crawler hold,
+   so signing off their lean deliberately does NOT make them usable. Asserting
+   the original claim over all sitemap rows would now be asserting that the hold
+   does not work. */
+const sitemapNotHeld = withSitemap.filter((o) => !AI_POLICY_HOLD.has(o.domain));
 check(
-  "a sitemap outlet becomes usable once a lean is signed off",
-  usableOutlets(withSitemap.map((o) => ({ ...o, leanTag: "center" as const }))).length === withSitemap.length,
+  "a sitemap outlet becomes usable once a lean is signed off (hold-free rows)",
+  usableOutlets(sitemapNotHeld.map((o) => ({ ...o, leanTag: "center" as const }))).length
+    === sitemapNotHeld.length,
+  `${sitemapNotHeld.length} hold-free sitemap outlets`,
+);
+check(
+  "a HELD sitemap outlet stays unusable even with a lean signed off",
+  usableOutlets(
+    withSitemap
+      .filter((o) => AI_POLICY_HOLD.has(o.domain))
+      .map((o) => ({ ...o, leanTag: "center" as const })),
+  ).length === 0,
 );
 /* Designating did not bypass either fail-closed flag or the retrieval-path
    requirement — that is the whole point of them outliving the lean gate. 27 of
@@ -439,23 +454,67 @@ check(
    a brand-new designation that moves `usableOutlets()` by exactly ZERO, because
    `mixedFeed` still holds it out. A lean is necessary for a card, never
    sufficient. */
-check("usableOutlets is 27 after the designation", usableOutlets().length === 27,
-  `${usableOutlets().length}`);
+check("usableOutlets is 24 after the designation and the AI-crawler hold",
+  usableOutlets().length === 24, `${usableOutlets().length}`);
+
+/* ---- the AI-crawler policy hold (founder 2026-09-21) ------------------
+   A hold is only worth anything if it cannot quietly fall out of step with the
+   thing it is based on. Two properties, and the second is the one that would
+   rot: */
+for (const domain of AI_POLICY_HOLD) {
+  const o = OUTLETS.find((x) => x.domain === domain);
+  check(`held outlet exists in the list: ${domain}`, o !== undefined);
+  check(`held outlet is not usable: ${domain}`,
+    !usableOutlets().some((u) => u.domain === domain));
+}
+/* EVERY outlet whose robots names a Claude/Anthropic agent must be held. This
+   is what stops the hold covering only the outlets that happened to be
+   sweepable on the day it was written: three of the seven are excluded today by
+   the lean gate or mixedFeed, and would become readable the moment those are
+   lifted for reasons having nothing to do with crawler policy. */
+const namesClaude = (o: Outlet) =>
+  (o.robots?.aiDisallow ?? []).some((a) => /anthropic|claude/i.test(a));
+const unheld = OUTLETS.filter((o) => namesClaude(o) && !AI_POLICY_HOLD.has(o.domain));
+check(
+  "every outlet whose robots names a Claude/Anthropic agent is on the hold",
+  unheld.length === 0,
+  `${unheld.map((o) => o.domain).join(",")} — add to AI_POLICY_HOLD or record the founder's decision to read it anyway`,
+);
+/* And the hold is a POLICY mechanism, not a technical one: satisfying every
+   technical requirement must not lift it. Give each held row a lean, a feed and
+   no flags, and it must still be refused. */
+const heldRows = OUTLETS.filter((o) => AI_POLICY_HOLD.has(o.domain));
+check("the hold survives a row being made technically perfect",
+  usableOutlets(
+    heldRows.map((o) => ({
+      ...o,
+      leanTag: "unrated" as const,
+      feed: `https://${o.domain.split("/")[0]}/feed/`,
+      mixedFeed: false,
+      syndicated: false,
+    })),
+  ).length === 0,
+  "a held outlet became usable once its flags were cleared — the hold is being read as technical");
 check(
   "every usable outlet has a retrieval path and neither flag",
   usableOutlets().every(
     (o) => (o.feed !== null || o.sitemap !== undefined) && !o.mixedFeed && !o.syndicated,
   ),
 );
+/* Eight now, not five: the AI-crawler hold (2026-09-21) added miaminewtimes.com,
+   wfla.com and wesh.com, which are designated and technically fine and are not
+   read by choice. The list is spelled out because a change to it is either an
+   editorial or a policy act, never an incidental one. */
 check(
-  "the five designated-but-held-out rows are exactly the flagged and path-less ones",
+  "the eight designated-but-held-out rows are exactly the flagged, path-less and held ones",
   designated
     .filter((o) => !usableOutlets().some((u) => u.domain === o.domain))
     .map((o) => o.domain)
     .sort()
     .join(",")
-    === "elnuevoherald.com,floridaphoenix.com,floridapolitics.com,miamitimesonline.com,outsfl.com",
-  designated.filter((o) => !usableOutlets().some((u) => u.domain === o.domain)).map((o) => o.domain).join(","),
+    === "elnuevoherald.com,floridaphoenix.com,floridapolitics.com,miaminewtimes.com,"
+      + "miamitimesonline.com,outsfl.com,wesh.com,wfla.com",
+  designated.filter((o) => !usableOutlets().some((u) => u.domain === o.domain)).map((o) => o.domain).sort().join(","),
 );
 /* Stated as a property rather than a list, so it survives the next
    designation: every held-out row must be held out for a NAMED reason. A row
@@ -465,8 +524,13 @@ for (const o of designated) {
   if (usableOutlets().some((u) => u.domain === o.domain)) continue;
   check(
     `${o.domain} is held out for a named reason, not by accident`,
-    o.mixedFeed === true || o.syndicated === true || (o.feed === null && o.sitemap === undefined),
-    `mixedFeed=${o.mixedFeed} syndicated=${o.syndicated} feed=${o.feed} sitemap=${o.sitemap !== undefined}`,
+    o.mixedFeed === true
+      || o.syndicated === true
+      || (o.feed === null && o.sitemap === undefined)
+      /* Added 2026-09-21: the AI-crawler policy hold is a fourth named reason,
+         and the only one that is a choice rather than a limitation. */
+      || AI_POLICY_HOLD.has(o.domain),
+    `mixedFeed=${o.mixedFeed} syndicated=${o.syndicated} feed=${o.feed} sitemap=${o.sitemap !== undefined} held=${AI_POLICY_HOLD.has(o.domain)}`,
   );
 }
 /* And 'unrated' specifically does not slip past a flag — the existing flagged
