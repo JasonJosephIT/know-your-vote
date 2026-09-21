@@ -56,6 +56,31 @@ check("no category is asked as a question",
 check("every sub-issue is asked",
   SUB_ISSUE_IDS.every((id) => ASKABLE_IDS.includes(id)));
 
+/* NO CATEGORY ALIAS IS ASKED NOWHERE.
+
+   Categories stopped being asked on 2026-09-18, and 20 alias terms went with
+   them — "homelessness", "police", "public schools", "property taxes",
+   "visas" and more lived ONLY on a category, so from that day the model was
+   never asked about them. Nothing failed; recall just quietly dropped, and
+   A2 housing scored 0.0% across 834 articles while the corpus carried two
+   homelessness stories. v4 folded them back into sub-issues.
+
+   The property is "asked SOMEWHERE", not "asked under its own category": a
+   term may legitimately belong to another category's child once the taxonomy
+   grows. `development` was a `housing` alias and is now KYV3's, under
+   `environment`, which is correct and must not be forced back. */
+{
+  const asked = new Set(SUB_ISSUES.flatMap((s) => s.aliases.map((a) => a.toLowerCase())));
+  for (const cat of CATEGORIES) {
+    const lost = cat.aliases.filter((a) => !asked.has(a.toLowerCase()));
+    check(
+      `${cat.id}: every category alias is asked by some sub-issue`,
+      lost.length === 0,
+      `asked nowhere: ${lost.join(", ")}`,
+    );
+  }
+}
+
 /* ---- the hierarchy is total: no orphans, no childless parent --------- */
 for (const sub of SUB_ISSUES) {
   check(`${sub.id}: its category exists`, CATEGORY_IDS.includes(sub.categoryId), sub.categoryId);
