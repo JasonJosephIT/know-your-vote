@@ -4,7 +4,7 @@
 
    Founder direction 2026-09-18: the quiz's eight become CATEGORIES; the
    fifteen researched issues from CAP_Issue_List_FL_2026_v1.md become the
-   SUB_ISSUES underneath them. Five `KYV`-prefixed sub-issues have been added
+   SUB_ISSUES underneath them. Eight `KYV`-prefixed sub-issues have been added
    since, each where a measured gap or the quiz's own wording showed a subject
    with nowhere to go — see TAXONOMY_VERSION and the KYV entries below.
 
@@ -29,7 +29,7 @@
    labels for the eight are verbatim from src/lib/quiz-questions.ts (TASK-032,
    neutrality-reviewed). A- and B-prefixed sub-issue labels are verbatim from
    CAP_Issue_List_FL_2026_v1.md (2026-07-15, sourced and balance-checked). The
-   three non-quiz category labels, the five `KYV` sub-issue labels and every
+   three non-quiz category labels, the eight `KYV` sub-issue labels and every
    `aliases` array were written here — that is the part a human must read in
    review, because nothing upstream has vetted them.
 
@@ -77,7 +77,35 @@ export type { NewsIssue };
    article was a miss the taxonomy could not express, and a v3 row tagged `{}`
    on the same article is a real negative. The two are not comparable, so the
    version has to say which one you are reading. */
-export const TAXONOMY_VERSION = "4";
+/* 5 — 2026-09-21: `housing` gained KYV6 (renters and evictions) and KYV7
+   (homelessness); `insurance` gained KYV8 (condominium and HOA costs).
+
+   KYV7 IS THE v4 FOLD DONE PROPERLY, NOT A SECOND ATTEMPT AT IT. v4 restored
+   "homelessness" by adding it to A2's aliases, which fixed the orphan and
+   made the term askable again. But A2's label — CAP's, verbatim — is "Housing
+   affordability", and asking a model whether a story about an encampment
+   ordinance relates to housing AFFORDABILITY invites the answer the label
+   deserves. That is the B6 failure exactly, and the KYV4 failure exactly: two
+   subjects under one label, and the label is what the model is actually
+   answering. So "homelessness" and "unhoused" move off A2 and onto KYV7,
+   where the label says what the question means. The v4 invariant still holds
+   — every category alias is asked somewhere — which is the property
+   verify-news-issues.ts asserts, deliberately not "asked under its own
+   category".
+
+   WHAT IS AND IS NOT MEASURED HERE. KYV7 has real support: A2 scored 0.0%
+   across the 834-article corpus that carried two homelessness stories (v4's
+   note). KYV6 and KYV8 have none — the 116-row gold set holds no eviction,
+   condo or insurance story at all, and A1/A2 sat at zero gold rows there.
+   Those two rest on the quiz's wording and Florida's issue space, the KYV4
+   standard rather than the B8 standard.
+
+   A1 and A2 ALIASES WIDENED SPARINGLY, and v4's warning is why. A6 went
+   14 -> 11 on that same corpus when its aliases grew; past roughly a dozen
+   terms the vocabulary blurs the question. A1 lands at 7 and A2 at 8, and
+   terms that were merely adjacent (mortgage rates, homeownership, rate
+   filing, insurer insolvency) were dropped rather than kept for completeness. */
+export const TAXONOMY_VERSION = "5";
 
 export interface IssueCategory {
   /** For the eight, this is verbatim QUIZ_QUESTIONS[].id — the shared key that
@@ -133,14 +161,27 @@ export const CATEGORIES: readonly IssueCategory[] = [
    voters weigh) and are kept so a tag traces back to a sourced entry. */
 export const SUB_ISSUES: readonly TaxonomyIssue[] = [
   { id: "A1", categoryId: "insurance", label: "Property insurance costs",
-    aliases: ["property insurance", "premiums", "hurricane coverage", "Citizens Property Insurance"] },
+    /* Widened 2026-09-21. In Florida wind, flood and the residual market are
+       three different policies and three different arguments, and the original
+       four aliases named only the first. Held to three additions, not the six
+       first drafted: v4 measured A6 losing ground at 14 terms, so "rate
+       filing" and "insurer insolvency" were dropped as insider vocabulary
+       that no headline uses. Condominium and association costs are KYV8's. */
+    aliases: ["property insurance", "premiums", "hurricane coverage",
+              "Citizens Property Insurance", "flood insurance",
+              "windstorm coverage", "reinsurance"] },
   { id: "A2", categoryId: "housing", label: "Housing affordability",
-    /* +homebuying/homelessness/unhoused (v4 fold). A2 scored 0 across 834
-       articles while the corpus carried two homelessness stories; "homelessness"
-       was a `housing` CATEGORY alias, and categories stopped being asked.
-       "zoning" is not added here — it is already KYV3's. */
+    /* COST, SUPPLY and BUYING: what a home costs and whether enough are being
+       built. `rent` stays because a rent level is a price; the landlord-tenant
+       relationship is KYV6's. "zoning" is KYV3's.
+
+       "homelessness" and "unhoused" came here in the v4 fold and moved to
+       KYV7 in v5 — see TAXONOMY_VERSION. They are still asked, which is what
+       the orphan check requires; they are asked under a label that describes
+       them. `homebuying` stays: buying a home is this issue. */
     aliases: ["housing costs", "rent", "housing supply", "first-time buyers",
-              "homebuying", "homelessness", "unhoused"] },
+              "homebuying", "home prices", "down payment assistance",
+              "affordable housing"] },
   { id: "A3", categoryId: "insurance", label: "Property taxes",
     aliases: ["property tax", "property taxes", "homestead exemption",
               "property assessments", "millage"] },
@@ -310,6 +351,71 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
               "water restrictions", "desalination", "water utility",
               "water rates", "water main", "reclaimed water",
               "drinking water contamination"] },
+
+  /* ── Housing and property costs, 2026-09-21 ────────────────────────────
+     TWO CATEGORIES, THREE SUB-ISSUES BETWEEN THEM, AND A QUIZ THAT ASKS
+     ABOUT MORE THAN THAT. `housing` had one child (A2, affordability) while
+     its quiz question offers three priorities: building more, help for
+     first-time buyers, and stronger protections for renters. The first two
+     are A2's and KYV3's. The third had nothing. And the category's own alias
+     list has named `homelessness` since it was written, with no sub-issue
+     able to catch it — a tag that can never fire is a promise the taxonomy
+     does not keep.
+
+     KYV7 IS MEASURED; KYV6 AND KYV8 ARE NOT. The 834-article corpus that
+     prompted v4 carried two homelessness stories and A2 caught neither, so
+     the homelessness gap is a number rather than an opinion. The 116-row gold
+     set holds no eviction, condo or insurance story at all — A1 and A2 sat at
+     zero gold rows there — so KYV6 and KYV8 rest on the quiz's wording and on
+     Florida's issue space, the KYV4 standard rather than the B8 standard.
+     Whoever reads the first v5 evaluation should expect those two to be the
+     least validated rows in it. */
+  { id: "KYV6", categoryId: "housing", label: "Renters and evictions",
+    /* The quiz's "stronger protections and stability for renters". Aliases
+       name the TENANCY, not the price — a rent level is A2's. */
+    aliases: ["renters", "tenants", "eviction", "landlord-tenant law",
+              "rental assistance", "security deposits", "tenant protections",
+              "lease terms", "rent stabilization"] },
+  /* THE ONE ENTRY HERE WITH A MEASURED CASE, and the alias route was measured
+     to fail before this one was written. A2 scored 0.0% across 834 articles
+     that carried two homelessness stories, and
+     docs/general-election/news-corpus-analysis-2026-09-19.md says why, in its
+     own words: the two articles "are about homelessness *services*, not
+     housing **affordability**, which is A2's label. Adding 'homelessness' as
+     an alias did not change it, and the label is right to resist. CAP's 15 has
+     no concept for housing insecurity — a taxonomy gap to note, not a tagging
+     failure."
+
+     So this is not a second opinion about A2's label. It is the missing
+     concept that analysis asked for. `unhoused` comes across from the v4 fold
+     for the same reason "homelessness" does. */
+  { id: "KYV7", categoryId: "housing", label: "Homelessness",
+    aliases: ["homelessness", "unhoused", "homeless services", "encampments",
+              "public camping", "emergency shelters", "unsheltered",
+              "transitional housing"] },
+  /* THE WEAKEST ENTRY IN THE TAXONOMY, and the 834-article corpus is why.
+     Its `Insurance & Property Costs` category totals 13 articles, and A1 (3)
+     plus A3 (10) account for all 13 — nothing unexplained is sitting there
+     waiting for a condo issue. Twenty-five days of 29 Florida outlets produced
+     no condominium story that any issue caught.
+
+     That is evidence against URGENCY, not against correctness: a special-
+     assessment story could be sitting in the corpus's 531 untagged articles,
+     which is exactly what this would catch, and the pool file was not
+     preserved so nobody can look. The test is to label rows, which is what
+     that report says to do about every zero in it.
+
+     PARENT IS `insurance`, NOT `housing`, AND THAT IS A JUDGMENT CALL. The
+     category's quiz question reads "On property insurance and what it costs to
+     keep a home", and a five-figure special assessment is the sharpest example
+     of that cost Florida offers. The argument for `housing` — a condominium is
+     a home, milestone inspections are building safety — is not weak. Moving it
+     is free while the sweep has never run and no row carries the tag. */
+  { id: "KYV8", categoryId: "insurance", label: "Condominium and HOA costs",
+    aliases: ["condominium association", "HOA", "homeowners association",
+              "special assessment", "milestone inspection",
+              "structural integrity reserve", "condo fees", "association dues",
+              "condo board", "reserve funding"] },
 ];
 
 /* What the model is asked about: THE SUB-ISSUES ONLY.

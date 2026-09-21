@@ -218,3 +218,113 @@ swallow the narrow one the way B1 swallows A4 (§3).
   who made these labels.
 - **Recommendation 4 (A4 vs B1) is untouched.** Still a founder call, still not
   urgent.
+
+---
+
+## 8. Follow-up — taxonomy v5 (2026-09-21)
+
+**Version 4 was taken by other work, and it changed this section's claim.**
+While this was being written, `f171c61` shipped taxonomy v4 — the fold that
+put the orphaned *category* aliases back onto sub-issues after categories
+stopped being asked on 2026-09-18. That commit reports a number this report
+does not have: **`A2` housing scored 0.0% across an 834-article corpus that
+carried two homelessness stories.** So the housing work below is now version
+**5**, and one of its three entries is measured after all.
+
+**What this corpus can and cannot say.** These 116 rows contain no housing,
+insurance, condo, eviction or homelessness story at all, and `A1`/`A2` sat at
+zero gold rows in §2. The homelessness evidence comes from the 834-article run,
+not from here. `KYV6` and `KYV8` have no evidence from either.
+
+| id | label | parent | why |
+|---|---|---|---|
+| `KYV6` | Renters and evictions | `housing` | The quiz's "stronger protections and stability for renters" had no sub-issue. `A2` is a price; a tenancy is not. |
+| `KYV7` | Homelessness | `housing` | **Measured, and the alias route was measured to fail first.** See below. |
+| `KYV8` | Condominium and HOA costs | `insurance` | Post-Surfside milestone inspections, reserve funding, special assessments. **The corpus argues against it** — see below. The weakest entry in the taxonomy. |
+
+### Why `KYV7` rather than leaving the term on `A2`
+
+`news-corpus-analysis-2026-09-19.md` — preserved on main after this section
+was first written — already answered this, and it is worth quoting rather than
+paraphrasing:
+
+> **A2 is probably correct.** The two candidate articles are about homelessness
+> *services*, not housing **affordability**, which is A2's label. Adding
+> "homelessness" as an alias did not change it, and the label is right to
+> resist. CAP's 15 has no concept for housing insecurity — a taxonomy gap to
+> note, not a tagging failure.
+
+So the alias route was not merely inelegant, it was **tried and measured not
+to move the number**, and the analysis names the remedy: a missing concept.
+`KYV7` is that concept. `homelessness` and `unhoused` move there. They are
+still asked, which is the property `verify-news-issues.ts` asserts — it checks
+"asked somewhere", deliberately not "asked under its own category".
+
+This is the same failure as `B6` (§3) and the `KYV4` draft (§7), now three for
+three: when an issue underperforms, suspect the label before the vocabulary.
+
+### Alias widening, held down on purpose
+
+v4 measured the counter-lesson: `A6` went **14 → 11** on the 834-article
+corpus when its aliases were widened, so past roughly a dozen terms vocabulary
+blurs a question instead of sharpening it. Held honestly, that datum cuts both
+ways — the same corpus report warns it can show a count moved but not that the
+new count is righter, so trimming on it is following the repo's own reading of
+the number, not a proof that the trim is correct. `A1` therefore takes three
+additions and lands at 7 — flood insurance, windstorm coverage, reinsurance,
+because in Florida those are three different policies and three different
+arguments, and its original four named only wind. `rate filing` and `insurer
+insolvency` were dropped as insider vocabulary no headline uses. `A2` lands at
+8 and keeps `homebuying` from the fold; `mortgage rates` and `homeownership`
+were dropped as adjacent rather than central.
+
+### `KYV8` has evidence against its urgency
+
+The 834-article corpus puts `Insurance & Property Costs` at 13 articles, and
+`A1` (3) plus `A3` (10) account for all 13. Nothing unexplained is sitting
+there waiting for a condo issue: twenty-five days of 29 Florida outlets
+produced no condominium story that any issue caught.
+
+That is evidence against **urgency**, not against correctness. A special-
+assessment story could be among the corpus's 531 untagged articles — precisely
+what `KYV8` would catch — and the pool file was not preserved, so nobody can
+look. The remedy is the one that report prescribes for every zero in it: label
+rows. If you would rather not carry an unevidenced issue in the meantime, this
+is the one to drop, and dropping it costs nothing today.
+
+### The `KYV8` parent is a judgment call, and a cheap one to reverse today
+
+It rolls up to `insurance` because that category's quiz question reads "On
+property insurance and what it costs to keep a home", and a five-figure special
+assessment is the sharpest example of that cost Florida currently offers. The
+argument for `housing` — a condominium is a home, and milestone inspections are
+building safety — is not weak. Moving it costs nothing while the sweep has never
+run and no row carries the tag; it stops being free the moment one does.
+
+### Deliberately not added
+
+- **Auto insurance** (PIP repeal and its successors). No quiz option, no gold
+  row, and lower salience than the property-insurance argument. Adding an issue
+  because it exists somewhere in the state's politics is how a taxonomy grows
+  past what anyone can evaluate.
+- **The rest of v4's fold.** Every other term it restored stayed exactly where
+  it put them. `A2` was the one case where the receiving label did not describe
+  the term, and it is the one case touched here.
+- **A3 untouched.** It measured 100% precision / 80% recall in §2 — the only
+  housing-or-property issue in this report with real numbers. Leave it alone.
+
+### What the re-run should show
+
+23 Nouls per article now, up from 16 at the time of §1, so roughly $0.016 a
+pass at the §4 rate. Expect `KYV6` and `KYV8` to report `n/a` on a corpus like
+this one; that is not a pass, it is silence. For `KYV7` there is a sharper test, and it is deliberately **not** alias
+tuning: the corpus analysis identified its two homelessness articles by hand,
+so those two have a known right answer. Re-run the corpus and check whether
+they land on `KYV7`. That respects that report's own warning — *"do not tune
+aliases against this corpus… it is unlabelled, so it can show a count moved
+but never that the new count is righter"* — because two hand-identified
+articles are not a count, they are a labelled pair. Everything wider than that
+needs the gold set, and the gold set needs more rows. A window containing an
+actual condo-assessment or encampment-ordinance story is what would test them,
+and pulling one deliberately (`scripts/news-eval-pool.ts` over a wider date
+range) is a cheaper way to find out than waiting for the daily sweep.
