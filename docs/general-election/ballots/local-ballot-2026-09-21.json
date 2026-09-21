@@ -1,0 +1,524 @@
+{
+ "orange": {
+  "offices_seen": 46,
+  "candidates_seen": 112,
+  "printed_contests": 12,
+  "printed_candidates": 26,
+  "unopposed_or_decided_contests": 32,
+  "contests": [
+   {
+    "office": "Clerk of the Courts",
+    "n": 2,
+    "who": [
+     "Terrell Thomas (NPA) [Runoff]",
+     "Roberta Walton Johnson (DEM) [Runoff]"
+    ]
+   },
+   {
+    "office": "County Mayor",
+    "n": 2,
+    "who": [
+     "Chris Messina [Runoff]",
+     "Tiffany  Moore Russell [Runoff]"
+    ]
+   },
+   {
+    "office": "County Commissioner District 2",
+    "n": 2,
+    "who": [
+     "Kamia Brown [Runoff]",
+     "Mike Crabb [Runoff]"
+    ]
+   },
+   {
+    "office": "County Commissioner District 4",
+    "n": 2,
+    "who": [
+     "Brian  Jones [Qualified]",
+     "Johanna Lopez [Qualified]"
+    ]
+   },
+   {
+    "office": "County Commissioner District 6",
+    "n": 2,
+    "who": [
+     "Lawanna Gelzer [Runoff]",
+     "Michael \"Mike\" Scott [Runoff]"
+    ]
+   },
+   {
+    "office": "County Commissioner District 7",
+    "n": 2,
+    "who": [
+     "Patricia Rumph [Runoff]",
+     "Vicki Vargo [Runoff]"
+    ]
+   },
+   {
+    "office": "County Commissioner District 8",
+    "n": 2,
+    "who": [
+     "Jeannette Quinones Hernandez [Runoff]",
+     "Victor M. Torres Jr. [Runoff]"
+    ]
+   },
+   {
+    "office": "School Board Dist. 3",
+    "n": 2,
+    "who": [
+     "Diana Moore [Runoff]",
+     "Susanne Pe\u00c3\u00b1a [Runoff]"
+    ]
+   },
+   {
+    "office": "Orange Soil and Water Conservation District 1",
+    "n": 3,
+    "who": [
+     "Quinnie Perez [Qualified]",
+     "Vicente Rafael Perez Carreno [Qualified]",
+     "Doug Sahr [Qualified]"
+    ]
+   },
+   {
+    "office": "Orange Soil and Water Conservation District 3",
+    "n": 3,
+    "who": [
+     "Chuck  Drake [Qualified]",
+     "Erik LaMont Melear [Qualified]",
+     "Jos\u00c3\u00a9 Antonio Rodriguez [Qualified]"
+    ]
+   },
+   {
+    "office": "Orange Soil and Water Conservation District 5",
+    "n": 2,
+    "who": [
+     "Zack Green [Qualified]",
+     "Jimm Middleton [Qualified]"
+    ]
+   },
+   {
+    "office": "Vista Lakes CDD Seat 3",
+    "n": 2,
+    "who": [
+     "Bennie Hichez [Qualified]",
+     "Frank J. Sebestyen [Qualified]"
+    ]
+   }
+  ]
+ },
+ "miamidade": {
+  "offices_seen": 84,
+  "candidates_seen": 99,
+  "printed_contests": 3,
+  "printed_candidates": 6,
+  "unopposed_or_decided_contests": 73,
+  "contests": [
+   {
+    "office": "School Board District 01",
+    "n": 2,
+    "who": [
+     "Linda Cothiere (NOP) [Runoff]",
+     "Thera Johnson (NOP) [Runoff]"
+    ]
+   },
+   {
+    "office": "County Commission District 05",
+    "n": 2,
+    "who": [
+     "Vicki L. Lopez (NOP) [Runoff]",
+     "Rob Piper  (NOP) [Runoff]"
+    ]
+   },
+   {
+    "office": "Coronado CDD Seat 1",
+    "n": 2,
+    "who": [
+     "Erwin Santacruz (NOP) [Qualified]",
+     "Giovanna Sousa (NOP) [Qualified]"
+    ]
+   }
+  ]
+ },
+ "broward": {
+  "offices_seen": 54,
+  "candidates_seen": 89,
+  "printed_contests": 16,
+  "printed_candidates": 32,
+  "unopposed_or_decided_contests": 38,
+  "contests": [
+   {
+    "office": "School Board, Dist. 6",
+    "n": 2,
+    "who": [
+     "Adam Cervera [Qualified]",
+     "Roberto Fernandez III [Qualified]"
+    ]
+   },
+   {
+    "office": "Central Broward Water Control District, Zone 6",
+    "n": 2,
+    "who": [
+     "David T.  Donzella [Qualified]",
+     "Patrick Jesse Mason [Qualified]"
+    ]
+   },
+   {
+    "office": "Coral Springs Improvement District, Seat 4",
+    "n": 2,
+    "who": [
+     "Katherine Castro [Qualified]",
+     "Maryam Omidi [Qualified]"
+    ]
+   },
+   {
+    "office": "Coral Springs Improvement District, Seat 5",
+    "n": 2,
+    "who": [
+     "Michael Kraus [Qualified]",
+     "Curt Tiefenbrun [Qualified]"
+    ]
+   },
+   {
+    "office": "Monterra Community Development District, Seat 2",
+    "n": 2,
+    "who": [
+     "Syed Hashem [Qualified]",
+     "Adam Zee [Qualified]"
+    ]
+   },
+   {
+    "office": "Orchid Grove Community Development District, Seat 5",
+    "n": 2,
+    "who": [
+     "Jill Jernigan Quigley [Qualified]",
+     "Edward K. Wolling [Qualified]"
+    ]
+   },
+   {
+    "office": "South Broward Drainage District, Zone 2",
+    "n": 2,
+    "who": [
+     "Alanna Orlen Mersinger [Qualified]",
+     "Steven Zucker [Qualified]"
+    ]
+   },
+   {
+    "office": "South Broward Drainage District, Zone 4",
+    "n": 2,
+    "who": [
+     "Luis Pedraza [Qualified]",
+     "Mercedes B. Santana Woodall [Qualified]"
+    ]
+   },
+   {
+    "office": "South Broward Drainage District, Zone 5",
+    "n": 2,
+    "who": [
+     "Richard Andrews [Qualified]",
+     "Sean Knowles [Qualified]"
+    ]
+   },
+   {
+    "office": "Sunshine Water Control District, Seat 4",
+    "n": 2,
+    "who": [
+     "Angelo \"Chuck\" LaRussell [Qualified]",
+     "Jose \"Joe\" Morera [Qualified]"
+    ]
+   },
+   {
+    "office": "Sunshine Water Control District, Seat 5",
+    "n": 2,
+    "who": [
+     "Prem Mirpuri [Qualified]",
+     "Paul  Stepler [Qualified]"
+    ]
+   },
+   {
+    "office": "Turtle Run Community Development District, Seat 1",
+    "n": 2,
+    "who": [
+     "Chris Kapish [Qualified]",
+     "James Robert Shipe [Qualified]"
+    ]
+   },
+   {
+    "office": "Turtle Run Community Development District, Seat 2",
+    "n": 2,
+    "who": [
+     "Lloyd List [Qualified]",
+     "Virginia \"Ginny\" Tropea [Qualified]"
+    ]
+   },
+   {
+    "office": "Turtle Run community Development District, Seat 3",
+    "n": 2,
+    "who": [
+     "Elzbieta \"Liz\" Jochim [Qualified]",
+     "Kenneth  Murray [Qualified]"
+    ]
+   },
+   {
+    "office": "Walnut Creek Community Development District, Seat 1",
+    "n": 2,
+    "who": [
+     "Allan Beckmann Jr. [Qualified]",
+     "Michael Cuevas [Qualified]"
+    ]
+   },
+   {
+    "office": "Walnut Creek Community Development District, Seat 3",
+    "n": 2,
+    "who": [
+     "Alison Hibbert Saffold [Qualified]",
+     "Juan Manuel Vasquez Canas [Qualified]"
+    ]
+   }
+  ]
+ },
+ "hillsborough": {
+  "offices_seen": 155,
+  "candidates_seen": 206,
+  "printed_contests": 29,
+  "printed_candidates": 62,
+  "unopposed_or_decided_contests": 126,
+  "contests": [
+   {
+    "office": "County Commissioner, Dist. 1",
+    "n": 2,
+    "who": [
+     "Harry Cohen (DEM) [Qualified]",
+     "Jackie Toledo (REP) [Qualified]"
+    ]
+   },
+   {
+    "office": "County Commissioner, Dist. 3",
+    "n": 2,
+    "who": [
+     "Luiz F. F. Garcia (REP) [Qualified]",
+     "Gwen Myers (DEM) [Qualified]"
+    ]
+   },
+   {
+    "office": "County Commissioner, Dist. 5",
+    "n": 2,
+    "who": [
+     "Stacy Hahn (REP) [Qualified]",
+     "Neil Manimala (DEM) [Qualified]"
+    ]
+   },
+   {
+    "office": "County Commissioner, Dist. 7",
+    "n": 2,
+    "who": [
+     "Adam Hattersley (DEM) [Qualified]",
+     "Joshua Wostal (REP) [Qualified]"
+    ]
+   },
+   {
+    "office": "School Board Member, Dist. 2",
+    "n": 2,
+    "who": [
+     "Brittany Lyssy [Runoff]",
+     "Daniela Simic [Runoff]"
+    ]
+   },
+   {
+    "office": "School Board Member, Dist. 6",
+    "n": 2,
+    "who": [
+     "Kenneth \"Ken\"  Gay [Runoff]",
+     "Karen Perez [Runoff]"
+    ]
+   },
+   {
+    "office": "Supervisor, Avelar Creek CDD, Seat 3",
+    "n": 2,
+    "who": [
+     "Frank B. Franco [Qualified]",
+     "Sebastian Johnson [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Avelar Creek CDD, Seat 4",
+    "n": 2,
+    "who": [
+     "Julie Campbell [Qualified]",
+     "Edwin Guillot [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Cory Lakes CDD, Seat 5",
+    "n": 2,
+    "who": [
+     "Pallu Gupta [Qualified]",
+     "Cynthia McIntyre [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Covington Park CDD, Seat 2",
+    "n": 2,
+    "who": [
+     "Stephen J. Brown [Qualified]",
+     "Rick L. Reidt [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Diamond Hill CDD, Seat 2",
+    "n": 2,
+    "who": [
+     "Linda L. Dunn [Qualified]",
+     "John I. Pollard [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Fishhawk Ranch CDD, Seat 4",
+    "n": 2,
+    "who": [
+     "India Crawford [Qualified]",
+     "Dennis Moore [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Harbor Bay CDD, Seat 2",
+    "n": 2,
+    "who": [
+     "Daniel J. Leventry [Qualified]",
+     "John Vollbrecht [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Hidden Creek CDD, Seat 2",
+    "n": 2,
+    "who": [
+     "Zoe Anene [Qualified]",
+     "Barbara A. Kargol [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Hidden Creek CDD, Seat 5",
+    "n": 3,
+    "who": [
+     "Harry Payton Gibson [Qualified]",
+     "Thomas H Marrone [Qualified]",
+     "Elizabeth \"Liz\" Santeramo [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, K-Bar Ranch II CDD, Seat 4",
+    "n": 2,
+    "who": [
+     "Kamolika Batabyal [Qualified]",
+     "Michele Emery [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Lake St. Charles CDD, Seat 1",
+    "n": 3,
+    "who": [
+     "Ginny Gianakos [Qualified]",
+     "Stephanie Hinson [Qualified]",
+     "Ana Loney [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Lake St. Charles CDD, Seat 2",
+    "n": 3,
+    "who": [
+     "Yvonne Brown [Qualified]",
+     "Barbara A. Kirby [Qualified]",
+     "Toni Kristina Rhodus [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, River Bend CDD, Seat 3",
+    "n": 2,
+    "who": [
+     "Lance C. Belka [Qualified]",
+     "Shanell  McMiller Brown [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Rivercrest CDD, Seat 1",
+    "n": 2,
+    "who": [
+     "Robert F. Fuhrmeister IV [Qualified]",
+     "Joseph A. McGee Sr [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Shell Point CDD, Seat 2",
+    "n": 2,
+    "who": [
+     "Jayce E. Donley [Qualified]",
+     "Brittany Schwartzbauer [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, South Fork III CDD, Seat 3",
+    "n": 2,
+    "who": [
+     "Scott Corder [Qualified]",
+     "Dustin Heflin [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, South Fork III CDD, Seat 5",
+    "n": 2,
+    "who": [
+     "Darryl F. Dew [Qualified]",
+     "Jessica Ocasio [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Southshore Bay CDD, Seat 2",
+    "n": 2,
+    "who": [
+     "Diane C. Anderson [Qualified]",
+     "Kathleen Robinson [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Spring Lake CDD, Seat 1",
+    "n": 2,
+    "who": [
+     "Danny R. Donegan Jr [Qualified]",
+     "Kenneth A. Hoefle [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Triple Creek CDD, Seat 1",
+    "n": 2,
+    "who": [
+     "Marc Carlton [Qualified]",
+     "Mirtha Amalia Moreno [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Triple Creek CDD, Seat 2",
+    "n": 3,
+    "who": [
+     "David Galloway [Qualified]",
+     "Shannon Lewis [Qualified]",
+     "Jodi Steel [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Waterleaf CDD, Seat 2",
+    "n": 2,
+    "who": [
+     "Alex Auld [Qualified]",
+     "Palmer Johnson [Qualified]"
+    ]
+   },
+   {
+    "office": "Supervisor, Waterleaf CDD, Seat 3",
+    "n": 2,
+    "who": [
+     "Nichole Ann Hawkins [Qualified]",
+     "Matthew Lenard [Qualified]"
+    ]
+   }
+  ]
+ }
+}
