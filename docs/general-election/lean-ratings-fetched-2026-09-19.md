@@ -497,6 +497,27 @@ was briefly wrong.
 
 ## 9. Open items handed on
 
+0. **The five rated rows — DEFERRED by the founder on 2026-09-21, not pending.**
+   Shown all three raters' values for Miami Herald, Sun Sentinel, Tampa Bay
+   Times, Orlando Sentinel and AP, the founder chose to leave them undecided
+   for now: *"no leaning"*. `leanTag: null` on those rows is therefore a
+   recorded decision to wait. **Do not re-present this table** — the evidence
+   is §2 and §4 below and has not changed.
+
+   When it is picked up it needs **two** decisions, not one: whose rating
+   governs where they disagree (four of the five do), and where the cut between
+   `center` and `center-left` falls, since no rater uses this repo's five-value
+   scale. Averaging is forbidden — "record disagreement as disagreement".
+
+   `unrated` is **not** an available answer here: three agencies rate each of
+   these outlets, so it would deny ratings this repo cites, and
+   `verify-news-sweep.ts` fails on it by design.
+
+   **It does not block launch.** A null lean keeps the row out of the sweep, so
+   these five are simply absent; 32 rows are designated and 27 are sweepable
+   without them. Deciding them would *add* Sun Sentinel, Tampa Bay Times and
+   Orlando Sentinel to the sweep (Miami Herald and AP have no retrieval path).
+
 1. **Gate A versus spectrum span** (§3) — a contradiction between spec §7 and
    corpus Recommendation 5. Founder decides which gives way. Blocks the
    national tier.
