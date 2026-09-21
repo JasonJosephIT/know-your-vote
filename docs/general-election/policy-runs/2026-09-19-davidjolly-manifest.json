@@ -1,0 +1,880 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "not_run",
+  "site": "https://davidjolly.com",
+  "created_at": "2026-09-19T23:06:15.792Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "2",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-2/q-e09d4597",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8"
+  ],
+  "counts": {
+    "passages": 120,
+    "asked": 0,
+    "states_policy": 0,
+    "with_issue": 0,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "faaa5243",
+      "url": "https://davidjolly.com/",
+      "heading": "This isn't just another election.",
+      "text": "It's a decision about what Florida becomes next.",
+      "verdict": null
+    },
+    {
+      "id": "aaf93a93",
+      "url": "https://davidjolly.com/",
+      "heading": "This isn't just another election.",
+      "text": "People feel it. Something is off. The system isn't working the way it should.",
+      "verdict": null
+    },
+    {
+      "id": "979ae0f4",
+      "url": "https://davidjolly.com/",
+      "heading": "This isn't just another election.",
+      "text": "This campaign isn't built on talking points. It's built on people.",
+      "verdict": null
+    },
+    {
+      "id": "0a466c41",
+      "url": "https://davidjolly.com/",
+      "heading": "This isn't just another election.",
+      "text": "Different backgrounds. Different beliefs. Same understanding.",
+      "verdict": null
+    },
+    {
+      "id": "4e732832",
+      "url": "https://davidjolly.com/",
+      "heading": "A New Coalition",
+      "text": "The work, the people, and the fight for a Florida that works for everyone.",
+      "verdict": null
+    },
+    {
+      "id": "6087258d",
+      "url": "https://davidjolly.com/",
+      "heading": "Every community, from Milton and Molino to Key West.",
+      "text": "David and Gwen have been in every community across the state, from Milton and Molino on the Alabama border to Key West and everywhere in between, because they believe every voice in Florida deserves to be heard. Below you can see some of those stops, and hear from some of the friends we have met along the way. Tap a stop for the photos from that day, or a voice to hear it.",
+      "verdict": null
+    },
+    {
+      "id": "53afb0bf",
+      "url": "https://davidjolly.com/",
+      "heading": "St. John Progressive Missionary Baptist Church",
+      "text": "A beautiful Sunday morning of faith, fellowship, and community at St. John Progressive Missionary Baptist Church alongside Senator Arthenia Joyner. Thank you to the entire St. John family for the warm welcome and the opportunity to worship together. I left inspired by the joy in this congregation and its deep commitment to serving others.",
+      "verdict": null
+    },
+    {
+      "id": "10613458",
+      "url": "https://davidjolly.com/",
+      "heading": "34th Street Church of God",
+      "text": "Our second church visit of the day brought us to 34th Street Church of God, where we were welcomed with open arms and joyful hearts.",
+      "verdict": null
+    },
+    {
+      "id": "2498771f",
+      "url": "https://davidjolly.com/",
+      "heading": "New Mt. Zion Missionary Baptist Church",
+      "text": "The spirit of this Sunday carried us to our fourth stop, New Mt. Zion Missionary Baptist Church. We were grateful for the opportunity to worship, s...",
+      "verdict": null
+    },
+    {
+      "id": "79be62d4",
+      "url": "https://davidjolly.com/",
+      "heading": "New Mt. Zion Missionary Baptist Church",
+      "text": "The spirit of this Sunday carried us to our fourth stop, New Mt. Zion Missionary Baptist Church. We were grateful for the opportunity to worship, share in fellowship, and hear directly from members of this community. Days like today remind us that leadership begins with listening, serving, and showing up for one another. Thank you to the entire New Mt. Zion family for welcoming us.",
+      "verdict": null
+    },
+    {
+      "id": "5cc166de",
+      "url": "https://davidjolly.com/",
+      "heading": "Allen Temple AME",
+      "text": "Our third church visit of the day brought us to Allen Temple AME, where faith, fellowship, and a deep commitment to service could be felt throughou...",
+      "verdict": null
+    },
+    {
+      "id": "f1f04573",
+      "url": "https://davidjolly.com/",
+      "heading": "Allen Temple AME",
+      "text": "Our third church visit of the day brought us to Allen Temple AME, where faith, fellowship, and a deep commitment to service could be felt throughout the congregation. Thank you to the Allen Temple family for welcoming us so graciously.",
+      "verdict": null
+    },
+    {
+      "id": "a7f5c841",
+      "url": "https://davidjolly.com/",
+      "heading": "Sep 12, 2026",
+      "text": "What a wonderful evening in Seaside. Even in deep-red territory, we met a room full of Floridians ready for change and eager to build a better futu...",
+      "verdict": null
+    },
+    {
+      "id": "2ae257c2",
+      "url": "https://davidjolly.com/",
+      "heading": "Sep 12, 2026",
+      "text": "What a wonderful evening in Seaside. Even in deep-red territory, we met a room full of Floridians ready for change and eager to build a better future together. A huge thank-you to Dave Rauschkolb, owner of Bud & Alley’s, for his friendship and support. No community is out of reach when we show up, listen, and lead with hope. Florida is ready to believe in better.",
+      "verdict": null
+    },
+    {
+      "id": "d523fcbc",
+      "url": "https://davidjolly.com/",
+      "heading": "A fifth-generation Floridian.",
+      "text": "A person of deep faith, David Jolly believes everyone deserves a shot at work, wages, and wealth, and that their rights should be protected and their dignity celebrated, regardless of the color of their skin, where they were born, who they love, or who they worship.",
+      "verdict": null
+    },
+    {
+      "id": "e2217ca5",
+      "url": "https://davidjolly.com/",
+      "heading": "A fifth-generation Floridian.",
+      "text": "David is a former Member of Congress, attorney, and nationally recognized television analyst who launched his bid for Governor in June of 2025. Since announcing his candidacy, David has traveled every corner of the state, hosting hundreds of town halls and community forums focused on improving the state's economy.",
+      "verdict": null
+    },
+    {
+      "id": "22d36f31",
+      "url": "https://davidjolly.com/",
+      "heading": "Born into public service.",
+      "text": "Gwen Graham was born in Miami Lakes and raised in a family built around public service. A proud product of Florida's public schools and a mother of three, she spent her early career fighting for teachers and students, from the PTA to the Leon County school district. In Congress, she represented Florida's 2nd District and worked together with David to protect our coastline and keep oil drilling out of the Gulf. Now they're running side by side for a Florida that works for everyone.",
+      "verdict": null
+    },
+    {
+      "id": "57df7016",
+      "url": "https://davidjolly.com/",
+      "heading": "This isn't abstract.",
+      "text": "Housing. Health care. The cost of just getting through the day. This is what people are living through. Right now. Across Florida.",
+      "verdict": null
+    },
+    {
+      "id": "5d9e0ab9",
+      "url": "https://davidjolly.com/",
+      "heading": "The Insurance Crisis",
+      "text": "Floridians pay the highest home insurance prices in America. Here is the plan to cut them by 60 to 70 percent.",
+      "verdict": null
+    },
+    {
+      "id": "62585151",
+      "url": "https://davidjolly.com/",
+      "heading": "A Florida for Everyone",
+      "text": "The people who make this state strong shouldn't be pushed to the margins.",
+      "verdict": null
+    },
+    {
+      "id": "d019ac19",
+      "url": "https://davidjolly.com/",
+      "heading": "The Reality We Can't Ignore",
+      "text": "You can see it. You can feel it. And it's not going away on its own.",
+      "verdict": null
+    },
+    {
+      "id": "cf97d944",
+      "url": "https://davidjolly.com/",
+      "heading": "Ending the Culture Wars",
+      "text": "We can't move forward together if we are constantly being driven apart.",
+      "verdict": null
+    },
+    {
+      "id": "9cd07447",
+      "url": "https://davidjolly.com/",
+      "heading": "Florida is paying attention.",
+      "text": "Coverage of the campaign from across the state.",
+      "verdict": null
+    },
+    {
+      "id": "e1137b9a",
+      "url": "https://davidjolly.com/",
+      "heading": "Support David",
+      "text": "If you've saved your payment information with ActBlue Express, your donation will be processed immediately.",
+      "verdict": null
+    },
+    {
+      "id": "12023e10",
+      "url": "https://davidjolly.com/",
+      "heading": "Join the movement.",
+      "text": "This campaign is built on people. There's a place in it for you.",
+      "verdict": null
+    },
+    {
+      "id": "1ddb0144",
+      "url": "https://davidjolly.com/",
+      "heading": "This is the moment everything changes.",
+      "text": "The story won't be about one person winning. It'll be about Florida choosing a different direction. And showing the rest of the country what's possible.",
+      "verdict": null
+    },
+    {
+      "id": "e4488d05",
+      "url": "https://davidjolly.com/issues",
+      "heading": "This Isn't About Party. It's About People.",
+      "text": "The challenges facing Florida families aren't left or right. They're real. And they demand real solutions.",
+      "verdict": null
+    },
+    {
+      "id": "9062ed3e",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Politics has spent years dividing people over labels while the actual problems kept getting worse.",
+      "text": "Housing costs that make it impossible to stay. Schools that are underfunded and over-politicized. A health care system that's too expensive to rely on for too many families. Climate impacts that threaten coastal communities and drive up insurance rates.",
+      "verdict": null
+    },
+    {
+      "id": "a84790e6",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Politics has spent years dividing people over labels while the actual problems kept getting worse.",
+      "text": "These aren't talking points. They're the lived experience of working families across Florida.",
+      "verdict": null
+    },
+    {
+      "id": "d6c916c4",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Politics has spent years dividing people over labels while the actual problems kept getting worse.",
+      "text": "The question isn't where a solution comes from. The question is whether it makes life better.",
+      "verdict": null
+    },
+    {
+      "id": "f91f38b0",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Solving our Affordability and Insurance Crisis",
+      "text": "The property insurance crisis is the primary reason so many people in Florida are struggling to afford a place to live. From renters to retirees to homeowners, the burden of property insurance continues to make housing costs in Florida unaffordable for many. A state catastrophic fund that removes natural disaster risk from the private insurance market would dramatically reduce property and car insurance rates, restoring affordability and price stability for millions of Floridians. Allowing condominium associations and owners access to a no-interest state-backed loan program would likewise address the crushing financial burden of generational condominium repairs.",
+      "verdict": null
+    },
+    {
+      "id": "0b312540",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Saving Our Schools",
+      "text": "Public schools have been inadequately funded in the state of Florida for decades. We need to dramatically increase investment in Florida's public schools to provide higher quality public schools in more neighborhoods, with more teachers who earn a more competitive salary. Schools in Florida's private school voucher program need to meet the same high standards as our public schools. Private schools that accept vouchers should be required to provide the same specialized services public schools provide and not charge additional tuition. The voucher program should be means-tested to ensure funding is provided for families with demonstrated economic need.",
+      "verdict": null
+    },
+    {
+      "id": "734373fc",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Campaign Finance and Ethics Reform",
+      "text": "Florida has some of the weakest ethics and campaign finance rules of any state in the country. Incumbent politicians solicit unlimited money from corporations in clear relationship to official acts. Florida should lead the nation in campaign finance reform and a sweeping ethics package committed to transparency and to protecting Florida taxpayers from legalized graft in Tallahassee.",
+      "verdict": null
+    },
+    {
+      "id": "5bf101e1",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Strengthening Florida's Economy",
+      "text": "Florida has one of the largest economies in the world, but it has been hindered by short-term political thinking. Florida should become a leading technology economy and invest in a renewed agriculture economy with a vision for the next century. We should continue to grow our tourist economy and should retain Florida's top talent while attracting the world's brightest minds and creators.",
+      "verdict": null
+    },
+    {
+      "id": "1609c159",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Restoring Reproductive Freedom",
+      "text": "Reproductive healthcare decisions should be made between women and their doctors, not politicians. Roe v. Wade and Casey v. Planned Parenthood provided a responsible, balanced framework for protecting these decisions. Absent federal legislation restoring these protections, Florida should codify the Roe/Casey framework.",
+      "verdict": null
+    },
+    {
+      "id": "8b655561",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Investing in Climate Resiliency, Clean Water, and the Ocean Economy",
+      "text": "Florida is home to remarkable ecosystems, waterways, and coastlines. The state's management of these resources has been insufficient. Florida should accept the science of climate change, protect our beaches and state parks, and invest in resiliency throughout the state. Florida should adopt a sustainability agenda that conserves our natural resources and grows an economy reliant on tourism, fisheries, hospitality, and outdoor living.",
+      "verdict": null
+    },
+    {
+      "id": "e01081c8",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Restoring Services for Our Veterans",
+      "text": "Florida is home to one of the largest veteran populations in the United States. We are fortunate to have men and women from all generations who have honorably served across all service branches. In the face of federal cuts and drawback of services, Florida should lead the nation in filling the gap of critical services for those who have served our nation in uniform.",
+      "verdict": null
+    },
+    {
+      "id": "2b0dab21",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Giving Florida's Families Access to Florida's Universities",
+      "text": "Too many Florida families are locked out of our state's flagship universities. Florida is fortunate to be home to some of our nation's leading colleges and universities, but it only benefits Florida families if our students can gain admission. Qualified Florida students should have preferred application status for Florida's universities.",
+      "verdict": null
+    },
+    {
+      "id": "534dabe7",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Reducing Gun Violence",
+      "text": "Florida suffers needlessly from gun violence. Responsible gun owners are not the problem, but lax gun laws are. Its time politicians in Tallahassee do more, protecting responsible gun owners' rights while passing common-sense reforms. Florida should ban the sale of assault weapons, require universal and comprehensive background checks, explore licensing, and preserve and expand the red flag laws enacted following the tragedy at Parkland.",
+      "verdict": null
+    },
+    {
+      "id": "a0418a9f",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Clean Energy",
+      "text": "Florida leaders should unleash clean and renewable energies across the Sunshine State, requiring greater integration of clean energy technologies into our public utilities. Environmentally sound energy technologies provide for greater stewardship of our environment, protect our tourist and environmental economy, and can drive down utility costs for all Florida consumers.",
+      "verdict": null
+    },
+    {
+      "id": "dffc5228",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Home Rule and Direct Democracy",
+      "text": "Across Florida, voters continue to use their vote to choose the direction of their state and their community. But Tallahassee politicians preempt the will of the voters based on selfish ideological whims. Direct democracy in Florida should be easier, not harder. Florida should respect home rule, and support the implementation of successful voter initiatives in communities across the state. Florida should make constitutional amendments easier for voters to place on the ballot, and if an amendment gets more than 50% of the vote, the Governor should fight to enact it on behalf of the people.",
+      "verdict": null
+    },
+    {
+      "id": "be39f224",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Fighting Crime, not Communities",
+      "text": "Whether you're a native born Floridian, an immigrant to our state, or a Tallahassee politician, if you break the law in Florida, you'll be held accountable. But Florida can also be a state that corrects disparities in criminal justice for communities of color and immigrant communities, promoting local control of community policing. It's time Florida fights crime, not communities.",
+      "verdict": null
+    },
+    {
+      "id": "594f3bae",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Delivering Affordable Healthcare to Floridians",
+      "text": "Medicaid is a critical program for Florida. It supports childbirth care for women and infants, long-term care for seniors, care for those with special needs and unique abilities, and is a critical funding source for hospitals across the state. In the face of cuts from Washington and Tallahassee, Florida should commit to expanding Medicaid and ensuring healthcare for all Floridians.",
+      "verdict": null
+    },
+    {
+      "id": "563485db",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Treating Everyone with Kindness, Dignity and Respect",
+      "text": "Culture wars divide and demonize. Florida should reject the politics of division and hate, and instead create a home where everyone is valued, respected, and welcomed. We should become a place where everyone is given dignity and treated equally, regardless of race, creed, or color; and regardless of who you love or who you worship. Florida should embrace our immigrant community and celebrate their contributions to our state's culture and economy. It's time to create a Florida for all people.",
+      "verdict": null
+    },
+    {
+      "id": "c7159bd5",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Florida deserves better than this.",
+      "text": "Not better talking points. Not better excuses. Better outcomes for the people who live here.",
+      "verdict": null
+    },
+    {
+      "id": "df3c7c10",
+      "url": "https://davidjolly.com/issues",
+      "heading": "Florida deserves better than this.",
+      "text": "That's what this campaign is about. That's what leadership should deliver.",
+      "verdict": null
+    },
+    {
+      "id": "76b8c361",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Principles Over Party.",
+      "text": "David Jolly's position is grounded in principles over party affiliation. He supports local control, private sector leadership, individual freedom from government interference in personal decisions, and government action when markets fail. Jolly's approach to Florida's challenges in housing, insurance, health care, education, and affordability focuses on solutions that work regardless of whether they originate from the right or left.",
+      "verdict": null
+    },
+    {
+      "id": "c3d4cd42",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Political parties change. Principles don't have to.",
+      "text": "David Jolly spent much of his life as a Republican. He represented Florida in Congress as a Republican. And many of the principles that shaped his view of government then still shape it today.",
+      "verdict": null
+    },
+    {
+      "id": "36d288b1",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Political parties change. Principles don't have to.",
+      "text": "Government closest to the people knows best.",
+      "verdict": null
+    },
+    {
+      "id": "e50972d8",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Political parties change. Principles don't have to.",
+      "text": "The private sector should lead wherever it can.",
+      "verdict": null
+    },
+    {
+      "id": "f4894fa9",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Political parties change. Principles don't have to.",
+      "text": "Government should protect individual freedom and stay out of deeply personal decisions.",
+      "verdict": null
+    },
+    {
+      "id": "d226ab54",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Political parties change. Principles don't have to.",
+      "text": "Public officials should be accountable to the people they serve.",
+      "verdict": null
+    },
+    {
+      "id": "2693ad86",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Political parties change. Principles don't have to.",
+      "text": "And when markets or institutions fail to meet a challenge, government has a responsibility to help find a solution that works.",
+      "verdict": null
+    },
+    {
+      "id": "67d801ad",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Political parties change. Principles don't have to.",
+      "text": "David describes himself today as being in a post-ideological place. Florida faces enormous challenges in housing, insurance, health care, education and affordability. His argument is straightforward: those problems require solutions at the same scale.",
+      "verdict": null
+    },
+    {
+      "id": "f12edb7b",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Political parties change. Principles don't have to.",
+      "text": "The question isn't whether an idea came from the right or the left.",
+      "verdict": null
+    },
+    {
+      "id": "045a575e",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Some of these ideas used to be called Republican ideas.",
+      "text": "In discussing local control, David has described what attracted him to the Republican Party in the first place.",
+      "verdict": null
+    },
+    {
+      "id": "35ba5b89",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Some of these ideas used to be called Republican ideas.",
+      "text": "Keeping government out of your doctor's office.",
+      "verdict": null
+    },
+    {
+      "id": "35d19193",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Some of these ideas used to be called Republican ideas.",
+      "text": "Keeping government from overruling communities simply because politicians in the state capital don't like the decisions those communities make.",
+      "verdict": null
+    },
+    {
+      "id": "6f7ce18a",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Government closest to the people.",
+      "text": "Florida is a big, diverse state. What works for Key West may not be what Jacksonville wants. David's position is that local communities should have meaningful authority to make local decisions.",
+      "verdict": null
+    },
+    {
+      "id": "ca775777",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "The private sector should lead.",
+      "text": "Government doesn't have to run everything to make people's lives better. Businesses, entrepreneurs, workers and communities create growth and opportunity. Government should create the conditions for that to happen. But when a market is clearly failing Floridians, the answer cannot simply be to watch it fail. David's housing and insurance proposals include public-private approaches and government intervention where Florida's insurance market is no longer delivering affordable outcomes.",
+      "verdict": null
+    },
+    {
+      "id": "aac9c99c",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Freedom should mean freedom.",
+      "text": "Freedom means trusting people with their own lives. Government shouldn't claim to support freedom while increasingly inserting itself into personal decisions, local communities and private lives. David's platform explicitly frames individual agency and freedom from government interference as a governing principle.",
+      "verdict": null
+    },
+    {
+      "id": "43bbc5e8",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Government should work.",
+      "text": "Limited government doesn't have to mean ineffective government. Floridians pay taxes and expect basic institutions to function. Schools should work. Roads and infrastructure should work. Insurance markets should work. Health care should be accessible. Public safety should work. And when something isn't working, government should be willing to fix it rather than defend a broken system because the solution doesn't fit neatly inside an ideological box.",
+      "verdict": null
+    },
+    {
+      "id": "36959815",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "FLORIDA DOESN'T NEED SMALLER POLITICS. WE NEED TO TRUST ONE ANOTHER AGAIN. WE NEED TO BELIEVE IN BETTER.",
+      "text": "Florida's challenges in housing, insurance, health care, education and affordability have moved beyond the traditional left and right argument. The real question is whether government is willing to meet problems at their actual scale. Where the solution comes from matters less than whether the solution works.",
+      "verdict": null
+    },
+    {
+      "id": "83bb8cdf",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "FLORIDA DOESN'T NEED SMALLER POLITICS. WE NEED TO TRUST ONE ANOTHER AGAIN. WE NEED TO BELIEVE IN BETTER.",
+      "text": "A conservative idea that works? Use it. A progressive idea that works? Use it. A private-sector solution? Great. A public-private partnership? Let's talk. Government action where the market has failed? Put it on the table.",
+      "verdict": null
+    },
+    {
+      "id": "744fbb0e",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "FLORIDA DOESN'T NEED SMALLER POLITICS. WE NEED TO TRUST ONE ANOTHER AGAIN. WE NEED TO BELIEVE IN BETTER.",
+      "text": "Florida's problems are too consequential to reject good ideas because somebody on the \"other team\" thought of them first.",
+      "verdict": null
+    },
+    {
+      "id": "9387fab8",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "A different kind of coalition",
+      "text": "REPUBLICANS. DEMOCRATS. INDEPENDENTS. FLORIDIANS.",
+      "verdict": null
+    },
+    {
+      "id": "c6d9cfbd",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Add your voice.",
+      "text": "Are you a Republican supporting David Jolly? Tell Florida why.",
+      "verdict": null
+    },
+    {
+      "id": "7382be72",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Add your voice.",
+      "text": "Record a short video explaining what matters to you, what principles guide your decision, and why you've chosen to support David. Your story may be featured on this page alongside other Floridians sharing their own experiences.",
+      "verdict": null
+    },
+    {
+      "id": "d099c68f",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "\"I'm a Republican, and this year I'm supporting David Jolly because...\"",
+      "text": "Everything after \"because\" is entirely yours. It takes about a minute, and you can record it right from your phone.",
+      "verdict": null
+    },
+    {
+      "id": "3c29bf1d",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Explore the issues",
+      "text": "Read David's plans in his own words, issue by issue.",
+      "verdict": null
+    },
+    {
+      "id": "11b50acf",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Get to know David",
+      "text": "Before you decide, read where he came from and what he has actually done.",
+      "verdict": null
+    },
+    {
+      "id": "a66a40e0",
+      "url": "https://davidjolly.com/issues/republicans-for-jolly",
+      "heading": "Join Republicans for Jolly",
+      "text": "Get alerts when there is a Republicans for Jolly event near you, and be counted in a growing coalition putting principle over party.",
+      "verdict": null
+    },
+    {
+      "id": "1d5f9a9f",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "David Jolly's Plan to Cut Florida Homeowners Insurance by 60 to 70 Percent",
+      "text": "Floridians pay the highest home insurance prices in America because every family is made to pay a private insurer to carry hurricane risk. Jolly's proposal moves that risk into one strong, state-backed fund. Here is how it works, what it costs, and what it saves.",
+      "verdict": null
+    },
+    {
+      "id": "af5004c7",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "David Jolly's Plan to Cut Florida Homeowners Insurance by 60 to 70 Percent",
+      "text": "Hurricane and wind risk makes up 60 to 70 percent of a Florida homeowners insurance bill. David Jolly's plan creates one strong, state-backed hurricane fund to carry that risk, so private insurers no longer have to price it into your policy. The fund is built to a financially sound level and backed by reinsurance before it covers anyone, and it is paid for by making insurance companies pay the taxes they currently avoid, along with other revenue that does not put the burden back on homeowners. Based on Insure.com's Florida calculator, that is the difference between $7,136 a year and $2,557 for a $300,000 home: about $4,500 a year, a 64 percent savings.",
+      "verdict": null
+    },
+    {
+      "id": "15728f6b",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "David Jolly's Plan to Cut Florida Homeowners Insurance by 60 to 70 Percent",
+      "text": "And the rule that governs all of it: the costs will be lower for Floridians, or we won't do it.",
+      "verdict": null
+    },
+    {
+      "id": "b92f8d5f",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "What hurricane risk costs a Florida family today",
+      "text": "Insure.com's Florida home insurance calculator, for a $300,000 home with a $1,000 deductible: the average policy priced with hurricane risk, and the same policy priced without it.",
+      "verdict": null
+    },
+    {
+      "id": "1bae06c9",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "The problem",
+      "text": "Floridians are paying the highest home insurance prices in America, and the private market has collapsed. Company after company has pulled out of the state or gone under, and the ones that remain price every policy for the worst storm they can imagine, because in Florida the worst storm is not hypothetical.",
+      "verdict": null
+    },
+    {
+      "id": "86c878b7",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "The problem",
+      "text": "The main reason a Florida policy costs so much more than one in Georgia or Ohio is one line on the bill: hurricane and wind. That single risk can be 60 to 70 percent of what a family pays. Every other part of a homeowners policy—fire, theft, liability, a burst pipe—is priced roughly the way it is priced anywhere else.",
+      "verdict": null
+    },
+    {
+      "id": "8d79a86d",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "Jolly's proposal, step by step",
+      "text": "Instead of forcing every Florida family to pay a private insurer to take on that enormous hurricane risk, Jolly's proposal does four things, in order.",
+      "verdict": null
+    },
+    {
+      "id": "b80c7018",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "Jolly's proposal, step by step",
+      "text": "Florida creates one strong, state-backed hurricane fund. One fund, for the whole state, carrying hurricane and wind risk for Florida homes.",
+      "verdict": null
+    },
+    {
+      "id": "23c2f5ab",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "Jolly's proposal, step by step",
+      "text": "The fund is built to a financially sound level and buys backup insurance for catastrophic storms. Coverage does not start until enough money is set aside and reinsurance for the biggest storms is in place. The fund is built first; it does not borrow against a storm that has not happened.",
+      "verdict": null
+    },
+    {
+      "id": "b243bfec",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "Jolly's proposal, step by step",
+      "text": "The fund is paid for without putting the burden back on homeowners. Insurance companies would start paying the taxes they currently avoid. Other sources that do not put a burden on homeowners, such as a fee on real estate transactions or existing tourist taxes, are on the table. The Legislature writes the specific funding policy. How the fund is paid for, in detail.",
+      "verdict": null
+    },
+    {
+      "id": "a0bbb4d3",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "Jolly's proposal, step by step",
+      "text": "Private insurers no longer have to price hurricane risk into your policy. That is where the 60 to 70 percent savings comes from. The rest of your policy stays private, competitive, and priced the way policies are in other states.",
+      "verdict": null
+    },
+    {
+      "id": "cbf388f8",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "This is a model that already works",
+      "text": "Florida already has a state catastrophic fund. The Florida Hurricane Catastrophe Fund was created in a special legislative session in November 1993, after Hurricane Andrew, and it has been run and expanded by Republican legislatures for three decades. Right now, that fund only reimburses insurance companies for a share of their hurricane losses. It is a bailout for insurers.",
+      "verdict": null
+    },
+    {
+      "id": "dd261a7f",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "This is a model that already works",
+      "text": "David Jolly's plan takes a structure Florida has already proven and directs it to the people who actually pay the bills. Does Florida already have a hurricane catastrophe fund?",
+      "verdict": null
+    },
+    {
+      "id": "39e5b792",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "The guarantee",
+      "text": "The fund is rolled out responsibly. Coverage becomes available only after a fiscally sound amount of money is set aside and backup reinsurance is in place. The Legislature is involved in creating the specific policies, including the funding.",
+      "verdict": null
+    },
+    {
+      "id": "0f2d6744",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "The guarantee",
+      "text": "And in the end, the costs will be lower for Floridians, or we won't do it. Simple as that.",
+      "verdict": null
+    },
+    {
+      "id": "6eebb1ba",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "About the \"hurricane tax\" ads",
+      "text": "Byron Donalds is running ads claiming this proposal creates a \"$1,000 hurricane tax.\" It does not. The ad's two \"sources\" are a legislative feasibility study that did not look at Jolly's proposal and an opinion blog post. When reporters asked Donalds about the number, he didn't give them a source; instead, he referred to an entirely different, unrelated law. We answer the claim, and the study, on their own pages:",
+      "verdict": null
+    },
+    {
+      "id": "6d55f59c",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "About the \"hurricane tax\" ads",
+      "text": "Does David Jolly want a $1,000 hurricane tax?",
+      "verdict": null
+    },
+    {
+      "id": "b579943c",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "About the \"hurricane tax\" ads",
+      "text": "What is the study Byron Donalds cites in his hurricane tax ad?",
+      "verdict": null
+    },
+    {
+      "id": "0b14a68e",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "About the \"hurricane tax\" ads",
+      "text": "Will David Jolly's catastrophe fund raise costs for Floridians?",
+      "verdict": null
+    },
+    {
+      "id": "b92d2064",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "About the \"hurricane tax\" ads",
+      "text": "What is Byron Donalds' plan to lower insurance costs?",
+      "verdict": null
+    },
+    {
+      "id": "965f2170",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "David Jolly on the ads",
+      "text": "\"Losing campaigns lie. What Byron is doing is using fear to try to stop progress.\" David Jolly, September 14, 2026.",
+      "verdict": null
+    },
+    {
+      "id": "e2c091f2",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "Q. How much would David Jolly's plan save on homeowners insurance?",
+      "text": "Hurricane and wind risk can be 60 to 70 percent of a Florida homeowners bill. Based on Insure.com's Florida home insurance calculator, a $300,000 home with a $1,000 deductible averages $7,136 a year when the policy is priced with hurricane risk and $2,557 when it is not. That is a 64 percent difference, about $4,500 a year.",
+      "verdict": null
+    },
+    {
+      "id": "cc1ca7ba",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "Q. Who pays for the state catastrophe fund?",
+      "text": "Not homeowners. The plan funds it by making insurance companies pay the taxes they currently avoid, and through other sources that do not put the burden back on homeowners, such as a fee on real estate transactions or existing tourist taxes. The Legislature writes the specific funding policy.",
+      "verdict": null
+    },
+    {
+      "id": "4cbd001d",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "Q. When would coverage start?",
+      "text": "Only after the fund reaches a fiscally sound level and backup reinsurance for catastrophic storms is in place. The fund is built first, then it covers people.",
+      "verdict": null
+    },
+    {
+      "id": "edaa05d2",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "Q. Does Florida already have something like this?",
+      "text": "Yes. The Florida Hurricane Catastrophe Fund has existed since 1993. Today it reimburses insurance companies for a share of their hurricane losses; it does not cover homeowners directly. The plan applies a structure Florida has already proven to the people who pay the bills.",
+      "verdict": null
+    },
+    {
+      "id": "7d167a89",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "Q. Is there a $1,000 hurricane tax in the plan?",
+      "text": "No. There is no $1,000 fee, tax or assessment on homeowners in the plan. The claim comes from a Byron Donalds ad whose sources are a legislative feasibility study of a different proposal and an opinion blog post. The full answer is at /homeowners-insurance/hurricane-tax/.",
+      "verdict": null
+    },
+    {
+      "id": "28518451",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "Where this comes from",
+      "text": "The plan and its numbers are from the Jolly campaign's published proposal and its September 2026 statement on the Donalds ads. The premium comparison is from Insure.com's Florida homeowners insurance calculator for a $300,000 dwelling with a $1,000 deductible, comparing the policy priced with a hurricane deductible against the standard policy. The history of the Florida Hurricane Catastrophe Fund is from the State Board of Administration , which runs it. David Jolly's remarks are from his September 14, 2026 video press conference and from Florida Phoenix .",
+      "verdict": null
+    },
+    {
+      "id": "fb6a7de2",
+      "url": "https://davidjolly.com/homeowners-insurance",
+      "heading": "Where this comes from",
+      "text": "This page was last reviewed on September 15, 2026 and is re-verified as the story develops.",
+      "verdict": null
+    },
+    {
+      "id": "a31ce08d",
+      "url": "https://davidjolly.com/environment",
+      "heading": "Protecting what makes Florida, Florida.",
+      "text": "David Jolly believes protecting Florida's environment is essential to the state's economy and quality of life. His plan calls for real investments in environmental protection, accelerated clean and renewable energy integration into Florida's utility system, sustained funding for coastal resiliency and water quality improvements, and honest climate planning in state policy. David sees environmental protection as protecting what makes Florida successful: the tourism economy, clean beaches, healthy waters, and the natural beauty that families depend on every day.",
+      "verdict": null
+    },
+    {
+      "id": "2dfa9f5b",
+      "url": "https://davidjolly.com/environment",
+      "heading": "This is about more than the environment.",
+      "text": "For families across Florida, the environment isn't an abstract issue. It's part of everyday life. It's the beaches they visit and parks they play in. The water they drink and air they breathe. The places that make this state feel like home.",
+      "verdict": null
+    },
+    {
+      "id": "71e63a0f",
+      "url": "https://davidjolly.com/environment",
+      "heading": "This is about more than the environment.",
+      "text": "For David and his family, it's deeply personal. Time spent near the ocean, watching their kids experience the same natural beauty that defines so much of Florida.",
+      "verdict": null
+    },
+    {
+      "id": "56c80a90",
+      "url": "https://davidjolly.com/environment",
+      "heading": "This is about more than the environment.",
+      "text": "That connection is something millions of Floridians share.",
+      "verdict": null
+    },
+    {
+      "id": "6a304cab",
+      "url": "https://davidjolly.com/environment",
+      "heading": "This is about more than the environment.",
+      "text": "And yet, too often, protecting it is treated like a secondary concern. Something to debate. Something to delay.",
+      "verdict": null
+    },
+    {
+      "id": "60d17d6b",
+      "url": "https://davidjolly.com/environment",
+      "heading": "This is about more than the environment.",
+      "text": "But the truth is, Florida's environment isn't separate from its success.",
+      "verdict": null
+    },
+    {
+      "id": "37d8cb9e",
+      "url": "https://davidjolly.com/environment",
+      "heading": "This is about more than the environment.",
+      "text": "Our economy depends on it. Tourism. Fishing. Local businesses. Entire communities rely on clean water, healthy coastlines, and a natural environment that people want to experience and protect.",
+      "verdict": null
+    },
+    {
+      "id": "b597aad8",
+      "url": "https://davidjolly.com/environment",
+      "heading": "This is about more than the environment.",
+      "text": "When that is threatened, it's not just an environmental issue. It's an economic one. It's a quality of life issue. It's a future issue.",
+      "verdict": null
+    },
+    {
+      "id": "fd3a1156",
+      "url": "https://davidjolly.com/environment",
+      "heading": "This is about more than the environment.",
+      "text": "Protecting Florida's environment means making real investments. Taking real responsibility. And refusing to treat long-term damage as acceptable.",
+      "verdict": null
+    },
+    {
+      "id": "a8678ea0",
+      "url": "https://davidjolly.com/environment",
+      "heading": "This is about more than the environment.",
+      "text": "It means understanding that what we protect today is what we pass on tomorrow.",
+      "verdict": null
+    },
+    {
+      "id": "a17142cc",
+      "url": "https://davidjolly.com/environment",
+      "heading": "This is about more than the environment.",
+      "text": "Because once it's gone, it's not coming back.",
+      "verdict": null
+    },
+    {
+      "id": "1a2d2a45",
+      "url": "https://davidjolly.com/environment",
+      "heading": "Some things are too important to lose.",
+      "text": "Florida's future depends on what we protect today.",
+      "verdict": null
+    },
+    {
+      "id": "66f9dd1e",
+      "url": "https://davidjolly.com/environment",
+      "heading": "Q. Is my insurance crisis related to climate?",
+      "text": "Yes, structurally. Florida's property insurance crisis is driven by hurricane risk, litigation costs, and reinsurance prices, and the hurricane risk component has grown with warming ocean temperatures and rising sea levels. Insurers price policies to absorb rising expected losses, so climate is one of the underlying drivers of the insurance crisis.",
+      "verdict": null
+    },
+    {
+      "id": "81c0d11b",
+      "url": "https://davidjolly.com/environment",
+      "heading": "Q. Is climate change real in Florida?",
+      "text": "Yes, and Florida faces some of the most direct climate impacts in the country. Florida's Gulf Coast is projected for 22 to 26 inches of sea level rise by 2050 (about double the U.S. average), and hurricane intensity is rising. The 2024 hurricane season caused over $100 billion in combined damage across the Southeast.",
+      "verdict": null
+    },
+    {
+      "id": "fb95965c",
+      "url": "https://davidjolly.com/environment",
+      "heading": "Q. What does David Jolly want to do about clean energy?",
+      "text": "Jolly's position is to unleash clean and renewable energies across Florida, requiring greater integration of clean energy technologies into public utilities. This means stronger net metering rules to support rooftop solar and accelerated utility-scale renewable buildout. Florida is projected to receive $62.7 billion in IRA-funded clean power investment by 2030.",
+      "verdict": null
+    },
+    {
+      "id": "b7c6c906",
+      "url": "https://davidjolly.com/environment",
+      "heading": "Q. Aren't climate policies just going to hurt the Florida economy?",
+      "text": "The economic case runs the other way. Florida's tourism economy ($134 billion in visitor spending, 1.8 million jobs), ocean economy, and saltwater fishing industry ($9.2 billion in annual impact) all depend on a healthy environment. Climate policy in Florida protects the state's largest industries rather than imposing costs against them.",
+      "verdict": null
+    },
+    {
+      "id": "daaca864",
+      "url": "https://davidjolly.com/environment",
+      "heading": "Q. What about Floridians who live in coastal communities?",
+      "text": "Coastal Floridians face the most direct climate exposure: rising sea levels, more intense hurricanes, and accelerating beach erosion. David Jolly's plan calls for sustained investment in resiliency, which means seawalls, raised infrastructure, beach renourishment, stormwater drainage upgrades, and building code modernization in coastal counties.",
+      "verdict": null
+    },
+    {
+      "id": "ff086bab",
+      "url": "https://davidjolly.com/environment",
+      "heading": "Q. How would David Jolly handle Florida's water quality crises?",
+      "text": "Jolly's plan ties water quality to broader environmental investment. Blue-green algae crises are addressed through the Comprehensive Everglades Restoration Plan, and springs degradation is addressed through septic to sewer conversions, agricultural runoff rules, and groundwater protection. Protecting Florida's coast requires changing what flows into it.",
+      "verdict": null
+    },
+    {
+      "id": "1b81d1b7",
+      "url": "https://davidjolly.com/environment",
+      "heading": "Q. What about FPL and renewable energy under David Jolly?",
+      "text": "Jolly's clean energy position would require greater integration of renewables into Florida's utility planning. That likely means stronger net metering rules to support rooftop solar and accelerated utility-scale renewable buildout, pushing FPL and other utilities to expand renewable generation.",
+      "verdict": null
+    },
+    {
+      "id": "f7ed5791",
+      "url": "https://davidjolly.com/environment",
+      "heading": "Q. Why oppose offshore drilling if it could create Florida jobs?",
+      "text": "Offshore drilling creates very few Florida jobs because rigs are based out of Louisiana and Texas ports. What Florida loses in a spill (tourism revenue, fishing industry, real estate value, ecological damage) runs to tens of billions of dollars. Florida's tourism economy ($130 billion) and ocean economy ($30 billion) depend on clean beaches and healthy water.",
+      "verdict": null
+    }
+  ],
+  "areas": [],
+  "usage": null
+}

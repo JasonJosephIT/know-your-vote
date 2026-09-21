@@ -29,6 +29,7 @@ export default async function CandidatesPage({
     view?: string;
     q?: string;
     county?: string;
+    area?: string;
     zip?: string;
     district?: string;
     change?: string;
@@ -52,8 +53,11 @@ export default async function CandidatesPage({
 
   const requested = TABS.find((t) => t.view === sp.view)?.view;
   /* Arriving with a location (from the landing page's ZIP entry) means the
-     voter wants their races even without an explicit view param. */
-  const view: View = requested ?? (zip || county ? "races" : "browse");
+     voter wants their races even without an explicit view param. An `area`
+     is a browse filter, so it pins the browse tab the same way — that is what
+     the policy-area chips on a brief link to. */
+  const view: View =
+    requested ?? (sp.area ? "browse" : zip || county ? "races" : "browse");
 
   /* The races tab keeps any location already in the URL. */
   const tabHref = (tab: View) => {
@@ -95,7 +99,7 @@ export default async function CandidatesPage({
       </nav>
 
       {view === "browse" && (
-        <CandidateBrowser q={sp.q} countyFips={sp.county} />
+        <CandidateBrowser q={sp.q} countyFips={sp.county} area={sp.area} />
       )}
       {view === "races" && (
         <YourRaces zip={zip} district={district} county={county} />

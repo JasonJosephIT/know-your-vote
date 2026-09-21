@@ -514,9 +514,15 @@ was briefly wrong.
    `verify-news-sweep.ts` fails on it by design.
 
    **It does not block launch.** A null lean keeps the row out of the sweep, so
-   these five are simply absent; 32 rows are designated and 27 are sweepable
-   without them. Deciding them would *add* Sun Sentinel, Tampa Bay Times and
-   Orlando Sentinel to the sweep (Miami Herald and AP have no retrieval path).
+   these five are simply absent; 32 rows are designated and **24** are sweepable
+   without them (27 until the 2026-09-21 AI-crawler hold).
+
+   **And since that hold, deciding the five would add nothing to the sweep.**
+   The three a lean would have unlocked — Sun Sentinel, Tampa Bay Times,
+   Orlando Sentinel — are all on `AI_POLICY_HOLD` because their robots.txt names
+   Claude/Anthropic agents; Miami Herald and AP have no retrieval path. The lean
+   gate and the crawler question now have to be answered together for any of
+   these five to be read.
 
 1. **Gate A versus spectrum span** (§3) — a contradiction between spec §7 and
    corpus Recommendation 5. Founder decides which gives way. Blocks the

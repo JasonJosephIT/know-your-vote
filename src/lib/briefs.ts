@@ -4,6 +4,7 @@ import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 import type { NewsSource } from "@/lib/news-labels";
 import { RECENT_WINDOW_DAYS } from "@/lib/neutrality";
 import { isUnopposedContest } from "@/lib/unopposed";
+import { categorizeIssue, type PolicyAreaRef } from "@/lib/policy-areas";
 import type { CandidateContact, NewsItem } from "@/types/app";
 import type {
   Candidate,
@@ -40,6 +41,12 @@ export interface IssueBlock {
   say: SourcedClaim[];
   done: SourcedClaim[];
   factCheck: SourcedClaim[];
+  /* Which policy areas this issue falls under, derived from its title by
+     src/lib/policy-areas.ts. Empty for a race-specific issue the shared
+     taxonomy has no home for, and empty is rendered as nothing rather than as
+     a guess. Derived per issue, never per candidate, so the same issue carries
+     the same areas for everyone in the race. */
+  policyAreas: PolicyAreaRef[];
 }
 
 export interface CandidateBriefData {
@@ -101,6 +108,10 @@ function buildIssueBlock(
   const forIssue = claims.filter((c) => c.issue_id === issue.issue_id);
   return {
     issue,
+    policyAreas: categorizeIssue({
+      title: issue.title,
+      description: issue.description,
+    }).areas,
     coverage: position?.coverage ?? "no_stated_position_found",
     stanceSummary: position?.stance_summary ?? "",
     say: toSourced(forIssue.filter((c) => c.bucket === "stated_position")),

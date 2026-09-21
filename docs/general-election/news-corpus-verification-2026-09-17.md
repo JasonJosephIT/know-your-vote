@@ -161,6 +161,35 @@ The three weeklies remain the only RSS sources; the daily reaches the pool by si
    feeds and links back, which is what RSS is for; it does not fetch article
    bodies. Whether a Claude-run pipeline doing that is within those publishers'
    intent is a policy question for the founder, not a robots.txt question.
+
+   > **PAUSED, founder 2026-09-21.** *"We can pause ingest on those three as I
+   > look into it more."* Implemented as `AI_POLICY_HOLD` in
+   > `src/lib/news-sources.ts`, which `usableOutlets()` honours: **`usableOutlets()`
+   > 27 → 24**, and nothing can sweep a held outlet.
+   >
+   > **It holds seven, not three.** Three (Miami New Times, WFLA, WESH) were
+   > sweepable when the pause was asked for, so they were the three named. Four
+   > more disallow the same agents and are excluded today only *incidentally* —
+   > Sun Sentinel, Tampa Bay Times and Orlando Sentinel by the open lean gate,
+   > Florida Phoenix by `mixedFeed`. Any of those exclusions can be lifted by a
+   > decision with nothing to do with crawler policy, so a hold covering only
+   > the visible three would have been silently incomplete.
+   >
+   > Consequence worth knowing: **deciding the five leans now adds nothing to
+   > the sweep**, because all three outlets a lean would have unlocked are held.
+   > The lean gate and this question have to be answered together.
+   >
+   > It is a *policy* hold, deliberately not reusing the technical flags or
+   > `leanTag: null` — a later session clearing the lean gate must not clear
+   > this with it. `verify-news-sweep.ts` asserts every outlet whose robots names
+   > a Claude/Anthropic agent is on the hold, so the list cannot drift from the
+   > data, and that satisfying every technical requirement does not lift it.
+   >
+   > **Still open, and a different fact:** `flvoicenews.com` is NOT held. Its
+   > robots.txt returns 403, so its policy is *unknown* rather than
+   > *disallowing* — the same distinction this project draws between `unrated`
+   > and `N/A`. Whether an unreadable policy counts as consent is undecided; it
+   > is sweepable today.
    So that the founder sees it at the row they are editing, each affected
    outlet now carries a `robots` field in the list naming the AI user agents
    it disallows and any crawl delay (Florida Bulldog 10 s, WESH 10 s, The

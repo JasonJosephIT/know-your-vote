@@ -172,9 +172,12 @@ export const UNRATED =
 
        THIS DOES NOT BLOCK LAUNCH. A null lean keeps a row out of
        `usableOutlets()`, so these five simply do not appear; the other 32 are
-       designated and 27 are sweepable. Deciding the five would ADD three
-       sweepable outlets (Sun Sentinel, Tampa Bay Times, Orlando Sentinel —
-       Miami Herald and AP have no retrieval path), not unblock anything.
+       designated and 24 are sweepable. Deciding the five would NOT, as of the
+       2026-09-21 AI-crawler hold, add any sweepable outlet: the three that a
+       lean would have unlocked (Sun Sentinel, Tampa Bay Times, Orlando
+       Sentinel) are all on `AI_POLICY_HOLD`, and Miami Herald and AP have no
+       retrieval path. So the lean gate and the crawler question now have to be
+       answered together before any of these five is read.
 
    FLORIDA PHOENIX IS THE ONE EXCEPTION IN SHAPE, added 2026-09-21. Every other
    designated row carries the shared `UNRATED` text; its basis is a States
@@ -189,7 +192,8 @@ export const UNRATED =
    someone adds it deliberately.
 
    It stays `mixedFeed`-flagged, so designating it does NOT make it sweepable:
-   `usableOutlets()` is unchanged at 27.
+   `usableOutlets()` was unchanged at 27 by this designation; it is 24 since the
+   2026-09-21 AI-crawler hold, which holds Florida Phoenix too.
 
    scripts/verify-news-sweep.ts pins the count and asserts every domain here
    exists, carries the UNRATED basis, and never a cited one. */
@@ -210,6 +214,51 @@ const UNRATED_DESIGNATED: ReadonlySet<string> = new Set([
   "floridadaily.com", "flvoicenews.com", "floridianpress.com",
   /* Added 2026-09-21, after the other 31. It is the one designated row whose
      `leanBasis` is NOT the shared UNRATED text — see the header note. */
+  "floridaphoenix.com",
+]);
+
+/* AI-CRAWLER POLICY HOLD, founder 2026-09-21. The sweep must not read these
+   outlets while the founder decides whether a Claude-run pipeline reading their
+   syndication feeds sits within what they intend.
+
+   WHY SEVEN, when the question was raised about three. Three of them
+   (miaminewtimes.com, wfla.com, wesh.com) were sweepable when the question came
+   up, so they were the three reported. The other four name the same agents and
+   are excluded today only INCIDENTALLY — sun-sentinel.com, tampabay.com and
+   orlandosentinel.com by the lean gate (C7-a, still open), floridaphoenix.com by
+   `mixedFeed`. Every one of those exclusions can be lifted by a decision that
+   has nothing to do with crawler policy: sign off the five leans and three of
+   these outlets start being read the same afternoon. A hold covering only the
+   visible three would have been silently incomplete.
+
+   WHAT THE ROBOTS FILES SAY. Each names an Anthropic or Claude agent in a
+   `Disallow` rule (`anthropic-ai`, `ClaudeBot`, `Claude-Web`, `Claude-User`),
+   recorded per row in `robots.aiDisallow`. wesh.com is the sharpest case: its
+   robots.txt header carries Hearst terms prohibiting crawlers and aggregation
+   outright, broader than the agent rules beneath it.
+
+   THIS IS A POLICY HOLD, NOT A TECHNICAL ONE. `mixedFeed` and `syndicated` say
+   a feed cannot produce a correct card; this says we are choosing not to read a
+   feed we are able to read. Keeping it a separate mechanism is the point —
+   reusing `leanTag: null` would have been quicker and would have recorded the
+   wrong reason, and a later session clearing the lean gate would have cleared
+   the hold with it.
+
+   NOT ON THIS LIST, and a real question rather than an oversight:
+   flvoicenews.com, whose own robots.txt returns 403, so its policy cannot be
+   read at all. "Unknown" is not "disallowed" — the same distinction this file
+   draws between `unrated` and `N/A` — so it is not held here. Whether an
+   unreadable policy counts as consent is the founder's call.
+
+   scripts/verify-news-sweep.ts asserts every outlet whose robots names a
+   Claude/Anthropic agent appears here, so this list cannot drift out of step
+   with the data it rests on. */
+export const AI_POLICY_HOLD: ReadonlySet<string> = new Set([
+  /* sweepable when the hold was placed */
+  "miaminewtimes.com", "wfla.com", "wesh.com",
+  /* excluded today only by the lean gate — readable the moment C7-a is signed off */
+  "sun-sentinel.com", "tampabay.com", "orlandosentinel.com",
+  /* excluded today only by mixedFeed */
   "floridaphoenix.com",
 ]);
 
@@ -552,6 +601,10 @@ export function usableOutlets(outlets: readonly Outlet[] = OUTLETS): Outlet[] {
       x.leanTag !== null &&
       (x.feed !== null || x.sitemap !== undefined) &&
       !x.mixedFeed &&
-      !x.syndicated,
+      !x.syndicated &&
+      /* Last on purpose: a decision NOT to read a feed we are able to read, so
+         it must not be confused with the technical flags above, and must not be
+         liftable by satisfying them (AI_POLICY_HOLD, founder 2026-09-21). */
+      !AI_POLICY_HOLD.has(x.domain),
   );
 }

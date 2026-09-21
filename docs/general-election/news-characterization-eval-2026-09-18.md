@@ -221,26 +221,49 @@ swallow the narrow one the way B1 swallows A4 (§3).
 
 ---
 
-## 8. Follow-up — taxonomy v4 (2026-09-21)
+## 8. Follow-up — taxonomy v5 (2026-09-21)
 
-**Weaker footing than §7, and the difference matters.** Version 3 was prompted
-by `B8`'s 0% recall over four real gold rows — a measured miss. Version 4 is
-prompted by the quiz's wording and by Florida's issue space. **This corpus
-contains no housing story, no insurance story, no condo story, no eviction
-story and no homelessness story at all**, and `A1` and `A2` were already at
-zero gold rows in §2. Nothing below is validated by anything in this report.
+**Version 4 was taken by other work, and it changed this section's claim.**
+While this was being written, `f171c61` shipped taxonomy v4 — the fold that
+put the orphaned *category* aliases back onto sub-issues after categories
+stopped being asked on 2026-09-18. That commit reports a number this report
+does not have: **`A2` housing scored 0.0% across an 834-article corpus that
+carried two homelessness stories.** So the housing work below is now version
+**5**, and one of its three entries is measured after all.
+
+**What this corpus can and cannot say.** These 116 rows contain no housing,
+insurance, condo, eviction or homelessness story at all, and `A1`/`A2` sat at
+zero gold rows in §2. The homelessness evidence comes from the 834-article run,
+not from here. `KYV6` and `KYV8` have no evidence from either.
 
 | id | label | parent | why |
 |---|---|---|---|
 | `KYV6` | Renters and evictions | `housing` | The quiz's "stronger protections and stability for renters" had no sub-issue. `A2` is a price; a tenancy is not. |
-| `KYV7` | Homelessness | `housing` | The `housing` category has listed `homelessness` among its aliases since it was written, with no sub-issue able to catch it. A tag that can never fire is a promise the taxonomy doesn't keep. |
+| `KYV7` | Homelessness | `housing` | **Measured.** `A2` missed both homelessness stories in the 834-article corpus. v4 restored the term by adding it to `A2`'s aliases; v5 moves it to a label that means it — see below. |
 | `KYV8` | Condominium and HOA costs | `insurance` | Post-Surfside milestone inspections, reserve funding and special assessments. No quiz option names it and no gold row exercises it — the most speculative entry in the taxonomy. |
 
-`A1` gained flood, windstorm, residual-market and reinsurance aliases — in
-Florida those are three different policies and three different arguments, and
-the original four aliases named only wind. `A2` gained home prices, down-payment
-assistance, affordable housing, mortgage rates and homeownership, and stays
-deliberately on cost, supply and buying.
+### Why `KYV7` rather than leaving the term on `A2`
+
+v4's fold was right that the term had to be askable again; the question is
+under which label. `A2`'s label is CAP's and verbatim: *Housing
+affordability*. Asking a model whether an encampment-ordinance story relates
+to housing affordability invites the answer the label deserves — and this
+report already contains that failure twice over, in `B6` (§3) and in the
+`KYV4` draft (§7). So `homelessness` and `unhoused` move to `KYV7`. They are
+still asked, which is the property `verify-news-issues.ts` asserts — it checks
+"asked somewhere", deliberately not "asked under its own category".
+
+### Alias widening, held down on purpose
+
+v4 measured the counter-lesson: `A6` went **14 → 11** on the 834-article
+corpus when its aliases were widened, so past roughly a dozen terms vocabulary
+blurs a question instead of sharpening it. `A1` therefore takes three
+additions and lands at 7 — flood insurance, windstorm coverage, reinsurance,
+because in Florida those are three different policies and three different
+arguments, and its original four named only wind. `rate filing` and `insurer
+insolvency` were dropped as insider vocabulary no headline uses. `A2` lands at
+8 and keeps `homebuying` from the fold; `mortgage rates` and `homeownership`
+were dropped as adjacent rather than central.
 
 ### The `KYV8` parent is a judgment call, and a cheap one to reverse today
 
@@ -257,14 +280,21 @@ run and no row carries the tag; it stops being free the moment one does.
   row, and lower salience than the property-insurance argument. Adding an issue
   because it exists somewhere in the state's politics is how a taxonomy grows
   past what anyone can evaluate.
+- **The rest of v4's fold.** Every other term it restored stayed exactly where
+  it put them. `A2` was the one case where the receiving label did not describe
+  the term, and it is the one case touched here.
 - **A3 untouched.** It measured 100% precision / 80% recall in §2 — the only
   housing-or-property issue in this report with real numbers. Leave it alone.
 
 ### What the re-run should show
 
 23 Nouls per article now, up from 16 at the time of §1, so roughly $0.016 a
-pass at the §4 rate. Expect `KYV6`, `KYV7` and `KYV8` to report `n/a` on a
-corpus like this one; that is not a pass, it is silence. A window containing an
+pass at the §4 rate. Expect `KYV6` and `KYV8` to report `n/a` on a corpus like
+this one; that is not a pass, it is silence. `KYV7` has a better test available
+than this corpus: **re-run the 834-article corpus from v4** and check whether
+the two homelessness stories `A2` missed now land on `KYV7`. That is the single
+highest-value measurement outstanding, because it is the only one with a known
+right answer. A window containing an
 actual condo-assessment or encampment-ordinance story is what would test them,
 and pulling one deliberately (`scripts/news-eval-pool.ts` over a wider date
 range) is a cheaper way to find out than waiting for the daily sweep.
