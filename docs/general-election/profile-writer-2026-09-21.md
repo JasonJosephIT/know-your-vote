@@ -140,11 +140,20 @@ audit would falsify the citation and the audit at once.
 5. **New: what closes the `word_count` gap?** See §3. This now blocks the first
    publishable race.
 
-## 5. Still the first blocker
+## 5. The first blocker, now partly cleared
 
-**0 of 91 ballot candidates have an `official_site`**, so the pipeline cannot
-run for a single real candidate. The writer is built and verified against
-fixtures; it has no real input until that is filled. `FL-GOV-general` (8
-candidates) remains the largest single unblock, and `official_site` already
-renders on the brief and directory pages, so it has value before any ingest
-runs.
+**Update, same day:** `official_site` has been collected for FL-GOV-general —
+7 of its 8 ballot candidates, shipped as `0032_fl_gov_official_sites.sql`, with
+evidence in `candidate-sites-2026-09-21.md`. The pipeline now has real input
+for one race.
+
+The eighth, Jeffrey "Dr. Jeff" Datto, has no website: the domain he advertises
+on social is a Namecheap parking page. That is a gap in the pipeline as much as
+the data — a social-only candidate cannot be briefed by a pipeline whose only
+input is a website, and he would sit at `no_stated_position_found` on every
+spine issue against seven opponents with sourced positions. Decide that before
+this race publishes.
+
+**The other 83 ballot candidates still have no `official_site`**, so every
+other race remains unrunnable. `official_site` already renders on the brief and
+directory pages, so filling the rest has value before any ingest runs.
