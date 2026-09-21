@@ -4,7 +4,9 @@
 
    Founder direction 2026-09-18: the quiz's eight become CATEGORIES; the
    fifteen researched issues from CAP_Issue_List_FL_2026_v1.md become the
-   SUB_ISSUES underneath them.
+   SUB_ISSUES underneath them. Five `KYV`-prefixed sub-issues have been added
+   since, each where a measured gap or the quiz's own wording showed a subject
+   with nowhere to go — see TAXONOMY_VERSION and the KYV entries below.
 
    WHY TWO LEVELS. Tagging at the coarse level loses information that cannot be
    recovered: tag an article "Insurance & Property Costs" and you can never
@@ -23,11 +25,13 @@
    parent is a contested editorial judgment, and this project does not make
    contested editorial judgments quietly. The quiz still asks eight questions.
 
-   LABELS ARE COPIED, NOT DRAFTED. Category labels for the eight are verbatim
-   from src/lib/quiz-questions.ts (TASK-032, neutrality-reviewed). Sub-issue
-   labels are verbatim from CAP_Issue_List_FL_2026_v1.md (2026-07-15, sourced
-   and balance-checked). Only the three new category labels and the `aliases`
-   arrays were written here, and they are the part a human must read in review.
+   LABELS ARE COPIED WHERE THEY EXIST, DRAFTED WHERE THEY DO NOT. Category
+   labels for the eight are verbatim from src/lib/quiz-questions.ts (TASK-032,
+   neutrality-reviewed). A- and B-prefixed sub-issue labels are verbatim from
+   CAP_Issue_List_FL_2026_v1.md (2026-07-15, sourced and balance-checked). The
+   three non-quiz category labels, the five `KYV` sub-issue labels and every
+   `aliases` array were written here — that is the part a human must read in
+   review, because nothing upstream has vetted them.
 
    Ballot amendments are NOT issues. `ballot_measure` (migration 0010) holds
    them with a measure_id and an official title. A3 "Property taxes" is the
@@ -45,7 +49,15 @@ export type { NewsIssue };
 /* 2 — 2026-09-18: CAP's B6 split into B6 + KYV1; A4/A6/B2 aliases widened
    after the gold-set evaluation. Bumped because tags written under v1 are
    not comparable to tags written under v2. */
-export const TAXONOMY_VERSION = "2";
+/* 3 — 2026-09-20: the `environment` category gained KYV2 (energy and
+   utilities), KYV3 (growth, development and land conservation), KYV4 (storm
+   resilience and flood protection) and KYV5 (water supply and drinking
+   water); A5's aliases widened to the ambient-quality vocabulary it lacked.
+   Bumped because a v2 row tagged `{}` on an energy, land-use or water-supply
+   article was a miss the taxonomy could not express, and a v3 row tagged `{}`
+   on the same article is a real negative. The two are not comparable, so the
+   version has to say which one you are reading. */
+export const TAXONOMY_VERSION = "3";
 
 export interface IssueCategory {
   /** For the eight, this is verbatim QUIZ_QUESTIONS[].id — the shared key that
@@ -110,7 +122,13 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
               "gas prices", "fuel costs", "grocery prices", "everyday expenses",
               "household budgets", "price increases", "paying the bills"] },
   { id: "A5", categoryId: "environment", label: "Water quality and Everglades restoration",
-    aliases: ["water quality", "Everglades", "red tide", "nutrient pollution", "restoration"] },
+    /* Widened 2026-09-20 — the aliases named the Everglades and red tide but
+       not the everyday ways water quality reaches the news. AMBIENT quality
+       only: what is in the water in the environment. What comes out of a tap,
+       and whether there is enough of it, is KYV5. */
+    aliases: ["water quality", "Everglades", "red tide", "nutrient pollution", "restoration",
+              "algae blooms", "blue-green algae", "sewage spill", "wastewater discharge",
+              "septic to sewer", "nutrient runoff", "water pollution", "springs", "seagrass"] },
   { id: "A6", categoryId: "education", label: "Public education and school choice",
     /* Widened 2026-09-18: 25% recall. Missed AI-in-schools rules, a work-based
        learning grant and a public-education polling story — all plainly
@@ -153,8 +171,92 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
               "checks and balances", "abuse of office", "democratic norms"] },
   { id: "B7", categoryId: "safety", label: "Crime and public safety",
     aliases: ["crime", "policing", "public safety", "sentencing"] },
+  /* B8 stays NATIONAL in scope, and its alias list is deliberately not
+     widened: the 2026-09-18 evaluation scored it 0% recall, and the diagnosis
+     was that all four gold rows were mislabelled rather than missed (eval §3).
+     They were county moratoria on AI data centres, which the report reads as
+     energy and land-use stories. Those rows now sit under KYV2/KYV3, and
+     `energy` moves out of this list with them — leaving it here would recreate
+     the A4/B1 overlap, where a broad label swallows every story a narrow one
+     was added to catch. */
   { id: "B8", categoryId: "environment", label: "Climate and environment (national)",
-    aliases: ["climate policy", "emissions", "environmental regulation", "energy"] },
+    aliases: ["climate policy", "emissions", "environmental regulation",
+              "federal environmental rules", "offshore drilling"] },
+
+  /* ── The environment category, expanded 2026-09-20 ──────────────────────
+     Two independent readings asked for the same three issues.
+
+     THE EVALUATION. B8 was the only issue scoring 0% recall with gold rows to
+     its name, and no alias list could have fixed it: a county moratorium on a
+     data centre is not national climate policy, so the model's refusal was
+     correct and the label was the defect. The missing thing was an issue, not
+     a word.
+
+     THE QUIZ. Its environment question (quiz-questions.ts, TASK-032) offers
+     three priorities — water quality and restoration projects, balancing
+     environmental rules with growth and development, and preparing
+     infrastructure for storms and flooding. Only the first had a sub-issue. A
+     voter who picked either of the other two got no news matching the
+     priority they had just named, which is the one thing a shared vocabulary
+     between the quiz and the feed is for.
+
+     KYV prefix, per KYV1: an A- or B-prefixed id traces to a sourced CAP
+     entry, a KYV id is this project's own addition and carries no CAP
+     provenance. Do not renumber these into the A or B series.
+
+     SCOPE IS THE SEAM. These three are state and local; B8 is national. That
+     split is what keeps them from competing for the same article the way A4
+     and B1 do (eval §3) — and it is also the line to check first if a later
+     evaluation finds one of them never firing. */
+  { id: "KYV2", categoryId: "environment", label: "Energy and utilities",
+    /* Aliases are deliberately ELECTRIC and fuel terms, not "utility rates"
+       in general: a water bill is KYV5's, and one alias reading on both
+       sides of that seam would make the pair inseparable in the data. */
+    aliases: ["electricity", "power grid", "electric rates", "power bills",
+              "rate case", "power plants", "solar", "natural gas",
+              "energy policy", "data centers", "data center power demand"] },
+  { id: "KYV3", categoryId: "environment", label: "Growth, development and land conservation",
+    aliases: ["land use", "zoning", "development moratorium", "growth management",
+              "wetlands", "permitting", "state parks", "conservation land",
+              "rural boundary", "suburban development", "data centers"] },
+  /* No gold row scores this — the position A1, A2, A5, B4 and B5 are also in.
+     It exists because the quiz asks about it and Florida votes on it, not
+     because the evaluation demanded it.
+
+     THE LABEL SAYS "PROTECTION", AND THAT IS THE WHOLE POINT. The first
+     draft was "Storm resilience and flooding", with `flooding` among the
+     aliases, and the gold set already held its refutation: two Broward rows
+     ("Flooding causes travel delays", "Flood advisory issued") are weather
+     reports the annotator correctly tagged with NO issue. Asked whether they
+     relate to "flooding", a model says yes and is not wrong — the question
+     was bad. Asked whether they relate to flood PROTECTION, it says no.
+     Weather is not a policy issue; what a government builds or funds before
+     the water arrives is. Every alias here names the second thing. */
+  { id: "KYV4", categoryId: "environment", label: "Storm resilience and flood protection",
+    aliases: ["storm resilience", "hurricane preparedness", "flood mitigation",
+              "flood control", "resilience funding", "sea-level rise",
+              "coastal flooding", "stormwater infrastructure", "drainage projects",
+              "beach renourishment", "sea walls", "evacuation routes"] },
+  /* WATER HAS TWO HALVES AND THE TAXONOMY ONLY HAD ONE. A5 is CAP's entry and
+     its label — fixed, verbatim — says "Water quality and Everglades
+     restoration": what is in the water out in the environment. Nothing named
+     the tap. A wellfield permit, a hosepipe ban, an aquifer drawdown, a
+     desalination plant or a water-rate rise is not a quality story, and
+     filing one under A5 would show a voter a label that does not describe
+     what they clicked. Florida runs on the Floridan aquifer and argues about
+     withdrawals from it; this is a live issue here, not a hypothetical.
+
+     Unscored, like KYV4: the 14-day window carried no water-supply story.
+     One thing to watch in the v3 re-run — the data-centre rows describe the
+     facilities as "water- and power-guzzling", so they may now fire KYV5
+     alongside KYV2/KYV3. The gold labels were left at KYV2+KYV3; whether the
+     water clause earns a third tag is a labelling call, and eval §0 still
+     holds that those labels are an agent's, not the founder's. */
+  { id: "KYV5", categoryId: "environment", label: "Water supply and drinking water",
+    aliases: ["drinking water", "water supply", "aquifer", "wellfield",
+              "water restrictions", "desalination", "water utility",
+              "water rates", "water main", "reclaimed water",
+              "drinking water contamination"] },
 ];
 
 /* What the model is asked about: THE SUB-ISSUES ONLY.

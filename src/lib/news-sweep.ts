@@ -9,9 +9,16 @@
    What the sweep does NOT do:
    - It does not decide lean. That is per-outlet, in news-sources.ts.
    - It does not match candidates. That is §6 (task C8).
-   - It does not store article text. Title, dek, link, date, outlet — no more.
-     The cards only ever show a headline and a line; storing the body would
-     create a copyright obligation with no product behind it.
+   - It does not store article text. Title, dek, link, date, outlet, and the
+     feed's own image URL — no more. The cards only ever show a headline and a
+     line; storing the body would create a copyright obligation with no product
+     behind it.
+   - It does not FETCH the image, and it does not fetch article pages to find
+     one. The URL comes from `<media:content>` / `<media:thumbnail>` / an image
+     `<enclosure>`, which the publisher put in the feed for this purpose. That
+     is why the card gained a hero image at a cost of zero extra requests to
+     any publisher, and why `og:image` is deliberately out of reach: reading it
+     would mean fetching article bodies, which is the line this file holds.
    - It does not decide what a sitemap "article" is. That is the outlet's `sitemap.include`, in news-sources.ts. */
 
 import type { LeanTag, SourceType } from "./news-labels";
@@ -24,6 +31,9 @@ export interface FeedEntry {
   summary: string;
   /** Raw date string as published; unparseable dates are dropped upstream. */
   published: string;
+  /** Feed-supplied image URL, https only, or "" when the feed carried none.
+      Empty is the common case and is not a defect — see `feedImage`. */
+  image: string;
 }
 
 /** How an article reached the pool — PRD §5 "record which". */
@@ -40,6 +50,9 @@ export interface SweptArticle {
   leanTag: LeanTag;
   countyFips: string | null;
   retrieval: Retrieval;
+  /** Hero image for the card, or null when the feed carried none. Null is a
+      real state with its own card treatment; it never drops the story. */
+  imageUrl: string | null;
 }
 
 /* ---------- feed parsing ---------------------------------------------- */
@@ -83,6 +96,50 @@ function atomLink(block: string): string {
   return plain ? text(href(plain)) : "";
 }
 
+/** The feed's own image for this entry, or "" when there is none.
+
+    Three shapes, in descending order of how much the publisher meant it:
+      1. `<media:content medium="image">` — MRSS, the explicit one.
+      2. `<media:thumbnail>` — MRSS, usually smaller but still deliberate.
+      3. `<enclosure type="image/*">` — RSS 2.0's generic attachment, which
+         also carries audio and video, so the type attribute is required here
+         rather than assumed.
+
+    HTTPS ONLY. The app is served over https, so an http image is blocked as
+    mixed content and renders as a broken box — worse than no image. Such a URL
+    is dropped and the article is kept; the card falls back to its text-only
+    variant. The URL is NOT required to belong to the outlet's own domain,
+    unlike the article link: publishers legitimately serve images from a CDN
+    (wp.com, cloudfront, and so on), so a same-host rule would throw away most
+    real images.
+
+    A `<media:content>` with no `medium` and no image-ish type is skipped, for
+    the same reason as the enclosure: MRSS carries video too. */
+function feedImage(block: string): string {
+  const attrsOf = (re: RegExp) => [...block.matchAll(re)].map((m) => m[1]);
+  const urlOf = (attrs: string) => attrs.match(/url\s*=\s*["']([^"']+)["']/i)?.[1] ?? "";
+  const looksImage = (attrs: string) =>
+    /medium\s*=\s*["']image["']/i.test(attrs) || /type\s*=\s*["']image\//i.test(attrs);
+
+  const candidates = [
+    ...attrsOf(/<media:content\b([^>]*)\/?>/gi).filter(looksImage),
+    ...attrsOf(/<media:thumbnail\b([^>]*)\/?>/gi),
+    ...attrsOf(/<enclosure\b([^>]*)\/?>/gi).filter(looksImage),
+  ];
+
+  for (const attrs of candidates) {
+    const raw = text(urlOf(attrs));
+    if (!raw) continue;
+    try {
+      const u = new URL(raw);
+      if (u.protocol === "https:") return u.toString();
+    } catch {
+      /* not a URL — try the next candidate */
+    }
+  }
+  return "";
+}
+
 /** RSS 2.0 `<item>` and Atom `<entry>`, in one pass. Unknown shapes yield
     nothing rather than guesses. */
 export function parseFeed(xml: string): FeedEntry[] {
@@ -96,6 +153,7 @@ export function parseFeed(xml: string): FeedEntry[] {
       link,
       summary: pick(block, "description", "summary", "subtitle"),
       published: pick(block, "pubDate", "published", "updated", "dc:date"),
+      image: feedImage(block),
     });
   }
   return out;
@@ -115,6 +173,10 @@ export function parseNewsSitemap(xml: string): FeedEntry[] {
       title: pick(news, "news:title"),
       link: pick(block, "loc"),
       summary: "",
+      /* A Google News sitemap carries no image, the same way it carries no
+         dek. Both Tribune dailies reach us this way, so their cards use the
+         text-only variant until they gain a feed we can read. */
+      image: "",
       published: pick(news, "news:publication_date") || pick(block, "lastmod"),
     });
   }
@@ -207,6 +269,7 @@ export function sweep(input: SweepInput): SweptArticle[] {
         leanTag,
         countyFips: outlet.countyFips,
         retrieval,
+        imageUrl: entry.image || null,
       });
     }
   }

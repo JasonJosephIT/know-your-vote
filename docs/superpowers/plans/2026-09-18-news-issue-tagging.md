@@ -642,7 +642,7 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 `supabase/migrations/README.md` rule 2: claim the number, then write the file. Add this row immediately **above** the `| 0027+ | free |` row, and change that row to `| 0028+ | free | — |`:
 
 ```markdown
-| 0027      | `0027_news_issues.sql` — `news_item.issues TEXT[]`, `characterized_by`, `characterized_at`, `idx_news_item_issues` (GIN) (`docs/superpowers/specs/2026-09-18-news-characterization-design.md` §4.6, Unit 1) | **written, not applied** — additive and nullable; no backfill. `issues IS NULL` means "not characterized", `issues = '{}'` means "characterized, nothing over threshold". These are different facts and queries must not conflate them. |
+| 0027      | `0027_news_issues.sql` — `news_item.issues TEXT[]`, `characterized_by`, `characterized_at`, `idx_news_item_issues` (GIN) (`docs/superpowers/specs/2026-09-18-news-characterization-design.md` §4.6, Unit 1) | **applied 2026-09-19** (recorded as `news_issues`; this row said otherwise until 2026-09-21 — see the ledger) — additive and nullable; no backfill. `issues IS NULL` means "not characterized", `issues = '{}'` means "characterized, nothing over threshold". These are different facts and queries must not conflate them. |
 ```
 
 - [x] **Step 2: Write the migration**
@@ -1300,5 +1300,5 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 ## After this plan
 
 - **Gate G4 (surface)** is the founder's, with Task 6's numbers in hand. Nothing renders to a voter before that. If issue tags ever do render, they inherit `news-fairness.md` §1: disclosed, never judged, never colour-coded.
-- **Unit 2 (candidate suggestions)** stays blocked on Q5 and ingest B2. Spec §5.
-- **Migration 0027 is written, not applied.** Applying it to the live project is a founder action, recorded in the ledger when it happens.
+- **Unit 2 (candidate suggestions)** is **no longer blocked on Q5** — the founder reversed admin-dashboard/design.md § 7 on 2026-09-19 and agent news now enters `review_item` (PR #54). It stays blocked on ingest **B2**: precision and recall are meaningless against 29 demo fixtures. Spec §5.
+- **Migration 0027 was applied live on 2026-09-19** (recorded as `news_issues`, byte-identical to the file). Neither this line nor the ledger recorded it until 2026-09-21, which is why the ledger now says plainly that applying a migration and recording it are two separate acts.

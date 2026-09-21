@@ -135,7 +135,7 @@ in the prompt.
 | **CN-R4** | Symmetric search, per-candidate counts recorded. | **Met** in the prompt (Constitution 5, run-report step 6). Three run reports carry the 26-row zero table. |
 | **CN-R5** | Dedupe is the database's job; never pre-query and branch. | **Conflict with the plan.** Plan §4 says "Dedupe on (url, candidate_id) before insert" with the unique index as backstop, and the prompt does both. Harmless either way; the index is authoritative. Drop the "never pre-query" wording or accept the plan's. |
 | **CN-R6** | Ops plane written on every run (`agent_run`), skip-and-note if `0006` absent. | **Gap** — this is exactly TASK-A15, unbuilt. |
-| **CN-R7** | Gated by default: agent news routes through `review_item` before it is publicly readable. | **Gap, and a reversal.** design.md § 7 recorded the opposite decision ("Manual + gated only … revisit via per-agent flag"). This PRD asks the founder to flip that flag for R1. Also note: the read path publishes `news_item` rows the moment they exist (anon SELECT); "gated" therefore means *don't INSERT until approved*, i.e. R1 writes a `review_item(kind='manual_news', source='agent:R1')` and the approve effect does the insert. That effect exists as `src/lib/admin/effects.ts` (on `main` via PR #14). |
+| **CN-R7** | Gated by default: agent news routes through `review_item` before it is publicly readable. | **CLOSED 2026-09-19 (PR #54) — was: gap, and a reversal.** The founder reversed § 7 and `scripts/news-enqueue.ts` implements this row as written. History, since the reasoning still matters: admin-dashboard/design.md § 7 recorded the opposite decision ("Manual + gated only … revisit via per-agent flag"). This PRD asked the founder to flip that flag for R1, and on 2026-09-19 they did. Also note: the read path publishes `news_item` rows the moment they exist (anon SELECT); "gated" therefore means *don't INSERT until approved*, i.e. R1 writes a `review_item(kind='manual_news', source='agent:R1')` and the approve effect does the insert. That effect exists as `src/lib/admin/effects.ts` (on `main` via PR #14). |
 | **CN-R8** | Degrade honestly: `status='failed'` on the run row; `ok_empty` for "ran fine, found nothing". | **Partial.** Fail-closed is in the prompt, but with no `agent_run` row there is no status anywhere a machine can read. Same fix as CN-R6. |
 | **CN-R9** *(v1.2)* | Every candidate-scoped row records **how** it matched: `relation` is `named` (deterministic full-name match) or `related` (ambiguous). `related` attaches to **every** candidate the ambiguity admits, never to one picked by judgment. | **Met in code 2026-09-07 (C8)**, unwired: `0017` adds the column, `src/lib/news-match.ts` assigns it, the candidate page renders the tiers apart. Nothing calls the matcher in production yet — its inputs are C7's sweep (gates open) and a real roster (B2). |
 | **CN-R10** *(v1.2)* | Coverage variance (`news-fairness.md` §2) is computed over **`named` rows only**. | **Met in code 2026-09-07 (C8)**: `namedCountsByCandidate()` is the denominator selection, and the guardrail proves that including `related` would move the variance from 1.00 to 0.75 on a fixture where one candidate has no coverage at all. The variance itself stays `balance_audit_core`'s (N5) — never reimplemented. |
@@ -433,11 +433,23 @@ the column that lets it reach 67 without a second migration.
   C1's founder answer.
 
 - [ ] **C5** — Ops-plane writes (CN-R6) + review-queue routing (CN-R7).
-  The `agent_run` half is TASK-A15 (prompt appendix, needs the scheduled-tasks
-  MCP + founder go). The `review_item` half needs the founder to reverse
-  design.md § 7 for R1 (gate Q5 below).
-  Verify: a run appears on the agents console; a written item lands in the
-  approval queue; `0006`-absent path skips cleanly.
+  **Half done — the box stays open deliberately.**
+  - **CN-R7, the `review_item` half: DONE 2026-09-19 (PR #54).** The founder
+    reversed admin-dashboard/design.md § 7 for R1 (gate Q5 below).
+    `scripts/news-enqueue.ts` writes
+    `review_item(kind='manual_news', source='agent:R1', status='pending')` and
+    the approve effect does the insert — the exact shape CN-R7 asked for.
+    *Verified:* a matched article lands in the approval queue and nothing is
+    voter-facing until approved; the relation tier survives the boundary
+    (`scripts/verify-news-enqueue.ts` parses every payload with the real
+    `ManualNewsPayloadSchema`).
+  - **CN-R6, the `agent_run` half: still open.** TASK-A15 (prompt appendix,
+    needs the scheduled-tasks MCP + founder go). A run does **not** yet appear
+    on the agents console, and the `0006`-absent path is untested — the runner
+    would fail its insert rather than skip cleanly, which is the fail-closed
+    choice but not what this line asked for.
+
+  So C5 closes when CN-R6 lands. Do not tick it on CN-R7 alone.
 
 - [ ] **C6** — Backfill one real race end to end; report per-candidate counts
   so `news-fairness.md`'s `N` can be chosen from data.
@@ -642,8 +654,13 @@ the column that lets it reach 67 without a second migration.
   an article matched no candidate at any tier.
 - **Q4 — retention.** Still open. Nothing prunes `news_item`;
   `verify-news-neutrality.ts` lints a 30-day window, which hints at the shape.
-- **Q5 — gate agent news? (new)** design.md § 7 chose *not* to queue agent
-  news. CN-R7 asks to reverse that for R1. Founder decision; C5 depends on it.
+- **Q5 — gate agent news?** *Answered 2026-09-19: yes, gate it — § 7 reversed.*
+  admin-dashboard/design.md § 7 had chosen *not* to queue agent news; CN-R7 asked
+  to reverse that for R1, and the founder did. Asked whether swept articles
+  matched to candidates should publish directly or be enqueued, the founder chose
+  **enqueue for review**. Implemented in PR #54; § 7's decision row and § 8's
+  "trust changes" bullet are both amended to record it. C5's CN-R7 half is
+  therefore done — its CN-R6 half is not, so C5 stays open.
 - **Q6 — where did the 09-01, 08-15 and 08-01 R1 runs go? (new)**
   `lastRunAt` is 2026-09-01T13:09Z, but the newest run report on disk is
   2026-07-15. Either those runs paused on a permission prompt (the sdd

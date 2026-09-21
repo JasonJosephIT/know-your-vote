@@ -93,7 +93,9 @@ export interface Source {
   url_norm: string;
   publisher: string;
   type: "factual_reporting" | "opinion" | "primary_doc" | "candidate_self";
-  lean_tag: "left" | "center-left" | "center" | "center-right" | "right" | "N/A";
+  /* 'unrated' (migration 0028) is the recorded absence of a rating, distinct
+     from 'N/A' ("a lean does not apply"). See src/lib/news-labels.ts rule 3. */
+  lean_tag: "left" | "center-left" | "center" | "center-right" | "right" | "N/A" | "unrated";
   retrieved_at: string;
 }
 

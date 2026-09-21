@@ -112,11 +112,83 @@ check(
 const unrated: Outlet = { ...times, leanTag: null };
 check("an unrated outlet yields nothing", run([{ outlet: unrated, xml: feed }]).length === 0);
 
+/* This check used to read "usableOutlets is empty until a human fills the gates
+   in", and its own failure message said: "if that is intended, this check should
+   change with them". It is intended now. The founder designated 31 rows
+   `leanTag: 'unrated'` on 2026-09-19 and floridaphoenix.com on 2026-09-21,
+   making 32 (gate C7-a; see UNRATED_DESIGNATED in
+   src/lib/news-sources.ts), so the gate is no longer uniformly closed and the
+   assertions below pin the shape it closed into instead of the empty set. */
+const designated = OUTLETS.filter((o) => o.leanTag === "unrated");
+const stillNull = OUTLETS.filter((o) => o.leanTag === null);
+
 check(
-  "usableOutlets is empty until a human fills the gates in",
-  usableOutlets().length === 0,
-  `${usableOutlets().length} outlet(s) already usable — if that is intended, this check should change with them`,
+  "exactly 32 rows are designated unrated",
+  designated.length === 32,
+  `${designated.length} designated — a change here is an editorial act and must be deliberate`,
 );
+/* Down from six to five: floridaphoenix.com was designated 2026-09-21. What is
+   left is exactly the set with FETCHED, CITED ratings — where a lean must be
+   *chosen* rather than recorded as absent. That is the whole of the remaining
+   C7-a gate, and it cannot be closed by a coding agent. */
+check(
+  "the five undesignated rows are exactly those with cited ratings",
+  stillNull.map((o) => o.domain).sort().join(",") ===
+    "apnews.com,miamiherald.com,orlandosentinel.com,sun-sentinel.com,tampabay.com",
+  stillNull.map((o) => o.domain).join(","),
+);
+/* The gate's real job: no lean was ever ASSERTED. Every row is either null
+   ("no human has decided") or 'unrated' ("a human recorded that nobody rates
+   this"). A left/center/right value appearing here without a founder commit is
+   the regression this file exists to catch. */
+check(
+  "no row carries an asserted lean — only null or 'unrated'",
+  OUTLETS.every((o) => o.leanTag === null || o.leanTag === "unrated"),
+  [...new Set(OUTLETS.map((o) => String(o.leanTag)))].join(","),
+);
+/* A designation must never sit on a row that HAS a rating: 'unrated' would then
+   contradict its own basis text and the card would deny a rating the repo
+   cites. That is the property being protected — not the literal string.
+
+   ONE DOMAIN IS ALLOWED A BESPOKE BASIS, by name. floridaphoenix.com was
+   designated 2026-09-21 and keeps its States Newsroom note instead of the
+   shared text, because that note explains WHY no outlet-specific rating exists
+   for a newsroom inside a national network — something `UNRATED` cannot say.
+   Naming it here rather than loosening the rule keeps the check fail-closed: a
+   second bespoke-basis designation still fails until someone adds it
+   deliberately, which is the same reason UNRATED_DESIGNATED is a list and not a
+   derived default. */
+const BESPOKE_BASIS_ALLOWED: ReadonlySet<string> = new Set(["floridaphoenix.com"]);
+check(
+  "every designated row carries the shared UNRATED basis, bar the one allowed by name",
+  designated.every((o) => o.leanBasis === UNRATED || BESPOKE_BASIS_ALLOWED.has(o.domain)),
+  designated
+    .filter((o) => o.leanBasis !== UNRATED && !BESPOKE_BASIS_ALLOWED.has(o.domain))
+    .map((o) => o.domain)
+    .join(","),
+);
+/* The allowance is not a hole. A bespoke basis on a DESIGNATED row must still
+   state that no rating was found — otherwise 'unrated' could sit on top of prose
+   citing a real rating, which is the exact contradiction the check above exists
+   to prevent, just smuggled through the exception. */
+for (const o of designated) {
+  if (o.leanBasis === UNRATED) continue;
+  check(
+    `bespoke designated basis for ${o.domain} still records that no rating was found`,
+    /no (outlet-specific )?rating/i.test(o.leanBasis),
+    o.leanBasis,
+  );
+  /* And it must not read as though a value were adopted. Phoenix's basis names
+     the uncited center-left proposal in order to DECLINE it; a designated row
+     mentioning a lean word without declining or disclaiming it is the
+     regression. */
+  check(
+    `bespoke designated basis for ${o.domain} never adopts a lean value`,
+    !/\b(left|right|center|centre|middle)\b/i.test(o.leanBasis)
+      || /declined|not a rating|no citation|without a citation|uncited/i.test(o.leanBasis),
+    o.leanBasis,
+  );
+}
 check("the list itself is non-empty", OUTLETS.length > 0);
 check(
   "every listed outlet records a lean basis",
@@ -150,8 +222,12 @@ for (const o of OUTLETS) {
     o.leanBasis,
   );
   check(
-    `non-default leanBasis for ${o.domain} defers to the founder`,
-    /Founder (decides|confirms)/.test(o.leanBasis),
+    `non-default leanBasis for ${o.domain} defers to the founder, or records their decision`,
+    /Founder (decides|confirms)/.test(o.leanBasis)
+      /* Once the founder HAS decided, "Founder decides" is stale and the honest
+         text records the decision instead. Both forms keep a value from being
+         asserted on a coding agent's authority, which is what this checks. */
+      || /Founder designated/.test(o.leanBasis),
     o.leanBasis,
   );
 }
@@ -353,7 +429,52 @@ check(
   "a sitemap outlet becomes usable once a lean is signed off",
   usableOutlets(withSitemap.map((o) => ({ ...o, leanTag: "center" as const }))).length === withSitemap.length,
 );
-check("usableOutlets is still empty (leans null)", usableOutlets().length === 0);
+/* Designating did not bypass either fail-closed flag or the retrieval-path
+   requirement — that is the whole point of them outliving the lean gate. 27 of
+   the 32 designated rows are usable; the five that are not are held out by a
+   flag or by having no feed and no sitemap, and no amount of lean sign-off
+   should change that.
+
+   floridaphoenix.com joining on 2026-09-21 is the cleanest demonstration of it:
+   a brand-new designation that moves `usableOutlets()` by exactly ZERO, because
+   `mixedFeed` still holds it out. A lean is necessary for a card, never
+   sufficient. */
+check("usableOutlets is 27 after the designation", usableOutlets().length === 27,
+  `${usableOutlets().length}`);
+check(
+  "every usable outlet has a retrieval path and neither flag",
+  usableOutlets().every(
+    (o) => (o.feed !== null || o.sitemap !== undefined) && !o.mixedFeed && !o.syndicated,
+  ),
+);
+check(
+  "the five designated-but-held-out rows are exactly the flagged and path-less ones",
+  designated
+    .filter((o) => !usableOutlets().some((u) => u.domain === o.domain))
+    .map((o) => o.domain)
+    .sort()
+    .join(",")
+    === "elnuevoherald.com,floridaphoenix.com,floridapolitics.com,miamitimesonline.com,outsfl.com",
+  designated.filter((o) => !usableOutlets().some((u) => u.domain === o.domain)).map((o) => o.domain).join(","),
+);
+/* Stated as a property rather than a list, so it survives the next
+   designation: every held-out row must be held out for a NAMED reason. A row
+   that became unusable for some other reason would pass the list check above
+   only by coincidence. */
+for (const o of designated) {
+  if (usableOutlets().some((u) => u.domain === o.domain)) continue;
+  check(
+    `${o.domain} is held out for a named reason, not by accident`,
+    o.mixedFeed === true || o.syndicated === true || (o.feed === null && o.sitemap === undefined),
+    `mixedFeed=${o.mixedFeed} syndicated=${o.syndicated} feed=${o.feed} sitemap=${o.sitemap !== undefined}`,
+  );
+}
+/* And 'unrated' specifically does not slip past a flag — the existing flagged
+   check above uses 'center'; this repeats it with the value actually in use. */
+check(
+  "a flagged row is not usable even when designated unrated",
+  usableOutlets(flagged.map((o) => ({ ...o, leanTag: "unrated" as const }))).length === 0,
+);
 
 if (failures > 0) {
   console.error(`\nverify-news-sweep: ${failures} failure(s)`);

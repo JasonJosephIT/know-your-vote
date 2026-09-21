@@ -3,7 +3,8 @@ import { z } from "zod";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { COVERED_COUNTIES, resolveZip, ZIP_RE } from "@/lib/resolve";
 import { dedupeByUrl } from "@/lib/news-feed";
-import { newsLabels, type NewsSource } from "@/lib/news-labels";
+import { type NewsSource } from "@/lib/news-labels";
+import { outletForUrl } from "@/lib/news-sources";
 import type { NewsItemType } from "@/types/app";
 
 /* This project has no generated Supabase types, so an embedded select widens
@@ -20,6 +21,7 @@ type NewsRow = {
   summary: string | null;
   url: string | null;
   published_at: string;
+  image_url: string | null;
   source: NewsSource | NewsSource[] | null;
 };
 
@@ -81,7 +83,7 @@ export async function GET(request: NextRequest) {
   const { data, error } = await supabase
     .from("news_item")
     .select(
-      "id, race_id, candidate_id, metro, county_fips, item_type, title, summary, url, published_at, "
+      "id, race_id, candidate_id, metro, county_fips, item_type, title, summary, url, published_at, image_url, "
         + "source(publisher, type, lean_tag)",
     )
     .or(scopes.join(","))
@@ -114,21 +116,31 @@ export async function GET(request: NextRequest) {
          rather than trusting one. */
       const raw = i.source;
       const source = Array.isArray(raw) ? (raw[0] ?? null) : (raw ?? null);
-      const labels = newsLabels(source);
+      /* The source row travels whole; the card derives its own labels with
+         `newsCardLabels`. Deliberately NO `lean` in this payload — lean is
+         disclosed on the outlet page, not on a card (news-fairness.md §1, as
+         amended 2026-09-19), and a value the client never receives is one no
+         card can render by accident. The lean still reaches a reader, one tap
+         away and in full, including when no rating exists.
+
+         `outletDomain` is resolved HERE rather than in the browser so the
+         client bundle does not have to carry the whole outlet list to draw a
+         link. Null for rows that belong to no listed outlet — an official
+         resource or a pipeline update has no outlet page to go to. */
+      const outlet = i.url ? outletForUrl(i.url) : null;
       return {
         id: i.id,
         itemType: i.item_type,
         title: i.title,
         summary: i.summary,
         url: i.url,
+        imageUrl: i.image_url ?? null,
         raceId: i.race_id,
         candidateId: i.candidateId,
         countyFips: i.county_fips,
         publishedAt: i.published_at,
-        publisher: source?.publisher ?? null,
-        kind: labels.kind,
-        lean: labels.lean,
-        isOpinion: labels.isOpinion,
+        source,
+        outletDomain: outlet?.domain ?? null,
       };
     }),
   });

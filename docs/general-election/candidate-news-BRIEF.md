@@ -27,9 +27,9 @@ behaviour*: R1 refuses to attach real people's news to fictional profiles.
 
 **C0 is done.** Every remaining C-task is blocked on something outside this
 branch: C2/C3/C6 on the real roster (ingest B2/B3), C4 on the C1 write-path
-decision, C5 on TASK-A15 plus founder gate Q5. The useful next moves are the
-founder gates in §6, in this order: answer Q5 and the C1 recommendation, then
-unblock the ingest branch's A0.
+decision, C5 on TASK-A15 (**Q5 is now answered** — 2026-09-19, reversed). The
+useful next moves are the founder gates in §6, in this order: the C1
+recommendation, then unblock the ingest branch's A0.
 
 > The single most expensive mistake available here is still writing a second,
 > divergent R1. The first one is `agents/r1-candidate-news.prompt.txt`.
@@ -87,8 +87,11 @@ node scripts/verify-news-neutrality.ts --self-test
   `ok_empty` for "ran fine, found nothing" — exactly what the last three R1
   runs were.
 - **Ops writes never fail a run.** If `0006` is missing, skip and note it.
-- **Gated by default** — *pending founder decision Q5*; design.md §7 currently
-  says the opposite.
+- **Gated by default** — *settled 2026-09-19: yes.* The founder reversed
+  admin-dashboard/design.md §7, which had said the opposite, and
+  `scripts/news-enqueue.ts` routes matched articles through
+  `review_item(kind='manual_news', source='agent:R1', status='pending')`.
+  Nothing an agent proposes is voter-facing until approved in the console.
 - **Do not edit a live scheduled task without the founder's explicit go.**
   Draft into `agents/`, then stop and report, per
   `docs/admin-dashboard/phases/run-3-agent-control.md`.
@@ -121,7 +124,7 @@ node scripts/verify-news-neutrality.ts --self-test
 |---|---|---|
 | ~~Locate `CAP_Refresh_Agents_Plan` + R1 prompt~~ | — | ✅ C0 |
 | ~~**Q0** — where is `news-fairness.md`~~ | — | ✅ on `main` (PR #10) |
-| **Q5** — queue agent news through `review_item` (reverses design.md §7) | C5 | ⬜ |
+| **Q5** — queue agent news through `review_item` (reverses design.md §7) | C5 | ✅ **yes, 2026-09-19** (PR #54) — C5's CN-R7 half done; its CN-R6 half still open |
 | **C1 rec.** — move R1's write path to `scripts/r1-ingest.mjs`, search stays in Cowork | C3, C4 shape | ⬜ (recommended yes) |
 | Ingest **A0** — three-tier `ballot_status` sign-off (on the ingest branch) | A1 → B2 → every R1 run | ⬜ |
 | Ingest **B2/B3** — real roster + official sites | C2, C3, C6 | ⬜ |
@@ -137,7 +140,7 @@ node scripts/verify-news-neutrality.ts --self-test
 Every `ballot`-tier candidate in one real target race has a current set of
 sourced, lean-labelled, neutrally-worded `news_item` rows; two consecutive runs
 are idempotent; the run appears on the agents console; written items land in
-the approval queue (if Q5 says so); `verify-news-neutrality.ts` passes against
+the approval queue (Q5 says so, as of 2026-09-19); `verify-news-neutrality.ts` passes against
 live rows; and per-candidate counts are recorded so `news-fairness.md`'s `N`
 can be chosen from data instead of guessed.
 

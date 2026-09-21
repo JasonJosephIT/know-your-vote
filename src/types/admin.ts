@@ -44,6 +44,34 @@ export const ManualNewsPayloadSchema = z
     race_id: z.string().trim().nullish(),
     candidate_id: z.string().trim().nullish(),
     published_at: z.string().min(1),
+    /* How this article was matched to its candidate (migration 0017, PRD §6).
+       'named' = the candidate's full name is in the title or dek. 'related' =
+       the story covers their race, or names a surname several candidates share,
+       so it attaches to EVERY candidate the ambiguity admits.
+
+       NULLISH, and null is not a third tier: it means the row is not a
+       candidate match at all, which is right for an election_news row scoped to
+       a metro. But null on a CANDIDATE row is a real hazard — CandidateNews
+       renders `relation !== "related"` under "In the news", so a null would
+       present an ambiguous surname hit as a story that named the person. That
+       is the single misreading PRD §6's tier exists to prevent, so the refine
+       below requires the tier whenever a candidate is named. */
+    relation: z.enum(["named", "related"]).nullish(),
+    /* Hero image for the card, from the outlet's feed (migration 0029). */
+    image_url: httpUrl.nullish(),
+    /* The `source` row this article is attributed to. Migration 0014's CHECK
+       requires every candidate_news / election_news row to carry one — the
+       ledger's 0014 entry names this as a precondition, because without it every
+       approved news insert fails and `describeNewsInsertError` blames the wrong
+       migration. An operator hand-adding a story may not have one; a swept
+       article always does. */
+    source_id: z.string().trim().nullish(),
+  })
+  .refine((p) => !p.candidate_id || Boolean(p.relation), {
+    message:
+      "A candidate-scoped story needs a relation tier ('named' or 'related') — "
+      + "without it an ambiguous surname match renders as though it named the candidate.",
+    path: ["relation"],
   })
   .refine((p) => Boolean(p.race_id || p.candidate_id || p.metro), {
     message: "Pick at least one scope (race, candidate, or metro).",

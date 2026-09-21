@@ -82,9 +82,10 @@ reason C was on the table at all is that the regex misses nicknames and "the
 incumbent", and the answer to that is §5's operator-gated suggestions, never a
 model writing `candidate_id`.
 
-Unit 2 (§5) is unaffected by this answer — it was gated on D1 **and** Q5, and Q5
-is still open. Nothing in Unit 2 is C: a suggestion an operator approves is not
-the model deciding attachment.
+Unit 2 (§5) is unaffected by this answer — it was gated on D1 **and** Q5.
+**Both are now closed** (Q5 reversed 2026-09-19, §7). Nothing in Unit 2 is C: a
+suggestion an operator approves is not the model deciding attachment. Its
+remaining dependency is ingest **B2** — see §5.
 
 ### 2.2 D2 — Which "System 1" (new; not in the brief)
 
@@ -162,8 +163,10 @@ Two units, built in order, with a shared pure core.
 **Unit 1 — issue tagging.** This is the work. Not blocked on B2, on the `leanTag`
 sign-off, or on Q5.
 
-**Unit 2 — candidate suggestions.** Blocked on Q5 (reverse `design.md` §7 so agent
-news may enter `review_item`). Specified in §5, not built.
+**Unit 2 — candidate suggestions.** **No longer blocked on Q5** — the founder
+reversed `admin-dashboard/design.md` §7 on 2026-09-19 and agent news now enters
+`review_item` (PR #54). Still blocked on ingest **B2** for evaluation, and still
+specified in §5 rather than built.
 
 ---
 
@@ -413,9 +416,24 @@ runner and any future route are affected; the pure modules are plain TypeScript.
 
 ## 5. Unit 2 — candidate suggestions (specified, not built)
 
-Blocked on **Q5** (`design.md` §7 currently says do not queue agent news; CN-R7
-asks to reverse it — open since 2026-09-06). D1 is resolved and does not block
-this: an operator-approved suggestion is not the model deciding attachment.
+**Q5 is closed (2026-09-19): agent news may enter `review_item`.** Asked whether
+swept articles matched to candidates should publish directly or be enqueued, the
+founder chose enqueue for review, and `scripts/news-enqueue.ts` now writes
+`review_item(kind='manual_news', source='agent:R1', status='pending')` — the shape
+CN-R7 specified and `admin-dashboard/design.md` §8 anticipated. D1 is resolved and
+does not block this either: an operator-approved suggestion is not the model
+deciding attachment.
+
+**So what still holds this unbuilt is ingest B2, not a gate.** Two cautions
+carried over from the reversal, both narrower than they look:
+
+- The reversal is about the **route**, not authority. §9's first rule is
+  unchanged and still load-bearing: the model never writes `candidate_id` or
+  `relation`. What queues today is the *deterministic* matcher's output.
+- The queue path is proven for the payload shape §5 needs, but not for a new
+  `kind`. `news-enqueue.ts` reuses `manual_news` because the payload is
+  identical; a model **suggestion** carrying `evidence` is a different shape and
+  still needs the one-PR set below (`kind` CHECK, zod payload, planned effect).
 
 - The model proposes attachments the regex missed — nicknames, "the incumbent",
   "the Republican nominee". It never writes `news_item.candidate_id` or `relation`.
@@ -486,12 +504,12 @@ judged, never colour-coded.
 | **G2 — input** | **CLOSED by this document:** title + dek, never a body; and only stored rows, not the raw sweep pool. Reopening needs a per-outlet `bodyFetch` flag |
 | **G3 — taxonomy** | **REOPENED 2026-09-18 — founder reviewing.** A third list exists (`CAP_Issue_List_FL_2026_v1.md`, 15 sourced issues) and covers four issues the quiz misses entirely. Options in `docs/general-election/news-issue-taxonomy-options-2026-09-18.md`. Blocks plan Task 1 only |
 | **G4 — surface** | **OPEN, deliberately.** Decided after §6 reports, not before |
-| **G5 / Q5 — queue** | **OPEN.** Blocks Unit 2 only. Unit 1 does not touch `review_item` |
+| **G5 / Q5 — queue** | **CLOSED 2026-09-19: reversed.** Agent news may enter `review_item`. The founder chose enqueue-for-review over direct publication; `scripts/news-enqueue.ts` writes `review_item(kind='manual_news', source='agent:R1', status='pending')` and the approve effect does the insert (PR #54). Unblocks Unit 2's gate; B2 still blocks its evaluation. Unit 1 still does not touch `review_item` |
 | **D2 — which System One** | **Narrowed 2026-09-18.** Founder has Jev access; pricing and limits published. Build the TypeSafe arm first; §6 item 6 decides whether the Anthropic arm is ever built |
 | Founder confirmation on G3 | Reusing the **voter-facing** quiz list for news tags is a product decision as much as a technical one. C11 is a PR-reviewed file, so the review is the gate — but flag it explicitly rather than letting it land silently |
 | `TYPESAFE_API_KEY` | Not in `.env.example`; `@typesafe-ai/sdk` not installed. Both are C13 steps |
 | Roster (ingest B2) | Blocks Unit 2's evaluation. **Does not block Unit 1** |
-| `leanTag` sign-off (C7-a), `unrated` value | Blocks rendering any card at all. Independent of this work |
+| `leanTag` sign-off (C7-a), `unrated` value | **Largely resolved 2026-09-19 (PR #54):** `unrated` shipped as migration 0028 and 31 outlets were designated, taking `usableOutlets()` from 0 to 27 — so cards render. Six rows still need a lean *chosen* (Miami Herald, Sun Sentinel, Tampa Bay Times, Orlando Sentinel, AP, Florida Phoenix). Independent of this work |
 
 ---
 
@@ -507,7 +525,7 @@ judged, never colour-coded.
 | **C14b** — evaluation (§6) against the gold set | C13, C13c, C14a | The numbers that decide the threshold and G4 |
 | **C15** — founder decision on G4 | C14b | — |
 | **C13-alt** — Anthropic adapter | only if C14b says so | `claude-haiku-4-5`, temperature 0, forced tool use |
-| **C16** — Unit 2 | Q5, B2 | §5 |
+| **C16** — Unit 2 | ~~Q5~~ (closed 2026-09-19), B2 | §5 |
 
 ---
 
