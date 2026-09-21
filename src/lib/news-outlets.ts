@@ -2,7 +2,7 @@
 
    This is where lean is disclosed, now that it has left the card. The whole
    point of moving it was to disclose it BETTER: on the card it was one word
-   among four, and on 31 of 37 outlets that word would have been an absence. On
+   among four, and on 32 of 37 outlets that word would have been an absence. On
    a page about one outlet there is room to say what the rating is, who says so,
    when they said it, and — the case that matters most here — that nobody has
    rated this outlet at all and what that does and does not mean.

@@ -185,7 +185,8 @@ if (dryRun) {
    is how 0014's own seed attributes rows. Migration 0014 requires every
    candidate_news / election_news row to carry a source_id, and `lean_tag` is
    NOT NULL, so this is only insertable at all because the founder designated the
-   31 local outlets `unrated` on 2026-09-19. Before that, a swept local article
+   31 local outlets `unrated` on 2026-09-19 (32 with floridaphoenix.com,
+   2026-09-21). Before that, a swept local article
    had no legal lean value and could never have satisfied the CHECK. */
 const outletsNeeded = [...new Set(capped.map((p) => p.sourceId))];
 for (const sourceId of outletsNeeded) {

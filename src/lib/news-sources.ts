@@ -19,12 +19,12 @@
                 the rater publishes one, a URL and the access date; see
                 docs/general-election/lean-ratings-fetched-2026-09-19.md.
                 Florida Phoenix carries a network note with no outlet-specific
-                rating. The remaining 31 rows carry `UNRATED` below and are NOT
+                rating. The remaining 32 rows are designated and are NOT
                 a backlog — see that report on why AllSides / Ad Fontes / MBFC
                 do not rate a community weekly or a local broadcaster. The
                 `unrated` lean value those rows need EXISTS (migration 0028,
                 src/lib/news-labels.ts rule 3) and renders as "No independent
-                rating". The founder designated those 31 rows `'unrated'` on
+                rating". The founder designated those 32 rows `'unrated'` on
                 2026-09-19 — see `UNRATED_DESIGNATED` below for the list, the
                 evidence and why it is a list rather than a default. Six rows
                 remain null: the four legacy dailies and AP, which have cited
@@ -125,7 +125,8 @@ export const UNRATED =
   "No independent bias rating cited in the 2026-09-17 corpus (which searched AllSides / Ad Fontes / MBFC). " +
   "Settle from a published nonpartisan rating cited in the PR that fills this in, or the founder signs off an explicit 'no rating' designation.";
 
-/* FOUNDER DESIGNATION, gate C7-a, 2026-09-19. These 31 outlets carry
+/* FOUNDER DESIGNATION, gate C7-a, 2026-09-19 (+ floridaphoenix.com
+   2026-09-21). These 32 outlets carry
    `leanTag: 'unrated'` — "a lean applies to this outlet and no rating agency
    has published one" — and their cards say "No independent rating"
    (src/lib/news-labels.ts rule 3, migration 0028).
@@ -147,11 +148,23 @@ export const UNRATED =
 
    NOT ON THIS LIST, and why:
      - the four legacy dailies and AP — they have fetched, cited ratings, and
-       their `leanTag` is the founder's remaining call;
-     - floridaphoenix.com — its basis is a States Newsroom network note rather
-       than the shared UNRATED text, so it is not one of the 31. In substance it
-       has no outlet-specific rating either; it is `mixedFeed`-flagged and so
-       unusable regardless, and designating it is a separate call.
+       their `leanTag` is the founder's remaining call. That is the whole of the
+       remaining gate.
+
+   FLORIDA PHOENIX IS THE ONE EXCEPTION IN SHAPE, added 2026-09-21. Every other
+   designated row carries the shared `UNRATED` text; its basis is a States
+   Newsroom network note instead, because the corpus proposed *center-left* for
+   it with no citation. The founder designated it `unrated` rather than adopting
+   that proposal, which is the brief's rule working as intended: an uncited
+   value is not a rating, and "nobody published one" is the honest record. The
+   bespoke text is kept rather than flattened to `UNRATED` — it explains *why*
+   no outlet-specific rating exists for a newsroom inside a national network,
+   which the shared text cannot say. `scripts/verify-news-sweep.ts` allows this
+   one domain by name, so a second bespoke-basis designation still fails until
+   someone adds it deliberately.
+
+   It stays `mixedFeed`-flagged, so designating it does NOT make it sweepable:
+   `usableOutlets()` is unchanged at 27.
 
    scripts/verify-news-sweep.ts pins the count and asserts every domain here
    exists, carries the UNRATED basis, and never a cited one. */
@@ -170,6 +183,9 @@ const UNRATED_DESIGNATED: ReadonlySet<string> = new Set([
   // Statewide
   "newsserviceflorida.com", "wfsu.org", "floridapolitics.com",
   "floridadaily.com", "flvoicenews.com", "floridianpress.com",
+  /* Added 2026-09-21, after the other 31. It is the one designated row whose
+     `leanBasis` is NOT the shared UNRATED text — see the header note. */
+  "floridaphoenix.com",
 ]);
 
 interface RowOptions {
@@ -364,7 +380,11 @@ export const OUTLETS: readonly Outlet[] = Object.freeze([
      Phoenix's commentary as well as its reporting, and the site has a
      /category/commentary/ section whose own feed 403s. See the header. */
   o("floridaphoenix.com", "Florida Phoenix", null, "https://floridaphoenix.com/feed/", {
-    leanBasis: "No outlet-specific rating captured; part of the States Newsroom network. Corpus 2026-09-17 proposes center-left without a citation. Founder decides.",
+    leanBasis:
+      "No outlet-specific rating captured; part of the States Newsroom network. "
+      + "The 2026-09-17 corpus proposed center-left with no citation, and that proposal was DECLINED: "
+      + "an uncited value is not a rating. Founder designated this row 'unrated' on 2026-09-21 — "
+      + "recording that no agency publishes a rating for this outlet, not a position on the spectrum.",
     mixedFeed: true,
     robots: { aiDisallow: ["GPTBot", "anthropic-ai", "ClaudeBot", "Claude-Web", "CCBot", "Google-Extended", "PerplexityBot", "Applebot-Extended", "Bytespider", "cohere-ai"] },
   }),
