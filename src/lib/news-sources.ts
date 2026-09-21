@@ -151,6 +151,31 @@ export const UNRATED =
        their `leanTag` is the founder's remaining call. That is the whole of the
        remaining gate.
 
+       DEFERRED, DELIBERATELY, 2026-09-21. The founder was shown all three
+       raters' published values for all five rows and chose to leave them
+       undecided for now — "no leaning". So `null` here is a RECORDED decision to
+       wait, not an oversight, and re-presenting the same table is wasted work:
+       the evidence is in docs/general-election/lean-ratings-fetched-2026-09-19.md
+       and has not changed.
+
+       WHAT IT WOULD TAKE, when it is picked up: the raters disagree on four of
+       the five, and none of them uses this file's five-value scale (AllSides
+       says "Lean Left", MBFC "Left-Center", Ad Fontes a number on -42..+42). So
+       it needs two founder choices, not one — whose rating governs, and where
+       the cut between `center` and `center-left` falls. Averaging them is
+       forbidden by the brief ("record disagreement as disagreement").
+
+       `unrated` IS NOT AVAILABLE FOR THESE FIVE, however tempting as a way to
+       close the gate. It means "no rating agency has published one", and three
+       have, for every one of them — the card would deny ratings this file
+       itself cites. verify-news-sweep.ts asserts exactly that, so it fails.
+
+       THIS DOES NOT BLOCK LAUNCH. A null lean keeps a row out of
+       `usableOutlets()`, so these five simply do not appear; the other 32 are
+       designated and 27 are sweepable. Deciding the five would ADD three
+       sweepable outlets (Sun Sentinel, Tampa Bay Times, Orlando Sentinel —
+       Miami Herald and AP have no retrieval path), not unblock anything.
+
    FLORIDA PHOENIX IS THE ONE EXCEPTION IN SHAPE, added 2026-09-21. Every other
    designated row carries the shared `UNRATED` text; its basis is a States
    Newsroom network note instead, because the corpus proposed *center-left* for
