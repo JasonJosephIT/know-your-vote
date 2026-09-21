@@ -197,12 +197,28 @@ check("B6 is still reachable without \"certification\"",
   ids("Election integrity") === "elections");
 
 /* ---- title-only rule for bare topic words ---------------------------- */
+/* The example here changed with taxonomy v3 (2026-09-20, PR #57). It used to
+   read "Water rates and utility oversight", chosen as prose that merely
+   mentions water — but v3 added "water rates" to KYV5's aliases, so that
+   string now contains a genuine PHRASE alias and categorizes correctly. The
+   fixture had stopped demonstrating its own premise; the rule it guards is
+   unchanged, so the example moved rather than the rule.
+   "Billing transparency for water" keeps the same topic word and contains no
+   phrase alias, so it still exercises exactly what this checks. */
 check("a bare topic word in the description does not categorize",
-  ids("Consumer Protection", "Water rates and utility oversight") === "",
-  `got "${ids("Consumer Protection", "Water rates and utility oversight")}"`);
+  ids("Consumer Protection", "Billing transparency for water") === "",
+  `got "${ids("Consumer Protection", "Billing transparency for water")}"`);
+check("a bare AREA word in the description does not categorize either",
+  ids("Consumer Protection", "Consumer complaints about environment") === "",
+  `got "${ids("Consumer Protection", "Consumer complaints about environment")}"`);
 check("a phrase alias in the description does categorize",
   ids("Consumer Protection", "Property insurance premiums and rate filings") ===
     "insurance");
+/* And the string that forced this edit is kept as a POSITIVE, so v3's new
+   phrase alias stays covered instead of the case being quietly dropped. */
+check("a v3 phrase alias in the description categorizes (water rates → KYV5)",
+  ids("Consumer Protection", "Water rates and utility oversight") === "environment",
+  `got "${ids("Consumer Protection", "Water rates and utility oversight")}"`);
 
 /* ---- nothing in, nothing out ----------------------------------------- */
 for (const empty of ["", "   ", "—", "…"]) {
