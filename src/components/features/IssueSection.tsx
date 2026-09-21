@@ -1,4 +1,5 @@
 import { VerdictBadge } from "@/components/ui/VerdictBadge";
+import { PolicyAreaChip, policyAreaHref } from "@/components/ui/PolicyAreaChip";
 import { SourceLinks } from "@/components/features/SourceLinks";
 import type { IssueBlock, SourcedClaim } from "@/lib/briefs";
 
@@ -37,6 +38,21 @@ export function IssueSection({ block }: { block: IssueBlock }) {
           </span>
         )}
       </h3>
+
+      {/* The policy areas this issue belongs to, derived from its title. A
+          race-specific issue that the shared taxonomy has no home for shows
+          nothing here, which is the honest rendering of "no area", not a gap
+          to fill. Spine issues are race-wide, so these chips are identical for
+          every candidate in the race. */}
+      {block.policyAreas.length > 0 && (
+        <ul aria-label="Policy areas" className="flex flex-wrap gap-2">
+          {block.policyAreas.map((area) => (
+            <li key={area.id}>
+              <PolicyAreaChip label={area.label} href={policyAreaHref(area.id)} />
+            </li>
+          ))}
+        </ul>
+      )}
 
       {block.coverage === "no_stated_position_found" && (
         <p className="rounded-md bg-surface-muted px-3 py-2 text-body-sm text-on-surface-muted">
