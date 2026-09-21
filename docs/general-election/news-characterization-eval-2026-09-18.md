@@ -146,3 +146,75 @@ then re-measure.**
 6. **Re-label the gold set as founder work.** This still rests on an agent's
    labels, and the B6 episode is a live example of an annotator's reading being
    the thing under test.
+
+---
+
+## 7. Follow-up — taxonomy v3 (2026-09-20)
+
+**Every number above is a v2 number and stays one.** This section records what
+changed afterwards so the report is not read as covering a taxonomy it never
+ran against.
+
+**Recommendation 2 is done: the four B8 gold rows are fixed.** All four were
+data-centre stories — one Orange County moratorium and the same David Jolly
+interview from three outlets — filed under "Climate and environment
+(national)". They now carry `["KYV2", "KYV3"]`.
+
+**That required new issues, not new labels.** There was nowhere correct to put
+them: the taxonomy had `A5` (Florida water and Everglades) and `B8` (national
+climate) and nothing for energy or land use. So `environment` gained three
+sub-issues, and `TAXONOMY_VERSION` went to `3`:
+
+| id | label | why |
+|---|---|---|
+| `KYV2` | Energy and utilities | The measured gap. Half of what a data-centre story is about; nothing else in the taxonomy covered electricity, the grid or power bills. |
+| `KYV3` | Growth, development and land conservation | The other half — a county moratorium is a land-use decision. Also the quiz's "balancing environmental rules with growth and development", which had no sub-issue. |
+| `KYV4` | Storm resilience and flood protection | The quiz's "preparing infrastructure for storms and flooding", which had no sub-issue either. No gold examples — see below. |
+| `KYV5` | Water supply and drinking water | Water had two halves and only one was in the taxonomy. `A5`'s label — CAP's, verbatim — is about ambient quality and the Everglades; nothing named the tap. A wellfield permit, a hosepipe ban, an aquifer drawdown or a water-rate rise had nowhere to go. No gold examples. |
+
+`A5` keeps its label and gains the ambient-quality aliases it lacked (algae
+blooms, sewage spills, wastewater discharge, septic-to-sewer, springs,
+seagrass). `KYV2`'s aliases were narrowed to electric and fuel terms so a
+water bill lands in `KYV5` and not in both.
+
+### The gold set caught a bad label before the model did
+
+`KYV4` was first drafted as **"Storm resilience and flooding"**, with
+`flooding` among its aliases. Two rows already in the gold set refute that
+wording: *"Flooding causes travel delays across Broward County"* and *"Flood
+advisory issued for Broward as heavy rain could lead to more flooding"*, both
+correctly tagged with **no issue** — they are weather reports. Asked whether
+they relate to "flooding", a model says yes and is not wrong; the question was
+bad. Asked whether they relate to flood **protection**, it says no. The label
+and every alias now name what a government builds or funds, not what the sky
+does. This is the `B6` lesson a second time: when precision looks likely to
+fail, suspect the label first.
+
+**B8 was deliberately not widened**, against the shape of recommendation 3.
+The lever works on A6/B2 because those were wording gaps. B8 was not: the model
+declined the four rows because they were not national climate policy, and it
+was right. `energy` moved out of B8's aliases to KYV2 so the broad label cannot
+swallow the narrow one the way B1 swallows A4 (§3).
+
+### What this is not
+
+- **Not measured.** Nothing in §1–§2 was re-run. Four new Nouls per article
+  (16 → 20), a widened `A5` and four re-labelled rows all move the numbers, in
+  unknown directions. Re-running needs `TYPESAFE_API_KEY`, which is a founder action:
+  `node scripts/news-characterize-eval.ts docs/general-election/news-characterization-goldset-2026-09-18.jsonl`.
+  Expect roughly $0.014 at 20 questions (§4), and treat the result as the first
+  v3 baseline rather than a comparison — v2 could not express these tags at all.
+- **Not founder-labelled.** §0 still holds, and recommendation 6 is still open:
+  these four rows were re-labelled by an agent, the same as the other 112.
+- **KYV4 and KYV5 are unexercised.** The 14-day window carried no
+  storm-resilience story and no water-supply story, so both sit where A1, A2,
+  A5, B4 and B5 sit — present and unscored. They are in because the quiz asks
+  about one and Florida argues about the other, not because the evaluation
+  found either missing.
+- **One thing to watch in the re-run.** The data-centre rows call the
+  facilities "water- and power-guzzling", so they may now fire `KYV5` as well
+  as `KYV2`/`KYV3`. Their gold labels were left at `KYV2`+`KYV3`; whether the
+  water clause earns a third tag is a labelling call, and §0 still applies to
+  who made these labels.
+- **Recommendation 4 (A4 vs B1) is untouched.** Still a founder call, still not
+  urgent.
