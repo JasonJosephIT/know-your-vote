@@ -82,6 +82,39 @@ must resolve through the *same* source so the two can never disagree. So:
 Until that exists the 17 races stay loaded and unreachable, which is the
 current deliberate state — see `0031` and the recalibration doc.
 
+## Could a commercial geocoder replace these? Geocodio: no, tested
+
+Run 2026-09-21 via `scripts/probe-district-api.ts`, 8 probes against the layers
+in this folder. **Two independent failures**, either one disqualifying.
+
+**It has no sub-county electoral districts — 0 of 8.** Its `school` field
+returns the administrative district, so every Orange probe answered "Orange
+County School District". Our ballot needs School Board District 3, a
+subdivision inside it. There is no county-commission field at all, so Orange
+Districts 7 and 8 returned nothing. This matches Geocodio's own documentation.
+
+**Its congressional map is stale where it matters.** Not expected, and the more
+useful finding:
+
+| Probe | Geocodio | `block_district` (enacted 2026 plan) |
+|---|---|---|
+| Orange | FL-10 | FL-10 |
+| Orange | FL-9 | FL-9 |
+| Miami-Dade | FL-24 | FL-24 |
+| **Broward** | **FL-25** | **FL-22** |
+
+Broward is exactly where HB 1-D redrew the most. Three of four agreed, so a
+casual spot-check passes it — the disagreement only appears if you test the
+county that changed. Any future vendor gets the same two tests: **Orange
+Districts 7/8** for local coverage, **Broward** for congressional freshness.
+
+This independently re-confirms the rule already in `src/lib/census-block.ts`:
+use a geocoder for address → census block only, never for its district layers.
+
+Google Civic's `representativeInfoByAddress` shut down 2026-04-30. The
+remaining candidate is Cicero, which explicitly sells county-level districts;
+`probe-district-api.ts` takes `--vendor` for that.
+
 ## Refreshing
 
 Each source is a public ArcGIS FeatureServer; append
