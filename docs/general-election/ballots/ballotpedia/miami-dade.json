@@ -1,0 +1,204 @@
+{
+  "source": "Ballotpedia (ballotpedia.org) — Tier 2 corroboration source; acknowledged as a source per founder, 2026-09-22",
+  "retrieved_at": "2026-09-22T00:22:28+00:00",
+  "county": "Miami-Dade",
+  "method_notes": [
+    "Guessed titles 'Miami-Dade County, Florida elections, 2026' and 'Miami-Dade County Commission, Florida' both returned HTTP 404; real pages located via search.",
+    "Commission field taken from the 'Miami-Dade County Commission general election, 2026' table on the municipal-elections page; school board field taken from the per-district 'General election' sections of the district elections page.",
+    "Ballotpedia labels all of these seats Nonpartisan; our party code for all rows is NOP, treated as equivalent (no party mismatches flagged).",
+    "Read-only run: no database writes, no other repo files edited."
+  ],
+  "races": [
+    {
+      "race_id": "FL-DAD-CC2-general",
+      "office": "Miami-Dade County Commission, District 2",
+      "district": "DAD-CC-2",
+      "ballotpedia_url": "https://ballotpedia.org/Municipal_elections_in_Miami-Dade_County,_Florida_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": false,
+      "ballotpedia_candidates": [],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-DAD-2964",
+          "legal_name": "Marleine Bastien",
+          "party": "NOP",
+          "qualifying_status": "elected_in_primary"
+        }
+      ],
+      "diff": {
+        "matched": [],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "DECIDED — agrees with ours. Municipal page general-election table: 'District 2 | This general election was canceled.' (no winner named in that cell). Candidate page https://ballotpedia.org/Marleine_Bastien: 'The general election scheduled for November 3, 2026, was canceled.' and 'Incumbent Marleine Bastien (Nonpartisan) won election outright against Miguel Quintero (Nonpartisan) and Ernst Jean (Nonpartisan) in the primary ... on August 18, 2026.' (total votes 18,225; Quintero 12.9%). Florida elections, 2026 candidate list also shows Bastien 'Won Primary'. Ballotpedia lists Elizabeth Jeanty and Fredericke Morley as withdrawn/disqualified (primary level). Our single-candidate row with qualifying_status 'elected_in_primary' is consistent with Ballotpedia: no November contest. Diff lists are empty because Ballotpedia shows no November field to compare against; Bastien is not 'missing' on Ballotpedia, the contest is decided."
+    },
+    {
+      "race_id": "FL-DAD-CC5-general",
+      "office": "Miami-Dade County Commission, District 5",
+      "district": "DAD-CC-5",
+      "ballotpedia_url": "https://ballotpedia.org/Municipal_elections_in_Miami-Dade_County,_Florida_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Vicki Lopez",
+          "party": "Nonpartisan",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Rob Piper III",
+          "party": "Nonpartisan",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-DAD-2949",
+          "legal_name": "Vicki L. Lopez",
+          "party": "NOP",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-DAD-2998",
+          "legal_name": "Rob Piper",
+          "party": "NOP",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Vicki L. Lopez ~ Vicki Lopez",
+          "Rob Piper ~ Rob Piper III"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": [
+          {
+            "ours": "Vicki L. Lopez",
+            "ballotpedia": "Vicki Lopez",
+            "kind": "spelling"
+          },
+          {
+            "ours": "Rob Piper",
+            "ballotpedia": "Rob Piper III",
+            "kind": "spelling"
+          }
+        ]
+      },
+      "notes": "MATCH (2/2), name-form variants only: ours carries middle initial 'L.' that Ballotpedia omits; Ballotpedia carries suffix 'III' that ours omits. Ballotpedia calls this a 'Special general election for Miami-Dade County Commission District 5' on Nov 3, 2026, following a special nonpartisan primary Aug 18, 2026 in which Lopez (42.3%, 7,061) and Piper (29.5%, 4,928) advanced over Joe Sanchez (28.1%, 4,695); total 16,684 (per https://ballotpedia.org/Vicki_Lopez). Ballotpedia marks Lopez as incumbent. Our race is labeled a regular general; Ballotpedia labels it special — terminology only, same Nov 3 contest."
+    },
+    {
+      "race_id": "FL-DAD-SB1-general",
+      "office": "Miami-Dade County School Board, District 1",
+      "district": "DAD-SB-1",
+      "ballotpedia_url": "https://ballotpedia.org/Miami-Dade_County_Public_Schools,_Florida,_elections_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Linda Cothiere",
+          "party": "Nonpartisan",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Katrina Wilson",
+          "party": "Nonpartisan",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [
+        "Thera Johnson (Nonpartisan) — shown by Ballotpedia as '(Write-in)' in the Aug 18, 2026 special primary results table with 0.0% / 0 votes; her candidate page (https://ballotpedia.org/Thera_Johnson) says she 'lost as a write-in in the special primary on August 18, 2026' and categorizes her '2026 primary (defeated)'. She is NOT listed in Ballotpedia's November special general field."
+      ],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-DAD-3076",
+          "legal_name": "Linda Cothiere",
+          "party": "NOP",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-DAD-3080",
+          "legal_name": "Thera Johnson",
+          "party": "NOP",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Linda Cothiere"
+        ],
+        "only_on_ballotpedia": [
+          "Katrina Wilson"
+        ],
+        "only_in_ours": [
+          "Thera Johnson"
+        ],
+        "mismatches": []
+      },
+      "notes": "DISCREPANCY — +1 on Ballotpedia, -1 in ours. Ballotpedia: 'Linda Cothiere (Nonpartisan) and Katrina Wilson (Nonpartisan) are running in the special general election for Miami-Dade County Public Schools school board District 1 on November 3, 2026.' 'There are no incumbents in this race.' Special primary Aug 18, 2026 (total 30,300): Katrina Wilson 32.9% (9,955) and Linda Cothiere 21.1% (6,384) advanced; Joy Jackson 19.2%, James Wright 9.2%, Erhabor Ighodaro 8.2%, Bernard Jennings 5.1%, Wrendly Mesidor 4.3%, Thera Johnson (Write-in) 0.0%/0. Withdrawn/disqualified: Tyrone Hill Sr. Ballotpedia's page carries the caveat 'The candidate list in this election may not be complete.' Katrina Wilson does not exist in our candidate table under any FL-VF-DAD- id (checked by name search), and our Thera Johnson row has ballot_status 'ballot' / qualifying_status 'qualified' rather than a write-in status. Ballotpedia's placement of a write-in inside the primary results is unusual for a Florida nonpartisan school board race (write-ins normally appear only as a blank line on the general ballot), so the exact status of Thera Johnson is ambiguous on Ballotpedia's side; what is unambiguous is that Ballotpedia's November field is Cothiere vs Wilson and does not include Johnson. Tier 2 source: reported, not corrected — recommend checking the Miami-Dade Supervisor of Elections / Florida DOS candidate list for SB District 1."
+    },
+    {
+      "race_id": "FL-DAD-SB2-general",
+      "office": "Miami-Dade County School Board, District 2",
+      "district": "DAD-SB-2",
+      "ballotpedia_url": "https://ballotpedia.org/Miami-Dade_County_Public_Schools,_Florida,_elections_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": false,
+      "ballotpedia_candidates": [],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-DAD-2926",
+          "legal_name": "Dorothy Bendross-Mindingall",
+          "party": "NOP",
+          "qualifying_status": "unopposed"
+        }
+      ],
+      "diff": {
+        "matched": [],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "DECIDED — agrees with ours. Ballotpedia: 'The general election scheduled for November 3, 2026, was canceled.' and 'The primary scheduled for August 18, 2026, was canceled. Incumbent Dorothy Bendross-Mindingall (Nonpartisan) won election in the primary for Miami-Dade County Public Schools school board District 2 without appearing on the ballot.' Name spelling identical. Consistent with our 'unopposed' status and F.S. 101.151(7): not on the November ballot."
+    },
+    {
+      "race_id": "FL-DAD-SB8-general",
+      "office": "Miami-Dade County School Board, District 8",
+      "district": "DAD-SB-8",
+      "ballotpedia_url": "https://ballotpedia.org/Miami-Dade_County_Public_Schools,_Florida,_elections_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": false,
+      "ballotpedia_candidates": [],
+      "write_ins_noted": [
+        "Samuel Joseph (Nonpartisan) — shown by Ballotpedia as '(Write-in)' in the Aug 18, 2026 primary results table with 0.0% / 0 votes; not in any November field."
+      ],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-DAD-2953",
+          "legal_name": "Monica Colucci",
+          "party": "NOP",
+          "qualifying_status": "elected_in_primary"
+        }
+      ],
+      "diff": {
+        "matched": [],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "DECIDED — agrees with ours. Ballotpedia: 'The general election scheduled for November 3, 2026, was canceled.' 'Incumbent Monica Colucci (Nonpartisan) won election outright against Samuel Joseph (Nonpartisan) in the primary ... on August 18, 2026.' Colucci 100.0% (21,530); Samuel Joseph (Write-in) 0.0% (0). Name spelling identical. Consistent with our 'elected_in_primary' status."
+    }
+  ],
+  "out_of_slice_observations": [
+    "Ballotpedia's commission general-election table also lists District 1 (general canceled; Steve Gallon elected, primary marked canceled/advanced), District 4 (Micky Steinberg (i)), District 6 (Natalie Milian Orbis (i)), District 8 ('This general election was canceled.'; Danielle Cohen Higgins (i) in primary), District 10 (Anthony Rodriguez (i)), District 12 (Juan Carlos Bermudez (i)) — all canceled generals. None of these have FL-DAD- race rows in ours, whereas the equally-decided District 2 does; this is an internal consistency question for our roster, not a Ballotpedia discrepancy. Source: https://ballotpedia.org/Municipal_elections_in_Miami-Dade_County,_Florida_(2026)",
+    "Ballotpedia school board page also lists District 4 (Roberto J. Alonso (i)) and District 6 (Maria Rojas (i)) as canceled general / won primary without appearing on ballot. No FL-DAD- rows in ours. Source: https://ballotpedia.org/Miami-Dade_County_Public_Schools,_Florida,_elections_(2026)"
+  ]
+}
