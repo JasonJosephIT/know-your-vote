@@ -406,3 +406,100 @@ so cost is not the constraint — **evaluability is**. The gold set has not grow
 since 2026-09-18, and every question added since then is unmeasurable against
 it. The highest-value work in this area is no longer taxonomy design; it is
 labelling rows, and §0's point about who labelled them still stands.
+
+---
+
+## 10. Follow-up — taxonomy v7, B7 narrowed to policy (2026-09-22)
+
+**§2's best row is retired, and it was the best row.** `B7` measured 83%
+precision and 96% recall on 25 gold rows and carried **155 of 834 articles**
+in the corpus — 18.6%, several times any other issue. Those numbers were
+real. What they could not say is what the 25 rows are.
+
+### Reading the 25 rows
+
+- **18 are crime blotter with no policy content whatever** — individual
+  arrests and shootings, a road-rage incident involving thrown mayonnaise, a man
+  robbed while buying cooking oil for his brother.
+- **3 are near-duplicate execution-scheduling notices** for one kind of case.
+- **3 are actual policy** (listed below).
+- **1 is a road-safety statistic.**
+
+So 96% recall meant `B7` was excellent at catching crime blotter, and the 83%
+precision was measured against labels that call blotter *"Crime and public
+safety"*. The label invited exactly that: asked whether a shooting relates to
+`crime`, a model correctly says yes.
+
+This is the `KYV4` defect — a label naming the phenomenon rather than the
+policy — at the largest scale in the taxonomy, and the **fifth** instance of
+the same lesson after `B6` (§3), `KYV4` (§7), `A2`/`KYV7` (§8) and `A6` (§9).
+
+### Why it matters more here than anywhere else
+
+This is a nonpartisan voter guide. A feed whose job is "news on the issues you
+picked" would have placed last night's shooting under a political issue heading
+beside candidate names, at roughly a fifth of the feed. What this category owes
+a voter is where candidates stand on policing, courts and sentencing — not the
+crime report.
+
+### The change
+
+`B7` keeps CAP's id and takes the policy half, as `B6` and `A6` did:
+**"Crime policy, policing and courts"**, with aliases naming police funding and
+oversight, sentencing laws, criminal justice reform, the court system, public
+safety budgets, prison policy and fraud enforcement. Bare `crime` is dropped
+rather than reassigned, exactly as bare `development` was in v4 — it is the
+phenomenon, and no sub-issue should ask for it. The `safety` category's bare
+aliases (`police`, `sheriff`, `courts`, `sentencing`) retire with it on that
+same precedent; every one of them appears in routine crime coverage.
+
+### Founder work: 21 of these 25 labels need correcting
+
+**Expect the next run to look like a collapse.** `B7`'s recall against the
+*current* labels should fall to roughly the rows listed as policy below,
+because this change says the other labels are wrong. That is the `B8` situation
+reversed: there the labels were suspect and the model was right; here the model
+was right about the label it was given. **Do not read the drop as a regression
+until these are re-labelled**, and per §0 and recommendation 6 the re-labelling
+is not an agent's to do.
+
+**Keep as `B7` (policy):**
+
+- Axon, Flock questions surface as St. Pete signs off on FY 2027 budget
+- Protecting the protectors: Donald Trump signs Laurel Lee’s prison staff safety measure
+- House passes bills targeting senior scams, federal fraud and data-center power costs
+
+**Re-label to no issue (crime blotter):**
+
+- Arrest made after southwest Miami-Dade teen shot in leg during argument, deputies say
+- Community reacts after man killed during altercation with FDLE agent in southwest Miami-Dade
+- Video shows fight before FDLE agent shot and killed man in SW Miami-Dade
+- Ex-Miami Hurricanes star Mark Pope arrested, accused of pistol-whipping woman
+- Suspect identified in shooting of teen after argument in southwest Miami-Dade, deputies say
+- Deputy opens fire after multiple dogs maul woman in northwest Miami-Dade, MDSO says
+- Cubano de 65 años vuelve a prisión tras grave acusación contra una niña en un Lowe's de Hialeah
+- After ax murder at Palm Harbor home, convicted killer is sentenced
+- Federal indictment accuses Lutz man of financially supporting Hamas
+- Florida woman accused of throwing 'veganaise mayo' at driver in road rage incident
+- $40K+ stolen from Florida man attempting to buy cooking oil for brother
+- Argument between roommates leads to shooting inside Deltona home, deputies say
+- Deltona man arrested in DeLand road rage shooting involving garbage truck driver
+- Fight over drone escalates into murder-for-hire plot in Florida
+- Suspect accused of shooting into roommate's bedroom after dispute, Volusia deputies say
+- 2 arrested after violent motel attack in Kissimmee, officials say
+- Roommate dispute leads to shooting in Deltona, deputies say
+- ICE agent Christian Castro released from Minnesota state custody, pleads not guilty in federal court
+
+**Founder call (case-specific, not clearly policy):**
+
+- DeSantis sets execution of man convicted of killing sheriff’s deputy
+- Execution date set for man convicted of fatally shooting Florida deputy
+- DeSantis Sets Execution of Man Who Killed Indian River Deputy
+- Florida Ranks No. 1 in U.S. for Deadliest Highways, New Study Finds
+
+The three execution notices are one judgment: capital punishment is a policy
+area, but a scheduling notice for a named case is closer to court reporting.
+The highway-safety statistic is arguably road-funding policy rather than crime.
+Both go whichever way the founder reads them; neither is this change's to
+decide.
+
