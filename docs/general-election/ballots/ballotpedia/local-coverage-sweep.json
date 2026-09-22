@@ -1,0 +1,834 @@
+{
+  "source": "Ballotpedia (ballotpedia.org) — Tier 2 corroboration source; acknowledged as a source per founder, 2026-09-22",
+  "retrieved_at": "2026-09-22T00:28:40Z",
+  "index_url": "https://ballotpedia.org/Florida_local_election_coverage,_2026",
+  "pages_read": [
+    "https://ballotpedia.org/Florida_local_election_coverage,_2026",
+    "https://ballotpedia.org/Orange_County,_Florida,_elections,_2026",
+    "https://ballotpedia.org/Hillsborough_County,_Florida,_elections,_2026",
+    "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026",
+    "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026",
+    "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)",
+    "https://ballotpedia.org/Municipal_elections_in_Hillsborough_County,_Florida_(2026)",
+    "https://ballotpedia.org/Municipal_elections_in_Miami-Dade_County,_Florida_(2026)",
+    "https://ballotpedia.org/Municipal_elections_in_Broward_County,_Florida_(2026)",
+    "https://ballotpedia.org/Florida_2026_local_ballot_measures",
+    "https://ballotpedia.org/Local_ballot_measure_elections_in_2026",
+    "https://ballotpedia.org/Hillsborough_County,_Florida_ballot_measures",
+    "https://ballotpedia.org/Miami-Dade_County,_Florida_ballot_measures",
+    "https://ballotpedia.org/Orange_County,_Florida_ballot_measures",
+    "https://ballotpedia.org/Broward_County,_Florida_ballot_measures",
+    "https://ballotpedia.org/Florida_school_board_elections,_2026",
+    "https://ballotpedia.org/Orange_County_Public_Schools,_Florida,_elections_(2026)",
+    "https://ballotpedia.org/Hillsborough_County_Public_Schools,_Florida,_elections_(2026)",
+    "https://ballotpedia.org/Miami-Dade_County_Public_Schools,_Florida,_elections_(2026)",
+    "https://ballotpedia.org/Broward_County_Public_Schools,_Florida,_elections_(2026)",
+    "https://ballotpedia.org/United_States_municipal_elections,_2026",
+    "https://ballotpedia.org/Florida_2026_ballot_measures",
+    "https://ballotpedia.org/Hillsborough_County,_Florida,_Referendum_1,_Require_Elections_for_the_Superintendent_of_Schools_Measure_(November_2026)",
+    "https://ballotpedia.org/Hillsborough_County,_Florida,_Referendum_2,_Increase_Number_of_Members_on_the_Board_of_County_Commissioners_Amendment_(November_2026)",
+    "https://ballotpedia.org/Hillsborough_County,_Florida,_Referendum_3,_Continue_Sales_Tax_Levy_to_Fund_School_Maintenance_and_Repairs_Measure_(November_2026)",
+    "https://ballotpedia.org/Miami,_Florida,_Establish_Advisory_General_Obligation_Bonds_Oversight_Committee_Charter_Amendment_(November_2026)",
+    "https://ballotpedia.org/Miami,_Florida,_Lease_and_Redevelopment_of_Rickenbacker_and_Marine_Stadium_Marinas_Measure_(November_2026)",
+    "https://ballotpedia.org/Miami,_Florida,_Public_Safety_Bond_Measure_(November_2026)"
+  ],
+  "pages_not_read": [
+    {
+      "url": "https://ballotpedia.org/School_board_elections,_2026",
+      "reason": "National index; the Florida-specific page it links (Florida_school_board_elections,_2026) was read instead and lists all four of our districts."
+    }
+  ],
+  "method_notes": [
+    "Ballotpedia has two page families per county: the '<County>, Florida, elections, 2026' overview (tabbed candidate lists) and 'Municipal elections in <County>, Florida (2026)'. They disagree: the Orange and Miami-Dade overview pages omit county-commission contests that the 'Municipal elections in' pages list for Nov 3. Both were read; the union is reported.",
+    "No 'Municipal elections in Broward County, Florida (2026)' page exists (HTTP 404) and Broward is absent from the Florida section of United_States_municipal_elections,_2026. Broward's only Ballotpedia-listed Nov 3 items are Lauderhill city seats and School Board District 6.",
+    "HELD = matches a race_id in the race table or a measure_id in ballot_measure. Items we hold that Ballotpedia does NOT list for Nov 3 are reported under held_but_ballotpedia_lists_no_nov3_contest — for the race-by-race agent, not corrected here.",
+    "Crawl-delay respected: pages fetched in small batches via Firecrawl with maxAge 0."
+  ],
+  "counties": {
+    "Orange": {
+      "ballotpedia_urls": [
+        "https://ballotpedia.org/Orange_County,_Florida,_elections,_2026",
+        "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)",
+        "https://ballotpedia.org/Orange_County_Public_Schools,_Florida,_elections_(2026)",
+        "https://ballotpedia.org/Orange_County,_Florida_ballot_measures"
+      ],
+      "held": [
+        {
+          "race_id": "FL-ORA-MAYOR-general",
+          "ballotpedia_office": "Mayor of Orange County (Chris Messina, Tiffany Moore Russell)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)"
+        },
+        {
+          "race_id": "FL-ORA-CLERK-general",
+          "ballotpedia_office": "Orange County Clerk of the Courts (Special) (Roberta Walton Johnson (D), Terrell Thomas (NPA))",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)"
+        },
+        {
+          "race_id": "FL-ORA-CC2-general",
+          "ballotpedia_office": "Orange County Commission District 2 (Kamia Brown, Mike Crabb)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)",
+          "note": "Listed only on the 'Municipal elections in Orange County' page, not on the county overview page."
+        },
+        {
+          "race_id": "FL-ORA-CC4-general",
+          "ballotpedia_office": "Orange County Commission District 4 (Brian Jones, Johanna López, Isabella Arthur (Write-in))",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)",
+          "note": "Same; note Ballotpedia lists a write-in, Isabella Arthur."
+        },
+        {
+          "race_id": "FL-ORA-CC6-general",
+          "ballotpedia_office": "Orange County Commission District 6 (Michael Scott (i), Lawanna Gelzer)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)",
+          "note": "Municipal-elections page only."
+        },
+        {
+          "race_id": "FL-ORA-CC7-general",
+          "ballotpedia_office": "Orange County Commission District 7 (Patricia Rumph, Vicki Vargo)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)",
+          "note": "Municipal-elections page only."
+        },
+        {
+          "race_id": "FL-ORA-CC8-general",
+          "ballotpedia_office": "Orange County Commission District 8 (Jeannette Quinones Hernandez, Victor Torres)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)",
+          "note": "Municipal-elections page only."
+        },
+        {
+          "race_id": "FL-ORA-SB3-general",
+          "ballotpedia_office": "Orange County Public Schools school board District 3 (Diana Moore, Susanne Marie Pena)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Orange_County_Public_Schools,_Florida,_elections_(2026)"
+        }
+      ],
+      "held_but_ballotpedia_lists_no_nov3_contest": [
+        {
+          "race_id": "FL-ORA-SBCHAIR-general",
+          "ballotpedia_says": "Nonpartisan primary Aug 18: Angie Gallo 59.1% (checkmark), Alicia K. Farrant 40.9%; no general election section.",
+          "url": "https://ballotpedia.org/Orange_County_Public_Schools,_Florida,_elections_(2026)"
+        },
+        {
+          "race_id": "FL-ORA-SB1-general",
+          "ballotpedia_says": "Aug 18 primary: Melissa Lopez Marantes 59.6% (checkmark), David Shepard 40.4%; no general election section.",
+          "url": "https://ballotpedia.org/Orange_County_Public_Schools,_Florida,_elections_(2026)"
+        },
+        {
+          "race_id": "FL-ORA-SB2-general",
+          "ballotpedia_says": "Aug 18 primary: Gloria Reina O'Neal 57.3% (checkmark), Marisol Lugo 42.7%; no general election section.",
+          "url": "https://ballotpedia.org/Orange_County_Public_Schools,_Florida,_elections_(2026)"
+        }
+      ],
+      "not_held": [
+        {
+          "kind": "county",
+          "name": "Orange County Soil and Water Conservation District, District 1",
+          "geography": "Orange County (countywide special district)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)",
+          "candidates_listed": [
+            "Quinnie Perez",
+            "Vicente Perez Carreno",
+            "Doug Sahr"
+          ]
+        },
+        {
+          "kind": "county",
+          "name": "Orange County Soil and Water Conservation District, District 3",
+          "geography": "Orange County",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)",
+          "candidates_listed": [
+            "Chuck Drake",
+            "Erik Melear",
+            "José Rodriguez",
+            "Kassanndra Santiago"
+          ]
+        },
+        {
+          "kind": "county",
+          "name": "Orange County Soil and Water Conservation District, District 5",
+          "geography": "Orange County",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)",
+          "candidates_listed": [
+            "Zack Green",
+            "Jimm Middleton"
+          ]
+        },
+        {
+          "kind": "county",
+          "name": "Florida 9th Circuit Court, Group 1 (judicial)",
+          "geography": "9th Judicial Circuit (Orange + Osceola)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Orange_County,_Florida,_elections,_2026",
+          "candidates_listed": [
+            "Temika Hampton-Johnson",
+            "Charles Hart"
+          ],
+          "note": "Contested judicial runoff after Aug 18 three-way primary (Mikaela Nix eliminated)."
+        },
+        {
+          "kind": "county",
+          "name": "Orange County Court Groups 2, 3, 7, 10, 15, 16, 20 (judicial)",
+          "geography": "Orange County",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Orange_County,_Florida,_elections,_2026",
+          "candidates_listed": [
+            "one candidate each: Jeramy Beasley; Ayana Barrow; Jeanette Bigney; Tina Caraballo; Brian Duckworth; Carly Wish; Heather G. Guarch"
+          ],
+          "note": "Judicial; single candidate listed by Ballotpedia. Under Fla. Stat. 105.051 an unopposed judicial candidate is deemed elected and does not appear on the ballot; Ballotpedia still files the seat under the Nov 3 general."
+        },
+        {
+          "kind": "county",
+          "name": "Florida 9th Circuit Court Groups 6, 8, 10, 12, 16, 18, 21, 22, 23, 24, 30, 32, 33, 34, 35, 36, 39, 40, 42 (judicial)",
+          "geography": "9th Judicial Circuit",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Orange_County,_Florida,_elections,_2026",
+          "candidates_listed": [
+            "one candidate each"
+          ],
+          "note": "Judicial; single candidate listed by Ballotpedia. Under Fla. Stat. 105.051 an unopposed judicial candidate is deemed elected and does not appear on the ballot; Ballotpedia still files the seat under the Nov 3 general."
+        }
+      ],
+      "measures": [],
+      "measures_note": "Ballotpedia lists no Orange County or Orlando local measure for any 2026 date; Orange_County,_Florida_ballot_measures has no 2026 section (latest is 2024). Orlando is inside Ballotpedia's 100-largest-cities scope, so an Orange County countywide or City of Orlando measure would be in scope if Ballotpedia had found one. Absence here is weak evidence, not proof."
+    },
+    "Hillsborough": {
+      "ballotpedia_urls": [
+        "https://ballotpedia.org/Hillsborough_County,_Florida,_elections,_2026",
+        "https://ballotpedia.org/Municipal_elections_in_Hillsborough_County,_Florida_(2026)",
+        "https://ballotpedia.org/Hillsborough_County_Public_Schools,_Florida,_elections_(2026)",
+        "https://ballotpedia.org/Hillsborough_County,_Florida_ballot_measures"
+      ],
+      "held": [
+        {
+          "race_id": "FL-HIL-CC1-general",
+          "ballotpedia_office": "Hillsborough County Commission District 1 (Harry Cohen (D, i), Jackie Toledo (R))",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Hillsborough_County,_Florida_(2026)",
+          "note": "Listed only on the 'Municipal elections in Hillsborough County' page; the county overview page lists only Districts 5 and 7 for Nov 3."
+        },
+        {
+          "race_id": "FL-HIL-CC3-general",
+          "ballotpedia_office": "Hillsborough County Commission District 3 (Gwen Myers (D, i), Luiz Garcia (R))",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Hillsborough_County,_Florida_(2026)",
+          "note": "Municipal-elections page only."
+        },
+        {
+          "race_id": "FL-HIL-CC5-general",
+          "ballotpedia_office": "Hillsborough County Board of Commissioners District 5 At-large (Neil Manimala (D), Stacy Hahn (R))",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Hillsborough_County,_Florida,_elections,_2026"
+        },
+        {
+          "race_id": "FL-HIL-CC7-general",
+          "ballotpedia_office": "Hillsborough County Board of Commissioners District 7 At-large (Aileen Rodriguez (D), Joshua Wostal (R, i))",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Hillsborough_County,_Florida,_elections,_2026"
+        },
+        {
+          "race_id": "FL-HIL-SB2-general",
+          "ballotpedia_office": "Hillsborough County Public Schools Board of Education District 2 (Brittany Lyssy, Daniela Simic)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Hillsborough_County_Public_Schools,_Florida,_elections_(2026)"
+        },
+        {
+          "race_id": "FL-HIL-SB6-general",
+          "ballotpedia_office": "Hillsborough County Public Schools Board of Education District 6 At-large (Karen Perez (i), Kenneth Gay)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Hillsborough_County_Public_Schools,_Florida,_elections_(2026)"
+        }
+      ],
+      "held_but_ballotpedia_lists_no_nov3_contest": [
+        {
+          "race_id": "FL-HIL-SB4-general",
+          "ballotpedia_says": "District 4: only Patricia Rendon listed, under the Aug 18 primary; General election section is empty.",
+          "url": "https://ballotpedia.org/Hillsborough_County_Public_Schools,_Florida,_elections_(2026)"
+        }
+      ],
+      "not_held": [
+        {
+          "kind": "county",
+          "name": "Hillsborough Soil and Water Conservation District Seats 1 and 5",
+          "geography": "Hillsborough County",
+          "nov3_confirmed": false,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Hillsborough_County,_Florida_(2026)",
+          "candidates_listed": [
+            "Terri Parke (i)",
+            "Matt Shivers (i)"
+          ],
+          "note": "Ballotpedia: 'The general election was canceled and this candidate was elected.' Seats 3 and 4: 'This general election was canceled.' Not on the Nov 3 ballot per Ballotpedia."
+        },
+        {
+          "kind": "county",
+          "name": "Florida 13th Circuit Court Groups 1, 2, 5, 8, 9, 10, 11, 15, 19, 20, 21, 26, 27, 29, 30, 31, 33, 34, 35, 38, 39, 40, 41 (judicial)",
+          "geography": "13th Judicial Circuit (Hillsborough)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Hillsborough_County,_Florida,_elections,_2026",
+          "candidates_listed": [
+            "one candidate each"
+          ],
+          "note": "Judicial; single candidate listed by Ballotpedia. Under Fla. Stat. 105.051 an unopposed judicial candidate is deemed elected and does not appear on the ballot; Ballotpedia still files the seat under the Nov 3 general."
+        },
+        {
+          "kind": "county",
+          "name": "Hillsborough County Court Groups 7, 9, 13, 16, 17, 18, 20, 24, 25 (judicial)",
+          "geography": "Hillsborough County",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Hillsborough_County,_Florida,_elections,_2026",
+          "candidates_listed": [
+            "one candidate each"
+          ],
+          "note": "Judicial; single candidate listed by Ballotpedia. Under Fla. Stat. 105.051 an unopposed judicial candidate is deemed elected and does not appear on the ballot; Ballotpedia still files the seat under the Nov 3 general."
+        }
+      ],
+      "measures": [
+        {
+          "title": "Hillsborough County, Florida, Referendum 1, Require Elections for the Superintendent of Schools Measure (November 2026)",
+          "ballot_title": "Shall Chapter 2026-196, Laws of Florida, which provides that the Superintendent of Schools for Hillsborough County Public Schools shall no longer be appointed by the School Board, but shall be elected in a partisan election for a term of 4 years, beginning with the 2028 general election, become effective?",
+          "geography": "Hillsborough County (countywide)",
+          "type": "Referral; subject: Elections / school governance",
+          "threshold": "simple majority",
+          "placed_by": "vote of the governing body of Hillsborough County (per Ballotpedia)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Hillsborough_County,_Florida,_Referendum_1,_Require_Elections_for_the_Superintendent_of_Schools_Measure_(November_2026)"
+        },
+        {
+          "title": "Hillsborough County, Florida, Referendum 2, Increase Number of Members on the Board of County Commissioners Amendment (November 2026)",
+          "ballot_title": "Shall the Hillsborough County Charter be amended to increase the number of members of board of county commissioners from 7 to 9 members, with an increase to 11 members once the county has a population of at least 2,500,000, require all county commissioners to be elected to office from single-member districts by electors residing in each of those districts only?",
+          "geography": "Hillsborough County (countywide)",
+          "type": "Referral; county charter amendment",
+          "threshold": "simple majority",
+          "placed_by": "vote of the governing body of Hillsborough County (per Ballotpedia)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Hillsborough_County,_Florida,_Referendum_2,_Increase_Number_of_Members_on_the_Board_of_County_Commissioners_Amendment_(November_2026)"
+        },
+        {
+          "title": "Hillsborough County, Florida, Referendum 3, Continue Sales Tax Levy to Fund School Maintenance and Repairs Measure (November 2026)",
+          "ballot_title": "Shall a one-half cent school capital outlay sales surtax be continued for a ten (10) year levy by the School Board of Hillsborough County beginning January 1, 2029, to fund air conditioning replacement and repairs, capital improvements and construction of other schools, building enhancements for school security and other maintenance needs?",
+          "geography": "Hillsborough County (countywide; school district)",
+          "type": "Referral; sales tax / county tax",
+          "threshold": "simple majority",
+          "placed_by": "vote of the governing body of Hillsborough County (per Ballotpedia)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Hillsborough_County,_Florida,_Referendum_3,_Continue_Sales_Tax_Levy_to_Fund_School_Maintenance_and_Repairs_Measure_(November_2026)",
+          "note": "Ballotpedia's own summaries of this measure are inconsistent: the state index says 'Extend the one-half cent sales tax to fund school repairs and maintenance'; the county measures page's yes/no text describes renewing 'the existing half-cent Community Investment sales tax from December 1, 2026, through December 31, 2041' shared among county, municipalities and school board. The ballot title on the measure page (quoted above) is the school capital outlay surtax beginning 2029. Verify against the Hillsborough SOE sample ballot."
+        }
+      ]
+    },
+    "Miami-Dade": {
+      "ballotpedia_urls": [
+        "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026",
+        "https://ballotpedia.org/Municipal_elections_in_Miami-Dade_County,_Florida_(2026)",
+        "https://ballotpedia.org/Miami-Dade_County_Public_Schools,_Florida,_elections_(2026)",
+        "https://ballotpedia.org/Miami-Dade_County,_Florida_ballot_measures"
+      ],
+      "held": [
+        {
+          "race_id": "FL-DAD-CC5-general",
+          "ballotpedia_office": "Miami-Dade County Commission District 5 (Vicki Lopez (i), Rob Piper III)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Miami-Dade_County,_Florida_(2026)",
+          "note": "Listed only on the 'Municipal elections in Miami-Dade County' page; the county overview page has no County elections section at all."
+        },
+        {
+          "race_id": "FL-DAD-SB1-general",
+          "ballotpedia_office": "Miami-Dade County Public Schools school board District 1 (Special) (Linda Cothiere, Katrina Wilson)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Miami-Dade_County_Public_Schools,_Florida,_elections_(2026)"
+        }
+      ],
+      "held_but_ballotpedia_lists_no_nov3_contest": [
+        {
+          "race_id": "FL-DAD-CC2-general",
+          "ballotpedia_says": "District 2: 'This general election was canceled.' Aug 18 primary listed Marleine Bastien (i), Ernst Jean, Miguel Quintero.",
+          "url": "https://ballotpedia.org/Municipal_elections_in_Miami-Dade_County,_Florida_(2026)"
+        },
+        {
+          "race_id": "FL-DAD-SB2-general",
+          "ballotpedia_says": "District 2: only Dorothy Bendross-Mindingall listed, under Aug 18 primary; General election section empty.",
+          "url": "https://ballotpedia.org/Miami-Dade_County_Public_Schools,_Florida,_elections_(2026)"
+        },
+        {
+          "race_id": "FL-DAD-SB8-general",
+          "ballotpedia_says": "District 8: Aug 18 primary Monica Colucci (i) 100.0%, Samuel Joseph (Write-in) 0; General election section empty.",
+          "url": "https://ballotpedia.org/Miami-Dade_County_Public_Schools,_Florida,_elections_(2026)"
+        }
+      ],
+      "not_held": [
+        {
+          "kind": "county",
+          "name": "Florida 11th Circuit Court, Group 5 (judicial)",
+          "geography": "11th Judicial Circuit (Miami-Dade)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026",
+          "candidates_listed": [
+            "Arthur McNeil",
+            "Monica Segura"
+          ],
+          "note": "Contested runoff after Aug 18 three-way primary (Alex Annunziato eliminated)."
+        },
+        {
+          "kind": "county",
+          "name": "Florida 11th Circuit Court, Group 69 (judicial)",
+          "geography": "11th Judicial Circuit (Miami-Dade)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026",
+          "candidates_listed": [
+            "Rita Maria Baez",
+            "Bonita Jones-Peabody"
+          ],
+          "note": "Contested runoff after Aug 18 three-way primary (Yaneth Baez eliminated)."
+        },
+        {
+          "kind": "county",
+          "name": "Florida 11th Circuit Court Groups 1, 11, 17, 18, 19, 21, 22, 23, 27, 28, 30, 33, 37, 38, 44, 48, 50, 55, 57, 60, 65, 70, 72, 73, 75, 77, 79 (judicial)",
+          "geography": "11th Judicial Circuit",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026",
+          "candidates_listed": [
+            "one candidate each"
+          ],
+          "note": "Judicial; single candidate listed by Ballotpedia. Under Fla. Stat. 105.051 an unopposed judicial candidate is deemed elected and does not appear on the ballot; Ballotpedia still files the seat under the Nov 3 general."
+        },
+        {
+          "kind": "county",
+          "name": "Miami-Dade County Court Groups 5, 8, 9, 16, 17, 20, 30, 34, 36, 38 (judicial)",
+          "geography": "Miami-Dade County",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026",
+          "candidates_listed": [
+            "one candidate each"
+          ],
+          "note": "Judicial; single candidate listed by Ballotpedia. Under Fla. Stat. 105.051 an unopposed judicial candidate is deemed elected and does not appear on the ballot; Ballotpedia still files the seat under the Nov 3 general."
+        },
+        {
+          "kind": "county",
+          "name": "Midtown Miami Community Development District Seats 1, 2, 3",
+          "geography": "Midtown Miami CDD (special district)",
+          "nov3_confirmed": false,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Miami-Dade_County,_Florida_(2026)",
+          "candidates_listed": [
+            "Joseph Padula (i)",
+            "Jennifer Skordilis (i)",
+            "Alex Miranda (i)"
+          ],
+          "note": "Ballotpedia: general election canceled, candidates elected."
+        },
+        {
+          "kind": "county",
+          "name": "Miami-Dade County Commission Districts 1, 4, 6, 8, 10, 12",
+          "geography": "Miami-Dade County",
+          "nov3_confirmed": false,
+          "url": "https://ballotpedia.org/Municipal_elections_in_Miami-Dade_County,_Florida_(2026)",
+          "note": "Ballotpedia: general election canceled (1, 4, 6, 10, 12 elected outright: Steve Gallon; Micky Steinberg (i); Natalie Milian Orbis (i); Anthony Rodriguez (i); Juan Carlos Bermudez (i); District 8 'This general election was canceled')."
+        }
+      ],
+      "measures": [
+        {
+          "title": "Miami, Florida, Establish Advisory General Obligation Bonds Oversight Committee Charter Amendment (November 2026)",
+          "ballot_title": "Shall the City of Miami Charter be amended to establish a permanent advisory General Obligation Bond Oversight Committee to provide for transparency and oversight, and with the authority to monitor and publicly report on the status, cost, timeline, and remaining or available funds for all active capital projects funded with general obligation bonds issued by the City of Miami?",
+          "geography": "City of Miami only (municipal)",
+          "type": "Referral; city charter amendment",
+          "threshold": "simple majority",
+          "placed_by": "vote of the governing body of Miami (per Ballotpedia)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Miami,_Florida,_Establish_Advisory_General_Obligation_Bonds_Oversight_Committee_Charter_Amendment_(November_2026)"
+        },
+        {
+          "title": "Miami, Florida, Lease and Redevelopment of Rickenbacker and Marine Stadium Marinas Measure (November 2026)",
+          "ballot_title": "Shall City lease approximately 27.62 acres on Virginia Key to Virginia Key, LLC for: 45-year initial term with two 15-year renewals; Minimum annual guaranteed rent to City of $2,200,000 (with escalations) totaling approximately $203,980,000 over the initial term plus 6% of gross revenues; Approximately $80,000,000 privately funded investment to redevelop existing Rickenbacker and Marine Stadium marinas in an environmentally sensitive manner, including boat storage, restaurants, retail, and public parking?",
+          "geography": "City of Miami only (municipal)",
+          "type": "Referral; zoning / land use / lease",
+          "threshold": "simple majority",
+          "placed_by": "vote of the governing body of Miami (per Ballotpedia)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Miami,_Florida,_Lease_and_Redevelopment_of_Rickenbacker_and_Marine_Stadium_Marinas_Measure_(November_2026)"
+        },
+        {
+          "title": "Miami, Florida, Public Safety Bond Measure (November 2026)",
+          "ballot_title": "To enhance citywide public safety by improving critically deteriorating facilities for firefighters and paramedics through renovations, modernizations, and new construction, and by building a modern, mission-ready public safety headquarters for police and first responders, shall the City of Miami issue $450 million in General Obligation Bonds, within maximum lawful interest rates, payable from ad valorem taxes, with no increase to the current capital projects debt millage rate (0.5935), and an independent annual audit? FOR BONDS / AGAINST BONDS",
+          "geography": "City of Miami only (municipal)",
+          "type": "Referral; city general obligation bond ($450 million)",
+          "threshold": "simple majority",
+          "placed_by": "vote of the governing body of Miami (per Ballotpedia)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Miami,_Florida,_Public_Safety_Bond_Measure_(November_2026)"
+        }
+      ],
+      "measures_note": "No Miami-Dade countywide measure is listed for Nov 3. Two City of Miami referendums (Aug 18) and one Coral Gables charter amendment (Apr 21) were decided earlier in 2026 and are excluded."
+    },
+    "Broward": {
+      "ballotpedia_urls": [
+        "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026",
+        "https://ballotpedia.org/Broward_County_Public_Schools,_Florida,_elections_(2026)",
+        "https://ballotpedia.org/Broward_County,_Florida_ballot_measures"
+      ],
+      "held": [
+        {
+          "race_id": "FL-BRO-SB6-general",
+          "ballotpedia_office": "Broward County Public Schools school board District 6 (Adam Cervera (i), Roberto Fernandez)",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Broward_County_Public_Schools,_Florida,_elections_(2026)"
+        }
+      ],
+      "held_but_ballotpedia_lists_no_nov3_contest": [
+        {
+          "race_id": "FL-BRO-CC2-general",
+          "ballotpedia_says": "Not listed anywhere for 2026. Only Broward County Commission contest on Ballotpedia is District 6 under the Aug 18 primary.",
+          "url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026"
+        },
+        {
+          "race_id": "FL-BRO-CC4-general",
+          "ballotpedia_says": "Not listed anywhere for 2026.",
+          "url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026"
+        },
+        {
+          "race_id": "FL-BRO-CC6-general",
+          "ballotpedia_says": "Listed under Aug 18 primary only (Eugen Mihai Bold, Jeffery Jones, Archibald John Ryan IV, Caryl Sandler Shuham); no Nov 3 entry.",
+          "url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026"
+        },
+        {
+          "race_id": "FL-BRO-CC8-general",
+          "ballotpedia_says": "Not listed anywhere for 2026.",
+          "url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026"
+        },
+        {
+          "race_id": "FL-BRO-SB1-general",
+          "ballotpedia_says": "Aug 18 primary: Maura McCarthy Bulman (i) 71.5% (checkmark), Carmen Gimenez 28.5%; no general election section.",
+          "url": "https://ballotpedia.org/Broward_County_Public_Schools,_Florida,_elections_(2026)"
+        },
+        {
+          "race_id": "FL-BRO-SB4-general",
+          "ballotpedia_says": "Aug 18 primary: Nicole Morst 59.7% (checkmark), Sharry Kimmel 40.3%; no general election section.",
+          "url": "https://ballotpedia.org/Broward_County_Public_Schools,_Florida,_elections_(2026)"
+        },
+        {
+          "race_id": "FL-BRO-SB7-general",
+          "ballotpedia_says": "Aug 18 primary: Cynthia Alceus Dominique 59.7% (checkmark), Rochelle Soffer 40.3%; no general election section.",
+          "url": "https://ballotpedia.org/Broward_County_Public_Schools,_Florida,_elections_(2026)"
+        },
+        {
+          "race_id": "FL-BRO-SBAL8-general",
+          "ballotpedia_says": "Aug 18 primary: Allen Zeman (i) 55.1% (checkmark), Sonja Azim 44.9%; no general election section.",
+          "url": "https://ballotpedia.org/Broward_County_Public_Schools,_Florida,_elections_(2026)"
+        }
+      ],
+      "not_held": [
+        {
+          "kind": "municipal",
+          "name": "Lauderhill City Commissioner Board Seat 4",
+          "geography": "City of Lauderhill, Broward County",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026",
+          "candidates_listed": [
+            "Richard Campbell",
+            "Tiffany Jackson"
+          ]
+        },
+        {
+          "kind": "municipal",
+          "name": "Lauderhill City Commissioner Board Seat 5 (Mayor)",
+          "geography": "City of Lauderhill, Broward County",
+          "nov3_confirmed": true,
+          "url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026",
+          "candidates_listed": [
+            "Ishmel Brown"
+          ],
+          "note": "Single candidate listed."
+        },
+        {
+          "kind": "county",
+          "name": "Florida 17th Circuit Court Group 52 and Broward County Court Group 11 (judicial)",
+          "geography": "17th Judicial Circuit / Broward County",
+          "nov3_confirmed": false,
+          "url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026",
+          "candidates_listed": [
+            "Group 52: David Andrew Fry, Tamar Hamilton, Kathleen O'Brien Hinkle",
+            "Group 11: Debi Gheorge Alten, Veronica N. Walker"
+          ],
+          "note": "Ballotpedia lists these under the Aug 18 primary only; no Nov 3 entry, although a 3-way Group 52 primary would normally produce a Nov runoff. Ballotpedia's Broward coverage is thin."
+        }
+      ],
+      "measures": [],
+      "measures_note": "Ballotpedia lists no Broward County or Broward-municipal measure for any 2026 date; Broward_County,_Florida_ballot_measures has no 2026 section (latest is 2013). Fort Lauderdale is not among the 100 largest U.S. cities, so Broward local measures fall outside Ballotpedia's stated 2026 scope unless electoral-system or data-center related. 'Nothing listed' here says nothing about the actual Broward ballot."
+    }
+  },
+  "statewide_measures_seen": [
+    {
+      "ballotpedia_name": "Florida Amendment 3, Homestead Tax Exemptions, Property Assessments, and Spending Restrictions Amendment (2026)",
+      "type": "LRCA",
+      "status": "HELD as FL-AM3-general",
+      "url": "https://ballotpedia.org/Florida_Amendment_3,_Homestead_Tax_Exemptions,_Property_Assessments,_and_Spending_Restrictions_Amendment_(2026)"
+    },
+    {
+      "ballotpedia_name": "Florida Changes to Budget Stabilization Fund Amendment (2026)",
+      "type": "LRCA",
+      "status": "HELD as FL-AM1-general",
+      "url": "https://ballotpedia.org/Florida_Changes_to_Budget_Stabilization_Fund_Amendment_(2026)"
+    },
+    {
+      "ballotpedia_name": "Florida Exempt Tangible Personal Property Used for Agriculture or Agritourism from Property Taxes Amendment (2026)",
+      "type": "LRCA",
+      "status": "HELD as FL-AM2-general",
+      "url": "https://ballotpedia.org/Florida_Exempt_Tangible_Personal_Property_Used_for_Agriculture_or_Agritourism_from_Property_Taxes_Amendment_(2026)"
+    },
+    {
+      "note": "Florida_2026_ballot_measures 'On the ballot' table holds exactly these three; everything else on that page (e.g. County Commissioner and School Board Member Term Limits Amendment, Marijuana Legalization Initiative) is under 'Not on the ballot'. Ballotpedia only numbers Amendment 3; our numbering 1/2/3 comes from the Division of Elections booklet.",
+      "url": "https://ballotpedia.org/Florida_2026_ballot_measures"
+    }
+  ],
+  "municipal": {
+    "index_url": "https://ballotpedia.org/United_States_municipal_elections,_2026#Florida",
+    "florida_section_lists": [
+      "Jacksonville (city page)",
+      "St. Petersburg (city page)",
+      "Tallahassee (city page)",
+      "Hillsborough County (Municipal_elections_in_ page)",
+      "Miami-Dade County (Municipal_elections_in_ page)",
+      "Orange County (Municipal_elections_in_ page)",
+      "Pinellas County (Municipal_elections_in_ page)"
+    ],
+    "on_nov3": [
+      {
+        "city": "Lauderhill",
+        "county": "Broward",
+        "office": "City Commissioner Board Seat 4 (council seat)",
+        "election_date": "2026-11-03",
+        "candidates": [
+          "Richard Campbell",
+          "Tiffany Jackson"
+        ],
+        "url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Lauderhill",
+        "county": "Broward",
+        "office": "City Commissioner Board Seat 5 (Mayor)",
+        "election_date": "2026-11-03",
+        "candidates": [
+          "Ishmel Brown"
+        ],
+        "url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026"
+      }
+    ],
+    "not_on_nov3": [
+      {
+        "city": "Apopka",
+        "county": "Orange",
+        "office": "Mayor",
+        "election_date": "2026-03-10 (General); 2026-04-14 (General runoff: Christine Moore, Nicholas L. Nesta III)",
+        "url": "https://ballotpedia.org/Orange_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Apopka",
+        "county": "Orange",
+        "office": "City Council Seat 1",
+        "election_date": "2026-03-10",
+        "url": "https://ballotpedia.org/Orange_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Apopka",
+        "county": "Orange",
+        "office": "City Council Seat 2",
+        "election_date": "2026-03-10",
+        "url": "https://ballotpedia.org/Orange_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Apopka",
+        "county": "Orange",
+        "office": "City Council Seat 4",
+        "election_date": "2026-03-10",
+        "url": "https://ballotpedia.org/Orange_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Maitland",
+        "county": "Orange",
+        "office": "City Council Seat 2",
+        "election_date": "2026-03-10",
+        "url": "https://ballotpedia.org/Orange_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Oakland",
+        "county": "Orange",
+        "office": "City Council Seat 4",
+        "election_date": "2026-03-10",
+        "url": "https://ballotpedia.org/Orange_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Eatonville",
+        "county": "Orange",
+        "office": "Town Council Seat 1 (Mayor)",
+        "election_date": "2026-03-07",
+        "url": "https://ballotpedia.org/Orange_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Eatonville",
+        "county": "Orange",
+        "office": "Town Council Seat 2",
+        "election_date": "2026-03-07",
+        "url": "https://ballotpedia.org/Orange_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Eatonville",
+        "county": "Orange",
+        "office": "Town Council Seat 3",
+        "election_date": "2026-03-07",
+        "url": "https://ballotpedia.org/Orange_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Plant City",
+        "county": "Hillsborough",
+        "office": "City Commissioner Board Group 3",
+        "election_date": "2026-04-07 (General); 2026-05-26 (General runoff: Karen Kerr, Tony Smith)",
+        "url": "https://ballotpedia.org/Hillsborough_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Plant City",
+        "county": "Hillsborough",
+        "office": "City Commissioner Board Group 4",
+        "election_date": "2026-04-07 (General); 2026-05-26 (General runoff: John Haney, Camryn Henry)",
+        "url": "https://ballotpedia.org/Hillsborough_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Miami Gardens",
+        "county": "Miami-Dade",
+        "office": "City Council Seat 2",
+        "election_date": "2026-08-18 (Primary); no Nov 3 entry on Ballotpedia",
+        "url": "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Miami Gardens",
+        "county": "Miami-Dade",
+        "office": "City Council Seat 4",
+        "election_date": "2026-08-18 (Primary); no Nov 3 entry on Ballotpedia",
+        "url": "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Bay Harbor Islands",
+        "county": "Miami-Dade",
+        "office": "Town Council At-large",
+        "election_date": "2026-04-14",
+        "url": "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "West Miami",
+        "county": "Miami-Dade",
+        "office": "Mayor",
+        "election_date": "2026-04-14",
+        "url": "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "West Miami",
+        "county": "Miami-Dade",
+        "office": "City Commissioner Board Seat 1",
+        "election_date": "2026-04-14",
+        "url": "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "West Miami",
+        "county": "Miami-Dade",
+        "office": "City Commissioner Board Seat 2",
+        "election_date": "2026-04-14",
+        "url": "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "West Miami",
+        "county": "Miami-Dade",
+        "office": "City Commissioner Board Seat 4 (Special)",
+        "election_date": "2026-04-14",
+        "url": "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Surfside",
+        "county": "Miami-Dade",
+        "office": "Mayor",
+        "election_date": "2026-03-17 (General); 2026-04-07 (General runoff: Shlomo Danzinger, Tina Paul)",
+        "url": "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Florida City",
+        "county": "Miami-Dade",
+        "office": "Mayor",
+        "election_date": "2026-01-27 (General); 2026-02-17 (General runoff: Sharon Smith-Butler, Charlotte Thompson)",
+        "url": "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Florida City",
+        "county": "Miami-Dade",
+        "office": "City Commission Board At-large (Special)",
+        "election_date": "2026-01-27 (General); 2026-02-17 (General runoff: James Brady, Trina Wilborn)",
+        "url": "https://ballotpedia.org/Miami-Dade_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Pembroke Pines",
+        "county": "Broward",
+        "office": "City Commissioner Board District 1",
+        "election_date": "2026-03-10",
+        "url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026"
+      },
+      {
+        "city": "Pembroke Pines",
+        "county": "Broward",
+        "office": "City Commission District 4",
+        "election_date": "2026-03-10",
+        "url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026"
+      }
+    ],
+    "cities_ballotpedia_covers_in_our_counties": {
+      "Orange": [
+        "Apopka",
+        "Maitland",
+        "Oakland",
+        "Eatonville"
+      ],
+      "Hillsborough": [
+        "Plant City"
+      ],
+      "Miami-Dade": [
+        "Miami Gardens",
+        "Bay Harbor Islands",
+        "West Miami",
+        "Surfside",
+        "Florida City",
+        "Miami (ballot measures only; no 2026 city-office contest)"
+      ],
+      "Broward": [
+        "Lauderhill",
+        "Pembroke Pines"
+      ]
+    },
+    "big_five_cities_2026_status": {
+      "note": "None of Orlando, Tampa, Miami, Hialeah or Fort Lauderdale appears in the Florida section of United_States_municipal_elections,_2026, and none appears under 'City and township elections' on its county overview page. A site search for their city-election pages returned only prior/odd-year pages, listed here for the founder's odd-year-pattern question. These are search results, not pages read in full.",
+      "Orlando": {
+        "most_recent_page_seen": "https://ballotpedia.org/City_elections_in_Orlando,_Florida_(2025)",
+        "snippet": "General election: November 4, 2025; Offices up: City council; Total seats up: 3."
+      },
+      "Miami": {
+        "most_recent_page_seen": "https://ballotpedia.org/City_elections_in_Miami,_Florida_(2025)",
+        "snippet": "held general elections for mayor and city commission on November 4, 2025. Nov 2026 has three City of Miami ballot measures (see Miami-Dade measures) but no city-office contest; the Aug 18, 2026 Referendum 1 moving city elections to even years starting 2034/2036 was approved 60-40."
+      },
+      "Hialeah": {
+        "most_recent_page_seen": "https://ballotpedia.org/City_elections_in_Hialeah,_Florida_(2025)",
+        "snippet": "held general elections for mayor and city council on December 9, 2025."
+      },
+      "Tampa": {
+        "most_recent_page_seen": "https://ballotpedia.org/Tampa,_Florida",
+        "snippet": "Ballotpedia's Tampa page references City elections in Tampa, Florida (2023) as the latest city election."
+      },
+      "Fort Lauderdale": {
+        "most_recent_page_seen": null,
+        "snippet": "No Fort Lauderdale city-election page surfaced in the search; Fort Lauderdale is not within Ballotpedia's 100-largest-cities scope."
+      }
+    }
+  },
+  "ballotpedia_scope_caveat": "Local measures (Florida_2026_local_ballot_measures and each county measures page): \"In 2026, Ballotpedia is covering local ballot measures that appear on the ballot for voters within the 100 largest cities in the U.S., within state capitals, and throughout California and Virginia. Ballotpedia is also covering local ballot measures related to electoral systems, like ranked-choice voting, and data centers outside of the largest cities.\" Municipal (United_States_municipal_elections,_2026): \"Ballotpedia is covering municipal elections in 81 counties and 89 cities, including 33 mayoral elections, in 2026. As of 2026, Ballotpedia's coverage scope for local elections includes elections on the ballot in the 100 largest U.S. cities by population, as well as elections for mayors, city council members, and district attorneys in each state capital.\" School boards (Florida_school_board_elections,_2026): \"The following table lists districts that overlap with the nation's 100 largest cities or that are among the nation's 200 largest school districts and for which Ballotpedia provides comprehensive coverage.\" County candidate tables carry: \"The candidate list in this election may not be complete.\" Ballotpedia's own county-overview pages also say: \"These pages do not provide election results.\"",
+  "scope_implication": "Orlando, Tampa and Miami sit inside the 100-largest-cities scope, so Orange, Hillsborough and Miami-Dade countywide measures are in scope and Ballotpedia's silence on Orange and Miami-Dade countywide measures is mildly informative. Broward has no city in that scope, so Ballotpedia's silence on Broward measures, Broward County Commission Nov 3 contests, and Broward municipalities (other than Lauderhill and Pembroke Pines) is uninformative and must be resolved against the Broward SOE sample ballot."
+}
