@@ -1,0 +1,479 @@
+{
+  "source": "Ballotpedia (ballotpedia.org) — Tier 2 corroboration source; acknowledged as a source per founder, 2026-09-22",
+  "retrieved_at": "2026-09-22T01:38:18Z",
+  "method": "One live Firecrawl scrape (maxAge 0, markdown, onlyMainContent) per district page; only the '## Candidates and election results > General election' block was used for the field. Names matched loosely (middle initials/names, punctuation, case); a name-form variant is recorded as a 'spelling' mismatch, not as a missing candidate. Write-ins are listed in write_ins_noted and excluded from the diff. Ballotpedia party labels: D=DEM, R=REP, L=LPF, 'No Party Affiliation'=NPA.",
+  "races": [
+    {
+      "race_id": "FL-7-general",
+      "office": "United States Representative",
+      "district": "FL-7",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_7th_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Bale Dalton",
+          "party": "D",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Ryan Elijah",
+          "party": "R",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Christopher Dennison",
+          "party": "L",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-90631",
+          "legal_name": "Bale Dalton",
+          "party": "DEM"
+        },
+        {
+          "candidate_id": "FL-DOE-90696",
+          "legal_name": "Ryan Elijah",
+          "party": "REP"
+        },
+        {
+          "candidate_id": "FL-DOE-92377",
+          "legal_name": "Christopher Dennison",
+          "party": "LPF"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Bale Dalton (DEM)",
+          "Ryan Elijah (REP)",
+          "Christopher Dennison (LPF)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Page states 'There are no incumbents in this race' and 'The candidate list in this election may not be complete.' Withdrawn/disqualified names (Jennifer Adams, George Bock, Benjamin Ewers, Noah Widmann (D); Mike Wilnau (R)) are listed under the primaries only, not the general. Libertarian primary was canceled; Dennison advanced."
+    },
+    {
+      "race_id": "FL-8-general",
+      "office": "United States Representative",
+      "district": "FL-8",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_8th_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Mike Haridopolos",
+          "party": "R",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Jennifer Jenkins",
+          "party": "D",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "George MacArthur",
+          "party": "No Party Affiliation",
+          "incumbent": false,
+          "withdrawn": true
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-89522",
+          "legal_name": "Mike Haridopolos",
+          "party": "REP"
+        },
+        {
+          "candidate_id": "FL-DOE-90831",
+          "legal_name": "Jennifer Jenkins",
+          "party": "DEM"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Mike Haridopolos (REP)",
+          "Jennifer Jenkins (DEM)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Ballotpedia lists George MacArthur (No Party Affiliation) under 'Withdrawn or disqualified candidates' directly beneath the general-election table; he is not on our roster, which is consistent. Both major-party primaries were canceled (Jenkins and Haridopolos advanced). An 'Independent Party of Florida primary election' section lists only a withdrawn candidate (Lacey Villareal). Page carries the standard 'candidate list may not be complete' caveat."
+    },
+    {
+      "race_id": "FL-9-general",
+      "office": "United States Representative",
+      "district": "FL-9",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_9th_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Darren Soto",
+          "party": "D",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Dan Green",
+          "party": "R",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-89339",
+          "legal_name": "Darren Soto",
+          "party": "DEM"
+        },
+        {
+          "candidate_id": "FL-DOE-91337",
+          "legal_name": "Dan Green",
+          "party": "REP"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Darren Soto (DEM)",
+          "Dan Green (REP)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Two-candidate general. Democratic primary was canceled (Soto advanced). Withdrawn/disqualified names (Ingrid Morales Vazquez, Jorge Malavet) are listed under the Republican primary only. Page carries the standard 'candidate list may not be complete' caveat."
+    },
+    {
+      "race_id": "FL-10-general",
+      "office": "United States Representative",
+      "district": "FL-10",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_10th_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Maxwell Alejandro Frost",
+          "party": "D",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Brent Lawhon",
+          "party": "No Party Affiliation",
+          "incumbent": false,
+          "withdrawn": true
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-89909",
+          "legal_name": "Maxwell Alejandro Frost",
+          "party": "DEM"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Maxwell Alejandro Frost (DEM)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": [
+          {
+            "ours": "Maxwell Alejandro Frost (DEM) — ballot_status='ballot', qualifying_status='unopposed'",
+            "ballotpedia": "Maxwell Alejandro Frost (D) — 'The general election was canceled ... won without appearing on the ballot.'",
+            "kind": "other"
+          }
+        ]
+      },
+      "notes": "Ballotpedia states verbatim: 'The general election was canceled. Maxwell Alejandro Frost (D) won without appearing on the ballot.' Frost's name is bolded, which per Ballotpedia's legend denotes the incumbent. Brent Lawhon (No Party Affiliation) is listed under 'Withdrawn or disqualified candidates' beneath the general-election heading. Ballotpedia therefore AGREES the general is uncontested (matches our qualifying_status='unopposed'), but its 'won without appearing on the ballot' framing does not agree with our ballot_status='ballot' for Frost. This is a Tier-2 report, not a correction: under Florida practice an unopposed candidate is deemed elected and is not printed on the general-election ballot, so the founder may want to decide how FL-10 should be presented. No primary sections appear on the page (no contested primary)."
+    },
+    {
+      "race_id": "FL-11-general",
+      "office": "United States Representative",
+      "district": "FL-11",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_11th_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "James Pericola",
+          "party": "D",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Joe Strada",
+          "party": "R",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Ralph Groves",
+          "party": "L",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-88517",
+          "legal_name": "Ralph Groves",
+          "party": "LPF"
+        },
+        {
+          "candidate_id": "FL-DOE-91715",
+          "legal_name": "James Pericola",
+          "party": "DEM"
+        },
+        {
+          "candidate_id": "FL-DOE-91717",
+          "legal_name": "Joe Strada",
+          "party": "REP"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Ralph Groves (LPF)",
+          "James Pericola (DEM)",
+          "Joe Strada (REP)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Page states 'There are no incumbents in this race' (open seat). Withdrawn/disqualified names appear only under the Democratic primary (Walter Walker, Barbie Harden Hall, Shawn Bettis) and Republican primary (Ryan Smith, Mike Wilnau, Chanelle Barnes, Steve Farley, ...). A Libertarian primary section is present; Groves advanced. Page carries the standard 'candidate list may not be complete' caveat."
+    },
+    {
+      "race_id": "FL-12-general",
+      "office": "United States Representative",
+      "district": "FL-12",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_12th_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Gus M. Bilirakis",
+          "party": "R",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Kimberly Overman",
+          "party": "D",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Branden Scrivener",
+          "party": "No Party Affiliation",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-88868",
+          "legal_name": "Gus Michael Bilirakis",
+          "party": "REP"
+        },
+        {
+          "candidate_id": "FL-DOE-89453",
+          "legal_name": "Kimberly Overman",
+          "party": "DEM"
+        },
+        {
+          "candidate_id": "FL-DOE-89778",
+          "legal_name": "Branden Scrivener",
+          "party": "NPA"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Kimberly Overman (DEM)",
+          "Branden Scrivener (NPA)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": [
+          {
+            "ours": "Gus Michael Bilirakis (REP)",
+            "ballotpedia": "Gus M. Bilirakis (R)",
+            "kind": "spelling"
+          }
+        ]
+      },
+      "notes": "Ballotpedia renders the incumbent as 'Gus M. Bilirakis' (middle initial); our legal_name is 'Gus Michael Bilirakis'. Same person, name-form variant only. Republican primary was canceled (Bilirakis advanced); Samantha June (R) is listed as withdrawn under the Republican primary only. Page carries the standard 'candidate list may not be complete' caveat."
+    },
+    {
+      "race_id": "FL-14-general",
+      "office": "United States Representative",
+      "district": "FL-14",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_14th_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Kathy Castor",
+          "party": "D",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Mike Beltran",
+          "party": "R",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Brian Lambert",
+          "party": "L",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [
+        "Salomon Hernandez (No Party Affiliation) (Write-in)",
+        "Keith Varian (No Party Affiliation) (Write-in)"
+      ],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-88870",
+          "legal_name": "Kathy Castor",
+          "party": "DEM"
+        },
+        {
+          "candidate_id": "FL-DOE-91313",
+          "legal_name": "Mike Beltran",
+          "party": "REP"
+        },
+        {
+          "candidate_id": "FL-DOE-92395",
+          "legal_name": "Brian Lambert",
+          "party": "LPF"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Kathy Castor (DEM)",
+          "Mike Beltran (REP)",
+          "Brian Lambert (LPF)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Ballotpedia's general-election table lists five names: Castor (D, incumbent), Beltran (R), Lambert (L), plus Salomon Hernandez and Keith Varian, both tagged '(No Party Affiliation) (Write-in)'. The two write-ins are recorded separately here and are NOT counted as only_on_ballotpedia, because Florida write-in candidates do not appear printed on the ballot; whether Know Your Vote wants to surface write-ins is a product decision. Withdrawn/disqualified names appear only under the Democratic primary (Juan Arauz) and Republican primary (Reginald Strachan, Erik Mishiyev, John Wick, Shay Williams, ...). Libertarian primary section present; Lambert advanced. Page carries the standard 'candidate list may not be complete' caveat."
+    },
+    {
+      "race_id": "FL-15-general",
+      "office": "United States Representative",
+      "district": "FL-15",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_15th_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Laurel Lee",
+          "party": "R",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Robert People",
+          "party": "D",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [
+        "Angie Boone (No Party Affiliation) (Write-in)"
+      ],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-89116",
+          "legal_name": "Robert People",
+          "party": "DEM"
+        },
+        {
+          "candidate_id": "FL-DOE-89121",
+          "legal_name": "Laurel Lee",
+          "party": "REP"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Robert People (DEM)",
+          "Laurel Lee (REP)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Ballotpedia's general-election table lists Lee (R, incumbent), People (D), and Angie Boone tagged '(No Party Affiliation) (Write-in)'. The write-in is recorded separately and not counted as only_on_ballotpedia. Republican primary was canceled (Lee advanced). Under the Democratic primary, Kimberly Overman and Jose Engell are listed as withdrawn/disqualified; Overman is the Democratic nominee on Ballotpedia's FL-12 page, consistent with a district switch. Page carries the standard 'candidate list may not be complete' caveat."
+    },
+    {
+      "race_id": "FL-16-general",
+      "office": "United States Representative",
+      "district": "FL-16",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_16th_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Kelly Kirschner",
+          "party": "D",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Sydney Gruters",
+          "party": "R",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Mark Davis",
+          "party": "No Party Affiliation",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-89623",
+          "legal_name": "Mark Davis",
+          "party": "NPA"
+        },
+        {
+          "candidate_id": "FL-DOE-90251",
+          "legal_name": "Sydney Gruters",
+          "party": "REP"
+        },
+        {
+          "candidate_id": "FL-DOE-90779",
+          "legal_name": "Kelly Kirschner",
+          "party": "DEM"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Mark Davis (NPA)",
+          "Sydney Gruters (REP)",
+          "Kelly Kirschner (DEM)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Page states 'There are no incumbents in this race' (open seat). Under the Republican primary's 'Withdrawn or disqualified candidates', Ballotpedia lists James Satcher, Vern Buchanan (bolded, i.e. the incumbent) and John Peters; none appear in the general-election field. Page carries the standard 'candidate list may not be complete' caveat."
+    }
+  ]
+}

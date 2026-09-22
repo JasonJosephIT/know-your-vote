@@ -1,0 +1,540 @@
+{
+  "source": "Ballotpedia (ballotpedia.org) — Tier 2 corroboration source; acknowledged as a source per founder, 2026-09-22",
+  "retrieved_at": "2026-09-22T01:42:59Z",
+  "method": "Live fetches (maxAge 0) of each Ballotpedia election page; only the 'General election' block for Nov 3, 2026 was extracted (primary fields ignored). Party codes normalized: R→REP, D→DEM, L→LPF, 'No Party Affiliation'→NPA. Names matched loosely (nicknames, middle names/initials, suffixes); name-form variants are listed under diff.name_variants, not as mismatches. Ballotpedia is Tier 2: discrepancies below are reports, not corrections. Nothing was written to the database.",
+  "races": [
+    {
+      "race_id": "FL-GOV-general",
+      "office": "Governor",
+      "ballotpedia_url": "https://ballotpedia.org/Florida_gubernatorial_and_lieutenant_gubernatorial_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "David Jolly",
+          "party": "DEM",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Byron Donalds",
+          "party": "REP",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Scott Jewett",
+          "party": "LPF",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Dean Abrams",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Charles Burkett",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Jeffrey Datto",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Moliere Dimanche",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Frank Russo",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Jennifer Pearl",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": true
+        },
+        {
+          "name": "David Wexler",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": true
+        },
+        {
+          "name": "Jason Pizzo",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": true
+        },
+        {
+          "name": "James Brown",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": true
+        },
+        {
+          "name": "Rodney Glover",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": true
+        },
+        {
+          "name": "Reginald Strachan",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": true
+        },
+        {
+          "name": "Surindar Bedi",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": true
+        },
+        {
+          "name": "Desmond Meade",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": true
+        },
+        {
+          "name": "Holly Klask",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": true
+        },
+        {
+          "name": "Mourice Hylton",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": true
+        },
+        {
+          "name": "Andrea Lynn Klink",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": true
+        },
+        {
+          "name": "Neil Gillespie",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": true
+        },
+        {
+          "name": "Jayson Winer",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": true
+        },
+        {
+          "name": "Insley Evans",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": true
+        },
+        {
+          "name": "Brandon L. McIntyre",
+          "party": "Constitution Party",
+          "incumbent": false,
+          "withdrawn": true
+        }
+      ],
+      "write_ins_noted": [
+        "Kathy Anderson (NPA) (Write-in)",
+        "David DeJesus (NPA) (Write-in)",
+        "Richard Dembinsky (NPA) (Write-in)",
+        "Mohammad Khan (NPA) (Write-in)",
+        "Erik Morris (NPA) (Write-in)"
+      ],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-84076",
+          "legal_name": "Scott Eckhard Jewett",
+          "party": "LPF"
+        },
+        {
+          "candidate_id": "FL-DOE-88529",
+          "legal_name": "Moliere \"Moe\" Dimanche",
+          "party": "NPA"
+        },
+        {
+          "candidate_id": "FL-DOE-89042",
+          "legal_name": "Byron Donalds",
+          "party": "REP"
+        },
+        {
+          "candidate_id": "FL-DOE-89243",
+          "legal_name": "David Jolly",
+          "party": "DEM"
+        },
+        {
+          "candidate_id": "FL-DOE-89571",
+          "legal_name": "Frank J. Russo",
+          "party": "NPA"
+        },
+        {
+          "candidate_id": "FL-DOE-89630",
+          "legal_name": "Jeffrey Peter \"Dr. Jeff\" Datto",
+          "party": "NPA"
+        },
+        {
+          "candidate_id": "FL-DOE-90433",
+          "legal_name": "Dean Ocean Abrams",
+          "party": "NPA"
+        },
+        {
+          "candidate_id": "FL-DOE-90630",
+          "legal_name": "Charles Burkett",
+          "party": "NPA"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "David Jolly (DEM)",
+          "Byron Donalds (REP)",
+          "Scott Eckhard Jewett = Scott Jewett (LPF)",
+          "Dean Ocean Abrams = Dean Abrams (NPA)",
+          "Charles Burkett (NPA)",
+          "Jeffrey Peter \"Dr. Jeff\" Datto = Jeffrey Datto (NPA)",
+          "Moliere \"Moe\" Dimanche = Moliere Dimanche (NPA)",
+          "Frank J. Russo = Frank Russo (NPA)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": [],
+        "name_variants": [
+          {
+            "ours": "Scott Eckhard Jewett",
+            "ballotpedia": "Scott Jewett",
+            "kind": "middle name"
+          },
+          {
+            "ours": "Moliere \"Moe\" Dimanche",
+            "ballotpedia": "Moliere Dimanche",
+            "kind": "nickname"
+          },
+          {
+            "ours": "Frank J. Russo",
+            "ballotpedia": "Frank Russo",
+            "kind": "middle initial"
+          },
+          {
+            "ours": "Jeffrey Peter \"Dr. Jeff\" Datto",
+            "ballotpedia": "Jeffrey Datto",
+            "kind": "middle name + nickname"
+          },
+          {
+            "ours": "Dean Ocean Abrams",
+            "ballotpedia": "Dean Abrams",
+            "kind": "middle name"
+          }
+        ]
+      },
+      "write_in_cross_check": {
+        "note": "Ballotpedia does list write-ins on this page, tagged '(Write-in)' (contrary to the assumption that it excludes them). Cross-checked against our candidate table (read-only) by name; race linkage for these rows was not queried.",
+        "Kathy Anderson": "ours FL-DOE-90612, party WRI, ballot_status write_in, qualifying_status qualified — consistent",
+        "Erik Morris": "ours FL-DOE-89939, party WRI, ballot_status write_in, qualifying_status qualified — consistent",
+        "David DeJesus": "ours FL-DOE-92544 'David \"DJ\" DeJesus', party WRI, ballot_status excluded, qualifying_status withdrawn — Ballotpedia still lists as an active write-in (discrepancy, Tier 2)",
+        "Richard Dembinsky": "ours FL-DOE-89280 'Richard Paul Dembinsky', party WRI, ballot_status excluded, qualifying_status withdrawn — Ballotpedia still lists as an active write-in (discrepancy, Tier 2)",
+        "Mohammad Khan": "no row found in our candidate table (ILIKE '%Mohammad%Khan%') — only on Ballotpedia (write-in)"
+      },
+      "notes": "8 of 8 ballot candidates match on identity and party. Ballotpedia states 'There are no incumbents in this race' and carries its standard caveat 'The candidate list in this election may not be complete.' Ballotpedia's 'Withdrawn or disqualified candidates' list directly under the general-election heading is included above with withdrawn=true (15 names; Neil Gillespie among them, consistent with his appearing in our U.S. Senate roster instead). Party mapping: Ballotpedia '(L)' for Jewett taken as Libertarian Party of Florida = our LPF."
+    },
+    {
+      "race_id": "FL-ATG-general",
+      "office": "Attorney General",
+      "ballotpedia_url": "https://ballotpedia.org/Florida_Attorney_General_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "James Uthmeier",
+          "party": "REP",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Jose Javier Rodriguez",
+          "party": "DEM",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-89041",
+          "legal_name": "James Uthmeier",
+          "party": "REP"
+        },
+        {
+          "candidate_id": "FL-DOE-89231",
+          "legal_name": "Jose Javier Rodriguez",
+          "party": "DEM"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "James Uthmeier (REP)",
+          "Jose Javier Rodriguez (DEM)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": [],
+        "name_variants": []
+      },
+      "notes": "Exact match, 2 of 2. Ballotpedia marks Uthmeier as incumbent (bolded). No write-ins listed. Withdrawn names on the page (Jim Lewis (D), Steven S. Leskovich (R)) sit under the primary headings, not the general election, so they are not included above. Page carries the caveat 'The candidate list in this election may not be complete.'"
+    },
+    {
+      "race_id": "FL-CFO-general",
+      "office": "Chief Financial Officer",
+      "ballotpedia_url": "https://ballotpedia.org/Florida_Chief_Financial_Officer_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Blaise Ingoglia",
+          "party": "REP",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Annette Taddeo",
+          "party": "DEM",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-89394",
+          "legal_name": "Blaise Ingoglia",
+          "party": "REP"
+        },
+        {
+          "candidate_id": "FL-DOE-91310",
+          "legal_name": "Annette Taddeo",
+          "party": "DEM"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Blaise Ingoglia (REP)",
+          "Annette Taddeo (DEM)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": [],
+        "name_variants": []
+      },
+      "notes": "Exact match, 2 of 2. Ballotpedia marks Ingoglia as incumbent. No write-ins listed. Withdrawn names (Kevin Steele, Benjamin Horbowy, Joe Gruters, all R) are under the Republican primary heading, not the general election. Page carries the caveat 'The candidate list in this election may not be complete.'"
+    },
+    {
+      "race_id": "FL-AGR-general",
+      "office": "Commissioner of Agriculture",
+      "ballotpedia_url": "https://ballotpedia.org/Florida_Agriculture_Commissioner_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Wilton Simpson",
+          "party": "REP",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Joey Atkins",
+          "party": "DEM",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Kyle Gibson",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-90560",
+          "legal_name": "Wilton Simpson",
+          "party": "REP"
+        },
+        {
+          "candidate_id": "FL-DOE-92013",
+          "legal_name": "Joey Mendoza Atkins",
+          "party": "DEM"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Wilton Simpson (REP)",
+          "Joey Mendoza Atkins = Joey Atkins (DEM)"
+        ],
+        "only_on_ballotpedia": [
+          "Kyle Gibson (NPA) — listed by Ballotpedia as an on-ballot general-election candidate, not tagged write-in"
+        ],
+        "only_in_ours": [],
+        "mismatches": [
+          {
+            "ours": "Kyle \"KC\" Gibson (FL-DOE-83588): party WRI, ballot_status write_in, qualifying_status qualified — not in our FL-AGR-general candidate_ids",
+            "ballotpedia": "Kyle Gibson (No Party Affiliation), shown in the general-election candidate table without a '(Write-in)' tag; his candidate page says he 'is on the ballot in the general election on November 3, 2026'",
+            "kind": "other"
+          }
+        ],
+        "name_variants": [
+          {
+            "ours": "Joey Mendoza Atkins",
+            "ballotpedia": "Joey Atkins",
+            "kind": "middle name"
+          }
+        ]
+      },
+      "notes": "DISCREPANCY (Tier 2 report, not a correction). Ballotpedia's general-election table lists three candidates; ours lists two. The third, Kyle Gibson, exists in our candidate table as a qualified WRITE-IN (party WRI), which by design is not in the race's ballot roster. Ballotpedia presents him as an on-ballot NPA candidate with no write-in tag (https://ballotpedia.org/Florida_Agriculture_Commissioner_election,_2026; https://ballotpedia.org/Kyle_Gibson). Context from his Ballotpedia page: in 2022 he ran for Governor as a write-in and 'was removed from the ballot prior to the general election.' Whether Gibson is a qualified write-in or an on-ballot NPA candidate should be settled by the Tier 1 source (FL Division of Elections); this file only records that Ballotpedia and our data classify him differently. Ballotpedia also lists Joey Atkins among withdrawn candidates of the U.S. Senate Democratic primary (https://ballotpedia.org/United_States_Senate_special_election_in_Florida,_2026), consistent with him having moved to this race. Withdrawn under the Democratic primary heading: Chase Anderson Romagnano (D) — primary-level, not included above. Page caveat: 'The candidate list in this election may not be complete.'"
+    },
+    {
+      "race_id": "FL-SEN-general",
+      "office": "United States Senator",
+      "ballotpedia_url": "https://ballotpedia.org/United_States_Senate_special_election_in_Florida,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Ashley B. Moody",
+          "party": "REP",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Angela Nixon",
+          "party": "DEM",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Neil Gillespie",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Pano Churchill",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": true
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-89119",
+          "legal_name": "Ashley Moody",
+          "party": "REP"
+        },
+        {
+          "candidate_id": "FL-DOE-89955",
+          "legal_name": "Neil J. Gillespie",
+          "party": "NPA"
+        },
+        {
+          "candidate_id": "FL-DOE-90009",
+          "legal_name": "Angie Nixon",
+          "party": "DEM"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Ashley Moody = Ashley B. Moody (REP)",
+          "Angie Nixon = Angela Nixon (DEM)",
+          "Neil J. Gillespie = Neil Gillespie (NPA)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": [],
+        "name_variants": [
+          {
+            "ours": "Ashley Moody",
+            "ballotpedia": "Ashley B. Moody",
+            "kind": "middle initial"
+          },
+          {
+            "ours": "Angie Nixon",
+            "ballotpedia": "Angela Nixon",
+            "kind": "nickname vs formal given name (no quotes in either source)"
+          },
+          {
+            "ours": "Neil J. Gillespie",
+            "ballotpedia": "Neil Gillespie",
+            "kind": "middle initial"
+          }
+        ]
+      },
+      "notes": "3 of 3 match on identity and party. The guessed URL 'United_States_Senate_election_in_Florida,_2026' redirected to 'United_States_Senate_special_election_in_Florida,_2026'; Ballotpedia frames this contest as a SPECIAL general election (heading: 'Special general election for U.S. Senate Florida') with Moody as incumbent. Our race record (office 'United States Senator', level federal) carries no special-election marker — an observation, not a candidate mismatch. Ballotpedia lists Pano Churchill (NPA) as withdrawn under the general-election heading (included above with withdrawn=true; no row for him in our candidate table). Angie/Angela Nixon is the largest name-form gap in this slice; our 'Angie Nixon' is presumably the DOE ballot name. Page caveat: 'The candidate list in this election may not be complete.'"
+    }
+  ],
+  "measures": [
+    {
+      "amendment": "1",
+      "title": "BUDGET STABILIZATION FUND",
+      "ballotpedia_title": "Florida Changes to Budget Stabilization Fund Amendment (2026)",
+      "ballotpedia_url": "https://ballotpedia.org/Florida_Changes_to_Budget_Stabilization_Fund_Amendment_(2026)",
+      "certified_for_nov_2026": true,
+      "ballotpedia_status": "On the ballot (infobox Status); election date November 3, 2026; type Legislatively referred constitutional amendment; origin HJR 5019 (2025); listed under 'On the ballot' at https://ballotpedia.org/Florida_2026_ballot_measures",
+      "ballotpedia_amendment_number": null,
+      "ours": {
+        "measure_id": "FL-AM1-general",
+        "number": "1",
+        "official_title": "BUDGET STABILIZATION FUND",
+        "placed_by": "legislature",
+        "threshold_pct": "60.00",
+        "display_order": 1
+      },
+      "diff_notes": "Ballotpedia's ballot-title block reads 'BUDGET STABILIZATION FUND.—Proposing an amendment to the State Constitution to increase the amount of funds that may be retained in the budget stabilization fund from 10% to 25% of general revenue collections, require the legislature to transfer the lesser of $750 million or the amount required to reach 25% ...' — matches our official_title and ballot_summary. Ballotpedia has NOT assigned an amendment number in its page title or list entry; our number '1' is therefore unconfirmed by this source (neither contradicted). Placed_by legislature matches LRCA; 60% threshold stated on the page."
+    },
+    {
+      "amendment": "2",
+      "title": "EXEMPTION OF TANGIBLE PERSONAL PROPERTY ON AGRICULTURAL LAND FROM TAXATION",
+      "ballotpedia_title": "Florida Exempt Tangible Personal Property Used for Agriculture or Agritourism from Property Taxes Amendment (2026)",
+      "ballotpedia_url": "https://ballotpedia.org/Florida_Exempt_Tangible_Personal_Property_Used_for_Agriculture_or_Agritourism_from_Property_Taxes_Amendment_(2026)",
+      "certified_for_nov_2026": true,
+      "ballotpedia_status": "On the ballot (infobox Status); election date November 3, 2026; type Legislatively referred constitutional amendment; origin HJR 1215 (2025); listed under 'On the ballot' at https://ballotpedia.org/Florida_2026_ballot_measures",
+      "ballotpedia_amendment_number": null,
+      "ours": {
+        "measure_id": "FL-AM2-general",
+        "number": "2",
+        "official_title": "EXEMPTION OF TANGIBLE PERSONAL PROPERTY ON AGRICULTURAL LAND FROM TAXATION",
+        "placed_by": "legislature",
+        "threshold_pct": "60.00",
+        "display_order": 2
+      },
+      "diff_notes": "Ballotpedia's ballot-title block reads 'EXEMPTION OF TANGIBLE PERSONAL PROPERTY ON AGRICULTURAL LAND FROM TAXATION.—Proposing an amendment to the State Constitution to exempt tangible personal property habitually located or typically present on land classified as agricultural ...' — matches our official_title and ballot_summary. Ballotpedia has NOT assigned an amendment number; our number '2' is unconfirmed by this source (neither contradicted)."
+    },
+    {
+      "amendment": "3",
+      "title": "INCREASED HOMESTEAD EXEMPTION; LOWER CAP ON INCREASES IN NON-HOMESTEAD PROPERTY ASSESSMENTS",
+      "ballotpedia_title": "Florida Amendment 3, Homestead Tax Exemptions, Property Assessments, and Spending Restrictions Amendment (2026)",
+      "ballotpedia_url": "https://ballotpedia.org/Florida_Amendment_3,_Homestead_Tax_Exemptions,_Property_Assessments,_and_Spending_Restrictions_Amendment_(2026)",
+      "certified_for_nov_2026": true,
+      "ballotpedia_status": "On the ballot (infobox Status); election date November 3, 2026; type Legislatively referred constitutional amendment; page references House Joint Resolution 1 and House Joint Resolution 369; listed as 'Amendment 3' under 'On the ballot' at https://ballotpedia.org/Florida_2026_ballot_measures",
+      "ballotpedia_amendment_number": "3",
+      "ours": {
+        "measure_id": "FL-AM3-general",
+        "number": "3",
+        "official_title": "INCREASED HOMESTEAD EXEMPTION; LOWER CAP ON INCREASES IN NON-HOMESTEAD PROPERTY ASSESSMENTS",
+        "placed_by": "legislature",
+        "threshold_pct": "60.00",
+        "display_order": 3
+      },
+      "diff_notes": "Amendment number 3 matches. Ballotpedia's ballot-title block reads 'INCREASED HOMESTEAD EXEMPTION; LOWER CAP ON INCREASES IN NON-HOMESTEAD PROPERTY ASSESSMENTS. — This amendment increases the homestead exemption, for all non-school taxes, to $150,000 in 2027 and $250,000 in 2028, and adjusts for inflation thereafter ...' — matches our official_title and the opening of our ballot_summary."
+    }
+  ],
+  "measures_summary": "Ballotpedia's 'On the ballot' table for Florida 2026 lists exactly three measures, all LRCAs, corresponding one-to-one with our three (https://ballotpedia.org/Florida_2026_ballot_measures). No measure is only-on-Ballotpedia or only-in-ours. Ballotpedia numbers only Amendment 3; the other two are unnumbered there."
+}

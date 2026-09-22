@@ -1,0 +1,346 @@
+{
+  "source": "Ballotpedia (ballotpedia.org) — Tier 2 corroboration source; acknowledged as a source per founder, 2026-09-22",
+  "retrieved_at": "2026-09-22T01:37:17Z",
+  "county": "Hillsborough",
+  "pages_consulted": [
+    {
+      "url": "https://ballotpedia.org/Municipal_elections_in_Hillsborough_County,_Florida_(2026)",
+      "status": 200,
+      "note": "Carries the County Commission general-election and primary tables (Districts 1, 3, 5, 7) plus Soil & Water and judicial offices. Does not carry school board."
+    },
+    {
+      "url": "https://ballotpedia.org/Hillsborough_County_Public_Schools,_Florida,_elections_(2026)",
+      "status": 200,
+      "note": "Carries School Board Districts 2, 4 and 6 At-large (general + nonpartisan primary)."
+    },
+    {
+      "url": "https://ballotpedia.org/Hillsborough_County,_Florida,_elections,_2026",
+      "status": 200,
+      "note": "County overview. Its 'County elections and candidates' Nov 3 section lists only Board of Commissioners Districts 5 and 7 (At-large) and Soil & Water Seats 1 and 5; Districts 1 and 3 are absent from this page and appear only on the municipal page. Its school board section lists Districts 2 and 6 At-large under Nov 3 and District 4 only under the Aug 18 primary."
+    }
+  ],
+  "method_notes": "Pages fetched live via Firecrawl (maxAge 0, markdown, onlyMainContent), one Ballotpedia request at a time to honor Crawl-delay: 2. Only the Nov 3 general-election field was extracted; primary fields were read only to establish incumbency and to explain who advanced. Ballotpedia party labels were mapped to our codes for comparison (Democratic->DEM, Republican->REP, Nonpartisan->''). Incumbent flag taken from Ballotpedia's '(i)' marker / 'Incumbent' wording / bold-underline convention. No write-in candidates were listed on any page consulted. Two non-Ballotpedia search snippets (Hillsborough SOE candidate list, Florida Politics) are cited in notes as corroborating context only; they were not scraped and are not the source of record here. Read-only: no database or other repo files were modified.",
+  "races": [
+    {
+      "race_id": "FL-HIL-CC1-general",
+      "office": "Hillsborough County Commission, District 1",
+      "district": "HIL-CC-1",
+      "ballotpedia_url": "https://ballotpedia.org/Municipal_elections_in_Hillsborough_County,_Florida_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Harry Cohen",
+          "party": "DEM",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Jackie Toledo",
+          "party": "REP",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-HIL-2640",
+          "legal_name": "Harry Cohen",
+          "party": "DEM",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-HIL-2880",
+          "legal_name": "Jackie Toledo",
+          "party": "REP",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Harry Cohen",
+          "Jackie Toledo"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Exact match on both names and parties. Ballotpedia marks Cohen as incumbent (i). Primary table shows both advanced with canceled primaries (*). Note: the county overview page (https://ballotpedia.org/Hillsborough_County,_Florida,_elections,_2026) omits District 1 from its 'County elections and candidates' section entirely; the municipal page is the only Ballotpedia page listing this contest."
+    },
+    {
+      "race_id": "FL-HIL-CC3-general",
+      "office": "Hillsborough County Commission, District 3",
+      "district": "HIL-CC-3",
+      "ballotpedia_url": "https://ballotpedia.org/Municipal_elections_in_Hillsborough_County,_Florida_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Gwen Myers",
+          "party": "DEM",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Luiz Garcia",
+          "party": "REP",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-HIL-2646",
+          "legal_name": "Luiz F. F. Garcia",
+          "party": "REP",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-HIL-2621",
+          "legal_name": "Gwen Myers",
+          "party": "DEM",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Gwen Myers",
+          "Luiz Garcia ~ Luiz F. F. Garcia"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Both candidates match. Name-form variant only: ours carries middle initials ('Luiz F. F. Garcia'); Ballotpedia lists 'Luiz Garcia' (page https://ballotpedia.org/Luiz_Garcia). Treated as a loose match, not a spelling mismatch. Ballotpedia marks Myers as incumbent (i); Myers defeated Twanda Bradley in the Aug 18 Democratic primary; Garcia advanced with a canceled primary (*). Note: the county overview page omits District 3 from its county section; the contest appears only on the municipal page."
+    },
+    {
+      "race_id": "FL-HIL-CC5-general",
+      "office": "Hillsborough County Commission, District 5",
+      "district": "HIL-CC-5",
+      "ballotpedia_url": "https://ballotpedia.org/Municipal_elections_in_Hillsborough_County,_Florida_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Neil Manimala",
+          "party": "DEM",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Stacy Hahn",
+          "party": "REP",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-HIL-2661",
+          "legal_name": "Stacy Hahn",
+          "party": "REP",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-HIL-2636",
+          "legal_name": "Neil Manimala",
+          "party": "DEM",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Neil Manimala",
+          "Stacy Hahn"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Exact match on both names and parties; neither is an incumbent per Ballotpedia. The Republican primary table shows incumbent Donna Cameron Cepeda (i) was defeated by Stacy Hahn on Aug 18; Manimala advanced with a canceled primary (*). Also listed on the county overview page as 'Board of Commissioners District 5 At-large' with the same two candidates."
+    },
+    {
+      "race_id": "FL-HIL-CC7-general",
+      "office": "Hillsborough County Commission, District 7",
+      "district": "HIL-CC-7",
+      "ballotpedia_url": "https://ballotpedia.org/Municipal_elections_in_Hillsborough_County,_Florida_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Aileen Rodriguez",
+          "party": "DEM",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Joshua Wostal",
+          "party": "REP",
+          "incumbent": true,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-HIL-2639",
+          "legal_name": "Adam Hattersley",
+          "party": "DEM",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-HIL-2620",
+          "legal_name": "Joshua Wostal",
+          "party": "REP",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Joshua Wostal"
+        ],
+        "only_on_ballotpedia": [
+          "Aileen Rodriguez (DEM)"
+        ],
+        "only_in_ours": [
+          "Adam Hattersley (DEM, FL-VF-HIL-2639)"
+        ],
+        "mismatches": []
+      },
+      "notes": "DISCREPANCY on the Democratic nominee. Ballotpedia's general-election table lists Aileen Rodriguez (D) vs. incumbent Joshua Wostal (R) (i). Its primary table shows Rodriguez defeated Cindy Stuart in the Aug 18 Democratic primary. Adam Hattersley does not appear anywhere on the municipal page, the county overview page (which also lists Rodriguez vs. Wostal under 'Board of Commissioners District 7 At-large'), or the school-board page. Corroborating context from a firecrawl_search (not scraped, not Ballotpedia): the Hillsborough SOE 'Local Candidates & Committees' snippet (https://www.votehillsborough.gov/202/Local-Candidates-Committees) lists 'Adam Hattersley (DEM) - Inactive' and 'Aileen Rodriguez (DEM) - Qualified', and Florida Politics reported 'Adam Hattersley suspends campaign for Hillsborough County Commission' (https://floridapolitics.com/archives/758385-adam-hattersley-suspends-campaign-for-hillsborough-county-commission/). Our row for Hattersley still shows ballot_status 'ballot' / qualifying_status 'qualified', which looks stale. Reported only; not corrected (Tier 2)."
+    },
+    {
+      "race_id": "FL-HIL-SB2-general",
+      "office": "Hillsborough County School Board, District 2",
+      "district": "HIL-SB-2",
+      "ballotpedia_url": "https://ballotpedia.org/Hillsborough_County_Public_Schools,_Florida,_elections_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Brittany Lyssy",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Daniela Simic",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-HIL-2677",
+          "legal_name": "Brittany Lyssy",
+          "party": "",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-HIL-2675",
+          "legal_name": "Daniela Simic",
+          "party": "",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Brittany Lyssy",
+          "Daniela Simic"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Exact match. Ballotpedia: 'Brittany Lyssy (Nonpartisan) and Daniela Simic (Nonpartisan) are running in the general election ... on November 3, 2026'; 'There are no incumbents in this race.' Both advanced from the Aug 18 nonpartisan primary (Simic 38.7%, Lyssy 36.8%), defeating Chris Taylor (24.4%). Same pair listed on the county overview page."
+    },
+    {
+      "race_id": "FL-HIL-SB4-general",
+      "office": "Hillsborough County School Board, District 4",
+      "district": "HIL-SB-4",
+      "ballotpedia_url": "https://ballotpedia.org/Hillsborough_County_Public_Schools,_Florida,_elections_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": false,
+      "ballotpedia_candidates": [
+        {
+          "name": "Patricia Rendon",
+          "party": "",
+          "incumbent": true,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-HIL-2691",
+          "legal_name": "Ashley Meeder",
+          "party": "",
+          "qualifying_status": "unopposed"
+        }
+      ],
+      "diff": {
+        "matched": [],
+        "only_on_ballotpedia": [
+          "Patricia Rendon (incumbent, nonpartisan)"
+        ],
+        "only_in_ours": [
+          "Ashley Meeder (FL-VF-HIL-2691)"
+        ],
+        "mismatches": []
+      },
+      "notes": "DECIDED per both sources, but they name DIFFERENT people. Ballotpedia: 'The general election scheduled for November 3, 2026, was canceled.' and 'The primary scheduled for August 18, 2026, was canceled. Incumbent Patricia Rendon (Nonpartisan) won election in the primary for Hillsborough County Public Schools Board of Education District 4 without appearing on the ballot.' The county overview page likewise lists only Patricia Rendon for District 4, under the Aug 18 primary. Ashley Meeder does not appear on any Ballotpedia page consulted. Ours has Ashley Meeder as the single 'unopposed' candidate and does not list Rendon at all. Corroborating context from a firecrawl_search (not scraped, not Ballotpedia): the Hillsborough SOE candidate-list snippet (https://www.votehillsborough.gov/202/Local-Candidates-Committees) shows 'Office: School Board Member, Dist. 4. Ashley Meeder. status (Inactive-Withdrawn)'. So Ballotpedia agrees with us that this seat is decided and off the November ballot (consistent with F.S. 101.151(7)), but attributes it to Rendon, and our Meeder row looks stale (withdrawn candidate recorded as the unopposed winner). Reported only; not corrected (Tier 2)."
+    },
+    {
+      "race_id": "FL-HIL-SB6-general",
+      "office": "Hillsborough County School Board, District 6",
+      "district": "HIL-SB-6",
+      "ballotpedia_url": "https://ballotpedia.org/Hillsborough_County_Public_Schools,_Florida,_elections_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Karen Perez",
+          "party": "",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Kenneth Gay",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-HIL-2610",
+          "legal_name": "Kenneth \"Ken\" Gay",
+          "party": "",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-HIL-2645",
+          "legal_name": "Karen Perez",
+          "party": "",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Karen Perez",
+          "Kenneth Gay ~ Kenneth \"Ken\" Gay"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Both candidates match. Name-form variant only: ours carries the nickname in quotes ('Kenneth \"Ken\" Gay'); Ballotpedia lists 'Kenneth Gay' (https://ballotpedia.org/Kenneth_Gay). Treated as a loose match. Ballotpedia marks Karen Perez as incumbent (bold/underline convention; 'Incumbent Karen Perez'). Both advanced from the Aug 18 nonpartisan primary (Perez 48.3%, Gay 27.2%), defeating Sally Harris (24.5%). Page-internal labeling quirk on Ballotpedia: the section heading reads '### District 5' but every table and sentence beneath it says 'District 6 At-large'; the county overview page confirms 'Board of Education District 6 At-large' with the same two candidates. Ambiguity noted, not resolved here."
+    }
+  ]
+}
