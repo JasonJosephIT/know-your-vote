@@ -459,9 +459,15 @@ same precedent; every one of them appears in routine crime coverage.
 > removed in the gold set. 16 are now `[]`. **Two are now `["B3"]`, not `[]`**:
 > the Hialeah row and the Christian Castro row were already multi-labelled
 > `B7`+`B3` (both mention ICE), and v7 is a change to `B7` only — so `B3` was
-> left as it was rather than removed without review. The **4 founder-call rows
-> are unchanged and still `["B7"]`** pending that call. `B7` now carries 7 gold
-> rows: the 3 kept below plus those 4.
+> left as it was rather than removed without review — and the founder then
+> confirmed **keep `B3`** on both.
+>
+> **Founder calls decided 2026-09-23: all four → `[]`.** The three execution
+> notices are scheduling notices for named cases, closer to court reporting than
+> to capital-punishment policy. The highway statistic is a road-safety ranking,
+> not crime; the option of re-tagging it to a transport issue did not arise,
+> because the taxonomy has none. **`B7` now carries 3 gold rows** — the 3 kept
+> below, all of them policy.
 >
 > This heading previously said 21; the lists total 3 kept + 18 re-labelled + 4
 > founder calls, so 22 rows were ever in question.
@@ -511,7 +517,8 @@ is not an agent's to do.
 - Roommate dispute leads to shooting in Deltona, deputies say
 - ICE agent Christian Castro released from Minnesota state custody, pleads not guilty in federal court
 
-**Founder call (case-specific, not clearly policy):**
+**Founder call (case-specific, not clearly policy)** — decided 2026-09-23, all
+four → `[]`:
 
 - DeSantis sets execution of man convicted of killing sheriff’s deputy
 - Execution date set for man convicted of fatally shooting Florida deputy
