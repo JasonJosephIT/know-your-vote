@@ -2,9 +2,7 @@ import type { MetadataRoute } from "next";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
-const BASE =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  "https://know-your-vote-chazak.vercel.app";
+const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://knowyour.vote";
 
 /* Visible races and their candidates only — RLS guarantees the query can't
    see anything else (TASK-048). Visible is `listed` or `published` since
