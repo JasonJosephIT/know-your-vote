@@ -116,7 +116,15 @@ export type { NewsIssue };
    two-subject label. The split is justified by an alias count past a measured
    threshold and by the B6 precedent, not by a number that predicts the
    outcome. Re-run the gold set before quoting anything about education. */
-export const TAXONOMY_VERSION = "6";
+/* 7 — 2026-09-22: B7 narrowed from "Crime and public safety" to "Crime
+   policy, policing and courts", and the `safety` category's bare aliases
+   retired with it. The largest tag in the taxonomy was catching crime blotter:
+   18 of its 25 gold rows are individual arrests and shootings with no policy
+   content. Bumped because a B7 tag meant "a crime happened" under v6 and
+   means "a policy question about crime" under v7 — the opposite kinds of row,
+   not comparable at all. Every B7 row ever written needs re-reading, and 18
+   gold labels need correcting before the numbers mean anything (eval §10). */
+export const TAXONOMY_VERSION = "7";
 
 export interface IssueCategory {
   /** For the eight, this is verbatim QUIZ_QUESTIONS[].id — the shared key that
@@ -156,7 +164,13 @@ export const CATEGORIES: readonly IssueCategory[] = [
   { id: "insurance", label: "Insurance & Property Costs", inQuiz: true,
     aliases: ["property insurance", "premiums", "property taxes", "homestead exemption"] },
   { id: "safety", label: "Public Safety & Crime", inQuiz: true,
-    aliases: ["police", "sheriff", "courts", "sentencing"] },
+    /* The bare words `police`, `sheriff`, `courts` and `sentencing` were
+       retired in v7, on the same precedent that retired bare `development` in
+       v4: as question words they matched the phenomenon rather than the
+       policy, and every one of them appears in routine crime coverage
+       ("deputies say", "sheriff's office"). The policy senses are B7's. */
+    aliases: ["police funding", "police oversight", "court system",
+              "sentencing laws"] },
 
   /* Not in the quiz — see the header. */
   { id: "elections", label: "Elections & Voting", inQuiz: false,
@@ -307,9 +321,55 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
   { id: "KYV1", categoryId: "elections", label: "Threats to democratic institutions",
     aliases: ["press freedom", "freedom of the press", "rule of law", "political violence",
               "checks and balances", "abuse of office", "democratic norms"] },
-  { id: "B7", categoryId: "safety", label: "Crime and public safety",
-    aliases: ["crime", "policing", "public safety", "sentencing",
-              "police", "sheriff", "courts"] },
+  /* ── B7 NARROWED TO POLICY, 2026-09-22 ─────────────────────────────────
+     THIS IS THE BIGGEST TAG IN THE TAXONOMY AND IT WAS MEASURING THE WRONG
+     THING. B7 scored 83% precision and 96% recall on 25 gold rows — the best
+     numbers in the project — and carried 155 of 834 articles, 18.6% of the
+     corpus, several times any other issue. Reading those 25 rows is what the
+     numbers could not say:
+
+       - 18 are crime blotter with no policy content whatever. Individual
+         arrests, roommate shootings, a road-rage incident involving thrown
+         mayonnaise, a man robbed buying cooking oil.
+       - 3 are near-duplicate execution-scheduling notices for one kind of
+         case.
+       - 3 are actual policy: a St. Petersburg budget vote on Axon and Flock
+         contracts, a prison-staff safety bill, a package of senior-scam and
+         fraud bills.
+       - 1 is a road-safety statistic.
+
+     So 96% recall meant B7 was excellent at catching crime blotter, and the
+     83% precision was measured against labels that call blotter "Crime and
+     public safety". The label invited it: asked whether a shooting relates to
+     "crime", a model correctly says yes. This is the KYV4 defect — the label
+     naming the phenomenon rather than the policy — at the largest scale in
+     the taxonomy, and it is the fifth instance of the same lesson after B6,
+     KYV4, A2/KYV7 and A6.
+
+     IT MATTERS MORE HERE THAN ANYWHERE ELSE. This is a nonpartisan voter
+     guide. A tag whose job is "news on the issues you picked" would have put
+     last night's shooting under a political issue heading beside candidate
+     names, at roughly a fifth of the feed. What a voter needs from this
+     category is where candidates stand on policing, courts and sentencing —
+     not the crime report.
+
+     B7 KEEPS CAP'S ID AND TAKES THE POLICY HALF, as B6 and A6 did before it.
+     Bare `crime` is dropped rather than reassigned, exactly as bare
+     `development` was in v4: it is the phenomenon, and no sub-issue should ask
+     for it.
+
+     THE MEASURED NUMBERS RETIRE WITH THE OLD LABEL, and the next run will
+     look like a collapse — B7's recall against the CURRENT gold labels should
+     fall to roughly the 4 rows in 25 that are policy, because 18 of those
+     labels are what this change says are wrong. That is the B8 situation in
+     reverse: there the labels were suspect and the model was right; here the
+     model was right about the label it was given. Re-labelling those rows is
+     founder work (eval §0, recommendation 6) and eval §10 lists them. Do not
+     read the drop as a regression until they are re-labelled. */
+  { id: "B7", categoryId: "safety", label: "Crime policy, policing and courts",
+    aliases: ["police funding", "police oversight", "policing policy",
+              "sentencing laws", "criminal justice reform", "court system",
+              "public safety budget", "prison policy", "fraud and scam enforcement"] },
   /* B8 stays NATIONAL in scope, and its alias list is deliberately not
      widened: the 2026-09-18 evaluation scored it 0% recall, and the diagnosis
      was that all four gold rows were mislabelled rather than missed (eval §3).
