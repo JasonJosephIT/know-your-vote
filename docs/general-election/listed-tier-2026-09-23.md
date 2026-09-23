@@ -264,3 +264,14 @@ every race's `candidate_ids` — a roster gap worth reading, not a leak.
    early voting, a fully `listed` ballot would be the product voters meet.
    That is honest, but it is a different product from the one the README
    promises, and it deserves a decision rather than a default.
+
+## 7. Follow-up — the resource ladder (2026-09-23, unapplied)
+
+`measure_argument` is retired by `0034_measure_resources.sql` in favour of
+`measure_resource`: outside links ordered by kind of source (spec
+`docs/superpowers/specs/2026-09-23-measure-resource-ladder-design.md`).
+The safety argument in §3 transfers unchanged: `anon_read_measure_resource`
+reads `'published'` only. Apply order: merge and deploy the PR, then `0034`,
+then `0035` (after the `url_norm` check in `supabase/migrations/README.md`).
+All three measures stay `listed` until the founder adds sided rows and
+flips each to `published`; the 2× rule refuses a lopsided flip.
