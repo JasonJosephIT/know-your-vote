@@ -304,26 +304,47 @@ per measure, read live, in the same open style as the scrutiny counts.
 | F6 | Column cap                                                                  | **8** visible per side, then "Show all".                                                             |
 | F7 | Which URLs seed Amendments 1–3                                              | **Not decided here.** Editorial work; §10 gives a starting list per tier to check, not to trust.     |
 
-## 10. Where the first resources come from (to check, not to trust)
+## 10. Candidate resources per amendment (researched 2026-09-23, not yet verified row by row)
 
-Per amendment, the tier-1 and tier-2 material is findable and largely
-neutral; tiers 4–5 are where "both sides" has to be earned.
+Found by web search in session; every URL still needs to be opened and its
+`kind`/`stance` confirmed by the founder before it becomes a `0035` row.
+"via news" means the person or group's position was found only in coverage,
+which our ladder files as `reporting` + `neutral` — a primary statement (their
+own page, testimony, or video) is still needed for an `argument` row.
 
-- **Tier 1, all three:** the DoE booklet (already `full_text_url`); the
-  House/Senate joint resolution page on `flsenate.gov` (HJR/SJR number per
-  measure, with the staff analysis PDF attached); for Amendment 3 the
-  Revenue Estimating Conference's impact statement.
-- **Tier 2:** Florida TaxWatch, Florida Policy Institute, James Madison
-  Institute, LeRoy Collins Institute, Florida Association of Counties (a
-  county-fiscal analysis of Amendment 3 is near-certain). Each has a lean
-  the founder may want disclosed on the row (F3).
-- **Tier 3:** Miami Herald / Tampa Bay Times / Orlando Sentinel / Florida
-  Phoenix explainers, already in the news corpus.
-- **Tier 4:** the resolution sponsor's statement; Florida Realtors and the
-  Florida League of Cities on Amendment 3; Florida Farm Bureau on Amendment
-  2; editorial boards on all three.
-- **Tier 5:** to be found; nothing is assumed.
+### Amendment 1 — Budget Stabilization Fund
 
-A measure whose tier-4/5 material exists on one side only stays listed, by
-the gate, until the other side is found or is documented as absent on the
-methodology page.
+| Tier | Neutral | YES | NO |
+| --- | --- | --- | --- |
+| 1 official | DoE booklet (seeded); DoS initiative page (find the AM1 `seqnum`; AM2 is 109, AM3 is 110); the joint resolution + staff analysis on flsenate.gov (number unconfirmed) | — | — |
+| 2 analysis | James Madison Institute 2026 Amendment Guide (jamesmadison.org; no recommendation found) | Florida TaxWatch 2026 Taxpayer's Guide (recommends YES) | — |
+| 3 reporting | WUSF 2026-09-15 "DeSantis splits with GOP on Amendment 1"; WFLA; CBS Miami "What is Amendment 1"; Bradenton Times explainer; Ocala Gazette; Creative Loafing Tampa | — | — |
+| 4 argument | — | Republican Party of Florida (Evan Power statement — via news; find RPOF's own page) | Gov. DeSantis (via news — find the press-conference video or transcript); Florida AFL-CIO (Rich Templin committee testimony — via news; find the Florida Channel clip); House Democratic Leader Fentrice Driskell (via news); League of Women Voters of Florida (listed as opponent by LWV Manatee; the Vote411 PDF at lwvfl.org carries the synopsis) |
+| 5 commentary | — | palmbeachexaminer.substack.com "Stop Paying Rent to the State" | amandainformed.substack.com "Three Amendments, Three Reasons to Vote No"; sparkers-soapbox.com |
+
+**Gate risk:** NO has no primary-source `argument` row yet. Every opponent was found through coverage. The Florida Channel archive of the House Budget Committee hearing is the most likely fix.
+
+### Amendment 2 — Agricultural tangible personal property
+
+| Tier | Neutral | YES | NO |
+| --- | --- | --- | --- |
+| 1 official | DoE booklet (seeded); DoS initiative page `seqnum=109`; Senate fiscal impact statement (≈$31M/yr local revenue, via Ballotpedia — find the flsenate.gov analysis PDF) | — | — |
+| 2 analysis | James Madison Institute guide | Florida TaxWatch guide (recommends YES) | — |
+| 3 reporting | Bradenton Times explainer; MyNews13 2026-04-09; WFLA/WKRG "New amendment aims to cut costs for Florida farms"; AgInfo.net; Bloomberg Tax | — | — |
+| 4 argument | — | Florida Farm Bureau "Vote YES on Amendment 2" (floridafarmbureau.org, 2026-09-11, links its own fact sheet); Agriculture Commissioner Wilton Simpson (via news); RPOF | League of Women Voters of Florida and Florida Education Association (both listed as opponents by LWV Manatee; **no reasoning page found for either**) |
+| 5 commentary | — | palmbeachexaminer.substack.com | sisusari.substack.com "Who Exactly Gets This Tax Break?"; amandainformed.substack.com |
+
+**Gate risk: highest of the three.** The NO side has two named opponents and no page where either makes the case, plus two Substack posts. As found today, AM2 cannot clear "both sides present" with anything above tier 5. That is the honest outcome — the page stays at ballot text — unless the FEA or LWV statement is located.
+
+### Amendment 3 — Homestead exemption
+
+| Tier | Neutral | YES | NO |
+| --- | --- | --- | --- |
+| 1 official | DoE booklet (seeded); DoS initiative page `seqnum=110`; House staff analysis of HJR 1F (flhouse.gov `h0001z.SAC`); Revenue Estimating Conference impact (edr.state.fl.us `impact0710.pdf`, −$11.86B recurring); Pinellas County Property Appraiser FAQ (pcpao.gov/amendment3); Orange County page (ocfl.net); Lake Wales "Property Tax Impact 2026" | — | — |
+| 2 analysis | James Madison Institute guide; JMI poll (via Florida Politics) | — | Florida TaxWatch guide (recommends NO, 2026-09-18) + its Property Tax Resource Center; Florida Policy Institute voter guide + local fiscal impacts post |
+| 3 reporting | ClickOrlando 2026-09-23 explainer; CBS Miami "$12 billion a year"; WLRN 2026-09-21 "Realtors pour millions"; Florida Phoenix 2026-09-15; WFLX/WPTV poll story; Tampa Bay Beacons; WCTV on the REC projections; WUSF "Battleground Florida" video | — | — |
+| 4 argument | — | Vote Yes on 3 (Florida Realtors' committee site; $18M funded); Florida Realtors launch release; Florida Chamber of Commerce page; RPOF endorsement; Gov. DeSantis; Senate President Albritton release (flsenate.gov PDF, 2026-06-02); Miami-Dade Sheriff (via Florida Politics) | Florida Sheriffs Association ad campaign (find the ad video); Vote No on 3 "Math" ad; Florida Association of Counties; Florida League of Cities property-tax page; 1000 Friends of Florida; APA Florida; Florida Professional Firefighters + FOP (Lake Mary presser) |
+| 5 commentary | — | palmbeachexaminer.substack.com; bellaverderealty.com pros/cons | Political Cortadito 2026-09-03; amandainformed.substack.com |
+| video | Martin County Property Appraiser Jenny Fields explains (YouTube, official); TaxWatch research-tool segment (YouTube, reporting) | "Amendment 3 backers say…" (YouTube, reporting — neutral) | Sheriffs' TV ad (argument) |
+
+**Shape of the debate, which the ladder will show honestly:** YES has money and officials but no research organisation; NO has the two fiscal-analysis shops, the sheriffs and the local-government associations. Support and oppose row counts can still balance under the 2× rule at tier 4, so AM3 is the likeliest of the three to publish first.
