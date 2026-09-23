@@ -453,7 +453,28 @@ phenomenon, and no sub-issue should ask for it. The `safety` category's bare
 aliases (`police`, `sheriff`, `courts`, `sentencing`) retire with it on that
 same precedent; every one of them appears in routine crime coverage.
 
-### Founder work: 21 of these 25 labels need correcting
+### Founder work: 22 of these 25 labels were in question
+
+> **Applied 2026-09-23, founder-approved.** The 18 blotter rows below had `B7`
+> removed in the gold set. 16 are now `[]`. **Two are now `["B3"]`, not `[]`**:
+> the Hialeah row and the Christian Castro row were already multi-labelled
+> `B7`+`B3` (both mention ICE), and v7 is a change to `B7` only — so `B3` was
+> left as it was rather than removed without review. The **4 founder-call rows
+> are unchanged and still `["B7"]`** pending that call. `B7` now carries 7 gold
+> rows: the 3 kept below plus those 4.
+>
+> This heading previously said 21; the lists total 3 kept + 18 re-labelled + 4
+> founder calls, so 22 rows were ever in question.
+>
+> **Scope note (2026-09-23).** This corpus and gold set were drawn from the
+> sweep pool, not from stored `news_item` rows — see
+> `news-ingest-order-handoff-2026-09-23.md` §2(b). Checked against the
+> candidate names in `ballots/ballotpedia/*.json`, **17 of the 18 name no
+> candidate** and would have been dropped before characterization in production;
+> the 18th is a surname collision ("Thomas") that the matcher's ambiguity rule
+> would attach as `related`, not `named`. So the `B7` share of the *feed* was
+> smaller than the corpus figure above. (Ballotpedia is a proxy for the live
+> roster, not the roster itself.)
 
 **Expect the next run to look like a collapse.** `B7`'s recall against the
 *current* labels should fall to roughly the rows listed as policy below,
@@ -469,7 +490,7 @@ is not an agent's to do.
 - Protecting the protectors: Donald Trump signs Laurel Lee’s prison staff safety measure
 - House passes bills targeting senior scams, federal fraud and data-center power costs
 
-**Re-label to no issue (crime blotter):**
+**Re-label to no issue (crime blotter)** — applied; `B7` removed from all 18:
 
 - Arrest made after southwest Miami-Dade teen shot in leg during argument, deputies say
 - Community reacts after man killed during altercation with FDLE agent in southwest Miami-Dade
