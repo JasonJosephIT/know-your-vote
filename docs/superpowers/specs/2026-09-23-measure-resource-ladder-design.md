@@ -348,3 +348,45 @@ own page, testimony, or video) is still needed for an `argument` row.
 | video | Martin County Property Appraiser Jenny Fields explains (YouTube, official); TaxWatch research-tool segment (YouTube, reporting) | "Amendment 3 backers say…" (YouTube, reporting — neutral) | Sheriffs' TV ad (argument) |
 
 **Shape of the debate, which the ladder will show honestly:** YES has money and officials but no research organisation; NO has the two fiscal-analysis shops, the sheriffs and the local-government associations. Support and oppose row counts can still balance under the 2× rule at tier 4, so AM3 is the likeliest of the three to publish first.
+
+## 11. Follow-up (founder, 2026-09-23): an organisation registry
+
+Not part of this design. Recorded here so it is not lost.
+
+**The ask.** Look up Florida think tanks and civic/advocacy groups (Florida
+TaxWatch, Florida Policy Institute, James Madison Institute, League of Women
+Voters of Florida, Florida Farm Bureau, the county and city associations, the
+Sheriffs Association, the Chamber, the Realtors, the AFL-CIO, the FEA…),
+categorise them once, and keep track of them as a standing source of opinion
+on ballot issues, so the next measure does not start from a blank search.
+
+**Why it fits.** `src/lib/news-sources.ts` already does exactly this for
+newsrooms: a fixed, reviewable list in the repo with `publisher`, `type`,
+`leanTag` (a founder gate, never asserted by an agent), `leanBasis` (the
+evidence, kept as data), and fail-closed flags. An organisation registry is
+the same shape for the people who *argue* rather than report. Every §10 row
+at tier 2 or tier 4 would then reference a registry entry instead of a
+one-off `source` row, and the entry's category would decide `kind`
+(`analysis` for a research institute, `argument` for an advocacy group or
+trade association) by rule rather than per link.
+
+**What it would hold, first pass.**
+
+| Field | Note |
+| --- | --- |
+| `orgId`, `name`, `domain` | as `Outlet` |
+| `category` | `research_institute` · `advocacy_group` · `trade_association` · `union` · `government_association` · `civic_organisation` · `political_party` · `campaign_committee` — decides the ladder `kind` |
+| `leanTag` / `leanBasis` | founder gate, same as outlets. Basis candidates: Media Bias/Fact Check rates some think tanks; InfluenceWatch (itself right-leaning) profiles most; Ballotpedia's "influencers" pages are neutral but carry no lean. Many will be `unrated`, and that is a fact to print, not a gap. |
+| `fundingBasis` | a URL to the IRS 990 (ProPublica Nonprofit Explorer) or the state committee filing (Florida Division of Elections campaign finance) — facts, not a judgment |
+| `positions[]` | `{ measureId, stance, url, date }` — the standing record of who argued what, which is the part the founder asked to "keep track of" |
+
+**Where to start looking.** Ballotpedia lists supporters and opponents per
+measure and is the fastest way to build the initial roster; the Division of
+Elections committee database (Vote Yes on 3, Vote No on 3) gives the
+campaign committees and their funders; ProPublica's 990 explorer gives each
+nonprofit's own filings.
+
+**Gate.** Categorising an organisation is an editorial act with the same
+reputational cost as a newsroom's lean, so the registry needs its own
+brainstorm and its own founder sign-off pass before an agent fills it. Do
+not build it inside this design.
