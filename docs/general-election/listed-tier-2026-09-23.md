@@ -12,6 +12,13 @@ sites — was in the database and could not reach a single voter. Not because
 anything was broken: because the publication gate had one setting, and that
 setting meant "the audited brief", which nobody has written yet.
 
+**Go-live, done 2026-09-23.** PR #77 merged and deployed; `0033` applied live
+(53 `draft` rows seeded, nothing visible); `scripts/list-ballot-2026.sql` run
+through the door: 53 races listed, 3 measures listed, one `admin_action` row
+each. Read back as `anon` afterwards: 53 races, 106 ballot candidates, 3
+measures, 7 FL-GOV official sites; 0 profiles, issues, positions, claims or
+measure arguments; 0 non-ballot candidates. The roster is up and no claim is.
+
 ---
 
 ## 1. The headline
