@@ -18,6 +18,9 @@
         with `races.length > 0` so the "not published yet" copy keeps that
         case. This pins the composition too, since dropping it is the silent
         way to show two messages for one absence.
+     6. County races (0031/0032, listed per county since 0033) stay out of
+        `races`: their district is non-null, so one inside the list would
+        silence the notice. They travel as ResolveResult `countyRaces`.
 
    Mutation-checked: replacing the predicate body with `false` fails case 1;
    with `Boolean(district)` fails case 2; dropping the empty-string handling
@@ -111,6 +114,30 @@ check(
   "a gap notice that does not say which district is not actionable"
 );
 
+// (6) County races must stay out of `races`. They carry a non-null district
+//     ('ORA-CC-2'), so one inside the list would satisfy the predicate and
+//     silence the House-race notice for a voter whose House race is missing —
+//     and it would place a county seat on a ballot we cannot place it on.
+check(
+  "a county race in the list would mask the missing House race",
+  districtRaceMissing("FL-9", [statewide, { district: "ORA-CC-2" }]) === false,
+  "documents why the next two checks exist"
+);
+const resolveSrc = readFileSync(
+  new URL("../src/lib/resolve.ts", import.meta.url),
+  "utf8"
+);
+check(
+  "racesForDistrict matches only statewide or the exact district",
+  /\.or\(`district\.is\.null,district\.eq\.\$\{district\}`\)/.test(resolveSrc),
+  "a wider match would pull county races into `races`"
+);
+check(
+  "YourRaces feeds the predicate result.races, never countyRaces",
+  !/districtRaceMissing\([^)]*countyRaces/.test(yourRaces.replace(/\s+/g, " ")),
+  "county races are county-matched and must not answer for the district"
+);
+
 // The predicate takes no side and reads nothing global.
 check(
   "deterministic across calls",
@@ -121,7 +148,8 @@ const input: Race[] = [statewide, house("FL-28")];
 districtRaceMissing("FL-28", input);
 check(
   "input array is not mutated",
-  input.length === 2 && input[0].district === null &&
+  input.length === 2 &&
+    input[0].district === null &&
     input[1].district === "FL-28"
 );
 

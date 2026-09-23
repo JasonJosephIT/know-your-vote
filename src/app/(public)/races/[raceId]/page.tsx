@@ -1,7 +1,14 @@
 import Link from "next/link";
 import { RaceCompare } from "@/components/features/RaceCompare";
 import { TrackView } from "@/components/features/TrackView";
+import { RaceListing } from "@/components/features/RaceListing";
 import { getRaceBrief } from "@/lib/briefs";
+import {
+  getRaceListing,
+  type RaceListing as RaceListingData,
+} from "@/lib/listing";
+import { listingCopy, raceStatusLine } from "@/lib/listing-copy";
+import type { Race } from "@/types/schema";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
@@ -38,11 +45,37 @@ export async function generateMetadata({
 }) {
   const { raceId } = await params;
   const brief = await getRaceBrief(raceId);
+  const office =
+    brief?.race.office ?? (await getRaceListing(raceId))?.race.office;
   return {
-    title: brief
-      ? `${brief.race.office} — Know Your Vote`
+    title: office
+      ? `${office} — Know Your Vote`
       : "Race in review — Know Your Vote",
   };
+}
+
+/* Office, district and dates — identical for a brief and a listing, so a
+   race moving from listed to published keeps its heading. */
+function RaceHeader({
+  race,
+  children,
+}: {
+  race: Race;
+  children: React.ReactNode;
+}) {
+  const general = formatDate(race.key_dates?.general_date);
+  const registration = formatDate(race.key_dates?.registration_deadline);
+  return (
+    <header className="flex flex-col gap-1">
+      <h1 className="text-h1">{race.office}</h1>
+      <p className="text-body-sm text-on-surface-muted">
+        {race.district ?? "Statewide"}
+        {general ? ` · General election ${general}` : ""}
+        {registration ? ` · Register by ${registration}` : ""}
+      </p>
+      {children}
+    </header>
+  );
 }
 
 export default async function RacePage({
@@ -54,6 +87,8 @@ export default async function RacePage({
   const brief = await getRaceBrief(raceId);
 
   if (!brief) {
+    const listing = await getRaceListing(raceId);
+    if (listing) return <ListedRace listing={listing} />;
     return (
       <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
         <h1 className="text-h1">This race is still in review</h1>
@@ -63,7 +98,7 @@ export default async function RacePage({
           yet. Check back soon.
         </p>
         <Link
-          href="/races"
+          href="/candidates?view=races"
           className="text-label text-primary underline underline-offset-2"
         >
           Back to your races
@@ -72,18 +107,9 @@ export default async function RacePage({
     );
   }
 
-  const general = formatDate(brief.race.key_dates?.general_date);
-  const registration = formatDate(brief.race.key_dates?.registration_deadline);
-
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-5 px-5 py-8">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-h1">{brief.race.office}</h1>
-        <p className="text-body-sm text-on-surface-muted">
-          {brief.race.district ?? "Statewide"}
-          {general ? ` · General election ${general}` : ""}
-          {registration ? ` · Register by ${registration}` : ""}
-        </p>
+      <RaceHeader race={brief.race}>
         {/* "Equal scrutiny" is a claim about a comparison, and with one
             candidate there is no comparison to make — the Balance Audit's
             variance over a single profile is 0.0 and passes trivially
@@ -114,16 +140,21 @@ export default async function RacePage({
             flat untruth about an election that happened, and the
             one-candidate line would imply nobody else ran. Said before both,
             because it is the more specific fact. */}
+        {/* The four sentences and their precedence live in
+            src/lib/listing-copy.ts so the listing below picks its branch by
+            the same rule; the brief's wording is unchanged and pinned by
+            scripts/verify-listing.ts. */}
         <p className="text-body-sm text-on-surface-muted">
-          {brief.decidedInPrimary
-            ? "This contest was decided in the August primary, so it will not appear on your November ballot — here's what we have on the winner."
-            : brief.notPrintedOnBallot
-              ? "No one filed against this candidate, so they are elected without opposition and this contest will not appear on your ballot — here's what we have on them."
-              : brief.candidates.length === 1
-                ? "One candidate qualified for this race, so there is nothing to compare — here's what we have on them."
-                : "Here's your race — every candidate, same space, same scrutiny."}
+          {raceStatusLine(
+            {
+              decidedInPrimary: brief.decidedInPrimary,
+              notPrintedOnBallot: brief.notPrintedOnBallot,
+              count: brief.candidates.length,
+            },
+            "brief"
+          )}
         </p>
-      </header>
+      </RaceHeader>
 
       <TrackView event="brief_viewed" />
       <RaceCompare brief={brief} />
@@ -136,6 +167,49 @@ export default async function RacePage({
           Candidate order follows the ballot order rule, applied identically to
           every race.
         </span>
+      </footer>
+    </main>
+  );
+}
+
+/* The roster for a race that is visible (listed, or published with a brief
+   the audit re-check refused) but has no brief to show — design brief,
+   `listed` tier. Same heading, same status rule, then who is on the ballot
+   and nothing else. Every sentence here is about the ballot or about our
+   process, never about a candidate: an empty comparison would read as "these
+   candidates have no positions", and the honest statement is that nobody's
+   brief is written yet. No TrackView: this is not a brief view, and counting
+   it as one would inflate the funnel metric the brief exists to move. */
+function ListedRace({ listing }: { listing: RaceListingData }) {
+  const copy = listingCopy({
+    decidedInPrimary: listing.decidedInPrimary,
+    notPrintedOnBallot: listing.notPrintedOnBallot,
+    count: listing.candidates.length,
+    level: listing.race.level,
+  });
+
+  return (
+    <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-5 px-5 py-8">
+      <RaceHeader race={listing.race}>
+        <p className="text-body-sm text-on-surface-muted">{copy.status}</p>
+      </RaceHeader>
+
+      <section className="flex max-w-[680px] flex-col gap-2 text-body-sm text-on-surface-muted">
+        <p>{copy.intro}</p>
+        {copy.countyNote && <p>{copy.countyNote}</p>}
+      </section>
+
+      <RaceListing listing={listing} />
+
+      <footer className="flex flex-wrap gap-4 text-caption text-on-surface-muted">
+        <Link href="/methodology" className="underline underline-offset-2">
+          How we stay fair
+        </Link>
+        <span>
+          Candidate order follows the ballot order rule, applied identically to
+          every race.
+        </span>
+        {copy.writeInNote && <span>{copy.writeInNote}</span>}
       </footer>
     </main>
   );

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { BallotQuestions } from "@/components/features/BallotQuestions";
 import { getActiveMeasures } from "@/lib/measures";
-import { getStatewideRaces } from "@/lib/races";
+import { getStatewideRaces, raceStatusLabel } from "@/lib/races";
 
 /* The ballot every Florida voter shares, rendered with no input at all
    (TASK-067).
@@ -14,10 +14,15 @@ import { getStatewideRaces } from "@/lib/races";
    first HTML response, which is what makes it survive a slow connection, a
    blocked script, or a voter who has JavaScript off.
 
-   With nothing published — or with the database unreachable, which both
-   reads degrade to rather than throwing — it says so in plain words instead
-   of rendering an empty div. A blank landing page is the one failure that
-   could ship unnoticed, so it is worth making visible. */
+   With nothing visible — or with the database unreachable, which both reads
+   degrade to rather than throwing — it says so in plain words instead of
+   rendering an empty div. A blank landing page is the one failure that could
+   ship unnoticed, so it is worth making visible.
+
+   Since the listed tier (0033) a race is visible as soon as its roster is,
+   before any brief exists, so each card says which it is (raceStatusLabel).
+   The "isn't published yet" copy below is now only the truly-empty case:
+   zero races AND zero measures, i.e. nothing at all is even listed. */
 
 function formatDate(iso: string | null) {
   if (!iso) return null;
@@ -38,9 +43,9 @@ export async function SharedBallot() {
   if (races.length === 0 && measures.length === 0) {
     return (
       <p className="text-body text-on-surface-muted">
-        The ballot isn&apos;t published yet — our Balance Audit publishes a
-        race only when every candidate has equal space and equal scrutiny.
-        Check back soon.
+        The ballot isn&apos;t published yet — our Balance Audit publishes a race
+        only when every candidate has equal space and equal scrutiny. Check back
+        soon.
       </p>
     );
   }
@@ -67,6 +72,9 @@ export async function SharedBallot() {
                       <p className="text-body-sm text-on-surface-muted">
                         Statewide
                         {general ? ` · General election ${general}` : ""}
+                      </p>
+                      <p className="text-caption text-on-surface-muted">
+                        {raceStatusLabel(race.status)}
                       </p>
                     </Card>
                   </Link>

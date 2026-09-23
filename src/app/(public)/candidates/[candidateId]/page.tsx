@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { CandidateBrief } from "@/components/features/CandidateBrief";
 import { CandidateContact } from "@/components/features/CandidateContact";
+import { CandidateListing } from "@/components/features/CandidateListing";
 import { CandidateNews } from "@/components/features/CandidateNews";
 import { TrackView } from "@/components/features/TrackView";
 import { getCandidateDetail } from "@/lib/briefs";
+import { getCandidateListing } from "@/lib/listing";
 
 export const revalidate = 3600;
 
@@ -14,10 +16,11 @@ export async function generateMetadata({
 }) {
   const { candidateId } = await params;
   const detail = await getCandidateDetail(candidateId);
+  const name = detail?.brief
+    ? detail.candidate.legal_name
+    : (await getCandidateListing(candidateId))?.candidate.legal_name;
   return {
-    title: detail
-      ? `${detail.candidate.legal_name} — Know Your Vote`
-      : "Candidate — Know Your Vote",
+    title: name ? `${name} — Know Your Vote` : "Candidate — Know Your Vote",
   };
 }
 
@@ -30,6 +33,22 @@ export default async function CandidatePage({
   const detail = await getCandidateDetail(candidateId);
 
   if (!detail || !detail.brief) {
+    /* Listed tier (design brief 2026-09-23): the race is visible but no brief
+       has cleared the audit, so show the roster facts for this candidate and
+       the same news and contact blocks the brief path shows. News is
+       already neutral, cited and fairness-ordered on its own terms
+       (news-fairness.md), and contact is the campaign's own details behind
+       its own flag — neither depends on the brief. */
+    const listing = await getCandidateListing(candidateId);
+    if (listing) {
+      return (
+        <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
+          <CandidateListing listing={listing} />
+          <CandidateNews candidateId={candidateId} />
+          <CandidateContact candidateId={candidateId} />
+        </main>
+      );
+    }
     return (
       <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
         <h1 className="text-h1">This candidate isn&apos;t published yet</h1>
@@ -38,7 +57,7 @@ export default async function CandidatePage({
           published — equal space and equal scrutiny come first.
         </p>
         <Link
-          href="/races"
+          href="/candidates?view=races"
           className="text-label text-primary underline underline-offset-2"
         >
           Back to your races

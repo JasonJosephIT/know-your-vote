@@ -164,12 +164,21 @@ node scripts/verify-sentry-scrub.ts
 
 ## Demo data
 
-The database currently holds **clearly-fictional demo fixtures** (every id is
-`demo-` prefixed, every person and program invented, sources point at
-example.org) so the app could be built and verified before the CAP pipeline
-produces real audited briefs. `scripts/build-demo-seed.mjs` regenerates them;
-`scripts/demo-teardown.sql` removes every demo row. Replace with real
-pipeline output before public launch.
+The live database holds **no demo data**. The nine `demo-*` races — clearly
+fictional fixtures (every person and program invented, sources pointing at
+example.org) that let the app be built and verified before the CAP pipeline
+produced anything real — were dropped from the live project on 2026-09-21 by
+the `drop_demo_races` migration. They were `draft` and never voter-visible,
+but their office names (`Governor of Florida`, `U.S. House — District 10`) did
+not announce themselves as fake, and they were one publication flip away from
+reading as real content.
+
+The seed scripts remain in `scripts/` (`build-demo-seed.mjs`,
+`demo-seed*.sql`, `demo-teardown.sql`) for the local verification harness
+only — `node scripts/verify-demo-seed.mjs` replays them into embedded
+Postgres. **Never run them against the live project, and never seed a real
+race from them**: their content is invented, and a real race's positions come
+from the candidate's own material with a citation per claim.
 
 ## Going live — the short list
 
@@ -184,15 +193,45 @@ pipeline output before public launch.
    to when it's absent.
 2. In Vercel → Settings → Deployment Protection, set Vercel Authentication to
    "Only Preview Deployments" so the production URL is public.
-3. Run real races through the pipeline's Balance Audit and publish only
-   passes (roadmap TASK-050 — the launch gate), then remove the demo data.
+3. Apply `supabase/migrations/0033_listed_publication.sql` live, **after**
+   the code that renders the listed tier has deployed. On its own it makes
+   nothing visible: it widens what `listed` could show and seeds a `draft`
+   `race_publication` row for every general-election race, so the door has
+   something to flip.
+4. Run `scripts/list-ballot-2026.sql` by hand. It flips every `draft` general
+   race to `listed` through `set_race_publication` (one `admin_action` row per
+   race) and inserts `listed` rows for the three amendments. That puts the
+   roster and the ballot text in front of voters, and not one brief. The
+   script's header says how to reverse it.
+5. Run real races through the pipeline's Balance Audit and publish only
+   passes (roadmap TASK-050 — the launch gate).
+
+The order of 3 and 4, and why, is in
+`docs/general-election/listed-tier-2026-09-23.md`.
 
 ## The one non-negotiable
 
-Everything shown is audited pipeline output, presented with equal space and
-equal scrutiny. A race is publicly reachable only when every candidate
-Profile has `balance_check_passed = true` **and**
-`race_publication.status = 'published'` — enforced in RLS and the read
-queries, not just the UI. Candidate order is a fixed neutral rule. Party
-chips are never color-coded. See `docs/` for the PRD, vision, roadmap, and
-design system.
+Every claim shown is audited pipeline output, presented with equal space and
+equal scrutiny. A race's **brief** — profiles, issues, positions, claims and
+their sources — is publicly reachable only when every candidate Profile has
+`balance_check_passed = true` **and** `race_publication.status =
+'published'`; a ballot measure's arguments only when both sides are present,
+balanced, and `measure_publication.status = 'published'`. Enforced in RLS and
+the read queries, not just the UI.
+
+Before that there is one lower tier, `listed`, and it carries no claims. At
+`listed` a voter can see the **roster** and nothing else: the race, the names
+printed on the ballot (`race.candidate_ids`, ballot tier only), party as
+filed, the official site where it was verified by reading the page, verified
+social handles, whether the seat was already decided, and an amendment's
+verbatim ballot text. That is public record from the Division of Elections
+and the county Supervisors of Elections, not our writing. Migration `0033`
+enforces the split in RLS: it widens only the roster policies (`race`,
+`candidate`, `race_publication`, `candidate_social_account`,
+`ballot_measure`, `measure_publication`), and leaves every brief-table policy
+(`profile`, `issue`, `position`, `claim`, `claim_source`, `measure_argument`)
+reading `'published'` exactly as `0002` and `0011` wrote them — so a listed
+race cannot leak an unaudited claim, whatever rows sit beneath it.
+
+Candidate order is a fixed neutral rule. Party chips are never color-coded.
+See `docs/` for the PRD, vision, roadmap, and design system.

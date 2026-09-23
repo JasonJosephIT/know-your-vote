@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { BallotQuestions } from "@/components/features/BallotQuestions";
+import { CountyRaces } from "@/components/features/CountyRaces";
 import { VotingInfo } from "@/components/features/VotingInfo";
 import { LocationEntry } from "@/components/features/LocationEntry";
 import { createAnonServerClient } from "@/lib/supabase/server";
@@ -12,8 +13,9 @@ import {
   resolveZip,
   ZIP_RE,
 } from "@/lib/resolve";
+import { raceStatusLabel } from "@/lib/races";
 import { geocoderConfigured } from "@/lib/geocode";
-import type { ResolveResult } from "@/types/app";
+import type { ResolveResultWithCounty } from "@/lib/resolve";
 
 const DISTRICT_RE = /^FL-\d{1,2}$/;
 
@@ -54,7 +56,7 @@ export async function YourRaces({
 }) {
   const districts = await getCoveredDistricts();
 
-  let result: ResolveResult | null = null;
+  let result: ResolveResultWithCounty | null = null;
   if (zip && ZIP_RE.test(zip)) {
     result = await resolveZip(zip, district);
   } else if (district && DISTRICT_RE.test(district) && county) {
@@ -126,12 +128,19 @@ export async function YourRaces({
         </Link>
       </p>
 
+      {/* The truly-empty case only. Since the listed tier (0033) the roster is
+          visible before any brief is, so an empty list now means nothing at
+          all is visible for this location — and if county races did come
+          back, saying "your races aren't published" above them would
+          contradict the page. */}
       {result.races.length === 0 ? (
-        <p className="text-body text-on-surface-muted">
-          Your races aren&apos;t published yet — our Balance Audit publishes a
-          race only when every candidate has equal space and equal scrutiny.
-          Check back soon.
-        </p>
+        (result.countyRaces?.length ?? 0) === 0 && (
+          <p className="text-body text-on-surface-muted">
+            Your races aren&apos;t published yet — our Balance Audit publishes a
+            race only when every candidate has equal space and equal scrutiny.
+            Check back soon.
+          </p>
+        )
       ) : (
         <ul className="flex flex-col gap-4">
           {result.races.map((race) => {
@@ -145,6 +154,9 @@ export async function YourRaces({
                     <p className="text-body-sm text-on-surface-muted">
                       {race.district ?? "Statewide"}
                       {general ? ` · General election ${general}` : ""}
+                    </p>
+                    <p className="text-caption text-on-surface-muted">
+                      {raceStatusLabel(race.status)}
                     </p>
                   </Card>
                 </Link>
@@ -171,6 +183,14 @@ export async function YourRaces({
             published.
           </p>
         )}
+
+      {/* County-matched, not district-matched, so its own section rather than
+          part of the list above: every race up there is on this voter's
+          ballot, and these may not be (CountyRaces says why). Below the
+          district list because that list is the certain part. */}
+      {result.county && result.countyRaces && result.countyRaces.length > 0 && (
+        <CountyRaces county={result.county} races={result.countyRaces} />
+      )}
 
       {/* Statewide, so they belong below the location-specific races rather
           than inside that list — a voter scanning for candidates should not

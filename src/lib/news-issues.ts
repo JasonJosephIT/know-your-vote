@@ -574,3 +574,115 @@ export function categoriesFor(ids: readonly string[]): string[] {
   }
   return CATEGORY_IDS.filter((c) => set.has(c));
 }
+
+/* ---- display and filter helpers ------------------------------------------
+   Added 2026-09-23 so a stored tag can reach a story card and the /news
+   filter. Pure, like everything above; scripts/verify-news-issues.ts drives
+   them.
+
+   THE HARD RULE THESE SERVE (news-ingest-order-handoff-2026-09-23.md §1, spec
+   §4.6): the characterizer tags rows that are ALREADY STORED, it never gates
+   them. `issues` NULL means "never characterized" and `{}` means
+   "characterized, nothing cleared the threshold" — and in both cases the row
+   still renders. So every helper here treats null, undefined and an empty
+   array as "no chips", never as a reason to drop anything. A card with no
+   tags is the common case, not an error. */
+
+/** The voter-facing label of one sub-issue, or null for anything else —
+    including a category id, which has its own label on CATEGORIES. */
+export function subIssueLabel(id: string): string | null {
+  return SUB_ISSUES.find((s) => s.id === id)?.label ?? null;
+}
+
+export interface IssueChipData {
+  id: string;
+  label: string;
+  categoryId: string;
+  categoryLabel: string;
+}
+
+/** A stored tag set, as chips a card can render.
+
+    Stored order is kept (the characterizer writes in ASKABLE order, so this is
+    stable without re-sorting), duplicates collapse to the first, and an id
+    this taxonomy does not know is DROPPED rather than printed raw — a row
+    tagged under an older TAXONOMY_VERSION may carry an id that has since been
+    split, and "B6" on a card means nothing to a voter.
+
+    A category id is accepted as a tag, because `categoriesFor()` already is:
+    restoring the parent questions (see ASKABLE) would store them. Its chip
+    carries its own label as both label and category. */
+export function issueChips(
+  ids: readonly string[] | null | undefined
+): IssueChipData[] {
+  if (!ids || ids.length === 0) return [];
+  const seen = new Set<string>();
+  const out: IssueChipData[] = [];
+  for (const id of ids) {
+    if (seen.has(id)) continue;
+    seen.add(id);
+    const sub = SUB_ISSUES.find((s) => s.id === id);
+    if (sub) {
+      const cat = CATEGORIES.find((c) => c.id === sub.categoryId);
+      if (!cat) continue; // unreachable while verify-news-issues passes
+      out.push({
+        id,
+        label: sub.label,
+        categoryId: cat.id,
+        categoryLabel: cat.label,
+      });
+      continue;
+    }
+    const cat = CATEGORIES.find((c) => c.id === id);
+    if (cat) {
+      out.push({
+        id,
+        label: cat.label,
+        categoryId: cat.id,
+        categoryLabel: cat.label,
+      });
+    }
+  }
+  return out;
+}
+
+/** Every id the /news issue filter accepts: the categories, then the
+    sub-issues. The route's zod schema is built from this, so the filter can
+    never be handed a value outside the taxonomy. */
+export const ISSUE_FILTER_IDS: readonly string[] = [
+  ...CATEGORY_IDS,
+  ...SUB_ISSUE_IDS,
+];
+
+/** The stored tags that satisfy a filter on `id`, for a PostgREST
+    `overlaps` (`issues && ARRAY[...]`, the GIN-indexed query migration 0027
+    was shaped for).
+
+    A sub-issue matches only itself. A CATEGORY matches itself plus every
+    sub-issue under it — categories are a derived display layer that is never
+    stored today, so filtering on the bare category id would match nothing at
+    all and read as "no coverage". The category id stays in the list because
+    a restored parent question would store it.
+
+    Null for an id outside the taxonomy: the caller ignores the filter rather
+    than guessing at what was meant. */
+export function issueFilterIds(id: string | null | undefined): string[] | null {
+  if (!id) return null;
+  if (SUB_ISSUE_IDS.includes(id)) return [id];
+  if (CATEGORY_IDS.includes(id)) {
+    return [
+      id,
+      ...SUB_ISSUES.filter((s) => s.categoryId === id).map((s) => s.id),
+    ];
+  }
+  return null;
+}
+
+/** The label to show for an active filter — category or sub-issue — or null
+    when the id is not in the taxonomy. */
+export function issueFilterLabel(id: string | null | undefined): string | null {
+  if (!id) return null;
+  return (
+    subIssueLabel(id) ?? CATEGORIES.find((c) => c.id === id)?.label ?? null
+  );
+}

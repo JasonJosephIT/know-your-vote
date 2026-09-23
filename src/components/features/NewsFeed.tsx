@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { NewsStoryCard } from "@/components/features/NewsStoryCard";
+import { issueHref } from "@/components/ui/IssueChip";
 import { formatNewsDate } from "@/lib/format";
+import { issueChips } from "@/lib/news-issues";
 
 import type { NewsItemType } from "@/types/app";
 import type { LeanTag, SourceType } from "@/lib/news-labels";
@@ -30,8 +32,11 @@ interface FeedItem {
   source: { publisher: string; type: SourceType; lean_tag: LeanTag } | null;
   /** Outlet domain for the outlet-page link, or null for non-article rows. */
   outletDomain: string | null;
+  /** Taxonomy ids the characterizer wrote on the stored row; [] when it has
+      not run on this row or found nothing over threshold. Labels are resolved
+      here with `issueChips`, which drops any id the taxonomy no longer knows. */
+  issues: string[];
 }
-
 
 type Stage =
   | { kind: "loading" }
@@ -56,7 +61,18 @@ type Stage =
    Dropping the store also removes the useSyncExternalStore dance that existed
    only to read device storage after hydration. */
 
-export function NewsFeed({ county }: { county?: string }) {
+/* `issue` is the /news issue filter — a category or sub-issue id the page has
+   already checked against the taxonomy, or undefined. */
+export function NewsFeed({
+  county,
+  issue,
+  issueLabel,
+}: {
+  county?: string;
+  issue?: string;
+  /** The filter's display label, for the empty-state copy. */
+  issueLabel?: string;
+}) {
   const [stage, setStage] = useState<Stage>({ kind: "loading" });
 
   useEffect(() => {
@@ -65,15 +81,20 @@ export function NewsFeed({ county }: { county?: string }) {
        removed the store, and §7's "switching county is a view, not a move"
        rule is satisfied by construction: there is nothing to overwrite, and
        the choice is shareable and survives a reload. */
-    const qs = county ? `?county=${encodeURIComponent(county)}` : "";
+    const params = new URLSearchParams();
+    if (county) params.set("county", county);
+    if (issue) params.set("issue", issue);
+    const qs = params.size > 0 ? `?${params.toString()}` : "";
     fetch(`/api/news${qs}`, { signal: controller.signal })
-      .then((r) => (r.ok ? (r.json() as Promise<{ items?: FeedItem[] }>) : Promise.reject()))
+      .then((r) =>
+        r.ok ? (r.json() as Promise<{ items?: FeedItem[] }>) : Promise.reject()
+      )
       .then((data) => setStage({ kind: "ready", items: data.items ?? [] }))
       .catch(() => {
         if (!controller.signal.aborted) setStage({ kind: "error" });
       });
     return () => controller.abort();
-  }, [county]);
+  }, [county, issue]);
 
   if (stage.kind === "loading") {
     return (
@@ -96,6 +117,30 @@ export function NewsFeed({ county }: { county?: string }) {
     return (
       <p className="text-body text-on-surface-muted" role="alert">
         Couldn&apos;t load the feed — refresh to try again.
+      </p>
+    );
+  }
+
+  if (stage.items.length === 0 && issue) {
+    /* THE EMPTY FILTER MUST NOT READ AS A FINDING. Tags are written by the
+       characterizer AFTER a story is stored, and most stored stories have not
+       been through it yet (news-ingest-order-handoff-2026-09-23.md §1). So
+       "nothing tagged X" says where our tagging has reached, not what the
+       press covered — and the copy says so rather than letting a reader
+       conclude an issue went unreported. */
+    return (
+      <p className="text-body text-on-surface-muted">
+        No stories here are tagged{" "}
+        {issueLabel ? `“${issueLabel}”` : "with this issue"} yet. We add issue
+        tags after a story is stored, and most stories are not tagged yet — so
+        an empty list here says nothing about how much this issue has been
+        covered.{" "}
+        <Link
+          href={county ? `/news?county=${encodeURIComponent(county)}` : "/news"}
+          className="text-primary underline underline-offset-2"
+        >
+          Show all stories
+        </Link>
       </p>
     );
   }
@@ -124,6 +169,13 @@ export function NewsFeed({ county }: { county?: string }) {
             source={item.source}
             outletDomain={item.outletDomain}
             summary={item.summary}
+            /* Each tag links to this feed filtered on it, keeping the county.
+               `?? []` guards a cached response from before the field existed. */
+            issues={issueChips(item.issues ?? []).map((c) => ({
+              id: c.id,
+              label: c.label,
+              href: issueHref(c.id, county),
+            }))}
             dateLabel={formatNewsDate(item.publishedAt)}
             /* Only reaches the card for rows with no source of their own — an
                 official resource or a pipeline update is not journalism and

@@ -1,6 +1,7 @@
 import { NewsStoryCard } from "@/components/features/NewsStoryCard";
 import { getCandidateNews, type CandidateNewsItem } from "@/lib/briefs";
 import { formatNewsDate } from "@/lib/format";
+import { issueChips } from "@/lib/news-issues";
 import { selectNewsSlots } from "@/lib/news-slots";
 import { outletForUrl } from "@/lib/news-sources";
 
@@ -22,6 +23,15 @@ function NewsCard({ item }: { item: CandidateNewsItem }) {
      NewsStoryCard (news-fairness.md §1, amended 2026-09-19). This used to be a
      near-copy of NewsFeed.tsx's card body, and the two had already drifted. */
   const outlet = item.url ? outletForUrl(item.url) : null;
+  /* `getCandidateNews` selects `*`, so the row carries migration 0027's
+     `issues`. NULL (never characterized) and {} (nothing over threshold) both
+     mean no chips, and the card renders exactly as before. Plain chips here,
+     not links — a tap from a candidate's page into the statewide feed would
+     leave the page the reader chose. */
+  const issues = issueChips(item.issues).map((c) => ({
+    id: c.id,
+    label: c.label,
+  }));
   return (
     <li>
       <NewsStoryCard
@@ -32,6 +42,7 @@ function NewsCard({ item }: { item: CandidateNewsItem }) {
         outletDomain={outlet?.domain ?? null}
         summary={item.summary}
         dateLabel={formatNewsDate(item.published_at)}
+        issues={issues}
       />
     </li>
   );
@@ -97,9 +108,8 @@ export async function CandidateNews({
                 shared; the selection from it is per candidate. */}
             <p className="text-body-sm text-on-surface-muted">
               These stories did not name this candidate — they cover the race,
-              or a name that could have been more than one person on the
-              ballot. They are drawn from the same pool for every candidate in
-              the race.
+              or a name that could have been more than one person on the ballot.
+              They are drawn from the same pool for every candidate in the race.
             </p>
           </header>
           <ul className="flex flex-col gap-4">
@@ -115,8 +125,8 @@ export async function CandidateNews({
           stories there were, not to fill the gap with something else. */}
       {shortfall > 0 && (
         <p className="text-body-sm text-on-surface-muted">
-          Only {selected.length} {selected.length === 1 ? "story" : "stories"} found
-          for this candidate in the last 30 days.
+          Only {selected.length} {selected.length === 1 ? "story" : "stories"}{" "}
+          found for this candidate in the last 30 days.
         </p>
       )}
     </section>

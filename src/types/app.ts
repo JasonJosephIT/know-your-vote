@@ -17,7 +17,11 @@ export interface ZipDistrict {
   in_coverage: boolean;
 }
 
-export type PublicationStatus = "draft" | "in_review" | "published";
+/* `listed` (migration 0033) is the roster tier: the race, its ballot-tier
+   candidates and the publication status itself are anon-readable, while every
+   brief table (profile, issue, position, claim, claim_source) stays gated on
+   `published`. See docs/general-election/listed-tier-2026-09-23.md. */
+export type PublicationStatus = "draft" | "in_review" | "listed" | "published";
 
 export interface RacePublication {
   race_id: string;
@@ -29,10 +33,7 @@ export interface RacePublication {
 /* Migration 0005 widened item_type to four values and added candidate_id;
    this type was left behind and no longer matched the live database. */
 export type NewsItemType =
-  | "pipeline_event"
-  | "official_link"
-  | "candidate_news"
-  | "election_news";
+  "pipeline_event" | "official_link" | "candidate_news" | "election_news";
 
 export interface NewsItem {
   id: string;
@@ -53,6 +54,10 @@ export interface NewsItem {
      NULL is a real and common state, not a backlog — many feeds carry no image
      and the card has a text-only variant. */
   image_url: string | null;
+  /* Issue tags from the characterizer (migration 0027). NULL means never
+     characterized, [] means characterized with nothing over threshold. Both
+     render as "no tags"; neither ever hides the row (design spec §4.2). */
+  issues: string[] | null;
 }
 
 /* Contact & logistics layer written by the R2 refresher (migration 0005) —
@@ -85,6 +90,10 @@ export interface ResolveRaceSummary {
   level: string;
   district: string | null;
   published: boolean;
+  /* Which tier made the race visible (0033). Optional because cached shapes
+     written before this field existed come back without it, and `undefined`
+     has to mean the weaker claim — treat as `listed`, never as `published`. */
+  status?: "listed" | "published";
 }
 
 export interface ResolveResult {

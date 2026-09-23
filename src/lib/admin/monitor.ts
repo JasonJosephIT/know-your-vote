@@ -124,7 +124,10 @@ export async function getHealth(): Promise<HealthReport> {
     for (const row of data ?? []) {
       const a = row.agent as AgentName;
       if (a in agents && agents[a].last === null) {
-        agents[a] = { last: row.started_at as string, status: row.status as string };
+        agents[a] = {
+          last: row.started_at as string,
+          status: row.status as string,
+        };
       }
     }
   }
@@ -138,7 +141,8 @@ export async function getHealth(): Promise<HealthReport> {
     agents,
     cron_heartbeat: {
       newest_at: newestHeartbeat,
-      age_hours: newestHeartbeat === null ? null : ageHours(newestHeartbeat, now),
+      age_hours:
+        newestHeartbeat === null ? null : ageHours(newestHeartbeat, now),
     },
     checked_at: new Date(now).toISOString(),
   };
@@ -206,6 +210,9 @@ export interface FeedHealthData {
 
 export interface PipelineData {
   published: number;
+  /* Roster-only races (0033): anon-readable like published, so always
+     measured. Before 0033 is applied live the filter simply matches nothing. */
+  listed: number;
   draft: number | null; // null = not measurable without the service role
   in_review: number | null;
   newest_event_at: string | null;
@@ -285,7 +292,8 @@ async function buildAgentRuns(
     .select("agent, status, items_written, started_at, summary, report_path")
     .order("started_at", { ascending: false });
   if (error) {
-    if (error.code === "42P01") return { status: "degraded", missing: MISSING_0006 };
+    if (error.code === "42P01")
+      return { status: "degraded", missing: MISSING_0006 };
     return { status: "error", message: error.message };
   }
 
@@ -352,10 +360,12 @@ async function buildFreshness(
   if (schemaGap) return { status: "degraded", missing: MISSING_0005 };
 
   const realError = [raceRes, candRes, contactRes].find((r) => r.error);
-  if (realError?.error) return { status: "error", message: realError.error.message };
+  if (realError?.error)
+    return { status: "error", message: realError.error.message };
 
   const race_verified_at = raceRes.data?.[0]?.info_last_verified_at ?? null;
-  const candidate_verified_at = candRes.data?.[0]?.site_last_verified_at ?? null;
+  const candidate_verified_at =
+    candRes.data?.[0]?.site_last_verified_at ?? null;
   const contact_verified_at = contactRes.data?.[0]?.last_verified_at ?? null;
 
   if (!race_verified_at && !candidate_verified_at && !contact_verified_at) {
@@ -421,9 +431,16 @@ async function buildFeedHealth(
     if (isMissingRequiredUrl(r)) {
       flags.push({ id: r.id, kind: "missing_url" });
     }
-    const match = findBannedTermMatch([r.title ?? "", r.summary ?? ""].join(" "));
+    const match = findBannedTermMatch(
+      [r.title ?? "", r.summary ?? ""].join(" ")
+    );
     if (match) {
-      flags.push({ id: r.id, kind: "banned_term", term: match.term, snippet: match.snippet });
+      flags.push({
+        id: r.id,
+        kind: "banned_term",
+        term: match.term,
+        snippet: match.snippet,
+      });
     }
   }
 
@@ -450,11 +467,17 @@ async function buildPipeline(
   // anon_read_published), so counting them with the anon client would return a
   // FAKE ZERO — dishonest. They come from the service client only; without it
   // they are reported as null ("—"), never a made-up 0 (roadmap Build Phil. 10).
-  const [pub, newestEvent, draft, inReview] = await Promise.all([
+  // listed rows ARE anon-readable (0033 anon_read_published), so they come
+  // from `content` like published.
+  const [pub, listed, newestEvent, draft, inReview] = await Promise.all([
     content
       .from("race_publication")
       .select("*", { head: true, count: "exact" })
       .eq("status", "published"),
+    content
+      .from("race_publication")
+      .select("*", { head: true, count: "exact" })
+      .eq("status", "listed"),
     newestPipelineEventAt(content),
     service
       ? service
@@ -470,11 +493,12 @@ async function buildPipeline(
       : null,
   ]);
 
-  const err = [pub, draft, inReview].find((r) => r && r.error);
+  const err = [pub, listed, draft, inReview].find((r) => r && r.error);
   if (err?.error) return { status: "error", message: err.error.message };
 
   const data: PipelineData = {
     published: pub.count ?? 0,
+    listed: listed.count ?? 0,
     draft: service ? (draft?.count ?? 0) : null,
     in_review: service ? (inReview?.count ?? 0) : null,
     newest_event_at: newestEvent,
@@ -483,6 +507,7 @@ async function buildPipeline(
   // a null (unmeasured) draft count must not read as a confident zero.
   if (
     data.published === 0 &&
+    data.listed === 0 &&
     data.draft === 0 &&
     data.in_review === 0 &&
     !data.newest_event_at
@@ -504,7 +529,8 @@ async function buildWaiting(
     .select("*", { head: true, count: "exact" })
     .eq("status", "pending");
   if (error) {
-    if (error.code === "42P01") return { status: "degraded", missing: MISSING_0006 };
+    if (error.code === "42P01")
+      return { status: "degraded", missing: MISSING_0006 };
     return { status: "error", message: error.message };
   }
   const pending = count ?? 0;
@@ -520,7 +546,9 @@ async function buildRisks(
   if (!service) return { status: "degraded", missing: MISSING_SERVICE };
   if (m0006 === false) return { status: "degraded", missing: MISSING_0006 };
 
-  const staleCutoff = new Date(now - STALE_CLAIM_HOURS * 3_600_000).toISOString();
+  const staleCutoff = new Date(
+    now - STALE_CLAIM_HOURS * 3_600_000
+  ).toISOString();
   const [failedRuns, applyErrors, staleClaims] = await Promise.all([
     service
       .from("agent_run")
@@ -539,15 +567,22 @@ async function buildRisks(
 
   const err = [failedRuns, applyErrors, staleClaims].find((r) => r.error);
   if (err?.error) {
-    if (err.error.code === "42P01") return { status: "degraded", missing: MISSING_0006 };
+    if (err.error.code === "42P01")
+      return { status: "degraded", missing: MISSING_0006 };
     return { status: "error", message: err.error.message };
   }
 
   const items: RiskItem[] = [
     { label: "Failed agent runs", count: failedRuns.count ?? 0 },
     { label: "Review items with apply errors", count: applyErrors.count ?? 0 },
-    { label: "Stale claimed run requests (> 6h)", count: staleClaims.count ?? 0 },
+    {
+      label: "Stale claimed run requests (> 6h)",
+      count: staleClaims.count ?? 0,
+    },
   ].filter((i) => i.count > 0);
 
-  return { status: "ok", data: { items, total: items.reduce((n, i) => n + i.count, 0) } };
+  return {
+    status: "ok",
+    data: { items, total: items.reduce((n, i) => n + i.count, 0) },
+  };
 }

@@ -8,12 +8,15 @@
    trigger did not cover — a restore, a direct service-role write, a future
    migration.
 
-   sidesBalanced is pure, so this needs no database or server.
+   sidesBalanced is pure, so this needs no database or server. So is
+   measureVisibleStatus (src/lib/measure-status.ts), the fail-closed read of
+   which publication tier made a measure visible, checked at the bottom.
 
    Run: node scripts/verify-measure-balance.ts
    (Node >= 23 strips types natively — same as verify-calendar.ts.) */
 
 import { sidesBalanced } from "../src/lib/measure-balance.ts";
+import { measureVisibleStatus } from "../src/lib/measure-status.ts";
 
 let failures = 0;
 function check(name: string, ok: boolean, detail = "") {
@@ -47,8 +50,43 @@ check("10 vs 2 is NOT balanced", !sidesBalanced(10, 2));
 check("4 vs 3 is balanced (boundary)", sidesBalanced(4, 3));
 check("4 vs 2 is NOT balanced (just past the boundary)", !sidesBalanced(4, 2));
 
+/* The listed tier (0033). measureVisibleStatus reads the
+   measure_publication(status) embed, which PostgREST may return as an
+   object, a one-element array, or null — and it must fail closed: anything
+   but exactly `listed` or `published` means the measure does not render. */
+check(
+  "object embed, listed",
+  measureVisibleStatus({ status: "listed" }) === "listed"
+);
+check(
+  "object embed, published",
+  measureVisibleStatus({ status: "published" }) === "published"
+);
+check(
+  "array embed, listed",
+  measureVisibleStatus([{ status: "listed" }]) === "listed"
+);
+check(
+  "array embed, published",
+  measureVisibleStatus([{ status: "published" }]) === "published"
+);
+check("null embed is hidden", measureVisibleStatus(null) === null);
+check("undefined embed is hidden", measureVisibleStatus(undefined) === null);
+check("empty array embed is hidden", measureVisibleStatus([]) === null);
+check("draft is hidden", measureVisibleStatus({ status: "draft" }) === null);
+check(
+  "in_review is hidden",
+  measureVisibleStatus({ status: "in_review" }) === null
+);
+check(
+  "an unknown future status is hidden",
+  measureVisibleStatus({ status: "archived" }) === null
+);
+check("case matters", measureVisibleStatus({ status: "Published" }) === null);
+check("a missing status field is hidden", measureVisibleStatus({}) === null);
+
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed`);
   process.exit(1);
 }
-console.log("\nMeasure symmetry checks passed.");
+console.log("\nMeasure symmetry and visibility checks passed.");

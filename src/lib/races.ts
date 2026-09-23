@@ -17,8 +17,40 @@ import type { ResolveRaceSummary } from "@/types/app";
 
    Cached like measures.ts: the race set changes when the pipeline publishes,
    not per visit, so the landing page stays prerendered rather than hitting
-   the database on every request. RLS still filters unpublished races, so
-   `published: true` is a fact about what came back, not an assumption. */
+   the database on every request.
+
+   Visible is no longer the same as published (0033). RLS now returns a race
+   at either `listed` (the roster: who is on the ballot) or `published` (the
+   audited brief), and the card has to say which — a listed race presented as
+   a brief would promise a comparison that does not exist yet. So the status
+   is read, not assumed: see raceStatusOf. */
+
+/* The status a visible race row carries, from its `race_publication(status)`
+   embed. Shared with resolve.ts so every race list derives it one way.
+
+   PostgREST returns this to-one embed as an object, but some relationship
+   shapes return a one-element array (same caveat as briefs.ts
+   fetchCandidateNews); both are normalized. Anything that is not exactly
+   'published' — a missing embed, a null, a cached row from before 0033 —
+   is `listed`, the weaker claim: the worst this can do is undersell an
+   audited brief, never oversell an unaudited one. */
+export function raceStatusOf(
+  embed: unknown
+): NonNullable<ResolveRaceSummary["status"]> {
+  const row = (Array.isArray(embed) ? embed[0] : embed) as
+    { status?: unknown } | null | undefined;
+  return row?.status === "published" ? "published" : "listed";
+}
+
+/* The one line every race card carries to say what is behind the link: an
+   audited brief, or (at `listed`) the roster alone. Kept here so the landing
+   page, Your races and the county list word it identically. Never
+   "published" for a listed race (listed-tier brief). */
+export function raceStatusLabel(status: ResolveRaceSummary["status"]): string {
+  return status === "published"
+    ? "Full brief"
+    : "Names on the ballot · brief in review";
+}
 
 export type StatewideRace = ResolveRaceSummary & {
   /* From race.key_dates, so the card can name the election day without a
@@ -42,7 +74,9 @@ async function fetchStatewideRaces(): Promise<StatewideRace[]> {
   }
   const { data, error } = await supabase
     .from("race")
-    .select("race_id, office, level, district, key_dates")
+    .select(
+      "race_id, office, level, district, key_dates, race_publication(status)"
+    )
     .eq("election", ACTIVE_ELECTION_KIND)
     .is("district", null)
     /* Same ordering as the district path in resolve.ts, so the landing page
@@ -56,21 +90,30 @@ async function fetchStatewideRaces(): Promise<StatewideRace[]> {
      indistinguishable from an outage here — an honest limit of degrading, and
      the better of the two failures. */
   if (error) return [];
-  return (data ?? []).map((r) => ({
-    raceId: r.race_id,
-    office: r.office,
-    level: r.level,
-    district: r.district,
-    published: true,
-    generalDate:
-      (r.key_dates as Record<string, string> | null)?.general_date ?? null,
-  }));
+  return (data ?? []).map((r) => {
+    const status = raceStatusOf(r.race_publication);
+    return {
+      raceId: r.race_id,
+      office: r.office,
+      level: r.level,
+      district: r.district,
+      /* Kept for callers that predate `status`; derived from it so the two
+         can never disagree. */
+      published: status === "published",
+      status,
+      generalDate:
+        (r.key_dates as Record<string, string> | null)?.general_date ?? null,
+    };
+  });
 }
 
 export function getStatewideRaces() {
   return unstable_cache(
     fetchStatewideRaces,
-    ["statewide-races", ACTIVE_ELECTION_KIND],
+    /* v2: the shape gained `status` (0033). A new key rather than trusting
+       old entries to age out, although an old entry would still be read
+       safely — a missing status is `listed`. */
+    ["statewide-races", "v2", ACTIVE_ELECTION_KIND],
     { revalidate: 3600, tags: ["races"] }
   )();
 }

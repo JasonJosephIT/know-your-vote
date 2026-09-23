@@ -4,14 +4,22 @@ import { Card } from "@/components/ui/Card";
 import { PartyChip } from "@/components/ui/PartyChip";
 import { PolicyAreaChip } from "@/components/ui/PolicyAreaChip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
-import { browseCandidates } from "@/lib/directory";
+import { browseCandidates, type DecidedSeat } from "@/lib/directory";
+import { safeHttpUrl } from "@/lib/format";
 import { policyAreaLabel } from "@/lib/policy-areas";
-import { COVERED_COUNTIES } from "@/lib/resolve";
+import { COVERED_COUNTIES } from "@/lib/counties";
 
-/* Browse every candidate in every published race across the four covered
-   counties — searchable by name, office, or party; filterable by county and
-   by policy area. Plain GET form, server-rendered, equal treatment
-   throughout.
+/* Browse every candidate across the four covered counties — including the
+   holders of seats already decided, marked as not printed on the ballot —
+   statewide, congressional and county races alike, whether the race has a
+   full brief yet or only its roster (the `listed` tier, 0033). Searchable by
+   name, office, or party; filterable by county and by policy area. Plain GET
+   form, server-rendered, equal treatment throughout.
+
+   A card links to "Read their brief" only when there is one (the race is
+   published); otherwise "About this candidate", which lands on the roster
+   listing. Promising a brief that is still in review would be the one
+   untrue thing this page could say.
 
    The policy-area filter narrows WHO IS LISTED, never how they are ranked or
    described: inside a race the ballot-order rule still decides the order, and
@@ -19,6 +27,12 @@ import { COVERED_COUNTIES } from "@/lib/resolve";
    as any other. Areas come from the issue titles the pipeline wrote (see
    src/lib/policy-areas.ts), so filtering cannot surface a judgment this app
    made about a candidate. */
+const DECIDED_LINE: Record<DecidedSeat, string> = {
+  unopposed: "Elected without opposition — not printed on the ballot",
+  elected_in_primary:
+    "Decided in the August primary — not printed on the ballot",
+};
+
 export async function CandidateBrowser({
   q,
   countyFips,
@@ -86,10 +100,19 @@ export async function CandidateBrowser({
         <Button type="submit">Search</Button>
       </form>
 
+      {/* "On the ballot" only while it is true: once a decided seat is in the
+          set, some of these races are not printed, so the line counts them
+          instead of claiming the whole set is on the ballot. */}
       <p className="text-caption text-on-surface-muted" role="status">
         {results.total} candidate{results.total === 1 ? "" : "s"} across{" "}
-        {results.races.length} published race
-        {results.races.length === 1 ? "" : "s"}
+        {results.races.length} race{results.races.length === 1 ? "" : "s"}
+        {results.decidedRaces === 0
+          ? " on the ballot"
+          : results.races.length === 1
+            ? ", a seat already decided"
+            : `, ${results.decidedRaces} of them ${
+                results.decidedRaces === 1 ? "a seat" : "seats"
+              } already decided`}
         {results.q ? ` matching “${results.q}”` : ""}
         {areaLabel ? ` with a stated position on ${areaLabel}` : ""} — shown in
         ballot order, every race, every party.
@@ -98,7 +121,7 @@ export async function CandidateBrowser({
       {results.total === 0 ? (
         <p className="text-body text-on-surface-muted">
           {areaLabel
-            ? `No candidates in this search have a stated position on ${areaLabel}. That is what the briefs record, so try another area or clear the filter to see everyone.`
+            ? `No candidates in this search have a stated position on ${areaLabel} in a full brief. Positions come only from races whose briefs are finished, so try another area or clear the filter to see everyone.`
             : "No candidates match that search. Try a shorter name, an office like “Governor”, or clear the search to see everyone."}
         </p>
       ) : (
@@ -108,9 +131,14 @@ export async function CandidateBrowser({
               <Link href={`/races/${race.race_id}`} className="hover:underline">
                 {race.office}
               </Link>{" "}
-              <span className="text-caption font-medium text-on-surface-muted">
-                {race.district ?? "Statewide"}
-              </span>
+              {/* A county race's office already names its county and seat
+                  ("Orange County Commission, District 2"); its district code
+                  is an internal key, not something a voter reads. */}
+              {race.level !== "county" && (
+                <span className="text-caption font-medium text-on-surface-muted">
+                  {race.district ?? "Statewide"}
+                </span>
+              )}
             </h2>
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {candidates.map((c) => (
@@ -127,6 +155,14 @@ export async function CandidateBrowser({
                       </h3>
                       <PartyChip party={c.party} />
                     </div>
+                    {/* A seat settled before November. Same card as everyone
+                        else's, plus the one fact that changes what a voter
+                        can do about it. */}
+                    {c.decided && (
+                      <p className="text-caption text-on-surface-muted">
+                        {DECIDED_LINE[c.decided]}
+                      </p>
+                    )}
                     {/* The areas this candidate has a stated position in.
                         Plain text, not links: the filter above is one tap
                         away, and a card full of links reads badly aloud. */}
@@ -147,8 +183,24 @@ export async function CandidateBrowser({
                         href={`/candidates/${c.candidate_id}`}
                         className="text-primary underline underline-offset-2"
                       >
-                        Read their brief
+                        {c.hasBrief
+                          ? "Read their brief"
+                          : "About this candidate"}
                       </Link>
+                      {/* The campaign's own site — always selected, never
+                          shown until now. Routed through safeHttpUrl like
+                          every other stored URL, so a bad row renders no link
+                          rather than a javascript: one. */}
+                      {safeHttpUrl(c.official_site) && (
+                        <a
+                          href={safeHttpUrl(c.official_site) ?? undefined}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-primary underline underline-offset-2"
+                        >
+                          Official site
+                        </a>
+                      )}
                       <SaveToggle candidateId={c.candidate_id} />
                     </div>
                   </Card>
