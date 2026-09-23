@@ -24,8 +24,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ??
-      "https://know-your-vote-chazak.vercel.app"
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://knowyour.vote"
   ),
   /* Every public page sets its own title, so `default` is in practice the
      landing page's — and since TASK-067 that page no longer claims to show

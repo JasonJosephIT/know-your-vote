@@ -1,5 +1,7 @@
 # Know Your Vote
 
+**Live at [knowyour.vote](https://knowyour.vote).**
+
 The voter-facing web app of the Civic Awareness Project (CAP): a nonpartisan
 civic tool that lets a Florida voter enter a ZIP code and see every candidate
 in their races side by side — **What They Say**, **What They've Done**, and
@@ -97,8 +99,9 @@ missing key degrades a surface, it never fakes one.
 ### Optional — URLs, analytics, error reporting
 
 - `NEXT_PUBLIC_SITE_URL` — canonical origin for `sitemap.xml`, `robots.txt`,
-  the OG metadata base, and the admin magic-link fallback. Falls back to the
-  Vercel URL, so set it once a custom domain exists.
+  the OG metadata base, and the admin magic-link fallback. Falls back to
+  `https://knowyour.vote`, the production domain, so an unset value is only
+  wrong on a preview deployment.
 - `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` — loads the cookieless analytics script.
   Unset → no script at all.
 - `NEXT_PUBLIC_SENTRY_DSN` — browser error reporting, loaded lazily after
@@ -192,7 +195,9 @@ from the candidate's own material with a citation per claim.
    [Environment variables](#environment-variables) for what each one degrades
    to when it's absent.
 2. In Vercel → Settings → Deployment Protection, set Vercel Authentication to
-   "Only Preview Deployments" so the production URL is public.
+   "Only Preview Deployments" so the production URL is public. **Done
+   2026-09-23**: `knowyour.vote` and the production `*.vercel.app` URLs are
+   public; preview deployments still require a Vercel login.
 3. Apply `supabase/migrations/0033_listed_publication.sql` live, **after**
    the code that renders the listed tier has deployed. On its own it makes
    nothing visible: it widens what `listed` could show and seeds a `draft`
