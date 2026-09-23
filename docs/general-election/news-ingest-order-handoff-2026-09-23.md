@@ -1,5 +1,10 @@
 # Handoff — the ingest order: what reaches Jev, and what never does
 
+> **Update, same day:** §4 has been run against production. See
+> `news-ingest-order-results-2026-09-23.md`. Short version: `profile` is empty,
+> so stage 3 has never run live, and stage 3's `related` tier admits
+> common-word surname collisions.
+
 **Written** 2026-09-23 · **Read from the repo at `c0cc33f`** (taxonomy v7, PR
 #72 merged). **Nothing in this file was read from the live database** — that is
 precisely the work being handed off. Every claim below is traceable to a file
