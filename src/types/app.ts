@@ -136,8 +136,20 @@ export interface QuizResponse {
   disclaimer: string;
 }
 
-/* Ballot measures (0010). App-owned, unlike the pipeline's race tables. */
-export type MeasureSide = "support" | "oppose";
+/* Ballot measures (0010, 0034). App-owned, unlike the pipeline's race tables. */
+export type MeasureStance = "support" | "oppose" | "neutral";
+
+/* The credibility ladder, top to bottom. The tier is RESOURCE_TIER[kind] in
+   src/lib/measure-ladder.ts and nowhere else. */
+export type MeasureKind =
+  | "official"
+  | "analysis"
+  | "reporting"
+  | "argument"
+  | "commentary";
+
+/* Format is NOT credibility: a think tank's video is `analysis` + `video`. */
+export type MeasureFormat = "document" | "article" | "video" | "audio";
 
 export interface BallotMeasure {
   measure_id: string;
@@ -154,12 +166,21 @@ export interface BallotMeasure {
   display_order: number;
 }
 
-export interface MeasureArgument {
-  argument_id: string;
+/* One outside resource about a measure (0034). Publisher, URL, type and
+   lean come from the joined `source` row, never duplicated here. */
+export interface MeasureResource {
+  resource_id: string;
   measure_id: string;
-  side: MeasureSide;
-  text: string;
   source_id: string;
-  attributed: boolean;
+  stance: MeasureStance;
+  kind: MeasureKind;
+  format: MeasureFormat;
+  title: string;
+  author: string | null;
+  /* ISO date (YYYY-MM-DD) or null when the resource is undated. */
+  published_at: string | null;
+  duration_seconds: number | null;
+  /* ≤140 chars of attribution, never summary (spec F4). */
+  note: string | null;
   display_order: number;
 }
