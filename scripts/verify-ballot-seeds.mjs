@@ -360,10 +360,10 @@ await check(
   measures
 );
 await check(
-  "anon reads no brief rows (profile/issue/position/claim/argument)",
+  "anon reads no brief rows (profile/issue/position/claim/resource)",
   `SELECT ((SELECT count(*) FROM profile) + (SELECT count(*) FROM issue)
          + (SELECT count(*) FROM position) + (SELECT count(*) FROM claim)
-         + (SELECT count(*) FROM measure_argument))::int n`,
+         + (SELECT count(*) FROM measure_resource))::int n`,
   0
 );
 await db.exec("RESET ROLE;");

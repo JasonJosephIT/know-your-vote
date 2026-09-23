@@ -1344,18 +1344,33 @@ await expectDenied(
 await db.exec("RESET ROLE;");
 
 /* ---------------------------------------------------------------- *
- * 16. 0010/0011 ballot measures (TASK-061).
+ * 16. 0010/0011/0034 ballot measures.
  *
  * Same posture as races: anon sees a measure only through a published
  * measure_publication row, and can write nothing. Plus the symmetry rule,
- * which is the part that is specific to measures — an amendment has no
- * campaign obliged to balance it, so the database refuses to publish a
- * lopsided one rather than trusting a reviewer to notice.
+ * which is the part specific to measures — an amendment has no campaign
+ * obliged to balance it, so the database refuses to publish a lopsided one
+ * rather than trusting a reviewer to notice. Since 0034 the unit is an
+ * outside RESOURCE (a link), not an argument we wrote, and the rule is
+ * "both sides present, larger <= 2x smaller".
  * ---------------------------------------------------------------- */
+
+await check("0034 dropped measure_argument", async () => {
+  const res = await db.query("SELECT to_regclass('public.measure_argument') AS t;");
+  if (res.rows[0].t !== null) throw new Error("measure_argument still exists");
+});
 
 await db.exec(`
   INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag) VALUES
-    ('s-m', 'https://example.gov/m', 'example.gov/m', 'Example Gov', 'primary_doc', 'N/A');
+    ('s-gov', 'https://example.gov/m',   'example.gov/m',   'Example Gov',   'primary_doc',       'N/A'),
+    ('s-n1',  'https://example.news/1',  'example.news/1',  'Example News',  'factual_reporting', 'unrated'),
+    ('s-o1',  'https://example.org/1',   'example.org/1',   'Example Org',   'opinion',           'unrated'),
+    ('s-o2',  'https://example.org/2',   'example.org/2',   'Example Org',   'opinion',           'unrated'),
+    ('s-o3',  'https://example.org/3',   'example.org/3',   'Example Org',   'opinion',           'unrated'),
+    ('s-o4',  'https://example.org/4',   'example.org/4',   'Example Org',   'opinion',           'unrated'),
+    ('s-o5',  'https://example.org/5',   'example.org/5',   'Example Org',   'opinion',           'unrated'),
+    ('s-o6',  'https://example.org/6',   'example.org/6',   'Example Org',   'opinion',           'unrated'),
+    ('s-yt',  'https://video.example/1', 'video.example/1', 'Some Channel',  'opinion',           'unrated');
 
   INSERT INTO ballot_measure
     (measure_id, election, number, official_title, ballot_summary, full_text_url,
@@ -1364,15 +1379,17 @@ await db.exec(`
     ('m-draft', 'general_2026', '2', 'Draft Measure',     'Summary.', 'https://example.gov/2', 'legislature', 60, 'FL', 2),
     ('m-skew',  'general_2026', '3', 'Lopsided Measure',  'Summary.', 'https://example.gov/3', 'legislature', 60, 'FL', 3);
 
-  INSERT INTO measure_argument (argument_id, measure_id, side, text, source_id) VALUES
-    ('a1', 'm-pub',   'support', 'For.',     's-m'),
-    ('a2', 'm-pub',   'oppose',  'Against.', 's-m'),
-    ('a3', 'm-draft', 'support', 'For.',     's-m'),
-    ('a4', 'm-draft', 'oppose',  'Against.', 's-m'),
+  INSERT INTO measure_resource
+    (resource_id, measure_id, source_id, stance, kind, format, title, published_at) VALUES
+    ('r1', 'm-pub',   's-gov', 'neutral', 'official',  'document', 'Staff analysis', '2026-01-01'),
+    ('r2', 'm-pub',   's-o1',  'support', 'argument',  'article',  'For.',           '2026-02-01'),
+    ('r3', 'm-pub',   's-o2',  'oppose',  'argument',  'article',  'Against.',       '2026-02-01'),
+    ('r4', 'm-draft', 's-o3',  'support', 'argument',  'article',  'For.',           NULL),
+    ('r5', 'm-draft', 's-o4',  'oppose',  'argument',  'article',  'Against.',       NULL),
     -- m-skew: three for, none against.
-    ('a5', 'm-skew',  'support', 'For A.',   's-m'),
-    ('a6', 'm-skew',  'support', 'For B.',   's-m'),
-    ('a7', 'm-skew',  'support', 'For C.',   's-m');
+    ('r6', 'm-skew',  's-o5',  'support', 'argument',  'article',  'For A.',         NULL),
+    ('r7', 'm-skew',  's-o6',  'support', 'argument',  'article',  'For B.',         NULL),
+    ('r8', 'm-skew',  's-yt',  'support', 'commentary','video',    'For C.',         NULL);
 
   INSERT INTO measure_publication (measure_id, status) VALUES
     ('m-pub', 'published'),
@@ -1380,11 +1397,11 @@ await db.exec(`
 `);
 
 /* 0033: a listed measure is its ballot text alone. Inserted as service_role
-   with ZERO arguments -- the balance trigger (0010/0012) checks only
-   status = 'published', so this must be accepted. An argument added
-   afterwards is still editable (the argument-side trigger guards published
-   measures only) and must stay invisible to anon. */
-await check("a listed measure with zero arguments is accepted", async () => {
+   with ZERO resources -- the balance trigger checks only status =
+   'published', so this must be accepted. A resource added afterwards stays
+   editable (the resource-side trigger guards published measures only) and
+   must stay invisible to anon. */
+await check("a listed measure with zero resources is accepted", async () => {
   await db.exec("SET ROLE service_role;");
   try {
     await db.exec(`
@@ -1393,8 +1410,8 @@ await check("a listed measure with zero arguments is accepted", async () => {
          placed_by, threshold_pct, jurisdiction, display_order) VALUES
         ('m-listed', 'general_2026', '4', 'Listed Measure', 'Summary.', 'https://example.gov/4', 'legislature', 60, 'FL', 4);
       INSERT INTO measure_publication (measure_id, status) VALUES ('m-listed', 'listed');
-      INSERT INTO measure_argument (argument_id, measure_id, side, text, source_id)
-        VALUES ('a-l1', 'm-listed', 'support', 'For, unpublished.', 's-m');`);
+      INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+        VALUES ('r-l1', 'm-listed', 's-o1', 'support', 'argument', 'article', 'For, unpublished.');`);
   } finally {
     await db.exec("RESET ROLE;");
   }
@@ -1405,9 +1422,7 @@ await check("anon sees published and listed measures, never draft", async () => 
   const res = await db.query("SELECT measure_id FROM ballot_measure ORDER BY measure_id;");
   await db.exec("RESET ROLE;");
   const ids = res.rows.map((r) => r.measure_id).join(",");
-  if (ids !== "m-listed,m-pub") {
-    throw new Error(`expected m-listed,m-pub, got [${ids}]`);
-  }
+  if (ids !== "m-listed,m-pub") throw new Error(`expected m-listed,m-pub, got [${ids}]`);
 });
 
 await check("anon sees listed and published measure_publication rows with their status", async () => {
@@ -1418,16 +1433,14 @@ await check("anon sees listed and published measure_publication rows with their 
   if (got !== "m-listed:listed,m-pub:published") throw new Error(`saw [${got}]`);
 });
 
-/* a-l1 belongs to the listed m-listed: listing exposes the ballot text, never
-   the arguments (anon_read_measure_argument is untouched by 0033). */
-await check("anon sees arguments only for published measures (not listed, not draft)", async () => {
+/* r-l1 belongs to the listed m-listed: listing exposes the ballot text, never
+   the resources (anon_read_measure_resource reads 'published' only). */
+await check("anon sees resources only for published measures (not listed, not draft)", async () => {
   await db.exec("SET ROLE anon;");
-  const res = await db.query("SELECT argument_id FROM measure_argument ORDER BY argument_id;");
+  const res = await db.query("SELECT resource_id FROM measure_resource ORDER BY resource_id;");
   await db.exec("RESET ROLE;");
-  const ids = res.rows.map((r) => r.argument_id);
-  if (ids.length !== 2 || ids[0] !== "a1" || ids[1] !== "a2") {
-    throw new Error(`expected a1,a2 only, got [${ids.join(", ")}]`);
-  }
+  const ids = res.rows.map((r) => r.resource_id).join(",");
+  if (ids !== "r1,r2,r3") throw new Error(`expected r1,r2,r3 only, got [${ids}]`);
 });
 
 await db.exec("SET ROLE anon;");
@@ -1437,9 +1450,9 @@ await expectDenied(
    VALUES ('m-x','general_2026','9','X','S','https://e.gov/x','legislature',60);`
 );
 await expectDenied(
-  "anon cannot INSERT a measure_argument",
-  `INSERT INTO measure_argument (argument_id, measure_id, side, text, source_id)
-   VALUES ('a-x','m-pub','support','X','s-m');`
+  "anon cannot INSERT a measure_resource",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r-x','m-pub','s-o1','support','argument','article','X');`
 );
 await expectDenied(
   "anon cannot publish a measure",
@@ -1447,49 +1460,110 @@ await expectDenied(
 );
 await db.exec("RESET ROLE;");
 
-/* The symmetry rule. These run as service_role: the trigger must hold for
-   the role that actually writes, not only for anon. */
+/* The symmetry rule, as service_role: the trigger must hold for the role
+   that actually writes. */
 await db.exec("SET ROLE service_role;");
 await expectConstraintViolation(
-  "a measure with no opposing argument cannot be published",
+  "a measure with no opposing resource cannot be published",
   "INSERT INTO measure_publication (measure_id, status) VALUES ('m-skew','published');",
-  /must both exist and differ by at most one/
+  /both sides must be present and the larger at most twice the smaller/
 );
-/* The INSERT above was rejected, so m-skew has no publication row yet; give
-   it a draft one so the UPDATE path is actually exercised rather than
-   matching zero rows. */
 await db.exec("INSERT INTO measure_publication (measure_id, status) VALUES ('m-skew','draft');");
 await expectConstraintViolation(
   "a skewed measure cannot be published by UPDATE either",
   "UPDATE measure_publication SET status='published' WHERE measure_id='m-skew';",
-  /must both exist and differ by at most one/
+  /both sides must be present and the larger at most twice the smaller/
 );
-await check("a balanced measure still publishes", async () => {
+/* m-skew is unpublished, so this insert is free (the resource-side trigger
+   guards published measures only). It makes m-skew 3 vs 1. */
+await db.exec(
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r9','m-skew','s-gov','oppose','analysis','document','Against A.');`
+);
+await expectConstraintViolation(
+  "3 vs 1 is still lopsided under the 2x rule",
+  "UPDATE measure_publication SET status='published' WHERE measure_id='m-skew';",
+  /both sides must be present and the larger at most twice the smaller/
+);
+await check("3 vs 2 publishes (within 2x)", async () => {
   await db.exec(
-    `INSERT INTO measure_argument (argument_id, measure_id, side, text, source_id)
-     VALUES ('a8','m-skew','oppose','Against A.','s-m'), ('a9','m-skew','oppose','Against B.','s-m');`
+    `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+     VALUES ('r10','m-skew','s-n1','oppose','argument','article','Against B.');`
   );
   await db.exec("UPDATE measure_publication SET status='published' WHERE measure_id='m-skew';");
   const res = await db.query("SELECT status FROM measure_publication WHERE measure_id='m-skew';");
-  if (res.rows[0].status !== "published") throw new Error("expected m-skew to publish once balanced");
+  if (res.rows[0].status !== "published") throw new Error("expected m-skew to publish at 3 vs 2");
 });
 
 /* The hole the publication-side trigger alone leaves: a measure published
    while balanced, then skewed by removing the other side. */
 await expectConstraintViolation(
-  "a published measure cannot be skewed by deleting an argument",
-  "DELETE FROM measure_argument WHERE argument_id='a2';",
-  /is published: support and oppose arguments/
+  "a published measure cannot be skewed by deleting a resource",
+  "DELETE FROM measure_resource WHERE resource_id='r3';",
+  /is published: both sides must be present/
 );
 await expectConstraintViolation(
-  "a published measure cannot be skewed by flipping an argument's side",
-  "UPDATE measure_argument SET side='support' WHERE argument_id='a2';",
-  /is published: support and oppose arguments/
+  "a published measure cannot be skewed by flipping a resource's stance",
+  "UPDATE measure_resource SET stance='support' WHERE resource_id='r3';",
+  /is published: both sides must be present/
 );
-await check("an unpublished measure's arguments can still be edited freely", async () => {
-  /* m-draft is not published, so the rule does not apply to it. */
-  await db.exec("DELETE FROM measure_argument WHERE argument_id='a4';");
+await check("neutral resources do not count toward either side", async () => {
+  /* m-pub is 1 vs 1 with one neutral; adding two more neutrals must not
+     trip the 2x rule, and removing one must not either. */
+  await db.exec(
+    `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+     VALUES ('r11','m-pub','s-n1','neutral','reporting','article','Explainer'),
+            ('r12','m-pub','s-o3','neutral','analysis','document','Study');
+     DELETE FROM measure_resource WHERE resource_id='r12';`
+  );
 });
+await check("an unpublished measure's resources can still be edited freely", async () => {
+  await db.exec("DELETE FROM measure_resource WHERE resource_id='r5';");
+});
+
+/* The cross-column CHECKs. */
+await expectConstraintViolation(
+  "an official document cannot take a side",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r-bad1','m-draft','s-gov','support','official','document','X');`,
+  /measure_resource_neutral_kinds/
+);
+await expectConstraintViolation(
+  "reporting cannot take a side",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r-bad2','m-draft','s-n1','oppose','reporting','article','X');`,
+  /measure_resource_neutral_kinds/
+);
+await expectConstraintViolation(
+  "an argument cannot be neutral",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r-bad3','m-draft','s-o1','neutral','argument','article','X');`,
+  /measure_resource_sided_kinds/
+);
+await expectConstraintViolation(
+  "commentary cannot be neutral",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r-bad4','m-draft','s-yt','neutral','commentary','video','X');`,
+  /measure_resource_sided_kinds/
+);
+await expectConstraintViolation(
+  "duration belongs to video and audio only",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title, duration_seconds)
+   VALUES ('r-bad5','m-draft','s-o1','support','argument','article','X', 600);`,
+  /measure_resource_duration_format/
+);
+await expectConstraintViolation(
+  "a note is attribution, at most 140 characters",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title, note)
+   VALUES ('r-bad6','m-draft','s-o1','support','argument','article','X', repeat('x', 141));`,
+  /measure_resource_note_length/
+);
+await expectConstraintViolation(
+  "one URL is one resource per measure",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r-dup','m-pub','s-o1','support','argument','article','Again');`,
+  /measure_resource_measure_id_source_id_key/
+);
 await expectConstraintViolation(
   "threshold_pct must be a real percentage",
   `INSERT INTO ballot_measure (measure_id, election, number, official_title, ballot_summary, full_text_url, placed_by, threshold_pct)
@@ -1497,10 +1571,10 @@ await expectConstraintViolation(
   /threshold_pct/
 );
 await expectConstraintViolation(
-  "side must be support or oppose",
-  `INSERT INTO measure_argument (argument_id, measure_id, side, text, source_id)
-   VALUES ('a-bad','m-pub','maybe','X','s-m');`,
-  /side/
+  "stance must be support, oppose or neutral",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r-bad7','m-pub','s-o1','maybe','argument','article','X');`,
+  /stance/
 );
 /* 17. block_district — public reference data for address lookup. */
 await db.exec("SET ROLE service_role;");
