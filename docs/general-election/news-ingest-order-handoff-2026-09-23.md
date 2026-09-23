@@ -170,8 +170,8 @@ workflow. It should be chosen deliberately if it is chosen, not arrived at.
 - **Do not re-tune the taxonomy against new numbers.** The corpus report's rule
   still holds: a measurement can show a count moved, never that the new count is
   righter. Label more rows first.
-- **Do not treat a `B7` drop as a regression.** The 18 blotter labels were
-  re-labelled on 2026-09-23 (eval §10); `B7` now carries 7 gold rows, 4 of them
-  founder calls still open. The drop is the change working.
+- **Do not treat a `B7` drop as a regression.** All 22 questioned labels were
+  settled on 2026-09-23 (eval §10); `B7` now carries 3 gold rows, all policy.
+  The drop from 25 is the change working.
 - **Do not read anything in this file as a live measurement.** Nothing here was
   read from the database.
