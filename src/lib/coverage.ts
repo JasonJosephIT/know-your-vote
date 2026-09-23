@@ -1,6 +1,6 @@
 /* What a resolved ZIP actually bought the voter, kept in its own
    dependency-free module so scripts/verify-coverage.ts can run it under
-   Node's native type stripping — the same reason measure-balance.ts is
+   Node's native type stripping — the same reason measure-ladder.ts is
    separate from measures.ts. Importing it from resolve.ts would drag in
    next/cache and the Supabase client.
 

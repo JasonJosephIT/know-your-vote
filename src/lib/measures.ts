@@ -1,34 +1,37 @@
 import { unstable_cache } from "next/cache";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION } from "@/lib/election";
-/* The same rule the database enforces (0010), re-checked here so a measure
-   that somehow reached 'published' without it never renders one-sided. Lives
-   in its own module so the verify script can run it without next/cache. */
-import { sidesBalanced } from "@/lib/measure-balance";
+/* The ladder and the symmetry rule, in their own module so the verify script
+   can run them without next/cache. */
+import { compareResources, sidesBalanced } from "@/lib/measure-ladder";
 import {
   measureVisibleStatus,
   type MeasureVisibleStatus,
 } from "@/lib/measure-status";
 import type { Source } from "@/types/schema";
-import type { BallotMeasure, MeasureArgument, MeasureSide } from "@/types/app";
+import type {
+  BallotMeasure,
+  MeasureResource,
+  MeasureStance,
+} from "@/types/app";
 
-/* Read layer for ballot measures (TASK-062), mirroring briefs.ts. Two tiers
-   since 0033 (docs/general-election/listed-tier-2026-09-23.md): a `listed`
-   measure exposes the measure row itself — the verbatim ballot text, which is
-   the Division of Elections' public record, not our writing — and a
-   `published` one adds the sourced case for and against. The arguments stay
+/* Read layer for ballot measures, mirroring briefs.ts. Two tiers since 0033
+   (docs/general-election/listed-tier-2026-09-23.md): a `listed` measure
+   exposes the measure row itself — the verbatim ballot text — and a
+   `published` one adds the two-sided resource list (0034). Resources stay
    gated on `published` in RLS, so the rules below still describe every
-   argument this module can ever return:
+   resource this module can ever return:
 
    1. RLS already hides every row tied to an unpublished measure, so the gate
       is at the database, not here.
    2. This module re-checks the symmetry rule anyway — belt and braces over
       the publication trigger, exactly as briefs.ts re-checks
       balance_check_passed over the publication gate.
-   3. Arguments carry a NOT NULL source_id, so "no source -> dropped" is a
-      schema guarantee rather than a query detail. The join is still inner:
-      a dangling source reference drops the argument rather than rendering
-      one with nothing behind it.
+   3. Resources carry a NOT NULL source_id, so "no source -> dropped" is a
+      schema guarantee. The join is still inner: a dangling source reference
+      drops the resource rather than rendering one with nothing behind it.
+   4. Order is the ladder (measure-ladder.ts), applied here so every caller
+      gets rows already in credible-first order and none re-sorts.
 
    Note the election vocabulary here is the cycle key ('general_2026'), not
    the race enum — see src/lib/election.ts for why those are separate. */
@@ -36,32 +39,37 @@ import type { BallotMeasure, MeasureArgument, MeasureSide } from "@/types/app";
 export { sidesBalanced };
 export type { MeasureVisibleStatus };
 
-export interface MeasureArgumentWithSource {
-  argument: MeasureArgument;
+export interface MeasureResourceWithSource {
+  resource: MeasureResource;
   source: Source;
 }
 
 export interface MeasureBrief {
   measure: BallotMeasure;
-  support: MeasureArgumentWithSource[];
-  oppose: MeasureArgumentWithSource[];
+  /* Shared context: official documents, research, reporting. Tier-ordered. */
+  neutral: MeasureResourceWithSource[];
+  /* The case for a YES. Tier-ordered. */
+  support: MeasureResourceWithSource[];
+  /* The case for a NO. Tier-ordered. */
+  oppose: MeasureResourceWithSource[];
 }
 
-type ArgumentRow = MeasureArgument & { source: Source | null };
+type ResourceRow = MeasureResource & { source: Source | null };
 
 function toSourced(
-  rows: ArgumentRow[],
-  side: MeasureSide
-): MeasureArgumentWithSource[] {
+  rows: ResourceRow[],
+  stance: MeasureStance
+): MeasureResourceWithSource[] {
   return rows
-    .filter((row) => row.side === side && row.source !== null)
+    .filter((row) => row.stance === stance && row.source !== null)
     .map((row) => {
-      const { source, ...argument } = row;
+      const { source, ...resource } = row;
       return {
-        argument: argument as MeasureArgument,
+        resource: resource as MeasureResource,
         source: source as Source,
       };
-    });
+    })
+    .sort((a, b) => compareResources(a.resource, b.resource));
 }
 
 async function fetchMeasureBrief(
@@ -78,18 +86,18 @@ async function fetchMeasureBrief(
   if (!measure) return null;
 
   const { data: rows } = await supabase
-    .from("measure_argument")
+    .from("measure_resource")
     .select("*, source!inner(*)")
-    .eq("measure_id", measureId)
-    .order("display_order");
+    .eq("measure_id", measureId);
 
-  const all = (rows ?? []) as ArgumentRow[];
+  const all = (rows ?? []) as ResourceRow[];
   const support = toSourced(all, "support");
   const oppose = toSourced(all, "oppose");
+  const neutral = toSourced(all, "neutral");
 
   if (!sidesBalanced(support.length, oppose.length)) return null;
 
-  return { measure, support, oppose };
+  return { measure, neutral, support, oppose };
 }
 
 export function getMeasureBrief(measureId: string) {
@@ -105,13 +113,13 @@ export function getMeasureBrief(measureId: string) {
    its sides are balanced.
 
    `brief` is null in two different cases, and the page treats them alike on
-   purpose: a `listed` measure (no arguments are readable at all — RLS gates
-   measure_argument on `published`), and a `published` one that fails the
+   purpose: a `listed` measure (no resources are readable at all — RLS gates
+   measure_resource on `published`), and a `published` one that fails the
    symmetry re-check. Either way the voter sees the ballot text and a plain
-   statement that the arguments are in review, never a one-sided comparison.
+   statement that resources are being collected, never a one-sided list.
 
    The brief is only fetched for `published`: under RLS a listed measure's
-   arguments are unreadable anyway, but asking only when the tier allows it
+   resources are unreadable anyway, but asking only when the tier allows it
    keeps the rule visible here instead of implied by a policy elsewhere. */
 export interface MeasureListing {
   measure: BallotMeasure;

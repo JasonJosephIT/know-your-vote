@@ -234,7 +234,7 @@ and the county Supervisors of Elections, not our writing. Migration `0033`
 enforces the split in RLS: it widens only the roster policies (`race`,
 `candidate`, `race_publication`, `candidate_social_account`,
 `ballot_measure`, `measure_publication`), and leaves every brief-table policy
-(`profile`, `issue`, `position`, `claim`, `claim_source`, `measure_argument`)
+(`profile`, `issue`, `position`, `claim`, `claim_source`, `measure_resource`)
 reading `'published'` exactly as `0002` and `0011` wrote them — so a listed
 race cannot leak an unaudited claim, whatever rows sit beneath it.
 

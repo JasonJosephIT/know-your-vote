@@ -15,8 +15,8 @@ import { getActiveMeasures } from "@/lib/measures";
    Renders nothing when no measure is visible, so it is safe on the page
    before TASK-066 content lands. Since 0033 a measure is visible at `listed`
    (verbatim ballot text only) as well as `published`; a listed card says its
-   arguments are in review so a voter does not open it expecting a case for
-   and against. `status !== "published"` rather than `=== "listed"`: a status
+   resources are being collected so a voter does not open it expecting a
+   two-sided list. `status !== "published"` rather than `=== "listed"`: a status
    missing from a stale cached shape must mean the weaker claim. */
 export async function BallotQuestions() {
   const measures = await getActiveMeasures();
@@ -46,7 +46,7 @@ export async function BallotQuestions() {
                     ? m.threshold_pct
                     : m.threshold_pct.toFixed(1)}
                   % to pass
-                  {m.status !== "published" ? " · arguments in review" : ""}
+                  {m.status !== "published" ? " · resources being collected" : ""}
                 </p>
               </Card>
             </Link>

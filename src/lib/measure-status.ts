@@ -17,8 +17,8 @@
       missing row) means "do not render this measure".
 
    Pure and dependency-free (the one import is type-only, so it is erased at
-   runtime) — scripts/verify-measure-balance.ts drives it, same split as
-   measure-balance.ts. */
+   runtime) — scripts/verify-measure-ladder.ts drives it, same split as
+   measure-ladder.ts. */
 
 import type { PublicationStatus } from "@/types/app";
 

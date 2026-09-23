@@ -10,7 +10,7 @@
 --     CASCADE, so once intake populates contacts the DELETE FROM candidate
 --     below fails with a foreign-key violation. Latent until launch day,
 --     which is exactly when it would fire.
---   ballot_measure + measure_argument + measure_publication (0010/0011) —
+--   ballot_measure + measure_resource + measure_publication (0010/0011) —
 --     the measure tables cascade from ballot_measure, but they are listed
 --     explicitly so this file stays a readable inventory rather than relying
 --     on delete rules staying as they are.
@@ -31,10 +31,10 @@ DELETE FROM candidate WHERE candidate_id LIKE 'demo-%';
 DELETE FROM race WHERE race_id LIKE 'demo-%';
 DELETE FROM news_item WHERE title LIKE 'DEMO:%' OR race_id LIKE 'demo-%';
 
--- Measures (0010/0011). measure_argument and measure_publication cascade from
+-- Measures (0010/0011). measure_resource and measure_publication cascade from
 -- ballot_measure; listed anyway so nothing is left to a delete rule.
 DELETE FROM measure_publication WHERE measure_id LIKE 'demo-%';
-DELETE FROM measure_argument WHERE measure_id LIKE 'demo-%';
+DELETE FROM measure_resource WHERE measure_id LIKE 'demo-%';
 DELETE FROM ballot_measure WHERE measure_id LIKE 'demo-%';
 
 -- Sources last: claims, issues, social accounts and measure arguments all

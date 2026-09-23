@@ -23,7 +23,7 @@
 
    Pure and dependency-free (the one import is type-only, so it is erased at
    runtime) — scripts/verify-unopposed.ts drives it, same split as
-   party-label.ts and measure-balance.ts. */
+   party-label.ts and measure-ladder.ts. */
 
 import type { Candidate } from "@/types/schema";
 
