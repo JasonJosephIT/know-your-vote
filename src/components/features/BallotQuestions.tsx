@@ -12,8 +12,12 @@ import { getActiveMeasures } from "@/lib/measures";
    rewrite. (The Phase 6 plan listed resolve.ts and app.ts for this task; it
    was written before the measure tables existed.)
 
-   Renders nothing when no measure is published, so it is safe on the page
-   before TASK-066 content lands. */
+   Renders nothing when no measure is visible, so it is safe on the page
+   before TASK-066 content lands. Since 0033 a measure is visible at `listed`
+   (verbatim ballot text only) as well as `published`; a listed card says its
+   arguments are in review so a voter does not open it expecting a case for
+   and against. `status !== "published"` rather than `=== "listed"`: a status
+   missing from a stale cached shape must mean the weaker claim. */
 export async function BallotQuestions() {
   const measures = await getActiveMeasures();
   if (measures.length === 0) return null;
@@ -37,10 +41,12 @@ export async function BallotQuestions() {
                 </h3>
                 <p className="text-body-sm text-on-surface-muted">
                   {m.jurisdiction === "FL" ? "Statewide" : m.jurisdiction} ·
-                  Needs {Number.isInteger(m.threshold_pct)
+                  Needs{" "}
+                  {Number.isInteger(m.threshold_pct)
                     ? m.threshold_pct
                     : m.threshold_pct.toFixed(1)}
                   % to pass
+                  {m.status !== "published" ? " · arguments in review" : ""}
                 </p>
               </Card>
             </Link>

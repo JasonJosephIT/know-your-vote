@@ -17,7 +17,7 @@ const TABS: Array<{ view: View; label: string }> = [
 
 const SUBTITLES: Record<View, string> = {
   browse:
-    "Every candidate in every published race across the four covered counties — equal space, equal scrutiny.",
+    "Every candidate across the four covered counties, including seats already decided — equal space, equal scrutiny.",
   races: "Your ballot by ZIP or county, races laid out side by side.",
   saved: "Candidates you've saved, with their official links in one place.",
 };

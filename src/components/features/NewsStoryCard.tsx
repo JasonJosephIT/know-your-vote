@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { newsCardLabels, type NewsSource } from "@/lib/news-labels";
 import { outletPathFor } from "@/lib/news-outlets";
 import { safeHttpUrl } from "@/lib/format";
+import { IssueChip } from "@/components/ui/IssueChip";
 
 /* The story card — news-fairness.md §1 as amended by the founder on 2026-09-19.
 
@@ -55,6 +56,13 @@ export interface NewsStoryCardProps {
       source yields no flag of its own, so it can never override or soften a
       real "Opinion". */
   kindFallback?: string | null;
+  /** Issue tags the characterizer wrote on the STORED row (news-issues.ts
+      `issueChips`). Optional and usually empty: tags are added after a story
+      is stored, and a row with none — never characterized, or characterized
+      with nothing over threshold — renders exactly as it did before tags
+      existed (news-ingest-order-handoff-2026-09-23.md §1). `href` makes a chip
+      a link into the /news issue filter. */
+  issues?: readonly { id: string; label: string; href?: string }[];
 }
 
 export function NewsStoryCard({
@@ -67,6 +75,7 @@ export function NewsStoryCard({
   dateLabel = null,
   footer = null,
   kindFallback = null,
+  issues = [],
 }: NewsStoryCardProps) {
   const href = safeHttpUrl(url);
   /* Images are validated https at parse time (news-sweep.ts `feedImage`), but
@@ -126,7 +135,9 @@ export function NewsStoryCard({
       <div className="flex flex-col gap-1 p-4">
         <p className="flex flex-wrap items-center gap-x-2 font-mono text-mono text-on-surface-muted">
           {shownFlag && (
-            <span className={isOpinion ? "text-on-surface" : undefined}>{shownFlag}</span>
+            <span className={isOpinion ? "text-on-surface" : undefined}>
+              {shownFlag}
+            </span>
           )}
           {publisher &&
             (outletHref ? (
@@ -142,7 +153,12 @@ export function NewsStoryCard({
 
         <h3 className="text-h3">
           {href ? (
-            <a href={href} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
+            <a
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              className="underline-offset-2 hover:underline"
+            >
               {title}
             </a>
           ) : (
@@ -150,9 +166,30 @@ export function NewsStoryCard({
           )}
         </h3>
 
-        {summary && <p className="text-body-sm text-on-surface-muted">{summary}</p>}
+        {summary && (
+          <p className="text-body-sm text-on-surface-muted">{summary}</p>
+        )}
 
-        {footer && <div className="flex flex-wrap gap-3 pt-1 text-caption">{footer}</div>}
+        {/* Below the headline and dek, above the actions: the tags describe the
+            story, so they come after it and never compete with the three things
+            the card is for. No row at all when there are none — an empty
+            "Issues:" line would read as "this story is about nothing". */}
+        {issues.length > 0 && (
+          <ul
+            className="flex flex-wrap gap-1.5 pt-1"
+            aria-label="Tagged issues"
+          >
+            {issues.map((i) => (
+              <li key={i.id}>
+                <IssueChip label={i.label} href={i.href} />
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {footer && (
+          <div className="flex flex-wrap gap-3 pt-1 text-caption">{footer}</div>
+        )}
       </div>
     </article>
   );

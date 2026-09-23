@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { MeasureCompare } from "@/components/features/MeasureCompare";
 import { MeasureThreshold } from "@/components/features/MeasureThreshold";
-import { getActiveMeasures, getMeasureBrief } from "@/lib/measures";
+import { Card } from "@/components/ui/Card";
+import { getActiveMeasures, getMeasureListing } from "@/lib/measures";
 
 export const revalidate = 3600;
 
-/* Prerender every published measure; getActiveMeasures reads through RLS, so
-   unpublished ones are absent by construction rather than filtered here. */
+/* Prerender every visible measure — listed or published (0033).
+   getActiveMeasures reads through RLS, so draft and in-review ones are absent
+   by construction rather than filtered here. */
 export async function generateStaticParams() {
   try {
     const measures = await getActiveMeasures();
@@ -22,10 +24,10 @@ export async function generateMetadata({
   params: Promise<{ measureId: string }>;
 }) {
   const { measureId } = await params;
-  const brief = await getMeasureBrief(measureId);
+  const listing = await getMeasureListing(measureId);
   return {
-    title: brief
-      ? `Amendment ${brief.measure.number}: ${brief.measure.official_title} — Know Your Vote`
+    title: listing
+      ? `Amendment ${listing.measure.number}: ${listing.measure.official_title} — Know Your Vote`
       : "Ballot question in review — Know Your Vote",
   };
 }
@@ -36,11 +38,11 @@ export default async function MeasurePage({
   params: Promise<{ measureId: string }>;
 }) {
   const { measureId } = await params;
-  const brief = await getMeasureBrief(measureId);
+  const listing = await getMeasureListing(measureId);
 
-  /* Unpublished, or published but lopsided — the read layer refuses both.
+  /* Neither listed nor published: the measure row itself is hidden by RLS.
      Same honest-degradation copy as an unpublished race. */
-  if (!brief) {
+  if (!listing) {
     return (
       <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
         <h1 className="text-h1">This ballot question is still in review</h1>
@@ -59,7 +61,12 @@ export default async function MeasurePage({
     );
   }
 
-  const { measure } = brief;
+  /* `brief` is null for a listed measure, and for a published one that
+     fails the symmetry re-check — the read layer refuses to render that one
+     lopsided. Both get the ballot text and nothing else: the verbatim summary
+     is the Division of Elections' own wording, so it needs no audit, while a
+     case for or against is our writing and waits for both sides. */
+  const { measure, brief } = listing;
 
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-5 px-5 py-8">
@@ -97,15 +104,30 @@ export default async function MeasurePage({
         </a>
       </section>
 
-      <MeasureCompare brief={brief} />
+      {brief ? (
+        <MeasureCompare brief={brief} />
+      ) : (
+        /* In place of the comparison, never beside an empty one: two blank
+           YES/NO columns would read as "nobody has an argument", which is
+           a claim we have not checked. */
+        <Card className="flex flex-col gap-2">
+          <h2 className="text-h3">The case for and against</h2>
+          <p className="text-body-sm text-on-surface-muted">
+            The case for and against are in review. We publish arguments only
+            when both sides are present and comparably sourced — until then,
+            this is the official ballot text and nothing else.
+          </p>
+        </Card>
+      )}
 
       <footer className="flex flex-wrap gap-4 text-caption text-on-surface-muted">
         <Link href="/methodology" className="underline underline-offset-2">
           How we stay fair
         </Link>
         <span>
-          We describe what each side argues and what the measure does. You
-          decide.
+          {brief
+            ? "We describe what each side argues and what the measure does. You decide."
+            : "We quote the ballot as it is printed. You decide."}
         </span>
       </footer>
     </main>

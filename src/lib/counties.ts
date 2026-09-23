@@ -15,20 +15,64 @@ export interface CoveredCounty {
   name: string;
   metro: Metro;
   metroLabel: string;
+  /* The county's code in `race.district` for county-level races
+     (0031_local_tier_a_2026, 0032_county_seats_decided): 'ORA-CC-2',
+     'BRO-SB-6', 'ORA-MAYOR'. Three letters, then a hyphen, then the seat.
+     These are the county Supervisors' own abbreviations as the VoterFocus
+     candidate lists print them, not FIPS, which is why they need a mapping
+     here rather than being derivable from the row. */
+  raceDistrictPrefix: string;
 }
 
 export const COVERED_COUNTIES: readonly CoveredCounty[] = [
-  { fips: "12086", name: "Miami-Dade", metro: "miami", metroLabel: "Miami" },
+  {
+    fips: "12086",
+    name: "Miami-Dade",
+    metro: "miami",
+    metroLabel: "Miami",
+    raceDistrictPrefix: "DAD",
+  },
   {
     fips: "12011",
     name: "Broward",
     metro: "fort_lauderdale",
     metroLabel: "Fort Lauderdale",
+    raceDistrictPrefix: "BRO",
   },
-  { fips: "12057", name: "Hillsborough", metro: "tampa", metroLabel: "Tampa" },
-  { fips: "12095", name: "Orange", metro: "orlando", metroLabel: "Orlando" },
+  {
+    fips: "12057",
+    name: "Hillsborough",
+    metro: "tampa",
+    metroLabel: "Tampa",
+    raceDistrictPrefix: "HIL",
+  },
+  {
+    fips: "12095",
+    name: "Orange",
+    metro: "orlando",
+    metroLabel: "Orlando",
+    raceDistrictPrefix: "ORA",
+  },
 ] as const;
 
 export function coveredCounty(fips: string): CoveredCounty | undefined {
   return COVERED_COUNTIES.find((c) => c.fips === fips);
+}
+
+/* Which covered county a county-level race belongs to, from its district
+   value alone — 'ORA-CC-2' is Orange, 'BRO-SBAL-8' is Broward.
+
+   Matches on the prefix AND the hyphen, so a congressional district
+   ('FL-10') or a future code that merely starts with the same letters
+   ('ORANGE') never reads as a county race. undefined for anything else, including
+   the statewide NULL district: the caller decides what a non-county race
+   means, this only answers "which county's seat is this". */
+export function countyForRaceDistrict(
+  district: string | null | undefined
+): CoveredCounty | undefined {
+  if (!district) return undefined;
+  const dash = district.indexOf("-");
+  if (dash <= 0) return undefined;
+  const prefix = district.slice(0, dash);
+  return COVERED_COUNTIES.find((c) => c.raceDistrictPrefix === prefix);
 }

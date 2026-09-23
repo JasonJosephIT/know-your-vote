@@ -5,11 +5,20 @@ import { ACTIVE_ELECTION } from "@/lib/election";
    that somehow reached 'published' without it never renders one-sided. Lives
    in its own module so the verify script can run it without next/cache. */
 import { sidesBalanced } from "@/lib/measure-balance";
+import {
+  measureVisibleStatus,
+  type MeasureVisibleStatus,
+} from "@/lib/measure-status";
 import type { Source } from "@/types/schema";
 import type { BallotMeasure, MeasureArgument, MeasureSide } from "@/types/app";
 
-/* Published-only read layer for ballot measures (TASK-062), mirroring
-   briefs.ts:
+/* Read layer for ballot measures (TASK-062), mirroring briefs.ts. Two tiers
+   since 0033 (docs/general-election/listed-tier-2026-09-23.md): a `listed`
+   measure exposes the measure row itself — the verbatim ballot text, which is
+   the Division of Elections' public record, not our writing — and a
+   `published` one adds the sourced case for and against. The arguments stay
+   gated on `published` in RLS, so the rules below still describe every
+   argument this module can ever return:
 
    1. RLS already hides every row tied to an unpublished measure, so the gate
       is at the database, not here.
@@ -25,6 +34,7 @@ import type { BallotMeasure, MeasureArgument, MeasureSide } from "@/types/app";
    the race enum — see src/lib/election.ts for why those are separate. */
 
 export { sidesBalanced };
+export type { MeasureVisibleStatus };
 
 export interface MeasureArgumentWithSource {
   argument: MeasureArgument;
@@ -39,16 +49,24 @@ export interface MeasureBrief {
 
 type ArgumentRow = MeasureArgument & { source: Source | null };
 
-function toSourced(rows: ArgumentRow[], side: MeasureSide): MeasureArgumentWithSource[] {
+function toSourced(
+  rows: ArgumentRow[],
+  side: MeasureSide
+): MeasureArgumentWithSource[] {
   return rows
     .filter((row) => row.side === side && row.source !== null)
     .map((row) => {
       const { source, ...argument } = row;
-      return { argument: argument as MeasureArgument, source: source as Source };
+      return {
+        argument: argument as MeasureArgument,
+        source: source as Source,
+      };
     });
 }
 
-async function fetchMeasureBrief(measureId: string): Promise<MeasureBrief | null> {
+async function fetchMeasureBrief(
+  measureId: string
+): Promise<MeasureBrief | null> {
   const supabase = await createAnonServerClient();
 
   const { data: measure } = await supabase
@@ -82,7 +100,74 @@ export function getMeasureBrief(measureId: string) {
   )();
 }
 
-async function fetchActiveMeasures(): Promise<BallotMeasure[]> {
+/* Listing mode for one measure: the measure row and which tier made it
+   visible, plus the brief when (and only when) the measure is published and
+   its sides are balanced.
+
+   `brief` is null in two different cases, and the page treats them alike on
+   purpose: a `listed` measure (no arguments are readable at all — RLS gates
+   measure_argument on `published`), and a `published` one that fails the
+   symmetry re-check. Either way the voter sees the ballot text and a plain
+   statement that the arguments are in review, never a one-sided comparison.
+
+   The brief is only fetched for `published`: under RLS a listed measure's
+   arguments are unreadable anyway, but asking only when the tier allows it
+   keeps the rule visible here instead of implied by a policy elsewhere. */
+export interface MeasureListing {
+  measure: BallotMeasure;
+  status: MeasureVisibleStatus;
+  brief: MeasureBrief | null;
+}
+
+type MeasureWithPublication = BallotMeasure & {
+  measure_publication: { status: string } | { status: string }[] | null;
+};
+
+/* Splits the embed off so callers get a plain BallotMeasure — the shape every
+   existing consumer was written against — and the status beside it. */
+function splitPublication(row: MeasureWithPublication): {
+  measure: BallotMeasure;
+  status: MeasureVisibleStatus | null;
+} {
+  const { measure_publication, ...measure } = row;
+  return { measure, status: measureVisibleStatus(measure_publication) };
+}
+
+async function fetchMeasureListing(
+  measureId: string
+): Promise<MeasureListing | null> {
+  const supabase = await createAnonServerClient();
+
+  const { data } = await supabase
+    .from("ballot_measure")
+    .select("*, measure_publication(status)")
+    .eq("measure_id", measureId)
+    .eq("election", ACTIVE_ELECTION)
+    .maybeSingle<MeasureWithPublication>();
+  if (!data) return null;
+
+  const { measure, status } = splitPublication(data);
+  if (!status) return null;
+
+  const brief =
+    status === "published" ? await fetchMeasureBrief(measureId) : null;
+  return { measure, status, brief };
+}
+
+export function getMeasureListing(measureId: string) {
+  return unstable_cache(
+    () => fetchMeasureListing(measureId),
+    ["measure-listing", measureId],
+    { revalidate: 3600, tags: ["measures", `measure:${measureId}`] }
+  )();
+}
+
+/* A measure as the ballot-questions list needs it: every BallotMeasure field,
+   untouched, plus the tier. An intersection rather than a new shape so every
+   caller written against BallotMeasure[] still type-checks. */
+export type ActiveMeasure = BallotMeasure & { status: MeasureVisibleStatus };
+
+async function fetchActiveMeasures(): Promise<ActiveMeasure[]> {
   let supabase;
   try {
     supabase = await createAnonServerClient();
@@ -94,18 +179,27 @@ async function fetchActiveMeasures(): Promise<BallotMeasure[]> {
   }
   const { data } = await supabase
     .from("ballot_measure")
-    .select("*")
+    .select("*, measure_publication(status)")
     .eq("election", ACTIVE_ELECTION)
     .order("display_order");
-  return (data ?? []) as BallotMeasure[];
+  /* RLS already hides every measure without a listed or published row; a
+     row whose status still fails the re-check is dropped, not shown. */
+  return ((data ?? []) as MeasureWithPublication[]).flatMap((row) => {
+    const { measure, status } = splitPublication(row);
+    return status ? [{ ...measure, status }] : [];
+  });
 }
 
-/* Every published measure for the active election. Statewide measures are on
-   every Florida voter's ballot, so this needs no ZIP — which is what lets
-   Phase 7 render them with no input at all. */
+/* Every visible measure for the active election — listed or published.
+   Statewide measures are on every Florida voter's ballot, so this needs no
+   ZIP — which is what lets Phase 7 render them with no input at all. */
 export function getActiveMeasures() {
-  return unstable_cache(fetchActiveMeasures, ["active-measures", ACTIVE_ELECTION], {
-    revalidate: 3600,
-    tags: ["measures"],
-  })();
+  return unstable_cache(
+    fetchActiveMeasures,
+    ["active-measures", ACTIVE_ELECTION],
+    {
+      revalidate: 3600,
+      tags: ["measures"],
+    }
+  )();
 }

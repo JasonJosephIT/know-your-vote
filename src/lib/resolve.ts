@@ -2,8 +2,10 @@ import { createAnonServerClient } from "@/lib/supabase/server";
 import { unstable_cache } from "next/cache";
 import { COVERED_COUNTIES, coveredCounty } from "@/lib/counties";
 import { districtFromBlockRows } from "@/lib/address-lookup";
-import { getStatewideRaces } from "@/lib/races";
+import { getStatewideRaces, raceStatusOf } from "@/lib/races";
+import { isDecidedInPrimary, isUnopposedContest } from "@/lib/unopposed";
 import type { ResolveRaceSummary, ResolveResult } from "@/types/app";
+import type { QualifyingStatus } from "@/types/schema";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
 export const ZIP_RE = /^\d{5}$/;
@@ -15,28 +17,193 @@ export { COVERED_COUNTIES };
 
 const districtNumber = (d: string) => Number(d.replace(/\D/g, "")) || 0;
 
-/* Races visible to anon are published by construction (RLS filters the
-   rest), so "your district has no race yet" and "not published yet" are the
-   same honest answer here. */
+/* A county-level race, listed per county rather than per voter.
+
+   `decided` is the D-B state (src/lib/unopposed.ts) for the seats that will
+   not be printed in November: 'unopposed' (nobody filed against the
+   candidate) or 'elected_in_primary' (someone cleared 50% in August). Those
+   are opposite facts about an election and the copy must never merge them.
+   `holder` is set only for a decided seat — it is the one person who takes
+   the office — and never for a contested one, where naming a single
+   candidate would read as a pick. */
+export type CountyRaceSummary = ResolveRaceSummary & {
+  generalDate: string | null;
+  decided: "unopposed" | "elected_in_primary" | null;
+  holder?: { candidateId: string; legalName: string };
+};
+
+/* ResolveResult plus the voter's county races.
+
+   A separate field, never merged into `races`: those are DISTRICT-matched —
+   every race in that list is on this voter's ballot — while a county race is
+   only COUNTY-matched. Nothing resolves a voter to a county commission or
+   school-board district yet (no crosswalk; boundaries sit unbuilt in
+   docs/general-election/boundaries/), so putting ORA-CC-2 in `races` would
+   tell every Orange voter it is on their ballot, which is false for seven in
+   eight of them.
+
+   Declared here rather than on ResolveResult in src/types/app.ts because
+   that file belongs to the schema/type contract; it is a structural
+   superset, so everything typed ResolveResult still accepts it, and
+   /api/resolve serializes it as-is (NextResponse.json does no filtering). */
+export type ResolveResultWithCounty = ResolveResult & {
+  countyRaces?: CountyRaceSummary[];
+};
+
+/* Races visible to anon are listed or published (RLS filters the rest, 0033),
+   so "your district has no race yet" and "not on our list yet" are the same
+   honest answer here. Which of the two tiers each race is at comes from the
+   race_publication embed — see raceStatusOf. */
 async function racesForDistrict(
   district: string
 ): Promise<ResolveRaceSummary[]> {
   const supabase = await createAnonServerClient();
   const { data, error } = await supabase
     .from("race")
-    .select("race_id, office, level, district")
+    .select("race_id, office, level, district, race_publication(status)")
     .eq("election", ACTIVE_ELECTION_KIND)
     .or(`district.is.null,district.eq.${district}`)
     .order("level", { ascending: false })
     .order("race_id");
   if (error) throw new Error(`race lookup failed: ${error.message}`);
-  return (data ?? []).map((r) => ({
-    raceId: r.race_id,
-    office: r.office,
-    level: r.level,
-    district: r.district,
-    published: true,
-  }));
+  return (data ?? []).map((r) => {
+    const status = raceStatusOf(r.race_publication);
+    return {
+      raceId: r.race_id,
+      office: r.office,
+      level: r.level,
+      district: r.district,
+      published: status === "published",
+      status,
+    };
+  });
+}
+
+/* Every visible county-level race in one covered county, contested and
+   decided alike.
+
+   Matched on the district prefix ('ORA-%'), the only county key a race row
+   carries (0031 / 0032 — see raceDistrictPrefix in counties.ts). `level =
+   'county'` is filtered too so a future non-county code that happens to share
+   a prefix cannot slip in.
+
+   Decided seats are marked here with the two D-B predicates rather than
+   re-derived from `candidate_ids.length === 1`, which cannot tell FL-10's
+   shape from a race whose opponents withdrew after qualifying (unopposed.ts).
+   `hasWriteIn` is passed as false, deliberately:
+     - write-in filers are kept out of race.candidate_ids (data-architecture
+       D1), and at `listed` anon cannot read the `profile` rows that are their
+       only link to a race — so there is nothing here to look at;
+     - for 'unopposed', the carried DoE/county `UNO` code already implies no
+       qualified write-in (the same reasoning briefs.ts records for when its
+       own write-in conjunct is inert);
+     - for 'elected_in_primary', the contest ended in August; a November
+       write-in line cannot reopen a seat the primary filled.
+   One candidate read for the whole county, bounded by the ids already in
+   scope, rather than one per race. */
+async function fetchCountyRaces(
+  countyFips: string
+): Promise<CountyRaceSummary[]> {
+  const county = coveredCounty(countyFips);
+  if (!county) return [];
+  const supabase = await createAnonServerClient();
+  const { data, error } = await supabase
+    .from("race")
+    .select(
+      "race_id, office, level, district, key_dates, candidate_ids, race_publication(status)"
+    )
+    .eq("election", ACTIVE_ELECTION_KIND)
+    .eq("level", "county")
+    .like("district", `${county.raceDistrictPrefix}-%`);
+  if (error) throw new Error(`county race lookup failed: ${error.message}`);
+  const rows = data ?? [];
+
+  const allIds = [
+    ...new Set(rows.flatMap((r) => (r.candidate_ids ?? []) as string[])),
+  ];
+  type BallotCandidate = {
+    candidate_id: string;
+    legal_name: string;
+    qualifying_status: QualifyingStatus;
+  };
+  const byId = new Map<string, BallotCandidate>();
+  if (allIds.length > 0) {
+    const { data: cands, error: candError } = await supabase
+      .from("candidate")
+      .select("candidate_id, legal_name, qualifying_status")
+      .in("candidate_id", allIds)
+      /* Printed ballot lines only (D1) — the same tier the predicates are
+         defined over. */
+      .eq("ballot_status", "ballot");
+    if (candError) {
+      throw new Error(`county candidate lookup failed: ${candError.message}`);
+    }
+    for (const c of (cands ?? []) as BallotCandidate[]) {
+      byId.set(c.candidate_id, c);
+    }
+  }
+
+  return rows
+    .map((r): CountyRaceSummary => {
+      const status = raceStatusOf(r.race_publication);
+      const ballot = ((r.candidate_ids ?? []) as string[])
+        .map((id) => byId.get(id))
+        .filter((c): c is BallotCandidate => Boolean(c));
+      const decided = isUnopposedContest(ballot, false)
+        ? "unopposed"
+        : isDecidedInPrimary(ballot, false)
+          ? "elected_in_primary"
+          : null;
+      return {
+        raceId: r.race_id,
+        office: r.office,
+        level: r.level,
+        district: r.district,
+        published: status === "published",
+        status,
+        generalDate:
+          (r.key_dates as Record<string, string> | null)?.general_date ?? null,
+        decided,
+        ...(decided
+          ? {
+              holder: {
+                candidateId: ballot[0].candidate_id,
+                legalName: ballot[0].legal_name,
+              },
+            }
+          : {}),
+      };
+    })
+    .sort(
+      /* Neutral and stable: by office (numeric-aware, so District 2 sorts
+         before District 10), then by the seat number in the district code. */
+      (a, b) =>
+        a.office.localeCompare(b.office, "en", { numeric: true }) ||
+        districtNumber(a.district ?? "") - districtNumber(b.district ?? "")
+    );
+}
+
+/* The county races for a covered county, cached like the other race reads
+   (the set changes when publication changes, and the "races" tag is what
+   those changes revalidate).
+
+   Degrades to [] rather than throwing, unlike racesForDistrict: this is a
+   supplement to the ballot the voter asked for, and a failed county read
+   must not cost them their district races (resolveZip would otherwise turn
+   it into a 500). The catch sits OUTSIDE the cache so a transient failure is
+   not cached as "no county races" for an hour. */
+export async function racesForCounty(
+  countyFips: string
+): Promise<CountyRaceSummary[]> {
+  try {
+    return await unstable_cache(
+      () => fetchCountyRaces(countyFips),
+      ["county-races", ACTIVE_ELECTION_KIND, countyFips],
+      { revalidate: 3600, tags: ["races"] }
+    )();
+  } catch {
+    return [];
+  }
 }
 
 /* Resolve a ZIP; when it spans districts, never auto-pick — return the
@@ -45,7 +212,7 @@ async function racesForDistrict(
 export async function resolveZip(
   zip: string,
   confirmedDistrict?: string
-): Promise<ResolveResult> {
+): Promise<ResolveResultWithCounty> {
   const supabase = await createAnonServerClient();
   const { data, error } = await supabase
     .from("zip_district")
@@ -92,6 +259,10 @@ export async function resolveZip(
         races: [],
       };
     }
+    const [races, countyRaces] = await Promise.all([
+      racesForDistrict(confirmed),
+      racesForCounty(countyFips),
+    ]);
     return {
       zip,
       inCoverage: true,
@@ -100,10 +271,15 @@ export async function resolveZip(
       metro,
       district: confirmed,
       isSplit: true,
-      races: await racesForDistrict(confirmed),
+      races,
+      countyRaces,
     };
   }
 
+  const [races, countyRaces] = await Promise.all([
+    racesForDistrict(districts[0]),
+    racesForCounty(countyFips),
+  ]);
   return {
     zip,
     inCoverage: true,
@@ -112,7 +288,8 @@ export async function resolveZip(
     metro,
     district: districts[0],
     isSplit: false,
-    races: await racesForDistrict(districts[0]),
+    races,
+    countyRaces,
   };
 }
 
@@ -126,23 +303,30 @@ export async function resolveZip(
    ordering. Only the county and metro are location-specific here. */
 export async function resolveCounty(
   countyFips: string
-): Promise<ResolveResult | null> {
+): Promise<ResolveResultWithCounty | null> {
   const county = COVERED_COUNTIES.find((c) => c.fips === countyFips);
   if (!county) return null;
-  const races = await getStatewideRaces();
+  const [races, countyRaces] = await Promise.all([
+    getStatewideRaces(),
+    racesForCounty(county.fips),
+  ]);
   return {
     zip: "",
     inCoverage: true,
     county: county.name,
     countyFips: county.fips,
     metro: county.metro,
-    races: races.map(({ raceId, office, level, district, published }) => ({
-      raceId,
-      office,
-      level,
-      district,
-      published,
-    })),
+    races: races.map(
+      ({ raceId, office, level, district, published, status }) => ({
+        raceId,
+        office,
+        level,
+        district,
+        published,
+        status,
+      })
+    ),
+    countyRaces,
   };
 }
 
@@ -174,9 +358,13 @@ export async function resolveBlock(
 export async function resolveDistrict(
   countyFips: string,
   district: string
-): Promise<ResolveResult | null> {
+): Promise<ResolveResultWithCounty | null> {
   const county = coveredCounty(countyFips);
   if (!county) return null;
+  const [races, countyRaces] = await Promise.all([
+    racesForDistrict(district),
+    racesForCounty(county.fips),
+  ]);
   return {
     zip: "",
     inCoverage: true,
@@ -184,7 +372,8 @@ export async function resolveDistrict(
     countyFips: county.fips,
     metro: county.metro,
     district,
-    races: await racesForDistrict(district),
+    races,
+    countyRaces,
   };
 }
 
