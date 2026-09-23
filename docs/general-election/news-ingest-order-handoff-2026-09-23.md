@@ -55,9 +55,13 @@ order.
 **(b) The 834-article corpus and the 116-row gold set were measured over the
 sweep pool, not over stored rows.** This matters for the v7 work that just
 merged. PR #72 reports `B7` carrying **155 of 834 corpus articles, 18.6%** —
-that is a **sweep-pool** number, and the feed is a different population. Most
-of the 18 blotter rows in the `B7` gold set name no candidate on the roster, so
-under the real pipeline they would be dropped at stage 3 and never reach Jev.
+that is a **sweep-pool** number, and the feed is a different population.
+Checked against the candidate names in `ballots/ballotpedia/*.json`, **17 of the
+18 blotter rows in the `B7` gold set name no candidate**, so under the real
+pipeline they would be dropped at stage 3 and never reach Jev. The 18th is a
+surname collision ("Thomas", against an Orange County Clerk candidate) that
+`news-match.ts` would attach as `related`, never `named`. Ballotpedia is a proxy
+for the live roster; §4.4 confirms against the real one.
 
 The v7 narrowing is still correct — a story can name a candidate _and_ be
 blotter, and the old label named the phenomenon rather than the policy either
@@ -108,6 +112,18 @@ the number that describes the product. Compare it against the corpus figures in
 §10, and correct §10's framing if the gap is large. Expect `B7` to be far
 smaller than 18.6%.
 
+In the same pass, **measure the near-duplicate rate over `news_item`** — same
+event, different outlets. It is nearly free once you are already counting rows,
+and it is the number that decides whether an event-level card (one story, a
+list of the outlets that covered it) earns a new UI surface. For reference, a
+cheap title-overlap check on the 116-row gold set put 19 rows (16%) in 8
+multi-outlet clusters, but 5 of the 8 were `B7` blotter since relabelled — and
+that set is the sweep pool, so it is an upper bound on the feed. Report the
+feed number separately. Do not build clustering off this measurement alone:
+sweep-time clustering sees articles that stage 3 then drops, so a card could
+say "2 outlets" for an event four covered — that is a schema decision, and §5
+changes the feed population first.
+
 **4.5 Answer the §5 question below.** It is a founder decision, not a test.
 
 ## 5. The open question: political, but names no candidate
@@ -154,7 +170,8 @@ workflow. It should be chosen deliberately if it is chosen, not arrived at.
 - **Do not re-tune the taxonomy against new numbers.** The corpus report's rule
   still holds: a measurement can show a count moved, never that the new count is
   righter. Label more rows first.
-- **Do not treat a `B7` drop as a regression.** 18 gold labels are known-wrong
-  and awaiting founder re-labelling (eval §10). The drop is the change working.
+- **Do not treat a `B7` drop as a regression.** The 18 blotter labels were
+  re-labelled on 2026-09-23 (eval §10); `B7` now carries 7 gold rows, 4 of them
+  founder calls still open. The drop is the change working.
 - **Do not read anything in this file as a live measurement.** Nothing here was
   read from the database.
