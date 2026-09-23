@@ -265,13 +265,14 @@ every race's `candidate_ids` — a roster gap worth reading, not a leak.
    That is honest, but it is a different product from the one the README
    promises, and it deserves a decision rather than a default.
 
-## 7. Follow-up — the resource ladder (2026-09-23, unapplied)
+## 7. Follow-up — the resource ladder (2026-09-23, **applied live the same day**)
 
 `measure_argument` is retired by `0034_measure_resources.sql` in favour of
 `measure_resource`: outside links ordered by kind of source (spec
 `docs/superpowers/specs/2026-09-23-measure-resource-ladder-design.md`).
 The safety argument in §3 transfers unchanged: `anon_read_measure_resource`
-reads `'published'` only. Apply order: merge and deploy the PR, then `0034`,
-then `0035` (after the `url_norm` check in `supabase/migrations/README.md`).
+reads `'published'` only. Done in that order on 2026-09-23: PR #80 merged and
+deployed (353f661), then `0034`, then `0035`. Read back as anon: 3 measures,
+0 resources. As service_role: 3 booklet rows, one per amendment.
 All three measures stay `listed` until the founder adds sided rows and
 flips each to `published`; the 2× rule refuses a lopsided flip.
