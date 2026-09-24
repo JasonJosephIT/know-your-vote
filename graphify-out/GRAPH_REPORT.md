@@ -1,7 +1,7 @@
 # Graph Report - know-your-vote  (2026-09-24)
 
 ## Corpus Check
-- 516 files · ~779,716 words
+- 516 files · ~779,814 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 20 file(s) not represented in the graph (top: .geojson 7, (none) 3, .csv 3)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f678a85a`
+- Built from commit: `c8fddc49`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -78,7 +78,7 @@
 - logsink.py
 - PRD — Know Your Vote
 - build-demo-seed.mjs
-- File map
+- createAnonServerClient
 - test_profiler_guard_core.py
 - intake.py
 - FakeConn
@@ -101,18 +101,18 @@
 - requireAdmin
 - CAP / "Know Your Vote" — Verified News-Outlet Corpus for the 2026 Florida General Election (Nov 3, 2026)
 - send-reminders/route.ts
-- news-corpus-analysis.ts
+- track
 - verify-brief-rows.ts
 - policy-areas.ts
 - verify-zip-seed-2026.mjs
 - compilerOptions
 - test_toollayer_skeleton.py
 - site.ts
-- createAnonServerClient
-- track
-- MeasureResourceLadder.tsx
-- decision/route.ts
+- news-corpus-analysis.ts
 - File Structure
+- test_factchecker_guard_core.py
+- decision/route.ts
+- briefs.ts
 - balance_audit_core.py
 - Lean ratings — fetched 2026-09-19
 - Model characterization of swept articles — session brief
@@ -135,7 +135,7 @@
 - verify-brief-rows-sql.mjs
 - verify-zip-seed-rules.mjs
 - YourRaces.tsx
-- test_factchecker_guard_core.py
+- File map
 - CAP / Know Your Vote — MVP Change Spec
 - Civic Awareness Project (CAP) — FL MVP
 - Civic Awareness Project (CAP) — FL MVP
@@ -145,7 +145,7 @@
 - verify-admin-ops.mjs
 - cavecrew/SKILL.md
 - Caveman Help
-- [measureId]/page.tsx
+- queue/page.tsx
 - R3 — Election News Curator — DRY RUN (validation)
 - Civic Awareness Project (CAP) — Balance Audit Specification
 - Civic Awareness Project (CAP) — Data Schema v1
@@ -154,7 +154,7 @@
 - What a candidate is running on, from their own site
 - Data Architecture — Primary → General
 - Map-coverage handoff — what "we cover this area" actually means
-- briefs.ts
+- [candidateId]/page.tsx
 - IssueSection.tsx
 - R2 — Contact & Race Info Refresher — Run Report
 - R3 — Election News Curator — Run Report
@@ -170,7 +170,7 @@
 - Caveman Compress
 - caveman/SKILL.md
 - Civic Awareness Project (CAP) — Logging Schema Specification
-- verify-measure-balance.ts
+- [measureId]/page.tsx
 - Roadmap — Operator Console (`/admin`)
 - Which issue list do news tags come from? — founder review
 - Stream P — Pipeline & schema
@@ -219,35 +219,35 @@
 - Review Caveman evidence
 - Manage eval-gated experiments
 - caveman-setup/SKILL.md
-- queue/page.tsx
+- verify-measure-balance.ts
 - R4 — Ops Overview Digest — LIVE RUN
 - R4 — Ops Overview Digest — LIVE RUN
 - R1 — Candidate News Curator — Run Report
-- [candidateId]/page.tsx
+- MeasureResourceLadder.tsx
 - TestPerIdentitySurface
 - Local session runbook — the network-bound tasks
 - Handoff — the ingest order: what reaches Jev, and what never does
 - Things to confirm
-- 2. Technical Architecture
+- check_tool_access
 - NotConfigured
 - 5. News intake: sweep a fixed corpus, don't search per candidate
-- check_tool_access
+- Prompt begins
 - Evaluate an optimization observation
 - caveman-stats
 - CAP Deep-Research Prompt — "Ballot Anatomy, Florida 2026"
 - SpineLogging
 - TestFactCheckerConfig
-- Prompt begins
+- B1 results — live run 2026-09-06
 - sys
 - 6. System Architecture & Pipeline
 - 6. System Architecture & Pipeline
-- Run 2 — Monitor + Submit & Review (Phases A2 + A3, combined) · after Run 1
+- 2. Technical Architecture
 - `official_site` for FL-GOV-general — what was collected and how
 - ToolLayer
 - sentry.server.config.ts
 - caveman-discover/SKILL.md
 - CAP Deep-Research Prompt — Issue Discovery (Stage 1)
-- B1 results — live run 2026-09-06
+- Run 2 — Monitor + Submit & Review (Phases A2 + A3, combined) · after Run 1
 - check_fetch
 - Agent 3 — The Fact-Checker ("What Is True")
 - verify-boundaries.mjs
@@ -264,18 +264,18 @@
 - CAP Incumbent Official-Account Verification (2026)
 - graphify
 - AgentTracking
-- .test_transferred_to_local_and_deceased_are_excluded
+- Run 4 — Site Metrics (Phase A5) · after Run 1, fully parallel-safe
 - Brief 02 — S2-02 / S2-03 live acceptance: Record + Fact-Checker
 - Brief 03 — S3: the orchestrator (final phase)
 - 7. Data Schema
 - _FakeTool
 - Ballots by ZIP — derived data for the 2026 general election
-- .test_unknown_status_code_fails_loudly
+- .test_malformed_row_is_not_counted_as_out_of_scope
 - scripts
-- .test_newly_covered_district_is_now_parsed
-- .test_usr_row_outside_the_sixteen_is_still_skipped
+- .test_membership_is_the_set_not_a_range
+- .test_defeated_filer_is_absent_from_candidate_ids
 - .test_write_in_is_tiered_and_kept_off_the_ballot
-- .test_unpadded_juris_is_zero_padded_before_the_membership_test
+- .test_transferred_to_local_and_deceased_are_excluded
 - .prettierrc.json
 - vercel.json
 - StatePurity
@@ -289,11 +289,11 @@
 - safe-refactor/SKILL.md
 - surgical-patch/SKILL.md
 - verify-and-stop/SKILL.md
-- Run 4 — Site Metrics (Phase A5) · after Run 1, fully parallel-safe
+- .test_unopposed_is_still_a_ballot_tier_filing
 - agents/README.md
 - postcss.config.mjs
 - CLAUDE.md
-- .test_skip_breakdown_names_the_dropped_house_district
+- .test_minor_party_code_is_stored_verbatim
 - session-start.sh
 - 7. Non-Functional Requirements
 - 1. Corrections to the brief
@@ -307,11 +307,11 @@
 - 0007_notifications.sql
 - 0009_action_log_roles.sql
 - 0024_block_district.sql
-- .test_malformed_row_is_not_counted_as_out_of_scope
-- .test_membership_is_the_set_not_a_range
-- .test_defeated_filer_is_absent_from_candidate_ids
-- .test_unopposed_is_still_a_ballot_tier_filing
-- .test_minor_party_code_is_stored_verbatim
+- .test_unknown_status_code_fails_loudly
+- .test_newly_covered_district_is_now_parsed
+- .test_usr_row_outside_the_sixteen_is_still_skipped
+- .test_unpadded_juris_is_zero_padded_before_the_membership_test
+- .test_skip_breakdown_names_the_dropped_house_district
 - .test_skip_detail_always_accounts_for_every_skip
 
 ## God Nodes (most connected - your core abstractions)
@@ -591,9 +591,9 @@ Nodes (24): 10. Payment Integration, 11. Edge Cases & Error Handling, 12. Depend
 Cohesion: 0.09
 Nodes (23): candArg, candidates, CHECK, claims, claimSources, DONE, issues, KEY_DATES (+15 more)
 
-### Community 62 - "File map"
-Cohesion: 0.18
-Nodes (15): File map, Global Constraints, Measure Resource Ladder Implementation Plan, Self-review, Task 1: The ladder module and its verify script, Task 3: Read layer, Task 4: The row and the ladder components, Task 5: The page and the listed-card copy (+7 more)
+### Community 62 - "createAnonServerClient"
+Cohesion: 0.14
+Nodes (17): 8. Tasks, Task 7: Resolution by block and by district, @supabase/ssr, GET(), params, COUNTY_FIPS, GET(), NewsRow (+9 more)
 
 ### Community 63 - "test_profiler_guard_core.py"
 Cohesion: 0.15
@@ -683,9 +683,9 @@ Nodes (18): BROWARD (12011) — most urgent to widen, CAP / "Know Your Vote" —
 Cohesion: 0.11
 Nodes (22): ref_node_crypto, SAMPLE, SAMPLE_CORRECTION, authorized(), GET(), maxDuration, POST(), run() (+14 more)
 
-### Community 85 - "news-corpus-analysis.ts"
-Cohesion: 0.10
-Nodes (14): args, catCount, catMax, concurrency, dates, out, perOutlet, pool (+6 more)
+### Community 85 - "track"
+Cohesion: 0.17
+Nodes (18): 12. Out of scope, LocationEntry(), commit(), resolveAddress(), resolveZipCode(), submit(), Quiz(), addDistrictRace() (+10 more)
 
 ### Community 86 - "verify-brief-rows.ts"
 Cohesion: 0.05
@@ -711,25 +711,25 @@ Nodes (19): _load(), load_aux_core(), load_guard_core(), Loaders for the canonic
 Cohesion: 0.12
 Nodes (21): Phase A5: Site Metrics, GET(), ErrorsPanel(), cachedDeployments, cachedSentryIssues, Deployment, DeploymentsResult, DeploymentState (+13 more)
 
-### Community 92 - "createAnonServerClient"
-Cohesion: 0.14
-Nodes (17): 8. Tasks, Task 7: Resolution by block and by district, @supabase/ssr, GET(), params, COUNTY_FIPS, GET(), NewsRow (+9 more)
+### Community 92 - "news-corpus-analysis.ts"
+Cohesion: 0.10
+Nodes (14): args, catCount, catMax, concurrency, dates, out, perOutlet, pool (+6 more)
 
-### Community 93 - "track"
-Cohesion: 0.17
-Nodes (18): 12. Out of scope, LocationEntry(), commit(), resolveAddress(), resolveZipCode(), submit(), Quiz(), addDistrictRace() (+10 more)
+### Community 93 - "File Structure"
+Cohesion: 0.13
+Nodes (18): 4. Where the four-metro assumption is baked in, Address → District Lookup Implementation Plan, File Structure, Notes for the reviewer, Status — built 2026-09-09, Task 0: Branch setup, Task 12: The ballot pages read the cookie, Task 13: Make the claims true (+10 more)
 
-### Community 94 - "MeasureResourceLadder.tsx"
-Cohesion: 0.27
-Nodes (8): COLUMN_KINDS, groupByKind(), NEUTRAL_KINDS, TieredList(), COLUMN_CAP, Rankable, TIER_LABEL, MeasureKind
+### Community 94 - "test_factchecker_guard_core.py"
+Cohesion: 0.19
+Nodes (10): check_db_read(), Any, Civic Awareness Project (CAP) — Fact-Checker agent (Agent 3) guards,…, Fact-Checker db_read spans ALL buckets (Tool Spec §2 — the only agent with…, Fact-Checker may register ANY Source type (Tool Spec §2), but every source must…, _result(), validate_source_register(), Tests for factchecker_guard_core — grants/denials, cross-bucket read, lean-tag… (+2 more)
 
 ### Community 95 - "decision/route.ts"
 Cohesion: 0.19
 Nodes (14): dynamic, POST(), dynamic, GET(), describeNewsInsertError(), describeUpdateError(), dynamic, failClosed() (+6 more)
 
-### Community 96 - "File Structure"
-Cohesion: 0.13
-Nodes (18): 4. Where the four-metro assumption is baked in, Address → District Lookup Implementation Plan, File Structure, Notes for the reviewer, Status — built 2026-09-09, Task 0: Branch setup, Task 12: The ballot pages read the cookie, Task 13: Make the claims true (+10 more)
+### Community 96 - "briefs.ts"
+Cohesion: 0.16
+Nodes (16): 9. Open questions, CandidateBrief(), buildIssueBlock(), CandidateBriefData, CandidateDetail, ClaimRow, fetchCandidateContact(), getCandidateContact() (+8 more)
 
 ### Community 97 - "balance_audit_core.py"
 Cohesion: 0.13
@@ -819,9 +819,9 @@ Nodes (10): dominantKey(), METROS, seedSql(), zipDistrictRows(), extraFieldErr, 
 Cohesion: 0.10
 Nodes (22): Task 10: The one smart field, ROOT, input, names, placed, Race, resolveSrc, routeSrc (+14 more)
 
-### Community 119 - "test_factchecker_guard_core.py"
-Cohesion: 0.19
-Nodes (10): check_db_read(), Any, Civic Awareness Project (CAP) — Fact-Checker agent (Agent 3) guards,…, Fact-Checker db_read spans ALL buckets (Tool Spec §2 — the only agent with…, Fact-Checker may register ANY Source type (Tool Spec §2), but every source must…, _result(), validate_source_register(), Tests for factchecker_guard_core — grants/denials, cross-bucket read, lean-tag… (+2 more)
+### Community 119 - "File map"
+Cohesion: 0.18
+Nodes (15): File map, Global Constraints, Measure Resource Ladder Implementation Plan, Self-review, Task 1: The ladder module and its verify script, Task 3: Read layer, Task 4: The row and the ladder components, Task 5: The page and the listed-card copy (+7 more)
 
 ### Community 120 - "CAP / Know Your Vote — MVP Change Spec"
 Cohesion: 0.13
@@ -859,9 +859,9 @@ Nodes (12): cavecrew, Example chaining, How to invoke, Model overrides, See also
 Cohesion: 0.14
 Nodes (12): caveman-help, Example output, How to invoke, See also, What it does, Caveman Help, Configure Default Mode, Deactivate (+4 more)
 
-### Community 129 - "[measureId]/page.tsx"
-Cohesion: 0.24
-Nodes (9): 6. Day 2 — amendments and urgency, generateMetadata(), generateStaticParams(), MeasurePage(), revalidate, MeasureResourceLadder(), MeasureThreshold(), RaceCompare() (+1 more)
+### Community 129 - "queue/page.tsx"
+Cohesion: 0.20
+Nodes (9): dynamic, metadata, QueuePage(), Search, KINDS, QueueFilters(), SOURCES, STATUSES (+1 more)
 
 ### Community 130 - "R3 — Election News Curator — DRY RUN (validation)"
 Cohesion: 0.14
@@ -895,9 +895,9 @@ Nodes (12): 0. What does NOT change, 1. The one decision that gates everything, 
 Cohesion: 0.15
 Nodes (12): 1. The headline, 2. The other direction — TASK-060, and why it is stuck, 3. Corrections to TASK-060 as written, 5. Decisions, 6. What the next session should do, 7. Verification notes, 8. Paste-ready prompt for the next session, Done-note — §1, the honest answer (2026-09-09) (+4 more)
 
-### Community 138 - "briefs.ts"
-Cohesion: 0.16
-Nodes (16): 9. Open questions, CandidateBrief(), buildIssueBlock(), CandidateBriefData, CandidateDetail, ClaimRow, fetchCandidateContact(), getCandidateContact() (+8 more)
+### Community 138 - "[candidateId]/page.tsx"
+Cohesion: 0.26
+Nodes (10): CandidatePage(), generateMetadata(), revalidate, CandidateListing(), ListedCandidateCard(), fetchCandidateDetail(), getCandidateDetail(), CandidateListing (+2 more)
 
 ### Community 139 - "IssueSection.tsx"
 Cohesion: 0.20
@@ -959,9 +959,9 @@ Nodes (10): caveman, Example output, How to invoke, See also, What it does, Auto
 Cohesion: 0.17
 Nodes (11): 0. Governing Principles (inherited), 1. Log Record Format, 2. Storage Backend — RESOLVED, 4. Queryability for the Symmetric Scrutiny Report, 5. Open Items, Append-only enforcement, Civic Awareness Project (CAP) — Logging Schema Specification, Companion to CAP_PRD_v1.0 and CAP_MCP_Tool_Spec_v1.0 (+3 more)
 
-### Community 154 - "verify-measure-balance.ts"
-Cohesion: 0.20
-Nodes (7): 7. Verification, ids(), Row, rankResources(), RESOURCE_TIER, StatusEmbed, PublicationStatus
+### Community 154 - "[measureId]/page.tsx"
+Cohesion: 0.24
+Nodes (9): 6. Day 2 — amendments and urgency, generateMetadata(), generateStaticParams(), MeasurePage(), revalidate, MeasureResourceLadder(), MeasureThreshold(), RaceCompare() (+1 more)
 
 ### Community 155 - "Roadmap — Operator Console (`/admin`)"
 Cohesion: 0.22
@@ -1147,9 +1147,9 @@ Nodes (7): Manage eval-gated experiments, Non-negotiable gates, Step 1 — Load 
 Cohesion: 0.25
 Nodes (7): Failure templates (use verbatim, filled in — never soften), Rules (non-negotiable), Step 1 — Find every live LLM callsite, Step 2 — Pick the app slug, Step 3 — Wire each callsite, Step 4 — Verify with one real request, Step 5 — Report
 
-### Community 203 - "queue/page.tsx"
+### Community 203 - "verify-measure-balance.ts"
 Cohesion: 0.20
-Nodes (9): dynamic, metadata, QueuePage(), Search, KINDS, QueueFilters(), SOURCES, STATUSES (+1 more)
+Nodes (7): 7. Verification, ids(), Row, rankResources(), RESOURCE_TIER, StatusEmbed, PublicationStatus
 
 ### Community 204 - "R4 — Ops Overview Digest — LIVE RUN"
 Cohesion: 0.25
@@ -1163,9 +1163,9 @@ Nodes (7): 0. Read-only compliance, 1. Sections regenerated, 2. Thresholds cross
 Cohesion: 0.25
 Nodes (7): 1. Scope read (read-only), 2. Blocker (unchanged since 2026-07-06 and 2026-07-03): candidate roster is fixture data, not real people, 3. Per-candidate results (all 26, symmetric coverage, honest zeros), 4. Stories skipped, and why, 5. Flag for Fact-Checker, 6. Summary, R1 — Candidate News Curator — Run Report
 
-### Community 207 - "[candidateId]/page.tsx"
-Cohesion: 0.26
-Nodes (10): CandidatePage(), generateMetadata(), revalidate, CandidateListing(), ListedCandidateCard(), fetchCandidateDetail(), getCandidateDetail(), CandidateListing (+2 more)
+### Community 207 - "MeasureResourceLadder.tsx"
+Cohesion: 0.27
+Nodes (8): COLUMN_KINDS, groupByKind(), NEUTRAL_KINDS, TieredList(), COLUMN_CAP, Rankable, TIER_LABEL, MeasureKind
 
 ### Community 209 - "Local session runbook — the network-bound tasks"
 Cohesion: 0.25
@@ -1179,9 +1179,9 @@ Nodes (18): 1. The headline, 2. Two corrections to earlier framing, 3. Verified 
 Cohesion: 0.25
 Nodes (7): TC-0 — Vercel is the only PR check, and it does not run the Python suite, TC-1 — ~~`test_toollayer_skeleton.py` is red on `claude/stream-pipeline`~~ ✅ RESOLVED, TC-2 — ~~PR #32's description no longer matches its contents~~ ✅ RESOLVED, TC-3 — ~~TASK-066's race count is still wrong in the roadmap~~ ✅ FIXED HERE, TC-4 — `verify-news-ungated.ts` is red on `main`, and has been since C9, TC-5 — a SECURITY DEFINER function shipped with EXECUTE granted to `anon`, Things to confirm
 
-### Community 212 - "2. Technical Architecture"
-Cohesion: 0.25
-Nodes (8): 2. Technical Architecture, Architecture Overview, Chosen Stack, Cost Estimate, Infrastructure & Deployment, Repository Structure, Security Considerations, Stack Integration Guide
+### Community 212 - "check_tool_access"
+Cohesion: 0.36
+Nodes (3): check_tool_access(), Grant/deny a tool call for the Fact-Checker (Tool Spec §2)., TestToolAccess
 
 ### Community 213 - "NotConfigured"
 Cohesion: 0.18
@@ -1191,9 +1191,9 @@ Nodes (8): _default_connect(), Real psycopg connection with dict rows, imported 
 Cohesion: 0.33
 Nodes (6): 5. News intake: sweep a fixed corpus, don't search per candidate, Cadence — biweekly is now too slow, Shape of the sweep, The honest cost, What this is not, Why, in two arguments
 
-### Community 215 - "check_tool_access"
-Cohesion: 0.36
-Nodes (3): check_tool_access(), Grant/deny a tool call for the Fact-Checker (Tool Spec §2)., TestToolAccess
+### Community 215 - "Prompt begins"
+Cohesion: 0.22
+Nodes (9): Context worth reading if you have the repository, Counties currently covered, Deliverables, Do not, Prompt begins, The outlets already in the file, Two rules that decide whether your work is usable, What the system does with your answer (+1 more)
 
 ### Community 216 - "Evaluate an optimization observation"
 Cohesion: 0.29
@@ -1207,9 +1207,9 @@ Nodes (5): caveman-stats, Example output, How to invoke, See also, What it does
 Cohesion: 0.29
 Nodes (6): Acceptance, CAP Deep-Research Prompt — "Ballot Anatomy, Florida 2026", The prompt, Variables (fill before running), What happens next, Why this runs first
 
-### Community 221 - "Prompt begins"
-Cohesion: 0.22
-Nodes (9): Context worth reading if you have the repository, Counties currently covered, Deliverables, Do not, Prompt begins, The outlets already in the file, Two rules that decide whether your work is usable, What the system does with your answer (+1 more)
+### Community 221 - "B1 results — live run 2026-09-06"
+Cohesion: 0.25
+Nodes (8): 1. Three defects that block the general run, B1 results — live run 2026-09-06, I1 — No status filter: defeated primary candidates enter the general race, I2 — Write-ins are indistinguishable in the parsed columns, Per-target-race tier counts, Q2 — is there a write-in column, Q3 — party codes beyond REP/DEM/NPA, Two corrections the run surfaced
 
 ### Community 222 - "sys"
 Cohesion: 0.29
@@ -1223,9 +1223,9 @@ Nodes (8): 6.1 Intake & Resolution (Deterministic Layer), 6.2 Agent Execution (A
 Cohesion: 0.25
 Nodes (8): 6.1 Intake & Resolution (Deterministic Layer), 6.2 Agent Execution (AI Layer), 6.3 Synthesis & Composition, 6.4 Delivery, 6. System Architecture & Pipeline, Agent 1: The Profiler — *The Self-Portrait*, Agent 2: The Record Agent — *What They've Done*, Agent 3: The Fact-Checker — *The Holy Grail*
 
-### Community 225 - "Run 2 — Monitor + Submit & Review (Phases A2 + A3, combined) · after Run 1"
-Cohesion: 0.29
-Nodes (6): Before you start, Definition of done, Founder gates touching this run, Run 2 — Monitor + Submit & Review (Phases A2 + A3, combined) · after Run 1, Scope, Tasks (mark `- [x]` in `docs/admin-dashboard/roadmap.md`; keep Status line accurate)
+### Community 225 - "2. Technical Architecture"
+Cohesion: 0.25
+Nodes (8): 2. Technical Architecture, Architecture Overview, Chosen Stack, Cost Estimate, Infrastructure & Deployment, Repository Structure, Security Considerations, Stack Integration Guide
 
 ### Community 226 - "`official_site` for FL-GOV-general — what was collected and how"
 Cohesion: 0.29
@@ -1247,9 +1247,9 @@ Nodes (5): Step 1 — Inventory the workflows, Step 2 — Name them, Step 3 — 
 Cohesion: 0.33
 Nodes (5): CAP Deep-Research Prompt — Issue Discovery (Stage 1), Handoff to Stage 2, Operator notes, The prompt, Variables (fill before running)
 
-### Community 231 - "B1 results — live run 2026-09-06"
-Cohesion: 0.25
-Nodes (8): 1. Three defects that block the general run, B1 results — live run 2026-09-06, I1 — No status filter: defeated primary candidates enter the general race, I2 — Write-ins are indistinguishable in the parsed columns, Per-target-race tier counts, Q2 — is there a write-in column, Q3 — party codes beyond REP/DEM/NPA, Two corrections the run surfaced
+### Community 231 - "Run 2 — Monitor + Submit & Review (Phases A2 + A3, combined) · after Run 1"
+Cohesion: 0.29
+Nodes (6): Before you start, Definition of done, Founder gates touching this run, Run 2 — Monitor + Submit & Review (Phases A2 + A3, combined) · after Run 1, Scope, Tasks (mark `- [x]` in `docs/admin-dashboard/roadmap.md`; keep Status line accurate)
 
 ### Community 232 - "check_fetch"
 Cohesion: 0.40
@@ -1303,6 +1303,10 @@ Nodes (4): CAP Deep-Research Prompt — "Where They Stand", Notes for the operat
 Cohesion: 0.40
 Nodes (4): CAP Incumbent Official-Account Verification (2026), Federal officeholders (US House), Flags to resolve, State officeholders
 
+### Community 248 - "Run 4 — Site Metrics (Phase A5) · after Run 1, fully parallel-safe"
+Cohesion: 0.33
+Nodes (5): Before you start, Definition of done, Run 4 — Site Metrics (Phase A5) · after Run 1, fully parallel-safe, Scope, Tasks (mark `- [x]` in `docs/admin-dashboard/roadmap.md`; keep Status line accurate)
+
 ### Community 249 - "Brief 02 — S2-02 / S2-03 live acceptance: Record + Fact-Checker"
 Cohesion: 0.50
 Nodes (4): Brief 02 — S2-02 / S2-03 live acceptance: Record + Fact-Checker, Goal, S2-03 — Fact-Checker, Watch-outs
@@ -1334,10 +1338,6 @@ Nodes (3): semi, singleQuote, trailingComma
 ### Community 261 - "vercel.json"
 Cohesion: 0.50
 Nodes (3): crons, framework, $schema
-
-### Community 273 - "Run 4 — Site Metrics (Phase A5) · after Run 1, fully parallel-safe"
-Cohesion: 0.33
-Nodes (5): Before you start, Definition of done, Run 4 — Site Metrics (Phase A5) · after Run 1, fully parallel-safe, Scope, Tasks (mark `- [x]` in `docs/admin-dashboard/roadmap.md`; keep Status line accurate)
 
 ### Community 283 - "7. Non-Functional Requirements"
 Cohesion: 0.33
@@ -1379,11 +1379,11 @@ Nodes (3): action_log, idx_log_guard, idx_log_race_candidate
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `balance_audit_core()` connect `balance_audit_core` to `balance_audit_core.py`, `Model characterization of swept articles — session brief`, `Model characterization of swept articles — design`, `orchestrator_core.py`, `Characterizer evaluation — 2026-09-18`, `News Fairness & Opinion Labelling`, `Candidate News — PRD`, `fetch_source`, `CandidateNews.tsx`, `logsink.py`, `createAnonServerClient`, `Stream P — Pipeline & schema`, `news-characterize-eval.ts`?**
-  _High betweenness centrality (0.164) - this node is a cross-community bridge._
+- **Why does `balance_audit_core()` connect `balance_audit_core` to `balance_audit_core.py`, `Model characterization of swept articles — session brief`, `Model characterization of swept articles — design`, `orchestrator_core.py`, `Characterizer evaluation — 2026-09-18`, `News Fairness & Opinion Labelling`, `Candidate News — PRD`, `fetch_source`, `CandidateNews.tsx`, `news-characterize-eval.ts`, `logsink.py`, `Stream P — Pipeline & schema`, `createAnonServerClient`?**
+  _High betweenness centrality (0.163) - this node is a cross-community bridge._
 - **Why does `8. Tasks` connect `createAnonServerClient` to `usableOutlets`, `CandidateBrowser.tsx`, `verify-news-enqueue.ts`, `verify-news-neutrality.ts`, `Model characterization of swept articles — design`, `balance_audit_core`, `next`, `Candidate News — PRD`, `CandidateNews.tsx`, `decision/route.ts`?**
   _High betweenness centrality (0.114) - this node is a cross-community bridge._
-- **Why does `next` connect `next` to `measures.ts`, `[measureId]/page.tsx`, `Address → district lookup, and a district the browser remembers`, `monitor.ts`, `schema.ts`, `news-sources.ts`, `Know Your Vote Design System`, `Quiz.tsx`, `IssueSection.tsx`, `guard.ts`, `briefs.ts`, `verify-address-resolve.ts`, `AgentsConsole.tsx`, `CandidateBrowser.tsx`, `address/resolve/route.ts`, `news-issues.ts`, `createServiceClient`, `listing.ts`, `submit/page.tsx`, `verify-no-stored-location.ts`, `queue/page.tsx`, `NewsFeed.tsx`, `[candidateId]/page.tsx`, `send-reminders/route.ts`, `site.ts`, `createAnonServerClient`, `decision/route.ts`, `Model characterization of swept articles — session brief`, `sentry.server.config.ts`, `package.json`, `@supabase/supabase-js`, `YourRaces.tsx`?**
+- **Why does `next` connect `next` to `measures.ts`, `queue/page.tsx`, `Address → district lookup, and a district the browser remembers`, `monitor.ts`, `schema.ts`, `news-sources.ts`, `Know Your Vote Design System`, `[candidateId]/page.tsx`, `Quiz.tsx`, `guard.ts`, `IssueSection.tsx`, `verify-address-resolve.ts`, `[measureId]/page.tsx`, `AgentsConsole.tsx`, `CandidateBrowser.tsx`, `address/resolve/route.ts`, `news-issues.ts`, `createServiceClient`, `listing.ts`, `submit/page.tsx`, `createAnonServerClient`, `verify-no-stored-location.ts`, `NewsFeed.tsx`, `send-reminders/route.ts`, `site.ts`, `decision/route.ts`, `briefs.ts`, `Model characterization of swept articles — session brief`, `sentry.server.config.ts`, `package.json`, `@supabase/supabase-js`, `YourRaces.tsx`?**
   _High betweenness centrality (0.100) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `createServiceClient()` (e.g. with `§0 Ground rules (read before any task)` and `5. Tasks`) actually correct?**
   _`createServiceClient()` has 2 INFERRED edges - model-reasoned connections that need verification._

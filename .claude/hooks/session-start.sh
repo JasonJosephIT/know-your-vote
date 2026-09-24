@@ -25,8 +25,11 @@ fi
 
 cd "$CLAUDE_PROJECT_DIR"
 
-# AST only, no LLM calls. Rewrites graph.json only if code changed.
-"$VENV/bin/graphify" update . > /dev/null
+# AST only, no LLM calls. PYTHONHASHSEED=0 matches graphify's own git hooks:
+# clustering is hash-order dependent, so an unpinned run produces different
+# communities than the post-commit rebuild and every commit would leave
+# graphify-out/ dirty.
+PYTHONHASHSEED=0 "$VENV/bin/graphify" update . > /dev/null
 
 # post-commit / post-checkout: rebuild the graph in the background.
 "$VENV/bin/graphify" hook install > /dev/null
