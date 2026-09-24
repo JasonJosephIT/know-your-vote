@@ -1,7 +1,8 @@
 #!/bin/bash
-# Cloud sessions only: install graphify and its MCP server dependency, refresh
-# the code knowledge graph in graphify-out/, and install graphify's git hooks
-# so the graph rebuilds after each commit and checkout.
+# Cloud sessions only: install graphify and its MCP server dependency, build
+# the code knowledge graph in graphify-out/ (gitignored: it is rebuilt here
+# every session, never committed), and install graphify's git hooks so the
+# graph rebuilds after each commit and checkout.
 set -euo pipefail
 
 if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then

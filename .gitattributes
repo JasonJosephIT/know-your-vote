@@ -1,1 +1,3 @@
+# Written by `graphify hook install` on every session start; committed only so
+# the tree stays clean. graph.json itself is not tracked.
 graphify-out/graph.json merge=graphify

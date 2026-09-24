@@ -75,8 +75,6 @@ docs/general-election/ballots/doe_*.tsv
 # Local pipeline venv (Brief 00)
 .venv/
 
-# graphify
-graphify-out/cache/
-graphify-out/manifest.json
-# dated backups graphify writes before overwriting the graph
-graphify-out/20*/
+# graphify: built per session by .claude/hooks/session-start.sh, never committed
+# (every rebuild re-clusters the graph, so a committed copy is always dirty)
+graphify-out/
