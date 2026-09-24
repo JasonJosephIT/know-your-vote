@@ -71,3 +71,7 @@ docs/general-election/ballots/doe_*.tsv
 
 # Local pipeline venv (Brief 00)
 .venv/
+
+# graphify
+graphify-out/cache/
+graphify-out/manifest.json
