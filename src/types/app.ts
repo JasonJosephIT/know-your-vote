@@ -111,6 +111,13 @@ export interface ResolveResult {
   needsCountyConfirm?: boolean;
   races: ResolveRaceSummary[];
   message?: string;
+  /* How much of the ballot this result places. "district": a congressional
+     district resolved (its House race may still be unpublished -- see
+     districtRaceMissing). "statewide": a Florida location we cannot place in a
+     district yet, so `races` is only the ballot every Florida voter shares.
+     Absent reads as "district", which is what every result meant before the
+     field existed. */
+  coverage?: "district" | "statewide";
 }
 
 /* POST /api/quiz response (PRD § 4). */

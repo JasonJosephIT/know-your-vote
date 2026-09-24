@@ -76,3 +76,13 @@ export function countyForRaceDistrict(
   const prefix = district.slice(0, dash);
   return COVERED_COUNTIES.find((c) => c.raceDistrictPrefix === prefix);
 }
+
+/* The covered counties as a voter reads them: "Miami-Dade, Broward,
+   Hillsborough and Orange". Derived from the list, so the coverage copy can
+   never name a county the resolver does not cover, or miss one it does. */
+export function coveredCountyNames(): string {
+  const names = COVERED_COUNTIES.map((c) => c.name);
+  return names.length <= 1
+    ? names.join("")
+    : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+}

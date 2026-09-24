@@ -5,11 +5,13 @@ import { CountyRaces } from "@/components/features/CountyRaces";
 import { VotingInfo } from "@/components/features/VotingInfo";
 import { LocationEntry } from "@/components/features/LocationEntry";
 import { createAnonServerClient } from "@/lib/supabase/server";
-import { districtRaceMissing } from "@/lib/coverage";
+import { districtRaceMissing, STATEWIDE_BALLOT_HREF } from "@/lib/coverage";
+import { coveredCountyNames } from "@/lib/counties";
 import {
   getCoveredDistricts,
   resolveCounty,
   resolveDistrict,
+  resolveStatewideOnly,
   resolveZip,
   ZIP_RE,
 } from "@/lib/resolve";
@@ -49,10 +51,14 @@ export async function YourRaces({
   zip,
   district,
   county,
+  scope,
 }: {
   zip?: string;
   district?: string;
   county?: string;
+  /* "statewide": a Florida voter we cannot place in a district yet (the
+     address path's answer outside the covered counties). */
+  scope?: string;
 }) {
   const districts = await getCoveredDistricts();
 
@@ -65,6 +71,8 @@ export async function YourRaces({
     result = await resolveDistrict(county, district);
   } else if (county) {
     result = await resolveCounty(county);
+  } else if (scope === "statewide") {
+    result = await resolveStatewideOnly();
   }
 
   if (!result) {
@@ -85,9 +93,17 @@ export async function YourRaces({
     return (
       <div className="flex flex-col gap-4">
         <p className="text-body text-on-surface-muted">
-          We don&apos;t cover that area yet — right now it&apos;s the Miami,
-          Fort Lauderdale, Tampa, and Orlando metros. Try another ZIP or pick a
-          county:
+          We can&apos;t place that ZIP on a ballot yet. Full statewide coverage
+          isn&apos;t available: U.S. House and county races are only for{" "}
+          {coveredCountyNames()} counties so far. If you live in Florida, try
+          your street address, or{" "}
+          <Link
+            href={STATEWIDE_BALLOT_HREF}
+            className="text-primary underline underline-offset-2"
+          >
+            see the statewide ballot every Florida voter shares
+          </Link>
+          .
         </p>
         <LocationEntry
           addressEnabled={geocoderConfigured()}
@@ -118,7 +134,9 @@ export async function YourRaces({
   return (
     <div className="flex flex-col gap-5">
       <p className="flex flex-wrap items-center gap-2 text-body-sm text-on-surface-muted">
-        {result.county}
+        {result.coverage === "statewide"
+          ? "Florida · statewide ballot"
+          : result.county}
         {result.district ? ` · ${result.district}` : ""}
         <Link
           href="/candidates?view=races"
@@ -127,6 +145,22 @@ export async function YourRaces({
           Change location
         </Link>
       </p>
+
+      {/* Said first, before any race: the list below is complete for the
+          statewide half and silent about the rest, and a voter must not read
+          it as their whole ballot. */}
+      {result.coverage === "statewide" && (
+        <p
+          role="status"
+          className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
+        >
+          Full statewide coverage isn&apos;t available yet. Your address is in
+          Florida, but outside the counties where we can place U.S. House and
+          county races ({coveredCountyNames()}). Below is the statewide ballot
+          every Florida voter shares. Your House race and any county or local
+          races aren&apos;t here yet.
+        </p>
+      )}
 
       {/* The truly-empty case only. Since the listed tier (0033) the roster is
           visible before any brief is, so an empty list now means nothing at
@@ -204,7 +238,9 @@ export async function YourRaces({
         you can vote on all of this.
       </p>
 
-      {!result.district && result.races.length > 0 && (
+      {!result.district &&
+        result.coverage !== "statewide" &&
+        result.races.length > 0 && (
         <p className="text-caption text-on-surface-muted">
           Showing statewide races. Enter your ZIP above to add your
           congressional district&apos;s races.

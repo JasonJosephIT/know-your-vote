@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { blockForCoordinates } from "@/lib/census-block";
-import { resolveBlock, resolveDistrict } from "@/lib/resolve";
+import { addressCoverage } from "@/lib/coverage";
+import {
+  resolveBlock,
+  resolveDistrict,
+  resolveStatewideOnly,
+} from "@/lib/resolve";
 import type { ResolveResult } from "@/types/app";
 
 /* Coordinate -> census block -> district -> ballot.
@@ -64,17 +69,20 @@ export async function POST(request: NextRequest) {
 
     /* Florida is 12. A non-Florida address is out of coverage rather than an
        error: this is a Florida voter guide, and the copy should say so. */
-    if (block.state !== "12") return NextResponse.json(OUT_OF_COVERAGE);
+    if (addressCoverage(block.state, null) === "out_of_state") {
+      return NextResponse.json(OUT_OF_COVERAGE);
+    }
 
-    const resolved = await resolveBlock(block.geoid);
-    if (!resolved) return NextResponse.json(OUT_OF_COVERAGE);
-
-    const result = await resolveDistrict(
-      resolved.countyFips,
-      resolved.district
-    );
-    if (!result) return NextResponse.json(OUT_OF_COVERAGE);
-    return NextResponse.json(result);
+    /* Coverage is decided by the address, not by the ZIP table. A Florida
+       block we cannot place in a district still has the statewide ballot, so
+       it gets that ballot and an honest "statewide only" -- never "we don't
+       cover this area", which hid races the voter really has. */
+    const placed = await resolveBlock(block.geoid);
+    const result =
+      addressCoverage(block.state, placed) === "district" && placed
+        ? await resolveDistrict(placed.countyFips, placed.district)
+        : null;
+    return NextResponse.json(result ?? (await resolveStatewideOnly()));
   } catch {
     /* No logging, deliberately: an error message on this path can carry the
        coordinate, and a coordinate is the voter's home. */
