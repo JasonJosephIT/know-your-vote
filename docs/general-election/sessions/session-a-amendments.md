@@ -40,13 +40,13 @@ design. This is independent of the candidate briefs and can finish first.
    it load, who published it, its `kind` (official / analysis / reporting /
    argument / commentary) and `stance` (yes / no / neutral) under the
    ladder's rules, and the evidence. "Found via news" is `reporting` +
-   `neutral`, never an `argument` row. For the gaps the spec names, look for
-   primary sources:
+   `neutral`, never an `argument` row. Write the results to
+   `docs/general-election/measure-resources-verified-2026-09-XX.md`. For the
+   gaps the spec names, look for primary sources:
    - AM1 NO: the Florida Channel archive of the House Budget Committee hearing
      (AFL-CIO testimony), and DeSantis's own video or transcript.
    - AM2 NO: an FEA or LWV Florida statement giving their reasons.
    - AM3: the Sheriffs Association ad video.
-     Write the results to `docs/general-election/measure-resources-verified-2026-09-XX.md`.
 4. **Draft the sided rows** as a new unapplied migration only after the
    founder confirms F1–F7 and approves the verified list. Use the number the
    founder gives you, or ask. **Do not take `0036` or `0037`**: they are
