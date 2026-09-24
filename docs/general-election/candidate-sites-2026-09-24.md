@@ -4,9 +4,9 @@
 · Session B, `docs/general-election/sessions/session-b-candidate-websites.md`.
 
 Before this, 7 of 106 ballot candidates had an `official_site`, all of them in FL-GOV
-(`0032`, `candidate-sites-2026-09-21.md`). This batch covers 66 more: **57 have a
-verified campaign site and 9 have none**, each with its reason recorded. With `0036`
-applied, 64 of 106 ballot candidates have a site. Datto (FL-GOV) remains the one
+(`0032`, `candidate-sites-2026-09-21.md`). This batch covers 79 more: **68 have a
+verified campaign site and 11 have none**, each with its reason recorded. With `0036`
+applied, 75 of 106 ballot candidates have a site. Datto (FL-GOV) remains the one
 NULL from `0032`.
 
 ## Method
@@ -117,6 +117,24 @@ The FL-GOV method, unchanged:
 | Dorothy Bendross-Mindingall | NPA/nonpartisan | Miami-Dade County School Board, District 2 | **none** | Nothing found on Ballotpedia, the SOE listing or search; only social profiles and her school-board office pages, which are not campaign sites. |
 | Monica Colucci | NPA/nonpartisan | Miami-Dade County School Board, District 8 | **none** | Genuine campaign site (monicacolucci.com) but compromised: its footer carries injected casino/SEO spam. Not stored until cleaned; founder decision. |
 
+## Hillsborough County
+
+| Candidate | Party | Office | `official_site` | Confirmed by |
+|---|---|---|---|---|
+| Harry Cohen | DEM | Hillsborough County Commission, District 1 | `https://harrycohen.vote/` | Page title "Re-Elect Harry Cohen for County Commission, District 1" |
+| Jackie Toledo | REP | Hillsborough County Commission, District 1 | `https://jackietoledo.com/` | Page title "Jackie Toledo for Hillsborough County Commission, District 1" |
+| Gwen Myers | DEM | Hillsborough County Commission, District 3 | `https://www.votegwenmyers.com/` | Disclaimer "Paid for and Approved by Commissioner Gwen Myers, Democrat, Hillsborough County- Distrcit 3" (sic); page text "Hillsborough County (Tampa's District 3) 2026" |
+| Luiz F. F. Garcia | REP | Hillsborough County Commission, District 3 | `https://www.electluizffgarcia.com/` | Page title "Luiz F. F. Garcia for District 3 County Commission" |
+| Neil Manimala | DEM | Hillsborough County Commission, District 5 | `https://www.neilmanimala.com/` | Disclaimer "paid for and approved by Neil Manimala, Democrat, for Hillsborough County Commission, District 5" |
+| Stacy Hahn | REP | Hillsborough County Commission, District 5 | `https://www.votestacyhahn.com/` | Disclaimer "Paid for by Stacy Hahn, Republican, for Hillsborough County Commission, District 5" |
+| Adam Hattersley | DEM | Hillsborough County Commission, District 7 | **none** | WITHDRAWN. SOE lists him "Inactive-Withdrawn" for Commission District 7; the qualified Democrat is Aileen Rodriguez, who is not in our roster. His old campaign domain is now a gambling-spam site. Roster error, see the doc. |
+| Joshua Wostal | REP | Hillsborough County Commission, District 7 | `https://www.joshuawostal.com/` | Page title "Home \| Joshua Wostal for Hillsborough County Commissioner" (no district number; he is the sitting District 7 commissioner and the SOE files him under District 7) |
+| Brittany Lyssy | NPA/nonpartisan | Hillsborough County School Board, District 2 | `https://www.votebrittanylyssy.com/` | Disclaimer "Paid for and approved by Brittany Lyssy for Hillsborough County School Board, District 2" |
+| Daniela Simic | NPA/nonpartisan | Hillsborough County School Board, District 2 | `https://danielaforschools.com/` | Disclaimer "Political advertisement paid for and approved by Daniela Simic, nonpartisan, for Hillsborough School Board, District 2" |
+| Karen Perez | NPA/nonpartisan | Hillsborough County School Board, District 6 | `https://keepkarenperez.com/` | og:title "Karen Perez for School Board District 6"; matching disclaimer |
+| Kenneth "Ken" Gay | NPA/nonpartisan | Hillsborough County School Board, District 6 | `https://votekennethgay.com/` | Page text "Vote Kenneth Gay - Hillsborough County School Board District 6" |
+| Ashley Meeder | NPA/nonpartisan | Hillsborough County School Board, District 4 | **none** | WITHDRAWN. SOE lists her "Inactive-Withdrawn" for School Board District 4; Patricia "Patti" Rendon holds that seat unopposed and is not in our roster. No site found. Roster error, see the doc. |
+
 ## Candidates with no site, and why
 
 NULL is the true value for each of these: we looked, and there is no campaign site to read.
@@ -132,6 +150,8 @@ NULL is the true value for each of these: we looked, and there is no campaign si
 | Thera Johnson (`FL-VF-DAD-3080`) | Miami-Dade County School Board, District 1 | NOT ON THE BALLOT. Miami-Dade SOE (VoterFocus) lists her "Inactive-Defeated"; Ballotpedia records 32 write-in votes (0.1%) in the Aug 18 special primary. Her site, vote4therajohnson.com, is real but campaigns as a "Write In Candidate" for that primary, so it is a site for a past race and is not stored. Roster error, see below. | — |
 | Dorothy Bendross-Mindingall (`FL-VF-DAD-2926`) | Miami-Dade County School Board, District 2 | Nothing found after checking Ballotpedia, the SOE listing and search. Only social profiles exist, plus board-member office pages (district2.dadeschools.net and a WordPress office blog, mdcpsd2.wordpress.com), which are not campaign sites. | https://district2.dadeschools.net/ |
 | Monica Colucci (`FL-VF-DAD-2953`) | Miami-Dade County School Board, District 8 | SITE COMPROMISED, NOT STORED. monicacolucci.com is her genuine campaign site (disclaimer "paid for and approved by Monica Colucci for Miami-Dade School Board, District 8"), but its WordPress footer carries injected casino/SEO spam links and text, a sign the site has been hacked. Not stored behind her name until it is cleaned; founder's call. | — |
+| Adam Hattersley (`FL-VF-HIL-2639`) | Hillsborough County Commission, District 7 | Campaign withdrawn and no live site: SOE lists him 'Inactive - Withdrawn' for County Commissioner Dist. 7 (Florida Politics: 'Adam Hattersley suspends campaign for Hillsborough County Commission', ~Sept 2025). Ballotpedia's campaign link https://www.adamforflorida.com/ now redirects to a re-registered Indonesian slot-gambling spam site; SOE email domain adam4florida.com resolves to GoDaddy parking IPs and resets HTTPS; adamforhillsborough.com (found in search) is NXDOMAIN. | — |
+| Ashley Meeder (`FL-VF-HIL-2691`) | Hillsborough County School Board, District 4 | Candidate withdrew; no site found. SOE lists Ashley Meeder 'Inactive - Withdrawn' for School Board Member Dist. 4 with $0 raised/spent; nothing found on Ballotpedia or in search. | — |
 
 ## Crawlability, for the ingest step
 
@@ -196,12 +216,25 @@ NULL is the true value for each of these: we looked, and there is no campaign si
 | `www.robpiperheretoserve.com` | Allowed by robots.txt ('User-agent: *' Allow: /). In practice a Cloudflare 'Just a moment' challenge returns 403 to curl; headless Chromium got through after about 20 s. |
 | `vickilopez.vote` | Allowed: WordPress default, 'User-agent: *' Disallow /wp-admin/ only. A SiteGround captcha blocks curl; headless Chromium got through after about 20 s. |
 | `lindaforschoolboard.com` | Explicitly allowed: ClaudeBot, Claude-User, Claude-SearchBot, anthropic-ai, Claude-Web and '*' all Allow: /. |
+| `harrycohen.vote` | robots.txt (MDW platform): User-agent: * Allow: / with Disallows on /mdw/system/, /mdw/_data/, /mdw/global/, /mdw/submit; Crawl-delay: 10; no Claude-specific block. BUT site serves a SiteGround-style 'Robot Challenge Screen' (sgcaptcha) to repeat headless requests. |
+| `jackietoledo.com` | robots.txt not readable: served a SiteGround captcha redirect (/.well-known/sgcaptcha/) with status 202; site has bot protection that blocks repeat automated requests. Crawlability for Claude agents effectively limited by the captcha. |
+| `www.votegwenmyers.com` | Wix robots.txt: User-agent: * Allow: / (Disallow *?lightbox=); blocks only PetalBot; no Claude-specific rules; crawl allowed. |
+| `www.electluizffgarcia.com` | Squarespace robots.txt: ClaudeBot/anthropic-ai are listed in the same group as User-agent: * with only admin/api/query-param Disallows, so Claude agents may crawl public pages; no Crawl-delay. |
+| `www.neilmanimala.com` | Squarespace robots.txt: ClaudeBot/anthropic-ai are listed in the same group as User-agent: * with only admin/api/query-param Disallows, so Claude agents may crawl public pages; no Crawl-delay. |
+| `www.votestacyhahn.com` | WordPress robots.txt: User-agent: * disallows /wp-admin/ and /wp-content/uploads/wpforms/ only; no Claude-specific blocks; crawl allowed. |
+| `www.joshuawostal.com` | robots.txt: User-agent: * Allow: / (Disallow /admin/); blocks GPTBot, CCBot, Google-Extended, Applebot-Extended, Bytespider, meta-externalagent; no ClaudeBot/anthropic-ai/Claude-User rule, so Claude agents fall under * and may crawl. |
+| `www.votebrittanylyssy.com` | Squarespace robots.txt: ClaudeBot/anthropic-ai are listed in the same group as User-agent: * with only admin/api/query-param Disallows, so Claude agents may crawl public pages; no Crawl-delay. |
+| `danielaforschools.com` | User-agent: * disallows only /wp-admin/ (admin-ajax allowed); no Claude-specific blocks; crawl allowed. |
+| `keepkarenperez.com` | User-agent: * disallows only /wp-admin/ (admin-ajax allowed); no Claude-specific blocks; crawl allowed. |
+| `votekennethgay.com` | User-agent: * disallows only /wp-admin/ (admin-ajax allowed); no Claude-specific blocks; crawl allowed. |
 
 ## Roster problems found along the way
 
 Checking each candidate against the county Supervisor of Elections listing turned up ballot-tier candidates who are **not on the November ballot**. This batch does not change the roster (`ballot_status` and `race.candidate_ids` belong to the intake pipeline); it records each one as NULL with the reason, and flags it here so the roster can be corrected before these races are briefed.
 
 - `FL-VF-DAD-3080` Thera Johnson. Miami-Dade School Board District 1 (special election): Thera Johnson is "Inactive-Defeated" on the SOE listing (32 write-in votes in the Aug 18 primary). The Nov 3 runoff is **Linda Cothiere vs Katrina Wilson** (SOE "Active-Runoff" for both; Ballotpedia agrees). Wilson is not in our roster, so the race shows the wrong opponent.
+- `FL-VF-HIL-2639` Adam Hattersley. Hillsborough Commission District 7: Adam Hattersley (DEM) is "Inactive-Withdrawn" on the SOE 2026 listing. The qualified Democrat is **Aileen Rodriguez** (VoterFocus `ca=2660`, "Active-Qualified"), who is not in our roster. The race is Wostal (REP) vs Rodriguez (DEM), and the directory currently shows a withdrawn candidate.
+- `FL-VF-HIL-2691` Ashley Meeder. Hillsborough School Board District 4: Ashley Meeder is "Inactive-Withdrawn" ($0 raised). The seat is held by **Patricia "Patti" Rendon** ("Active-Unopposed", VoterFocus `ca=2672`), who is not in our roster. The decided seat is attributed to the wrong person.
 
 ## Notes on the stored values
 
@@ -211,6 +244,8 @@ Checking each candidate against the county Supervisor of Elections listing turne
 - **Kathy Castor**: Ballotpedia links the `www` host, which redirects to the apex; the apex is the page's own `og:url`, so the apex is stored.
 - **Phil "Felipe" Ehr**: the disclaimer names "EHR FORCE INC" rather than a "for Congress" committee; the page title "Vote Phil Ehr for U.S. House of Representatives" and FL-28 content establish the race.
 - **Vicki L. Lopez**: Ballotpedia still links `vickiforflorida.com`, her old State House site, which was rejected. The current site carries leftover template text ("Lisa Klein for State House" in its SMS consent block); the title and content are hers.
+- **Stacy Hahn**: Ballotpedia also lists `votehahn.com`; that domain is now parked and was rejected.
+- **Kenneth "Ken" Gay**: the homepage carries `noindex, nofollow`. That governs search indexing, not this ingest, but it is worth a second look before quoting.
 
 ## Still open
 

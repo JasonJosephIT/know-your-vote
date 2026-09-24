@@ -2,8 +2,8 @@
 --
 -- Session B (docs/general-election/sessions/session-b-candidate-websites.md).
 -- 0032 covered FL-GOV-general (7 of 8). This file covers the rest of the
--- ballot tier: 66 candidates here, 57 with a verified site and
--- 9 recorded as having none. Evidence per candidate, the robots.txt
+-- ballot tier: 79 candidates here, 68 with a verified site and
+-- 11 recorded as having none. Evidence per candidate, the robots.txt
 -- reading for each site, and the reason behind every NULL:
 -- docs/general-election/candidate-sites-2026-09-24.md
 --
@@ -556,6 +556,107 @@ WHERE candidate_id = 'FL-VF-DAD-3076';
 --   until cleaned; founder decision.
 
 
+-- ==========================================================================
+-- Hillsborough County
+-- ==========================================================================
+
+UPDATE candidate SET
+  official_site = 'https://harrycohen.vote/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-HIL-2640';
+-- Harry Cohen (DEM), Hillsborough County Commission, District 1. Page title
+-- "Re-Elect Harry Cohen for County Commission, District 1"
+
+UPDATE candidate SET
+  official_site = 'https://jackietoledo.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-HIL-2880';
+-- Jackie Toledo (REP), Hillsborough County Commission, District 1. Page title
+-- "Jackie Toledo for Hillsborough County Commission, District 1"
+
+UPDATE candidate SET
+  official_site = 'https://www.votegwenmyers.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-HIL-2621';
+-- Gwen Myers (DEM), Hillsborough County Commission, District 3. Disclaimer
+-- "Paid for and Approved by Commissioner Gwen Myers, Democrat, Hillsborough
+-- County- Distrcit 3" (sic); page text "Hillsborough County (Tampa's District
+-- 3) 2026"
+
+UPDATE candidate SET
+  official_site = 'https://www.electluizffgarcia.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-HIL-2646';
+-- Luiz F. F. Garcia (REP), Hillsborough County Commission, District 3. Page
+-- title "Luiz F. F. Garcia for District 3 County Commission"
+
+UPDATE candidate SET
+  official_site = 'https://www.neilmanimala.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-HIL-2636';
+-- Neil Manimala (DEM), Hillsborough County Commission, District 5. Disclaimer
+-- "paid for and approved by Neil Manimala, Democrat, for Hillsborough County
+-- Commission, District 5"
+
+UPDATE candidate SET
+  official_site = 'https://www.votestacyhahn.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-HIL-2661';
+-- Stacy Hahn (REP), Hillsborough County Commission, District 5. Disclaimer
+-- "Paid for by Stacy Hahn, Republican, for Hillsborough County Commission,
+-- District 5"
+
+UPDATE candidate SET
+  official_site = 'https://www.joshuawostal.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-HIL-2620';
+-- Joshua Wostal (REP), Hillsborough County Commission, District 7. Page title
+-- "Home | Joshua Wostal for Hillsborough County Commissioner" (no district
+-- number; he is the sitting District 7 commissioner and the SOE files him
+-- under District 7)
+
+UPDATE candidate SET
+  official_site = 'https://www.votebrittanylyssy.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-HIL-2677';
+-- Brittany Lyssy (nonpartisan), Hillsborough County School Board, District 2.
+-- Disclaimer "Paid for and approved by Brittany Lyssy for Hillsborough County
+-- School Board, District 2"
+
+UPDATE candidate SET
+  official_site = 'https://danielaforschools.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-HIL-2675';
+-- Daniela Simic (nonpartisan), Hillsborough County School Board, District 2.
+-- Disclaimer "Political advertisement paid for and approved by Daniela Simic,
+-- nonpartisan, for Hillsborough School Board, District 2"
+
+UPDATE candidate SET
+  official_site = 'https://keepkarenperez.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-HIL-2645';
+-- Karen Perez (nonpartisan), Hillsborough County School Board, District 6.
+-- og:title "Karen Perez for School Board District 6"; matching disclaimer
+
+UPDATE candidate SET
+  official_site = 'https://votekennethgay.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-HIL-2610';
+-- Kenneth "Ken" Gay (nonpartisan), Hillsborough County School Board, District
+-- 6. Page text "Vote Kenneth Gay - Hillsborough County School Board District
+-- 6"
+
+-- No official_site (recorded NULL, see the doc for the full reason):
+--   FL-VF-HIL-2639, Adam Hattersley: WITHDRAWN. SOE lists him
+--   "Inactive-Withdrawn" for Commission District 7; the qualified Democrat is
+--   Aileen Rodriguez, who is not in our roster. His old campaign domain is
+--   now a gambling-spam site. Roster error, see the doc.
+--   FL-VF-HIL-2691, Ashley Meeder: WITHDRAWN. SOE lists her
+--   "Inactive-Withdrawn" for School Board District 4; Patricia "Patti" Rendon
+--   holds that seat unopposed and is not in our roster. No site found. Roster
+--   error, see the doc.
+
+
 -- Assert what was achieved. The county rosters are seeded by 0031/0032, so
 -- they exist in the offline harness (scripts/verify-migrations.mjs); the
 -- statewide and congressional rosters arrive through the DoE intake and do
@@ -582,7 +683,7 @@ BEGIN
   -- that candidate exists.
   SELECT count(*) INTO n_mine
     FROM candidate
-   WHERE candidate_id IN ('FL-DOE-89119', 'FL-DOE-90009', 'FL-DOE-89955', 'FL-DOE-89041', 'FL-DOE-89231', 'FL-DOE-91310', 'FL-DOE-89394', 'FL-DOE-92013', 'FL-DOE-90560', 'FL-DOE-90631', 'FL-DOE-92377', 'FL-DOE-90696', 'FL-DOE-90831', 'FL-DOE-89522', 'FL-DOE-91337', 'FL-DOE-89339', 'FL-DOE-89909', 'FL-DOE-91715', 'FL-DOE-91717', 'FL-DOE-88517', 'FL-DOE-89778', 'FL-DOE-88868', 'FL-DOE-89453', 'FL-DOE-92395', 'FL-DOE-88870', 'FL-DOE-91313', 'FL-DOE-89121', 'FL-DOE-89116', 'FL-DOE-90779', 'FL-DOE-89623', 'FL-DOE-90251', 'FL-DOE-91278', 'FL-DOE-91577', 'FL-DOE-90814', 'FL-DOE-92109', 'FL-DOE-89301', 'FL-DOE-91544', 'FL-DOE-90703', 'FL-DOE-88911', 'FL-DOE-89801', 'FL-DOE-90330', 'FL-DOE-89980', 'FL-DOE-89933', 'FL-DOE-90721', 'FL-DOE-90340', 'FL-DOE-91699', 'FL-VF-BRO-1041', 'FL-VF-BRO-1194', 'FL-VF-BRO-1191', 'FL-VF-BRO-1184', 'FL-VF-BRO-1172', 'FL-VF-BRO-1254', 'FL-VF-BRO-1195', 'FL-VF-DAD-2964', 'FL-VF-DAD-2998', 'FL-VF-DAD-2949', 'FL-VF-DAD-3076')
+   WHERE candidate_id IN ('FL-DOE-89119', 'FL-DOE-90009', 'FL-DOE-89955', 'FL-DOE-89041', 'FL-DOE-89231', 'FL-DOE-91310', 'FL-DOE-89394', 'FL-DOE-92013', 'FL-DOE-90560', 'FL-DOE-90631', 'FL-DOE-92377', 'FL-DOE-90696', 'FL-DOE-90831', 'FL-DOE-89522', 'FL-DOE-91337', 'FL-DOE-89339', 'FL-DOE-89909', 'FL-DOE-91715', 'FL-DOE-91717', 'FL-DOE-88517', 'FL-DOE-89778', 'FL-DOE-88868', 'FL-DOE-89453', 'FL-DOE-92395', 'FL-DOE-88870', 'FL-DOE-91313', 'FL-DOE-89121', 'FL-DOE-89116', 'FL-DOE-90779', 'FL-DOE-89623', 'FL-DOE-90251', 'FL-DOE-91278', 'FL-DOE-91577', 'FL-DOE-90814', 'FL-DOE-92109', 'FL-DOE-89301', 'FL-DOE-91544', 'FL-DOE-90703', 'FL-DOE-88911', 'FL-DOE-89801', 'FL-DOE-90330', 'FL-DOE-89980', 'FL-DOE-89933', 'FL-DOE-90721', 'FL-DOE-90340', 'FL-DOE-91699', 'FL-VF-BRO-1041', 'FL-VF-BRO-1194', 'FL-VF-BRO-1191', 'FL-VF-BRO-1184', 'FL-VF-BRO-1172', 'FL-VF-BRO-1254', 'FL-VF-BRO-1195', 'FL-VF-DAD-2964', 'FL-VF-DAD-2998', 'FL-VF-DAD-2949', 'FL-VF-DAD-3076', 'FL-VF-HIL-2640', 'FL-VF-HIL-2880', 'FL-VF-HIL-2621', 'FL-VF-HIL-2646', 'FL-VF-HIL-2636', 'FL-VF-HIL-2661', 'FL-VF-HIL-2620', 'FL-VF-HIL-2677', 'FL-VF-HIL-2675', 'FL-VF-HIL-2645', 'FL-VF-HIL-2610')
      AND (official_site IS NULL OR site_last_verified_at IS NULL);
   IF n_mine > 0 THEN
     RAISE EXCEPTION '% candidate(s) in this batch exist but did not take their official_site', n_mine;
@@ -606,9 +707,9 @@ BEGIN
   IF n_ballot <> 106 THEN
     RAISE EXCEPTION 'the ballot tier has % candidates, expected 106 - the roster moved, re-check before trusting these URLs', n_ballot;
   END IF;
-  IF n_sited <> 64 THEN
-    RAISE EXCEPTION 'expected 64 of 106 ballot candidates to have official_site (7 from 0032 + 57 here), found %', n_sited;
+  IF n_sited <> 75 THEN
+    RAISE EXCEPTION 'expected 75 of 106 ballot candidates to have official_site (7 from 0032 + 68 here), found %', n_sited;
   END IF;
 
-  RAISE NOTICE '64 of 106 ballot candidates have a verified official_site';
+  RAISE NOTICE '75 of 106 ballot candidates have a verified official_site';
 END $$;
