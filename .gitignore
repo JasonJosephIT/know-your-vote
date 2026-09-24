@@ -48,8 +48,11 @@ __pycache__/
 *.pyc
 
 # --- reconciliation 2026-07-26 ---
-# Agent scaffolding and crawl caches
-.claude/
+# Agent scaffolding and crawl caches. The shared settings and the session-start
+# hook are tracked; everything else under .claude/ stays local.
+.claude/*
+!.claude/settings.json
+!.claude/hooks/
 .claude-crawl/
 
 # Generated ops output. RunReports are deliberately TRACKED: they are the
@@ -72,6 +75,6 @@ docs/general-election/ballots/doe_*.tsv
 # Local pipeline venv (Brief 00)
 .venv/
 
-# graphify
-graphify-out/cache/
-graphify-out/manifest.json
+# graphify: built per session by .claude/hooks/session-start.sh, never committed
+# (every rebuild re-clusters the graph, so a committed copy is always dirty)
+graphify-out/
