@@ -330,6 +330,33 @@ export async function resolveCounty(
   };
 }
 
+/* A Florida voter we cannot place in a district yet: the address path's answer
+   for a block outside the seeded counties (addressCoverage "statewide").
+
+   Not an out-of-coverage result, deliberately. Every race returned here is on
+   this voter's ballot -- statewide races are on every Florida ballot -- so
+   `inCoverage` stays true and `coverage: "statewide"` tells the UI which half
+   is missing. No county or district is claimed: nothing on this path knows
+   either well enough to show county races or a House race. */
+export async function resolveStatewideOnly(): Promise<ResolveResultWithCounty> {
+  const races = await getStatewideRaces();
+  return {
+    zip: "",
+    inCoverage: true,
+    coverage: "statewide",
+    races: races.map(
+      ({ raceId, office, level, district, published, status }) => ({
+        raceId,
+        office,
+        level,
+        district,
+        published,
+        status,
+      })
+    ),
+  };
+}
+
 /* Address path. A census block sits in exactly one district, so unlike a ZIP
    there is nothing to confirm -- which is the whole reason this path exists.
    null means the block is outside the four covered counties, which is also the

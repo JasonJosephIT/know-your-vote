@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
@@ -9,6 +10,8 @@ import {
   DistrictConfirm,
 } from "@/components/features/CountyPicker";
 import { track } from "@/lib/analytics";
+import { coveredCountyNames } from "@/lib/counties";
+import { STATEWIDE_BALLOT_HREF } from "@/lib/coverage";
 import { writeDistrictCookie } from "@/lib/district-cookie";
 import type { AddressSuggestion } from "@/lib/address-lookup";
 import type { CoveredDistrict } from "@/lib/resolve";
@@ -143,6 +146,13 @@ export function LocationEntry({
       const data: ResolveResult = await res.json();
       if (!data.inCoverage) {
         setStage({ kind: "outOfCoverage" });
+        return;
+      }
+      /* A Florida address outside the counties we can place in a district:
+         the statewide ballot is still theirs. Nothing is written to the
+         district cookie -- there is no district to remember. */
+      if (data.coverage === "statewide") {
+        router.push(STATEWIDE_BALLOT_HREF);
         return;
       }
       if (!data.district || !data.countyFips) {
@@ -316,6 +326,15 @@ export function LocationEntry({
         </Button>
       </form>
 
+      {/* Always visible, not only after a miss: a voter outside the four
+          counties should know before typing that their House and county
+          races are not here yet. */}
+      <p className="text-caption text-on-surface-muted">
+        Full statewide coverage isn&apos;t available yet. Every Florida voter
+        gets the statewide races and amendments; U.S. House and county races
+        are only for {coveredCountyNames()} counties so far.
+      </p>
+
       {stage.kind === "error" && (
         <p role="alert" className="text-body-sm text-error">
           {stage.message}
@@ -325,9 +344,21 @@ export function LocationEntry({
       {stage.kind === "outOfCoverage" && (
         <div className="flex flex-col gap-3" role="status">
           <p className="text-body-sm text-on-surface-muted">
-            We don&apos;t cover that area yet — right now we cover the Miami,
-            Fort Lauderdale, Tampa, and Orlando metros. You can still browse a
-            covered county:
+            We can&apos;t place that location on a ballot yet. Full statewide
+            coverage isn&apos;t available: we have U.S. House and county races
+            only for {coveredCountyNames()} counties.
+            {addressEnabled
+              ? " If you live in Florida, enter your street address instead — your address, not your ZIP, decides what we can show."
+              : ""}
+          </p>
+          <Link
+            href={STATEWIDE_BALLOT_HREF}
+            className="w-fit text-body-sm text-primary underline underline-offset-2"
+          >
+            See the statewide ballot every Florida voter shares
+          </Link>
+          <p className="text-body-sm text-on-surface-muted">
+            Or browse a covered county:
           </p>
           <CountyPicker
             onPick={(county) =>

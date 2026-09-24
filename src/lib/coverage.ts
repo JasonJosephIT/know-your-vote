@@ -39,3 +39,36 @@ export function districtRaceMissing(
 ): boolean {
   return Boolean(district) && !races.some((r) => Boolean(r.district));
 }
+
+/* How much of a ballot an ADDRESS can place, decided by where the address is
+   rather than by which ZIPs happen to be seeded.
+
+   A census block is authoritative for state and county in a way a ZIP never
+   is: every Florida block answers "12", and block_district answers the
+   district only where it is seeded (the four covered counties). So a Florida
+   address outside them is not "out of coverage" -- the statewide ballot is on
+   every Florida voter's ballot, and saying "we don't cover this area" hid
+   eleven races and three amendments the voter really does have. What it lacks
+   is the district and county half, and the UI says exactly that.
+
+     out_of_state -- not a Florida address; this is a Florida voter guide.
+     statewide    -- Florida, but no district we can place it in yet.
+     district     -- Florida, placed in exactly one congressional district.
+
+   `state` is the block's two-digit state FIPS; `placed` is block_district's
+   answer (null when the block is not seeded). */
+export type AddressCoverage = "out_of_state" | "statewide" | "district";
+
+export function addressCoverage(
+  state: string,
+  placed: { district: string; countyFips: string } | null
+): AddressCoverage {
+  if (state !== "12") return "out_of_state";
+  return placed ? "district" : "statewide";
+}
+
+/* The ballot every Florida voter shares, with the "statewide only" notice.
+   Carries no location at all, so it is safe to share and safe to cache. Here
+   rather than in LocationEntry because a value exported from a client module
+   reaches a server component as a client reference, not as the string. */
+export const STATEWIDE_BALLOT_HREF = "/candidates?view=races&scope=statewide";
