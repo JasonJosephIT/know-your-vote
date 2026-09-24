@@ -2,8 +2,8 @@
 --
 -- Session B (docs/general-election/sessions/session-b-candidate-websites.md).
 -- 0032 covered FL-GOV-general (7 of 8). This file covers the rest of the
--- ballot tier: 49 candidates here, 46 with a verified site and
--- 3 recorded as having none. Evidence per candidate, the robots.txt
+-- ballot tier: 66 candidates here, 57 with a verified site and
+-- 9 recorded as having none. Evidence per candidate, the robots.txt
 -- reading for each site, and the reason behind every NULL:
 -- docs/general-election/candidate-sites-2026-09-24.md
 --
@@ -439,6 +439,123 @@ WHERE candidate_id = 'FL-DOE-91699';
 --   quote 2020 positions as current. Founder decision.
 
 
+-- ==========================================================================
+-- Broward and Miami-Dade County
+-- ==========================================================================
+
+UPDATE candidate SET
+  official_site = 'https://www.carylshuham.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-BRO-1041';
+-- Caryl Sandler Shuham (DEM), Broward County Commission, District 6. Page
+-- title 'Caryl Shuham for Broward County Commission - District 6'; disclaimer
+-- 'Paid for by Caryl Shuham, Democrat, for Broward County Commission,
+-- District 6'
+
+UPDATE candidate SET
+  official_site = 'https://www.mauraforbroward.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-BRO-1194';
+-- Maura McCarthy Bulman (nonpartisan), Broward County School Board, District
+-- 1. Disclaimer 'Political advertisement paid for and approved by Maura
+-- McCarthy Bulman for Broward County School Board, District 1, non partisan'
+
+UPDATE candidate SET
+  official_site = 'https://nicolemorst.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-BRO-1191';
+-- Nicole Morst (nonpartisan), Broward County School Board, District 4.
+-- Disclaimer 'Political Advertisement Paid for and Approved by Nicole Morst,
+-- non-partisan, for Broward County School Board, District 4'
+
+UPDATE candidate SET
+  official_site = 'https://www.adamcervera.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-BRO-1184';
+-- Adam Cervera (nonpartisan), Broward County School Board, District 6.
+-- Disclaimer 'Political advertisement paid for and approved by Adam Cervera
+-- for Broward County School Board, District 6'
+
+UPDATE candidate SET
+  official_site = 'https://www.electroberto2026.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-BRO-1172';
+-- Roberto Fernandez III (nonpartisan), Broward County School Board, District
+-- 6. Page title 'Vote Roberto Fernandez, III for Broward County School
+-- Board'; disclaimer '...approved by Roberto Fernandez, III, non-partisan,
+-- for Broward County School Board District 6' (live read after its SiteGround
+-- challenge cleared)
+
+UPDATE candidate SET
+  official_site = 'https://www.cynthiaforbrowardschools.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-BRO-1254';
+-- Cynthia Alceus Dominique (nonpartisan), Broward County School Board,
+-- District 7. Disclaimer 'Political advertisement paid for by Cynthia
+-- Dominique for Broward County School Board, District 7'
+
+UPDATE candidate SET
+  official_site = 'https://electallenzeman.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-BRO-1195';
+-- Allen Zeman (nonpartisan), Broward County School Board, At-Large Seat 8.
+-- Disclaimer 'Political advertisement paid for and approved by Allen Zeman
+-- for School Board of Broward County, Seat 8, nonpartisan'
+
+UPDATE candidate SET
+  official_site = 'https://reelectbastien.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-DAD-2964';
+-- Marleine Bastien (nonpartisan), Miami-Dade County Commission, District 2.
+-- Page title 'Marleine Bastien for Miami-Dade Commission District 2 |
+-- Re-Elect'
+
+UPDATE candidate SET
+  official_site = 'https://www.robpiperheretoserve.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-DAD-2998';
+-- Rob Piper (nonpartisan), Miami-Dade County Commission, District 5. Page
+-- title 'Rob Piper for Miami-Dade County Commissioner - District 5';
+-- disclaimer 'Paid for by ROB PIPER for Miami-Dade County District 5
+-- Commissioner'
+
+UPDATE candidate SET
+  official_site = 'https://vickilopez.vote/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-DAD-2949';
+-- Vicki L. Lopez (nonpartisan), Miami-Dade County Commission, District 5.
+-- Page title 'Vicki Lopez for Miami-Dade County Commissioner'
+
+UPDATE candidate SET
+  official_site = 'https://lindaforschoolboard.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-DAD-3076';
+-- Linda Cothiere (nonpartisan), Miami-Dade County School Board, District 1.
+-- og:title 'Elect Linda Cothiere Aristide - Miami-Dade School Board, District
+-- 1 - Runoff Nov 3'; disclaimer '...approved by Linda Cothiere, nonpartisan,
+-- for Miami-Dade School Board District 1'
+
+-- No official_site (recorded NULL, see the doc for the full reason):
+--   FL-VF-BRO-1179, Mark D. Bogen: Nothing found on Ballotpedia, the SOE
+--   listing or search; decided seat. Only social profiles and the county
+--   office page exist.
+--   FL-VF-BRO-1178, Lamar Fisher: Old campaign domain fisherfordistrict4.com
+--   is disconnected (Wix "ConnectYourDomain" 404) and lamarfisher.com is
+--   parked; social profiles only.
+--   FL-VF-BRO-1182, Robert McKinzie: Nothing found on Ballotpedia, the SOE
+--   listing or search; decided seat. Only social profiles and the county
+--   office page exist.
+--   FL-VF-DAD-3080, Thera Johnson: Not on the ballot (lost the Aug 18 primary
+--   as a write-in, SOE "Inactive-Defeated"); her site is for that past race.
+--   Roster error.
+--   FL-VF-DAD-2926, Dorothy Bendross-Mindingall: Nothing found on
+--   Ballotpedia, the SOE listing or search; only social profiles and her
+--   school-board office pages, which are not campaign sites.
+--   FL-VF-DAD-2953, Monica Colucci: Genuine campaign site (monicacolucci.com)
+--   but compromised: its footer carries injected casino/SEO spam. Not stored
+--   until cleaned; founder decision.
+
+
 -- Assert what was achieved. The county rosters are seeded by 0031/0032, so
 -- they exist in the offline harness (scripts/verify-migrations.mjs); the
 -- statewide and congressional rosters arrive through the DoE intake and do
@@ -465,7 +582,7 @@ BEGIN
   -- that candidate exists.
   SELECT count(*) INTO n_mine
     FROM candidate
-   WHERE candidate_id IN ('FL-DOE-89119', 'FL-DOE-90009', 'FL-DOE-89955', 'FL-DOE-89041', 'FL-DOE-89231', 'FL-DOE-91310', 'FL-DOE-89394', 'FL-DOE-92013', 'FL-DOE-90560', 'FL-DOE-90631', 'FL-DOE-92377', 'FL-DOE-90696', 'FL-DOE-90831', 'FL-DOE-89522', 'FL-DOE-91337', 'FL-DOE-89339', 'FL-DOE-89909', 'FL-DOE-91715', 'FL-DOE-91717', 'FL-DOE-88517', 'FL-DOE-89778', 'FL-DOE-88868', 'FL-DOE-89453', 'FL-DOE-92395', 'FL-DOE-88870', 'FL-DOE-91313', 'FL-DOE-89121', 'FL-DOE-89116', 'FL-DOE-90779', 'FL-DOE-89623', 'FL-DOE-90251', 'FL-DOE-91278', 'FL-DOE-91577', 'FL-DOE-90814', 'FL-DOE-92109', 'FL-DOE-89301', 'FL-DOE-91544', 'FL-DOE-90703', 'FL-DOE-88911', 'FL-DOE-89801', 'FL-DOE-90330', 'FL-DOE-89980', 'FL-DOE-89933', 'FL-DOE-90721', 'FL-DOE-90340', 'FL-DOE-91699')
+   WHERE candidate_id IN ('FL-DOE-89119', 'FL-DOE-90009', 'FL-DOE-89955', 'FL-DOE-89041', 'FL-DOE-89231', 'FL-DOE-91310', 'FL-DOE-89394', 'FL-DOE-92013', 'FL-DOE-90560', 'FL-DOE-90631', 'FL-DOE-92377', 'FL-DOE-90696', 'FL-DOE-90831', 'FL-DOE-89522', 'FL-DOE-91337', 'FL-DOE-89339', 'FL-DOE-89909', 'FL-DOE-91715', 'FL-DOE-91717', 'FL-DOE-88517', 'FL-DOE-89778', 'FL-DOE-88868', 'FL-DOE-89453', 'FL-DOE-92395', 'FL-DOE-88870', 'FL-DOE-91313', 'FL-DOE-89121', 'FL-DOE-89116', 'FL-DOE-90779', 'FL-DOE-89623', 'FL-DOE-90251', 'FL-DOE-91278', 'FL-DOE-91577', 'FL-DOE-90814', 'FL-DOE-92109', 'FL-DOE-89301', 'FL-DOE-91544', 'FL-DOE-90703', 'FL-DOE-88911', 'FL-DOE-89801', 'FL-DOE-90330', 'FL-DOE-89980', 'FL-DOE-89933', 'FL-DOE-90721', 'FL-DOE-90340', 'FL-DOE-91699', 'FL-VF-BRO-1041', 'FL-VF-BRO-1194', 'FL-VF-BRO-1191', 'FL-VF-BRO-1184', 'FL-VF-BRO-1172', 'FL-VF-BRO-1254', 'FL-VF-BRO-1195', 'FL-VF-DAD-2964', 'FL-VF-DAD-2998', 'FL-VF-DAD-2949', 'FL-VF-DAD-3076')
      AND (official_site IS NULL OR site_last_verified_at IS NULL);
   IF n_mine > 0 THEN
     RAISE EXCEPTION '% candidate(s) in this batch exist but did not take their official_site', n_mine;
@@ -489,9 +606,9 @@ BEGIN
   IF n_ballot <> 106 THEN
     RAISE EXCEPTION 'the ballot tier has % candidates, expected 106 - the roster moved, re-check before trusting these URLs', n_ballot;
   END IF;
-  IF n_sited <> 53 THEN
-    RAISE EXCEPTION 'expected 53 of 106 ballot candidates to have official_site (7 from 0032 + 46 here), found %', n_sited;
+  IF n_sited <> 64 THEN
+    RAISE EXCEPTION 'expected 64 of 106 ballot candidates to have official_site (7 from 0032 + 57 here), found %', n_sited;
   END IF;
 
-  RAISE NOTICE '53 of 106 ballot candidates have a verified official_site';
+  RAISE NOTICE '64 of 106 ballot candidates have a verified official_site';
 END $$;

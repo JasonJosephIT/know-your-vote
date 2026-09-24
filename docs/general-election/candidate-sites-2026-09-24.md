@@ -4,9 +4,9 @@
 · Session B, `docs/general-election/sessions/session-b-candidate-websites.md`.
 
 Before this, 7 of 106 ballot candidates had an `official_site`, all of them in FL-GOV
-(`0032`, `candidate-sites-2026-09-21.md`). This batch covers 49 more: **46 have a
-verified campaign site and 3 have none**, each with its reason recorded. With `0036`
-applied, 53 of 106 ballot candidates have a site. Datto (FL-GOV) remains the one
+(`0032`, `candidate-sites-2026-09-21.md`). This batch covers 66 more: **57 have a
+verified campaign site and 9 have none**, each with its reason recorded. With `0036`
+applied, 64 of 106 ballot candidates have a site. Datto (FL-GOV) remains the one
 NULL from `0032`.
 
 ## Method
@@ -95,6 +95,28 @@ The FL-GOV method, unchanged:
 | Eddy Rojas | NPA | U.S. House, FL-28 | `https://www.eddyrojas.com/` | Live homepage: title/og:title 'Eddy Rojas for Congress - District 28 \| district 28 \| Miami-Dade, FL, USA'; h1 'Running for U.S. Congress — Florida District 28'; /about title 'About \| ROJAS FOR CONGRESS' |
 | Phil "Felipe" Ehr | DEM | U.S. House, FL-28 | `https://ehrforcongress.us/` | Live homepage: title/og:title 'Vote Phil Ehr for U.S. House of Representatives'; og:url https://ehrforcongress.us/; footer 'PAID FOR BY EHR FORCE INC'; body 'DONATE FL-28 Bike Tour', 'FL-28 Debate Request', 'Help us defeat Gimenez' |
 
+## Broward and Miami-Dade County
+
+| Candidate | Party | Office | `official_site` | Confirmed by |
+|---|---|---|---|---|
+| Mark D. Bogen | DEM | Broward County Commission, District 2 | **none** | Nothing found on Ballotpedia, the SOE listing or search; decided seat. Only social profiles and the county office page exist. |
+| Lamar Fisher | DEM | Broward County Commission, District 4 | **none** | Old campaign domain fisherfordistrict4.com is disconnected (Wix "ConnectYourDomain" 404) and lamarfisher.com is parked; social profiles only. |
+| Caryl Sandler Shuham | DEM | Broward County Commission, District 6 | `https://www.carylshuham.com/` | Page title 'Caryl Shuham for Broward County Commission - District 6'; disclaimer 'Paid for by Caryl Shuham, Democrat, for Broward County Commission, District 6' |
+| Robert McKinzie | DEM | Broward County Commission, District 8 | **none** | Nothing found on Ballotpedia, the SOE listing or search; decided seat. Only social profiles and the county office page exist. |
+| Maura McCarthy Bulman | NPA/nonpartisan | Broward County School Board, District 1 | `https://www.mauraforbroward.com/` | Disclaimer 'Political advertisement paid for and approved by Maura McCarthy Bulman for Broward County School Board, District 1, non partisan' |
+| Nicole Morst | NPA/nonpartisan | Broward County School Board, District 4 | `https://nicolemorst.com/` | Disclaimer 'Political Advertisement Paid for and Approved by Nicole Morst, non-partisan, for Broward County School Board, District 4' |
+| Adam Cervera | NPA/nonpartisan | Broward County School Board, District 6 | `https://www.adamcervera.com/` | Disclaimer 'Political advertisement paid for and approved by Adam Cervera for Broward County School Board, District 6' |
+| Roberto Fernandez III | NPA/nonpartisan | Broward County School Board, District 6 | `https://www.electroberto2026.com/` | Page title 'Vote Roberto Fernandez, III for Broward County School Board'; disclaimer '...approved by Roberto Fernandez, III, non-partisan, for Broward County School Board District 6' (live read after its SiteGround challenge cleared) |
+| Cynthia Alceus Dominique | NPA/nonpartisan | Broward County School Board, District 7 | `https://www.cynthiaforbrowardschools.com/` | Disclaimer 'Political advertisement paid for by Cynthia Dominique for Broward County School Board, District 7' |
+| Allen Zeman | NPA/nonpartisan | Broward County School Board, At-Large Seat 8 | `https://electallenzeman.com/` | Disclaimer 'Political advertisement paid for and approved by Allen Zeman for School Board of Broward County, Seat 8, nonpartisan' |
+| Marleine Bastien | NPA/nonpartisan | Miami-Dade County Commission, District 2 | `https://reelectbastien.com/` | Page title 'Marleine Bastien for Miami-Dade Commission District 2 \| Re-Elect' |
+| Rob Piper | NPA/nonpartisan | Miami-Dade County Commission, District 5 | `https://www.robpiperheretoserve.com/` | Page title 'Rob Piper for Miami-Dade County Commissioner - District 5'; disclaimer 'Paid for by ROB PIPER for Miami-Dade County District 5 Commissioner' |
+| Vicki L. Lopez | NPA/nonpartisan | Miami-Dade County Commission, District 5 | `https://vickilopez.vote/` | Page title 'Vicki Lopez for Miami-Dade County Commissioner' |
+| Linda Cothiere | NPA/nonpartisan | Miami-Dade County School Board, District 1 | `https://lindaforschoolboard.com/` | og:title 'Elect Linda Cothiere Aristide - Miami-Dade School Board, District 1 - Runoff Nov 3'; disclaimer '...approved by Linda Cothiere, nonpartisan, for Miami-Dade School Board District 1' |
+| Thera Johnson | NPA/nonpartisan | Miami-Dade County School Board, District 1 | **none** | Not on the ballot (lost the Aug 18 primary as a write-in, SOE "Inactive-Defeated"); her site is for that past race. Roster error. |
+| Dorothy Bendross-Mindingall | NPA/nonpartisan | Miami-Dade County School Board, District 2 | **none** | Nothing found on Ballotpedia, the SOE listing or search; only social profiles and her school-board office pages, which are not campaign sites. |
+| Monica Colucci | NPA/nonpartisan | Miami-Dade County School Board, District 8 | **none** | Genuine campaign site (monicacolucci.com) but compromised: its footer carries injected casino/SEO spam. Not stored until cleaned; founder decision. |
+
 ## Candidates with no site, and why
 
 NULL is the true value for each of these: we looked, and there is no campaign site to read.
@@ -104,6 +126,12 @@ NULL is the true value for each of these: we looked, and there is no campaign si
 | Peter Jassenoff (`FL-DOE-92357`) | U.S. House, FL-25 | Nothing found: Ballotpedia candidate page has no campaign/personal website link (FEC link only); BallotReady lists none; FEC committee C00953877 'PETER JASSENOFF FOR CONGRESS' lists no website (gmail contact only); web search found only news coverage. Guessed domains peterjassenoff.com / jassenoffforcongress.com do not resolve; jassenoff.com resolves to a parking-type IP with no candidate content. lp.org/candidate/peter-jassenoff/ read on 2026-09-24: bio only, no website link. | — |
 | Deborah Ann Meidinger Hosey (`FL-DOE-92137`) | U.S. House, FL-26 | Nothing found: Ballotpedia page has no website link (FEC only); BallotReady lists none; FEC Form 1 for 'Deborah Ann Meidinger Hosey for US Congress' (filed 2026-06-10) gives only email DeborahUnites@DAMHforCongress.com — damhforcongress.com (and www) has no A record (DNS shows only Microsoft/Azure mail-hosting SOA), so no website is served. | — |
 | Carlos A. Gimenez (`FL-DOE-91226`) | U.S. House, FL-28 | STALE SITE, NOT STORED. carlosgimenezforcongress.com is his committee's site, but its copy is from the 2020 first run: "Mayor Gimenez ... Now, he's building on this record as a candidate for Congress", with no mention of 2026 or District 28. Storing it would have the ingest quote 2020 positions as current ones. Founder's call whether to store it anyway. | https://gimenez.house.gov/ |
+| Mark D. Bogen (`FL-VF-BRO-1179`) | Broward County Commission, District 2 | Nothing found after checking Ballotpedia, the SOE listing and search; incumbent seeking re-election unopposed. Only social (X @mark_bogen) and the county office page exist. | https://www.broward.org/district2 |
+| Lamar Fisher (`FL-VF-BRO-1178`) | Broward County Commission, District 4 | fisherfordistrict4.com (apex and www) returns a Wix 'ConnectYourDomain Error' 404, so the domain is not connected. lamarfisher.com is a GoDaddy parked page. Only social profiles (Facebook @FisherForDistrict4, X @LamarPFisher) are live. | https://www.broward.org/district4 |
+| Robert McKinzie (`FL-VF-BRO-1182`) | Broward County Commission, District 8 | Nothing found after checking Ballotpedia, the SOE listing and search; incumbent is unopposed. | https://www.broward.org/district8 |
+| Thera Johnson (`FL-VF-DAD-3080`) | Miami-Dade County School Board, District 1 | NOT ON THE BALLOT. Miami-Dade SOE (VoterFocus) lists her "Inactive-Defeated"; Ballotpedia records 32 write-in votes (0.1%) in the Aug 18 special primary. Her site, vote4therajohnson.com, is real but campaigns as a "Write In Candidate" for that primary, so it is a site for a past race and is not stored. Roster error, see below. | — |
+| Dorothy Bendross-Mindingall (`FL-VF-DAD-2926`) | Miami-Dade County School Board, District 2 | Nothing found after checking Ballotpedia, the SOE listing and search. Only social profiles exist, plus board-member office pages (district2.dadeschools.net and a WordPress office blog, mdcpsd2.wordpress.com), which are not campaign sites. | https://district2.dadeschools.net/ |
+| Monica Colucci (`FL-VF-DAD-2953`) | Miami-Dade County School Board, District 8 | SITE COMPROMISED, NOT STORED. monicacolucci.com is her genuine campaign site (disclaimer "paid for and approved by Monica Colucci for Miami-Dade School Board, District 8"), but its WordPress footer carries injected casino/SEO spam links and text, a sign the site has been hacked. Not stored behind her name until it is cleaned; founder's call. | — |
 
 ## Crawlability, for the ingest step
 
@@ -157,6 +185,23 @@ NULL is the true value for each of these: we looked, and there is no campaign si
 | `mariaelvirasalazar.com` | Yoast robots.txt: User-agent: * Disallow: (empty) — all allowed; a Crawl-delay: 10 line precedes the user-agent block (applies loosely to all) |
 | `www.eddyrojas.com` | Wix default robots.txt: User-agent: * Allow: / (Disallow *?lightbox=); only PetalBot blocked; no Claude/AI-bot rules |
 | `ehrforcongress.us` | Yoast robots.txt: User-agent: * Disallow: (empty) — all allowed; no AI-bot rules |
+| `www.carylshuham.com` | Allowed: robots.txt is 'User-agent: *' with Crawl-delay: 10 and no Disallow and no AI-bot blocks. SiteGround anti-bot captcha is served to curl and sometimes to headless Chromium. |
+| `www.mauraforbroward.com` | Allowed (Squarespace default): ClaudeBot, anthropic-ai and GPTBot are listed in the same group as 'User-agent: *', which only disallows admin/API/search/query paths. There is no 'Disallow: /'. |
+| `nicolemorst.com` | Allowed: 'User-agent: *' disallows only /Login, store cart/checkout and filter paths. No AI-bot blocks. |
+| `www.adamcervera.com` | Allowed: 'User-agent: *' disallows only /admin/, /portal/, /js/ and /_*. No AI-bot blocks. |
+| `www.electroberto2026.com` | By its rules, allowed: the archived robots.txt (2026-08-19) is 'User-agent: *' with Disallow only /wp-admin/. In practice the live site is behind a SiteGround captcha that blocked curl and headless Chromium, robots.txt included. |
+| `www.cynthiaforbrowardschools.com` | Allowed: Wix default, 'User-agent: *' Allow: / (Disallow only *?lightbox=). PetalBot is blocked; no AI-bot blocks. |
+| `electallenzeman.com` | Allowed: WordPress default, 'User-agent: *' Disallow /wp-admin/ only. |
+| `reelectbastien.com` | Allowed: 'User-agent: *' Allow: /. |
+| `www.robpiperheretoserve.com` | Allowed by robots.txt ('User-agent: *' Allow: /). In practice a Cloudflare 'Just a moment' challenge returns 403 to curl; headless Chromium got through after about 20 s. |
+| `vickilopez.vote` | Allowed: WordPress default, 'User-agent: *' Disallow /wp-admin/ only. A SiteGround captcha blocks curl; headless Chromium got through after about 20 s. |
+| `lindaforschoolboard.com` | Explicitly allowed: ClaudeBot, Claude-User, Claude-SearchBot, anthropic-ai, Claude-Web and '*' all Allow: /. |
+
+## Roster problems found along the way
+
+Checking each candidate against the county Supervisor of Elections listing turned up ballot-tier candidates who are **not on the November ballot**. This batch does not change the roster (`ballot_status` and `race.candidate_ids` belong to the intake pipeline); it records each one as NULL with the reason, and flags it here so the roster can be corrected before these races are briefed.
+
+- `FL-VF-DAD-3080` Thera Johnson. Miami-Dade School Board District 1 (special election): Thera Johnson is "Inactive-Defeated" on the SOE listing (32 write-in votes in the Aug 18 primary). The Nov 3 runoff is **Linda Cothiere vs Katrina Wilson** (SOE "Active-Runoff" for both; Ballotpedia agrees). Wilson is not in our roster, so the race shows the wrong opponent.
 
 ## Notes on the stored values
 
@@ -165,6 +210,7 @@ NULL is the true value for each of these: we looked, and there is no campaign si
 - **Branden Scrivener**: a GoodParty.org-built site carrying `noindex`. The title names only "Federal Congressional District 12, No Party Affiliation Candidate"; his name is in the body and disclaimer.
 - **Kathy Castor**: Ballotpedia links the `www` host, which redirects to the apex; the apex is the page's own `og:url`, so the apex is stored.
 - **Phil "Felipe" Ehr**: the disclaimer names "EHR FORCE INC" rather than a "for Congress" committee; the page title "Vote Phil Ehr for U.S. House of Representatives" and FL-28 content establish the race.
+- **Vicki L. Lopez**: Ballotpedia still links `vickiforflorida.com`, her old State House site, which was rejected. The current site carries leftover template text ("Lisa Klein for State House" in its SMS consent block); the title and content are hers.
 
 ## Still open
 
