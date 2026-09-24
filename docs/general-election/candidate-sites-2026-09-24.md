@@ -4,9 +4,9 @@
 · Session B, `docs/general-election/sessions/session-b-candidate-websites.md`.
 
 Before this, 7 of 106 ballot candidates had an `official_site`, all of them in FL-GOV
-(`0032`, `candidate-sites-2026-09-21.md`). This batch covers 31 more: **31 have a
-verified campaign site and 0 have none**, each with its reason recorded. With `0036`
-applied, 38 of 106 ballot candidates have a site. Datto (FL-GOV) remains the one
+(`0032`, `candidate-sites-2026-09-21.md`). This batch covers 49 more: **46 have a
+verified campaign site and 3 have none**, each with its reason recorded. With `0036`
+applied, 53 of 106 ballot candidates have a site. Datto (FL-GOV) remains the one
 NULL from `0032`.
 
 ## Method
@@ -72,9 +72,38 @@ The FL-GOV method, unchanged:
 | Mark Davis | NPA | U.S. House, FL-16 | `https://markdavisforcongress.com/` | title/og:title 'Mark Davis for Congress \| Join the Campaign - Make a Difference'; text '...in Congress (FL-16)'; footer 'Paid by Mark Davis for US House of Representatives Florida Congressional District 16.' |
 | Sydney Gruters | REP | U.S. House, FL-16 | `https://grutersforcongress.com/` | title/og:title 'Sydney Gruters For Congress'; footer 'PAID FOR BY SYDNEY GRUTERS FOR CONGRESS' |
 
+## U.S. House (FL-20 to FL-28)
+
+| Candidate | Party | Office | `official_site` | Confirmed by |
+|---|---|---|---|---|
+| Brent Andersen | REP | U.S. House, FL-20 | `https://brentandersenfl.com/` | title 'Brent Andersen for Congress'; footer 'Paid for by ANDERSEN FOR CONGRESS' (read with a plain fetch; the site fronts a SiteGround challenge) |
+| Debbie Wasserman Schultz | DEM | U.S. House, FL-20 | `https://debbiewassermanschultz.com/` | Live homepage: title/og:title 'Debbie Wasserman Schultz \| Democrat for Congress'; og:url https://debbiewassermanschultz.com/; footer 'PAID FOR BY DEBBIE WASSERMAN SCHULTZ FOR CONGRESS'; page features 'Debbie Wasserman Schultz wins primary — this time in Florida’s 20th District' |
+| Kedner Maxime | IND | U.S. House, FL-20 | `https://www.maximeforcongress.com/` | Live homepage: title/og:title 'Kedner Maxime for Congress — District 20 Florida'; h1 'Service Over Politics. Solutions Over Promises.'; footer 'Paid for by Dr. Kedner Maxime for Congress, Inc.' |
+| Casey Askar | REP | U.S. House, FL-22 | `https://www.caseyaskar.com/` | Live homepage: title/og:title 'Casey Askar for Congress'; footer 'PAID FOR BY CASEY FOR CONGRESS'; body cites 'Casey Askar launches bid for Florida's District 22 seat' |
+| Pia Dandiya | DEM | U.S. House, FL-22 | `https://piaforcongress.com/` | title 'Pia Dandiya for Congress - A New Future for Florida'; footer 'Paid for by Pia Dandiya for Congress' (live read on retry past a SiteGround challenge) |
+| Oliver G. Gilbert III | DEM | U.S. House, FL-24 | `https://olivergilbert.vote/` | title 'Oliver Gilbert for Congress'; footer 'Paid for by Oliver Gilbert for Congress' (live read on retry past a SiteGround challenge) |
+| Te Mayonna Brown | REP | U.S. House, FL-24 | `https://tebrownforflorida.com/` | Live homepage: title 'Home - Te Brown For Congress'; og:url https://tebrownforflorida.com/; footer 'Paid for by Te Brown for Congress 20200 West Dixie Highway Suite 902, Aventura, FL, 33180'; body 'support Te's campaign for Florida's 24th District' |
+| Jared Moskowitz | DEM | U.S. House, FL-25 | `https://jaredforflorida.com/` | Live homepage (read.mjs): title/og:title 'Jared Moskowitz for Congress — Independent Leadership. Real Results.'; og:url https://jaredforflorida.com/. Wayback 2026-08-20 capture also shows footer 'Paid for by Jared Moskowitz for Congress' |
+| Peter Jassenoff | LPF | U.S. House, FL-25 | **none** | Nothing found: no site on Ballotpedia, BallotReady, his FEC committee record or the national LP candidate page (lp.org/candidate/peter-jassenoff, bio only); lpf.org is behind a Cloudflare challenge. |
+| Scott Singer | REP | U.S. House, FL-25 | `https://www.scottsingerusa.com/` | Live homepage: title/og:title 'SCOTT SINGER FOR CONGRESS'; og:url https://www.scottsingerusa.com; body 'Boca Raton Mayor Scott Singer is the Republican nominee running to represent Florida’s 25th district in Congress'; footer 'Scott Singer for Congress PO Box 810335 Boca Raton, FL 33481' |
+| Deborah Ann Meidinger Hosey | NPA | U.S. House, FL-26 | **none** | Nothing found: no site on Ballotpedia or BallotReady; her FEC filing gives only an email at damhforcongress.com, which serves no website. |
+| Mario Diaz-Balart | REP | U.S. House, FL-26 | `https://mariodiazbalart.org/` | Live homepage: title 'Mario Diaz-Balart for Congress 2026 \| Florida's 26th District'; og:title 'Mario Diaz-Balart for Congress 2026'; footer 'PAID FOR BY MARIO DIAZ-BALART FOR CONGRESS · © 2026' |
+| Nicole Locklin | DEM | U.S. House, FL-26 | `https://locklinforcongress.com/` | Live homepage: title 'Nicole Locklin for Congress'; og:title 'Nicole Locklin for U.S. Congress \| Florida District 26'; footer 'Nicole Locklin for U.S. Congress 1808 N. University Dr, Pembroke Pines, FL 33024' |
+| Eliott Rodriguez | DEM | U.S. House, FL-27 | `https://eliottrodriguez.com/` | Live homepage: title 'Eliott Rodriguez – For Congress'; footer 'Paid for by Eliott Rodriguez for Congress' |
+| Maria Elvira Salazar | REP | U.S. House, FL-27 | `https://mariaelvirasalazar.com/` | Live homepage: title 'Maria Elvira Salazar for Congress - Fighting for FL-27'; og:title 'Maria Salazar for Congress'; og:url https://mariaelvirasalazar.com/; footer 'Paid for by Salazar for Congress', '© 2026 Maria Elvira Salazar for Congress' |
+| Carlos A. Gimenez | REP | U.S. House, FL-28 | **none** | Campaign site exists (carlosgimenezforcongress.com) but its copy is from the 2020 first run and never mentions 2026 or District 28; not stored so the ingest does not quote 2020 positions as current. Founder decision. |
+| Eddy Rojas | NPA | U.S. House, FL-28 | `https://www.eddyrojas.com/` | Live homepage: title/og:title 'Eddy Rojas for Congress - District 28 \| district 28 \| Miami-Dade, FL, USA'; h1 'Running for U.S. Congress — Florida District 28'; /about title 'About \| ROJAS FOR CONGRESS' |
+| Phil "Felipe" Ehr | DEM | U.S. House, FL-28 | `https://ehrforcongress.us/` | Live homepage: title/og:title 'Vote Phil Ehr for U.S. House of Representatives'; og:url https://ehrforcongress.us/; footer 'PAID FOR BY EHR FORCE INC'; body 'DONATE FL-28 Bike Tour', 'FL-28 Debate Request', 'Help us defeat Gimenez' |
+
 ## Candidates with no site, and why
 
-None in the groups collected so far.
+NULL is the true value for each of these: we looked, and there is no campaign site to read.
+
+| Candidate | Race | Reason | Government page (not stored) |
+|---|---|---|---|
+| Peter Jassenoff (`FL-DOE-92357`) | U.S. House, FL-25 | Nothing found: Ballotpedia candidate page has no campaign/personal website link (FEC link only); BallotReady lists none; FEC committee C00953877 'PETER JASSENOFF FOR CONGRESS' lists no website (gmail contact only); web search found only news coverage. Guessed domains peterjassenoff.com / jassenoffforcongress.com do not resolve; jassenoff.com resolves to a parking-type IP with no candidate content. lp.org/candidate/peter-jassenoff/ read on 2026-09-24: bio only, no website link. | — |
+| Deborah Ann Meidinger Hosey (`FL-DOE-92137`) | U.S. House, FL-26 | Nothing found: Ballotpedia page has no website link (FEC only); BallotReady lists none; FEC Form 1 for 'Deborah Ann Meidinger Hosey for US Congress' (filed 2026-06-10) gives only email DeborahUnites@DAMHforCongress.com — damhforcongress.com (and www) has no A record (DNS shows only Microsoft/Azure mail-hosting SOA), so no website is served. | — |
+| Carlos A. Gimenez (`FL-DOE-91226`) | U.S. House, FL-28 | STALE SITE, NOT STORED. carlosgimenezforcongress.com is his committee's site, but its copy is from the 2020 first run: "Mayor Gimenez ... Now, he's building on this record as a candidate for Congress", with no mention of 2026 or District 28. Storing it would have the ingest quote 2020 positions as current ones. Founder's call whether to store it anyway. | https://gimenez.house.gov/ |
 
 ## Crawlability, for the ingest step
 
@@ -113,6 +142,21 @@ None in the groups collected so far.
 | `kellykirschner.com` | Allowed: User-agent * disallows only /wp-admin/; no Claude/AI-specific blocks |
 | `markdavisforcongress.com` | Allowed: Squarespace default; ClaudeBot/anthropic-ai/GPTBot are listed in the same group as User-agent * with only utility-path Disallows (/config, /search, /account, /api/, format= query variants); no root block |
 | `grutersforcongress.com` | Allowed: robots.txt 404, no restrictions |
+| `brentandersenfl.com` | robots.txt (read via headless browser) allows all: User-agent: * Disallow: /wp-admin/ only. Bot protection: SiteGround sgcaptcha challenge intermittently blocks plain curl and sometimes headless Chromium |
+| `debbiewassermanschultz.com` | robots.txt allows all agents (User-agent: * only disallows /wp-admin/); no AI-bot-specific rules |
+| `www.maximeforcongress.com` | Wix default robots.txt: User-agent: * Allow: / (Disallow *?lightbox=); only PetalBot blocked; no Claude/AI-bot rules |
+| `www.caseyaskar.com` | robots.txt returns 200 with an empty body (so nothing disallowed) but carries X-Robots-Tag: noindex on the robots.txt response itself; homepage has no noindex; Cloudflare-fronted, no challenge seen |
+| `piaforcongress.com` | robots.txt (read once via headless browser) allows all: User-agent: * Allow: / with only /mdw/system/, /mdw/_data/, /mdw/global/, /mdw/submit disallowed. Bot protection: SiteGround sgcaptcha 'Robot Challenge Screen' blocks curl and headless Chromium on the live homepage (repeated attempts) |
+| `olivergilbert.vote` | Allowed: 'User-agent: *' disallows only /wp-admin/ (admin-ajax allowed); read on retry past the SiteGround challenge, which the ingest may also meet |
+| `tebrownforflorida.com` | Yoast robots.txt: User-agent: * Disallow: (empty) — everything allowed; no AI-bot rules |
+| `jaredforflorida.com` | robots.txt allows all: User-agent: * Allow: / with only /mdw/system/, /mdw/_data/, /mdw/global/, /mdw/submit disallowed. Bot protection: SiteGround sgcaptcha challenges plain curl; headless Chromium got through on 2nd try |
+| `www.scottsingerusa.com` | Squarespace robots.txt: ClaudeBot and anthropic-ai (plus GPTBot etc.) are listed in the same group as User-agent: *, which only disallows /config, /search, /account, /api/, /static/ and query-param variants — page crawling allowed; no Crawl-delay |
+| `mariodiazbalart.org` | robots.txt returns 404 — no restrictions; Cloudflare-fronted, no challenge seen |
+| `locklinforcongress.com` | robots.txt contains only a Sitemap line — no disallows, everything allowed; Cloudflare-fronted, no challenge seen |
+| `eliottrodriguez.com` | robots.txt allows all agents (User-agent: * only disallows /wp-admin/); no AI-bot-specific rules |
+| `mariaelvirasalazar.com` | Yoast robots.txt: User-agent: * Disallow: (empty) — all allowed; a Crawl-delay: 10 line precedes the user-agent block (applies loosely to all) |
+| `www.eddyrojas.com` | Wix default robots.txt: User-agent: * Allow: / (Disallow *?lightbox=); only PetalBot blocked; no Claude/AI-bot rules |
+| `ehrforcongress.us` | Yoast robots.txt: User-agent: * Disallow: (empty) — all allowed; no AI-bot rules |
 
 ## Notes on the stored values
 
@@ -120,6 +164,7 @@ None in the groups collected so far.
 - **Joe Strada**: the page declares `og:url` `https://ssms.life/`, and its robots.txt sitemap points there too, apparently left over from a site-builder template. `votestrada.com` is the host that actually serves the campaign, so it is what is stored.
 - **Branden Scrivener**: a GoodParty.org-built site carrying `noindex`. The title names only "Federal Congressional District 12, No Party Affiliation Candidate"; his name is in the body and disclaimer.
 - **Kathy Castor**: Ballotpedia links the `www` host, which redirects to the apex; the apex is the page's own `og:url`, so the apex is stored.
+- **Phil "Felipe" Ehr**: the disclaimer names "EHR FORCE INC" rather than a "for Congress" committee; the page title "Vote Phil Ehr for U.S. House of Representatives" and FL-28 content establish the race.
 
 ## Still open
 

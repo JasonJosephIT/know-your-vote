@@ -2,8 +2,8 @@
 --
 -- Session B (docs/general-election/sessions/session-b-candidate-websites.md).
 -- 0032 covered FL-GOV-general (7 of 8). This file covers the rest of the
--- ballot tier: 31 candidates here, 31 with a verified site and
--- 0 recorded as having none. Evidence per candidate, the robots.txt
+-- ballot tier: 49 candidates here, 46 with a verified site and
+-- 3 recorded as having none. Evidence per candidate, the robots.txt
 -- reading for each site, and the reason behind every NULL:
 -- docs/general-election/candidate-sites-2026-09-24.md
 --
@@ -289,6 +289,156 @@ WHERE candidate_id = 'FL-DOE-90251';
 -- Congress'; footer 'PAID FOR BY SYDNEY GRUTERS FOR CONGRESS'
 
 
+-- ==========================================================================
+-- U.S. House (FL-20 to FL-28)
+-- ==========================================================================
+
+UPDATE candidate SET
+  official_site = 'https://brentandersenfl.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-DOE-91278';
+-- Brent Andersen (REP), U.S. House, FL-20. title 'Brent Andersen for
+-- Congress'; footer 'Paid for by ANDERSEN FOR CONGRESS' (read with a plain
+-- fetch; the site fronts a SiteGround challenge)
+
+UPDATE candidate SET
+  official_site = 'https://debbiewassermanschultz.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-DOE-91577';
+-- Debbie Wasserman Schultz (DEM), U.S. House, FL-20. Live homepage:
+-- title/og:title 'Debbie Wasserman Schultz | Democrat for Congress'; og:url
+-- https://debbiewassermanschultz.com/; footer 'PAID FOR BY DEBBIE WASSERMAN
+-- SCHULTZ FOR CONGRESS'; page features 'Debbie Wasserman Schultz wins primary
+-- -- this time in Florida's 20th District'
+
+UPDATE candidate SET
+  official_site = 'https://www.maximeforcongress.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-DOE-90814';
+-- Kedner Maxime (IND), U.S. House, FL-20. Live homepage: title/og:title
+-- 'Kedner Maxime for Congress -- District 20 Florida'; h1 'Service Over
+-- Politics. Solutions Over Promises.'; footer 'Paid for by Dr. Kedner Maxime
+-- for Congress, Inc.'
+
+UPDATE candidate SET
+  official_site = 'https://www.caseyaskar.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-DOE-92109';
+-- Casey Askar (REP), U.S. House, FL-22. Live homepage: title/og:title 'Casey
+-- Askar for Congress'; footer 'PAID FOR BY CASEY FOR CONGRESS'; body cites
+-- 'Casey Askar launches bid for Florida's District 22 seat'
+
+UPDATE candidate SET
+  official_site = 'https://piaforcongress.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-DOE-89301';
+-- Pia Dandiya (DEM), U.S. House, FL-22. title 'Pia Dandiya for Congress - A
+-- New Future for Florida'; footer 'Paid for by Pia Dandiya for Congress'
+-- (live read on retry past a SiteGround challenge)
+
+UPDATE candidate SET
+  official_site = 'https://olivergilbert.vote/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-DOE-91544';
+-- Oliver G. Gilbert III (DEM), U.S. House, FL-24. title 'Oliver Gilbert for
+-- Congress'; footer 'Paid for by Oliver Gilbert for Congress' (live read on
+-- retry past a SiteGround challenge)
+
+UPDATE candidate SET
+  official_site = 'https://tebrownforflorida.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-DOE-90703';
+-- Te Mayonna Brown (REP), U.S. House, FL-24. Live homepage: title 'Home - Te
+-- Brown For Congress'; og:url https://tebrownforflorida.com/; footer 'Paid
+-- for by Te Brown for Congress 20200 West Dixie Highway Suite 902, Aventura,
+-- FL, 33180'; body 'support Te's campaign for Florida's 24th District'
+
+UPDATE candidate SET
+  official_site = 'https://jaredforflorida.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-DOE-88911';
+-- Jared Moskowitz (DEM), U.S. House, FL-25. Live homepage (read.mjs):
+-- title/og:title 'Jared Moskowitz for Congress -- Independent Leadership.
+-- Real Results.'; og:url https://jaredforflorida.com/. Wayback 2026-08-20
+-- capture also shows footer 'Paid for by Jared Moskowitz for Congress'
+
+UPDATE candidate SET
+  official_site = 'https://www.scottsingerusa.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-DOE-89801';
+-- Scott Singer (REP), U.S. House, FL-25. Live homepage: title/og:title 'SCOTT
+-- SINGER FOR CONGRESS'; og:url https://www.scottsingerusa.com; body 'Boca
+-- Raton Mayor Scott Singer is the Republican nominee running to represent
+-- Florida's 25th district in Congress'; footer 'Scott Singer for Congress PO
+-- Box 810335 Boca Raton, FL 33481'
+
+UPDATE candidate SET
+  official_site = 'https://mariodiazbalart.org/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-DOE-90330';
+-- Mario Diaz-Balart (REP), U.S. House, FL-26. Live homepage: title 'Mario
+-- Diaz-Balart for Congress 2026 | Florida's 26th District'; og:title 'Mario
+-- Diaz-Balart for Congress 2026'; footer 'PAID FOR BY MARIO DIAZ-BALART FOR
+-- CONGRESS 2026'
+
+UPDATE candidate SET
+  official_site = 'https://locklinforcongress.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-DOE-89980';
+-- Nicole Locklin (DEM), U.S. House, FL-26. Live homepage: title 'Nicole
+-- Locklin for Congress'; og:title 'Nicole Locklin for U.S. Congress | Florida
+-- District 26'; footer 'Nicole Locklin for U.S. Congress 1808 N. University
+-- Dr, Pembroke Pines, FL 33024'
+
+UPDATE candidate SET
+  official_site = 'https://eliottrodriguez.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-DOE-89933';
+-- Eliott Rodriguez (DEM), U.S. House, FL-27. Live homepage: title 'Eliott
+-- Rodriguez - For Congress'; footer 'Paid for by Eliott Rodriguez for
+-- Congress'
+
+UPDATE candidate SET
+  official_site = 'https://mariaelvirasalazar.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-DOE-90721';
+-- Maria Elvira Salazar (REP), U.S. House, FL-27. Live homepage: title 'Maria
+-- Elvira Salazar for Congress - Fighting for FL-27'; og:title 'Maria Salazar
+-- for Congress'; og:url https://mariaelvirasalazar.com/; footer 'Paid for by
+-- Salazar for Congress', ' 2026 Maria Elvira Salazar for Congress'
+
+UPDATE candidate SET
+  official_site = 'https://www.eddyrojas.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-DOE-90340';
+-- Eddy Rojas (NPA), U.S. House, FL-28. Live homepage: title/og:title 'Eddy
+-- Rojas for Congress - District 28 | district 28 | Miami-Dade, FL, USA'; h1
+-- 'Running for U.S. Congress -- Florida District 28'; /about title 'About |
+-- ROJAS FOR CONGRESS'
+
+UPDATE candidate SET
+  official_site = 'https://ehrforcongress.us/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-DOE-91699';
+-- Phil "Felipe" Ehr (DEM), U.S. House, FL-28. Live homepage: title/og:title
+-- 'Vote Phil Ehr for U.S. House of Representatives'; og:url
+-- https://ehrforcongress.us/; footer 'PAID FOR BY EHR FORCE INC'; body
+-- 'DONATE FL-28 Bike Tour', 'FL-28 Debate Request', 'Help us defeat Gimenez'
+
+-- No official_site (recorded NULL, see the doc for the full reason):
+--   FL-DOE-92357, Peter Jassenoff: Nothing found: no site on Ballotpedia,
+--   BallotReady, his FEC committee record or the national LP candidate page
+--   (lp.org/candidate/peter-jassenoff, bio only); lpf.org is behind a
+--   Cloudflare challenge.
+--   FL-DOE-92137, Deborah Ann Meidinger Hosey: Nothing found: no site on
+--   Ballotpedia or BallotReady; her FEC filing gives only an email at
+--   damhforcongress.com, which serves no website.
+--   FL-DOE-91226, Carlos A. Gimenez: Campaign site exists
+--   (carlosgimenezforcongress.com) but its copy is from the 2020 first run
+--   and never mentions 2026 or District 28; not stored so the ingest does not
+--   quote 2020 positions as current. Founder decision.
+
+
 -- Assert what was achieved. The county rosters are seeded by 0031/0032, so
 -- they exist in the offline harness (scripts/verify-migrations.mjs); the
 -- statewide and congressional rosters arrive through the DoE intake and do
@@ -315,7 +465,7 @@ BEGIN
   -- that candidate exists.
   SELECT count(*) INTO n_mine
     FROM candidate
-   WHERE candidate_id IN ('FL-DOE-89119', 'FL-DOE-90009', 'FL-DOE-89955', 'FL-DOE-89041', 'FL-DOE-89231', 'FL-DOE-91310', 'FL-DOE-89394', 'FL-DOE-92013', 'FL-DOE-90560', 'FL-DOE-90631', 'FL-DOE-92377', 'FL-DOE-90696', 'FL-DOE-90831', 'FL-DOE-89522', 'FL-DOE-91337', 'FL-DOE-89339', 'FL-DOE-89909', 'FL-DOE-91715', 'FL-DOE-91717', 'FL-DOE-88517', 'FL-DOE-89778', 'FL-DOE-88868', 'FL-DOE-89453', 'FL-DOE-92395', 'FL-DOE-88870', 'FL-DOE-91313', 'FL-DOE-89121', 'FL-DOE-89116', 'FL-DOE-90779', 'FL-DOE-89623', 'FL-DOE-90251')
+   WHERE candidate_id IN ('FL-DOE-89119', 'FL-DOE-90009', 'FL-DOE-89955', 'FL-DOE-89041', 'FL-DOE-89231', 'FL-DOE-91310', 'FL-DOE-89394', 'FL-DOE-92013', 'FL-DOE-90560', 'FL-DOE-90631', 'FL-DOE-92377', 'FL-DOE-90696', 'FL-DOE-90831', 'FL-DOE-89522', 'FL-DOE-91337', 'FL-DOE-89339', 'FL-DOE-89909', 'FL-DOE-91715', 'FL-DOE-91717', 'FL-DOE-88517', 'FL-DOE-89778', 'FL-DOE-88868', 'FL-DOE-89453', 'FL-DOE-92395', 'FL-DOE-88870', 'FL-DOE-91313', 'FL-DOE-89121', 'FL-DOE-89116', 'FL-DOE-90779', 'FL-DOE-89623', 'FL-DOE-90251', 'FL-DOE-91278', 'FL-DOE-91577', 'FL-DOE-90814', 'FL-DOE-92109', 'FL-DOE-89301', 'FL-DOE-91544', 'FL-DOE-90703', 'FL-DOE-88911', 'FL-DOE-89801', 'FL-DOE-90330', 'FL-DOE-89980', 'FL-DOE-89933', 'FL-DOE-90721', 'FL-DOE-90340', 'FL-DOE-91699')
      AND (official_site IS NULL OR site_last_verified_at IS NULL);
   IF n_mine > 0 THEN
     RAISE EXCEPTION '% candidate(s) in this batch exist but did not take their official_site', n_mine;
@@ -339,9 +489,9 @@ BEGIN
   IF n_ballot <> 106 THEN
     RAISE EXCEPTION 'the ballot tier has % candidates, expected 106 - the roster moved, re-check before trusting these URLs', n_ballot;
   END IF;
-  IF n_sited <> 38 THEN
-    RAISE EXCEPTION 'expected 38 of 106 ballot candidates to have official_site (7 from 0032 + 31 here), found %', n_sited;
+  IF n_sited <> 53 THEN
+    RAISE EXCEPTION 'expected 53 of 106 ballot candidates to have official_site (7 from 0032 + 46 here), found %', n_sited;
   END IF;
 
-  RAISE NOTICE '38 of 106 ballot candidates have a verified official_site';
+  RAISE NOTICE '53 of 106 ballot candidates have a verified official_site';
 END $$;
