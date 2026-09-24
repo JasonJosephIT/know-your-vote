@@ -1,84 +1,84 @@
 # Graph Report - know-your-vote  (2026-09-24)
 
 ## Corpus Check
-- 509 files · ~776,128 words
+- 516 files · ~779,716 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 19 file(s) not represented in the graph (top: .geojson 7, .csv 3, (none) 2)
+- Unclassified: 20 file(s) not represented in the graph (top: .geojson 7, (none) 3, .csv 3)
 
 ## Summary
-- 4796 nodes · 8463 edges · 281 communities (250 shown, 31 thin omitted)
+- 4957 nodes · 8655 edges · 329 communities (257 shown, 72 thin omitted)
 - Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 788 edges (avg confidence: 0.94)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `66d609a7`
+- Built from commit: `f678a85a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- app.ts
+- measures.ts
 - check
-- verify-no-stored-location.ts
+- Address → district lookup, and a district the browser remembers
 - monitor.ts
-- briefs.ts
+- schema.ts
 - compress.py
-- [raceId]/page.tsx
+- verify-listing.ts
 - verify-news-enqueue.ts
 - FakeDb
 - news-sources.ts
 - Know Your Vote Design System
-- LocationEntry.tsx
+- Quiz.tsx
 - lib/news-sweep.ts
-- next
+- guard.ts
 - candidate-policy-noul.ts
 - TestIntakeDoEParser
 - base_claim
 - TestIntakeIncumbencyHandler
-- voting-info/route.ts
+- verify-address-resolve.ts
 - admin.ts
 - fetch_source
-- test_toollayer_skeleton.py
+- make_discovery_layer
 - TestIncumbencyResolver
 - verify-news-sweep.ts
 - Store
 - S1StdioClient
-- verify-news-characterize.ts
-- Card
-- resolve.ts
+- 0000_pipeline_read_models.sql
+- safeHttpUrl
+- Session B — Collect `official_site` for the remaining ballot candidates
 - ref_node_fs
 - news-characterize-eval.ts
 - validate.py
 - usableOutlets
 - 3. Product Strategy
 - Product Roadmap — Know Your Vote
-- createServiceClient
-- react
-- discovery.py
-- File Structure
+- AgentsConsole.tsx
+- CandidateBrowser.tsx
+- build_discovery_handlers
+- address/resolve/route.ts
 - news-issues.ts
 - orchestrator_core.py
 - session.py
-- YourRaces.tsx
+- next
 - candidate-site.ts
 - run_session
 - run_to_agents_done
-- policy-run.ts
+- verify-policy-run.ts
 - validate_claim_write
-- quiz.ts
-- TestReadPlane
-- store.py
+- app.ts
+- FakeConn
+- listing.ts
 - make_intake_layer
-- requireAdmin
+- submit/page.tsx
 - make_data_layer
 - CandidateNews.tsx
 - verify-news-slots.ts
-- AgentsConsole.tsx
+- _doe_row
 - classify_url
 - FakeReadPlane
 - logsink.py
 - PRD — Know Your Vote
 - build-demo-seed.mjs
-- policy-areas.ts
+- File map
 - test_profiler_guard_core.py
 - intake.py
 - FakeConn
@@ -89,44 +89,44 @@
 - _FakeSession
 - Characterizer evaluation — 2026-09-18
 - verify-news-neutrality.ts
-- verify-policy-run.ts
+- verify-no-stored-location.ts
 - balance_audit_core
 - LiveAnthropicBackend
 - Candidate News — PRD
-- news-labels.ts
+- NewsFeed.tsx
 - pathlib
 - test_runtime.py
 - parse_candidate_list
-- Handoff — Phase A1: Foundation (as built)
-- queue/page.tsx
+- file_lock
+- requireAdmin
 - CAP / "Know Your Vote" — Verified News-Outlet Corpus for the 2026 Florida General Election (Nov 3, 2026)
-- templates.ts
+- send-reminders/route.ts
 - news-corpus-analysis.ts
 - verify-brief-rows.ts
-- verify-news-match.ts
+- policy-areas.ts
 - verify-zip-seed-2026.mjs
 - compilerOptions
-- make_layer
+- test_toollayer_skeleton.py
 - site.ts
-- brief-rows.ts
-- style-check/page.tsx
-- brief-rows-sql.ts
+- createAnonServerClient
+- track
+- MeasureResourceLadder.tsx
 - decision/route.ts
-- test_factchecker_guard_core.py
+- File Structure
 - balance_audit_core.py
 - Lean ratings — fetched 2026-09-19
 - Model characterization of swept articles — session brief
-- cores.py
+- directory.ts
 - server.py
 - Handoff — candidate profiles and the 21 unbuilt races
 - Model characterization of swept articles — design
 - Ballot questions: a two-sided resource ladder instead of our own arguments — design
 - package.json
 - probe-district-api.ts
-- Civic Awareness Project (CAP) — MCP Tool Layer Specification
+- Candidate
 - Agent Brief — continuing the CAP runtime build (S2 → S3)
-- ics.ts
-- Operator Console — Developer Handoff
+- @supabase/supabase-js
+- Card
 - PRD — Know Your Vote Operator Console (`/admin`)
 - Roster recalibration — what is actually on our voters' ballots
 - Session handoff — enacted 2026 map, 16-district coverage, `unopposed` carried
@@ -134,8 +134,8 @@
 - Environment variables
 - verify-brief-rows-sql.mjs
 - verify-zip-seed-rules.mjs
-- verify-address-resolve.ts
-- ReviewItemCard.tsx
+- YourRaces.tsx
+- test_factchecker_guard_core.py
 - CAP / Know Your Vote — MVP Change Spec
 - Civic Awareness Project (CAP) — FL MVP
 - Civic Awareness Project (CAP) — FL MVP
@@ -145,7 +145,7 @@
 - verify-admin-ops.mjs
 - cavecrew/SKILL.md
 - Caveman Help
-- Source registry
+- [measureId]/page.tsx
 - R3 — Election News Curator — DRY RUN (validation)
 - Civic Awareness Project (CAP) — Balance Audit Specification
 - Civic Awareness Project (CAP) — Data Schema v1
@@ -154,8 +154,8 @@
 - What a candidate is running on, from their own site
 - Data Architecture — Primary → General
 - Map-coverage handoff — what "we cover this area" actually means
-- candidate-site-ingest.ts
-- Source
+- briefs.ts
+- IssueSection.tsx
 - R2 — Contact & Race Info Refresher — Run Report
 - R3 — Election News Curator — Run Report
 - claim
@@ -170,7 +170,7 @@
 - Caveman Compress
 - caveman/SKILL.md
 - Civic Awareness Project (CAP) — Logging Schema Specification
-- TestLiveBackendLoop
+- verify-measure-balance.ts
 - Roadmap — Operator Console (`/admin`)
 - Which issue list do news tags come from? — founder review
 - Stream P — Pipeline & schema
@@ -183,7 +183,7 @@
 - caveman-review
 - CAP PWA + Notifications Plan — agent build plan (ponytail revision)
 - CAP Runtime PRD — S1 Tool Layer · S2 Agent Runtime · S3 Orchestrator
-- NotConfigured
+- Source
 - TestToolSchemas
 - Agent Brief — the Candidate News session
 - News Fairness & Opinion Labelling
@@ -193,9 +193,9 @@
 - caveman-learn/package.json
 - R2 — Contact & Race Info Refresher — DRY RUN (validation)
 - R1 — Candidate News Curator — DRY RUN (validation)
-- ToolLayer
+- createServiceClient
 - Self-hosted Pelias — Florida
-- System Design — Operator Console
+- benchmark.py
 - Local district boundaries — county commission and school board
 - Handoff — Broward County
 - Live database audit — 2026-09-07
@@ -203,15 +203,15 @@
 - 8. UI/UX Requirements
 - Vision — Know Your Vote
 - KYV Voice & Tone
-- verify-election-seed.mjs
+- ref_node_url
 - verify-shared-ballot.ts
 - compose_sms
 - ToolAccess
 - R1 — Candidate News Curator — Run Report
-- check_tool_access
+- ReviewItemCard.tsx
 - Data Ingest — Primary → General
 - Decision record — the `listed` tier: the roster goes up before the briefs
-- Prompt begins
+- TestLiveBackendLoop
 - Policy areas for candidate issues
 - Handoff — profile intake: the writer that has to exist before anything ships
 - verify-measure-resources.ts
@@ -219,63 +219,63 @@
 - Review Caveman evidence
 - Manage eval-gated experiments
 - caveman-setup/SKILL.md
-- 6. System Architecture & Pipeline
+- queue/page.tsx
 - R4 — Ops Overview Digest — LIVE RUN
 - R4 — Ops Overview Digest — LIVE RUN
 - R1 — Candidate News Curator — Run Report
-- 6. System Architecture & Pipeline
+- [candidateId]/page.tsx
 - TestPerIdentitySurface
 - Local session runbook — the network-bound tasks
 - Handoff — the ingest order: what reaches Jev, and what never does
 - Things to confirm
 - 2. Technical Architecture
-- news-characterize-engines.ts
-- verify-coverage.ts
-- verify-quiz-ungated.ts
+- NotConfigured
+- 5. News intake: sweep a fixed corpus, don't search per candidate
+- check_tool_access
 - Evaluate an optimization observation
 - caveman-stats
 - CAP Deep-Research Prompt — "Ballot Anatomy, Florida 2026"
 - SpineLogging
 - TestFactCheckerConfig
-- FakeDbCursor
-- doe-code-dump.py
-- C. The six panels
-- Run 1 — Foundation (Phase A1) · run FIRST, alone
+- Prompt begins
+- sys
+- 6. System Architecture & Pipeline
+- 6. System Architecture & Pipeline
 - Run 2 — Monitor + Submit & Review (Phases A2 + A3, combined) · after Run 1
 - `official_site` for FL-GOV-general — what was collected and how
-- 8. Follow-up — taxonomy v5 (2026-09-21)
-- @sentry/nextjs
+- ToolLayer
+- sentry.server.config.ts
 - caveman-discover/SKILL.md
 - CAP Deep-Research Prompt — Issue Discovery (Stage 1)
-- 7. Data Schema
+- B1 results — live run 2026-09-06
 - check_fetch
 - Agent 3 — The Fact-Checker ("What Is True")
-- 7. Data Schema
+- verify-boundaries.mjs
 - TestProfilerConfig
 - Run 3 — Agent Control Plane (Phase A4) · after Run 1
 - What the Florida press covered — corpus analysis
-- Results: the ingest-order checklist, run against production
-- 7. Non-Functional Requirements
-- 1. Corrections to the brief
+- 0006_admin_ops.sql
+- 8. Follow-up — taxonomy v5 (2026-09-21)
+- 7. Data Schema
 - pelias-stub.mjs
 - skills/caveman-learn — the Caveman Learn editing skill (MIT, public)
 - caveman-learn skill
 - CAP Deep-Research Prompt — "Where They Stand"
 - CAP Incumbent Official-Account Verification (2026)
-- 8. UX Flow
+- graphify
 - AgentTracking
-- 8. UX Flow
+- .test_transferred_to_local_and_deceased_are_excluded
 - Brief 02 — S2-02 / S2-03 live acceptance: Record + Fact-Checker
 - Brief 03 — S3: the orchestrator (final phase)
-- TestModelResolution
+- 7. Data Schema
 - _FakeTool
 - Ballots by ZIP — derived data for the 2026 general election
-- 7. The election news feed, filtered by county
+- .test_unknown_status_code_fails_loudly
 - scripts
-- _FakeListToolsResult
-- TestRecordConfig
-- .test_uno_survives_ingest_as_its_own_qualifying_status
-- 4. Data: `block_district`
+- .test_newly_covered_district_is_now_parsed
+- .test_usr_row_outside_the_sixteen_is_still_skipped
+- .test_write_in_is_tiered_and_kept_off_the_ballot
+- .test_unpadded_juris_is_zero_padded_before_the_membership_test
 - .prettierrc.json
 - vercel.json
 - StatePurity
@@ -289,9 +289,30 @@
 - safe-refactor/SKILL.md
 - surgical-patch/SKILL.md
 - verify-and-stop/SKILL.md
-- .test_us_senate_is_a_target_race_and_is_federal
+- Run 4 — Site Metrics (Phase A5) · after Run 1, fully parallel-safe
 - agents/README.md
 - postcss.config.mjs
+- CLAUDE.md
+- .test_skip_breakdown_names_the_dropped_house_district
+- session-start.sh
+- 7. Non-Functional Requirements
+- 1. Corrections to the brief
+- 0012_measure_function_search_path.sql
+- news-eval-pool.ts
+- 8. UX Flow
+- 8. UX Flow
+- TestModelResolution
+- _FakeListToolsResult
+- TestRecordConfig
+- 0007_notifications.sql
+- 0009_action_log_roles.sql
+- 0024_block_district.sql
+- .test_malformed_row_is_not_counted_as_out_of_scope
+- .test_membership_is_the_set_not_a_range
+- .test_defeated_filer_is_absent_from_candidate_ids
+- .test_unopposed_is_still_a_ballot_tier_filing
+- .test_minor_party_code_is_stored_verbatim
+- .test_skip_detail_always_accounts_for_every_skip
 
 ## God Nodes (most connected - your core abstractions)
 1. `next` - 75 edges
@@ -320,95 +341,95 @@
 ## Import Cycles
 - None detected.
 
-## Communities (281 total, 31 thin omitted)
+## Communities (329 total, 72 thin omitted)
 
-### Community 0 - "app.ts"
-Cohesion: 0.06
-Nodes (56): File map, Global Constraints, Measure Resource Ladder Implementation Plan, Self-review, Task 1: The ladder module and its verify script, Task 3: Read layer, Task 4: The row and the ladder components, Task 5: The page and the listed-card copy (+48 more)
+### Community 0 - "measures.ts"
+Cohesion: 0.21
+Nodes (16): 3. Read layer — `src/lib/measures.ts`, compareResources(), measureVisibleStatus, ActiveMeasure, fetchActiveMeasures(), fetchMeasureBrief(), fetchMeasureListing(), getMeasureBrief() (+8 more)
 
 ### Community 1 - "check"
-Cohesion: 0.05
-Nodes (36): allowlist_a_check(), _decision(), default_registrable_domain(), _extract_handle(), _fold_platform(), _host_of(), norm_handle(), normalize_url() (+28 more)
+Cohesion: 0.07
+Nodes (22): allowlist_a_check(), _decision(), default_registrable_domain(), _extract_handle(), _fold_platform(), _host_of(), norm_handle(), normalize_url() (+14 more)
 
-### Community 2 - "verify-no-stored-location.ts"
-Cohesion: 0.06
-Nodes (48): Task 11: The district chip, 14. Work order, 7. Rendering and caching, ALLOWED_LOCAL, analytics, cookieSrc, cookieWrites, districtSetCalls (+40 more)
+### Community 2 - "Address → district lookup, and a district the browser remembers"
+Cohesion: 0.09
+Nodes (22): 10. Testing, 11. Cost control, 13. Gates, 14. Work order, 1. What this changes, 2. Decisions taken, 3. Data flow, 6. Client (+14 more)
 
 ### Community 3 - "monitor.ts"
-Cohesion: 0.09
-Nodes (45): dynamic, metadata, OverviewPage(), AgentRunsPanel(), CHIP, FeedHealthPanel(), ITEM_TYPE_LABEL, FreshnessPanel() (+37 more)
+Cohesion: 0.08
+Nodes (47): server-only, dynamic, metadata, OverviewPage(), SubmitPage(), AgentRunsPanel(), CHIP, FeedHealthPanel() (+39 more)
 
-### Community 4 - "briefs.ts"
-Cohesion: 0.07
-Nodes (48): getScrutinyCounts, ISSUE_CATEGORY_LIST, metadata, MethodologyPage(), revalidate, ScrutinyRace, buildIssueBlock(), CandidateBriefData (+40 more)
+### Community 4 - "schema.ts"
+Cohesion: 0.13
+Nodes (16): 5. Day 1 — ballot correctness, getScrutinyCounts, ISSUE_CATEGORY_LIST, metadata, MethodologyPage(), revalidate, ScrutinyRace, ACTIVE_ELECTION_KIND (+8 more)
 
 ### Community 5 - "compress.py"
-Cohesion: 0.06
-Nodes (53): backup_dir_for(), build_compress_prompt(), build_fix_prompt(), call_claude(), compress_file(), _compress_file_locked(), file_lock(), first_nonblank_line() (+45 more)
+Cohesion: 0.08
+Nodes (36): build_compress_prompt(), build_fix_prompt(), call_claude(), _compress_file_locked(), first_nonblank_line(), is_sensitive_path(), _is_smaller_than_body(), mask_code_blocks() (+28 more)
 
-### Community 6 - "[raceId]/page.tsx"
-Cohesion: 0.06
-Nodes (43): 9. Open questions, 6. Day 2 — amendments and urgency, 4. Where the uncontested-seat metadata actually lives, BRIEF_BEFORE, contestCounty, contestState, decidedCounty, listingLines (+35 more)
+### Community 6 - "verify-listing.ts"
+Cohesion: 0.12
+Nodes (18): BRIEF_BEFORE, contestCounty, contestState, decidedCounty, listingLines, singleCounty, unopposedFederal, ListedRace() (+10 more)
 
 ### Community 7 - "verify-news-enqueue.ts"
-Cohesion: 0.07
-Nodes (45): 3. Verified here vs. needs a running system, 6. Read order, 2. Checklist results, args, db, dryRun, limitArg, outletsNeeded (+37 more)
+Cohesion: 0.04
+Nodes (56): 1. The ladder: kind decides the tier, nobody decides per link, args, db, dryRun, limitArg, outletsNeeded, ProfileRow, roster (+48 more)
 
 ### Community 8 - "FakeDb"
 Cohesion: 0.09
 Nodes (18): FakeDb, make_synthesis_layer(), _profile(), profile_updates(), The defect this task exists to fix. A write-in has no public material, so it…, LEFT JOIN, so a profile whose candidate row is gone arrives with ballot_status…, FL-10's real shape: the file's only UNO row, so exactly one ballot line.…, Every filer excluded is not a balanced race, it is an empty one. Variance over… (+10 more)
 
 ### Community 9 - "news-sources.ts"
-Cohesion: 0.08
-Nodes (38): 5. The page — `src/app/(public)/measures/[measureId]/page.tsx`, args, days, perOutlet, withFeeds, pendingRows, scoped, unratedRows (+30 more)
+Cohesion: 0.09
+Nodes (39): 5. The page — `src/app/(public)/measures/[measureId]/page.tsx`, pendingRows, scoped, unratedRows, run(), metadata, OutletsIndexPage(), dynamic (+31 more)
 
 ### Community 10 - "Know Your Vote Design System"
 Cohesion: 0.05
 Nodes (40): Balance check, CAP Issue List — Florida 2026 (Stage 1 output), Group A — Florida-specific issues, Group B — National issues Florida voters weigh, How to read this, Sourcing notes and limitations, Structured output for Stage 2, 0 · The five rules that override everything (+32 more)
 
-### Community 11 - "LocationEntry.tsx"
-Cohesion: 0.07
-Nodes (32): B. Agent trigger card (×4: R1, R2, R3, R4), Interactions, Request-state machine (`agent_run_request.status`), 12. Out of scope, 8. Privacy, Enforced invariants, What changes in the claim, metadata (+24 more)
+### Community 11 - "Quiz.tsx"
+Cohesion: 0.08
+Nodes (25): A. Page layout — `/admin/agents`, B. Agent trigger card (×4: R1, R2, R3, R4), C. Run history — `GET /api/admin/agents/runs?agent&limit`, D. Out-of-UI notes (context for the builder), E. Responsive & a11y, Handoff — Phase A4: Agent Control (target), Interactions, Request-state machine (`agent_run_request.status`) (+17 more)
 
 ### Community 12 - "lib/news-sweep.ts"
-Cohesion: 0.09
-Nodes (39): File Structure, News Sweep Retrieval Mode 2 (Google News Sitemaps) Implementation Plan, Task 1: Sitemap parser and `retrieval` in the pure sweep, Task 2: `sitemap` on the outlet list and its invariants, Task 3: Runner walks sitemap days, Task 4: Docs, PR, Data model (`src/lib/news-sources.ts`), Docs (+31 more)
+Cohesion: 0.10
+Nodes (34): File Structure, News Sweep Retrieval Mode 2 (Google News Sitemaps) Implementation Plan, Task 1: Sitemap parser and `retrieval` in the pure sweep, Task 2: `sitemap` on the outlet list and its invariants, Task 3: Runner walks sitemap days, Task 4: Docs, PR, Data model (`src/lib/news-sources.ts`), Docs (+26 more)
 
-### Community 13 - "next"
-Cohesion: 0.09
-Nodes (32): next, GET(), ConsoleLayout(), signOut(), metadata, AdminLoginPage(), emailSchema, firstParam() (+24 more)
+### Community 13 - "guard.ts"
+Cohesion: 0.16
+Nodes (18): GET(), ConsoleLayout(), signOut(), AdminLoginPage(), emailSchema, firstParam(), metadata, requestLink() (+10 more)
 
 ### Community 14 - "candidate-policy-noul.ts"
 Cohesion: 0.07
 Nodes (40): areas, args, by, citations, dryRun, flag(), inPath, jsonPath (+32 more)
 
 ### Community 15 - "TestIntakeDoEParser"
-Cohesion: 0.06
-Nodes (19): _doe_row(), A row with no AcctNum would have been a candidate. Folding it in with the ~90%…, PR #42 pinned 000/001/028/029, which only says something while every number…, Deterministic output is a documented promise of this parser, and re-intake…, The post-primary defect B1 measured: 83 losers in 8 races. One candidate with…, XTL and DEC, found in the live file on 2026-09-07 by the ballots-by-ZIP whole-…, Corrects ballots-handoff.md F3, which said the next live run would stop on the…, The two axes stay independent. `qualifying_status` says why the candidate is on… (+11 more)
+Cohesion: 0.15
+Nodes (3): The gap found by the 2026-09-07 database audit. USS fell through to `skipped` —…, D-B (founder 2026-09-07): carry the DoE's UNO code, do not derive it.…, TestIntakeDoEParser
 
 ### Community 16 - "base_claim"
-Cohesion: 0.07
-Nodes (8): base_claim(), ClaimWriteBucketHaltTests, ClaimWriteContractTests, DbReadTests, EditorialLabelHaltTests, Tests for recorder_guard_core (Record agent / Agent 2 wrapper guards)., SourceRegisterTests, ToolAccessTests
+Cohesion: 0.05
+Nodes (22): check_db_read(), check_tool_access(), find_editorial_labels(), Any, Civic Awareness Project (CAP) — Record agent (Agent 2) guards, deterministic…, Return the distinct editorial labels found in `text` (order kept)., Grant/deny a tool call for the Record agent (Tool Spec §2)., Record agent db_read is own-bucket only (Tool Spec §2). (+14 more)
 
 ### Community 17 - "TestIntakeIncumbencyHandler"
 Cohesion: 0.08
 Nodes (16): committed_updates(), _fec_get_map(), fec_get(), A /candidates/ envelope. `pagination.count` matches the rows returned unless a…, The id-first rule only fires if something hydrates it: the DoE file carries no…, The ordinary case, and the one the §6 dry-run snippet runs: no candidate has an…, Unlike a FEC fetch failure, this read shares the store's one connection with…, `per_page=100` and no paging: if the FEC says the district has more filers than… (+8 more)
 
-### Community 18 - "voting-info/route.ts"
-Cohesion: 0.10
-Nodes (34): Task 8: The two routes, 5. Server, resend, zod, body, OUT_OF_COVERAGE, POST(), body (+26 more)
+### Community 18 - "verify-address-resolve.ts"
+Cohesion: 0.11
+Nodes (20): block, ROOT, rows, suggestions, body, POST(), metadata, PrivacyPage() (+12 more)
 
 ### Community 19 - "admin.ts"
-Cohesion: 0.06
-Nodes (36): validNews, ACTION_CHIP, dynamic, LogPage(), metadata, QueuePage(), AdminLogResult, getAdminLog() (+28 more)
+Cohesion: 0.07
+Nodes (28): validNews, AdminLogResult, MISSING_0006, MISSING_SERVICE, ReviewQueueFilters, ReviewQueueResult, AdminActionRow, DateMismatchPayload (+20 more)
 
 ### Community 20 - "fetch_source"
-Cohesion: 0.18
-Nodes (40): What the orchestrator is, Files, Files, Agent 2 — The Record Agent ("What They've Done"), Files, Integration notes for the wrapper, Status (2026-07-01), What the Recorder is (+32 more)
+Cohesion: 0.16
+Nodes (44): What the orchestrator is, Files, What the Fact-Checker is, Files, Agent 2 — The Record Agent ("What They've Done"), Files, Integration notes for the wrapper, Status (2026-07-01) (+36 more)
 
-### Community 21 - "test_toollayer_skeleton.py"
-Cohesion: 0.07
-Nodes (12): make_discovery_layer(), prime_profiler_scope(), S1-02 skeleton tests — stdlib only, like every other core test here. Covers the…, load_psl() degrades to None so the core uses its embedded fail-closed subset…, The other half, which nothing covered: with tldextract available the loader…, TestCores, TestDiscoveryAllowlistA, TestDiscoveryAllowlistB (+4 more)
+### Community 21 - "make_discovery_layer"
+Cohesion: 0.11
+Nodes (8): make_discovery_layer(), prime_profiler_scope(), load_psl() degrades to None so the core uses its embedded fail-closed subset…, The other half, which nothing covered: with tldextract available the loader…, TestDiscoveryAllowlistA, TestDiscoveryAllowlistB, TestDiscoveryFetchAndSearch, boom()
 
 ### Community 22 - "TestIncumbencyResolver"
 Cohesion: 0.07
@@ -419,40 +440,40 @@ Cohesion: 0.05
 Nodes (36): a, aged, b, BESPOKE_BASIS_ALLOWED, COUNTIES, dayIso(), deduped, designated (+28 more)
 
 ### Community 24 - "Store"
-Cohesion: 0.09
-Nodes (22): 5.1 Cross-cutting requirements, 5.3 Tasks, 5. S1 — MCP Tool-Layer Service, Any, Dedupe on normalized URL, INSERT if new. Returns (source_id, deduped).…, {source_id -> {source_id,url,type,lean_tag}} for the ids that exist. An absent…, Idempotent by race_id (PK). candidate_ids is REPLACED, not appended, so re-…, Idempotent by candidate_id (PK). A later FEC linkage (fec_id) is preserved if… (+14 more)
+Cohesion: 0.10
+Nodes (19): Any, Dedupe on normalized URL, INSERT if new. Returns (source_id, deduped).…, {source_id -> {source_id,url,type,lean_tag}} for the ids that exist. An absent…, Idempotent by race_id (PK). candidate_ids is REPLACED, not appended, so re-…, Idempotent by candidate_id (PK). A later FEC linkage (fec_id) is preserved if…, {candidate_id, fec_id} for the ids that exist, so the incumbency resolver can…, Write the resolved FEC incumbency onto `race` and `candidate`. Not folded into…, The per-candidate inputs Allowlist A matches against: the registered… (+11 more)
 
 ### Community 25 - "S1StdioClient"
 Cohesion: 0.08
-Nodes (26): asyncio, Any, S2-01 — the MCP-stdio client that connects the S2 agent loop to the real S1.…, One instance == one S1 subprocess == one identity (ADR-R1). Use as a context…, Build a client from `session.s1_spawn_spec(...)` output (`command`, `env`),…, Spawn S1, run the MCP handshake, and populate `self.tools`. Raises…, Synchronous seam for the agent loop: run `tools/call` on the session thread and…, Signal the session coroutine to exit its context managers (reaping the S1… (+18 more)
+Nodes (24): asyncio, Any, S2-01 — the MCP-stdio client that connects the S2 agent loop to the real S1.…, One instance == one S1 subprocess == one identity (ADR-R1). Use as a context…, Build a client from `session.s1_spawn_spec(...)` output (`command`, `env`),…, Spawn S1, run the MCP handshake, and populate `self.tools`. Raises…, Synchronous seam for the agent loop: run `tools/call` on the session thread and…, Signal the session coroutine to exit its context managers (reaping the S1… (+16 more)
 
-### Community 26 - "verify-news-characterize.ts"
-Cohesion: 0.08
-Nodes (33): 9. Constraints & keys — consolidated, File Structure, Task 2: The pure characterizer core, Task 3: Migration 0027 and the ledger row, Task 4: The Jev engine adapter, Task 6: Gold set and evaluation, 4.1 Taxonomy (gate G3) — **REOPENED 2026-09-18, founder reviewing**, 4.3 Symmetry — and an honest limit (+25 more)
+### Community 26 - "0000_pipeline_read_models.sql"
+Cohesion: 0.05
+Nodes (51): public.enforce_measure_balance, public.enforce_published_measure_balance, public.measure_resource, candidate, candidate_social_account, claim, claim_source, idx_claim_candidate (+43 more)
 
-### Community 27 - "Card"
-Cohesion: 0.11
-Nodes (26): A. Health strip (top of Overview), B. Panel component (shared), D. Interactions, responsive, a11y, Handoff — Phase A2: Monitor (target), metadata, AnalyticsLink, analyticsLinks(), AnalyticsLinksCard() (+18 more)
+### Community 27 - "safeHttpUrl"
+Cohesion: 0.12
+Nodes (22): A. Deployments panel (AFR-040), B. Errors panel (AFR-041), C. Analytics links-out card (AFR-042), D. Page assembly (task A18), E. Caching, responsive, a11y, Handoff — Phase A5: Site Metrics (target), metadata, SitePage() (+14 more)
 
-### Community 28 - "resolve.ts"
-Cohesion: 0.10
-Nodes (28): Task 7: Resolution by block and by district, GET(), params, COUNTY_FIPS, GET(), NewsRow, params, GET() (+20 more)
+### Community 28 - "Session B — Collect `official_site` for the remaining ballot candidates"
+Cohesion: 0.06
+Nodes (28): Collision rules (read before starting any session), Founder checklist (no session can do these), Parallel sessions to full release — 2026-09-24, What depends on what, Don't, Done when, Goal, Read first (+20 more)
 
 ### Community 29 - "ref_node_fs"
-Cohesion: 0.08
-Nodes (27): md, skillFile, skill, @electric-sql/pglite, ref_node_assert, ref_node_fs, ref_node_path, ref_node_test (+19 more)
+Cohesion: 0.10
+Nodes (15): md, skillFile, skill, ref_node_assert, ref_node_fs, ref_node_path, ref_node_test, EVENTS (+7 more)
 
 ### Community 30 - "news-characterize-eval.ts"
-Cohesion: 0.07
-Nodes (30): Task 5: The runner, 4.5 Cost is not a deciding factor, loadEnvLocal(), args, by, db, args, DemoRow (+22 more)
+Cohesion: 0.05
+Nodes (61): 9. Constraints & keys — consolidated, File Structure, Task 2: The pure characterizer core, Task 3: Migration 0027 and the ledger row, Task 4: The Jev engine adapter, Task 5: The runner, Task 6: Gold set and evaluation, 4.7 Modules (+53 more)
 
 ### Community 31 - "validate.py"
-Cohesion: 0.10
-Nodes (29): benchmark_pair(), count_tokens(), main(), print_table(), Path, count_bullets(), extract_code_blocks(), extract_fenced_spans() (+21 more)
+Cohesion: 0.12
+Nodes (23): count_bullets(), extract_code_blocks(), extract_fenced_spans(), extract_headings(), extract_indented_code_blocks(), extract_inline_codes(), extract_paths(), extract_urls() (+15 more)
 
 ### Community 32 - "usableOutlets"
-Cohesion: 0.07
-Nodes (32): 1. The task in one sentence, 2. Why this exists, 3. The rules, which are not negotiable, 4. Group A — the 4 local outlets that have ratings, 5. Group B — the 8 national outlets, currently unadded, 6. Where to put what, 7. What this does NOT do — read before promising anything, 8. Read order (+24 more)
+Cohesion: 0.08
+Nodes (27): 1. The task in one sentence, 2. Why this exists, 3. The rules, which are not negotiable, 4. Group A — the 4 local outlets that have ratings, 5. Group B — the 8 national outlets, currently unadded, 6. Where to put what, 7. What this does NOT do — read before promising anything, 8. Read order (+19 more)
 
 ### Community 33 - "3. Product Strategy"
 Cohesion: 0.06
@@ -462,93 +483,93 @@ Nodes (34): 1. Vision & Mission, 2. User Research, 3. Product Strategy, 4. Brand
 Cohesion: 0.06
 Nodes (31): 1. The correction: it's four sections today, not two, 2. Why November makes ZIP nearly unnecessary, 3. The adjustment, 4. The persistence question — three stores, not one, 6. What this costs, Phase 7: Ballot First, ZIP Optional, 1. Why the general is a different product, 2. What's on the November 3, 2026 ballot (+23 more)
 
-### Community 35 - "createServiceClient"
+### Community 35 - "AgentsConsole.tsx"
+Cohesion: 0.12
+Nodes (21): AgentsPage(), isMissingRelation(), metadata, RequestRow, RunRow, toRequest(), toRun(), absolute() (+13 more)
+
+### Community 36 - "CandidateBrowser.tsx"
 Cohesion: 0.13
-Nodes (24): ref_node_crypto, server-only, GET(), authorized(), GET(), POST(), refresh(), authorized() (+16 more)
+Nodes (24): 4. Read model, Where it surfaces, react, parties, verdicts, CandidateBrowser(), DECIDED_LINE, SavedCandidates() (+16 more)
 
-### Community 36 - "react"
-Cohesion: 0.15
-Nodes (21): react, KINDS, SOURCES, STATUSES, RaceListing(), SavedCandidates(), SavedSummary, Chip() (+13 more)
+### Community 37 - "build_discovery_handlers"
+Cohesion: 0.11
+Nodes (16): Agent 1 — The Profiler ("What They Say"), Integration notes for the wrapper, Status (2026-07-01), What the Profiler is, build_discovery_handlers(), _blocked(), _gate(), _scope() (+8 more)
 
-### Community 37 - "discovery.py"
-Cohesion: 0.08
-Nodes (26): Agent 1 — The Profiler ("What They Say"), Integration notes for the wrapper, Status (2026-07-01), What the Profiler is, build_discovery_handlers(), _blocked(), _fetch(), _gate() (+18 more)
-
-### Community 38 - "File Structure"
-Cohesion: 0.08
-Nodes (30): Address → District Lookup Implementation Plan, File Structure, Notes for the reviewer, Status — built 2026-09-09, Task 0: Branch setup, Task 10: The one smart field, Task 12: The ballot pages read the cookie, Task 13: Make the claims true (+22 more)
+### Community 38 - "address/resolve/route.ts"
+Cohesion: 0.17
+Nodes (20): Task 8: The two routes, 5. Server, zod, body, OUT_OF_COVERAGE, POST(), body, POST() (+12 more)
 
 ### Community 39 - "news-issues.ts"
-Cohesion: 0.11
-Nodes (26): collisions, extra, inQuiz, missing, questions, quizIds, metadata, NewsPage() (+18 more)
+Cohesion: 0.08
+Nodes (30): 4.1 Taxonomy (gate G3) — **REOPENED 2026-09-18, founder reviewing**, 4.2 Input (gate G2) — title + dek, never a body; and only stored rows, 4.3 Symmetry — and an honest limit, 4.4 What the model returns, and what it cannot, 4.5 Cost is not a deciding factor, 4.6 Storage, 4. Unit 1 — issue tagging, collisions (+22 more)
 
 ### Community 40 - "orchestrator_core.py"
 Cohesion: 0.15
 Nodes (30): agent_finished(), apply_audit_result(), _blocked(), check_db_read(), check_dispatch(), check_tool_access(), log_spine_issues(), mark_composed() (+22 more)
 
 ### Community 41 - "session.py"
-Cohesion: 0.11
-Nodes (20): AgentConfig, get_config(), Any, S2 agent configurations — one per agent kind with its verbatim prompt. Prompts…, One agent kind's static configuration., The first user turn: the concrete task, the race's spine issues, and (Fact-…, CAP S2 agent runtime — session runner + agent configs (CAP_Runtime_PRD_v1 §6)., S2/S3 read-plane — the orchestration-side reads, run as cap_readonly. The… (+12 more)
+Cohesion: 0.10
+Nodes (23): argparse, AgentConfig, get_config(), Any, S2 agent configurations — one per agent kind with its verbatim prompt. Prompts…, One agent kind's static configuration., The first user turn: the concrete task, the race's spine issues, and (Fact-…, CAP S2 agent runtime — session runner + agent configs (CAP_Runtime_PRD_v1 §6). (+15 more)
 
-### Community 42 - "YourRaces.tsx"
-Cohesion: 0.16
-Nodes (24): 5. Tasks, 8. Tasks, 4. What each surface renders in listing mode, Done since the pivot began, Home(), BallotQuestions(), CandidateBrowser(), CountyRaces() (+16 more)
+### Community 42 - "next"
+Cohesion: 0.13
+Nodes (26): 5. Tasks, 4. What each surface renders in listing mode, Done since the pivot began, next, metadata, Home(), BallotQuestions(), CountyRaces() (+18 more)
 
 ### Community 43 - "candidate-site.ts"
-Cohesion: 0.12
-Nodes (28): allowed(), across, dupPage, LINKS, picked, ps, split, texts (+20 more)
+Cohesion: 0.07
+Nodes (40): Notes on the stored values, all, allowed(), args, lines, links, outPath, pageLimit (+32 more)
 
 ### Community 44 - "run_session"
-Cohesion: 0.09
-Nodes (24): BackendFactory, Brief 01 — S2-01 live acceptance: Profiler end-to-end vs the real S1, Done when (PRD S2-01 Verify), Goal, The task: wire them into one end-to-end run, Watch-outs, What's already built (do not rebuild), Path (+16 more)
+Cohesion: 0.11
+Nodes (22): BackendFactory, Brief 01 — S2-01 live acceptance: Profiler end-to-end vs the real S1, Done when (PRD S2-01 Verify), Goal, The task: wire them into one end-to-end run, Watch-outs, What's already built (do not rebuild), Path (+14 more)
 
 ### Community 45 - "run_to_agents_done"
 Cohesion: 0.16
 Nodes (8): AuditBranch, Composition, halt_audit(), HumanGateAndDispatch, pass_audit(), Tests for orchestrator_core (Orchestrator / Synthesis Layer). stdlib only.…, run_to_agents_done(), run_to_approved()
 
-### Community 46 - "policy-run.ts"
-Cohesion: 0.09
-Nodes (24): [a, b], args, files, isFlagValue(), jsonOut, result, toleranceRaw, groupByArea() (+16 more)
+### Community 46 - "verify-policy-run.ts"
+Cohesion: 0.05
+Nodes (42): [a, b], args, files, isFlagValue(), jsonOut, result, toleranceRaw, base (+34 more)
 
 ### Community 47 - "validate_claim_write"
 Cohesion: 0.18
 Nodes (6): The load-bearing guard on claim_write (T9) for the Fact-Checker. Args: claim:…, validate_claim_write(), fact_claim(), opinion_claim(), TestClaimWriteContract, TestClaimWriteHalts
 
-### Community 48 - "quiz.ts"
-Cohesion: 0.10
-Nodes (23): candidates, comparative, hostile, legitimate, out, answersForPrompt(), callClaude(), CandidateForQuiz (+15 more)
+### Community 48 - "app.ts"
+Cohesion: 0.08
+Nodes (27): @anthropic-ai/sdk, candidates, comparative, hostile, legitimate, out, answersForPrompt(), callClaude() (+19 more)
 
-### Community 49 - "TestReadPlane"
-Cohesion: 0.10
-Nodes (6): FakeConn, _FakeCursor, make_read_plane(), Routes each executed SQL (by substring) to a list of dict rows., TestReadPlane, router()
+### Community 49 - "FakeConn"
+Cohesion: 0.17
+Nodes (3): FakeConn, _FakeCursor, Routes each executed SQL (by substring) to a list of dict rows.
 
-### Community 50 - "store.py"
-Cohesion: 0.10
-Nodes (20): error_payload(), ok_payload(), Any, Structured error taxonomy for tool results (CAP_Runtime_PRD_v1 §5.3 S1-02).…, build_data_handlers(), Handler, S1-04 data-tool handlers — T7 source_register, T8 db_read, T9 claim_write. Each…, Wire the three data tools to `guard` + `store` for one identity. (+12 more)
+### Community 50 - "listing.ts"
+Cohesion: 0.15
+Nodes (20): 1. Why publication is blocked, 1. Why publishing is not a publication flip, formatDate(), generateMetadata(), generateStaticParams(), RaceHeader(), RacePage(), revalidate (+12 more)
 
 ### Community 51 - "make_intake_layer"
 Cohesion: 0.12
 Nodes (8): make_intake_layer(), MemCache, In-memory stand-in for discovery.DiskCache (no repo/disk side effects)., TestIntakeDoEHandler, TestIntakeFEC, flaky(), TestIntakeFLSenateAndJurisdiction, doe_fetch()
 
-### Community 52 - "requireAdmin"
-Cohesion: 0.11
-Nodes (21): B. Authed shell — `src/app/admin/(console)/layout.tsx`, Header, Main, States / a11y, SitePage(), dynamic, metadata, SubmitFormLoader() (+13 more)
+### Community 52 - "submit/page.tsx"
+Cohesion: 0.16
+Nodes (14): dynamic, metadata, SubmitFormLoader(), Kind, KINDS, SubmitForm(), buildBody(), onSubmit() (+6 more)
 
 ### Community 53 - "make_data_layer"
 Cohesion: 0.18
 Nodes (6): committed_into(), committed_log_rows(), make_data_layer(), TestDataToolsClaimWrite, TestDataToolsDbRead, TestDataToolsSourceRegister
 
 ### Community 54 - "CandidateNews.tsx"
-Cohesion: 0.11
-Nodes (22): 4. Tasks, 1. State of the branch, 2. What changed for a voter, 3. Open decisions and gates (founder / next session), 4. Deferred Minor findings (triaged by the final review, none blocking), 5. How this was run (for repeatability), 6. Paste-ready prompt for the next session, Baseline on `70cdbae` (all green) (+14 more)
+Cohesion: 0.15
+Nodes (17): 4. Tasks, 1. State of the branch, 2. What changed for a voter, 3. Open decisions and gates (founder / next session), 4. Deferred Minor findings (triaged by the final review, none blocking), 5. How this was run (for repeatability), 6. Paste-ready prompt for the next session, Baseline on `70cdbae` (all green) (+9 more)
 
 ### Community 55 - "verify-news-slots.ts"
-Cohesion: 0.08
-Nodes (18): A, a5, aAll, B3, b5, C, c3, D (+10 more)
+Cohesion: 0.07
+Nodes (24): A, a5, aAll, B3, b5, C, c3, D (+16 more)
 
-### Community 56 - "AgentsConsole.tsx"
-Cohesion: 0.12
-Nodes (21): AgentsPage(), isMissingRelation(), metadata, RequestRow, RunRow, toRequest(), toRun(), absolute() (+13 more)
+### Community 56 - "_doe_row"
+Cohesion: 0.18
+Nodes (6): _doe_row(), Deterministic output is a documented promise of this parser, and re-intake…, Corrects ballots-handoff.md F3, which said the next live run would stop on the…, D-A (founder 2026-09-07): under the enacted map FL-23 falls in no ZIP this app…, race.district must be `FL-nn`, because that is what resolves a voter. The app…, The live-export shape (see the test above): Juris1num already zero-padded to…
 
 ### Community 57 - "classify_url"
 Cohesion: 0.14
@@ -559,8 +580,8 @@ Cohesion: 0.11
 Nodes (8): FakeReadPlane, FakeS1, In-memory read plane for the entrypoint wiring tests., A drop-in for S1StdioClient: a context manager exposing .tools/.dispatch., Captures the kickoff it was handed, then finishes with a report., RecordingBackend, TestRunSession, s1_factory()
 
 ### Community 59 - "logsink.py"
-Cohesion: 0.12
-Nodes (19): _default_connect(), JsonlSink, LogConfigError, LogWriteError, make_sink(), PostgresSink, Any, Path (+11 more)
+Cohesion: 0.10
+Nodes (24): 5.1 Cross-cutting requirements, 5.3 Tasks, 5. S1 — MCP Tool-Layer Service, _default_connect(), JsonlSink, LogConfigError, LogWriteError, make_sink() (+16 more)
 
 ### Community 60 - "PRD — Know Your Vote"
 Cohesion: 0.08
@@ -570,17 +591,17 @@ Nodes (24): 10. Payment Integration, 11. Edge Cases & Error Handling, 12. Depend
 Cohesion: 0.09
 Nodes (23): candArg, candidates, CHECK, claims, claimSources, DONE, issues, KEY_DATES (+15 more)
 
-### Community 62 - "policy-areas.ts"
-Cohesion: 0.14
-Nodes (21): areaIds, FIXTURES, ids(), seen, twice, areaRef(), CategorizableIssue, categorizeIssue() (+13 more)
+### Community 62 - "File map"
+Cohesion: 0.18
+Nodes (15): File map, Global Constraints, Measure Resource Ladder Implementation Plan, Self-review, Task 1: The ladder module and its verify script, Task 3: Read layer, Task 4: The row and the ladder components, Task 5: The page and the listed-card copy (+7 more)
 
 ### Community 63 - "test_profiler_guard_core.py"
 Cohesion: 0.15
 Nodes (13): check_db_read(), check_tool_access(), Any, Civic Awareness Project (CAP) — Profiler (Agent 1) guards, deterministic core.…, Profiler db_read is own-bucket only (Tool Spec §2)., Profiler may register Sources with type='candidate_self' only., Grant/deny a tool call for the Profiler (Tool Spec §2)., _result() (+5 more)
 
 ### Community 64 - "intake.py"
-Cohesion: 0.13
-Nodes (18): build_intake_handlers(), _incumbency_for_race(), _default_fec_get(), _fec_name_parts(), _fec_with_backoff(), _name_tokens(), _names_match(), _now_iso() (+10 more)
+Cohesion: 0.12
+Nodes (21): _fetch(), _strip_scripts(), _today(), build_intake_handlers(), _incumbency_for_race(), _default_fec_get(), _fec_name_parts(), _fec_with_backoff() (+13 more)
 
 ### Community 65 - "FakeConn"
 Cohesion: 0.11
@@ -614,65 +635,65 @@ Nodes (21): 0. Read this before the numbers, 10. Follow-up — taxonomy v7, B7 n
 Cohesion: 0.16
 Nodes (18): EmbeddedSource, NewsItemRow, runLiveLint(), runSelfTest(), sanitizeForTerminal(), selfTestRequested, sourcednessViolation(), buildFeedHealth() (+10 more)
 
-### Community 73 - "verify-policy-run.ts"
-Cohesion: 0.09
-Nodes (18): base, corpusDiff, edited, empty, moved, otherQuestions, otherTaxonomy, otherThreshold (+10 more)
+### Community 73 - "verify-no-stored-location.ts"
+Cohesion: 0.08
+Nodes (34): Task 11: The district chip, ALLOWED_LOCAL, analytics, cookieSrc, cookieWrites, districtSetCalls, files, keyed (+26 more)
 
 ### Community 74 - "balance_audit_core"
-Cohesion: 0.20
-Nodes (9): balance_audit_core(), Run the deterministic balance audit for one race. Returns a result dict…, claims(), profile(), Tests for balance_audit_core (v1.1) — stdlib unittest, no dependencies. Run:…, facts -> verifiable_fact claims; positions -> stated_position claims., TestBalanceAuditCore, statistics (+1 more)
+Cohesion: 0.22
+Nodes (8): balance_audit_core(), Run the deterministic balance audit for one race. Returns a result dict…, claims(), profile(), Tests for balance_audit_core (v1.1) — stdlib unittest, no dependencies. Run:…, facts -> verifiable_fact claims; positions -> stated_position claims., TestBalanceAuditCore, statistics
 
 ### Community 75 - "LiveAnthropicBackend"
-Cohesion: 0.10
-Nodes (16): LiveAnthropicBackend, Any, The real agent loop: the Anthropic Messages tool-use loop over the S1 tool…, The live gate. Two ways to be configured, and nothing else counts: an injected…, _usage_tokens(), Next (build order: Profiler → Record → Fact-Checker), Run, S2 — Agent runtime (foundation) (+8 more)
+Cohesion: 0.09
+Nodes (18): BackendResult, LiveAnthropicBackend, Any, The real agent loop: the Anthropic Messages tool-use loop over the S1 tool…, The live gate. Two ways to be configured, and nothing else counts: an injected…, Deterministic stand-in agent for tests. `script` is a list of steps: {"tool":…, ScriptedBackend, _usage_tokens() (+10 more)
 
 ### Community 76 - "Candidate News — PRD"
-Cohesion: 0.10
-Nodes (20): 10. C0 evidence (2026-09-06), 1. Why this exists, 2. What already exists — do not rebuild it, 3. The architecture, confirmed (was "inferred" in v1.0), 4. Requirements — and where the live R1 contract falls short, 5. News intake: sweep a fixed corpus, don't search per candidate, 6. Association: a hard name match, and a `related` tier, Cadence — biweekly is now too slow (+12 more)
+Cohesion: 0.11
+Nodes (18): 10. C0 evidence (2026-09-06), 1. Why this exists, 2. What already exists — do not rebuild it, 3. The architecture, confirmed (was "inferred" in v1.0), 6. Association: a hard name match, and a `related` tier, 7. The election news feed, filtered by county, API and UI, Candidate News — PRD (+10 more)
 
-### Community 77 - "news-labels.ts"
-Cohesion: 0.13
-Nodes (16): everyLean, LEAN_WORDS, leans, opinionCard, primary, types, unrated, FORMAT_LABEL (+8 more)
+### Community 77 - "NewsFeed.tsx"
+Cohesion: 0.12
+Nodes (19): everyLean, LEAN_WORDS, leans, opinionCard, primary, types, unrated, FeedItem (+11 more)
 
 ### Community 78 - "pathlib"
-Cohesion: 0.16
-Nodes (17): main(), Caveman Compress CLI Usage: caveman <filepath>, detect_file_type(), _is_code_line(), _is_json_content(), _is_yaml_content(), Path, Return True if the file is natural language and should be compressed. (+9 more)
+Cohesion: 0.15
+Nodes (19): main(), Caveman Compress CLI Usage: caveman <filepath>, backup_dir_for(), compress_file(), Out-of-tree backup dir for filepath, keyed by its parent dir name — kept…, detect_file_type(), _is_code_line(), _is_json_content() (+11 more)
 
 ### Community 79 - "test_runtime.py"
 Cohesion: 0.17
 Nodes (10): _Block, MockAnthropic, S2-01 runtime tests — stdlib only (same convention as the tool layer). Covers…, The client is a drop-in for SessionRunner: its `.tools` feed the backend and…, _Resp, TestS1ClientDrivesRunner, TestSpawnSpec, _text() (+2 more)
 
 ### Community 80 - "parse_candidate_list"
+Cohesion: 0.23
+Nodes (12): _ballot_status(), DoEFormatError, parse_candidate_list(), Tier for one filed row, or raise on a code we have never seen. Fail loud rather…, The DoE file header is not the shape we parse — fail closed, never guess., Parse the tab-separated DoE export into target-race rows. Returns {"races":…, 2. Findings that change the app (read before touching ingest or resolve), Q1 — which status codes appear post-primary (+4 more)
+
+### Community 81 - "file_lock"
 Cohesion: 0.15
-Nodes (19): _ballot_status(), DoEFormatError, parse_candidate_list(), Tier for one filed row, or raise on a code we have never seen. Fail loud rather…, The DoE file header is not the shape we parse — fail closed, never guess., Parse the tab-separated DoE export into target-race rows. Returns {"races":…, 2. Findings that change the app (read before touching ingest or resolve), 1. Three defects that block the general run (+11 more)
+Nodes (13): file_lock(), lock_path_for(), LockTimeoutError, Raised when another process holds the compress lock past LOCK_WAIT_SECONDS., Cross-session lock path keyed on the same (parent-dir-name, stem) identity…, Attempt the OS-native exclusive lock on fd; raises BlockingIOError if another…, Release the OS-native lock on fd; swallows errors since callers use this in a…, Cross-session exclusive lock on filepath's resolved path, backed by the OS's… (+5 more)
 
-### Community 81 - "Handoff — Phase A1: Foundation (as built)"
-Cohesion: 0.11
-Nodes (15): A. Sign-in screen — `/admin/login`, C. Section nav — `src/components/admin/AdminNav.tsx`, D. `DegradedBanner` — `src/components/admin/DegradedBanner.tsx`, E. Section empty states (five) + Overview shell, Edge cases, F. Verified (Phase A1), Handoff — Phase A1: Foundation (as built), Interaction & security notes (+7 more)
-
-### Community 82 - "queue/page.tsx"
-Cohesion: 0.11
-Nodes (16): A. Deployments panel (AFR-040), B. Errors panel (AFR-041), C. Analytics links-out card (AFR-042), D. Page assembly (task A18), E. Caching, responsive, a11y, Handoff — Phase A5: Site Metrics (target), Before you start, Definition of done (+8 more)
+### Community 82 - "requireAdmin"
+Cohesion: 0.06
+Nodes (36): § 1 Requirements Summary, § 2 High-Level Design, § 3 Data Model (migration `0006_admin_ops.sql`), § 4 API Contracts, § 5 Deep Dives, § 6 Scale & Reliability, § 7 Trade-off Analysis, § 8 Revisit As It Grows (+28 more)
 
 ### Community 83 - "CAP / "Know Your Vote" — Verified News-Outlet Corpus for the 2026 Florida General Election (Nov 3, 2026)"
 Cohesion: 0.10
 Nodes (18): BROWARD (12011) — most urgent to widen, CAP / "Know Your Vote" — Verified News-Outlet Corpus for the 2026 Florida General Election (Nov 3, 2026), Caveats, Details, Flagged for Founder Sign-off (lean uncited or raters disagree), HILLSBOROUGH (12057), Key Findings, MIAMI-DADE (12086) (+10 more)
 
-### Community 84 - "templates.ts"
-Cohesion: 0.13
-Nodes (15): 5. Day 1 — ballot correctness, SAMPLE, SAMPLE_CORRECTION, DueReminder, dueReminders(), isoDaysBefore(), REMINDER_OFFSETS, BUDGETS (+7 more)
+### Community 84 - "send-reminders/route.ts"
+Cohesion: 0.11
+Nodes (22): ref_node_crypto, SAMPLE, SAMPLE_CORRECTION, authorized(), GET(), maxDuration, POST(), run() (+14 more)
 
 ### Community 85 - "news-corpus-analysis.ts"
 Cohesion: 0.10
 Nodes (14): args, catCount, catMax, concurrency, dates, out, perOutlet, pool (+6 more)
 
 ### Community 86 - "verify-brief-rows.ts"
-Cohesion: 0.12
-Nodes (18): again, baseInput(), blakeSpine, crossed, [ISSUE_A, ISSUE_B, ISSUE_C], issueIds, noSpine, noVerdict (+10 more)
+Cohesion: 0.05
+Nodes (52): 3. The gap, precisely, arr(), candidates, misattributed, outPath, Plan, planDir, planPath (+44 more)
 
-### Community 87 - "verify-news-match.ts"
-Cohesion: 0.10
-Nodes (14): a1, a2, both, counts, filler, johnNamed, namedInRace, race1 (+6 more)
+### Community 87 - "policy-areas.ts"
+Cohesion: 0.15
+Nodes (20): areaIds, FIXTURES, ids(), seen, twice, TAXONOMY_VERSION, areaRef(), CategorizableIssue (+12 more)
 
 ### Community 88 - "verify-zip-seed-2026.mjs"
 Cohesion: 0.10
@@ -682,53 +703,53 @@ Nodes (17): badSplit, CD, csvHeader, csvLines, extra, METRO_FIPS, missing, offMe
 Cohesion: 0.10
 Nodes (19): compilerOptions, allowImportingTsExtensions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib (+11 more)
 
-### Community 90 - "make_layer"
-Cohesion: 0.14
-Nodes (6): ExplodingSink, make_layer(), MemorySink, TestDispatchGuards, TestHaltState, TestLoggingInvariant
+### Community 90 - "test_toollayer_skeleton.py"
+Cohesion: 0.06
+Nodes (19): _load(), load_aux_core(), load_guard_core(), Loaders for the canonical pure cores. The guard/allowlist/audit cores are the…, The per-agent guard module. All four expose check_tool_access()., ExplodingSink, FakeDbCursor, make_layer() (+11 more)
 
 ### Community 91 - "site.ts"
-Cohesion: 0.16
-Nodes (17): Phase A5: Site Metrics, cachedDeployments, cachedSentryIssues, Deployment, DeploymentsResult, DeploymentState, ErrorsResult, getDeployments() (+9 more)
+Cohesion: 0.12
+Nodes (21): Phase A5: Site Metrics, GET(), ErrorsPanel(), cachedDeployments, cachedSentryIssues, Deployment, DeploymentsResult, DeploymentState (+13 more)
 
-### Community 92 - "brief-rows.ts"
-Cohesion: 0.13
-Nodes (18): Notes on the stored values, BRIEF_ROWS_SCHEMA, BriefRowsInput, BriefRowsResult, buildBriefRows(), ClaimRow, ClaimSourceRow, fnv() (+10 more)
+### Community 92 - "createAnonServerClient"
+Cohesion: 0.14
+Nodes (17): 8. Tasks, Task 7: Resolution by block and by district, @supabase/ssr, GET(), params, COUNTY_FIPS, GET(), NewsRow (+9 more)
 
-### Community 93 - "style-check/page.tsx"
-Cohesion: 0.15
-Nodes (12): Where it surfaces, parties, verdicts, buckets, IssueSection(), SourceLinks(), PolicyAreaChip(), policyAreaHref() (+4 more)
+### Community 93 - "track"
+Cohesion: 0.17
+Nodes (18): 12. Out of scope, LocationEntry(), commit(), resolveAddress(), resolveZipCode(), submit(), Quiz(), addDistrictRace() (+10 more)
 
-### Community 94 - "brief-rows-sql.ts"
-Cohesion: 0.15
-Nodes (17): 3. The gap, precisely, arr(), candidates, misattributed, outPath, Plan, planDir, planPath (+9 more)
+### Community 94 - "MeasureResourceLadder.tsx"
+Cohesion: 0.27
+Nodes (8): COLUMN_KINDS, groupByKind(), NEUTRAL_KINDS, TieredList(), COLUMN_CAP, Rankable, TIER_LABEL, MeasureKind
 
 ### Community 95 - "decision/route.ts"
 Cohesion: 0.19
 Nodes (14): dynamic, POST(), dynamic, GET(), describeNewsInsertError(), describeUpdateError(), dynamic, failClosed() (+6 more)
 
-### Community 96 - "test_factchecker_guard_core.py"
-Cohesion: 0.19
-Nodes (10): check_db_read(), Any, Civic Awareness Project (CAP) — Fact-Checker agent (Agent 3) guards,…, Fact-Checker db_read spans ALL buckets (Tool Spec §2 — the only agent with…, Fact-Checker may register ANY Source type (Tool Spec §2), but every source must…, _result(), validate_source_register(), Tests for factchecker_guard_core — grants/denials, cross-bucket read, lean-tag… (+2 more)
+### Community 96 - "File Structure"
+Cohesion: 0.13
+Nodes (18): 4. Where the four-metro assumption is baked in, Address → District Lookup Implementation Plan, File Structure, Notes for the reviewer, Status — built 2026-09-09, Task 0: Branch setup, Task 12: The ballot pages read the cookie, Task 13: Make the claims true (+10 more)
 
 ### Community 97 - "balance_audit_core.py"
-Cohesion: 0.12
-Nodes (16): claims(), _extract(), _lohi(), profile(), Any, Civic Awareness Project (CAP) — Balance Audit, deterministic core. Reference…, (max - min) / max * 100, rounded to 1 decimal. 0.0 when max is 0., Pull the audited quantities from a Schema v1 Profile object.… (+8 more)
+Cohesion: 0.13
+Nodes (15): claims(), _extract(), _lohi(), profile(), Any, Civic Awareness Project (CAP) — Balance Audit, deterministic core. Reference…, (max - min) / max * 100, rounded to 1 decimal. 0.0 when max is 0., Pull the audited quantities from a Schema v1 Profile object.… (+7 more)
 
 ### Community 98 - "Lean ratings — fetched 2026-09-19"
-Cohesion: 0.11
-Nodes (17): 1. Method and access, 2. Group A — the four local dailies (edited in `news-sources.ts`), 3. Group B — the eight national outlets (recorded here only), 4. Where this contradicts the 2026-09-17 record, 5. Recorded absences, 6. Attribution owed — AllSides CC BY-NC 4.0, 7. The sweep is unblocked — 27 outlets, as of 2026-09-19, 9. Open items handed on (+9 more)
+Cohesion: 0.10
+Nodes (21): 1. Method and access, 2. Group A — the four local dailies (edited in `news-sources.ts`), 3. Group B — the eight national outlets (recorded here only), 4. Where this contradicts the 2026-09-17 record, 5. Recorded absences, 6. Attribution owed — AllSides CC BY-NC 4.0, 7. The sweep is unblocked — 27 outlets, as of 2026-09-19, 8. What this session changed (+13 more)
 
 ### Community 99 - "Model characterization of swept articles — session brief"
 Cohesion: 0.12
-Nodes (16): 0. State of the branch you are inheriting, 1. The idea, restated precisely, 3. Why this cannot be "just add a model call" — three rules it touches, 4.1 What the model is allowed to decide, 4.2 Input to the model, 4.3 Model and prompt shape, 4.4 Where it runs and where results go, 4. Design space (+8 more)
+Nodes (16): 0. State of the branch you are inheriting, 1. The idea, restated precisely, 2. What exists (do not rebuild it), 3. Why this cannot be "just add a model call" — three rules it touches, 4.1 What the model is allowed to decide, 4.2 Input to the model, 4.3 Model and prompt shape, 4.4 Where it runs and where results go (+8 more)
 
-### Community 100 - "cores.py"
-Cohesion: 0.17
-Nodes (15): Companion to CAP_PRD_v1.0, CAP_MCP_Tool_Spec_v1.0, CAP_Logging_Schema_v1.0, CAP_Agent_Plan_v1.1, CAP_Balance_Audit_Spec_v1.1, Master Guide §9, _load(), load_aux_core(), load_guard_core(), Loaders for the canonical pure cores. The guard/allowlist/audit cores are the…, The per-agent guard module. All four expose check_tool_access()., for_agent(), _obj() (+7 more)
+### Community 100 - "directory.ts"
+Cohesion: 0.20
+Nodes (14): fetchRaceBrief(), orderCandidates(), countyForRaceDistrict(), browseCandidates(), DecidedSeat, DirectoryCandidate, districtNumber(), PolicyAreaOption (+6 more)
 
 ### Community 101 - "server.py"
-Cohesion: 0.16
-Nodes (11): IdentityError, RuntimeError, Agent identity — bound at process spawn, never per call (ADR-R1). The §5…, Raised when the process has no usable identity. Server must not start., resolve_identity(), main(), S1 entrypoint. Two modes: * MCP server (default): exposes the eleven callable…, selfcheck() (+3 more)
+Cohesion: 0.06
+Nodes (39): _httpx_fetch(), NotConfigured, _now_iso(), RuntimeError, S1-05 discovery tools — T5 web_search, T6 fetch_source. Caller-keyed allowlist…, A required backend (search API / fetch client) is absent., error_payload(), ok_payload() (+31 more)
 
 ### Community 102 - "Handoff — candidate profiles and the 21 unbuilt races"
 Cohesion: 0.12
@@ -736,35 +757,35 @@ Nodes (16): 1. The headline, 2. Two corrections to earlier framing, 3. The good 
 
 ### Community 103 - "Model characterization of swept articles — design"
 Cohesion: 0.12
-Nodes (15): 2. What exists (do not rebuild it), After this plan, Global Constraints, News Issue Tagging (Unit 1) Implementation Plan, 2.1 D1 — Authority (gate G1) — **RESOLVED: A, C dropped**, 2.2 D2 — Which "System 1" (new; not in the brief), 2. The two open founder decisions, 3. Architecture (+7 more)
+Nodes (15): 4. Requirements — and where the live R1 contract falls short, After this plan, Global Constraints, News Issue Tagging (Unit 1) Implementation Plan, 2.1 D1 — Authority (gate G1) — **RESOLVED: A, C dropped**, 2.2 D2 — Which "System 1" (new; not in the brief), 2. The two open founder decisions, 3. Architecture (+7 more)
 
 ### Community 104 - "Ballot questions: a two-sided resource ladder instead of our own arguments — design"
-Cohesion: 0.12
-Nodes (16): 10. Candidate resources per amendment (researched 2026-09-23, not yet verified row by row), 11. Follow-up (founder, 2026-09-23): an organisation registry, 1. The ladder: kind decides the tier, nobody decides per link, 2. Data model — `supabase/migrations/0034_measure_resources.sql`, 4. The publication gate, 6. Video: link out, never embed, 8. Methodology page, 9. Founder calls — this draft's assumptions, to confirm or overturn (+8 more)
+Cohesion: 0.13
+Nodes (14): 10. Candidate resources per amendment (researched 2026-09-23, not yet verified row by row), 11. Follow-up (founder, 2026-09-23): an organisation registry, 2. Data model — `supabase/migrations/0034_measure_resources.sql`, 4. The publication gate, 6. Video: link out, never embed, 8. Methodology page, 9. Founder calls — this draft's assumptions, to confirm or overturn, Amendment 1 — Budget Stabilization Fund (+6 more)
 
 ### Community 105 - "package.json"
 Cohesion: 0.12
-Nodes (15): eslintConfig, name, private, version, @anthropic-ai/sdk, eslint, eslint-config-next, prettier (+7 more)
+Nodes (15): eslintConfig, name, private, version, eslint, eslint-config-next, prettier, react-dom (+7 more)
 
 ### Community 106 - "probe-district-api.ts"
 Cohesion: 0.14
 Nodes (12): args, boundaries, dryRun, inRing(), interiorPoint(), jsonOut, points, PROBES (+4 more)
 
-### Community 107 - "Civic Awareness Project (CAP) — MCP Tool Layer Specification"
+### Community 107 - "Candidate"
 Cohesion: 0.12
-Nodes (15): 0. Governing Principles (from PRD), 2.5 Domain Allowlists (completes the tool layer), 3. Logging Schema (`log_action`), 4. Balance Audit Tool Spec (`balance_audit`), 5. Open Items, Allowlist A — Candidate-controlled (Agent 1 / Profiler), Allowlist B — Independent authoritative (Agent 3 / Fact-Checker), Civic Awareness Project (CAP) — MCP Tool Layer Specification (+7 more)
+Nodes (17): 1. Florida candidate file (Division of Elections), 2. Florida election dates (Department of State), 3. FEC (federal campaign finance), 4. GovTrack (federal voting records), 5. MBFC ratings API (outlet vetting), 6. Ballotpedia (race and legislation context), 7. US Digital Registry (official government accounts), Build order (+9 more)
 
 ### Community 108 - "Agent Brief — continuing the CAP runtime build (S2 → S3)"
 Cohesion: 0.12
 Nodes (14): 0. Where the build actually is, 2. Read order (before touching code), 3. The loop protocol, 4. House rules (non-negotiable, learned the hard way), 5. Environment facts (so you don't rediscover them the hard way), 6. The probe technique — use it, it's cheap and it works, 7. Founder gates — park, don't block, 8. Definition of done (whole build) (+6 more)
 
-### Community 109 - "ics.ts"
-Cohesion: 0.16
-Nodes (13): RFC-5545, blocks, empty, ics, lines, SAMPLE, buildElectionCalendar(), ELECTION_LABEL (+5 more)
+### Community 109 - "@supabase/supabase-js"
+Cohesion: 0.10
+Nodes (24): RFC-5545, @supabase/supabase-js, blocks, empty, ics, lines, SAMPLE, GET() (+16 more)
 
-### Community 110 - "Operator Console — Developer Handoff"
-Cohesion: 0.12
-Nodes (15): D. Log — `/admin/log` + nav badge (AFR-050), Log view, Nav badge (in `AdminNav`), 1. Design tokens, 2. Layout system, 3. The honest-degradation idiom (the console's spine), 4. Accessibility baseline (applies to every phase), 5. Responsive baseline (+7 more)
+### Community 110 - "Card"
+Cohesion: 0.09
+Nodes (22): 1. Agent runs — `agent_run` registry (AFR-002), 2. Freshness — logistics stamps, 3. Feed health — `news_item` + neutrality verdict (AFR-003), 4. Pipeline state, 5. Waiting on Jason — pending `review_item` count, 6. Open risks, A. Health strip (top of Overview), B. Panel component (shared) (+14 more)
 
 ### Community 111 - "PRD — Know Your Vote Operator Console (`/admin`)"
 Cohesion: 0.12
@@ -794,13 +815,13 @@ Nodes (11): ref_node_child_process, ref_node_os, db, dir, root, sql, sqlPath, wo
 Cohesion: 0.17
 Nodes (10): dominantKey(), METROS, seedSql(), zipDistrictRows(), extraFieldErr, fixtures, nonNumericErr, root (+2 more)
 
-### Community 118 - "verify-address-resolve.ts"
-Cohesion: 0.14
-Nodes (7): block, ROOT, rows, suggestions, ROOT, rel(), COVERED_COUNTIES
+### Community 118 - "YourRaces.tsx"
+Cohesion: 0.10
+Nodes (22): Task 10: The one smart field, ROOT, input, names, placed, Race, resolveSrc, routeSrc (+14 more)
 
-### Community 119 - "ReviewItemCard.tsx"
-Cohesion: 0.16
-Nodes (12): DecisionControls(), decide(), onApprove(), GATED_KINDS, asText(), Body(), DiffBlock(), KIND_CHIP (+4 more)
+### Community 119 - "test_factchecker_guard_core.py"
+Cohesion: 0.19
+Nodes (10): check_db_read(), Any, Civic Awareness Project (CAP) — Fact-Checker agent (Agent 3) guards,…, Fact-Checker db_read spans ALL buckets (Tool Spec §2 — the only agent with…, Fact-Checker may register ANY Source type (Tool Spec §2), but every source must…, _result(), validate_source_register(), Tests for factchecker_guard_core — grants/denials, cross-bucket read, lean-tag… (+2 more)
 
 ### Community 120 - "CAP / Know Your Vote — MVP Change Spec"
 Cohesion: 0.13
@@ -815,12 +836,12 @@ Cohesion: 0.13
 Nodes (14): 11. Claude Corps Application Narrative, 12. Open Questions (Phase 1 Blockers), 1. Meta Information, 2. Executive Summary, 3. Problem Statement, 4. Goals & Success Metrics, 5. MVP Scope, 9. MCP Architecture & Tools (+6 more)
 
 ### Community 123 - "ReadPlane"
-Cohesion: 0.20
-Nodes (7): Any, The candidate's legal name for the prompt {{name}} substitution; None if the…, The Profiler+Record claims for one candidate — what the Fact-Checker…, Successful claim_writes this agent logged for this candidate — the…, Read-only orchestration queries, run as cap_readonly. The connection is opened…, The race's spine issue set, ordered — S2-R1 kickoff input. Same shape T8's…, ReadPlane
+Cohesion: 0.10
+Nodes (10): Any, The candidate's legal name for the prompt {{name}} substitution; None if the…, The Profiler+Record claims for one candidate — what the Fact-Checker…, Successful claim_writes this agent logged for this candidate — the…, Read-only orchestration queries, run as cap_readonly. The connection is opened…, The race's spine issue set, ordered — S2-R1 kickoff input. Same shape T8's…, ReadPlane, make_read_plane() (+2 more)
 
 ### Community 124 - "Handoff — Phase A3: Submit & Review (target)"
-Cohesion: 0.13
-Nodes (14): A. Submit — `/admin/submit` (AFR-020/021/022), Advisory neutrality lint (news only, AFR-022), B. Queue — `/admin/queue` (AFR-030/031), C. Decision flow — `POST /api/admin/review/:id/decision` (AFR-032/033, §5 transaction), E. Responsive & a11y, Field spec (label `text-label`, help `text-caption text-on-surface-muted`, error `text-caption text-error`), Filter bar, Handoff — Phase A3: Submit & Review (target) (+6 more)
+Cohesion: 0.11
+Nodes (17): A. Submit — `/admin/submit` (AFR-020/021/022), Advisory neutrality lint (news only, AFR-022), B. Queue — `/admin/queue` (AFR-030/031), C. Decision flow — `POST /api/admin/review/:id/decision` (AFR-032/033, §5 transaction), D. Log — `/admin/log` + nav badge (AFR-050), E. Responsive & a11y, Field spec (label `text-label`, help `text-caption text-on-surface-muted`, error `text-caption text-error`), Filter bar (+9 more)
 
 ### Community 125 - "verify-admin-effects.ts"
 Cohesion: 0.18
@@ -838,21 +859,21 @@ Nodes (12): cavecrew, Example chaining, How to invoke, Model overrides, See also
 Cohesion: 0.14
 Nodes (12): caveman-help, Example output, How to invoke, See also, What it does, Caveman Help, Configure Default Mode, Deactivate (+4 more)
 
-### Community 129 - "Source registry"
-Cohesion: 0.14
-Nodes (13): 1. Florida candidate file (Division of Elections), 2. Florida election dates (Department of State), 3. FEC (federal campaign finance), 4. GovTrack (federal voting records), 5. MBFC ratings API (outlet vetting), 6. Ballotpedia (race and legislation context), 7. US Digital Registry (official government accounts), Build order (+5 more)
+### Community 129 - "[measureId]/page.tsx"
+Cohesion: 0.24
+Nodes (9): 6. Day 2 — amendments and urgency, generateMetadata(), generateStaticParams(), MeasurePage(), revalidate, MeasureResourceLadder(), MeasureThreshold(), RaceCompare() (+1 more)
 
 ### Community 130 - "R3 — Election News Curator — DRY RUN (validation)"
 Cohesion: 0.14
 Nodes (13): 0. Migration gate — STOP CONDITION HIT, 1. Scope read (read-only, as instructed), 2. key_dates verification — NO MISMATCH FOUND, 3.1 Miami-Dade — Primary early voting schedule set, 3.2 Broward — Early voting periods for Primary and General set, 3.3 Hillsborough — 27 early voting sites confirmed for Primary, 3.4 Statewide — HB 991 signed into law (ballot/voting-system rule changes), 3.5 Verbatim SQL for the four items above (WOULD RUN — not executed) (+5 more)
 
 ### Community 131 - "Civic Awareness Project (CAP) — Balance Audit Specification"
-Cohesion: 0.14
-Nodes (13): 0. Governing Principles (inherited), 1. Architecture — one core, two adapters, 2. Inputs, 3. Logic, 4. Output — PASS (no flags), 5. Output — HALT (with a flag also raised), 6. Halt behavior, 7. The published artifact — Symmetric Scrutiny Log (+5 more)
+Cohesion: 0.08
+Nodes (24): 0. Governing Principles (inherited), 1. Architecture — one core, two adapters, 2. Inputs, 3. Logic, 4. Output — PASS (no flags), 5. Output — HALT (with a flag also raised), 6. Halt behavior, 7. The published artifact — Symmetric Scrutiny Log (+16 more)
 
 ### Community 132 - "Civic Awareness Project (CAP) — Data Schema v1"
-Cohesion: 0.14
-Nodes (13): 10. Open items carried to the tool/agent builds, 1. Race, 2. Candidate, 4. social_platform  *(new reference table)*, 6.1 claim_source  *(new join table)*, 6.2 Issue  *(new)*, 6.3 Position  *(new)*, 6. Claim (+5 more)
+Cohesion: 0.13
+Nodes (14): 0. What changed from PRD §7 (summary), 10. Open items carried to the tool/agent builds, 1. Race, 2. Candidate, 4. social_platform  *(new reference table)*, 6.1 claim_source  *(new join table)*, 6.2 Issue  *(new)*, 6.3 Position  *(new)* (+6 more)
 
 ### Community 133 - "Steps"
 Cohesion: 0.18
@@ -867,20 +888,20 @@ Cohesion: 0.14
 Nodes (13): 1. Ingest (`scripts/candidate-site-ingest.ts`), 2. Ask (`scripts/candidate-policy-noul.ts`), Comparing two runs, Reading the output, The claim this pipeline makes, The manifest, The threshold is inherited, not tuned, Two steps, two failure modes kept apart (+5 more)
 
 ### Community 136 - "Data Architecture — Primary → General"
-Cohesion: 0.14
-Nodes (13): 0. What does NOT change, 1. The one decision that gates everything, 2. Schema changes — migration `0013_general_election.sql`, 3. Balance-audit population policy, 4. Read model, 5. RLS, 6. Deferred (YAGNI register), D1 — FOUNDER DECISION, 2026-09-07 (A0 answered) (+5 more)
+Cohesion: 0.15
+Nodes (12): 0. What does NOT change, 1. The one decision that gates everything, 2. Schema changes — migration `0013_general_election.sql`, 3. Balance-audit population policy, 5. RLS, 6. Deferred (YAGNI register), D1 — FOUNDER DECISION, 2026-09-07 (A0 answered), D1 — Who is in the audited population? **(founder call, blocks publication)** (+4 more)
 
 ### Community 137 - "Map-coverage handoff — what "we cover this area" actually means"
-Cohesion: 0.14
-Nodes (13): 1. The headline, 2. The other direction — TASK-060, and why it is stuck, 3. Corrections to TASK-060 as written, 4. Where the four-metro assumption is baked in, 5. Decisions, 6. What the next session should do, 7. Verification notes, 8. Paste-ready prompt for the next session (+5 more)
+Cohesion: 0.15
+Nodes (12): 1. The headline, 2. The other direction — TASK-060, and why it is stuck, 3. Corrections to TASK-060 as written, 5. Decisions, 6. What the next session should do, 7. Verification notes, 8. Paste-ready prompt for the next session, Done-note — §1, the honest answer (2026-09-09) (+4 more)
 
-### Community 138 - "candidate-site-ingest.ts"
-Cohesion: 0.14
-Nodes (10): all, args, lines, links, outPath, pageLimit, pages, passages (+2 more)
+### Community 138 - "briefs.ts"
+Cohesion: 0.16
+Nodes (16): 9. Open questions, CandidateBrief(), buildIssueBlock(), CandidateBriefData, CandidateDetail, ClaimRow, fetchCandidateContact(), getCandidateContact() (+8 more)
 
-### Community 139 - "Source"
-Cohesion: 0.17
-Nodes (13): 10. Schema impacts (`CAP_PRD_v1.md` §7), 12. KPI and pipeline impacts, 0. How to Use This Document, 10. Risks & Mitigations, 0. How to Use This Document, 10. Risks & Mitigations, 1. Overview, Magic Moment (+5 more)
+### Community 139 - "IssueSection.tsx"
+Cohesion: 0.20
+Nodes (9): buckets, IssueSection(), SourceLinks(), PolicyAreaChip(), policyAreaHref(), styles, VerdictBadge(), SourcedClaim (+1 more)
 
 ### Community 140 - "R2 — Contact & Race Info Refresher — Run Report"
 Cohesion: 0.15
@@ -895,8 +916,8 @@ Cohesion: 0.36
 Nodes (4): The load-bearing guard on claim_write (T9) for the Profiler. Args: claim: the…, validate_claim_write(), claim(), TestClaimWrite
 
 ### Community 143 - "Civic Awareness Project (CAP) — Agent Build Plan"
-Cohesion: 0.15
-Nodes (12): 2. Agent 1 — The Profiler ("What They Say"), 3. Agent 2 — The Record Agent ("What They've Done"), 4. Agent 3 — The Fact-Checker ("What Is True"), 5. Orchestrator / Synthesis Layer (deterministic — NO system prompt), 6. Coverage check — plan vs. PRD/Tool Spec, 7. Open Items carried into the agent builds, Civic Awareness Project (CAP) — Agent Build Plan, Companion to CAP_PRD_v1.0, CAP_MCP_Tool_Spec_v1.0, CAP_Logging_Schema_v1.0, CAP_Balance_Audit_Spec_v1.1, CAP_Schema_v1.0 (+4 more)
+Cohesion: 0.17
+Nodes (11): 2. Agent 1 — The Profiler ("What They Say"), 3. Agent 2 — The Record Agent ("What They've Done"), 4. Agent 3 — The Fact-Checker ("What Is True"), 5. Orchestrator / Synthesis Layer (deterministic — NO system prompt), 6. Coverage check — plan vs. PRD/Tool Spec, Civic Awareness Project (CAP) — Agent Build Plan, Companion to CAP_PRD_v1.0, CAP_MCP_Tool_Spec_v1.0, CAP_Logging_Schema_v1.0, CAP_Balance_Audit_Spec_v1.1, CAP_Schema_v1.0, Control flow (+3 more)
 
 ### Community 144 - "_FakeCallResult"
 Cohesion: 0.26
@@ -915,16 +936,16 @@ Cohesion: 0.15
 Nodes (12): 1. What was asked, and what was delivered, 3. Files and how they were made, 4.1 Get the county half of each ballot (late September), 4.2 Rebuild `zip_district` for the 2026 map (engineering, Stream P owns migrations), 4.3 Parser: map `XTL` and `DEC` before the next live run, 4.4 Read model: "not printed" state for unopposed races, 4.5 Retention and amendments (content), 4.6 Then the items the Data Streams page already lists (+4 more)
 
 ### Community 148 - "Scoping the pipeline run that unblocks publication"
-Cohesion: 0.15
-Nodes (12): 0. A naming correction, because it changes what you'd be approving, 10. What this does not cover, 1. Why publication is blocked, 2. What the run actually is, 3. Volume, 4. Cost, 5. What is built vs what has to be written, 6. Prerequisites (Brief 00 — founder-owned, blocks everything) (+4 more)
+Cohesion: 0.17
+Nodes (11): 0. A naming correction, because it changes what you'd be approving, 10. What this does not cover, 2. What the run actually is, 3. Volume, 4. Cost, 5. What is built vs what has to be written, 6. Prerequisites (Brief 00 — founder-owned, blocks everything), 7. Gates that stay in the way, by design (+3 more)
 
 ### Community 149 - "verify-notifications-schema.mjs"
-Cohesion: 0.15
-Nodes (11): @supabase/supabase-js, anon, dayOf, envLocal, EVENTS, returnT1, returnT7, root (+3 more)
+Cohesion: 0.17
+Nodes (10): anon, dayOf, envLocal, EVENTS, returnT1, returnT7, root, service (+2 more)
 
 ### Community 150 - "sentry-scrub.ts"
-Cohesion: 0.32
-Nodes (10): beforeBreadcrumb(), beforeSend(), beforeBreadcrumb(), beforeSend(), AnyEvent, dropAddressBody(), scrubBreadcrumb(), scrubEvent() (+2 more)
+Cohesion: 0.40
+Nodes (8): beforeBreadcrumb(), beforeSend(), AnyEvent, dropAddressBody(), scrubBreadcrumb(), scrubEvent(), scrubString(), scrubValue()
 
 ### Community 151 - "Caveman Compress"
 Cohesion: 0.17
@@ -938,13 +959,13 @@ Nodes (10): caveman, Example output, How to invoke, See also, What it does, Auto
 Cohesion: 0.17
 Nodes (11): 0. Governing Principles (inherited), 1. Log Record Format, 2. Storage Backend — RESOLVED, 4. Queryability for the Symmetric Scrutiny Report, 5. Open Items, Append-only enforcement, Civic Awareness Project (CAP) — Logging Schema Specification, Companion to CAP_PRD_v1.0 and CAP_MCP_Tool_Spec_v1.0 (+3 more)
 
-### Community 154 - "TestLiveBackendLoop"
-Cohesion: 0.24
-Nodes (5): ok_dispatch(), SDK available, credential absent -> refuse. This is the case the old test could…, Refusing a box authenticated by token rather than key would be a false…, A fake S1 dispatch that records calls and returns ok results., TestLiveBackendLoop
+### Community 154 - "verify-measure-balance.ts"
+Cohesion: 0.20
+Nodes (7): 7. Verification, ids(), Row, rankResources(), RESOURCE_TIER, StatusEmbed, PublicationStatus
 
 ### Community 155 - "Roadmap — Operator Console (`/admin`)"
-Cohesion: 0.17
-Nodes (10): Build Philosophy (additions), Phase A0: Prerequisites (founder-gated — no code), Phase A1: Foundation — ops schema, auth, shell, Phase A2: Monitor, Phase A3: Submit & Review, Phase A4: Agent Control Plane, Roadmap — Operator Console (`/admin`), @supabase/ssr (+2 more)
+Cohesion: 0.22
+Nodes (8): Build Philosophy (additions), Phase A0: Prerequisites (founder-gated — no code), Phase A1: Foundation — ops schema, auth, shell, Phase A2: Monitor, Phase A3: Submit & Review, Phase A4: Agent Control Plane, Roadmap — Operator Console (`/admin`), proxy()
 
 ### Community 156 - "Which issue list do news tags come from? — founder review"
 Cohesion: 0.17
@@ -987,12 +1008,12 @@ Cohesion: 0.18
 Nodes (10): §0 Ground rules (read before any task), §1 Phase A — PWA shell + election data + daily email reminders (one PR), §2 Phase B — web push + parity page (one PR, after A merges), §3 Phase C — SMS (one PR; **gated, do not start** until F2 approved and env set), §4 Founder-only tasks (agents: check as prerequisites, never perform), §5 Environment variables, §6 Scope guards — agents must NOT, §7 Working agreement (+2 more)
 
 ### Community 166 - "CAP Runtime PRD — S1 Tool Layer · S2 Agent Runtime · S3 Orchestrator"
-Cohesion: 0.18
-Nodes (10): 10. Risks & Open Questions, 1. Purpose & Background, 2. Goals & Success Metrics, 3. Non-Goals, 4. Architecture Overview, 6. S2 — Agent Runtime, 8. Verification Strategy, 9. Dependencies & Founder Gates (+2 more)
+Cohesion: 0.12
+Nodes (16): 10. Risks & Open Questions, 2. Goals & Success Metrics, 3. Non-Goals, 4. Architecture Overview, 6. S2 — Agent Runtime, 8. Verification Strategy, 9. Dependencies & Founder Gates, ADR-R1 (embedded): how agent identity binds to the wrapper (+8 more)
 
-### Community 167 - "NotConfigured"
-Cohesion: 0.18
-Nodes (8): _default_connect(), Real psycopg connection with dict rows, imported lazily so the module loads…, BudgetExceeded, BudgetGuard, NotConfigured, RuntimeError, A required runtime dependency (API key / SDK / Python) is absent., Called before each tool dispatch; raises when a cap is reached so the run stops…
+### Community 167 - "Source"
+Cohesion: 0.17
+Nodes (13): 10. Schema impacts (`CAP_PRD_v1.md` §7), 12. KPI and pipeline impacts, 0. How to Use This Document, 10. Risks & Mitigations, 0. How to Use This Document, 10. Risks & Mitigations, 1. Overview, Magic Moment (+5 more)
 
 ### Community 169 - "Agent Brief — the Candidate News session"
 Cohesion: 0.18
@@ -1007,8 +1028,8 @@ Cohesion: 0.18
 Nodes (11): devDependencies, @electric-sql/pglite, eslint, eslint-config-next, prettier, tailwindcss, @tailwindcss/postcss, @types/node (+3 more)
 
 ### Community 172 - "verify-news-feed.ts"
-Cohesion: 0.18
-Nodes (9): distinct, mixed, noUrl, one, ordered, row(), tagged, three (+1 more)
+Cohesion: 0.17
+Nodes (10): distinct, mixed, noUrl, one, ordered, row(), tagged, three (+2 more)
 
 ### Community 173 - "caveman-explore/package.json"
 Cohesion: 0.20
@@ -1026,17 +1047,17 @@ Nodes (9): 0. Migration gate — STOP CONDITION HIT, 1. Scope read (read-only, a
 Cohesion: 0.20
 Nodes (9): 0. Migration gate — STOP CONDITION HIT, 1. Scope read (read-only, as instructed), 2. A second, independent blocker: candidate identities are fixture data, not real people, 3. Per-candidate results (all 26, symmetric coverage, honest zeros), 4. Illustrative SQL — what R1 WOULD run, once §0 and §2 are resolved, 5. Stories skipped, and why, 6. Flag for Fact-Checker, 7. Summary (+1 more)
 
-### Community 177 - "ToolLayer"
-Cohesion: 0.31
-Nodes (5): Any, Dispatch middleware — the order of operations every tool call goes through. 1.…, One instance per S1 process; identity fixed at construction (ADR-R1)., Write the action_log row. Raises LogWriteError on failure — callers must let…, ToolLayer
+### Community 177 - "createServiceClient"
+Cohesion: 0.11
+Nodes (23): 4. Data: `block_district`, Generation, Independent verification, What the cross-check measured, DELETE(), isMissingRelation(), RequestRow, toRequest() (+15 more)
 
 ### Community 178 - "Self-hosted Pelias — Florida"
 Cohesion: 0.20
 Nodes (9): Attribution, Bring it up, Developing without a 50GB import, Self-hosted Pelias — Florida, Verified, and not, What is in this directory, What to expect, Why interpolation is off (+1 more)
 
-### Community 179 - "System Design — Operator Console"
-Cohesion: 0.20
-Nodes (9): § 1 Requirements Summary, § 2 High-Level Design, § 3 Data Model (migration `0006_admin_ops.sql`), § 4 API Contracts, § 5 Deep Dives, § 6 Scale & Reliability, § 7 Trade-off Analysis, § 8 Revisit As It Grows (+1 more)
+### Community 179 - "benchmark.py"
+Cohesion: 0.43
+Nodes (6): benchmark_pair(), count_tokens(), main(), print_table(), Path, tiktoken
 
 ### Community 180 - "Local district boundaries — county commission and school board"
 Cohesion: 0.20
@@ -1066,9 +1087,9 @@ Nodes (9): Audience, Brand Voice, Business, Founder, Product, Purpose, Tech Stac
 Cohesion: 0.20
 Nodes (9): Before → after (from the metadata change), Canonical lines (use these verbatim), Do / Don't, KYV Voice & Tone, Register map (where the voice dials up vs. down), The shift, in one line, Two things to confirm (flagged, not decided), Voice principles (+1 more)
 
-### Community 187 - "verify-election-seed.mjs"
-Cohesion: 0.20
-Nodes (8): db, EVENT_TYPES, EXPECTED_RULE, keys, migrationsDir, root, rows, seedFile
+### Community 187 - "ref_node_url"
+Cohesion: 0.10
+Nodes (18): @electric-sql/pglite, ref_node_url, check(), db, migrationsDir, n(), root, db (+10 more)
 
 ### Community 188 - "verify-shared-ballot.ts"
 Cohesion: 0.22
@@ -1082,9 +1103,9 @@ Nodes (8): compose_sms(), profile_updates_from_audit(), Map a balance_audit resu
 Cohesion: 0.22
 Nodes (8): 0. Migration gate — RESOLVED since last dry run, 1. Scope read (read-only), 2. Second blocker (unchanged from 2026-07-03): candidate roster is fixture data, not real people, 3. Per-candidate results (all 26, symmetric coverage, honest zeros), 4. Stories skipped, and why, 5. Flag for Fact-Checker, 6. Summary, R1 — Candidate News Curator — Run Report
 
-### Community 192 - "check_tool_access"
-Cohesion: 0.36
-Nodes (3): check_tool_access(), Grant/deny a tool call for the Fact-Checker (Tool Spec §2)., TestToolAccess
+### Community 192 - "ReviewItemCard.tsx"
+Cohesion: 0.18
+Nodes (10): DecisionControls(), decide(), onApprove(), asText(), Body(), DiffBlock(), KIND_CHIP, KIND_LABEL (+2 more)
 
 ### Community 193 - "Data Ingest — Primary → General"
 Cohesion: 0.22
@@ -1094,9 +1115,9 @@ Nodes (8): 0. What does NOT change, 2. T1 changes, 3. Field gaps, and which exis
 Cohesion: 0.22
 Nodes (8): 1. The headline, 2. The decision: two tiers, 3. The safety argument, 5. Go-live sequence, 6. Re-run the numbers, 7. What is still NOT visible, and why, 8. Open questions for the founder, Decision record — the `listed` tier: the roster goes up before the briefs
 
-### Community 195 - "Prompt begins"
-Cohesion: 0.22
-Nodes (9): Context worth reading if you have the repository, Counties currently covered, Deliverables, Do not, Prompt begins, The outlets already in the file, Two rules that decide whether your work is usable, What the system does with your answer (+1 more)
+### Community 195 - "TestLiveBackendLoop"
+Cohesion: 0.24
+Nodes (5): ok_dispatch(), SDK available, credential absent -> refuse. This is the case the old test could…, Refusing a box authenticated by token rather than key would be a false…, A fake S1 dispatch that records calls and returns ok results., TestLiveBackendLoop
 
 ### Community 196 - "Policy areas for candidate issues"
 Cohesion: 0.22
@@ -1126,9 +1147,9 @@ Nodes (7): Manage eval-gated experiments, Non-negotiable gates, Step 1 — Load 
 Cohesion: 0.25
 Nodes (7): Failure templates (use verbatim, filled in — never soften), Rules (non-negotiable), Step 1 — Find every live LLM callsite, Step 2 — Pick the app slug, Step 3 — Wire each callsite, Step 4 — Verify with one real request, Step 5 — Report
 
-### Community 203 - "6. System Architecture & Pipeline"
-Cohesion: 0.25
-Nodes (8): 6.1 Intake & Resolution (Deterministic Layer), 6.2 Agent Execution (AI Layer), 6.3 Synthesis & Composition, 6.4 Delivery, 6. System Architecture & Pipeline, Agent 1: The Profiler — *The Self-Portrait*, Agent 2: The Record Agent — *What They've Done*, Agent 3: The Fact-Checker — *The Holy Grail*
+### Community 203 - "queue/page.tsx"
+Cohesion: 0.20
+Nodes (9): dynamic, metadata, QueuePage(), Search, KINDS, QueueFilters(), SOURCES, STATUSES (+1 more)
 
 ### Community 204 - "R4 — Ops Overview Digest — LIVE RUN"
 Cohesion: 0.25
@@ -1142,17 +1163,17 @@ Nodes (7): 0. Read-only compliance, 1. Sections regenerated, 2. Thresholds cross
 Cohesion: 0.25
 Nodes (7): 1. Scope read (read-only), 2. Blocker (unchanged since 2026-07-06 and 2026-07-03): candidate roster is fixture data, not real people, 3. Per-candidate results (all 26, symmetric coverage, honest zeros), 4. Stories skipped, and why, 5. Flag for Fact-Checker, 6. Summary, R1 — Candidate News Curator — Run Report
 
-### Community 207 - "6. System Architecture & Pipeline"
-Cohesion: 0.25
-Nodes (8): 6.1 Intake & Resolution (Deterministic Layer), 6.2 Agent Execution (AI Layer), 6.3 Synthesis & Composition, 6.4 Delivery, 6. System Architecture & Pipeline, Agent 1: The Profiler — *The Self-Portrait*, Agent 2: The Record Agent — *What They've Done*, Agent 3: The Fact-Checker — *The Holy Grail*
+### Community 207 - "[candidateId]/page.tsx"
+Cohesion: 0.26
+Nodes (10): CandidatePage(), generateMetadata(), revalidate, CandidateListing(), ListedCandidateCard(), fetchCandidateDetail(), getCandidateDetail(), CandidateListing (+2 more)
 
 ### Community 209 - "Local session runbook — the network-bound tasks"
 Cohesion: 0.25
 Nodes (7): Do this first — B1 (≈2 minutes) — ✅ done 2026-09-06, Local session runbook — the network-bound tasks, Paste-ready session prompt, Sending results back, The `cantype` diff is not a write-in test, The other local-only tasks, The three questions the output has to answer
 
 ### Community 210 - "Handoff — the ingest order: what reaches Jev, and what never does"
-Cohesion: 0.29
-Nodes (7): 1. The headline, 2. Two corrections to earlier framing, 4. The checklist for the next session, 5. The open question: political, but names no candidate, 7. What not to do, Handoff — the ingest order: what reaches Jev, and what never does, unmatched()
+Cohesion: 0.13
+Nodes (18): 1. The headline, 2. Two corrections to earlier framing, 3. Verified here vs. needs a running system, 4. The checklist for the next session, 5. The open question: political, but names no candidate, 6. Read order, 7. What not to do, Handoff — the ingest order: what reaches Jev, and what never does (+10 more)
 
 ### Community 211 - "Things to confirm"
 Cohesion: 0.25
@@ -1162,17 +1183,17 @@ Nodes (7): TC-0 — Vercel is the only PR check, and it does not run the Python 
 Cohesion: 0.25
 Nodes (8): 2. Technical Architecture, Architecture Overview, Chosen Stack, Cost Estimate, Infrastructure & Deployment, Repository Structure, Security Considerations, Stack Integration Guide
 
-### Community 213 - "news-characterize-engines.ts"
-Cohesion: 0.32
-Nodes (6): @typesafe-ai/sdk, CharacterizeEngine, CharacterizeResult, JEV_MODEL_ID, EngineState, NoulQuestion
+### Community 213 - "NotConfigured"
+Cohesion: 0.18
+Nodes (8): _default_connect(), Real psycopg connection with dict rows, imported lazily so the module loads…, BudgetExceeded, BudgetGuard, NotConfigured, RuntimeError, A required runtime dependency (API key / SDK / Python) is absent., Called before each tool dispatch; raises when a cap is reached so the run stops…
 
-### Community 214 - "verify-coverage.ts"
-Cohesion: 0.25
-Nodes (5): input, Race, resolveSrc, statewide, yourRaces
+### Community 214 - "5. News intake: sweep a fixed corpus, don't search per candidate"
+Cohesion: 0.33
+Nodes (6): 5. News intake: sweep a fixed corpus, don't search per candidate, Cadence — biweekly is now too slow, Shape of the sweep, The honest cost, What this is not, Why, in two arguments
 
-### Community 215 - "verify-quiz-ungated.ts"
-Cohesion: 0.25
-Nodes (4): lib, quiz, ROOT, route
+### Community 215 - "check_tool_access"
+Cohesion: 0.36
+Nodes (3): check_tool_access(), Grant/deny a tool call for the Fact-Checker (Tool Spec §2)., TestToolAccess
 
 ### Community 216 - "Evaluate an optimization observation"
 Cohesion: 0.29
@@ -1186,17 +1207,21 @@ Nodes (5): caveman-stats, Example output, How to invoke, See also, What it does
 Cohesion: 0.29
 Nodes (6): Acceptance, CAP Deep-Research Prompt — "Ballot Anatomy, Florida 2026", The prompt, Variables (fill before running), What happens next, Why this runs first
 
-### Community 222 - "doe-code-dump.py"
-Cohesion: 0.33
-Nodes (4): collections, B1 (docs/general-election/data-ingest.md §1): dump the DoE export's raw code…, selftest(), summarize()
+### Community 221 - "Prompt begins"
+Cohesion: 0.22
+Nodes (9): Context worth reading if you have the repository, Counties currently covered, Deliverables, Do not, Prompt begins, The outlets already in the file, Two rules that decide whether your work is usable, What the system does with your answer (+1 more)
 
-### Community 223 - "C. The six panels"
+### Community 222 - "sys"
 Cohesion: 0.29
-Nodes (7): 1. Agent runs — `agent_run` registry (AFR-002), 2. Freshness — logistics stamps, 3. Feed health — `news_item` + neutrality verdict (AFR-003), 4. Pipeline state, 5. Waiting on Jason — pending `review_item` count, 6. Open risks, C. The six panels
+Nodes (5): collections, B1 (docs/general-election/data-ingest.md §1): dump the DoE export's raw code…, selftest(), summarize(), sys
 
-### Community 224 - "Run 1 — Foundation (Phase A1) · run FIRST, alone"
-Cohesion: 0.29
-Nodes (6): Before you start, Definition of done, Founder gates touching this run, Run 1 — Foundation (Phase A1) · run FIRST, alone, Scope, Tasks (mark each `- [x]` in `docs/admin-dashboard/roadmap.md` as you finish; keep its Status line accurate)
+### Community 223 - "6. System Architecture & Pipeline"
+Cohesion: 0.25
+Nodes (8): 6.1 Intake & Resolution (Deterministic Layer), 6.2 Agent Execution (AI Layer), 6.3 Synthesis & Composition, 6.4 Delivery, 6. System Architecture & Pipeline, Agent 1: The Profiler — *The Self-Portrait*, Agent 2: The Record Agent — *What They've Done*, Agent 3: The Fact-Checker — *The Holy Grail*
+
+### Community 224 - "6. System Architecture & Pipeline"
+Cohesion: 0.25
+Nodes (8): 6.1 Intake & Resolution (Deterministic Layer), 6.2 Agent Execution (AI Layer), 6.3 Synthesis & Composition, 6.4 Delivery, 6. System Architecture & Pipeline, Agent 1: The Profiler — *The Self-Portrait*, Agent 2: The Record Agent — *What They've Done*, Agent 3: The Fact-Checker — *The Holy Grail*
 
 ### Community 225 - "Run 2 — Monitor + Submit & Review (Phases A2 + A3, combined) · after Run 1"
 Cohesion: 0.29
@@ -1206,13 +1231,13 @@ Nodes (6): Before you start, Definition of done, Founder gates touching this run
 Cohesion: 0.29
 Nodes (6): Crawlability, for the ingest step, Method, `official_site` for FL-GOV-general — what was collected and how, Still open, The one that is empty, and why that is the right answer, The rows
 
-### Community 227 - "8. Follow-up — taxonomy v5 (2026-09-21)"
-Cohesion: 0.29
-Nodes (7): 8. Follow-up — taxonomy v5 (2026-09-21), Alias widening, held down on purpose, Deliberately not added, `KYV8` has evidence against its urgency, The `KYV8` parent is a judgment call, and a cheap one to reverse today, What the re-run should show, Why `KYV7` rather than leaving the term on `A2`
+### Community 227 - "ToolLayer"
+Cohesion: 0.43
+Nodes (4): Any, One instance per S1 process; identity fixed at construction (ADR-R1)., Write the action_log row. Raises LogWriteError on failure — callers must let…, ToolLayer
 
-### Community 228 - "@sentry/nextjs"
-Cohesion: 0.29
-Nodes (4): onRequestError(), register(), nextConfig, @sentry/nextjs
+### Community 228 - "sentry.server.config.ts"
+Cohesion: 0.24
+Nodes (6): onRequestError(), register(), nextConfig, @sentry/nextjs, beforeBreadcrumb(), beforeSend()
 
 ### Community 229 - "caveman-discover/SKILL.md"
 Cohesion: 0.33
@@ -1222,21 +1247,21 @@ Nodes (5): Step 1 — Inventory the workflows, Step 2 — Name them, Step 3 — 
 Cohesion: 0.33
 Nodes (5): CAP Deep-Research Prompt — Issue Discovery (Stage 1), Handoff to Stage 2, Operator notes, The prompt, Variables (fill before running)
 
-### Community 231 - "7. Data Schema"
-Cohesion: 0.33
-Nodes (6): 7. Data Schema, Candidate, Claim, Profile, Race, Source
+### Community 231 - "B1 results — live run 2026-09-06"
+Cohesion: 0.25
+Nodes (8): 1. Three defects that block the general run, B1 results — live run 2026-09-06, I1 — No status filter: defeated primary candidates enter the general race, I2 — Write-ins are indistinguishable in the parsed columns, Per-target-race tier counts, Q2 — is there a write-in column, Q3 — party codes beyond REP/DEM/NPA, Two corrections the run surfaced
 
 ### Community 232 - "check_fetch"
 Cohesion: 0.40
 Nodes (4): check_fetch(), Any, Wrapper-facing pass/block decision for web_search (T5) / fetch_source (T6) when…, TestCheckFetch
 
 ### Community 233 - "Agent 3 — The Fact-Checker ("What Is True")"
-Cohesion: 0.33
-Nodes (5): Agent 3 — The Fact-Checker ("What Is True"), Design decisions (recorded, beyond-spec or spec-ambiguous), Integration notes for the wrapper, Status (2026-07-01), What the Fact-Checker is
+Cohesion: 0.40
+Nodes (4): Agent 3 — The Fact-Checker ("What Is True"), Design decisions (recorded, beyond-spec or spec-ambiguous), Integration notes for the wrapper, Status (2026-07-01)
 
-### Community 234 - "7. Data Schema"
-Cohesion: 0.33
-Nodes (6): 7. Data Schema, Candidate, Claim, Profile, Race, Source
+### Community 234 - "verify-boundaries.mjs"
+Cohesion: 0.25
+Nodes (6): dir, LAYERS, loaded, mdc5, RACES, root
 
 ### Community 236 - "Run 3 — Agent Control Plane (Phase A4) · after Run 1"
 Cohesion: 0.33
@@ -1246,17 +1271,17 @@ Nodes (5): Before you start, Definition of done, Run 3 — Agent Control Plane (
 Cohesion: 0.33
 Nodes (5): Coverage by category, Coverage by issue, Outlets by how much tracked-issue news they carried, Read these zeros carefully, What the Florida press covered — corpus analysis
 
-### Community 238 - "Results: the ingest-order checklist, run against production"
-Cohesion: 0.33
-Nodes (5): 1. The finding that reframes the brief, 3. Stage 3 is a surname filter, not a political one, 4. Follow-ups (none done here: each is its own change), 5. How to reproduce, Results: the ingest-order checklist, run against production
+### Community 238 - "0006_admin_ops.sql"
+Cohesion: 0.36
+Nodes (7): admin_action, agent_run, agent_run_request, idx_agent_run_agent_time, idx_review_item_queue, review_item, uq_run_request_live
 
-### Community 239 - "7. Non-Functional Requirements"
-Cohesion: 0.33
-Nodes (6): 7. Non-Functional Requirements, Accessibility, Performance, Reliability, Scalability, Security
+### Community 239 - "8. Follow-up — taxonomy v5 (2026-09-21)"
+Cohesion: 0.29
+Nodes (7): 8. Follow-up — taxonomy v5 (2026-09-21), Alias widening, held down on purpose, Deliberately not added, `KYV8` has evidence against its urgency, The `KYV8` parent is a judgment call, and a cheap one to reverse today, What the re-run should show, Why `KYV7` rather than leaving the term on `A2`
 
-### Community 240 - "1. Corrections to the brief"
+### Community 240 - "7. Data Schema"
 Cohesion: 0.33
-Nodes (6): 1.1 An issue taxonomy already exists — twice, 1.2 The brief's single output schema should be two units, 1.3 "Temperature 0" now selects the model, 1.4 Option B needs a migration, not just a payload shape, 1.5 The next free migration number is 0027, 1. Corrections to the brief
+Nodes (6): 7. Data Schema, Candidate, Claim, Profile, Race, Source
 
 ### Community 241 - "pelias-stub.mjs"
 Cohesion: 0.40
@@ -1278,21 +1303,17 @@ Nodes (4): CAP Deep-Research Prompt — "Where They Stand", Notes for the operat
 Cohesion: 0.40
 Nodes (4): CAP Incumbent Official-Account Verification (2026), Federal officeholders (US House), Flags to resolve, State officeholders
 
-### Community 246 - "8. UX Flow"
-Cohesion: 0.40
-Nodes (5): 8. UX Flow, Step 1: User Input, Step 2: Jurisdiction Resolution, Step 3: SMS Response, Step 4: Web Page — The Brief
-
-### Community 248 - "8. UX Flow"
-Cohesion: 0.40
-Nodes (5): 8. UX Flow, Step 1: User Input, Step 2: Jurisdiction Resolution, Step 3: SMS Response, Step 4: Web Page — The Brief
-
 ### Community 249 - "Brief 02 — S2-02 / S2-03 live acceptance: Record + Fact-Checker"
-Cohesion: 0.40
-Nodes (5): Brief 02 — S2-02 / S2-03 live acceptance: Record + Fact-Checker, Goal, S2-02 — Record, S2-03 — Fact-Checker, Watch-outs
+Cohesion: 0.50
+Nodes (4): Brief 02 — S2-02 / S2-03 live acceptance: Record + Fact-Checker, Goal, S2-03 — Fact-Checker, Watch-outs
 
 ### Community 250 - "Brief 03 — S3: the orchestrator (final phase)"
 Cohesion: 0.40
 Nodes (5): Brief 03 — S3: the orchestrator (final phase), Done when, Goal, Non-negotiable invariants (from PRD S3-R1…R5), Tasks (in order)
+
+### Community 251 - "7. Data Schema"
+Cohesion: 0.33
+Nodes (6): 7. Data Schema, Candidate, Claim, Profile, Race, Source
 
 ### Community 252 - "_FakeTool"
 Cohesion: 0.40
@@ -1302,17 +1323,9 @@ Nodes (3): _FakeTool, Duck-typed MCP tool object (as `types.Tool`: .name/.descri
 Cohesion: 0.40
 Nodes (4): Ballots by ZIP — derived data for the 2026 general election, Files, Findings that change the app, Rebuilding
 
-### Community 254 - "7. The election news feed, filtered by county"
-Cohesion: 0.40
-Nodes (5): 7. The election news feed, filtered by county, API and UI, Honest limit, Most of the switcher already exists, The one schema addition
-
 ### Community 255 - "scripts"
 Cohesion: 0.40
 Nodes (5): scripts, build, dev, lint, start
-
-### Community 259 - "4. Data: `block_district`"
-Cohesion: 0.50
-Nodes (4): 4. Data: `block_district`, Generation, Independent verification, What the cross-check measured
 
 ### Community 260 - ".prettierrc.json"
 Cohesion: 0.50
@@ -1322,25 +1335,61 @@ Nodes (3): semi, singleQuote, trailingComma
 Cohesion: 0.50
 Nodes (3): crons, framework, $schema
 
+### Community 273 - "Run 4 — Site Metrics (Phase A5) · after Run 1, fully parallel-safe"
+Cohesion: 0.33
+Nodes (5): Before you start, Definition of done, Run 4 — Site Metrics (Phase A5) · after Run 1, fully parallel-safe, Scope, Tasks (mark `- [x]` in `docs/admin-dashboard/roadmap.md`; keep Status line accurate)
+
+### Community 283 - "7. Non-Functional Requirements"
+Cohesion: 0.33
+Nodes (6): 7. Non-Functional Requirements, Accessibility, Performance, Reliability, Scalability, Security
+
+### Community 284 - "1. Corrections to the brief"
+Cohesion: 0.33
+Nodes (6): 1.1 An issue taxonomy already exists — twice, 1.2 The brief's single output schema should be two units, 1.3 "Temperature 0" now selects the model, 1.4 Option B needs a migration, not just a payload shape, 1.5 The next free migration number is 0027, 1. Corrections to the brief
+
+### Community 285 - "0012_measure_function_search_path.sql"
+Cohesion: 0.33
+Nodes (4): public.measure_argument, public.enforce_published_measure_balance(), public.measure_sides_balanced(), public.measure_publication
+
+### Community 286 - "news-eval-pool.ts"
+Cohesion: 0.33
+Nodes (4): args, days, perOutlet, withFeeds
+
+### Community 287 - "8. UX Flow"
+Cohesion: 0.40
+Nodes (5): 8. UX Flow, Step 1: User Input, Step 2: Jurisdiction Resolution, Step 3: SMS Response, Step 4: Web Page — The Brief
+
+### Community 288 - "8. UX Flow"
+Cohesion: 0.40
+Nodes (5): 8. UX Flow, Step 1: User Input, Step 2: Jurisdiction Resolution, Step 3: SMS Response, Step 4: Web Page — The Brief
+
+### Community 292 - "0007_notifications.sql"
+Cohesion: 0.67
+Nodes (3): election_event, notification_send_log, uq_election_event_scope
+
+### Community 293 - "0009_action_log_roles.sql"
+Cohesion: 0.83
+Nodes (3): action_log, idx_log_guard, idx_log_race_candidate
+
 ## Knowledge Gaps
-- **1731 isolated node(s):** `name`, `version`, `license`, `private`, `type` (+1726 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 2462 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **31 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **1764 isolated node(s):** `name`, `version`, `license`, `private`, `type` (+1759 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 2539 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **72 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `balance_audit_core()` connect `balance_audit_core` to `balance_audit_core.py`, `Model characterization of swept articles — design`, `orchestrator_core.py`, `Characterizer evaluation — 2026-09-18`, `YourRaces.tsx`, `News Fairness & Opinion Labelling`, `Candidate News — PRD`, `fetch_source`, `CandidateNews.tsx`, `Store`, `verify-news-characterize.ts`, `Stream P — Pipeline & schema`?**
-  _High betweenness centrality (0.153) - this node is a cross-community bridge._
-- **Why does `next` connect `next` to `app.ts`, `verify-no-stored-location.ts`, `monitor.ts`, `briefs.ts`, `[raceId]/page.tsx`, `news-sources.ts`, `Know Your Vote Design System`, `LocationEntry.tsx`, `voting-info/route.ts`, `Card`, `resolve.ts`, `Roadmap — Operator Console (`/admin`)`, `createServiceClient`, `react`, `news-issues.ts`, `YourRaces.tsx`, `requireAdmin`, `AgentsConsole.tsx`, `site.ts`, `style-check/page.tsx`, `decision/route.ts`, `Model characterization of swept articles — session brief`, `@sentry/nextjs`, `package.json`, `Operator Console — Developer Handoff`, `ReviewItemCard.tsx`?**
-  _High betweenness centrality (0.123) - this node is a cross-community bridge._
-- **Why does `8. Tasks` connect `YourRaces.tsx` to `usableOutlets`, `verify-news-enqueue.ts`, `verify-news-neutrality.ts`, `Model characterization of swept articles — design`, `balance_audit_core`, `Candidate News — PRD`, `CandidateNews.tsx`, `resolve.ts`, `decision/route.ts`?**
-  _High betweenness centrality (0.101) - this node is a cross-community bridge._
+- **Why does `balance_audit_core()` connect `balance_audit_core` to `balance_audit_core.py`, `Model characterization of swept articles — session brief`, `Model characterization of swept articles — design`, `orchestrator_core.py`, `Characterizer evaluation — 2026-09-18`, `News Fairness & Opinion Labelling`, `Candidate News — PRD`, `fetch_source`, `CandidateNews.tsx`, `logsink.py`, `createAnonServerClient`, `Stream P — Pipeline & schema`, `news-characterize-eval.ts`?**
+  _High betweenness centrality (0.164) - this node is a cross-community bridge._
+- **Why does `8. Tasks` connect `createAnonServerClient` to `usableOutlets`, `CandidateBrowser.tsx`, `verify-news-enqueue.ts`, `verify-news-neutrality.ts`, `Model characterization of swept articles — design`, `balance_audit_core`, `next`, `Candidate News — PRD`, `CandidateNews.tsx`, `decision/route.ts`?**
+  _High betweenness centrality (0.114) - this node is a cross-community bridge._
+- **Why does `next` connect `next` to `measures.ts`, `[measureId]/page.tsx`, `Address → district lookup, and a district the browser remembers`, `monitor.ts`, `schema.ts`, `news-sources.ts`, `Know Your Vote Design System`, `Quiz.tsx`, `IssueSection.tsx`, `guard.ts`, `briefs.ts`, `verify-address-resolve.ts`, `AgentsConsole.tsx`, `CandidateBrowser.tsx`, `address/resolve/route.ts`, `news-issues.ts`, `createServiceClient`, `listing.ts`, `submit/page.tsx`, `verify-no-stored-location.ts`, `queue/page.tsx`, `NewsFeed.tsx`, `[candidateId]/page.tsx`, `send-reminders/route.ts`, `site.ts`, `createAnonServerClient`, `decision/route.ts`, `Model characterization of swept articles — session brief`, `sentry.server.config.ts`, `package.json`, `@supabase/supabase-js`, `YourRaces.tsx`?**
+  _High betweenness centrality (0.100) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `createServiceClient()` (e.g. with `§0 Ground rules (read before any task)` and `5. Tasks`) actually correct?**
   _`createServiceClient()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `name`, `version`, `license` to the rest of the system?**
-  _1731 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `app.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.06151062867480778 - nodes in this community are weakly interconnected._
+  _1764 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `check` be split into smaller, more focused modules?**
-  _Cohesion score 0.05384615384615385 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07183673469387755 - nodes in this community are weakly interconnected._
+- **Should `Address → district lookup, and a district the browser remembers` be split into smaller, more focused modules?**
+  _Cohesion score 0.09 - nodes in this community are weakly interconnected._
