@@ -353,6 +353,11 @@ const CLOUDFLARE_BLOCK =
 const REAL_PAGE =
   `<!DOCTYPE html><html><head><title>Jennifer Jenkins for U.S. Congress</title></head>` +
   `<body><p>We use Cloudflare to keep this site fast. Just a moment of your time to sign up.</p></body></html>`;
+const TURNSTILE_PAGE =
+  `<!DOCTYPE html><html lang="en-US"><head><title>Home - Blaise Ingoglia for CFO</title>` +
+  `<link rel='dns-prefetch' href='//challenges.cloudflare.com' />` +
+  `<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script></head>` +
+  `<body><h1>KEEP FLORIDA FEARLESS WITH BLAISE</h1></body></html>`;
 
 check("SiteGround's meta-refresh interstitial is a challenge", looksLikeBotChallenge(SITEGROUND_REFRESH));
 check("SiteGround's Robot Challenge Screen is a challenge", looksLikeBotChallenge(SITEGROUND_SCREEN));
@@ -360,6 +365,8 @@ check("Cloudflare's 'Just a moment...' is a challenge", looksLikeBotChallenge(CL
 check("Cloudflare's 'Attention Required!' block is a challenge", looksLikeBotChallenge(CLOUDFLARE_BLOCK));
 check("a real page that merely mentions Cloudflare is not a challenge",
   !looksLikeBotChallenge(REAL_PAGE));
+check("a real page that embeds a Cloudflare Turnstile widget is not a challenge",
+  !looksLikeBotChallenge(TURNSTILE_PAGE));
 check("a robots.txt is not a challenge",
   !looksLikeBotChallenge("User-agent: *\nDisallow: /wp-admin/\n"));
 check("only the head of a document is examined",

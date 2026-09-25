@@ -566,7 +566,10 @@ const CHALLENGE_MARKERS: readonly RegExp[] = [
   /Checking the site connection security/i,
   /<title>\s*Just a moment\.\.\./i,
   /<title>\s*Attention Required! \| Cloudflare/i,
-  /challenges\.cloudflare\.com|cf-chl-|_cf_chl_opt/i,
+  // The interstitial's own script and markup. Not the bare host
+  // challenges.cloudflare.com: a real page that embeds a Turnstile widget on
+  // its sign-up form names it too (blaiseforflorida.com dns-prefetches it).
+  /cf-chl-|_cf_chl_opt/i,
   /<title>\s*Bot Verification/i,
 ];
 
