@@ -1417,9 +1417,15 @@ await check("a listed measure with zero resources is accepted", async () => {
   }
 });
 
+/* Scoped to this fixture's own 'm-%' ids: 0038 seeds a genuinely published
+   real-world measure (FL-AM3-general), and an unscoped SELECT here would
+   pick that up too and make this fixture's assertion depend on unrelated
+   seed data. */
 await check("anon sees published and listed measures, never draft", async () => {
   await db.exec("SET ROLE anon;");
-  const res = await db.query("SELECT measure_id FROM ballot_measure ORDER BY measure_id;");
+  const res = await db.query(
+    "SELECT measure_id FROM ballot_measure WHERE measure_id LIKE 'm-%' ORDER BY measure_id;"
+  );
   await db.exec("RESET ROLE;");
   const ids = res.rows.map((r) => r.measure_id).join(",");
   if (ids !== "m-listed,m-pub") throw new Error(`expected m-listed,m-pub, got [${ids}]`);
@@ -1427,7 +1433,9 @@ await check("anon sees published and listed measures, never draft", async () => 
 
 await check("anon sees listed and published measure_publication rows with their status", async () => {
   await db.exec("SET ROLE anon;");
-  const res = await db.query("SELECT measure_id, status FROM measure_publication ORDER BY measure_id;");
+  const res = await db.query(
+    "SELECT measure_id, status FROM measure_publication WHERE measure_id LIKE 'm-%' ORDER BY measure_id;"
+  );
   await db.exec("RESET ROLE;");
   const got = res.rows.map((r) => `${r.measure_id}:${r.status}`).join(",");
   if (got !== "m-listed:listed,m-pub:published") throw new Error(`saw [${got}]`);
@@ -1437,7 +1445,9 @@ await check("anon sees listed and published measure_publication rows with their 
    the resources (anon_read_measure_resource reads 'published' only). */
 await check("anon sees resources only for published measures (not listed, not draft)", async () => {
   await db.exec("SET ROLE anon;");
-  const res = await db.query("SELECT resource_id FROM measure_resource ORDER BY resource_id;");
+  const res = await db.query(
+    "SELECT resource_id FROM measure_resource WHERE measure_id LIKE 'm-%' ORDER BY resource_id;"
+  );
   await db.exec("RESET ROLE;");
   const ids = res.rows.map((r) => r.resource_id).join(",");
   if (ids !== "r1,r2,r3") throw new Error(`expected r1,r2,r3 only, got [${ids}]`);

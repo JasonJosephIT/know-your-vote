@@ -27,6 +27,30 @@ row. Gate (F2): at least one `support` and one `oppose`, larger ≤ 2× smaller.
 | AM2 | 5 | 4 | passes on count | Both NO `argument` rows (FEA toolkit, LWV Vote411 PDF) name an opposition with **no reasons**; the LWV PDF may be a neutral synopsis that lists opponents rather than LWV's own case; the sisusari post reads as undecided. Realistically 5 vs 1–2. |
 | AM3 | 5 | 7 | passes | Strongest of the three. Reclassified to `reporting`/`neutral`: Florida Chamber, RPOF, DeSantis, Miami-Dade Sheriff (not found in their own words); Lake Wales page (argues a side, so not `official`) and the Martin County video (uploaded by CBS12). |
 
+## Decisions (2026-09-24)
+
+Founder decisions, final:
+
+- F1–F6 (spec §9) confirmed as drafted: drop `measure_argument`; the ≤2×
+  symmetry rule; no lean printed on a resource row; the ≤140-char attribution
+  `note`; `analysis` may carry a stance; an 8-row column cap.
+- F7 (which measures seed first): **Amendment 3 only**, via
+  `supabase/migrations/0038_measure_resources_am3.sql` — 14 verified rows (2
+  support, 4 oppose, 8 neutral), `FL-AM3-general` moved to `published`.
+- **Amendment 1 not published.** Tier 4 (`argument`) is empty on both sides:
+  every named advocate or opponent (RPOF, Gov. DeSantis, Florida AFL-CIO,
+  Rep. Driskell, League of Women Voters of Florida) was found only through
+  news coverage, never their own primary statement, page, or archived
+  testimony. What remains after excluding search-snippet-only rows is one
+  `analysis` row (Florida TaxWatch, support) and two Substack posts — a
+  guide and two personal blogs is a thin basis for a published page, even
+  though the raw count passes the ≤2× gate.
+- **Amendment 2 not published.** Both identified NO-side organizations
+  (Florida Education Association, League of Women Voters of Florida) state
+  their opposition with no stated reasons anywhere in their own material —
+  a bare "opposed" listing, not a case. Publishing NO would show two named
+  opponents who, on the page, appear to object without giving a reason.
+
 Open points to check before any row is written:
 
 - **AM3 DeSantis.** The verifier says he called it "foolish". That word is his

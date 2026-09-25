@@ -49,7 +49,8 @@ Rules:
 | **0035**  | `0035_measure_resources_2026.sql` — seed skeleton: the DoE booklet as an `official`/`neutral` resource for each amendment; every sided row is a founder addition (spec §10 lists the candidates) | **not applied**. Before applying: `SELECT source_id FROM source WHERE url_norm LIKE 'files.floridados.gov/media/711355/%'` — if a row exists under another id, change the three `source_id` values to it. After: 3 `measure_resource` rows visible to service_role, **0 to anon** (all three measures still `listed`). |
 | 0036      | **reserved** — Session B's `official_site` batch (`docs/general-election/sessions/session-b-candidate-websites.md`) | not written |
 | 0037      | **reserved** — Session C, only if the brief pilot truly needs a migration (`docs/general-election/sessions/session-c-brief-pilot.md`) | not written |
-| 0038+     | free | — |
+| **0038**  | `0038_measure_resources_am3.sql` — seeds 14 verified outside-resource rows for Amendment 3 only (`docs/general-election/measure-resources-verified-2026-09-24.md`; founder call F7), 2 support / 4 oppose / 8 neutral, then flips `FL-AM3-general`'s `measure_publication` to `published` | **not applied**. Precondition: `0034`/`0035` applied. Read back as anon after applying: AM3 shows `published` with its 14 resources visible; AM1 and AM2 stay `listed` with **0** anon-visible `measure_resource` rows each. |
+| 0039+     | free | — |
 
 Verify applied state with `SELECT version, name FROM supabase_migrations.schema_migrations`
 (read-only) rather than trusting this table; update the table when it drifts.
