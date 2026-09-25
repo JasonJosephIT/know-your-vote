@@ -31,7 +31,9 @@ import {
   extractPassages,
   isAllowedByRobots,
   isSameSite,
+  looksClientRendered,
   looksLikeBotChallenge,
+  visibleTextLength,
   looksLikePolicyPath,
   namesPolicyArea,
   passageId,
@@ -104,6 +106,9 @@ check("donate and assets are never fetched",
 check("the same page is not fetched twice",
   new Set(picked).size === picked.length);
 check("the cap is a cap", selectPolicyPages(LINKS, "https://e.com", 1).length === 1);
+check("the homepage is never re-selected, even as a one-page site's #anchor",
+  selectPolicyPages(extractLinks(`<a href="/#issues">Issues</a><a href="https://www.e.com/">Platform</a>`, "https://e.com/"),
+    "https://e.com/").length === 0);
 
 /* ---- links ----------------------------------------------------------- */
 const links = extractLinks(
@@ -361,6 +366,38 @@ check("only the head of a document is examined",
   !looksLikeBotChallenge(`<html><body>${"x".repeat(20_000)}<title>Just a moment...</title></body></html>`));
 check("a rendered page must carry more text than an interstitial's one line",
   MIN_PAGE_TEXT_CHARS > "annettetaddeo.com Checking the site connection security".length);
+
+/* ---- client-rendered pages --------------------------------------------
+   The shell below is reelectbastien.com's real homepage, trimmed, 2026-09-25:
+   a title, meta tags, an empty #root and a script bundle. Every word a voter
+   reads is built by that script, so a plain fetch finds nothing to quote. */
+const SPA_SHELL = `<!doctype html><html lang="en"><head><meta charset="UTF-8" />
+<title>Marleine Bastien for Miami-Dade Commission District 2 | Re-Elect</title>
+<meta name="description" content="Re-elect Commissioner Marleine Bastien, Miami-Dade County Commission District 2. The work is not done. Vote August 18, 2026. Ballot #134." />
+<script type="module" crossorigin src="/assets/index-Bx2k.js"></script>
+<link rel="stylesheet" crossorigin href="/assets/index-C9q.css"></head>
+<body><div id="root"></div></body></html>`;
+const SERVER_PAGE = `<html><head><title>Kathy Castor for Congress</title></head><body>
+<h1>Kathy Castor: Fighting for Florida</h1>
+<p>Kathy Castor has spent her career fighting to lower costs for Tampa Bay families,
+protect Social Security and Medicare, and make homeowners insurance affordable again.</p>
+<p>She will keep working to bring good-paying jobs to the district and protect our waters.</p>
+</body></html>`;
+const SCRIPT_ONLY_TEXT = `<html><body><div id="app"></div><script>
+window.__DATA__ = {"text": "${"I will cap property insurance increases for every Florida family. ".repeat(10)}"};
+</script></body></html>`;
+
+check("a client-rendered shell is recognised", looksClientRendered(SPA_SHELL),
+  `${visibleTextLength(SPA_SHELL)} chars`);
+check("a server-rendered page is not", !looksClientRendered(SERVER_PAGE),
+  `${visibleTextLength(SERVER_PAGE)} chars`);
+check("text that exists only inside a script does not count as visible",
+  looksClientRendered(SCRIPT_ONLY_TEXT));
+check("visible text ignores meta tags and counts only what a reader sees",
+  visibleTextLength(SPA_SHELL) === "Marleine Bastien for Miami-Dade Commission District 2 | Re-Elect".length,
+  String(visibleTextLength(SPA_SHELL)));
+check("a bot challenge is also too short to be a page, so either check alone would catch it",
+  looksClientRendered(SITEGROUND_SCREEN));
 
 if (failures > 0) {
   console.error(`\nverify-candidate-site: ${failures} failure(s)`);

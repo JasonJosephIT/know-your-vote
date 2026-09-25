@@ -41,7 +41,12 @@
    browser identifies itself: its own UA with our token appended, never a
    disguised one. It downloads no images, media or fonts, and it solves no
    captchas. If the check does not clear, the page is reported unreachable and
-   nothing from it is quoted. --browser always skips the plain fetch;
+   nothing from it is quoted.
+
+   CLIENT-RENDERED PAGES. A page that loads but carries almost no text
+   (looksClientRendered: an empty `<div id="root">` shell whose words are
+   built by its scripts) is rendered in the same browser, under the same rules,
+   so its text and links exist to be read. --browser always skips the plain fetch;
    --browser never restores fetch-only behavior. Needs Chromium for
    playwright-core (`npx playwright-core install chromium`, or CHROMIUM_PATH).
 
@@ -61,7 +66,9 @@ import {
   extractPassages,
   isAllowedByRobots,
   canonicalizeUrl,
+  looksClientRendered,
   looksLikeBotChallenge,
+  visibleTextLength,
   selectPolicyPages,
   type Passage,
 } from "../src/lib/candidate-site.ts";
@@ -95,8 +102,9 @@ const MIN_DELAY_MS = 1_000;
 
 /* ---- the browser, launched at most once and only when needed ---------- */
 
-/* How long a challenge gets to clear in the browser before the page is
-   reported unreachable. SiteGround's usually clears in under 15 s. */
+/* How long the browser waits for a challenge to clear, or for a
+   client-rendered page's text to appear. SiteGround's challenge usually clears
+   in under 15 s; a rendered page, in a few. */
 const CHALLENGE_WAIT_MS = 30_000;
 
 let browser: Browser | null = null;
@@ -136,9 +144,11 @@ async function browserContext(): Promise<BrowserContext | null> {
   }
 }
 
-/** Load `url` in the browser and wait for any challenge to clear. Returns
-    the page's HTML, or for a text resource (robots.txt) its rendered text;
-    null when the challenge did not clear. */
+/** Load `url` in the browser and wait for any challenge to clear and the
+    page's text to appear. Returns the page's HTML, or for a text resource
+    (robots.txt) its rendered text. Null only when a bot challenge is still
+    showing at the deadline: a page that renders but stays short is still the
+    page, and is returned as it is. */
 async function browserGet(url: string, asText: boolean): Promise<string | null> {
   const ctx = await browserContext();
   if (!ctx) return null;
@@ -146,8 +156,9 @@ async function browserGet(url: string, asText: boolean): Promise<string | null> 
   try {
     const res = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 45_000 });
     const deadline = Date.now() + CHALLENGE_WAIT_MS;
+    let html = "";
     while (Date.now() < deadline) {
-      const html = await page.content().catch(() => "");
+      html = await page.content().catch(() => "");
       if (!looksLikeBotChallenge(html)) {
         const text = await page.evaluate(() => document.body?.innerText ?? "").catch(() => "");
         if (asText) {
@@ -159,6 +170,10 @@ async function browserGet(url: string, asText: boolean): Promise<string | null> 
         }
       }
       await page.waitForTimeout(1_500);
+    }
+    if (!asText && html && !looksLikeBotChallenge(html)) {
+      console.error(`  rendered, but only ${visibleTextLength(html)} characters of text: ${url}`);
+      return html;
     }
     console.error(`  bot challenge did not clear in the browser: ${url}`);
     return null;
@@ -205,7 +220,18 @@ async function get(url: string): Promise<string | null> {
     });
     status = res.status;
     body = await res.text();
-    if (res.ok && !looksLikeBotChallenge(body)) return body;
+    if (res.ok && !looksLikeBotChallenge(body)) {
+      /* A client-rendered shell: its text only exists once its scripts run.
+         Render it; if the browser cannot, the shell is still what we got. */
+      if (browserMode === "never" || !looksClientRendered(body)) return body;
+      console.error(
+        `  only ${visibleTextLength(body)} characters of text, rendering in the browser: ${url}`,
+      );
+      const html = await browserGet(url, false);
+      if (html === null) return body;
+      viaBrowser++;
+      return html;
+    }
   } catch (err) {
     /* Degrade honestly: name the failure, never a silent empty result. */
     console.error(`  ${(err as Error).name}: ${url}`);
