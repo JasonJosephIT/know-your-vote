@@ -283,6 +283,42 @@ await check(
   "SELECT count(*)::int n FROM measure_publication",
   1
 );
+/* 0038's publish flip writes its own admin_action row in the same statement
+   (finding #3, fix round 1) -- exactly one, not zero (forgotten) and not
+   more than one (duplicated by a naive re-run). */
+await check(
+  "0038's publish logged exactly one admin_action row",
+  `SELECT count(*)::int n FROM admin_action
+    WHERE action='publish' AND subject_kind='measure_publication'
+      AND subject_ref='FL-AM3-general'`,
+  1
+);
+
+/* Re-apply 0038 itself (idempotency, same proof style as 0033 below): the
+   admin_action guard (`prior.status IS DISTINCT FROM upserted.status`) must
+   see no change the second time -- still exactly one audit row, and AM3's
+   resource count must still be 15 (ON CONFLICT DO UPDATE re-writing the
+   same 14 rows, not appending duplicates). This check runs unrestricted
+   (no SET ROLE), so it counts total rows in the table, not what anon can
+   see -- the anon-scoped read-back is checked separately below. */
+await db.exec(
+  await readFile(
+    path.join(migrationsDir, "0038_measure_resources_am3.sql"),
+    "utf8"
+  )
+);
+await check(
+  "re-applying 0038 still logs exactly one admin_action row (no duplicate)",
+  `SELECT count(*)::int n FROM admin_action
+    WHERE action='publish' AND subject_kind='measure_publication'
+      AND subject_ref='FL-AM3-general'`,
+  1
+);
+await check(
+  "re-applying 0038 still leaves FL-AM3-general with 15 resources (no duplicates)",
+  "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM3-general'",
+  15
+);
 
 /* scripts/list-ballot-2026.sql, the go-live flip, applied to this throwaway
    database after every migration. Proves it runs, flips through the door

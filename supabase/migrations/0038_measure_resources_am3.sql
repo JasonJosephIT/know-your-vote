@@ -174,7 +174,7 @@ VALUES
 
   ('FL-AM3-general:vote-yes-on-3-site', 'FL-AM3-general', 'src_voteyeson3_site',
    'support', 'argument', 'document',
-   'Vote Yes on 3', NULL, NULL, NULL,
+   'Vote YES on 3', NULL, NULL, NULL,
    'Florida Realtors'' committee', 1),
 
   ('FL-AM3-general:florida-realtors-launch', 'FL-AM3-general', 'src_floridarealtors_launch_am3',
@@ -210,7 +210,7 @@ VALUES
   ('FL-AM3-general:political-cortadito', 'FL-AM3-general', 'src_political_cortadito_am3',
    'oppose', 'commentary', 'article',
    'Amendment 3 looks like a winner — until Florida voters learn what it does', 'Elaine de Valle (Ladra)', '2026-09-03', NULL,
-   'Independent Miami politics blog', 4),
+   'Elaine de Valle''s blog', 4),
 
   ('FL-AM3-general:cbs12-jenny-fields-video', 'FL-AM3-general', 'src_cbs12_jenny_fields_am3',
    'neutral', 'reporting', 'video',

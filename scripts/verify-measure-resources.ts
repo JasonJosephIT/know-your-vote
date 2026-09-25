@@ -21,6 +21,9 @@ const sql = readFileSync(path, "utf8");
    contains a semicolon -- e.g. a verbatim ballot title like "INCREASED
    HOMESTEAD EXEMPTION; LOWER CAP ON INCREASES..." (0038) -- which would
    truncate the body mid-tuple and silently parse to zero rows. */
+/* Quote-aware only -- it does not skip `--` line comments, so a `;` or
+   `ON CONFLICT` inside one would still end the body early. None of the
+   migrations this reads put a comment inside a VALUES list. */
 function sliceStatementBody(text: string, from: number): string {
   let i = from;
   let inQuote = false;

@@ -225,6 +225,20 @@ from what 0038 originally filed (rows 1, 20, 26, 30, 35); the other 4 (rows
 5, 27, 29, 32) already matched verbatim by coincidence and are listed here
 only as confirmation that they were checked, not left un-verified.
 
+### Title (verbatim), fix round 2 (2026-09-24)
+
+Round 1 missed row 19 (voteyeson3.com) — its title was never re-verified
+against the live page, only carried over from the spec table as "Vote Yes
+on 3."
+
+| Row (# above) | Source | Prior title | Verbatim title (verified) |
+|---|---|---|---|
+| 19 | voteyeson3.com | "Vote Yes on 3" | Vote YES on 3 (confirmed via `<title>` tag and og:title, both "Vote YES on 3" — corrects case: "Yes" → "YES") |
+
+voteyeson3.com opened cleanly (curl `<title>` and og:title agree); not
+dropped. Support/oppose/neutral unchanged (2/4/8) — this is a case-only
+correction, stance/kind/inclusion untouched.
+
 ### Gaps
 
 - **pcpao.gov** returned HTTP 403 to WebFetch (likely bot-blocking); content confirmed only via search-engine cache/snippet, not opened directly.
