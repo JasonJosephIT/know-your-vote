@@ -14,7 +14,7 @@ page at `url`.** Nothing here is summarized or paraphrased, and nothing has been
 scored. `index.json` records each candidate's outcome, which run produced it,
 and with which ingest code.
 
-**Result: 91 of 97 ingested, 4449 passages.**
+**Result: 93 of 97 ingested, 4539 passages.**
 
 ## How it was run
 
@@ -24,7 +24,12 @@ and with which ingest code.
 - **Run 2:** the 13 candidates run 1 did not ingest (other than the AI-crawler opt-out), one site at a time, ingest at
   `d635d40 (#92: adds client-rendered pages)`. Two causes: two sites are JavaScript-built, which #92 fixed; and
   SiteGround's challenges were harder to clear with six parallel runs coming from one IP.
-- A candidate's file comes from run 2 when run 2 produced passages; otherwise from run 1.
+- **Run 3:** the three candidates still unreachable after run 2 (Ingoglia, Taddeo, Abrams), one site at a time, ingest at
+  `d7a2896 (Turnstile embed no longer read as a bot challenge)`. Ingoglia's homepage had never been a challenge: it
+  dns-prefetches `challenges.cloudflare.com` for a Turnstile widget on its sign-up form, and the challenge check read
+  that host name as Cloudflare's interstitial. d7a2896 stops counting the bare host name. Taddeo's SiteGround
+  challenge cleared this time. Abrams's Cloudflare challenge did not.
+- A candidate's file comes from the latest run that produced passages.
 
 Every run honored robots.txt, including the rules for Anthropic's crawlers, and each site's `Crawl-delay`.
 It sent an honest user agent (`KnowYourVote/1.0`, appended to the browser's own when a page needed the browser).
@@ -35,16 +40,14 @@ Checked before commit:
 - every passage's `url` is on the candidate's own site;
 - every row has the same five fields.
 
-## Not ingested (6)
+## Not ingested (4)
 
 | Candidate | Race | Why | What would change it |
 |---|---|---|---|
 | Rob Piper (`FL-VF-DAD-2998`) | `FL-DAD-CC5-general` | Cloudflare refuses any automated client, even a real browser | Another source for his positions |
 | Brian Jones (`FL-VF-ORA-1260`) | `FL-ORA-CC4-general` | The page loads, but its builder puts the text in `<div>`s, which the extractor does not read (it reads `p`, `li`, `blockquote`, `dd`) | Extractor reading text in `<div>`s (see below) |
 | Jeannette Quinones Hernandez (`FL-VF-ORA-1275`) | `FL-ORA-CC8-general` | Her robots.txt refuses ClaudeBot, anthropic-ai and Claude-Web. Honored, as designed | Nothing: this is the site owner's choice |
-| Blaise Ingoglia (`FL-DOE-89394`) | `FL-CFO-general` | SiteGround/host bot challenge did not clear on either run (intermittent) | A later re-run, one site at a time |
-| Annette Taddeo (`FL-DOE-91310`) | `FL-CFO-general` | Bot challenge did not clear on either run (intermittent: it cleared earlier on 2026-09-25) | A later re-run, one site at a time |
-| Dean Abrams (`FL-DOE-90433`) | `FL-GOV-general` | Bot challenge (HTTP 403) did not clear on either run | A later re-run, one site at a time |
+| Dean Abrams (`FL-DOE-90433`) | `FL-GOV-general` | Cloudflare's "Just a moment..." check (HTTP 403) did not clear in the browser on any of four attempts across three runs | Another source for his positions, as for Piper |
 
 ## Thin results (3 passages or fewer)
 
@@ -156,12 +159,12 @@ navigation or footers) is the next ingest change worth making.
 | Joey Mendoza Atkins | `FL-AGR-general` | ingested | 25 | 1 | 1 |  |
 | James Uthmeier | `FL-ATG-general` | ingested | 110 | 2 | 1 |  |
 | Jose Javier Rodriguez | `FL-ATG-general` | ingested | 13 | 2 | 1 |  |
-| Blaise Ingoglia | `FL-CFO-general` | unreachable: bot challenge did not clear | 0 | 0 | 1 | 1 page(s) via the browser |
-| Annette Taddeo | `FL-CFO-general` | unreachable: bot challenge did not clear | 0 | 0 | 1 | robots.txt read in the browser; 1 page(s) via the browser |
+| Blaise Ingoglia | `FL-CFO-general` | ingested | 80 | 3 | 3 | earlier runs misread a Turnstile embed as a challenge |
+| Annette Taddeo | `FL-CFO-general` | ingested | 10 | 2 | 3 | robots.txt read in the browser; 2 page(s) via the browser |
 | Scott Eckhard Jewett | `FL-GOV-general` | ingested | 389 | 4 | 2 | robots.txt read in the browser; 4 page(s) via the browser |
 | Moliere "Moe" Dimanche | `FL-GOV-general` | ingested | 19 | 2 | 1 |  |
 | Byron Donalds | `FL-GOV-general` | ingested | 58 | 7 | 1 |  |
 | David Jolly | `FL-GOV-general` | ingested | 195 | 8 | 1 | Crawl-delay 10s |
 | Frank J. Russo | `FL-GOV-general` | ingested | 201 | 9 | 1 |  |
-| Dean Abrams | `FL-GOV-general` | unreachable: bot challenge did not clear | 0 | 0 | 1 | 1 page(s) via the browser |
+| Dean Abrams | `FL-GOV-general` | unreachable: bot challenge did not clear | 0 | 0 | 3 | Cloudflare challenge, 4 attempts |
 | Charles Burkett | `FL-GOV-general` | ingested | 189 | 1 | 1 | robots.txt read in the browser |
