@@ -120,6 +120,15 @@ in place, `--pages 2`.
 | Mike Beltran | U.S. House FL-14 | 34 passages | **Resolved** |
 | Rob Piper | Miami-Dade Commission D5 | Cloudflare's check does not clear even in a real browser; the run exits non-zero and quotes nothing | **Open**: unreachable to any automated client. His positions would have to come from another source |
 
-Rob Piper is now the only ballot candidate with a site the ingest cannot
-read. The pipeline gap is the same as Datto's: a website is the brief
+The full ingest run (`policy-runs/passages-2026-09-25/`) met three more, and a
+re-run the same day settled them:
+
+| Candidate | Race | Result | Status |
+|---|---|---|---|
+| Blaise Ingoglia | CFO | 80 passages. Never a challenge: his page dns-prefetches `challenges.cloudflare.com` for a Turnstile form widget, and the check read the host name as Cloudflare's interstitial. Fixed in the challenge markers | **Resolved** |
+| Annette Taddeo | CFO | 10 passages; SiteGround's challenge cleared on the re-run | **Resolved** |
+| Dean Abrams | Governor | Cloudflare's "Just a moment..." (HTTP 403) did not clear in the browser on any of four attempts | **Open**: same as Piper. His positions would have to come from another source |
+
+Rob Piper and Dean Abrams are now the only ballot candidates with a site the
+ingest cannot read. The pipeline gap is the same as Datto's: a website is the brief
 pipeline's only input.

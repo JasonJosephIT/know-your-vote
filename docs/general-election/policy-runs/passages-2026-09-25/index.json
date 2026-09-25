@@ -9,6 +9,10 @@
   "2": {
    "code": "d635d40 (#92: adds client-rendered pages)",
    "mode": "one site at a time"
+  },
+  "3": {
+   "code": "d7a2896 (Turnstile embed no longer read as a bot challenge)",
+   "mode": "one site at a time, re-run of three unreachable candidates"
   }
  },
  "candidates": [
@@ -1831,11 +1835,11 @@
    "name": "Blaise Ingoglia",
    "race": "FL-CFO-general",
    "site": "https://blaiseforflorida.com/",
-   "status": "unreachable: bot challenge did not clear",
-   "passages": 0,
-   "pages": 0,
-   "run": 1,
-   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "status": "ingested",
+   "passages": 80,
+   "pages": 3,
+   "run": 3,
+   "ingest_code": "d7a2896 (Turnstile embed no longer read as a bot challenge)",
    "attempts": [
     {
      "run": 1,
@@ -1848,20 +1852,32 @@
      "exit": 1,
      "seconds": 37,
      "passages": 0
+    },
+    {
+     "run": 3,
+     "exit": 1,
+     "seconds": 38,
+     "passages": 0
+    },
+    {
+     "run": 3,
+     "exit": 0,
+     "seconds": 7,
+     "passages": 80
     }
    ],
-   "notes": "1 page(s) via the browser"
+   "notes": "earlier runs misread a Turnstile dns-prefetch as a challenge; fixed in d7a2896, the page needs no browser"
   },
   {
    "candidate_id": "FL-DOE-91310",
    "name": "Annette Taddeo",
    "race": "FL-CFO-general",
    "site": "https://annettetaddeo.com/",
-   "status": "unreachable: bot challenge did not clear",
-   "passages": 0,
-   "pages": 0,
-   "run": 1,
-   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "status": "ingested",
+   "passages": 10,
+   "pages": 2,
+   "run": 3,
+   "ingest_code": "d7a2896 (Turnstile embed no longer read as a bot challenge)",
    "attempts": [
     {
      "run": 1,
@@ -1874,9 +1890,21 @@
      "exit": 1,
      "seconds": 43,
      "passages": 0
+    },
+    {
+     "run": 3,
+     "exit": 0,
+     "seconds": 29,
+     "passages": 10
+    },
+    {
+     "run": 3,
+     "exit": 0,
+     "seconds": 14,
+     "passages": 10
     }
    ],
-   "notes": "robots.txt read in the browser; 1 page(s) via the browser"
+   "notes": "robots.txt read in the browser; 2 page(s) via the browser; SiteGround challenge cleared on the re-run"
   },
   {
    "candidate_id": "FL-DOE-84076",
@@ -2006,9 +2034,21 @@
      "exit": 1,
      "seconds": 33,
      "passages": 0
+    },
+    {
+     "run": 3,
+     "exit": 1,
+     "seconds": 33,
+     "passages": 0
+    },
+    {
+     "run": 3,
+     "exit": 1,
+     "seconds": 33,
+     "passages": 0
     }
    ],
-   "notes": "1 page(s) via the browser"
+   "notes": "Cloudflare 'Just a moment...' (HTTP 403) did not clear in the browser on any of 4 attempts"
   },
   {
    "candidate_id": "FL-DOE-90630",
