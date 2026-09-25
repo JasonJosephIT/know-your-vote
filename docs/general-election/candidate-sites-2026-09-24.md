@@ -322,11 +322,7 @@ Checking each candidate against the county Supervisor of Elections listing turne
    NULL until it is cleaned (current), or store it.
 5. **Chris Dennison (FL-7, LPF)**: stored on the page's own strong self-identification, though
    nothing links to the domain. A confirmation from the LPF would close it.
-6. **AI-crawler opt-outs.** `jeannette2026.com` disallows ClaudeBot, anthropic-ai and Claude-Web.
-   `scripts/candidate-site-ingest.ts` sends `KnowYourVote/1.0` and `isAllowedByRobots()` reads
-   only the `User-agent: *` group, so as written the ingest **would** crawl it. Since the ingest
-   feeds a model, it should honour AI-crawler groups too; until it does, skip that site by hand.
-   Several sites also set `Crawl-delay`, which the ingest does not read.
+6. ~~**AI-crawler opt-outs.**~~ **Fixed.** `src/lib/candidate-site.ts` now reads robots.txt per RFC 9309 for the ingest's own token *and* every Anthropic crawler token (`ClaudeBot`, `Claude-User`, `Claude-SearchBot`, `Claude-Web`, `anthropic-ai`), and a path is fetched only if all of them may fetch it, the same rule the news sweep's `AI_POLICY_HOLD` keeps. `jeannette2026.com` is now refused by name ("disallows … for ClaudeBot, Claude-Web, anthropic-ai"). The ingest also honors `Crawl-delay` (including the site-wide one WordPress puts above the first `User-agent`), and stops when robots.txt cannot be read (a 5xx, a failed fetch, or a bot-challenge page served in its place), because an unreadable policy is not consent. Sites behind a SiteGround challenge (Taddeo, Pericola and others in the table above) therefore stop at robots.txt when fetched by the ingest.
 
 ## Still open
 
