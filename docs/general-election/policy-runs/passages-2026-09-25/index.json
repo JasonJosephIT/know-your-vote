@@ -1,0 +1,2034 @@
+{
+ "run_date": "2026-09-25",
+ "command": "node scripts/candidate-site-ingest.ts --site <official_site> --pages 8 --out <candidate_id>.jsonl",
+ "runs": {
+  "1": {
+   "code": "f736d8a (#89: browser fallback for bot challenges)",
+   "mode": "6 sites in parallel"
+  },
+  "2": {
+   "code": "d635d40 (#92: adds client-rendered pages)",
+   "mode": "one site at a time"
+  }
+ },
+ "candidates": [
+  {
+   "candidate_id": "FL-VF-BRO-1041",
+   "name": "Caryl Sandler Shuham",
+   "race": "FL-BRO-CC6-general",
+   "site": "https://www.carylshuham.com/",
+   "status": "ingested",
+   "passages": 42,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 31,
+     "passages": 42
+    }
+   ],
+   "notes": "robots.txt read in the browser; 3 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-VF-BRO-1194",
+   "name": "Maura McCarthy Bulman",
+   "race": "FL-BRO-SB1-general",
+   "site": "https://www.mauraforbroward.com/",
+   "status": "ingested",
+   "passages": 12,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 2,
+     "passages": 12
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-BRO-1191",
+   "name": "Nicole Morst",
+   "race": "FL-BRO-SB4-general",
+   "site": "https://nicolemorst.com/",
+   "status": "ingested",
+   "passages": 9,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 2,
+     "passages": 9
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-BRO-1172",
+   "name": "Roberto Fernandez III",
+   "race": "FL-BRO-SB6-general",
+   "site": "https://www.electroberto2026.com/",
+   "status": "ingested",
+   "passages": 21,
+   "pages": 1,
+   "run": 2,
+   "ingest_code": "d635d40 (#92: adds client-rendered pages)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 1,
+     "seconds": 35,
+     "passages": 0
+    },
+    {
+     "run": 2,
+     "exit": 0,
+     "seconds": 4,
+     "passages": 21
+    }
+   ],
+   "notes": "robots.txt read in the browser; 1 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-VF-BRO-1184",
+   "name": "Adam Cervera",
+   "race": "FL-BRO-SB6-general",
+   "site": "https://www.adamcervera.com/",
+   "status": "ingested",
+   "passages": 19,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 5,
+     "passages": 19
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-BRO-1254",
+   "name": "Cynthia Alceus Dominique",
+   "race": "FL-BRO-SB7-general",
+   "site": "https://www.cynthiaforbrowardschools.com/",
+   "status": "ingested",
+   "passages": 62,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 62
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-BRO-1195",
+   "name": "Allen Zeman",
+   "race": "FL-BRO-SBAL8-general",
+   "site": "https://electallenzeman.com/",
+   "status": "ingested",
+   "passages": 7,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 6,
+     "passages": 7
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-DAD-2964",
+   "name": "Marleine Bastien",
+   "race": "FL-DAD-CC2-general",
+   "site": "https://reelectbastien.com/",
+   "status": "ingested",
+   "passages": 18,
+   "pages": 1,
+   "run": 2,
+   "ingest_code": "d635d40 (#92: adds client-rendered pages)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 1,
+     "seconds": 2,
+     "passages": 0
+    },
+    {
+     "run": 2,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 18
+    }
+   ],
+   "notes": "1 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-VF-DAD-2949",
+   "name": "Vicki L. Lopez",
+   "race": "FL-DAD-CC5-general",
+   "site": "https://vickilopez.vote/",
+   "status": "ingested",
+   "passages": 9,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 15,
+     "passages": 9
+    }
+   ],
+   "notes": "robots.txt read in the browser; 2 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-VF-DAD-2998",
+   "name": "Rob Piper",
+   "race": "FL-DAD-CC5-general",
+   "site": "https://www.robpiperheretoserve.com/",
+   "status": "unreachable: bot challenge did not clear",
+   "passages": 0,
+   "pages": 0,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 1,
+     "seconds": 65,
+     "passages": 0
+    },
+    {
+     "run": 2,
+     "exit": 1,
+     "seconds": 63,
+     "passages": 0
+    }
+   ],
+   "notes": "robots.txt unreadable, proceeded; 1 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-VF-DAD-3070",
+   "name": "Katrina Wilson",
+   "race": "FL-DAD-SB1-general",
+   "site": "https://wilsonforeducation.com/",
+   "status": "ingested",
+   "passages": 1,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 1
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-DAD-3076",
+   "name": "Linda Cothiere",
+   "race": "FL-DAD-SB1-general",
+   "site": "https://lindaforschoolboard.com/",
+   "status": "ingested",
+   "passages": 72,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 5,
+     "passages": 72
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-HIL-2640",
+   "name": "Harry Cohen",
+   "race": "FL-HIL-CC1-general",
+   "site": "https://harrycohen.vote/",
+   "status": "ingested",
+   "passages": 42,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 11,
+     "passages": 42
+    }
+   ],
+   "notes": "robots.txt read in the browser; 1 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-VF-HIL-2880",
+   "name": "Jackie Toledo",
+   "race": "FL-HIL-CC1-general",
+   "site": "https://jackietoledo.com/",
+   "status": "ingested",
+   "passages": 28,
+   "pages": 3,
+   "run": 2,
+   "ingest_code": "d635d40 (#92: adds client-rendered pages)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 1,
+     "seconds": 35,
+     "passages": 0
+    },
+    {
+     "run": 2,
+     "exit": 0,
+     "seconds": 14,
+     "passages": 28
+    }
+   ],
+   "notes": "2 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-VF-HIL-2621",
+   "name": "Gwen Myers",
+   "race": "FL-HIL-CC3-general",
+   "site": "https://www.votegwenmyers.com/",
+   "status": "ingested",
+   "passages": 9,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 9
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-HIL-2646",
+   "name": "Luiz F. F. Garcia",
+   "race": "FL-HIL-CC3-general",
+   "site": "https://www.electluizffgarcia.com/",
+   "status": "ingested",
+   "passages": 23,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 23
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-HIL-2636",
+   "name": "Neil Manimala",
+   "race": "FL-HIL-CC5-general",
+   "site": "https://www.neilmanimala.com/",
+   "status": "ingested",
+   "passages": 13,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 2,
+     "passages": 13
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-HIL-2661",
+   "name": "Stacy Hahn",
+   "race": "FL-HIL-CC5-general",
+   "site": "https://www.votestacyhahn.com/",
+   "status": "ingested",
+   "passages": 16,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 4,
+     "passages": 16
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-HIL-2620",
+   "name": "Joshua Wostal",
+   "race": "FL-HIL-CC7-general",
+   "site": "https://www.joshuawostal.com/",
+   "status": "ingested",
+   "passages": 49,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 4,
+     "passages": 49
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-HIL-2660",
+   "name": "Aileen Rodriguez",
+   "race": "FL-HIL-CC7-general",
+   "site": "https://voteaileen2026.com/",
+   "status": "ingested",
+   "passages": 44,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 44
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-HIL-2675",
+   "name": "Daniela Simic",
+   "race": "FL-HIL-SB2-general",
+   "site": "https://danielaforschools.com/",
+   "status": "ingested",
+   "passages": 4,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 4
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-HIL-2677",
+   "name": "Brittany Lyssy",
+   "race": "FL-HIL-SB2-general",
+   "site": "https://www.votebrittanylyssy.com/",
+   "status": "ingested",
+   "passages": 3,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 1,
+     "passages": 3
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-HIL-2672",
+   "name": "Patricia \"Patti\" Rendon",
+   "race": "FL-HIL-SB4-general",
+   "site": "https://www.votepattirendon.com/",
+   "status": "ingested",
+   "passages": 1,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 2,
+     "passages": 1
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-HIL-2610",
+   "name": "Kenneth \"Ken\" Gay",
+   "race": "FL-HIL-SB6-general",
+   "site": "https://votekennethgay.com/",
+   "status": "ingested",
+   "passages": 13,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 5,
+     "passages": 13
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-HIL-2645",
+   "name": "Karen Perez",
+   "race": "FL-HIL-SB6-general",
+   "site": "https://keepkarenperez.com/",
+   "status": "ingested",
+   "passages": 15,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 15
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1290",
+   "name": "Kamia Brown",
+   "race": "FL-ORA-CC2-general",
+   "site": "https://www.kamiafororangecounty.com/",
+   "status": "ingested",
+   "passages": 37,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 4,
+     "passages": 37
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1384",
+   "name": "Mike Crabb",
+   "race": "FL-ORA-CC2-general",
+   "site": "https://ilikemikecrabb.com/",
+   "status": "ingested",
+   "passages": 35,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 4,
+     "passages": 35
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1260",
+   "name": "Brian Jones",
+   "race": "FL-ORA-CC4-general",
+   "site": "https://brianhubertjones.com/",
+   "status": "no passages extracted",
+   "passages": 0,
+   "pages": 0,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 1,
+     "seconds": 36,
+     "passages": 0
+    },
+    {
+     "run": 2,
+     "exit": 1,
+     "seconds": 33,
+     "passages": 0
+    }
+   ],
+   "notes": "1 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1279",
+   "name": "Johanna Lopez",
+   "race": "FL-ORA-CC4-general",
+   "site": "https://www.votejohannalopez.com/",
+   "status": "ingested",
+   "passages": 41,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 41
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1265",
+   "name": "Michael \"Mike\" Scott",
+   "race": "FL-ORA-CC6-general",
+   "site": "https://mymikescott.com/",
+   "status": "ingested",
+   "passages": 9,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 21,
+     "passages": 9
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1295",
+   "name": "Lawanna Gelzer",
+   "race": "FL-ORA-CC6-general",
+   "site": "https://www.lawannagelzer.com/",
+   "status": "ingested",
+   "passages": 1,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 1
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1271",
+   "name": "Vicki Vargo",
+   "race": "FL-ORA-CC7-general",
+   "site": "https://votevickivargo.com/",
+   "status": "ingested",
+   "passages": 13,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 6,
+     "passages": 13
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1283",
+   "name": "Patricia Rumph",
+   "race": "FL-ORA-CC7-general",
+   "site": "https://www.patriciarumph.com/",
+   "status": "ingested",
+   "passages": 21,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 4,
+     "passages": 21
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1272",
+   "name": "Victor M. Torres Jr.",
+   "race": "FL-ORA-CC8-general",
+   "site": "https://www.electvictorres.com/",
+   "status": "ingested",
+   "passages": 43,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 43
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1275",
+   "name": "Jeannette Quinones Hernandez",
+   "race": "FL-ORA-CC8-general",
+   "site": "https://www.jeannette2026.com/",
+   "status": "refused: robots.txt opts out of AI crawlers",
+   "passages": 0,
+   "pages": 0,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 1,
+     "seconds": 1,
+     "passages": 0
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1364",
+   "name": "Terrell Thomas",
+   "race": "FL-ORA-CLERK-general",
+   "site": "https://thomasforclerk.com/",
+   "status": "ingested",
+   "passages": 23,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 4,
+     "passages": 23
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1401",
+   "name": "Roberta Walton Johnson",
+   "race": "FL-ORA-CLERK-general",
+   "site": "https://voteroberta.com/",
+   "status": "ingested",
+   "passages": 58,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 5,
+     "passages": 58
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1236",
+   "name": "Tiffany Moore Russell",
+   "race": "FL-ORA-MAYOR-general",
+   "site": "https://tiffanyformayor.com/",
+   "status": "ingested",
+   "passages": 79,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 23,
+     "passages": 79
+    }
+   ],
+   "notes": "robots.txt read in the browser; 3 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1239",
+   "name": "Chris Messina",
+   "race": "FL-ORA-MAYOR-general",
+   "site": "https://www.chrismessina.com/",
+   "status": "ingested",
+   "passages": 27,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 120,
+     "passages": 27
+    }
+   ],
+   "notes": "Crawl-delay 20s"
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1270",
+   "name": "Melissa Lopez Marantes",
+   "race": "FL-ORA-SB1-general",
+   "site": "https://www.melissaforkids.com/",
+   "status": "ingested",
+   "passages": 5,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 2,
+     "passages": 5
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1318",
+   "name": "Gloria Reina O'Neal",
+   "race": "FL-ORA-SB2-general",
+   "site": "https://votegloriareina.com/",
+   "status": "ingested",
+   "passages": 39,
+   "pages": 1,
+   "run": 2,
+   "ingest_code": "d635d40 (#92: adds client-rendered pages)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 1,
+     "seconds": 2,
+     "passages": 0
+    },
+    {
+     "run": 2,
+     "exit": 0,
+     "seconds": 5,
+     "passages": 39
+    }
+   ],
+   "notes": "1 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1242",
+   "name": "Susanne Peña",
+   "race": "FL-ORA-SB3-general",
+   "site": "https://www.vote4pena.com/",
+   "status": "ingested",
+   "passages": 3,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 2,
+     "passages": 3
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-VF-ORA-1314",
+   "name": "Diana Moore",
+   "race": "FL-ORA-SB3-general",
+   "site": "https://www.votefordianamoore.com/",
+   "status": "ingested",
+   "passages": 18,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 5,
+     "passages": 18
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-89909",
+   "name": "Maxwell Alejandro Frost",
+   "race": "FL-10-general",
+   "site": "https://www.frostforcongress.com/",
+   "status": "ingested",
+   "passages": 73,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 2,
+     "passages": 73
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-88517",
+   "name": "Ralph Groves",
+   "race": "FL-11-general",
+   "site": "https://www.grovesforcongress.com/",
+   "status": "ingested",
+   "passages": 18,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 2,
+     "passages": 18
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-91715",
+   "name": "James Pericola",
+   "race": "FL-11-general",
+   "site": "https://jamespericola.com/",
+   "status": "ingested",
+   "passages": 18,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 32,
+     "passages": 18
+    }
+   ],
+   "notes": "Crawl-delay 10s; 1 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-DOE-91717",
+   "name": "Joe Strada",
+   "race": "FL-11-general",
+   "site": "https://votestrada.com/",
+   "status": "ingested",
+   "passages": 27,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 4,
+     "passages": 27
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-88868",
+   "name": "Gus Michael Bilirakis",
+   "race": "FL-12-general",
+   "site": "https://bilirakisforcongress.com/",
+   "status": "ingested",
+   "passages": 86,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 86
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-89453",
+   "name": "Kimberly Overman",
+   "race": "FL-12-general",
+   "site": "https://kimberlyoverman.com/",
+   "status": "ingested",
+   "passages": 47,
+   "pages": 4,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 5,
+     "passages": 47
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-89778",
+   "name": "Branden Scrivener",
+   "race": "FL-12-general",
+   "site": "https://brandenscrivenerfl.info/",
+   "status": "ingested",
+   "passages": 11,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 4,
+     "passages": 11
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-88870",
+   "name": "Kathy Castor",
+   "race": "FL-14-general",
+   "site": "https://castorforcongress.com/",
+   "status": "ingested",
+   "passages": 7,
+   "pages": 4,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 58,
+     "passages": 7
+    }
+   ],
+   "notes": "Crawl-delay 10s"
+  },
+  {
+   "candidate_id": "FL-DOE-91313",
+   "name": "Mike Beltran",
+   "race": "FL-14-general",
+   "site": "https://beltranforcongress.com/",
+   "status": "ingested",
+   "passages": 34,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 17,
+     "passages": 34
+    }
+   ],
+   "notes": "robots.txt read in the browser; 3 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-DOE-92395",
+   "name": "Brian Lambert",
+   "race": "FL-14-general",
+   "site": "https://www.brianlambertforcongress.com/",
+   "status": "ingested",
+   "passages": 139,
+   "pages": 7,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 8,
+     "passages": 139
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-89116",
+   "name": "Robert People",
+   "race": "FL-15-general",
+   "site": "https://www.peopleforcongress.com/",
+   "status": "ingested",
+   "passages": 41,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 41
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-89121",
+   "name": "Laurel Lee",
+   "race": "FL-15-general",
+   "site": "https://votelaurel.com/",
+   "status": "ingested",
+   "passages": 132,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 22,
+     "passages": 132
+    }
+   ],
+   "notes": "Crawl-delay 10s"
+  },
+  {
+   "candidate_id": "FL-DOE-89623",
+   "name": "Mark Davis",
+   "race": "FL-16-general",
+   "site": "https://markdavisforcongress.com/",
+   "status": "ingested",
+   "passages": 34,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 4,
+     "passages": 34
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-90251",
+   "name": "Sydney Gruters",
+   "race": "FL-16-general",
+   "site": "https://grutersforcongress.com/",
+   "status": "ingested",
+   "passages": 27,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 5,
+     "passages": 27
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-90779",
+   "name": "Kelly Kirschner",
+   "race": "FL-16-general",
+   "site": "https://kellykirschner.com/",
+   "status": "ingested",
+   "passages": 115,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 6,
+     "passages": 115
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-90814",
+   "name": "Kedner Maxime",
+   "race": "FL-20-general",
+   "site": "https://www.maximeforcongress.com/",
+   "status": "ingested",
+   "passages": 105,
+   "pages": 6,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 10,
+     "passages": 105
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-91278",
+   "name": "Brent Andersen",
+   "race": "FL-20-general",
+   "site": "https://brentandersenfl.com/",
+   "status": "ingested",
+   "passages": 3,
+   "pages": 1,
+   "run": 2,
+   "ingest_code": "d635d40 (#92: adds client-rendered pages)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 1,
+     "seconds": 14,
+     "passages": 0
+    },
+    {
+     "run": 2,
+     "exit": 0,
+     "seconds": 14,
+     "passages": 3
+    }
+   ],
+   "notes": "robots.txt read in the browser; 1 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-DOE-91577",
+   "name": "Debbie Wasserman Schultz",
+   "race": "FL-20-general",
+   "site": "https://debbiewassermanschultz.com/",
+   "status": "ingested",
+   "passages": 64,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 7,
+     "passages": 64
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-89301",
+   "name": "Pia Dandiya",
+   "race": "FL-22-general",
+   "site": "https://piaforcongress.com/",
+   "status": "ingested",
+   "passages": 62,
+   "pages": 3,
+   "run": 2,
+   "ingest_code": "d635d40 (#92: adds client-rendered pages)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 1,
+     "seconds": 15,
+     "passages": 0
+    },
+    {
+     "run": 2,
+     "exit": 0,
+     "seconds": 12,
+     "passages": 62
+    }
+   ],
+   "notes": "robots.txt read in the browser; 4 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-DOE-92109",
+   "name": "Casey Askar",
+   "race": "FL-22-general",
+   "site": "https://www.caseyaskar.com/",
+   "status": "ingested",
+   "passages": 1,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 1
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-90703",
+   "name": "Te Mayonna Brown",
+   "race": "FL-24-general",
+   "site": "https://tebrownforflorida.com/",
+   "status": "ingested",
+   "passages": 24,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 5,
+     "passages": 24
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-91544",
+   "name": "Oliver G. Gilbert III",
+   "race": "FL-24-general",
+   "site": "https://olivergilbert.vote/",
+   "status": "ingested",
+   "passages": 66,
+   "pages": 3,
+   "run": 2,
+   "ingest_code": "d635d40 (#92: adds client-rendered pages)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 1,
+     "seconds": 35,
+     "passages": 0
+    },
+    {
+     "run": 2,
+     "exit": 0,
+     "seconds": 16,
+     "passages": 66
+    }
+   ],
+   "notes": "robots.txt read in the browser; 3 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-DOE-88911",
+   "name": "Jared Moskowitz",
+   "race": "FL-25-general",
+   "site": "https://jaredforflorida.com/",
+   "status": "ingested",
+   "passages": 32,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 20,
+     "passages": 32
+    }
+   ],
+   "notes": "3 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-DOE-89801",
+   "name": "Scott Singer",
+   "race": "FL-25-general",
+   "site": "https://www.scottsingerusa.com/",
+   "status": "ingested",
+   "passages": 82,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 4,
+     "passages": 82
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-89980",
+   "name": "Nicole Locklin",
+   "race": "FL-26-general",
+   "site": "https://locklinforcongress.com/",
+   "status": "ingested",
+   "passages": 60,
+   "pages": 9,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 10,
+     "passages": 60
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-90330",
+   "name": "Mario Diaz-Balart",
+   "race": "FL-26-general",
+   "site": "https://mariodiazbalart.org/",
+   "status": "ingested",
+   "passages": 80,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 80
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-89933",
+   "name": "Eliott Rodriguez",
+   "race": "FL-27-general",
+   "site": "https://eliottrodriguez.com/",
+   "status": "ingested",
+   "passages": 69,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 7,
+     "passages": 69
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-90721",
+   "name": "Maria Elvira Salazar",
+   "race": "FL-27-general",
+   "site": "https://mariaelvirasalazar.com/",
+   "status": "ingested",
+   "passages": 96,
+   "pages": 9,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 98,
+     "passages": 96
+    }
+   ],
+   "notes": "Crawl-delay 10s"
+  },
+  {
+   "candidate_id": "FL-DOE-90340",
+   "name": "Eddy Rojas",
+   "race": "FL-28-general",
+   "site": "https://www.eddyrojas.com/",
+   "status": "ingested",
+   "passages": 4,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 4
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-91226",
+   "name": "Carlos A. Gimenez",
+   "race": "FL-28-general",
+   "site": "https://carlosgimenezforcongress.com/",
+   "status": "ingested",
+   "passages": 71,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 5,
+     "passages": 71
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-91699",
+   "name": "Phil \"Felipe\" Ehr",
+   "race": "FL-28-general",
+   "site": "https://ehrforcongress.us/",
+   "status": "ingested",
+   "passages": 29,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 8,
+     "passages": 29
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-90631",
+   "name": "Bale Dalton",
+   "race": "FL-7-general",
+   "site": "https://baledalton.com/",
+   "status": "ingested",
+   "passages": 37,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 6,
+     "passages": 37
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-90696",
+   "name": "Ryan Elijah",
+   "race": "FL-7-general",
+   "site": "https://elijahforcongress.com/",
+   "status": "ingested",
+   "passages": 84,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 4,
+     "passages": 84
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-92377",
+   "name": "Christopher Dennison",
+   "race": "FL-7-general",
+   "site": "https://dennison4congress.com/",
+   "status": "ingested",
+   "passages": 17,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 9,
+     "passages": 17
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-89522",
+   "name": "Mike Haridopolos",
+   "race": "FL-8-general",
+   "site": "https://www.mike4congress.com/",
+   "status": "ingested",
+   "passages": 49,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 7,
+     "passages": 49
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-90831",
+   "name": "Jennifer Jenkins",
+   "race": "FL-8-general",
+   "site": "https://jenkinsforfl.com/",
+   "status": "ingested",
+   "passages": 72,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 23,
+     "passages": 72
+    }
+   ],
+   "notes": "robots.txt read in the browser; 3 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-DOE-89339",
+   "name": "Darren Soto",
+   "race": "FL-9-general",
+   "site": "https://www.darrensoto.com/",
+   "status": "ingested",
+   "passages": 34,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 5,
+     "passages": 34
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-91337",
+   "name": "Dan Green",
+   "race": "FL-9-general",
+   "site": "https://dangreenfl.com/",
+   "status": "ingested",
+   "passages": 10,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 10
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-89119",
+   "name": "Ashley Moody",
+   "race": "FL-SEN-general",
+   "site": "https://ashleymoody.com/",
+   "status": "ingested",
+   "passages": 4,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 11,
+     "passages": 4
+    }
+   ],
+   "notes": "Crawl-delay 10s"
+  },
+  {
+   "candidate_id": "FL-DOE-89955",
+   "name": "Neil J. Gillespie",
+   "race": "FL-SEN-general",
+   "site": "https://neilgillespie4senate.blogspot.com/",
+   "status": "ingested",
+   "passages": 80,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 2,
+     "passages": 80
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-90009",
+   "name": "Angie Nixon",
+   "race": "FL-SEN-general",
+   "site": "https://angienixon.com/",
+   "status": "ingested",
+   "passages": 150,
+   "pages": 3,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 6,
+     "passages": 150
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-90560",
+   "name": "Wilton Simpson",
+   "race": "FL-AGR-general",
+   "site": "https://wiltonsimpson.com/",
+   "status": "ingested",
+   "passages": 72,
+   "pages": 4,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 6,
+     "passages": 72
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-92013",
+   "name": "Joey Mendoza Atkins",
+   "race": "FL-AGR-general",
+   "site": "https://www.joeyforflorida.com/",
+   "status": "ingested",
+   "passages": 25,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 2,
+     "passages": 25
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-89041",
+   "name": "James Uthmeier",
+   "race": "FL-ATG-general",
+   "site": "https://jamesforfl.com/",
+   "status": "ingested",
+   "passages": 110,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 110
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-89231",
+   "name": "Jose Javier Rodriguez",
+   "race": "FL-ATG-general",
+   "site": "https://www.jjr.vote/",
+   "status": "ingested",
+   "passages": 13,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 13
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-89394",
+   "name": "Blaise Ingoglia",
+   "race": "FL-CFO-general",
+   "site": "https://blaiseforflorida.com/",
+   "status": "unreachable: bot challenge did not clear",
+   "passages": 0,
+   "pages": 0,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 1,
+     "seconds": 42,
+     "passages": 0
+    },
+    {
+     "run": 2,
+     "exit": 1,
+     "seconds": 37,
+     "passages": 0
+    }
+   ],
+   "notes": "1 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-DOE-91310",
+   "name": "Annette Taddeo",
+   "race": "FL-CFO-general",
+   "site": "https://annettetaddeo.com/",
+   "status": "unreachable: bot challenge did not clear",
+   "passages": 0,
+   "pages": 0,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 1,
+     "seconds": 33,
+     "passages": 0
+    },
+    {
+     "run": 2,
+     "exit": 1,
+     "seconds": 43,
+     "passages": 0
+    }
+   ],
+   "notes": "robots.txt read in the browser; 1 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-DOE-84076",
+   "name": "Scott Eckhard Jewett",
+   "race": "FL-GOV-general",
+   "site": "https://scottjewett.com/",
+   "status": "ingested",
+   "passages": 389,
+   "pages": 4,
+   "run": 2,
+   "ingest_code": "d635d40 (#92: adds client-rendered pages)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 1,
+     "seconds": 13,
+     "passages": 0
+    },
+    {
+     "run": 2,
+     "exit": 0,
+     "seconds": 15,
+     "passages": 389
+    }
+   ],
+   "notes": "robots.txt read in the browser; 4 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-DOE-88529",
+   "name": "Moliere \"Moe\" Dimanche",
+   "race": "FL-GOV-general",
+   "site": "https://nomoecorruption.com/",
+   "status": "ingested",
+   "passages": 19,
+   "pages": 2,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 3,
+     "passages": 19
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-89042",
+   "name": "Byron Donalds",
+   "race": "FL-GOV-general",
+   "site": "https://byrondonalds.com/",
+   "status": "ingested",
+   "passages": 58,
+   "pages": 7,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 9,
+     "passages": 58
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-89243",
+   "name": "David Jolly",
+   "race": "FL-GOV-general",
+   "site": "https://davidjolly.com/",
+   "status": "ingested",
+   "passages": 195,
+   "pages": 8,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 99,
+     "passages": 195
+    }
+   ],
+   "notes": "Crawl-delay 10s"
+  },
+  {
+   "candidate_id": "FL-DOE-89571",
+   "name": "Frank J. Russo",
+   "race": "FL-GOV-general",
+   "site": "https://russo2026.com/",
+   "status": "ingested",
+   "passages": 201,
+   "pages": 9,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 13,
+     "passages": 201
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "candidate_id": "FL-DOE-90433",
+   "name": "Dean Abrams",
+   "race": "FL-GOV-general",
+   "site": "https://www.deanabrams.com/",
+   "status": "unreachable: bot challenge did not clear",
+   "passages": 0,
+   "pages": 0,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 1,
+     "seconds": 34,
+     "passages": 0
+    },
+    {
+     "run": 2,
+     "exit": 1,
+     "seconds": 33,
+     "passages": 0
+    }
+   ],
+   "notes": "1 page(s) via the browser"
+  },
+  {
+   "candidate_id": "FL-DOE-90630",
+   "name": "Charles Burkett",
+   "race": "FL-GOV-general",
+   "site": "https://burkettforgov.com/",
+   "status": "ingested",
+   "passages": 189,
+   "pages": 1,
+   "run": 1,
+   "ingest_code": "f736d8a (#89: browser fallback for bot challenges)",
+   "attempts": [
+    {
+     "run": 1,
+     "exit": 0,
+     "seconds": 14,
+     "passages": 189
+    }
+   ],
+   "notes": "robots.txt read in the browser"
+  }
+ ]
+}
