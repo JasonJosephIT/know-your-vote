@@ -21,7 +21,11 @@ import {
   canonicalizeUrl,
   decodeEntities,
   dedupeAcrossPages,
-  disallowedPaths,
+  ANTHROPIC_AGENTS,
+  INGEST_AGENT,
+  ROBOTS_AGENTS,
+  blockedAgents,
+  crawlDelaySec,
   extractLinks,
   extractPassages,
   isAllowedByRobots,
@@ -197,9 +201,8 @@ Disallow: /private
 # a comment
 Allow: /
 `;
-check("only the * group is read",
-  disallowedPaths(ROBOTS).join(",") === "/wp-admin/,/private",
-  disallowedPaths(ROBOTS).join(","));
+check("a group naming someone else is not ours",
+  isAllowedByRobots(ROBOTS, "https://e.com/issues"));
 check("a disallowed path is refused",
   !isAllowedByRobots(ROBOTS, "https://e.com/private/plan") &&
     !isAllowedByRobots(ROBOTS, "https://e.com/wp-admin/"));
@@ -207,6 +210,123 @@ check("an allowed path is fetched", isAllowedByRobots(ROBOTS, "https://e.com/iss
 check("no robots.txt means no rules", isAllowedByRobots("", "https://e.com/issues"));
 check("an unparseable url is refused rather than fetched",
   !isAllowedByRobots(ROBOTS, "not a url"));
+
+/* The ingest answers to its own token AND every Anthropic token, because what
+   it reads goes to a model. */
+check("the ingest honors its own token and every Anthropic crawler token",
+  ROBOTS_AGENTS.includes(INGEST_AGENT) &&
+    ANTHROPIC_AGENTS.every((a) => ROBOTS_AGENTS.includes(a)) &&
+    ["ClaudeBot", "anthropic-ai", "Claude-Web", "Claude-User"].every((a) => ROBOTS_AGENTS.includes(a)));
+
+/* jeannette2026.com, 2026-09-24: AI crawlers named and refused, `*` allowed.
+   Under the old `*`-only reading the ingest would have crawled this site. */
+const AI_OPT_OUT = `
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: *
+Allow: /
+Disallow: /css2/
+`;
+check("a site that disallows Anthropic's crawlers is not read, though * allows it",
+  !isAllowedByRobots(AI_OPT_OUT, "https://www.jeannette2026.com/"));
+check("the refusal names the agents that were refused",
+  blockedAgents(AI_OPT_OUT, "https://www.jeannette2026.com/").join(",") ===
+    "ClaudeBot,Claude-Web,anthropic-ai",
+  blockedAgents(AI_OPT_OUT, "https://www.jeannette2026.com/").join(","));
+check("our own token still falls back to *",
+  isAllowedByRobots(AI_OPT_OUT, "https://e.com/issues", [INGEST_AGENT]));
+
+/* Squarespace's default: ClaudeBot listed in the SAME group as *, which blocks
+   only admin paths. Listing an agent is not refusing it. */
+const SHARED_GROUP = `
+User-agent: AI2Bot
+User-agent: anthropic-ai
+User-agent: ClaudeBot
+User-agent: GPTBot
+User-agent: *
+Disallow: /config
+Disallow: /api/
+Allow: /api/ui-extensions/
+`;
+check("an agent listed in a permissive shared group may fetch content pages",
+  isAllowedByRobots(SHARED_GROUP, "https://e.com/issues"));
+check("the shared group's disallows still apply to it",
+  !isAllowedByRobots(SHARED_GROUP, "https://e.com/config") &&
+    !isAllowedByRobots(SHARED_GROUP, "https://e.com/api/data"));
+
+check("a group naming our own token binds us even when * allows",
+  !isAllowedByRobots("User-agent: KnowYourVote\nDisallow: /\n\nUser-agent: *\nAllow: /\n", "https://e.com/"));
+check("a named group replaces *, it does not add to it",
+  isAllowedByRobots("User-agent: *\nDisallow: /\n\nUser-agent: ClaudeBot\nDisallow: /private\n",
+    "https://e.com/issues", ["ClaudeBot"]) &&
+  !isAllowedByRobots("User-agent: *\nDisallow: /\n\nUser-agent: ClaudeBot\nDisallow: /private\n",
+    "https://e.com/issues"),
+  "ClaudeBot is governed by its own group; the ingest's own token still falls to * and is refused");
+check("agent names match case-insensitively and ignore a version suffix",
+  !isAllowedByRobots("User-agent: claudebot/1.0\nDisallow: /\n", "https://e.com/"));
+/* Lines before the first User-agent apply to everyone (a deliberate,
+   politer departure from RFC 9309; see candidate-site.ts). The real case is a
+   WordPress plugin's site-wide Crawl-delay above a Yoast block. */
+const PREAMBLE = `Disallow: /wp-content/uploads/wpforms/
+Crawl-delay: 10
+# START YOAST BLOCK
+User-agent: *
+Disallow:
+`;
+check("a Crawl-delay above the first User-agent is honored",
+  crawlDelaySec(PREAMBLE) === 10, String(crawlDelaySec(PREAMBLE)));
+check("a Disallow above the first User-agent applies to every agent",
+  !isAllowedByRobots(PREAMBLE, "https://e.com/wp-content/uploads/wpforms/x") &&
+    isAllowedByRobots(PREAMBLE, "https://e.com/issues"));
+check("the preamble adds to a named group rather than replacing it",
+  !isAllowedByRobots("Disallow: /private\nUser-agent: ClaudeBot\nDisallow: /drafts\n",
+    "https://e.com/private/x", ["ClaudeBot"]) &&
+  !isAllowedByRobots("Disallow: /private\nUser-agent: ClaudeBot\nDisallow: /drafts\n",
+    "https://e.com/drafts/x", ["ClaudeBot"]));
+check("an empty Disallow allows everything",
+  isAllowedByRobots("User-agent: ClaudeBot\nDisallow:\n", "https://e.com/issues"));
+
+/* Precedence: the longest matching pattern wins, and a tie goes to Allow. */
+const PRECEDENCE = "User-agent: *\nDisallow: /issues\nAllow: /issues/housing\nDisallow: /a\nAllow: /a\n";
+check("a longer Allow beats a shorter Disallow",
+  isAllowedByRobots(PRECEDENCE, "https://e.com/issues/housing"));
+check("a longer Disallow beats a shorter Allow",
+  !isAllowedByRobots("User-agent: *\nAllow: /\nDisallow: /private\n", "https://e.com/private/x"));
+check("the Disallow still covers the rest of its prefix",
+  !isAllowedByRobots(PRECEDENCE, "https://e.com/issues/taxes"));
+check("an equal-length tie goes to Allow",
+  isAllowedByRobots(PRECEDENCE, "https://e.com/a"));
+
+/* Wildcards and anchors, including the query-string rule Wix ships. */
+check("* matches any run and $ anchors the end",
+  !isAllowedByRobots("User-agent: *\nDisallow: /*.pdf$\n", "https://e.com/docs/plan.pdf") &&
+    isAllowedByRobots("User-agent: *\nDisallow: /*.pdf$\n", "https://e.com/docs/plan.pdf.html"));
+check("rules match the query string too",
+  !isAllowedByRobots("User-agent: *\nDisallow: *?lightbox=\n", "https://e.com/gallery?lightbox=1") &&
+    isAllowedByRobots("User-agent: *\nDisallow: *?lightbox=\n", "https://e.com/gallery"));
+check("regex characters in a pattern are literal",
+  isAllowedByRobots("User-agent: *\nDisallow: /a.b\n", "https://e.com/axb"));
+
+/* Crawl-delay: the longest one any governing group asks for, from groups that
+   govern us only. */
+check("Crawl-delay is read from the groups that govern us",
+  crawlDelaySec("User-agent: *\nCrawl-delay: 10\n") === 10);
+check("the longest applicable Crawl-delay wins",
+  crawlDelaySec("User-agent: ClaudeBot\nCrawl-delay: 20\n\nUser-agent: *\nCrawl-delay: 10\n") === 20);
+check("another agent's Crawl-delay does not apply to us",
+  crawlDelaySec("User-agent: BadBot\nCrawl-delay: 600\n\nUser-agent: *\nDisallow:\n") === null);
+check("a malformed Crawl-delay is ignored, not read as zero",
+  crawlDelaySec("User-agent: *\nCrawl-delay: soon\n") === null);
 
 if (failures > 0) {
   console.error(`\nverify-candidate-site: ${failures} failure(s)`);

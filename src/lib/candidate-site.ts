@@ -360,36 +360,187 @@ export function dedupeAcrossPages(passages: readonly Passage[]): Passage[] {
   return out;
 }
 
-/** Minimal robots.txt: the Disallow rules that apply to us.
+/* ---- robots.txt --------------------------------------------------------
 
-    Only `User-agent: *` groups are read, and `Allow` is honored when it is a
-    longer match than the Disallow, which is the documented precedence. An
-    unparseable or missing file means no rules, which is the correct reading of
-    "no robots.txt" and the only safe one for a site that never had any. */
-export function disallowedPaths(robotsTxt: string): string[] {
-  const rules: string[] = [];
-  let inStar = false;
+   WHOSE RULES APPLY. The ingest fetches as `KnowYourVote/1.0`, which on its
+   own falls under `User-agent: *`. But what it fetches is quoted to a model:
+   the passages go to the Noul pass and the brief writer. A site that says
+   "not ClaudeBot, not anthropic-ai" has opted out of exactly that use, and
+   reading it under a different name would be obeying the letter of its file
+   while ignoring what it asked. So the ingest answers to its own token AND to
+   every Anthropic crawler token, and a path is fetched only if ALL of them may
+   fetch it. This is the rule the news sweep already keeps
+   (AI_POLICY_HOLD in src/lib/news-sources.ts): a robots file that names a
+   Claude/Anthropic agent is honored, whatever our UA happens to be.
+
+   HOW, per RFC 9309: a group is one or more consecutive `User-agent` lines
+   and the rules under them. An agent uses every group that names its token
+   (case-insensitively; `ClaudeBot/1.0` names `ClaudeBot`); only when none
+   does it fall back to the `*` groups. Among that agent's rules the LONGEST
+   matching pattern wins and a tie goes to Allow. `*` matches any run of
+   characters and a trailing `$` anchors the end. A missing file, or one with
+   no group for us, means no rules — the correct reading of a site that never
+   published any.
+
+   ONE DEPARTURE, toward politeness. RFC 9309 ignores lines that come before
+   the first `User-agent`. WordPress plugins put a site-wide `Crawl-delay: 10`
+   exactly there (castorforcongress.com, ashleymoody.com and others, above a
+   Yoast block), and ignoring it would hammer a site that asked us to slow
+   down. Those lines are read as applying to EVERY agent, on top of that
+   agent's own groups. That can only make us slower or fetch less. */
+
+/** Our own UA token. Must match the product token in the ingest's UA string. */
+export const INGEST_AGENT = "KnowYourVote";
+
+/** Anthropic's crawler tokens. A site that disallows any of these has opted
+    out of having its text read into a model, which is what the ingest does. */
+export const ANTHROPIC_AGENTS: readonly string[] = [
+  "ClaudeBot",
+  "Claude-User",
+  "Claude-SearchBot",
+  "Claude-Web",
+  "anthropic-ai",
+];
+
+/** Every token whose rules the ingest honors. */
+export const ROBOTS_AGENTS: readonly string[] = [INGEST_AGENT, ...ANTHROPIC_AGENTS];
+
+export interface RobotsRule {
+  allow: boolean;
+  /** The path pattern as written: `*` wildcards, optional trailing `$`. */
+  pattern: string;
+}
+
+export interface RobotsGroup {
+  /** Lowercased product tokens from the group's `User-agent` lines. Empty
+      for the preamble: lines before the first `User-agent`. */
+  agents: string[];
+  /** True for the preamble, which applies to every agent. */
+  everyone: boolean;
+  rules: RobotsRule[];
+  /** `Crawl-delay` in seconds, when the group states a usable one. */
+  crawlDelaySec: number | null;
+}
+
+/** Split a robots.txt into groups. Lines before the first `User-agent` form
+    the preamble (see above); fields no crawler reads (`Sitemap`, `Host`)
+    belong to no group. */
+export function parseRobots(robotsTxt: string): RobotsGroup[] {
+  const preamble: RobotsGroup = { agents: [], everyone: true, rules: [], crawlDelaySec: null };
+  const groups: RobotsGroup[] = [preamble];
+  let current: RobotsGroup = preamble;
+  let sawRule = false;
   for (const rawLine of robotsTxt.split(/\r?\n/)) {
     const line = rawLine.replace(/#.*$/, "").trim();
     if (line.length === 0) continue;
-    const [field, ...rest] = line.split(":");
-    const value = rest.join(":").trim();
-    const name = field.trim().toLowerCase();
+    const colon = line.indexOf(":");
+    if (colon < 0) continue;
+    const name = line.slice(0, colon).trim().toLowerCase();
+    const value = line.slice(colon + 1).trim();
     if (name === "user-agent") {
-      inStar = value === "*";
+      /* Consecutive User-agent lines share one group; one after a rule
+         starts the next. */
+      if (current === preamble || sawRule) {
+        current = { agents: [], everyone: false, rules: [], crawlDelaySec: null };
+        groups.push(current);
+        sawRule = false;
+      }
+      const token = value.split("/")[0].trim().toLowerCase();
+      if (token.length > 0) current.agents.push(token);
       continue;
     }
-    if (inStar && name === "disallow" && value.length > 0) rules.push(value);
+    if (name === "allow" || name === "disallow") {
+      sawRule = true;
+      /* An empty value is "no rule", not "match everything". */
+      if (value.length > 0) current.rules.push({ allow: name === "allow", pattern: value });
+    } else if (name === "crawl-delay") {
+      sawRule = true;
+      const sec = Number(value);
+      if (Number.isFinite(sec) && sec >= 0) current.crawlDelaySec = sec;
+    }
   }
-  return rules;
+  return groups;
 }
 
-export function isAllowedByRobots(robotsTxt: string, url: string): boolean {
-  let path: string;
-  try {
-    path = new URL(url).pathname || "/";
-  } catch {
-    return false;
+/** The groups that govern one agent: every group naming its token, else
+    every `*` group, plus the preamble either way. */
+export function groupsFor(groups: readonly RobotsGroup[], agent: string): RobotsGroup[] {
+  const token = agent.toLowerCase();
+  const named = groups.filter((g) => g.agents.includes(token));
+  const own = named.length > 0 ? named : groups.filter((g) => g.agents.includes("*"));
+  return [...groups.filter((g) => g.everyone), ...own];
+}
+
+function patternMatches(pattern: string, target: string): boolean {
+  const anchored = pattern.endsWith("$");
+  const body = anchored ? pattern.slice(0, -1) : pattern;
+  const re = body
+    .split("*")
+    .map((part) => part.replace(/[.+?^${}()|[\]\\]/g, "\\$&"))
+    .join(".*");
+  return new RegExp(`^${re}${anchored ? "$" : ""}`).test(target);
+}
+
+function agentMayFetch(groups: readonly RobotsGroup[], agent: string, target: string): boolean {
+  let best: RobotsRule | null = null;
+  for (const g of groupsFor(groups, agent)) {
+    for (const rule of g.rules) {
+      if (!patternMatches(rule.pattern, target)) continue;
+      if (
+        best === null ||
+        rule.pattern.length > best.pattern.length ||
+        (rule.pattern.length === best.pattern.length && rule.allow)
+      ) {
+        best = rule;
+      }
+    }
   }
-  return !disallowedPaths(robotsTxt).some((rule) => path.startsWith(rule));
+  return best === null || best.allow;
+}
+
+/** The agents in `agents` that robots.txt forbids from fetching `url`. Empty
+    means every one may fetch it. An unparseable url is refused by all. */
+export function blockedAgents(
+  robotsTxt: string,
+  url: string,
+  agents: readonly string[] = ROBOTS_AGENTS,
+): string[] {
+  let target: string;
+  try {
+    const u = new URL(url);
+    /* Rules match the path AND query: `Disallow: /*?lightbox=` is real. */
+    target = `${u.pathname || "/"}${u.search}`;
+  } catch {
+    return [...agents];
+  }
+  const groups = parseRobots(robotsTxt);
+  return agents.filter((a) => !agentMayFetch(groups, a, target));
+}
+
+/** True only when EVERY agent in `agents` may fetch `url`. */
+export function isAllowedByRobots(
+  robotsTxt: string,
+  url: string,
+  agents: readonly string[] = ROBOTS_AGENTS,
+): boolean {
+  return blockedAgents(robotsTxt, url, agents).length === 0;
+}
+
+/** The longest `Crawl-delay` any group governing these agents asks for, in
+    seconds, or null when none states one. The longest, because the delay is
+    honored for every agent the ingest answers to. */
+export function crawlDelaySec(
+  robotsTxt: string,
+  agents: readonly string[] = ROBOTS_AGENTS,
+): number | null {
+  const groups = parseRobots(robotsTxt);
+  let max: number | null = null;
+  for (const agent of agents) {
+    for (const g of groupsFor(groups, agent)) {
+      if (g.crawlDelaySec !== null && (max === null || g.crawlDelaySec > max)) {
+        max = g.crawlDelaySec;
+      }
+    }
+  }
+  return max;
 }
