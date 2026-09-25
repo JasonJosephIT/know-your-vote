@@ -23,6 +23,7 @@ import {
   dedupeAcrossPages,
   ANTHROPIC_AGENTS,
   INGEST_AGENT,
+  MIN_PAGE_TEXT_CHARS,
   ROBOTS_AGENTS,
   blockedAgents,
   crawlDelaySec,
@@ -30,6 +31,7 @@ import {
   extractPassages,
   isAllowedByRobots,
   isSameSite,
+  looksLikeBotChallenge,
   looksLikePolicyPath,
   namesPolicyArea,
   passageId,
@@ -327,6 +329,38 @@ check("another agent's Crawl-delay does not apply to us",
   crawlDelaySec("User-agent: BadBot\nCrawl-delay: 600\n\nUser-agent: *\nDisallow:\n") === null);
 check("a malformed Crawl-delay is ignored, not read as zero",
   crawlDelaySec("User-agent: *\nCrawl-delay: soon\n") === null);
+
+/* ---- bot challenges ---------------------------------------------------
+   Real markup captured from candidate hosts on 2026-09-25. A challenge read
+   as the page yields zero passages, which looks like a candidate who said
+   nothing, so every shape the ingest meets must be recognised. */
+const SITEGROUND_REFRESH =
+  `<html><head><link rel="icon" href="data:;"><meta http-equiv="refresh" ` +
+  `content="0;/.well-known/sgcaptcha/?r=%2F&y=ipr:160.79.106.132:1790305984.952"></meta></head></html>`;
+const SITEGROUND_SCREEN =
+  `<!DOCTYPE html><html><head><title>Robot Challenge Screen</title></head>` +
+  `<body>annettetaddeo.com Checking the site connection security</body></html>`;
+const CLOUDFLARE_WAIT =
+  `<!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title>` +
+  `<script>window._cf_chl_opt={cvId:'3'};</script></head><body></body></html>`;
+const CLOUDFLARE_BLOCK =
+  `<!DOCTYPE html><html><head><title>Attention Required! | Cloudflare</title></head><body></body></html>`;
+const REAL_PAGE =
+  `<!DOCTYPE html><html><head><title>Jennifer Jenkins for U.S. Congress</title></head>` +
+  `<body><p>We use Cloudflare to keep this site fast. Just a moment of your time to sign up.</p></body></html>`;
+
+check("SiteGround's meta-refresh interstitial is a challenge", looksLikeBotChallenge(SITEGROUND_REFRESH));
+check("SiteGround's Robot Challenge Screen is a challenge", looksLikeBotChallenge(SITEGROUND_SCREEN));
+check("Cloudflare's 'Just a moment...' is a challenge", looksLikeBotChallenge(CLOUDFLARE_WAIT));
+check("Cloudflare's 'Attention Required!' block is a challenge", looksLikeBotChallenge(CLOUDFLARE_BLOCK));
+check("a real page that merely mentions Cloudflare is not a challenge",
+  !looksLikeBotChallenge(REAL_PAGE));
+check("a robots.txt is not a challenge",
+  !looksLikeBotChallenge("User-agent: *\nDisallow: /wp-admin/\n"));
+check("only the head of a document is examined",
+  !looksLikeBotChallenge(`<html><body>${"x".repeat(20_000)}<title>Just a moment...</title></body></html>`));
+check("a rendered page must carry more text than an interstitial's one line",
+  MIN_PAGE_TEXT_CHARS > "annettetaddeo.com Checking the site connection security".length);
 
 if (failures > 0) {
   console.error(`\nverify-candidate-site: ${failures} failure(s)`);
