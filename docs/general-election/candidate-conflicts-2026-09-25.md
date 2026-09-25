@@ -84,36 +84,43 @@ page alone does not say it, so the proof rests partly on another source.
 ## 5. The ingest cannot read it as things stand
 
 These sites are stored, and voters can click them, but
-`scripts/candidate-site-ingest.ts` gets nothing from them. Each was checked
-on 2026-09-25 by fetching its robots.txt and homepage the way the ingest does
-(same UA, same client).
+`scripts/candidate-site-ingest.ts` gets nothing from them, or had nothing
+until decision (A) below. Each was checked on 2026-09-25 by running the
+ingest itself (same UA, same client). The bot challenges are intermittent: a
+site that serves robots.txt on one run can challenge it on the next.
 
-| Candidate | Race | What the ingest meets | Status |
+**Decision (A), 2026-09-25: an unreadable robots.txt no longer stops the
+ingest.** It is treated as no rules, with a `WARNING robots.txt unreadable`
+line naming the site. A readable file that refuses Anthropic's crawlers still
+stops the run. Re-run the same day on all eleven sites that had stopped at
+robots.txt, it unlocked **one**: Vicki Lopez (9 passages). The other ten serve
+the same bot challenge on their homepage, so they now fail at the page, not
+at robots.txt. That makes them (B) cases.
+
+| Candidate | Race | What the ingest meets (2026-09-25, after (A)) | Status |
 |---|---|---|---|
 | Jeannette Quiñones Hernández | Orange Commission D8 | robots.txt disallows ClaudeBot, anthropic-ai, Claude-Web; the ingest refuses by name | **Noted**: her opt-out is honored; she will have no sourced positions |
-| Jackie Toledo | Hillsborough Commission D1 | robots.txt answered with a bot-challenge page (HTTP 202) | **Open** (A) |
-| Harry Cohen | Hillsborough Commission D1 | robots.txt answered with a bot-challenge page (HTTP 202) | **Open** (A) |
-| James Pericola | U.S. House FL-11 | robots.txt answered with a bot-challenge page (HTTP 202) | **Open** (A) |
-| Brent Andersen | U.S. House FL-20 | robots.txt answered with a bot-challenge page (HTTP 202) | **Open** (A) |
-| Pia Dandiya | U.S. House FL-22 | robots.txt answered with a bot-challenge page (HTTP 202) | **Open** (A) |
-| Oliver G. Gilbert III | U.S. House FL-24 | robots.txt answered with a bot-challenge page (HTTP 202) | **Open** (A) |
-| Roberto Fernandez III | Broward School Board D6 | robots.txt answered with a bot-challenge page (HTTP 202) | **Open** (A) |
-| Caryl Sandler Shuham | Broward Commission D6 | robots.txt answered with a bot-challenge page (HTTP 202) | **Open** (A) |
-| Vicki L. Lopez | Miami-Dade Commission D5 | robots.txt answered with a bot-challenge page (HTTP 202) | **Open** (A) |
-| Annette Taddeo | CFO | the connection is refused to a non-browser client | **Open** (A) |
-| Tiffany Moore Russell | Orange County Mayor | the connection is refused to a non-browser client | **Open** (A) |
+| Vicki L. Lopez | Miami-Dade Commission D5 | Ingests: 9 passages | **Resolved** by (A) |
+| Jackie Toledo | Hillsborough Commission D1 | robots.txt and homepage both answer with a bot-challenge page | **Open** (B) |
+| Harry Cohen | Hillsborough Commission D1 | Homepage is a bot-challenge page (robots.txt intermittently too) | **Open** (B) |
+| James Pericola | U.S. House FL-11 | Homepage is a bot-challenge page (robots.txt intermittently too) | **Open** (B) |
+| Brent Andersen | U.S. House FL-20 | robots.txt and homepage both answer with a bot-challenge page | **Open** (B) |
+| Pia Dandiya | U.S. House FL-22 | robots.txt and homepage both answer with a bot-challenge page | **Open** (B) |
+| Oliver G. Gilbert III | U.S. House FL-24 | robots.txt and homepage both answer with a bot-challenge page | **Open** (B) |
+| Roberto Fernandez III | Broward School Board D6 | robots.txt and homepage both answer with a bot-challenge page | **Open** (B) |
+| Caryl Sandler Shuham | Broward Commission D6 | robots.txt and homepage both answer with a bot-challenge page | **Open** (B) |
+| Annette Taddeo | CFO | robots.txt and homepage both answer with a bot-challenge page, or refuse the connection | **Open** (B) |
+| Tiffany Moore Russell | Orange County Mayor | robots.txt and homepage both answer with a bot-challenge page, or refuse the connection | **Open** (B) |
 | Jennifer Jenkins | U.S. House FL-8 | robots.txt readable, but the homepage is a bot-challenge page, so no passages | **Open** (B) |
 | Mike Beltran | U.S. House FL-14 | robots.txt readable, but the homepage is a bot-challenge page, so no passages | **Open** (B) |
 | Rob Piper | Miami-Dade Commission D5 | Cloudflare answers 403 to robots.txt and homepage alike | **Open** (B) |
 
-Two decisions cover all of these:
+- **(A) Policy: decided.** An unreadable robots.txt is treated as no rules,
+  with a warning, so the site's stance is on record as unknown rather than
+  assumed.
+- **(B) Mechanics: open, and now the only blocker for 13 candidates.** These
+  sites block any non-browser client whatever robots.txt says. Reading them
+  would need a browser-based fetch in the ingest, which is a separate change.
 
-- **(A) Policy.** Should the ingest go ahead when a site's robots.txt cannot
-  be read? Today it stops, because an unreadable policy is not consent. The
-  news sweep leaves the same question (flvoicenews.com) to the founder.
-- **(B) Mechanics.** These sites block any non-browser client, whatever
-  robots.txt says. Reading them would need a browser-based fetch in the
-  ingest, which is a separate change.
-
-Until then, these candidates can have a site on their card but no sourced
-positions from it. That is the same pipeline gap as Datto's.
+Until (B) is done, these candidates can have a site on their card but no
+sourced positions from it. That is the same pipeline gap as Datto's.
