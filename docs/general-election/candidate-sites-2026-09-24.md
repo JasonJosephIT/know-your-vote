@@ -274,7 +274,7 @@ NULL is the true value for each of these: we looked, and there is no campaign si
 
 ## Roster problems found along the way
 
-**Fixed in `supabase/migrations/0038_county_roster_fixes.sql`.** The three below were confirmed on the live VoterFocus lists on 2026-09-25, and all 49 county ballot-tier candidates were re-checked the same day; no other race is affected. The cause was the 2026-09-21 local-ballot derivation, which joined each of these names to another candidate's status in the same contest. The replacements and their verified sites:
+**Fixed in `supabase/migrations/0038_county_roster_fixes.sql`, applied 2026-09-25.** The three below were confirmed on the live VoterFocus lists on 2026-09-25, and all 49 county ballot-tier candidates were re-checked the same day; no other race is affected. The cause was the 2026-09-21 local-ballot derivation, which joined each of these names to another candidate's status in the same contest. The replacements and their verified sites:
 
 | Race | Out | In | `official_site` | Confirmed by | robots.txt |
 |---|---|---|---|---|---|
