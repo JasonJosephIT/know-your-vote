@@ -159,13 +159,13 @@ INSERT INTO measure_resource
 VALUES
   ('FL-AM3-general:dos-init-detail', 'FL-AM3-general', 'src_dos_init_detail_am3',
    'neutral', 'official', 'document',
-   'Initiative Detail: Increased Homestead Exemption (seqnum 110)', NULL, NULL, NULL,
+   'INCREASED HOMESTEAD EXEMPTION; LOWER CAP ON INCREASES IN NON-HOMESTEAD PROPERTY ASSESSMENTS', NULL, NULL, NULL,
    'State''s own initiative-tracking record for this amendment', 1),
 
   ('FL-AM3-general:ocfl-property-tax', 'FL-AM3-general', 'src_ocfl_property_tax_am3',
    'neutral', 'official', 'document',
    'Property Tax Amendment 3', NULL, NULL, NULL,
-   'County government''s factual explainer page', 2),
+   'Orange County Government page', 2),
 
   ('FL-AM3-general:wfla-battleground-video', 'FL-AM3-general', 'src_wfla_battleground_am3',
    'neutral', 'reporting', 'video',
@@ -175,32 +175,32 @@ VALUES
   ('FL-AM3-general:vote-yes-on-3-site', 'FL-AM3-general', 'src_voteyeson3_site',
    'support', 'argument', 'document',
    'Vote Yes on 3', NULL, NULL, NULL,
-   'Ballot committee campaigning for Amendment 3', 1),
+   'Florida Realtors'' committee', 1),
 
   ('FL-AM3-general:florida-realtors-launch', 'FL-AM3-general', 'src_floridarealtors_launch_am3',
    'support', 'argument', 'article',
-   'Florida Realtors Launches ''Vote Yes 3'' Campaign', NULL, '2026-09-09', NULL,
-   'Trade association funding the Vote Yes on 3 committee', 2),
+   'Florida Realtors launches Vote Yes on 3 campaign', NULL, '2026-09-09', NULL,
+   'Florida Realtors'' own announcement', 2),
 
   ('FL-AM3-general:wftv-sheriffs-ad-report', 'FL-AM3-general', 'src_wftv_sheriffs_ad_report_am3',
    'neutral', 'reporting', 'article',
-   'Florida Sheriffs Association launches ad campaign against Amendment 3', NULL, '2026-09-15', NULL,
+   'Florida Sheriff''s Association launches ad campaign against Amendment 3', NULL, '2026-09-15', NULL,
    NULL, 4),
 
   ('FL-AM3-general:fsa-youtube-short', 'FL-AM3-general', 'src_fsa_short_am3',
    'oppose', 'argument', 'video',
    'Amendment 3 Rips Out Public Safety Funding', NULL, NULL, 16,
-   'Law-enforcement trade association''s own campaign video', 1),
+   'Posted to the Florida Sheriffs Association''s own YouTube channel', 1),
 
   ('FL-AM3-general:flcities-property-taxes', 'FL-AM3-general', 'src_flcities_property_taxes_am3',
    'oppose', 'argument', 'document',
    'Property Taxes', NULL, '2026-09-18', NULL,
-   'Municipal government association''s advocacy page', 2),
+   'Florida League of Cities'' own page', 2),
 
   ('FL-AM3-general:1000-friends-property-tax', 'FL-AM3-general', 'src_1000fof_property_tax_am3',
    'oppose', 'argument', 'document',
-   'Property Tax', NULL, NULL, NULL,
-   'Land-use advocacy nonprofit''s own position page', 3),
+   'Florida''s Proposed Property Tax Reform', NULL, NULL, NULL,
+   '1000 Friends of Florida''s own position page', 3),
 
   ('FL-AM3-general:clickorlando-lake-mary-presser', 'FL-AM3-general', 'src_clickorlando_lake_mary_am3',
    'neutral', 'reporting', 'article',
@@ -209,7 +209,7 @@ VALUES
 
   ('FL-AM3-general:political-cortadito', 'FL-AM3-general', 'src_political_cortadito_am3',
    'oppose', 'commentary', 'article',
-   'Amendment 3: Daniella Levine Cava''s ''no'' campaign', 'Elaine de Valle (Ladra)', '2026-09-03', NULL,
+   'Amendment 3 looks like a winner — until Florida voters learn what it does', 'Elaine de Valle (Ladra)', '2026-09-03', NULL,
    'Independent Miami politics blog', 4),
 
   ('FL-AM3-general:cbs12-jenny-fields-video', 'FL-AM3-general', 'src_cbs12_jenny_fields_am3',
@@ -232,17 +232,48 @@ ON CONFLICT (measure_id, source_id) DO UPDATE SET
   duration_seconds = EXCLUDED.duration_seconds, note = EXCLUDED.note,
   display_order = EXCLUDED.display_order;
 
--- (3) Publish. Both sides are present (2 support, 4 oppose; 4 <= 2x2) so
---     0034's trg_measure_balance accepts this. AM1 and AM2 are untouched --
---     no row is written for them here -- and stay `listed`.
-INSERT INTO measure_publication (measure_id, status, published_at, note)
-VALUES (
-  'FL-AM3-general', 'published', now(),
-  'Amendment 3 resources seeded from row-by-row verification, 2026-09-24 (0038). '
-  'AM1/AM2 remain listed -- see the Decisions section of '
-  'docs/general-election/measure-resources-verified-2026-09-24.md.'
+-- (3) Publish, with its admin_action audit row written in the SAME statement.
+--     Both sides are present (2 support, 4 oppose; 4 <= 2x2) so 0034's
+--     trg_measure_balance accepts this. AM1 and AM2 are untouched -- no row
+--     is written for them here -- and stay `listed`.
+--
+--     measure_publication has no door function like set_race_publication
+--     (0018) -- list-ballot-2026.sql's own header makes the same point for
+--     the `listed` tier -- so the audit row is written here, via a CTE that
+--     reads the prior status before the UPSERT applies (sibling CTEs in one
+--     WITH clause share the pre-statement snapshot, so `prior` sees the
+--     row as it was before `upserted` writes it). The INSERT INTO
+--     admin_action fires only when status actually changes (`prior.status
+--     IS DISTINCT FROM upserted.status`), so a second run of this file --
+--     where AM3 is already `published` -- flips nothing and logs nothing:
+--     re-running 0038 sets AM3 to `published` (a no-op if it already is) and
+--     never writes a duplicate audit row.
+WITH prior AS (
+  SELECT status FROM measure_publication WHERE measure_id = 'FL-AM3-general'
+), upserted AS (
+  INSERT INTO measure_publication (measure_id, status, published_at, note)
+  VALUES (
+    'FL-AM3-general', 'published', now(),
+    'Amendment 3 resources seeded from row-by-row verification, 2026-09-24 (0038). '
+    'AM1/AM2 remain listed -- see the Decisions section of '
+    'docs/general-election/measure-resources-verified-2026-09-24.md.'
+  )
+  ON CONFLICT (measure_id) DO UPDATE SET
+    status = 'published',
+    published_at = COALESCE(measure_publication.published_at, EXCLUDED.published_at),
+    note = EXCLUDED.note
+  RETURNING measure_id, status
+), logged AS (
+  INSERT INTO admin_action (actor, action, subject_kind, subject_ref, detail)
+  SELECT 'founder', 'publish', 'measure_publication', u.measure_id,
+         jsonb_build_object(
+           'prior_status', p.status,
+           'new_status',   u.status,
+           'reason',       'Amendment 3 resources seeded from row-by-row verification, 2026-09-24 (0038)'
+         )
+    FROM upserted u
+    LEFT JOIN prior p ON true
+   WHERE p.status IS DISTINCT FROM u.status
+  RETURNING 1
 )
-ON CONFLICT (measure_id) DO UPDATE SET
-  status = 'published',
-  published_at = COALESCE(measure_publication.published_at, EXCLUDED.published_at),
-  note = EXCLUDED.note;
+SELECT 1;

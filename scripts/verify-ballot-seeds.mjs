@@ -101,11 +101,20 @@ await check(
   1
 );
 /* status = 'published', not "no row": the listed tier (0033) means a
-   measure_publication row no longer implies a published measure. */
+   measure_publication row no longer implies a published measure. 0038
+   (Session A) is the one migration that DOES publish a measure -- Amendment 3
+   only, per founder call F7 -- so "no measure is published" is no longer
+   true after every migration; what stays true is that FL-AM3-general is the
+   only one. */
 await check(
-  "no measure is published (arguments do not exist yet)",
+  "exactly one measure is published (FL-AM3-general, seeded by 0038)",
   "SELECT count(*)::int n FROM measure_publication WHERE status = 'published'",
-  0
+  1
+);
+await check(
+  "the one published measure is FL-AM3-general, not some other measure",
+  "SELECT count(*)::int n FROM measure_publication WHERE status = 'published' AND measure_id = 'FL-AM3-general'",
+  1
 );
 
 console.log("0031 + 0032 — Tier A local races");
@@ -240,16 +249,22 @@ await check(
 
 console.log("0033 — listed tier, as the migrations leave it");
 /* Going live is a hand-run script, never a migration: applying 0033 must make
-   nothing visible, so a replay of every migration leaves nothing listed or
-   published anywhere. */
+   nothing visible, so a replay of every migration leaves nothing listed
+   anywhere, and the one exception to "nothing published" is 0038's
+   deliberate publish of FL-AM3-general (checked above). */
 await check(
   "no race is listed or published by any migration",
   "SELECT count(*)::int n FROM race_publication WHERE status IN ('listed','published')",
   0
 );
 await check(
-  "no measure is listed or published by any migration",
-  "SELECT count(*)::int n FROM measure_publication WHERE status IN ('listed','published')",
+  "no measure is listed by any migration",
+  "SELECT count(*)::int n FROM measure_publication WHERE status = 'listed'",
+  0
+);
+await check(
+  "no measure OTHER than FL-AM3-general is published by any migration",
+  "SELECT count(*)::int n FROM measure_publication WHERE status = 'published' AND measure_id <> 'FL-AM3-general'",
   0
 );
 await check(
@@ -260,16 +275,22 @@ await check(
                        WHERE rp.race_id = r.race_id AND rp.status = 'draft')`,
   0
 );
+/* 0033 itself still writes no measure_publication row -- the one row that
+   exists after every migration (FL-AM3-general, published) is 0038's, not
+   0033's. */
 await check(
-  "0033 inserted no measure_publication rows",
+  "the only measure_publication row after every migration is 0038's FL-AM3-general publish",
   "SELECT count(*)::int n FROM measure_publication",
-  0
+  1
 );
 
 /* scripts/list-ballot-2026.sql, the go-live flip, applied to this throwaway
    database after every migration. Proves it runs, flips through the door
-   (one admin_action row per race), lists every measure, publishes nothing,
-   and is a no-op the second time. */
+   (one admin_action row per race), lists every measure that has no
+   publication row yet, publishes nothing new, and is a no-op the second
+   time. FL-AM3-general already has a row (0038's 'published') by this point,
+   so list-ballot-2026.sql's own NOT EXISTS guard skips it -- only the other
+   `measures - 1` measures (AM1, AM2) get listed here. */
 console.log("list-ballot-2026.sql — go-live flip (throwaway)");
 const listSql = await readFile(
   path.join(root, "scripts", "list-ballot-2026.sql"),
@@ -280,6 +301,9 @@ const generalRaces = await n(
 );
 const measures = await n(
   "SELECT count(*)::int n FROM ballot_measure WHERE election='general_2026'"
+);
+const measuresPublishedBefore = await n(
+  "SELECT count(*)::int n FROM measure_publication WHERE status='published'"
 );
 await db.exec(listSql);
 await check(
@@ -294,15 +318,15 @@ await check(
   0
 );
 await check(
-  "every general_2026 measure is listed",
+  "every measure without a prior row is now listed (all but FL-AM3-general)",
   `SELECT count(*)::int n FROM ballot_measure bm JOIN measure_publication mp USING (measure_id)
     WHERE bm.election='general_2026' AND mp.status='listed'`,
-  measures
+  measures - 1
 );
 await check(
-  "no measure is published by the listing",
+  "the listing published nothing new (published count unchanged by the listing)",
   "SELECT count(*)::int n FROM measure_publication WHERE status='published'",
-  0
+  measuresPublishedBefore
 );
 await check(
   "every race flip went through the door and logged 'list'",
@@ -312,10 +336,10 @@ await check(
   generalRaces
 );
 await check(
-  "every measure listing logged an audit row",
+  "every newly-listed measure (all but FL-AM3-general) logged an audit row",
   `SELECT count(*)::int n FROM admin_action
     WHERE subject_kind='measure_publication' AND action='list'`,
-  measures
+  measures - 1
 );
 await check(
   "listing stamped no published_at",
@@ -360,10 +384,23 @@ await check(
   measures
 );
 await check(
-  "anon reads no brief rows (profile/issue/position/claim/resource)",
+  "anon reads no brief rows (profile/issue/position/claim)",
   `SELECT ((SELECT count(*) FROM profile) + (SELECT count(*) FROM issue)
-         + (SELECT count(*) FROM position) + (SELECT count(*) FROM claim)
-         + (SELECT count(*) FROM measure_resource))::int n`,
+         + (SELECT count(*) FROM position) + (SELECT count(*) FROM claim))::int n`,
+  0
+);
+/* FL-AM3-general is the one published measure (0038, untouched by the
+   listing above): anon sees ITS resources -- 0038's 14 rows plus the
+   FL-AM3-general:booklet row 0035 already seeded, 15 total -- but still
+   nothing for the two measures this run only listed (AM1, AM2). */
+await check(
+  "anon reads FL-AM3-general's 15 published resources",
+  "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM3-general'",
+  15
+);
+await check(
+  "anon reads 0 resources for the merely-listed AM1/AM2",
+  "SELECT count(*)::int n FROM measure_resource WHERE measure_id IN ('FL-AM1-general', 'FL-AM2-general')",
   0
 );
 await db.exec("RESET ROLE;");
@@ -373,5 +410,5 @@ if (failures > 0) {
   process.exit(1);
 }
 console.log(
-  "\nverify-ballot-seeds: OK — measures and Tier A local races seeded as intended, none listed or published by a migration; list-ballot-2026.sql lists them all and publishes nothing."
+  "\nverify-ballot-seeds: OK — measures and Tier A local races seeded as intended; no race is listed or published by a migration, and FL-AM3-general is the one measure 0038 publishes; list-ballot-2026.sql lists every race and every measure without a prior row (AM1/AM2), publishes nothing new, and anon reads back AM3's 15 resources and 0 for AM1/AM2."
 );

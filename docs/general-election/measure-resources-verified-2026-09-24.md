@@ -27,6 +27,24 @@ row. Gate (F2): at least one `support` and one `oppose`, larger ≤ 2× smaller.
 | AM2 | 5 | 4 | passes on count | Both NO `argument` rows (FEA toolkit, LWV Vote411 PDF) name an opposition with **no reasons**; the LWV PDF may be a neutral synopsis that lists opponents rather than LWV's own case; the sisusari post reads as undecided. Realistically 5 vs 1–2. |
 | AM3 | 5 | 7 | passes | Strongest of the three. Reclassified to `reporting`/`neutral`: Florida Chamber, RPOF, DeSantis, Miami-Dade Sheriff (not found in their own words); Lake Wales page (argues a side, so not `official`) and the Martin County video (uploaded by CBS12). |
 
+## Open points to check before any row is written
+
+- **AM3 DeSantis.** The verifier says he called it "foolish". That word is his
+  documented quote on **AM1**, so this may be a mix-up. Re-check before filing
+  him on either side of AM3. **Resolved by 0038:** confirmed a mix-up — the
+  "foolish" quote is his documented AM1 remark (WUSF/CBS Miami, 2026-09-15/16),
+  and no primary DeSantis statement on AM3 itself was found. He is excluded
+  from AM3 entirely per the founder's direction (F7 header comment in 0038).
+- **Rows only seen as search snippets** (403 or paywall: WFLA, Bradenton Times,
+  pcpao.gov, the flsenate/edr PDFs, several floridapolitics.com pieces) are
+  not verified loads. Open them in a browser before seeding. **Resolved by
+  0038:** none of these snippet-only rows were seeded — 0038's header lists
+  every one of them under "EXCLUDED — not opened."
+- **Sparker's Soapbox** (AM1) is a both-sides explainer. `commentary` cannot be
+  `neutral`, so drop it. **Resolved by 0038:** dropped — AM1 is not seeded at
+  all (see the Amendment 1 decision below), so Sparker's Soapbox is not a row
+  in any migration.
+
 ## Decisions (2026-09-24)
 
 Founder decisions, final:
@@ -45,22 +63,12 @@ Founder decisions, final:
   `analysis` row (Florida TaxWatch, support) and two Substack posts — a
   guide and two personal blogs is a thin basis for a published page, even
   though the raw count passes the ≤2× gate.
-- **Amendment 2 not published.** Both identified NO-side organizations
-  (Florida Education Association, League of Women Voters of Florida) state
-  their opposition with no stated reasons anywhere in their own material —
-  a bare "opposed" listing, not a case. Publishing NO would show two named
+- **Amendment 2 not published.** In the two documents we checked (FEA
+  toolkit, LWV Vote411 PDF), both identified NO-side organizations (Florida
+  Education Association, League of Women Voters of Florida) state their
+  opposition with no stated reasons anywhere in their own material — a bare
+  "opposed" listing, not a case. Publishing NO would show two named
   opponents who, on the page, appear to object without giving a reason.
-
-Open points to check before any row is written:
-
-- **AM3 DeSantis.** The verifier says he called it "foolish". That word is his
-  documented quote on **AM1**, so this may be a mix-up. Re-check before filing
-  him on either side of AM3.
-- **Rows only seen as search snippets** (403 or paywall: WFLA, Bradenton Times,
-  pcpao.gov, the flsenate/edr PDFs, several floridapolitics.com pieces) are
-  not verified loads. Open them in a browser before seeding.
-- **Sparker's Soapbox** (AM1) is a both-sides explainer. `commentary` cannot be
-  `neutral`, so drop it.
 
 <!-- per-amendment detail below -->
 
@@ -189,6 +197,33 @@ Excluding neutral rows: **5 support** (TaxWatch, Farm Bureau, Wilton Simpson/FDA
 | 38 | https://www.youtube.com/watch?v=EX3t4tN9a6I "New tool helps Florida voters research Amendment 3 property taxes" | Loads (browser verified) | WPTV News (covering Florida TaxWatch's tool) | ~1 month before 2026-09-24 (≈2026-08-21) | video, 2:36 | reporting | neutral | "Florida Tax Watch launched a tool to help voters research Amendment 3" |
 | 39 | https://www.youtube.com/watch?v=r6M34w74GuI "Amendment 3 backers say bigger property tax break could help Florida homeowners stay put" | Loads (browser verified) | CBS 12 News – WPEC | 7 days before 2026-09-24 (≈2026-09-17) | video, 3:36 | reporting | neutral | "Supporters... say the proposed changes... could help homeowners stay in their homes" |
 | 40 | Sheriffs' TV ad, video row (same underlying campaign as row 26/27) | See row 27 — best available primary is the FSA short, 16 sec | Florida Sheriffs Association | 2026-09-15 | video | argument | oppose | see row 27 |
+
+### Title (verbatim), fix round 1 (2026-09-24)
+
+0038 originally filed 9 of its 14 rows' titles as reconstructions from the
+URL slug rather than the page's own headline/`<title>`. Each was re-opened
+(WebFetch, or `curl` for the ones that would decode) and the title column
+below is the page's own title/headline, verbatim, with only a trailing
+` | Site Name` suffix stripped:
+
+| Row (# above) | Source | 0038's original title | Verbatim title (verified) |
+|---|---|---|---|
+| 1 | DoS InitDetail (seqnum 110) | "Initiative Detail: Increased Homestead Exemption (seqnum 110)" | INCREASED HOMESTEAD EXEMPTION; LOWER CAP ON INCREASES IN NON-HOMESTEAD PROPERTY ASSESSMENTS (the page's own bolded initiative title; `<title>` tag itself is just "Constitutional Initiatives" — a generic SPA shell, not usable) |
+| 5 | ocfl.net/.../PropertyTaxAmendment3.aspx | "Property Tax Amendment 3" | Property Tax Amendment 3 (confirmed via `<title>` tag — unchanged) |
+| 20 | floridarealtors.org launch article | "Florida Realtors Launches ''Vote Yes 3'' Campaign" | Florida Realtors launches Vote Yes on 3 campaign (confirmed via `<title>`/og:title — corrects case and "Vote Yes 3" → "Vote Yes on 3") |
+| 26 | wftv.com sheriffs ad report | "Florida Sheriffs Association launches ad campaign against Amendment 3" | Florida Sheriff's Association launches ad campaign against Amendment 3 (confirmed via og:title — the page's own `<title>` tag is a generic section title, "Amendment Three: How property tax changes affect funding - WFTV", not this article's headline; og:title is the article-specific one) |
+| 27 | FSA YouTube short | "Amendment 3 Rips Out Public Safety Funding" | Amendment 3 Rips Out Public Safety Funding (confirmed via YouTube oEmbed — unchanged) |
+| 29 | flcities.com/propertytaxes | "Property Taxes" | Property Taxes (confirmed via `<title>` tag — unchanged) |
+| 30 | 1000fof.org/propertytax | "Property Tax" | Florida's Proposed Property Tax Reform (confirmed via `<title>` tag; 0038's title was not this page's own — it read like a topic label, not the headline) |
+| 32 | ClickOrlando Lake Mary presser | "Public safety leaders urge Floridians to vote no on Amendment 3" | Public safety leaders urge Floridians to vote no on Amendment 3 (confirmed via `<title>`/og:title — unchanged) |
+| 35 | Political Cortadito | "Amendment 3: Daniella Levine Cava's 'no' campaign" | Amendment 3 looks like a winner — until Florida voters learn what it does (confirmed via a text-rendering fetch that got past the page's bot check; 0038's title used the URL slug's topic, not the actual headline, which is the deck/subhead "Mayor Daniella Levine Cava starts 'No on 3' campaign," not the page `<title>`) |
+
+All 9 rows were reachable this round (none dropped); 0038 updated in place.
+Support/oppose/neutral counts are unchanged (2/4/8) since no row's stance,
+kind, or inclusion changed — only 5 of the 9 titles above actually differ
+from what 0038 originally filed (rows 1, 20, 26, 30, 35); the other 4 (rows
+5, 27, 29, 32) already matched verbatim by coincidence and are listed here
+only as confirmation that they were checked, not left un-verified.
 
 ### Gaps
 

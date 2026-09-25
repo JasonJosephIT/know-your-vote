@@ -1453,6 +1453,23 @@ await check("anon sees resources only for published measures (not listed, not dr
   if (ids !== "r1,r2,r3") throw new Error(`expected r1,r2,r3 only, got [${ids}]`);
 });
 
+/* 0038 publishes the real FL-AM3-general measure: anon must see all 15 of
+   its resources (0038's 14 plus the FL-AM3-general:booklet row 0035 already
+   seeded), and 0 for AM1/AM2, which 0038 leaves untouched (no
+   measure_publication row at all at the migration level -- they only
+   become 'listed' via the hand-run scripts/list-ballot-2026.sql). */
+await check("anon sees all 15 FL-AM3-general resources, 0 for AM1/AM2", async () => {
+  await db.exec("SET ROLE anon;");
+  const res = await db.query(
+    `SELECT measure_id, count(*)::int n FROM measure_resource
+      WHERE measure_id IN ('FL-AM1-general', 'FL-AM2-general', 'FL-AM3-general')
+      GROUP BY measure_id ORDER BY measure_id;`
+  );
+  await db.exec("RESET ROLE;");
+  const got = res.rows.map((r) => `${r.measure_id}:${r.n}`).join(",");
+  if (got !== "FL-AM3-general:15") throw new Error(`expected FL-AM3-general:15 only, got [${got}]`);
+});
+
 await db.exec("SET ROLE anon;");
 await expectDenied(
   "anon cannot INSERT a ballot_measure",

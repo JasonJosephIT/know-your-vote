@@ -15,19 +15,48 @@ const path =
   process.argv[2] ?? "supabase/migrations/0035_measure_resources_2026.sql";
 const sql = readFileSync(path, "utf8");
 
+/* Finds the end of a VALUES body starting at `from`: the first top-level
+   (outside any '...' literal) "ON CONFLICT" or statement-terminating ";".
+   A plain first-';'-wins scan breaks the moment a quoted value legitimately
+   contains a semicolon -- e.g. a verbatim ballot title like "INCREASED
+   HOMESTEAD EXEMPTION; LOWER CAP ON INCREASES..." (0038) -- which would
+   truncate the body mid-tuple and silently parse to zero rows. */
+function sliceStatementBody(text: string, from: number): string {
+  let i = from;
+  let inQuote = false;
+  while (i < text.length) {
+    const ch = text[i];
+    if (inQuote) {
+      if (ch === "'") {
+        if (text[i + 1] === "'") {
+          i += 2;
+          continue;
+        }
+        inQuote = false;
+      }
+      i++;
+      continue;
+    }
+    if (ch === "'") {
+      inQuote = true;
+      i++;
+      continue;
+    }
+    if (ch === ";") break;
+    if (text.slice(i, i + 11).toUpperCase() === "ON CONFLICT") break;
+    i++;
+  }
+  return text.slice(from, i);
+}
+
 /* Pulls every tuple from the INSERT into `table`. Values are SQL literals:
    'quoted' (with '' escapes), NULL, or a bare number. */
 function tuples(table: string): string[][] {
-  const m = sql.match(
-    /* Stops at ON CONFLICT so the conflict target's own parentheses are
-       never read as a tuple. */
-    new RegExp(
-      `INSERT INTO ${table}\\s*\\(([^)]*)\\)\\s*VALUES([\\s\\S]*?)(?:ON CONFLICT|;)`,
-      "i"
-    )
+  const head = sql.match(
+    new RegExp(`INSERT INTO ${table}\\s*\\(([^)]*)\\)\\s*VALUES`, "i")
   );
-  if (!m) return [];
-  const body = m[2];
+  if (!head || head.index === undefined) return [];
+  const body = sliceStatementBody(sql, head.index + head[0].length);
   const out: string[][] = [];
   const tupleRe = /\(((?:'(?:[^']|'')*'|[^()'])*)\)/g;
   let t: RegExpExecArray | null;
