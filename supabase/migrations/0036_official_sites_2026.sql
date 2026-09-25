@@ -2,8 +2,8 @@
 --
 -- Session B (docs/general-election/sessions/session-b-candidate-websites.md).
 -- 0032 covered FL-GOV-general (7 of 8). This file covers the rest of the
--- ballot tier: 79 candidates here, 68 with a verified site and
--- 11 recorded as having none. Evidence per candidate, the robots.txt
+-- ballot tier: 98 candidates here, 86 with a verified site and
+-- 12 recorded as having none. Evidence per candidate, the robots.txt
 -- reading for each site, and the reason behind every NULL:
 -- docs/general-election/candidate-sites-2026-09-24.md
 --
@@ -657,6 +657,192 @@ WHERE candidate_id = 'FL-VF-HIL-2610';
 --   error, see the doc.
 
 
+-- ==========================================================================
+-- Orange County
+-- ==========================================================================
+
+UPDATE candidate SET
+  official_site = 'https://www.chrismessina.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1239';
+-- Chris Messina (nonpartisan), Orange County Mayor. Homepage
+-- (https://www.chrismessina.com/): header 'CHRIS MESSINA FOR ORANGE COUNTY
+-- MAYOR'; footer disclaimer 'Paid for and approved by Chris Messina for
+-- Orange County Mayor'; title/og:title 'Chris Messina Compassionate Visionary
+-- Leader Rooted in Conservative Values'
+
+UPDATE candidate SET
+  official_site = 'https://tiffanyformayor.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1236';
+-- Tiffany Moore Russell (nonpartisan), Orange County Mayor. Homepage
+-- (https://tiffanyformayor.com/): title and og:title 'Tiffany Moore Russell
+-- for Orange County Mayor'; disclaimer 'paid for and approved by Tiffany
+-- Moore Russell for Orange County Mayor, Non-partisan'
+
+UPDATE candidate SET
+  official_site = 'https://voteroberta.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1401';
+-- Roberta Walton Johnson (DEM), Orange County Clerk of the Courts. Homepage
+-- (https://voteroberta.com/): title, og:title and h1 'Roberta Walton Johnson
+-- for Orange County Clerk of Court'; disclaimer 'Political advertisement paid
+-- for and approved by Roberta Walton Johnson, Democrat, for Orange County
+-- Clerk of Courts'
+
+UPDATE candidate SET
+  official_site = 'https://thomasforclerk.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1364';
+-- Terrell Thomas (NPA), Orange County Clerk of the Courts. Homepage
+-- (https://thomasforclerk.com/): title 'Thomas For Orange County Clerk of
+-- Court - Together. Clerk Forward.'; h1 'Thomas For Orange County Clerk of
+-- Court'; disclaimer 'Political advertisement paid for and approved by
+-- Terrell Thomas, No Party Affiliation, for Orange County Clerk of Court'
+
+UPDATE candidate SET
+  official_site = 'https://www.kamiafororangecounty.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1290';
+-- Kamia Brown (nonpartisan), Orange County Commission, District 2. Homepage
+-- (https://www.kamiafororangecounty.com/): title and og:title 'Kamia Brown
+-- for Orange County Commissioner - District 2'; disclaimer 'Political
+-- advertisement paid for and approved by Kamia Brown for Orange County
+-- Commissioner District 2'
+
+UPDATE candidate SET
+  official_site = 'https://ilikemikecrabb.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1384';
+-- Mike Crabb (nonpartisan), Orange County Commission, District 2. Homepage
+-- (https://ilikemikecrabb.com/): title 'Commissioner Mike Crabb (Mike Crab),
+-- Orange County Commissioner, District 2 | Vote November 3, 2026'; h1 'Keep
+-- Commissioner Mike Crabb Orange County District 2'; disclaimer 'Political
+-- advertisement paid for and approved by Mike Crabb, nonpartisan, for Orange
+-- County Commissioner, District 2'
+
+UPDATE candidate SET
+  official_site = 'https://brianhubertjones.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1260';
+-- Brian Jones (nonpartisan), Orange County Commission, District 4. Homepage
+-- (https://brianhubertjones.com/, via curl): title 'Brian Jones for
+-- Commissioner'; hero 'Building a Better Community Together for District 4';
+-- footer 'Political advertising paid for and approved by Brian Jones Campaign
+-- for County Commissioner, Inc.'
+
+UPDATE candidate SET
+  official_site = 'https://www.votejohannalopez.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1279';
+-- Johanna Lopez (nonpartisan), Orange County Commission, District 4. Homepage
+-- (https://www.votejohannalopez.com/): title/og:title 'Johanna Lopez For
+-- Orange County'; disclaimer 'Political Advertisement paid for and approved
+-- by Johanna Lopez for Orange County Commissioner, District 4'
+
+UPDATE candidate SET
+  official_site = 'https://www.lawannagelzer.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1295';
+-- Lawanna Gelzer (nonpartisan), Orange County Commission, District 6.
+-- Homepage (https://www.lawannagelzer.com/): title 'HOME |
+-- LawannaGelzer.com'; disclaimer 'Political advertisement paid for and
+-- approved by Lawanna Gelzer for Orange County Commissioner, District 6'
+
+UPDATE candidate SET
+  official_site = 'https://mymikescott.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1265';
+-- Michael "Mike" Scott (nonpartisan), Orange County Commission, District 6.
+-- Homepage (https://mymikescott.com/): title 'District 6 Commissioner -
+-- Michael "Mike" Scott'; og:title 'Mike Scott for District 6 Commissioner';
+-- hero 'RE-ELECT COMMISSIONER MIKE SCOTT'
+
+UPDATE candidate SET
+  official_site = 'https://www.patriciarumph.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1283';
+-- Patricia Rumph (nonpartisan), Orange County Commission, District 7.
+-- Homepage (https://www.patriciarumph.com/): title/og:title 'Patricia Rumph
+-- for Orange County Commissioner District 7 | ...'; disclaimer 'Political
+-- Advertisement Paid for and Approved by Patricia Rumph, Non-partisan, for
+-- Orange County Commission, District 7'
+
+UPDATE candidate SET
+  official_site = 'https://votevickivargo.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1271';
+-- Vicki Vargo (nonpartisan), Orange County Commission, District 7. Homepage
+-- (https://votevickivargo.com/): title/og:title 'Vicki Vargo for Orange
+-- County Commissioner'; footer 'Paid by Vicki Vargo for Orange County
+-- Commissioner, District 7'
+
+UPDATE candidate SET
+  official_site = 'https://www.jeannette2026.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1275';
+-- Jeannette Quinones Hernandez (nonpartisan), Orange County Commission,
+-- District 8. Homepage (https://www.jeannette2026.com/): title/og:title
+-- 'Jeannette Quinones for Orange County Commission District 8'; disclaimer
+-- 'PAID FOR BY THE JEANNETTE QUINONES HERNANDEZ CAMPAIGN, NONPARTISAN, FOR
+-- ORANGE COUNTY COMMISSION DISTRICT 8'
+
+UPDATE candidate SET
+  official_site = 'https://www.electvictorres.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1272';
+-- Victor M. Torres Jr. (nonpartisan), Orange County Commission, District 8.
+-- Homepage (https://www.electvictorres.com/): 'Victor "Vic" Torres is a
+-- lifelong public servant running for Orange County Commission District 8';
+-- disclaimer 'Paid for and approved by Victor Torres, non-partisan, for
+-- Orange County Commission District 8'; title 'Vic Torres | Support Community
+-- Progress - Act Now'
+
+UPDATE candidate SET
+  official_site = 'https://www.votefordianamoore.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1314';
+-- Diana Moore (nonpartisan), Orange County School Board, District 3. Homepage
+-- (https://www.votefordianamoore.com/): footer 'Paid for by the Campaign to
+-- Elect Diana Moore for District 3 School Board'; title/og:title 'About |
+-- www.VoteforDianaMoorecom'
+
+UPDATE candidate SET
+  official_site = 'https://www.vote4pena.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1242';
+-- Susanne Pena (nonpartisan), Orange County School Board, District 3.
+-- Homepage (https://www.vote4pena.com/): title/og:title 'Susanne Pena for
+-- Orange County School Board'; disclaimer 'Political advertisement paid for
+-- by Susanne Pena, Non-partisan, for Orange County School Board, District 3'
+
+UPDATE candidate SET
+  official_site = 'https://www.melissaforkids.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1270';
+-- Melissa Lopez Marantes (nonpartisan), Orange County School Board, District
+-- 1. Homepage (https://www.melissaforkids.com/): title/og:title 'Melissa
+-- Lopez Marantes for Orange County School Board District 1 | school board
+-- candidate | Orange County, FL, USA'; disclaimer 'Political advertisement
+-- paid for and approved by Melissa Lopez Marantes, non-partisan, for Orange
+-- County School Board District 1'
+
+UPDATE candidate SET
+  official_site = 'https://votegloriareina.com/',
+  site_last_verified_at = '2026-09-24T00:00:00Z'
+WHERE candidate_id = 'FL-VF-ORA-1318';
+-- Gloria Reina O'Neal (nonpartisan), Orange County School Board, District 2.
+-- Homepage (https://votegloriareina.com/): title/og:title "Gloria Reina
+-- O'Neal for School Board District 2"; disclaimer 'Paid for by Gloria Reina,
+-- Non-partisan, for Orange County School Board, District 2'
+
+-- No official_site (recorded NULL, see the doc for the full reason):
+--   FL-VF-ORA-1245, Angie Gallo: Campaign domain voteangiegallo.com has
+--   lapsed ("Squarespace - Website Expired" 404) after she won the seat
+--   outright in the Aug 18 primary; no other campaign site. Her OCPS District
+--   1 board page is noted, not stored.
+
+
 -- Assert what was achieved. The county rosters are seeded by 0031/0032, so
 -- they exist in the offline harness (scripts/verify-migrations.mjs); the
 -- statewide and congressional rosters arrive through the DoE intake and do
@@ -683,7 +869,24 @@ BEGIN
   -- that candidate exists.
   SELECT count(*) INTO n_mine
     FROM candidate
-   WHERE candidate_id IN ('FL-DOE-89119', 'FL-DOE-90009', 'FL-DOE-89955', 'FL-DOE-89041', 'FL-DOE-89231', 'FL-DOE-91310', 'FL-DOE-89394', 'FL-DOE-92013', 'FL-DOE-90560', 'FL-DOE-90631', 'FL-DOE-92377', 'FL-DOE-90696', 'FL-DOE-90831', 'FL-DOE-89522', 'FL-DOE-91337', 'FL-DOE-89339', 'FL-DOE-89909', 'FL-DOE-91715', 'FL-DOE-91717', 'FL-DOE-88517', 'FL-DOE-89778', 'FL-DOE-88868', 'FL-DOE-89453', 'FL-DOE-92395', 'FL-DOE-88870', 'FL-DOE-91313', 'FL-DOE-89121', 'FL-DOE-89116', 'FL-DOE-90779', 'FL-DOE-89623', 'FL-DOE-90251', 'FL-DOE-91278', 'FL-DOE-91577', 'FL-DOE-90814', 'FL-DOE-92109', 'FL-DOE-89301', 'FL-DOE-91544', 'FL-DOE-90703', 'FL-DOE-88911', 'FL-DOE-89801', 'FL-DOE-90330', 'FL-DOE-89980', 'FL-DOE-89933', 'FL-DOE-90721', 'FL-DOE-90340', 'FL-DOE-91699', 'FL-VF-BRO-1041', 'FL-VF-BRO-1194', 'FL-VF-BRO-1191', 'FL-VF-BRO-1184', 'FL-VF-BRO-1172', 'FL-VF-BRO-1254', 'FL-VF-BRO-1195', 'FL-VF-DAD-2964', 'FL-VF-DAD-2998', 'FL-VF-DAD-2949', 'FL-VF-DAD-3076', 'FL-VF-HIL-2640', 'FL-VF-HIL-2880', 'FL-VF-HIL-2621', 'FL-VF-HIL-2646', 'FL-VF-HIL-2636', 'FL-VF-HIL-2661', 'FL-VF-HIL-2620', 'FL-VF-HIL-2677', 'FL-VF-HIL-2675', 'FL-VF-HIL-2645', 'FL-VF-HIL-2610')
+   WHERE candidate_id IN ('FL-DOE-89119', 'FL-DOE-90009', 'FL-DOE-89955', 'FL-DOE-89041', 'FL-DOE-89231',
+       'FL-DOE-91310', 'FL-DOE-89394', 'FL-DOE-92013', 'FL-DOE-90560', 'FL-DOE-90631',
+       'FL-DOE-92377', 'FL-DOE-90696', 'FL-DOE-90831', 'FL-DOE-89522', 'FL-DOE-91337',
+       'FL-DOE-89339', 'FL-DOE-89909', 'FL-DOE-91715', 'FL-DOE-91717', 'FL-DOE-88517',
+       'FL-DOE-89778', 'FL-DOE-88868', 'FL-DOE-89453', 'FL-DOE-92395', 'FL-DOE-88870',
+       'FL-DOE-91313', 'FL-DOE-89121', 'FL-DOE-89116', 'FL-DOE-90779', 'FL-DOE-89623',
+       'FL-DOE-90251', 'FL-DOE-91278', 'FL-DOE-91577', 'FL-DOE-90814', 'FL-DOE-92109',
+       'FL-DOE-89301', 'FL-DOE-91544', 'FL-DOE-90703', 'FL-DOE-88911', 'FL-DOE-89801',
+       'FL-DOE-90330', 'FL-DOE-89980', 'FL-DOE-89933', 'FL-DOE-90721', 'FL-DOE-90340',
+       'FL-DOE-91699', 'FL-VF-BRO-1041', 'FL-VF-BRO-1194', 'FL-VF-BRO-1191', 'FL-VF-BRO-1184',
+       'FL-VF-BRO-1172', 'FL-VF-BRO-1254', 'FL-VF-BRO-1195', 'FL-VF-DAD-2964', 'FL-VF-DAD-2998',
+       'FL-VF-DAD-2949', 'FL-VF-DAD-3076', 'FL-VF-HIL-2640', 'FL-VF-HIL-2880', 'FL-VF-HIL-2621',
+       'FL-VF-HIL-2646', 'FL-VF-HIL-2636', 'FL-VF-HIL-2661', 'FL-VF-HIL-2620', 'FL-VF-HIL-2677',
+       'FL-VF-HIL-2675', 'FL-VF-HIL-2645', 'FL-VF-HIL-2610', 'FL-VF-ORA-1239', 'FL-VF-ORA-1236',
+       'FL-VF-ORA-1401', 'FL-VF-ORA-1364', 'FL-VF-ORA-1290', 'FL-VF-ORA-1384', 'FL-VF-ORA-1260',
+       'FL-VF-ORA-1279', 'FL-VF-ORA-1295', 'FL-VF-ORA-1265', 'FL-VF-ORA-1283', 'FL-VF-ORA-1271',
+       'FL-VF-ORA-1275', 'FL-VF-ORA-1272', 'FL-VF-ORA-1314', 'FL-VF-ORA-1242', 'FL-VF-ORA-1270',
+       'FL-VF-ORA-1318')
      AND (official_site IS NULL OR site_last_verified_at IS NULL);
   IF n_mine > 0 THEN
     RAISE EXCEPTION '% candidate(s) in this batch exist but did not take their official_site', n_mine;
@@ -707,9 +910,9 @@ BEGIN
   IF n_ballot <> 106 THEN
     RAISE EXCEPTION 'the ballot tier has % candidates, expected 106 - the roster moved, re-check before trusting these URLs', n_ballot;
   END IF;
-  IF n_sited <> 75 THEN
-    RAISE EXCEPTION 'expected 75 of 106 ballot candidates to have official_site (7 from 0032 + 68 here), found %', n_sited;
+  IF n_sited <> 93 THEN
+    RAISE EXCEPTION 'expected 93 of 106 ballot candidates to have official_site (7 from 0032 + 86 here), found %', n_sited;
   END IF;
 
-  RAISE NOTICE '75 of 106 ballot candidates have a verified official_site';
+  RAISE NOTICE '93 of 106 ballot candidates have a verified official_site';
 END $$;

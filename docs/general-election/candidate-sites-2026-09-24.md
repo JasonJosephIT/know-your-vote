@@ -4,9 +4,9 @@
 · Session B, `docs/general-election/sessions/session-b-candidate-websites.md`.
 
 Before this, 7 of 106 ballot candidates had an `official_site`, all of them in FL-GOV
-(`0032`, `candidate-sites-2026-09-21.md`). This batch covers 79 more: **68 have a
-verified campaign site and 11 have none**, each with its reason recorded. With `0036`
-applied, 75 of 106 ballot candidates have a site. Datto (FL-GOV) remains the one
+(`0032`, `candidate-sites-2026-09-21.md`). This batch covers 98 more: **86 have a
+verified campaign site and 12 have none**, each with its reason recorded. With `0036`
+applied, 93 of 106 ballot candidates have a site. Datto (FL-GOV) remains the one
 NULL from `0032`.
 
 ## Method
@@ -25,7 +25,8 @@ The FL-GOV method, unchanged:
 - Leads came from Ballotpedia's per-candidate and per-race external links, the county
   Supervisor of Elections candidate listings, the Libertarian Party of Florida and web search.
 - Every accepted URL was fetched a **second time, independently**, before it went into the
-  migration; the evidence below is what that second read showed.
+  migration (the last of those second reads ran into 2026-09-25 UTC); the evidence below is what
+  the reads showed. `site_last_verified_at` carries the first read's date.
 - Ballotpedia serves a JavaScript challenge to plain HTTP clients, so pages were read in
   headless Chromium. Stored values are the canonical `https://host/` origin (apex vs `www` as
   the site itself redirects or declares in `og:url`).
@@ -135,6 +136,30 @@ The FL-GOV method, unchanged:
 | Kenneth "Ken" Gay | NPA/nonpartisan | Hillsborough County School Board, District 6 | `https://votekennethgay.com/` | Page text "Vote Kenneth Gay - Hillsborough County School Board District 6" |
 | Ashley Meeder | NPA/nonpartisan | Hillsborough County School Board, District 4 | **none** | WITHDRAWN. SOE lists her "Inactive-Withdrawn" for School Board District 4; Patricia "Patti" Rendon holds that seat unopposed and is not in our roster. No site found. Roster error, see the doc. |
 
+## Orange County
+
+| Candidate | Party | Office | `official_site` | Confirmed by |
+|---|---|---|---|---|
+| Chris Messina | NPA/nonpartisan | Orange County Mayor | `https://www.chrismessina.com/` | Homepage (https://www.chrismessina.com/): header 'CHRIS MESSINA FOR ORANGE COUNTY MAYOR'; footer disclaimer 'Paid for and approved by Chris Messina for Orange County Mayor'; title/og:title 'Chris Messina Compassionate Visionary Leader Rooted in Conservative Values' |
+| Tiffany Moore Russell | NPA/nonpartisan | Orange County Mayor | `https://tiffanyformayor.com/` | Homepage (https://tiffanyformayor.com/): title and og:title 'Tiffany Moore Russell for Orange County Mayor'; disclaimer 'paid for and approved by Tiffany Moore Russell for Orange County Mayor, Non-partisan' |
+| Roberta Walton Johnson | DEM | Orange County Clerk of the Courts | `https://voteroberta.com/` | Homepage (https://voteroberta.com/): title, og:title and h1 'Roberta Walton Johnson for Orange County Clerk of Court'; disclaimer 'Political advertisement paid for and approved by Roberta Walton Johnson, Democrat, for Orange County Clerk of Courts' |
+| Terrell Thomas | NPA | Orange County Clerk of the Courts | `https://thomasforclerk.com/` | Homepage (https://thomasforclerk.com/): title 'Thomas For Orange County Clerk of Court – Together. Clerk Forward.'; h1 'Thomas For Orange County Clerk of Court'; disclaimer 'Political advertisement paid for and approved by Terrell Thomas, No Party Affiliation, for Orange County Clerk of Court' |
+| Kamia Brown | NPA/nonpartisan | Orange County Commission, District 2 | `https://www.kamiafororangecounty.com/` | Homepage (https://www.kamiafororangecounty.com/): title and og:title 'Kamia Brown for Orange County Commissioner – District 2'; disclaimer 'Political advertisement paid for and approved by Kamia Brown for Orange County Commissioner District 2' |
+| Mike Crabb | NPA/nonpartisan | Orange County Commission, District 2 | `https://ilikemikecrabb.com/` | Homepage (https://ilikemikecrabb.com/): title 'Commissioner Mike Crabb (Mike Crab), Orange County Commissioner, District 2 \| Vote November 3, 2026'; h1 'Keep Commissioner Mike Crabb Orange County District 2'; disclaimer 'Political advertisement paid for and approved by Mike Crabb, nonpartisan, for Orange County Commissioner, District 2' |
+| Brian Jones | NPA/nonpartisan | Orange County Commission, District 4 | `https://brianhubertjones.com/` | Homepage (https://brianhubertjones.com/, via curl): title 'Brian Jones for Commissioner'; hero 'Building a Better Community Together for District 4'; footer 'Political advertising paid for and approved by Brian Jones Campaign for County Commissioner, Inc.' |
+| Johanna Lopez | NPA/nonpartisan | Orange County Commission, District 4 | `https://www.votejohannalopez.com/` | Homepage (https://www.votejohannalopez.com/): title/og:title 'Johanna Lopez For Orange County'; disclaimer 'Political Advertisement paid for and approved by Johanna López for Orange County Commissioner, District 4' |
+| Lawanna Gelzer | NPA/nonpartisan | Orange County Commission, District 6 | `https://www.lawannagelzer.com/` | Homepage (https://www.lawannagelzer.com/): title 'HOME \| LawannaGelzer.com'; disclaimer 'Political advertisement paid for and approved by Lawanna Gelzer for Orange County Commissioner, District 6' |
+| Michael "Mike" Scott | NPA/nonpartisan | Orange County Commission, District 6 | `https://mymikescott.com/` | Homepage (https://mymikescott.com/): title 'District 6 Commissioner - Michael "Mike" Scott'; og:title 'Mike Scott for District 6 Commissioner'; hero 'RE-ELECT COMMISSIONER MIKE SCOTT' |
+| Patricia Rumph | NPA/nonpartisan | Orange County Commission, District 7 | `https://www.patriciarumph.com/` | Homepage (https://www.patriciarumph.com/): title/og:title 'Patricia Rumph for Orange County Commissioner District 7 \| ...'; disclaimer 'Political Advertisement Paid for and Approved by Patricia Rumph, Non-partisan, for Orange County Commission, District 7' |
+| Vicki Vargo | NPA/nonpartisan | Orange County Commission, District 7 | `https://votevickivargo.com/` | Homepage (https://votevickivargo.com/): title/og:title 'Vicki Vargo for Orange County Commissioner'; footer 'Paid by Vicki Vargo for Orange County Commissioner, District 7' |
+| Jeannette Quinones Hernandez | NPA/nonpartisan | Orange County Commission, District 8 | `https://www.jeannette2026.com/` | Homepage (https://www.jeannette2026.com/): title/og:title 'Jeannette Quiñones for Orange County Commission District 8'; disclaimer 'PAID FOR BY THE JEANNETTE QUIÑONES HERNÁNDEZ CAMPAIGN, NONPARTISAN, FOR ORANGE COUNTY COMMISSION DISTRICT 8' |
+| Victor M. Torres Jr. | NPA/nonpartisan | Orange County Commission, District 8 | `https://www.electvictorres.com/` | Homepage (https://www.electvictorres.com/): 'Victor "Vic" Torres is a lifelong public servant running for Orange County Commission District 8'; disclaimer 'Paid for and approved by Victor Torres, non-partisan, for Orange County Commission District 8'; title 'Vic Torres \| Support Community Progress – Act Now' |
+| Diana Moore | NPA/nonpartisan | Orange County School Board, District 3 | `https://www.votefordianamoore.com/` | Homepage (https://www.votefordianamoore.com/): footer 'Paid for by the Campaign to Elect Diana Moore for District 3 School Board'; title/og:title 'About \| www.VoteforDianaMoorecom' |
+| Susanne Peña | NPA/nonpartisan | Orange County School Board, District 3 | `https://www.vote4pena.com/` | Homepage (https://www.vote4pena.com/): title/og:title 'Susanne Pena for Orange County School Board'; disclaimer 'Political advertisement paid for by Susanne Peña, Non-partisan, for Orange County School Board, District 3' |
+| Melissa Lopez Marantes | NPA/nonpartisan | Orange County School Board, District 1 | `https://www.melissaforkids.com/` | Homepage (https://www.melissaforkids.com/): title/og:title 'Melissa Lopez Marantes for Orange County School Board District 1 \| school board candidate \| Orange County, FL, USA'; disclaimer 'Political advertisement paid for and approved by Melissa Lopez Marantes, non-partisan, for Orange County School Board District 1' |
+| Gloria Reina O'Neal | NPA/nonpartisan | Orange County School Board, District 2 | `https://votegloriareina.com/` | Homepage (https://votegloriareina.com/): title/og:title "Gloria Reina O'Neal for School Board District 2"; disclaimer 'Paid for by Gloria Reina, Non-partisan, for Orange County School Board, District 2' |
+| Angie Gallo | NPA/nonpartisan | Orange County School Board Chair | **none** | Campaign domain voteangiegallo.com has lapsed ("Squarespace - Website Expired" 404) after she won the seat outright in the Aug 18 primary; no other campaign site. Her OCPS District 1 board page is noted, not stored. |
+
 ## Candidates with no site, and why
 
 NULL is the true value for each of these: we looked, and there is no campaign site to read.
@@ -152,6 +177,7 @@ NULL is the true value for each of these: we looked, and there is no campaign si
 | Monica Colucci (`FL-VF-DAD-2953`) | Miami-Dade County School Board, District 8 | SITE COMPROMISED, NOT STORED. monicacolucci.com is her genuine campaign site (disclaimer "paid for and approved by Monica Colucci for Miami-Dade School Board, District 8"), but its WordPress footer carries injected casino/SEO spam links and text, a sign the site has been hacked. Not stored behind her name until it is cleaned; founder's call. | — |
 | Adam Hattersley (`FL-VF-HIL-2639`) | Hillsborough County Commission, District 7 | Campaign withdrawn and no live site: SOE lists him 'Inactive - Withdrawn' for County Commissioner Dist. 7 (Florida Politics: 'Adam Hattersley suspends campaign for Hillsborough County Commission', ~Sept 2025). Ballotpedia's campaign link https://www.adamforflorida.com/ now redirects to a re-registered Indonesian slot-gambling spam site; SOE email domain adam4florida.com resolves to GoDaddy parking IPs and resets HTTPS; adamforhillsborough.com (found in search) is NXDOMAIN. | — |
 | Ashley Meeder (`FL-VF-HIL-2691`) | Hillsborough County School Board, District 4 | Candidate withdrew; no site found. SOE lists Ashley Meeder 'Inactive - Withdrawn' for School Board Member Dist. 4 with $0 raised/spent; nothing found on Ballotpedia or in search. | — |
+| Angie Gallo (`FL-VF-ORA-1245`) | Orange County School Board Chair | Campaign site voteangiegallo.com has lapsed (Squarespace account expired, 404) after she won the chair race outright in the Aug 18, 2026 primary; no other campaign site found (only Facebook). | https://www.ocps.net/district-1-angie-gallo |
 
 ## Crawlability, for the ingest step
 
@@ -227,6 +253,24 @@ NULL is the true value for each of these: we looked, and there is no campaign si
 | `danielaforschools.com` | User-agent: * disallows only /wp-admin/ (admin-ajax allowed); no Claude-specific blocks; crawl allowed. |
 | `keepkarenperez.com` | User-agent: * disallows only /wp-admin/ (admin-ajax allowed); no Claude-specific blocks; crawl allowed. |
 | `votekennethgay.com` | User-agent: * disallows only /wp-admin/ (admin-ajax allowed); no Claude-specific blocks; crawl allowed. |
+| `www.chrismessina.com` | Allowed: User-agent: * with no Disallow, but Crawl-Delay: 20; no Claude-specific rules; no bot challenge |
+| `tiffanyformayor.com` | Allowed: User-agent: * disallows only /wp-admin/; no Claude-specific rules. BOT PROTECTION: SiteGround sgcaptcha 'Robot Challenge Screen' (curl gets 202 challenge; headless Chromium passes after ~6 s JS wait) |
+| `voteroberta.com` | Allowed: User-agent: * Allow: /; no Claude-specific rules; no bot challenge |
+| `thomasforclerk.com` | Allowed: User-agent: * disallows only /wp-admin/, WooCommerce and WPForms upload paths; no Claude-specific rules; no bot challenge |
+| `www.kamiafororangecounty.com` | Allowed: Wix default, User-agent: * Allow: / (Disallow *?lightbox=); no Claude-specific rules; no bot challenge |
+| `ilikemikecrabb.com` | Allowed: User-agent: * Allow: / (disallows /admin, /unsubscribe, /preview, /email/, /lovable/); no Claude-specific rules; no bot challenge |
+| `brianhubertjones.com` | Allowed: User-agent: * disallows only /wp-admin/; no Claude-specific rules. BOT PROTECTION: headless Chromium got 403 'Bot Verification' page; plain curl gets 200 |
+| `www.votejohannalopez.com` | Allowed: Wix default, User-agent: * Allow: /; no Claude-specific rules; no bot challenge |
+| `www.lawannagelzer.com` | Allowed: Wix default, User-agent: * Allow: /; no Claude-specific rules; no bot challenge |
+| `mymikescott.com` | Allowed: WordPress/Yoast, User-agent: * disallows only /wp-admin/ and WooCommerce paths; no Claude-specific rules; no bot challenge |
+| `www.patriciarumph.com` | Allowed: Wix default, User-agent: * Allow: /; no Claude-specific rules; no bot challenge |
+| `votevickivargo.com` | Allowed: Yoast, User-agent: * with empty Disallow; no Claude-specific rules; no bot challenge |
+| `www.jeannette2026.com` | BLOCKED for Claude crawlers: robots.txt has 'User-agent: ClaudeBot', 'anthropic-ai', 'Claude-Web' (and GPTBot) each 'Disallow: /'; User-agent: * Allow: / (Disallow /css2/). Claude-User not named. No bot challenge |
+| `www.electvictorres.com` | Allowed for content: Squarespace robots lists ClaudeBot/anthropic-ai in the same group as User-agent: *, which only disallows /config, /search, /account, /api/, /static/ and query-param variants (no full-site block); no bot challenge |
+| `www.votefordianamoore.com` | Allowed: Wix default, User-agent: * Allow: /; no Claude-specific rules; no bot challenge |
+| `www.vote4pena.com` | Allowed for content: Squarespace robots lists ClaudeBot/anthropic-ai in the same group as User-agent: *, which only disallows /config, /search, /account, /api/, /static/ and query-param variants; no bot challenge |
+| `www.melissaforkids.com` | Allowed: Wix default, User-agent: * Allow: /; no Claude-specific rules; no bot challenge |
+| `votegloriareina.com` | Allowed: User-agent: * Allow: /; no Claude-specific rules; no bot challenge |
 
 ## Roster problems found along the way
 
@@ -246,12 +290,38 @@ Checking each candidate against the county Supervisor of Elections listing turne
 - **Vicki L. Lopez**: Ballotpedia still links `vickiforflorida.com`, her old State House site, which was rejected. The current site carries leftover template text ("Lisa Klein for State House" in its SMS consent block); the title and content are hers.
 - **Stacy Hahn**: Ballotpedia also lists `votehahn.com`; that domain is now parked and was rejected.
 - **Kenneth "Ken" Gay**: the homepage carries `noindex, nofollow`. That governs search indexing, not this ingest, but it is worth a second look before quoting.
+- **Brian Jones**: the page names "Brian Jones for Commissioner" and District 4 but never "Orange County"; accepted because Ballotpedia and the Orange SOE both list this URL for him. It fronts a bot-verification page to headless browsers (plain fetch reads it).
+- **Jeannette Quinones Hernandez**: **robots.txt disallows ClaudeBot, anthropic-ai and Claude-Web.** The URL is stored (it is her site and voters can click it), but the ingest must not crawl it.
+- **Diana Moore**: the disclaimer names her and "District 3 School Board" but still carries the Wix template address (San Francisco); the title is just the domain.
+
+## Decisions for the founder
+
+1. **Apply `0036`.** Not applied here. The file asserts the roster is still 106 ballot candidates
+   and that exactly the expected number are sited, so it fails rather than half-applies if the
+   roster moved. Fix the roster (item 2) in a separate change; `0036` does not depend on it,
+   but its 106 count will need updating if the roster fix lands first.
+2. **Three races carry candidates who are not on the November ballot** (section above):
+   Hillsborough Commission D7 (Hattersley withdrew; Aileen Rodriguez is the Democrat),
+   Hillsborough School Board D4 (Meeder withdrew; Patricia "Patti" Rendon holds the seat), and
+   Miami-Dade School Board D1 (Thera Johnson lost the primary; the runoff is Cothiere vs Katrina
+   Wilson). The directory shows the wrong people for these seats today. This batch was only
+   checked against the SOE listings where a candidate looked wrong, so the other county rosters
+   are worth one systematic pass against their SOE status column.
+3. **Carlos Gimenez (FL-28)**: store his stale 2020-copy campaign site, or leave NULL (current).
+4. **Monica Colucci (Miami-Dade SB 8)**: her real site is compromised with injected spam. Leave
+   NULL until it is cleaned (current), or store it.
+5. **Chris Dennison (FL-7, LPF)**: stored on the page's own strong self-identification, though
+   nothing links to the domain. A confirmation from the LPF would close it.
+6. **AI-crawler opt-outs.** `jeannette2026.com` disallows ClaudeBot, anthropic-ai and Claude-Web.
+   `scripts/candidate-site-ingest.ts` sends `KnowYourVote/1.0` and `isAllowedByRobots()` reads
+   only the `User-agent: *` group, so as written the ingest **would** crawl it. Since the ingest
+   feeds a model, it should honour AI-crawler groups too; until it does, skip that site by hand.
+   Several sites also set `Crawl-delay`, which the ingest does not read.
 
 ## Still open
 
-- Applying `0036` to production is the founder's call. It asserts the roster is still 106
-  ballot candidates and that exactly the expected number now have a site, so it fails loudly
-  rather than half-applying if the roster moved.
 - Candidates with no site are the same pipeline gap as Datto (`candidate-sites-2026-09-21.md`):
   the brief pipeline's only input is a website, so they will read as `no_stated_position_found`
   until something ingests another source.
+- `fec_id` is still empty for the federal candidates; several FEC committee ids were seen
+  during this pass (Gillespie `C00943399`, Jassenoff `C00953877`) but none were stored.
