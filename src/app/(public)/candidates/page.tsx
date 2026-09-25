@@ -2,6 +2,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { DISTRICT_COOKIE, parseDistrictCookie } from "@/lib/district-cookie";
 import { CandidateBrowser } from "@/components/features/CandidateBrowser";
+import { OutsideResources } from "@/components/features/OutsideResources";
 import { SavedCandidates } from "@/components/features/SavedCandidates";
 import { YourRaces } from "@/components/features/YourRaces";
 
@@ -105,6 +106,8 @@ export default async function CandidatesPage({
           );
         })}
       </nav>
+
+      <OutsideResources />
 
       {view === "browse" && (
         <CandidateBrowser q={sp.q} countyFips={sp.county} area={sp.area} />

@@ -198,6 +198,25 @@ check(
 );
 check("race page renders the IssueFilter", /<IssueFilter\b/.test(racePage));
 
+const outside = read("src/components/features/OutsideResources.tsx");
+check("OutsideResources.tsx exists", outside.length > 0);
+check("outbound card loads nothing third-party", !/<img|<iframe|<script/i.test(outside));
+check(
+  "outbound card links to Ballotpedia's sample ballot lookup in a new tab, no referrer",
+  outside.includes('href="https://ballotpedia.org/Sample_Ballot_Lookup"') &&
+    outside.includes('target="_blank"') &&
+    outside.includes('rel="noreferrer"')
+);
+check("outbound card adds no client JavaScript", outside.length > 0 && !outside.includes('"use client"'));
+check(
+  "candidates hub renders the outbound card",
+  /<OutsideResources\s*\/>/.test(code("src/app/(public)/candidates/page.tsx"))
+);
+check(
+  "sitemap lists no /issues URLs",
+  !read("src/app/sitemap.ts").includes("/issues")
+);
+
 /* ---- summary ------------------------------------------------------------ */
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed.`);
