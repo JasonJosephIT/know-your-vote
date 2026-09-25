@@ -1,6 +1,6 @@
 # `official_site` for the rest of the 2026 ballot: what was collected and how
 
-**Collected** 2026-09-24 · Ships as `supabase/migrations/0036_official_sites_2026.sql` (**not applied**)
+**Collected** 2026-09-24 · Ships as `supabase/migrations/0036_official_sites_2026.sql` (**applied 2026-09-25**)
 · Session B, `docs/general-election/sessions/session-b-candidate-websites.md`.
 
 Before this, 7 of 106 ballot candidates had an `official_site`, all of them in FL-GOV
@@ -296,7 +296,7 @@ Checking each candidate against the county Supervisor of Elections listing turne
 
 ## Decisions for the founder
 
-1. **Apply `0036`.** Not applied here. The file asserts the roster is still 106 ballot candidates
+1. ~~**Apply `0036`.**~~ **Done 2026-09-25** (recorded as `official_sites_2026`; 93 of 106 sited, values verified byte-exact against this file). The file asserts the roster is still 106 ballot candidates
    and that exactly the expected number are sited, so it fails rather than half-applies if the
    roster moved. Fix the roster (item 2) in a separate change; `0036` does not depend on it,
    but its 106 count will need updating if the roster fix lands first.
