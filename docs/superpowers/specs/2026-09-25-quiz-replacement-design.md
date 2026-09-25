@@ -128,8 +128,8 @@ therefore gets **its own route**, and the race page stays static:
   `IssueRows`.
 - `generateMetadata` gives the title `"<office>: <issue titles> — Know Your
   Vote"`, reusing the brief the page already loaded (the same cached call).
-- It keeps the existing footer copy ("We write none of it") and adds no new
-  copy about candidates.
+- It reuses the race page's existing footer ("How we stay fair" and the
+  ballot-order line) and adds no new copy about candidates.
 
 ### Other touch points
 
