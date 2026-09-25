@@ -40,11 +40,6 @@ export default function PrivacyPage() {
           &quot;Forget my district&quot; deletes it on the spot.
         </p>
         <p className="text-body">
-          Your quiz answers aren&apos;t stored anywhere — not on your device,
-          not with us. They exist while you are answering and are gone when you
-          close the tab.
-        </p>
-        <p className="text-body">
           Your address and your ZIP aren&apos;t stored either — not on your
           device, not with us. We use them to work out which district you are
           in, keep the district, and forget the rest. The single exception is
@@ -122,16 +117,6 @@ export default function PrivacyPage() {
         </p>
       </section>
 
-      <section className="flex flex-col gap-2">
-        <h2 className="text-h2">The quiz and AI</h2>
-        <p className="text-body">
-          Quiz answers are interpreted by an AI model. We send it only the races
-          on your ballot and your issue answers — never your name, email, or any
-          identifier. Candidates are even anonymized in that request, so the
-          model can&apos;t favor anyone it recognizes. Take the quiz without a
-          ZIP and the races are simply the statewide ones.
-        </p>
-      </section>
 
       <section className="flex flex-col gap-2">
         <h2 className="text-h2">Analytics and errors</h2>

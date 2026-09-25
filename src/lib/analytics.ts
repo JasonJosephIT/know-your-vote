@@ -22,7 +22,6 @@ export type AnalyticsEvent =
   | "zip_resolved"
   | "district_set"
   | "brief_viewed"
-  | "quiz_completed"
   | "candidate_saved"
   | "voting_info_requested";
 
