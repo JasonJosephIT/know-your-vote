@@ -123,9 +123,13 @@ await check(
   "SELECT count(*)::int n FROM race WHERE level='county'",
   32
 );
+/* 0038_county_roster_fixes swaps three wrongly seeded candidates for the
+   right ones: the three out stay as rows, marked withdrawn/excluded and
+   listed in no race, so the ballot tier is still 49. */
+const ROSTER_FIX_OUT = "('FL-VF-HIL-2639', 'FL-VF-HIL-2691', 'FL-VF-DAD-3080')";
 await check(
-  "forty-nine local candidates (34 contested + 15 decided)",
-  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%'",
+  "forty-nine ballot-tier local candidates (34 contested + 15 decided)",
+  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND ballot_status = 'ballot'",
   49
 );
 await check(
@@ -164,15 +168,30 @@ await check(
   0
 );
 await check(
-  "no local candidate is orphaned from its race",
+  "no ballot-tier local candidate is orphaned from its race",
   `SELECT count(*)::int n FROM candidate c
-    WHERE c.candidate_id LIKE 'FL-VF-%'
+    WHERE c.candidate_id LIKE 'FL-VF-%' AND c.ballot_status = 'ballot'
       AND NOT EXISTS (SELECT 1 FROM race r WHERE c.candidate_id = ANY(r.candidate_ids))`,
   0
 );
 await check(
-  "all local candidates are ballot tier",
-  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND ballot_status <> 'ballot'",
+  "the only non-ballot local candidates are 0038's three roster-fix removals",
+  `SELECT count(*)::int n FROM candidate
+    WHERE candidate_id LIKE 'FL-VF-%' AND ballot_status <> 'ballot'
+      AND candidate_id NOT IN ${ROSTER_FIX_OUT}`,
+  0
+);
+await check(
+  "0038's three removals are withdrawn/excluded",
+  `SELECT count(*)::int n FROM candidate
+    WHERE candidate_id IN ${ROSTER_FIX_OUT}
+      AND ballot_status = 'excluded' AND qualifying_status = 'withdrawn'`,
+  3
+);
+await check(
+  "no race lists one of 0038's removals",
+  `SELECT count(*)::int n FROM race r, unnest(r.candidate_ids) cid
+    WHERE cid IN ${ROSTER_FIX_OUT}`,
   0
 );
 await check(
