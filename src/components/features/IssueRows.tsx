@@ -33,8 +33,18 @@ export function IssueRows({ rows }: { rows: IssueRow[] }) {
                     {cell.name}
                   </Link>
                 </h3>
-                {cell.coverage === "no_stated_position_found" && <NoStatedPosition />}
+                {cell.coverage === "no_stated_position_found" && cell.say.length === 0 && (
+                  <NoStatedPosition />
+                )}
                 {cell.say.length > 0 && <ClaimList items={cell.say} />}
+                {cell.say.length === 0 && cell.coverage !== "no_stated_position_found" && (
+                  <Link
+                    href={`/candidates/${cell.candidateId}`}
+                    className="text-caption text-primary underline underline-offset-2"
+                  >
+                    See the full record
+                  </Link>
+                )}
               </article>
             ))}
           </div>

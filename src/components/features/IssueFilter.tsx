@@ -34,6 +34,12 @@ export function IssueFilter({
                     : "bg-surface-muted text-on-surface-muted hover:text-on-surface"
                 }`}
               >
+                {on && (
+                  <>
+                    <span aria-hidden="true">✓ </span>
+                    <span className="sr-only">(selected, select to remove) </span>
+                  </>
+                )}
                 {o.title}
               </Link>
             </li>

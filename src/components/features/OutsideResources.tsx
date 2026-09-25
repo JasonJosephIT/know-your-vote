@@ -22,6 +22,7 @@ export function OutsideResources() {
         className="text-label text-primary underline underline-offset-2"
       >
         Look up your ballot on Ballotpedia
+        <span className="sr-only"> (opens in a new tab)</span>
       </a>
     </aside>
   );

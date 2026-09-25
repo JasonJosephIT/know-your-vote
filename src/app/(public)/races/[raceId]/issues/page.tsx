@@ -26,7 +26,12 @@ export async function generateMetadata({ params, searchParams }: Props) {
   const { raceId } = await params;
   const { pick } = await searchParams;
   const brief = await getRaceBrief(raceId);
-  if (!brief) return { title: "Race in review — Know Your Vote" };
+  if (!brief) {
+    return {
+      title: "Race in review — Know Your Vote",
+      robots: { index: false, follow: true },
+    };
+  }
   const options = spineOptions(brief.spineIssues);
   const selected = parseIssuePick(pick, options.map((o) => o.id));
   const titles = options
@@ -37,6 +42,8 @@ export async function generateMetadata({ params, searchParams }: Props) {
     title: titles
       ? `${brief.race.office}: ${titles} — Know Your Vote`
       : `${brief.race.office} — Know Your Vote`,
+    robots: { index: false, follow: true },
+    alternates: { canonical: pickHref(raceId, selected) },
   };
 }
 

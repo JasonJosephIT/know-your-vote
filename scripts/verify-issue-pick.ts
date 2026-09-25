@@ -105,20 +105,29 @@ const ECON = issue("economy", "Economy & Affordability", "spine", 1);
 const HOUS = issue("housing", "Housing", "spine", 2);
 const INS = issue("insurance", "Insurance & Property Costs", "spine", 3);
 const EXTRA = issue("KYV9", "A candidate-added issue", "candidate", 4);
+/* Only used to exercise coverage/say combinations that the other spine
+   issues don't: a "stated" block whose say is empty, and a
+   "no_stated_position_found" block that nevertheless carries claims. */
+const SAFETY = issue("safety", "Public Safety", "spine", 5);
 
 const fixture = {
   race: { race_id: RACE, office: "Governor" },
-  spineIssues: [ECON, HOUS, INS],
+  spineIssues: [ECON, HOUS, INS, SAFETY],
   candidates: [
     {
       candidate: { candidate_id: "cand-a", legal_name: "Alex Able" },
       socials: [],
       audit: {},
       issues: [
-        block(ECON, "stated", "A on economy"),
+        /* stated, but say is empty: the row must still show coverage
+           "stated" with say: [], never a "no stated position" claim. */
+        block(ECON, "stated", null),
         block(HOUS, "no_stated_position_found", null),
         block(INS, "stated", "A on insurance"),
         block(EXTRA, "stated", "A extra"),
+        /* no_stated_position_found, but say has claims: those claims must
+           carry through, not be dropped because of the coverage value. */
+        block(SAFETY, "no_stated_position_found", "A safety claim"),
       ],
     },
     {
@@ -162,6 +171,16 @@ check(
   "nothing site-authored (stanceSummary, done, factCheck) reaches the rows",
   !JSON.stringify(issueRowsFor(fixture, ["economy", "housing", "insurance"])).includes(SENTINEL)
 );
+check(
+  "a stated block with empty say yields say: [] and coverage stated",
+  issueRowsFor(fixture, ["economy"])[0]?.cells[0]?.coverage === "stated" &&
+    issueRowsFor(fixture, ["economy"])[0]?.cells[0]?.say.length === 0
+);
+check(
+  "a no_stated_position_found block with claims carries those claims through",
+  issueRowsFor(fixture, ["safety"])[0]?.cells[0]?.coverage === "no_stated_position_found" &&
+    issueRowsFor(fixture, ["safety"])[0]?.cells[0]?.say[0]?.claim.text === "A safety claim"
+);
 
 /* ---- 3. source scans ---------------------------------------------------- */
 const read = (p: string) => {
@@ -182,7 +201,17 @@ const issueRows = code("src/components/features/IssueRows.tsx");
 check("IssueRows.tsx exists", issueRows.length > 0);
 check(
   "IssueRows renders no site-authored field",
-  !/stanceSummary|factCheck|\.done\b/.test(issueRows)
+  !/stanceSummary|factCheck|\bdone\b/.test(issueRows)
+);
+const issuesPage = code("src/app/(public)/races/[raceId]/issues/page.tsx");
+check("issues/page.tsx exists", issuesPage.length > 0);
+check(
+  "issues/page.tsx renders no site-authored field",
+  !/stanceSummary|factCheck|\bdone\b/.test(issuesPage)
+);
+check(
+  "issues/page.tsx opts every metadata branch out of indexing",
+  read("src/app/(public)/races/[raceId]/issues/page.tsx").includes("index: false")
 );
 for (const f of [
   "src/components/features/IssueRows.tsx",

@@ -100,7 +100,7 @@ export function issueRowsFor(brief: RaceBrief, selected: string[]): IssueRow[] {
           candidateId: c.candidate.candidate_id,
           name: c.candidate.legal_name,
           coverage: found ? found.coverage : null,
-          say: found && found.coverage === "stated" ? found.say : [],
+          say: found?.say ?? [],
         };
       }),
     }));
