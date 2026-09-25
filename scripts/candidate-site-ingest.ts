@@ -22,9 +22,15 @@
    robots.txt is honored for our own UA token AND every Anthropic crawler
    token (src/lib/candidate-site.ts, ROBOTS_AGENTS): what this fetches is read
    into a model, so a site that disallows ClaudeBot or anthropic-ai is not
-   read, whatever our UA string says. Its Crawl-delay is honored too, and a
-   robots.txt we cannot read (a server error, or a bot-challenge page in its
-   place) stops the run: an unreadable policy is not consent.
+   read, whatever our UA string says. Its Crawl-delay is honored too.
+
+   A robots.txt we cannot read (a server error, a failed fetch, or a
+   bot-challenge page served in its place) is treated as no rules, and the run
+   proceeds with a warning. Founder decision 2026-09-25: an unreadable file
+   states no policy to honor, and a readable one that refuses Anthropic's
+   crawlers still stops the run. The warning is the audit trail that the site's
+   stance was unknown when it was read
+   (docs/general-election/candidate-conflicts-2026-09-25.md §5).
 
    Fail-closed: a site that yields no passages exits non-zero. A silent empty
    file looks exactly like a candidate with no stated positions, and those are
@@ -85,11 +91,19 @@ async function get(url: string): Promise<string | null> {
   }
 }
 
-/* robots.txt first, read the way RFC 9309 says: a 4xx means the site
-   published none, so there are no rules; a 5xx or a failed fetch means we
-   cannot know, so we stop. A 2xx that is an HTML page (a bot challenge served
-   in its place) is also unreadable, not empty. */
+/* robots.txt first. A 4xx means the site published none (RFC 9309), so there
+   are no rules. A 5xx, a failed fetch, or a 2xx that is an HTML page (a bot
+   challenge served in its place) means we could not read it: that is not the
+   same fact as "none", so it is named, and then treated as no rules (see the
+   header). Returns the file's text, or "" for no rules. */
 async function getRobots(url: string): Promise<string> {
+  const unreadable = (why: string) => {
+    robotsUnreadable = true;
+    console.error(
+      `  WARNING robots.txt unreadable (${why}) at ${url} — its policy is unknown; proceeding with no rules.`,
+    );
+    return "";
+  };
   let res: Response;
   try {
     res = await fetch(url, {
@@ -98,17 +112,16 @@ async function getRobots(url: string): Promise<string> {
       signal: AbortSignal.timeout(25_000),
     });
   } catch (err) {
-    console.error(`robots.txt unreachable (${(err as Error).name}) at ${url} — stopping.`);
-    process.exit(1);
+    return unreadable((err as Error).name);
   }
   if (res.status >= 400 && res.status < 500) return "";
   const text = await res.text();
-  if (!res.ok || /^\s*</.test(text)) {
-    console.error(`robots.txt unreadable (HTTP ${res.status}) at ${url} — stopping.`);
-    process.exit(1);
-  }
+  if (!res.ok) return unreadable(`HTTP ${res.status}`);
+  if (/^\s*</.test(text)) return unreadable(`HTTP ${res.status}, an HTML page in its place`);
   return text;
 }
+
+let robotsUnreadable = false;
 
 const robotsTxt = await getRobots(new URL("/robots.txt", site).toString());
 const allowed = (url: string) => isAllowedByRobots(robotsTxt, url);
@@ -163,7 +176,11 @@ const lines = passages.map((p) =>
 if (passages.length === 0) {
   console.error(
     `No passages from ${site}. That is a finding about the fetch, not about the ` +
-      `candidate: check whether the site renders its text client-side.`,
+      (robotsUnreadable
+        ? `candidate: robots.txt was unreadable too, so the site is most likely serving a ` +
+          `bot challenge to non-browser clients rather than its pages.`
+        : `candidate: check whether the site renders its text client-side, or serves ` +
+          `a bot challenge to non-browser clients.`),
   );
   process.exit(1);
 }
