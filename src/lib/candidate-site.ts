@@ -544,3 +544,38 @@ export function crawlDelaySec(
   }
   return max;
 }
+
+/* ---- bot challenges ----------------------------------------------------
+
+   Several campaign hosts put an anti-bot interstitial in front of every
+   page: SiteGround's "Robot Challenge Screen" (HTTP 202, /.well-known/
+   sgcaptcha/), Cloudflare's "Just a moment..." (403/503), and a few builder
+   equivalents. A plain fetch gets the interstitial instead of the page. Read
+   as the page, it yields zero passages, which then looks like a candidate who
+   said nothing. So the ingest must recognise one, and either fetch the page
+   in a real browser that runs the host's own check, or report it as
+   unreachable. It must never quote it.
+
+   Markers, not status codes alone: 202 and 403 are also ordinary answers. */
+const CHALLENGE_MARKERS: readonly RegExp[] = [
+  /\/\.well-known\/sgcaptcha\//i,
+  /<title>\s*Robot Challenge Screen/i,
+  /Checking the site connection security/i,
+  /<title>\s*Just a moment\.\.\./i,
+  /<title>\s*Attention Required! \| Cloudflare/i,
+  /challenges\.cloudflare\.com|cf-chl-|_cf_chl_opt/i,
+  /<title>\s*Bot Verification/i,
+];
+
+/** True when `body` is an anti-bot interstitial rather than the page asked
+    for. Only the head of the document is examined, since the markers sit
+    there and a real page can mention Cloudflare further down. */
+export function looksLikeBotChallenge(body: string): boolean {
+  const head = body.slice(0, 20_000);
+  return CHALLENGE_MARKERS.some((re) => re.test(head));
+}
+
+/** Visible text a browser-rendered page must carry before it is treated as
+    the page rather than a challenge that is still resolving. Less than a
+    campaign homepage ever has, more than an interstitial's one line. */
+export const MIN_PAGE_TEXT_CHARS = 200;

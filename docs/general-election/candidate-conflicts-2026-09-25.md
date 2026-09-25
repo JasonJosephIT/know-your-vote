@@ -83,44 +83,43 @@ page alone does not say it, so the proof rests partly on another source.
 
 ## 5. The ingest cannot read it as things stand
 
-These sites are stored, and voters can click them, but
-`scripts/candidate-site-ingest.ts` gets nothing from them, or had nothing
-until decision (A) below. Each was checked on 2026-09-25 by running the
-ingest itself (same UA, same client). The bot challenges are intermittent: a
-site that serves robots.txt on one run can challenge it on the next.
-
-**Decision (A), 2026-09-25: an unreadable robots.txt no longer stops the
-ingest.** It is treated as no rules, with a `WARNING robots.txt unreadable`
-line naming the site. A readable file that refuses Anthropic's crawlers still
-stops the run. Re-run the same day on all eleven sites that had stopped at
-robots.txt, it unlocked **one**: Vicki Lopez (9 passages). The other ten serve
-the same bot challenge on their homepage, so they now fail at the page, not
-at robots.txt. That makes them (B) cases.
-
-| Candidate | Race | What the ingest meets (2026-09-25, after (A)) | Status |
-|---|---|---|---|
-| Jeannette Quiñones Hernández | Orange Commission D8 | robots.txt disallows ClaudeBot, anthropic-ai, Claude-Web; the ingest refuses by name | **Noted**: her opt-out is honored; she will have no sourced positions |
-| Vicki L. Lopez | Miami-Dade Commission D5 | Ingests: 9 passages | **Resolved** by (A) |
-| Jackie Toledo | Hillsborough Commission D1 | robots.txt and homepage both answer with a bot-challenge page | **Open** (B) |
-| Harry Cohen | Hillsborough Commission D1 | Homepage is a bot-challenge page (robots.txt intermittently too) | **Open** (B) |
-| James Pericola | U.S. House FL-11 | Homepage is a bot-challenge page (robots.txt intermittently too) | **Open** (B) |
-| Brent Andersen | U.S. House FL-20 | robots.txt and homepage both answer with a bot-challenge page | **Open** (B) |
-| Pia Dandiya | U.S. House FL-22 | robots.txt and homepage both answer with a bot-challenge page | **Open** (B) |
-| Oliver G. Gilbert III | U.S. House FL-24 | robots.txt and homepage both answer with a bot-challenge page | **Open** (B) |
-| Roberto Fernandez III | Broward School Board D6 | robots.txt and homepage both answer with a bot-challenge page | **Open** (B) |
-| Caryl Sandler Shuham | Broward Commission D6 | robots.txt and homepage both answer with a bot-challenge page | **Open** (B) |
-| Annette Taddeo | CFO | robots.txt and homepage both answer with a bot-challenge page, or refuse the connection | **Open** (B) |
-| Tiffany Moore Russell | Orange County Mayor | robots.txt and homepage both answer with a bot-challenge page, or refuse the connection | **Open** (B) |
-| Jennifer Jenkins | U.S. House FL-8 | robots.txt readable, but the homepage is a bot-challenge page, so no passages | **Open** (B) |
-| Mike Beltran | U.S. House FL-14 | robots.txt readable, but the homepage is a bot-challenge page, so no passages | **Open** (B) |
-| Rob Piper | Miami-Dade Commission D5 | Cloudflare answers 403 to robots.txt and homepage alike | **Open** (B) |
+These sites are stored and voters can click them, but they refused the
+ingest's plain fetch. Two decisions were made on 2026-09-25, both measured by
+running the ingest itself on every site below.
 
 - **(A) Policy: decided.** An unreadable robots.txt is treated as no rules,
-  with a warning, so the site's stance is on record as unknown rather than
-  assumed.
-- **(B) Mechanics: open, and now the only blocker for 13 candidates.** These
-  sites block any non-browser client whatever robots.txt says. Reading them
-  would need a browser-based fetch in the ingest, which is a separate change.
+  with a `WARNING robots.txt unreadable` line naming the site. A readable file
+  that refuses Anthropic's crawlers still stops the run.
+- **(B) Mechanics: done.** `scripts/candidate-site-ingest.ts --browser auto`
+  (the default) recognises a bot-challenge interstitial (`looksLikeBotChallenge`)
+  and fetches that page again in headless Chromium, which runs the host's own
+  check the way any visitor's browser does. robots.txt goes through the same
+  path, so a challenged policy is now read rather than skipped. The browser
+  identifies itself (its own UA plus `KnowYourVote/1.0`), downloads no images,
+  media or fonts, and solves no captchas.
 
-Until (B) is done, these candidates can have a site on their card but no
-sourced positions from it. That is the same pipeline gap as Datto's.
+Challenges are intermittent: a site that serves a plain fetch on one run can
+challenge it on the next. The table is the run of 2026-09-25 with (A) and (B)
+in place, `--pages 2`.
+
+| Candidate | Race | Result | Status |
+|---|---|---|---|
+| Jeannette Quiñones Hernández | Orange Commission D8 | robots.txt disallows ClaudeBot, anthropic-ai, Claude-Web; refused by name | **Noted**: her opt-out is honored; no sourced positions |
+| Vicki L. Lopez | Miami-Dade Commission D5 | Ingests (9 passages, after (A)) | **Resolved** |
+| Jackie Toledo | Hillsborough Commission D1 | 28 passages; robots.txt read in the browser | **Resolved** |
+| Harry Cohen | Hillsborough Commission D1 | 42 passages; robots.txt read in the browser | **Resolved** |
+| James Pericola | U.S. House FL-11 | 18 passages; robots.txt read in the browser | **Resolved** |
+| Brent Andersen | U.S. House FL-20 | 3 passages (no challenge on this run) | **Resolved** |
+| Pia Dandiya | U.S. House FL-22 | 41 passages | **Resolved** |
+| Oliver G. Gilbert III | U.S. House FL-24 | 53 passages (one policy page's challenge did not clear and was skipped) | **Resolved** |
+| Roberto Fernandez III | Broward School Board D6 | 21 passages | **Resolved** |
+| Caryl Sandler Shuham | Broward Commission D6 | 68 passages; robots.txt read in the browser | **Resolved** |
+| Annette Taddeo | CFO | 10 passages; robots.txt read in the browser | **Resolved** |
+| Tiffany Moore Russell | Orange County Mayor | 79 passages; robots.txt read in the browser | **Resolved** |
+| Jennifer Jenkins | U.S. House FL-8 | 72 passages; robots.txt read in the browser | **Resolved** |
+| Mike Beltran | U.S. House FL-14 | 34 passages | **Resolved** |
+| Rob Piper | Miami-Dade Commission D5 | Cloudflare's check does not clear even in a real browser; the run exits non-zero and quotes nothing | **Open**: unreachable to any automated client. His positions would have to come from another source |
+
+Rob Piper is now the only ballot candidate with a site the ingest cannot
+read. The pipeline gap is the same as Datto's: a website is the brief
+pipeline's only input.
