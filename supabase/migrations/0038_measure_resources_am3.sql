@@ -87,11 +87,21 @@
 -- url_norm follows src/lib/brief-rows.ts's urlNorm(): lowercased host + path
 -- with trailing slash stripped + query, no scheme. Checked before writing:
 -- `grep` across supabase/migrations/*.sql found no existing source row for
--- any of the 14 URLs below, so each gets a fresh source_id.
+-- any of the 14 URLs below, so each gets a fresh source_id here -- but a
+-- LIVE database may already hold a source row for one of these URLs (seeded
+-- by an agent run, another migration, or by hand) with a DIFFERENT
+-- source_id than the ones minted below. section (2) never writes the
+-- literal 'src_...' id into measure_resource -- it resolves
+-- `(SELECT source_id FROM source WHERE url_norm = '...')` at insert time
+-- (scripts/brief-rows-sql.ts:186-195's own pattern for claim_source), so
+-- ON CONFLICT (url_norm) DO NOTHING in section (1) losing to a pre-existing
+-- row still leaves section (2) pointing at the row that actually won, never
+-- a dangling FK to an id nobody inserted.
 --
 -- Idempotent: source rows ON CONFLICT (url_norm) DO NOTHING, measure_resource
--- rows ON CONFLICT (measure_id, source_id) DO UPDATE (0035's style), and the
--- publication flip is an UPSERT that only raises status, never lowers it.
+-- rows ON CONFLICT (measure_id, source_id) DO UPDATE (0035's style, keyed on
+-- the source_id the subquery above resolves to), and the publication flip is
+-- an UPSERT that only raises status, never lowers it.
 
 -- (1) Sources -- one row per outside resource, keyed by url_norm.
 INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag) VALUES
@@ -100,7 +110,7 @@ INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag) VALUES
    'constitutionalinitiatives.dos.fl.gov/Home/InitDetail?account=10&seqnum=110',
    'Florida Dept. of State, Division of Elections', 'primary_doc', 'N/A'),
   ('src_ocfl_property_tax_am3',
-   'http://ocfl.net/OpenGovernment/PropertyTaxAmendment3.aspx',
+   'https://ocfl.net/OpenGovernment/PropertyTaxAmendment3.aspx',
    'ocfl.net/OpenGovernment/PropertyTaxAmendment3.aspx',
    'Orange County Government, FL', 'primary_doc', 'N/A'),
   ('src_wfla_battleground_am3',
@@ -134,7 +144,7 @@ INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag) VALUES
   ('src_clickorlando_lake_mary_am3',
    'https://www.clickorlando.com/election-2026/2026/09/16/public-safety-leaders-urge-floridians-to-vote-no-on-amendment-3/',
    'www.clickorlando.com/election-2026/2026/09/16/public-safety-leaders-urge-floridians-to-vote-no-on-amendment-3',
-   'ClickOrlando (WKMG)', 'factual_reporting', 'unrated'),
+   'WKMG News 6 & ClickOrlando', 'factual_reporting', 'unrated'),
   ('src_political_cortadito_am3',
    'https://politicalcortadito.com/2026/09/03/amendment-3-daniella-levine-cava-no-campaign/',
    'politicalcortadito.com/2026/09/03/amendment-3-daniella-levine-cava-no-campaign',
@@ -157,74 +167,88 @@ ON CONFLICT (url_norm) DO NOTHING;
 INSERT INTO measure_resource
   (resource_id, measure_id, source_id, stance, kind, format, title, author, published_at, duration_seconds, note, display_order)
 VALUES
-  ('FL-AM3-general:dos-init-detail', 'FL-AM3-general', 'src_dos_init_detail_am3',
+  ('FL-AM3-general:dos-init-detail', 'FL-AM3-general',
+   (SELECT source_id FROM source WHERE url_norm = 'constitutionalinitiatives.dos.fl.gov/Home/InitDetail?account=10&seqnum=110'),
    'neutral', 'official', 'document',
    'INCREASED HOMESTEAD EXEMPTION; LOWER CAP ON INCREASES IN NON-HOMESTEAD PROPERTY ASSESSMENTS', NULL, NULL, NULL,
-   'State''s own initiative-tracking record for this amendment', 1),
+   'Division of Elections'' amendment database record', 1),
 
-  ('FL-AM3-general:ocfl-property-tax', 'FL-AM3-general', 'src_ocfl_property_tax_am3',
+  ('FL-AM3-general:ocfl-property-tax', 'FL-AM3-general',
+   (SELECT source_id FROM source WHERE url_norm = 'ocfl.net/OpenGovernment/PropertyTaxAmendment3.aspx'),
    'neutral', 'official', 'document',
    'Property Tax Amendment 3', NULL, NULL, NULL,
    'Orange County Government page', 2),
 
-  ('FL-AM3-general:wfla-battleground-video', 'FL-AM3-general', 'src_wfla_battleground_am3',
+  ('FL-AM3-general:wfla-battleground-video', 'FL-AM3-general',
+   (SELECT source_id FROM source WHERE url_norm = 'www.youtube.com/watch?v=Kc6QYIVx0XI'),
    'neutral', 'reporting', 'video',
-   'What happens if the property tax amendment passes?', NULL, NULL, 3172,
+   'What happens if the property tax amendment passes?', NULL, '2026-09-09', 3172,
    NULL, 3),
 
-  ('FL-AM3-general:vote-yes-on-3-site', 'FL-AM3-general', 'src_voteyeson3_site',
+  ('FL-AM3-general:vote-yes-on-3-site', 'FL-AM3-general',
+   (SELECT source_id FROM source WHERE url_norm = 'voteyeson3.com'),
    'support', 'argument', 'document',
    'Vote YES on 3', NULL, NULL, NULL,
    'Florida Realtors'' committee', 1),
 
-  ('FL-AM3-general:florida-realtors-launch', 'FL-AM3-general', 'src_floridarealtors_launch_am3',
+  ('FL-AM3-general:florida-realtors-launch', 'FL-AM3-general',
+   (SELECT source_id FROM source WHERE url_norm = 'www.floridarealtors.org/news-media/news-articles/2026/09/florida-realtors-launches-vote-yes-3-campaign'),
    'support', 'argument', 'article',
    'Florida Realtors launches Vote Yes on 3 campaign', NULL, '2026-09-09', NULL,
    'Florida Realtors'' own announcement', 2),
 
-  ('FL-AM3-general:wftv-sheriffs-ad-report', 'FL-AM3-general', 'src_wftv_sheriffs_ad_report_am3',
+  ('FL-AM3-general:wftv-sheriffs-ad-report', 'FL-AM3-general',
+   (SELECT source_id FROM source WHERE url_norm = 'www.wftv.com/news/local/florida-sheriffs-association-launches-ad-campaign-against-amendment-3/66LZUYYIPFBOROT66T2GCA62DI'),
    'neutral', 'reporting', 'article',
    'Florida Sheriff''s Association launches ad campaign against Amendment 3', NULL, '2026-09-15', NULL,
    NULL, 4),
 
-  ('FL-AM3-general:fsa-youtube-short', 'FL-AM3-general', 'src_fsa_short_am3',
+  ('FL-AM3-general:fsa-youtube-short', 'FL-AM3-general',
+   (SELECT source_id FROM source WHERE url_norm = 'www.youtube.com/shorts/i1HMUpBJ780'),
    'oppose', 'argument', 'video',
    'Amendment 3 Rips Out Public Safety Funding', NULL, NULL, 16,
    'Posted to the Florida Sheriffs Association''s own YouTube channel', 1),
 
-  ('FL-AM3-general:flcities-property-taxes', 'FL-AM3-general', 'src_flcities_property_taxes_am3',
+  ('FL-AM3-general:flcities-property-taxes', 'FL-AM3-general',
+   (SELECT source_id FROM source WHERE url_norm = 'www.flcities.com/propertytaxes'),
    'oppose', 'argument', 'document',
    'Property Taxes', NULL, '2026-09-18', NULL,
    'Florida League of Cities'' own page', 2),
 
-  ('FL-AM3-general:1000-friends-property-tax', 'FL-AM3-general', 'src_1000fof_property_tax_am3',
+  ('FL-AM3-general:1000-friends-property-tax', 'FL-AM3-general',
+   (SELECT source_id FROM source WHERE url_norm = '1000fof.org/propertytax'),
    'oppose', 'argument', 'document',
    'Florida''s Proposed Property Tax Reform', NULL, NULL, NULL,
    '1000 Friends of Florida''s own position page', 3),
 
-  ('FL-AM3-general:clickorlando-lake-mary-presser', 'FL-AM3-general', 'src_clickorlando_lake_mary_am3',
+  ('FL-AM3-general:clickorlando-lake-mary-presser', 'FL-AM3-general',
+   (SELECT source_id FROM source WHERE url_norm = 'www.clickorlando.com/election-2026/2026/09/16/public-safety-leaders-urge-floridians-to-vote-no-on-amendment-3'),
    'neutral', 'reporting', 'article',
    'Public safety leaders urge Floridians to vote no on Amendment 3', NULL, '2026-09-16', NULL,
    NULL, 5),
 
-  ('FL-AM3-general:political-cortadito', 'FL-AM3-general', 'src_political_cortadito_am3',
+  ('FL-AM3-general:political-cortadito', 'FL-AM3-general',
+   (SELECT source_id FROM source WHERE url_norm = 'politicalcortadito.com/2026/09/03/amendment-3-daniella-levine-cava-no-campaign'),
    'oppose', 'commentary', 'article',
    'Amendment 3 looks like a winner — until Florida voters learn what it does', 'Elaine de Valle (Ladra)', '2026-09-03', NULL,
    'Elaine de Valle''s blog', 4),
 
-  ('FL-AM3-general:cbs12-jenny-fields-video', 'FL-AM3-general', 'src_cbs12_jenny_fields_am3',
+  ('FL-AM3-general:cbs12-jenny-fields-video', 'FL-AM3-general',
+   (SELECT source_id FROM source WHERE url_norm = 'www.youtube.com/watch?v=37lN8L0PCT0'),
    'neutral', 'reporting', 'video',
-   'Will Amendment 3 lower your property taxes? Jenny Fields explains', NULL, NULL, 89,
+   'Will Amendment 3 lower your property taxes? Jenny Fields explains', NULL, '2026-08-10', 89,
    'TV station interview with the Martin County Property Appraiser', 6),
 
-  ('FL-AM3-general:wptv-taxwatch-tool-video', 'FL-AM3-general', 'src_wptv_taxwatch_tool_am3',
+  ('FL-AM3-general:wptv-taxwatch-tool-video', 'FL-AM3-general',
+   (SELECT source_id FROM source WHERE url_norm = 'www.youtube.com/watch?v=EX3t4tN9a6I'),
    'neutral', 'reporting', 'video',
-   'New tool helps Florida voters research Amendment 3 property taxes', NULL, NULL, 156,
+   'New tool helps Florida voters research Amendment 3 property taxes', NULL, '2026-08-21', 156,
    NULL, 7),
 
-  ('FL-AM3-general:cbs12-backers-video', 'FL-AM3-general', 'src_cbs12_backers_am3',
+  ('FL-AM3-general:cbs12-backers-video', 'FL-AM3-general',
+   (SELECT source_id FROM source WHERE url_norm = 'www.youtube.com/watch?v=r6M34w74GuI'),
    'neutral', 'reporting', 'video',
-   'Amendment 3 backers say bigger property tax break could help Florida homeowners stay put', NULL, NULL, 216,
+   'Amendment 3 backers say bigger property tax break could help Florida homeowners stay put', NULL, '2026-09-17', 216,
    NULL, 8)
 ON CONFLICT (measure_id, source_id) DO UPDATE SET
   stance = EXCLUDED.stance, kind = EXCLUDED.kind, format = EXCLUDED.format,

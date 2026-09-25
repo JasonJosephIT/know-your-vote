@@ -188,7 +188,7 @@ Excluding neutral rows: **5 support** (TaxWatch, Farm Bureau, Wilton Simpson/FDA
 | 29 | https://www.flcities.com/propertytaxes/ | Loads (browser verified) | Florida League of Cities | page timestamp 2026-09-18 | document | argument | oppose | "Amendment 3 is not a tax cut, it's a tax shift" |
 | 30 | https://1000fof.org/propertytax/ | Loads (browser verified) | 1000 Friends of Florida | ~2026-07 (per reporting of when position formalized) | document | argument | oppose | "1000 Friends of Florida opposes Amendment 3 because the modest savings... would be outweighed by the lasting harm" |
 | 31 | APA Florida opposition (no single stable URL found; reported via https://floridaphoenix.com/2026/09/15/florida-gop-endorses-amendment-3-american-planners-association-opposes/ ; primary campaign page https://whatsatstakefl.org/) | whatsatstakefl.org loads per search (not directly fetched) | APA Florida (quotes attributed to president Allara Mills-Gutcher) | 2026-09-15 (reporting) | document/article | argument | oppose | "APA Florida cannot support the amendment in its current form" |
-| 32 | https://www.clickorlando.com/election-2026/2026/09/16/public-safety-leaders-urge-floridians-to-vote-no-on-amendment-3/ (Lake Mary presser: Florida Professional Firefighters + FOP + sheriffs) | Loads (via WebFetch) | ClickOrlando / Central Florida Public Media collaborative | 2026-09-16 | article | **reporting of a presser, not itself an argument page — see Gaps** | neutral (as a news article) | quotes Firefighters president Wayne Bernoska and Sheriff Grady Judd at the Lake Mary press conference |
+| 32 | https://www.clickorlando.com/election-2026/2026/09/16/public-safety-leaders-urge-floridians-to-vote-no-on-amendment-3/ (Lake Mary presser: Florida Professional Firefighters + FOP + sheriffs) | Loads (via WebFetch) | WKMG News 6 & ClickOrlando (per the page's own JSON-LD `publisher` credit — corrected from a guessed "Central Florida Public Media collaborative"; M-7, final-review fix round) | 2026-09-16 | article | **reporting of a presser, not itself an argument page — see Gaps** | neutral (as a news article) | quotes Firefighters president Wayne Bernoska and Sheriff Grady Judd at the Lake Mary press conference |
 | 33 | https://palmbeachexaminer.substack.com/p/vote-yes-on-florida-amendment-3-for | Loads (via search) | Palm Beach Examiner (Substack, unaffiliated) | 2026 | article | commentary | support | "Vote Yes on Florida Amendment 3 for Property Tax Relief" |
 | 34 | https://bellaverderealty.com/news/local-news/florida-amendment-3-2026-pros-cons-solivita/ | Loads (via search) | Bella Verde Realty (realtor blog) | 2026 | article | commentary | pros/cons framing — net leans support (listed to weigh both, but publisher is a realty business with financial interest in the exemption) | outlines pros (tax relief) and cons (fee/service risk) |
 | 35 | https://politicalcortadito.com/2026/09/03/amendment-3-daniella-levine-cava-no-campaign/ | Loads (via WebFetch, confirmed) | Political Cortadito (Ladra / Elaine de Valle), unaffiliated blog | 2026-09-03 | article | commentary | oppose | "It just decides who gets the bill" |
@@ -238,6 +238,23 @@ on 3."
 voteyeson3.com opened cleanly (curl `<title>` and og:title agree); not
 dropped. Support/oppose/neutral unchanged (2/4/8) — this is a case-only
 correction, stance/kind/inclusion untouched.
+
+### Published dates for the 4 YouTube rows (final-review fix round, 2026-09-24)
+
+I-1: the neutral block sorts by `published_at` desc (nulls last), so the 4
+YouTube rows (rows 18, 37, 38, 39) sat last with NULL dates. Each video's
+own upload date, pulled from its page metadata
+(`curl -sL URL | grep -o '"uploadDate":"[^"]*"'`, which agreed with
+`"publishDate"` in every case):
+
+| Row (# above) | Video | `uploadDate` (page metadata, full timestamp) | `published_at` filed |
+|---|---|---|---|
+| 18 | youtube.com/watch?v=Kc6QYIVx0XI ("What happens if the property tax amendment passes?", WFLA) | 2026-09-09T12:01:38-07:00 | 2026-09-09 |
+| 37 | youtube.com/watch?v=37lN8L0PCT0 (Jenny Fields, CBS12) | 2026-08-10T18:32:10-07:00 | 2026-08-10 |
+| 38 | youtube.com/watch?v=EX3t4tN9a6I (TaxWatch tool, WPTV) | 2026-08-21T14:13:08-07:00 | 2026-08-21 |
+| 39 | youtube.com/watch?v=r6M34w74GuI ("backers say", CBS12) | 2026-09-17T05:18:40-07:00 | 2026-09-17 |
+
+All 4 verified; none left NULL. Row inclusion and stance unchanged.
 
 ### Gaps
 

@@ -402,6 +402,44 @@ await check(
   "SELECT count(*)::int n FROM race_publication WHERE status='listed'",
   generalRaces
 );
+
+/* I-3: the path that actually happened in production (per the verified doc's
+   "Live state checked before this work") is list-ballot-2026.sql listing
+   ALL THREE amendments first, and 0038 publishing AM3 out of `listed` only
+   later -- not out of "no row" (prior_status NULL), which is all the harness
+   has exercised so far since it applies every migration, 0038 included,
+   before list-ballot-2026.sql ever runs. AM1/AM2 are genuinely `listed` here
+   (the real door, from the block above); reset AM3 back to `listed` to match
+   and re-apply 0038 to prove the production transition. */
+console.log("0038 vs the production path — AM1/AM2/AM3 already 'listed' before 0038 runs");
+await db.exec(
+  "UPDATE measure_publication SET status='listed' WHERE measure_id='FL-AM3-general';"
+);
+await db.exec(
+  await readFile(
+    path.join(migrationsDir, "0038_measure_resources_am3.sql"),
+    "utf8"
+  )
+);
+await check(
+  "0038 on the production path logs exactly one admin_action row transitioning listed -> published",
+  `SELECT count(*)::int n FROM admin_action
+    WHERE subject_kind='measure_publication' AND subject_ref='FL-AM3-general'
+      AND action='publish'
+      AND detail->>'prior_status'='listed' AND detail->>'new_status'='published'`,
+  1
+);
+await check(
+  "FL-AM3-general is published on the production path",
+  "SELECT count(*)::int n FROM measure_publication WHERE measure_id='FL-AM3-general' AND status='published'",
+  1
+);
+await check(
+  "AM1/AM2 stay listed, untouched by 0038 on the production path",
+  "SELECT count(*)::int n FROM measure_publication WHERE measure_id IN ('FL-AM1-general','FL-AM2-general') AND status='listed'",
+  2
+);
+
 /* What a voter's browser can now read: the whole roster, and no brief. */
 await db.exec("SET ROLE anon;");
 await check(
