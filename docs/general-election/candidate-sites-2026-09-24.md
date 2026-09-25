@@ -92,7 +92,7 @@ The FL-GOV method, unchanged:
 | Nicole Locklin | DEM | U.S. House, FL-26 | `https://locklinforcongress.com/` | Live homepage: title 'Nicole Locklin for Congress'; og:title 'Nicole Locklin for U.S. Congress \| Florida District 26'; footer 'Nicole Locklin for U.S. Congress 1808 N. University Dr, Pembroke Pines, FL 33024' |
 | Eliott Rodriguez | DEM | U.S. House, FL-27 | `https://eliottrodriguez.com/` | Live homepage: title 'Eliott Rodriguez – For Congress'; footer 'Paid for by Eliott Rodriguez for Congress' |
 | Maria Elvira Salazar | REP | U.S. House, FL-27 | `https://mariaelvirasalazar.com/` | Live homepage: title 'Maria Elvira Salazar for Congress - Fighting for FL-27'; og:title 'Maria Salazar for Congress'; og:url https://mariaelvirasalazar.com/; footer 'Paid for by Salazar for Congress', '© 2026 Maria Elvira Salazar for Congress' |
-| Carlos A. Gimenez | REP | U.S. House, FL-28 | **none** | Campaign site exists (carlosgimenezforcongress.com) but its copy is from the 2020 first run and never mentions 2026 or District 28; not stored so the ingest does not quote 2020 positions as current. Founder decision. |
+| Carlos A. Gimenez | REP | U.S. House, FL-28 | `https://carlosgimenezforcongress.com/` (stored by `0039`, founder 2026-09-25) | Page title "Carlos Gimenez for Congress"; disclaimer "Paid For By Carlos Gimenez for Congress". **Stale:** the copy is from the 2020 first run and never mentions 2026 or District 28. Left NULL by `0036`, stored on the founder's call. |
 | Eddy Rojas | NPA | U.S. House, FL-28 | `https://www.eddyrojas.com/` | Live homepage: title/og:title 'Eddy Rojas for Congress - District 28 \| district 28 \| Miami-Dade, FL, USA'; h1 'Running for U.S. Congress — Florida District 28'; /about title 'About \| ROJAS FOR CONGRESS' |
 | Phil "Felipe" Ehr | DEM | U.S. House, FL-28 | `https://ehrforcongress.us/` | Live homepage: title/og:title 'Vote Phil Ehr for U.S. House of Representatives'; og:url https://ehrforcongress.us/; footer 'PAID FOR BY EHR FORCE INC'; body 'DONATE FL-28 Bike Tour', 'FL-28 Debate Request', 'Help us defeat Gimenez' |
 
@@ -168,7 +168,7 @@ NULL is the true value for each of these: we looked, and there is no campaign si
 |---|---|---|---|
 | Peter Jassenoff (`FL-DOE-92357`) | U.S. House, FL-25 | Nothing found: Ballotpedia candidate page has no campaign/personal website link (FEC link only); BallotReady lists none; FEC committee C00953877 'PETER JASSENOFF FOR CONGRESS' lists no website (gmail contact only); web search found only news coverage. Guessed domains peterjassenoff.com / jassenoffforcongress.com do not resolve; jassenoff.com resolves to a parking-type IP with no candidate content. lp.org/candidate/peter-jassenoff/ read on 2026-09-24: bio only, no website link. | — |
 | Deborah Ann Meidinger Hosey (`FL-DOE-92137`) | U.S. House, FL-26 | Nothing found: Ballotpedia page has no website link (FEC only); BallotReady lists none; FEC Form 1 for 'Deborah Ann Meidinger Hosey for US Congress' (filed 2026-06-10) gives only email DeborahUnites@DAMHforCongress.com — damhforcongress.com (and www) has no A record (DNS shows only Microsoft/Azure mail-hosting SOA), so no website is served. | — |
-| Carlos A. Gimenez (`FL-DOE-91226`) | U.S. House, FL-28 | STALE SITE, NOT STORED. carlosgimenezforcongress.com is his committee's site, but its copy is from the 2020 first run: "Mayor Gimenez ... Now, he's building on this record as a candidate for Congress", with no mention of 2026 or District 28. Storing it would have the ingest quote 2020 positions as current ones. Founder's call whether to store it anyway. | https://gimenez.house.gov/ |
+| ~~Carlos A. Gimenez (`FL-DOE-91226`)~~ **now stored by `0039`** | U.S. House, FL-28 | STALE SITE, NOT STORED by `0036`. carlosgimenezforcongress.com is his committee's site, but its copy is from the 2020 first run: "Mayor Gimenez ... Now, he's building on this record as a candidate for Congress", with no mention of 2026 or District 28. Storing it would have the ingest quote 2020 positions as current ones. Founder's call whether to store it anyway. | https://gimenez.house.gov/ |
 | Mark D. Bogen (`FL-VF-BRO-1179`) | Broward County Commission, District 2 | Nothing found after checking Ballotpedia, the SOE listing and search; incumbent seeking re-election unopposed. Only social (X @mark_bogen) and the county office page exist. | https://www.broward.org/district2 |
 | Lamar Fisher (`FL-VF-BRO-1178`) | Broward County Commission, District 4 | fisherfordistrict4.com (apex and www) returns a Wix 'ConnectYourDomain Error' 404, so the domain is not connected. lamarfisher.com is a GoDaddy parked page. Only social profiles (Facebook @FisherForDistrict4, X @LamarPFisher) are live. | https://www.broward.org/district4 |
 | Robert McKinzie (`FL-VF-BRO-1182`) | Broward County Commission, District 8 | Nothing found after checking Ballotpedia, the SOE listing and search; incumbent is unopposed. | https://www.broward.org/district8 |
@@ -317,14 +317,17 @@ Checking each candidate against the county Supervisor of Elections listing turne
    Wilson). The directory shows the wrong people for these seats today. This batch was only
    checked against the SOE listings where a candidate looked wrong, so the other county rosters
    are worth one systematic pass against their SOE status column.
-3. **Carlos Gimenez (FL-28)**: store his stale 2020-copy campaign site, or leave NULL (current).
-4. **Monica Colucci (Miami-Dade SB 8)**: her real site is compromised with injected spam. Leave
+3. ~~**Carlos Gimenez (FL-28)**: store his stale 2020-copy campaign site, or leave NULL.~~ **Decided 2026-09-25: stored** (`0039_gimenez_official_site.sql`, applied). The staleness stays recorded here for the brief pipeline to weigh.
+4. ~~**Monica Colucci (Miami-Dade SB 8)**~~ **Decided 2026-09-25: left NULL** until her compromised site is cleaned.
    NULL until it is cleaned (current), or store it.
 5. **Chris Dennison (FL-7, LPF)**: stored on the page's own strong self-identification, though
    nothing links to the domain. A confirmation from the LPF would close it.
 6. ~~**AI-crawler opt-outs.**~~ **Fixed.** `src/lib/candidate-site.ts` now reads robots.txt per RFC 9309 for the ingest's own token *and* every Anthropic crawler token (`ClaudeBot`, `Claude-User`, `Claude-SearchBot`, `Claude-Web`, `anthropic-ai`), and a path is fetched only if all of them may fetch it, the same rule the news sweep's `AI_POLICY_HOLD` keeps. `jeannette2026.com` is now refused by name ("disallows … for ClaudeBot, Claude-Web, anthropic-ai"). The ingest also honors `Crawl-delay` (including the site-wide one WordPress puts above the first `User-agent`), and stops when robots.txt cannot be read (a 5xx, a failed fetch, or a bot-challenge page served in its place), because an unreadable policy is not consent. Sites behind a SiteGround challenge (Taddeo, Pericola and others in the table above) therefore stop at robots.txt when fetched by the ingest.
 
 ## Still open
+
+- Every candidate whose sources disagreed, or who the ingest cannot read, is listed with status in
+  `candidate-conflicts-2026-09-25.md`.
 
 - Candidates with no site are the same pipeline gap as Datto (`candidate-sites-2026-09-21.md`):
   the brief pipeline's only input is a website, so they will read as `no_stated_position_found`
