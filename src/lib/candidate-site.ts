@@ -219,6 +219,9 @@ export function selectPolicyPages(
   const byText: string[] = [];
   for (const link of links) {
     if (!isSameSite(link.url, siteUrl)) continue;
+    /* The homepage is already read. On a one-page site "/#issues" canonicalizes
+       back to it, and fetching it again would cost a request (or a render). */
+    if (new URL(link.url).pathname === "/") continue;
     if (isSkippablePath(link.url)) continue;
     if (seen.has(link.url)) continue;
     const lowerText = link.text.toLowerCase();
@@ -579,3 +582,32 @@ export function looksLikeBotChallenge(body: string): boolean {
     the page rather than a challenge that is still resolving. Less than a
     campaign homepage ever has, more than an interstitial's one line. */
 export const MIN_PAGE_TEXT_CHARS = 200;
+
+/* ---- pages that render in the browser ----------------------------------
+
+   Some campaign sites ship an empty shell (`<div id="root"></div>` and a
+   script bundle) and build every word in the browser: reelectbastien.com is
+   one. A plain fetch of that page has a title and nothing else, so it yields
+   zero passages and no links, which again looks like a candidate who said
+   nothing. The ingest recognises the shell by how little text it carries once
+   scripts and styles are set aside, and renders it in a browser instead. */
+
+/** Characters of human-readable text in `html`: what a reader would see,
+    with scripts, styles, templates and tags removed and whitespace
+    collapsed. */
+export function visibleTextLength(html: string): number {
+  return decodeEntities(
+    html
+      .replace(/<!--[\s\S]*?-->/g, " ")
+      .replace(/<(script|style|noscript|template|svg)\b[\s\S]*?<\/\1>/gi, " ")
+      .replace(TAG, " "),
+  )
+    .replace(/\s+/g, " ")
+    .trim().length;
+}
+
+/** True when a fetched page carries too little text to be the page itself:
+    a client-rendered shell whose content only exists after its scripts run. */
+export function looksClientRendered(html: string): boolean {
+  return visibleTextLength(html) < MIN_PAGE_TEXT_CHARS;
+}
