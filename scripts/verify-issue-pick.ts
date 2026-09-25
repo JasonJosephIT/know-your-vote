@@ -12,6 +12,8 @@
 
    Run: node scripts/verify-issue-pick.ts */
 
+import { readFileSync } from "node:fs";
+
 import {
   issueRowsFor,
   parseIssuePick,
@@ -161,7 +163,40 @@ check(
   !JSON.stringify(issueRowsFor(fixture, ["economy", "housing", "insurance"])).includes(SENTINEL)
 );
 
-/* ---- 3. source scans (appended by later tasks) -------------------------- */
+/* ---- 3. source scans ---------------------------------------------------- */
+const read = (p: string) => {
+  try {
+    return readFileSync(new URL(`../${p}`, import.meta.url), "utf8");
+  } catch {
+    return "";
+  }
+};
+/* Comments may name the forbidden fields to explain the rule; code may not. */
+const code = (p: string) =>
+  read(p)
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/\{\s*\/\*[\s\S]*?\*\/\s*\}/g, "")
+    .replace(/^\s*\/\/.*$/gm, "");
+
+const issueRows = code("src/components/features/IssueRows.tsx");
+check("IssueRows.tsx exists", issueRows.length > 0);
+check(
+  "IssueRows renders no site-authored field",
+  !/stanceSummary|factCheck|\.done\b/.test(issueRows)
+);
+for (const f of [
+  "src/components/features/IssueRows.tsx",
+  "src/components/features/IssueFilter.tsx",
+  "src/app/(public)/races/[raceId]/issues/page.tsx",
+]) {
+  check(`${f} adds no client JavaScript`, read(f).length > 0 && !read(f).includes('"use client"'));
+}
+const racePage = code("src/app/(public)/races/[raceId]/page.tsx");
+check(
+  "race page stays static: no searchParams, no dynamic export",
+  racePage.length > 0 && !/searchParams|export const dynamic/.test(racePage)
+);
+check("race page renders the IssueFilter", /<IssueFilter\b/.test(racePage));
 
 /* ---- summary ------------------------------------------------------------ */
 if (failures > 0) {

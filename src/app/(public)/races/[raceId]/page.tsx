@@ -2,13 +2,15 @@ import Link from "next/link";
 import { RaceCompare } from "@/components/features/RaceCompare";
 import { TrackView } from "@/components/features/TrackView";
 import { RaceListing } from "@/components/features/RaceListing";
+import { RaceHeader } from "@/components/features/RaceHeader";
+import { IssueFilter } from "@/components/features/IssueFilter";
 import { getRaceBrief } from "@/lib/briefs";
 import {
   getRaceListing,
   type RaceListing as RaceListingData,
 } from "@/lib/listing";
 import { listingCopy, raceStatusLine } from "@/lib/listing-copy";
-import type { Race } from "@/types/schema";
+import { spineOptions } from "@/lib/issue-pick";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
@@ -29,15 +31,6 @@ export async function generateStaticParams() {
   }
 }
 
-function formatDate(iso?: string) {
-  if (!iso) return null;
-  return new Date(`${iso}T00:00:00`).toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
 export async function generateMetadata({
   params,
 }: {
@@ -52,30 +45,6 @@ export async function generateMetadata({
       ? `${office} — Know Your Vote`
       : "Race in review — Know Your Vote",
   };
-}
-
-/* Office, district and dates — identical for a brief and a listing, so a
-   race moving from listed to published keeps its heading. */
-function RaceHeader({
-  race,
-  children,
-}: {
-  race: Race;
-  children: React.ReactNode;
-}) {
-  const general = formatDate(race.key_dates?.general_date);
-  const registration = formatDate(race.key_dates?.registration_deadline);
-  return (
-    <header className="flex flex-col gap-1">
-      <h1 className="text-h1">{race.office}</h1>
-      <p className="text-body-sm text-on-surface-muted">
-        {race.district ?? "Statewide"}
-        {general ? ` · General election ${general}` : ""}
-        {registration ? ` · Register by ${registration}` : ""}
-      </p>
-      {children}
-    </header>
-  );
 }
 
 export default async function RacePage({
@@ -157,6 +126,11 @@ export default async function RacePage({
       </RaceHeader>
 
       <TrackView event="brief_viewed" />
+      <IssueFilter
+        raceId={raceId}
+        options={spineOptions(brief.spineIssues)}
+        selected={[]}
+      />
       <RaceCompare brief={brief} />
 
       <footer className="flex flex-wrap gap-4 text-caption text-on-surface-muted">
