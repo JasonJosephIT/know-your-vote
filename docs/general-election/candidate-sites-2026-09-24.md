@@ -274,6 +274,16 @@ NULL is the true value for each of these: we looked, and there is no campaign si
 
 ## Roster problems found along the way
 
+**Fixed in `supabase/migrations/0038_county_roster_fixes.sql`.** The three below were confirmed on the live VoterFocus lists on 2026-09-25, and all 49 county ballot-tier candidates were re-checked the same day; no other race is affected. The cause was the 2026-09-21 local-ballot derivation, which joined each of these names to another candidate's status in the same contest. The replacements and their verified sites:
+
+| Race | Out | In | `official_site` | Confirmed by | robots.txt |
+|---|---|---|---|---|---|
+| Hillsborough Commission D7 | Adam Hattersley (withdrew) | Aileen Rodriguez (DEM, `FL-VF-HIL-2660`) | `https://voteaileen2026.com/` | Disclaimer "Paid for and approved by Aileen Rodriguez, Democrat for Hillsborough County Commission, District 7"; SOE email on the same domain | Squarespace default: AI crawlers share the `*` group, which blocks only admin/API paths |
+| Hillsborough School Board D4 | Ashley Meeder (withdrew) | Patricia "Patti" Rendon (`FL-VF-HIL-2672`, incumbent, unopposed) | `https://www.votepattirendon.com/` | Title "Patti Rendon For School Board"; disclaimer "Paid for by Patti Rendon, Non-Partisan, for School Board District 4" | `User-agent: *` `Allow: /` |
+| Miami-Dade School Board D1 | Thera Johnson (lost primary) | Katrina Wilson (NOP, `FL-VF-DAD-3070`) | `https://wilsonforeducation.com/` | Ballotpedia campaign link; page names her and "School Board District 1" (no title or disclaimer on the page) | Empty file: nothing disallowed |
+
+As found on 2026-09-24:
+
 Checking each candidate against the county Supervisor of Elections listing turned up ballot-tier candidates who are **not on the November ballot**. This batch does not change the roster (`ballot_status` and `race.candidate_ids` belong to the intake pipeline); it records each one as NULL with the reason, and flags it here so the roster can be corrected before these races are briefed.
 
 - `FL-VF-DAD-3080` Thera Johnson. Miami-Dade School Board District 1 (special election): Thera Johnson is "Inactive-Defeated" on the SOE listing (32 write-in votes in the Aug 18 primary). The Nov 3 runoff is **Linda Cothiere vs Katrina Wilson** (SOE "Active-Runoff" for both; Ballotpedia agrees). Wilson is not in our roster, so the race shows the wrong opponent.
@@ -300,7 +310,7 @@ Checking each candidate against the county Supervisor of Elections listing turne
    and that exactly the expected number are sited, so it fails rather than half-applies if the
    roster moved. Fix the roster (item 2) in a separate change; `0036` does not depend on it,
    but its 106 count will need updating if the roster fix lands first.
-2. **Three races carry candidates who are not on the November ballot** (section above):
+2. ~~**Three races carry candidates who are not on the November ballot**~~ **Fixed in `0038`** (section above):
    Hillsborough Commission D7 (Hattersley withdrew; Aileen Rodriguez is the Democrat),
    Hillsborough School Board D4 (Meeder withdrew; Patricia "Patti" Rendon holds the seat), and
    Miami-Dade School Board D1 (Thera Johnson lost the primary; the runoff is Cothiere vs Katrina
