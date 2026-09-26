@@ -120,29 +120,6 @@ export interface ResolveResult {
   coverage?: "district" | "statewide";
 }
 
-/* POST /api/quiz response (PRD § 4). */
-export interface QuizResultCandidate {
-  candidateId: string;
-  legalName: string;
-  party: string;
-  raceId: string;
-  office: string;
-  /* What this candidate has SAID about the issues the voter picked —
-     described on its own terms, not measured against the voter's answers.
-     Renamed from alignmentNote in TASK-065: in a two-way general, "aligns
-     with you" is a verdict even when nothing is ranked. */
-  stanceSummary: string;
-  /* Which of the voter's chosen issues this candidate has a stated position
-     on. A coverage fact, not a score. */
-  issuesCovered: string[];
-}
-
-export interface QuizResponse {
-  races: Array<{ raceId: string; office: string }>;
-  results: QuizResultCandidate[];
-  disclaimer: string;
-}
-
 /* Ballot measures (0010, 0034). App-owned, unlike the pipeline's race tables. */
 export type MeasureStance = "support" | "oppose" | "neutral";
 

@@ -46,27 +46,6 @@ const items = [
       </svg>
     ),
   },
-  {
-    href: "/where-i-stand",
-    label: "Where I Stand",
-    alsoMatch: [] as string[],
-    icon: (
-      <svg
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        aria-hidden
-      >
-        <circle cx="10" cy="10" r="7.5" />
-        <path
-          d="M7.8 7.7a2.2 2.2 0 1 1 3.1 2.5c-.6.3-.9.8-.9 1.4"
-          strokeLinecap="round"
-        />
-        <path d="M10 14.2h.01" strokeLinecap="round" strokeWidth="2.2" />
-      </svg>
-    ),
-  },
 ];
 
 export function SectionNav() {
