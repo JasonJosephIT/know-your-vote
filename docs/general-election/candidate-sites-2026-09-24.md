@@ -334,3 +334,27 @@ Checking each candidate against the county Supervisor of Elections listing turne
   until something ingests another source.
 - `fec_id` is still empty for the federal candidates; several FEC committee ids were seen
   during this pass (Gillespie `C00943399`, Jassenoff `C00953877`) but none were stored.
+
+## Re-check, 2026-09-25
+
+All nine candidates without an `official_site` were searched again, using the
+same method. Every URL was fetched, and each failure recorded above was
+re-tested. **None changed, so no new migration was written.**
+
+- Jassenoff (FL-25) and Hosey (FL-26): their Ballotpedia pages still have no
+  campaign link. `damhforcongress.com` still has no A record.
+- Bogen, McKinzie (Broward CC 2 and 8) and Bendross-Mindingall (Miami-Dade
+  SB 2): still no campaign site. Only government or office pages and social
+  profiles exist.
+- Fisher (Broward CC 4): `fisherfordistrict4.com` still returns the Wix
+  "ConnectYourDomain" 404. `lamarfisher.com` is still parked, now on a
+  redirect "lander" template.
+- Datto (FL-GOV): `drjeffdatto.com` is still a Namecheap parking page, and
+  his FL DoS candidate record has no website.
+- Gallo (Orange SB chair): `voteangiegallo.com` still shows "Squarespace —
+  Website Expired". A search-engine cache still shows an old subpage title,
+  but a direct fetch confirms the site has lapsed.
+- Colucci (Miami-Dade SB 8): `monicacolucci.com` still carries injected
+  casino and gambling spam in its footer, so the 2026-09-25 decision (left
+  NULL until the site is cleaned) still holds. This will not fix itself.
+  Telling her campaign about the hack is the only way it changes.
