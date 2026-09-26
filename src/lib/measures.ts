@@ -113,18 +113,19 @@ export function getMeasureBrief(measureId: string) {
    its sides are balanced.
 
    `brief` is null in two different cases, and the page treats them alike on
-   purpose: a `listed` measure (no resources are readable at all — RLS gates
-   measure_resource on `published`), and a `published` one that fails the
-   symmetry re-check. Either way the voter sees the ballot text and a plain
-   statement that resources are being collected, never a one-sided list.
+   purpose: a `listed` measure (only its neutral resources are readable — RLS
+   gates support/oppose rows on `published`, 0041), and a `published` one
+   that fails the symmetry re-check. Either way the voter sees the ballot
+   text and never a one-sided support/oppose list.
 
-   The brief is only fetched for `published`: under RLS a listed measure's
-   resources are unreadable anyway, but asking only when the tier allows it
-   keeps the rule visible here instead of implied by a policy elsewhere. */
+   `neutral` is filled from the brief once published, and read directly for a
+   listed measure — RLS returns only the neutral rows in that state, so no
+   extra filtering is needed here. */
 export interface MeasureListing {
   measure: BallotMeasure;
   status: MeasureVisibleStatus;
   brief: MeasureBrief | null;
+  neutral: MeasureResourceWithSource[];
 }
 
 type MeasureWithPublication = BallotMeasure & {
@@ -157,9 +158,20 @@ async function fetchMeasureListing(
   const { measure, status } = splitPublication(data);
   if (!status) return null;
 
-  const brief =
-    status === "published" ? await fetchMeasureBrief(measureId) : null;
-  return { measure, status, brief };
+  let neutral: MeasureResourceWithSource[] = [];
+  let brief: MeasureBrief | null = null;
+  if (status === "published") {
+    brief = await fetchMeasureBrief(measureId);
+    neutral = brief?.neutral ?? [];
+  } else {
+    const { data: rows } = await supabase
+      .from("measure_resource")
+      .select("*, source!inner(*)")
+      .eq("measure_id", measureId)
+      .eq("stance", "neutral");
+    neutral = toSourced((rows ?? []) as ResourceRow[], "neutral");
+  }
+  return { measure, status, brief, neutral };
 }
 
 export function getMeasureListing(measureId: string) {
