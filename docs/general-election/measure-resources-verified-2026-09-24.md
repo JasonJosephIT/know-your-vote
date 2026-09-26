@@ -301,12 +301,12 @@ AM1 or AM2 in their own words, on both sides. Pages the fetcher couldn't open
 were opened in a real browser with the TypeSafe computer-control loop, and
 the Florida House Journals were searched for vote explanations.
 
-## Official vote explanations (House Journal)
+## Official vote explanations (House and Senate Journals)
 
 | Amendment | Record | Result |
 | --- | --- | --- |
 | AM2 (CS/HJR 1215, 2025) | House Journal No. 31, April 25, 2025, PDF p. 155: vote sequence 256, "Nays — 1 Eskamani" | **Found.** It is a signed "Explanation of Vote for Sequence Number 256" by Rep. Dr. Anna V. Eskamani (District 42). She gives her reasons: the REC-estimated $30M fiscal impact on local governments with "no guardrails to prevent windfalls", that it would mostly benefit "a handful of giant agribusinesses", and that a more targeted approach could support smaller farmers. This is the first **NO case with reasons in the opponent's own words.** It is proposed as `argument` / `oppose`, and the publisher is the Florida House of Representatives (Journal). The founder should confirm whether a legislator's journal explanation is filed as `argument` or `official`. |
-| AM1 (HJR 5019, 2025) | House Journal No. 39, June 16, 2025: vote sequence 431, 100–1 | **No explanation filed.** The lone NO was Rep. Caruso. After the roll call, Hinson was recorded NO and Basabe changed from yea to nay. The journal's explanations for that day cover sequences 432 and 435 only. The Senate's 29–4 vote (Senate Journal p. 1578) has not been checked yet. |
+| AM1 (HJR 5019, 2025) | House Journal No. 39, June 16, 2025: vote sequence 431, 100–1 | **No explanation filed.** The lone NO was Rep. Caruso. After the roll call, Hinson was recorded NO and Basabe changed from yea to nay. The journal's explanations for that day cover sequences 432 and 435 only. The Senate's vote was checked too: 2025 Senate bound journal, Vol. II, p. 1576 of the journal (PDF p. 937), vote 29–4. The NO votes were Berman, Jones, Osgood and Smith, and Avila recorded a vote preference for yea. **None of them filed a vote explanation.** |
 
 ## Blocked pages re-opened in a real browser (2026-09-26, TypeSafe computer-control loop)
 
