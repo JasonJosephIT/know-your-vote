@@ -13,7 +13,7 @@ export interface HeldNote {
 export const HELD_NOTES: Record<string, HeldNote> = {
   "FL-AM1-general": {
     paragraphs: [
-      "Supporters of Amendment 1 have published their case in their own words. Its opponents have so far only listed themselves as opposed, without giving reasons we can show you. We show both sides once each has made its own case.",
+      "Supporters of Amendment 1 have published their case in their own words. The organisations and officials opposing it have so far only listed themselves as opposed, without giving their reasons. We show both sides once each has made its own case.",
       "The Legislature's journals record how every member voted on this amendment, but no member filed a written explanation of their vote.",
     ],
     updated: "2026-09-26",
