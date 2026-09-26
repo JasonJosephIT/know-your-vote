@@ -32,5 +32,14 @@ cd "$CLAUDE_PROJECT_DIR"
 # graphify-out/ dirty.
 PYTHONHASHSEED=0 "$VENV/bin/graphify" update . > /dev/null
 
+# Name the clusters by product area with TypeSafe, then regenerate
+# graph.json and GRAPH_REPORT.md with those names. Needs TYPESAFE_API_KEY from
+# the environment's settings; without it the script exits 0 and graphify's
+# file-based names stay.
+if [ -n "${TYPESAFE_API_KEY:-}" ]; then
+  python3 scripts/graphify-label-typesafe.py > /dev/null
+  PYTHONHASHSEED=0 "$VENV/bin/graphify" cluster-only . > /dev/null
+fi
+
 # post-commit / post-checkout: rebuild the graph in the background.
 "$VENV/bin/graphify" hook install > /dev/null
