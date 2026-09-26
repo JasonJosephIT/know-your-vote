@@ -66,8 +66,6 @@ const SKIP_PATH_HINTS: readonly string[] = [
   "shop",
   "events",
   "volunteer",
-  "privacy",
-  "terms",
   "contact",
   "media",
   "press",
@@ -78,6 +76,24 @@ const SKIP_PATH_HINTS: readonly string[] = [
   "wp-json",
   "cdn-cgi",
 ];
+
+/* A site's legal pages: its privacy policy, terms, cookie notice, disclaimer,
+   accessibility statement. They are the longest pages on most campaign sites
+   and say nothing about what the candidate will do, and their link text
+   ("Privacy Policy", "Cookie Policy") carries the word "policy", which is
+   also a policy-page hint. So they are matched as whole names, by path
+   segment ("/privacy-policy", "/privacy.html", "/legal") or by the exact
+   link text, never by substring: "/issues/privacy-rights" is a position,
+   and "midterms" is not "terms". */
+const LEGAL_SEGMENT =
+  /^(?:(?:sms|text|mobile|messaging)-)?(?:privacy|cookies?|terms|legal|disclaimer|accessibility)(?:-(?:policy|notice|statement|settings|preferences|of-service|of-use|and-conditions|conditions))?(?:\.(?:html?|php|aspx?))?$/;
+const LEGAL_LINK_TEXT =
+  /^(?:(?:sms|text message|mobile) )?(?:privacy|cookies?|terms|legal|disclaimer|accessibility)(?: (?:policy|notice|statement|settings|preferences|of service|of use|and conditions|& conditions|conditions))?$/i;
+
+/** True when a link points at a legal page rather than a policy page. */
+export function isLegalLink(link: SiteLink): boolean {
+  return segments(link.url).some((seg) => LEGAL_SEGMENT.test(seg)) || LEGAL_LINK_TEXT.test(link.text.trim());
+}
 
 const SKIP_EXTENSIONS =
   /\.(jpg|jpeg|png|gif|webp|svg|ico|pdf|mp4|mp3|zip|css|js|xml|rss)$/i;
@@ -207,7 +223,8 @@ export function namesPolicyArea(link: SiteLink): boolean {
       2. the link names a policy AREA ("/environment", "Homeowners insurance"),
       3. the anchor text says "issues" and the path does not.
 
-    Same-site only, skippable sections dropped, deduped, capped. */
+    Same-site only, skippable sections and legal pages dropped, deduped,
+    capped. */
 export function selectPolicyPages(
   links: readonly SiteLink[],
   siteUrl: string,
@@ -223,6 +240,7 @@ export function selectPolicyPages(
        back to it, and fetching it again would cost a request (or a render). */
     if (new URL(link.url).pathname === "/") continue;
     if (isSkippablePath(link.url)) continue;
+    if (isLegalLink(link)) continue;
     if (seen.has(link.url)) continue;
     const lowerText = link.text.toLowerCase();
     const textHit = POLICY_PATH_HINTS.some((h) => lowerText.includes(h));
