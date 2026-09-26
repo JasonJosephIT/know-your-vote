@@ -181,6 +181,17 @@ COMMENT ON COLUMN measure_publication.status IS
   'row; published = the two-sided resource list too, enforced by '
   'trg_measure_balance (0010, 0033, 0034).';
 
+-- 0034's own table comment said anon reads measure_resource rows "only
+-- through a published measure" -- true before this file, false after it.
+-- Re-issued here with the rest of the wording kept, only that clause
+-- corrected.
+COMMENT ON TABLE measure_resource IS
+  'Outside material about a ballot measure, one row per link. The credibility '
+  'tier is a function of `kind` (src/lib/measure-ladder.ts) and never a '
+  'per-row judgment; `format` is not credibility; `source.lean_tag` is not a '
+  'sort key. Anon reads a neutral row once its measure is listed, and a '
+  'support/oppose row only once its measure is published (0041).';
+
 -- (2) Sources -- one row per outside resource, keyed by url_norm.
 INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag) VALUES
   ('src_dos_init_detail_am1',

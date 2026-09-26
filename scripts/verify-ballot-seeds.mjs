@@ -364,9 +364,9 @@ await check(
   1
 );
 await check(
-  "re-applying 0040 still leaves FL-AM2-general with 17 resources (no duplicates)",
+  "re-applying 0040 still leaves FL-AM2-general with 18 resources (no duplicates)",
   "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM2-general'",
-  17
+  18
 );
 
 /* scripts/list-ballot-2026.sql, the go-live flip, applied to this throwaway
@@ -485,6 +485,11 @@ await check(
   "SELECT count(*)::int n FROM measure_publication WHERE measure_id='FL-AM3-general' AND status='published'",
   1
 );
+await check(
+  "FL-AM2-general is still listed after 0038 re-applies, before 0040 runs",
+  "SELECT count(*)::int n FROM measure_publication WHERE measure_id='FL-AM2-general' AND status='listed'",
+  1
+);
 await db.exec(
   await readFile(
     path.join(migrationsDir, "0040_measure_resources_am2.sql"),
@@ -537,8 +542,8 @@ await check(
    and 0040, both untouched by the listing above except for the round-trip
    through 'listed' just proved): anon sees AM3's resources -- 0038's 14 rows
    plus the FL-AM3-general:booklet row 0035 already seeded, 15 total -- and
-   AM2's -- 0040's 16 rows plus the FL-AM2-general:booklet row 0035 already
-   seeded, 17 total. AM1 stays merely `listed` (this run's list-ballot-
+   AM2's -- 0040's 17 rows plus the FL-AM2-general:booklet row 0035 already
+   seeded, 18 total. AM1 stays merely `listed` (this run's list-ballot-
    2026.sql is what listed it), but 0041 widens the anon policy so a listed
    measure's NEUTRAL rows are readable: anon now sees AM1's resources too --
    0041's 9 neutral rows plus the FL-AM1-general:booklet row 0035 already
@@ -549,9 +554,9 @@ await check(
   15
 );
 await check(
-  "anon reads FL-AM2-general's 17 published resources",
+  "anon reads FL-AM2-general's 18 published resources",
   "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM2-general'",
-  17
+  18
 );
 await check(
   "anon reads FL-AM1-general's 10 neutral resources while merely listed (0 support, 0 oppose)",
@@ -570,5 +575,5 @@ if (failures > 0) {
   process.exit(1);
 }
 console.log(
-  "\nverify-ballot-seeds: OK — measures and Tier A local races seeded as intended; no race is listed or published by a migration, and FL-AM3-general/FL-AM2-general are the two measures 0038/0040 publish; list-ballot-2026.sql lists every race and every measure without a prior row (AM1), publishes nothing new, and anon reads back AM3's 15 resources, AM2's 17 and (since 0041) AM1's 10 neutral-only resources."
+  "\nverify-ballot-seeds: OK — measures and Tier A local races seeded as intended; no race is listed or published by a migration, and FL-AM3-general/FL-AM2-general are the two measures 0038/0040 publish; list-ballot-2026.sql lists every race and every measure without a prior row (AM1), publishes nothing new, and anon reads back AM3's 15 resources, AM2's 18 and (since 0041) AM1's 10 neutral-only resources."
 );

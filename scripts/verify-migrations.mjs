@@ -1497,14 +1497,14 @@ await check("a draft or in_review measure's neutral rows stay unreadable to anon
 
 /* 0038 and 0040 publish the real FL-AM3-general and FL-AM2-general measures:
    anon must see all 15 of AM3's resources (0038's 14 plus the
-   FL-AM3-general:booklet row 0035 already seeded) and all 17 of AM2's
-   (0040's 16 plus the FL-AM2-general:booklet row 0035 already seeded), and
+   FL-AM3-general:booklet row 0035 already seeded) and all 18 of AM2's
+   (0040's 17 plus the FL-AM2-general:booklet row 0035 already seeded), and
    0 for AM1 here even though 0041 seeded AM1's neutral rows too -- AM1 has
    no measure_publication row at all at the migration level (it only becomes
    'listed' via the hand-run scripts/list-ballot-2026.sql), and 0041's policy
    only opens a neutral row once its measure has a 'listed' or 'published'
    row to point at. */
-await check("anon sees all 15 FL-AM3-general and 17 FL-AM2-general resources, 0 for AM1", async () => {
+await check("anon sees all 15 FL-AM3-general and 18 FL-AM2-general resources, 0 for AM1", async () => {
   await db.exec("SET ROLE anon;");
   const res = await db.query(
     `SELECT measure_id, count(*)::int n FROM measure_resource
@@ -1513,8 +1513,8 @@ await check("anon sees all 15 FL-AM3-general and 17 FL-AM2-general resources, 0 
   );
   await db.exec("RESET ROLE;");
   const got = res.rows.map((r) => `${r.measure_id}:${r.n}`).join(",");
-  if (got !== "FL-AM2-general:17,FL-AM3-general:15")
-    throw new Error(`expected FL-AM2-general:17,FL-AM3-general:15 only, got [${got}]`);
+  if (got !== "FL-AM2-general:18,FL-AM3-general:15")
+    throw new Error(`expected FL-AM2-general:18,FL-AM3-general:15 only, got [${got}]`);
 });
 
 await db.exec("SET ROLE anon;");

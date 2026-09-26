@@ -370,10 +370,12 @@ Scope note: Florida is running a second, unrelated "Amendment 2" this cycle — 
 ## Gate picture
 
 Verified rows carried forward from the prior session (2026-09-24), unchanged by this pass:
-- **Support (5):** Florida TaxWatch (analysis), Florida Farm Bureau (feaweb.org "vote-yes" news post), Wilton Simpson/FDACS, Tampa Bay Times "Viewpoints" op-ed, palmbeachexaminer Substack.
+- **Support (5):** Florida TaxWatch (analysis), Florida Farm Bureau (floridafarmbureau.org "vote-yes" news post), Wilton Simpson/FDACS, Tampa Bay Times "Viewpoints" op-ed, palmbeachexaminer Substack.
 - **Oppose (4):** FEA voter toolkit, LWV Florida Vote411 PDF, sisusari Substack (caveated as undecided, not a clean oppose), amandainformed Substack.
 
 This pass adds one more support-side `argument` row with its own stated reasons (Florida Farm Bureau's dedicated `floridafarmbureau.org/yeson2/` page — a second, more detailed URL than the one already verified) and **zero** new oppose-side rows with reasons. No group approached in this widened search — agricultural, county/city/school, tax-collector, appraiser, or editorial — has published its own words giving a reason to vote NO on Amendment 2. The only NO-side reasoning found anywhere (Rep. Eskamani's $30M-local-impact / large-ag-benefit argument) exists solely inside news reporting, never in her own statement, release, or social post, so it stays `reporting` + `neutral` and cannot become an `argument` row. The FEA/LWV gap the brief asked about again resolves the same way as 2026-09-24: both are still bare "opposed" listings with no reasons in their own material.
+
+**Superseded 2026-09-26:** Eskamani's reasons were found in her own signed House Journal vote explanation (see "Official vote explanations"); founder calls C1/D2 file it and the FEA and LWV listings as argument/oppose. 0040 seeds 5 support / 4 oppose.
 
 ## Amendment 1 — widened search (2026-09-26)
 

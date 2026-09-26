@@ -62,7 +62,7 @@
 --      the State: How Florida Amendments 1, 2, and 3 Cut Your Taxes,"
 --      2026-08-07 (commentary; support).
 --
--- INCLUDED -- oppose (3, one row per organisation/individual):
+-- INCLUDED -- oppose (4, one row per organisation/individual):
 --   1. Rep. Dr. Anna V. Eskamani -- signed "Explanation of Vote for Sequence
 --      Number 256," House Journal No. 31, April 25, 2025 (argument; her own
 --      reasons: the ~$30M local-government hit with no anti-windfall
@@ -83,7 +83,16 @@
 --   2. Florida Education Association -- feaweb.org voter toolkit, "OPPOSED
 --      BY FEA" (argument; a bare position listing, no reasoning given, but
 --      still FEA's own stated position on its own page).
---   3. Amanda Informed (Substack) -- "Three Amendments, Three Reasons to
+--   3. League of Women Voters of Florida -- lwvfl.org Vote411 synopsis PDF,
+--      "Vote411 Voter Guide -- Florida Proposed Amendments" (argument; like
+--      FEA, a bare position listing -- "Opponents Florida Education
+--      Association, LWV of Florida" -- with no reasoning given, but still
+--      LWV's own document naming its own opposition to this amendment).
+--      Founder call D2, 2026-09-26: an organisation's own "opposed" listing
+--      counts consistently as an argument/oppose row whether it is FEA's or
+--      LWV's -- so this is INCLUDED, reversing the EXCLUDE call the prior
+--      pass made for this same PDF.
+--   4. Amanda Informed (Substack) -- "Three Amendments, Three Reasons to
 --      Vote No," 2026-09-23 (commentary; oppose).
 --
 -- EXCLUDED -- not a verified open, or excluded by rule, even though the doc
@@ -98,17 +107,10 @@
 --     the fuller /yeson2/ page above under the one-row-per-organisation rule
 --     (spec §1's "new" rule); this stops one voice filling two rows on the
 --     same side.
---   - League of Women Voters of Florida -- lwvfl.org Vote411 synopsis PDF.
---     The doc (2026-09-24 table, row 14, and the "Gate count"/"Gaps"
---     sections, reconfirmed unchanged by the 2026-09-26 widened pass) reads
---     this consistently as a neutral ballot synopsis that names itself as an
---     opponent inside otherwise-neutral text ("no argument text"), not a
---     page stating LWV's own case with reasoning. Per this migration's
---     inclusion rule, that means EXCLUDE and name it -- so it is not seeded
---     as an `argument`/`oppose` row.
 --   - sisusari Substack ("Florida Amendment 2: who exactly gets...") --
 --     doc's own caveat: "reads as an undecided/skeptical piece, not a clean
---     oppose case." Excluded as uncertain stance, per the founder's call.
+--     oppose case." Excluded as uncertain stance, per spec §1's inclusion
+--     rule.
 --   - floridapolitics.com legislative-vote piece -- HTTP 402 paywall, never
 --     opened (widened search, row 4); not a verified read.
 --   - Rep. Eskamani's floor-debate quote as reported by mynews13.com /
@@ -127,16 +129,20 @@
 --     AM2 material located for any of them in the widened search; nothing to
 --     seed.
 --
--- INCLUDED: 16 new rows, all independently opened/confirmed, unambiguous
+-- INCLUDED: 17 new rows, all independently opened/confirmed, unambiguous
 -- kind/stance.
 --   support = 5 (Florida Farm Bureau /yeson2/; Florida TaxWatch; FDACS/
 --              Wilton Simpson; Tampa Bay Times "Viewpoints"; Palm Beach
 --              Examiner Substack)
---   oppose  = 3 (Eskamani House Journal vote explanation; FEA voter toolkit;
---              Amanda Informed Substack)
+--   oppose  = 4 (Eskamani House Journal vote explanation; FEA voter toolkit;
+--              LWV Florida Vote411 PDF; Amanda Informed Substack)
 --   neutral = 8 (2 official, 1 analysis, 5 reporting)
--- Gate (0034 §4 / spec §1): both sides present, larger(5) <= 2 x smaller(3)
--- = 6 -- passes.
+-- Gate (0034 §4 / spec §1): both sides present, larger(5) <= 2 x smaller(4)
+-- = 8 -- passes.
+--
+-- Counts (support / oppose / non-neutral total): 5 / 4 / 9. Plus the 8
+-- neutral rows here and the pre-existing FL-AM2-general:booklet row (0035),
+-- anon reads 18 FL-AM2-general resource rows once published.
 --
 -- SOURCE TYPE / LEAN CONVENTIONS (same as 0038): `type` is source.type's
 -- coarse 4-value CHECK, not the ladder's `kind`. The two `official` rows use
@@ -156,7 +162,7 @@
 --
 -- url_norm follows src/lib/brief-rows.ts's urlNorm(). Checked before
 -- writing: `grep` across supabase/migrations/*.sql found no existing source
--- row for any of the 16 URLs below, so each gets a fresh source_id here --
+-- row for any of the 17 URLs below, so each gets a fresh source_id here --
 -- but a LIVE database may already hold a source row for one of these URLs
 -- with a DIFFERENT source_id than the ones minted below. Section (2) never
 -- writes the literal 'src_...' id into measure_resource -- it resolves
@@ -222,14 +228,22 @@ INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag) VALUES
    'https://palmbeachexaminer.substack.com/p/stop-paying-rent-to-the-state-how',
    'palmbeachexaminer.substack.com/p/stop-paying-rent-to-the-state-how',
    'Palm Beach Examiner (Substack)', 'opinion', 'unrated'),
+  -- `#page=155` deep-links the reader straight to her signed explanation
+  -- inside the bound journal PDF; urlNorm() (src/lib/brief-rows.ts) drops
+  -- the fragment, so url_norm below is unaffected and still matches the
+  -- plain journal URL.
   ('src_eskamani_vote_explanation',
-   'https://www.flhouse.gov/Sections/Documents/loaddoc.aspx?PublicationType=Session&DocumentType=Journals&Session=2025&FileName=Bound_House%20Journal%20No.31,%20April%2025,%202025%20(Friday).pdf',
+   'https://www.flhouse.gov/Sections/Documents/loaddoc.aspx?PublicationType=Session&DocumentType=Journals&Session=2025&FileName=Bound_House%20Journal%20No.31,%20April%2025,%202025%20(Friday).pdf#page=155',
    'www.flhouse.gov/Sections/Documents/loaddoc.aspx?PublicationType=Session&DocumentType=Journals&Session=2025&FileName=Bound_House%20Journal%20No.31,%20April%2025,%202025%20(Friday).pdf',
    'Florida House of Representatives', 'primary_doc', 'N/A'),
   ('src_fea_voter_toolkit',
    'https://feaweb.org/action-center/voter-toolkit/',
    'feaweb.org/action-center/voter-toolkit',
    'Florida Education Association', 'opinion', 'unrated'),
+  ('src_lwvfl_vote411_synopsis_am2',
+   'https://www.lwvfl.org/wp-content/uploads/2026-State-Amendments-Synopses-English-from-Vote411-1.pdf',
+   'www.lwvfl.org/wp-content/uploads/2026-State-Amendments-Synopses-English-from-Vote411-1.pdf',
+   'League of Women Voters of Florida', 'opinion', 'unrated'),
   ('src_amandainformed_am2',
    'https://amandainformed.substack.com/p/three-amendments-three-reasons-to',
    'amandainformed.substack.com/p/three-amendments-three-reasons-to',
@@ -330,11 +344,17 @@ VALUES
    'Constitutional Amendments', NULL, NULL, NULL,
    'Florida Education Association''s own voter toolkit, listing itself as opposed', 2),
 
+  ('FL-AM2-general:lwvfl-vote411-synopsis', 'FL-AM2-general',
+   (SELECT source_id FROM source WHERE url_norm = 'www.lwvfl.org/wp-content/uploads/2026-State-Amendments-Synopses-English-from-Vote411-1.pdf'),
+   'oppose', 'argument', 'document',
+   'Vote411 Voter Guide - Florida Proposed Amendments', NULL, NULL, NULL,
+   'League of Women Voters of Florida''s own Vote411 synopsis, listing itself as opposed', 3),
+
   ('FL-AM2-general:amandainformed', 'FL-AM2-general',
    (SELECT source_id FROM source WHERE url_norm = 'amandainformed.substack.com/p/three-amendments-three-reasons-to'),
    'oppose', 'commentary', 'article',
    'Three Amendments, Three Reasons to Vote No', 'Amanda Informed', '2026-09-23', NULL,
-   NULL, 3)
+   NULL, 4)
 ON CONFLICT (measure_id, source_id) DO UPDATE SET
   stance = EXCLUDED.stance, kind = EXCLUDED.kind, format = EXCLUDED.format,
   title = EXCLUDED.title, author = EXCLUDED.author, published_at = EXCLUDED.published_at,
@@ -342,7 +362,7 @@ ON CONFLICT (measure_id, source_id) DO UPDATE SET
   display_order = EXCLUDED.display_order;
 
 -- (3) Publish, with its admin_action audit row written in the SAME statement.
---     Both sides are present (5 support, 3 oppose; 5 <= 2x3) so 0034's
+--     Both sides are present (5 support, 4 oppose; 5 <= 2x4) so 0034's
 --     trg_measure_balance accepts this. AM1 and AM3 are untouched here.
 --
 --     Same pattern as 0038: a CTE reads the prior status before the UPSERT

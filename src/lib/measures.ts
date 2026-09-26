@@ -22,8 +22,9 @@ import type {
    gated on `published` in RLS, so the rules below still describe every
    resource this module can ever return:
 
-   1. RLS already hides every row tied to an unpublished measure, so the gate
-      is at the database, not here.
+   1. RLS lets anon read a `listed` measure's neutral resources (0041); sided
+      (`support`/`oppose`) rows stay hidden until the measure is `published`.
+      That split is enforced at the database, not here.
    2. This module re-checks the symmetry rule anyway — belt and braces over
       the publication trigger, exactly as briefs.ts re-checks
       balance_check_passed over the publication gate.
@@ -177,7 +178,7 @@ async function fetchMeasureListing(
 export function getMeasureListing(measureId: string) {
   return unstable_cache(
     () => fetchMeasureListing(measureId),
-    ["measure-listing", measureId],
+    ["measure-listing-v2", measureId],
     { revalidate: 3600, tags: ["measures", `measure:${measureId}`] }
   )();
 }

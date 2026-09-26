@@ -78,7 +78,7 @@ export default async function MeasurePage({
      lopsided. Both get the ballot text and nothing else: the verbatim summary
      is the Division of Elections' own wording, so it needs no audit, while
      the resource list waits for both sides. */
-  const { measure, brief, neutral } = listing;
+  const { measure, brief, neutral = [] } = listing;
   const note = heldNote(measure.measure_id);
 
   return (
