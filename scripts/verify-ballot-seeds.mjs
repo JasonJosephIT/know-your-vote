@@ -538,8 +538,11 @@ await check(
    through 'listed' just proved): anon sees AM3's resources -- 0038's 14 rows
    plus the FL-AM3-general:booklet row 0035 already seeded, 15 total -- and
    AM2's -- 0040's 16 rows plus the FL-AM2-general:booklet row 0035 already
-   seeded, 17 total -- but still nothing for the one measure this run only
-   listed (AM1). */
+   seeded, 17 total. AM1 stays merely `listed` (this run's list-ballot-
+   2026.sql is what listed it), but 0041 widens the anon policy so a listed
+   measure's NEUTRAL rows are readable: anon now sees AM1's resources too --
+   0041's 9 neutral rows plus the FL-AM1-general:booklet row 0035 already
+   seeded, 10 total, 0 support / 0 oppose. */
 await check(
   "anon reads FL-AM3-general's 15 published resources",
   "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM3-general'",
@@ -551,8 +554,13 @@ await check(
   17
 );
 await check(
-  "anon reads 0 resources for the merely-listed AM1",
+  "anon reads FL-AM1-general's 10 neutral resources while merely listed (0 support, 0 oppose)",
   "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM1-general'",
+  10
+);
+await check(
+  "anon reads 0 support/oppose FL-AM1-general resources while merely listed",
+  "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM1-general' AND stance IN ('support','oppose')",
   0
 );
 await db.exec("RESET ROLE;");
@@ -562,5 +570,5 @@ if (failures > 0) {
   process.exit(1);
 }
 console.log(
-  "\nverify-ballot-seeds: OK — measures and Tier A local races seeded as intended; no race is listed or published by a migration, and FL-AM3-general/FL-AM2-general are the two measures 0038/0040 publish; list-ballot-2026.sql lists every race and every measure without a prior row (AM1), publishes nothing new, and anon reads back AM3's 15 resources, AM2's 17 and 0 for AM1."
+  "\nverify-ballot-seeds: OK — measures and Tier A local races seeded as intended; no race is listed or published by a migration, and FL-AM3-general/FL-AM2-general are the two measures 0038/0040 publish; list-ballot-2026.sql lists every race and every measure without a prior row (AM1), publishes nothing new, and anon reads back AM3's 15 resources, AM2's 17 and (since 0041) AM1's 10 neutral-only resources."
 );
