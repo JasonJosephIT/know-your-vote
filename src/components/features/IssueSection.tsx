@@ -1,23 +1,6 @@
-import { VerdictBadge } from "@/components/ui/VerdictBadge";
 import { PolicyAreaChip, policyAreaHref } from "@/components/ui/PolicyAreaChip";
-import { SourceLinks } from "@/components/features/SourceLinks";
-import type { IssueBlock, SourcedClaim } from "@/lib/briefs";
-
-function ClaimList({ items, withVerdict }: { items: SourcedClaim[]; withVerdict?: boolean }) {
-  return (
-    <ul className="flex flex-col gap-3">
-      {items.map(({ claim, sources }) => (
-        <li key={claim.claim_id} className="flex flex-col gap-1">
-          <p className="text-body-sm">{claim.text}</p>
-          <span className="flex flex-wrap items-center gap-2">
-            {withVerdict && claim.verdict && <VerdictBadge verdict={claim.verdict} />}
-            <SourceLinks sources={sources} />
-          </span>
-        </li>
-      ))}
-    </ul>
-  );
-}
+import { ClaimList, NoStatedPosition } from "@/components/features/ClaimList";
+import type { IssueBlock } from "@/lib/briefs";
 
 const buckets = [
   { key: "say", label: "What They Say", tone: "text-accent-strong" },
@@ -54,13 +37,7 @@ export function IssueSection({ block }: { block: IssueBlock }) {
         </ul>
       )}
 
-      {block.coverage === "no_stated_position_found" && (
-        <p className="rounded-md bg-surface-muted px-3 py-2 text-body-sm text-on-surface-muted">
-          No stated position found — we searched this candidate&apos;s own
-          sources and found no position on this issue. Silence is recorded
-          honestly, never filled in.
-        </p>
-      )}
+      {block.coverage === "no_stated_position_found" && <NoStatedPosition />}
 
       {buckets.map(({ key, label, tone }) => {
         const items = block[key];
