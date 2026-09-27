@@ -49,4 +49,4 @@ The same rules hold for both parts: every candidate gets the same kinds of sourc
   - That is the recorded intent: the founder decided that uneven campaign-site length, and silent candidates, do not block publication.
   - The soft flags still fire and are stored.
 - **`brief.sql` applied** over the Supabase MCP on the founder's yes. How it was applied, and how it was verified, is in `run-2026-09-27.md` under "Apply and audit".
-- **Publishing is not yet authorised.** It needs its own yes.
+- **Publishing was then authorised separately:** "yes, publish FL-GOV". It was published at 2026-09-27 15:26 UTC (see `run-2026-09-27.md`).
