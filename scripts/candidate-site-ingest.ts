@@ -178,7 +178,11 @@ async function browserGet(url: string, asText: boolean): Promise<string | null> 
     console.error(`  bot challenge did not clear in the browser: ${url}`);
     return null;
   } catch (err) {
-    console.error(`  browser ${(err as Error).name}: ${url}`);
+    /* The message's first line, not just the name: "Error" alone hid a
+       certificate failure (net::ERR_CERT_AUTHORITY_INVALID) that made two
+       readable sites look like bot walls. */
+    const { name, message } = err as Error;
+    console.error(`  browser ${name} (${message.split("\n")[0]}): ${url}`);
     return null;
   } finally {
     await page.close().catch(() => {});

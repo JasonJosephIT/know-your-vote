@@ -68,9 +68,13 @@ export interface CandidateRun {
   candidateId: string;
   /** The candidate's `official_site`. Not decoration: every passage is checked
       against it, so a run attached to the wrong candidate is rejected rather
-      than published under their name. */
-  officialSite: string;
-  run: PolicyRun;
+      than published under their name. Null when the candidate has none. */
+  officialSite: string | null;
+  /** Null when there is nothing to run: no site, or a site the ingest could
+      not read. The candidate still gets a profile and a
+      `no_stated_position_found` on every spine issue, and a `no_run`
+      rejection says why. Silence rendered, never absence. */
+  run: PolicyRun | null;
 }
 
 export interface BriefRowsInput {
@@ -167,6 +171,7 @@ export interface Rejection {
   candidate_id: string;
   passage_id: string | null;
   reason:
+    | "no_run"
     | "schema_mismatch"
     | "not_official_site"
     | "unparseable_url"
@@ -266,9 +271,12 @@ export function buildBriefRows(input: BriefRowsInput): BriefRowsResult {
   const spineIds = new Set(spine.map((s) => s.id));
 
   for (const { candidateId, officialSite, run } of candidates) {
+    if (run === null) {
+      rejected.push({ candidate_id: candidateId, passage_id: null, reason: "no_run" });
+    }
     /* A run built under other rules is not mixed in with these. */
-    const usable = run.schema === "kyv.policy-run/1";
-    if (!usable) {
+    const usable = run !== null && run.schema === "kyv.policy-run/1";
+    if (run !== null && !usable) {
       rejected.push({
         candidate_id: candidateId,
         passage_id: null,
@@ -324,7 +332,8 @@ export function buildBriefRows(input: BriefRowsInput): BriefRowsResult {
          just a file, so nothing upstream stops one candidate's run being
          handed to another's id — at which point their opponent's words are
          published over their name. Cheap to check, unrecoverable to miss. */
-      if (!isSameSite(canonical, officialSite)) {
+      /* No official_site means no passage can be the candidate's own. */
+      if (officialSite === null || !isSameSite(canonical, officialSite)) {
         rejected.push({
           candidate_id: candidateId,
           passage_id: passage.id,

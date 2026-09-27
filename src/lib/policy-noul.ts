@@ -127,6 +127,13 @@ export function buildPolicyQuestions(
   return questions;
 }
 
+/** How many passages a `--limit` would drop from a corpus of `total`.
+    Anything above 0 is a refusal, not a trim: a cap asks about the head of a
+    site and never its tail, so a long site would lose more than a short one. */
+export function limitShortfall(total: number, limit: number): number {
+  return Math.max(0, total - limit);
+}
+
 /** One number from an answer set, or null. Fail-closed: anything that is not
     a finite number in [0,1] under a `noul` key is absent, never coerced. */
 export function noulValue(

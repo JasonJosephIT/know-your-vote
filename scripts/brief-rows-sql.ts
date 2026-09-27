@@ -23,7 +23,10 @@
      }
 
    `run` paths resolve relative to the plan file, so a plan and its runs move
-   together. */
+   together. A candidate with nothing to run (no `official_site`, or a site the
+   ingest could not read) is listed with `"run": null` and a `"no_run_reason"`;
+   they get a profile and `no_stated_position_found` on every spine issue,
+   never a gap in the race. */
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -40,7 +43,12 @@ interface Plan {
   race_id: string;
   retrieved_at?: string;
   spine: SpineIssue[];
-  candidates: Array<{ candidate_id: string; official_site: string; run: string }>;
+  candidates: Array<{
+    candidate_id: string;
+    official_site: string | null;
+    run: string | null;
+    no_run_reason?: string;
+  }>;
 }
 
 function arg(name: string): string | undefined {
@@ -57,10 +65,24 @@ if (!planPath) {
 const planDir = dirname(resolve(planPath));
 const plan = JSON.parse(readFileSync(planPath, "utf8")) as Plan;
 
+/* A null run has to say why, in the plan, where a reviewer reads it: "no
+   site" and "a site we could not read" are different facts about the same
+   silence. */
+const unexplained = plan.candidates.filter((c) => c.run === null && !c.no_run_reason?.trim());
+if (unexplained.length > 0) {
+  console.error(
+    `every candidate with "run": null needs a "no_run_reason": ${unexplained.map((c) => c.candidate_id).join(", ")}`,
+  );
+  process.exit(2);
+}
+
 const candidates: CandidateRun[] = plan.candidates.map((c) => ({
   candidateId: c.candidate_id,
   officialSite: c.official_site,
-  run: JSON.parse(readFileSync(resolve(planDir, c.run), "utf8")) as PolicyRun,
+  run:
+    c.run === null
+      ? null
+      : (JSON.parse(readFileSync(resolve(planDir, c.run), "utf8")) as PolicyRun),
 }));
 
 /* A spine id outside the shared taxonomy is legal but worth saying out loud:
@@ -109,13 +131,19 @@ function render(rows: BriefRows): string {
   }, {});
 
   out.push(`-- Brief rows for ${plan.race_id}, built by scripts/brief-rows-sql.ts.`);
-  out.push(`-- Generated from ${plan.candidates.length} policy run(s). Review before applying.`);
+  const runs = plan.candidates.filter((c) => c.run !== null).length;
+  out.push(
+    `-- Generated from ${runs} policy run(s) for ${plan.candidates.length} candidate(s). Review before applying.`,
+  );
   out.push(`--`);
   out.push(
     `-- ${rows.sources.length} source, ${rows.issues.length} issue, ${rows.claims.length} claim, ` +
       `${rows.positions.length} position, ${rows.profiles.length} profile rows.`,
   );
   out.push(`-- Passages that produced no row: ${JSON.stringify(counts)}`);
+  for (const c of plan.candidates.filter((c) => c.run === null)) {
+    out.push(`-- ${c.candidate_id}: no run, silent on every spine issue: ${c.no_run_reason}`);
+  }
   out.push(`--`);
   out.push(`-- Every claim is stated_position / single_source with a NULL verdict: a Noul`);
   out.push(`-- scores relevance and cannot adjudicate. Nothing here is a checked fact.`);

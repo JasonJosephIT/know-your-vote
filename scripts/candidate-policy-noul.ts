@@ -25,7 +25,8 @@
 
      node scripts/candidate-policy-noul.ts --in passages.jsonl [--limit N]
        [--threshold 0.85] [--json report.json]
-       Ask, and print the report. One request per passage.
+       Ask, and print the report. One request per passage. --limit is a cost
+       guard (default 200): a corpus larger than it is refused, never cut.
 
    Fail-closed: a missing key, an unreadable input, or zero passages exits
    non-zero. A silent empty report looks exactly like a candidate who has
@@ -42,6 +43,7 @@ import {
   buildPassageState,
   buildPolicyQuestions,
   groupByArea,
+  limitShortfall,
   readVerdict,
   unmatched,
   type PolicyCitation,
@@ -94,10 +96,20 @@ try {
   passages = readFileSync(inPath, "utf8")
     .split("\n")
     .filter((line) => line.trim().length > 0)
-    .map((line) => JSON.parse(line) as Passage)
-    .slice(0, limit);
+    .map((line) => JSON.parse(line) as Passage);
 } catch (e) {
   console.error(`could not read ${inPath}: ${(e as Error).message}`);
+  process.exit(2);
+}
+/* Fail-closed, like everything else here: a --limit below the corpus used to
+   drop the tail silently, which is exactly the passages a long site has and a
+   short one doesn't. Refuse, and say how many would have gone. */
+const dropped = limitShortfall(passages.length, limit);
+if (dropped > 0) {
+  console.error(
+    `${inPath} holds ${passages.length} passages; --limit ${limit} would drop ${dropped} of them. ` +
+      `Pass --limit ${passages.length} or higher.`,
+  );
   process.exit(2);
 }
 if (passages.length === 0) {
