@@ -2,7 +2,7 @@
   "schema": "kyv.policy-run/1",
   "status": "not_run",
   "site": "https://nomoecorruption.com",
-  "created_at": "2026-09-27T13:00:00.944Z",
+  "created_at": "2026-09-27T12:52:46.992Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
@@ -36,7 +36,7 @@
     "KYV8"
   ],
   "counts": {
-    "passages": 18,
+    "passages": 19,
     "asked": 0,
     "states_policy": 0,
     "with_issue": 0,
@@ -167,6 +167,13 @@
       "url": "https://nomoecorruption.com/2026/07/09/byron-donalds-gets-sued-for-assault-but-fishbacks-racist-response-is-worse-why-voting-npa-is-the-best-option-for-governor-of-florida",
       "heading": "Byron Donalds Gets Sued for Assault, but Fishback’s Racist Response is Worse. Why Voting NPA is the BEST Option for Governor of Florida",
       "text": "The Republican Party and its candidates are in utter chaos right now, and are simply not an option in this Florida gubernatorial race. Voters have had it with racism, bad behavior and division. The next Governor of Florida must be an NPA with No Party Affiliation. That’s why Moe Dimanche is in this race, because sensible Republican voters would rather vote for a common-sense NPA than racist and divisive Republican candidates. This is also why donors to Republican candidates have pledged their money in an effort to stop Moe.",
+      "verdict": null
+    },
+    {
+      "id": "0c289595",
+      "url": "https://nomoecorruption.com/2026/07/09/byron-donalds-gets-sued-for-assault-but-fishbacks-racist-response-is-worse-why-voting-npa-is-the-best-option-for-governor-of-florida",
+      "heading": "One response to “Byron Donalds Gets Sued for Assault, but Fishback’s Racist Response is Worse. Why Voting NPA is the BEST Option for Governor of Florida”",
+      "text": "Jesse Vega July 9, 2026 at 2:26 pm yeah right, for the people. you don’t do enough for the people, criminals do crime kill a person and gets 12 years for killing, give them 100 years if they kill someone, no good time, no half way house, no parole, nothing just the time, get serious about the crime and your citizens and their rights of the 2nd amendment, make it harder for the criminals and ezy for the citizens 🙄 😉 😀. thank 😊 you. Loading… Reply",
       "verdict": null
     }
   ],

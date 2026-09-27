@@ -1,7 +1,7 @@
 -- Brief rows for FL-GOV-general, built by scripts/brief-rows-sql.ts.
 -- Generated from 5 policy run(s) for 8 candidate(s). Review before applying.
 --
--- 25 source, 47 issue, 232 claim, 75 position, 8 profile rows.
+-- 24 source, 46 issue, 230 claim, 74 position, 8 profile rows.
 -- Passages that produced no row: {"states_no_policy":395,"no_issue_matched":115,"no_run":3}
 -- FL-DOE-90433: no run, silent on every spine issue: site unreadable: bot challenge (HTTP 403) did not clear in the browser, 2026-09-27 (FL-DOE-90433/ingest.log); founder decision D3/D4: record silence
 -- FL-DOE-89630: no run, silent on every spine issue: no official_site (candidate-sites-2026-09-21.md); founder decision D3: record silence
@@ -49,8 +49,7 @@ INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag, retriev
   ('src-efa529ed', 'https://russo2026.com/en/priorities/innovation', 'russo2026.com/en/priorities/innovation', 'russo2026.com', 'candidate_self', 'N/A', '2026-09-27T12:50:23Z'),
   ('src-bf79b0bc', 'https://russo2026.com/en/priorities/immigration', 'russo2026.com/en/priorities/immigration', 'russo2026.com', 'candidate_self', 'N/A', '2026-09-27T12:50:23Z'),
   ('src-dcacde8b', 'https://russo2026.com/en/priorities/florida-9-9', 'russo2026.com/en/priorities/florida-9-9', 'russo2026.com', 'candidate_self', 'N/A', '2026-09-27T12:50:23Z'),
-  ('src-530377e3', 'https://nomoecorruption.com/', 'nomoecorruption.com', 'nomoecorruption.com', 'candidate_self', 'N/A', '2026-09-27T12:50:23Z'),
-  ('src-32b8d40d', 'https://nomoecorruption.com/2026/07/09/byron-donalds-gets-sued-for-assault-but-fishbacks-racist-response-is-worse-why-voting-npa-is-the-best-option-for-governor-of-florida', 'nomoecorruption.com/2026/07/09/byron-donalds-gets-sued-for-assault-but-fishbacks-racist-response-is-worse-why-voting-npa-is-the-best-option-for-governor-of-florida', 'nomoecorruption.com', 'candidate_self', 'N/A', '2026-09-27T12:50:23Z')
+  ('src-530377e3', 'https://nomoecorruption.com/', 'nomoecorruption.com', 'nomoecorruption.com', 'candidate_self', 'N/A', '2026-09-27T12:50:23Z')
 ON CONFLICT (url_norm) DO NOTHING;
 
 INSERT INTO issue (issue_id, race_id, tier, candidate_id, title, description, source_id, display_order) VALUES
@@ -99,8 +98,7 @@ INSERT INTO issue (issue_id, race_id, tier, candidate_id, title, description, so
   ('FL-GOV-general--issue-KYV3--FL-DOE-89571', 'FL-GOV-general', 'candidate', 'FL-DOE-89571', 'Growth, development and land conservation', NULL, NULL, 105),
   ('FL-GOV-general--issue-B7--FL-DOE-89571', 'FL-GOV-general', 'candidate', 'FL-DOE-89571', 'Crime policy, policing and courts', NULL, NULL, 106),
   ('FL-GOV-general--issue-B3--FL-DOE-88529', 'FL-GOV-general', 'candidate', 'FL-DOE-88529', 'Immigration and border enforcement', NULL, NULL, 100),
-  ('FL-GOV-general--issue-KYV8--FL-DOE-88529', 'FL-GOV-general', 'candidate', 'FL-DOE-88529', 'Condominium and HOA costs', NULL, NULL, 101),
-  ('FL-GOV-general--issue-B7--FL-DOE-88529', 'FL-GOV-general', 'candidate', 'FL-DOE-88529', 'Crime policy, policing and courts', NULL, NULL, 102)
+  ('FL-GOV-general--issue-KYV8--FL-DOE-88529', 'FL-GOV-general', 'candidate', 'FL-DOE-88529', 'Condominium and HOA costs', NULL, NULL, 101)
 ;
 
 INSERT INTO claim (claim_id, candidate_id, race_id, issue_id, text, bucket, attributed, derived_from, verdict, verification) VALUES
@@ -328,14 +326,12 @@ INSERT INTO claim (claim_id, candidate_id, race_id, issue_id, text, bucket, attr
   ('claim-FL-DOE-89571-bf4da03b', 'FL-DOE-89571', 'FL-GOV-general', 'FL-GOV-general--issue-B1--FL-DOE-89571', 'Detailed legislation would include protections for legitimate pass-through business operations, investment and job creation, with additional fiscal modeling, legal review and implementation details developed before the proposal moves forward.', 'stated_position', true, NULL, NULL, 'single_source'),
   ('claim-FL-DOE-88529-0c603efe', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-B3--FL-DOE-88529', 'While our laws will be followed, we will not re-enact Jim Crow. During the Jim Crow era, Black babies were often fed to alligators under the racist name “ licorice drops “. This cruel practice has been extensively documented by the Jim Crow Museum , and with DeSantis and James Uthmeier bringing that back to make migrants the new licorice drops , this nation has already been set back more than 100 years. On Day 1 , Moe will permanently close Alligator Alcatraz.', 'stated_position', true, NULL, NULL, 'single_source'),
   ('claim-FL-DOE-88529-d6e8d2b1', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-A3', 'HOAs are unconstitutional, and property taxes on Floridians’ homesteads infringes on ownership rights. While property taxes are an important way to fund our schools and public works, the state can fund these efforts without taxing property held as the homestead.', 'stated_position', true, NULL, NULL, 'single_source'),
-  ('claim-FL-DOE-88529-8b058de3', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-KYV8--FL-DOE-88529', 'HOAs are unconstitutional, and property taxes on Floridians’ homesteads infringes on ownership rights. While property taxes are an important way to fund our schools and public works, the state can fund these efforts without taxing property held as the homestead.', 'stated_position', true, NULL, NULL, 'single_source'),
   ('claim-FL-DOE-88529-145e0735', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-A3', 'And with new HOA scams arising every single day throughout the state, Floridians are paying double their property taxes when unelected HOA boards “assess dues” for the exact same thing Floridians are paying the county for.', 'stated_position', true, NULL, NULL, 'single_source'),
   ('claim-FL-DOE-88529-cd2b9047', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-KYV8--FL-DOE-88529', 'And with new HOA scams arising every single day throughout the state, Floridians are paying double their property taxes when unelected HOA boards “assess dues” for the exact same thing Floridians are paying the county for.', 'stated_position', true, NULL, NULL, 'single_source'),
   ('claim-FL-DOE-88529-62178dbd', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-A3', 'Everybody knows HOAs are a honeypot for taxation without representation, and are manipulated to initiate scam foreclosures against our most vulnerable citizens, the elderly. And in Orange County, malicious neighbors are taxing their communities through unauthorized HOAs without even being licensed CAMs.', 'stated_position', true, NULL, NULL, 'single_source'),
   ('claim-FL-DOE-88529-3e559507', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-KYV8--FL-DOE-88529', 'Everybody knows HOAs are a honeypot for taxation without representation, and are manipulated to initiate scam foreclosures against our most vulnerable citizens, the elderly. And in Orange County, malicious neighbors are taxing their communities through unauthorized HOAs without even being licensed CAMs.', 'stated_position', true, NULL, NULL, 'single_source'),
   ('claim-FL-DOE-88529-92b14ece', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-A3', 'HOAs will be abolished under the Dimanche Administration, and Floridians will enjoy their Constitutional right to the pursuit of happiness/property in their own homes.', 'stated_position', true, NULL, NULL, 'single_source'),
-  ('claim-FL-DOE-88529-36b82874', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-KYV8--FL-DOE-88529', 'HOAs will be abolished under the Dimanche Administration, and Floridians will enjoy their Constitutional right to the pursuit of happiness/property in their own homes.', 'stated_position', true, NULL, NULL, 'single_source'),
-  ('claim-FL-DOE-88529-f43267d9', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-B7--FL-DOE-88529', 'Jesse Vega July 9, 2026 at 2:26 pm yeah right, for the people. you don’t do enough for the people, criminals do crime kill a person and gets 12 years for killing, give them 100 years if they kill someone, no good time, no half way house, no parole, nothing just the time, get serious about the crime and your citizens and their rights of the 2nd amendment, make it harder for the criminals and ezy for the citizens 🙄 😉 😀. thank 😊 you. Loading… Reply', 'stated_position', true, NULL, NULL, 'single_source')
+  ('claim-FL-DOE-88529-36b82874', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-KYV8--FL-DOE-88529', 'HOAs will be abolished under the Dimanche Administration, and Floridians will enjoy their Constitutional right to the pursuit of happiness/property in their own homes.', 'stated_position', true, NULL, NULL, 'single_source')
 ;
 
 -- Resolved by url_norm, not by the source_id above, so a claim binds to the
@@ -790,8 +786,6 @@ UNION ALL
 UNION ALL
   SELECT 'claim-FL-DOE-88529-d6e8d2b1', source_id FROM source WHERE url_norm = 'nomoecorruption.com'
 UNION ALL
-  SELECT 'claim-FL-DOE-88529-8b058de3', source_id FROM source WHERE url_norm = 'nomoecorruption.com'
-UNION ALL
   SELECT 'claim-FL-DOE-88529-145e0735', source_id FROM source WHERE url_norm = 'nomoecorruption.com'
 UNION ALL
   SELECT 'claim-FL-DOE-88529-cd2b9047', source_id FROM source WHERE url_norm = 'nomoecorruption.com'
@@ -803,8 +797,6 @@ UNION ALL
   SELECT 'claim-FL-DOE-88529-92b14ece', source_id FROM source WHERE url_norm = 'nomoecorruption.com'
 UNION ALL
   SELECT 'claim-FL-DOE-88529-36b82874', source_id FROM source WHERE url_norm = 'nomoecorruption.com'
-UNION ALL
-  SELECT 'claim-FL-DOE-88529-f43267d9', source_id FROM source WHERE url_norm = 'nomoecorruption.com/2026/07/09/byron-donalds-gets-sued-for-assault-but-fishbacks-racist-response-is-worse-why-voting-npa-is-the-best-option-for-governor-of-florida'
 ;
 
 INSERT INTO position (position_id, candidate_id, race_id, issue_id, stance_summary, claim_ids, attributed, coverage) VALUES
@@ -877,8 +869,7 @@ INSERT INTO position (position_id, candidate_id, race_id, issue_id, stance_summa
   ('pos-FL-DOE-88529-9cd5d1da', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-A2', '', ARRAY[]::text[], false, 'no_stated_position_found'),
   ('pos-FL-DOE-88529-96d5c868', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-A4', '', ARRAY[]::text[], false, 'no_stated_position_found'),
   ('pos-FL-DOE-88529-0ddd3f82', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-B3--FL-DOE-88529', '', ARRAY['claim-FL-DOE-88529-0c603efe']::text[], true, 'stated'),
-  ('pos-FL-DOE-88529-aeb2824f', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-KYV8--FL-DOE-88529', '', ARRAY['claim-FL-DOE-88529-8b058de3','claim-FL-DOE-88529-cd2b9047','claim-FL-DOE-88529-3e559507','claim-FL-DOE-88529-36b82874']::text[], true, 'stated'),
-  ('pos-FL-DOE-88529-09dd3936', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-B7--FL-DOE-88529', '', ARRAY['claim-FL-DOE-88529-f43267d9']::text[], true, 'stated'),
+  ('pos-FL-DOE-88529-aeb2824f', 'FL-DOE-88529', 'FL-GOV-general', 'FL-GOV-general--issue-KYV8--FL-DOE-88529', '', ARRAY['claim-FL-DOE-88529-cd2b9047','claim-FL-DOE-88529-3e559507','claim-FL-DOE-88529-36b82874']::text[], true, 'stated'),
   ('pos-FL-DOE-84076-9bd5d047', 'FL-DOE-84076', 'FL-GOV-general', 'FL-GOV-general--issue-A1', '', ARRAY[]::text[], false, 'no_stated_position_found'),
   ('pos-FL-DOE-84076-9dd5d36d', 'FL-DOE-84076', 'FL-GOV-general', 'FL-GOV-general--issue-A3', '', ARRAY[]::text[], false, 'no_stated_position_found'),
   ('pos-FL-DOE-84076-9cd5d1da', 'FL-DOE-84076', 'FL-GOV-general', 'FL-GOV-general--issue-A2', '', ARRAY[]::text[], false, 'no_stated_position_found'),
@@ -896,7 +887,7 @@ INSERT INTO profile (candidate_id, race_id, facts, positions, opinions, audit) V
   ('FL-DOE-90433', 'FL-GOV-general', ARRAY[]::text[], ARRAY[]::text[], ARRAY[]::text[], '{"word_count":0,"verifiable_fact_count":0,"stated_position_count":0,"fact_checks_performed":0,"spine_issue_count":4,"spine_issues_covered":0}'::jsonb),
   ('FL-DOE-89571', 'FL-GOV-general', ARRAY[]::text[], ARRAY['claim-FL-DOE-89571-7f48a847','claim-FL-DOE-89571-6ba87ac5','claim-FL-DOE-89571-c701fd15','claim-FL-DOE-89571-27a8e5c9','claim-FL-DOE-89571-13d5ad7e','claim-FL-DOE-89571-37b2978e','claim-FL-DOE-89571-75d888c4','claim-FL-DOE-89571-ef6883fa','claim-FL-DOE-89571-838e7530','claim-FL-DOE-89571-f973f76a','claim-FL-DOE-89571-d0509601','claim-FL-DOE-89571-1c93597e','claim-FL-DOE-89571-e7a8a0ae','claim-FL-DOE-89571-370b12ac','claim-FL-DOE-89571-c6257f5c','claim-FL-DOE-89571-4124395b','claim-FL-DOE-89571-3b413adc','claim-FL-DOE-89571-6f872f3a','claim-FL-DOE-89571-04488b74','claim-FL-DOE-89571-f0e49f2b','claim-FL-DOE-89571-2f95703c','claim-FL-DOE-89571-1bf742a8','claim-FL-DOE-89571-dafc6778','claim-FL-DOE-89571-1258a09d','claim-FL-DOE-89571-3b0929b9','claim-FL-DOE-89571-5bef209f','claim-FL-DOE-89571-e9a86174','claim-FL-DOE-89571-db78775e','claim-FL-DOE-89571-05566d99','claim-FL-DOE-89571-01149069','claim-FL-DOE-89571-9bd33ea0','claim-FL-DOE-89571-dcd98692','claim-FL-DOE-89571-8efeb562','claim-FL-DOE-89571-15db0c50','claim-FL-DOE-89571-e7952238','claim-FL-DOE-89571-66ec838b','claim-FL-DOE-89571-994fe02a','claim-FL-DOE-89571-475eed74','claim-FL-DOE-89571-bd3cb724','claim-FL-DOE-89571-1604577d','claim-FL-DOE-89571-3a889edd','claim-FL-DOE-89571-dcf1bae0','claim-FL-DOE-89571-8d1b73b4','claim-FL-DOE-89571-c898e1f6','claim-FL-DOE-89571-bb87d82e','claim-FL-DOE-89571-533fb7c8','claim-FL-DOE-89571-9f0dba05','claim-FL-DOE-89571-ec240228','claim-FL-DOE-89571-04a50e53','claim-FL-DOE-89571-fabc4344','claim-FL-DOE-89571-5b938a13','claim-FL-DOE-89571-7c4b8a9f','claim-FL-DOE-89571-05d0620f','claim-FL-DOE-89571-d1149e5d','claim-FL-DOE-89571-955c36a9','claim-FL-DOE-89571-bf4da03b']::text[], ARRAY[]::text[], '{"word_count":1943,"verifiable_fact_count":0,"stated_position_count":56,"fact_checks_performed":0,"spine_issue_count":4,"spine_issues_covered":4}'::jsonb),
   ('FL-DOE-89630', 'FL-GOV-general', ARRAY[]::text[], ARRAY[]::text[], ARRAY[]::text[], '{"word_count":0,"verifiable_fact_count":0,"stated_position_count":0,"fact_checks_performed":0,"spine_issue_count":4,"spine_issues_covered":0}'::jsonb),
-  ('FL-DOE-88529', 'FL-GOV-general', ARRAY[]::text[], ARRAY['claim-FL-DOE-88529-0c603efe','claim-FL-DOE-88529-d6e8d2b1','claim-FL-DOE-88529-8b058de3','claim-FL-DOE-88529-145e0735','claim-FL-DOE-88529-cd2b9047','claim-FL-DOE-88529-62178dbd','claim-FL-DOE-88529-3e559507','claim-FL-DOE-88529-92b14ece','claim-FL-DOE-88529-36b82874','claim-FL-DOE-88529-f43267d9']::text[], ARRAY[]::text[], '{"word_count":454,"verifiable_fact_count":0,"stated_position_count":10,"fact_checks_performed":0,"spine_issue_count":4,"spine_issues_covered":1}'::jsonb),
+  ('FL-DOE-88529', 'FL-GOV-general', ARRAY[]::text[], ARRAY['claim-FL-DOE-88529-0c603efe','claim-FL-DOE-88529-d6e8d2b1','claim-FL-DOE-88529-145e0735','claim-FL-DOE-88529-cd2b9047','claim-FL-DOE-88529-62178dbd','claim-FL-DOE-88529-3e559507','claim-FL-DOE-88529-92b14ece','claim-FL-DOE-88529-36b82874']::text[], ARRAY[]::text[], '{"word_count":327,"verifiable_fact_count":0,"stated_position_count":8,"fact_checks_performed":0,"spine_issue_count":4,"spine_issues_covered":1}'::jsonb),
   ('FL-DOE-84076', 'FL-GOV-general', ARRAY[]::text[], ARRAY[]::text[], ARRAY[]::text[], '{"word_count":0,"verifiable_fact_count":0,"stated_position_count":0,"fact_checks_performed":0,"spine_issue_count":4,"spine_issues_covered":0}'::jsonb)
 ON CONFLICT (candidate_id, race_id) DO UPDATE SET
   facts = EXCLUDED.facts, positions = EXCLUDED.positions,

@@ -25,3 +25,17 @@ It has two parts, and each maps onto a bucket that already exists:
 2. **Self-description.** This is a verbatim `stated_position` quote from the candidate's own About or "Who I am" page, attributed as "self-describes as …". The ingest follows only policy-looking links today (`selectPolicyPages`), so it has to learn to fetch the About page too, under the same robots rules.
 
 The same rules hold for both parts: every candidate gets the same kinds of source, nothing without a source, and no paraphrase of the self-description. The pilot measures whether the ingest reaches an About page as it stands.
+
+## After the pilot (founder, 2026-09-27)
+
+> go with (c), fix the --limit bug, then run all candidates
+
+- **D2 = (c):** a recorded threshold decision instead of Recorder facts or a smaller spine.
+  - **Still open: the form of (c).** On the full race, `word_count` ranges from 0 to 3,867, a variance of 100%.
+  - Three candidates are silent (Datto, Abrams and Jewett) and have 0 words, so any `word_count_pct` below 100 still HALTs. The five candidates with runs alone vary by 91.5%.
+  - (c) therefore means one of two things, and the founder has to pick:
+    - `word_count_pct = 100` for FL-GOV, which turns this gate off for the race.
+    - Change what the gate measures, for example exclude silent candidates and set a threshold of at least 92.
+  - `run-2026-09-27.md` has the numbers.
+- **`--limit`:** fixed so that it refuses to drop passages (`limitShortfall`).
+- **The commitment gate (0.85) and the page cap (8)** were not raised. They are unchanged, and the same for every candidate.

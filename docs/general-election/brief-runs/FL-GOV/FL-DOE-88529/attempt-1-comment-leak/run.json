@@ -2,7 +2,7 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://nomoecorruption.com",
-  "created_at": "2026-09-27T13:00:04.617Z",
+  "created_at": "2026-09-27T12:52:50.452Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
@@ -36,10 +36,10 @@
     "KYV8"
   ],
   "counts": {
-    "passages": 18,
-    "asked": 18,
-    "states_policy": 7,
-    "with_issue": 5,
+    "passages": 19,
+    "asked": 19,
+    "states_policy": 8,
+    "with_issue": 6,
     "failed": 0
   },
   "passages": [
@@ -58,7 +58,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.04,
+          "A6": 0.05,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -72,7 +72,7 @@
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
+          "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -102,7 +102,7 @@
           "B2": 0.02,
           "B3": 0.03,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
@@ -212,18 +212,18 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.03,
+          "B1": 0.04,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.48,
+          "B7": 0.49,
           "B8": 0.02,
           "KYV1": 0.04,
           "KYV10": 0.02,
           "KYV2": 0.03,
-          "KYV3": 0.39,
+          "KYV3": 0.42,
           "KYV4": 0.03,
           "KYV5": 0.03,
           "KYV6": 0.02,
@@ -244,14 +244,14 @@
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.03,
-          "A3": 0.23,
+          "A2": 0.02,
+          "A3": 0.24,
           "A4": 0.03,
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.03,
           "B1": 0.07,
-          "B2": 0.02,
+          "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
@@ -277,7 +277,7 @@
       "heading": "CLOSING ALLIGATOR ALCATRAZ",
       "text": "After Ron DeSantis and his attorney general introduced the plan for Alligator Alcatraz, the federal government tweeted out an image of alligators wearing ICE hats. This horrifying imagery is chilling, and promotes the idea that Floridians support the idea of feeding migrants to alligators.",
       "verdict": {
-        "commitment": 0.22,
+        "commitment": 0.2,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -290,11 +290,11 @@
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.75,
+          "B3": 0.74,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.29,
+          "B7": 0.27,
           "B8": 0.03,
           "KYV1": 0.09,
           "KYV10": 0.02,
@@ -325,17 +325,17 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.03,
+          "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.9,
+          "B3": 0.88,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.49,
-          "B8": 0.03,
+          "B7": 0.47,
+          "B8": 0.02,
           "KYV1": 0.22,
           "KYV10": 0.02,
           "KYV2": 0.02,
@@ -358,17 +358,18 @@
         "commitment": 0.98,
         "states_policy": true,
         "issues": [
-          "A3"
+          "A3",
+          "KYV8"
         ],
         "scores": {
           "A1": 0.02,
-          "A2": 0.38,
+          "A2": 0.39,
           "A3": 0.98,
-          "A4": 0.4,
+          "A4": 0.41,
           "A5": 0.02,
           "A6": 0.76,
           "A7": 0.02,
-          "B1": 0.1,
+          "B1": 0.09,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -377,14 +378,14 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.04,
-          "KYV10": 0.03,
+          "KYV10": 0.04,
           "KYV2": 0.02,
           "KYV3": 0.06,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.84,
+          "KYV8": 0.85,
           "KYV9": 0.03
         }
       }
@@ -395,25 +396,25 @@
       "heading": "ABOLISHING HOAs and PROPERTY TAXES ON HOMESTEADS",
       "text": "And with new HOA scams arising every single day throughout the state, Floridians are paying double their property taxes when unelected HOA boards “assess dues” for the exact same thing Floridians are paying the county for.",
       "verdict": {
-        "commitment": 0.89,
+        "commitment": 0.87,
         "states_policy": true,
         "issues": [
           "A3",
           "KYV8"
         ],
         "scores": {
-          "A1": 0.02,
-          "A2": 0.64,
+          "A1": 0.03,
+          "A2": 0.63,
           "A3": 0.92,
-          "A4": 0.68,
+          "A4": 0.69,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.28,
+          "B1": 0.31,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.01,
+          "B5": 0.02,
           "B6": 0.02,
           "B7": 0.13,
           "B8": 0.02,
@@ -436,7 +437,7 @@
       "heading": "ABOLISHING HOAs and PROPERTY TAXES ON HOMESTEADS",
       "text": "Everybody knows HOAs are a honeypot for taxation without representation, and are manipulated to initiate scam foreclosures against our most vulnerable citizens, the elderly. And in Orange County, malicious neighbors are taxing their communities through unauthorized HOAs without even being licensed CAMs.",
       "verdict": {
-        "commitment": 0.93,
+        "commitment": 0.92,
         "states_policy": true,
         "issues": [
           "A3",
@@ -444,29 +445,29 @@
         ],
         "scores": {
           "A1": 0.03,
-          "A2": 0.45,
+          "A2": 0.44,
           "A3": 0.89,
-          "A4": 0.25,
+          "A4": 0.26,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.11,
+          "B1": 0.1,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.21,
+          "B7": 0.2,
           "B8": 0.02,
-          "KYV1": 0.28,
+          "KYV1": 0.32,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.05,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.05,
+          "KYV6": 0.04,
           "KYV7": 0.02,
-          "KYV8": 0.87,
+          "KYV8": 0.89,
           "KYV9": 0.02
         }
       }
@@ -485,13 +486,13 @@
         ],
         "scores": {
           "A1": 0.03,
-          "A2": 0.46,
+          "A2": 0.49,
           "A3": 0.89,
           "A4": 0.58,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.11,
+          "B1": 0.13,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -507,7 +508,7 @@
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.89,
+          "KYV8": 0.87,
           "KYV9": 0.02
         }
       }
@@ -518,17 +519,17 @@
       "heading": "Byron Donalds Gets Sued for Assault, but Fishback’s Racist Response is Worse. Why Voting NPA is the BEST Option for Governor of Florida",
       "text": "A bombshell lawsuit (or a dud) was filed against Florida gubernatorial candidate Byron Donalds by a woman named Kelly Mason over a confrontation that occurred in 2022. Mason alleges that she was cornered by Donalds before he threatened her, but the video shows Donalds losing his cool in, what most social media users describe as an argument, and a “set up”.",
       "verdict": {
-        "commitment": 0.12,
+        "commitment": 0.1,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.03,
-          "A4": 0.03,
-          "A5": 0.03,
-          "A6": 0.03,
-          "A7": 0.09,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.08,
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.03,
@@ -556,26 +557,26 @@
       "heading": "Byron Donalds Gets Sued for Assault, but Fishback’s Racist Response is Worse. Why Voting NPA is the BEST Option for Governor of Florida",
       "text": "Sure, Donalds may have anger management issues, but the real controversy surrounds the response from the other republican candidate, James Fishback, who shares the same lawyer as Kelly Mason . Fishback took to X to release a racist statement on the nature of the lawsuit , before stating that Donalds “ chimped out ” in another X post.",
       "verdict": {
-        "commitment": 0.1,
+        "commitment": 0.09,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.02,
+          "A4": 0.03,
           "A5": 0.02,
-          "A6": 0.02,
+          "A6": 0.03,
           "A7": 0.08,
-          "B1": 0.03,
-          "B2": 0.02,
+          "B1": 0.02,
+          "B2": 0.03,
           "B3": 0.03,
           "B4": 0.02,
-          "B5": 0.03,
+          "B5": 0.02,
           "B6": 0.03,
-          "B7": 0.06,
-          "B8": 0.03,
-          "KYV1": 0.12,
+          "B7": 0.05,
+          "B8": 0.02,
+          "KYV1": 0.1,
           "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -584,7 +585,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -594,7 +595,7 @@
       "heading": "Byron Donalds Gets Sued for Assault, but Fishback’s Racist Response is Worse. Why Voting NPA is the BEST Option for Governor of Florida",
       "text": "Fishback described Donalds as a 6’5, 260 pound man (Donalds is 6’2) who cornered a “blonde woman”, echoing Jim Crow era pretextual sentiments used to portray Black men as a danger to White women. In addition to this, Fishback adopted the term “chimping out”, coined by prolific racist Chud the Builder , who is currently behind bars on hate crime charges after he shot a Black man he called a slur. Some Fishback supporters expressed that use of that term cost him their vote while others stated that it was worse than using the N-word.",
       "verdict": {
-        "commitment": 0.15,
+        "commitment": 0.16,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -604,17 +605,17 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.09,
+          "A7": 0.1,
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.03,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.03,
-          "B7": 0.08,
+          "B7": 0.07,
           "B8": 0.02,
-          "KYV1": 0.12,
-          "KYV10": 0.02,
+          "KYV1": 0.11,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -622,7 +623,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -632,7 +633,7 @@
       "heading": "Byron Donalds Gets Sued for Assault, but Fishback’s Racist Response is Worse. Why Voting NPA is the BEST Option for Governor of Florida",
       "text": "Fishback doubled down on his use of the term “chimping out”, and formally issued a press release using the racist language.",
       "verdict": {
-        "commitment": 0.14,
+        "commitment": 0.16,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -642,11 +643,11 @@
           "A4": 0.03,
           "A5": 0.03,
           "A6": 0.03,
-          "A7": 0.2,
+          "A7": 0.16,
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.03,
-          "B4": 0.02,
+          "B4": 0.03,
           "B5": 0.03,
           "B6": 0.05,
           "B7": 0.09,
@@ -657,7 +658,7 @@
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV6": 0.03,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.03
@@ -670,26 +671,26 @@
       "heading": "Byron Donalds Gets Sued for Assault, but Fishback’s Racist Response is Worse. Why Voting NPA is the BEST Option for Governor of Florida",
       "text": "The chaos between the republicans came to a head this week, but not before yet, another confrontation in Collier County where members of Fishback’s entourage had a physical altercation with elderly voters at a Donalds event. Fishback’s online supporters called the elderly people “Byron’s Boomer Enforcers”. While no one was arrested for assaulting any of the elderly attendees, Fishback was removed from the event.",
       "verdict": {
-        "commitment": 0.11,
+        "commitment": 0.12,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.03,
-          "A4": 0.03,
-          "A5": 0.02,
-          "A6": 0.03,
-          "A7": 0.15,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.17,
           "B1": 0.03,
           "B2": 0.02,
-          "B3": 0.02,
+          "B3": 0.03,
           "B4": 0.03,
           "B5": 0.02,
           "B6": 0.04,
           "B7": 0.08,
           "B8": 0.02,
-          "KYV1": 0.32,
+          "KYV1": 0.3,
           "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.03,
@@ -697,7 +698,7 @@
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.03,
           "KYV9": 0.03
         }
       }
@@ -715,26 +716,66 @@
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.03,
-          "A4": 0.02,
-          "A5": 0.02,
-          "A6": 0.03,
-          "A7": 0.08,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.07,
           "B1": 0.03,
           "B2": 0.03,
           "B3": 0.03,
           "B4": 0.03,
-          "B5": 0.03,
+          "B5": 0.02,
           "B6": 0.03,
           "B7": 0.04,
           "B8": 0.02,
-          "KYV1": 0.12,
+          "KYV1": 0.11,
           "KYV10": 0.02,
           "KYV2": 0.03,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "0c289595",
+      "url": "https://nomoecorruption.com/2026/07/09/byron-donalds-gets-sued-for-assault-but-fishbacks-racist-response-is-worse-why-voting-npa-is-the-best-option-for-governor-of-florida",
+      "heading": "One response to “Byron Donalds Gets Sued for Assault, but Fishback’s Racist Response is Worse. Why Voting NPA is the BEST Option for Governor of Florida”",
+      "text": "Jesse Vega July 9, 2026 at 2:26 pm yeah right, for the people. you don’t do enough for the people, criminals do crime kill a person and gets 12 years for killing, give them 100 years if they kill someone, no good time, no half way house, no parole, nothing just the time, get serious about the crime and your citizens and their rights of the 2nd amendment, make it harder for the criminals and ezy for the citizens 🙄 😉 😀. thank 😊 you. Loading… Reply",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.06,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.97,
+          "B8": 0.02,
+          "KYV1": 0.15,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -758,9 +799,9 @@
                 "url": "https://nomoecorruption.com/",
                 "heading": "CLOSING ALLIGATOR ALCATRAZ",
                 "text": "While our laws will be followed, we will not re-enact Jim Crow. During the Jim Crow era, Black babies were often fed to alligators under the racist name “ licorice drops “. This cruel practice has been extensively documented by the Jim Crow Museum , and with DeSantis and James Uthmeier bringing that back to make migrants the new licorice drops , this nation has already been set back more than 100 years. On Day 1 , Moe will permanently close Alligator Alcatraz.",
-                "retrieved_at": "2026-09-27T12:57:51.895Z"
+                "retrieved_at": "2026-09-27T12:50:13.986Z"
               },
-              "score": 0.9
+              "score": 0.88
             }
           ]
         }
@@ -782,7 +823,7 @@
                 "url": "https://nomoecorruption.com/",
                 "heading": "ABOLISHING HOAs and PROPERTY TAXES ON HOMESTEADS",
                 "text": "HOAs are unconstitutional, and property taxes on Floridians’ homesteads infringes on ownership rights. While property taxes are an important way to fund our schools and public works, the state can fund these efforts without taxing property held as the homestead.",
-                "retrieved_at": "2026-09-27T12:57:51.895Z"
+                "retrieved_at": "2026-09-27T12:50:13.986Z"
               },
               "score": 0.98
             },
@@ -792,7 +833,7 @@
                 "url": "https://nomoecorruption.com/",
                 "heading": "ABOLISHING HOAs and PROPERTY TAXES ON HOMESTEADS",
                 "text": "And with new HOA scams arising every single day throughout the state, Floridians are paying double their property taxes when unelected HOA boards “assess dues” for the exact same thing Floridians are paying the county for.",
-                "retrieved_at": "2026-09-27T12:57:51.895Z"
+                "retrieved_at": "2026-09-27T12:50:13.986Z"
               },
               "score": 0.92
             },
@@ -802,7 +843,7 @@
                 "url": "https://nomoecorruption.com/",
                 "heading": "ABOLISHING HOAs and PROPERTY TAXES ON HOMESTEADS",
                 "text": "Everybody knows HOAs are a honeypot for taxation without representation, and are manipulated to initiate scam foreclosures against our most vulnerable citizens, the elderly. And in Orange County, malicious neighbors are taxing their communities through unauthorized HOAs without even being licensed CAMs.",
-                "retrieved_at": "2026-09-27T12:57:51.895Z"
+                "retrieved_at": "2026-09-27T12:50:13.986Z"
               },
               "score": 0.89
             },
@@ -812,7 +853,7 @@
                 "url": "https://nomoecorruption.com/",
                 "heading": "ABOLISHING HOAs and PROPERTY TAXES ON HOMESTEADS",
                 "text": "HOAs will be abolished under the Dimanche Administration, and Floridians will enjoy their Constitutional right to the pursuit of happiness/property in their own homes.",
-                "retrieved_at": "2026-09-27T12:57:51.895Z"
+                "retrieved_at": "2026-09-27T12:50:13.986Z"
               },
               "score": 0.89
             }
@@ -828,19 +869,9 @@
                 "url": "https://nomoecorruption.com/",
                 "heading": "ABOLISHING HOAs and PROPERTY TAXES ON HOMESTEADS",
                 "text": "And with new HOA scams arising every single day throughout the state, Floridians are paying double their property taxes when unelected HOA boards “assess dues” for the exact same thing Floridians are paying the county for.",
-                "retrieved_at": "2026-09-27T12:57:51.895Z"
+                "retrieved_at": "2026-09-27T12:50:13.986Z"
               },
               "score": 0.96
-            },
-            {
-              "passage": {
-                "id": "0f653308",
-                "url": "https://nomoecorruption.com/",
-                "heading": "ABOLISHING HOAs and PROPERTY TAXES ON HOMESTEADS",
-                "text": "HOAs will be abolished under the Dimanche Administration, and Floridians will enjoy their Constitutional right to the pursuit of happiness/property in their own homes.",
-                "retrieved_at": "2026-09-27T12:57:51.895Z"
-              },
-              "score": 0.89
             },
             {
               "passage": {
@@ -848,9 +879,53 @@
                 "url": "https://nomoecorruption.com/",
                 "heading": "ABOLISHING HOAs and PROPERTY TAXES ON HOMESTEADS",
                 "text": "Everybody knows HOAs are a honeypot for taxation without representation, and are manipulated to initiate scam foreclosures against our most vulnerable citizens, the elderly. And in Orange County, malicious neighbors are taxing their communities through unauthorized HOAs without even being licensed CAMs.",
-                "retrieved_at": "2026-09-27T12:57:51.895Z"
+                "retrieved_at": "2026-09-27T12:50:13.986Z"
+              },
+              "score": 0.89
+            },
+            {
+              "passage": {
+                "id": "0f653308",
+                "url": "https://nomoecorruption.com/",
+                "heading": "ABOLISHING HOAs and PROPERTY TAXES ON HOMESTEADS",
+                "text": "HOAs will be abolished under the Dimanche Administration, and Floridians will enjoy their Constitutional right to the pursuit of happiness/property in their own homes.",
+                "retrieved_at": "2026-09-27T12:50:13.986Z"
               },
               "score": 0.87
+            },
+            {
+              "passage": {
+                "id": "634a8fbb",
+                "url": "https://nomoecorruption.com/",
+                "heading": "ABOLISHING HOAs and PROPERTY TAXES ON HOMESTEADS",
+                "text": "HOAs are unconstitutional, and property taxes on Floridians’ homesteads infringes on ownership rights. While property taxes are an important way to fund our schools and public works, the state can fund these efforts without taxing property held as the homestead.",
+                "retrieved_at": "2026-09-27T12:50:13.986Z"
+              },
+              "score": 0.85
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "safety",
+        "label": "Public Safety & Crime"
+      },
+      "subIssues": [
+        {
+          "id": "B7",
+          "label": "Crime policy, policing and courts",
+          "citations": [
+            {
+              "passage": {
+                "id": "0c289595",
+                "url": "https://nomoecorruption.com/2026/07/09/byron-donalds-gets-sued-for-assault-but-fishbacks-racist-response-is-worse-why-voting-npa-is-the-best-option-for-governor-of-florida",
+                "heading": "One response to “Byron Donalds Gets Sued for Assault, but Fishback’s Racist Response is Worse. Why Voting NPA is the BEST Option for Governor of Florida”",
+                "text": "Jesse Vega July 9, 2026 at 2:26 pm yeah right, for the people. you don’t do enough for the people, criminals do crime kill a person and gets 12 years for killing, give them 100 years if they kill someone, no good time, no half way house, no parole, nothing just the time, get serious about the crime and your citizens and their rights of the 2nd amendment, make it harder for the criminals and ezy for the citizens 🙄 😉 😀. thank 😊 you. Loading… Reply",
+                "retrieved_at": "2026-09-27T12:50:13.986Z"
+              },
+              "score": 0.97
             }
           ]
         }
@@ -858,7 +933,7 @@
     }
   ],
   "usage": {
-    "input_tokens": 64318,
-    "output_tokens": 8244
+    "input_tokens": 68002,
+    "output_tokens": 8702
   }
 }
