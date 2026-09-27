@@ -1375,9 +1375,10 @@ await db.exec(`
   INSERT INTO ballot_measure
     (measure_id, election, number, official_title, ballot_summary, full_text_url,
      placed_by, threshold_pct, jurisdiction, display_order) VALUES
-    ('m-pub',   'general_2026', '1', 'Published Measure', 'Summary.', 'https://example.gov/1', 'legislature', 60, 'FL', 1),
-    ('m-draft', 'general_2026', '2', 'Draft Measure',     'Summary.', 'https://example.gov/2', 'legislature', 60, 'FL', 2),
-    ('m-skew',  'general_2026', '3', 'Lopsided Measure',  'Summary.', 'https://example.gov/3', 'legislature', 60, 'FL', 3);
+    ('m-pub',    'general_2026', '1', 'Published Measure',  'Summary.', 'https://example.gov/1', 'legislature', 60, 'FL', 1),
+    ('m-draft',  'general_2026', '2', 'Draft Measure',      'Summary.', 'https://example.gov/2', 'legislature', 60, 'FL', 2),
+    ('m-skew',   'general_2026', '3', 'Lopsided Measure',   'Summary.', 'https://example.gov/3', 'legislature', 60, 'FL', 3),
+    ('m-review', 'general_2026', '5', 'In-review Measure',  'Summary.', 'https://example.gov/5', 'legislature', 60, 'FL', 5);
 
   INSERT INTO measure_resource
     (resource_id, measure_id, source_id, stance, kind, format, title, published_at) VALUES
@@ -1386,14 +1387,20 @@ await db.exec(`
     ('r3', 'm-pub',   's-o2',  'oppose',  'argument',  'article',  'Against.',       '2026-02-01'),
     ('r4', 'm-draft', 's-o3',  'support', 'argument',  'article',  'For.',           NULL),
     ('r5', 'm-draft', 's-o4',  'oppose',  'argument',  'article',  'Against.',       NULL),
+    -- 0041: a neutral row on a draft measure must stay unreadable, same as a
+    -- sided one -- draft/in_review is a wall, not a door for any stance.
+    ('r5n', 'm-draft', 's-n1', 'neutral', 'official',  'document', 'Draft-stage staff note', NULL),
     -- m-skew: three for, none against.
     ('r6', 'm-skew',  's-o5',  'support', 'argument',  'article',  'For A.',         NULL),
     ('r7', 'm-skew',  's-o6',  'support', 'argument',  'article',  'For B.',         NULL),
-    ('r8', 'm-skew',  's-yt',  'support', 'commentary','video',    'For C.',         NULL);
+    ('r8', 'm-skew',  's-yt',  'support', 'commentary','video',    'For C.',         NULL),
+    -- 0041: same wall for in_review as for draft.
+    ('r-rev1', 'm-review', 's-n1', 'neutral', 'official', 'document', 'In-review staff note', NULL);
 
   INSERT INTO measure_publication (measure_id, status) VALUES
     ('m-pub', 'published'),
-    ('m-draft', 'draft');
+    ('m-draft', 'draft'),
+    ('m-review', 'in_review');
 `);
 
 /* 0033: a listed measure is its ballot text alone. Inserted as service_role
@@ -1410,8 +1417,12 @@ await check("a listed measure with zero resources is accepted", async () => {
          placed_by, threshold_pct, jurisdiction, display_order) VALUES
         ('m-listed', 'general_2026', '4', 'Listed Measure', 'Summary.', 'https://example.gov/4', 'legislature', 60, 'FL', 4);
       INSERT INTO measure_publication (measure_id, status) VALUES ('m-listed', 'listed');
-      INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
-        VALUES ('r-l1', 'm-listed', 's-o1', 'support', 'argument', 'article', 'For, unpublished.');`);
+      INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title) VALUES
+        ('r-l1', 'm-listed', 's-o1', 'support', 'argument', 'article', 'For, unpublished.'),
+        -- 0041: the neutral row on a *listed* measure is the one case that
+        -- opens early -- neutral material takes no side, so showing it
+        -- before publication cannot make the page one-sided.
+        ('r-l2', 'm-listed', 's-gov', 'neutral', 'official', 'document', 'Listed-stage staff note');`);
   } finally {
     await db.exec("RESET ROLE;");
   }
@@ -1441,24 +1452,59 @@ await check("anon sees listed and published measure_publication rows with their 
   if (got !== "m-listed:listed,m-pub:published") throw new Error(`saw [${got}]`);
 });
 
-/* r-l1 belongs to the listed m-listed: listing exposes the ballot text, never
-   the resources (anon_read_measure_resource reads 'published' only). */
-await check("anon sees resources only for published measures (not listed, not draft)", async () => {
+/* 0041: r-l1 (support) stays behind the door on the listed m-listed --
+   listing exposes the ballot text and neutral material only, never a side.
+   r-l2 (neutral, m-listed) is the new admission: a listed measure's neutral
+   rows are readable. r1/r2/r3 (m-pub, published) are unchanged -- a
+   published measure still shows every row, sided or not. */
+await check("anon sees a listed measure's neutral resources plus every published one, never a listed measure's sided rows", async () => {
   await db.exec("SET ROLE anon;");
   const res = await db.query(
     "SELECT resource_id FROM measure_resource WHERE measure_id LIKE 'm-%' ORDER BY resource_id;"
   );
   await db.exec("RESET ROLE;");
   const ids = res.rows.map((r) => r.resource_id).join(",");
-  if (ids !== "r1,r2,r3") throw new Error(`expected r1,r2,r3 only, got [${ids}]`);
+  if (ids !== "r-l2,r1,r2,r3") throw new Error(`expected r-l2,r1,r2,r3 only, got [${ids}]`);
 });
 
-/* 0038 publishes the real FL-AM3-general measure: anon must see all 15 of
-   its resources (0038's 14 plus the FL-AM3-general:booklet row 0035 already
-   seeded), and 0 for AM1/AM2, which 0038 leaves untouched (no
-   measure_publication row at all at the migration level -- they only
-   become 'listed' via the hand-run scripts/list-ballot-2026.sql). */
-await check("anon sees all 15 FL-AM3-general resources, 0 for AM1/AM2", async () => {
+await check("anon reads m-listed's neutral row and none of its sided rows", async () => {
+  await db.exec("SET ROLE anon;");
+  const res = await db.query(
+    "SELECT resource_id, stance FROM measure_resource WHERE measure_id = 'm-listed' ORDER BY resource_id;"
+  );
+  await db.exec("RESET ROLE;");
+  const ids = res.rows.map((r) => r.resource_id).join(",");
+  if (ids !== "r-l2") throw new Error(`expected r-l2 only, got [${ids}]`);
+});
+
+await check("anon reads every one of m-pub's rows, sided and neutral, unchanged by 0041", async () => {
+  await db.exec("SET ROLE anon;");
+  const res = await db.query("SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'm-pub';");
+  await db.exec("RESET ROLE;");
+  const cnt = res.rows[0].n;
+  if (cnt !== 3) throw new Error(`expected 3, got ${cnt}`);
+});
+
+await check("a draft or in_review measure's neutral rows stay unreadable to anon", async () => {
+  await db.exec("SET ROLE anon;");
+  const res = await db.query(
+    "SELECT count(*)::int n FROM measure_resource WHERE measure_id IN ('m-draft','m-review') AND stance = 'neutral';"
+  );
+  await db.exec("RESET ROLE;");
+  const cnt = res.rows[0].n;
+  if (cnt !== 0) throw new Error(`expected 0, got ${cnt}`);
+});
+
+/* 0038 and 0040 publish the real FL-AM3-general and FL-AM2-general measures:
+   anon must see all 15 of AM3's resources (0038's 14 plus the
+   FL-AM3-general:booklet row 0035 already seeded) and all 18 of AM2's
+   (0040's 17 plus the FL-AM2-general:booklet row 0035 already seeded), and
+   0 for AM1 here even though 0041 seeded AM1's neutral rows too -- AM1 has
+   no measure_publication row at all at the migration level (it only becomes
+   'listed' via the hand-run scripts/list-ballot-2026.sql), and 0041's policy
+   only opens a neutral row once its measure has a 'listed' or 'published'
+   row to point at. */
+await check("anon sees all 15 FL-AM3-general and 18 FL-AM2-general resources, 0 for AM1", async () => {
   await db.exec("SET ROLE anon;");
   const res = await db.query(
     `SELECT measure_id, count(*)::int n FROM measure_resource
@@ -1467,7 +1513,8 @@ await check("anon sees all 15 FL-AM3-general resources, 0 for AM1/AM2", async ()
   );
   await db.exec("RESET ROLE;");
   const got = res.rows.map((r) => `${r.measure_id}:${r.n}`).join(",");
-  if (got !== "FL-AM3-general:15") throw new Error(`expected FL-AM3-general:15 only, got [${got}]`);
+  if (got !== "FL-AM2-general:18,FL-AM3-general:15")
+    throw new Error(`expected FL-AM2-general:18,FL-AM3-general:15 only, got [${got}]`);
 });
 
 await db.exec("SET ROLE anon;");

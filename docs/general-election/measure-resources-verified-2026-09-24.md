@@ -291,3 +291,126 @@ DONE_WITH_CONCERNS
 Gate count line: Support = 5, Oppose = 7 (verified argument/commentary rows only); 7 ≤ 2×5=10, so the 2× rule holds and AM3 can still clear the gate.
 
 Concerns: several tier-4 rows the spec pre-assigned to YES/argument (Florida Chamber of Commerce, RPOF endorsement, Gov. DeSantis, Miami-Dade Sheriff) turned out, on primary-source verification, to be either not a formal endorsement (Chamber), sourced only through news coverage rather than a primary page (RPOF, Miami-Dade Sheriff), or actually opposed rather than supportive (DeSantis) — all reclassified to reporting/neutral per the ladder's own rule and excluded from the gate count above. Two of the spec's "official" tier video/document rows (Lake Wales city page, Martin County appraiser YouTube video) don't fit their assigned kind either: Lake Wales argues a position (breaking official-must-be-neutral), and the Fields video is TV-station content, not the appraiser's own channel. Several sources — pcpao.gov, all flsenate.gov/edr.state.fl.us PDFs, and multiple floridapolitics.com articles — could not be opened directly (403/402/undecodable PDF) and are reported here via search snippets only. The Sheriffs Association's full broadcast TV ad and a stable RPOF primary page could not be located at all; a 16-second FSA YouTube short and search-result metadata for the "Math" ad were the best substitutes found for the two explicit gap-fill requests.
+
+---
+
+# Widened search, 2026-09-26
+
+The search now covers organisations and officials likely to state a case on
+AM1 or AM2 in their own words, on both sides. Pages the fetcher couldn't open
+were opened in a real browser with the TypeSafe computer-control loop, and
+the Florida House Journals were searched for vote explanations.
+
+## Official vote explanations (House and Senate Journals)
+
+| Amendment | Record | Result |
+| --- | --- | --- |
+| AM2 (CS/HJR 1215, 2025) | House Journal No. 31, April 25, 2025, PDF p. 155: vote sequence 256, "Nays — 1 Eskamani" | **Found.** It is a signed "Explanation of Vote for Sequence Number 256" by Rep. Dr. Anna V. Eskamani (District 42). She gives her reasons: the REC-estimated $30M fiscal impact on local governments with "no guardrails to prevent windfalls", that it would mostly benefit "a handful of giant agribusinesses", and that a more targeted approach could support smaller farmers. This is the first **NO case with reasons in the opponent's own words.** It is proposed as `argument` / `oppose`, and the publisher is the Florida House of Representatives (Journal). The founder should confirm whether a legislator's journal explanation is filed as `argument` or `official`. |
+| AM1 (HJR 5019, 2025) | House Journal No. 39, June 16, 2025: vote sequence 431, 100–1 | **No explanation filed.** The lone NO was Rep. Caruso. After the roll call, Hinson was recorded NO and Basabe changed from yea to nay. The journal's explanations for that day cover sequences 432 and 435 only. The Senate's vote was checked too: 2025 Senate bound journal, Vol. II, p. 1576 of the journal (PDF p. 937), vote 29–4. The NO votes were Berman, Jones, Osgood and Smith, and Avila recorded a vote preference for yea. **None of them filed a vote explanation.** |
+
+## Blocked pages re-opened in a real browser (2026-09-26, TypeSafe computer-control loop)
+
+The web fetcher got 403 errors or paywalls on these pages, so each one was
+opened in Claude's built-in browser. The article text was read from the DOM,
+and TypeSafe (jev-latest) judged `goal_done`, `step_ok` and `stuck`. Every
+page marked "opened" was also confirmed from its extracted body text.
+
+| Page | Result | TypeSafe | kind / stance |
+| --- | --- | --- | --- |
+| WFLA — "DeSantis breaks with GOP over budget stabilization amendment" (AM1) | **Opened.** A straight-news article; it quotes RPOF chair Evan Power for and reports DeSantis against. | done 0.93 | reporting / neutral |
+| The Bradenton Times — "Amendment 1: Budget Stabilization Fund, Explained" (2026-09-12) | **Opened.** A balanced explainer ("advocates say… critics argue…"). | done 0.91 | reporting / neutral |
+| The Bradenton Times — "Amendment 2: Agricultural Tangible Personal Property Tax Exemption, Explained" (2026-09-12) | **Opened.** An explainer. | done 0.91 | reporting / neutral |
+| WFLA — "New amendment aims to cut costs for Florida farms" (AM2) | **Blocked.** "Access to this page has been denied" (bot protection), so the skill's stop rule applied. | stuck 0.92 | — |
+| WKRG (same story, WMBB reporting) — wkrg.com/news/new-amendment-aims-to-cut-costs-for-florida-farms/ | **Opened** through a different entry point: the syndicated copy. It quotes a farmer for AM2 and notes counties could raise other taxes. | done 0.72; confirmed on the page | reporting / neutral |
+| Tampa Bay Times column — "Vote yes on Amendment 2 for Florida's farmers, food security and landscape" (2026-09-23, Danny Alvarez and Pat Durden) | **Opened.** The full text renders (21 paragraphs), and the reasons given are food security and taxing equipment every year. | done 0.79; confirmed on the page | argument / support |
+| Bloomberg Tax — "Florida Legislature Proposes Property Tax Exemption Constitutional Amendment" (AM2) | **Opened.** A short news brief, fully visible. | done 0.85 | reporting / neutral |
+
+# Amendment 2 — widened search (2026-09-26)
+
+Scope note: Florida is running a second, unrelated "Amendment 2" this cycle — SJR 2-F from the 2026F special session (homestead exemption to $150k/$250k). Several search results below returned that measure instead of the one this brief covers (HJR 1215/CS SJR 318, general-election Nov 3 2026, DoS seqnum=109, agricultural tangible personal property). Every row in the table below was checked against the correct measure before inclusion.
+
+| # | URL | Loads | Publisher / author | Date | Format | kind | stance | Gives reasons? | Evidence (≤15 words) |
+|---|-----|-------|---------------------|------|--------|------|--------|-----------------|----------------------|
+| 1 | https://floridafarmbureau.org/yeson2/ | Yes | Florida Farm Bureau Federation (own site) | undated (references Nov 2026 election) | article | argument | support | Yes — 4 stated reasons | "A YES vote... would support Florida farms, protect open spaces... preserve local food" |
+| 2 | https://www.flcities.com/propertytaxes/ | Yes | Florida League of Cities (own site) | current/live page | article | — | — | N/A | Page covers Amendment 3 (homestead) only; does not mention Amendment 2 anywhere — not usable as a row |
+| 3 | https://noto2.org/f/vote-no-on-amendment-2 | Yes | Florida Wildlife Advocates ("NoTo2.org") | 2024 | article | — | — | N/A | This is the 2024 hunting/fishing Amendment 2 campaign, unrelated measure/year — not usable |
+| 4 | https://floridapolitics.com/archives/736070-legislature-votes-to-put-agriculture-tax-cut-on-statewide-ballot-in-2026/ | No — HTTP 402 paywall | Florida Politics | ~2025 | article | reporting (assumed) | — | Could not open; Rep. Eskamani's opposition quote about the amendment is known only through this and other news reporting (mynews13, floridapolitics), never from her own page, press release, or social account found in this pass — treated as `reporting` + `neutral`, not an `argument` row |
+| 5 | (search only — no stable URL located) | Not opened | Rep. Anna Eskamani | 2025 floor debate | — | — | oppose (in reporting only) | Yes, per news — cites $30M local-government hit and benefit to large agribusiness | Not a row: quote exists only inside news coverage (mynews13.com, floridapolitics.com); no primary Eskamani statement, release, or social post with the quote was found |
+
+## Groups checked, nothing found (no own-words material on Amendment 2, support or oppose)
+
+- Florida Cattlemen's Association (no dedicated statement; a past president co-bylined the Tampa Bay Times op-ed already verified in the prior pass, but that is a TBT byline, not an Association statement)
+- Florida Fruit & Vegetable Association
+- Florida Nursery Growers & Landscape Association (FNGLA)
+- Florida Citrus Mutual
+- Florida Sugar Cane League
+- Florida Dairy Farmers
+- Florida Forestry Association
+- Florida Poultry Federation
+- Florida Strawberry Growers Association (checked floridastrawberry.org/news/ via search — nothing surfaced)
+- Florida Blueberry Growers
+- Florida Black Farmers & Agriculturalists Association
+- Florida Organic Growers (FOG)
+- Florida Farmers Union / National Young Farmers Coalition FL
+- UF/IFAS Extension (no dedicated AM2 explainer found; only third-party outlets restate the same generic description)
+- Florida Ag Coalition (no organization by this name found to exist)
+- Florida Association of Counties
+- Florida School Boards Association (FSBA legislative updates found, no AM2-specific position)
+- Florida Association of District School Superintendents
+- Florida Property Appraisers Association / PAAF (has an Amendment 3 FAQ; nothing on Amendment 2)
+- Florida Policy Institute (has Amendment 3 fiscal-impact material; nothing on Amendment 2)
+- 1000 Friends of Florida
+- Florida Tax Collectors
+- Florida Sheriffs Association (its property-tax concern, confirmed by opening the WLRN article, is explicitly about **Amendment 3**, not Amendment 2 — quote: "significantly concerned with Constitutional Amendment 3")
+- Individual county commissions / property appraisers with a published AM2 position (none located beyond the already-known PAAF Amendment 3 FAQ)
+- Newspaper editorial boards (Orlando Sentinel, Miami Herald, Sun-Sentinel, Palm Beach Post): no editorial on the 2026 agricultural Amendment 2 was located. One AI-search summary claimed all four opposed "Amendment 2" — verified false: it was conflating the unrelated 2024 hunting/fishing Amendment 2. Not treated as a finding.
+- FEA (feaweb.org voter toolkit, re-checked): still only the bare "OPPOSED BY FEA" tag, no reasoning text anywhere on the toolkit page.
+- LWV Florida (Vote411 PDF and lwvfl.org, re-checked): still only names itself as an opponent inside the neutral synopsis; no separate press release or position page with reasoning was found this pass either.
+
+## Gate picture
+
+Verified rows carried forward from the prior session (2026-09-24), unchanged by this pass:
+- **Support (5):** Florida TaxWatch (analysis), Florida Farm Bureau (floridafarmbureau.org "vote-yes" news post), Wilton Simpson/FDACS, Tampa Bay Times "Viewpoints" op-ed, palmbeachexaminer Substack.
+- **Oppose (4):** FEA voter toolkit, LWV Florida Vote411 PDF, sisusari Substack (caveated as undecided, not a clean oppose), amandainformed Substack.
+
+This pass adds one more support-side `argument` row with its own stated reasons (Florida Farm Bureau's dedicated `floridafarmbureau.org/yeson2/` page — a second, more detailed URL than the one already verified) and **zero** new oppose-side rows with reasons. No group approached in this widened search — agricultural, county/city/school, tax-collector, appraiser, or editorial — has published its own words giving a reason to vote NO on Amendment 2. The only NO-side reasoning found anywhere (Rep. Eskamani's $30M-local-impact / large-ag-benefit argument) exists solely inside news reporting, never in her own statement, release, or social post, so it stays `reporting` + `neutral` and cannot become an `argument` row. The FEA/LWV gap the brief asked about again resolves the same way as 2026-09-24: both are still bare "opposed" listings with no reasons in their own material.
+
+**Superseded 2026-09-26:** Eskamani's reasons were found in her own signed House Journal vote explanation (see "Official vote explanations"); founder calls C1/D2 file it and the FEA and LWV listings as argument/oppose. 0040 seeds 5 support / 4 oppose.
+
+## Amendment 1 — widened search (2026-09-26)
+
+Every URL below was opened (WebFetch, or `curl -sL -A "Mozilla/5.0"` where WebFetch was blocked/summarized-only) and read in full before being logged. Rows marked "not opened" were only ever seen as a search snippet and are excluded from the gate count.
+
+| # | URL | Loads | Publisher / author | Date | Format | kind | stance | Gives reasons? | Evidence |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | https://florida.gop/florida-gop-officially-endorses-amendments-1-and-3/ | Yes (curl, raw text confirmed) | Republican Party of Florida — Chairman Evan Power, own press release | 2026-09-14 | article (press release) | argument | support | Yes | "Amendment 1 keeps Florida prepared for storms, emergencies, and downturns without raising taxes." |
+| 2 | https://feaweb.org/action-center/voter-toolkit/ | Yes (curl, raw text confirmed) | Florida Education Association (own site) | undated, 2026-cycle page | article | argument | oppose | No — bare listing | "Amendment 1 OPPOSED BY FEA / Budget Stabilization Fund" — no rationale given for this specific amendment on the page (caution: the same page also carries an unrelated older flier titled "Vote NO on Amendment 1" about a *different*, prior-cycle partisan-school-board amendment also numbered "Amendment 1" — do not conflate; that flier's reasoning text is not about the Budget Stabilization Fund). |
+| 3 | https://onyourballot.vote411.org/race-detail.do?id=71659260 | Yes (curl, raw text confirmed) | League of Women Voters (Vote411 — LWV's own voter-guide platform) | 2026 (live page) | document | argument | oppose | No — bare listing | "Opponents: Florida Education Association, LWV of Florida" printed on LWV's own Vote411 page, inside an otherwise neutral pro/con summary; no reasoning text accompanies the self-naming. Same pattern as the already-verified Amendment 2 LWV Vote411 PDF row. |
+| 4 | https://flaflcio.org/category/press/ | Yes | Florida AFL-CIO (own site) | reviewed full category listing | — | — | — | — | No press release mentions Amendment 1, HJR 5019, Budget Stabilization Fund, or rainy day fund. Templin's opposition remains reporting-only (gap a unchanged). |
+| 5 | https://flaflcio.org/category/legislative/ | Yes | Florida AFL-CIO (own site) | reviewed full category listing | — | — | — | — | Same result — no AM1/HJR 5019 post found on the union's own site. |
+| 6 | https://www.flgov.com/eog/news/press | Yes | Executive Office of the Governor (own site) | September 2026 listing reviewed | — | — | — | — | No release on Amendment 1, Budget Stabilization Fund, or rainy day fund; September releases cover appointments, judicial nominations, a sales-tax holiday, etc. DeSantis's opposition remains sourced only to news coverage of his social-media post (gap b unchanged). |
+| 7 | https://www.floridapolicy.org (site search) | Partial — post titles/summaries reviewed, no AM1-specific page found | Florida Policy Institute (own site) | n/a | — | — | — | — | FPI's site has budget-overview and Amendment 3 pieces but no Amendment 1 / Budget Stabilization Fund post located. |
+
+### Groups checked, nothing found (own-words material on Amendment 1, either side)
+
+- Florida Chamber of Commerce (flchamber.com has an Amendment 3 hub page; no Amendment 1 page or statement found)
+- Associated Industries of Florida (AIF) — no AM1 statement in weekly legislative updates or site search
+- Americans for Prosperity–Florida — no AM1-specific statement found
+- Florida Retail Federation, NFIB Florida, Florida Realtors, Florida Home Builders Association — no AM1 statements found (Realtors' and NFIB's public activity found instead concerns Amendment 2/3, not AM1)
+- James Madison Institute — confirmed (already verified 2026-09-24): guide describes AM1 mechanics, states no recommendation
+- AFSCME Florida, SEIU Florida — no AM1-specific statement found
+- Florida Center for Fiscal and Economic Policy — no AM1-specific material found
+- Florida Association of Counties, Florida League of Cities — no AM1-specific position found (League of Cities' public advocacy located instead is about Amendment 3, not AM1)
+- Florida Democratic Party (own site), Florida House Democratic Caucus, Florida Senate Democratic Caucus — no own-site statement on AM1 found; Driskell's opposition remains reporting-only (gap e unchanged)
+- The Florida Channel — searched its 2025 legislative-session archive and video search; no hearing clip for HJR 5019 / House Budget Committee testimony (Templin's testimony) located (gap a unchanged)
+- Newspaper editorial boards (Tampa Bay Times, Orlando Sentinel, Miami Herald, Sun Sentinel, Palm Beach Post) — no specific AM1 editorial text could be opened/verified; one search-engine summary claimed several boards "oppose" AM1 but supplied no article URL and could not be corroborated by opening any actual editorial — treated as unverified, not used
+
+### Gate picture
+
+Previously verified (2026-09-24, unchanged): tier 1 `official` — DoS/Senate/House bill pages (neutral); tier 2 `analysis` — Florida TaxWatch (support), James Madison Institute guide (neutral); tier 3 `reporting` — several neutral news explainers; tier 5 `commentary` — Amanda Informed Substack (oppose), palmbeachexaminer/Freedom Vanguard Substack (support); Sparker's Soapbox flagged as a stance/kind conflict, unresolved.
+
+New from this widened pass: **tier 4 `argument` is no longer empty on either side.**
+- Support: Republican Party of Florida's own press release (row 1) — closes prior gap (c).
+- Oppose: Florida Education Association's own voter toolkit (row 2) and League of Women Voters of Florida's own Vote411 page (row 3) — both bare "opposed" listings with no stated reasoning, but both are the organization's own words about this specific amendment, matching the precedent already accepted for Amendment 2's FEA/LWV rows.
+
+Updated tier-4 count: support = 1 (RPOF), oppose = 2 (FEA, LWV) — within the ≤2× symmetry rule. Combined with the pre-existing tier-2/tier-5 rows, both YES and NO now clear at least one non-neutral tier on top of tier-4. Still-open gaps: no primary-source statement was found from DeSantis, Rich Templin/Florida AFL-CIO, or Fentrice Driskell themselves (all three remain reporting-only), and no Florida Channel hearing-testimony video was located.
