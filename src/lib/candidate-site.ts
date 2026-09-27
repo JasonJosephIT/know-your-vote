@@ -325,9 +325,62 @@ export function passageId(url: string, text: string): string {
     and a parser dependency would be a new package in the bundle for one
     script. Malformed markup degrades to fewer passages, never to a wrong
     quote — the text between two tags is still the text between two tags. */
+/* ---- comment sections ----------------------------------------------------
+
+   A comment thread lives on the candidate's domain and is written by anyone.
+   FL-GOV 2026-09-27: a visitor's comment under a nomoecorruption.com post came
+   through as a passage and cleared the policy gate. Quoted, it would have put a
+   stranger's words under the candidate's name. The host check cannot catch
+   this, because host is not authorship.
+
+   An element is a comment section when one of its id or class TOKENS names one
+   (whole tokens only: "commentary-box" is not). It is removed with everything
+   it contains, nested replies included, by matching its own close tag rather
+   than the first one. An unclosed section is dropped to the end of the page:
+   losing text there costs a passage, keeping it could cost a misquote. */
+const COMMENT_TOKEN =
+  /^(comments?|comments?-(area|list|section|wrapper|container|title)|commentlist|comment-(body|content|respond|thread|form)|respond|disqus_thread|fb-comments)$/i;
+const COMMENT_CONTAINER = /<(div|section|ol|ul|li|article|aside|form)\b([^>]*)>/gi;
+
+function isCommentAttrs(attrs: string): boolean {
+  for (const m of attrs.matchAll(/\b(id|class)\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)) {
+    const value = m[2] ?? m[3] ?? "";
+    if (value.split(/\s+/).some((token) => COMMENT_TOKEN.test(token))) return true;
+  }
+  return false;
+}
+
+export function stripCommentSections(html: string): string {
+  let out = html;
+  for (;;) {
+    COMMENT_CONTAINER.lastIndex = 0;
+    let open: RegExpExecArray | null = null;
+    for (let m = COMMENT_CONTAINER.exec(out); m; m = COMMENT_CONTAINER.exec(out)) {
+      if (isCommentAttrs(m[2])) {
+        open = m;
+        break;
+      }
+    }
+    if (!open) return out;
+    const tag = open[1].toLowerCase();
+    const start = open.index;
+    const scan = new RegExp(`<(/?)${tag}\\b[^>]*>`, "gi");
+    scan.lastIndex = start + open[0].length;
+    let depth = 1;
+    let end = out.length;
+    for (let t = scan.exec(out); t; t = scan.exec(out)) {
+      depth += t[1] === "/" ? -1 : 1;
+      if (depth === 0) {
+        end = t.index + t[0].length;
+        break;
+      }
+    }
+    out = `${out.slice(0, start)} ${out.slice(end)}`;
+  }
+}
+
 export function extractPassages(html: string, url: string): Passage[] {
-  const body = html
-    .replace(/<!--[\s\S]*?-->/g, " ")
+  const body = stripCommentSections(html.replace(/<!--[\s\S]*?-->/g, " "))
     .replace(/<(script|style|noscript|svg|head|template)\b[\s\S]*?<\/\1>/gi, " ")
     .replace(/<(nav|footer)\b[\s\S]*?<\/\1>/gi, " ");
 

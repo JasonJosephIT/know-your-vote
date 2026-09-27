@@ -432,6 +432,47 @@ check("visible text ignores meta tags and counts only what a reader sees",
 check("a bot challenge is also too short to be a page, so either check alone would catch it",
   looksClientRendered(SITEGROUND_SCREEN));
 
+/* ---- a comment section is not the candidate ----------------------------
+   A blog post's comment thread is on the candidate's domain but is written by
+   visitors. FL-GOV 2026-09-27: a reader's comment on nomoecorruption.com came
+   through as a passage, cleared the policy gate, and would have been quoted as
+   the candidate's position. Host is not authorship. */
+const BLOG_POST = `<article><h1>Why I am running</h1>
+<p>I will cut the state sales tax on groceries in my first budget.</p></article>
+<div id="comments" class="comments-area">
+  <h2 class="comments-title">One response to &ldquo;Why I am running&rdquo;</h2>
+  <ol class="comment-list">
+    <li id="comment-12" class="comment even thread-even depth-1">
+      <article id="div-comment-12" class="comment-body">
+        <div class="comment-author vcard"><b class="fn">Jesse Visitor</b></div>
+        <div class="comment-content"><p>You should lock up every criminal in the state for life, no parole at all.</p></div>
+      </article>
+      <ol class="children"><li id="comment-13" class="comment odd depth-2">
+        <div class="comment-content"><p>A reply from another visitor who has their own views on taxes.</p></div>
+      </li></ol>
+    </li>
+  </ol>
+  <div id="respond" class="comment-respond"><h3>Leave a Reply</h3><p>Your email address will not be published. Required fields are marked.</p></div>
+</div>
+<p>Paid-for text after the comments stays: I will fund teacher raises every year.</p>`;
+const blogTexts = extractPassages(BLOG_POST, "https://e.com/2026/07/09/why").map((p) => p.text);
+check("the candidate's own post text is kept",
+  blogTexts.some((t) => t.includes("sales tax on groceries")), blogTexts.join(" | "));
+check("a visitor's comment is never a passage",
+  !blogTexts.some((t) => /criminal|Jesse Visitor/.test(t)), blogTexts.join(" | "));
+check("a nested reply is never a passage",
+  !blogTexts.some((t) => t.includes("another visitor")), blogTexts.join(" | "));
+check("the comment form is never a passage",
+  !blogTexts.some((t) => /email address will not be published/i.test(t)), blogTexts.join(" | "));
+check("text after the comment section survives",
+  blogTexts.some((t) => t.includes("teacher raises")), blogTexts.join(" | "));
+const notComments = extractPassages(
+  `<div class="commentary-box"><p>My plan will lower the cost of homeowners insurance for every family.</p></div>`,
+  "https://e.com/issues",
+).map((p) => p.text);
+check("a class that merely starts with 'comment' is not a comment section",
+  notComments.length === 1, notComments.join(" | "));
+
 if (failures > 0) {
   console.error(`\nverify-candidate-site: ${failures} failure(s)`);
   process.exit(1);
