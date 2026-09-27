@@ -22,6 +22,7 @@ import {
   buildPassageState,
   buildPolicyQuestions,
   groupByArea,
+  limitShortfall,
   noulValue,
   readVerdict,
   slugOf,
@@ -172,6 +173,15 @@ check("no citation text was altered anywhere in the roll-up",
   insurance?.subIssues[0].citations.every(
     (c) => c.passage.text === (c.passage.id === "1" ? p1.text : p2.text),
   ) === true);
+
+/* ---- --limit never drops a passage silently ---------------------------
+   A cap below the corpus size asks about the head of a site and never its
+   tail, and a long site loses more than a short one. That is unequal
+   treatment, so it is refused, never applied quietly. */
+check("a limit at or above the corpus drops nothing",
+  limitShortfall(215, 215) === 0 && limitShortfall(19, 200) === 0);
+check("a limit below the corpus reports how many would be dropped",
+  limitShortfall(215, 200) === 15, String(limitShortfall(215, 200)));
 
 /* ---- the threshold is a knob, and says so ----------------------------- */
 check("the default threshold is in range",
