@@ -39,3 +39,14 @@ The same rules hold for both parts: every candidate gets the same kinds of sourc
   - `run-2026-09-27.md` has the numbers.
 - **`--limit`:** fixed so that it refuses to drop passages (`limitShortfall`).
 - **The commitment gate (0.85) and the page cap (8)** were not raised. They are unchanged, and the same for every candidate.
+
+## The form of (c), and the apply (founder, 2026-09-27)
+
+> set word_count_pct to 150 and apply brief.sql
+
+- **`word_count_pct = 150` for FL-GOV-general only**, passed as a per-call override to `balance_audit_core`. The global `DEFAULT_THRESHOLDS` stays at 15.
+  - Variance is `(max − min) / max`, so it can never exceed 100%. Any threshold of 100 or more means **the `word_count` gate cannot HALT this race**.
+  - That is the recorded intent: the founder decided that uneven campaign-site length, and silent candidates, do not block publication.
+  - The soft flags still fire and are stored.
+- **`brief.sql` applied** over the Supabase MCP on the founder's yes. How it was applied, and how it was verified, is in `run-2026-09-27.md` under "Apply and audit".
+- **Publishing is not yet authorised.** It needs its own yes.
