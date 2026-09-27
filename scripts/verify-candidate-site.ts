@@ -39,6 +39,7 @@ import {
   passageId,
   pathWords,
   selectPolicyPages,
+  isLegalLink,
 } from "../src/lib/candidate-site.ts";
 
 let failures = 0;
@@ -109,6 +110,31 @@ check("the cap is a cap", selectPolicyPages(LINKS, "https://e.com", 1).length ==
 check("the homepage is never re-selected, even as a one-page site's #anchor",
   selectPolicyPages(extractLinks(`<a href="/#issues">Issues</a><a href="https://www.e.com/">Platform</a>`, "https://e.com/"),
     "https://e.com/").length === 0);
+
+/* Legal pages. Every one of these was selected on 2026-09-25 (through the
+   word "policy" in its link text) and quoted: 1,028 passages of privacy
+   policy, terms and cookie notice across 29 sites. */
+const LEGAL = [
+  { url: "https://e.com/privacy-policy", text: "Privacy Policy" },
+  { url: "https://e.com/privacy.html", text: "Privacy" },
+  { url: "https://e.com/legal", text: "Legal" },
+  { url: "https://e.com/en/cookie-policy", text: "Cookie Policy" },
+  { url: "https://e.com/terms-of-service", text: "Terms of Service" },
+  { url: "https://e.com/sms-terms", text: "SMS Terms" },
+  { url: "https://e.com/accessibility-statement", text: "Accessibility" },
+  { url: "https://e.com/pp", text: "Privacy Policy" },
+];
+for (const link of LEGAL) check(`a legal page is recognised: ${link.url}`, isLegalLink(link));
+check("legal pages are never selected, even though their link text says 'policy'",
+  selectPolicyPages([...LEGAL, { url: "https://e.com/issues", text: "Issues" }], "https://e.com", 8).join(" ") ===
+    "https://e.com/issues");
+check("an issue page about privacy is still a policy page",
+  !isLegalLink({ url: "https://e.com/issues/privacy-rights", text: "Protecting your privacy" }) &&
+    selectPolicyPages([{ url: "https://e.com/issues/privacy-rights", text: "Privacy rights" }], "https://e.com", 8).length === 1);
+check("'midterms' is not 'terms'",
+  !isLegalLink({ url: "https://e.com/news/florida-midterms", text: "Midterms" }));
+check("a policy page named for its terms is not a legal page",
+  !isLegalLink({ url: "https://e.com/term-limits", text: "Term limits" }));
 
 /* ---- links ----------------------------------------------------------- */
 const links = extractLinks(
