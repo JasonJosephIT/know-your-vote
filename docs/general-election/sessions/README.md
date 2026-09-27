@@ -34,6 +34,7 @@ So three sessions can start today, in parallel:
 | A — Amendments           | [`session-a-amendments.md`](session-a-amendments.md)                 | cloud or local, needs web access                                   | nothing; applying migrations needs the founder's OK |
 | B — Candidate websites   | [`session-b-candidate-websites.md`](session-b-candidate-websites.md) | cloud or local, needs web access                                   | nothing                                             |
 | C — Brief pilot (FL-GOV) | [`session-c-brief-pilot.md`](session-c-brief-pilot.md)               | **the founder's Mac** (the arm64 venv and `.env.local` live there) | founder credentials (below)                         |
+| C2 — FL-GOV briefs in Claude Code | [`session-c2-claude-code-briefs.md`](session-c2-claude-code-briefs.md) | **the founder's Mac**, Claude Code with the Supabase MCP | `TYPESAFE_API_KEY` (already set); founder decisions D1–D4 at the start. Replaces C for now; C stays for when the runtime's credentials exist |
 
 ## Collision rules (read before starting any session)
 
