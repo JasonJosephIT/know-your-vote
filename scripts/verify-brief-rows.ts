@@ -343,6 +343,58 @@ check(
     wrongSchema.rejected.some((r) => r.reason === "schema_mismatch"),
 );
 
+/* ---- a candidate with no site is silence, never absence ---------------
+   Datto (FL-GOV) has no official_site, and a site the ingest cannot read gets
+   the same treatment (founder decisions D3/D4, 2026-09-27). Leaving such a
+   candidate out would take the race's comparability with them. So they get a
+   profile and an explicit no_stated_position_found on every spine issue, and
+   the reason is reported rather than implied. */
+const noSite = buildBriefRows({
+  ...baseInput(),
+  candidates: [
+    ...baseInput().candidates,
+    { candidateId: "cand-cruz", officialSite: null, run: null },
+  ],
+});
+const cruzPositions = noSite.rows.positions.filter((p) => p.candidate_id === "cand-cruz");
+const cruz = noSite.rows.profiles.find((p) => p.candidate_id === "cand-cruz");
+check(
+  "a candidate with no run still gets a profile",
+  cruz !== undefined && cruz.audit.word_count === 0 && cruz.positions.length === 0,
+  JSON.stringify(cruz?.audit),
+);
+check(
+  "a candidate with no run is silent on every spine issue",
+  cruzPositions.length === SPINE.length &&
+    cruzPositions.every((p) => p.coverage === "no_stated_position_found" && p.claim_ids.length === 0),
+  cruzPositions.map((p) => p.coverage).join(","),
+);
+check(
+  "a candidate with no run writes no claim and no source",
+  !noSite.rows.claims.some((c) => c.candidate_id === "cand-cruz"),
+);
+check(
+  "a candidate with no run is reported, not read as a candidate who said nothing",
+  noSite.rejected.some((r) => r.candidate_id === "cand-cruz" && r.reason === "no_run"),
+);
+check(
+  "the other candidates are untouched by a silent one",
+  noSite.rows.claims.length === rows.claims.length,
+  `${noSite.rows.claims.length} vs ${rows.claims.length}`,
+);
+
+const runWithoutSite = buildBriefRows({
+  ...baseInput(),
+  candidates: [
+    { candidateId: "cand-ada", officialSite: null, run: baseInput().candidates[0].run },
+  ],
+});
+check(
+  "a run with no official_site to check it against writes nothing",
+  runWithoutSite.rows.claims.length === 0 &&
+    runWithoutSite.rejected.some((r) => r.reason === "not_official_site"),
+);
+
 /* ---- url_norm must match allowlist_b_core.url_norm -------------------- */
 check("urlNorm drops the scheme", urlNorm("https://a.example.com/x") === "a.example.com/x");
 check("urlNorm strips a trailing slash", urlNorm("https://a.example.com/x/") === "a.example.com/x");
