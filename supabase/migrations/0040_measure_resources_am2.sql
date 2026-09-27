@@ -300,7 +300,7 @@ VALUES
    (SELECT source_id FROM source WHERE url_norm = 'www.wkrg.com/news/new-amendment-aims-to-cut-costs-for-florida-farms'),
    'neutral', 'reporting', 'article',
    'New amendment aims to cut costs for Florida farms', 'Peyton Gay', '2026-09-19', NULL,
-   'WMBB reporting, syndicated copy (the WFLA original stayed blocked)', 8),
+   'WMBB reporting, syndicated by WKRG', 8),
 
   ('FL-AM2-general:farmbureau-yeson2', 'FL-AM2-general',
    (SELECT source_id FROM source WHERE url_norm = 'floridafarmbureau.org/yeson2'),
