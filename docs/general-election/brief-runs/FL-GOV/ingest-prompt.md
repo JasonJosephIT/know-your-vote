@@ -24,7 +24,7 @@ report what it did. You do not read, summarize or judge the candidate's content.
 
 1. Record the start time: `date -u +%Y-%m-%dT%H:%M:%SZ`.
 2. Run, from the repo root, exactly:
-     node scripts/candidate-site-ingest.ts --site {{official_site}} \
+     mkdir -p {{OUT_DIR}} && node scripts/candidate-site-ingest.ts --site {{official_site}} \
        --out {{OUT_DIR}}/passages.jsonl 2> {{OUT_DIR}}/ingest.log
    (No timing wrapper: the container has no /usr/bin/time. Wall-clock comes from
    the start and end timestamps in steps 1 and 3.)
@@ -54,3 +54,6 @@ Rules:
   which this container lacks. The shell exited 127 before `node` started, and no request
   reached the site. The wrapper was removed. The failed attempt's report is kept in
   `FL-DOE-89243/attempt-1-failed/`. It cost 59,117 subagent tokens.
+- 2026-09-27, before the other six candidates: added `mkdir -p {{OUT_DIR}} &&`, because their
+  run folders did not exist yet (Jolly's had been created by hand). Nothing else changed. The
+  six ingests were dispatched with this version.
