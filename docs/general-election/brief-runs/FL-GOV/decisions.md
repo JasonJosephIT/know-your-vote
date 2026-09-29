@@ -50,3 +50,16 @@ The same rules hold for both parts: every candidate gets the same kinds of sourc
   - The soft flags still fire and are stored.
 - **`brief.sql` applied** over the Supabase MCP on the founder's yes. How it was applied, and how it was verified, is in `run-2026-09-27.md` under "Apply and audit".
 - **Publishing was then authorised separately:** "yes, publish FL-GOV". It was published at 2026-09-27 15:26 UTC (see `run-2026-09-27.md`).
+
+## Link picking, `--limit`, and re-ingesting FL-GOV (founder, 2026-09-29)
+
+After the keyword ingest of the other 46 races (`../ingest-2026-09-29-keywords.md`) found 32 of 81 readable sites read only at the homepage, and the About page read for 1 of 90:
+
+> Explain 1 and 2, and what the issues were there. After that, we can try doing it in Jev, and we can remove the limit.
+
+Asked which limit and whether FL-GOV is included, the founder answered: **the Jev `--limit` in Step 2**, and **yes, re-ingest FL-GOV too**.
+
+- **Links are picked by Jev** (`--links jev`, now the ingest default): every on-site content link on the homepage is judged by its path and text, links at or above 0.5 are followed up to the unchanged 8-page cap, plus the strongest About page.
+- **`--limit` is removed** from `candidate-policy-noul.ts`. Every passage is always asked.
+- **FL-GOV is re-ingested and re-run the same way**, into each candidate's `reingest-2026-09-29/`. The published brief is not changed by this; rebuilding it from the new runs is a separate decision.
+- **Unchanged:** the 8-page cap and the 0.85 threshold.

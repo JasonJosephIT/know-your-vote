@@ -12,12 +12,24 @@
    to make.
 
      node scripts/candidate-site-ingest.ts --site https://example.com \
-       [--pages 8] [--out passages.jsonl] [--browser auto|always|never]
+       [--pages 8] [--out passages.jsonl] [--browser auto|always|never] \
+       [--links jev|keywords]
 
    Polite by construction: robots.txt is read and honored, the crawl is capped
-   at --pages beyond the homepage, requests are serialized with a delay, and
-   only links that look like a policy section are followed. This is a handful
-   of requests to someone else's server, not a crawl.
+   at --pages beyond the homepage (plus one About page), requests are
+   serialized with a delay, and only links judged to hold the candidate's
+   positions are followed. This is a handful of requests to someone else's
+   server, not a crawl.
+
+   WHICH LINKS. With --links jev (the default), every on-site content link on
+   the homepage is put to Jev as its path and anchor text
+   (src/lib/link-noul.ts): does it lead to stated positions, and is it the
+   candidate's About page. The strongest policy links up to --pages are
+   fetched, plus the strongest About page. Every judgement is written to
+   links.jsonl next to --out. Needs TYPESAFE_API_KEY; without it the run
+   refuses before any request. --links keywords is the old word-list
+   selector (selectPolicyPages), which never follows an About page and
+   misses pages named "/taxes" or "/position-papers" (2026-09-29 ingest).
 
    robots.txt is honored for our own UA token AND every Anthropic crawler
    token (src/lib/candidate-site.ts, ROBOTS_AGENTS): what this fetches is read
@@ -55,6 +67,19 @@
    opposite facts. */
 
 import { writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { loadEnvLocal } from "./env-local.ts";
+import { jevEngine, JEV_MODEL_ID, type CharacterizeEngine } from "../src/lib/news-characterize-engines.ts";
+import {
+  DEFAULT_LINK_THRESHOLD,
+  buildLinkQuestions,
+  buildLinkState,
+  candidateLinks,
+  chooseLinks,
+  linkProvenance,
+  readLinkVerdict,
+  type ScoredLink,
+} from "../src/lib/link-noul.ts";
 import type { Browser, BrowserContext } from "playwright-core";
 import {
   INGEST_AGENT,
@@ -82,7 +107,7 @@ const flag = (name: string): string | undefined => {
 const site = canonicalizeUrl(flag("site") ?? "");
 if (!site) {
   console.error(
-    "Usage: node scripts/candidate-site-ingest.ts --site https://example.com [--pages 8] [--out passages.jsonl] [--browser auto|always|never]",
+    "Usage: node scripts/candidate-site-ingest.ts --site https://example.com [--pages 8] [--out passages.jsonl] [--browser auto|always|never] [--links jev|keywords]",
   );
   process.exit(2);
 }
@@ -92,6 +117,22 @@ const browserMode = flag("browser") ?? "auto";
 if (!["auto", "always", "never"].includes(browserMode)) {
   console.error(`--browser must be auto, always or never, not "${browserMode}"`);
   process.exit(2);
+}
+const linkMode = flag("links") ?? "jev";
+if (!["jev", "keywords"].includes(linkMode)) {
+  console.error(`--links must be jev or keywords, not "${linkMode}"`);
+  process.exit(2);
+}
+/* Before any request: a run that cannot judge links must not start fetching. */
+loadEnvLocal(import.meta.url);
+let engine: CharacterizeEngine | null = null;
+if (linkMode === "jev") {
+  try {
+    engine = jevEngine();
+  } catch (e) {
+    console.error((e as Error).message);
+    process.exit(2);
+  }
 }
 
 const UA = `${INGEST_AGENT}/1.0 (+https://github.com/JasonJosephIT/know-your-vote)`;
@@ -316,13 +357,54 @@ const homepage =
   (console.error("Could not fetch the homepage — stopping."), await done(1));
 
 const links = extractLinks(homepage, site);
-const selected = selectPolicyPages(links, site, pageLimit);
+
+/** Jev's judgement of every offered link. A request that fails is retried
+    once; a link still unjudged fails the run, because fetching the rest would
+    give this candidate a different crawl from everyone else's. */
+async function judgeLinks(): Promise<{ policy: string[]; about: string | null }> {
+  const offered = candidateLinks(links, site!);
+  const questions = buildLinkQuestions();
+  console.error(`  asking Jev about ${offered.length} link(s) as ${linkProvenance(JEV_MODEL_ID)}`);
+  const scored: (ScoredLink & { text: string })[] = [];
+  for (const link of offered) {
+    let verdict = null;
+    for (let attempt = 1; attempt <= 2 && verdict === null; attempt++) {
+      try {
+        const { answers } = await engine!.characterize({ ...buildLinkState(link) }, questions);
+        verdict = readLinkVerdict(answers);
+      } catch (err) {
+        console.error(`  link not judged (attempt ${attempt}, ${(err as Error).message.split("\n")[0]}): ${link.url}`);
+      }
+    }
+    if (verdict === null) {
+      console.error("Jev could not judge every link — stopping, so no candidate gets a partial crawl.");
+      await done(1);
+    }
+    scored.push({ url: link.url, text: link.text, ...verdict! });
+  }
+  const chosen = chooseLinks(scored, DEFAULT_LINK_THRESHOLD, pageLimit);
+  if (outPath) {
+    const rows = scored.map((s) =>
+      JSON.stringify({
+        ...s,
+        chosen: chosen.policy.includes(s.url) ? "policy" : chosen.about === s.url ? "about" : null,
+      }),
+    );
+    writeFileSync(join(dirname(outPath), "links.jsonl"), rows.length ? `${rows.join("\n")}\n` : "");
+  }
+  return chosen;
+}
+
+const chosen =
+  linkMode === "jev" ? await judgeLinks() : { policy: selectPolicyPages(links, site, pageLimit), about: null };
+const selected = chosen.about ? [...chosen.policy, chosen.about] : chosen.policy;
 const pages = selected.filter(allowed);
 for (const url of selected.filter((u) => !allowed(u))) {
   console.error(`  skipped, robots.txt disallows it for ${blockedAgents(robotsTxt, url).join(", ")}: ${url}`);
 }
 console.error(
-  `  ${links.length} links, ${pages.length} policy page(s) selected (cap ${pageLimit})`,
+  `  ${links.length} links, ${chosen.policy.filter(allowed).length} policy page(s) selected (cap ${pageLimit})` +
+    (linkMode === "jev" ? `, about page: ${chosen.about && allowed(chosen.about) ? chosen.about : "none"}` : ""),
 );
 
 const all: Passage[] = [];
