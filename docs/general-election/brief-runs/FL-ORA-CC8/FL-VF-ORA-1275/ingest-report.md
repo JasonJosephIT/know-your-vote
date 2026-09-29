@@ -13,8 +13,9 @@ node scripts/candidate-policy-noul.ts --in docs/general-election/brief-runs/FL-O
 
 | Field | Value |
 |---|---|
-| Start / end (UTC) | 2026-09-29T11:45:49Z → 2026-09-29T11:45:49Z (0 s) |
+| Start / end (UTC) | 2026-09-29T19:18:20Z → 2026-09-29T19:18:21Z (1 s) |
 | Exit code | 1 |
+| Attempt | **re-run** (founder rule: one identical re-run of every failure); the first attempt, FAILURE: robots.txt disallows the crawl (honoured), is in `attempt-1-failed/` |
 | Result | **FAILURE: robots.txt disallows the crawl (honoured)** |
 | Passages | **0** (0 words) from 0 page(s); keyword crawl: 0 from 0 |
 | Links | — on the homepage, 0 judged by Jev |

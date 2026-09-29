@@ -13,12 +13,13 @@ node scripts/candidate-policy-noul.ts --in docs/general-election/brief-runs/FL-B
 
 | Field | Value |
 |---|---|
-| Start / end (UTC) | 2026-09-29T11:43:47Z → 2026-09-29T11:44:22Z (35 s) |
+| Start / end (UTC) | 2026-09-29T19:17:39Z → 2026-09-29T19:18:02Z (23 s) |
 | Exit code | 1 |
-| Result | **FAILURE: bot challenge did not clear (not solved, by rule)** |
+| Attempt | **re-run** (founder rule: one identical re-run of every failure); the first attempt, FAILURE: bot challenge did not clear (not solved, by rule), is in `attempt-1-failed/` |
+| Result | **FAILURE: bot challenge; the browser rendered a page with no links and no text** |
 | Passages | **0** (0 words) from 0 page(s); keyword crawl: 42 from 1 |
-| Links | — on the homepage, 0 judged by Jev |
-| Policy pages chosen | — (cap 8) |
+| Links | 0 on the homepage, 0 judged by Jev (`jev:jev-1.13.0/links/q-e03cabd0`) |
+| Policy pages chosen | 0 (cap 8) |
 | About page | **none** |
 
 ### robots.txt / Crawl-delay / bot-challenge / browser / unreachable lines (verbatim)
@@ -26,8 +27,7 @@ node scripts/candidate-policy-noul.ts --in docs/general-election/brief-runs/FL-B
 ```
   robots.txt read in the browser (plain fetch got a bot challenge, HTTP 202)
   bot challenge (HTTP 202), retrying in the browser: https://www.carylshuham.com/
-  bot challenge did not clear in the browser: https://www.carylshuham.com/
-Could not fetch the homepage — stopping.
+No passages from https://www.carylshuham.com/. That is a finding about the fetch, not about the candidate: check whether the site renders its text client-side, or serves a bot challenge to non-browser clients.
 ```
 
 ## Step 2: policy run (Jev)

@@ -1,10 +1,24 @@
-(node:2544) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-site-ingest.ts is not specified and it doesn't parse as CommonJS.
+(node:548) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-site-ingest.ts is not specified and it doesn't parse as CommonJS.
 Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
 To eliminate this warning, add "type": "module" to /home/user/know-your-vote/package.json.
 (Use `node --trace-warnings ...` to show where the warning was created)
   robots.txt read in the browser (plain fetch got a bot challenge, HTTP 202)
 site: https://olivergilbert.vote/
   bot challenge (HTTP 202), retrying in the browser: https://olivergilbert.vote/
-  asking Jev about 0 link(s) as jev:jev-1.13.0/links/q-e03cabd0
-  0 links, 0 policy page(s) selected (cap 8), about page: none
-No passages from https://olivergilbert.vote/. That is a finding about the fetch, not about the candidate: check whether the site renders its text client-side, or serves a bot challenge to non-browser clients.
+  asking Jev about 8 link(s) as jev:jev-1.13.0/links/q-e03cabd0
+  89 links, 5 policy page(s) selected (cap 8), about page: https://olivergilbert.vote/about
+  bot challenge (HTTP 202), retrying in the browser: https://olivergilbert.vote/es/home-act
+   40 passage(s)  https://olivergilbert.vote/es/home-act
+  bot challenge (HTTP 202), retrying in the browser: https://olivergilbert.vote/build-business-act
+   34 passage(s)  https://olivergilbert.vote/build-business-act
+  bot challenge (HTTP 202), retrying in the browser: https://olivergilbert.vote/care-act
+   82 passage(s)  https://olivergilbert.vote/care-act
+  bot challenge (HTTP 202), retrying in the browser: https://olivergilbert.vote/build-act
+   21 passage(s)  https://olivergilbert.vote/build-act
+  bot challenge (HTTP 202), retrying in the browser: https://olivergilbert.vote/issues
+   14 passage(s)  https://olivergilbert.vote/issues
+  bot challenge (HTTP 202), retrying in the browser: https://olivergilbert.vote/about
+   11 passage(s)  https://olivergilbert.vote/about
+  7 page(s) fetched in the browser
+
+217 passage(s) -> docs/general-election/brief-runs/FL-24/FL-DOE-91544/passages.jsonl

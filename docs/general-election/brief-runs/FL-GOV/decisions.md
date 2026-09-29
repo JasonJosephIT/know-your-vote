@@ -63,3 +63,13 @@ Asked which limit and whether FL-GOV is included, the founder answered: **the Je
 - **`--limit` is removed** from `candidate-policy-noul.ts`. Every passage is always asked.
 - **FL-GOV is re-ingested and re-run the same way**, into each candidate's `reingest-2026-09-29/`. The published brief is not changed by this; rebuilding it from the new runs is a separate decision.
 - **Unchanged:** the 8-page cap and the 0.85 threshold.
+
+## Re-run, reviews and FL-GOV rebuild (founder, 2026-09-29)
+
+Asked whether (1) every failure gets one identical re-run, (2) Step 3 reviews go ahead for every run, and (3) FL-GOV's brief is rebuilt from `reingest-2026-09-29/`:
+
+> Yes to all
+
+- **One identical re-run of every failure**, the same rule for every candidate: the 9 candidates whose Jev-link ingest failed were run again at 19:17 UTC with the same command (`jev-driver-2026-09-29.sh jev-retry-targets-2026-09-29.tsv`). The failed attempt is kept in each folder's `attempt-1-failed/`. Dan Green and Oliver Gilbert were read on the re-run; the other 7 failed again and are recorded silence. There is no second re-run.
+- **Step 3 reviews** for all 90 runs, one reviewer subagent each on `profiler-review-prompt.md` (header change recorded there).
+- **FL-GOV is rebuilt** from the new runs: a new `plan.json` and `brief.sql` in `FL-GOV/rebuild-2026-09-29/`. Applying it replaces the live, published brief, so it waits on its own yes.

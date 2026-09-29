@@ -10,7 +10,9 @@
 set -u
 cd "$(dirname "$0")/../../.."
 B=docs/general-election/brief-runs
-TARGETS=$B/jev-targets-2026-09-29.tsv
+# A target file can be passed as $1 (the one identical re-run of failures uses
+# jev-retry-targets-2026-09-29.tsv); the default is the full list.
+TARGETS=${1:-$B/jev-targets-2026-09-29.tsv}
 
 one() {
   local site="$4" out="$B/$5"

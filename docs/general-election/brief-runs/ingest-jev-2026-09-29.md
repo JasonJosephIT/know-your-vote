@@ -19,36 +19,38 @@ Founder, 2026-09-29, after `ingest-2026-09-29-keywords.md`: pick the links to fo
 
 | | Keyword crawl | Jev links |
 |---|---|---|
-| Readable sites | 86 | **88** |
-| Passages | 3024 | **4093** (median 23) |
-| Pages read (incl. homepages) | 187 | **241** |
+| Readable sites | 86 | **90** |
+| Passages | 3024 | **4331** (median 23) |
+| Pages read (incl. homepages) | 187 | **251** |
 | Homepage only | 38 | **31** |
-| About page read | 1 | **54** |
+| About page read | 1 | **56** |
 | Hit the 8-page cap | 2 + Jolly | **3** (none left out) |
 
 Of the 37 sites the keyword crawl read only at the homepage, 13 now reach more pages. The rest are one-page sites, or sites whose only other links Jev judged not to hold positions (their `links.jsonl` shows each score).
 
 ## Two runs of the same site can differ
 
-1. **Bot walls are intermittent.** The same homepage fetch, two hours apart, gave different results on the same hosts. Readable in the keyword run and not now: Oliver G. Gilbert III, Dan Green, Caryl Sandler Shuham, Annette Taddeo. Failed in the keyword run and readable now: Brent Andersen, Roberto Fernandez III, Vicki L. Lopez, Harry Cohen, Brian Jones, Scott Eckhard Jewett. The fetch code for the homepage did not change between the runs, so this is the sites' HTTP 202/403 challenge behaving differently from one visit to the next, not the link picker. Nothing was retried (rule: report as-is). A uniform rule, such as one identical re-run of every failure an hour later, would be a founder decision.
+1. **Bot walls are intermittent.** The same homepage fetch, two hours apart, gave different results on the same hosts. Readable in the keyword run and not now: Caryl Sandler Shuham, Annette Taddeo. Failed in the keyword run and readable now: Brent Andersen, Roberto Fernandez III, Vicki L. Lopez, Harry Cohen, Brian Jones, Scott Eckhard Jewett. The fetch code for the homepage did not change between the runs, so this is the sites' HTTP 202/403 challenge behaving differently from one visit to the next, not the link picker. Nothing was retried (rule: report as-is). A uniform rule, such as one identical re-run of every failure an hour later, would be a founder decision.
 2. **Jev's link scores move by a few hundredths between runs.** Jolly's `/environment` scored 0.52 in the pilot and 0.49 here, so a link near the 0.5 line can be followed in one run and not the next. Every judgement is saved in `links.jsonl`, so which pages a brief rests on is always on record.
 
 ## Step 2 (Jev policy run)
 
-- **Runs:** 88 (every readable site), 88 complete with 0 failed requests.
-- **Passages asked:** 4093; state a policy at 0.85: 1302; and match a taxonomy issue: 695.
-- **Cost:** 14.40M input tokens, about **$0.60** at $0.042/MTok (input only). The link judgements are not in this total: about 469 small requests.
+- **Runs:** 90 (every readable site), 90 complete with 0 failed requests.
+- **Passages asked:** 4331; state a policy at 0.85: 1376; and match a taxonomy issue: 722.
+- **Cost:** 15.24M input tokens, about **$0.64** at $0.042/MTok (input only). The link judgements are not in this total: about 482 small requests.
 
-## Failures (reported as-is, not retried)
+## The re-run of failures
+
+Founder rule (2026-09-29): every candidate whose ingest failed gets **one** identical re-run, the same command, later. 9 were re-run at 2026-09-29T19:17:39Z: Oliver G. Gilbert III, Dan Green read this time; Mike Beltran, Pia Dandiya, Caryl Sandler Shuham, Annette Taddeo, Rob Piper, Jeannette Quinones Hernandez, Dean Ocean Abrams failed again. Each first attempt is in its folder's `attempt-1-failed/`. There is no second re-run.
+
+## Failures after the re-run
 
 | Race | Candidate | Site | Result | Keyword crawl |
 |---|---|---|---|---|
 | FL-14-general | [FL-DOE-91313](FL-14/FL-DOE-91313/ingest-report.md) Mike Beltran | https://beltranforcongress.com/ | FAILURE: bot challenge did not clear (not solved, by rule) | also failed |
-| FL-22-general | [FL-DOE-89301](FL-22/FL-DOE-89301/ingest-report.md) Pia Dandiya | https://piaforcongress.com/ | FAILURE: bot challenge; the browser rendered a page with no links and no text | also failed |
-| FL-24-general | [FL-DOE-91544](FL-24/FL-DOE-91544/ingest-report.md) Oliver G. Gilbert III | https://olivergilbert.vote/ | FAILURE: bot challenge; the browser rendered a page with no links and no text | 62 passages |
-| FL-9-general | [FL-DOE-91337](FL-9/FL-DOE-91337/ingest-report.md) Dan Green | https://dangreenfl.com/ | FAILURE: the browser rendered the page with almost no text | 11 passages |
-| FL-BRO-CC6-general | [FL-VF-BRO-1041](FL-BRO-CC6/FL-VF-BRO-1041/ingest-report.md) Caryl Sandler Shuham | https://www.carylshuham.com/ | FAILURE: bot challenge did not clear (not solved, by rule) | 42 passages |
-| FL-CFO-general | [FL-DOE-91310](FL-CFO/FL-DOE-91310/ingest-report.md) Annette Taddeo | https://annettetaddeo.com/ | FAILURE: the browser rendered the page with almost no text | 10 passages |
+| FL-22-general | [FL-DOE-89301](FL-22/FL-DOE-89301/ingest-report.md) Pia Dandiya | https://piaforcongress.com/ | FAILURE: bot challenge did not clear (not solved, by rule) | also failed |
+| FL-BRO-CC6-general | [FL-VF-BRO-1041](FL-BRO-CC6/FL-VF-BRO-1041/ingest-report.md) Caryl Sandler Shuham | https://www.carylshuham.com/ | FAILURE: bot challenge; the browser rendered a page with no links and no text | 42 passages |
+| FL-CFO-general | [FL-DOE-91310](FL-CFO/FL-DOE-91310/ingest-report.md) Annette Taddeo | https://annettetaddeo.com/ | FAILURE: bot challenge did not clear (not solved, by rule) | 10 passages |
 | FL-DAD-CC5-general | [FL-VF-DAD-2998](FL-DAD-CC5/FL-VF-DAD-2998/ingest-report.md) Rob Piper | https://www.robpiperheretoserve.com/ | FAILURE: bot challenge did not clear (not solved, by rule) | also failed |
 | FL-ORA-CC8-general | [FL-VF-ORA-1275](FL-ORA-CC8/FL-VF-ORA-1275/ingest-report.md) Jeannette Quinones Hernandez | https://www.jeannette2026.com/ | FAILURE: robots.txt disallows the crawl (honoured) | also failed |
 | FL-GOV-general | [FL-DOE-90433](FL-GOV/FL-DOE-90433/reingest-2026-09-29/ingest-report.md) Dean Ocean Abrams | https://www.deanabrams.com/ | FAILURE: bot challenge did not clear (not solved, by rule) | also failed |
@@ -77,10 +79,10 @@ Under D3/D4 each becomes **recorded silence** unless the founder decides otherwi
 | FL-20-general | [FL-DOE-90814](FL-20/FL-DOE-90814/ingest-report.md) Kedner Maxime | 49 → **108** | 5 → 10 | 15 → 8 (cap) | yes | 51 | 38 | ok |
 |  | [FL-DOE-91278](FL-20/FL-DOE-91278/ingest-report.md) Brent Andersen | 0 → **11** | 0 → 2 | 7 → 0 | yes | 1 | 1 | ok |
 |  | [FL-DOE-91577](FL-20/FL-DOE-91577/ingest-report.md) Debbie Wasserman Schultz | 11 → **8** | 2 → 1 | 10 → 0 | no | 1 | 1 | ok |
-| FL-22-general | [FL-DOE-89301](FL-22/FL-DOE-89301/ingest-report.md) Pia Dandiya | 0 → **0** | 0 → 0 | 0 → 0 | no | — | — | **challenge_empty** |
+| FL-22-general | [FL-DOE-89301](FL-22/FL-DOE-89301/ingest-report.md) Pia Dandiya | 0 → **0** | 0 → 0 | 0 → — (cap) | no | — | — | **bot_wall** |
 |  | [FL-DOE-92109](FL-22/FL-DOE-92109/ingest-report.md) Casey Askar | 1 → **1** | 1 → 1 | 0 → 0 | no | 1 | 1 | ok |
 | FL-24-general | [FL-DOE-90703](FL-24/FL-DOE-90703/ingest-report.md) Te Mayonna Brown | 24 → **27** | 3 → 4 | 5 → 2 | yes | 17 | 15 | ok |
-|  | [FL-DOE-91544](FL-24/FL-DOE-91544/ingest-report.md) Oliver G. Gilbert III | 62 → **0** | 3 → 0 | 0 → 0 | no | — | — | **challenge_empty** |
+|  | [FL-DOE-91544](FL-24/FL-DOE-91544/ingest-report.md) Oliver G. Gilbert III | 62 → **217** | 3 → 7 | 8 → 5 | yes | 68 | 24 | ok |
 | FL-25-general | [FL-DOE-88911](FL-25/FL-DOE-88911/ingest-report.md) Jared Moskowitz | 32 → **25** | 3 → 2 | 12 → 1 | yes | 4 | 4 | ok |
 |  | [FL-DOE-89801](FL-25/FL-DOE-89801/ingest-report.md) Scott Singer | 52 → **58** | 2 → 3 | 4 → 1 | yes | 30 | 16 | ok |
 | FL-26-general | [FL-DOE-89980](FL-26/FL-DOE-89980/ingest-report.md) Nicole Locklin | 60 → **78** | 9 → 10 | 14 → 8 (cap) | yes | 36 | 24 | ok |
@@ -96,12 +98,12 @@ Under D3/D4 each becomes **recorded silence** unless the founder decides otherwi
 | FL-8-general | [FL-DOE-89522](FL-8/FL-DOE-89522/ingest-report.md) Mike Haridopolos | 34 → **39** | 2 → 3 | 6 → 1 | yes | 18 | 11 | ok |
 |  | [FL-DOE-90831](FL-8/FL-DOE-90831/ingest-report.md) Jennifer Jenkins | 25 → **30** | 2 → 3 | 3 → 1 | yes | 13 | 9 | ok |
 | FL-9-general | [FL-DOE-89339](FL-9/FL-DOE-89339/ingest-report.md) Darren Soto | 19 → **15** | 2 → 1 | 7 → 1 | no | 7 | 4 | ok |
-|  | [FL-DOE-91337](FL-9/FL-DOE-91337/ingest-report.md) Dan Green | 11 → **0** | 2 → 0 | 0 → 0 | no | — | — | **render_empty** |
+|  | [FL-DOE-91337](FL-9/FL-DOE-91337/ingest-report.md) Dan Green | 11 → **21** | 2 → 3 | 5 → 1 | yes | 6 | 3 | ok |
 | FL-AGR-general | [FL-DOE-90560](FL-AGR/FL-DOE-90560/ingest-report.md) Wilton Simpson | 72 → **137** | 4 → 8 | 12 → 6 | yes | 30 | 19 | ok |
 |  | [FL-DOE-92013](FL-AGR/FL-DOE-92013/ingest-report.md) Joey Mendoza Atkins | 2 → **2** | 1 → 1 | 0 → 0 | no | 0 | 0 | ok |
 | FL-ATG-general | [FL-DOE-89041](FL-ATG/FL-DOE-89041/ingest-report.md) James Uthmeier | 1 → **2** | 1 → 2 | 1 → 0 | yes | 0 | 0 | ok |
 |  | [FL-DOE-89231](FL-ATG/FL-DOE-89231/ingest-report.md) Jose Javier Rodriguez | 13 → **17** | 2 → 3 | 5 → 1 | yes | 9 | 4 | ok |
-| FL-BRO-CC6-general | [FL-VF-BRO-1041](FL-BRO-CC6/FL-VF-BRO-1041/ingest-report.md) Caryl Sandler Shuham | 42 → **0** | 1 → 0 | 0 → — (cap) | no | — | — | **bot_wall** |
+| FL-BRO-CC6-general | [FL-VF-BRO-1041](FL-BRO-CC6/FL-VF-BRO-1041/ingest-report.md) Caryl Sandler Shuham | 42 → **0** | 1 → 0 | 0 → 0 | no | — | — | **challenge_empty** |
 | FL-BRO-SB1-general | [FL-VF-BRO-1194](FL-BRO-SB1/FL-VF-BRO-1194/ingest-report.md) Maura McCarthy Bulman | 12 → **18** | 1 → 2 | 2 → 0 | yes | 3 | 1 | ok |
 | FL-BRO-SB4-general | [FL-VF-BRO-1191](FL-BRO-SB4/FL-VF-BRO-1191/ingest-report.md) Nicole Morst | 9 → **9** | 1 → 1 | 2 → 0 | no | 4 | 1 | ok |
 | FL-BRO-SB6-general | [FL-VF-BRO-1172](FL-BRO-SB6/FL-VF-BRO-1172/ingest-report.md) Roberto Fernandez III | 0 → **21** | 0 → 1 | 0 → 0 | no | 0 | 0 | ok |
@@ -109,7 +111,7 @@ Under D3/D4 each becomes **recorded silence** unless the founder decides otherwi
 | FL-BRO-SB7-general | [FL-VF-BRO-1254](FL-BRO-SB7/FL-VF-BRO-1254/ingest-report.md) Cynthia Alceus Dominique | 62 → **62** | 1 → 1 | 0 → 0 | no | 33 | 5 | ok |
 | FL-BRO-SBAL8-general | [FL-VF-BRO-1195](FL-BRO-SBAL8/FL-VF-BRO-1195/ingest-report.md) Allen Zeman | 7 → **11** | 1 → 2 | 5 → 0 | yes | 0 | 0 | ok |
 | FL-CFO-general | [FL-DOE-89394](FL-CFO/FL-DOE-89394/ingest-report.md) Blaise Ingoglia | 43 → **50** | 2 → 3 | 9 → 1 | yes | 14 | 8 | ok |
-|  | [FL-DOE-91310](FL-CFO/FL-DOE-91310/ingest-report.md) Annette Taddeo | 10 → **0** | 2 → 0 | 0 → 0 | no | — | — | **render_empty** |
+|  | [FL-DOE-91310](FL-CFO/FL-DOE-91310/ingest-report.md) Annette Taddeo | 10 → **0** | 2 → 0 | 0 → — (cap) | no | — | — | **bot_wall** |
 | FL-DAD-CC2-general | [FL-VF-DAD-2964](FL-DAD-CC2/FL-VF-DAD-2964/ingest-report.md) Marleine Bastien | 18 → **18** | 1 → 1 | 0 → 0 | no | 4 | 3 | ok |
 | FL-DAD-CC5-general | [FL-VF-DAD-2949](FL-DAD-CC5/FL-VF-DAD-2949/ingest-report.md) Vicki L. Lopez | 0 → **9** | 0 → 1 | 1 → 0 | no | 6 | 3 | ok |
 |  | [FL-VF-DAD-2998](FL-DAD-CC5/FL-VF-DAD-2998/ingest-report.md) Rob Piper | 0 → **0** | 0 → 0 | 0 → — (cap) | no | — | — | **bot_wall** |
@@ -164,10 +166,8 @@ Multi-candidate races where a candidate is unreadable, or where the count of pas
 - **FL-14-general:** Kathy Castor 2, Mike Beltran unreadable, Brian Lambert 51
 - **FL-20-general:** Kedner Maxime 51, Brent Andersen 1, Debbie Wasserman Schultz 1
 - **FL-22-general:** Pia Dandiya unreadable, Casey Askar 1
-- **FL-24-general:** Te Mayonna Brown 17, Oliver G. Gilbert III unreadable
 - **FL-27-general:** Eliott Rodriguez 0, Maria Elvira Salazar 23
 - **FL-28-general:** Eddy Rojas 0, Carlos A. Gimenez 0, Phil "Felipe" Ehr 7
-- **FL-9-general:** Darren Soto 7, Dan Green unreadable
 - **FL-AGR-general:** Wilton Simpson 30, Joey Mendoza Atkins 0
 - **FL-ATG-general:** James Uthmeier 0, Jose Javier Rodriguez 9
 - **FL-BRO-SB6-general:** Roberto Fernandez III 0, Adam Cervera 1

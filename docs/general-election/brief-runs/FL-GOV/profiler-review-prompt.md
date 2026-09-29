@@ -104,3 +104,7 @@ Write the result to RUN_DIR/review.md: a table of the five checks, then the
 evidence. End with one line: VERDICT: PASS, or VERDICT: FAIL (with the checks that
 failed). Do not commit.
 ```
+
+## Revision history
+
+- 2026-09-29, for the 90 runs of `../ingest-jev-2026-09-29.md`: the body (Parts 1 and 2) is unchanged. The header gains the race and run directory of each candidate. For the 45 races whose spine the founder has not decided yet, the `SPINE:` line reads: `undecided for this race — for check 4, report the count for every taxonomy issue (src/lib/news-issues.ts) with at least one passage over the threshold; for check 5, consider every taxonomy issue.` FL-GOV keeps its Core 4 line. Each subagent was given the filled prompt as a file to read and follow exactly.

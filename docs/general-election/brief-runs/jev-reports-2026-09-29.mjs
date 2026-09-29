@@ -5,7 +5,7 @@
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 
 const BASE = "docs/general-election/brief-runs";
-const [batchStart, batchEnd] = process.argv.slice(2);
+const [batchStart, batchEnd, retryAt = "(not yet re-run)"] = process.argv.slice(2);
 const read = (p) => (existsSync(p) ? readFileSync(p, "utf8") : "");
 const jsonl = (p) => read(p).split("\n").filter(Boolean).map((l) => JSON.parse(l));
 const secs = (a, b) => Math.round((Date.parse(b) - Date.parse(a)) / 1000);
@@ -76,6 +76,11 @@ const rows = targets.map((t) => {
     crawlDelay: (log.match(/honoring Crawl-delay: (\S+)s/) ?? [])[1] ?? null,
     viaBrowser: Number((log.match(/(\d+) page\(s\) fetched in the browser/) ?? [])[1] ?? 0),
   };
+  r.retried = existsSync(`${t.dir}/attempt-1-failed/meta.tsv`);
+  if (r.retried) {
+    const first = read(`${t.dir}/attempt-1-failed/ingest.log`);
+    r.firstStatus = classify({ ...r, exit: 1, passages: 0, links: null, log: first });
+  }
   r.status = classify(r);
   return r;
 });
@@ -95,6 +100,7 @@ for (const r of rows) {
     "| Field | Value |", "|---|---|",
     `| Start / end (UTC) | ${r.start} → ${r.end} (${secs(r.start, r.end)} s) |`,
     `| Exit code | ${r.exit} |`,
+    ...(r.retried ? [`| Attempt | **re-run** (founder rule: one identical re-run of every failure); the first attempt, ${LABEL[r.firstStatus]}, is in \`attempt-1-failed/\` |`] : []),
     `| Result | **${LABEL[r.status]}** |`,
     `| Passages | **${r.passages}** (${r.words} words) from ${r.urls.length} page(s); keyword crawl: ${r.before.passages} from ${r.before.pages} |`,
     `| Links | ${r.links ?? "—"} on the homepage, ${r.judged.length} judged by Jev${r.linkProv ? ` (\`${r.linkProv}\`)` : ""} |`,
@@ -168,7 +174,9 @@ const summary = [
   `- **Runs:** ${runs.length} (every readable site), ${runs.filter((r) => r.run.status === "complete" && r.run.counts.failed === 0).length} complete with 0 failed requests${partial.length ? `; **partial: ${partial.map((r) => `${r.name} (${r.run.counts.failed} failed)`).join(", ")}**` : ""}.`,
   `- **Passages asked:** ${sum(runs, (r) => r.run.counts.asked)}; state a policy at 0.85: ${sum(runs, (r) => r.run.counts.states_policy)}; and match a taxonomy issue: ${sum(runs, (r) => r.run.counts.with_issue)}.`,
   `- **Cost:** ${(inTok / 1e6).toFixed(2)}M input tokens, about **$${(inTok / 1e6 * COST_PER_MTOK).toFixed(2)}** at $${COST_PER_MTOK}/MTok (input only). The link judgements are not in this total: about ${sum(rows, (r) => r.judged.length)} small requests.`, "",
-  ...(failed.length ? ["## Failures (reported as-is, not retried)", "",
+  "## The re-run of failures", "",
+  `Founder rule (2026-09-29): every candidate whose ingest failed gets **one** identical re-run, the same command, later. ${rows.filter((r) => r.retried).length} were re-run at ${retryAt}: ${rows.filter((r) => r.retried && r.status === "ok").map((r) => r.name).join(", ") || "none"} read this time; ${rows.filter((r) => r.retried && r.status !== "ok").map((r) => r.name).join(", ") || "none"} failed again. Each first attempt is in its folder's \`attempt-1-failed/\`. There is no second re-run.`, "",
+  ...(failed.length ? ["## Failures after the re-run", "",
     "| Race | Candidate | Site | Result | Keyword crawl |", "|---|---|---|---|---|",
     ...failed.map((r) => `| ${r.race} | [${r.cid}](${rel(r)}/ingest-report.md) ${r.name} | ${r.site} | ${LABEL[r.status]} | ${r.before.passages ? `${r.before.passages} passages` : "also failed"} |`), "",
     "Under D3/D4 each becomes **recorded silence** unless the founder decides otherwise.", ""] : []),

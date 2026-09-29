@@ -13,8 +13,9 @@ node scripts/candidate-policy-noul.ts --in docs/general-election/brief-runs/FL-D
 
 | Field | Value |
 |---|---|
-| Start / end (UTC) | 2026-09-29T11:44:22Z → 2026-09-29T11:45:26Z (64 s) |
+| Start / end (UTC) | 2026-09-29T19:18:02Z → 2026-09-29T19:19:06Z (64 s) |
 | Exit code | 1 |
+| Attempt | **re-run** (founder rule: one identical re-run of every failure); the first attempt, FAILURE: bot challenge did not clear (not solved, by rule), is in `attempt-1-failed/` |
 | Result | **FAILURE: bot challenge did not clear (not solved, by rule)** |
 | Passages | **0** (0 words) from 0 page(s); keyword crawl: 0 from 0 |
 | Links | — on the homepage, 0 judged by Jev |
