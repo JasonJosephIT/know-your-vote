@@ -1,0 +1,38 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  B1  Economy, inflation, and jobs  (1 citation(s))
+      0.86  "Oppose reckless tariffs that drive up the cost of everyday goods."
+            https://jenkinsforfl.com/priorities  — section: Affordability
+
+Education
+  A6  Public school funding and teachers  (1 citation(s))
+      0.97  "Expand Title I and invest in teachers, classrooms, and student mental health."
+            https://jenkinsforfl.com/priorities  — section: Education
+
+Healthcare
+  B2  Healthcare access and costs  (4 citation(s))
+      0.98  "Expand Medicaid so Floridians aren’t forced into emergency care or medical debt."
+            https://jenkinsforfl.com/priorities  — section: Healthcare
+      0.98  "Restore and strengthen ACA subsidies to lower premiums immediately."
+            https://jenkinsforfl.com/priorities  — section: Healthcare
+      0.95  "Protect coverage for pre-existing conditions and invest in access to mental health care."
+            https://jenkinsforfl.com/priorities  — section: Healthcare
+      0.86  "Now, Jennifer is running for Congress to take that same courage and determination to Washington. She’ll fight to lower costs, address the broken property insurance system, protect health care, and ensure every Floridian has the freedom t…"
+            https://jenkinsforfl.com/about  — section: Jennifer Jenkins is a mom, an educator, and a common-sense fighter for Florida’s families.
+
+Insurance & Property Costs
+  A1  Property insurance costs  (2 citation(s))
+      0.97  "Stabilize Florida’s property insurance market through bipartisan federal reinsurance and catastrophe backstops."
+            https://jenkinsforfl.com/priorities  — section: Affordability
+      0.87  "Now, Jennifer is running for Congress to take that same courage and determination to Washington. She’ll fight to lower costs, address the broken property insurance system, protect health care, and ensure every Floridian has the freedom t…"
+            https://jenkinsforfl.com/about  — section: Jennifer Jenkins is a mom, an educator, and a common-sense fighter for Florida’s families.
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (2 citation(s))
+      0.89  "Support evidence-based public safety strategies that reduce violence and recidivism."
+            https://jenkinsforfl.com/priorities  — section: Public Safety
+      0.85  "Ensure first responders have stable funding, training, and mental health support."
+            https://jenkinsforfl.com/priorities  — section: Public Safety
+

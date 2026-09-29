@@ -1,0 +1,131 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://www.joeyforflorida.com",
+  "created_at": "2026-09-29T11:43:43.971Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 2,
+    "asked": 2,
+    "states_policy": 0,
+    "with_issue": 0,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "0462c809",
+      "url": "https://www.joeyforflorida.com/",
+      "heading": "Make Florida More Affordable",
+      "text": "The Ag and Consumer Commissioner affects everyday Floridians in so many ways they don’t realize, from food prices to farm land being sold off for data centers and doubling or tripling utility bills. Like most other Floridians, I’ve had to deal with the cost of living skyrocketing out of control, from rent and home insurance, to food, gas and utility bills - and the corrupt multimillionaire politician I’m running against, Wilton Simpson, has played a key role in driving up all of those costs. Wilt rakes in millions from the same special interests hiking up our prices, while bankrupting farmers, tearing farm worker families apart and letting his donors destroy our land and water.",
+      "verdict": {
+        "commitment": 0.43,
+        "states_policy": false,
+        "issues": [
+          "A4",
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.51,
+          "A2": 0.63,
+          "A3": 0.03,
+          "A4": 0.96,
+          "A5": 0.16,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.86,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.07,
+          "KYV1": 0.06,
+          "KYV10": 0.02,
+          "KYV2": 0.7,
+          "KYV3": 0.79,
+          "KYV4": 0.03,
+          "KYV5": 0.18,
+          "KYV6": 0.07,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8587887c",
+      "url": "https://www.joeyforflorida.com/",
+      "heading": "We’re grateful for your donations!",
+      "text": "Your contributions help us reach more voters.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.07,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    }
+  ],
+  "areas": [],
+  "usage": {
+    "input_tokens": 7093,
+    "output_tokens": 916
+  }
+}

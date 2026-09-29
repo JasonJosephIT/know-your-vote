@@ -1,0 +1,55 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  B1  Economy, inflation, and jobs  (3 citation(s))
+      0.96  "By unleashing the world’s best economy through lower taxes, less regulation, and smart growth, we will make America more affordable and prosperous for millions of Americans."
+            https://elijahforcongress.com/issues.html  — section: Affordability & Economy
+      0.91  "Congress must continue driving down costs for American families by keeping taxes low and achieving American energy independence. Lower gas prices are critical to our economy because they reduce costs for families, businesses, and everyth…"
+            https://elijahforcongress.com/issues.html  — section: Affordability & Economy
+      0.89  "It’s past time to put a stop to out of control government spending that acts to drive up everyday costs for American families and our national debt."
+            https://elijahforcongress.com/issues.html  — section: Affordability & Economy
+
+Education
+  KYV9  School choice and vouchers  (2 citation(s))
+      0.96  "Ryan champions parental rights and school choice, empowering families to make the best decisions for their kids and have transparency on curriculum."
+            https://elijahforcongress.com/  — section: Education
+      0.96  "That’s why he champions parental rights and school choice, empowering families to make the best decisions for their kids and have transparency on curriculum."
+            https://elijahforcongress.com/issues.html  — section: Education
+
+Healthcare
+  B2  Healthcare access and costs  (3 citation(s))
+      0.98  "Ryan supports solutions that deliver affordable, patient-centered healthcare options. He also believes healthcare costs can be reduced by providing individuals with tax benefits, such as expanded Health Savings Accounts."
+            https://elijahforcongress.com/issues.html  — section: Healthcare
+      0.96  "The United States must continue to lead the world in medical innovation. The federal government can do more to lower healthcare costs."
+            https://elijahforcongress.com/  — section: Healthcare
+      0.96  "Additionally, Ryan supports greater transparency in the system, including requirements for clear pricing from hospitals, insurers, and other providers."
+            https://elijahforcongress.com/issues.html  — section: Healthcare
+
+Environment & Water
+  KYV2  Energy and utilities  (2 citation(s))
+      0.90  "Congress must continue driving down costs for American families by keeping taxes low and achieving American energy independence. Lower gas prices are critical to our economy because they reduce costs for families, businesses, and everyth…"
+            https://elijahforcongress.com/issues.html  — section: Affordability & Economy
+      0.88  "Congress must continue driving down costs for American families by keeping taxes low and achieving American energy independence."
+            https://elijahforcongress.com/  — section: Affordability & Economy
+  KYV4  Storm resilience and flood protection  (1 citation(s))
+      0.95  "Ryan will prioritize working with federal agencies to secure long-term beach nourishment and storm-damage reduction projects."
+            https://elijahforcongress.com/issues.html  — section: Beach Protection
+
+Immigration
+  B3  Immigration and border enforcement  (2 citation(s))
+      0.98  "We must continue to secure our borders and oppose any measures that weaken enforcement or prioritize non-citizens over American safety."
+            https://elijahforcongress.com/issues.html  — section: Illegal Immigration
+      0.95  "America is a nation built by immigrants, however we must enforce the rule of law."
+            https://elijahforcongress.com/  — section: Illegal Immigration
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (1 citation(s))
+      0.97  "Ryan is a strong defender of law enforcement and deeply understands the daily challenges officers face. He will strongly support legislation that protects law enforcement, including tougher penalties for assaulting or shooting officers."
+            https://elijahforcongress.com/issues.html  — section: Law Enforcement
+
+Elections & Voting
+  A7  Elections administration and voting access  (1 citation(s))
+      0.92  "He strongly supports the Save America Act, which ensures only American citizens can vote in our elections — because citizenship must matter."
+            https://elijahforcongress.com/issues.html  — section: Illegal Immigration
+

@@ -1,0 +1,15 @@
+(node:7127) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-site-ingest.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/user/know-your-vote/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+site: https://byrondonalds.com/
+  asking Jev about 10 link(s) as jev:jev-1.13.0/links/q-e03cabd0
+  10 links, 6 policy page(s) selected (cap 8), about page: none
+    5 passage(s)  https://byrondonalds.com/issues/law-and-order
+   19 passage(s)  https://byrondonalds.com/issues/education
+   10 passage(s)  https://byrondonalds.com/issues/affordability
+    5 passage(s)  https://byrondonalds.com/issues/space-and-tech
+    5 passage(s)  https://byrondonalds.com/issues/economy
+    6 passage(s)  https://byrondonalds.com/issues/healthcare
+
+58 passage(s) -> docs/general-election/brief-runs/FL-GOV/FL-DOE-89042/reingest-2026-09-29/passages.jsonl

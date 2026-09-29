@@ -34,6 +34,7 @@ function classify(r) {
   if (/bot challenge did not clear/.test(r.log)) return "bot_wall";
   if (/Jev could not judge every link/.test(r.log)) return "jev_links_failed";
   if (/Could not fetch the homepage/.test(r.log)) return "unreachable";
+  if (r.passages === 0 && /rendered, but only \d+ characters of text/.test(r.log)) return "render_empty";
   if (r.passages === 0 && /bot challenge \(HTTP \d+\), retrying in the browser/.test(r.log)) return "challenge_empty";
   if (r.passages === 0 && r.links > 0) return "no_text";
   return r.passages === 0 ? "zero_passages" : "nonzero_exit";
@@ -44,6 +45,7 @@ const LABEL = {
   bot_wall: "FAILURE: bot challenge did not clear (not solved, by rule)",
   jev_links_failed: "FAILURE: Jev could not judge every link",
   unreachable: "FAILURE: homepage could not be fetched",
+  render_empty: "FAILURE: the browser rendered the page with almost no text",
   challenge_empty: "FAILURE: bot challenge; the browser rendered a page with no links and no text",
   no_text: "FAILURE: homepage fetched with links but no text (client-side rendering, no challenge)",
   zero_passages: "FAILURE: zero passages",
@@ -134,7 +136,9 @@ const partial = runs.filter((r) => r.run.status !== "complete" || r.run.counts.f
 const byRace = new Map();
 for (const r of rows) byRace.set(r.race, [...(byRace.get(r.race) ?? []), r]);
 const rel = (r) => r.dir.slice(BASE.length + 1);
-const wasHomeOnly = ok.filter((r) => r.before.pages <= 1);
+const wasHomeOnly = ok.filter((r) => r.before.passages > 0 && r.before.pages <= 1);
+const flippedDown = failed.filter((r) => r.before.passages > 0);
+const flippedUp = ok.filter((r) => r.before.passages === 0);
 
 const summary = [
   "# Re-ingest with Jev link picking, and Step 2 (2026-09-29)", "",
@@ -157,6 +161,9 @@ const summary = [
   `| About page read | ${1} | **${ok.filter((r) => r.about && r.aboutPassages > 0).length}** |`,
   `| Hit the 8-page cap | ${2} + Jolly | **${ok.filter((r) => r.selected === r.cap).length}** (${ok.filter((r) => r.overCap).map((r) => `${r.name}: ${r.overCap} left out`).join(", ") || "none left out"}) |`, "",
   `Of the ${wasHomeOnly.length} sites the keyword crawl read only at the homepage, ${wasHomeOnly.filter((r) => r.urls.length > 1).length} now reach more pages. The rest are one-page sites, or sites whose only other links Jev judged not to hold positions (their \`links.jsonl\` shows each score).`, "",
+  "## Two runs of the same site can differ", "",
+  `1. **Bot walls are intermittent.** The same homepage fetch, two hours apart, gave different results on the same hosts. Readable in the keyword run and not now: ${flippedDown.map((r) => r.name).join(", ") || "none"}. Failed in the keyword run and readable now: ${flippedUp.map((r) => r.name).join(", ") || "none"}. The fetch code for the homepage did not change between the runs, so this is the sites' HTTP 202/403 challenge behaving differently from one visit to the next, not the link picker. Nothing was retried (rule: report as-is). A uniform rule, such as one identical re-run of every failure an hour later, would be a founder decision.`,
+  "2. **Jev's link scores move by a few hundredths between runs.** Jolly's `/environment` scored 0.52 in the pilot and 0.49 here, so a link near the 0.5 line can be followed in one run and not the next. Every judgement is saved in `links.jsonl`, so which pages a brief rests on is always on record.", "",
   "## Step 2 (Jev policy run)", "",
   `- **Runs:** ${runs.length} (every readable site), ${runs.filter((r) => r.run.status === "complete" && r.run.counts.failed === 0).length} complete with 0 failed requests${partial.length ? `; **partial: ${partial.map((r) => `${r.name} (${r.run.counts.failed} failed)`).join(", ")}**` : ""}.`,
   `- **Passages asked:** ${sum(runs, (r) => r.run.counts.asked)}; state a policy at 0.85: ${sum(runs, (r) => r.run.counts.states_policy)}; and match a taxonomy issue: ${sum(runs, (r) => r.run.counts.with_issue)}.`,

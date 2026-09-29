@@ -1,0 +1,22 @@
+
+What this site states, by policy area
+
+Environment & Water
+  KYV2  Energy and utilities  (1 citation(s))
+      0.92  "Deliver real relief for homeowners and small businesses from skyrocketing insurance costs and electric bills."
+            https://www.jjr.vote/priorities  — section: Costs.
+
+Insurance & Property Costs
+  A1  Property insurance costs  (1 citation(s))
+      0.90  "Deliver real relief for homeowners and small businesses from skyrocketing insurance costs and electric bills."
+            https://www.jjr.vote/priorities  — section: Costs.
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (3 citation(s))
+      0.95  "Support law enforcement, advocate for victims, protect witnesses and address gun violence."
+            https://www.jjr.vote/priorities  — section: crime.
+      0.93  "Crack down on scammers targeting Florida families, renters or homeowners."
+            https://www.jjr.vote/priorities  — section: Costs.
+      0.85  "Get fentanyl and dangerous drugs off our streets."
+            https://www.jjr.vote/priorities  — section: crime.
+

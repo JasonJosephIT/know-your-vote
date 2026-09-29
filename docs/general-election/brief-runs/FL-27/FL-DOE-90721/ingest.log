@@ -1,0 +1,18 @@
+(node:2995) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-site-ingest.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/user/know-your-vote/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+site: https://mariaelvirasalazar.com/
+  honoring Crawl-delay: 10s
+  asking Jev about 14 link(s) as jev:jev-1.13.0/links/q-e03cabd0
+  81 links, 7 policy page(s) selected (cap 8), about page: https://mariaelvirasalazar.com/bio
+   15 passage(s)  https://mariaelvirasalazar.com/issues/environment
+   12 passage(s)  https://mariaelvirasalazar.com/issues/public_safety
+   11 passage(s)  https://mariaelvirasalazar.com/issues/economy
+   11 passage(s)  https://mariaelvirasalazar.com/issues/healthcare
+   24 passage(s)  https://mariaelvirasalazar.com/issues/infrastructure
+   10 passage(s)  https://mariaelvirasalazar.com/issues/fight_socialism
+   11 passage(s)  https://mariaelvirasalazar.com/issues
+   10 passage(s)  https://mariaelvirasalazar.com/bio
+
+104 passage(s) -> docs/general-election/brief-runs/FL-27/FL-DOE-90721/passages.jsonl

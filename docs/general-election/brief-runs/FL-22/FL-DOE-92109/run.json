@@ -1,0 +1,117 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://www.caseyaskar.com",
+  "created_at": "2026-09-29T11:42:40.218Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 1,
+    "asked": 1,
+    "states_policy": 1,
+    "with_issue": 1,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "8787d0fc",
+      "url": "https://www.caseyaskar.com/",
+      "heading": "Darrin Palumbo",
+      "text": "We are all feeling the pressure at the grocery store and at the gas pump.Tackling the rising cost of eggs, milk, and gas is hist top priority. In Congress, Casey will work with leadership to help slash overburdening taxes and regulations that are adding to the affordability crisis.",
+      "verdict": {
+        "commitment": 0.94,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.05,
+          "A4": 0.72,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.94,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.04,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.3,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "economy",
+        "label": "Economy & Affordability"
+      },
+      "subIssues": [
+        {
+          "id": "B1",
+          "label": "Economy, inflation, and jobs",
+          "citations": [
+            {
+              "passage": {
+                "id": "8787d0fc",
+                "url": "https://www.caseyaskar.com/",
+                "heading": "Darrin Palumbo",
+                "text": "We are all feeling the pressure at the grocery store and at the gas pump.Tackling the rising cost of eggs, milk, and gas is hist top priority. In Congress, Casey will work with leadership to help slash overburdening taxes and regulations that are adding to the affordability crisis.",
+                "retrieved_at": "2026-09-29T11:42:39.680Z"
+              },
+              "score": 0.94
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 3529,
+    "output_tokens": 458
+  }
+}

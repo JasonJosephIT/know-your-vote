@@ -1,0 +1,72 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  B1  Economy, inflation, and jobs  (2 citation(s))
+      0.91  "Kimberly knows what it’s like to juggle bills and worry about rent. In Congress, she’ll fight for real solutions to rising costs, including affordable housing, infrastructure investment, and fair wages."
+            https://kimberlyoverman.com/  — section: THE ISSUES
+      0.88  "From the cost of living to the classroom, Kimberly Overman is running to make government deliver for working people—fighting for fair wages, quality healthcare, strong schools, and safe communities."
+            https://kimberlyoverman.com/  — section: THE ISSUES
+
+Education
+  A6  Public school funding and teachers  (2 citation(s))
+      0.99  "Every child deserves a strong start. Kimberly will fight for fully funded public schools, better teacher pay, and pathways to college, trade careers, and lifelong learning."
+            https://kimberlyoverman.com/  — section: THE ISSUES
+      0.98  "Kimberly believes public education is the foundation of opportunity. She will advocate for stronger investments in schools, competitive teacher pay, and expanded access to early childhood education, vocational training, and higher educat…"
+            https://kimberlyoverman.com/issues  — section: Education & Workforce Development
+  KYV10  Career, vocational and higher education  (2 citation(s))
+      0.98  "Kimberly believes public education is the foundation of opportunity. She will advocate for stronger investments in schools, competitive teacher pay, and expanded access to early childhood education, vocational training, and higher educat…"
+            https://kimberlyoverman.com/issues  — section: Education & Workforce Development
+      0.93  "Every child deserves a strong start. Kimberly will fight for fully funded public schools, better teacher pay, and pathways to college, trade careers, and lifelong learning."
+            https://kimberlyoverman.com/  — section: THE ISSUES
+
+Healthcare
+  B2  Healthcare access and costs  (5 citation(s))
+      0.99  "Healthcare isn’t a luxury—it’s a right. Kimberly will work to expand access to care, lower prescription costs, and defend reproductive rights and mental health services."
+            https://kimberlyoverman.com/  — section: THE ISSUES
+      0.99  "Kimberly has seen firsthand how medical bills can destabilize families. She will work to lower prescription drug costs, expand coverage—especially mental health care—and protect access to reproductive services. No one should have to choo…"
+            https://kimberlyoverman.com/issues  — section: Healthcare Access
+      0.90  "Kimberly’s priorities reflect what voters across the district are demanding: affordable housing, accessible healthcare, economic stability, reproductive freedom, and a government that works for everyone—not just the wealthy or well-conne…"
+            https://kimberlyoverman.com/issues  — section: What Kimberly Stands For
+      0.87  "Families are struggling while politicians argue. Kimberly is focused on what matters: affordable housing, accessible healthcare, and a fair shot for all."
+            https://kimberlyoverman.com/  — section: Time for Government That Works.
+      0.87  "With over 45,000 veterans and active-duty personnel in the district, Kimberly knows our service members deserve more than just symbolic support. She’ll fight to improve access to VA care, mental health services, job training, and transit…"
+            https://kimberlyoverman.com/issues  — section: Veterans & Military Families
+
+Housing
+  A2  Housing affordability  (4 citation(s))
+      0.98  "As someone who grew up in a working-class household and has helped others manage through financial hardship, Kimberly understands the urgent need for economic stability. In Congress, she’ll fight for increased investment in affordable ho…"
+            https://kimberlyoverman.com/issues  — section: Affordable Housing & Cost of Living
+      0.97  "Kimberly knows what it’s like to juggle bills and worry about rent. In Congress, she’ll fight for real solutions to rising costs, including affordable housing, infrastructure investment, and fair wages."
+            https://kimberlyoverman.com/  — section: THE ISSUES
+      0.95  "Kimberly’s priorities reflect what voters across the district are demanding: affordable housing, accessible healthcare, economic stability, reproductive freedom, and a government that works for everyone—not just the wealthy or well-conne…"
+            https://kimberlyoverman.com/issues  — section: What Kimberly Stands For
+      0.91  "Families are struggling while politicians argue. Kimberly is focused on what matters: affordable housing, accessible healthcare, and a fair shot for all."
+            https://kimberlyoverman.com/  — section: Time for Government That Works.
+
+Environment & Water
+  B8  Climate and environment (national)  (1 citation(s))
+      0.90  "For Florida families, climate change isn’t abstract – it shows up in flooding, rising insurance costs, water quality, and extreme heat. Kimberly understands that climate resilience is affordability: when communities skip investment in dr…"
+            https://kimberlyoverman.com/issues  — section: Climate Resilience & Environmental Protection
+  KYV4  Storm resilience and flood protection  (1 citation(s))
+      0.97  "For Florida families, climate change isn’t abstract – it shows up in flooding, rising insurance costs, water quality, and extreme heat. Kimberly understands that climate resilience is affordability: when communities skip investment in dr…"
+            https://kimberlyoverman.com/issues  — section: Climate Resilience & Environmental Protection
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (2 citation(s))
+      0.96  "Kimberly supports public safety policies that work: strong law enforcement paired with investments in mental health services, youth engagement, and community-led crime prevention. She knows safety comes from both accountability and oppor…"
+            https://kimberlyoverman.com/issues  — section: Public Safety & Crime Prevention
+      0.94  "Safe communities start with smart investments. Kimberly supports balanced public safety policies that combine law enforcement with prevention, youth programs, and mental health care."
+            https://kimberlyoverman.com/  — section: THE ISSUES
+
+Abortion Policy
+  B5  Abortion policy  (4 citation(s))
+      0.98  "Kimberly trusts people to make their own healthcare decisions. She will fight to restore and protect the right to abortion and access to reproductive care—because these decisions belong to individuals, not politicians"
+            https://kimberlyoverman.com/issues  — section: Reproductive Rights & Personal Freedom
+      0.90  "Healthcare isn’t a luxury—it’s a right. Kimberly will work to expand access to care, lower prescription costs, and defend reproductive rights and mental health services."
+            https://kimberlyoverman.com/  — section: THE ISSUES
+      0.87  "Kimberly has seen firsthand how medical bills can destabilize families. She will work to lower prescription drug costs, expand coverage—especially mental health care—and protect access to reproductive services. No one should have to choo…"
+            https://kimberlyoverman.com/issues  — section: Healthcare Access
+      0.86  "Kimberly’s priorities reflect what voters across the district are demanding: affordable housing, accessible healthcare, economic stability, reproductive freedom, and a government that works for everyone—not just the wealthy or well-conne…"
+            https://kimberlyoverman.com/issues  — section: What Kimberly Stands For
+
