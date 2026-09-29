@@ -88,6 +88,6 @@ This one is outside the check as written, because the passage is gated rather th
 ### Other notes
 
 - The Profiler constitution text for this candidate uses the example attribution "Senator Debbie Wasserman Schultz says…". The passages describe her as "Florida's senior Congresswoman" and "a 21-year member of Congress", and the race is U.S. House District 20. The Profiler should attribute to "Rep. Debbie Wasserman Schultz", "Congresswoman Debbie Wasserman Schultz" or "The campaign website", not "Senator".
-- The whole brief for this candidate would rest on one 88-word homepage block. Any Position built from it should cite `3b9a6802` and nothing else.
+- The whole brief for this candidate would rest on one 84-word homepage block. Any Position built from it should cite `3b9a6802` and nothing else.
 
 VERDICT: PASS
