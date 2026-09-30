@@ -73,7 +73,7 @@ These passages are marked states_policy=false but state a commitment on a taxono
 Not counted as misses:
 
 - `dce8d996` (commitment 0.66, own_commitment 0.30) mentions "unwavering dedication to limited government and constitutional principles". That is not a commitment on any taxonomy issue.
-- `918afcd0` cleared both gates, so it cannot be a gate miss. It scored B7 (Crime policy, policing and courts) at 0.84 for "strong borders and law enforcement". It also scored B1 at 0.77 ("fiscal responsibility") and A2 at 0.76 ("housing costs"; the last of these phrases appears in the biography sentence, not the commitment). None of these reached the threshold. They are noted here for the founder only.
+- `918afcd0` cleared both gates, so it cannot be a gate miss. It scored B7 (Crime policy, policing and courts) at 0.84 for "strong borders and law enforcement". It also scored B1 at 0.77 ("fiscal responsibility") and A2 at 0.76 ("housing costs", which appears in the biography sentence, not in the commitment). None of these reached the threshold. They are noted here for the founder only.
 
 ### Other notes (not checks)
 
