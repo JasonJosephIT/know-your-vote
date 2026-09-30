@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://jaredforflorida.com",
-  "created_at": "2026-09-29T11:43:39.017Z",
+  "created_at": "2026-09-30T01:58:25.773Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -50,26 +51,27 @@
       "text": "Jared Moskowitz was first elected to the U.S. House of Representatives in 2022 and re-elected in 2024, earning the trust of voters with his record of action, bipartisan leadership, and crisis-tested experience.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.02,
+          "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
-          "B3": 0.02,
+          "B3": 0.03,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.03,
+          "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.03,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -88,6 +90,7 @@
       "text": "From the state legislature to the floor of Congress, he has built his career on showing up, getting results, and putting people ahead of politics.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -100,16 +103,16 @@
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
-          "B3": 0.02,
+          "B3": 0.03,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.03,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.03,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -126,10 +129,11 @@
       "text": "Jared answers to this district — not to any party. Here is where he stands.",
       "verdict": {
         "commitment": 0.11,
+        "own_commitment": 0.15,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.03,
           "A3": 0.03,
           "A4": 0.03,
@@ -139,7 +143,7 @@
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.03,
-          "B4": 0.02,
+          "B4": 0.03,
           "B5": 0.03,
           "B6": 0.03,
           "B7": 0.03,
@@ -149,9 +153,9 @@
           "KYV2": 0.03,
           "KYV3": 0.03,
           "KYV4": 0.03,
-          "KYV5": 0.02,
+          "KYV5": 0.03,
           "KYV6": 0.03,
-          "KYV7": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.03,
           "KYV9": 0.03
         }
@@ -164,6 +168,7 @@
       "text": "Cutting property insurance premiums, drug prices, and the everyday costs squeezing South Florida families.",
       "verdict": {
         "commitment": 0.86,
+        "own_commitment": 0.88,
         "states_policy": true,
         "issues": [
           "A1",
@@ -171,15 +176,15 @@
           "B2"
         ],
         "scores": {
-          "A1": 0.91,
+          "A1": 0.9,
           "A2": 0.35,
           "A3": 0.05,
           "A4": 0.93,
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.02,
-          "B1": 0.66,
-          "B2": 0.9,
+          "B1": 0.63,
+          "B2": 0.89,
           "B3": 0.02,
           "B4": 0.03,
           "B5": 0.02,
@@ -194,7 +199,7 @@
           "KYV5": 0.03,
           "KYV6": 0.03,
           "KYV7": 0.03,
-          "KYV8": 0.05,
+          "KYV8": 0.06,
           "KYV9": 0.03
         }
       }
@@ -206,6 +211,7 @@
       "text": "Fighting every effort to cut, weaken, or privatize the programs seniors earned.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.91,
         "states_policy": true,
         "issues": [
           "B4"
@@ -219,7 +225,7 @@
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.04,
-          "B2": 0.54,
+          "B2": 0.53,
           "B3": 0.02,
           "B4": 0.98,
           "B5": 0.02,
@@ -246,6 +252,7 @@
       "text": "Jared is one of the few in Congress willing to work with and call out corruption in both parties.",
       "verdict": {
         "commitment": 0.19,
+        "own_commitment": 0.11,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -262,9 +269,9 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.03,
-          "B7": 0.08,
+          "B7": 0.09,
           "B8": 0.02,
-          "KYV1": 0.58,
+          "KYV1": 0.6,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -283,7 +290,8 @@
       "heading": "Moskowitz leans into work combating antisemitism as he launches general election campaign",
       "text": "A new digital ad from Moskowitz’s campaign opens with footage of the Holocaust, and discusses his family history and work to combat antisemitism.",
       "verdict": {
-        "commitment": 0.18,
+        "commitment": 0.19,
+        "own_commitment": 0.12,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -294,10 +302,10 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.02,
+          "B1": 0.03,
           "B2": 0.02,
-          "B3": 0.03,
-          "B4": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -322,6 +330,7 @@
       "text": "Democratic U.S. Rep. Jared Moskowitz is opening his General Election campaign by returning to the worst day in his hometown’s history.",
       "verdict": {
         "commitment": 0.29,
+        "own_commitment": 0.28,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -330,7 +339,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.03,
+          "A6": 0.02,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
@@ -338,18 +347,18 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.03,
-          "B7": 0.15,
+          "B7": 0.16,
           "B8": 0.02,
           "KYV1": 0.04,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -359,7 +368,8 @@
       "heading": "Rep. Jared Moskowitz: Pro-Israel Democrats are being ‘ostracized’ in the Democratic Party",
       "text": "For Rep. Jared Moskowitz, the Democratic caucus has become an increasingly lonely place for those who remain staunchly pro-Israel.",
       "verdict": {
-        "commitment": 0.17,
+        "commitment": 0.18,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -378,7 +388,7 @@
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.04,
+          "KYV1": 0.03,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -398,6 +408,7 @@
       "text": "Many Democratic congressional candidates have spent the summer running away from AIPAC and toward the DSA. Jared Moskowitz is doing the opposite.",
       "verdict": {
         "commitment": 0.11,
+        "own_commitment": 0.15,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -408,7 +419,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -436,18 +447,19 @@
       "text": "Moskowitz sat down with CBS Miami's Jim DeFede to discuss the race.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.03,
+          "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.02,
-          "A5": 0.02,
+          "A4": 0.03,
+          "A5": 0.03,
           "A6": 0.03,
           "A7": 0.03,
           "B1": 0.03,
-          "B2": 0.02,
+          "B2": 0.03,
           "B3": 0.03,
           "B4": 0.03,
           "B5": 0.03,
@@ -458,7 +470,7 @@
           "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.03,
-          "KYV4": 0.03,
+          "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.03,
@@ -473,7 +485,8 @@
       "heading": "Jared Moskowitz named Ranking Democrat on House Middle East Subcommittee",
       "text": "U.S. Rep. Jared Moskowitz now serves as the top Democrat on the House subcommittee tackling foreign policy in the Middle East.",
       "verdict": {
-        "commitment": 0.02,
+        "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -498,7 +511,7 @@
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.01,
+          "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -512,6 +525,7 @@
       "text": "Jared is running a people-powered campaign, and he needs our help. Chip in today to ensure Jared can continue holding extremists in both parties accountable.",
       "verdict": {
         "commitment": 0.18,
+        "own_commitment": 0.41,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -521,16 +535,16 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
-          "B1": 0.03,
+          "A7": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.03,
-          "B4": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
           "B5": 0.02,
           "B6": 0.03,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.18,
+          "KYV1": 0.17,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -550,6 +564,7 @@
       "text": "Make your plan, find your polling place, and know your options — everything you need to make your voice heard.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -559,7 +574,7 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.25,
+          "A7": 0.24,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
@@ -587,7 +602,8 @@
       "heading": "Ready to help Jared keep fighting for South Florida?",
       "text": "Get involved, volunteer, or chip in today.",
       "verdict": {
-        "commitment": 0.03,
+        "commitment": 0.04,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -597,10 +613,10 @@
           "A4": 0.02,
           "A5": 0.03,
           "A6": 0.02,
-          "A7": 0.02,
+          "A7": 0.03,
           "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.02,
+          "B3": 0.03,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
@@ -615,7 +631,7 @@
           "KYV6": 0.02,
           "KYV7": 0.03,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -626,6 +642,7 @@
       "text": "Add your name to get campaign updates and ways to help keep Jared in Congress.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -644,7 +661,7 @@
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.02,
+          "KYV1": 0.03,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -663,7 +680,8 @@
       "heading": "Shaped by a Commitment to Public Service",
       "text": "Congressman Jared Moskowitz has become one of the most effective checks on extremists in Washington, using his seat on the House Judiciary Committee to demand accountability, defend the independence of the courts, and push back whenever Washington oversteps at the expense of the people he represents. It is the same thing he has done his entire career: stand up for South Florida, no matter who is in charge.",
       "verdict": {
-        "commitment": 0.34,
+        "commitment": 0.33,
+        "own_commitment": 0.26,
         "states_policy": false,
         "issues": [
           "KYV1"
@@ -672,7 +690,7 @@
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.02,
+          "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.03,
@@ -682,7 +700,7 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.03,
-          "B7": 0.53,
+          "B7": 0.56,
           "B8": 0.02,
           "KYV1": 0.86,
           "KYV10": 0.02,
@@ -704,6 +722,7 @@
       "text": "Born and raised in Broward County and a proud graduate of Marjory Stoneman Douglas High School, Jared brings something almost no one else in Congress can: hands-on experience running a crisis. As Director of Florida's Division of Emergency Management, a rare appointment made by Republican Governor Ron DeSantis, he led the state's response to multiple hurricanes and stood up Florida's COVID-19 response, from testing sites and vaccine distribution to delivering millions of meals to the communities that needed them.",
       "verdict": {
         "commitment": 0.05,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -711,22 +730,22 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
-          "A6": 0.02,
+          "A5": 0.03,
+          "A6": 0.03,
           "A7": 0.02,
           "B1": 0.03,
-          "B2": 0.15,
-          "B3": 0.02,
+          "B2": 0.14,
+          "B3": 0.03,
           "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.03,
           "B8": 0.03,
-          "KYV1": 0.02,
-          "KYV10": 0.03,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
           "KYV2": 0.03,
           "KYV3": 0.02,
-          "KYV4": 0.1,
+          "KYV4": 0.09,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -742,6 +761,7 @@
       "text": "In Congress, Jared has stayed focused on what South Florida families actually feel: the cost of living. He authored legislation to cut homeowners' property insurance premiums, one of the biggest expenses squeezing Florida families, and he is fighting to protect Social Security and Medicare from cuts and to lower health care and prescription drug costs.",
       "verdict": {
         "commitment": 0.96,
+        "own_commitment": 0.86,
         "states_policy": true,
         "issues": [
           "A1",
@@ -753,11 +773,11 @@
           "A1": 0.98,
           "A2": 0.7,
           "A3": 0.14,
-          "A4": 0.96,
+          "A4": 0.97,
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.02,
-          "B1": 0.49,
+          "B1": 0.52,
           "B2": 0.98,
           "B3": 0.02,
           "B4": 0.98,
@@ -785,34 +805,35 @@
       "text": "What sets Jared apart is his willingness to stand up to both parties. He said no to Republicans when they threatened Medicare and Medicaid, and no to Democrats who wanted to defund the police. He supports banning members of Congress from trading stocks, because corruption is a problem on both sides, and he has called out issues at FEMA under Republican and Democratic administrations alike. While too many in Washington retreat to their partisan corners, Jared will work with anyone, and stand up to anyone, to deliver for Floridians.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.87,
         "states_policy": true,
         "issues": [
           "B7"
         ],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.02,
-          "A3": 0.02,
-          "A4": 0.03,
+          "A3": 0.03,
+          "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.03,
+          "A6": 0.02,
           "A7": 0.03,
-          "B1": 0.04,
-          "B2": 0.8,
+          "B1": 0.03,
+          "B2": 0.78,
           "B3": 0.02,
-          "B4": 0.76,
-          "B5": 0.03,
-          "B6": 0.02,
-          "B7": 0.9,
+          "B4": 0.71,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.91,
           "B8": 0.02,
-          "KYV1": 0.42,
+          "KYV1": 0.43,
           "KYV10": 0.02,
-          "KYV2": 0.02,
+          "KYV2": 0.03,
           "KYV3": 0.02,
           "KYV4": 0.03,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -825,6 +846,7 @@
       "text": "After the 2018 shooting at his alma mater, Jared became a leading voice for school safety. He helped craft and pass the bipartisan Marjory Stoneman Douglas High School Public Safety Act, Florida's most comprehensive school safety and gun violence prevention law in over 20 years, working across the aisle to get it done, and he remains a trusted partner to many of the families affected by the tragedy.",
       "verdict": {
         "commitment": 0.2,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -841,7 +863,7 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.58,
+          "B7": 0.55,
           "B8": 0.02,
           "KYV1": 0.08,
           "KYV10": 0.02,
@@ -862,7 +884,8 @@
       "heading": "Shaped by a Commitment to Public Service",
       "text": "Jared is also a strong and consistent supporter of Israel and one of Congress's most outspoken voices against rising antisemitism and political extremism, a fight that is personal for him and for the community he represents.",
       "verdict": {
-        "commitment": 0.76,
+        "commitment": 0.75,
+        "own_commitment": 0.41,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -881,7 +904,7 @@
           "B6": 0.02,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.24,
+          "KYV1": 0.27,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -900,14 +923,15 @@
       "heading": "Shaped by a Commitment to Public Service",
       "text": "Jared was shaped early by a commitment to public service and by his father, whose example he has carried forward since losing him to pancreatic cancer. He earned a degree in political science with a focus on public policy at The George Washington University and a law degree at Nova Southeastern University. His own public service began while he was still in law school, on the Parkland City Commission, where he championed public safety and the environment and passed one of the state's first local bans on texting while driving. He went on to serve in the Florida House of Representatives and on the Broward County Commission before being elected to Congress in 2022 and re-elected in 2024.",
       "verdict": {
-        "commitment": 0.43,
+        "commitment": 0.42,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.02,
+          "A4": 0.03,
           "A5": 0.04,
           "A6": 0.03,
           "A7": 0.03,
@@ -915,9 +939,9 @@
           "B2": 0.03,
           "B3": 0.02,
           "B4": 0.03,
-          "B5": 0.02,
-          "B6": 0.03,
-          "B7": 0.28,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.26,
           "B8": 0.12,
           "KYV1": 0.03,
           "KYV10": 0.03,
@@ -925,7 +949,7 @@
           "KYV3": 0.07,
           "KYV4": 0.03,
           "KYV5": 0.03,
-          "KYV6": 0.02,
+          "KYV6": 0.03,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.03
@@ -938,7 +962,8 @@
       "heading": "Shaped by a Commitment to Public Service",
       "text": "He currently serves on the House Foreign Affairs Committee, where he is Ranking Member of the Subcommittee on Oversight and Accountability, and on the House Judiciary Committee, and he is a co-founder of the Bipartisan Disaster Preparedness Caucus, helped launch the Bipartisan School Safety and Security Caucus, and co-founded the Sneaker Caucus to engage younger Americans in the democratic process.",
       "verdict": {
-        "commitment": 0.05,
+        "commitment": 0.06,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -955,7 +980,7 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.03,
-          "B7": 0.05,
+          "B7": 0.06,
           "B8": 0.02,
           "KYV1": 0.05,
           "KYV10": 0.02,
@@ -976,7 +1001,8 @@
       "heading": "Shaped by a Commitment to Public Service",
       "text": "Jared and his wife Leah live in Broward County with their two sons. From local government to Congress, he has kept the same approach in every job he has held: answer to the people he represents, not to a party, and never be afraid to take on either one to get South Florida a fair shot.",
       "verdict": {
-        "commitment": 0.19,
+        "commitment": 0.18,
+        "own_commitment": 0.56,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -986,7 +1012,7 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
+          "A7": 0.03,
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
@@ -998,7 +1024,7 @@
           "KYV1": 0.07,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -1028,7 +1054,7 @@
                 "text": "In Congress, Jared has stayed focused on what South Florida families actually feel: the cost of living. He authored legislation to cut homeowners' property insurance premiums, one of the biggest expenses squeezing Florida families, and he is fighting to protect Social Security and Medicare from cuts and to lower health care and prescription drug costs.",
                 "retrieved_at": "2026-09-29T11:43:34.635Z"
               },
-              "score": 0.96
+              "score": 0.97
             },
             {
               "passage": {
@@ -1072,7 +1098,7 @@
                 "text": "Cutting property insurance premiums, drug prices, and the everyday costs squeezing South Florida families.",
                 "retrieved_at": "2026-09-29T11:43:34.635Z"
               },
-              "score": 0.9
+              "score": 0.89
             }
           ]
         }
@@ -1106,7 +1132,7 @@
                 "text": "Cutting property insurance premiums, drug prices, and the everyday costs squeezing South Florida families.",
                 "retrieved_at": "2026-09-29T11:43:34.635Z"
               },
-              "score": 0.91
+              "score": 0.9
             }
           ]
         }
@@ -1130,7 +1156,7 @@
                 "text": "What sets Jared apart is his willingness to stand up to both parties. He said no to Republicans when they threatened Medicare and Medicaid, and no to Democrats who wanted to defund the police. He supports banning members of Congress from trading stocks, because corruption is a problem on both sides, and he has called out issues at FEMA under Republican and Democratic administrations alike. While too many in Washington retreat to their partisan corners, Jared will work with anyone, and stand up to anyone, to deliver for Floridians.",
                 "retrieved_at": "2026-09-29T11:43:34.635Z"
               },
-              "score": 0.9
+              "score": 0.91
             }
           ]
         }
@@ -1172,7 +1198,7 @@
     }
   ],
   "usage": {
-    "input_tokens": 88102,
-    "output_tokens": 11450
+    "input_tokens": 93302,
+    "output_tokens": 11975
   }
 }

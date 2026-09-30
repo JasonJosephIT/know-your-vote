@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://kimberlyoverman.com",
-  "created_at": "2026-09-29T11:42:05.596Z",
+  "created_at": "2026-09-30T01:58:11.194Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -38,8 +39,8 @@
   "counts": {
     "passages": 73,
     "asked": 73,
-    "states_policy": 16,
-    "with_issue": 14,
+    "states_policy": 12,
+    "with_issue": 11,
     "failed": 0
   },
   "passages": [
@@ -49,33 +50,34 @@
       "heading": "People First. Always.",
       "text": "Kimberly Overman is running for Congress to put everyday Floridians back at the center of decision-making—with real solutions and leadership that listens.",
       "verdict": {
-        "commitment": 0.33,
+        "commitment": 0.32,
+        "own_commitment": 0.42,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.02,
           "A3": 0.03,
-          "A4": 0.04,
+          "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
-          "B1": 0.04,
+          "A7": 0.03,
+          "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.04,
           "KYV10": 0.02,
-          "KYV2": 0.02,
+          "KYV2": 0.03,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.02,
-          "KYV7": 0.03,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -88,6 +90,7 @@
       "text": "With a proven track record in Hillsborough County, Kimberly brings experience, empathy, and results-driven leadership to Washington.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -97,7 +100,7 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
+          "A7": 0.03,
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
@@ -126,14 +129,15 @@
       "text": "Families are struggling while politicians argue. Kimberly is focused on what matters: affordable housing, accessible healthcare, and a fair shot for all.",
       "verdict": {
         "commitment": 0.86,
-        "states_policy": true,
+        "own_commitment": 0.66,
+        "states_policy": false,
         "issues": [
           "A2",
           "B2"
         ],
         "scores": {
           "A1": 0.02,
-          "A2": 0.91,
+          "A2": 0.9,
           "A3": 0.03,
           "A4": 0.29,
           "A5": 0.02,
@@ -144,17 +148,17 @@
           "B3": 0.02,
           "B4": 0.03,
           "B5": 0.03,
-          "B6": 0.03,
-          "B7": 0.03,
+          "B6": 0.02,
+          "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.04,
           "KYV10": 0.03,
-          "KYV2": 0.02,
+          "KYV2": 0.03,
           "KYV3": 0.07,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.11,
-          "KYV7": 0.15,
+          "KYV7": 0.16,
           "KYV8": 0.03,
           "KYV9": 0.03
         }
@@ -167,18 +171,19 @@
       "text": "Kimberly Overman is a mom, grandmother, small business owner, and former Hillsborough County Commissioner running for Congress in Florida’s 12th District. A champion for working families and a proven leader during times of crisis, Kimberly brings both lived experience and a track record of results. From affordable housing to public health, she has always fought to make government work for the people—not special interests. Now, she’s ready to take that fight to Washington.",
       "verdict": {
         "commitment": 0.46,
+        "own_commitment": 0.25,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
-          "A2": 0.7,
+          "A2": 0.69,
           "A3": 0.03,
-          "A4": 0.24,
+          "A4": 0.22,
           "A5": 0.03,
           "A6": 0.03,
           "A7": 0.03,
-          "B1": 0.17,
-          "B2": 0.28,
+          "B1": 0.16,
+          "B2": 0.26,
           "B3": 0.03,
           "B4": 0.03,
           "B5": 0.02,
@@ -190,9 +195,9 @@
           "KYV2": 0.03,
           "KYV3": 0.04,
           "KYV4": 0.03,
-          "KYV5": 0.03,
+          "KYV5": 0.02,
           "KYV6": 0.07,
-          "KYV7": 0.07,
+          "KYV7": 0.08,
           "KYV8": 0.03,
           "KYV9": 0.03
         }
@@ -204,36 +209,37 @@
       "heading": "THE ISSUES",
       "text": "From the cost of living to the classroom, Kimberly Overman is running to make government deliver for working people—fighting for fair wages, quality healthcare, strong schools, and safe communities.",
       "verdict": {
-        "commitment": 0.9,
-        "states_policy": true,
+        "commitment": 0.89,
+        "own_commitment": 0.8,
+        "states_policy": false,
         "issues": [
           "B1"
         ],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.07,
           "A3": 0.03,
-          "A4": 0.45,
+          "A4": 0.41,
           "A5": 0.02,
-          "A6": 0.53,
+          "A6": 0.52,
           "A7": 0.02,
-          "B1": 0.88,
+          "B1": 0.89,
           "B2": 0.79,
           "B3": 0.02,
           "B4": 0.04,
-          "B5": 0.02,
+          "B5": 0.03,
           "B6": 0.02,
           "B7": 0.13,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.08,
+          "KYV10": 0.07,
           "KYV2": 0.03,
           "KYV3": 0.03,
           "KYV4": 0.03,
           "KYV5": 0.02,
           "KYV6": 0.03,
           "KYV7": 0.04,
-          "KYV8": 0.02,
+          "KYV8": 0.03,
           "KYV9": 0.04
         }
       }
@@ -244,28 +250,29 @@
       "heading": "THE ISSUES",
       "text": "Kimberly knows what it’s like to juggle bills and worry about rent. In Congress, she’ll fight for real solutions to rising costs, including affordable housing, infrastructure investment, and fair wages.",
       "verdict": {
-        "commitment": 0.96,
+        "commitment": 0.97,
+        "own_commitment": 0.93,
         "states_policy": true,
         "issues": [
           "A2",
           "B1"
         ],
         "scores": {
-          "A1": 0.03,
+          "A1": 0.02,
           "A2": 0.97,
           "A3": 0.03,
-          "A4": 0.46,
+          "A4": 0.44,
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.02,
-          "B1": 0.91,
+          "B1": 0.9,
           "B2": 0.03,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.02,
+          "B8": 0.03,
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.04,
@@ -286,6 +293,7 @@
       "text": "Healthcare isn’t a luxury—it’s a right. Kimberly will work to expand access to care, lower prescription costs, and defend reproductive rights and mental health services.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.97,
         "states_policy": true,
         "issues": [
           "B2",
@@ -299,11 +307,11 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.04,
+          "B1": 0.03,
           "B2": 0.99,
           "B3": 0.02,
           "B4": 0.03,
-          "B5": 0.9,
+          "B5": 0.89,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
@@ -327,6 +335,7 @@
       "text": "Florida’s 12th is home to thousands of veterans. Kimberly will ensure they receive the benefits, healthcare, and respect they’ve earned.",
       "verdict": {
         "commitment": 0.92,
+        "own_commitment": 0.92,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -338,9 +347,9 @@
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.03,
-          "B2": 0.62,
+          "B2": 0.61,
           "B3": 0.02,
-          "B4": 0.11,
+          "B4": 0.1,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -365,6 +374,7 @@
       "text": "Every child deserves a strong start. Kimberly will fight for fully funded public schools, better teacher pay, and pathways to college, trade careers, and lifelong learning.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.97,
         "states_policy": true,
         "issues": [
           "A6",
@@ -378,7 +388,7 @@
           "A5": 0.02,
           "A6": 0.99,
           "A7": 0.02,
-          "B1": 0.37,
+          "B1": 0.39,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -387,7 +397,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.93,
+          "KYV10": 0.92,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -406,7 +416,8 @@
       "text": "Kimberly is committed to protecting voting rights, restoring trust in government, and making sure everyday people—not lobbyists—have a seat at the table.",
       "verdict": {
         "commitment": 0.9,
-        "states_policy": true,
+        "own_commitment": 0.84,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
@@ -421,7 +432,7 @@
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.17,
+          "B6": 0.18,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.54,
@@ -444,6 +455,7 @@
       "text": "Safe communities start with smart investments. Kimberly supports balanced public safety policies that combine law enforcement with prevention, youth programs, and mental health care.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.9,
         "states_policy": true,
         "issues": [
           "B7"
@@ -457,7 +469,7 @@
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.03,
-          "B2": 0.13,
+          "B2": 0.12,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
@@ -484,12 +496,13 @@
       "text": "I’m Kimberly Overman, and I’m running for Congress to put people first, always —with real solutions and results for working Floridians.",
       "verdict": {
         "commitment": 0.15,
+        "own_commitment": 0.28,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
@@ -521,7 +534,8 @@
       "heading": "Fuel Our Movement.",
       "text": "This campaign is powered by people, not special interests.",
       "verdict": {
-        "commitment": 0.08,
+        "commitment": 0.07,
+        "own_commitment": 0.13,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -531,8 +545,8 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.04,
-          "B1": 0.03,
+          "A7": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -560,6 +574,7 @@
       "text": "If you want a representative who delivers, please chip in whatever you can today!",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.11,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -570,7 +585,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -597,7 +612,8 @@
       "heading": "Fuel Our Movement.",
       "text": "Fuel a campaign powered by people, not special interests.",
       "verdict": {
-        "commitment": 0.2,
+        "commitment": 0.18,
+        "own_commitment": 0.28,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -607,15 +623,15 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.04,
-          "B1": 0.03,
+          "A7": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.03,
           "B7": 0.02,
-          "B8": 0.02,
+          "B8": 0.03,
           "KYV1": 0.1,
           "KYV10": 0.02,
           "KYV2": 0.03,
@@ -636,16 +652,17 @@
       "text": "Your support helps us connect with voters, grow our movement, and deliver real change. Chip in today to help Kimberly fight for Florida’s families and future.",
       "verdict": {
         "commitment": 0.05,
+        "own_commitment": 0.25,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.03,
+          "A7": 0.04,
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
@@ -673,7 +690,8 @@
       "heading": "Fuel Our Movement.",
       "text": "Whether you can knock doors, make calls, or share our message online—there’s a place for you on Team Overman. Sign up and help us bring integrity and results back to Congress.",
       "verdict": {
-        "commitment": 0.11,
+        "commitment": 0.1,
+        "own_commitment": 0.25,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -683,16 +701,16 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
+          "A7": 0.03,
           "B1": 0.03,
-          "B2": 0.03,
+          "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.06,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.07,
+          "KYV1": 0.06,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -712,6 +730,7 @@
       "text": "In the News – The word is getting out — Kimberly Overman’s people-first campaign is making headlines across Florida’s 12th District. Here’s the latest coverage of a movement built by working families, for working families.",
       "verdict": {
         "commitment": 0.05,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -720,26 +739,26 @@
           "A3": 0.02,
           "A4": 0.03,
           "A5": 0.02,
-          "A6": 0.02,
+          "A6": 0.03,
           "A7": 0.02,
           "B1": 0.06,
           "B2": 0.02,
-          "B3": 0.02,
+          "B3": 0.03,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.03,
+          "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.03,
-          "KYV9": 0.03
+          "KYV8": 0.02,
+          "KYV9": 0.02
         }
       }
     },
@@ -749,35 +768,36 @@
       "heading": "What Kimberly Stands For",
       "text": "Kimberly Overman is running for Congress to deliver what Florida’s 12th District deserves but isn’t getting: leadership that listens, acts, and puts people first.",
       "verdict": {
-        "commitment": 0.16,
+        "commitment": 0.18,
+        "own_commitment": 0.39,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.03,
+          "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.03,
           "A5": 0.03,
           "A6": 0.02,
-          "A7": 0.02,
+          "A7": 0.03,
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.03,
-          "B6": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.03,
-          "KYV2": 0.03,
-          "KYV3": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.03,
+          "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -788,14 +808,15 @@
       "text": "Her approach is grounded in decades of public service, small business experience, and the realities of working-class life—from raising a family to navigating housing insecurity. She knows what’s at stake because she’s lived it.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.07,
-          "A3": 0.03,
+          "A3": 0.02,
           "A4": 0.05,
-          "A5": 0.03,
+          "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.05,
@@ -825,8 +846,9 @@
       "heading": "What Kimberly Stands For",
       "text": "Kimberly’s priorities reflect what voters across the district are demanding: affordable housing, accessible healthcare, economic stability, reproductive freedom, and a government that works for everyone—not just the wealthy or well-connected.",
       "verdict": {
-        "commitment": 0.89,
-        "states_policy": true,
+        "commitment": 0.88,
+        "own_commitment": 0.64,
+        "states_policy": false,
         "issues": [
           "A2",
           "B2",
@@ -835,8 +857,8 @@
         "scores": {
           "A1": 0.02,
           "A2": 0.95,
-          "A3": 0.02,
-          "A4": 0.35,
+          "A3": 0.03,
+          "A4": 0.36,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -850,11 +872,11 @@
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.03,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.04,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.09,
+          "KYV6": 0.08,
           "KYV7": 0.12,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -868,6 +890,7 @@
       "text": "As someone who grew up in a working-class household and has helped others manage through financial hardship, Kimberly understands the urgent need for economic stability. In Congress, she’ll fight for increased investment in affordable housing, expanded transportation options, and stronger support for working families and small businesses. She believes housing, transit, and child care are essential infrastructure—and should be treated as such.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.96,
         "states_policy": true,
         "issues": [
           "A2"
@@ -875,8 +898,8 @@
         "scores": {
           "A1": 0.02,
           "A2": 0.98,
-          "A3": 0.03,
-          "A4": 0.41,
+          "A3": 0.02,
+          "A4": 0.38,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -895,7 +918,7 @@
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.1,
-          "KYV7": 0.1,
+          "KYV7": 0.09,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -908,6 +931,7 @@
       "text": "Kimberly has seen firsthand how medical bills can destabilize families. She will work to lower prescription drug costs, expand coverage—especially mental health care—and protect access to reproductive services. No one should have to choose between seeing a doctor and paying their rent.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.98,
         "states_policy": true,
         "issues": [
           "B2",
@@ -917,7 +941,7 @@
           "A1": 0.02,
           "A2": 0.06,
           "A3": 0.02,
-          "A4": 0.14,
+          "A4": 0.12,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -925,7 +949,7 @@
           "B2": 0.99,
           "B3": 0.02,
           "B4": 0.03,
-          "B5": 0.87,
+          "B5": 0.86,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
@@ -935,8 +959,8 @@
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.03,
-          "KYV7": 0.03,
+          "KYV6": 0.04,
+          "KYV7": 0.04,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -949,6 +973,7 @@
       "text": "Kimberly supports public safety policies that work: strong law enforcement paired with investments in mental health services, youth engagement, and community-led crime prevention. She knows safety comes from both accountability and opportunity.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.9,
         "states_policy": true,
         "issues": [
           "B7"
@@ -965,7 +990,7 @@
           "B2": 0.08,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.01,
+          "B5": 0.02,
           "B6": 0.02,
           "B7": 0.96,
           "B8": 0.02,
@@ -989,6 +1014,7 @@
       "text": "Kimberly believes public education is the foundation of opportunity. She will advocate for stronger investments in schools, competitive teacher pay, and expanded access to early childhood education, vocational training, and higher education that prepares students for good-paying jobs.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.97,
         "states_policy": true,
         "issues": [
           "A6",
@@ -1002,7 +1028,7 @@
           "A5": 0.02,
           "A6": 0.98,
           "A7": 0.02,
-          "B1": 0.41,
+          "B1": 0.4,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -1014,7 +1040,7 @@
           "KYV10": 0.98,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.02,
+          "KYV4": 0.01,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -1030,6 +1056,7 @@
       "text": "With over 45,000 veterans and active-duty personnel in the district, Kimberly knows our service members deserve more than just symbolic support. She’ll fight to improve access to VA care, mental health services, job training, and transitional support for returning veterans.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.96,
         "states_policy": true,
         "issues": [
           "B2"
@@ -1042,7 +1069,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.3,
+          "B1": 0.25,
           "B2": 0.87,
           "B3": 0.02,
           "B4": 0.03,
@@ -1051,13 +1078,13 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.78,
+          "KYV10": 0.77,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.06,
+          "KYV7": 0.07,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -1070,6 +1097,7 @@
       "text": "Kimberly trusts people to make their own healthcare decisions. She will fight to restore and protect the right to abortion and access to reproductive care—because these decisions belong to individuals, not politicians",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.97,
         "states_policy": true,
         "issues": [
           "B5"
@@ -1083,7 +1111,7 @@
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
-          "B2": 0.39,
+          "B2": 0.41,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.98,
@@ -1110,6 +1138,7 @@
       "text": "For Florida families, climate change isn’t abstract – it shows up in flooding, rising insurance costs, water quality, and extreme heat. Kimberly understands that climate resilience is affordability: when communities skip investment in drainage, flood mitigation, and clean water infrastructure, families pay through higher premiums and repair bills. In Congress, she’ll fight for resilient infrastructure, protection of the Florida Wildlife Corridor, and environmental justice for the communities hit hardest – because safeguarding our air, water, and coastline lowers long-term costs for working families.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.97,
         "states_policy": true,
         "issues": [
           "B8",
@@ -1118,12 +1147,12 @@
         "scores": {
           "A1": 0.84,
           "A2": 0.09,
-          "A3": 0.02,
-          "A4": 0.6,
-          "A5": 0.58,
+          "A3": 0.03,
+          "A4": 0.58,
+          "A5": 0.62,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.11,
+          "B1": 0.12,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -1134,9 +1163,9 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.04,
-          "KYV3": 0.53,
+          "KYV3": 0.5,
           "KYV4": 0.97,
-          "KYV5": 0.65,
+          "KYV5": 0.64,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1151,6 +1180,7 @@
       "text": "From kitchen tables to county government—Kimberly’s journey is rooted in service, resilience, and results.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1161,16 +1191,16 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.02,
+          "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.02,
+          "B8": 0.01,
           "KYV1": 0.02,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -1188,19 +1218,20 @@
       "heading": "Meet Kimberly",
       "text": "Kimberly Overman is a mom, a grandmother, a small business owner, and a public servant with deep roots in Florida’s 12th District. She’s running for Congress because she believes leadership should be about listening, showing up, and delivering real solutions—not playing politics or chasing headlines.",
       "verdict": {
-        "commitment": 0.1,
+        "commitment": 0.11,
+        "own_commitment": 0.24,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.03,
-          "A5": 0.02,
+          "A5": 0.03,
           "A6": 0.03,
           "A7": 0.02,
           "B1": 0.03,
-          "B2": 0.02,
+          "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
@@ -1227,6 +1258,7 @@
       "text": "Raised in a working-class family that faced housing insecurity, Kimberly learned early what it means to struggle—and to persevere. Her mother juggled multiple jobs to keep the family afloat, and those early experiences shaped Kimberly’s lifelong commitment to fairness, opportunity, and economic justice.",
       "verdict": {
         "commitment": 0.1,
+        "own_commitment": 0.1,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1237,8 +1269,8 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.33,
-          "B2": 0.02,
+          "B1": 0.29,
+          "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
@@ -1265,17 +1297,18 @@
       "text": "Over the years, Kimberly has worn many hats: she put herself through college, earned her Certified Financial Planner designation, and built a successful advisory firm focused on ethical financial guidance. She’s volunteered in her community for decades, applying her background in economics and planning to real-world challenges—especially around housing, transportation, and sustainability.",
       "verdict": {
         "commitment": 0.05,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.07,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.04,
+          "B1": 0.05,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -1284,7 +1317,7 @@
           "B7": 0.02,
           "B8": 0.06,
           "KYV1": 0.02,
-          "KYV10": 0.05,
+          "KYV10": 0.04,
           "KYV2": 0.03,
           "KYV3": 0.06,
           "KYV4": 0.02,
@@ -1302,37 +1335,38 @@
       "heading": "Meet Kimberly",
       "text": "As a Hillsborough County Commissioner from 2018 to 2022, Kimberly delivered during some of the region’s most challenging moments. She led during the COVID-19 pandemic, championing emergency support for small businesses, childcare providers, and vulnerable residents. She pushed for expanded public health programs, affordable housing initiatives, and more equitable infrastructure investment.",
       "verdict": {
-        "commitment": 0.49,
+        "commitment": 0.52,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [
           "A2"
         ],
         "scores": {
           "A1": 0.02,
-          "A2": 0.94,
+          "A2": 0.95,
           "A3": 0.03,
-          "A4": 0.23,
-          "A5": 0.02,
+          "A4": 0.25,
+          "A5": 0.03,
           "A6": 0.03,
-          "A7": 0.02,
-          "B1": 0.71,
-          "B2": 0.73,
+          "A7": 0.03,
+          "B1": 0.73,
+          "B2": 0.75,
           "B3": 0.02,
           "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.03,
-          "B8": 0.03,
-          "KYV1": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
           "KYV10": 0.03,
           "KYV2": 0.03,
-          "KYV3": 0.07,
+          "KYV3": 0.08,
           "KYV4": 0.03,
-          "KYV5": 0.03,
-          "KYV6": 0.08,
-          "KYV7": 0.11,
+          "KYV5": 0.02,
+          "KYV6": 0.07,
+          "KYV7": 0.1,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -1343,6 +1377,7 @@
       "text": "But what sets Kimberly apart isn’t just her experience—it’s her empathy. As a mother and grandmother, she knows what’s at stake for the next generation. She understands what families are facing because she’s lived it: the high cost of care, the fear of unexpected bills, the frustration with a system that too often leaves people behind.",
       "verdict": {
         "commitment": 0.05,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1353,8 +1388,8 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.09,
-          "B2": 0.59,
+          "B1": 0.08,
+          "B2": 0.57,
           "B3": 0.02,
           "B4": 0.04,
           "B5": 0.02,
@@ -1365,8 +1400,8 @@
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
-          "KYV5": 0.01,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1381,11 +1416,12 @@
       "text": "In Washington, Kimberly will bring a grounded, no-nonsense approach to leadership—focused on solutions, service, and building a future where everyone has a fair shot.",
       "verdict": {
         "commitment": 0.2,
+        "own_commitment": 0.48,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.03,
+          "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
@@ -1419,15 +1455,16 @@
       "text": "Hillsborough County Board of County Commissioners, Chair",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.03,
-          "A6": 0.02,
+          "A6": 0.03,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -1435,18 +1472,18 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.02,
+          "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
-          "KYV5": 0.03,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV8": 0.03,
+          "KYV9": 0.03
         }
       }
     },
@@ -1457,14 +1494,15 @@
       "text": "Hillsborough County Affordable Housing Advisory Board, Chair",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.07,
+          "A2": 0.06,
           "A3": 0.03,
-          "A4": 0.03,
-          "A5": 0.02,
+          "A4": 0.04,
+          "A5": 0.03,
           "A6": 0.03,
           "A7": 0.02,
           "B1": 0.03,
@@ -1478,10 +1516,10 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.06,
+          "KYV3": 0.05,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.03,
+          "KYV6": 0.04,
           "KYV7": 0.04,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -1495,6 +1533,7 @@
       "text": "Hillsborough County Commission on Human Trafficking, Chair",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1520,7 +1559,7 @@
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -1533,6 +1572,7 @@
       "text": "Department of Defense - Tampa Bay Chamber/ MacDill Air Force Base Support",
       "verdict": {
         "commitment": 0.08,
+        "own_commitment": 0.18,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1549,16 +1589,16 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.03,
+          "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -1571,6 +1611,7 @@
       "text": "HART - Hillsborough Area Regional Transit Authority",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1578,7 +1619,7 @@
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.03,
+          "A5": 0.02,
           "A6": 0.03,
           "A7": 0.02,
           "B1": 0.02,
@@ -1591,7 +1632,7 @@
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -1609,30 +1650,31 @@
       "text": "Hillsborough County Public Safety Coordinating Council",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.03,
           "A6": 0.03,
           "A7": 0.02,
-          "B1": 0.02,
+          "B1": 0.03,
           "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.05,
+          "B7": 0.06,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.03,
           "KYV3": 0.03,
           "KYV4": 0.03,
-          "KYV5": 0.02,
+          "KYV5": 0.03,
           "KYV6": 0.02,
           "KYV7": 0.03,
           "KYV8": 0.03,
@@ -1646,7 +1688,8 @@
       "heading": "Boards Service:",
       "text": "Hillsborough County Environment Protection Commission",
       "verdict": {
-        "commitment": 0.05,
+        "commitment": 0.04,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1655,7 +1698,7 @@
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.04,
-          "A6": 0.03,
+          "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -1664,7 +1707,7 @@
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.03,
+          "B8": 0.04,
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.03,
@@ -1685,11 +1728,12 @@
       "text": "Hillsborough County Transportation Planning Organization",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.02,
+          "A2": 0.03,
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.03,
@@ -1723,6 +1767,7 @@
       "text": "Hillsborough County Emergency Policy Group, Vice Chair",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1731,7 +1776,7 @@
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.03,
+          "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -1744,7 +1789,7 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.03,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -1761,6 +1806,7 @@
       "text": "Southwest Florida Water Management District Liaison",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1768,7 +1814,7 @@
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.04,
+          "A5": 0.03,
           "A6": 0.03,
           "A7": 0.02,
           "B1": 0.02,
@@ -1786,7 +1832,7 @@
           "KYV4": 0.03,
           "KYV5": 0.04,
           "KYV6": 0.02,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.03,
           "KYV9": 0.02
         }
@@ -1799,6 +1845,7 @@
       "text": "Past President of Heights Urban Core Chamber-Business Guild of Seminole Heights",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1837,6 +1884,7 @@
       "text": "Surly Feminists for the Revolution, Member",
       "verdict": {
         "commitment": 0.05,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1845,7 +1893,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.03,
+          "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -1853,9 +1901,9 @@
           "B4": 0.02,
           "B5": 0.03,
           "B6": 0.02,
-          "B7": 0.03,
+          "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.02,
+          "KYV1": 0.03,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -1875,18 +1923,19 @@
       "text": "Indivisible Action Together Tampa Bay, Member",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.03,
-          "A3": 0.02,
-          "A4": 0.03,
+          "A3": 0.03,
+          "A4": 0.02,
           "A5": 0.03,
           "A6": 0.03,
           "A7": 0.03,
           "B1": 0.03,
-          "B2": 0.02,
+          "B2": 0.03,
           "B3": 0.03,
           "B4": 0.02,
           "B5": 0.03,
@@ -1895,14 +1944,14 @@
           "B8": 0.03,
           "KYV1": 0.03,
           "KYV10": 0.03,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.03,
-          "KYV5": 0.03,
+          "KYV5": 0.02,
           "KYV6": 0.03,
           "KYV7": 0.03,
-          "KYV8": 0.03,
-          "KYV9": 0.03
+          "KYV8": 0.02,
+          "KYV9": 0.02
         }
       }
     },
@@ -1913,6 +1962,7 @@
       "text": "Hillsborough County Democratic Party, Precinct Captain",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1920,14 +1970,14 @@
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.03,
+          "A5": 0.02,
           "A6": 0.03,
           "A7": 0.03,
-          "B1": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.03,
+          "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.03,
           "B6": 0.03,
           "B7": 0.03,
           "B8": 0.02,
@@ -1936,10 +1986,10 @@
           "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
-          "KYV5": 0.02,
+          "KYV5": 0.03,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.03,
           "KYV9": 0.02
         }
       }
@@ -1951,6 +2001,7 @@
       "text": "Hillsborough County LGBTA Democratic Caucus, Member",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1989,15 +2040,16 @@
       "text": "East Hillsborough County Democratic Club, Member",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.03,
-          "A6": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
           "A7": 0.03,
           "B1": 0.02,
           "B2": 0.02,
@@ -2015,7 +2067,7 @@
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.03,
           "KYV9": 0.02
         }
       }
@@ -2027,12 +2079,13 @@
       "text": "Old Seminole Heights Neighborhood Association, Member",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.02,
-          "A3": 0.02,
+          "A2": 0.03,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
@@ -2054,7 +2107,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.03,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -2065,15 +2118,16 @@
       "text": "South Seminole Heights Civic Association, Member",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.02,
+          "A6": 0.03,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -2081,7 +2135,7 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.03,
+          "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
@@ -2103,15 +2157,16 @@
       "text": "Hillsborough County Metropolitan Planning Organization, Citizen Advisory Committee Member",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.02,
+          "A2": 0.03,
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.03,
-          "A6": 0.03,
+          "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -2119,16 +2174,16 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.03,
+          "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.02,
-          "KYV3": 0.04,
+          "KYV3": 0.05,
           "KYV4": 0.03,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -2141,6 +2196,7 @@
       "text": "City of Tampa Budget & Finance Citizen Advisory Committee Member, Past Chair",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2157,7 +2213,7 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.03,
+          "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
@@ -2179,6 +2235,7 @@
       "text": "Seminole Heights Foundation, Board Member",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2186,7 +2243,7 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.03,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
@@ -2217,13 +2274,14 @@
       "text": "Hillsborough County Housing Finance Authority – Past Chair",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.04,
-          "A3": 0.02,
-          "A4": 0.02,
+          "A3": 0.03,
+          "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -2236,14 +2294,14 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.03,
           "KYV7": 0.03,
-          "KYV8": 0.03,
+          "KYV8": 0.02,
           "KYV9": 0.02
         }
       }
@@ -2255,6 +2313,7 @@
       "text": "Greater Tampa Chamber of Commerce Women of Influence Committee – Former Member",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2263,7 +2322,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.02,
+          "A6": 0.03,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -2277,7 +2336,7 @@
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.03,
+          "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -2293,6 +2352,7 @@
       "text": "Hillsborough Education Foundation Finance Committee – Former Member",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2331,23 +2391,24 @@
       "text": "Voices for Children, Former Board Member",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.03,
+          "A3": 0.02,
           "A4": 0.02,
           "A5": 0.03,
-          "A6": 0.04,
+          "A6": 0.03,
           "A7": 0.02,
           "B1": 0.02,
-          "B2": 0.02,
+          "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.03,
+          "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
@@ -2369,6 +2430,7 @@
       "text": "Community in Schools, Former Board Member",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2378,44 +2440,6 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.04,
-          "A7": 0.02,
-          "B1": 0.02,
-          "B2": 0.02,
-          "B3": 0.02,
-          "B4": 0.02,
-          "B5": 0.02,
-          "B6": 0.02,
-          "B7": 0.02,
-          "B8": 0.02,
-          "KYV1": 0.02,
-          "KYV10": 0.03,
-          "KYV2": 0.02,
-          "KYV3": 0.02,
-          "KYV4": 0.02,
-          "KYV5": 0.02,
-          "KYV6": 0.02,
-          "KYV7": 0.02,
-          "KYV8": 0.02,
-          "KYV9": 0.03
-        }
-      }
-    },
-    {
-      "id": "9e281748",
-      "url": "https://kimberlyoverman.com/meet-kimberly",
-      "heading": "Community Leadership:",
-      "text": "Business and Professional Round Table, Founding Member",
-      "verdict": {
-        "commitment": 0.02,
-        "states_policy": false,
-        "issues": [],
-        "scores": {
-          "A1": 0.02,
-          "A2": 0.02,
-          "A3": 0.02,
-          "A4": 0.02,
-          "A5": 0.02,
-          "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -2439,12 +2463,52 @@
       }
     },
     {
+      "id": "9e281748",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Business and Professional Round Table, Founding Member",
+      "verdict": {
+        "commitment": 0.02,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
       "id": "27df6c39",
       "url": "https://kimberlyoverman.com/meet-kimberly",
       "heading": "Community Leadership:",
       "text": "Toastmasters – High Risers Chapter, Former Membe",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2483,6 +2547,7 @@
       "text": "Business and Professional Women, Former Member",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2491,7 +2556,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.03,
+          "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -2521,6 +2586,7 @@
       "text": "Soroptimist International, Former Member",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2559,6 +2625,7 @@
       "text": "Tampa General Hospital Foundation Planned Giving Council Member",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2571,13 +2638,13 @@
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.03,
-          "B3": 0.02,
+          "B3": 0.01,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.01,
+          "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.01,
+          "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -2597,6 +2664,7 @@
       "text": "Alzheimer’s Association Planned Giving Council Member",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2608,7 +2676,7 @@
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
-          "B2": 0.02,
+          "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
@@ -2635,6 +2703,7 @@
       "text": "H. Lee Moffitt Professional Advisory Council Member",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2672,7 +2741,8 @@
       "heading": "Community Leadership:",
       "text": "Tampa Bay Estate Planning Council – Past President",
       "verdict": {
-        "commitment": 0.03,
+        "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2711,15 +2781,16 @@
       "text": "Financial Planning Association of Florida Member – Past President",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.03,
+          "A1": 0.02,
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.03,
+          "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -2749,6 +2820,7 @@
       "text": "Financial Planning Association of Tampa Bay Member – Past Chair",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2787,6 +2859,7 @@
       "text": "Certified Financial Planner Practitioner, CFP Board of Standards",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2825,6 +2898,7 @@
       "text": "Bachelor of Science, University of Maryland, College Park, Agricultural and Resource Economics",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.02,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2846,7 +2920,7 @@
           "KYV1": 0.02,
           "KYV10": 0.04,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -2876,17 +2950,7 @@
                 "text": "Kimberly knows what it’s like to juggle bills and worry about rent. In Congress, she’ll fight for real solutions to rising costs, including affordable housing, infrastructure investment, and fair wages.",
                 "retrieved_at": "2026-09-29T11:41:52.934Z"
               },
-              "score": 0.91
-            },
-            {
-              "passage": {
-                "id": "e9dc6867",
-                "url": "https://kimberlyoverman.com/",
-                "heading": "THE ISSUES",
-                "text": "From the cost of living to the classroom, Kimberly Overman is running to make government deliver for working people—fighting for fair wages, quality healthcare, strong schools, and safe communities.",
-                "retrieved_at": "2026-09-29T11:41:52.934Z"
-              },
-              "score": 0.88
+              "score": 0.9
             }
           ]
         }
@@ -2946,7 +3010,7 @@
                 "text": "Every child deserves a strong start. Kimberly will fight for fully funded public schools, better teacher pay, and pathways to college, trade careers, and lifelong learning.",
                 "retrieved_at": "2026-09-29T11:41:52.934Z"
               },
-              "score": 0.93
+              "score": 0.92
             }
           ]
         }
@@ -2981,26 +3045,6 @@
                 "retrieved_at": "2026-09-29T11:41:52.934Z"
               },
               "score": 0.99
-            },
-            {
-              "passage": {
-                "id": "0819d6e2",
-                "url": "https://kimberlyoverman.com/issues",
-                "heading": "What Kimberly Stands For",
-                "text": "Kimberly’s priorities reflect what voters across the district are demanding: affordable housing, accessible healthcare, economic stability, reproductive freedom, and a government that works for everyone—not just the wealthy or well-connected.",
-                "retrieved_at": "2026-09-29T11:41:52.934Z"
-              },
-              "score": 0.9
-            },
-            {
-              "passage": {
-                "id": "541b0654",
-                "url": "https://kimberlyoverman.com/",
-                "heading": "Time for Government That Works.",
-                "text": "Families are struggling while politicians argue. Kimberly is focused on what matters: affordable housing, accessible healthcare, and a fair shot for all.",
-                "retrieved_at": "2026-09-29T11:41:52.934Z"
-              },
-              "score": 0.87
             },
             {
               "passage": {
@@ -3045,26 +3089,6 @@
                 "retrieved_at": "2026-09-29T11:41:52.934Z"
               },
               "score": 0.97
-            },
-            {
-              "passage": {
-                "id": "0819d6e2",
-                "url": "https://kimberlyoverman.com/issues",
-                "heading": "What Kimberly Stands For",
-                "text": "Kimberly’s priorities reflect what voters across the district are demanding: affordable housing, accessible healthcare, economic stability, reproductive freedom, and a government that works for everyone—not just the wealthy or well-connected.",
-                "retrieved_at": "2026-09-29T11:41:52.934Z"
-              },
-              "score": 0.95
-            },
-            {
-              "passage": {
-                "id": "541b0654",
-                "url": "https://kimberlyoverman.com/",
-                "heading": "Time for Government That Works.",
-                "text": "Families are struggling while politicians argue. Kimberly is focused on what matters: affordable housing, accessible healthcare, and a fair shot for all.",
-                "retrieved_at": "2026-09-29T11:41:52.934Z"
-              },
-              "score": 0.91
             }
           ]
         }
@@ -3172,7 +3196,7 @@
                 "text": "Healthcare isn’t a luxury—it’s a right. Kimberly will work to expand access to care, lower prescription costs, and defend reproductive rights and mental health services.",
                 "retrieved_at": "2026-09-29T11:41:52.934Z"
               },
-              "score": 0.9
+              "score": 0.89
             },
             {
               "passage": {
@@ -3180,16 +3204,6 @@
                 "url": "https://kimberlyoverman.com/issues",
                 "heading": "Healthcare Access",
                 "text": "Kimberly has seen firsthand how medical bills can destabilize families. She will work to lower prescription drug costs, expand coverage—especially mental health care—and protect access to reproductive services. No one should have to choose between seeing a doctor and paying their rent.",
-                "retrieved_at": "2026-09-29T11:41:52.934Z"
-              },
-              "score": 0.87
-            },
-            {
-              "passage": {
-                "id": "0819d6e2",
-                "url": "https://kimberlyoverman.com/issues",
-                "heading": "What Kimberly Stands For",
-                "text": "Kimberly’s priorities reflect what voters across the district are demanding: affordable housing, accessible healthcare, economic stability, reproductive freedom, and a government that works for everyone—not just the wealthy or well-connected.",
                 "retrieved_at": "2026-09-29T11:41:52.934Z"
               },
               "score": 0.86
@@ -3200,7 +3214,7 @@
     }
   ],
   "usage": {
-    "input_tokens": 255484,
-    "output_tokens": 33434
+    "input_tokens": 270668,
+    "output_tokens": 34967
   }
 }

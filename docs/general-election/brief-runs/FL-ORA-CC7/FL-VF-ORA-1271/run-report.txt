@@ -1,10 +1,6 @@
 
 What this site states, by policy area
 
-Housing
-  A2  Housing affordability  (2 citation(s))
-      0.97  "Vicki believes that everyone should have the opportunity to own a home. She is ready to fight for affordability in Orange County and help homeowners keep their homes."
-            https://votevickivargo.com/issues  — section: Affordable Housing
-      0.96  "A Champion for Affordable Housing So Everyone Has the Opportunity to Own a Home"
-            https://votevickivargo.com/  — section: A Leader With The Experience To Get Things Done in Orange County
-
+  No passage cleared both the commitment gate and an issue question.
+  That is a result, not an error: at this threshold, on these pages,
+  nothing was found. Lower --threshold or ingest more pages to widen it.

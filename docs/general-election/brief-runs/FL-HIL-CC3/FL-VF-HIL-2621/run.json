@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://www.votegwenmyers.com",
-  "created_at": "2026-09-29T11:44:58.571Z",
+  "created_at": "2026-09-30T01:58:56.082Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -38,8 +39,8 @@
   "counts": {
     "passages": 5,
     "asked": 5,
-    "states_policy": 1,
-    "with_issue": 1,
+    "states_policy": 0,
+    "with_issue": 0,
     "failed": 0
   },
   "passages": [
@@ -50,17 +51,18 @@
       "text": "Hillsborough County (Tampa's District 3) 2026",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
           "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.03,
+          "A4": 0.02,
           "A5": 0.03,
           "A6": 0.03,
           "A7": 0.04,
-          "B1": 0.02,
+          "B1": 0.03,
           "B2": 0.03,
           "B3": 0.03,
           "B4": 0.03,
@@ -68,7 +70,7 @@
           "B6": 0.03,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.02,
+          "KYV1": 0.03,
           "KYV10": 0.03,
           "KYV2": 0.03,
           "KYV3": 0.03,
@@ -88,12 +90,13 @@
       "text": "Commissioner Gwen Myers is a native and lifelong resident of Hillsborough County. She was elected to the Hillsborough County Board of County Commissioners November 2020.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.03,
+          "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
@@ -109,7 +112,7 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -126,22 +129,23 @@
       "text": "She has long been an advocate for improving affordable housing, health care, and transportation in the county. She is championing the construction of an African American Art and Cultural Center to be located in West Tampa at 2103 North Rome Avenue.",
       "verdict": {
         "commitment": 0.9,
-        "states_policy": true,
+        "own_commitment": 0.82,
+        "states_policy": false,
         "issues": [
           "A2"
         ],
         "scores": {
-          "A1": 0.03,
-          "A2": 0.92,
+          "A1": 0.02,
+          "A2": 0.93,
           "A3": 0.02,
-          "A4": 0.16,
+          "A4": 0.17,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.05,
-          "B2": 0.8,
+          "B2": 0.78,
           "B3": 0.02,
-          "B4": 0.02,
+          "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -149,13 +153,13 @@
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.02,
-          "KYV3": 0.27,
+          "KYV3": 0.26,
           "KYV4": 0.02,
           "KYV5": 0.03,
           "KYV6": 0.05,
-          "KYV7": 0.06,
-          "KYV8": 0.03,
-          "KYV9": 0.02
+          "KYV7": 0.07,
+          "KYV8": 0.02,
+          "KYV9": 0.03
         }
       }
     },
@@ -166,34 +170,35 @@
       "text": "Commissioner Myers uses the theme, \"It's About The People.\" She worked in Hillsborough County Government for 25 Years, from 1988 through 2013, in the departments of Housing and Community Development and Health and Social Services.",
       "verdict": {
         "commitment": 0.05,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.03,
+          "A4": 0.02,
           "A5": 0.03,
           "A6": 0.03,
-          "A7": 0.02,
+          "A7": 0.03,
           "B1": 0.03,
           "B2": 0.03,
-          "B3": 0.03,
-          "B4": 0.02,
-          "B5": 0.03,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.03,
-          "KYV7": 0.03,
-          "KYV8": 0.03,
-          "KYV9": 0.02
+          "KYV7": 0.04,
+          "KYV8": 0.02,
+          "KYV9": 0.03
         }
       }
     },
@@ -204,6 +209,7 @@
       "text": "Commissioner Myers has a bachelor's degree in Business Administration/Accounting from Florida Agriculture and Mechanical University (FAMU). She has one adult stepchild.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -213,7 +219,7 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.03,
+          "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
@@ -225,7 +231,7 @@
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -236,34 +242,9 @@
       }
     }
   ],
-  "areas": [
-    {
-      "area": {
-        "id": "housing",
-        "label": "Housing"
-      },
-      "subIssues": [
-        {
-          "id": "A2",
-          "label": "Housing affordability",
-          "citations": [
-            {
-              "passage": {
-                "id": "f15bbe54",
-                "url": "https://www.votegwenmyers.com/meet-gwen",
-                "heading": "\"It's About the People\"",
-                "text": "She has long been an advocate for improving affordable housing, health care, and transportation in the county. She is championing the construction of an African American Art and Cultural Center to be located in West Tampa at 2103 North Rome Avenue.",
-                "retrieved_at": "2026-09-29T11:44:57.187Z"
-              },
-              "score": 0.92
-            }
-          ]
-        }
-      ]
-    }
-  ],
+  "areas": [],
   "usage": {
-    "input_tokens": 17575,
-    "output_tokens": 2290
+    "input_tokens": 18615,
+    "output_tokens": 2395
   }
 }

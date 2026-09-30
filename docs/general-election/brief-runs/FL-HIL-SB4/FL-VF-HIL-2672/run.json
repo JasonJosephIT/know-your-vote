@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://www.votepattirendon.com",
-  "created_at": "2026-09-29T11:45:49.182Z",
+  "created_at": "2026-09-30T01:59:02.683Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -49,7 +50,8 @@
       "heading": null,
       "text": "I do believe our kids are our future. I will work tirelessly to help get us back on the right track and propose common sense solutions. I will listen and advocate for the needs of our community.\"",
       "verdict": {
-        "commitment": 0.58,
+        "commitment": 0.59,
+        "own_commitment": 0.91,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -60,7 +62,7 @@
           "A5": 0.02,
           "A6": 0.04,
           "A7": 0.02,
-          "B1": 0.03,
+          "B1": 0.04,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -77,14 +79,14 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     }
   ],
   "areas": [],
   "usage": {
-    "input_tokens": 3504,
-    "output_tokens": 458
+    "input_tokens": 3712,
+    "output_tokens": 479
   }
 }

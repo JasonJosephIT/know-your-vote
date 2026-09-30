@@ -1,8 +1,6 @@
 
 What this site states, by policy area
 
-Housing
-  A2  Housing affordability  (1 citation(s))
-      0.92  "She has long been an advocate for improving affordable housing, health care, and transportation in the county. She is championing the construction of an African American Art and Cultural Center to be located in West Tampa at 2103 North R…"
-            https://www.votegwenmyers.com/meet-gwen  — section: "It's About the People"
-
+  No passage cleared both the commitment gate and an issue question.
+  That is a result, not an error: at this threshold, on these pages,
+  nothing was found. Lower --threshold or ingest more pages to widen it.

@@ -1,0 +1,33 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  B1  Economy, inflation, and jobs  (3 citation(s))
+      0.92  "Mike will work to tackle housing costs, reduce taxes, and attract high-paying jobs so families can afford to live, work, and thrive in Northwest Orange County."
+            https://ilikemikecrabb.com/issues  — section: Economic Affordability
+      0.89  "Mike Crabb works to make Northwest Orange County more affordable for families by tackling housing costs, reducing taxes, and attracting high-paying jobs."
+            https://ilikemikecrabb.com/issues  — section: Where does Mike Crabb stand on economic affordability?
+      0.87  "Tackle housing costs, reduce taxes, and attract high-paying jobs."
+            https://ilikemikecrabb.com/  — section: Economic Affordability
+
+Housing
+  A2  Housing affordability  (3 citation(s))
+      0.97  "Mike will work to tackle housing costs, reduce taxes, and attract high-paying jobs so families can afford to live, work, and thrive in Northwest Orange County."
+            https://ilikemikecrabb.com/issues  — section: Economic Affordability
+      0.97  "Mike Crabb works to make Northwest Orange County more affordable for families by tackling housing costs, reducing taxes, and attracting high-paying jobs."
+            https://ilikemikecrabb.com/issues  — section: Where does Mike Crabb stand on economic affordability?
+      0.92  "Tackle housing costs, reduce taxes, and attract high-paying jobs."
+            https://ilikemikecrabb.com/  — section: Economic Affordability
+
+Environment & Water
+  KYV3  Growth, development and land conservation  (2 citation(s))
+      0.96  "Mike Crabb supports smart, responsible growth that protects existing neighborhoods and pays for the infrastructure it requires."
+            https://ilikemikecrabb.com/issues  — section: Where does Mike Crabb stand on growth?
+      0.95  "Mike believes growth must be managed responsibly. Development should meet the needs of residents, protect existing neighborhoods, improve infrastructure, and pay for itself."
+            https://ilikemikecrabb.com/issues  — section: Smart, Responsible Growth
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (1 citation(s))
+      0.92  "Mike Crabb supports law enforcement, crime prevention, and safe neighborhoods, drawing on 30 years as an Orange County deputy sheriff."
+            https://ilikemikecrabb.com/issues  — section: Where does Mike Crabb stand on public safety?
+

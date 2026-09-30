@@ -2,25 +2,19 @@
 What this site states, by policy area
 
 Economy & Affordability
-  A4  Cost of living in Florida  (5 citation(s))
-      0.98  "Our plan takes on Florida's affordability crisis in several ways. Let's start with housing and insurance.It dramatically lowers insurance premiums by creating a statewide catastrophic fund. It reduces monthly electric bills by capping ut…"
+  A4  Cost of living in Florida  (3 citation(s))
+      0.97  "Our plan takes on Florida's affordability crisis in several ways. Let's start with housing and insurance.It dramatically lowers insurance premiums by creating a statewide catastrophic fund. It reduces monthly electric bills by capping ut…"
             https://davidjolly.com/issues/affordability  — section: Florida Should Be a Place You Can Afford to Call Home
-      0.95  "Electricity is not a luxury, and over-the-top profits for the biggest utilities should not come out of your monthly budget. Florida regulators have let investor-owned power companies earn some of the fattest returns in the nation while f…"
+      0.96  "Electricity is not a luxury, and over-the-top profits for the biggest utilities should not come out of your monthly budget. Florida regulators have let investor-owned power companies earn some of the fattest returns in the nation while f…"
             https://davidjolly.com/issues/affordability  — section: Stop the Runaway Utility Bills
       0.95  "More than half of Florida renters now pay over 30 percent of income on housing. The plan scales workforce and affordable housing targeted near job centers, expands existing state housing programs, and caps utility profits to lower the mo…"
             https://davidjolly.com/issues/affordability  — section: Q. How will this plan help me if I rent?
-      0.92  "Half of Florida renters now hand over more than a third of their income just to keep a roof overhead, and older condo owners are being hit with special assessments that can wipe out a lifetime of savings. Safety matters, and no one shoul…"
-            https://davidjolly.com/issues/affordability  — section: Protect Renters and Condo Owners Left Behind
-      0.90  "The property insurance crisis is the primary reason so many people in Florida are struggling to afford a place to live. From renters to retirees to homeowners, the burden of property insurance continues to make housing costs in Florida u…"
-            https://davidjolly.com/issues  — section: Solving our Affordability and Insurance Crisis
-  B1  Economy, inflation, and jobs  (2 citation(s))
+  B1  Economy, inflation, and jobs  (1 citation(s))
       0.95  "Florida has one of the largest economies in the world, but it has been hindered by short-term political thinking. Florida should become a leading technology economy and invest in a renewed agriculture economy with a vision for the next c…"
             https://davidjolly.com/issues  — section: Strengthening Florida's Economy
-      0.87  "Today, David is a proud Florida Democrat, fighting for the values he sees rooted in democratic tradition, that the economy should work for everyone; responsible investments in housing, healthcare, and education can improve people’s lives…"
-            https://davidjolly.com/about  — section: David's Story
 
 Education
-  A6  Public school funding and teachers  (8 citation(s))
+  A6  Public school funding and teachers  (4 citation(s))
       0.99  "Jolly wants to dramatically increase teacher pay as part of a 10-year public education renaissance. He proposes redirecting Tourist Development Tax revenue (currently used for convention centers and tourism promotion) toward teacher pay …"
             https://davidjolly.com/issues/public-education  — section: Q. What does Jolly want to do about teacher pay?
       0.99  "Public schools have been inadequately funded in the state of Florida for decades. We need to dramatically increase investment in Florida's public schools to provide higher quality public schools in more neighborhoods, with more teachers …"
@@ -29,124 +23,67 @@ Education
             https://davidjolly.com/issues/public-education  — section: Public education shouldn't be an afterthought.
       0.98  "Jolly proposes expanding the allowed uses of Florida's Tourist Development Tax (over $1 billion per year statewide) to include teacher pay and school infrastructure. His framing: Florida doesn't have a crisis of convention centers, it ha…"
             https://davidjolly.com/issues/public-education  — section: Q. How does Jolly plan to fund his education priorities?
-      0.96  "That means paying teachers what they deserve. Supporting the people who show up every day to educate, guide, and inspire the next generation."
-            https://davidjolly.com/issues/public-education  — section: This isn't what real school choice looks like.
-      0.89  "That starts with schools we are willing to invest in."
-            https://davidjolly.com/issues/public-education  — section: Every child deserves a real shot.
-      0.87  "David has focused his campaign on historic groundbreaking homeowner’s insurance reform, the expansion of primary healthcare services, and investing in more community public schools. A fifth-generation Floridian and son of a minister, Dav…"
-            https://davidjolly.com/about  — section: David's Story
-      0.86  "It means investing in school infrastructure, classrooms, and resources so students aren’t trying to learn in systems that have been neglected for too long."
-            https://davidjolly.com/issues/public-education  — section: This isn't what real school choice looks like.
-  KYV9  School choice and vouchers  (2 citation(s))
+  KYV9  School choice and vouchers  (1 citation(s))
       0.98  "Public schools have been inadequately funded in the state of Florida for decades. We need to dramatically increase investment in Florida's public schools to provide higher quality public schools in more neighborhoods, with more teachers …"
             https://davidjolly.com/issues  — section: Saving Our Schools
-      0.87  "Florida doesn’t need to abandon public education."
-            https://davidjolly.com/issues/public-education  — section: This isn't what real school choice looks like.
-  KYV10  Career, vocational and higher education  (1 citation(s))
-      0.96  "Too many Florida families are locked out of our state's flagship universities. Florida is fortunate to be home to some of our nation's leading colleges and universities, but it only benefits Florida families if our students can gain admi…"
-            https://davidjolly.com/issues  — section: Giving Florida's Families Access to Florida's Universities
 
 Healthcare
-  B2  Healthcare access and costs  (7 citation(s))
+  B2  Healthcare access and costs  (3 citation(s))
       0.98  "David Jolly's health care plan for Florida expands Medicaid to cover hundreds of thousands of uninsured Floridians and invests in more primary care clinics throughout the state so people can access care when and where they need it, regar…"
             https://davidjolly.com/issues/health-care  — section: Health care shouldn't be this hard.
-      0.98  "Expanding Medicaid is part of the solution. It would provide coverage to hundreds of thousands of Floridians who are currently left without access to care."
-            https://davidjolly.com/issues/health-care  — section: This system isn't working for the people who need it.
-      0.98  "That's why Florida should invest in more primary healthcare clinics throughout the state. Places where people can go, regardless of income, to receive basic care, support, and treatment."
-            https://davidjolly.com/issues/health-care  — section: This system isn't working for the people who need it.
       0.98  "Rural counties have been hit hardest by healthcare gaps. Jolly's plan scales community health centers in every county, including rural areas where private practices are unviable, and stabilizes rural hospital revenue by reducing uncompen…"
             https://davidjolly.com/issues/health-care  — section: Q. How would this plan affect rural Floridians?
-      0.98  "Medicaid is a critical program for Florida. It supports childbirth care for women and infants, long-term care for seniors, care for those with special needs and unique abilities, and is a critical funding source for hospitals across the …"
-            https://davidjolly.com/issues  — section: Delivering Affordable Healthcare to Floridians
-      0.97  "Because expansion provides coverage, but people still need somewhere to actually get care. Jolly proposes a 5-year pilot to dramatically expand community health centers in every Florida county so new enrollees can connect with primary ca…"
-            https://davidjolly.com/issues/health-care  — section: Q. Why isn't Medicaid expansion enough on its own?
       0.85  "David Jolly is a former Member of Congress, attorney, and fifth-generation Floridian running for Florida Governor in 2026. His campaign focuses on historic homeowner's insurance reform, expanding primary healthcare services, and investin…"
             https://davidjolly.com/about  — section: Meet David. Not a politician. A person.
 
 Housing
-  A2  Housing affordability  (6 citation(s))
+  A2  Housing affordability  (3 citation(s))
       0.99  "Our plan takes on Florida's affordability crisis in several ways. Let's start with housing and insurance.It dramatically lowers insurance premiums by creating a statewide catastrophic fund. It reduces monthly electric bills by capping ut…"
             https://davidjolly.com/issues/affordability  — section: Florida Should Be a Place You Can Afford to Call Home
       0.99  "You cannot fix a shortage by wishing it away, and Florida is short the homes its growing families need. We will invest in the tools that work, from workforce housing to real down-payment help for first-time buyers, so a nurse, a teacher,…"
             https://davidjolly.com/issues/affordability  — section: Build Homes People Can Actually Afford
       0.98  "More than half of Florida renters now pay over 30 percent of income on housing. The plan scales workforce and affordable housing targeted near job centers, expands existing state housing programs, and caps utility profits to lower the mo…"
             https://davidjolly.com/issues/affordability  — section: Q. How will this plan help me if I rent?
-      0.97  "Half of Florida renters now hand over more than a third of their income just to keep a roof overhead, and older condo owners are being hit with special assessments that can wipe out a lifetime of savings. Safety matters, and no one shoul…"
-            https://davidjolly.com/issues/affordability  — section: Protect Renters and Condo Owners Left Behind
-      0.96  "The property insurance crisis is the primary reason so many people in Florida are struggling to afford a place to live. From renters to retirees to homeowners, the burden of property insurance continues to make housing costs in Florida u…"
-            https://davidjolly.com/issues  — section: Solving our Affordability and Insurance Crisis
-      0.93  "Older coastal condos have been hit hardest by new inspection requirements, with many owners facing assessments of $50,000 or more per unit. The plan offers no-interest state-backed loans so associations can spread costs over time without…"
-            https://davidjolly.com/issues/affordability  — section: Q. What if I own an older condo and got hit with a huge special assessment?
-  KYV6  Renters and evictions  (1 citation(s))
-      0.89  "Half of Florida renters now hand over more than a third of their income just to keep a roof overhead, and older condo owners are being hit with special assessments that can wipe out a lifetime of savings. Safety matters, and no one shoul…"
-            https://davidjolly.com/issues/affordability  — section: Protect Renters and Condo Owners Left Behind
 
 Environment & Water
-  KYV2  Energy and utilities  (5 citation(s))
+  KYV2  Energy and utilities  (3 citation(s))
       0.98  "Electricity is not a luxury, and over-the-top profits for the biggest utilities should not come out of your monthly budget. Florida regulators have let investor-owned power companies earn some of the fattest returns in the nation while f…"
             https://davidjolly.com/issues/affordability  — section: Stop the Runaway Utility Bills
-      0.98  "Florida leaders should unleash clean and renewable energies across the Sunshine State, requiring greater integration of clean energy technologies into our public utilities. Environmentally sound energy technologies provide for greater st…"
-            https://davidjolly.com/issues  — section: Clean Energy
       0.97  "Our plan takes on Florida's affordability crisis in several ways. Let's start with housing and insurance.It dramatically lowers insurance premiums by creating a statewide catastrophic fund. It reduces monthly electric bills by capping ut…"
             https://davidjolly.com/issues/affordability  — section: Florida Should Be a Place You Can Afford to Call Home
-      0.95  "Data Centers DATA CENTERS Florida's voters are saying no. David Jolly is listening. A moratorium on hyperscale data centers, issued…"
-            https://davidjolly.com/where-david-stands  — section: Where David Stands
       0.91  "More than half of Florida renters now pay over 30 percent of income on housing. The plan scales workforce and affordable housing targeted near job centers, expands existing state housing programs, and caps utility profits to lower the mo…"
             https://davidjolly.com/issues/affordability  — section: Q. How will this plan help me if I rent?
-  KYV3  Growth, development and land conservation  (1 citation(s))
-      0.95  "Data Centers DATA CENTERS Florida's voters are saying no. David Jolly is listening. A moratorium on hyperscale data centers, issued…"
-            https://davidjolly.com/where-david-stands  — section: Where David Stands
 
 Insurance & Property Costs
-  A1  Property insurance costs  (13 citation(s))
+  A1  Property insurance costs  (11 citation(s))
       0.98  "Floridians pay the highest home insurance prices in America because every family is made to pay a private insurer to carry hurricane risk. Jolly's proposal moves that risk into one strong, state-backed fund. Here is how it works, what it…"
             https://davidjolly.com/homeowners-insurance  — section: David Jolly's Plan to Cut Florida Homeowners Insurance by 60 to 70 Percent
       0.98  "Hurricane and wind risk makes up 60 to 70 percent of a Florida homeowners insurance bill. David Jolly's plan creates one strong, state-backed hurricane fund to carry that risk, so private insurers no longer have to price it into your pol…"
             https://davidjolly.com/homeowners-insurance  — section: David Jolly's Plan to Cut Florida Homeowners Insurance by 60 to 70 Percent
       0.98  "No family should have to choose between insuring their home and keeping the lights on. Florida pays the highest homeowners' premiums in the country, and too many carriers have walked away, leaving people stranded. We will fight for a sys…"
             https://davidjolly.com/issues/affordability  — section: Take on the Insurance Crisis
-      0.98  "The property insurance crisis is the primary reason so many people in Florida are struggling to afford a place to live. From renters to retirees to homeowners, the burden of property insurance continues to make housing costs in Florida u…"
-            https://davidjolly.com/issues  — section: Solving our Affordability and Insurance Crisis
       0.98  "Jolly's model to fix homeowners insurance, in plain English. Hurricane and wind risk can make up 60–70% of a homeowners insurance bill. So instead of forcing every Florida family to pay private insurers to take on that enormous risk: Flo…"
             https://davidjolly.com/jolly-insurance-proposal-facts  — section: Jolly Insurance Proposal Facts
       0.97  "And the rule that governs all of it: the costs will be lower for Floridians, or we won't do it."
             https://davidjolly.com/homeowners-insurance  — section: David Jolly's Plan to Cut Florida Homeowners Insurance by 60 to 70 Percent
-      0.97  "Private insurers no longer have to price hurricane risk into your policy. That is where the 60 to 70 percent savings comes from. The rest of your policy stays private, competitive, and priced the way policies are in other states."
-            https://davidjolly.com/homeowners-insurance  — section: Jolly's proposal, step by step
-      0.96  "Our plan takes on Florida's affordability crisis in several ways. Let's start with housing and insurance.It dramatically lowers insurance premiums by creating a statewide catastrophic fund. It reduces monthly electric bills by capping ut…"
+      0.97  "Our plan takes on Florida's affordability crisis in several ways. Let's start with housing and insurance.It dramatically lowers insurance premiums by creating a statewide catastrophic fund. It reduces monthly electric bills by capping ut…"
             https://davidjolly.com/issues/affordability  — section: Florida Should Be a Place You Can Afford to Call Home
-      0.96  "Byron Donalds is lying to scare people with invented numbers. There is no “$1,000 hurricane tax” in the plan. Here is the plan to cut Florida homeowners insurance by 60 to 70 percent, in plain English, and the facts behind the ads."
-            https://davidjolly.com/jolly-insurance-proposal-facts  — section: Jolly Insurance Proposal Facts
+      0.96  "Private insurers no longer have to price hurricane risk into your policy. That is where the 60 to 70 percent savings comes from. The rest of your policy stays private, competitive, and priced the way policies are in other states."
+            https://davidjolly.com/homeowners-insurance  — section: Jolly's proposal, step by step
+      0.95  "David Jolly’s Plan to Cut Florida Homeowners Insurance by 60 to 70 Percent THE PLAN, IN PLAIN ENGLISH David Jolly's Plan to Cut Florida Homeowners Insurance by 60 to 70 Percent…"
+            https://davidjolly.com/where-david-stands  — section: Where David Stands
       0.94  "This will lower costs for Floridians. It can be funded through a mix of forcing insurance companies to pay the taxes they currently avoid, a fee on real estate transactions, or existing tourist taxes. The fund can be rolled out responsib…"
             https://davidjolly.com/jolly-insurance-proposal-facts  — section: Jolly Insurance Proposal Facts
-      0.94  "David Jolly’s Plan to Cut Florida Homeowners Insurance by 60 to 70 Percent THE PLAN, IN PLAIN ENGLISH David Jolly's Plan to Cut Florida Homeowners Insurance by 60 to 70 Percent…"
-            https://davidjolly.com/where-david-stands  — section: Where David Stands
       0.90  "Instead of forcing every Florida family to pay a private insurer to take on that enormous hurricane risk, Jolly's proposal does four things, in order."
             https://davidjolly.com/homeowners-insurance  — section: Jolly's proposal, step by step
-      0.87  "And in the end, the costs will be lower for Floridians, or we won't do it. Simple as that."
+      0.86  "And in the end, the costs will be lower for Floridians, or we won't do it. Simple as that."
             https://davidjolly.com/homeowners-insurance  — section: The guarantee
-  KYV8  Condominium and HOA costs  (4 citation(s))
-      0.95  "Our plan takes on Florida's affordability crisis in several ways. Let's start with housing and insurance.It dramatically lowers insurance premiums by creating a statewide catastrophic fund. It reduces monthly electric bills by capping ut…"
+  KYV8  Condominium and HOA costs  (1 citation(s))
+      0.94  "Our plan takes on Florida's affordability crisis in several ways. Let's start with housing and insurance.It dramatically lowers insurance premiums by creating a statewide catastrophic fund. It reduces monthly electric bills by capping ut…"
             https://davidjolly.com/issues/affordability  — section: Florida Should Be a Place You Can Afford to Call Home
-      0.95  "Older coastal condos have been hit hardest by new inspection requirements, with many owners facing assessments of $50,000 or more per unit. The plan offers no-interest state-backed loans so associations can spread costs over time without…"
-            https://davidjolly.com/issues/affordability  — section: Q. What if I own an older condo and got hit with a huge special assessment?
-      0.95  "The property insurance crisis is the primary reason so many people in Florida are struggling to afford a place to live. From renters to retirees to homeowners, the burden of property insurance continues to make housing costs in Florida u…"
-            https://davidjolly.com/issues  — section: Solving our Affordability and Insurance Crisis
-      0.92  "Half of Florida renters now hand over more than a third of their income just to keep a roof overhead, and older condo owners are being hit with special assessments that can wipe out a lifetime of savings. Safety matters, and no one shoul…"
-            https://davidjolly.com/issues/affordability  — section: Protect Renters and Condo Owners Left Behind
-
-Public Safety & Crime
-  B7  Crime policy, policing and courts  (1 citation(s))
-      0.97  "Whether you're a native born Floridian, an immigrant to our state, or a Tallahassee politician, if you break the law in Florida, you'll be held accountable. But Florida can also be a state that corrects disparities in criminal justice fo…"
-            https://davidjolly.com/issues  — section: Fighting Crime, not Communities
 
 Elections & Voting
   A7  Elections administration and voting access  (1 citation(s))
-      0.94  "Across Florida, voters continue to use their vote to choose the direction of their state and their community. But Tallahassee politicians preempt the will of the voters based on selfish ideological whims. Direct democracy in Florida shou…"
+      0.93  "Across Florida, voters continue to use their vote to choose the direction of their state and their community. But Tallahassee politicians preempt the will of the voters based on selfish ideological whims. Direct democracy in Florida shou…"
             https://davidjolly.com/issues  — section: Home Rule and Direct Democracy
-
-Abortion Policy
-  B5  Abortion policy  (1 citation(s))
-      0.98  "Reproductive healthcare decisions should be made between women and their doctors, not politicians. Roe v. Wade and Casey v. Planned Parenthood provided a responsible, balanced framework for protecting these decisions. Absent federal legi…"
-            https://davidjolly.com/issues  — section: Restoring Reproductive Freedom
 

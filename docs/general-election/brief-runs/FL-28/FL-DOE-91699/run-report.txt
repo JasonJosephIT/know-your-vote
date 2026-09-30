@@ -10,18 +10,15 @@ Healthcare
 
 Housing
   A2  Housing affordability  (1 citation(s))
-      0.86  "Enforce anti-fraud laws, hold bad actors accountable, stabilize the market, and protect homeowners from rising costs."
+      0.85  "Enforce anti-fraud laws, hold bad actors accountable, stabilize the market, and protect homeowners from rising costs."
             https://ehrforcongress.us/  — section: Phil’s Priorities
 
 Environment & Water
-  A5  Water quality and Everglades restoration  (1 citation(s))
-      0.85  "Protect the Everglades, defend water resources, support responsible growth, and pursue a temporary moratorium on large-scale AI data centers and other high-impact developments until their impacts on infrastructure, energy, housing, and t…"
-            https://ehrforcongress.us/  — section: Phil’s Priorities
   KYV2  Energy and utilities  (1 citation(s))
       0.93  "Protect the Everglades, defend water resources, support responsible growth, and pursue a temporary moratorium on large-scale AI data centers and other high-impact developments until their impacts on infrastructure, energy, housing, and t…"
             https://ehrforcongress.us/  — section: Phil’s Priorities
   KYV3  Growth, development and land conservation  (1 citation(s))
-      0.98  "Protect the Everglades, defend water resources, support responsible growth, and pursue a temporary moratorium on large-scale AI data centers and other high-impact developments until their impacts on infrastructure, energy, housing, and t…"
+      0.99  "Protect the Everglades, defend water resources, support responsible growth, and pursue a temporary moratorium on large-scale AI data centers and other high-impact developments until their impacts on infrastructure, energy, housing, and t…"
             https://ehrforcongress.us/  — section: Phil’s Priorities
 
 Immigration
@@ -36,6 +33,6 @@ Public Safety & Crime
 
 Elections & Voting
   KYV1  Threats to democratic institutions  (1 citation(s))
-      0.85  "Putting America First means defending the Constitution and the rule of law, rejecting anti-American rhetoric, antisemitism, socialism and political extremism, and using military force only when lawful and necessary."
+      0.86  "Putting America First means defending the Constitution and the rule of law, rejecting anti-American rhetoric, antisemitism, socialism and political extremism, and using military force only when lawful and necessary."
             https://ehrforcongress.us/  — section: Phil’s Priorities
 

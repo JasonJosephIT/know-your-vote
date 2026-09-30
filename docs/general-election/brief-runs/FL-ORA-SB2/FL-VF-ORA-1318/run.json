@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://votegloriareina.com",
-  "created_at": "2026-09-29T11:46:18.699Z",
+  "created_at": "2026-09-30T01:59:22.966Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -38,7 +39,7 @@
   "counts": {
     "passages": 39,
     "asked": 39,
-    "states_policy": 9,
+    "states_policy": 6,
     "with_issue": 1,
     "failed": 0
   },
@@ -50,15 +51,16 @@
       "text": "Wife. Mom. Public School Parent. Fighting for every student and family in District 2.",
       "verdict": {
         "commitment": 0.13,
+        "own_commitment": 0.49,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.03,
+          "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.19,
+          "A6": 0.16,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -77,7 +79,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.05
+          "KYV9": 0.04
         }
       }
     },
@@ -88,6 +90,7 @@
       "text": "Orange County Classroom Teachers Association",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -102,17 +105,17 @@
           "B2": 0.03,
           "B3": 0.03,
           "B4": 0.03,
-          "B5": 0.03,
+          "B5": 0.02,
           "B6": 0.03,
-          "B7": 0.02,
-          "B8": 0.02,
-          "KYV1": 0.02,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.03,
           "KYV10": 0.03,
           "KYV2": 0.03,
           "KYV3": 0.03,
-          "KYV4": 0.02,
-          "KYV5": 0.02,
-          "KYV6": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.03,
+          "KYV6": 0.02,
           "KYV7": 0.03,
           "KYV8": 0.03,
           "KYV9": 0.03
@@ -125,7 +128,8 @@
       "heading": "A parent and leader ready to put students first.",
       "text": "Gloria Reina O'Neal is a wife, proud Lake Nona resident, and Orange County Public Schools mom running for Orange County School Board in District 2 to strengthen public education for every student and family.",
       "verdict": {
-        "commitment": 0.44,
+        "commitment": 0.43,
+        "own_commitment": 0.41,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -134,25 +138,25 @@
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.24,
-          "A7": 0.03,
+          "A6": 0.25,
+          "A7": 0.02,
           "B1": 0.03,
-          "B2": 0.02,
+          "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.02,
+          "B6": 0.03,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.03,
-          "KYV2": 0.03,
-          "KYV3": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.03,
           "KYV9": 0.05
         }
       }
@@ -163,7 +167,8 @@
       "heading": "A parent and leader ready to put students first.",
       "text": "As a parent with one child in OCPS and another who is a graduate of OCPS, Gloria understands firsthand how critical strong schools, supported teachers, and safe learning environments are to a child's success.",
       "verdict": {
-        "commitment": 0.22,
+        "commitment": 0.23,
+        "own_commitment": 0.11,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -172,7 +177,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.57,
+          "A6": 0.56,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -201,7 +206,8 @@
       "heading": "A parent and leader ready to put students first.",
       "text": "Gloria brings extensive experience managing large-scale public programs, ensuring accountability, and improving how systems serve families. That same experience translates directly to the school system, where strong oversight, transparency, and smart decision-making are essential to student success.",
       "verdict": {
-        "commitment": 0.24,
+        "commitment": 0.27,
+        "own_commitment": 0.17,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -210,7 +216,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.1,
+          "A6": 0.11,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
@@ -225,7 +231,7 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.02,
+          "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -240,12 +246,13 @@
       "text": "Gloria is running for Orange County School Board because, as a parent with children in and graduated from OCPS, she sees firsthand both the opportunities our schools provide and the challenges families face.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.06,
@@ -261,7 +268,7 @@
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -277,8 +284,9 @@
       "heading": "Why She's Running",
       "text": "She believes our schools should be focused on what truly matters: strong academics, safe learning environments, and preparing students for success in life. Too often, time and energy are pulled away from the classroom and from the real needs of students and teachers. Gloria is running to bring the focus back to student achievement, support for educators, and outcomes that actually improve our schools.",
       "verdict": {
-        "commitment": 0.91,
-        "states_policy": true,
+        "commitment": 0.9,
+        "own_commitment": 0.6,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
@@ -288,7 +296,7 @@
           "A5": 0.02,
           "A6": 0.53,
           "A7": 0.02,
-          "B1": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -315,7 +323,8 @@
       "heading": "Why She's Running",
       "text": "Gloria is committed to ensuring every student feels safe, respected, and supported, and that every family, no matter their background, has access to a high-quality public education. She believes parents deserve a real voice, teachers deserve strong support, and students deserve a school system focused on helping them succeed.",
       "verdict": {
-        "commitment": 0.74,
+        "commitment": 0.72,
+        "own_commitment": 0.59,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -354,6 +363,7 @@
       "text": "With one child in OCPS and another who graduated from OCPS, Gloria lives the system she's fighting to improve.",
       "verdict": {
         "commitment": 0.07,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -381,7 +391,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.07
+          "KYV9": 0.06
         }
       }
     },
@@ -392,6 +402,7 @@
       "text": "A law degree with a concentration in poverty research gives her deep understanding of the barriers families face.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -402,7 +413,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.04,
+          "B1": 0.03,
           "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
@@ -413,13 +424,13 @@
           "KYV1": 0.02,
           "KYV10": 0.06,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.03,
           "KYV7": 0.04,
           "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     },
@@ -430,20 +441,21 @@
       "text": "Extensive experience managing large-scale public programs, ensuring accountability and delivering results for families.",
       "verdict": {
         "commitment": 0.05,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.03,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.03,
-          "A7": 0.02,
+          "A7": 0.03,
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.02,
+          "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.03,
@@ -455,7 +467,7 @@
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -468,6 +480,7 @@
       "text": "Graduate of Leadership Orange through OCPS, strengthening her connection to the district and its mission.",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -476,7 +489,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.04,
+          "A6": 0.03,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -506,6 +519,7 @@
       "text": "Ensure every child has access to strong academics and support services",
       "verdict": {
         "commitment": 0.93,
+        "own_commitment": 0.88,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -514,7 +528,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.17,
+          "A6": 0.18,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.04,
@@ -543,7 +557,8 @@
       "heading": "Put Students First",
       "text": "Create real opportunities for student success across every school",
       "verdict": {
-        "commitment": 0.82,
+        "commitment": 0.83,
+        "own_commitment": 0.81,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -554,7 +569,7 @@
           "A5": 0.02,
           "A6": 0.12,
           "A7": 0.02,
-          "B1": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -581,7 +596,8 @@
       "heading": "Put Students First",
       "text": "Keep the focus on student achievement and outcomes that matter",
       "verdict": {
-        "commitment": 0.73,
+        "commitment": 0.74,
+        "own_commitment": 0.51,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -605,7 +621,7 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -620,7 +636,8 @@
       "text": "Advocate for the resources, respect, and working conditions educators deserve",
       "verdict": {
         "commitment": 0.9,
-        "states_policy": true,
+        "own_commitment": 0.78,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
@@ -628,9 +645,9 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.84,
+          "A6": 0.83,
           "A7": 0.02,
-          "B1": 0.17,
+          "B1": 0.18,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -644,7 +661,7 @@
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV6": 0.01,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.03
@@ -657,7 +674,8 @@
       "heading": "Support & Retain Teachers",
       "text": "Fight for competitive compensation that keeps great teachers in our schools",
       "verdict": {
-        "commitment": 0.96,
+        "commitment": 0.95,
+        "own_commitment": 0.9,
         "states_policy": true,
         "issues": [
           "A6"
@@ -668,26 +686,26 @@
           "A3": 0.02,
           "A4": 0.03,
           "A5": 0.02,
-          "A6": 0.96,
+          "A6": 0.95,
           "A7": 0.02,
           "B1": 0.59,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.02,
-          "KYV3": 0.01,
-          "KYV4": 0.01,
-          "KYV5": 0.01,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     },
@@ -698,6 +716,7 @@
       "text": "Reduce unnecessary burdens so teachers can focus on teaching",
       "verdict": {
         "commitment": 0.9,
+        "own_commitment": 0.85,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -706,13 +725,13 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.01,
-          "A6": 0.69,
+          "A6": 0.67,
           "A7": 0.02,
           "B1": 0.07,
           "B2": 0.02,
-          "B3": 0.01,
+          "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
@@ -736,6 +755,7 @@
       "text": "Ensure families understand how decisions are made and resources are used",
       "verdict": {
         "commitment": 0.88,
+        "own_commitment": 0.87,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -744,17 +764,17 @@
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.21,
+          "A6": 0.24,
           "A7": 0.05,
           "B1": 0.03,
-          "B2": 0.05,
+          "B2": 0.06,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.03,
-          "B7": 0.03,
+          "B7": 0.04,
           "B8": 0.02,
-          "KYV1": 0.18,
+          "KYV1": 0.16,
           "KYV10": 0.03,
           "KYV2": 0.03,
           "KYV3": 0.03,
@@ -773,7 +793,8 @@
       "heading": "Accountability & Transparency",
       "text": "Bring strong oversight and smart decision-making to the board",
       "verdict": {
-        "commitment": 0.79,
+        "commitment": 0.8,
+        "own_commitment": 0.69,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -782,7 +803,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.07,
+          "A6": 0.06,
           "A7": 0.03,
           "B1": 0.03,
           "B2": 0.02,
@@ -790,18 +811,18 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.03,
-          "B7": 0.04,
+          "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.27,
+          "KYV1": 0.25,
           "KYV10": 0.02,
-          "KYV2": 0.02,
+          "KYV2": 0.03,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.03,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -812,17 +833,18 @@
       "text": "Demand efficiency and results from every dollar spent",
       "verdict": {
         "commitment": 0.84,
+        "own_commitment": 0.62,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.03,
+          "A1": 0.02,
           "A2": 0.02,
           "A3": 0.03,
-          "A4": 0.02,
+          "A4": 0.03,
           "A5": 0.03,
           "A6": 0.09,
           "A7": 0.03,
-          "B1": 0.26,
+          "B1": 0.23,
           "B2": 0.05,
           "B3": 0.02,
           "B4": 0.03,
@@ -830,15 +852,15 @@
           "B6": 0.02,
           "B7": 0.04,
           "B8": 0.02,
-          "KYV1": 0.08,
+          "KYV1": 0.07,
           "KYV10": 0.03,
           "KYV2": 0.03,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
-          "KYV5": 0.02,
+          "KYV5": 0.03,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.05,
+          "KYV8": 0.04,
           "KYV9": 0.03
         }
       }
@@ -850,11 +872,12 @@
       "text": "Ensure every student can learn in a secure environment",
       "verdict": {
         "commitment": 0.89,
+        "own_commitment": 0.85,
         "states_policy": true,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.02,
+          "A2": 0.01,
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
@@ -866,9 +889,9 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.18,
+          "B7": 0.17,
           "B8": 0.02,
-          "KYV1": 0.03,
+          "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -888,6 +911,7 @@
       "text": "Prioritize safety upgrades and protocols across every school",
       "verdict": {
         "commitment": 0.95,
+        "own_commitment": 0.92,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -896,23 +920,23 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.09,
+          "A6": 0.1,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.01,
+          "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
-          "B6": 0.02,
+          "B5": 0.01,
+          "B6": 0.01,
           "B7": 0.12,
           "B8": 0.02,
-          "KYV1": 0.03,
-          "KYV10": 0.03,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV6": 0.01,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -925,17 +949,18 @@
       "heading": "Strengthen School Safety",
       "text": "Create learning environments where students feel safe, respected, and supported",
       "verdict": {
-        "commitment": 0.85,
-        "states_policy": true,
+        "commitment": 0.84,
+        "own_commitment": 0.82,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.02,
+          "A2": 0.01,
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.04,
-          "A7": 0.02,
+          "A7": 0.01,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
@@ -949,11 +974,11 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.01,
-          "KYV9": 0.02
+          "KYV8": 0.02,
+          "KYV9": 0.03
         }
       }
     },
@@ -964,6 +989,7 @@
       "text": "Knock doors, make calls, or help at events. Every hour moves us closer to better schools.",
       "verdict": {
         "commitment": 0.06,
+        "own_commitment": 0.14,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -972,7 +998,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.16,
+          "A6": 0.15,
           "A7": 0.03,
           "B1": 0.02,
           "B2": 0.02,
@@ -986,8 +1012,8 @@
           "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
-          "KYV5": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1001,7 +1027,8 @@
       "heading": "Trusted voices standing with Gloria.",
       "text": "Community leaders across Orange County are backing Gloria's vision for our schools.",
       "verdict": {
-        "commitment": 0.08,
+        "commitment": 0.09,
+        "own_commitment": 0.1,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1010,7 +1037,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.2,
+          "A6": 0.21,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -1039,7 +1066,8 @@
       "heading": "Trusted voices standing with Gloria.",
       "text": "\"Our children deserve School Board members who will champion public education and always put students first. I trust Gloria Reina O'Neal to lead with integrity, experience, and compassion. We need leaders who will stand up and protect public education, invest in our teachers, and ensure every student has the opportunity to succeed. I'm proud to endorse Gloria, and I encourage everyone to support her campaign for Orange County School Board.\"",
       "verdict": {
-        "commitment": 0.74,
+        "commitment": 0.73,
+        "own_commitment": 0.26,
         "states_policy": false,
         "issues": [
           "A6"
@@ -1069,7 +1097,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.09
+          "KYV9": 0.1
         }
       }
     },
@@ -1080,6 +1108,7 @@
       "text": "\"We are at a critical moment where we must defend and strengthen public education. Now more than ever, we need leaders who will stand up as true champions for our public schools and push back against efforts that undermine them. I'm proud to endorse Gloria Reina because I trust her to be a staunch defender of public education, our teachers, and most importantly, our students. She has the commitment to lead with purpose and keep our schools moving in the right direction. I urge all voters in District 2 to join me in supporting Gloria Reina.\"",
       "verdict": {
         "commitment": 0.66,
+        "own_commitment": 0.26,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1088,8 +1117,8 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.84,
-          "A7": 0.03,
+          "A6": 0.83,
+          "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
@@ -1118,6 +1147,7 @@
       "text": "\"As an educator at Colonial High School for more than 20 years and a former Orange County School Board Member, I’ve seen firsthand the needs of our students and families. Through my conversations with Gloria Reina O’Neal, I’m confident she is prepared to meet those needs and deliver real solutions. Gloria is the only candidate raising children who attend Orange County Public Schools, giving her a personal understanding of the challenges our families face every day. As a mom, she understands the importance of strong public schools, safe communities, and opportunities for every child to succeed.",
       "verdict": {
         "commitment": 0.17,
+        "own_commitment": 0.1,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1126,7 +1156,7 @@
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.33,
+          "A6": 0.3,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
@@ -1139,13 +1169,13 @@
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.05
+          "KYV9": 0.06
         }
       }
     },
@@ -1156,6 +1186,7 @@
       "text": "Her commitment to accountability, transparency, and serving our community is why I’m proud to endorse Gloria Reina O’Neal.\"",
       "verdict": {
         "commitment": 0.07,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1165,13 +1196,13 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.04,
-          "B1": 0.03,
+          "A7": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.08,
+          "B6": 0.07,
           "B7": 0.04,
           "B8": 0.02,
           "KYV1": 0.09,
@@ -1193,13 +1224,14 @@
       "heading": "Trusted voices standing with Gloria.",
       "text": "\"Orange County Public Schools needs leaders who stay focused on what matters most: student achievement, supporting educators, safe learning environments, and strengthening public education for every family. As someone currently serving on the School Board, I know how important it is to have thoughtful and committed leaders who understand the challenges facing our schools. I'm proud to endorse Gloria Reina for Orange County School Board because she brings the experience, leadership, and dedication needed to defend and strengthen public education in Orange County. I encourage District 2 voters to join me in supporting Gloria Reina for School Board.\"",
       "verdict": {
-        "commitment": 0.42,
+        "commitment": 0.4,
+        "own_commitment": 0.15,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.03,
+          "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.52,
@@ -1221,7 +1253,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.08
+          "KYV9": 0.07
         }
       }
     },
@@ -1231,7 +1263,8 @@
       "heading": "Trusted voices standing with Gloria.",
       "text": "\"Public education is one of the most important investments we can make in our future, and we need leaders on the School Board who understand the responsibility that comes with serving our students, parents, and teachers. I'm proud to endorse Gloria Reina for Orange County School Board because she brings the experience, professionalism, and commitment needed to help move our schools forward. As an OCPS parent and public sector leader, Gloria understands the challenges families face and the importance of keeping the focus on student success, accountability, and strong support for educators. I encourage voters across District 2 to join me in supporting Gloria Reina for School Board.\"",
       "verdict": {
-        "commitment": 0.48,
+        "commitment": 0.5,
+        "own_commitment": 0.19,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1240,7 +1273,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.8,
+          "A6": 0.81,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
@@ -1250,7 +1283,7 @@
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.03,
+          "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -1269,7 +1302,8 @@
       "heading": "Trusted voices standing with Gloria.",
       "text": "\"We need bold leaders who will stand up for our public schools, our students, our educators, and our families. I'm proud to endorse Gloria Reina for Orange County School Board because she understands the challenges facing public education and will stay focused on strengthening our schools, supporting teachers, and putting students first. I know Gloria will be a strong voice for Orange County families and a committed defender of the public education our students deserve.\"",
       "verdict": {
-        "commitment": 0.57,
+        "commitment": 0.56,
+        "own_commitment": 0.47,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1278,7 +1312,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.82,
+          "A6": 0.83,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -1307,7 +1341,8 @@
       "heading": "Trusted voices standing with Gloria.",
       "text": "\"Gloria Reina understands that the job of a School Board member is to protect students, support educators, and strengthen public education, not to fuel divisive culture wars. I'm proud to endorse Gloria because she is committed to creating safe, welcoming schools where every student has the opportunity to succeed. She will be a strong voice for students, parents, teachers, and the future of public education in Orange County.\"",
       "verdict": {
-        "commitment": 0.66,
+        "commitment": 0.69,
+        "own_commitment": 0.58,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1346,6 +1381,7 @@
       "text": "\"Strong schools require thoughtful leadership and experienced oversight. I'm proud to endorse Gloria Reina O'Neal because she brings both. Through her experience in public education, as well as her work managing large-scale public programs and ensuring accountability for taxpayer resources, Gloria has the knowledge and leadership needed to help guide one of the largest school districts in the nation while keeping the focus on student success, educator support, and responsible stewardship of public dollars.\"",
       "verdict": {
         "commitment": 0.18,
+        "own_commitment": 0.13,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1354,7 +1390,7 @@
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.67,
+          "A6": 0.69,
           "A7": 0.02,
           "B1": 0.05,
           "B2": 0.02,
@@ -1369,7 +1405,7 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1384,6 +1420,7 @@
       "text": "\"Orange County students deserve School Board members who will focus on strengthening public education, supporting teachers, and helping every student succeed, not on culture wars and political distractions. I'm proud to endorse Gloria Reina because she understands the challenges facing our schools and is committed to putting students, families, and educators first. Gloria will be a strong advocate for public education and a leader who will keep the focus where it belongs: on our students.\"",
       "verdict": {
         "commitment": 0.69,
+        "own_commitment": 0.55,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1392,7 +1429,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.79,
+          "A6": 0.8,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -1402,7 +1439,7 @@
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.05,
+          "KYV1": 0.04,
           "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -1411,7 +1448,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.08
+          "KYV9": 0.07
         }
       }
     },
@@ -1422,10 +1459,11 @@
       "text": "Read the full feature on Gloria's campaign launch and the endorsement from the departing incumbent.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.03,
+          "A1": 0.02,
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.03,
@@ -1433,16 +1471,16 @@
           "A6": 0.05,
           "A7": 0.03,
           "B1": 0.03,
-          "B2": 0.02,
-          "B3": 0.02,
-          "B4": 0.03,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.02,
           "B5": 0.03,
           "B6": 0.03,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.02,
+          "KYV1": 0.03,
           "KYV10": 0.03,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -1460,6 +1498,7 @@
       "text": "State Senator Carlos Guillermo Smith throws his support behind Gloria in the race for District 2.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1469,7 +1508,7 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.05,
-          "A7": 0.02,
+          "A7": 0.03,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
@@ -1479,7 +1518,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.03,
+          "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -1487,7 +1526,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     },
@@ -1498,6 +1537,7 @@
       "text": "U.S. Congressman Maxwell Frost endorses Gloria's campaign for Orange County School Board District 2.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1506,7 +1546,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.09,
+          "A6": 0.08,
           "A7": 0.03,
           "B1": 0.02,
           "B2": 0.02,
@@ -1519,7 +1559,7 @@
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -1549,7 +1589,7 @@
                 "text": "Fight for competitive compensation that keeps great teachers in our schools",
                 "retrieved_at": "2026-09-29T11:46:11.861Z"
               },
-              "score": 0.96
+              "score": 0.95
             }
           ]
         }
@@ -1557,7 +1597,7 @@
     }
   ],
   "usage": {
-    "input_tokens": 136917,
-    "output_tokens": 17862
+    "input_tokens": 145029,
+    "output_tokens": 18681
   }
 }

@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://bilirakisforcongress.com",
-  "created_at": "2026-09-29T11:42:00.020Z",
+  "created_at": "2026-09-30T01:58:07.330Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -38,8 +39,8 @@
   "counts": {
     "passages": 53,
     "asked": 53,
-    "states_policy": 12,
-    "with_issue": 9,
+    "states_policy": 5,
+    "with_issue": 4,
     "failed": 0
   },
   "passages": [
@@ -49,7 +50,8 @@
       "heading": "Gus Is For Us.",
       "text": "Gus Bilirakis is delivering real results for Tampa Bay families: taking on skyrocketing property insurance, fighting for affordable housing, and working to lower the cost of living across Pasco and Hillsborough.",
       "verdict": {
-        "commitment": 0.73,
+        "commitment": 0.78,
+        "own_commitment": 0.44,
         "states_policy": false,
         "issues": [
           "A1",
@@ -57,24 +59,24 @@
           "A4"
         ],
         "scores": {
-          "A1": 0.9,
-          "A2": 0.94,
+          "A1": 0.91,
+          "A2": 0.93,
           "A3": 0.06,
-          "A4": 0.91,
+          "A4": 0.92,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.51,
+          "B1": 0.52,
           "B2": 0.04,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.03,
           "KYV1": 0.02,
           "KYV10": 0.03,
-          "KYV2": 0.07,
+          "KYV2": 0.06,
           "KYV3": 0.05,
           "KYV4": 0.06,
           "KYV5": 0.02,
@@ -92,6 +94,7 @@
       "text": "Be the first to receive updates on campaign news, events, and opportunities to get involved!",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -130,28 +133,29 @@
       "text": "Three pillars. One promise. Gus shows up, gets results, and fights to lower the cost of living, because Gus Is For Us.",
       "verdict": {
         "commitment": 0.85,
-        "states_policy": true,
+        "own_commitment": 0.78,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
-          "A2": 0.15,
+          "A2": 0.13,
           "A3": 0.03,
-          "A4": 0.68,
+          "A4": 0.7,
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.02,
-          "B1": 0.74,
+          "B1": 0.78,
           "B2": 0.05,
           "B3": 0.02,
           "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.03,
+          "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.04,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.03,
@@ -168,28 +172,29 @@
       "text": "Seniors, veterans, and the kids next door.",
       "verdict": {
         "commitment": 0.11,
+        "own_commitment": 0.14,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.03,
+          "A1": 0.02,
           "A2": 0.05,
           "A3": 0.03,
           "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
+          "A7": 0.03,
           "B1": 0.03,
           "B2": 0.03,
           "B3": 0.02,
-          "B4": 0.08,
+          "B4": 0.07,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.03,
+          "KYV10": 0.02,
           "KYV2": 0.03,
-          "KYV3": 0.05,
+          "KYV3": 0.04,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -205,7 +210,8 @@
       "heading": "Gus Is For Our Families",
       "text": "$4 million for Moffitt Cancer Center and nearly $6 million for cancer research at USF in Hillsborough County.",
       "verdict": {
-        "commitment": 0.68,
+        "commitment": 0.7,
+        "own_commitment": 0.69,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -216,8 +222,8 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.04,
-          "B2": 0.38,
+          "B1": 0.03,
+          "B2": 0.39,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
@@ -243,7 +249,8 @@
       "heading": "Gus Is For Our Families",
       "text": "$2M to expand mental-health services at Federally Qualified Health Centers.",
       "verdict": {
-        "commitment": 0.85,
+        "commitment": 0.86,
+        "own_commitment": 0.9,
         "states_policy": true,
         "issues": [
           "B2"
@@ -256,7 +263,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.05,
+          "B1": 0.04,
           "B2": 0.92,
           "B3": 0.02,
           "B4": 0.03,
@@ -271,7 +278,7 @@
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.03,
+          "KYV7": 0.04,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -284,11 +291,12 @@
       "text": "Magnolia Oaks Veterans Housing & Vincent House Pasco, federal dollars Gus delivered.",
       "verdict": {
         "commitment": 0.11,
+        "own_commitment": 0.1,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.16,
+          "A2": 0.17,
           "A3": 0.03,
           "A4": 0.03,
           "A5": 0.02,
@@ -297,7 +305,7 @@
           "B1": 0.06,
           "B2": 0.04,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.04,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -309,7 +317,7 @@
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.03,
-          "KYV7": 0.21,
+          "KYV7": 0.22,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -321,33 +329,34 @@
       "heading": "Gus Is For Our Families",
       "text": "Standing with our veterans, delivering healthcare, housing, and job opportunities.",
       "verdict": {
-        "commitment": 0.87,
-        "states_policy": true,
+        "commitment": 0.85,
+        "own_commitment": 0.83,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.38,
+          "A2": 0.37,
           "A3": 0.02,
           "A4": 0.03,
           "A5": 0.02,
-          "A6": 0.02,
+          "A6": 0.03,
           "A7": 0.02,
-          "B1": 0.67,
-          "B2": 0.72,
+          "B1": 0.66,
+          "B2": 0.75,
           "B3": 0.02,
-          "B4": 0.05,
+          "B4": 0.04,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.12,
+          "KYV10": 0.13,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.03,
-          "KYV7": 0.44,
+          "KYV7": 0.45,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -359,7 +368,8 @@
       "heading": "Gus Is For Our Families",
       "text": "EASE Act, extending telehealth access for seniors.",
       "verdict": {
-        "commitment": 0.71,
+        "commitment": 0.7,
+        "own_commitment": 0.65,
         "states_policy": false,
         "issues": [
           "B2"
@@ -368,28 +378,28 @@
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.02,
+          "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.04,
+          "B1": 0.05,
           "B2": 0.9,
           "B3": 0.02,
-          "B4": 0.63,
+          "B4": 0.58,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.03,
+          "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
-          "KYV2": 0.03,
-          "KYV3": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.03,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -399,7 +409,8 @@
       "heading": "Gus Is For Our Families",
       "text": "Longest-ever KidCare reauthorization in the program's history.",
       "verdict": {
-        "commitment": 0.35,
+        "commitment": 0.34,
+        "own_commitment": 0.19,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -411,9 +422,9 @@
           "A6": 0.03,
           "A7": 0.02,
           "B1": 0.04,
-          "B2": 0.71,
+          "B2": 0.72,
           "B3": 0.03,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -437,19 +448,20 @@
       "heading": "Gus Is For Our Families",
       "text": "Working to pass the Major Richard Star Act for combat-injured veterans.",
       "verdict": {
-        "commitment": 0.9,
+        "commitment": 0.91,
+        "own_commitment": 0.9,
         "states_policy": true,
         "issues": [],
         "scores": {
-          "A1": 0.03,
-          "A2": 0.04,
+          "A1": 0.02,
+          "A2": 0.03,
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.03,
-          "B2": 0.38,
+          "B1": 0.04,
+          "B2": 0.36,
           "B3": 0.02,
           "B4": 0.03,
           "B5": 0.02,
@@ -457,12 +469,12 @@
           "B7": 0.04,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.09,
+          "KYV10": 0.08,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.04,
+          "KYV6": 0.05,
           "KYV7": 0.07,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -475,7 +487,8 @@
       "heading": "Gus Is For Our Future",
       "text": "Lower costs, real tax relief, and a stronger recovery.",
       "verdict": {
-        "commitment": 0.71,
+        "commitment": 0.7,
+        "own_commitment": 0.62,
         "states_policy": false,
         "issues": [
           "B1"
@@ -483,12 +496,12 @@
         "scores": {
           "A1": 0.04,
           "A2": 0.06,
-          "A3": 0.06,
-          "A4": 0.58,
+          "A3": 0.07,
+          "A4": 0.55,
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.02,
-          "B1": 0.9,
+          "B1": 0.89,
           "B2": 0.06,
           "B3": 0.02,
           "B4": 0.03,
@@ -515,30 +528,31 @@
       "heading": "Gus Is For Our Future",
       "text": "Taking on skyrocketing homeowners insurance with the Homeowners Premium Tax Reduction Act, up to a $10,000 above-the-line deduction.",
       "verdict": {
-        "commitment": 0.94,
+        "commitment": 0.93,
+        "own_commitment": 0.89,
         "states_policy": true,
         "issues": [
           "A1"
         ],
         "scores": {
           "A1": 0.96,
-          "A2": 0.78,
-          "A3": 0.06,
-          "A4": 0.62,
+          "A2": 0.77,
+          "A3": 0.07,
+          "A4": 0.63,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.2,
-          "B2": 0.02,
+          "B1": 0.19,
+          "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.04,
+          "B8": 0.03,
           "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.02,
+          "KYV2": 0.03,
           "KYV3": 0.03,
           "KYV4": 0.03,
           "KYV5": 0.02,
@@ -555,8 +569,9 @@
       "heading": "Gus Is For Our Future",
       "text": "Fighting for affordable housing so families can afford to stay in the homes and neighborhoods they love.",
       "verdict": {
-        "commitment": 0.92,
-        "states_policy": true,
+        "commitment": 0.93,
+        "own_commitment": 0.79,
+        "states_policy": false,
         "issues": [
           "A2"
         ],
@@ -564,11 +579,11 @@
           "A1": 0.02,
           "A2": 0.98,
           "A3": 0.03,
-          "A4": 0.49,
+          "A4": 0.48,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.11,
+          "B1": 0.12,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -582,8 +597,8 @@
           "KYV3": 0.24,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.33,
-          "KYV7": 0.15,
+          "KYV6": 0.35,
+          "KYV7": 0.16,
           "KYV8": 0.03,
           "KYV9": 0.02
         }
@@ -595,7 +610,8 @@
       "heading": "Gus Is For Our Future",
       "text": "$6,000 senior tax exemption locked in under the new tax law.",
       "verdict": {
-        "commitment": 0.4,
+        "commitment": 0.42,
+        "own_commitment": 0.44,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -606,10 +622,10 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.2,
+          "B1": 0.24,
           "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.14,
+          "B4": 0.17,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -622,7 +638,7 @@
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.03,
           "KYV9": 0.02
         }
       }
@@ -634,19 +650,20 @@
       "text": "Co-sponsored legislation to eliminate taxes on Social Security.",
       "verdict": {
         "commitment": 0.95,
-        "states_policy": true,
+        "own_commitment": 0.74,
+        "states_policy": false,
         "issues": [
           "B4"
         ],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.07,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.32,
+          "B1": 0.27,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.94,
@@ -673,18 +690,19 @@
       "heading": "Gus Is For Our Future",
       "text": "$585M in federal disaster-recovery dollars flowing into Pasco County after Helene & Milton.",
       "verdict": {
-        "commitment": 0.1,
+        "commitment": 0.09,
+        "own_commitment": 0.08,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
           "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.02,
+          "A4": 0.03,
           "A5": 0.02,
-          "A6": 0.02,
+          "A6": 0.03,
           "A7": 0.02,
-          "B1": 0.1,
+          "B1": 0.11,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -697,8 +715,8 @@
           "KYV2": 0.03,
           "KYV3": 0.05,
           "KYV4": 0.18,
-          "KYV5": 0.03,
-          "KYV6": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
           "KYV7": 0.03,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -711,7 +729,8 @@
       "heading": "Gus Is For Our Freedom",
       "text": "Safer streets, safer schools, safer kids.",
       "verdict": {
-        "commitment": 0.34,
+        "commitment": 0.31,
+        "own_commitment": 0.24,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -724,14 +743,14 @@
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.06,
+          "B3": 0.04,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.57,
+          "B7": 0.55,
           "B8": 0.02,
           "KYV1": 0.05,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
@@ -750,6 +769,7 @@
       "text": "Securing the southern border to choke off cartels driving fentanyl into our communities.",
       "verdict": {
         "commitment": 0.92,
+        "own_commitment": 0.86,
         "states_policy": true,
         "issues": [
           "B3"
@@ -762,18 +782,18 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.03,
-          "B2": 0.04,
+          "B1": 0.02,
+          "B2": 0.05,
           "B3": 0.97,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.54,
+          "B7": 0.55,
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -790,6 +810,7 @@
       "text": "Standing with Pasco Sheriff Chris Nocco's law-enforcement-first approach.",
       "verdict": {
         "commitment": 0.71,
+        "own_commitment": 0.7,
         "states_policy": false,
         "issues": [
           "B7"
@@ -799,9 +820,9 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.03,
+          "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.03,
+          "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.11,
@@ -810,14 +831,14 @@
           "B6": 0.03,
           "B7": 0.93,
           "B8": 0.02,
-          "KYV1": 0.19,
+          "KYV1": 0.2,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.06,
+          "KYV7": 0.05,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -829,7 +850,8 @@
       "heading": "Gus Is For Our Freedom",
       "text": "$3M in school-safety funding for Pasco County Schools this year.",
       "verdict": {
-        "commitment": 0.59,
+        "commitment": 0.6,
+        "own_commitment": 0.47,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -838,7 +860,7 @@
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.76,
+          "A6": 0.77,
           "A7": 0.02,
           "B1": 0.04,
           "B2": 0.02,
@@ -867,7 +889,8 @@
       "heading": "Gus Is For Our Freedom",
       "text": "The Take It Down Act, signed into law, going after predators using AI to victimize kids.",
       "verdict": {
-        "commitment": 0.27,
+        "commitment": 0.25,
+        "own_commitment": 0.15,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -905,7 +928,8 @@
       "heading": "Gus Is For Our Freedom",
       "text": "Working to empower parents with greater tools to keep kids safe online.",
       "verdict": {
-        "commitment": 0.56,
+        "commitment": 0.52,
+        "own_commitment": 0.77,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -924,7 +948,7 @@
           "B6": 0.02,
           "B7": 0.05,
           "B8": 0.02,
-          "KYV1": 0.03,
+          "KYV1": 0.04,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -944,6 +968,7 @@
       "text": "Others talk — Gus works and gets results.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -982,31 +1007,32 @@
       "text": "When Tampa Bay families needed results, Gus delivered, from disaster recovery to lower costs. See how he is delivering for us all over Pasco and Hillsborough.",
       "verdict": {
         "commitment": 0.11,
+        "own_commitment": 0.11,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.22,
-          "A2": 0.09,
+          "A1": 0.24,
+          "A2": 0.11,
           "A3": 0.05,
-          "A4": 0.3,
+          "A4": 0.32,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.17,
-          "B2": 0.06,
+          "B1": 0.2,
+          "B2": 0.07,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.03,
-          "B8": 0.02,
+          "B8": 0.03,
           "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.12,
+          "KYV2": 0.15,
           "KYV3": 0.03,
-          "KYV4": 0.1,
+          "KYV4": 0.08,
           "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV6": 0.03,
           "KYV7": 0.03,
           "KYV8": 0.05,
           "KYV9": 0.02
@@ -1020,10 +1046,11 @@
       "text": "Gus Bilirakis is a husband, father, attorney, and son with deep roots to this community. He grew up in the Tampa Bay area, watched his father Mike serve this same community in Congress, and has served the people of this region by quietly building one of the most effective records in the U.S. House.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.03,
           "A3": 0.03,
           "A4": 0.02,
@@ -1031,14 +1058,14 @@
           "A6": 0.03,
           "A7": 0.02,
           "B1": 0.03,
-          "B2": 0.03,
+          "B2": 0.02,
           "B3": 0.02,
           "B4": 0.03,
-          "B5": 0.03,
+          "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.02,
+          "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.03,
+          "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.03,
           "KYV3": 0.03,
@@ -1046,8 +1073,8 @@
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV8": 0.03,
+          "KYV9": 0.02
         }
       }
     },
@@ -1058,23 +1085,24 @@
       "text": "As a senior member of the Energy & Commerce Committee and a veteran legislator with deep relationships across the aisle, Gus has built a record measured by bills passed and dollars delivered, not cable-TV hits.",
       "verdict": {
         "commitment": 0.06,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.02,
+          "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.05,
           "B2": 0.03,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.02,
+          "B7": 0.03,
           "B8": 0.03,
           "KYV1": 0.03,
           "KYV10": 0.02,
@@ -1096,6 +1124,7 @@
       "text": "In Florida, Vote-by-Mail requests don't carry over from year to year, so each general election cycle you simply submit a new one. If you want to Vote By Mail for Gus Bilirakis, request your ballot today!",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1105,21 +1134,21 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.59,
+          "A7": 0.58,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.08,
+          "B6": 0.07,
           "B7": 0.02,
-          "B8": 0.01,
+          "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1134,6 +1163,7 @@
       "text": "Show your neighbors where you stand. Yard signs are free to constituents inside the new CD 12 footprint (Pasco & Hillsborough). The campaign will confirm availability and arrange pickup or drop-off.",
       "verdict": {
         "commitment": 0.08,
+        "own_commitment": 0.66,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1155,7 +1185,7 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -1171,24 +1201,25 @@
       "heading": "Stand with Gus.",
       "text": "Our community deserves proven results. Help re-elect a congressman who delivers results and fights to lower costs for Pasco and Hillsborough.",
       "verdict": {
-        "commitment": 0.41,
+        "commitment": 0.44,
+        "own_commitment": 0.31,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.05,
+          "A1": 0.04,
           "A2": 0.05,
           "A3": 0.04,
           "A4": 0.68,
-          "A5": 0.02,
+          "A5": 0.03,
           "A6": 0.03,
           "A7": 0.03,
-          "B1": 0.56,
+          "B1": 0.61,
           "B2": 0.14,
           "B3": 0.02,
           "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.03,
+          "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
@@ -1210,10 +1241,11 @@
       "text": "Learn how Gus is leading and delivering on the critical issues facing our community.",
       "verdict": {
         "commitment": 0.05,
+        "own_commitment": 0.09,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.03,
           "A3": 0.03,
           "A4": 0.03,
@@ -1222,21 +1254,21 @@
           "A7": 0.03,
           "B1": 0.03,
           "B2": 0.03,
-          "B3": 0.03,
-          "B4": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.03,
           "B7": 0.03,
-          "B8": 0.03,
+          "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.03,
           "KYV2": 0.03,
-          "KYV3": 0.04,
+          "KYV3": 0.03,
           "KYV4": 0.03,
           "KYV5": 0.03,
-          "KYV6": 0.03,
+          "KYV6": 0.02,
           "KYV7": 0.03,
-          "KYV8": 0.03,
+          "KYV8": 0.02,
           "KYV9": 0.03
         }
       }
@@ -1247,21 +1279,22 @@
       "heading": "Lowering the Cost of Living",
       "text": "Groceries, housing, and the everyday basics cost more every week. Families are squeezed by inflation on every necessity, workers watch tips and overtime get taxed away, and seniors stretch fixed incomes thinner every month.",
       "verdict": {
-        "commitment": 0.08,
+        "commitment": 0.07,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
           "A2": 0.4,
           "A3": 0.03,
-          "A4": 0.34,
+          "A4": 0.37,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
-          "B1": 0.67,
+          "A7": 0.01,
+          "B1": 0.71,
           "B2": 0.03,
           "B3": 0.02,
-          "B4": 0.06,
+          "B4": 0.05,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -1286,24 +1319,24 @@
       "text": "Gus delivered the new $6,000 senior tax exemption , championed no tax on tips and no tax on overtime , and continues to push affordability legislation that puts money back in working families' pockets, including ending taxation on Social Security, lowering prescription drug costs for seniors, and his new homeowners insurance deduction.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.88,
         "states_policy": true,
         "issues": [
-          "A1",
           "A4",
           "B2"
         ],
         "scores": {
-          "A1": 0.85,
+          "A1": 0.82,
           "A2": 0.73,
           "A3": 0.12,
           "A4": 0.9,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.62,
+          "B1": 0.61,
           "B2": 0.94,
           "B3": 0.02,
-          "B4": 0.83,
+          "B4": 0.81,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -1317,7 +1350,7 @@
           "KYV6": 0.03,
           "KYV7": 0.02,
           "KYV8": 0.03,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -1328,21 +1361,22 @@
       "text": "Floridians are losing the dream of homeownership to skyrocketing insurance premiums. Seniors on fixed incomes are being priced out of houses they've owned for decades.",
       "verdict": {
         "commitment": 0.07,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.8,
-          "A2": 0.82,
+          "A1": 0.81,
+          "A2": 0.81,
           "A3": 0.03,
-          "A4": 0.7,
+          "A4": 0.69,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.01,
-          "B1": 0.17,
+          "A7": 0.02,
+          "B1": 0.18,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.03,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.05,
@@ -1366,32 +1400,33 @@
       "text": "Gus filed the Homeowners Premium Tax Reduction Act , an above-the-line $10,000 tax deduction on homeowners insurance premiums for a primary residence, and is fighting for an Anclote River Basin study to attack the flooding driving repetitive-loss premiums in the first place.",
       "verdict": {
         "commitment": 0.97,
-        "states_policy": true,
+        "own_commitment": 0.83,
+        "states_policy": false,
         "issues": [
           "A1",
           "KYV4"
         ],
         "scores": {
           "A1": 0.97,
-          "A2": 0.66,
-          "A3": 0.05,
-          "A4": 0.54,
+          "A2": 0.63,
+          "A3": 0.04,
+          "A4": 0.56,
           "A5": 0.03,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.12,
+          "B1": 0.13,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.27,
+          "B8": 0.26,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.08,
-          "KYV4": 0.86,
+          "KYV3": 0.07,
+          "KYV4": 0.87,
           "KYV5": 0.03,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -1407,20 +1442,21 @@
       "text": "Talk is cheap in Washington. What matters is who actually passes legislation and delivers real results for the families and Seniors they represent.",
       "verdict": {
         "commitment": 0.09,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.04,
           "B2": 0.03,
-          "B3": 0.02,
-          "B4": 0.05,
+          "B3": 0.03,
+          "B4": 0.04,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -1428,7 +1464,7 @@
           "KYV1": 0.03,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -1445,12 +1481,13 @@
       "text": "The nonpartisan Center for Effective Lawmaking has named Gus one of the most effective members of Congress, multiple times , a ranking measured by bills passed and results delivered, not headlines. It is independent proof of what Pasco and Hillsborough already know: Gus shows up and gets things done.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.03,
@@ -1464,7 +1501,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.03,
-          "KYV10": 0.03,
+          "KYV10": 0.02,
           "KYV2": 0.03,
           "KYV3": 0.03,
           "KYV4": 0.02,
@@ -1483,6 +1520,7 @@
       "text": "Helene and Milton flattened parts of Hudson, Holiday, Port Richey, and New Port Richey. Recovery has been slow, repetitive losses are mounting, and families are tired of waiting.",
       "verdict": {
         "commitment": 0.05,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1493,23 +1531,23 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.04,
+          "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.04,
+          "B8": 0.03,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.03,
           "KYV3": 0.03,
-          "KYV4": 0.07,
+          "KYV4": 0.08,
           "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV6": 0.03,
           "KYV7": 0.02,
-          "KYV8": 0.03,
+          "KYV8": 0.02,
           "KYV9": 0.02
         }
       }
@@ -1521,6 +1559,7 @@
       "text": "Gus secured $585 million in federal disaster-recovery funding for Pasco County, usable for direct hurricane relief and for the long-term infrastructure work needed to fortify the county against the next storm.",
       "verdict": {
         "commitment": 0.08,
+        "own_commitment": 0.08,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1533,17 +1572,17 @@
           "A7": 0.02,
           "B1": 0.06,
           "B2": 0.02,
-          "B3": 0.02,
+          "B3": 0.01,
           "B4": 0.02,
           "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.08,
+          "B8": 0.07,
           "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.03,
+          "KYV2": 0.04,
           "KYV3": 0.03,
-          "KYV4": 0.58,
+          "KYV4": 0.53,
           "KYV5": 0.03,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -1559,6 +1598,7 @@
       "text": "Every family in Pasco and Hillsborough has been touched by addiction or mental illness. The system has gaps that swallow the people who need help most.",
       "verdict": {
         "commitment": 0.08,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1575,8 +1615,8 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.03,
-          "B8": 0.02,
+          "B7": 0.02,
+          "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
@@ -1584,7 +1624,7 @@
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -1596,7 +1636,8 @@
       "heading": "Mental Health & Addiction",
       "text": "Gus secured $2 million to expand mental-health services at FQHCs, brought federal funding to open Vincent House Pasco for those battling mental illness, secured funding for a one-stop behavioral-health hub in Pasco, extended telehealth for seniors through the EASE Act , and expanded the types of licensed therapists who can participate in Medicare.",
       "verdict": {
-        "commitment": 0.41,
+        "commitment": 0.38,
+        "own_commitment": 0.11,
         "states_policy": false,
         "issues": [
           "B2"
@@ -1609,10 +1650,10 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.03,
+          "B1": 0.02,
           "B2": 0.85,
           "B3": 0.02,
-          "B4": 0.58,
+          "B4": 0.63,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -1636,7 +1677,8 @@
       "heading": "Children's Health & Rare Disease",
       "text": "Kids with rare diseases lose precious time when conditions go undiagnosed at birth, and pediatric cancer drug development still lags pediatric need.",
       "verdict": {
-        "commitment": 0.07,
+        "commitment": 0.08,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1644,18 +1686,18 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.01,
-          "A5": 0.01,
+          "A5": 0.02,
           "A6": 0.02,
           "A7": 0.01,
           "B1": 0.02,
-          "B2": 0.17,
+          "B2": 0.19,
           "B3": 0.01,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.01,
           "B7": 0.02,
-          "B8": 0.01,
-          "KYV1": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.01,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -1674,7 +1716,8 @@
       "heading": "Children's Health & Rare Disease",
       "text": "Gus is leading the fight to expand the federal newborn-screening panel (two new conditions were added at HHS this year) and he secured the reauthorization of the Pediatric Cancer Voucher to fast-track new treatments for sick kids. He also delivered the longest reauthorization of KidCare in the program's history.",
       "verdict": {
-        "commitment": 0.41,
+        "commitment": 0.36,
+        "own_commitment": 0.1,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1694,7 +1737,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.03,
+          "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -1702,7 +1745,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.06
+          "KYV9": 0.05
         }
       }
     },
@@ -1713,6 +1756,7 @@
       "text": "Cartels are pushing fentanyl into our neighborhoods, predators are using AI to victimize children, and parents are still worried about safety in the schoolhouse.",
       "verdict": {
         "commitment": 0.08,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1721,7 +1765,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.03,
+          "A6": 0.04,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.04,
@@ -1729,7 +1773,7 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.27,
+          "B7": 0.26,
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.02,
@@ -1740,7 +1784,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -1750,7 +1794,8 @@
       "heading": "Public Safety, School Safety, & the Border",
       "text": "Gus secured the wall to choke off the cartels driving human and drug trafficking, passed the Take It Down Act to give law enforcement new tools against AI-generated child sexual abuse material, and brought $3 million in school-safety funding to districts in the new CD 12 footprint this year. Pasco Sheriff Chris Nocco speaks to this record.",
       "verdict": {
-        "commitment": 0.64,
+        "commitment": 0.62,
+        "own_commitment": 0.08,
         "states_policy": false,
         "issues": [
           "B3",
@@ -1762,20 +1807,20 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.43,
+          "A6": 0.41,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
-          "B3": 0.93,
+          "B3": 0.92,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.9,
+          "B7": 0.91,
           "B8": 0.02,
           "KYV1": 0.05,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -1792,7 +1837,8 @@
       "text": "Florida families want a Washington that secures the border, lowers costs, and puts America First. That takes a representative who will stand with President Trump and fight to get his agenda across the finish line.",
       "verdict": {
         "commitment": 0.87,
-        "states_policy": true,
+        "own_commitment": 0.78,
+        "states_policy": false,
         "issues": [
           "B3"
         ],
@@ -1800,17 +1846,17 @@
           "A1": 0.04,
           "A2": 0.08,
           "A3": 0.03,
-          "A4": 0.79,
+          "A4": 0.77,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
-          "B1": 0.67,
-          "B2": 0.11,
-          "B3": 0.93,
+          "A7": 0.03,
+          "B1": 0.68,
+          "B2": 0.1,
+          "B3": 0.92,
           "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.07,
+          "B7": 0.08,
           "B8": 0.03,
           "KYV1": 0.03,
           "KYV10": 0.02,
@@ -1831,8 +1877,9 @@
       "heading": "Supporting the Trump Agenda",
       "text": "Gus is a proven partner for the America First agenda, voting to secure the border, cut taxes for working families and seniors, and unleash American energy, the record that earned him President Trump's full support.",
       "verdict": {
-        "commitment": 0.85,
-        "states_policy": true,
+        "commitment": 0.82,
+        "own_commitment": 0.13,
+        "states_policy": false,
         "issues": [
           "B3"
         ],
@@ -1842,24 +1889,24 @@
           "A3": 0.04,
           "A4": 0.05,
           "A5": 0.02,
-          "A6": 0.02,
-          "A7": 0.02,
-          "B1": 0.75,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.77,
           "B2": 0.03,
           "B3": 0.94,
-          "B4": 0.07,
-          "B5": 0.02,
-          "B6": 0.03,
+          "B4": 0.08,
+          "B5": 0.03,
+          "B6": 0.02,
           "B7": 0.1,
           "B8": 0.51,
           "KYV1": 0.03,
           "KYV10": 0.03,
-          "KYV2": 0.83,
+          "KYV2": 0.84,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.03,
-          "KYV7": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.03
         }
@@ -1872,6 +1919,7 @@
       "text": "★ ★ ★ “Gus Bilirakis has my complete and total endorsement!” — President Donald J. Trump ★ ★ ★",
       "verdict": {
         "commitment": 0.06,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1886,20 +1934,20 @@
           "B2": 0.02,
           "B3": 0.03,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.03,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.02,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -1909,29 +1957,30 @@
       "heading": "The work doesn't stop.",
       "text": "Help re-elect a congressman who delivers results and fights to lower costs for Pasco and Hillsborough.",
       "verdict": {
-        "commitment": 0.54,
+        "commitment": 0.51,
+        "own_commitment": 0.39,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.05,
-          "A2": 0.05,
+          "A2": 0.06,
           "A3": 0.04,
-          "A4": 0.64,
+          "A4": 0.65,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.03,
-          "B1": 0.57,
-          "B2": 0.13,
+          "B1": 0.59,
+          "B2": 0.12,
           "B3": 0.02,
           "B4": 0.03,
           "B5": 0.02,
-          "B6": 0.02,
+          "B6": 0.03,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.04,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -1948,21 +1997,22 @@
       "text": "As a senior member of the Energy & Commerce Committee and a veteran legislator with deep relationships across the aisle, Gus has been repeatedly named one of Florida's Most Effective Lawmakers, a ranking earned by counting bills passed and dollars delivered, not cable-TV hits.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.02,
           "A3": 0.03,
-          "A4": 0.03,
-          "A5": 0.02,
-          "A6": 0.02,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.03,
           "A7": 0.02,
-          "B1": 0.03,
-          "B2": 0.03,
-          "B3": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.03,
           "B4": 0.03,
-          "B5": 0.02,
+          "B5": 0.03,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
@@ -1975,7 +2025,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.03,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     },
@@ -1986,18 +2036,19 @@
       "text": "Gus's seat on the Energy & Commerce Committee, the oldest and most consequential committee in the House, gives him jurisdiction over health care, energy, telecommunications, consumer protection, and the Affordable Care Act. It's the engine room of the bills that touch every family in Pasco and Hillsborough.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
           "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.04,
+          "A4": 0.03,
           "A5": 0.03,
           "A6": 0.03,
-          "A7": 0.03,
+          "A7": 0.02,
           "B1": 0.04,
-          "B2": 0.07,
+          "B2": 0.06,
           "B3": 0.03,
           "B4": 0.04,
           "B5": 0.03,
@@ -2011,7 +2062,7 @@
           "KYV4": 0.03,
           "KYV5": 0.03,
           "KYV6": 0.03,
-          "KYV7": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.03,
           "KYV9": 0.03
         }
@@ -2024,14 +2075,15 @@
       "text": "From there, Gus has championed seniors, kids, and rare-disease families: the longest-ever KidCare reauthorization, the EASE Act extending telehealth, Medicare reimbursement for marriage and family therapists treating seniors, the Pediatric Cancer Voucher reauthorization, and an expanded federal newborn-screening panel.",
       "verdict": {
         "commitment": 0.35,
+        "own_commitment": 0.09,
         "states_policy": false,
         "issues": [
           "B2"
         ],
         "scores": {
           "A1": 0.03,
-          "A2": 0.03,
-          "A3": 0.03,
+          "A2": 0.02,
+          "A3": 0.02,
           "A4": 0.03,
           "A5": 0.02,
           "A6": 0.03,
@@ -2040,20 +2092,20 @@
           "B2": 0.88,
           "B3": 0.02,
           "B4": 0.61,
-          "B5": 0.03,
+          "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.02,
+          "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.03,
-          "KYV4": 0.03,
+          "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.02,
-          "KYV9": 0.1
+          "KYV9": 0.11
         }
       }
     },
@@ -2064,6 +2116,7 @@
       "text": "From hurricane recovery in Pasco to lower drug costs for seniors, safer schools, stronger borders, and tax relief that puts money back in workers' pockets, Gus's record delivering for us speaks for itself!",
       "verdict": {
         "commitment": 0.3,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [
           "B2"
@@ -2072,14 +2125,14 @@
           "A1": 0.06,
           "A2": 0.04,
           "A3": 0.06,
-          "A4": 0.54,
+          "A4": 0.5,
           "A5": 0.03,
           "A6": 0.13,
-          "A7": 0.03,
-          "B1": 0.62,
-          "B2": 0.87,
-          "B3": 0.67,
-          "B4": 0.05,
+          "A7": 0.02,
+          "B1": 0.59,
+          "B2": 0.88,
+          "B3": 0.69,
+          "B4": 0.06,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.17,
@@ -2088,9 +2141,9 @@
           "KYV10": 0.03,
           "KYV2": 0.03,
           "KYV3": 0.03,
-          "KYV4": 0.29,
-          "KYV5": 0.03,
-          "KYV6": 0.02,
+          "KYV4": 0.28,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
           "KYV7": 0.03,
           "KYV8": 0.03,
           "KYV9": 0.04
@@ -2159,54 +2212,6 @@
     },
     {
       "area": {
-        "id": "housing",
-        "label": "Housing"
-      },
-      "subIssues": [
-        {
-          "id": "A2",
-          "label": "Housing affordability",
-          "citations": [
-            {
-              "passage": {
-                "id": "bb5c897d",
-                "url": "https://bilirakisforcongress.com/",
-                "heading": "Gus Is For Our Future",
-                "text": "Fighting for affordable housing so families can afford to stay in the homes and neighborhoods they love.",
-                "retrieved_at": "2026-09-29T11:41:51.223Z"
-              },
-              "score": 0.98
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "area": {
-        "id": "environment",
-        "label": "Environment & Water"
-      },
-      "subIssues": [
-        {
-          "id": "KYV4",
-          "label": "Storm resilience and flood protection",
-          "citations": [
-            {
-              "passage": {
-                "id": "7c5d0bee",
-                "url": "https://bilirakisforcongress.com/issues.html",
-                "heading": "Homeowners & Flood Insurance Affordability",
-                "text": "Gus filed the Homeowners Premium Tax Reduction Act , an above-the-line $10,000 tax deduction on homeowners insurance premiums for a primary residence, and is fighting for an Anclote River Basin study to attack the flooding driving repetitive-loss premiums in the first place.",
-                "retrieved_at": "2026-09-29T11:41:51.223Z"
-              },
-              "score": 0.86
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "area": {
         "id": "immigration",
         "label": "Immigration"
       },
@@ -2224,26 +2229,6 @@
                 "retrieved_at": "2026-09-29T11:41:51.223Z"
               },
               "score": 0.97
-            },
-            {
-              "passage": {
-                "id": "5f4dcb3a",
-                "url": "https://bilirakisforcongress.com/issues.html",
-                "heading": "Supporting the Trump Agenda",
-                "text": "Gus is a proven partner for the America First agenda, voting to secure the border, cut taxes for working families and seniors, and unleash American energy, the record that earned him President Trump's full support.",
-                "retrieved_at": "2026-09-29T11:41:51.223Z"
-              },
-              "score": 0.94
-            },
-            {
-              "passage": {
-                "id": "18b8c4c5",
-                "url": "https://bilirakisforcongress.com/issues.html",
-                "heading": "Supporting the Trump Agenda",
-                "text": "Florida families want a Washington that secures the border, lowers costs, and puts America First. That takes a representative who will stand with President Trump and fight to get his agenda across the finish line.",
-                "retrieved_at": "2026-09-29T11:41:51.223Z"
-              },
-              "score": 0.93
             }
           ]
         }
@@ -2261,16 +2246,6 @@
           "citations": [
             {
               "passage": {
-                "id": "7c5d0bee",
-                "url": "https://bilirakisforcongress.com/issues.html",
-                "heading": "Homeowners & Flood Insurance Affordability",
-                "text": "Gus filed the Homeowners Premium Tax Reduction Act , an above-the-line $10,000 tax deduction on homeowners insurance premiums for a primary residence, and is fighting for an Anclote River Basin study to attack the flooding driving repetitive-loss premiums in the first place.",
-                "retrieved_at": "2026-09-29T11:41:51.223Z"
-              },
-              "score": 0.97
-            },
-            {
-              "passage": {
                 "id": "fc97e53c",
                 "url": "https://bilirakisforcongress.com/",
                 "heading": "Gus Is For Our Future",
@@ -2278,40 +2253,6 @@
                 "retrieved_at": "2026-09-29T11:41:51.223Z"
               },
               "score": 0.96
-            },
-            {
-              "passage": {
-                "id": "94b3a28b",
-                "url": "https://bilirakisforcongress.com/issues.html",
-                "heading": "Lowering the Cost of Living",
-                "text": "Gus delivered the new $6,000 senior tax exemption , championed no tax on tips and no tax on overtime , and continues to push affordability legislation that puts money back in working families' pockets, including ending taxation on Social Security, lowering prescription drug costs for seniors, and his new homeowners insurance deduction.",
-                "retrieved_at": "2026-09-29T11:41:51.223Z"
-              },
-              "score": 0.85
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "area": {
-        "id": "retirement",
-        "label": "Retirement & Benefits"
-      },
-      "subIssues": [
-        {
-          "id": "B4",
-          "label": "Social Security and Medicare",
-          "citations": [
-            {
-              "passage": {
-                "id": "30adcf1e",
-                "url": "https://bilirakisforcongress.com/",
-                "heading": "Gus Is For Our Future",
-                "text": "Co-sponsored legislation to eliminate taxes on Social Security.",
-                "retrieved_at": "2026-09-29T11:41:51.223Z"
-              },
-              "score": 0.94
             }
           ]
         }
@@ -2319,7 +2260,7 @@
     }
   ],
   "usage": {
-    "input_tokens": 185818,
-    "output_tokens": 24274
+    "input_tokens": 196842,
+    "output_tokens": 25387
   }
 }

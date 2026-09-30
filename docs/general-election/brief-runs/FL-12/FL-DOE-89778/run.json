@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://brandenscrivenerfl.info",
-  "created_at": "2026-09-29T11:41:56.411Z",
+  "created_at": "2026-09-30T01:58:03.358Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -38,8 +39,8 @@
   "counts": {
     "passages": 11,
     "asked": 11,
-    "states_policy": 4,
-    "with_issue": 3,
+    "states_policy": 3,
+    "with_issue": 2,
     "failed": 0
   },
   "passages": [
@@ -50,6 +51,7 @@
       "text": "My name is Branden Scrivener, I’m a 27-year-old working class father of two. I have a bachelor’s in human services, along with internship experiences at Catholic Charities, Tampa Crossroads, Department of Child Services, and Flagler Education Foundation. I’ve also worked in healthcare for over three years. One of the main duties in my role is to secure insurance authorizations for patients. My experience has led me to work with a diverse group of people which has shown me firsthand our broken insurance system. I have experience advocating for my community and seeing our vulnerable populations difficulties directly.",
       "verdict": {
         "commitment": 0.07,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -61,9 +63,9 @@
           "A6": 0.03,
           "A7": 0.02,
           "B1": 0.05,
-          "B2": 0.66,
+          "B2": 0.63,
           "B3": 0.02,
-          "B4": 0.02,
+          "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -87,7 +89,8 @@
       "heading": "My Bio",
       "text": "All this experience has led me to the same conclusion; our government policies are the source of many of our issues. For a while, I waited it out, thinking surely when “this” party won things would be different. I’ve watched the administrations and party affiliations change, and yet the systems which created our issues seem to rarely change. I’ve decided to stop wishing for someone to change things and become the change I want to see.",
       "verdict": {
-        "commitment": 0.15,
+        "commitment": 0.18,
+        "own_commitment": 0.45,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -99,21 +102,21 @@
           "A6": 0.02,
           "A7": 0.03,
           "B1": 0.06,
-          "B2": 0.03,
+          "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.02,
+          "B6": 0.03,
           "B7": 0.03,
           "B8": 0.03,
           "KYV1": 0.09,
           "KYV10": 0.02,
-          "KYV2": 0.02,
+          "KYV2": 0.03,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -126,6 +129,7 @@
       "text": "https://linktr.ee/Citzensforbrandenscrivener",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -133,11 +137,11 @@
           "A2": 0.03,
           "A3": 0.03,
           "A4": 0.03,
-          "A5": 0.03,
+          "A5": 0.02,
           "A6": 0.03,
           "A7": 0.03,
           "B1": 0.03,
-          "B2": 0.03,
+          "B2": 0.02,
           "B3": 0.03,
           "B4": 0.03,
           "B5": 0.03,
@@ -152,8 +156,8 @@
           "KYV5": 0.02,
           "KYV6": 0.03,
           "KYV7": 0.03,
-          "KYV8": 0.03,
-          "KYV9": 0.02
+          "KYV8": 0.02,
+          "KYV9": 0.03
         }
       }
     },
@@ -164,6 +168,7 @@
       "text": "All political offices need strict term limits. I believe 8 years is sufficient for the House. Someone serving a decade long appointment will lose touch as they are not living in the conditions in which they create. We should continue to engage, build, and platform the next generation of thinkers. Congress needs to be uncapped to meet the growing population and create equal representation. We have had 435 Representatives for the last 100 years. Campaign Finance law needs to be reworked to prevent unlimited corporate spending, and create clear transparency & accountability. I will advocate for open primaries to allow all voters to participate in the election process.",
       "verdict": {
         "commitment": 0.99,
+        "own_commitment": 0.97,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -182,7 +187,7 @@
           "B6": 0.11,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.41,
+          "KYV1": 0.42,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -201,7 +206,8 @@
       "heading": "Government Reform",
       "text": "In Pasco County, there are more registered independents than Democrats. That means there’s a significant portion of eligible voters unable to participate in FL primaries.",
       "verdict": {
-        "commitment": 0.09,
+        "commitment": 0.1,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -211,7 +217,7 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.68,
+          "A7": 0.69,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
@@ -240,33 +246,34 @@
       "text": "We have shifted our focus to develop Charter and other 3rd party school systems over public education. I believe in parent choice, the problem stems from where that choice funding comes from. Funding for public education should not be diverted to these programs. Teachers need to be supported and valued. Students and staff should feel safe in the public school system. We must take steps to ensure our children are not harmed while attending school.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.88,
         "states_policy": true,
         "issues": [
           "A6",
           "KYV9"
         ],
         "scores": {
-          "A1": 0.01,
+          "A1": 0.02,
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.98,
           "A7": 0.02,
-          "B1": 0.06,
+          "B1": 0.07,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.02,
+          "B6": 0.01,
           "B7": 0.04,
-          "B8": 0.01,
+          "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
-          "KYV5": 0.01,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -281,28 +288,29 @@
       "text": "Cost of living has skyrocketed and continues to rise. We need to change fundamentals rather than only addressing the symptoms. The interest of working class Americans must be prioritized over those of foreign nations or corporate capital.",
       "verdict": {
         "commitment": 0.91,
-        "states_policy": true,
+        "own_commitment": 0.51,
+        "states_policy": false,
         "issues": [
           "B1"
         ],
         "scores": {
           "A1": 0.03,
-          "A2": 0.15,
+          "A2": 0.17,
           "A3": 0.03,
-          "A4": 0.17,
+          "A4": 0.2,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.87,
           "B2": 0.04,
           "B3": 0.04,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.03,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.03,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -321,36 +329,37 @@
       "text": "Your data should be protected and required to be accessed by the government with the use of a warrant. They should not be able to buy your consumer data on the market to create their own lists and data. Overdevelopment is an issue here in Florida. We must maintain our communities while expanding in ways residents actually want. No AI data centers paid for by Floridians. We need to expand public transportation to reduce traffic and provide an alternative to the expensive auto insurance industry.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.88,
         "states_policy": true,
         "issues": [
           "KYV3"
         ],
         "scores": {
-          "A1": 0.06,
-          "A2": 0.05,
+          "A1": 0.05,
+          "A2": 0.06,
           "A3": 0.03,
-          "A4": 0.51,
+          "A4": 0.53,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.21,
+          "B1": 0.2,
           "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.22,
-          "B8": 0.05,
-          "KYV1": 0.25,
+          "B7": 0.24,
+          "B8": 0.06,
+          "KYV1": 0.23,
           "KYV10": 0.02,
-          "KYV2": 0.75,
+          "KYV2": 0.72,
           "KYV3": 0.95,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     },
@@ -360,13 +369,14 @@
       "heading": "Grassroots",
       "text": "This is a grassroots campaign and that means I need your support. Both parties are corrupted with special interests and selfish personal wealth gain. This campaign is bigger than me. It’s to show we still have a voice. The two party system works to support its own influence and divide us. We have more in common than they want us to believe. People say they want change, new voices, young voice, etc. That requires you to act. Donate, volunteer, and share my campaign. I don’t have huge party backing or developer backroom deals. Don’t just complain, join me in being the change.",
       "verdict": {
-        "commitment": 0.21,
+        "commitment": 0.22,
+        "own_commitment": 0.19,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
@@ -379,10 +389,10 @@
           "B6": 0.03,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.32,
+          "KYV1": 0.34,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.04,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -399,32 +409,33 @@
       "text": "Have questions or suggestions? I would love to hear from you!",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.09,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.01,
+          "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.01,
-          "B3": 0.01,
+          "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.01,
           "B8": 0.01,
-          "KYV1": 0.01,
+          "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.01,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.01,
+          "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -437,6 +448,7 @@
       "text": "Land O' Lakes Blvd, Land O' Lakes, FL, USA",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -470,30 +482,6 @@
     }
   ],
   "areas": [
-    {
-      "area": {
-        "id": "economy",
-        "label": "Economy & Affordability"
-      },
-      "subIssues": [
-        {
-          "id": "B1",
-          "label": "Economy, inflation, and jobs",
-          "citations": [
-            {
-              "passage": {
-                "id": "642c3734",
-                "url": "https://brandenscrivenerfl.info/",
-                "heading": "Quality of Life",
-                "text": "Cost of living has skyrocketed and continues to rise. We need to change fundamentals rather than only addressing the symptoms. The interest of working class Americans must be prioritized over those of foreign nations or corporate capital.",
-                "retrieved_at": "2026-09-29T11:41:54.449Z"
-              },
-              "score": 0.87
-            }
-          ]
-        }
-      ]
-    },
     {
       "area": {
         "id": "education",
@@ -560,7 +548,7 @@
     }
   ],
   "usage": {
-    "input_tokens": 38917,
-    "output_tokens": 5038
+    "input_tokens": 41205,
+    "output_tokens": 5269
   }
 }

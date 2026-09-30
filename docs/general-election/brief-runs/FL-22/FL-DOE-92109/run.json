@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://www.caseyaskar.com",
-  "created_at": "2026-09-29T11:42:40.218Z",
+  "created_at": "2026-09-30T01:58:16.921Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -49,7 +50,8 @@
       "heading": "Darrin Palumbo",
       "text": "We are all feeling the pressure at the grocery store and at the gas pump.Tackling the rising cost of eggs, milk, and gas is hist top priority. In Congress, Casey will work with leadership to help slash overburdening taxes and regulations that are adding to the affordability crisis.",
       "verdict": {
-        "commitment": 0.94,
+        "commitment": 0.93,
+        "own_commitment": 0.91,
         "states_policy": true,
         "issues": [
           "B1"
@@ -58,28 +60,28 @@
           "A1": 0.03,
           "A2": 0.03,
           "A3": 0.05,
-          "A4": 0.72,
+          "A4": 0.74,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.94,
           "B2": 0.03,
           "B3": 0.02,
-          "B4": 0.02,
+          "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.04,
+          "B8": 0.03,
           "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.3,
+          "KYV2": 0.29,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV6": 0.03,
           "KYV7": 0.02,
-          "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV8": 0.03,
+          "KYV9": 0.02
         }
       }
     }
@@ -111,7 +113,7 @@
     }
   ],
   "usage": {
-    "input_tokens": 3529,
-    "output_tokens": 458
+    "input_tokens": 3737,
+    "output_tokens": 479
   }
 }

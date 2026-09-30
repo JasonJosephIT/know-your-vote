@@ -1,5 +1,5 @@
-asking 73 passage(s) at threshold 0.85 as jev:jev-1.13.0/tax-7/q-b2171346
-(node:1784) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-policy-noul.ts is not specified and it doesn't parse as CommonJS.
+asking 73 passage(s) at threshold 0.85 as jev:jev-1.13.0/tax-7/q-e7282116
+(node:1008) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-policy-noul.ts is not specified and it doesn't parse as CommonJS.
 Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
 To eliminate this warning, add "type": "module" to /home/user/know-your-vote/package.json.
 (Use `node --trace-warnings ...` to show where the warning was created)
@@ -7,6 +7,6 @@ To eliminate this warning, add "type": "module" to /home/user/know-your-vote/pac
   40/73
   60/73
 
-done: 73 asked, 16 state a policy, 2 state a policy the taxonomy has no question for, 57 state no policy, 0 failed
-tokens: 255484 in, 33434 out
+done: 73 asked, 12 state a policy, 1 state a policy the taxonomy has no question for, 61 state no policy, 0 failed
+tokens: 270668 in, 34967 out
 run -> docs/general-election/brief-runs/FL-12/FL-DOE-89453/run.json

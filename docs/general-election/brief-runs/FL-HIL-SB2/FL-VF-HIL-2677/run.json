@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://www.votebrittanylyssy.com",
-  "created_at": "2026-09-29T11:45:13.893Z",
+  "created_at": "2026-09-30T01:59:02.277Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -38,7 +39,7 @@
   "counts": {
     "passages": 3,
     "asked": 3,
-    "states_policy": 2,
+    "states_policy": 1,
     "with_issue": 0,
     "failed": 0
   },
@@ -50,6 +51,7 @@
       "text": "“ Strong families and well-rounded education give children the foundation they need to thrive, adapt, and achieve in the years ahead. ”",
       "verdict": {
         "commitment": 0.13,
+        "own_commitment": 0.08,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -57,7 +59,7 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.01,
           "A6": 0.05,
           "A7": 0.02,
           "B1": 0.02,
@@ -69,7 +71,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.06,
+          "KYV10": 0.05,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -88,7 +90,8 @@
       "text": "who believes parents, not politics, should guide their children’s education. She and her husband, Doug, are raising their three young boys in our community, and like so many families, they want schools that are safe, academically strong, and focused on preparing students for real opportunity. Brittany believes parents deserve a clear voice in their children’s education and that schools must prioritize reading, math, science, and civics, not politics. A graduate of the University of Florida and Stetson University College of Law, Brittany is a member of the Florida Bar and is currently pursuing a Ph.D. in Public Policy with a specialization in Education Policy.",
       "verdict": {
         "commitment": 0.91,
-        "states_policy": true,
+        "own_commitment": 0.55,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
@@ -115,7 +118,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.07
+          "KYV9": 0.06
         }
       }
     },
@@ -126,27 +129,28 @@
       "text": "She also served on the City of Tampa Citizens Advisory Budget and Finance Committee, where she works to ensure transparency and responsible stewardship of public funds. Brittany believes strong schools are built on strong families, fiscal discipline, and accountability. She is running for the School Board to defend parental rights, demand financial responsibility, and keep the focus where it belongs, on students and academic excellence.",
       "verdict": {
         "commitment": 0.96,
+        "own_commitment": 0.85,
         "states_policy": true,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.05,
-          "A4": 0.03,
+          "A3": 0.04,
+          "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.8,
-          "A7": 0.02,
-          "B1": 0.17,
-          "B2": 0.03,
+          "A6": 0.81,
+          "A7": 0.03,
+          "B1": 0.15,
+          "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.03,
+          "B6": 0.02,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.07,
+          "KYV1": 0.08,
           "KYV10": 0.03,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -160,7 +164,7 @@
   ],
   "areas": [],
   "usage": {
-    "input_tokens": 10691,
-    "output_tokens": 1374
+    "input_tokens": 11315,
+    "output_tokens": 1437
   }
 }

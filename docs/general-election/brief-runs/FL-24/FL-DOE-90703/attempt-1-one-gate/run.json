@@ -1,0 +1,1479 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://tebrownforflorida.com",
+  "created_at": "2026-09-29T11:42:51.243Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 27,
+    "asked": 27,
+    "states_policy": 17,
+    "with_issue": 15,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "7a003d7f",
+      "url": "https://tebrownforflorida.com/",
+      "heading": "Meet Te Brown",
+      "text": "Te Brown is a real estate developer, small businesswoman, and homeschooling mom.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "47150ed2",
+      "url": "https://tebrownforflorida.com/",
+      "heading": "Meet Te Brown",
+      "text": "She grew up on the tough streets of Chicago and relied on her Christian values and faith in America to build a successful business from scratch.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "3a8cf149",
+      "url": "https://tebrownforflorida.com/",
+      "heading": "Meet Te Brown",
+      "text": "She is a pro-MAGA, pro-Constitution conservative who isn’t afraid to stand up for what’s right.",
+      "verdict": {
+        "commitment": 0.65,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.04,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.06,
+          "B4": 0.02,
+          "B5": 0.03,
+          "B6": 0.1,
+          "B7": 0.05,
+          "B8": 0.03,
+          "KYV1": 0.11,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "b7e52bb9",
+      "url": "https://tebrownforflorida.com/",
+      "heading": "Latest News",
+      "text": "Stay updated with the latest news and insights from Te Brown's campaign.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "74182647",
+      "url": "https://tebrownforflorida.com/",
+      "heading": "Latest News",
+      "text": "Stay tuned for the latest campaign updates and news.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "f2ff891e",
+      "url": "https://tebrownforflorida.com/",
+      "heading": "Upcoming Events",
+      "text": "Join the team at upcoming events and meet Te Brown at events around the district.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "6ee90ccc",
+      "url": "https://tebrownforflorida.com/",
+      "heading": "Upcoming Events",
+      "text": "We're planning exciting events across the district. Check back soon to join us!",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.01,
+          "B8": 0.01,
+          "KYV1": 0.01,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "44f0eaeb",
+      "url": "https://tebrownforflorida.com/the-people-first-agenda",
+      "heading": "Putting People Before Politics. Delivering Results That Matter.",
+      "text": "A bold agenda focused on lowering the cost of living, making housing and childcare more affordable, protecting seniors and veterans, creating jobs, protecting the healthcare system, strengthening communities, and putting families first.",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.96,
+          "A3": 0.03,
+          "A4": 0.6,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.93,
+          "B2": 0.75,
+          "B3": 0.03,
+          "B4": 0.15,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.03,
+          "KYV10": 0.04,
+          "KYV2": 0.04,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.06,
+          "KYV7": 0.05,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "0c802def",
+      "url": "https://tebrownforflorida.com/the-people-first-agenda",
+      "heading": "The People First Agenda",
+      "text": "1. Affordability & Homeownership — Lower the barriers to buying a home, build more affordable housing, and address the cost of living. 2. Healthcare That Works — Increase transparency, lower prescription and healthcare costs, and protect patients from unnecessary costs. 3. Jobs & Economic Opportunity — Support small businesses, attract manufacturing, and create good-paying jobs in the district. 4. Infrastructure & Resilience — Invest in roads, bridges, water systems, drainage, and infrastructure that keeps South Florida moving. 5. Protecting Seniors & Veterans — Protect Social Security and Medicare while making sure veterans receive the services they’ve earned. 6.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "A4",
+          "B1",
+          "B2",
+          "B4"
+        ],
+        "scores": {
+          "A1": 0.04,
+          "A2": 0.99,
+          "A3": 0.04,
+          "A4": 0.9,
+          "A5": 0.1,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.96,
+          "B2": 0.98,
+          "B3": 0.03,
+          "B4": 0.98,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.05,
+          "KYV1": 0.02,
+          "KYV10": 0.04,
+          "KYV2": 0.05,
+          "KYV3": 0.06,
+          "KYV4": 0.71,
+          "KYV5": 0.42,
+          "KYV6": 0.03,
+          "KYV7": 0.06,
+          "KYV8": 0.04,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "93d60669",
+      "url": "https://tebrownforflorida.com/the-people-first-agenda",
+      "heading": "The People First Agenda",
+      "text": "Safe & Strong Communities — Support law enforcement, address crime, and make communities safer. 7. Education & Opportunity — Expand educational choices and make sure children have pathways to careers, trades, college, or entrepreneurship. 8. Accountability in Washington — Make government live within its means, eliminate waste, and demand measurable results",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "KYV10",
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.07,
+          "A7": 0.03,
+          "B1": 0.13,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.96,
+          "B8": 0.03,
+          "KYV1": 0.1,
+          "KYV10": 0.95,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.78
+        }
+      }
+    },
+    {
+      "id": "0ab92443",
+      "url": "https://tebrownforflorida.com/the-people-first-agenda",
+      "heading": "The People First Agenda",
+      "text": "Your concerns are not just messages—they’re the issues I intend to fight to address. Send me your concerns, ideas, and priorities. Together, we can build a People’s First Agenda that delivers results.",
+      "verdict": {
+        "commitment": 0.22,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "560e7ff7",
+      "url": "https://tebrownforflorida.com/the-people-first-agenda",
+      "heading": "The People First Agenda",
+      "text": "Email me your concerns and ideas at info@tmbrownforcongress.com",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "6ce50e9c",
+      "url": "https://tebrownforflorida.com/issues",
+      "heading": "Make Housing Affordable Again",
+      "text": "Te Brown supports redirecting federal housing dollars away from lifelong rental subsidies and toward helping low-income families in our district buy their first home. Instead of keeping hardworking Americans trapped as permanent renters, housing policy should help families build stability, equity, and independence. It is time to move beyond dependency and give more families the chance to own a piece of the American Dream.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.98,
+          "A3": 0.03,
+          "A4": 0.21,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.08,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.71,
+          "KYV7": 0.04,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e1b6b720",
+      "url": "https://tebrownforflorida.com/issues",
+      "heading": "School Choice",
+      "text": "Every child in Florida’s 24th District deserves a quality education, not a zip code assignment. Te Brown supports taking federal education dollars that currently prop up failing schools and putting that money directly in the hands of parents by funding students, not systems. Families should be empowered to choose the best learning environment for their children, whether that is a public school, charter school, private school, or homeschool. No child should be trapped in an underperforming school because of where their family lives.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "KYV9"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.8,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.98
+        }
+      }
+    },
+    {
+      "id": "18911dd3",
+      "url": "https://tebrownforflorida.com/issues",
+      "heading": "PROTECT AMERICAN WORKERS & REFORM H-1B",
+      "text": "The H-1B program should serve America’s workforce—not be used to undercut American workers’ wages or replace qualified Americans. I support reforms that prioritize American workers, require employers to pay competitive wages, crack down on abuse, and reserve H-1B visas for legitimate high-skill workforce needs where American workers cannot fill the position.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "B1",
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.01,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.94,
+          "B2": 0.02,
+          "B3": 0.95,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.04,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.01,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "1acafefe",
+      "url": "https://tebrownforflorida.com/issues",
+      "heading": "PROTECT AMERICAN WORKERS & REFORM H-1B",
+      "text": "No wage suppression or worker replacement",
+      "verdict": {
+        "commitment": 0.94,
+        "states_policy": true,
+        "issues": [
+          "B1",
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.9,
+          "B2": 0.02,
+          "B3": 0.89,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.04,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "143588d7",
+      "url": "https://tebrownforflorida.com/issues",
+      "heading": "PROTECT AMERICAN WORKERS & REFORM H-1B",
+      "text": "H-1B visas for genuine high-skill workforce shortages",
+      "verdict": {
+        "commitment": 0.9,
+        "states_policy": true,
+        "issues": [
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.8,
+          "B2": 0.02,
+          "B3": 0.95,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.07,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "0c7e1b54",
+      "url": "https://tebrownforflorida.com/issues",
+      "heading": "Keep Promises to Veterans",
+      "text": "The men and women who served this country deserve more than empty thank-yous. Faster care, real mental health support, and full accountability at the VA — that’s what our veterans have earned.",
+      "verdict": {
+        "commitment": 0.94,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.82,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4a9ef6ee",
+      "url": "https://tebrownforflorida.com/issues",
+      "heading": "SECURE BORDERS & A LEGAL IMMIGRATION SYSTEM",
+      "text": "A nation must have secure borders and a fair, lawful immigration system.",
+      "verdict": {
+        "commitment": 0.91,
+        "states_policy": true,
+        "issues": [
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.98,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.07,
+          "B8": 0.02,
+          "KYV1": 0.05,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "993d6724",
+      "url": "https://tebrownforflorida.com/issues",
+      "heading": "SECURE BORDERS & A LEGAL IMMIGRATION SYSTEM",
+      "text": "I support securing our southern border, enforcing our immigration laws, and prioritizing the removal of criminals and those who pose a threat to public safety.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.01,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.01,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.99,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.28,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "518d18b1",
+      "url": "https://tebrownforflorida.com/issues",
+      "heading": "SECURE BORDERS & A LEGAL IMMIGRATION SYSTEM",
+      "text": "At the same time, we should create a clear, lawful process for people who have earned the right to remain, while ending policies that encourage illegal immigration and ensuring that those who follow the rules are not left behind.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.01,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.98,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.05,
+          "B8": 0.01,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c015eb57",
+      "url": "https://tebrownforflorida.com/issues",
+      "heading": "Defend Our Traditional Values",
+      "text": "Faith, family, and freedom are the foundation of America. Religious liberty, parental rights, the Second Amendment, and the Constitution itself are under attack — and they’re worth fighting for.",
+      "verdict": {
+        "commitment": 0.85,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.05,
+          "B6": 0.02,
+          "B7": 0.08,
+          "B8": 0.02,
+          "KYV1": 0.2,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "06592307",
+      "url": "https://tebrownforflorida.com/issues",
+      "heading": "TPS Holder",
+      "text": "For 15 years, Washington has told Haitian families in South Florida that their status was temporary, and for 15 years nothing changed. During that time, the situation in Haiti has only worsened, and many community members have built businesses, raised families, staffed hospitals, and created institutions the rest of us depend on. Put simply, that is not a temporary population, and the community has earned better than a deportation notice. In Congress, I will fight for an earned path to citizenship. Earned: a steady work history, taxes paid, a clean record, a full background check. Not amnesty, and not a cut ahead of anyone who waited in line.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.1,
+          "B2": 0.02,
+          "B3": 0.98,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.08,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "7fdc81fa",
+      "url": "https://tebrownforflorida.com/issues",
+      "heading": "TPS Holder",
+      "text": "A Republican Congress did this in 1998 with the Haitian Refugee Immigration Fairness Act, and it was right then. Those who have worked, paid taxes, built our communities, and embodied the American experience should not be cast aside, but welcomed as who they are: Haitian-Americans. I won’t pretend, either, that the other side doesn’t matter. No immigration bill can fix the status of Port-Au-Prince and Haiti. I will work to end the South Florida weapons pipeline to Port-Au-Prince, and back the effort to rebuild, because nobody wants a stable Haiti more than those forced to leave it.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.02,
+          "B3": 0.96,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.19,
+          "B8": 0.02,
+          "KYV1": 0.07,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8a02b2df",
+      "url": "https://tebrownforflorida.com/meet-te-brown",
+      "heading": "Meet Te Brown",
+      "text": "Te Mayonna Brown is the Republican nominee for Florida’s 24th Congressional District. A successful businesswoman, educator, and trailblazing real estate developer, she has spent her career building stronger communities, creating opportunities, and helping families achieve the American Dream. As a woman real estate developer, Te has transformed neighborhoods through affordable housing and economic investment. Her work has given her firsthand experience solving real-world challenges, creating jobs, and helping communities grow. Te also understands the importance of education.",
+      "verdict": {
+        "commitment": 0.08,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.49,
+          "A3": 0.03,
+          "A4": 0.06,
+          "A5": 0.03,
+          "A6": 0.04,
+          "A7": 0.02,
+          "B1": 0.26,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.08,
+          "KYV2": 0.02,
+          "KYV3": 0.21,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.04,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "6abe852a",
+      "url": "https://tebrownforflorida.com/meet-te-brown",
+      "heading": "Meet Te Brown",
+      "text": "As a former teacher, she believes every child deserves access to a quality education and that parents—not government bureaucrats—should have the freedom to choose the best educational path for their children. She is a strong advocate for school choice and policies that put students and families first. Now, Te is taking her experience as a builder, educator, and entrepreneur to Washington. She isn’t a career politician—she’s a proven leader who knows how to get results. She is committed to fighting for stronger wage growth, affordable housing, lower costs for working families, safer communities, and policies that encourage businesses to grow and create better-paying jobs.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "KYV9",
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.91,
+          "A3": 0.03,
+          "A4": 0.38,
+          "A5": 0.02,
+          "A6": 0.26,
+          "A7": 0.02,
+          "B1": 0.96,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.25,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.09,
+          "KYV2": 0.03,
+          "KYV3": 0.05,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.04,
+          "KYV7": 0.04,
+          "KYV8": 0.03,
+          "KYV9": 0.98
+        }
+      }
+    },
+    {
+      "id": "4ef9bace",
+      "url": "https://tebrownforflorida.com/meet-te-brown",
+      "heading": "Meet Te Brown",
+      "text": "Te believes America is strongest when government is limited, communities are safe, the economy is growing, and every family has the opportunity to succeed through hard work. As your next representative in Congress, Te Mayonna Brown will be a strong voice for economic growth, public safety, fiscal responsibility, individual freedom, and common-sense leadership. She will work every day to protect taxpayers, support small businesses, strengthen families, and ensure the next generation has even greater opportunities than the last. Together, we can build a stronger Florida, a stronger economy, and a brighter future for the families of Florida’s 24th Congressional District.",
+      "verdict": {
+        "commitment": 0.94,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.04,
+          "A4": 0.07,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.94,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.48,
+          "B8": 0.03,
+          "KYV1": 0.04,
+          "KYV10": 0.04,
+          "KYV2": 0.03,
+          "KYV3": 0.04,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "economy",
+        "label": "Economy & Affordability"
+      },
+      "subIssues": [
+        {
+          "id": "A4",
+          "label": "Cost of living in Florida",
+          "citations": [
+            {
+              "passage": {
+                "id": "0c802def",
+                "url": "https://tebrownforflorida.com/the-people-first-agenda",
+                "heading": "The People First Agenda",
+                "text": "1. Affordability & Homeownership — Lower the barriers to buying a home, build more affordable housing, and address the cost of living. 2. Healthcare That Works — Increase transparency, lower prescription and healthcare costs, and protect patients from unnecessary costs. 3. Jobs & Economic Opportunity — Support small businesses, attract manufacturing, and create good-paying jobs in the district. 4. Infrastructure & Resilience — Invest in roads, bridges, water systems, drainage, and infrastructure that keeps South Florida moving. 5. Protecting Seniors & Veterans — Protect Social Security and Medicare while making sure veterans receive the services they’ve earned. 6.",
+                "retrieved_at": "2026-09-29T11:42:46.181Z"
+              },
+              "score": 0.9
+            }
+          ]
+        },
+        {
+          "id": "B1",
+          "label": "Economy, inflation, and jobs",
+          "citations": [
+            {
+              "passage": {
+                "id": "0c802def",
+                "url": "https://tebrownforflorida.com/the-people-first-agenda",
+                "heading": "The People First Agenda",
+                "text": "1. Affordability & Homeownership — Lower the barriers to buying a home, build more affordable housing, and address the cost of living. 2. Healthcare That Works — Increase transparency, lower prescription and healthcare costs, and protect patients from unnecessary costs. 3. Jobs & Economic Opportunity — Support small businesses, attract manufacturing, and create good-paying jobs in the district. 4. Infrastructure & Resilience — Invest in roads, bridges, water systems, drainage, and infrastructure that keeps South Florida moving. 5. Protecting Seniors & Veterans — Protect Social Security and Medicare while making sure veterans receive the services they’ve earned. 6.",
+                "retrieved_at": "2026-09-29T11:42:46.181Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "6abe852a",
+                "url": "https://tebrownforflorida.com/meet-te-brown",
+                "heading": "Meet Te Brown",
+                "text": "As a former teacher, she believes every child deserves access to a quality education and that parents—not government bureaucrats—should have the freedom to choose the best educational path for their children. She is a strong advocate for school choice and policies that put students and families first. Now, Te is taking her experience as a builder, educator, and entrepreneur to Washington. She isn’t a career politician—she’s a proven leader who knows how to get results. She is committed to fighting for stronger wage growth, affordable housing, lower costs for working families, safer communities, and policies that encourage businesses to grow and create better-paying jobs.",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "18911dd3",
+                "url": "https://tebrownforflorida.com/issues",
+                "heading": "PROTECT AMERICAN WORKERS & REFORM H-1B",
+                "text": "The H-1B program should serve America’s workforce—not be used to undercut American workers’ wages or replace qualified Americans. I support reforms that prioritize American workers, require employers to pay competitive wages, crack down on abuse, and reserve H-1B visas for legitimate high-skill workforce needs where American workers cannot fill the position.",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.94
+            },
+            {
+              "passage": {
+                "id": "4ef9bace",
+                "url": "https://tebrownforflorida.com/meet-te-brown",
+                "heading": "Meet Te Brown",
+                "text": "Te believes America is strongest when government is limited, communities are safe, the economy is growing, and every family has the opportunity to succeed through hard work. As your next representative in Congress, Te Mayonna Brown will be a strong voice for economic growth, public safety, fiscal responsibility, individual freedom, and common-sense leadership. She will work every day to protect taxpayers, support small businesses, strengthen families, and ensure the next generation has even greater opportunities than the last. Together, we can build a stronger Florida, a stronger economy, and a brighter future for the families of Florida’s 24th Congressional District.",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.94
+            },
+            {
+              "passage": {
+                "id": "44f0eaeb",
+                "url": "https://tebrownforflorida.com/the-people-first-agenda",
+                "heading": "Putting People Before Politics. Delivering Results That Matter.",
+                "text": "A bold agenda focused on lowering the cost of living, making housing and childcare more affordable, protecting seniors and veterans, creating jobs, protecting the healthcare system, strengthening communities, and putting families first.",
+                "retrieved_at": "2026-09-29T11:42:46.181Z"
+              },
+              "score": 0.93
+            },
+            {
+              "passage": {
+                "id": "1acafefe",
+                "url": "https://tebrownforflorida.com/issues",
+                "heading": "PROTECT AMERICAN WORKERS & REFORM H-1B",
+                "text": "No wage suppression or worker replacement",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.9
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "education",
+        "label": "Education"
+      },
+      "subIssues": [
+        {
+          "id": "KYV9",
+          "label": "School choice and vouchers",
+          "citations": [
+            {
+              "passage": {
+                "id": "e1b6b720",
+                "url": "https://tebrownforflorida.com/issues",
+                "heading": "School Choice",
+                "text": "Every child in Florida’s 24th District deserves a quality education, not a zip code assignment. Te Brown supports taking federal education dollars that currently prop up failing schools and putting that money directly in the hands of parents by funding students, not systems. Families should be empowered to choose the best learning environment for their children, whether that is a public school, charter school, private school, or homeschool. No child should be trapped in an underperforming school because of where their family lives.",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "6abe852a",
+                "url": "https://tebrownforflorida.com/meet-te-brown",
+                "heading": "Meet Te Brown",
+                "text": "As a former teacher, she believes every child deserves access to a quality education and that parents—not government bureaucrats—should have the freedom to choose the best educational path for their children. She is a strong advocate for school choice and policies that put students and families first. Now, Te is taking her experience as a builder, educator, and entrepreneur to Washington. She isn’t a career politician—she’s a proven leader who knows how to get results. She is committed to fighting for stronger wage growth, affordable housing, lower costs for working families, safer communities, and policies that encourage businesses to grow and create better-paying jobs.",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.98
+            }
+          ]
+        },
+        {
+          "id": "KYV10",
+          "label": "Career, vocational and higher education",
+          "citations": [
+            {
+              "passage": {
+                "id": "93d60669",
+                "url": "https://tebrownforflorida.com/the-people-first-agenda",
+                "heading": "The People First Agenda",
+                "text": "Safe & Strong Communities — Support law enforcement, address crime, and make communities safer. 7. Education & Opportunity — Expand educational choices and make sure children have pathways to careers, trades, college, or entrepreneurship. 8. Accountability in Washington — Make government live within its means, eliminate waste, and demand measurable results",
+                "retrieved_at": "2026-09-29T11:42:46.181Z"
+              },
+              "score": 0.95
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "healthcare",
+        "label": "Healthcare"
+      },
+      "subIssues": [
+        {
+          "id": "B2",
+          "label": "Healthcare access and costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "0c802def",
+                "url": "https://tebrownforflorida.com/the-people-first-agenda",
+                "heading": "The People First Agenda",
+                "text": "1. Affordability & Homeownership — Lower the barriers to buying a home, build more affordable housing, and address the cost of living. 2. Healthcare That Works — Increase transparency, lower prescription and healthcare costs, and protect patients from unnecessary costs. 3. Jobs & Economic Opportunity — Support small businesses, attract manufacturing, and create good-paying jobs in the district. 4. Infrastructure & Resilience — Invest in roads, bridges, water systems, drainage, and infrastructure that keeps South Florida moving. 5. Protecting Seniors & Veterans — Protect Social Security and Medicare while making sure veterans receive the services they’ve earned. 6.",
+                "retrieved_at": "2026-09-29T11:42:46.181Z"
+              },
+              "score": 0.98
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "housing",
+        "label": "Housing"
+      },
+      "subIssues": [
+        {
+          "id": "A2",
+          "label": "Housing affordability",
+          "citations": [
+            {
+              "passage": {
+                "id": "0c802def",
+                "url": "https://tebrownforflorida.com/the-people-first-agenda",
+                "heading": "The People First Agenda",
+                "text": "1. Affordability & Homeownership — Lower the barriers to buying a home, build more affordable housing, and address the cost of living. 2. Healthcare That Works — Increase transparency, lower prescription and healthcare costs, and protect patients from unnecessary costs. 3. Jobs & Economic Opportunity — Support small businesses, attract manufacturing, and create good-paying jobs in the district. 4. Infrastructure & Resilience — Invest in roads, bridges, water systems, drainage, and infrastructure that keeps South Florida moving. 5. Protecting Seniors & Veterans — Protect Social Security and Medicare while making sure veterans receive the services they’ve earned. 6.",
+                "retrieved_at": "2026-09-29T11:42:46.181Z"
+              },
+              "score": 0.99
+            },
+            {
+              "passage": {
+                "id": "6ce50e9c",
+                "url": "https://tebrownforflorida.com/issues",
+                "heading": "Make Housing Affordable Again",
+                "text": "Te Brown supports redirecting federal housing dollars away from lifelong rental subsidies and toward helping low-income families in our district buy their first home. Instead of keeping hardworking Americans trapped as permanent renters, housing policy should help families build stability, equity, and independence. It is time to move beyond dependency and give more families the chance to own a piece of the American Dream.",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "44f0eaeb",
+                "url": "https://tebrownforflorida.com/the-people-first-agenda",
+                "heading": "Putting People Before Politics. Delivering Results That Matter.",
+                "text": "A bold agenda focused on lowering the cost of living, making housing and childcare more affordable, protecting seniors and veterans, creating jobs, protecting the healthcare system, strengthening communities, and putting families first.",
+                "retrieved_at": "2026-09-29T11:42:46.181Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "6abe852a",
+                "url": "https://tebrownforflorida.com/meet-te-brown",
+                "heading": "Meet Te Brown",
+                "text": "As a former teacher, she believes every child deserves access to a quality education and that parents—not government bureaucrats—should have the freedom to choose the best educational path for their children. She is a strong advocate for school choice and policies that put students and families first. Now, Te is taking her experience as a builder, educator, and entrepreneur to Washington. She isn’t a career politician—she’s a proven leader who knows how to get results. She is committed to fighting for stronger wage growth, affordable housing, lower costs for working families, safer communities, and policies that encourage businesses to grow and create better-paying jobs.",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "immigration",
+        "label": "Immigration"
+      },
+      "subIssues": [
+        {
+          "id": "B3",
+          "label": "Immigration and border enforcement",
+          "citations": [
+            {
+              "passage": {
+                "id": "993d6724",
+                "url": "https://tebrownforflorida.com/issues",
+                "heading": "SECURE BORDERS & A LEGAL IMMIGRATION SYSTEM",
+                "text": "I support securing our southern border, enforcing our immigration laws, and prioritizing the removal of criminals and those who pose a threat to public safety.",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.99
+            },
+            {
+              "passage": {
+                "id": "4a9ef6ee",
+                "url": "https://tebrownforflorida.com/issues",
+                "heading": "SECURE BORDERS & A LEGAL IMMIGRATION SYSTEM",
+                "text": "A nation must have secure borders and a fair, lawful immigration system.",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "518d18b1",
+                "url": "https://tebrownforflorida.com/issues",
+                "heading": "SECURE BORDERS & A LEGAL IMMIGRATION SYSTEM",
+                "text": "At the same time, we should create a clear, lawful process for people who have earned the right to remain, while ending policies that encourage illegal immigration and ensuring that those who follow the rules are not left behind.",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "06592307",
+                "url": "https://tebrownforflorida.com/issues",
+                "heading": "TPS Holder",
+                "text": "For 15 years, Washington has told Haitian families in South Florida that their status was temporary, and for 15 years nothing changed. During that time, the situation in Haiti has only worsened, and many community members have built businesses, raised families, staffed hospitals, and created institutions the rest of us depend on. Put simply, that is not a temporary population, and the community has earned better than a deportation notice. In Congress, I will fight for an earned path to citizenship. Earned: a steady work history, taxes paid, a clean record, a full background check. Not amnesty, and not a cut ahead of anyone who waited in line.",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "7fdc81fa",
+                "url": "https://tebrownforflorida.com/issues",
+                "heading": "TPS Holder",
+                "text": "A Republican Congress did this in 1998 with the Haitian Refugee Immigration Fairness Act, and it was right then. Those who have worked, paid taxes, built our communities, and embodied the American experience should not be cast aside, but welcomed as who they are: Haitian-Americans. I won’t pretend, either, that the other side doesn’t matter. No immigration bill can fix the status of Port-Au-Prince and Haiti. I will work to end the South Florida weapons pipeline to Port-Au-Prince, and back the effort to rebuild, because nobody wants a stable Haiti more than those forced to leave it.",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "18911dd3",
+                "url": "https://tebrownforflorida.com/issues",
+                "heading": "PROTECT AMERICAN WORKERS & REFORM H-1B",
+                "text": "The H-1B program should serve America’s workforce—not be used to undercut American workers’ wages or replace qualified Americans. I support reforms that prioritize American workers, require employers to pay competitive wages, crack down on abuse, and reserve H-1B visas for legitimate high-skill workforce needs where American workers cannot fill the position.",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.95
+            },
+            {
+              "passage": {
+                "id": "143588d7",
+                "url": "https://tebrownforflorida.com/issues",
+                "heading": "PROTECT AMERICAN WORKERS & REFORM H-1B",
+                "text": "H-1B visas for genuine high-skill workforce shortages",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.95
+            },
+            {
+              "passage": {
+                "id": "1acafefe",
+                "url": "https://tebrownforflorida.com/issues",
+                "heading": "PROTECT AMERICAN WORKERS & REFORM H-1B",
+                "text": "No wage suppression or worker replacement",
+                "retrieved_at": "2026-09-29T11:42:46.182Z"
+              },
+              "score": 0.89
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "safety",
+        "label": "Public Safety & Crime"
+      },
+      "subIssues": [
+        {
+          "id": "B7",
+          "label": "Crime policy, policing and courts",
+          "citations": [
+            {
+              "passage": {
+                "id": "93d60669",
+                "url": "https://tebrownforflorida.com/the-people-first-agenda",
+                "heading": "The People First Agenda",
+                "text": "Safe & Strong Communities — Support law enforcement, address crime, and make communities safer. 7. Education & Opportunity — Expand educational choices and make sure children have pathways to careers, trades, college, or entrepreneurship. 8. Accountability in Washington — Make government live within its means, eliminate waste, and demand measurable results",
+                "retrieved_at": "2026-09-29T11:42:46.181Z"
+              },
+              "score": 0.96
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "retirement",
+        "label": "Retirement & Benefits"
+      },
+      "subIssues": [
+        {
+          "id": "B4",
+          "label": "Social Security and Medicare",
+          "citations": [
+            {
+              "passage": {
+                "id": "0c802def",
+                "url": "https://tebrownforflorida.com/the-people-first-agenda",
+                "heading": "The People First Agenda",
+                "text": "1. Affordability & Homeownership — Lower the barriers to buying a home, build more affordable housing, and address the cost of living. 2. Healthcare That Works — Increase transparency, lower prescription and healthcare costs, and protect patients from unnecessary costs. 3. Jobs & Economic Opportunity — Support small businesses, attract manufacturing, and create good-paying jobs in the district. 4. Infrastructure & Resilience — Invest in roads, bridges, water systems, drainage, and infrastructure that keeps South Florida moving. 5. Protecting Seniors & Veterans — Protect Social Security and Medicare while making sure veterans receive the services they’ve earned. 6.",
+                "retrieved_at": "2026-09-29T11:42:46.181Z"
+              },
+              "score": 0.98
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 95282,
+    "output_tokens": 12366
+  }
+}

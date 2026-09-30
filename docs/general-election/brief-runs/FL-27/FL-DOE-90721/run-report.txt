@@ -1,39 +1,16 @@
 
 What this site states, by policy area
 
-Economy & Affordability
-  B1  Economy, inflation, and jobs  (3 citation(s))
-      0.98  "As your representative in Congress, I am working to create more opportunities for South Florida families, support local businesses, and keep our economy strong. I have voted to lower taxes, supported efforts to provide greater tax relief…"
-            https://mariaelvirasalazar.com/issues  — section: Economy &#038; Jobs
-      0.96  "Capital Support for Small Businesses: I cosponsored the Main Street Tax Certainty Act to permanently extend the 20% tax deduction for small businesses, preventing them from having to limit their growth, investment, and hiring plans."
-            https://mariaelvirasalazar.com/issues/economy  — section: Below are some of my key accomplishments:
-      0.91  "Supporting the Fiscal Responsibility Act: I backed the Fiscal Responsibility Act, which cuts over $2 trillion in spending, reclaims $28 billion in unspent COVID funds, and expands welfare work requirements. This historic measure aims to …"
-            https://mariaelvirasalazar.com/issues/economy  — section: Below are some of my key accomplishments:
-
-Healthcare
-  B2  Healthcare access and costs  (2 citation(s))
-      0.96  "As your representative in Congress, I am committed to strengthening our healthcare system and ensuring patients have access to the care they need. I have secured millions of dollars to expand healthcare services, strengthen hospitals, su…"
-            https://mariaelvirasalazar.com/issues  — section: Affordable Healthcare
-      0.95  "I also fought to protect and preserve programs that train the next generation of doctors, helping expand the healthcare workforce and improve access to care in communities that need it most. In addition, I have helped seriously ill child…"
-            https://mariaelvirasalazar.com/issues  — section: Affordable Healthcare
-
 Environment & Water
   A5  Water quality and Everglades restoration  (1 citation(s))
       0.98  "As a proud champion of the Everglades, I am fully committed to securing funding for its restoration and preservation, ensuring this unique ecosystem is protected for generations to come. I am leading the charge to create a National Resil…"
             https://mariaelvirasalazar.com/issues  — section: Protect the Environment
-  B8  Climate and environment (national)  (1 citation(s))
-      0.92  "Introduced the National Climate Adaptation and Resilience Strategy Act: This creates a comprehensive plan for strengthening our resilience against hurricane damage, storm surges, and flooding, while safeguarding Florida’s most vulnerable…"
-            https://mariaelvirasalazar.com/issues/environment  — section: Here are some of my key accomplishments:
-  KYV4  Storm resilience and flood protection  (2 citation(s))
-      0.98  "As a proud champion of the Everglades, I am fully committed to securing funding for its restoration and preservation, ensuring this unique ecosystem is protected for generations to come. I am leading the charge to create a National Resil…"
+  KYV4  Storm resilience and flood protection  (1 citation(s))
+      0.99  "As a proud champion of the Everglades, I am fully committed to securing funding for its restoration and preservation, ensuring this unique ecosystem is protected for generations to come. I am leading the charge to create a National Resil…"
             https://mariaelvirasalazar.com/issues  — section: Protect the Environment
-      0.97  "Introduced the National Climate Adaptation and Resilience Strategy Act: This creates a comprehensive plan for strengthening our resilience against hurricane damage, storm surges, and flooding, while safeguarding Florida’s most vulnerable…"
-            https://mariaelvirasalazar.com/issues/environment  — section: Here are some of my key accomplishments:
 
 Elections & Voting
-  KYV1  Threats to democratic institutions  (2 citation(s))
-      0.97  "I have also spoken out against attacks on free speech and democratic institutions in countries like Brazil and worked to ensure transparency and accountability in elections across the region, including Honduras. From passing legislation …"
-            https://mariaelvirasalazar.com/issues  — section: Anti-Socialism
+  KYV1  Threats to democratic institutions  (1 citation(s))
       0.85  "Introduced Legislation to Restore Democracy and Accountability in Venezuela: I proposed support for international efforts to address the Maduro regime’s crimes and provide relief to Venezuelans suffering from a prolonged political and ec…"
             https://mariaelvirasalazar.com/issues/fight_socialism  — section: “As your representative in Congress, I understand the profound impact that totalitarian and socialist regimes have had on our South Florida community. That’s why I am committed to being a strong advocate against these oppressive regimes.” – María Elvira Salazar Here are some of my key accomplishments:
 

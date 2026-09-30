@@ -3,11 +3,9 @@ What this site states, by policy area
 
 Economy & Affordability
   A4  Cost of living in Florida  (1 citation(s))
-      0.92  "“As a dedicated civic leader, public servant, and most importantly as a mother, I understand what’s at stake. We must do everything we can to defend our American way of life. I will fight for the real issues that affect everyday working …"
+      0.93  "“As a dedicated civic leader, public servant, and most importantly as a mother, I understand what’s at stake. We must do everything we can to defend our American way of life. I will fight for the real issues that affect everyday working …"
             https://grutersforcongress.com/  — section: TRUMP ENDORSED
-  B1  Economy, inflation, and jobs  (2 citation(s))
-      0.96  "Sydney will fight rising prices with conservative solutions that help families keep more of what they earn."
-            https://grutersforcongress.com/  — section: Inflation
+  B1  Economy, inflation, and jobs  (1 citation(s))
       0.91  "“As a dedicated civic leader, public servant, and most importantly as a mother, I understand what’s at stake. We must do everything we can to defend our American way of life. I will fight for the real issues that affect everyday working …"
             https://grutersforcongress.com/  — section: TRUMP ENDORSED
 
@@ -28,7 +26,7 @@ Immigration
 
 Elections & Voting
   B6  Election integrity  (1 citation(s))
-      0.94  "Sydney is ready to fight for Democracy and stand with President Trump to ensure our elections are secure."
+      0.93  "Sydney is ready to fight for Democracy and stand with President Trump to ensure our elections are secure."
             https://grutersforcongress.com/  — section: Election Security
 
 Retirement & Benefits

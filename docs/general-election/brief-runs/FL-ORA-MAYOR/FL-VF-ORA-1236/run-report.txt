@@ -1,13 +1,6 @@
 
 What this site states, by policy area
 
-Economy & Affordability
-  B1  Economy, inflation, and jobs  (1 citation(s))
-      0.89  "Protecting Small Business, Supporting Their Growth, and Diversifying Jobs"
-            https://tiffanyformayor.com/issues  — section: Tiffany Moore Russell's vision includes:
-
-Environment & Water
-  KYV3  Growth, development and land conservation  (1 citation(s))
-      0.93  "Ensuring Equitable Development that Prioritize Smart Growth"
-            https://tiffanyformayor.com/issues  — section: Tiffany Moore Russell's vision includes:
-
+  No passage cleared both the commitment gate and an issue question.
+  That is a result, not an error: at this threshold, on these pages,
+  nothing was found. Lower --threshold or ingest more pages to widen it.

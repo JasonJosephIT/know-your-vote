@@ -73,3 +73,11 @@ Asked whether (1) every failure gets one identical re-run, (2) Step 3 reviews go
 - **One identical re-run of every failure**, the same rule for every candidate: the 9 candidates whose Jev-link ingest failed were run again at 19:17 UTC with the same command (`jev-driver-2026-09-29.sh jev-retry-targets-2026-09-29.tsv`). The failed attempt is kept in each folder's `attempt-1-failed/`. Dan Green and Oliver Gilbert were read on the re-run; the other 7 failed again and are recorded silence. There is no second re-run.
 - **Step 3 reviews** for all 90 runs, one reviewer subagent each on `profiler-review-prompt.md` (header change recorded there).
 - **FL-GOV is rebuilt** from the new runs: a new `plan.json` and `brief.sql` in `FL-GOV/rebuild-2026-09-29/`. Applying it replaces the live, published brief, so it waits on its own yes.
+
+## The second commitment gate (founder, 2026-09-30)
+
+On the three options in `../review-2026-09-29.md` for the 70 passages flagged under check 3:
+
+> 1
+
+A second gate question is added to Step 2 (`OWN_COMMITMENT_ID`), and every run is re-run and re-reviewed. The same 0.85 threshold applies to it as to every other question. The wording, the pilot that shaped it, and the result are in `../gate2-2026-09-30.md`.

@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://www.mike4congress.com",
-  "created_at": "2026-09-29T11:43:40.276Z",
+  "created_at": "2026-09-30T01:58:44.790Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -38,8 +39,8 @@
   "counts": {
     "passages": 39,
     "asked": 39,
-    "states_policy": 18,
-    "with_issue": 11,
+    "states_policy": 13,
+    "with_issue": 9,
     "failed": 0
   },
   "passages": [
@@ -50,6 +51,7 @@
       "text": "\" I'm honored to be your Congressman for Florida's 8th District. Thank you for your trust and support. Now let's get to work!\"",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.16,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -65,7 +67,7 @@
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.03,
+          "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
@@ -87,7 +89,8 @@
       "heading": "Mike Haridopolos wins election to U.S. House in Florida's 8th Congressional District!",
       "text": "\"I'm honored to be your Congressman for Florida's 8th District. Thank you for your trust and support. Now let's get to work!\"",
       "verdict": {
-        "commitment": 0.03,
+        "commitment": 0.04,
+        "own_commitment": 0.25,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -95,7 +98,7 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.03,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
@@ -107,7 +110,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.03,
+          "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -126,6 +129,7 @@
       "text": "Mike is an educator and author who loves our nation. He and his wife, Stephanie, raised their three children right here in our district.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -145,7 +149,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.03,
+          "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -153,7 +157,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -163,7 +167,8 @@
       "heading": "About Mike Haridopolos",
       "text": "Mike is a former member of both the Florida House and Senate, where he served as President of the Senate. Now a member of Congress, Mike serves as Chairman of the Space Committee and Whip of the Financial Services Committee.",
       "verdict": {
-        "commitment": 0.02,
+        "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -184,7 +189,7 @@
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -202,6 +207,7 @@
       "text": "In Congress, he focuses his efforts on supporting our space industry, improving the water quality of our Indian River Lagoon, fighting to protect election integrity, banning insider trading in Congress, and expanding access to affordable housing.",
       "verdict": {
         "commitment": 0.96,
+        "own_commitment": 0.85,
         "states_policy": true,
         "issues": [
           "A2",
@@ -211,25 +217,25 @@
           "A1": 0.03,
           "A2": 0.97,
           "A3": 0.03,
-          "A4": 0.32,
-          "A5": 0.8,
+          "A4": 0.31,
+          "A5": 0.77,
           "A6": 0.03,
-          "A7": 0.61,
-          "B1": 0.14,
-          "B2": 0.03,
-          "B3": 0.02,
+          "A7": 0.65,
+          "B1": 0.13,
+          "B2": 0.02,
+          "B3": 0.03,
           "B4": 0.03,
-          "B5": 0.03,
+          "B5": 0.02,
           "B6": 0.94,
-          "B7": 0.19,
-          "B8": 0.29,
-          "KYV1": 0.75,
+          "B7": 0.2,
+          "B8": 0.31,
+          "KYV1": 0.73,
           "KYV10": 0.03,
-          "KYV2": 0.04,
+          "KYV2": 0.03,
           "KYV3": 0.18,
           "KYV4": 0.04,
-          "KYV5": 0.19,
-          "KYV6": 0.09,
+          "KYV5": 0.18,
+          "KYV6": 0.08,
           "KYV7": 0.18,
           "KYV8": 0.03,
           "KYV9": 0.03
@@ -243,6 +249,7 @@
       "text": "Mike is honored to have the endorsement of President Trump, Governor DeSantis, Senator Scott, Senator Rubio, Speaker Mike Johnson, Congressman Jim Jordan, and our local sheriffs, among dozens of others. These endorsements reflect his commitment to conservative values and effective leadership.",
       "verdict": {
         "commitment": 0.05,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -258,7 +265,7 @@
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.02,
+          "B6": 0.03,
           "B7": 0.06,
           "B8": 0.02,
           "KYV1": 0.03,
@@ -280,19 +287,20 @@
       "heading": "Mike's Vision",
       "text": "Mike is focused on creating a stronger future for our community by:",
       "verdict": {
-        "commitment": 0.27,
+        "commitment": 0.26,
+        "own_commitment": 0.46,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.03,
-          "A3": 0.02,
-          "A4": 0.03,
+          "A3": 0.03,
+          "A4": 0.02,
           "A5": 0.03,
           "A6": 0.03,
-          "A7": 0.02,
-          "B1": 0.05,
-          "B2": 0.03,
+          "A7": 0.03,
+          "B1": 0.04,
+          "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
@@ -305,9 +313,9 @@
           "KYV3": 0.04,
           "KYV4": 0.03,
           "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV6": 0.03,
           "KYV7": 0.03,
-          "KYV8": 0.03,
+          "KYV8": 0.02,
           "KYV9": 0.03
         }
       }
@@ -319,6 +327,7 @@
       "text": "Banning Congressional Stock Trading Mike Haridopolos believes politicians should not profit from the laws they pass. He has never traded stocks while serving in Congress and supports banning congressional stock trading to end self-dealing in Washington.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.92,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -337,7 +346,7 @@
           "B6": 0.02,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.56,
+          "KYV1": 0.54,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -357,6 +366,7 @@
       "text": "Protecting Our Elections Mike Haridopolos believes free and fair elections start with ensuring American elections are decided by American citizens. He supports the SAVE America Act and commonsense voter verification measures to protect the integrity of the ballot box and restore confidence in our elections.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [
           "A7",
@@ -372,13 +382,13 @@
           "A7": 0.95,
           "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.08,
+          "B3": 0.1,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.98,
-          "B7": 0.04,
+          "B7": 0.05,
           "B8": 0.02,
-          "KYV1": 0.57,
+          "KYV1": 0.6,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -398,6 +408,7 @@
       "text": "Stopping Illegal Immigration Addressing the catastrophic crisis at our southern border and securing our nation’s borders. Fixing Our Economy Making the American economy work for our families once again. Out-of-control inflation, higher taxes, and reckless spending are putting the American Dream out of reach for millions of Americans. Reducing National Debt Fighting reckless spending to preserve Social Security and Medicare for future generations. Mike faced a $4B budget shortfall in Florida and found common-sense solutions to balance the budget. He will do this again in Congress. End Weaponization of Justice Putting a stop to the misuse of the justice system.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.97,
         "states_policy": true,
         "issues": [
           "B1",
@@ -408,27 +419,27 @@
           "A1": 0.02,
           "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.14,
+          "A4": 0.13,
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.03,
           "B1": 0.98,
-          "B2": 0.17,
-          "B3": 0.99,
+          "B2": 0.15,
+          "B3": 0.98,
           "B4": 0.95,
           "B5": 0.02,
           "B6": 0.03,
-          "B7": 0.62,
+          "B7": 0.59,
           "B8": 0.03,
           "KYV1": 0.62,
           "KYV10": 0.03,
           "KYV2": 0.03,
-          "KYV3": 0.02,
-          "KYV4": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
           "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV6": 0.03,
           "KYV7": 0.03,
-          "KYV8": 0.02,
+          "KYV8": 0.03,
           "KYV9": 0.03
         }
       }
@@ -440,6 +451,7 @@
       "text": "Mike will stand shoulder-to-shoulder key allies to end the weaponization of our justice system. Protecting the Indian River Lagoon Advancing common sense ideas to protect our environment and joining the Congressional Estuary Caucus. Supporting Space Exploration Promoting high-paying jobs and technological innovation through space exploration. Space is key to American technological innovation as well as our national security. Tackling Crime & Public Safety Backing law enforcement and defending Second Amendment rights. Mike will always “Back the Blue” and is grateful for the support of the Sheriffs of both Brevard and Indian River Counties.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.98,
         "states_policy": true,
         "issues": [
           "B7"
@@ -449,27 +461,27 @@
           "A2": 0.03,
           "A3": 0.03,
           "A4": 0.03,
-          "A5": 0.4,
+          "A5": 0.41,
           "A6": 0.03,
           "A7": 0.03,
-          "B1": 0.65,
+          "B1": 0.62,
           "B2": 0.03,
           "B3": 0.03,
           "B4": 0.03,
           "B5": 0.02,
           "B6": 0.03,
-          "B7": 0.96,
-          "B8": 0.57,
-          "KYV1": 0.29,
+          "B7": 0.97,
+          "B8": 0.54,
+          "KYV1": 0.33,
           "KYV10": 0.03,
           "KYV2": 0.03,
-          "KYV3": 0.24,
+          "KYV3": 0.25,
           "KYV4": 0.04,
           "KYV5": 0.05,
           "KYV6": 0.02,
           "KYV7": 0.03,
-          "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV8": 0.03,
+          "KYV9": 0.02
         }
       }
     },
@@ -480,20 +492,21 @@
       "text": "Strengthening the Military & Veterans Ensuring our military has the best technology and our veterans receive top-notch care. Our military preserves our freedom every day. Implementing Term Limits Supporting term limits to ensure citizens serve and return to the private sector. Florida is proof that term limits work.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.03,
+          "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.05,
-          "B1": 0.04,
+          "B1": 0.05,
           "B2": 0.22,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.04,
           "B5": 0.02,
           "B6": 0.03,
           "B7": 0.03,
@@ -505,7 +518,7 @@
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -518,6 +531,7 @@
       "text": "Join our campaign and be a part of the movement to bring positive change to our district. There are many ways to get involved and support Mike Haridopolos for Congress!",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -556,6 +570,7 @@
       "text": "To volunteer, attend events or just to stay informed, fill out the form below. You can also click here to donate now!",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -594,6 +609,7 @@
       "text": "Volunteer: Lend your time and talents to help spread Mike's message.Knocking doors, waving signs, helping with events… there are many ways to help!",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -632,6 +648,7 @@
       "text": "Events: Attend local events and fundraisers to show your support and hear from Mike directly.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -670,6 +687,7 @@
       "text": "Understanding the key issues that impact our country is crucial for making informed decisions. Mike Haridopolos is dedicated to addressing the most pressing concerns facing our district and our nation. From stopping illegal immigration to fixing our economy, reducing national debt, protecting the Indian River Lagoon, and supporting space exploration, Mike's comprehensive policy agenda is designed to build a stronger future. See below how Mike plans to lead with integrity, strength and effective solutions.",
       "verdict": {
         "commitment": 0.95,
+        "own_commitment": 0.9,
         "states_policy": true,
         "issues": [
           "B3"
@@ -679,7 +697,7 @@
           "A2": 0.03,
           "A3": 0.03,
           "A4": 0.06,
-          "A5": 0.36,
+          "A5": 0.34,
           "A6": 0.03,
           "A7": 0.03,
           "B1": 0.76,
@@ -693,7 +711,7 @@
           "KYV1": 0.03,
           "KYV10": 0.03,
           "KYV2": 0.04,
-          "KYV3": 0.2,
+          "KYV3": 0.19,
           "KYV4": 0.04,
           "KYV5": 0.05,
           "KYV6": 0.02,
@@ -710,10 +728,11 @@
       "text": "Politicians should not profit from the very laws they pass. I have NEVER traded stocks while serving in Congress, and I believe elected officials should be held to the same standards as the people they represent. That’s why I supported legislation to ban members of Congress from trading stocks and end the culture of self-dealing in Washington.",
       "verdict": {
         "commitment": 0.98,
-        "states_policy": true,
+        "own_commitment": 0.67,
+        "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.01,
+          "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.01,
@@ -728,11 +747,11 @@
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.52,
+          "KYV1": 0.5,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
+          "KYV4": 0.02,
           "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -747,7 +766,8 @@
       "heading": "PROTECTING OUR ELECTIONS",
       "text": "Free and fair elections start with one simple principle: American elections should be decided by American citizens.",
       "verdict": {
-        "commitment": 0.75,
+        "commitment": 0.76,
+        "own_commitment": 0.17,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -755,15 +775,15 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.01,
           "A6": 0.02,
-          "A7": 0.68,
+          "A7": 0.65,
           "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.23,
+          "B3": 0.22,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.76,
+          "B6": 0.74,
           "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.56,
@@ -771,7 +791,7 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.02,
+          "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -786,6 +806,7 @@
       "text": "For too long, Washington Democrats have fought against commonsense election safeguards. I’m fighting to restore trust in our elections by supporting the SAVE America Act and ensuring proper voter verification measures are in place.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.96,
         "states_policy": true,
         "issues": [
           "A7",
@@ -796,7 +817,7 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.01,
           "A6": 0.02,
           "A7": 0.95,
           "B1": 0.02,
@@ -804,14 +825,14 @@
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.98,
+          "B6": 0.97,
           "B7": 0.05,
           "B8": 0.02,
-          "KYV1": 0.53,
+          "KYV1": 0.58,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
+          "KYV4": 0.02,
           "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -827,10 +848,10 @@
       "text": "​ Protecting the ballot box isn’t partisan — it’s common sense. The American people deserve confidence that their voices will be heard and their votes will be protected. I will continue fighting for election integrity and standing up against efforts to undermine our democratic process.",
       "verdict": {
         "commitment": 0.94,
+        "own_commitment": 0.92,
         "states_policy": true,
         "issues": [
-          "B6",
-          "KYV1"
+          "B6"
         ],
         "scores": {
           "A1": 0.02,
@@ -848,15 +869,15 @@
           "B6": 0.97,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.85,
+          "KYV1": 0.83,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.01,
-          "KYV5": 0.01,
-          "KYV6": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.01,
           "KYV7": 0.02,
-          "KYV8": 0.01,
+          "KYV8": 0.02,
           "KYV9": 0.02
         }
       }
@@ -868,6 +889,7 @@
       "text": "Joe Biden’s economy crushed working families. Out-of control inflation, higher taxes, and reckless spending put the American Dream out of reach for millions of Americans. Under President Trump’s leadership, Mike helped pass historic tax relief and provided more opportunities for small businesses to grow than ever before. Mike understands that burdensome federal and state regulations and mandates stifle economic growth and job creation. Mike will stand against federal mandates that hurt small businesses and families.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.94,
         "states_policy": true,
         "issues": [
           "B1"
@@ -876,21 +898,21 @@
           "A1": 0.02,
           "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.23,
+          "A4": 0.25,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.99,
           "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.05,
           "KYV1": 0.02,
           "KYV10": 0.03,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.04,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -907,8 +929,9 @@
       "heading": "INDIAN RIVER LAGOON",
       "text": "Mike has lived in Brevard County since 1989 and raised his family along the Lagoon and that is why it’s so important for us to work together to care for our environment. Our quality of life, economy, tourism, property values, and the survival of many indigenous species of plant and wildlife will depend on our efforts. Advancing common sense ideas that protect our Lagoon and preserve our natural beauty is important to Mike. Since elected in 2024, Mike has delivered over $14 MILLION in funding through appropriations requests for Indian River Lagoon Projects.",
       "verdict": {
-        "commitment": 0.88,
-        "states_policy": true,
+        "commitment": 0.87,
+        "own_commitment": 0.51,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
@@ -929,9 +952,9 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.2,
+          "KYV3": 0.22,
           "KYV4": 0.05,
-          "KYV5": 0.05,
+          "KYV5": 0.04,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -945,7 +968,8 @@
       "heading": "INDIAN RIVER LAGOON",
       "text": "Mike is a co-chair of the bi-partisan Congressional Estuary Caucus created by former Congressman Bill Posey to help solve the growing problem in our 28 estuaries across the nation.",
       "verdict": {
-        "commitment": 0.1,
+        "commitment": 0.11,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -963,13 +987,13 @@
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.29,
+          "B8": 0.32,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.03,
           "KYV3": 0.05,
           "KYV4": 0.03,
-          "KYV5": 0.04,
+          "KYV5": 0.03,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -983,7 +1007,8 @@
       "heading": "SPACE",
       "text": "Space exploration generates high-paying jobs here in District 8. Space is key to American technological innovation as well as our national security. Space is the ultimate military high ground. Free nations worldwide are looking to the U.S. to lead the world in space, and if we fail to do so, others – namely China and Russia – will fill that void, and threaten our economic and national security interests.",
       "verdict": {
-        "commitment": 0.45,
+        "commitment": 0.47,
+        "own_commitment": 0.1,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1002,8 +1027,8 @@
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.03,
-          "KYV10": 0.06,
+          "KYV1": 0.02,
+          "KYV10": 0.05,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -1021,7 +1046,8 @@
       "heading": "SPACE",
       "text": "Mike is a member of the House Science, Space and Technology Committee and serves as Chairman of the Space and Aeronautics Subcommittee. He has helped secure billions in funding for NASA and other projects that directly impact the space industry in Florida.",
       "verdict": {
-        "commitment": 0.11,
+        "commitment": 0.12,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1059,7 +1085,8 @@
       "heading": "CRIME & PUBLIC SAFETY",
       "text": "As the son of a law enforcement agent, Mike knows the challenges our men and women in uniform face each day. Mike will always “Back the Blue” and is grateful for the support of the Sheriffs of both Brevard and Indian River Counties.",
       "verdict": {
-        "commitment": 0.73,
+        "commitment": 0.66,
+        "own_commitment": 0.78,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1077,8 +1104,8 @@
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.81,
-          "B8": 0.02,
-          "KYV1": 0.05,
+          "B8": 0.01,
+          "KYV1": 0.04,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -1098,6 +1125,7 @@
       "text": "Additionally, Mike has always been a staunch defender of our Second Amendment rights, carrying an A rating from the NRA from his service in the Florida Legislature. Mike will always protect our right to bear arms in Congress.",
       "verdict": {
         "commitment": 0.95,
+        "own_commitment": 0.93,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1114,7 +1142,7 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.24,
+          "B7": 0.25,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
@@ -1135,11 +1163,12 @@
       "heading": "THE MILITARY & VETERANS",
       "text": "Mike’s son serves in the United States Air Force. Our military preserves our freedom every day. We must back them with the best technology available to keep evil at bay and ensure a strong national defense.",
       "verdict": {
-        "commitment": 0.81,
+        "commitment": 0.8,
+        "own_commitment": 0.63,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.01,
+          "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
@@ -1160,9 +1189,9 @@
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.01,
+          "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.01,
+          "KYV8": 0.02,
           "KYV9": 0.02
         }
       }
@@ -1174,7 +1203,8 @@
       "text": "Our veterans deserve the best care as well for their service to our nation. Unfortunately, the system too often lets our veterans down. Mike will fight each day to make sure our veterans get the top-notch care they deserve.",
       "verdict": {
         "commitment": 0.89,
-        "states_policy": true,
+        "own_commitment": 0.84,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
@@ -1185,7 +1215,7 @@
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
-          "B2": 0.68,
+          "B2": 0.7,
           "B3": 0.02,
           "B4": 0.03,
           "B5": 0.02,
@@ -1212,6 +1242,7 @@
       "text": "Mike believes in term limits. Florida is proof that term limits work. Florida is the epicenter of conservative reforms where citizens serve and then return to the private sector. Mike signed the U.S. Term Limits pledge and will vote for all term limits measures in office.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.97,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1230,7 +1261,7 @@
           "B6": 0.03,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.16,
+          "KYV1": 0.14,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -1249,8 +1280,9 @@
       "heading": "ILLEGAL IMMIGRATION",
       "text": "Mike is a strong supporter of President Trump’s immigration measures to secure the southern border and remove dangerous illegal aliens. The Biden Border Crisis allowed record numbers of illegal immigrants and deadly drugs to pour across the southern border. Under Biden, over 7 million illegals entered our nation illegally.",
       "verdict": {
-        "commitment": 0.87,
-        "states_policy": true,
+        "commitment": 0.88,
+        "own_commitment": 0.45,
+        "states_policy": false,
         "issues": [
           "B3"
         ],
@@ -1268,7 +1300,7 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.1,
+          "B7": 0.09,
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.02,
@@ -1290,7 +1322,8 @@
       "text": "Mike led the fight to defeat a measure in the Florida legislature to allow illegals to obtain a driver’s license. Mike fully stands by President Trump’s immigration agenda and America is once again a nation of laws and secure borders.",
       "verdict": {
         "commitment": 0.93,
-        "states_policy": true,
+        "own_commitment": 0.67,
+        "states_policy": false,
         "issues": [
           "B3"
         ],
@@ -1308,9 +1341,9 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.07,
+          "B7": 0.08,
           "B8": 0.02,
-          "KYV1": 0.17,
+          "KYV1": 0.15,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -1330,6 +1363,7 @@
       "text": "Under Obamacare, prices have been spiraling out of control, and free-market competitive pricing has been reduced; keeping healthcare more expensive. Mike will always support measures that provide patient centered care and competition in the marketplace. Mike stands firm against any single-payer healthcare system.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.96,
         "states_policy": true,
         "issues": [
           "B2"
@@ -1342,7 +1376,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.14,
+          "B1": 0.13,
           "B2": 0.97,
           "B3": 0.02,
           "B4": 0.04,
@@ -1370,32 +1404,33 @@
       "text": "Mike Haridopolos is an experienced leader, successful businessman, and lifelong conservative. Mike began his career teaching United States History and Political Science at what is now Eastern Florida State College and has always cared deeply about our country, our constitution, and our American values. He served as a member of the Florida House of Representatives and State Senate, where he was elected President of the Senate from 2010-2012. Mike was elected as the Representative for Florida’s 8 th Congressional District in 2024.",
       "verdict": {
         "commitment": 0.09,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.03,
+          "A5": 0.02,
           "A6": 0.03,
           "A7": 0.03,
           "B1": 0.03,
-          "B2": 0.02,
-          "B3": 0.03,
+          "B2": 0.03,
+          "B3": 0.02,
           "B4": 0.03,
-          "B5": 0.02,
+          "B5": 0.03,
           "B6": 0.03,
-          "B7": 0.03,
+          "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.04,
           "KYV10": 0.03,
-          "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.02,
-          "KYV7": 0.03,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.03
         }
@@ -1407,22 +1442,23 @@
       "heading": "History",
       "text": "Mike has always cared deeply about our country, our constitution, and our American values. He began his career teaching United States History and Political Science at Brevard Community College—now Eastern Florida State College. Haridopolos also taught classes as an instructor at the Bob Graham Center at the University of Florida. In the Florida Legislature, Mike quickly established himself as a capable lawmaker who stood firmly rooted in his conservative values. Mike pushed for greater government transparency and accountability for Floridians, leading the effort to put the state’s budget online.",
       "verdict": {
-        "commitment": 0.61,
+        "commitment": 0.62,
+        "own_commitment": 0.08,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.02,
-          "A3": 0.03,
+          "A3": 0.02,
           "A4": 0.03,
           "A5": 0.03,
           "A6": 0.03,
           "A7": 0.03,
-          "B1": 0.04,
+          "B1": 0.03,
           "B2": 0.02,
           "B3": 0.03,
           "B4": 0.03,
-          "B5": 0.02,
+          "B5": 0.03,
           "B6": 0.03,
           "B7": 0.03,
           "B8": 0.02,
@@ -1430,11 +1466,11 @@
           "KYV10": 0.05,
           "KYV2": 0.03,
           "KYV3": 0.03,
-          "KYV4": 0.02,
-          "KYV5": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
           "KYV9": 0.03
         }
       }
@@ -1445,21 +1481,22 @@
       "heading": "History",
       "text": "In 2008, he sponsored and championed Florida’s constitutional amendment reducing property taxes and allowing homeowners to bring their tax savings with them when they move to a new home. Mike made transforming the Florida Senate into a more conservative policy body a key objective of his Senate Presidency.",
       "verdict": {
-        "commitment": 0.66,
+        "commitment": 0.61,
+        "own_commitment": 0.29,
         "states_policy": false,
         "issues": [
           "A3"
         ],
         "scores": {
           "A1": 0.03,
-          "A2": 0.34,
+          "A2": 0.39,
           "A3": 0.95,
           "A4": 0.45,
           "A5": 0.02,
           "A6": 0.03,
-          "A7": 0.04,
-          "B1": 0.42,
-          "B2": 0.03,
+          "A7": 0.05,
+          "B1": 0.44,
+          "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
@@ -1467,7 +1504,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
@@ -1486,6 +1523,7 @@
       "text": "After leaving office in 2012, Haridopolos started MJH Consulting, a successful business and political consulting company. He appears regularly on Fox 35 Orlando offering political analysis and remains active in federal, state, and local politics, helping Republicans win elections.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1494,9 +1532,9 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.02,
+          "A6": 0.03,
           "A7": 0.03,
-          "B1": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -1507,7 +1545,7 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -1524,13 +1562,14 @@
       "text": "In 2024, Mike was elected to the U.S House of Representatives for Florida’s 8 th Congressional District. Mike lives in Indian Harbour Beach with his wife Dr. Stephanie Haridopolos. They have three adult children, Alexis, Hayden and Reagan.",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
-          "A4": 0.02,
+          "A3": 0.03,
+          "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -1547,7 +1586,7 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.03,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1657,26 +1696,6 @@
                 "text": "Stopping Illegal Immigration Addressing the catastrophic crisis at our southern border and securing our nation’s borders. Fixing Our Economy Making the American economy work for our families once again. Out-of-control inflation, higher taxes, and reckless spending are putting the American Dream out of reach for millions of Americans. Reducing National Debt Fighting reckless spending to preserve Social Security and Medicare for future generations. Mike faced a $4B budget shortfall in Florida and found common-sense solutions to balance the budget. He will do this again in Congress. End Weaponization of Justice Putting a stop to the misuse of the justice system.",
                 "retrieved_at": "2026-09-29T11:43:33.530Z"
               },
-              "score": 0.99
-            },
-            {
-              "passage": {
-                "id": "2728200b",
-                "url": "https://www.mike4congress.com/issues",
-                "heading": "ILLEGAL IMMIGRATION",
-                "text": "Mike is a strong supporter of President Trump’s immigration measures to secure the southern border and remove dangerous illegal aliens. The Biden Border Crisis allowed record numbers of illegal immigrants and deadly drugs to pour across the southern border. Under Biden, over 7 million illegals entered our nation illegally.",
-                "retrieved_at": "2026-09-29T11:43:33.530Z"
-              },
-              "score": 0.98
-            },
-            {
-              "passage": {
-                "id": "b2317584",
-                "url": "https://www.mike4congress.com/issues",
-                "heading": "ILLEGAL IMMIGRATION",
-                "text": "Mike led the fight to defeat a measure in the Florida legislature to allow illegals to obtain a driver’s license. Mike fully stands by President Trump’s immigration agenda and America is once again a nation of laws and secure borders.",
-                "retrieved_at": "2026-09-29T11:43:33.530Z"
-              },
               "score": 0.98
             },
             {
@@ -1711,7 +1730,7 @@
                 "text": "Mike will stand shoulder-to-shoulder key allies to end the weaponization of our justice system. Protecting the Indian River Lagoon Advancing common sense ideas to protect our environment and joining the Congressional Estuary Caucus. Supporting Space Exploration Promoting high-paying jobs and technological innovation through space exploration. Space is key to American technological innovation as well as our national security. Tackling Crime & Public Safety Backing law enforcement and defending Second Amendment rights. Mike will always “Back the Blue” and is grateful for the support of the Sheriffs of both Brevard and Indian River Counties.",
                 "retrieved_at": "2026-09-29T11:43:33.530Z"
               },
-              "score": 0.96
+              "score": 0.97
             }
           ]
         }
@@ -1771,7 +1790,7 @@
                 "text": "For too long, Washington Democrats have fought against commonsense election safeguards. I’m fighting to restore trust in our elections by supporting the SAVE America Act and ensuring proper voter verification measures are in place.",
                 "retrieved_at": "2026-09-29T11:43:33.530Z"
               },
-              "score": 0.98
+              "score": 0.97
             },
             {
               "passage": {
@@ -1792,22 +1811,6 @@
                 "retrieved_at": "2026-09-29T11:43:33.530Z"
               },
               "score": 0.94
-            }
-          ]
-        },
-        {
-          "id": "KYV1",
-          "label": "Threats to democratic institutions",
-          "citations": [
-            {
-              "passage": {
-                "id": "4c24f783",
-                "url": "https://www.mike4congress.com/issues",
-                "heading": "PROTECTING OUR ELECTIONS",
-                "text": "​ Protecting the ballot box isn’t partisan — it’s common sense. The American people deserve confidence that their voices will be heard and their votes will be protected. I will continue fighting for election integrity and standing up against efforts to undermine our democratic process.",
-                "retrieved_at": "2026-09-29T11:43:33.530Z"
-              },
-              "score": 0.85
             }
           ]
         }
@@ -1839,7 +1842,7 @@
     }
   ],
   "usage": {
-    "input_tokens": 137565,
-    "output_tokens": 17862
+    "input_tokens": 145677,
+    "output_tokens": 18681
   }
 }

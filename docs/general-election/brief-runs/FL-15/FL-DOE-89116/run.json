@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://www.peopleforcongress.com",
-  "created_at": "2026-09-29T11:42:18.819Z",
+  "created_at": "2026-09-30T01:58:12.559Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -38,8 +39,8 @@
   "counts": {
     "passages": 48,
     "asked": 48,
-    "states_policy": 19,
-    "with_issue": 8,
+    "states_policy": 15,
+    "with_issue": 5,
     "failed": 0
   },
   "passages": [
@@ -50,6 +51,7 @@
       "text": "Make your voice heard. Mark your calendar and be sure to vote.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -59,7 +61,7 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.23,
+          "A7": 0.24,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
@@ -68,7 +70,7 @@
           "B6": 0.03,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.03,
+          "KYV1": 0.04,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -87,39 +89,41 @@
       "heading": "Standing with America’s Postal Workers",
       "text": "Robert speaks with members of the American Postal Workers Union about his priorities, including protecting Social Security, Medicare for All, Vote by Mail, protecting people and the environment, and opposing data centers when communities don’t want them.",
       "verdict": {
-        "commitment": 0.95,
+        "commitment": 0.96,
+        "own_commitment": 0.89,
         "states_policy": true,
         "issues": [
           "A7",
           "B2",
           "B4",
+          "KYV2",
           "KYV3"
         ],
         "scores": {
           "A1": 0.03,
           "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.03,
+          "A4": 0.02,
           "A5": 0.03,
           "A6": 0.03,
           "A7": 0.91,
           "B1": 0.12,
-          "B2": 0.91,
+          "B2": 0.92,
           "B3": 0.03,
-          "B4": 0.94,
+          "B4": 0.93,
           "B5": 0.03,
           "B6": 0.17,
           "B7": 0.03,
-          "B8": 0.75,
-          "KYV1": 0.23,
+          "B8": 0.76,
+          "KYV1": 0.22,
           "KYV10": 0.03,
-          "KYV2": 0.83,
-          "KYV3": 0.86,
+          "KYV2": 0.85,
+          "KYV3": 0.87,
           "KYV4": 0.03,
           "KYV5": 0.03,
           "KYV6": 0.03,
           "KYV7": 0.03,
-          "KYV8": 0.02,
+          "KYV8": 0.03,
           "KYV9": 0.03
         }
       }
@@ -131,6 +135,7 @@
       "text": "His message is simple: the first priority should be listening to what people want and protecting the communities we call home.",
       "verdict": {
         "commitment": 0.63,
+        "own_commitment": 0.47,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -143,16 +148,16 @@
           "A7": 0.03,
           "B1": 0.14,
           "B2": 0.02,
-          "B3": 0.02,
+          "B3": 0.03,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.02,
-          "B7": 0.03,
+          "B6": 0.03,
+          "B7": 0.02,
           "B8": 0.03,
           "KYV1": 0.04,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.06,
+          "KYV3": 0.05,
           "KYV4": 0.04,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -169,32 +174,33 @@
       "text": "Robert People was born in Baltimore, Maryland in 1979. He was the second-born of four children and grew up with a single mother in poverty. The family lived in the commonly found row homes of Baltimore’s inner city. They strived to make the best our of their situation and Robert dreamt of better days when his mother no longer had to ride the bus to and from work and they didn’t need to borrow money to make ends meet.",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.04,
+          "A2": 0.03,
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.04,
+          "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.02,
+          "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.02,
+          "KYV5": 0.01,
           "KYV6": 0.02,
-          "KYV7": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -207,18 +213,19 @@
       "text": "Robert’s mother fought for more opportunities, attending school to become a nursing assistant while working full-time. Robert admired her perseverance and connected with her drive to help people. He first dreamed of becoming a doctor. While his friends feared the doctor and told exaggerated horror stories of their check-ups, he enjoyed the visits. He would endure the shots just for a chance to observe close up how they helped people. He loved the idea of saving people’s lives and appreciated the care and",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.01,
+          "A2": 0.02,
           "A3": 0.02,
           "A4": 0.01,
           "A5": 0.01,
           "A6": 0.02,
           "A7": 0.01,
           "B1": 0.02,
-          "B2": 0.04,
+          "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
@@ -226,12 +233,12 @@
           "B7": 0.01,
           "B8": 0.01,
           "KYV1": 0.01,
-          "KYV10": 0.05,
+          "KYV10": 0.04,
           "KYV2": 0.02,
           "KYV3": 0.01,
           "KYV4": 0.01,
           "KYV5": 0.01,
-          "KYV6": 0.01,
+          "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.01,
           "KYV9": 0.02
@@ -244,7 +251,8 @@
       "heading": "A BORN HELPER",
       "text": "compassion that doctors showed their patients.",
       "verdict": {
-        "commitment": 0.04,
+        "commitment": 0.05,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -282,26 +290,27 @@
       "heading": "A BORN HELPER",
       "text": "As a teenager, Robert fell in love with the idea of being a teacher, a passion he still carries. He loved school and wanted to give others the same amazing feeling he received from learning. Life took Robert in a different direction, but the foundation",
       "verdict": {
-        "commitment": 0.02,
+        "commitment": 0.03,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.01,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.01,
-          "A5": 0.01,
+          "A4": 0.02,
+          "A5": 0.02,
           "A6": 0.03,
-          "A7": 0.01,
+          "A7": 0.02,
           "B1": 0.02,
-          "B2": 0.02,
-          "B3": 0.02,
+          "B2": 0.01,
+          "B3": 0.01,
           "B4": 0.02,
-          "B5": 0.01,
-          "B6": 0.02,
-          "B7": 0.02,
+          "B5": 0.02,
+          "B6": 0.01,
+          "B7": 0.01,
           "B8": 0.01,
-          "KYV1": 0.02,
+          "KYV1": 0.01,
           "KYV10": 0.04,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -309,7 +318,7 @@
           "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.01,
+          "KYV8": 0.02,
           "KYV9": 0.02
         }
       }
@@ -321,6 +330,7 @@
       "text": "remained the same – Robert was meant for a life of service.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -338,7 +348,7 @@
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.02,
+          "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.02,
@@ -358,17 +368,18 @@
       "heading": "THE U.S. ARMY",
       "text": "Shortly after starting his senior year in high school, Robert followed in his older brother’s footsteps and signed up to join the Army. He shipped out the day after he turned 18 years old and encountered his first true test in adulthood, completing basic training.",
       "verdict": {
-        "commitment": 0.01,
+        "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.01,
+          "A2": 0.02,
           "A3": 0.02,
           "A4": 0.01,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.01,
+          "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
@@ -382,11 +393,11 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.01,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.01,
           "KYV7": 0.02,
-          "KYV8": 0.02,
-          "KYV9": 0.01
+          "KYV8": 0.01,
+          "KYV9": 0.02
         }
       }
     },
@@ -397,15 +408,16 @@
       "text": "Robert didn’t originally plan to become a career soldier. He was nearing the end of his second enlistment at Fort Cavazos, Texas, when he and other junior soldiers attended a discussion by the Base Command Sergeant Major.",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.01,
+          "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.01,
+          "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -419,9 +431,9 @@
           "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.02,
+          "KYV4": 0.01,
           "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV6": 0.01,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -435,6 +447,7 @@
       "text": "The discussion began, “As I go around to your units and talk to you, there are a lot of complaints, but also a lot of great ideas. However, only a few of you in here want to do the work to go to the promotion board and become Sergeants. You have a golden opportunity to take that next step and maybe implement those ideas you have. Do you want to be part of the problem, or part of the solution?”",
       "verdict": {
         "commitment": 0.11,
+        "own_commitment": 0.08,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -446,7 +459,7 @@
           "A6": 0.02,
           "A7": 0.01,
           "B1": 0.03,
-          "B2": 0.02,
+          "B2": 0.01,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
@@ -454,15 +467,15 @@
           "B7": 0.02,
           "B8": 0.01,
           "KYV1": 0.02,
-          "KYV10": 0.05,
+          "KYV10": 0.06,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
-          "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.01
+          "KYV9": 0.02
         }
       }
     },
@@ -473,44 +486,7 @@
       "text": "Robert knew his answer. He went back to his unit, requested to go before the promotion board, and the rest was history. Robert served the United States of America for 21 years through three combat tours (2 in Iraq, 1 in Afghanistan) and in the roles of",
       "verdict": {
         "commitment": 0.02,
-        "states_policy": false,
-        "issues": [],
-        "scores": {
-          "A1": 0.02,
-          "A2": 0.02,
-          "A3": 0.02,
-          "A4": 0.02,
-          "A5": 0.01,
-          "A6": 0.02,
-          "A7": 0.02,
-          "B1": 0.02,
-          "B2": 0.02,
-          "B3": 0.02,
-          "B4": 0.02,
-          "B5": 0.02,
-          "B6": 0.01,
-          "B7": 0.02,
-          "B8": 0.02,
-          "KYV1": 0.02,
-          "KYV10": 0.03,
-          "KYV2": 0.02,
-          "KYV3": 0.02,
-          "KYV4": 0.02,
-          "KYV5": 0.02,
-          "KYV6": 0.01,
-          "KYV7": 0.02,
-          "KYV8": 0.02,
-          "KYV9": 0.02
-        }
-      }
-    },
-    {
-      "id": "6b27600f",
-      "url": "https://www.peopleforcongress.com/",
-      "heading": "THE U.S. ARMY",
-      "text": "Ammunitions Specialist and Journalist before retiring in 2018.",
-      "verdict": {
-        "commitment": 0.02,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -531,7 +507,46 @@
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "6b27600f",
+      "url": "https://www.peopleforcongress.com/",
+      "heading": "THE U.S. ARMY",
+      "text": "Ammunitions Specialist and Journalist before retiring in 2018.",
+      "verdict": {
+        "commitment": 0.02,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -549,6 +564,7 @@
       "text": "When Robert joined the Army, he took an oath to the Constitution, not a political party or a President. He is NOT done with his oath. His passion for public service drives him to continue to follow the advice of that Command Sergeant Major from 25 years ago and be PART OF THE SOLUTION.",
       "verdict": {
         "commitment": 0.09,
+        "own_commitment": 0.21,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -567,7 +583,7 @@
           "B6": 0.03,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.13,
+          "KYV1": 0.12,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -587,6 +603,7 @@
       "text": "Robert is ready to step up and serve District 15. As your Representative, People isn’t just his last name, they are his FIRST PRIORITY.",
       "verdict": {
         "commitment": 0.08,
+        "own_commitment": 0.19,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -608,7 +625,7 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -625,6 +642,46 @@
       "text": "Robert will provide the leadership that Florida's Congressional District 15 has been sorely missing. He will listen to and work for his constituents, not the president, nor the administration. Not even other Democrats. He will work for the PEOPLE.",
       "verdict": {
         "commitment": 0.47,
+        "own_commitment": 0.79,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.07,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "39f59e1c",
+      "url": "https://www.peopleforcongress.com/general-7",
+      "heading": "MY PLATFORM",
+      "text": "As your Congressman, Robert will bring the attention back to the PEOPLE. Too many Representatives forget who they serve and end up removed from us. His VISION is to PRIORITIZE what you, the PEOPLE, tell him you need from your member of Congress. Below are some of his IDEAS:",
+      "verdict": {
+        "commitment": 0.57,
+        "own_commitment": 0.66,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -657,50 +714,13 @@
       }
     },
     {
-      "id": "39f59e1c",
-      "url": "https://www.peopleforcongress.com/general-7",
-      "heading": "MY PLATFORM",
-      "text": "As your Congressman, Robert will bring the attention back to the PEOPLE. Too many Representatives forget who they serve and end up removed from us. His VISION is to PRIORITIZE what you, the PEOPLE, tell him you need from your member of Congress. Below are some of his IDEAS:",
-      "verdict": {
-        "commitment": 0.57,
-        "states_policy": false,
-        "issues": [],
-        "scores": {
-          "A1": 0.02,
-          "A2": 0.02,
-          "A3": 0.02,
-          "A4": 0.02,
-          "A5": 0.02,
-          "A6": 0.02,
-          "A7": 0.03,
-          "B1": 0.03,
-          "B2": 0.02,
-          "B3": 0.02,
-          "B4": 0.02,
-          "B5": 0.02,
-          "B6": 0.02,
-          "B7": 0.02,
-          "B8": 0.02,
-          "KYV1": 0.08,
-          "KYV10": 0.02,
-          "KYV2": 0.02,
-          "KYV3": 0.02,
-          "KYV4": 0.02,
-          "KYV5": 0.02,
-          "KYV6": 0.02,
-          "KYV7": 0.02,
-          "KYV8": 0.02,
-          "KYV9": 0.02
-        }
-      }
-    },
-    {
       "id": "292ca1d7",
       "url": "https://www.peopleforcongress.com/general-7",
       "heading": "MY PLATFORM",
       "text": "Since Donald Trump’s term started in 2025, his administration has made decisions for the benefit of the fossil fuel industry and to the detriment of regular people. Electricity rates are up 8% since Trump took office, and here in District 15, residents have been significantly impacted by increased electricity costs. 47% of Floridians already struggle to meet basic costs of living. With the addition of increased expenses due to natural disaster impacts and insurance costs, Florida’s working and middle-class families are being priced out of living here.",
       "verdict": {
-        "commitment": 0.18,
+        "commitment": 0.17,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [
           "A4",
@@ -709,7 +729,7 @@
         ],
         "scores": {
           "A1": 0.46,
-          "A2": 0.38,
+          "A2": 0.37,
           "A3": 0.03,
           "A4": 0.95,
           "A5": 0.02,
@@ -722,15 +742,15 @@
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.4,
+          "B8": 0.39,
           "KYV1": 0.03,
           "KYV10": 0.02,
-          "KYV2": 0.88,
+          "KYV2": 0.89,
           "KYV3": 0.03,
           "KYV4": 0.06,
           "KYV5": 0.02,
           "KYV6": 0.03,
-          "KYV7": 0.03,
+          "KYV7": 0.04,
           "KYV8": 0.03,
           "KYV9": 0.02
         }
@@ -742,7 +762,8 @@
       "heading": "MY PLATFORM",
       "text": "Please read below for Robert's policies on lowering utility costs, expanding clean energy investments, restoring Environmental Protection Agency (EPA) standards, and restoring Federal Emergency Management Agency (FEMA) programs.",
       "verdict": {
-        "commitment": 0.51,
+        "commitment": 0.53,
+        "own_commitment": 0.54,
         "states_policy": false,
         "issues": [
           "B8"
@@ -751,28 +772,28 @@
           "A1": 0.04,
           "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.4,
+          "A4": 0.38,
           "A5": 0.04,
           "A6": 0.03,
           "A7": 0.02,
           "B1": 0.07,
-          "B2": 0.03,
+          "B2": 0.02,
           "B3": 0.03,
           "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.03,
+          "B7": 0.02,
           "B8": 0.9,
           "KYV1": 0.03,
           "KYV10": 0.03,
-          "KYV2": 0.82,
+          "KYV2": 0.8,
           "KYV3": 0.04,
-          "KYV4": 0.24,
+          "KYV4": 0.21,
           "KYV5": 0.04,
           "KYV6": 0.03,
           "KYV7": 0.02,
-          "KYV8": 0.03,
-          "KYV9": 0.03
+          "KYV8": 0.02,
+          "KYV9": 0.02
         }
       }
     },
@@ -783,6 +804,7 @@
       "text": "Since members of Congress often make policy decisions that can have a direct impact on the economy and specific industries, Robert is looking to support or put forth legislation to ban congressional stock trading.",
       "verdict": {
         "commitment": 0.96,
+        "own_commitment": 0.89,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -796,14 +818,14 @@
           "B1": 0.24,
           "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.02,
+          "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.48,
+          "KYV1": 0.45,
           "KYV10": 0.02,
-          "KYV2": 0.02,
+          "KYV2": 0.03,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -820,33 +842,34 @@
       "heading": "Read More Here:",
       "text": "This will also prevent insider trading, which will stop lawmakers from having non-public, market-moving information before the general public. Members of Congress are representatives of the American people. They should not be engaging in activities that give them an unfair financial advantage over the people they represent, especially when their constituents are often suffering and living in poverty. This is unacceptable.",
       "verdict": {
-        "commitment": 0.88,
-        "states_policy": true,
+        "commitment": 0.86,
+        "own_commitment": 0.57,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.01,
+          "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.1,
+          "B1": 0.11,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.13,
+          "B7": 0.12,
           "B8": 0.02,
-          "KYV1": 0.67,
+          "KYV1": 0.64,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.01,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -859,23 +882,23 @@
       "text": "We have proven time and time again that we have the capacity to support Medicare For All, and there has been enough \"kicking this can down the road.\" Robert will support universal healthcare to ensure that our citizens receive the healthcare they need without being financially drained just to pay for medication(s), forcing them to decide between paying a bill or receiving, in many cases, life-saving medicines. Our citizens should not have to decide to essentially die due to the inflated costs of medications that they can no longer afford, and whoever is benefiting from these astronomical costs needs to be held accountable as well. Enough of pretending we do not know that is happening.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.97,
         "states_policy": true,
         "issues": [
-          "B2",
-          "B4"
+          "B2"
         ],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.11,
+          "A4": 0.13,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.1,
           "B2": 0.99,
           "B3": 0.02,
-          "B4": 0.86,
+          "B4": 0.84,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -900,13 +923,14 @@
       "text": "NO AIPAC Contributions and NO Further Arms to Israel",
       "verdict": {
         "commitment": 0.93,
+        "own_commitment": 0.89,
         "states_policy": true,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
-          "A4": 0.02,
+          "A3": 0.03,
+          "A4": 0.01,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -938,6 +962,7 @@
       "text": "Robert will NOT accept donations from the American Israel Public Affairs Committee (AIPAC). This includes disguised, AIPAC-linked donors; i.e., donations linked to AIPAC while not disclosed as being received from this organization. Robert will also always vote and/or support NO further arms being sent to Israel under this administration.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.98,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -975,15 +1000,16 @@
       "heading": "Read More Here:",
       "text": "​ ​Robert will NOT support Israel's GENOCIDE against the people of Palestine. Since October 7, 2023, 65,000 Palestinians have died, and this continues even after an established Gaza peace plan that went into effect on October 10, 2025. This is unacceptable.",
       "verdict": {
-        "commitment": 0.95,
+        "commitment": 0.94,
+        "own_commitment": 0.88,
         "states_policy": true,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.01,
-          "A5": 0.01,
+          "A4": 0.02,
+          "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
@@ -994,7 +1020,7 @@
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.03,
+          "KYV1": 0.04,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -1014,6 +1040,7 @@
       "text": "No word from the United States or Israel to express any care or concern for the thousands of murdered Palestinians, and enough is enough. Robert will always speak up against this war and the senseless killing of the people of Palestine.",
       "verdict": {
         "commitment": 0.84,
+        "own_commitment": 0.82,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1021,7 +1048,7 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.01,
-          "A5": 0.01,
+          "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
@@ -1032,7 +1059,7 @@
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.06,
+          "KYV1": 0.07,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -1052,6 +1079,7 @@
       "text": "Our children need to be fed and nourished so that they can focus on learning and becoming their absolute best. Robert will fight for FREE school breakfasts and lunches for ALL our children. ​ Robert would like to propose child tax credits to cover school meals.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.96,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1062,7 +1090,7 @@
           "A5": 0.02,
           "A6": 0.27,
           "A7": 0.02,
-          "B1": 0.08,
+          "B1": 0.07,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -1071,7 +1099,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -1090,17 +1118,18 @@
       "text": "Robert would also like to restore USDA funding for food banks and to engage with food assistance organizations to identify bureaucratic barriers and regulation changes that could expand opportunities and alleviate costs.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.87,
         "states_policy": true,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.15,
+          "A4": 0.13,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.11,
+          "B1": 0.12,
           "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
@@ -1115,7 +1144,7 @@
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.05,
+          "KYV7": 0.04,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -1128,6 +1157,7 @@
       "text": "We must remember that this will also help hard-working families, especially single mothers, as this option allows them no longer to have the additional task of preparing breakfasts and lunches for their children on school days. They have more than enough to deal with...this will at least give them one less task to take on.",
       "verdict": {
         "commitment": 0.6,
+        "own_commitment": 0.47,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1136,14 +1166,14 @@
           "A3": 0.02,
           "A4": 0.06,
           "A5": 0.02,
-          "A6": 0.13,
+          "A6": 0.12,
           "A7": 0.02,
           "B1": 0.08,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.01,
+          "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
@@ -1151,11 +1181,11 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.01,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.21
+          "KYV9": 0.23
         }
       }
     },
@@ -1166,6 +1196,7 @@
       "text": "Women are still having to deal with a host of issues during doctor's visits. They are NOT being heard by medical providers. Women are often misdiagnosed, receive improper treatments, or are frequently told that they \"need to lose weight\" in an effort to dismiss the problem. There is still a lack of women in clinical trials, as men are still strongly viewed as the default, insufficient research into women's health issues, and so much more. Robert will support federal grant funding for these initiatives. Reproductive health and decisions are always up to a woman and her doctor. ​ ​",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1177,10 +1208,10 @@
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.03,
-          "B2": 0.22,
+          "B2": 0.23,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.77,
+          "B5": 0.78,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
@@ -1203,19 +1234,20 @@
       "heading": "Read More Here:",
       "text": "The last significant and comprehensive immigration reform in the U.S. was the Immigration Reform Act and Control Act (IRCA) of 1986, that was signed by President Reagan. While there have been many attempts of immigration reform, none of those efforts have passed.",
       "verdict": {
-        "commitment": 0.03,
+        "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.01,
+          "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.02,
+          "A4": 0.01,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.03,
-          "B2": 0.02,
+          "B2": 0.01,
           "B3": 0.18,
           "B4": 0.02,
           "B5": 0.01,
@@ -1226,7 +1258,7 @@
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
+          "KYV4": 0.02,
           "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -1242,47 +1274,8 @@
       "text": "There needs to be a much better and clearer path to citizenship that does not involve immigrants who are doing the right thing having to wait years for their citizenship.",
       "verdict": {
         "commitment": 0.93,
-        "states_policy": true,
-        "issues": [
-          "B3"
-        ],
-        "scores": {
-          "A1": 0.02,
-          "A2": 0.02,
-          "A3": 0.02,
-          "A4": 0.01,
-          "A5": 0.02,
-          "A6": 0.02,
-          "A7": 0.02,
-          "B1": 0.03,
-          "B2": 0.02,
-          "B3": 0.97,
-          "B4": 0.02,
-          "B5": 0.02,
-          "B6": 0.02,
-          "B7": 0.02,
-          "B8": 0.02,
-          "KYV1": 0.03,
-          "KYV10": 0.02,
-          "KYV2": 0.02,
-          "KYV3": 0.02,
-          "KYV4": 0.02,
-          "KYV5": 0.01,
-          "KYV6": 0.02,
-          "KYV7": 0.02,
-          "KYV8": 0.02,
-          "KYV9": 0.02
-        }
-      }
-    },
-    {
-      "id": "1021e7c2",
-      "url": "https://www.peopleforcongress.com/general-7",
-      "heading": "Read More Here:",
-      "text": "Also, there seems to be unnecessary confusion on due process, as Robert will also push that immigrants have better protection and adequate due process as stated by our CONSTITUTION.",
-      "verdict": {
-        "commitment": 0.86,
-        "states_policy": true,
+        "own_commitment": 0.37,
+        "states_policy": false,
         "issues": [
           "B3"
         ],
@@ -1296,13 +1289,54 @@
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
-          "B3": 0.91,
+          "B3": 0.97,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.44,
+          "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.3,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "1021e7c2",
+      "url": "https://www.peopleforcongress.com/general-7",
+      "heading": "Read More Here:",
+      "text": "Also, there seems to be unnecessary confusion on due process, as Robert will also push that immigrants have better protection and adequate due process as stated by our CONSTITUTION.",
+      "verdict": {
+        "commitment": 0.87,
+        "own_commitment": 0.84,
+        "states_policy": false,
+        "issues": [
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.92,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.45,
+          "B8": 0.02,
+          "KYV1": 0.31,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -1322,21 +1356,22 @@
       "text": "This bill was passed on July 3, 2025, and signed on July 4, 2025. This is a horrible bill, to say the least. Millions will lose healthcare coverage and SNAP benefits. Our national debt will rise by nearly $3.5 trillion. There will be limits to overtime and tips deductions. And this is just the start. If this has not taken place by the time Robert is in office in 2027, his goal here would be to propose legislation to amend and/or repeal this bill.",
       "verdict": {
         "commitment": 0.96,
+        "own_commitment": 0.86,
         "states_policy": true,
         "issues": [
           "B2"
         ],
         "scores": {
           "A1": 0.03,
-          "A2": 0.03,
+          "A2": 0.02,
           "A3": 0.03,
-          "A4": 0.04,
+          "A4": 0.05,
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.02,
-          "B1": 0.69,
+          "B1": 0.68,
           "B2": 0.95,
-          "B3": 0.02,
+          "B3": 0.03,
           "B4": 0.04,
           "B5": 0.02,
           "B6": 0.02,
@@ -1348,9 +1383,9 @@
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.03,
+          "KYV6": 0.02,
           "KYV7": 0.03,
-          "KYV8": 0.02,
+          "KYV8": 0.03,
           "KYV9": 0.03
         }
       }
@@ -1362,6 +1397,7 @@
       "text": "It is important to note that in this case, a two-thirds vote would be needed from both the House and the Senate. However, considering the catastrophic nature of the contents of this bill, Robert has no plans to give up on getting rid of this horrible, ugly bill.",
       "verdict": {
         "commitment": 0.88,
+        "own_commitment": 0.9,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1373,20 +1409,20 @@
           "A6": 0.03,
           "A7": 0.04,
           "B1": 0.06,
-          "B2": 0.07,
+          "B2": 0.06,
           "B3": 0.06,
           "B4": 0.03,
-          "B5": 0.08,
+          "B5": 0.07,
           "B6": 0.04,
-          "B7": 0.07,
-          "B8": 0.08,
-          "KYV1": 0.14,
+          "B7": 0.06,
+          "B8": 0.09,
+          "KYV1": 0.13,
           "KYV10": 0.04,
           "KYV2": 0.06,
-          "KYV3": 0.06,
+          "KYV3": 0.05,
           "KYV4": 0.05,
           "KYV5": 0.03,
-          "KYV6": 0.05,
+          "KYV6": 0.04,
           "KYV7": 0.04,
           "KYV8": 0.03,
           "KYV9": 0.03
@@ -1400,6 +1436,7 @@
       "text": "Robert will propose raising the Social Security tax cap. According to http://pgpf.org , in 2025, the Social Security tax cap was set at $176,100, which is an increase of $7,500 more than in 2024.",
       "verdict": {
         "commitment": 0.95,
+        "own_commitment": 0.94,
         "states_policy": true,
         "issues": [
           "B4"
@@ -1415,7 +1452,7 @@
           "B1": 0.23,
           "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.91,
+          "B4": 0.92,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -1424,8 +1461,8 @@
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
-          "KYV5": 0.01,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1440,6 +1477,7 @@
       "text": "Florida has the second-largest population of seniors in the state, at 4.6 million, next to California (6 million). Florida also has the third-largest percentage of seniors in the state (21.75%), next to Maine (22.94%) and Vermont (22.15%).",
       "verdict": {
         "commitment": 0.05,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1463,7 +1501,7 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.02,
+          "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1478,6 +1516,7 @@
       "text": "We must make sure we keep the Social Security conversation on the table, and Robert pledges to keep the discussion going. Our citizens should not have to worry about losing their hard-earned money. ​ ​",
       "verdict": {
         "commitment": 0.73,
+        "own_commitment": 0.8,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1488,10 +1527,10 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.09,
+          "B1": 0.11,
           "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.74,
+          "B4": 0.76,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -1516,6 +1555,7 @@
       "text": "One way Robert will look to do this is to establish a minimum salary in every state. This will be determined at the very least by the cost of living, the current median salaries, and a few other factors. It will be enough for teachers not to have to get second jobs over the summer.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.94,
         "states_policy": true,
         "issues": [
           "A6",
@@ -1525,10 +1565,10 @@
           "A1": 0.02,
           "A2": 0.03,
           "A3": 0.02,
-          "A4": 0.07,
+          "A4": 0.06,
           "A5": 0.01,
-          "A6": 0.98,
-          "A7": 0.02,
+          "A6": 0.97,
+          "A7": 0.01,
           "B1": 0.9,
           "B2": 0.02,
           "B3": 0.01,
@@ -1557,7 +1597,8 @@
       "text": "When annual budgets are established, teacher salaries need to be at the TOP of the list. Except for emergency issues, all the improvements and enhancements in the world make NO difference if you don't have teachers. ​",
       "verdict": {
         "commitment": 0.93,
-        "states_policy": true,
+        "own_commitment": 0.62,
+        "states_policy": false,
         "issues": [
           "A6"
         ],
@@ -1569,16 +1610,16 @@
           "A5": 0.02,
           "A6": 0.98,
           "A7": 0.01,
-          "B1": 0.73,
+          "B1": 0.76,
           "B2": 0.02,
-          "B3": 0.01,
+          "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.01,
+          "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.02,
+          "B8": 0.01,
           "KYV1": 0.02,
-          "KYV10": 0.04,
+          "KYV10": 0.05,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -1596,7 +1637,8 @@
       "heading": "Protecting the LGBTQ+ Community",
       "text": "LGBTQ+ rights are human rights, and this is not a radical concept.",
       "verdict": {
-        "commitment": 0.41,
+        "commitment": 0.4,
+        "own_commitment": 0.2,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1604,7 +1646,7 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.01,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
@@ -1635,6 +1677,7 @@
       "text": "Robert will ensure to protect the LGBTQ+ community against harmful legislation and practices, along with supporting transgender care, access to doctors, mental health professionals, and targeted intervention.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.98,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1646,7 +1689,7 @@
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
-          "B2": 0.78,
+          "B2": 0.77,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.03,
@@ -1657,8 +1700,8 @@
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV4": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1673,6 +1716,7 @@
       "text": "Robert is also a supporter of safe spaces and will support protected community centers, along with gender-neutral public facilities.",
       "verdict": {
         "commitment": 0.95,
+        "own_commitment": 0.92,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1710,33 +1754,34 @@
       "heading": "ENDORSE ROBERT PEOPLE",
       "text": "Support a grassroots campaign focused on honesty, accountability, and real representation for Florida’s 15th District.",
       "verdict": {
-        "commitment": 0.14,
+        "commitment": 0.15,
+        "own_commitment": 0.26,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.03,
+          "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.04,
           "B1": 0.03,
           "B2": 0.02,
-          "B3": 0.02,
+          "B3": 0.03,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.08,
+          "B6": 0.09,
           "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.12,
           "KYV10": 0.02,
-          "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -1748,7 +1793,8 @@
       "heading": "ENDORSE ROBERT PEOPLE",
       "text": "Robert is running to represent working people and communities, not corporate PACs, billionaire donors, or special interests.",
       "verdict": {
-        "commitment": 0.43,
+        "commitment": 0.41,
+        "own_commitment": 0.52,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1759,7 +1805,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.03,
-          "B1": 0.17,
+          "B1": 0.15,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -1767,9 +1813,9 @@
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.08,
+          "KYV1": 0.07,
           "KYV10": 0.02,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -1786,18 +1832,19 @@
       "heading": "COMMUNITY SUPPORT",
       "text": "Supporters across District 15 are joining a people-powered campaign focused on accountability, affordability, and putting people first.",
       "verdict": {
-        "commitment": 0.39,
+        "commitment": 0.4,
+        "own_commitment": 0.22,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
-          "A2": 0.28,
+          "A2": 0.27,
           "A3": 0.03,
           "A4": 0.23,
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.03,
-          "B1": 0.18,
+          "B1": 0.16,
           "B2": 0.06,
           "B3": 0.02,
           "B4": 0.02,
@@ -1805,7 +1852,7 @@
           "B6": 0.03,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.09,
+          "KYV1": 0.1,
           "KYV10": 0.02,
           "KYV2": 0.03,
           "KYV3": 0.02,
@@ -1825,31 +1872,32 @@
       "text": "Democratic Progressive Caucus of Florida",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.03,
           "A6": 0.03,
           "A7": 0.03,
           "B1": 0.02,
-          "B2": 0.02,
-          "B3": 0.02,
+          "B2": 0.03,
+          "B3": 0.03,
           "B4": 0.02,
           "B5": 0.03,
           "B6": 0.03,
-          "B7": 0.02,
+          "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.03,
-          "KYV10": 0.03,
-          "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV6": 0.03,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.03
@@ -1863,6 +1911,7 @@
       "text": "I authorize the campaign to publicly share my endorsement. *",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.12,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1885,7 +1934,7 @@
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
+          "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -1938,17 +1987,7 @@
                 "text": "One way Robert will look to do this is to establish a minimum salary in every state. This will be determined at the very least by the cost of living, the current median salaries, and a few other factors. It will be enough for teachers not to have to get second jobs over the summer.",
                 "retrieved_at": "2026-09-29T11:42:10.968Z"
               },
-              "score": 0.98
-            },
-            {
-              "passage": {
-                "id": "bf8ae8df",
-                "url": "https://www.peopleforcongress.com/general-7",
-                "heading": "Increasing Teacher Salaries",
-                "text": "When annual budgets are established, teacher salaries need to be at the TOP of the list. Except for emergency issues, all the improvements and enhancements in the world make NO difference if you don't have teachers. ​",
-                "retrieved_at": "2026-09-29T11:42:10.968Z"
-              },
-              "score": 0.98
+              "score": 0.97
             }
           ]
         }
@@ -1992,7 +2031,7 @@
                 "text": "Robert speaks with members of the American Postal Workers Union about his priorities, including protecting Social Security, Medicare for All, Vote by Mail, protecting people and the environment, and opposing data centers when communities don’t want them.",
                 "retrieved_at": "2026-09-29T11:42:10.968Z"
               },
-              "score": 0.91
+              "score": 0.92
             }
           ]
         }
@@ -2005,6 +2044,22 @@
       },
       "subIssues": [
         {
+          "id": "KYV2",
+          "label": "Energy and utilities",
+          "citations": [
+            {
+              "passage": {
+                "id": "fbc2a460",
+                "url": "https://www.peopleforcongress.com/",
+                "heading": "Standing with America’s Postal Workers",
+                "text": "Robert speaks with members of the American Postal Workers Union about his priorities, including protecting Social Security, Medicare for All, Vote by Mail, protecting people and the environment, and opposing data centers when communities don’t want them.",
+                "retrieved_at": "2026-09-29T11:42:10.968Z"
+              },
+              "score": 0.85
+            }
+          ]
+        },
+        {
           "id": "KYV3",
           "label": "Growth, development and land conservation",
           "citations": [
@@ -2016,41 +2071,7 @@
                 "text": "Robert speaks with members of the American Postal Workers Union about his priorities, including protecting Social Security, Medicare for All, Vote by Mail, protecting people and the environment, and opposing data centers when communities don’t want them.",
                 "retrieved_at": "2026-09-29T11:42:10.968Z"
               },
-              "score": 0.86
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "area": {
-        "id": "immigration",
-        "label": "Immigration"
-      },
-      "subIssues": [
-        {
-          "id": "B3",
-          "label": "Immigration and border enforcement",
-          "citations": [
-            {
-              "passage": {
-                "id": "49e85e80",
-                "url": "https://www.peopleforcongress.com/general-7",
-                "heading": "Read More Here:",
-                "text": "There needs to be a much better and clearer path to citizenship that does not involve immigrants who are doing the right thing having to wait years for their citizenship.",
-                "retrieved_at": "2026-09-29T11:42:10.968Z"
-              },
-              "score": 0.97
-            },
-            {
-              "passage": {
-                "id": "1021e7c2",
-                "url": "https://www.peopleforcongress.com/general-7",
-                "heading": "Read More Here:",
-                "text": "Also, there seems to be unnecessary confusion on due process, as Robert will also push that immigrants have better protection and adequate due process as stated by our CONSTITUTION.",
-                "retrieved_at": "2026-09-29T11:42:10.968Z"
-              },
-              "score": 0.91
+              "score": 0.87
             }
           ]
         }
@@ -2098,7 +2119,7 @@
                 "text": "Robert speaks with members of the American Postal Workers Union about his priorities, including protecting Social Security, Medicare for All, Vote by Mail, protecting people and the environment, and opposing data centers when communities don’t want them.",
                 "retrieved_at": "2026-09-29T11:42:10.968Z"
               },
-              "score": 0.94
+              "score": 0.93
             },
             {
               "passage": {
@@ -2108,17 +2129,7 @@
                 "text": "Robert will propose raising the Social Security tax cap. According to http://pgpf.org , in 2025, the Social Security tax cap was set at $176,100, which is an increase of $7,500 more than in 2024.",
                 "retrieved_at": "2026-09-29T11:42:10.968Z"
               },
-              "score": 0.91
-            },
-            {
-              "passage": {
-                "id": "4c6749c3",
-                "url": "https://www.peopleforcongress.com/general-7",
-                "heading": "Read More Here:",
-                "text": "We have proven time and time again that we have the capacity to support Medicare For All, and there has been enough \"kicking this can down the road.\" Robert will support universal healthcare to ensure that our citizens receive the healthcare they need without being financially drained just to pay for medication(s), forcing them to decide between paying a bill or receiving, in many cases, life-saving medicines. Our citizens should not have to decide to essentially die due to the inflated costs of medications that they can no longer afford, and whoever is benefiting from these astronomical costs needs to be held accountable as well. Enough of pretending we do not know that is happening.",
-                "retrieved_at": "2026-09-29T11:42:10.968Z"
-              },
-              "score": 0.86
+              "score": 0.92
             }
           ]
         }
@@ -2126,7 +2137,7 @@
     }
   ],
   "usage": {
-    "input_tokens": 169080,
-    "output_tokens": 21984
+    "input_tokens": 179064,
+    "output_tokens": 22992
   }
 }

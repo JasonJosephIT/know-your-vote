@@ -1,0 +1,41 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  A4  Cost of living in Florida  (1 citation(s))
+      0.95  "We must stop tariffs and other policies that are raising grocery, fuel, and housing costs, and hurting local agriculture. Stop Medicaid and ACA cuts causing thousands of Central Florida families to lose their healthcare. Protect Social S…"
+            https://www.darrensoto.com/  — section: I’m Congressman Darren Soto, and I’m running for re-election on the three C’s: Lower Costs. Protect Our Care. Stop Corruption.
+  B1  Economy, inflation, and jobs  (3 citation(s))
+      0.92  "Boost high-paying jobs at Lake Nona, NeoCity, University of Central Florida Research Park, and NASA/commercial space"
+            https://www.darrensoto.com/  — section: Meet Darren Soto
+      0.88  "We must stop tariffs and other policies that are raising grocery, fuel, and housing costs, and hurting local agriculture. Stop Medicaid and ACA cuts causing thousands of Central Florida families to lose their healthcare. Protect Social S…"
+            https://www.darrensoto.com/  — section: I’m Congressman Darren Soto, and I’m running for re-election on the three C’s: Lower Costs. Protect Our Care. Stop Corruption.
+      0.88  "In Congress, he serves on the powerful Energy and Commerce Committee and the Natural Resources Committee, where he fights to lower the cost of healthcare, energy, and consumer goods, boost American jobs, technology, and innovation, incre…"
+            https://www.darrensoto.com/  — section: Meet Darren Soto
+
+Healthcare
+  B2  Healthcare access and costs  (3 citation(s))
+      0.98  "We must stop tariffs and other policies that are raising grocery, fuel, and housing costs, and hurting local agriculture. Stop Medicaid and ACA cuts causing thousands of Central Florida families to lose their healthcare. Protect Social S…"
+            https://www.darrensoto.com/  — section: I’m Congressman Darren Soto, and I’m running for re-election on the three C’s: Lower Costs. Protect Our Care. Stop Corruption.
+      0.98  "In Congress, he serves on the powerful Energy and Commerce Committee and the Natural Resources Committee, where he fights to lower the cost of healthcare, energy, and consumer goods, boost American jobs, technology, and innovation, incre…"
+            https://www.darrensoto.com/  — section: Meet Darren Soto
+      0.93  "Make food, healthcare, and housing more affordable"
+            https://www.darrensoto.com/  — section: Meet Darren Soto
+
+Housing
+  A2  Housing affordability  (2 citation(s))
+      0.95  "Make food, healthcare, and housing more affordable"
+            https://www.darrensoto.com/  — section: Meet Darren Soto
+      0.87  "We must stop tariffs and other policies that are raising grocery, fuel, and housing costs, and hurting local agriculture. Stop Medicaid and ACA cuts causing thousands of Central Florida families to lose their healthcare. Protect Social S…"
+            https://www.darrensoto.com/  — section: I’m Congressman Darren Soto, and I’m running for re-election on the three C’s: Lower Costs. Protect Our Care. Stop Corruption.
+
+Environment & Water
+  B8  Climate and environment (national)  (1 citation(s))
+      0.96  "In Congress, he serves on the powerful Energy and Commerce Committee and the Natural Resources Committee, where he fights to lower the cost of healthcare, energy, and consumer goods, boost American jobs, technology, and innovation, incre…"
+            https://www.darrensoto.com/  — section: Meet Darren Soto
+
+Retirement & Benefits
+  B4  Social Security and Medicare  (1 citation(s))
+      0.98  "We must stop tariffs and other policies that are raising grocery, fuel, and housing costs, and hurting local agriculture. Stop Medicaid and ACA cuts causing thousands of Central Florida families to lose their healthcare. Protect Social S…"
+            https://www.darrensoto.com/  — section: I’m Congressman Darren Soto, and I’m running for re-election on the three C’s: Lower Costs. Protect Our Care. Stop Corruption.
+

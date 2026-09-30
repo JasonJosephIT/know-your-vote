@@ -7,10 +7,8 @@ Economy & Affordability
             https://www.peopleforcongress.com/general-7  — section: Increasing Teacher Salaries
 
 Education
-  A6  Public school funding and teachers  (2 citation(s))
-      0.98  "One way Robert will look to do this is to establish a minimum salary in every state. This will be determined at the very least by the cost of living, the current median salaries, and a few other factors. It will be enough for teachers no…"
-            https://www.peopleforcongress.com/general-7  — section: Increasing Teacher Salaries
-      0.98  "When annual budgets are established, teacher salaries need to be at the TOP of the list. Except for emergency issues, all the improvements and enhancements in the world make NO difference if you don't have teachers. ​"
+  A6  Public school funding and teachers  (1 citation(s))
+      0.97  "One way Robert will look to do this is to establish a minimum salary in every state. This will be determined at the very least by the cost of living, the current median salaries, and a few other factors. It will be enough for teachers no…"
             https://www.peopleforcongress.com/general-7  — section: Increasing Teacher Salaries
 
 Healthcare
@@ -19,20 +17,16 @@ Healthcare
             https://www.peopleforcongress.com/general-7  — section: Read More Here:
       0.95  "This bill was passed on July 3, 2025, and signed on July 4, 2025. This is a horrible bill, to say the least. Millions will lose healthcare coverage and SNAP benefits. Our national debt will rise by nearly $3.5 trillion. There will be lim…"
             https://www.peopleforcongress.com/general-7  — section: Read More Here:
-      0.91  "Robert speaks with members of the American Postal Workers Union about his priorities, including protecting Social Security, Medicare for All, Vote by Mail, protecting people and the environment, and opposing data centers when communities…"
+      0.92  "Robert speaks with members of the American Postal Workers Union about his priorities, including protecting Social Security, Medicare for All, Vote by Mail, protecting people and the environment, and opposing data centers when communities…"
             https://www.peopleforcongress.com/  — section: Standing with America’s Postal Workers
 
 Environment & Water
-  KYV3  Growth, development and land conservation  (1 citation(s))
-      0.86  "Robert speaks with members of the American Postal Workers Union about his priorities, including protecting Social Security, Medicare for All, Vote by Mail, protecting people and the environment, and opposing data centers when communities…"
+  KYV2  Energy and utilities  (1 citation(s))
+      0.85  "Robert speaks with members of the American Postal Workers Union about his priorities, including protecting Social Security, Medicare for All, Vote by Mail, protecting people and the environment, and opposing data centers when communities…"
             https://www.peopleforcongress.com/  — section: Standing with America’s Postal Workers
-
-Immigration
-  B3  Immigration and border enforcement  (2 citation(s))
-      0.97  "There needs to be a much better and clearer path to citizenship that does not involve immigrants who are doing the right thing having to wait years for their citizenship."
-            https://www.peopleforcongress.com/general-7  — section: Read More Here:
-      0.91  "Also, there seems to be unnecessary confusion on due process, as Robert will also push that immigrants have better protection and adequate due process as stated by our CONSTITUTION."
-            https://www.peopleforcongress.com/general-7  — section: Read More Here:
+  KYV3  Growth, development and land conservation  (1 citation(s))
+      0.87  "Robert speaks with members of the American Postal Workers Union about his priorities, including protecting Social Security, Medicare for All, Vote by Mail, protecting people and the environment, and opposing data centers when communities…"
+            https://www.peopleforcongress.com/  — section: Standing with America’s Postal Workers
 
 Elections & Voting
   A7  Elections administration and voting access  (1 citation(s))
@@ -40,11 +34,9 @@ Elections & Voting
             https://www.peopleforcongress.com/  — section: Standing with America’s Postal Workers
 
 Retirement & Benefits
-  B4  Social Security and Medicare  (3 citation(s))
-      0.94  "Robert speaks with members of the American Postal Workers Union about his priorities, including protecting Social Security, Medicare for All, Vote by Mail, protecting people and the environment, and opposing data centers when communities…"
+  B4  Social Security and Medicare  (2 citation(s))
+      0.93  "Robert speaks with members of the American Postal Workers Union about his priorities, including protecting Social Security, Medicare for All, Vote by Mail, protecting people and the environment, and opposing data centers when communities…"
             https://www.peopleforcongress.com/  — section: Standing with America’s Postal Workers
-      0.91  "Robert will propose raising the Social Security tax cap. According to http://pgpf.org , in 2025, the Social Security tax cap was set at $176,100, which is an increase of $7,500 more than in 2024."
+      0.92  "Robert will propose raising the Social Security tax cap. According to http://pgpf.org , in 2025, the Social Security tax cap was set at $176,100, which is an increase of $7,500 more than in 2024."
             https://www.peopleforcongress.com/general-7  — section: Protecting Social Security
-      0.86  "We have proven time and time again that we have the capacity to support Medicare For All, and there has been enough "kicking this can down the road." Robert will support universal healthcare to ensure that our citizens receive the health…"
-            https://www.peopleforcongress.com/general-7  — section: Read More Here:
 

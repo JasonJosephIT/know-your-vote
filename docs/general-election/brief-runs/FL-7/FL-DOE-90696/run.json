@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://elijahforcongress.com",
-  "created_at": "2026-09-29T11:43:33.125Z",
+  "created_at": "2026-09-30T01:58:45.624Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -38,8 +39,8 @@
   "counts": {
     "passages": 64,
     "asked": 64,
-    "states_policy": 21,
-    "with_issue": 14,
+    "states_policy": 16,
+    "with_issue": 9,
     "failed": 0
   },
   "passages": [
@@ -50,6 +51,7 @@
       "text": "Get involved! Ryan is looking for people who want to help by placing yard signs, knocking on doors, making calls or just attending events. If that’s you, sign up below.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -88,6 +90,7 @@
       "text": "Keep an eye on your inbox for campaign updates and ways to get involved.",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -112,7 +115,7 @@
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV6": 0.01,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -126,15 +129,16 @@
       "text": "For the past 14 years Ryan Elijah has been a very visible part of the community — building strong bonds with area leaders, giving him a unique position to bring your concerns and needs to the right people at the highest levels.",
       "verdict": {
         "commitment": 0.05,
+        "own_commitment": 0.12,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
-          "A2": 0.03,
+          "A2": 0.02,
           "A3": 0.03,
-          "A4": 0.02,
+          "A4": 0.03,
           "A5": 0.02,
-          "A6": 0.02,
+          "A6": 0.03,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
@@ -146,11 +150,11 @@
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV6": 0.03,
           "KYV7": 0.02,
           "KYV8": 0.03,
           "KYV9": 0.03
@@ -163,22 +167,23 @@
       "heading": "Meet Ryan Elijah",
       "text": "A message from Ryan to the families of Seminole and Volusia counties.",
       "verdict": {
-        "commitment": 0.06,
+        "commitment": 0.05,
+        "own_commitment": 0.09,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.04,
-          "A2": 0.03,
+          "A2": 0.04,
           "A3": 0.04,
           "A4": 0.03,
           "A5": 0.04,
-          "A6": 0.04,
-          "A7": 0.04,
+          "A6": 0.05,
+          "A7": 0.05,
           "B1": 0.03,
-          "B2": 0.03,
+          "B2": 0.04,
           "B3": 0.03,
           "B4": 0.03,
-          "B5": 0.03,
+          "B5": 0.04,
           "B6": 0.04,
           "B7": 0.04,
           "B8": 0.03,
@@ -189,7 +194,7 @@
           "KYV4": 0.04,
           "KYV5": 0.04,
           "KYV6": 0.03,
-          "KYV7": 0.04,
+          "KYV7": 0.05,
           "KYV8": 0.03,
           "KYV9": 0.05
         }
@@ -201,17 +206,18 @@
       "heading": "Faith, family, and Central Florida.",
       "text": "Ryan and his wife, Tasha, have raised their two boys in Seminole County. As a long-time Florida resident of 20 years — 14 of them in District 7 — he is committed to fighting for conservative Florida values.",
       "verdict": {
-        "commitment": 0.3,
+        "commitment": 0.28,
+        "own_commitment": 0.61,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.03,
+          "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.02,
-          "A7": 0.03,
+          "A6": 0.03,
+          "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
@@ -220,15 +226,15 @@
           "B6": 0.03,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.02,
-          "KYV10": 0.03,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.03,
+          "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.03,
           "KYV9": 0.03
         }
       }
@@ -239,7 +245,8 @@
       "heading": "Faith, family, and Central Florida.",
       "text": "Family is the foundation of our strong communities in Central Florida. Ryan is active in his church and believes in protecting family values.",
       "verdict": {
-        "commitment": 0.15,
+        "commitment": 0.16,
+        "own_commitment": 0.18,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -250,7 +257,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -278,6 +285,7 @@
       "text": "Ryan has earned the support of Florida’s governor, both of the district’s sheriffs, and members of Florida’s congressional delegation.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -290,7 +298,7 @@
           "A7": 0.03,
           "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.03,
+          "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.03,
@@ -305,7 +313,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -315,12 +323,13 @@
       "heading": "Key Objectives",
       "text": "Focused on Florida and supporting a conservative agenda.",
       "verdict": {
-        "commitment": 0.58,
+        "commitment": 0.6,
+        "own_commitment": 0.62,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
-          "A2": 0.03,
+          "A2": 0.02,
           "A3": 0.03,
           "A4": 0.03,
           "A5": 0.03,
@@ -328,21 +337,21 @@
           "A7": 0.03,
           "B1": 0.04,
           "B2": 0.03,
-          "B3": 0.03,
+          "B3": 0.04,
           "B4": 0.03,
-          "B5": 0.03,
-          "B6": 0.03,
-          "B7": 0.04,
+          "B5": 0.04,
+          "B6": 0.04,
+          "B7": 0.05,
           "B8": 0.03,
           "KYV1": 0.03,
           "KYV10": 0.03,
           "KYV2": 0.03,
-          "KYV3": 0.03,
+          "KYV3": 0.04,
           "KYV4": 0.03,
-          "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV5": 0.03,
+          "KYV6": 0.03,
           "KYV7": 0.03,
-          "KYV8": 0.02,
+          "KYV8": 0.03,
           "KYV9": 0.03
         }
       }
@@ -354,7 +363,8 @@
       "text": "Congress must continue driving down costs for American families by keeping taxes low and achieving American energy independence.",
       "verdict": {
         "commitment": 0.96,
-        "states_policy": true,
+        "own_commitment": 0.78,
+        "states_policy": false,
         "issues": [
           "KYV2"
         ],
@@ -362,7 +372,7 @@
           "A1": 0.02,
           "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.25,
+          "A4": 0.27,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -373,7 +383,7 @@
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.36,
+          "B8": 0.35,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.88,
@@ -394,7 +404,8 @@
       "text": "The United States must continue to lead the world in medical innovation. The federal government can do more to lower healthcare costs.",
       "verdict": {
         "commitment": 0.91,
-        "states_policy": true,
+        "own_commitment": 0.4,
+        "states_policy": false,
         "issues": [
           "B2"
         ],
@@ -405,14 +416,14 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.01,
-          "B1": 0.08,
+          "A7": 0.02,
+          "B1": 0.07,
           "B2": 0.96,
           "B3": 0.02,
-          "B4": 0.05,
+          "B4": 0.06,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.01,
+          "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
@@ -434,6 +445,7 @@
       "text": "Floridians lose hundreds of millions of dollars to fraud every year. Ryan spent years fighting for consumers and recovering money for victims.",
       "verdict": {
         "commitment": 0.17,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -450,11 +462,11 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.62,
+          "B7": 0.61,
           "B8": 0.02,
-          "KYV1": 0.02,
-          "KYV10": 0.03,
-          "KYV2": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -472,6 +484,7 @@
       "text": "Volusia County’s beaches drive a $4.3 billion economy and serve as our first line of defense against storms.",
       "verdict": {
         "commitment": 0.06,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -481,20 +494,20 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
+          "A7": 0.01,
           "B1": 0.23,
           "B2": 0.02,
-          "B3": 0.01,
+          "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.02,
+          "B6": 0.01,
           "B7": 0.02,
-          "B8": 0.08,
+          "B8": 0.09,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.21,
-          "KYV4": 0.56,
+          "KYV3": 0.24,
+          "KYV4": 0.57,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -510,6 +523,7 @@
       "text": "Ryan champions parental rights and school choice, empowering families to make the best decisions for their kids and have transparency on curriculum.",
       "verdict": {
         "commitment": 0.96,
+        "own_commitment": 0.88,
         "states_policy": true,
         "issues": [
           "KYV9"
@@ -520,7 +534,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.07,
+          "A6": 0.06,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -550,6 +564,7 @@
       "text": "Ryan comes from a military family, with both his father and grandfather having served.",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -587,7 +602,8 @@
       "heading": "Law Enforcement",
       "text": "Ryan is a strong defender of law enforcement and deeply understands the daily challenges officers face.",
       "verdict": {
-        "commitment": 0.35,
+        "commitment": 0.36,
+        "own_commitment": 0.28,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -606,7 +622,7 @@
           "B6": 0.02,
           "B7": 0.75,
           "B8": 0.02,
-          "KYV1": 0.07,
+          "KYV1": 0.08,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -625,8 +641,9 @@
       "heading": "Illegal Immigration",
       "text": "America is a nation built by immigrants, however we must enforce the rule of law.",
       "verdict": {
-        "commitment": 0.85,
-        "states_policy": true,
+        "commitment": 0.84,
+        "own_commitment": 0.58,
+        "states_policy": false,
         "issues": [
           "B3"
         ],
@@ -634,7 +651,7 @@
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.01,
+          "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -644,7 +661,7 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.23,
+          "B7": 0.22,
           "B8": 0.02,
           "KYV1": 0.51,
           "KYV10": 0.02,
@@ -666,16 +683,17 @@
       "text": "Florida’s 7th District covers all of Seminole County and southern Volusia County. Here’s everything you need to cast your ballot for Ryan.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.03,
+          "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.03,
           "A6": 0.03,
-          "A7": 0.15,
+          "A7": 0.16,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
@@ -687,13 +705,13 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV8": 0.03,
+          "KYV9": 0.02
         }
       }
     },
@@ -704,33 +722,34 @@
       "text": "Request your ballot from your county Supervisor of Elections, then return it by mail or to a secure drop-off location. Ballots must be received by 7:00 p.m. on Election Day — postmarks don’t count, so mail early.",
       "verdict": {
         "commitment": 0.07,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.01,
           "A2": 0.01,
           "A3": 0.02,
-          "A4": 0.02,
-          "A5": 0.01,
-          "A6": 0.02,
-          "A7": 0.77,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.01,
+          "A7": 0.71,
           "B1": 0.02,
-          "B2": 0.02,
-          "B3": 0.01,
+          "B2": 0.01,
+          "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.27,
+          "B6": 0.26,
           "B7": 0.02,
-          "B8": 0.01,
+          "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.01,
-          "KYV6": 0.01,
+          "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.01,
+          "KYV8": 0.02,
           "KYV9": 0.02
         }
       }
@@ -742,21 +761,22 @@
       "text": "Skip the Election Day lines and vote in person at any early-voting site in your county. Dates, hours, and locations are set by each county Supervisor of Elections — confirm before you go.",
       "verdict": {
         "commitment": 0.08,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.01,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.01,
+          "A4": 0.02,
           "A5": 0.01,
           "A6": 0.02,
-          "A7": 0.71,
+          "A7": 0.74,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.04,
           "B7": 0.02,
           "B8": 0.01,
@@ -780,6 +800,7 @@
       "text": "Polls are open 7:00 a.m. to 7:00 p.m. on Tuesday, November 3, 2026. Find your assigned precinct and polling place before you head out to vote for Ryan.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -789,16 +810,16 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.17,
+          "A7": 0.16,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.03,
+          "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.03,
+          "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -818,6 +839,7 @@
       "text": "Not sure if you’re registered, or if you live in Congressional District 7? Check your registration status with the Florida Division of Elections.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -827,13 +849,13 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.28,
+          "A7": 0.29,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.09,
+          "B6": 0.08,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.03,
@@ -856,14 +878,15 @@
       "text": "See Ryan’s television ad, and hear from Ryan on Newsmax after winning the Republican primary.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.03,
-          "A4": 0.03,
-          "A5": 0.02,
+          "A4": 0.02,
+          "A5": 0.03,
           "A6": 0.03,
           "A7": 0.03,
           "B1": 0.03,
@@ -874,7 +897,7 @@
           "B6": 0.03,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.02,
+          "KYV1": 0.03,
           "KYV10": 0.03,
           "KYV2": 0.03,
           "KYV3": 0.03,
@@ -893,7 +916,8 @@
       "heading": "Latest News",
       "text": "The campaign is up and running, and Ryan Elijah is in the news.",
       "verdict": {
-        "commitment": 0.02,
+        "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -932,6 +956,7 @@
       "text": "Follow the campaign in real time on Facebook and X.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.11,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -970,6 +995,7 @@
       "text": "Follow Ryan on X for the latest from the campaign trail.",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1008,6 +1034,7 @@
       "text": "Show your support across Seminole and Volusia counties — request a Ryan Elijah yard sign and a volunteer will get one to you.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.09,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1046,6 +1073,7 @@
       "text": "Thanks for standing with Ryan. A member of our team will be in touch to arrange your sign.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1067,12 +1095,12 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.01,
+          "KYV8": 0.02,
           "KYV9": 0.02
         }
       }
@@ -1084,6 +1112,7 @@
       "text": "Stay connected with the campaign on social media.",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1121,29 +1150,30 @@
       "heading": "Key Objectives",
       "text": "As a public figure, Ryan Elijah has been immersed in the community and has heard your concerns. Once elected, he will bring them to those who can help get them addressed.",
       "verdict": {
-        "commitment": 0.5,
+        "commitment": 0.52,
+        "own_commitment": 0.8,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.03,
-          "A3": 0.02,
-          "A4": 0.02,
+          "A3": 0.03,
+          "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.03,
           "B1": 0.03,
-          "B2": 0.02,
+          "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.02,
+          "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.02,
+          "KYV1": 0.03,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -1160,7 +1190,8 @@
       "text": "Congress must continue driving down costs for American families by keeping taxes low and achieving American energy independence. Lower gas prices are critical to our economy because they reduce costs for families, businesses, and everything we buy.",
       "verdict": {
         "commitment": 0.97,
-        "states_policy": true,
+        "own_commitment": 0.76,
+        "states_policy": false,
         "issues": [
           "B1",
           "KYV2"
@@ -1180,10 +1211,10 @@
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.26,
+          "B8": 0.29,
           "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.9,
+          "KYV2": 0.89,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -1200,8 +1231,9 @@
       "heading": "Affordability & Economy",
       "text": "It’s past time to put a stop to out of control government spending that acts to drive up everyday costs for American families and our national debt.",
       "verdict": {
-        "commitment": 0.94,
-        "states_policy": true,
+        "commitment": 0.95,
+        "own_commitment": 0.54,
+        "states_policy": false,
         "issues": [
           "B1"
         ],
@@ -1209,11 +1241,11 @@
           "A1": 0.03,
           "A2": 0.05,
           "A3": 0.03,
-          "A4": 0.22,
+          "A4": 0.21,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.89,
+          "B1": 0.9,
           "B2": 0.04,
           "B3": 0.02,
           "B4": 0.03,
@@ -1240,7 +1272,8 @@
       "heading": "Affordability & Economy",
       "text": "Ryan understands that burdensome federal regulations will slow job creation and economic growth.",
       "verdict": {
-        "commitment": 0.74,
+        "commitment": 0.73,
+        "own_commitment": 0.16,
         "states_policy": false,
         "issues": [
           "B1"
@@ -1249,7 +1282,7 @@
           "A1": 0.02,
           "A2": 0.03,
           "A3": 0.02,
-          "A4": 0.1,
+          "A4": 0.11,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -1264,7 +1297,7 @@
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.03,
-          "KYV3": 0.05,
+          "KYV3": 0.04,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -1281,28 +1314,29 @@
       "text": "By unleashing the world’s best economy through lower taxes, less regulation, and smart growth, we will make America more affordable and prosperous for millions of Americans.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [
           "B1"
         ],
         "scores": {
           "A1": 0.02,
-          "A2": 0.08,
+          "A2": 0.09,
           "A3": 0.06,
-          "A4": 0.08,
+          "A4": 0.1,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.96,
-          "B2": 0.03,
+          "B2": 0.04,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.04,
           "KYV1": 0.02,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.03,
           "KYV3": 0.27,
           "KYV4": 0.02,
@@ -1321,6 +1355,7 @@
       "text": "Ryan supports solutions that deliver affordable, patient-centered healthcare options. He also believes healthcare costs can be reduced by providing individuals with tax benefits, such as expanded Health Savings Accounts.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.93,
         "states_policy": true,
         "issues": [
           "B2"
@@ -1333,7 +1368,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.04,
+          "B1": 0.03,
           "B2": 0.98,
           "B3": 0.02,
           "B4": 0.03,
@@ -1361,6 +1396,7 @@
       "text": "Additionally, Ryan supports greater transparency in the system, including requirements for clear pricing from hospitals, insurers, and other providers.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [
           "B2"
@@ -1373,14 +1409,14 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.06,
+          "B1": 0.07,
           "B2": 0.96,
           "B3": 0.02,
           "B4": 0.04,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.02,
+          "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
@@ -1401,6 +1437,7 @@
       "text": "Floridians lose hundreds of millions of dollars to fraud every year. During his television career, Ryan spent years fighting for consumers—taking on complex federal cases and recovering thousands of dollars for victims.",
       "verdict": {
         "commitment": 0.12,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1417,7 +1454,7 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.52,
+          "B7": 0.5,
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.02,
@@ -1439,6 +1476,7 @@
       "text": "He will support strong consumer-protection legislation and aggressively pursue those who prey on Floridians, especially our most vulnerable senior citizens.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.98,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1450,12 +1488,12 @@
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.04,
-          "B2": 0.03,
+          "B2": 0.02,
           "B3": 0.02,
           "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.59,
+          "B7": 0.65,
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.02,
@@ -1477,10 +1515,11 @@
       "text": "Volusia County’s beaches drive a $4.3 billion economy and serve as our first line of defense against storms. Hurricanes Ian and Nicole severely damaged our shoreline.",
       "verdict": {
         "commitment": 0.08,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.03,
+          "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
@@ -1489,7 +1528,7 @@
           "A7": 0.02,
           "B1": 0.13,
           "B2": 0.02,
-          "B3": 0.02,
+          "B3": 0.01,
           "B4": 0.02,
           "B5": 0.01,
           "B6": 0.02,
@@ -1515,6 +1554,7 @@
       "text": "Ryan will prioritize working with federal agencies to secure long-term beach nourishment and storm-damage reduction projects.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.96,
         "states_policy": true,
         "issues": [
           "KYV4"
@@ -1526,20 +1566,20 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.01,
+          "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.02,
+          "B6": 0.01,
           "B7": 0.02,
-          "B8": 0.57,
+          "B8": 0.58,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.15,
-          "KYV4": 0.95,
+          "KYV3": 0.18,
+          "KYV4": 0.96,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -1555,6 +1595,7 @@
       "text": "Ryan will strongly support our schools. His boys were educated in both public and private schools. He believes both are critical to our children’s success and our community’s future.",
       "verdict": {
         "commitment": 0.93,
+        "own_commitment": 0.91,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1563,7 +1604,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.31,
+          "A6": 0.32,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -1572,7 +1613,7 @@
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.01,
+          "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.04,
           "KYV2": 0.02,
@@ -1582,7 +1623,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.55
+          "KYV9": 0.54
         }
       }
     },
@@ -1593,6 +1634,7 @@
       "text": "That’s why he champions parental rights and school choice, empowering families to make the best decisions for their kids and have transparency on curriculum.",
       "verdict": {
         "commitment": 0.96,
+        "own_commitment": 0.88,
         "states_policy": true,
         "issues": [
           "KYV9"
@@ -1618,7 +1660,7 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.02,
+          "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1632,7 +1674,8 @@
       "heading": "Education",
       "text": "Federal funding is important for the district, with the most recent audit showing Seminole County’s budget is comprised of nearly 14% federal funding, while Volusia County is closer to 20%. (National Center for Education Statistics, 2022/23 school year)",
       "verdict": {
-        "commitment": 0.08,
+        "commitment": 0.09,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1641,13 +1684,13 @@
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.43,
+          "A6": 0.42,
           "A7": 0.02,
           "B1": 0.04,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
@@ -1670,7 +1713,8 @@
       "heading": "Education",
       "text": "We must protect local control and ensure every dollar serves our students effectively.",
       "verdict": {
-        "commitment": 0.95,
+        "commitment": 0.96,
+        "own_commitment": 0.86,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1679,13 +1723,13 @@
           "A3": 0.05,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.76,
+          "A6": 0.75,
           "A7": 0.02,
-          "B1": 0.04,
+          "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
@@ -1695,7 +1739,7 @@
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.01,
+          "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.06
@@ -1708,14 +1752,15 @@
       "heading": "Faith, Family and Life",
       "text": "As your representative, he will champion policies that support parents, protect children, and keep families united and strong.",
       "verdict": {
-        "commitment": 0.87,
+        "commitment": 0.89,
+        "own_commitment": 0.93,
         "states_policy": true,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.03,
+          "A4": 0.02,
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.02,
@@ -1746,7 +1791,8 @@
       "heading": "Faith, Family and Life",
       "text": "Ryan is pro-life and believes every life is a sacred gift from God.",
       "verdict": {
-        "commitment": 0.74,
+        "commitment": 0.73,
+        "own_commitment": 0.3,
         "states_policy": false,
         "issues": [
           "B5"
@@ -1763,7 +1809,7 @@
           "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.87,
+          "B5": 0.89,
           "B6": 0.02,
           "B7": 0.03,
           "B8": 0.02,
@@ -1772,7 +1818,7 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1786,7 +1832,8 @@
       "heading": "The Military & Veterans",
       "text": "We must ensure that the U.S. military remains the strongest and best-equipped fighting force in the world, backed by the most advanced technology.",
       "verdict": {
-        "commitment": 0.94,
+        "commitment": 0.95,
+        "own_commitment": 0.85,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1795,13 +1842,13 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.02,
+          "A6": 0.01,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
@@ -1825,6 +1872,7 @@
       "text": "We must also guarantee that our veterans receive the best possible care after their service to our nation.",
       "verdict": {
         "commitment": 0.94,
+        "own_commitment": 0.87,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1836,7 +1884,7 @@
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
-          "B2": 0.71,
+          "B2": 0.73,
           "B3": 0.02,
           "B4": 0.05,
           "B5": 0.02,
@@ -1863,6 +1911,7 @@
       "text": "Ryan is a strong defender of law enforcement and deeply understands the daily challenges officers face. He will strongly support legislation that protects law enforcement, including tougher penalties for assaulting or shooting officers.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [
           "B7"
@@ -1883,7 +1932,7 @@
           "B6": 0.02,
           "B7": 0.97,
           "B8": 0.02,
-          "KYV1": 0.12,
+          "KYV1": 0.11,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -1902,24 +1951,25 @@
       "heading": "Law Enforcement",
       "text": "He is a staunch supporter of the Second Amendment and has earned an “A” rating with the NRA.",
       "verdict": {
-        "commitment": 0.74,
+        "commitment": 0.72,
+        "own_commitment": 0.27,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.02,
+          "B3": 0.03,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.28,
+          "B7": 0.31,
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.02,
@@ -1927,7 +1977,7 @@
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.03,
+          "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -1940,7 +1990,8 @@
       "heading": "Law Enforcement",
       "text": "Ryan has received multiple honors for his outstanding support of law enforcement.",
       "verdict": {
-        "commitment": 0.06,
+        "commitment": 0.05,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1957,7 +2008,7 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.23,
+          "B7": 0.21,
           "B8": 0.02,
           "KYV1": 0.04,
           "KYV10": 0.02,
@@ -1966,7 +2017,7 @@
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -1979,6 +2030,7 @@
       "text": "We must continue to secure our borders and oppose any measures that weaken enforcement or prioritize non-citizens over American safety.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.93,
         "states_policy": true,
         "issues": [
           "B3"
@@ -1988,10 +2040,10 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.01,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
           "B3": 0.98,
           "B4": 0.02,
@@ -2004,10 +2056,10 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.01,
+          "KYV8": 0.02,
           "KYV9": 0.02
         }
       }
@@ -2019,6 +2071,7 @@
       "text": "Ryan will work with local law enforcement to stop the flood of illegal drugs that damage our Central Florida communities.",
       "verdict": {
         "commitment": 0.94,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -2031,13 +2084,13 @@
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
-          "B3": 0.23,
+          "B3": 0.25,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.75,
+          "B7": 0.77,
           "B8": 0.02,
-          "KYV1": 0.04,
+          "KYV1": 0.05,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -2057,6 +2110,7 @@
       "text": "He strongly supports the Save America Act, which ensures only American citizens can vote in our elections — because citizenship must matter.",
       "verdict": {
         "commitment": 0.96,
+        "own_commitment": 0.89,
         "states_policy": true,
         "issues": [
           "A7"
@@ -2068,13 +2122,13 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.92,
+          "A7": 0.93,
           "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.4,
+          "B3": 0.38,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.78,
+          "B6": 0.77,
           "B7": 0.04,
           "B8": 0.02,
           "KYV1": 0.5,
@@ -2097,26 +2151,27 @@
       "text": "Join the team working to send Ryan Elijah to Congress for Seminole and Volusia counties.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.03,
+          "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.03,
-          "A6": 0.03,
+          "A6": 0.02,
           "A7": 0.03,
           "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.02,
+          "B3": 0.03,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.02,
+          "B6": 0.03,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
@@ -2124,7 +2179,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     },
@@ -2134,11 +2189,12 @@
       "heading": "I’m Ryan Elijah, and I’m running for Congress in Florida’s District 7.",
       "text": "Ryan and his wife, Tasha, have raised their two boys in Seminole County and, as a long-time Florida resident of 20 years — 14 of them in District 7 — he is committed to fighting for conservative Florida values.",
       "verdict": {
-        "commitment": 0.16,
+        "commitment": 0.17,
+        "own_commitment": 0.49,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.03,
+          "A1": 0.02,
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.03,
@@ -2148,9 +2204,9 @@
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.03,
-          "B4": 0.02,
+          "B4": 0.03,
           "B5": 0.03,
-          "B6": 0.02,
+          "B6": 0.03,
           "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.02,
@@ -2173,19 +2229,20 @@
       "text": "Ryan is an Emmy-winning news anchor, having hosted the popular weekly show Orlando Matters , which provided viewers direct access to elected officials — from members of Congress to the President of the United States.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
-          "A2": 0.03,
+          "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.02,
-          "A6": 0.02,
+          "A5": 0.03,
+          "A6": 0.03,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.03,
-          "B3": 0.02,
+          "B3": 0.03,
           "B4": 0.03,
           "B5": 0.02,
           "B6": 0.03,
@@ -2194,10 +2251,10 @@
           "KYV1": 0.03,
           "KYV10": 0.03,
           "KYV2": 0.03,
-          "KYV3": 0.02,
-          "KYV4": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
           "KYV5": 0.02,
-          "KYV6": 0.03,
+          "KYV6": 0.02,
           "KYV7": 0.03,
           "KYV8": 0.02,
           "KYV9": 0.03
@@ -2211,6 +2268,7 @@
       "text": "Ryan has always been involved with the community. During his broadcasting career, he created a consumer advocacy segment that returned thousands of dollars to residents in need. The segment frequently tackled complex federal issues, including Social Security disability benefits and consumer protection matters.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2220,22 +2278,22 @@
           "A4": 0.03,
           "A5": 0.03,
           "A6": 0.03,
-          "A7": 0.03,
-          "B1": 0.03,
+          "A7": 0.02,
+          "B1": 0.04,
           "B2": 0.03,
           "B3": 0.03,
           "B4": 0.07,
-          "B5": 0.03,
+          "B5": 0.02,
           "B6": 0.02,
           "B7": 0.05,
-          "B8": 0.02,
+          "B8": 0.03,
           "KYV1": 0.03,
           "KYV10": 0.03,
           "KYV2": 0.03,
           "KYV3": 0.03,
           "KYV4": 0.02,
-          "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV5": 0.03,
+          "KYV6": 0.03,
           "KYV7": 0.03,
           "KYV8": 0.03,
           "KYV9": 0.03
@@ -2248,23 +2306,24 @@
       "heading": "I’m Ryan Elijah, and I’m running for Congress in Florida’s District 7.",
       "text": "He has served on numerous boards, including the YMCA, a homeowners association, and a Christian school board, where he helped oversee budgets and operations. He was also appointed by Jacksonville Mayor John Delaney to serve on the Mayor’s Council. During that time, Ryan hosted television programming for the Jacksonville Jaguars and worked as a sideline reporter for the Jaguars Radio Network and Fox Sports.",
       "verdict": {
-        "commitment": 0.03,
+        "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
           "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.03,
+          "A4": 0.02,
           "A5": 0.03,
-          "A6": 0.04,
+          "A6": 0.03,
           "A7": 0.03,
           "B1": 0.03,
-          "B2": 0.03,
+          "B2": 0.02,
           "B3": 0.03,
-          "B4": 0.02,
-          "B5": 0.03,
-          "B6": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.03,
           "B7": 0.03,
           "B8": 0.03,
           "KYV1": 0.02,
@@ -2273,9 +2332,9 @@
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.03,
-          "KYV7": 0.03,
-          "KYV8": 0.04,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
           "KYV9": 0.03
         }
       }
@@ -2286,7 +2345,8 @@
       "heading": "I’m Ryan Elijah, and I’m running for Congress in Florida’s District 7.",
       "text": "Ryan is active in his church and around Central Florida. You’ll often find his family at our theme parks or taking a cruise from Port Canaveral. He has great memories from coaching high school basketball and Little League baseball.",
       "verdict": {
-        "commitment": 0.02,
+        "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2294,13 +2354,13 @@
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.02,
-          "A6": 0.02,
-          "A7": 0.03,
-          "B1": 0.03,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -2308,13 +2368,13 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -2325,14 +2385,15 @@
       "text": "An Emmy-winning broadcaster Central Florida already knows. Host of the weekly show Orlando Matters , giving viewers direct access to elected officials — from members of Congress to the President of the United States.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.03,
+          "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.03,
@@ -2343,7 +2404,7 @@
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.02,
+          "KYV1": 0.03,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -2362,7 +2423,8 @@
       "heading": "Trusted Leadership",
       "text": "A consumer advocate who delivered results. His consumer advocacy segment returned thousands of dollars to residents in need and tackled complex federal issues, including Social Security disability benefits and consumer protection matters.",
       "verdict": {
-        "commitment": 0.06,
+        "commitment": 0.07,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2370,16 +2432,16 @@
           "A2": 0.03,
           "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.03,
+          "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.04,
           "B2": 0.03,
           "B3": 0.02,
-          "B4": 0.14,
+          "B4": 0.15,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.06,
+          "B7": 0.05,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
@@ -2387,8 +2449,8 @@
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.03,
-          "KYV7": 0.03,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
           "KYV8": 0.03,
           "KYV9": 0.02
         }
@@ -2401,6 +2463,7 @@
       "text": "A community board veteran. Service on the YMCA, a homeowners association, and a Christian school board, overseeing budgets and operations — plus an appointment by Jacksonville Mayor John Delaney to the Mayor’s Council.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2408,25 +2471,25 @@
           "A2": 0.03,
           "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.03,
           "A6": 0.03,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
-          "B3": 0.03,
+          "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.02,
+          "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.03,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.04,
           "KYV9": 0.03
         }
@@ -2438,7 +2501,8 @@
       "heading": "Trusted Leadership",
       "text": "A husband, father, and 20-year Floridian. Ryan and his wife, Tasha, raised their two boys in Seminole County, and Ryan is active in his church and across Central Florida.",
       "verdict": {
-        "commitment": 0.02,
+        "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2449,7 +2513,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -2460,7 +2524,7 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -2476,7 +2540,8 @@
       "heading": "Support Ryan’s efforts.",
       "text": "Your support helps us reach more voters across Seminole and Volusia counties before November 3rd.",
       "verdict": {
-        "commitment": 0.03,
+        "commitment": 0.04,
+        "own_commitment": 0.08,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -2529,26 +2594,6 @@
                 "retrieved_at": "2026-09-29T11:43:22.828Z"
               },
               "score": 0.96
-            },
-            {
-              "passage": {
-                "id": "00020f86",
-                "url": "https://elijahforcongress.com/issues.html",
-                "heading": "Affordability & Economy",
-                "text": "Congress must continue driving down costs for American families by keeping taxes low and achieving American energy independence. Lower gas prices are critical to our economy because they reduce costs for families, businesses, and everything we buy.",
-                "retrieved_at": "2026-09-29T11:43:22.828Z"
-              },
-              "score": 0.91
-            },
-            {
-              "passage": {
-                "id": "5772d16e",
-                "url": "https://elijahforcongress.com/issues.html",
-                "heading": "Affordability & Economy",
-                "text": "It’s past time to put a stop to out of control government spending that acts to drive up everyday costs for American families and our national debt.",
-                "retrieved_at": "2026-09-29T11:43:22.828Z"
-              },
-              "score": 0.89
             }
           ]
         }
@@ -2610,16 +2655,6 @@
             },
             {
               "passage": {
-                "id": "40924017",
-                "url": "https://elijahforcongress.com/",
-                "heading": "Healthcare",
-                "text": "The United States must continue to lead the world in medical innovation. The federal government can do more to lower healthcare costs.",
-                "retrieved_at": "2026-09-29T11:43:22.828Z"
-              },
-              "score": 0.96
-            },
-            {
-              "passage": {
                 "id": "3025591a",
                 "url": "https://elijahforcongress.com/issues.html",
                 "heading": "Healthcare",
@@ -2639,32 +2674,6 @@
       },
       "subIssues": [
         {
-          "id": "KYV2",
-          "label": "Energy and utilities",
-          "citations": [
-            {
-              "passage": {
-                "id": "00020f86",
-                "url": "https://elijahforcongress.com/issues.html",
-                "heading": "Affordability & Economy",
-                "text": "Congress must continue driving down costs for American families by keeping taxes low and achieving American energy independence. Lower gas prices are critical to our economy because they reduce costs for families, businesses, and everything we buy.",
-                "retrieved_at": "2026-09-29T11:43:22.828Z"
-              },
-              "score": 0.9
-            },
-            {
-              "passage": {
-                "id": "032d0f52",
-                "url": "https://elijahforcongress.com/",
-                "heading": "Affordability & Economy",
-                "text": "Congress must continue driving down costs for American families by keeping taxes low and achieving American energy independence.",
-                "retrieved_at": "2026-09-29T11:43:22.828Z"
-              },
-              "score": 0.88
-            }
-          ]
-        },
-        {
           "id": "KYV4",
           "label": "Storm resilience and flood protection",
           "citations": [
@@ -2676,7 +2685,7 @@
                 "text": "Ryan will prioritize working with federal agencies to secure long-term beach nourishment and storm-damage reduction projects.",
                 "retrieved_at": "2026-09-29T11:43:22.828Z"
               },
-              "score": 0.95
+              "score": 0.96
             }
           ]
         }
@@ -2701,16 +2710,6 @@
                 "retrieved_at": "2026-09-29T11:43:22.828Z"
               },
               "score": 0.98
-            },
-            {
-              "passage": {
-                "id": "80ea4aad",
-                "url": "https://elijahforcongress.com/",
-                "heading": "Illegal Immigration",
-                "text": "America is a nation built by immigrants, however we must enforce the rule of law.",
-                "retrieved_at": "2026-09-29T11:43:22.828Z"
-              },
-              "score": 0.95
             }
           ]
         }
@@ -2758,7 +2757,7 @@
                 "text": "He strongly supports the Save America Act, which ensures only American citizens can vote in our elections — because citizenship must matter.",
                 "retrieved_at": "2026-09-29T11:43:22.828Z"
               },
-              "score": 0.92
+              "score": 0.93
             }
           ]
         }
@@ -2766,7 +2765,7 @@
     }
   ],
   "usage": {
-    "input_tokens": 224039,
-    "output_tokens": 29312
+    "input_tokens": 237351,
+    "output_tokens": 30656
   }
 }

@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://www.vote4pena.com",
-  "created_at": "2026-09-29T11:46:13.094Z",
+  "created_at": "2026-09-30T01:59:18.105Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -50,6 +51,7 @@
       "text": "Champion Academic Freedom & Excellence– Support an inclusive curriculum that promotes critical thinking and reflects diverse perspectives to prepare students for college, careers, and civic life.",
       "verdict": {
         "commitment": 0.96,
+        "own_commitment": 0.94,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -60,7 +62,7 @@
           "A5": 0.02,
           "A6": 0.09,
           "A7": 0.02,
-          "B1": 0.02,
+          "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -68,8 +70,8 @@
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.06,
-          "KYV10": 0.28,
+          "KYV1": 0.07,
+          "KYV10": 0.27,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -88,6 +90,7 @@
       "text": "Expand Access to High-Quality Education– Invest in strong academic programs, such as bilingual education and STEAM, as well as support services to ensure every child in Orange County can succeed.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -96,7 +99,7 @@
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.46,
+          "A6": 0.49,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
@@ -126,6 +129,7 @@
       "text": "Empowering Teachers & Students– Create safer, more independent learning environments where educators feel valued and students thrive.",
       "verdict": {
         "commitment": 0.8,
+        "own_commitment": 0.83,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -134,7 +138,7 @@
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.47,
+          "A6": 0.46,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
@@ -163,7 +167,8 @@
       "heading": "Meet Susanne",
       "text": "Susanne is a wife, a mother to a OCPS student, a dedicated educator with over 20 years experience in K-12 and college classrooms, and a fierce advocate for children, teachers and our public schools.",
       "verdict": {
-        "commitment": 0.12,
+        "commitment": 0.13,
+        "own_commitment": 0.16,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -172,7 +177,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.38,
+          "A6": 0.37,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -201,7 +206,8 @@
       "heading": "Meet Susanne",
       "text": "Born on a U.S. Army base in Oklahoma to a proud military family, Susanne grew up in Puerto Rico. She comes from a family steeped in the tradition of service—her father, grandfather, sister, cousins, and uncle have all dedicated themselves to this country. She carries their legacy of commitment, sacrifice, and patriotism into everything she does.",
       "verdict": {
-        "commitment": 0.03,
+        "commitment": 0.02,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -225,7 +231,7 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -240,6 +246,7 @@
       "text": "She began her career teaching in Title I schools within the New York City Department of Education and has since held leadership roles in bilingual and English as a Second Language (ESL) programs. As the President of the Florida Association for Bilingual Education (FABE), she champions equitable access to multilingual learning opportunities for all students in Florida.",
       "verdict": {
         "commitment": 0.54,
+        "own_commitment": 0.48,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -254,7 +261,7 @@
           "B2": 0.02,
           "B3": 0.03,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
@@ -264,7 +271,7 @@
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.01,
-          "KYV6": 0.02,
+          "KYV6": 0.01,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.03
@@ -278,18 +285,19 @@
       "text": "Susanne has served as a District Coordinator for ESL, Bilingual Programs, and World Languages and supported teachers and students in developing strong bilingual foundations. She has also worked as an instructional coach, supervisor, and evaluator for bilingual and ENL educators, ensuring high-quality instruction for all learners.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.01,
           "A2": 0.01,
           "A3": 0.02,
           "A4": 0.01,
           "A5": 0.01,
-          "A6": 0.04,
+          "A6": 0.03,
           "A7": 0.01,
           "B1": 0.02,
-          "B2": 0.01,
+          "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
@@ -315,7 +323,8 @@
       "heading": "Meet Susanne",
       "text": "Her expertise extends to higher education, having led the Dual Language STEPS (Support Through Technology Enhanced Programs and Strategies) Grant at the University of Central Florida, focusing on innovative approaches to bilingual education. She served as an Adjunct Instructor at Brooklyn College for Bilingual and Multicultural Education. She currently works as an Adjunct Professor at Florida International University.",
       "verdict": {
-        "commitment": 0.03,
+        "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -323,23 +332,23 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
-          "A6": 0.03,
+          "A5": 0.01,
+          "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.01,
+          "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.09,
+          "KYV10": 0.08,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.01,
-          "KYV5": 0.02,
+          "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -353,14 +362,15 @@
       "heading": "Meet Susanne",
       "text": "Susanne is the lead education consultant at SMP Education Consulting, where she provides strategic guidance on bilingual program development, curriculum design, and teacher training. Her lifelong commitment to bilingualism stems from her own experiences growing up in a multilingual household, and she continues to advocate for policies that support an inclusive curriculum that promotes critical thinking and reflects diverse perspectives to prepare students for college, careers, and civic life.",
       "verdict": {
-        "commitment": 0.7,
+        "commitment": 0.71,
+        "own_commitment": 0.5,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.01,
+          "A4": 0.02,
           "A5": 0.01,
           "A6": 0.09,
           "A7": 0.02,
@@ -380,8 +390,8 @@
           "KYV5": 0.01,
           "KYV6": 0.01,
           "KYV7": 0.02,
-          "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV8": 0.01,
+          "KYV9": 0.02
         }
       }
     },
@@ -392,6 +402,7 @@
       "text": "A lifelong learner, Susanne is months away from completing her Ph.D. and becoming Dr. Susanne Peña! In her free time, she enjoys competing in 5Ks, spending time with her family, cooking- using fresh herbs from her garden- and entertaining her large community of friends. Susanne is active in her son’s school PTO and served on the Board of Directors for Allianza- a non-profit that serves the Puerto Rican and Hispanic communities of Florida by developing and promoting leadership around the environment, healthy living, arts and culture, civic engagement, and education.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -426,7 +437,7 @@
   ],
   "areas": [],
   "usage": {
-    "input_tokens": 35576,
-    "output_tokens": 4580
+    "input_tokens": 37656,
+    "output_tokens": 4790
   }
 }

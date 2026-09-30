@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://keepkarenperez.com",
-  "created_at": "2026-09-29T11:46:09.708Z",
+  "created_at": "2026-09-30T01:59:05.818Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -49,20 +50,21 @@
       "heading": "We Need Karen Perez",
       "text": "As your Hillsborough County School Board member, Karen Perez is a calm and rational voice on the issues confronting our district. She holds the administration accountable for its mistakes and works diligently to ensure our limited resources make it to the classroom. She has fought uphill battles to make sure the first cuts due to budget shortfalls were at the administration level and not among our teachers and support staff. Karen’s fight against waste, such as overpriced software and bloating of the top executive payroll, is well known and documented. We need an advocate for our children on the Board. We need to re-elect Karen Perez.",
       "verdict": {
-        "commitment": 0.71,
+        "commitment": 0.73,
+        "own_commitment": 0.2,
         "states_policy": false,
         "issues": [
           "A6"
         ],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.95,
           "A7": 0.02,
-          "B1": 0.21,
+          "B1": 0.22,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -70,7 +72,7 @@
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.07,
+          "KYV1": 0.08,
           "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -90,6 +92,7 @@
       "text": "Education Advocate – Elected in 2018 as Hillsborough County School Board Member at-large",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -97,8 +100,8 @@
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.03,
-          "A6": 0.08,
+          "A5": 0.02,
+          "A6": 0.07,
           "A7": 0.03,
           "B1": 0.02,
           "B2": 0.02,
@@ -128,6 +131,7 @@
       "text": "Small Business Owner – President and CEO of Embracing Changes for Wellness, LLC",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -146,7 +150,7 @@
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.01,
+          "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -166,6 +170,7 @@
       "text": "Caring for our Children – Care Team Coordinator, Hillsborough Kids, Inc.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -176,8 +181,8 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.02,
-          "B2": 0.02,
+          "B1": 0.03,
+          "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
@@ -203,7 +208,8 @@
       "heading": "Professional",
       "text": "Aiding Our Children in Trouble – Twin Oaks, Juvenile Competency Trainer",
       "verdict": {
-        "commitment": 0.07,
+        "commitment": 0.08,
+        "own_commitment": 0.09,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -220,18 +226,18 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.21,
+          "B7": 0.2,
           "B8": 0.02,
           "KYV1": 0.03,
-          "KYV10": 0.08,
+          "KYV10": 0.09,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -242,6 +248,7 @@
       "text": "Helping our Vets – Primary Social Worker for Veterans’ Administration Hospital",
       "verdict": {
         "commitment": 0.07,
+        "own_commitment": 0.1,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -255,13 +262,13 @@
           "B1": 0.03,
           "B2": 0.08,
           "B3": 0.02,
-          "B4": 0.02,
+          "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.03,
+          "KYV10": 0.04,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -280,6 +287,7 @@
       "text": "Healing our Families – Family Reunification Specialist at Northside Mental Health Center, Clinical Therapist, Social Worker at Memorial Hospital",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -289,7 +297,7 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
+          "A7": 0.01,
           "B1": 0.02,
           "B2": 0.03,
           "B3": 0.02,
@@ -302,7 +310,7 @@
           "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
+          "KYV4": 0.02,
           "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -317,7 +325,8 @@
       "heading": "Professional",
       "text": "Protecting Our Community – Department of Juvenile Justice, Probation Officer",
       "verdict": {
-        "commitment": 0.09,
+        "commitment": 0.1,
+        "own_commitment": 0.13,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -334,7 +343,7 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.2,
+          "B7": 0.16,
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.03,
@@ -356,6 +365,7 @@
       "text": "Championing Mental Health – Board Member of National Association of Social Workers Children, Adolescents and Young Adults Specialty Practice Section",
       "verdict": {
         "commitment": 0.08,
+        "own_commitment": 0.14,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -394,6 +404,7 @@
       "text": "Elected to Hillsborough County School Board in 2018",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -413,7 +424,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
@@ -431,7 +442,8 @@
       "heading": "Volunteer Boards + Service",
       "text": "The Family Healthcare Foundation Board member",
       "verdict": {
-        "commitment": 0.03,
+        "commitment": 0.04,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -470,6 +482,7 @@
       "text": "Florida School Board Association Advocacy/Legislative Liaison",
       "verdict": {
         "commitment": 0.05,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -481,8 +494,8 @@
           "A6": 0.06,
           "A7": 0.03,
           "B1": 0.03,
-          "B2": 0.02,
-          "B3": 0.03,
+          "B2": 0.03,
+          "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.03,
@@ -493,7 +506,7 @@
           "KYV2": 0.03,
           "KYV3": 0.03,
           "KYV4": 0.03,
-          "KYV5": 0.03,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.03,
           "KYV8": 0.03,
@@ -508,12 +521,13 @@
       "text": "Florida School Board Association Board of Directors (Alternate)",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.04,
@@ -528,7 +542,7 @@
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
-          "KYV2": 0.02,
+          "KYV2": 0.03,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -546,20 +560,21 @@
       "text": "Safe and Sound Hillsborough Executive Committee",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
           "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.02,
+          "A4": 0.03,
           "A5": 0.03,
           "A6": 0.03,
           "A7": 0.03,
           "B1": 0.02,
-          "B2": 0.02,
+          "B2": 0.03,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.03,
           "B7": 0.04,
@@ -567,7 +582,7 @@
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.03,
-          "KYV3": 0.04,
+          "KYV3": 0.03,
           "KYV4": 0.04,
           "KYV5": 0.03,
           "KYV6": 0.03,
@@ -584,6 +599,7 @@
       "text": "Karen Perez has three adult children, eight grandchildren and lives in New Tampa with Riley and Baxter, certified Therapy Dogs for comforting her clients",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -598,11 +614,11 @@
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.01,
-          "KYV1": 0.02,
+          "KYV1": 0.01,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -618,7 +634,7 @@
   ],
   "areas": [],
   "usage": {
-    "input_tokens": 52381,
-    "output_tokens": 6870
+    "input_tokens": 55501,
+    "output_tokens": 7185
   }
 }

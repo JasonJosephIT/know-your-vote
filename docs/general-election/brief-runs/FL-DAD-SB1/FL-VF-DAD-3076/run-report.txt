@@ -2,34 +2,26 @@
 What this site states, by policy area
 
 Economy & Affordability
-  B1  Economy, inflation, and jobs  (1 citation(s))
+  B1  Economy, inflation, and jobs  (2 citation(s))
       0.86  "Proteger y priorizar el referéndum de salario docente que aprobaron los votantes — se renueva en este término — hacia sueldo competitivo y retención."
+            https://lindaforschoolboard.com/es  — section: 4 · Pagar y retener a los buenos maestros
+      0.85  "Cerrar la brecha de sueldo y condiciones con los condados vecinos, para dejar de perder buenos maestros."
             https://lindaforschoolboard.com/es  — section: 4 · Pagar y retener a los buenos maestros
 
 Education
-  A6  Public school funding and teachers  (12 citation(s))
-      0.98  "Florida ranks last in the nation for teacher pay, and we lose ours to the next county. Direct local dollars to competitive pay and real retention — the smartest investment we can make."
-            https://lindaforschoolboard.com/  — section: Pay & keep great teachers
+  A6  Public school funding and teachers  (7 citation(s))
       0.98  "Protect and prioritize the voter-approved teacher-salary referendum — up for renewal on this term — toward competitive pay and retention."
             https://lindaforschoolboard.com/  — section: 4 · Pay & keep great teachers
       0.98  "Close the pay and working-condition gap with neighboring counties so we stop losing great teachers."
             https://lindaforschoolboard.com/  — section: 4 · Pay & keep great teachers
       0.98  "Fight in Tallahassee for a real state investment in teacher salaries — Florida currently ranks 50th in the nation."
             https://lindaforschoolboard.com/  — section: 4 · Pay & keep great teachers
-      0.98  "La Florida está de última en el país en salario docente, y perdemos a los nuestros con el condado de al lado. Dirigir el dinero local a un sueldo competitivo y a retener de verdad — es la inversión más inteligente que podemos hacer."
-            https://lindaforschoolboard.com/es  — section: Pagar y retener a los buenos maestros
       0.98  "Proteger y priorizar el referéndum de salario docente que aprobaron los votantes — se renueva en este término — hacia sueldo competitivo y retención."
             https://lindaforschoolboard.com/es  — section: 4 · Pagar y retener a los buenos maestros
       0.98  "Cerrar la brecha de sueldo y condiciones con los condados vecinos, para dejar de perder buenos maestros."
             https://lindaforschoolboard.com/es  — section: 4 · Pagar y retener a los buenos maestros
-      0.98  "Pelear en Tallahassee por una inversión estatal de verdad en el salario docente — la Florida está hoy en el puesto 50 del país."
-            https://lindaforschoolboard.com/es  — section: 4 · Pagar y retener a los buenos maestros
-      0.89  "Exigir cuentas para el Distrito 1 del bono escolar de $1.2 mil millones de 2012 — continuando la auditoría que pidió el propio ex miembro de este puesto — para saber si a nuestros edificios, aires acondicionados y tecnología les tocó lo …"
+      0.88  "Exigir cuentas para el Distrito 1 del bono escolar de $1.2 mil millones de 2012 — continuando la auditoría que pidió el propio ex miembro de este puesto — para saber si a nuestros edificios, aires acondicionados y tecnología les tocó lo …"
             https://lindaforschoolboard.com/es  — section: 2 · Escuelas seguras y modernas
-      0.89  "Four pillars. Empower teachers Safe & modern campuses Parents as partners Pay & keep great teachers Learn more at LindaForSchoolBoard.com"
-            https://lindaforschoolboard.com/meet-linda  — section: Endorsed by United Teachers of Dade
-      0.87  "“We know that you will make a difference on the Miami-Dade County School Board by … blocking attempts to privatize our neighborhood schools.”"
-            https://lindaforschoolboard.com/  — section: Endorsed by United Teachers of Dade.
-      0.87  "“Sabemos que usted marcará la diferencia en la Junta Escolar del Condado Miami-Dade al … bloquear los intentos de privatizar nuestras escuelas de vecindario.”"
-            https://lindaforschoolboard.com/es  — section: Respaldada por United Teachers of Dade.
+      0.85  "Audit district-mandated paperwork and cut duplicative reporting so teachers teach, not document."
+            https://lindaforschoolboard.com/  — section: 1 · Empower teachers
 

@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://byrondonalds.com",
-  "created_at": "2026-09-29T11:47:02.351Z",
+  "created_at": "2026-09-30T01:59:32.980Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -38,8 +39,8 @@
   "counts": {
     "passages": 58,
     "asked": 58,
-    "states_policy": 45,
-    "with_issue": 28,
+    "states_policy": 31,
+    "with_issue": 19,
     "failed": 0
   },
   "passages": [
@@ -50,19 +51,20 @@
       "text": "Florida cannot become too expensive for working families and seniors on fixed incomes. The status quo has a cost. Progress doesn't pay the bill sitting on your kitchen counter today—it's time to bring down costs.",
       "verdict": {
         "commitment": 0.86,
-        "states_policy": true,
+        "own_commitment": 0.37,
+        "states_policy": false,
         "issues": [
           "A4"
         ],
         "scores": {
           "A1": 0.05,
-          "A2": 0.43,
+          "A2": 0.48,
           "A3": 0.06,
           "A4": 0.97,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.71,
+          "B1": 0.7,
           "B2": 0.06,
           "B3": 0.02,
           "B4": 0.06,
@@ -77,7 +79,7 @@
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.04,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.03,
           "KYV9": 0.02
         }
@@ -89,7 +91,8 @@
       "heading": "Healthcare",
       "text": "You deserve to know what healthcare costs before you get treated. Your Doctor, Your Price puts you back in charge, cuts out the red tape, and lets doctors focus on their patients.",
       "verdict": {
-        "commitment": 0.55,
+        "commitment": 0.53,
+        "own_commitment": 0.49,
         "states_policy": false,
         "issues": [
           "B2"
@@ -101,14 +104,14 @@
           "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
+          "A7": 0.01,
           "B1": 0.04,
-          "B2": 0.95,
+          "B2": 0.94,
           "B3": 0.02,
           "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.02,
+          "B7": 0.01,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
@@ -129,7 +132,8 @@
       "heading": "Economy",
       "text": "California passes heavy regulations. New York sends you the bill. Florida puts out the welcome mat. Bureaucratic delays shouldn't stop honest people from opening a business and earning a living.",
       "verdict": {
-        "commitment": 0.81,
+        "commitment": 0.82,
+        "own_commitment": 0.35,
         "states_policy": false,
         "issues": [
           "B1"
@@ -152,7 +156,7 @@
           "B8": 0.09,
           "KYV1": 0.04,
           "KYV10": 0.03,
-          "KYV2": 0.02,
+          "KYV2": 0.03,
           "KYV3": 0.09,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -169,7 +173,8 @@
       "heading": "Education",
       "text": "Reading by third grade is a basic promise every child deserves. Every student should Read to Succeed, stay active and healthy, and have a debt-free route to a great-paying job.",
       "verdict": {
-        "commitment": 0.7,
+        "commitment": 0.71,
+        "own_commitment": 0.44,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -184,7 +189,7 @@
           "B2": 0.04,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.01,
+          "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
@@ -208,6 +213,7 @@
       "text": "We must secure our borders, keep local neighborhoods safe, stop taxpayer handouts to illegal immigration, and keep deadly drugs off our streets.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.91,
         "states_policy": true,
         "issues": [
           "B3"
@@ -226,7 +232,7 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.83,
+          "B7": 0.84,
           "B8": 0.02,
           "KYV1": 0.09,
           "KYV10": 0.02,
@@ -248,7 +254,8 @@
       "text": "Every American who walked on the Moon took off from Florida's coast. It's time to bring NASA home, build out our launchpads, and create thousands of high-paying jobs right here in Florida.",
       "verdict": {
         "commitment": 0.94,
-        "states_policy": true,
+        "own_commitment": 0.83,
+        "states_policy": false,
         "issues": [
           "B1"
         ],
@@ -264,13 +271,13 @@
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.07,
-          "KYV2": 0.02,
+          "KYV10": 0.08,
+          "KYV2": 0.03,
           "KYV3": 0.26,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -288,6 +295,7 @@
       "text": "A conservative warrior for Florida’s 19th Congressional District.",
       "verdict": {
         "commitment": 0.07,
+        "own_commitment": 0.08,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -308,7 +316,7 @@
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.02,
+          "KYV2": 0.03,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -326,6 +334,7 @@
       "text": "Born and raised in Brooklyn, New York, Byron Donalds is the product of a single-parent household. Throughout his life, his mother made every sacrifice possible to give him the best opportunity to live the American Dream. That philosophy his mother taught him, striving to leave future generations better than the current, is what leads him in his work, his home life, and as a Member of Congress.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -334,26 +343,26 @@
           "A3": 0.03,
           "A4": 0.03,
           "A5": 0.02,
-          "A6": 0.02,
-          "A7": 0.02,
+          "A6": 0.03,
+          "A7": 0.03,
           "B1": 0.03,
           "B2": 0.02,
-          "B3": 0.02,
-          "B4": 0.03,
+          "B3": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.02,
-          "B7": 0.02,
+          "B6": 0.03,
+          "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.02,
-          "KYV2": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.02,
+          "KYV5": 0.03,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     },
@@ -364,6 +373,7 @@
       "text": "“We must secure our borders, keep local neighborhoods safe, stop taxpayer handouts to illegal immigration, and keep deadly drugs off our streets.”",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.91,
         "states_policy": true,
         "issues": [
           "B3"
@@ -373,16 +383,16 @@
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.01,
+          "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.04,
           "B2": 0.02,
-          "B3": 0.99,
+          "B3": 0.98,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.78,
+          "B7": 0.77,
           "B8": 0.02,
           "KYV1": 0.06,
           "KYV10": 0.02,
@@ -392,7 +402,7 @@
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.03,
-          "KYV8": 0.01,
+          "KYV8": 0.02,
           "KYV9": 0.02
         }
       }
@@ -404,6 +414,7 @@
       "text": "Cut off state funds, subsidies, and free perks that encourage illegal immigration into Florida.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.96,
         "states_policy": true,
         "issues": [
           "B3"
@@ -414,15 +425,15 @@
           "A3": 0.03,
           "A4": 0.04,
           "A5": 0.02,
-          "A6": 0.03,
+          "A6": 0.04,
           "A7": 0.02,
-          "B1": 0.2,
+          "B1": 0.21,
           "B2": 0.04,
           "B3": 0.96,
           "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.27,
+          "B7": 0.28,
           "B8": 0.02,
           "KYV1": 0.05,
           "KYV10": 0.03,
@@ -444,6 +455,7 @@
       "text": "Require every Florida business to use the E-Verify system so legal workers keep the jobs and wages they've earned.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [
           "B1",
@@ -457,20 +469,20 @@
           "A5": 0.01,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.87,
+          "B1": 0.85,
           "B2": 0.02,
-          "B3": 0.88,
+          "B3": 0.89,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.24,
-          "B8": 0.02,
+          "B7": 0.26,
+          "B8": 0.01,
           "KYV1": 0.05,
-          "KYV10": 0.03,
+          "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.01,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -485,6 +497,7 @@
       "text": "Coordinate state and local police directly with federal authorities to quickly deport noncitizens who commit crimes in our communities.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [
           "B3",
@@ -497,22 +510,22 @@
           "A4": 0.01,
           "A5": 0.01,
           "A6": 0.02,
-          "A7": 0.02,
+          "A7": 0.01,
           "B1": 0.02,
           "B2": 0.01,
-          "B3": 0.96,
+          "B3": 0.95,
           "B4": 0.02,
           "B5": 0.01,
           "B6": 0.02,
-          "B7": 0.91,
-          "B8": 0.02,
-          "KYV1": 0.06,
+          "B7": 0.89,
+          "B8": 0.01,
+          "KYV1": 0.07,
           "KYV10": 0.01,
-          "KYV2": 0.01,
+          "KYV2": 0.02,
           "KYV3": 0.01,
           "KYV4": 0.01,
           "KYV5": 0.01,
-          "KYV6": 0.01,
+          "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.01,
           "KYV9": 0.01
@@ -526,6 +539,7 @@
       "text": "Target drug cartels with heavy penalties and joint police task forces to take deadly fentanyl off Florida streets.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.93,
         "states_policy": true,
         "issues": [
           "B7"
@@ -542,7 +556,7 @@
           "B2": 0.03,
           "B3": 0.04,
           "B4": 0.02,
-          "B5": 0.01,
+          "B5": 0.02,
           "B6": 0.02,
           "B7": 0.97,
           "B8": 0.02,
@@ -551,10 +565,10 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.01,
+          "KYV8": 0.02,
           "KYV9": 0.02
         }
       }
@@ -565,7 +579,8 @@
       "heading": "Education",
       "text": "“Reading by third grade is a basic promise every child deserves. Every student should Read to Succeed, stay active and healthy, and have a debt-free route to a great-paying job.”",
       "verdict": {
-        "commitment": 0.75,
+        "commitment": 0.76,
+        "own_commitment": 0.51,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -576,7 +591,7 @@
           "A5": 0.02,
           "A6": 0.07,
           "A7": 0.02,
-          "B1": 0.52,
+          "B1": 0.51,
           "B2": 0.04,
           "B3": 0.02,
           "B4": 0.02,
@@ -603,16 +618,17 @@
       "heading": "Read to Succeed (Early Literacy):",
       "text": "Train future teachers in proven phonics and reading science so every classroom teaches reading the right way.",
       "verdict": {
-        "commitment": 0.87,
+        "commitment": 0.85,
+        "own_commitment": 0.87,
         "states_policy": true,
         "issues": [],
         "scores": {
           "A1": 0.01,
-          "A2": 0.01,
+          "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.01,
-          "A6": 0.4,
+          "A6": 0.42,
           "A7": 0.01,
           "B1": 0.02,
           "B2": 0.02,
@@ -623,12 +639,12 @@
           "B7": 0.01,
           "B8": 0.01,
           "KYV1": 0.02,
-          "KYV10": 0.28,
+          "KYV10": 0.31,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.02,
+          "KYV4": 0.01,
           "KYV5": 0.01,
-          "KYV6": 0.02,
+          "KYV6": 0.01,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -641,11 +657,12 @@
       "heading": "Read to Succeed (Early Literacy):",
       "text": "Catch reading issues early in Kindergarten through 2nd grade, before children fall behind.",
       "verdict": {
-        "commitment": 0.51,
+        "commitment": 0.49,
+        "own_commitment": 0.32,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.01,
           "A2": 0.01,
           "A3": 0.02,
           "A4": 0.01,
@@ -657,18 +674,18 @@
           "B3": 0.01,
           "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.01,
+          "B6": 0.02,
           "B7": 0.01,
-          "B8": 0.02,
+          "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.01,
+          "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.01,
           "KYV5": 0.01,
           "KYV6": 0.01,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.01,
           "KYV9": 0.02
         }
       }
@@ -680,6 +697,7 @@
       "text": "Provide free, state-funded tutoring for every 3rd grader struggling with reading.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -691,22 +709,22 @@
           "A6": 0.68,
           "A7": 0.01,
           "B1": 0.02,
-          "B2": 0.02,
+          "B2": 0.01,
           "B3": 0.01,
           "B4": 0.01,
           "B5": 0.01,
           "B6": 0.01,
-          "B7": 0.01,
+          "B7": 0.02,
           "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV2": 0.01,
+          "KYV3": 0.01,
           "KYV4": 0.01,
           "KYV5": 0.01,
           "KYV6": 0.01,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.01,
           "KYV9": 0.03
         }
       }
@@ -717,7 +735,8 @@
       "heading": "Read to Succeed (Early Literacy):",
       "text": "Reward top-performing reading teachers with real bonus pay for getting results.",
       "verdict": {
-        "commitment": 0.91,
+        "commitment": 0.9,
+        "own_commitment": 0.85,
         "states_policy": true,
         "issues": [
           "A6"
@@ -728,20 +747,20 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.01,
-          "A6": 0.91,
+          "A6": 0.9,
           "A7": 0.01,
-          "B1": 0.22,
+          "B1": 0.25,
           "B2": 0.01,
           "B3": 0.01,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.01,
           "B7": 0.01,
           "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.01,
           "KYV4": 0.01,
           "KYV5": 0.01,
           "KYV6": 0.01,
@@ -758,7 +777,8 @@
       "text": "Bring back real books in the classroom instead of parking young kids in front of screens all day.",
       "verdict": {
         "commitment": 0.93,
-        "states_policy": true,
+        "own_commitment": 0.77,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.01,
@@ -775,7 +795,7 @@
           "B5": 0.01,
           "B6": 0.01,
           "B7": 0.01,
-          "B8": 0.02,
+          "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
@@ -783,7 +803,7 @@
           "KYV4": 0.01,
           "KYV5": 0.01,
           "KYV6": 0.01,
-          "KYV7": 0.02,
+          "KYV7": 0.01,
           "KYV8": 0.01,
           "KYV9": 0.02
         }
@@ -796,6 +816,7 @@
       "text": "Connect high schools and community colleges with local businesses to offer paid apprenticeships in construction, advanced manufacturing, and defense.",
       "verdict": {
         "commitment": 0.89,
+        "own_commitment": 0.87,
         "states_policy": true,
         "issues": [
           "KYV10"
@@ -835,7 +856,8 @@
       "heading": "LaunchPad Florida (Debt-Free Careers):",
       "text": "Help young Floridians step straight into careers earning around $60,000 a year without taking on piles of student debt.",
       "verdict": {
-        "commitment": 0.74,
+        "commitment": 0.75,
+        "own_commitment": 0.67,
         "states_policy": false,
         "issues": [
           "KYV10"
@@ -848,7 +870,7 @@
           "A5": 0.02,
           "A6": 0.04,
           "A7": 0.02,
-          "B1": 0.47,
+          "B1": 0.49,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -857,7 +879,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.94,
+          "KYV10": 0.93,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -876,6 +898,7 @@
       "text": "Students and businesses lead not government bureaucracy",
       "verdict": {
         "commitment": 0.78,
+        "own_commitment": 0.47,
         "states_policy": false,
         "issues": [
           "KYV10"
@@ -883,12 +906,12 @@
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.03,
           "A5": 0.02,
           "A6": 0.11,
           "A7": 0.02,
-          "B1": 0.35,
+          "B1": 0.34,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -905,7 +928,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.18
+          "KYV9": 0.17
         }
       }
     },
@@ -915,14 +938,15 @@
       "heading": "Personalized Success Plans for Every Student:",
       "text": "Every student gets a tailored success plan no later than 6th grade, with annual updates through graduation.",
       "verdict": {
-        "commitment": 0.9,
+        "commitment": 0.91,
+        "own_commitment": 0.9,
         "states_policy": true,
         "issues": [],
         "scores": {
           "A1": 0.01,
           "A2": 0.01,
           "A3": 0.02,
-          "A4": 0.01,
+          "A4": 0.02,
           "A5": 0.01,
           "A6": 0.07,
           "A7": 0.01,
@@ -935,7 +959,7 @@
           "B7": 0.01,
           "B8": 0.01,
           "KYV1": 0.02,
-          "KYV10": 0.2,
+          "KYV10": 0.19,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.01,
@@ -954,7 +978,8 @@
       "text": "College, university, workforce/trade, military, entrepreneurship, and hybrid pathways are equally resourced and equally respected.",
       "verdict": {
         "commitment": 0.89,
-        "states_policy": true,
+        "own_commitment": 0.8,
+        "states_policy": false,
         "issues": [
           "KYV10"
         ],
@@ -966,21 +991,21 @@
           "A5": 0.02,
           "A6": 0.05,
           "A7": 0.01,
-          "B1": 0.08,
+          "B1": 0.09,
           "B2": 0.02,
-          "B3": 0.01,
+          "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.01,
+          "B6": 0.02,
           "B7": 0.01,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.96,
-          "KYV2": 0.02,
+          "KYV2": 0.01,
           "KYV3": 0.02,
-          "KYV4": 0.01,
+          "KYV4": 0.02,
           "KYV5": 0.01,
-          "KYV6": 0.01,
+          "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.01,
           "KYV9": 0.04
@@ -993,30 +1018,31 @@
       "heading": "Personalized Success Plans for Every Student:",
       "text": "Families are co-authors, not bystanders. Annual plan reviews include parent conversations.",
       "verdict": {
-        "commitment": 0.86,
-        "states_policy": true,
+        "commitment": 0.83,
+        "own_commitment": 0.81,
+        "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.01,
+          "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.01,
+          "A4": 0.02,
           "A5": 0.01,
           "A6": 0.04,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.01,
+          "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
           "B6": 0.01,
-          "B7": 0.01,
+          "B7": 0.02,
           "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.05,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.02,
+          "KYV4": 0.01,
           "KYV5": 0.01,
           "KYV6": 0.01,
           "KYV7": 0.02,
@@ -1031,7 +1057,8 @@
       "heading": "Personalized Success Plans for Every Student:",
       "text": "Internship, apprenticeship, and industry certification milestones are baked into each plan, not treated as add-ons.",
       "verdict": {
-        "commitment": 0.8,
+        "commitment": 0.79,
+        "own_commitment": 0.82,
         "states_policy": false,
         "issues": [
           "KYV10"
@@ -1044,10 +1071,10 @@
           "A5": 0.01,
           "A6": 0.03,
           "A7": 0.01,
-          "B1": 0.17,
-          "B2": 0.01,
+          "B1": 0.18,
+          "B2": 0.02,
           "B3": 0.01,
-          "B4": 0.02,
+          "B4": 0.01,
           "B5": 0.01,
           "B6": 0.02,
           "B7": 0.01,
@@ -1072,7 +1099,8 @@
       "text": "Transparency for parents means schools are held accountable so that each student is receiving a plan to express their God-given talents. No more education factories or status quo.",
       "verdict": {
         "commitment": 0.9,
-        "states_policy": true,
+        "own_commitment": 0.67,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
@@ -1080,25 +1108,25 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.01,
-          "A6": 0.09,
+          "A6": 0.08,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.01,
           "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.01,
-          "B7": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
           "B8": 0.01,
           "KYV1": 0.03,
-          "KYV10": 0.08,
+          "KYV10": 0.09,
           "KYV2": 0.01,
           "KYV3": 0.02,
           "KYV4": 0.01,
           "KYV5": 0.01,
           "KYV6": 0.01,
           "KYV7": 0.02,
-          "KYV8": 0.01,
+          "KYV8": 0.02,
           "KYV9": 0.06
         }
       }
@@ -1110,14 +1138,15 @@
       "text": "Bring back the Presidential Fitness Test to build healthy habits and keep kids active throughout the school day.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.92,
         "states_policy": true,
         "issues": [],
         "scores": {
-          "A1": 0.02,
-          "A2": 0.01,
+          "A1": 0.01,
+          "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.01,
           "A6": 0.04,
           "A7": 0.01,
           "B1": 0.02,
@@ -1132,8 +1161,8 @@
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
-          "KYV5": 0.01,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1148,6 +1177,7 @@
       "text": "Give mini-grants to schools that encourage regular daily recess and structured physical activity.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.94,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1156,22 +1186,22 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.54,
-          "A7": 0.02,
+          "A6": 0.53,
+          "A7": 0.01,
           "B1": 0.02,
-          "B2": 0.02,
+          "B2": 0.03,
           "B3": 0.01,
           "B4": 0.02,
           "B5": 0.01,
           "B6": 0.01,
-          "B7": 0.02,
-          "B8": 0.02,
+          "B7": 0.01,
+          "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1186,22 +1216,23 @@
       "text": "Send fitness scores straight home to mom and dad, keeping children's private health data out of state databases.",
       "verdict": {
         "commitment": 0.93,
+        "own_commitment": 0.89,
         "states_policy": true,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.02,
+          "A2": 0.01,
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.03,
-          "A7": 0.02,
+          "A7": 0.01,
           "B1": 0.02,
           "B2": 0.04,
-          "B3": 0.01,
+          "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
-          "B6": 0.02,
+          "B5": 0.01,
+          "B6": 0.01,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
@@ -1224,6 +1255,7 @@
       "text": "Let education money follow the student so parents can choose the best school for their child.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.85,
         "states_policy": true,
         "issues": [
           "KYV9"
@@ -1233,8 +1265,8 @@
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.01,
-          "A6": 0.81,
+          "A5": 0.02,
+          "A6": 0.82,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
@@ -1250,7 +1282,7 @@
           "KYV3": 0.02,
           "KYV4": 0.01,
           "KYV5": 0.01,
-          "KYV6": 0.01,
+          "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.97
@@ -1264,11 +1296,12 @@
       "text": "Keep partisan political theories out of the classroom so schools focus strictly on the basics: reading, math, and science.",
       "verdict": {
         "commitment": 0.95,
-        "states_policy": true,
+        "own_commitment": 0.82,
+        "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.01,
-          "A2": 0.02,
+          "A1": 0.02,
+          "A2": 0.01,
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.01,
@@ -1286,11 +1319,11 @@
           "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.02,
+          "KYV4": 0.01,
           "KYV5": 0.01,
           "KYV6": 0.01,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.01,
           "KYV9": 0.02
         }
       }
@@ -1301,23 +1334,24 @@
       "heading": "Affordability",
       "text": "“Florida cannot become too expensive for working families and seniors on fixed incomes. The status quo has a cost. Progress doesn't pay the bill sitting on your kitchen counter today—it's time to bring down costs.”",
       "verdict": {
-        "commitment": 0.89,
-        "states_policy": true,
+        "commitment": 0.87,
+        "own_commitment": 0.43,
+        "states_policy": false,
         "issues": [
           "A4"
         ],
         "scores": {
           "A1": 0.05,
-          "A2": 0.37,
+          "A2": 0.42,
           "A3": 0.06,
           "A4": 0.97,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.6,
+          "B1": 0.59,
           "B2": 0.07,
           "B3": 0.02,
-          "B4": 0.06,
+          "B4": 0.07,
           "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
@@ -1325,7 +1359,7 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.05,
-          "KYV3": 0.03,
+          "KYV3": 0.04,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.04,
@@ -1342,25 +1376,26 @@
       "text": "Protect reforms and stop lawsuit abuse that jacks up rates for everyone, saving homeowners hundreds of dollars a year.",
       "verdict": {
         "commitment": 0.96,
+        "own_commitment": 0.85,
         "states_policy": true,
         "issues": [
           "A1"
         ],
         "scores": {
-          "A1": 0.94,
-          "A2": 0.63,
+          "A1": 0.95,
+          "A2": 0.65,
           "A3": 0.03,
-          "A4": 0.7,
+          "A4": 0.69,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.17,
-          "B2": 0.08,
+          "B1": 0.18,
+          "B2": 0.07,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.21,
+          "B7": 0.19,
           "B8": 0.02,
           "KYV1": 0.04,
           "KYV10": 0.02,
@@ -1382,18 +1417,19 @@
       "text": "Lower costs by trimming down state fees when reserves are full so those extra dollars stay in your wallet. Pursue regulatory reforms that lower insurance premiums.",
       "verdict": {
         "commitment": 0.96,
+        "own_commitment": 0.87,
         "states_policy": true,
         "issues": [],
         "scores": {
-          "A1": 0.55,
+          "A1": 0.54,
           "A2": 0.03,
           "A3": 0.02,
-          "A4": 0.63,
+          "A4": 0.64,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.22,
-          "B2": 0.51,
+          "B1": 0.21,
+          "B2": 0.57,
           "B3": 0.01,
           "B4": 0.02,
           "B5": 0.01,
@@ -1402,13 +1438,13 @@
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.02,
+          "KYV2": 0.03,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.06,
+          "KYV8": 0.04,
           "KYV9": 0.02
         }
       }
@@ -1420,6 +1456,7 @@
       "text": "Reform the My Safe Florida Home program and other grants programs to fund real, storm-hardening upgrades that lower your annual premium the most.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.93,
         "states_policy": true,
         "issues": [
           "A1",
@@ -1427,13 +1464,13 @@
         ],
         "scores": {
           "A1": 0.97,
-          "A2": 0.25,
+          "A2": 0.28,
           "A3": 0.03,
           "A4": 0.72,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.1,
+          "B1": 0.09,
           "B2": 0.02,
           "B3": 0.01,
           "B4": 0.02,
@@ -1445,7 +1482,7 @@
           "KYV10": 0.02,
           "KYV2": 0.04,
           "KYV3": 0.02,
-          "KYV4": 0.92,
+          "KYV4": 0.91,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -1460,7 +1497,8 @@
       "heading": "Bring Down Your Insurance Bill:",
       "text": "Keep Citizens Insurance small so everyday drivers and homeowners never get hit with a surprise \"hurricane tax\" bill after a big storm.",
       "verdict": {
-        "commitment": 0.94,
+        "commitment": 0.95,
+        "own_commitment": 0.85,
         "states_policy": true,
         "issues": [
           "A1"
@@ -1473,23 +1511,23 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.17,
+          "B1": 0.21,
           "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.01,
+          "B6": 0.02,
           "B7": 0.02,
           "B8": 0.06,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.06,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.03,
+          "KYV8": 0.04,
           "KYV9": 0.02
         }
       }
@@ -1501,6 +1539,7 @@
       "text": "Cut the red tape and slow permitting that make rebuilding a home after a storm needlessly expensive and drive up your insurance premiums.",
       "verdict": {
         "commitment": 0.93,
+        "own_commitment": 0.86,
         "states_policy": true,
         "issues": [
           "A1"
@@ -1509,7 +1548,7 @@
           "A1": 0.95,
           "A2": 0.8,
           "A3": 0.03,
-          "A4": 0.67,
+          "A4": 0.69,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -1520,12 +1559,12 @@
           "B5": 0.01,
           "B6": 0.01,
           "B7": 0.02,
-          "B8": 0.1,
-          "KYV1": 0.03,
+          "B8": 0.11,
+          "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.03,
-          "KYV3": 0.76,
-          "KYV4": 0.25,
+          "KYV3": 0.78,
+          "KYV4": 0.26,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -1541,22 +1580,23 @@
       "text": "Create a simple online Scorecard where you can compare insurance companies side by side on price, how fast they pay claims, and how often they deny coverage.",
       "verdict": {
         "commitment": 0.94,
+        "own_commitment": 0.9,
         "states_policy": true,
         "issues": [],
         "scores": {
-          "A1": 0.23,
+          "A1": 0.2,
           "A2": 0.03,
           "A3": 0.02,
           "A4": 0.19,
-          "A5": 0.02,
-          "A6": 0.01,
+          "A5": 0.01,
+          "A6": 0.02,
           "A7": 0.01,
           "B1": 0.06,
-          "B2": 0.81,
+          "B2": 0.83,
           "B3": 0.01,
           "B4": 0.02,
-          "B5": 0.02,
-          "B6": 0.01,
+          "B5": 0.01,
+          "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
@@ -1564,11 +1604,11 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.01
+          "KYV9": 0.02
         }
       }
     },
@@ -1578,22 +1618,23 @@
       "heading": "Hold Insurance Companies Accountable—Put Consumers First:",
       "text": "Require insurers to report accurate data or pay real fines, keeping the tool free for taxpayers by having the insurance industry cover the cost.",
       "verdict": {
-        "commitment": 0.98,
+        "commitment": 0.97,
+        "own_commitment": 0.93,
         "states_policy": true,
         "issues": [],
         "scores": {
           "A1": 0.2,
-          "A2": 0.09,
+          "A2": 0.08,
           "A3": 0.02,
           "A4": 0.41,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
+          "A7": 0.01,
           "B1": 0.11,
-          "B2": 0.8,
-          "B3": 0.02,
+          "B2": 0.84,
+          "B3": 0.01,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.01,
           "B7": 0.04,
           "B8": 0.02,
@@ -1616,16 +1657,17 @@
       "heading": "Protect Homeowners & Utility Payers:",
       "text": "Keep property taxes in check so seniors and working families aren't taxed out of their homes.",
       "verdict": {
-        "commitment": 0.95,
-        "states_policy": true,
+        "commitment": 0.94,
+        "own_commitment": 0.76,
+        "states_policy": false,
         "issues": [
           "A3"
         ],
         "scores": {
-          "A1": 0.03,
+          "A1": 0.02,
           "A2": 0.79,
-          "A3": 0.98,
-          "A4": 0.74,
+          "A3": 0.97,
+          "A4": 0.73,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -1634,7 +1676,7 @@
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.02,
+          "B6": 0.01,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
@@ -1657,7 +1699,8 @@
       "text": "Stop giant industrial data centers from passing their massive electric and water bills onto everyday households.",
       "verdict": {
         "commitment": 0.94,
-        "states_policy": true,
+        "own_commitment": 0.74,
+        "states_policy": false,
         "issues": [
           "KYV2"
         ],
@@ -1665,13 +1708,13 @@
           "A1": 0.02,
           "A2": 0.22,
           "A3": 0.03,
-          "A4": 0.57,
+          "A4": 0.59,
           "A5": 0.03,
           "A6": 0.02,
           "A7": 0.01,
           "B1": 0.49,
           "B2": 0.02,
-          "B3": 0.01,
+          "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
           "B6": 0.01,
@@ -1680,7 +1723,7 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.98,
-          "KYV3": 0.71,
+          "KYV3": 0.66,
           "KYV4": 0.02,
           "KYV5": 0.7,
           "KYV6": 0.02,
@@ -1696,8 +1739,9 @@
       "heading": "Space and Tech",
       "text": "“Every American who walked on the Moon took off from Florida's coast. It's time to bring NASA home, build out our launchpads, and create thousands of high-paying jobs right here in Florida.”",
       "verdict": {
-        "commitment": 0.95,
-        "states_policy": true,
+        "commitment": 0.96,
+        "own_commitment": 0.84,
+        "states_policy": false,
         "issues": [
           "B1"
         ],
@@ -1708,24 +1752,24 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
-          "B1": 0.88,
-          "B2": 0.02,
+          "A7": 0.01,
+          "B1": 0.9,
+          "B2": 0.01,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.02,
+          "B6": 0.01,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.05,
           "KYV2": 0.02,
-          "KYV3": 0.17,
+          "KYV3": 0.18,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.01,
           "KYV9": 0.02
         }
       }
@@ -1737,6 +1781,7 @@
       "text": "Work to move NASA headquarters and the Space Force Academy right to our Space Coast where the rockets actually launch.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.92,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1746,24 +1791,24 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
+          "A7": 0.01,
           "B1": 0.1,
           "B2": 0.01,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.01,
-          "B6": 0.01,
+          "B5": 0.02,
+          "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.12,
+          "KYV10": 0.11,
           "KYV2": 0.02,
-          "KYV3": 0.06,
+          "KYV3": 0.05,
           "KYV4": 0.02,
-          "KYV5": 0.02,
+          "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.01,
+          "KYV8": 0.02,
           "KYV9": 0.02
         }
       }
@@ -1775,6 +1820,7 @@
       "text": "Pre-approve the top 10 industrial space manufacturing sites across the state so aerospace companies set up shop in Florida without delay.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1783,11 +1829,11 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.02,
+          "A6": 0.01,
           "A7": 0.01,
-          "B1": 0.7,
+          "B1": 0.72,
           "B2": 0.02,
-          "B3": 0.01,
+          "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
           "B6": 0.01,
@@ -1796,13 +1842,13 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.8,
+          "KYV3": 0.81,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.01
+          "KYV9": 0.02
         }
       }
     },
@@ -1812,36 +1858,37 @@
       "heading": "Hands-on Tech Training:",
       "text": "Train Florida high schoolers and college students to work as skilled aerospace welders, machinists, and launch technicians.",
       "verdict": {
-        "commitment": 0.76,
+        "commitment": 0.77,
+        "own_commitment": 0.84,
         "states_policy": false,
         "issues": [
           "KYV10"
         ],
         "scores": {
           "A1": 0.02,
-          "A2": 0.01,
+          "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.01,
           "A6": 0.05,
           "A7": 0.01,
-          "B1": 0.6,
-          "B2": 0.01,
+          "B1": 0.61,
+          "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.91,
+          "KYV10": 0.92,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.01,
           "KYV6": 0.01,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.01,
           "KYV9": 0.02
         }
       }
@@ -1852,7 +1899,8 @@
       "heading": "Host the Space Race Summit:",
       "text": "Bring leading private aerospace innovators and engineers together to ensure Florida stays the world's top launchpad.",
       "verdict": {
-        "commitment": 0.73,
+        "commitment": 0.75,
+        "own_commitment": 0.9,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1863,8 +1911,8 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.01,
-          "B1": 0.11,
-          "B2": 0.01,
+          "B1": 0.12,
+          "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
@@ -1890,16 +1938,17 @@
       "heading": "Economy",
       "text": "“California passes heavy regulations. New York sends you the bill. Florida puts out the welcome mat. Bureaucratic delays shouldn't stop honest people from opening a business and earning a living.”",
       "verdict": {
-        "commitment": 0.86,
-        "states_policy": true,
+        "commitment": 0.85,
+        "own_commitment": 0.43,
+        "states_policy": false,
         "issues": [
           "B1"
         ],
         "scores": {
           "A1": 0.02,
-          "A2": 0.02,
+          "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.05,
+          "A4": 0.06,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -1910,7 +1959,7 @@
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.06,
+          "B8": 0.07,
           "KYV1": 0.03,
           "KYV10": 0.03,
           "KYV2": 0.03,
@@ -1930,20 +1979,21 @@
       "heading": "A Public Shot Clock on Permits:",
       "text": "Put every business, building, and road permit on an open state website with a ticking clock, forcing local offices to approve projects on time.",
       "verdict": {
-        "commitment": 0.96,
+        "commitment": 0.97,
+        "own_commitment": 0.9,
         "states_policy": true,
         "issues": [
           "KYV3"
         ],
         "scores": {
           "A1": 0.02,
-          "A2": 0.18,
+          "A2": 0.2,
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.77,
+          "B1": 0.78,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -1971,6 +2021,7 @@
       "text": "Bring all major development permits under a single digital hub so job creators spend less time in lines and more time hiring workers.",
       "verdict": {
         "commitment": 0.96,
+        "own_commitment": 0.91,
         "states_policy": true,
         "issues": [
           "B1",
@@ -1980,7 +2031,7 @@
           "A1": 0.02,
           "A2": 0.05,
           "A3": 0.02,
-          "A4": 0.03,
+          "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -1994,7 +2045,7 @@
           "B8": 0.03,
           "KYV1": 0.02,
           "KYV10": 0.03,
-          "KYV2": 0.03,
+          "KYV2": 0.04,
           "KYV3": 0.91,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -2011,8 +2062,9 @@
       "heading": "Specialized Business Courts:",
       "text": "Route complicated business lawsuits through specialized judges so commercial fights don't clog up everyday neighborhood courtrooms.",
       "verdict": {
-        "commitment": 0.92,
-        "states_policy": true,
+        "commitment": 0.93,
+        "own_commitment": 0.83,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
@@ -2022,19 +2074,19 @@
           "A5": 0.01,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.38,
+          "B1": 0.37,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
           "B6": 0.02,
-          "B7": 0.52,
+          "B7": 0.51,
           "B8": 0.02,
           "KYV1": 0.06,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.02,
-          "KYV4": 0.01,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
           "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -2050,20 +2102,21 @@
       "text": "Keep our state personal income tax at zero, make sure Tallahassee balances its books responsibly every single year, and cut taxes at every opportunity.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.97,
         "states_policy": true,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.04,
+          "A3": 0.03,
           "A4": 0.09,
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.02,
-          "B1": 0.8,
+          "B1": 0.79,
           "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -2087,7 +2140,8 @@
       "heading": "Healthcare",
       "text": "“You deserve to know what healthcare costs before you get treated. Your Doctor, Your Price puts you back in charge, cuts out the red tape, and lets doctors focus on their patients.”",
       "verdict": {
-        "commitment": 0.82,
+        "commitment": 0.81,
+        "own_commitment": 0.6,
         "states_policy": false,
         "issues": [
           "B2"
@@ -2096,14 +2150,14 @@
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.04,
+          "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.04,
           "B2": 0.96,
-          "B3": 0.01,
-          "B4": 0.04,
+          "B3": 0.02,
+          "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -2128,6 +2182,7 @@
       "text": "Require doctors and hospitals to post plain, guaranteed cash prices for the 50 most common medical tests and procedures.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [
           "B2"
@@ -2135,28 +2190,28 @@
         "scores": {
           "A1": 0.02,
           "A2": 0.01,
-          "A3": 0.02,
+          "A3": 0.01,
           "A4": 0.03,
           "A5": 0.01,
           "A6": 0.01,
           "A7": 0.01,
-          "B1": 0.09,
+          "B1": 0.08,
           "B2": 0.98,
           "B3": 0.01,
           "B4": 0.04,
           "B5": 0.02,
           "B6": 0.01,
-          "B7": 0.01,
-          "B8": 0.02,
+          "B7": 0.02,
+          "B8": 0.01,
           "KYV1": 0.02,
-          "KYV10": 0.02,
+          "KYV10": 0.01,
           "KYV2": 0.02,
           "KYV3": 0.01,
           "KYV4": 0.01,
           "KYV5": 0.01,
           "KYV6": 0.01,
-          "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV7": 0.01,
+          "KYV8": 0.01,
           "KYV9": 0.01
         }
       }
@@ -2167,7 +2222,8 @@
       "heading": "Best Price Guarantee:",
       "text": "Ensure everyday patients paying cash get the lowest discounted rate that the hospital gives to big insurance companies.",
       "verdict": {
-        "commitment": 0.92,
+        "commitment": 0.9,
+        "own_commitment": 0.85,
         "states_policy": true,
         "issues": [
           "B2"
@@ -2178,20 +2234,20 @@
           "A3": 0.02,
           "A4": 0.04,
           "A5": 0.01,
-          "A6": 0.01,
+          "A6": 0.02,
           "A7": 0.01,
           "B1": 0.1,
           "B2": 0.97,
           "B3": 0.01,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.01,
-          "B7": 0.01,
-          "B8": 0.01,
+          "B7": 0.02,
+          "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.02,
-          "KYV3": 0.01,
+          "KYV2": 0.01,
+          "KYV3": 0.02,
           "KYV4": 0.01,
           "KYV5": 0.01,
           "KYV6": 0.01,
@@ -2208,6 +2264,7 @@
       "text": "Let what you pay to an out-of-network doctor count directly toward your yearly insurance deductible.",
       "verdict": {
         "commitment": 0.95,
+        "own_commitment": 0.9,
         "states_policy": true,
         "issues": [
           "B2"
@@ -2216,26 +2273,26 @@
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.02,
+          "A4": 0.03,
           "A5": 0.01,
           "A6": 0.01,
           "A7": 0.01,
-          "B1": 0.02,
+          "B1": 0.03,
           "B2": 0.97,
           "B3": 0.01,
           "B4": 0.03,
           "B5": 0.02,
           "B6": 0.01,
-          "B7": 0.01,
+          "B7": 0.02,
           "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.01,
           "KYV4": 0.01,
           "KYV5": 0.01,
           "KYV6": 0.01,
-          "KYV7": 0.02,
+          "KYV7": 0.01,
           "KYV8": 0.02,
           "KYV9": 0.01
         }
@@ -2248,6 +2305,7 @@
       "text": "Require insurance companies to approve common treatments within three days instead of letting paperwork delay your care.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.92,
         "states_policy": true,
         "issues": [
           "B2"
@@ -2258,8 +2316,8 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.01,
-          "A6": 0.02,
-          "A7": 0.01,
+          "A6": 0.01,
+          "A7": 0.02,
           "B1": 0.02,
           "B2": 0.96,
           "B3": 0.01,
@@ -2272,9 +2330,9 @@
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.01,
-          "KYV4": 0.02,
-          "KYV5": 0.01,
-          "KYV6": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.02,
+          "KYV6": 0.01,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.01
@@ -2287,8 +2345,9 @@
       "heading": "Cheaper Prescriptions:",
       "text": "Expose pharmacy middleman markups so prescription discounts get passed straight to you at the checkout counter.",
       "verdict": {
-        "commitment": 0.86,
-        "states_policy": true,
+        "commitment": 0.87,
+        "own_commitment": 0.78,
+        "states_policy": false,
         "issues": [
           "B2"
         ],
@@ -2296,23 +2355,23 @@
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.07,
+          "A4": 0.06,
           "A5": 0.02,
-          "A6": 0.02,
-          "A7": 0.02,
-          "B1": 0.16,
+          "A6": 0.01,
+          "A7": 0.01,
+          "B1": 0.17,
           "B2": 0.96,
-          "B3": 0.01,
+          "B3": 0.02,
           "B4": 0.03,
           "B5": 0.02,
-          "B6": 0.02,
+          "B6": 0.01,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
+          "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -2330,55 +2389,9 @@
       },
       "subIssues": [
         {
-          "id": "A4",
-          "label": "Cost of living in Florida",
-          "citations": [
-            {
-              "passage": {
-                "id": "a6dd6069",
-                "url": "https://byrondonalds.com/",
-                "heading": "Affordability",
-                "text": "Florida cannot become too expensive for working families and seniors on fixed incomes. The status quo has a cost. Progress doesn't pay the bill sitting on your kitchen counter today—it's time to bring down costs.",
-                "retrieved_at": "2026-09-29T11:46:52.740Z"
-              },
-              "score": 0.97
-            },
-            {
-              "passage": {
-                "id": "cff91837",
-                "url": "https://byrondonalds.com/issues/affordability",
-                "heading": "Affordability",
-                "text": "“Florida cannot become too expensive for working families and seniors on fixed incomes. The status quo has a cost. Progress doesn't pay the bill sitting on your kitchen counter today—it's time to bring down costs.”",
-                "retrieved_at": "2026-09-29T11:46:52.740Z"
-              },
-              "score": 0.97
-            }
-          ]
-        },
-        {
           "id": "B1",
           "label": "Economy, inflation, and jobs",
           "citations": [
-            {
-              "passage": {
-                "id": "e9147a5c",
-                "url": "https://byrondonalds.com/",
-                "heading": "Space and Tech",
-                "text": "Every American who walked on the Moon took off from Florida's coast. It's time to bring NASA home, build out our launchpads, and create thousands of high-paying jobs right here in Florida.",
-                "retrieved_at": "2026-09-29T11:46:52.740Z"
-              },
-              "score": 0.93
-            },
-            {
-              "passage": {
-                "id": "17fb524d",
-                "url": "https://byrondonalds.com/issues/economy",
-                "heading": "Economy",
-                "text": "“California passes heavy regulations. New York sends you the bill. Florida puts out the welcome mat. Bureaucratic delays shouldn't stop honest people from opening a business and earning a living.”",
-                "retrieved_at": "2026-09-29T11:46:52.740Z"
-              },
-              "score": 0.93
-            },
             {
               "passage": {
                 "id": "77b3ea9a",
@@ -2391,23 +2404,13 @@
             },
             {
               "passage": {
-                "id": "c45a38db",
-                "url": "https://byrondonalds.com/issues/space-and-tech",
-                "heading": "Space and Tech",
-                "text": "“Every American who walked on the Moon took off from Florida's coast. It's time to bring NASA home, build out our launchpads, and create thousands of high-paying jobs right here in Florida.”",
-                "retrieved_at": "2026-09-29T11:46:52.740Z"
-              },
-              "score": 0.88
-            },
-            {
-              "passage": {
                 "id": "ccba2d60",
                 "url": "https://byrondonalds.com/issues/law-and-order",
                 "heading": "Enforce Workplace Rules:",
                 "text": "Require every Florida business to use the E-Verify system so legal workers keep the jobs and wages they've earned.",
                 "retrieved_at": "2026-09-29T11:46:52.740Z"
               },
-              "score": 0.87
+              "score": 0.85
             }
           ]
         }
@@ -2431,7 +2434,7 @@
                 "text": "Reward top-performing reading teachers with real bonus pay for getting results.",
                 "retrieved_at": "2026-09-29T11:46:52.740Z"
               },
-              "score": 0.91
+              "score": 0.9
             }
           ]
         },
@@ -2464,16 +2467,6 @@
                 "retrieved_at": "2026-09-29T11:46:52.740Z"
               },
               "score": 0.97
-            },
-            {
-              "passage": {
-                "id": "d339581e",
-                "url": "https://byrondonalds.com/issues/education",
-                "heading": "Personalized Success Plans for Every Student:",
-                "text": "College, university, workforce/trade, military, entrepreneurship, and hybrid pathways are equally resourced and equally respected.",
-                "retrieved_at": "2026-09-29T11:46:52.740Z"
-              },
-              "score": 0.96
             }
           ]
         }
@@ -2528,16 +2521,6 @@
                 "retrieved_at": "2026-09-29T11:46:52.740Z"
               },
               "score": 0.96
-            },
-            {
-              "passage": {
-                "id": "237eba00",
-                "url": "https://byrondonalds.com/issues/healthcare",
-                "heading": "Cheaper Prescriptions:",
-                "text": "Expose pharmacy middleman markups so prescription discounts get passed straight to you at the checkout counter.",
-                "retrieved_at": "2026-09-29T11:46:52.740Z"
-              },
-              "score": 0.96
             }
           ]
         }
@@ -2549,22 +2532,6 @@
         "label": "Environment & Water"
       },
       "subIssues": [
-        {
-          "id": "KYV2",
-          "label": "Energy and utilities",
-          "citations": [
-            {
-              "passage": {
-                "id": "44a9504f",
-                "url": "https://byrondonalds.com/issues/affordability",
-                "heading": "Protect Homeowners & Utility Payers:",
-                "text": "Stop giant industrial data centers from passing their massive electric and water bills onto everyday households.",
-                "retrieved_at": "2026-09-29T11:46:52.740Z"
-              },
-              "score": 0.98
-            }
-          ]
-        },
         {
           "id": "KYV3",
           "label": "Growth, development and land conservation",
@@ -2603,7 +2570,7 @@
                 "text": "Reform the My Safe Florida Home program and other grants programs to fund real, storm-hardening upgrades that lower your annual premium the most.",
                 "retrieved_at": "2026-09-29T11:46:52.740Z"
               },
-              "score": 0.92
+              "score": 0.91
             }
           ]
         }
@@ -2621,20 +2588,20 @@
           "citations": [
             {
               "passage": {
-                "id": "7ada4c7b",
-                "url": "https://byrondonalds.com/issues/law-and-order",
-                "heading": "Law and Order",
-                "text": "“We must secure our borders, keep local neighborhoods safe, stop taxpayer handouts to illegal immigration, and keep deadly drugs off our streets.”",
-                "retrieved_at": "2026-09-29T11:46:52.740Z"
-              },
-              "score": 0.99
-            },
-            {
-              "passage": {
                 "id": "55b7dc1c",
                 "url": "https://byrondonalds.com/",
                 "heading": "Law and Order",
                 "text": "We must secure our borders, keep local neighborhoods safe, stop taxpayer handouts to illegal immigration, and keep deadly drugs off our streets.",
+                "retrieved_at": "2026-09-29T11:46:52.740Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "7ada4c7b",
+                "url": "https://byrondonalds.com/issues/law-and-order",
+                "heading": "Law and Order",
+                "text": "“We must secure our borders, keep local neighborhoods safe, stop taxpayer handouts to illegal immigration, and keep deadly drugs off our streets.”",
                 "retrieved_at": "2026-09-29T11:46:52.740Z"
               },
               "score": 0.98
@@ -2657,7 +2624,7 @@
                 "text": "Coordinate state and local police directly with federal authorities to quickly deport noncitizens who commit crimes in our communities.",
                 "retrieved_at": "2026-09-29T11:46:52.740Z"
               },
-              "score": 0.96
+              "score": 0.95
             },
             {
               "passage": {
@@ -2667,7 +2634,7 @@
                 "text": "Require every Florida business to use the E-Verify system so legal workers keep the jobs and wages they've earned.",
                 "retrieved_at": "2026-09-29T11:46:52.740Z"
               },
-              "score": 0.88
+              "score": 0.89
             }
           ]
         }
@@ -2705,6 +2672,16 @@
             },
             {
               "passage": {
+                "id": "e76d6c8c",
+                "url": "https://byrondonalds.com/issues/affordability",
+                "heading": "Bring Down Your Insurance Bill:",
+                "text": "Protect reforms and stop lawsuit abuse that jacks up rates for everyone, saving homeowners hundreds of dollars a year.",
+                "retrieved_at": "2026-09-29T11:46:52.740Z"
+              },
+              "score": 0.95
+            },
+            {
+              "passage": {
                 "id": "3aafe4d7",
                 "url": "https://byrondonalds.com/issues/affordability",
                 "heading": "Bring Down Your Insurance Bill:",
@@ -2712,32 +2689,6 @@
                 "retrieved_at": "2026-09-29T11:46:52.740Z"
               },
               "score": 0.95
-            },
-            {
-              "passage": {
-                "id": "e76d6c8c",
-                "url": "https://byrondonalds.com/issues/affordability",
-                "heading": "Bring Down Your Insurance Bill:",
-                "text": "Protect reforms and stop lawsuit abuse that jacks up rates for everyone, saving homeowners hundreds of dollars a year.",
-                "retrieved_at": "2026-09-29T11:46:52.740Z"
-              },
-              "score": 0.94
-            }
-          ]
-        },
-        {
-          "id": "A3",
-          "label": "Property taxes",
-          "citations": [
-            {
-              "passage": {
-                "id": "4ee02003",
-                "url": "https://byrondonalds.com/issues/affordability",
-                "heading": "Protect Homeowners & Utility Payers:",
-                "text": "Keep property taxes in check so seniors and working families aren't taxed out of their homes.",
-                "retrieved_at": "2026-09-29T11:46:52.740Z"
-              },
-              "score": 0.98
             }
           ]
         }
@@ -2771,7 +2722,7 @@
                 "text": "Coordinate state and local police directly with federal authorities to quickly deport noncitizens who commit crimes in our communities.",
                 "retrieved_at": "2026-09-29T11:46:52.740Z"
               },
-              "score": 0.91
+              "score": 0.89
             }
           ]
         }
@@ -2779,7 +2730,7 @@
     }
   ],
   "usage": {
-    "input_tokens": 203163,
-    "output_tokens": 26564
+    "input_tokens": 215227,
+    "output_tokens": 27782
   }
 }

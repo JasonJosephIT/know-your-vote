@@ -5,38 +5,20 @@ Economy & Affordability
   A4  Cost of living in Florida  (1 citation(s))
       0.93  "He also believes extraordinary success comes with an opportunity to help keep Florida affordable for the people who teach our children, care for our families, build our homes and keep this state running. Ensuring local and state essentia…"
             https://russo2026.com/en/priorities/affordability  — section: Florida 9.9 - Invest in Florida’s Future
-  B1  Economy, inflation, and jobs  (14 citation(s))
-      0.95  "AI & the Future of Work - Bring the jobs of the future to Florida while making sure Florida students and workers have the skills, training and opportunities to fill them."
-            https://russo2026.com/en/priorities  — section: Build Florida’s Next Economy
+  B1  Economy, inflation, and jobs  (5 citation(s))
       0.95  "Frank wants Florida preparing now - attracting the industries and jobs of the future while investing in education, skilled workforce programs and opportunities that help Floridians adapt as AI and automation reshape the economy. His Flor…"
             https://russo2026.com/en/priorities/innovation  — section: AI & the Future of Work
-      0.94  "His approach is pro-innovation, pro-business and pro-accountability - protecting taxpayers and communities, preparing Florida workers for an economy transformed by AI, and giving more entrepreneurs a fair shot to build something successful."
-            https://russo2026.com/  — section: Build Florida’s Next Economy
-      0.94  "That means strengthening skilled careers that are difficult to automate while also preparing students and workers to participate in AI and emerging industries."
-            https://russo2026.com/en/priorities/children-teachers-trades  — section: Prepare Floridians for the AI Economy
       0.94  "Frank's Florida 9.9 proposal would reinforce that investment through the protected Florida Future Fund - supporting teacher pay, skilled trades and apprenticeships, and education and retraining for workers affected by AI and automation."
             https://russo2026.com/en/priorities/children-teachers-trades  — section: Prepare Floridians for the AI Economy
-      0.94  "Florida should be one of the best places in America to build a company, develop new technology, create jobs and turn a good idea into something successful. Frank wants Florida leading the next generation of American innovation - but grow…"
-            https://russo2026.com/en/priorities/innovation  — section: Build Florida’s Next Economy
-      0.93  "Florida should compete for AI, technology investment and high-paying jobs - but existing residents shouldn't be left paying for the infrastructure that makes major developments possible."
-            https://russo2026.com/en/priorities/innovation  — section: Data Centers & AI Infrastructure
-      0.92  "Frank believes Florida should prepare for that change rather than wait until workers are displaced by it."
-            https://russo2026.com/en/priorities/children-teachers-trades  — section: Prepare Floridians for the AI Economy
-      0.92  "Frank does not want the proposal to unintentionally punish legitimate business activity, entrepreneurship or investment."
-            https://russo2026.com/en/priorities/florida-9-9  — section: Protect Small Businesses and Job Creation
-      0.91  "Detailed legislation would include protections for legitimate pass-through business operations, investment and job creation, with additional fiscal modeling, legal review and implementation details developed before the proposal moves for…"
-            https://russo2026.com/en/priorities/florida-9-9  — section: Protect Small Businesses and Job Creation
       0.90  "Skilled Trades - Expand trade schools, apprenticeships and skilled workforce programs."
             https://russo2026.com/en/priorities/florida-9-9  — section: Where Would the Money Go?
-      0.88  "Frank wants to raise Florida's average teacher salary to at least $75,000, strengthen teacher recruitment and retention, and expand skilled trades, apprenticeships and career pathways so every student has a path to a good-paying future. …"
+      0.89  "Frank wants to raise Florida's average teacher salary to at least $75,000, strengthen teacher recruitment and retention, and expand skilled trades, apprenticeships and career pathways so every student has a path to a good-paying future. …"
             https://russo2026.com/  — section: Invest in the People Building Florida’s Future
-      0.86  "Frank's proposed $100 million Florida Women's Entrepreneur Initiative would help qualified women learn the fundamentals of running a business, develop a viable plan, access professional support, compete for performance-based startup assi…"
+      0.85  "Frank's proposed $100 million Florida Women's Entrepreneur Initiative would help qualified women learn the fundamentals of running a business, develop a viable plan, access professional support, compete for performance-based startup assi…"
             https://russo2026.com/en/priorities/innovation  — section: Women’s Entrepreneurship
-      0.86  "AI & the Future of Work - Prepare students and workers for emerging technologies and help Floridians adapt as automation changes industries and jobs."
-            https://russo2026.com/en/priorities/florida-9-9  — section: Where Would the Money Go?
 
 Education
-  A6  Public school funding and teachers  (11 citation(s))
+  A6  Public school funding and teachers  (8 citation(s))
       0.98  "Frank wants to raise Florida's average teacher salary to at least $75,000, strengthen teacher recruitment and retention, and expand skilled trades, apprenticeships and career pathways so every student has a path to a good-paying future. …"
             https://russo2026.com/  — section: Invest in the People Building Florida’s Future
       0.98  "Frank is proposing to raise Florida's average teacher salary to at least $75,000 a year while strengthening teacher recruitment, retention and classroom support."
@@ -45,41 +27,29 @@ Education
             https://russo2026.com/en/priorities/children-teachers-trades  — section: Put More Money Into Classrooms - Not Bureaucracy
       0.98  "Teachers - Raise Florida's average teacher salary to at least $75,000 and improve recruitment and retention."
             https://russo2026.com/en/priorities/florida-9-9  — section: Where Would the Money Go?
-      0.97  "Frank believes raising teacher pay has to be accompanied by a serious look at where Florida's education dollars are going."
-            https://russo2026.com/en/priorities/children-teachers-trades  — section: Put More Money Into Classrooms - Not Bureaucracy
-      0.96  "Put the people teaching our children ahead of the bureaucracy surrounding them."
-            https://russo2026.com/en/priorities/children-teachers-trades  — section: Put More Money Into Classrooms - Not Bureaucracy
       0.94  "Frank's Florida 9.9 proposal would reinforce that investment through the protected Florida Future Fund - supporting teacher pay, skilled trades and apprenticeships, and education and retraining for workers affected by AI and automation."
             https://russo2026.com/en/priorities/children-teachers-trades  — section: Prepare Floridians for the AI Economy
-      0.92  "Florida's future starts in its classrooms. Frank Russo believes we cannot say children are our future while undervaluing the people responsible for educating them. And we cannot prepare young Floridians for a changing economy if we conti…"
+      0.91  "Florida's future starts in its classrooms. Frank Russo believes we cannot say children are our future while undervaluing the people responsible for educating them. And we cannot prepare young Floridians for a changing economy if we conti…"
             https://russo2026.com/en/priorities/children-teachers-trades  — section: Invest in the People Building Florida’s Future
-      0.90  "We should cut bureaucracy before we cut teachers."
-            https://russo2026.com/en/priorities/children-teachers-trades  — section: Treat Teachers Like the Professionals They Are
-      0.90  "Florida 9.9 - Invest in Florida's future through a proposed 9.9% consumption tax only on spending above $1 million, with the first $1 million exempt and the resulting revenue protected in public trust for housing, teachers, healthcare, s…"
+      0.89  "Florida 9.9 - Invest in Florida's future through a proposed 9.9% consumption tax only on spending above $1 million, with the first $1 million exempt and the resulting revenue protected in public trust for housing, teachers, healthcare, s…"
             https://russo2026.com/en/priorities  — section: Make Florida Affordable Again
       0.86  "The revenue from this plan would be protected in public trust, not in government agency hands and reinvested in priorities including housing, teachers, healthcare workers, skilled trades and preparing Florida's workforce for AI and autom…"
             https://russo2026.com/en/priorities/affordability  — section: Florida 9.9 - Invest in Florida’s Future
-  KYV10  Career, vocational and higher education  (10 citation(s))
-      0.98  "Frank's plan would expand technical training and create more paid apprenticeship opportunities connecting students directly with employers and skilled careers."
-            https://russo2026.com/en/priorities/children-teachers-trades  — section: Earn While You Learn
+  KYV10  Career, vocational and higher education  (7 citation(s))
       0.97  "Frank wants to bring skilled-trades education back into Florida high schools so more students can graduate with certifications, practical skills and a direct path into the workforce."
             https://russo2026.com/en/priorities/children-teachers-trades  — section: Bring the Skilled Trades Back
+      0.97  "Frank's plan would expand technical training and create more paid apprenticeship opportunities connecting students directly with employers and skilled careers."
+            https://russo2026.com/en/priorities/children-teachers-trades  — section: Earn While You Learn
       0.97  "Skilled Trades - Expand trade schools, apprenticeships and skilled workforce programs."
             https://russo2026.com/en/priorities/florida-9-9  — section: Where Would the Money Go?
       0.96  "Frank wants to raise Florida's average teacher salary to at least $75,000, strengthen teacher recruitment and retention, and expand skilled trades, apprenticeships and career pathways so every student has a path to a good-paying future. …"
             https://russo2026.com/  — section: Invest in the People Building Florida’s Future
-      0.96  "He also wants experienced tradesmen and tradeswomen to have greater opportunities to teach the next generation - recognizing that decades of real-world experience can be just as valuable in a technical classroom as a traditional academic…"
-            https://russo2026.com/en/priorities/children-teachers-trades  — section: Earn While You Learn
       0.95  "Frank's Florida 9.9 proposal would reinforce that investment through the protected Florida Future Fund - supporting teacher pay, skilled trades and apprenticeships, and education and retraining for workers affected by AI and automation."
             https://russo2026.com/en/priorities/children-teachers-trades  — section: Prepare Floridians for the AI Economy
       0.94  "Florida's future starts in its classrooms. Frank Russo believes we cannot say children are our future while undervaluing the people responsible for educating them. And we cannot prepare young Floridians for a changing economy if we conti…"
             https://russo2026.com/en/priorities/children-teachers-trades  — section: Invest in the People Building Florida’s Future
-      0.91  "That means strengthening skilled careers that are difficult to automate while also preparing students and workers to participate in AI and emerging industries."
-            https://russo2026.com/en/priorities/children-teachers-trades  — section: Prepare Floridians for the AI Economy
       0.91  "Frank wants Florida preparing now - attracting the industries and jobs of the future while investing in education, skilled workforce programs and opportunities that help Floridians adapt as AI and automation reshape the economy. His Flor…"
             https://russo2026.com/en/priorities/innovation  — section: AI & the Future of Work
-      0.87  "AI & the Future of Work - Bring the jobs of the future to Florida while making sure Florida students and workers have the skills, training and opportunities to fill them."
-            https://russo2026.com/en/priorities  — section: Build Florida’s Next Economy
 
 Housing
   A2  Housing affordability  (3 citation(s))
@@ -101,25 +71,17 @@ Environment & Water
             https://russo2026.com/en/priorities/innovation  — section: Data Centers & AI Infrastructure
 
 Immigration
-  B3  Immigration and border enforcement  (10 citation(s))
+  B3  Immigration and border enforcement  (6 citation(s))
       0.98  "His Common Sense Immigration Principles focus on stronger public safety partnerships, targeting violent criminals, traffickers and gangs, cracking down on worker exploitation, supporting legal immigration and pushing Washington to finall…"
             https://russo2026.com/  — section: Secure. Legal. Humane.
       0.98  "Frank believes in secure borders. He believes in the rule of law. And as Governor, his first responsibility will always be keeping Floridians safe. But immigration is personal to Frank too. His family came to this country for the same re…"
             https://russo2026.com/en/priorities/immigration  — section: Secure. Legal. Humane.
       0.98  "Frank supports securing America's border."
             https://russo2026.com/en/priorities/immigration  — section: Secure the Border - And Be Honest About Who Controls It
-      0.98  "Frank believes the federal government needs to secure the border, enforce the law and finally create a legal process that actually works."
-            https://russo2026.com/en/priorities/immigration  — section: Washington Needs to Fix What’s Broken
       0.97  "He supports calling on Congress to establish an earned federal process for long-term, law-abiding residents who meet strict legal requirements, including background checks and compliance with federal law."
             https://russo2026.com/en/priorities/immigration  — section: Washington Needs to Fix What’s Broken
-      0.95  "What Florida can do is strengthen public safety partnerships, combat trafficking and exploitation, enforce the laws within its authority and make sure our state is doing its part."
-            https://russo2026.com/en/priorities/immigration  — section: Secure the Border - And Be Honest About Who Controls It
       0.95  "Frank would expand English-language and workforce-development opportunities that help legal immigrants successfully integrate into Florida's economy."
             https://russo2026.com/en/priorities/immigration  — section: Respect People Who Follow the Rules
-      0.94  "Frank believes Florida can protect its communities, uphold the rule of law, support legal immigration and still treat people with dignity. Those principles are not in conflict."
-            https://russo2026.com/  — section: Secure. Legal. Humane.
-      0.94  "If a business or individual knowingly exploits undocumented workers or commits immigration-related fraud, they should be held accountable too."
-            https://russo2026.com/en/priorities/immigration  — section: Go After the People Exploiting Workers
       0.88  "Frank would crack down on that exploitation while strengthening employment verification requirements for state agencies and state contractors so taxpayer-funded jobs comply with federal law."
             https://russo2026.com/en/priorities/immigration  — section: Go After the People Exploiting Workers
 
@@ -134,9 +96,7 @@ Insurance & Property Costs
             https://russo2026.com/en/priorities/affordability  — section: Property Tax Relief
 
 Public Safety & Crime
-  B7  Crime policy, policing and courts  (2 citation(s))
-      0.91  "That means focusing law enforcement resources on the people who actually threaten our communities - violent criminals, drug traffickers, human traffickers and transnational gangs."
-            https://russo2026.com/en/priorities/immigration  — section: Keep Floridians Safe
+  B7  Crime policy, policing and courts  (1 citation(s))
       0.91  "As Governor, Frank would strengthen partnerships between Florida law enforcement and federal agencies and prioritize state resources toward removing people who commit violent crimes and pose genuine threats to public safety."
             https://russo2026.com/en/priorities/immigration  — section: Keep Floridians Safe
 

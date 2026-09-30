@@ -1,0 +1,902 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://ehrforcongress.us",
+  "created_at": "2026-09-29T11:43:17.828Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 17,
+    "asked": 17,
+    "states_policy": 7,
+    "with_issue": 6,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "82bf9d9e",
+      "url": "https://ehrforcongress.us/",
+      "heading": "Meet Phil",
+      "text": "Phil Ehr’s first mission in the Navy was the Mariel Boatlift, where he helped rescue Cuban exiles who risked it all for freedom and opportunity in America. He went on to serve a full career in the Navy and beyond—often in harm’s way— fighting communists, fascists and terrorists. Phil’s lifelong commitment to our freedoms, democracy and prosperity continues in his campaign to replace Rep. Carlos Gimenez in Congress. Florida’s 28th Congressional District includes Southwest Miami-Dade County (West Kendall, The Hammocks, West Richmond Heights, Goulds, South Dade, Homestead, Florida City) and the beautiful Florida Keys.",
+      "verdict": {
+        "commitment": 0.1,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.17,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.04,
+          "B8": 0.03,
+          "KYV1": 0.11,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "c109dfb1",
+      "url": "https://ehrforcongress.us/",
+      "heading": "Phil’s Priorities",
+      "text": "Lower premiums, expand access, and reduce out-of-pocket costs through the Healthcare Stability & Program Choice Act.",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.1,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.98,
+          "B3": 0.02,
+          "B4": 0.05,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "41430c1f",
+      "url": "https://ehrforcongress.us/",
+      "heading": "Phil’s Priorities",
+      "text": "Enforce anti-fraud laws, hold bad actors accountable, stabilize the market, and protect homeowners from rising costs.",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.7,
+          "A2": 0.86,
+          "A3": 0.07,
+          "A4": 0.53,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.57,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.92,
+          "B8": 0.02,
+          "KYV1": 0.11,
+          "KYV10": 0.02,
+          "KYV2": 0.06,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.04,
+          "KYV7": 0.03,
+          "KYV8": 0.12,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "1707e2b2",
+      "url": "https://ehrforcongress.us/",
+      "heading": "Phil’s Priorities",
+      "text": "Putting America First means defending the Constitution and the rule of law, rejecting anti-American rhetoric, antisemitism, socialism and political extremism, and using military force only when lawful and necessary.",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "KYV1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.05,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.09,
+          "B8": 0.02,
+          "KYV1": 0.85,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b9b09509",
+      "url": "https://ehrforcongress.us/",
+      "heading": "Phil’s Priorities",
+      "text": "Create an inter-agency public corruption task force and strengthen accountability for public contracts.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.76,
+          "B8": 0.02,
+          "KYV1": 0.79,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "01bcefdd",
+      "url": "https://ehrforcongress.us/",
+      "heading": "Phil’s Priorities",
+      "text": "Pursue a full VA hospital or major VA medical facility in South Dade to improve access for veterans in South Dade and Monroe County while strengthening essential services.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.96,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.07,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "30568a3c",
+      "url": "https://ehrforcongress.us/",
+      "heading": "Phil’s Priorities",
+      "text": "Protect law-abiding immigrant families, Improve training and accountability for border personnel, a path to permanent residency for families stuck in legal limbo and target criminals and traffickers.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.98,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.81,
+          "B8": 0.02,
+          "KYV1": 0.05,
+          "KYV10": 0.05,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "651eba12",
+      "url": "https://ehrforcongress.us/",
+      "heading": "Phil’s Priorities",
+      "text": "Protect the Everglades, defend water resources, support responsible growth, and pursue a temporary moratorium on large-scale AI data centers and other high-impact developments until their impacts on infrastructure, energy, housing, and the environment are fully evaluated.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A5",
+          "KYV2",
+          "KYV3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.26,
+          "A3": 0.02,
+          "A4": 0.12,
+          "A5": 0.85,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.13,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.57,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.93,
+          "KYV3": 0.98,
+          "KYV4": 0.08,
+          "KYV5": 0.74,
+          "KYV6": 0.02,
+          "KYV7": 0.04,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ba9cbb9d",
+      "url": "https://ehrforcongress.us/",
+      "heading": "I am proud to endorse retired Navy Commander Phil Ehr for Congress. Phil Ehr has a proven track record of fighting for freedom abroad and he will fight for freedom here at home. With the House of Representatives being pushed to extremism we need candidates like Phil Ehr who will always put people before political partisanship.",
+      "text": "– Former U.S. Rep. Debbie Mucarsel-Powell",
+      "verdict": {
+        "commitment": 0.19,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.28,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "57b1abcc",
+      "url": "https://ehrforcongress.us/",
+      "heading": "ROOTED IN SERVICE",
+      "text": "Leaders like Phil Ehr exemplify unwavering integrity, relentless problem-solving, and the ability to forge new paths. Phil’s distinguished record in the Navy and beyond is a testament to these qualities.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "21c54aa8",
+      "url": "https://ehrforcongress.us/",
+      "heading": "ROOTED IN SERVICE",
+      "text": "The dire need for change in South Florida is clear. Our community is plagued by corruption, while Tallahassee is preoccupied with divisive culture wars, and Washington is compromised by anti-democratic extremists. Tragically, Carlos Gimenez is complicit in these grave threats.",
+      "verdict": {
+        "commitment": 0.16,
+        "states_policy": false,
+        "issues": [
+          "KYV1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.07,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.05,
+          "B7": 0.05,
+          "B8": 0.02,
+          "KYV1": 0.89,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "1ee46eab",
+      "url": "https://ehrforcongress.us/",
+      "heading": "ROOTED IN SERVICE",
+      "text": "We can trust Phil Ehr to continue serving with integrity. He will find solutions that matter to everyday people in South Florida, and he’ll fight for our freedom, democracy, and prosperity.",
+      "verdict": {
+        "commitment": 0.25,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.1,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.17,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5c2612ac",
+      "url": "https://ehrforcongress.us/meet-phil",
+      "heading": "Distinguished Naval Service",
+      "text": "Phil Ehr advanced from Navy Seaman to Commander in a 26-year active duty career. He flew reconnaissance in the Cold War, combat support in Desert Storm, and oversaw U.S. combat operations in Allied Force, which was the most intense and sustained combat operation in Europe between World War II and Russia’s invasion of Ukraine. On shore duty, Phil provided strategic advice to senior leaders in Washington, Silicon Valley, London, and NATO, including the Chairman of the Joint Chiefs of Staff, General Colin Powell; and helped civilian agencies use declassified space technology to improve border security, federal firefighting, and earth science research.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.01,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.05,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.03,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "aae63009",
+      "url": "https://ehrforcongress.us/meet-phil",
+      "heading": "Distinguished Naval Service",
+      "text": "Phil’s first mission in the Navy was the Mariel Boatlift in the Florida Strait rescuing men, women and children who risked their lives escaping brutality in Cuba for freedom and opportunity in America.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.01,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.12,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.01,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.01,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.01
+        }
+      }
+    },
+    {
+      "id": "7beed08b",
+      "url": "https://ehrforcongress.us/meet-phil",
+      "heading": "Beyond the Navy",
+      "text": "After the Navy, Phil taught children the game of chess in schools and fought Russian corruption in the World Chess Federation. Phil also taught British officers in their war college, challenged craven politicians who manipulated Americans with bigotry and lies, and founded a nonprofit to counter disinformation in domestic politics with combat-proven military tactics. Phil recently completed dozens of humanitarian aid delivery missions in Ukraine for people who—like the Cuban exiles he saw four decades earlier—risked it all for freedom.",
+      "verdict": {
+        "commitment": 0.09,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.04,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.1,
+          "B7": 0.04,
+          "B8": 0.02,
+          "KYV1": 0.59,
+          "KYV10": 0.04,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "9579603b",
+      "url": "https://ehrforcongress.us/meet-phil",
+      "heading": "Beyond the Navy",
+      "text": "Phil and Sue, his wife of 28 years, are blessed with two daughters. Phil is running to represent the people of South Miami-Dade and the Florida Keys, because they are suffering from extremism and chaos in Congress. New leadership is needed to solve problems that matter and to defend American freedoms, democracy and prosperity.",
+      "verdict": {
+        "commitment": 0.26,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.08,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.04,
+          "B8": 0.02,
+          "KYV1": 0.51,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "17ad5d2c",
+      "url": "https://ehrforcongress.us/meet-phil",
+      "heading": "Beyond the Navy",
+      "text": "To view Phil’s LinkedIn profile CLICK HERE .",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "healthcare",
+        "label": "Healthcare"
+      },
+      "subIssues": [
+        {
+          "id": "B2",
+          "label": "Healthcare access and costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "c109dfb1",
+                "url": "https://ehrforcongress.us/",
+                "heading": "Phil’s Priorities",
+                "text": "Lower premiums, expand access, and reduce out-of-pocket costs through the Healthcare Stability & Program Choice Act.",
+                "retrieved_at": "2026-09-29T11:43:14.395Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "01bcefdd",
+                "url": "https://ehrforcongress.us/",
+                "heading": "Phil’s Priorities",
+                "text": "Pursue a full VA hospital or major VA medical facility in South Dade to improve access for veterans in South Dade and Monroe County while strengthening essential services.",
+                "retrieved_at": "2026-09-29T11:43:14.395Z"
+              },
+              "score": 0.96
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "housing",
+        "label": "Housing"
+      },
+      "subIssues": [
+        {
+          "id": "A2",
+          "label": "Housing affordability",
+          "citations": [
+            {
+              "passage": {
+                "id": "41430c1f",
+                "url": "https://ehrforcongress.us/",
+                "heading": "Phil’s Priorities",
+                "text": "Enforce anti-fraud laws, hold bad actors accountable, stabilize the market, and protect homeowners from rising costs.",
+                "retrieved_at": "2026-09-29T11:43:14.395Z"
+              },
+              "score": 0.86
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "environment",
+        "label": "Environment & Water"
+      },
+      "subIssues": [
+        {
+          "id": "A5",
+          "label": "Water quality and Everglades restoration",
+          "citations": [
+            {
+              "passage": {
+                "id": "651eba12",
+                "url": "https://ehrforcongress.us/",
+                "heading": "Phil’s Priorities",
+                "text": "Protect the Everglades, defend water resources, support responsible growth, and pursue a temporary moratorium on large-scale AI data centers and other high-impact developments until their impacts on infrastructure, energy, housing, and the environment are fully evaluated.",
+                "retrieved_at": "2026-09-29T11:43:14.395Z"
+              },
+              "score": 0.85
+            }
+          ]
+        },
+        {
+          "id": "KYV2",
+          "label": "Energy and utilities",
+          "citations": [
+            {
+              "passage": {
+                "id": "651eba12",
+                "url": "https://ehrforcongress.us/",
+                "heading": "Phil’s Priorities",
+                "text": "Protect the Everglades, defend water resources, support responsible growth, and pursue a temporary moratorium on large-scale AI data centers and other high-impact developments until their impacts on infrastructure, energy, housing, and the environment are fully evaluated.",
+                "retrieved_at": "2026-09-29T11:43:14.395Z"
+              },
+              "score": 0.93
+            }
+          ]
+        },
+        {
+          "id": "KYV3",
+          "label": "Growth, development and land conservation",
+          "citations": [
+            {
+              "passage": {
+                "id": "651eba12",
+                "url": "https://ehrforcongress.us/",
+                "heading": "Phil’s Priorities",
+                "text": "Protect the Everglades, defend water resources, support responsible growth, and pursue a temporary moratorium on large-scale AI data centers and other high-impact developments until their impacts on infrastructure, energy, housing, and the environment are fully evaluated.",
+                "retrieved_at": "2026-09-29T11:43:14.395Z"
+              },
+              "score": 0.98
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "immigration",
+        "label": "Immigration"
+      },
+      "subIssues": [
+        {
+          "id": "B3",
+          "label": "Immigration and border enforcement",
+          "citations": [
+            {
+              "passage": {
+                "id": "30568a3c",
+                "url": "https://ehrforcongress.us/",
+                "heading": "Phil’s Priorities",
+                "text": "Protect law-abiding immigrant families, Improve training and accountability for border personnel, a path to permanent residency for families stuck in legal limbo and target criminals and traffickers.",
+                "retrieved_at": "2026-09-29T11:43:14.395Z"
+              },
+              "score": 0.98
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "safety",
+        "label": "Public Safety & Crime"
+      },
+      "subIssues": [
+        {
+          "id": "B7",
+          "label": "Crime policy, policing and courts",
+          "citations": [
+            {
+              "passage": {
+                "id": "41430c1f",
+                "url": "https://ehrforcongress.us/",
+                "heading": "Phil’s Priorities",
+                "text": "Enforce anti-fraud laws, hold bad actors accountable, stabilize the market, and protect homeowners from rising costs.",
+                "retrieved_at": "2026-09-29T11:43:14.395Z"
+              },
+              "score": 0.92
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "elections",
+        "label": "Elections & Voting"
+      },
+      "subIssues": [
+        {
+          "id": "KYV1",
+          "label": "Threats to democratic institutions",
+          "citations": [
+            {
+              "passage": {
+                "id": "1707e2b2",
+                "url": "https://ehrforcongress.us/",
+                "heading": "Phil’s Priorities",
+                "text": "Putting America First means defending the Constitution and the rule of law, rejecting anti-American rhetoric, antisemitism, socialism and political extremism, and using military force only when lawful and necessary.",
+                "retrieved_at": "2026-09-29T11:43:14.395Z"
+              },
+              "score": 0.85
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 59924,
+    "output_tokens": 7786
+  }
+}

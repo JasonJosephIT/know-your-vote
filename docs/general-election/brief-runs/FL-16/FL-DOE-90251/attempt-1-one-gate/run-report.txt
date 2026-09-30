@@ -1,0 +1,38 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  A4  Cost of living in Florida  (1 citation(s))
+      0.92  "“As a dedicated civic leader, public servant, and most importantly as a mother, I understand what’s at stake. We must do everything we can to defend our American way of life. I will fight for the real issues that affect everyday working …"
+            https://grutersforcongress.com/  — section: TRUMP ENDORSED
+  B1  Economy, inflation, and jobs  (2 citation(s))
+      0.96  "Sydney will fight rising prices with conservative solutions that help families keep more of what they earn."
+            https://grutersforcongress.com/  — section: Inflation
+      0.91  "“As a dedicated civic leader, public servant, and most importantly as a mother, I understand what’s at stake. We must do everything we can to defend our American way of life. I will fight for the real issues that affect everyday working …"
+            https://grutersforcongress.com/  — section: TRUMP ENDORSED
+
+Housing
+  A2  Housing affordability  (1 citation(s))
+      0.96  "Sydney will fight to curb overdevelopment and keep homeownership within reach for working families."
+            https://grutersforcongress.com/  — section: Housing Costs
+
+Environment & Water
+  KYV3  Growth, development and land conservation  (1 citation(s))
+      0.91  "Sydney will fight to curb overdevelopment and keep homeownership within reach for working families."
+            https://grutersforcongress.com/  — section: Housing Costs
+
+Immigration
+  B3  Immigration and border enforcement  (1 citation(s))
+      0.98  "Sydney will work with President Trump and ICE to keep our families safe from violent criminals entering our country illegally."
+            https://grutersforcongress.com/  — section: Secure Border
+
+Elections & Voting
+  B6  Election integrity  (1 citation(s))
+      0.94  "Sydney is ready to fight for Democracy and stand with President Trump to ensure our elections are secure."
+            https://grutersforcongress.com/  — section: Election Security
+
+Retirement & Benefits
+  B4  Social Security and Medicare  (1 citation(s))
+      0.98  "Sydney will strengthen veterans’ benefits and protect Social Security and Medicare so seniors and those who served can retire with security and peace of mind."
+            https://grutersforcongress.com/  — section: Seniors & Veterans
+

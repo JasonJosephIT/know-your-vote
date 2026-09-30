@@ -1,16 +1,6 @@
 
 What this site states, by policy area
 
-Economy & Affordability
-  B1  Economy, inflation, and jobs  (1 citation(s))
-      0.88  "3) Professional Pay for Professional Work- Florida is ranked 50th in pay. How can we attract and keep the best talent in our schools if we don't pay a competitive salary? I can read the Comprehensive Annual Financial Report and look for …"
-            https://www.votefordianamoore.com/  — section: ​
-
-Education
-  A6  Public school funding and teachers  (1 citation(s))
-      0.98  "3) Professional Pay for Professional Work- Florida is ranked 50th in pay. How can we attract and keep the best talent in our schools if we don't pay a competitive salary? I can read the Comprehensive Annual Financial Report and look for …"
-            https://www.votefordianamoore.com/  — section: ​
-  KYV10  Career, vocational and higher education  (1 citation(s))
-      0.86  "2) Choice - Ask parents and students why they are moving to other learning options? Is it the security? Is it the focus on high-stakes testing? Is it the discipline and bullying that goes unchecked? We should survey parents and students …"
-            https://www.votefordianamoore.com/  — section: ​
-
+  No passage cleared both the commitment gate and an issue question.
+  That is a result, not an error: at this threshold, on these pages,
+  nothing was found. Lower --threshold or ingest more pages to widen it.

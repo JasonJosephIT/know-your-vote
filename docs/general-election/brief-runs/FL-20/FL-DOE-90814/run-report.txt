@@ -14,9 +14,9 @@ Economy & Affordability
             https://www.maximeforcongress.com/jobs  — section: 03
       0.94  "Invest in workforce training aligned to South Florida's real industries — healthcare, construction, logistics, hospitality, and skilled trades."
             https://www.maximeforcongress.com/jobs  — section: 01
-      0.92  "Protect the right to organize and negotiate for fair pay and safe conditions."
+      0.91  "Protect the right to organize and negotiate for fair pay and safe conditions."
             https://www.maximeforcongress.com/jobs  — section: 05
-      0.91  "Dr. Maxime will fight for the jobs, training, and protections District 20 workers deserve:"
+      0.90  "Dr. Maxime will fight for the jobs, training, and protections District 20 workers deserve:"
             https://www.maximeforcongress.com/jobs  — section: Solutions
       0.89  "Families are being squeezed by housing, groceries, insurance, and healthcare. Dr. Maxime will fight to bring costs down and open real pathways to ownership and long-term wealth."
             https://www.maximeforcongress.com/  — section: Affordability & Lower Inflation
@@ -31,9 +31,11 @@ Education
             https://www.maximeforcongress.com/education  — section: 02
       0.94  "Raise public-school funding so classrooms have the resources, materials, and support they need."
             https://www.maximeforcongress.com/education  — section: 01
-  KYV10  Career, vocational and higher education  (10 citation(s))
+  KYV10  Career, vocational and higher education  (9 citation(s))
       0.98  "Expand vocational and technical training so students who don't take a four-year path still have a real path."
             https://www.maximeforcongress.com/education  — section: 03
+      0.98  "Grow apprenticeship and vocational pathways so a trade is a real career, not a fallback."
+            https://www.maximeforcongress.com/students  — section: 03
       0.97  "Expand apprenticeship pathways so workers can earn while they learn."
             https://www.maximeforcongress.com/jobs  — section: 03
       0.97  "Dr. Maxime plans to work to raise school funding and teacher pay, expand vocational training, and build real career pathways for District 20's young people."
@@ -42,15 +44,11 @@ Education
             https://www.maximeforcongress.com/education  — section: 04
       0.97  "Expand Pell grants and make community college genuinely affordable."
             https://www.maximeforcongress.com/students  — section: 01
-      0.97  "Grow apprenticeship and vocational pathways so a trade is a real career, not a fallback."
-            https://www.maximeforcongress.com/students  — section: 03
       0.97  "Protect and strengthen trade schools and technical training programs."
             https://www.maximeforcongress.com/students  — section: 02
       0.96  "Invest in workforce training aligned to South Florida's real industries — healthcare, construction, logistics, hospitality, and skilled trades."
             https://www.maximeforcongress.com/jobs  — section: 01
-      0.95  "Every young person in District 20 deserves a real path forward — whether that path runs through a university, a trade, or an apprenticeship. Dr. Maxime will fight to:"
-            https://www.maximeforcongress.com/students  — section: Solutions
-      0.88  "Invest in mentorship, internships, and workforce partnerships that keep District 20 talent in District 20."
+      0.89  "Invest in mentorship, internships, and workforce partnerships that keep District 20 talent in District 20."
             https://www.maximeforcongress.com/students  — section: 04
 
 Healthcare
@@ -71,16 +69,16 @@ Healthcare
             https://www.maximeforcongress.com/healthcare  — section: 04
       0.90  "Healthcare is not a luxury. It's a right. And in Congress, Dr. Maxime will fight for that right — for every family in District 20."
             https://www.maximeforcongress.com/healthcare  — section: 05
-      0.86  "Families are being squeezed by housing, groceries, insurance, and healthcare. Dr. Maxime will fight to bring costs down and open real pathways to ownership and long-term wealth."
+      0.87  "Families are being squeezed by housing, groceries, insurance, and healthcare. Dr. Maxime will fight to bring costs down and open real pathways to ownership and long-term wealth."
             https://www.maximeforcongress.com/  — section: Affordability & Lower Inflation
       0.86  "Dr. Kedner Maxime's plan to lower everyday costs for District 20 families — housing, groceries, healthcare — and open real pathways to ownership."
             https://www.maximeforcongress.com/lower-costs  — section: Lower Costs
 
 Housing
   A2  Housing affordability  (5 citation(s))
-      0.99  "Expand affordable housing so working families, seniors, and young people can find a home they can actually afford."
+      0.98  "Expand affordable housing so working families, seniors, and young people can find a home they can actually afford."
             https://www.maximeforcongress.com/lower-costs  — section: 03
-      0.97  "Back responsible first-time-homebuyer assistance so more District 20 families move from renting to owning."
+      0.98  "Back responsible first-time-homebuyer assistance so more District 20 families move from renting to owning."
             https://www.maximeforcongress.com/lower-costs  — section: 05
       0.97  "Expand responsible first-time-homebuyer assistance so renting doesn't have to be forever."
             https://www.maximeforcongress.com/ownership-equity  — section: 01
@@ -90,16 +88,12 @@ Housing
             https://www.maximeforcongress.com/lower-costs  — section: Lower Costs
 
 Immigration
-  B3  Immigration and border enforcement  (5 citation(s))
+  B3  Immigration and border enforcement  (3 citation(s))
       0.98  "Dr. Kedner Maxime's balanced plan — secure borders, fair laws, a legal path for those who follow the law, and family reunification."
             https://www.maximeforcongress.com/immigration  — section: Immigration
       0.97  "Secure borders that protect our communities."
             https://www.maximeforcongress.com/immigration  — section: 01
-      0.97  "A clear, fair pathway to legal permanent residency for those who follow the law."
-            https://www.maximeforcongress.com/immigration  — section: 05
-      0.95  "Family-reunification policies that keep families together."
-            https://www.maximeforcongress.com/immigration  — section: 04
-      0.90  "Fair, faster processing so people who follow the rules aren't punished for doing so."
+      0.96  "A clear, fair pathway to legal permanent residency for those who follow the law."
             https://www.maximeforcongress.com/immigration  — section: 05
 
 Retirement & Benefits

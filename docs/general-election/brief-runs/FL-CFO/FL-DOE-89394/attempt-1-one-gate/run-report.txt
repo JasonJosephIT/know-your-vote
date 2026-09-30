@@ -1,0 +1,32 @@
+
+What this site states, by policy area
+
+Immigration
+  B3  Immigration and border enforcement  (2 citation(s))
+      0.98  "For years, Blaise has been the go-to voice in the legislature to stop illegal immigration. This commitment to law and order is exemplified by SB 1718, which Blaise sponsored to stop giving IDs and driver’s licenses to illegal immigrants,…"
+            https://blaiseforflorida.com/issues  — section: DEI – Deport Every Illegal
+      0.97  "Blaise’s message to illegal immigrants has been even clearer – you can go home, or you can go to Alligator Alcatraz, the choice is yours."
+            https://blaiseforflorida.com/issues  — section: DEI – Deport Every Illegal
+
+Insurance & Property Costs
+  A1  Property insurance costs  (1 citation(s))
+      0.87  "Blaise Ingoglia is a small business owner and conservative warrior taking on the establishment to Keep Florida free. As CFO, he’s working to lower insurance rates, protect your investments, and support our first responders."
+            https://blaiseforflorida.com/meet-blaise  — section: BLAISE INGOGLIA
+  A3  Property taxes  (4 citation(s))
+      0.98  "Blaise’s commitment to lowering or eliminating property taxes is undeniable. From working with Marco Rubio in demanding property tax relief in the mid-2000s to currently working with Governor Ron DeSantis to eliminate taxes on homestead …"
+            https://blaiseforflorida.com/issues  — section: Lowering Property Taxes
+      0.98  "Beyond legislative reform, Blaise knows the best way to truly lower property taxes for Floridians is to cut out the enormous waste, fraud, and abuse at the local government level. These politicians and bureaucrats waste tens, if not hund…"
+            https://blaiseforflorida.com/issues  — section: Lowering Property Taxes
+      0.95  "Blaise has also fought to eliminate additional property assessments for those who harden their homes against dangerous storms."
+            https://blaiseforflorida.com/issues  — section: Lowering Property Taxes
+      0.92  "Blaise is traveling the state auditing local governments, big and small, Republican and Democrat; our CFO doesn’t discriminate when it comes to rooting out waste, fraud, and abuse. These audits prove what we’ve all known for far too long…"
+            https://blaiseforflorida.com/issues  — section: Lowering Property Taxes
+
+Elections & Voting
+  A7  Elections administration and voting access  (1 citation(s))
+      0.96  "Strengthened voter ID and election integrity laws"
+            https://blaiseforflorida.com/  — section: “Conservative Pitbull”
+  B6  Election integrity  (1 citation(s))
+      0.97  "Strengthened voter ID and election integrity laws"
+            https://blaiseforflorida.com/  — section: “Conservative Pitbull”
+

@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://nicolemorst.com",
-  "created_at": "2026-09-29T11:44:03.297Z",
+  "created_at": "2026-09-30T01:58:47.815Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -50,10 +51,11 @@
       "text": "My name is Nicole Morst and I'm running to be your next Broward County School Board Member for District 4. I am a mom of 3, all of whom have attended Broward County Public Schools, with 2 having graduated and one currently attending. I first became involved in school advocacy when I saw firsthand the security gaps at my daughter's school. I successfully advocated with district staff and the School Board to implement security updates, including new cameras and a single point of entry. During this time, I was invited to serve as the School Advisory Forum Chair, where I learned how School Board policy impacts schools and where meaningful improvements are needed.",
       "verdict": {
         "commitment": 0.2,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
@@ -68,9 +70,9 @@
           "B6": 0.02,
           "B7": 0.17,
           "B8": 0.02,
-          "KYV1": 0.02,
+          "KYV1": 0.03,
           "KYV10": 0.03,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -87,7 +89,8 @@
       "heading": null,
       "text": "I'm running because after years of serving in our schools and on district advisories, I've seen the gaps, inequities, and disparities impacting our students and schools. I've seen where the system works, and where it doesn't. I have worked side-by-side with teachers, administrators, students, and parents in my roles at the school and district level. This experience has given me a clear understanding of the real needs and concerns of our school communities. This insight is something I will bring to the table as decisions are being made.",
       "verdict": {
-        "commitment": 0.08,
+        "commitment": 0.09,
+        "own_commitment": 0.14,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -111,7 +114,7 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -125,7 +128,8 @@
       "heading": null,
       "text": "I'm running because I know we can do better for our kids, teachers, and communities. By prioritizing student well-being, retaining good teachers, encouraging parent engagement, ensuring equity, and committing to transparency and accountability, we will keep students in our Broward County public schools. For years, I have fought for the needs of our schools and kids. Now, I am ready to expand my impact by serving where the decisions are being made.",
       "verdict": {
-        "commitment": 0.94,
+        "commitment": 0.93,
+        "own_commitment": 0.94,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -134,7 +138,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.73,
+          "A6": 0.77,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
@@ -144,7 +148,7 @@
           "B6": 0.03,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.04,
+          "KYV1": 0.03,
           "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -164,6 +168,7 @@
       "text": "This is my why. I would be honored to have your support.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -202,6 +207,7 @@
       "text": "Ensuring our schools are properly funded and staffed with essential support personnel, including security staff, nurses, mental health professionals, and guidance counselors is critical for student success. These professionals help keep students safe, healthy, and supported so they can learn at their full potential every day.",
       "verdict": {
         "commitment": 0.81,
+        "own_commitment": 0.47,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -209,9 +215,9 @@
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.01,
           "A6": 0.79,
-          "A7": 0.01,
+          "A7": 0.02,
           "B1": 0.06,
           "B2": 0.15,
           "B3": 0.02,
@@ -219,7 +225,7 @@
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.17,
-          "B8": 0.02,
+          "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
@@ -229,7 +235,7 @@
           "KYV6": 0.01,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -240,6 +246,7 @@
       "text": "I will continue to advocate for safety and security improvements, including modern detection and prevention tools, while ensuring behavioral health challenges, such as vaping, are addressed through education, prevention, and meaningful support.",
       "verdict": {
         "commitment": 0.96,
+        "own_commitment": 0.98,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -247,11 +254,11 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.01,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
-          "B2": 0.07,
+          "B2": 0.06,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
@@ -277,7 +284,8 @@
       "heading": "Equitable Educational Opportunities",
       "text": "Every child should have equal access to a high-quality education, clean and safe facilities, and the full range of programs Broward Schools has to offer, regardless of zip code, background, or socioeconomic status. I will work to ensure that every school's unique needs are prioritized and addressed so all students in Broward Schools receive an equitable and meaningful educational experience. It is very important that as an \"A\" district, we make sure that \"A\" is for ALL.",
       "verdict": {
-        "commitment": 0.97,
+        "commitment": 0.98,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -286,18 +294,18 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.34,
+          "A6": 0.36,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
-          "B6": 0.02,
+          "B5": 0.01,
+          "B6": 0.01,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.06,
+          "KYV10": 0.05,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -316,6 +324,7 @@
       "text": "As our district faces financial challenges and declining enrollment, it is critical that we rebuild public trust. I believe transparency and accountability must be at the forefront of every decision we make. I will insist upon open, honest decision making that always prioritizes student, classrooms, and teachers first. I will closely monitor how taxpayer dollars are spent, ask hard questions, and ensure resources are used wisely and equitably. Parents, educators, and community members deserve clear communication about how and why decisions are made. I am committed to holding the district accountable to the people it serves.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.97,
         "states_policy": true,
         "issues": [
           "A6"
@@ -328,23 +337,23 @@
           "A5": 0.01,
           "A6": 0.91,
           "A7": 0.02,
-          "B1": 0.09,
+          "B1": 0.1,
           "B2": 0.02,
-          "B3": 0.01,
+          "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.01,
+          "B8": 0.02,
           "KYV1": 0.14,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.01,
-          "KYV6": 0.01,
+          "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.01,
           "KYV9": 0.02
         }
       }
@@ -356,31 +365,32 @@
       "text": "Paid Political Advertisement Paid for and Approved by Nicole Morst, non-partisan, for Broward County School Board, District 4",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.03,
           "A6": 0.04,
-          "A7": 0.11,
+          "A7": 0.1,
           "B1": 0.03,
           "B2": 0.02,
-          "B3": 0.03,
+          "B3": 0.02,
           "B4": 0.03,
           "B5": 0.02,
-          "B6": 0.04,
+          "B6": 0.03,
           "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.03,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.03,
-          "KYV4": 0.02,
+          "KYV4": 0.03,
           "KYV5": 0.02,
-          "KYV6": 0.03,
+          "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.03
@@ -415,7 +425,7 @@
     }
   ],
   "usage": {
-    "input_tokens": 31880,
-    "output_tokens": 4122
+    "input_tokens": 33752,
+    "output_tokens": 4311
   }
 }

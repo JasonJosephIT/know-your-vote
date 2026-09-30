@@ -1,8 +1,6 @@
 
 What this site states, by policy area
 
-Housing
-  A2  Housing affordability  (1 citation(s))
-      0.96  "Fight for practical housing investments that help families stay in Hillsborough County."
-            https://harrycohen.vote/  — section: Affordable housing
-
+  No passage cleared both the commitment gate and an issue question.
+  That is a result, not an error: at this threshold, on these pages,
+  nothing was found. Lower --threshold or ingest more pages to widen it.

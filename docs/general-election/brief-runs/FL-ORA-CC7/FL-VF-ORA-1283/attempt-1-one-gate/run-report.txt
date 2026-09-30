@@ -1,0 +1,20 @@
+
+What this site states, by policy area
+
+Housing
+  A2  Housing affordability  (2 citation(s))
+      0.98  "Everyone should have access to an affordable place to call home. I'll work to increase accessible housing options and ensure new developments are responsibly planned. A stronger community is one where families can afford to live."
+            https://www.patriciarumph.com/  — section: Affordable Housing
+      0.98  "Patricia Rumph supports affordable housing and responsible development, ensuring working families, seniors, and essential workers can live, work, and thrive in the communities they serve."
+            https://www.patriciarumph.com/on-the-issues  — section: Housing
+
+Environment & Water
+  KYV3  Growth, development and land conservation  (1 citation(s))
+      0.94  "Protecting our environment is about ensuring a healthy Orange County for generations to come. I will champion responsible growth policies, conservation of our natural resources, and initiatives that reduce pollution and safeguard our wat…"
+            https://www.patriciarumph.com/  — section: Environmental Stewardship
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (1 citation(s))
+      0.87  "I believe every family deserves to feel safe in their homes and neighborhoods. Whether it's partnering with local law enforcement to reduce crime, supporting violence prevention programs, or improving emergency services, I'll work tirele…"
+            https://www.patriciarumph.com/  — section: Public Safety
+

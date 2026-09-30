@@ -2,18 +2,14 @@
 What this site states, by policy area
 
 Economy & Affordability
-  B1  Economy, inflation, and jobs  (2 citation(s))
-      0.98  "Printing trillions of dollars devalues every paycheck and every retirement account."
-            https://www.brianlambertforcongress.com/issues/fiscal-responsibility  — section: Stop Inflationary Money Printing
-      0.89  "Lower taxes, reduce regulation, and let American entrepreneurs succeed."
+  B1  Economy, inflation, and jobs  (1 citation(s))
+      0.90  "Lower taxes, reduce regulation, and let American entrepreneurs succeed."
             https://www.brianlambertforcongress.com/issues  — section: Economy & Small Business
 
 Healthcare
-  B2  Healthcare access and costs  (2 citation(s))
+  B2  Healthcare access and costs  (1 citation(s))
       0.92  "Restore patient choice, medical freedom, price transparency, and competition while reducing unnecessary federal interference in healthcare."
             https://www.brianlambertforcongress.com/issues  — section: Healthcare Reform
-      0.90  "When the VA cannot provide timely treatment, veterans should have access to care in their own communities."
-            https://www.brianlambertforcongress.com/issues/veterans  — section: Expand Community Care
 
 Immigration
   B3  Immigration and border enforcement  (1 citation(s))
@@ -21,29 +17,10 @@ Immigration
             https://www.brianlambertforcongress.com/issues  — section: Border Security & Immigration
 
 Elections & Voting
-  A7  Elections administration and voting access  (5 citation(s))
-      0.96  "States should continue leading election administration while Congress respects constitutional limits on federal authority."
-            https://www.brianlambertforcongress.com/issues/election-integrity  — section: Where I Stand
+  A7  Elections administration and voting access  (1 citation(s))
       0.95  "I support election systems that are secure, transparent, and easy for eligible citizens to use while making fraud difficult to commit and easy to detect."
             https://www.brianlambertforcongress.com/issues/election-integrity  — section: Where I Stand
-      0.94  "Election administration should remain consistent with the Constitution and the role of the states."
-            https://www.brianlambertforcongress.com/issues/election-integrity  — section: Respect Constitutional Authority
-      0.92  "Election systems should protect against fraud while remaining accessible to lawful voters."
-            https://www.brianlambertforcongress.com/issues/election-integrity  — section: Support Secure Elections
-      0.88  "Election laws should be applied fairly and consistently to every voter, every campaign, and every jurisdiction."
-            https://www.brianlambertforcongress.com/issues/election-integrity  — section: Ensure Equal Application of the Law
-  B6  Election integrity  (5 citation(s))
+  B6  Election integrity  (1 citation(s))
       0.98  "I support election systems that are secure, transparent, and easy for eligible citizens to use while making fraud difficult to commit and easy to detect."
             https://www.brianlambertforcongress.com/issues/election-integrity  — section: Where I Stand
-      0.96  "Election processes should be open, observable, and accountable to the public."
-            https://www.brianlambertforcongress.com/issues/election-integrity  — section: Promote Transparency
-      0.96  "Election systems should protect against fraud while remaining accessible to lawful voters."
-            https://www.brianlambertforcongress.com/issues/election-integrity  — section: Support Secure Elections
-      0.93  "Election laws should be applied fairly and consistently to every voter, every campaign, and every jurisdiction."
-            https://www.brianlambertforcongress.com/issues/election-integrity  — section: Ensure Equal Application of the Law
-      0.86  "States should continue leading election administration while Congress respects constitutional limits on federal authority."
-            https://www.brianlambertforcongress.com/issues/election-integrity  — section: Where I Stand
-  KYV1  Threats to democratic institutions  (1 citation(s))
-      0.86  "No branch of government should be allowed to exceed its constitutional role."
-            https://www.brianlambertforcongress.com/issues/constitutional-government  — section: Respect Separation of Powers
 

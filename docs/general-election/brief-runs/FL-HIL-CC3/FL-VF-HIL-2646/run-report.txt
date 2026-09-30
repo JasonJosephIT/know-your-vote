@@ -2,34 +2,28 @@
 What this site states, by policy area
 
 Economy & Affordability
-  B1  Economy, inflation, and jobs  (3 citation(s))
+  B1  Economy, inflation, and jobs  (2 citation(s))
+      0.97  "Structured Growth Hillsborough County has enormous potential for economic expansion, but growth must be structured, intentional, and aligned with the needs of our communities. As a small business owner, I understand the challenges local …"
+            https://www.electluizffgarcia.com/issues  — section: Key Issues
       0.96  "Structured Growth Support local businesses, attract new industries, and create jobs to strengthen our economy."
             https://www.electluizffgarcia.com/  — section: Key Issues
-      0.96  "Structured Growth Hillsborough County has enormous potential for economic expansion, but growth must be structured, intentional, and aligned with the needs of our communities. As a small business owner, I understand the challenges local …"
-            https://www.electluizffgarcia.com/issues  — section: Key Issues
-      0.91  "Strong economic development also means planning growth the right way , revitalizing underused districts, and encouraging new development that enhances neighborhoods rather than overwhelming them. Structured growth brings stability: it pr…"
-            https://www.electluizffgarcia.com/issues  — section: Key Issues
 
 Education
   A6  Public school funding and teachers  (1 citation(s))
-      0.91  "Our children are the foundation of our county’s future which is why it’s time to properly fund and modernize our schools. Every child deserves access to quality education, safe facilities, and the tools to build a successful life right h…"
+      0.90  "Our children are the foundation of our county’s future which is why it’s time to properly fund and modernize our schools. Every child deserves access to quality education, safe facilities, and the tools to build a successful life right h…"
             https://www.electluizffgarcia.com/about  — section: From Building Dreams to Building a Better Hillsborough
 
 Environment & Water
-  KYV3  Growth, development and land conservation  (3 citation(s))
-      0.94  "Strong economic development also means planning growth the right way , revitalizing underused districts, and encouraging new development that enhances neighborhoods rather than overwhelming them. Structured growth brings stability: it pr…"
-            https://www.electluizffgarcia.com/issues  — section: Key Issues
-      0.92  "Infrastructure Improvements Hillsborough County is expanding rapidly, but growth without strategy leads to overcrowded roads, strained utilities, and communities that feel overwhelmed. My plan focuses on structured, intentional developme…"
+  KYV3  Growth, development and land conservation  (2 citation(s))
+      0.93  "Infrastructure Improvements Hillsborough County is expanding rapidly, but growth without strategy leads to overcrowded roads, strained utilities, and communities that feel overwhelmed. My plan focuses on structured, intentional developme…"
             https://www.electluizffgarcia.com/issues  — section: Key Issues
       0.88  "Structured Growth Hillsborough County has enormous potential for economic expansion, but growth must be structured, intentional, and aligned with the needs of our communities. As a small business owner, I understand the challenges local …"
             https://www.electluizffgarcia.com/issues  — section: Key Issues
 
 Public Safety & Crime
-  B7  Crime policy, policing and courts  (3 citation(s))
+  B7  Crime policy, policing and courts  (2 citation(s))
       0.98  "Public Safety Invest in law enforcement, first responders, and crime prevention to keep neighborhoods safe."
             https://www.electluizffgarcia.com/  — section: Key Issues
-      0.92  "Public Safety A safe community is the foundation of a strong county, and public safety begins with leadership that supports law enforcement, invests in community wellbeing, and plans ahead instead of reacting after problems arise. My foc…"
-            https://www.electluizffgarcia.com/issues  — section: Key Issues
-      0.88  "But true public safety goes beyond enforcement. It’s also about building environments that discourage crime before it happens , supporting youth programs, improving mental-health response options, and ensuring new developments follow pro…"
+      0.93  "Public Safety A safe community is the foundation of a strong county, and public safety begins with leadership that supports law enforcement, invests in community wellbeing, and plans ahead instead of reacting after problems arise. My foc…"
             https://www.electluizffgarcia.com/issues  — section: Key Issues
 

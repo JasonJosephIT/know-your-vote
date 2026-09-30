@@ -9,16 +9,14 @@ Housing
             https://www.kamiafororangecounty.com/  — section: Kamia's Vision For District 2:
 
 Environment & Water
-  KYV3  Growth, development and land conservation  (4 citation(s))
+  KYV3  Growth, development and land conservation  (3 citation(s))
       0.97  "Balance growth while preserving parks, waterways, and green space"
             https://www.kamiafororangecounty.com/  — section: Kamia's Vision For District 2:
       0.96  "Encourage smart zoning for diverse housing types"
             https://www.kamiafororangecounty.com/  — section: Kamia's Vision For District 2:
-      0.95  "Protect natural resources through responsible land use"
-            https://www.kamiafororangecounty.com/  — section: Kamia's Vision For District 2:
-      0.88  "Reduce barriers and incentivize responsible development"
+      0.94  "Protect natural resources through responsible land use"
             https://www.kamiafororangecounty.com/  — section: Kamia's Vision For District 2:
   KYV4  Storm resilience and flood protection  (1 citation(s))
-      0.85  "Upgrade utilities, stormwater systems, and public facilities"
+      0.86  "Upgrade utilities, stormwater systems, and public facilities"
             https://www.kamiafororangecounty.com/  — section: Kamia's Vision For District 2:
 

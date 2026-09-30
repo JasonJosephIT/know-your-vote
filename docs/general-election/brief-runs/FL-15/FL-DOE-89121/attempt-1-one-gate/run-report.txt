@@ -1,0 +1,37 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  B1  Economy, inflation, and jobs  (3 citation(s))
+      0.98  "Laurel is committed to building an economy that rewards work, empowers small businesses, and prepares the next generation of American workers. She championed the permanent tax relief provisions recently enacted by Congress, including pro…"
+            https://votelaurel.com/  — section: Growing Our Economy and Leading in Innovation
+      0.93  "Laurel served as Florida’s Secretary of State for three years, and delivered strong results for families, and businesses. In Congress, Laurel is fighting tirelessly to Grow our Economy, Cut Taxes and Regulations, Promote MADE IN THE U.S.…"
+            https://votelaurel.com/  — section: LAUREL'S RECORD
+      0.87  "She also supported efforts to cut unnecessary government spending and end fraud, waste, and abuse in government programs —ensuring that taxpayer resources go to those truly in need, not those who are ineligible or defrauding the system. …"
+            https://votelaurel.com/  — section: Growing Our Economy and Leading in Innovation
+
+Education
+  KYV10  Career, vocational and higher education  (1 citation(s))
+      0.98  "She also supported efforts to cut unnecessary government spending and end fraud, waste, and abuse in government programs —ensuring that taxpayer resources go to those truly in need, not those who are ineligible or defrauding the system. …"
+            https://votelaurel.com/  — section: Growing Our Economy and Leading in Innovation
+
+Environment & Water
+  KYV2  Energy and utilities  (1 citation(s))
+      0.89  "Laurel served as Florida’s Secretary of State for three years, and delivered strong results for families, and businesses. In Congress, Laurel is fighting tirelessly to Grow our Economy, Cut Taxes and Regulations, Promote MADE IN THE U.S.…"
+            https://votelaurel.com/  — section: LAUREL'S RECORD
+
+Immigration
+  B3  Immigration and border enforcement  (1 citation(s))
+      0.93  "Laurel served as Florida’s Secretary of State for three years, and delivered strong results for families, and businesses. In Congress, Laurel is fighting tirelessly to Grow our Economy, Cut Taxes and Regulations, Promote MADE IN THE U.S.…"
+            https://votelaurel.com/  — section: LAUREL'S RECORD
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (1 citation(s))
+      0.99  "She has voted to overturn soft-on-crime policies like the D.C. criminal code overhaul, and co-sponsored a resolution opposing efforts to defund the police. Laurel has championed the Debbie Smith Act to fund DNA testing in sexual assault …"
+            https://votelaurel.com/  — section: Crime and Community Safety
+
+Elections & Voting
+  A7  Elections administration and voting access  (1 citation(s))
+      0.97  "Laurel co-introduced the Supporting Military Voters Act, a bipartisan effort to improve absentee ballot access for deployed servicemembers and their dependents. She supports expanding access to mental health care, improving veteran job p…"
+            https://votelaurel.com/  — section: Supporting Our Military and Veterans
+

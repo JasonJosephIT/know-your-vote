@@ -6,19 +6,10 @@ Healthcare
       0.95  "Let Veterans Choose Their Own Care. My benefits should not be trapped inside one government hospital system. Veterans earned that care and should be able to take it to whatever doctor they trust, close to home, without waiting on a burea…"
             https://dennison4congress.com/  — section: SUPPORTING VETERANS
 
-Environment & Water
-  KYV3  Growth, development and land conservation  (1 citation(s))
-      0.97  "If you want to build a data center on property you own, that is between you and your neighbors. The federal government has no business in that decision. What gets built on public land is a question for the community that lives there, not…"
-            https://dennison4congress.com/issues-2  — section: Washington Doesn't Own Your Land
-
 Public Safety & Crime
-  B7  Crime policy, policing and courts  (3 citation(s))
+  B7  Crime policy, policing and courts  (1 citation(s))
       0.93  "Flock and Axon have turned our streets into a permanent lineup. Every plate, every face, every trip you take, logged and stored without a warrant and without your consent. I will get these systems out of public spaces and keep the Fourth…"
             https://dennison4congress.com/  — section: FOURTH AMENDMENT
-      0.93  "I do not trust any government that gets this wrong even once. Courts convict innocent people. I would rather one hundred guilty men live out their sentences than watch this country put one innocent man to death."
-            https://dennison4congress.com/issues-2  — section: The State Should Not Decide Who Dies
-      0.92  "No government employee should be shielded from the consequences of their own actions. This is not about any one profession. It is about a simple rule that already applies to the rest of us: if you violate someone's rights, they get their…"
-            https://dennison4congress.com/issues-2  — section: End Qualified Immunity
 
 Abortion Policy
   B5  Abortion policy  (1 citation(s))

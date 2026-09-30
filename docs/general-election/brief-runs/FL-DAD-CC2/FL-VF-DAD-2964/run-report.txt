@@ -3,7 +3,7 @@ What this site states, by policy area
 
 Economy & Affordability
   B1  Economy, inflation, and jobs  (2 citation(s))
-      0.97  "Grow the Mom & Pop grant program and bring jobs and investment to District 2’s commercial corridors."
+      0.96  "Grow the Mom & Pop grant program and bring jobs and investment to District 2’s commercial corridors."
             https://reelectbastien.com/  — section: A local economy for small business
       0.96  "Expand job training and real pathways so every family can build lasting financial security."
             https://reelectbastien.com/  — section: Jobs & opportunity for all
@@ -18,6 +18,6 @@ Housing
       0.98  "Keep building homes families can actually afford, and protect renters from being pushed out of the neighborhoods they built."
             https://reelectbastien.com/  — section: Affordable housing & anti-displacement
   KYV6  Renters and evictions  (1 citation(s))
-      0.93  "Keep building homes families can actually afford, and protect renters from being pushed out of the neighborhoods they built."
+      0.92  "Keep building homes families can actually afford, and protect renters from being pushed out of the neighborhoods they built."
             https://reelectbastien.com/  — section: Affordable housing & anti-displacement
 

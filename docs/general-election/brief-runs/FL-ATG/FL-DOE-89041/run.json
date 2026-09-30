@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://jamesforfl.com",
-  "created_at": "2026-09-29T11:43:47.647Z",
+  "created_at": "2026-09-30T01:58:46.156Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -50,17 +51,18 @@
       "text": "By entering your phone number and selection to opt in, you consent to join a recurring SMS/MMS text messaging program that will provide alerts, donation requests, updates, and other important information. By participating, you agree to the terms & privacy policy for auto-dialed messages from James Uthmeier for Attorney General to the phone number you provide. No consent is required to buy. Msg&data rates may apply. Msg frequency may vary. SMS information is not rented, sold, or shared. Privacy Policy and Terms & Conditions . Reply STOP to opt out and Reply HELP for help.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.02,
+          "A2": 0.03,
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.03,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.03,
@@ -68,16 +70,16 @@
           "B6": 0.03,
           "B7": 0.04,
           "B8": 0.02,
-          "KYV1": 0.03,
+          "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.03,
-          "KYV9": 0.02
+          "KYV8": 0.02,
+          "KYV9": 0.03
         }
       }
     },
@@ -87,7 +89,8 @@
       "heading": "MEET JAMES",
       "text": "Attorney General James Uthmeier is a dedicated public servant who has devoted his career to fighting for freedom. From prosecuting dangerous criminals to combatting illegal immigration to suing corporations that jeopardize shareholder value by sexualizing and indoctrinating our children, James is focused on keeping Florida safe, strong, and free.",
       "verdict": {
-        "commitment": 0.79,
+        "commitment": 0.8,
+        "own_commitment": 0.47,
         "states_policy": false,
         "issues": [
           "B3"
@@ -99,19 +102,19 @@
           "A4": 0.03,
           "A5": 0.02,
           "A6": 0.03,
-          "A7": 0.02,
-          "B1": 0.09,
-          "B2": 0.02,
-          "B3": 0.93,
+          "A7": 0.03,
+          "B1": 0.1,
+          "B2": 0.03,
+          "B3": 0.94,
           "B4": 0.02,
-          "B5": 0.03,
+          "B5": 0.02,
           "B6": 0.03,
           "B7": 0.66,
-          "B8": 0.03,
-          "KYV1": 0.09,
+          "B8": 0.02,
+          "KYV1": 0.1,
           "KYV10": 0.03,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -124,7 +127,7 @@
   ],
   "areas": [],
   "usage": {
-    "input_tokens": 7135,
-    "output_tokens": 916
+    "input_tokens": 7551,
+    "output_tokens": 958
   }
 }

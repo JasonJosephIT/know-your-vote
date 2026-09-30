@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://www.adamcervera.com",
-  "created_at": "2026-09-29T11:44:09.518Z",
+  "created_at": "2026-09-30T01:58:51.206Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -49,7 +50,8 @@
       "heading": null,
       "text": "Standing With Parents. Delivering for Students. Championing Success for the Next Generation.",
       "verdict": {
-        "commitment": 0.23,
+        "commitment": 0.2,
+        "own_commitment": 0.46,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -77,7 +79,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.05
+          "KYV9": 0.04
         }
       }
     },
@@ -87,7 +89,8 @@
       "heading": "CHIP IN NOW",
       "text": "Adam Cervera is a dedicated advocate for children, families, and academic excellence. A proud graduate of Broward County Public Schools, Adam attended local elementary and middle schools and graduated from J.P. Taravella High School. He brings both professional expertise and personal passion to his role on the School Board, where he works to promote high standards, strong parental involvement, and a student-first approach to education.",
       "verdict": {
-        "commitment": 0.52,
+        "commitment": 0.51,
+        "own_commitment": 0.46,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -96,7 +99,7 @@
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.13,
+          "A6": 0.12,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
@@ -126,6 +129,7 @@
       "text": "Professionally, Adam is an accomplished attorney where he practices business litigation and represents clients in administrative proceedings. He earned his Bachelor’s degree in Political Science from the University of Central Florida and his Juris Doctor from Florida International University College of Law.",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -164,6 +168,7 @@
       "text": "We’re Just Getting Started. Join the Conversation!",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -173,6 +178,45 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.01,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "492af281",
+      "url": "https://www.adamcervera.com/",
+      "heading": "Pricing Plans",
+      "text": "A strong believer in family and community, Adam is actively involved in youth sports and serves as a team parent. He sees firsthand how discipline, teamwork, and accountability help shape confident and resilient young people—values he champions in the classroom as well.",
+      "verdict": {
+        "commitment": 0.05,
+        "own_commitment": 0.08,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -196,50 +240,13 @@
       }
     },
     {
-      "id": "492af281",
-      "url": "https://www.adamcervera.com/",
-      "heading": "Pricing Plans",
-      "text": "A strong believer in family and community, Adam is actively involved in youth sports and serves as a team parent. He sees firsthand how discipline, teamwork, and accountability help shape confident and resilient young people—values he champions in the classroom as well.",
-      "verdict": {
-        "commitment": 0.05,
-        "states_policy": false,
-        "issues": [],
-        "scores": {
-          "A1": 0.02,
-          "A2": 0.02,
-          "A3": 0.02,
-          "A4": 0.02,
-          "A5": 0.02,
-          "A6": 0.03,
-          "A7": 0.02,
-          "B1": 0.02,
-          "B2": 0.02,
-          "B3": 0.02,
-          "B4": 0.02,
-          "B5": 0.02,
-          "B6": 0.02,
-          "B7": 0.02,
-          "B8": 0.02,
-          "KYV1": 0.02,
-          "KYV10": 0.02,
-          "KYV2": 0.02,
-          "KYV3": 0.02,
-          "KYV4": 0.02,
-          "KYV5": 0.02,
-          "KYV6": 0.02,
-          "KYV7": 0.02,
-          "KYV8": 0.02,
-          "KYV9": 0.03
-        }
-      }
-    },
-    {
       "id": "77554922",
       "url": "https://www.adamcervera.com/",
       "heading": "Pricing Plans",
       "text": "Adam is married to Teressa Maria Cervera, and together they are raising their three children: Austin (9), Autumn (7), and Anthony (6 months). Their family is grounded in service, faith, and a shared belief in the power of education to transform lives.",
       "verdict": {
-        "commitment": 0.03,
+        "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -247,7 +254,7 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.01,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
@@ -257,12 +264,12 @@
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.01,
-          "B8": 0.01,
+          "B8": 0.02,
           "KYV1": 0.01,
-          "KYV10": 0.08,
+          "KYV10": 0.07,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.02,
+          "KYV4": 0.01,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -277,7 +284,8 @@
       "heading": "Pricing Plans",
       "text": "As a member of the Broward County School Board, Adam Cervera is committed to ensuring that every student has the opportunity to succeed—and that every family has a voice in shaping the future of public education.",
       "verdict": {
-        "commitment": 0.4,
+        "commitment": 0.46,
+        "own_commitment": 0.53,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -286,7 +294,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.16,
+          "A6": 0.17,
           "A7": 0.03,
           "B1": 0.02,
           "B2": 0.02,
@@ -315,7 +323,8 @@
       "heading": "Pricing Plans",
       "text": "Accountability Delivering honest, responsive leadership that keeps families informed and ensures schools stay focused on results, not bureaucracy.",
       "verdict": {
-        "commitment": 0.49,
+        "commitment": 0.5,
+        "own_commitment": 0.53,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -324,9 +333,9 @@
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.08,
+          "A6": 0.07,
           "A7": 0.02,
-          "B1": 0.02,
+          "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -335,7 +344,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.07,
-          "KYV10": 0.03,
+          "KYV10": 0.04,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -353,7 +362,8 @@
       "heading": "Pricing Plans",
       "text": "Students First Prioritizing academic success, classroom resources, and real opportunities for every student to thrive.",
       "verdict": {
-        "commitment": 0.33,
+        "commitment": 0.32,
+        "own_commitment": 0.39,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -362,7 +372,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.2,
+          "A6": 0.17,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -373,15 +383,15 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.1,
+          "KYV10": 0.09,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.04
         }
       }
     },
@@ -392,6 +402,7 @@
       "text": "Standing with parents and ensuring they have a voice in their children’s education and what happens in the classroom.",
       "verdict": {
         "commitment": 0.83,
+        "own_commitment": 0.73,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -400,7 +411,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.09,
+          "A6": 0.08,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -411,7 +422,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.04,
-          "KYV10": 0.03,
+          "KYV10": 0.04,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -419,7 +430,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.08
+          "KYV9": 0.07
         }
       }
     },
@@ -430,6 +441,7 @@
       "text": "Safer Schools Every student deserves to feel safe at school. I’m committed to supporting common-sense safety measures and stronger school security.",
       "verdict": {
         "commitment": 0.95,
+        "own_commitment": 0.92,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -446,9 +458,9 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.31,
+          "B7": 0.36,
           "B8": 0.02,
-          "KYV1": 0.04,
+          "KYV1": 0.03,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -467,7 +479,8 @@
       "heading": "Pricing Plans",
       "text": "Supporting Teachers Championing policies that give teachers the tools, respect, and support they need to succeed — because strong teachers build strong students.",
       "verdict": {
-        "commitment": 0.78,
+        "commitment": 0.77,
+        "own_commitment": 0.64,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -476,7 +489,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.73,
+          "A6": 0.72,
           "A7": 0.02,
           "B1": 0.05,
           "B2": 0.02,
@@ -487,7 +500,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.05,
+          "KYV10": 0.06,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -506,6 +519,7 @@
       "text": "School Partnerships Bringing schools, families, and local communities together to build trust, improve outcomes, and create schools that truly reflect the families they serve.",
       "verdict": {
         "commitment": 0.16,
+        "own_commitment": 0.41,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -514,7 +528,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.04,
+          "A6": 0.05,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -530,7 +544,7 @@
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.01,
-          "KYV6": 0.01,
+          "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.04
@@ -543,7 +557,8 @@
       "heading": "Pricing Plans",
       "text": "\"I’m here to lead with purpose, to listen to parents, and to put students first every single day — because real leadership means showing up, taking action, and always putting our kids at the center of every decision.\"",
       "verdict": {
-        "commitment": 0.4,
+        "commitment": 0.42,
+        "own_commitment": 0.74,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -552,25 +567,25 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.03,
+          "A6": 0.04,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.01,
-          "B4": 0.02,
+          "B3": 0.02,
+          "B4": 0.01,
           "B5": 0.01,
           "B6": 0.02,
-          "B7": 0.01,
+          "B7": 0.02,
           "B8": 0.01,
           "KYV1": 0.02,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.02,
+          "KYV4": 0.01,
           "KYV5": 0.01,
           "KYV6": 0.01,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.01,
           "KYV9": 0.02
         }
       }
@@ -581,7 +596,8 @@
       "heading": "Pricing Plans",
       "text": "“I didn’t come here to go along — I came to stand up, address past bad decisions, and fight for transparency and accountability.”",
       "verdict": {
-        "commitment": 0.76,
+        "commitment": 0.75,
+        "own_commitment": 0.8,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -589,25 +605,25 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
-          "A6": 0.03,
-          "A7": 0.06,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.05,
           "B1": 0.03,
           "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.11,
+          "B6": 0.1,
           "B7": 0.08,
           "B8": 0.02,
-          "KYV1": 0.48,
-          "KYV10": 0.03,
+          "KYV1": 0.52,
+          "KYV10": 0.02,
           "KYV2": 0.03,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.03,
           "KYV9": 0.02
         }
@@ -620,6 +636,7 @@
       "text": "While at FIU Law, Adam was deeply involved in child advocacy work through the Juvenile Justice and Education Advocacy Clinics. He represented special needs students and at-risk youth across South Florida, earning multiple awards for his service, including the CALI Excellence for the Future Award and FIU Law’s Excellence in Service Award. He later served on the South Florida Regional Board of Read to a Child, a national nonprofit focused on literacy and mentoring in under-resourced schools.",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -647,7 +664,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     },
@@ -657,7 +674,8 @@
       "heading": "Pricing Plans",
       "text": "FOR DELIVERING RESULTS AND STANDING UP FOR STUDENTS, TEACHERS, AND PARENTS, ADAM CERVERA IS PROUDLY ENDORSED BY:",
       "verdict": {
-        "commitment": 0.07,
+        "commitment": 0.06,
+        "own_commitment": 0.08,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -666,7 +684,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.08,
+          "A6": 0.07,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -695,7 +713,8 @@
       "heading": "Pricing Plans",
       "text": "Fighting for the Issues That Shape Our Schools.",
       "verdict": {
-        "commitment": 0.13,
+        "commitment": 0.11,
+        "own_commitment": 0.31,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -704,7 +723,7 @@
           "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.12,
+          "A6": 0.11,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -721,9 +740,9 @@
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.04
+          "KYV9": 0.03
         }
       }
     },
@@ -733,32 +752,33 @@
       "heading": "Pricing Plans",
       "text": "Your feedback matters. I’m here to listen, to learn, and to lead alongside you. Sign up, share your thoughts, and let’s build better schools together.",
       "verdict": {
-        "commitment": 0.1,
+        "commitment": 0.11,
+        "own_commitment": 0.45,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.02,
+          "A4": 0.01,
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.01,
-          "B4": 0.01,
+          "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.02,
+          "B6": 0.01,
           "B7": 0.02,
-          "B8": 0.02,
+          "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.02,
-          "KYV5": 0.01,
-          "KYV6": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.02,
+          "KYV6": 0.01,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -768,7 +788,7 @@
   ],
   "areas": [],
   "usage": {
-    "input_tokens": 66605,
-    "output_tokens": 8702
+    "input_tokens": 70557,
+    "output_tokens": 9101
   }
 }

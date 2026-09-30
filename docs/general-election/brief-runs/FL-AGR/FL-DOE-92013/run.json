@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://www.joeyforflorida.com",
-  "created_at": "2026-09-29T11:43:43.971Z",
+  "created_at": "2026-09-30T01:58:45.499Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -49,32 +50,33 @@
       "heading": "Make Florida More Affordable",
       "text": "The Ag and Consumer Commissioner affects everyday Floridians in so many ways they don’t realize, from food prices to farm land being sold off for data centers and doubling or tripling utility bills. Like most other Floridians, I’ve had to deal with the cost of living skyrocketing out of control, from rent and home insurance, to food, gas and utility bills - and the corrupt multimillionaire politician I’m running against, Wilton Simpson, has played a key role in driving up all of those costs. Wilt rakes in millions from the same special interests hiking up our prices, while bankrupting farmers, tearing farm worker families apart and letting his donors destroy our land and water.",
       "verdict": {
-        "commitment": 0.43,
+        "commitment": 0.49,
+        "own_commitment": 0.13,
         "states_policy": false,
         "issues": [
           "A4",
           "B1"
         ],
         "scores": {
-          "A1": 0.51,
+          "A1": 0.49,
           "A2": 0.63,
-          "A3": 0.03,
+          "A3": 0.04,
           "A4": 0.96,
-          "A5": 0.16,
+          "A5": 0.17,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.86,
+          "B1": 0.85,
           "B2": 0.03,
           "B3": 0.03,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.03,
-          "B8": 0.07,
+          "B8": 0.08,
           "KYV1": 0.06,
           "KYV10": 0.02,
-          "KYV2": 0.7,
-          "KYV3": 0.79,
+          "KYV2": 0.67,
+          "KYV3": 0.77,
           "KYV4": 0.03,
           "KYV5": 0.18,
           "KYV6": 0.07,
@@ -91,6 +93,7 @@
       "text": "Your contributions help us reach more voters.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.09,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -113,7 +116,7 @@
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.02,
+          "KYV4": 0.01,
           "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -125,7 +128,7 @@
   ],
   "areas": [],
   "usage": {
-    "input_tokens": 7093,
-    "output_tokens": 916
+    "input_tokens": 7509,
+    "output_tokens": 958
   }
 }

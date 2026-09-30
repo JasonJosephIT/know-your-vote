@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://www.eddyrojas.com",
-  "created_at": "2026-09-29T11:43:07.688Z",
+  "created_at": "2026-09-30T01:58:30.431Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -50,6 +51,7 @@
       "text": "Eddy Rojas came to Miami from Cuba with a dream and a work ethic that wouldn't quit. Over the past 20 years, he built a successful service company from the ground up — going from parking cars to leading one of Florida's most respected service businesses.",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -59,17 +61,17 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
+          "A7": 0.01,
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.03,
           "B4": 0.02,
-          "B5": 0.01,
+          "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.03,
+          "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -87,7 +89,8 @@
       "heading": "A NEW VOICE FOR MIAMI IN WASHINGTON",
       "text": "He knows what it means to work hard, raise a family, and fight for the American Dream. Now, Eddy is running for Congress to bring that same dedication and honesty to Washington — because Miami's hardworking families deserve a representative who truly understands their struggles.",
       "verdict": {
-        "commitment": 0.07,
+        "commitment": 0.06,
+        "own_commitment": 0.19,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -126,6 +129,7 @@
       "text": "\"My family is my anchor. Everything I do is for their future — and for every family in District 28.\"",
       "verdict": {
         "commitment": 0.1,
+        "own_commitment": 0.28,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -143,7 +147,7 @@
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.02,
+          "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
@@ -160,7 +164,7 @@
   ],
   "areas": [],
   "usage": {
-    "input_tokens": 10565,
-    "output_tokens": 1374
+    "input_tokens": 11189,
+    "output_tokens": 1437
   }
 }

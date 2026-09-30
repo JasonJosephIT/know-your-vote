@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://ilikemikecrabb.com",
-  "created_at": "2026-09-29T11:45:40.119Z",
+  "created_at": "2026-09-30T01:59:12.682Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -38,8 +39,8 @@
   "counts": {
     "passages": 45,
     "asked": 45,
-    "states_policy": 12,
-    "with_issue": 6,
+    "states_policy": 9,
+    "with_issue": 4,
     "failed": 0
   },
   "passages": [
@@ -50,14 +51,15 @@
       "text": "Commissioner. Deputy Sheriff. Problem Solver.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.02,
+          "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.03,
-          "A5": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
           "A6": 0.02,
           "A7": 0.03,
           "B1": 0.02,
@@ -65,14 +67,14 @@
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.03,
-          "B7": 0.13,
+          "B6": 0.02,
+          "B7": 0.11,
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.02,
-          "KYV2": 0.02,
+          "KYV2": 0.03,
           "KYV3": 0.03,
-          "KYV4": 0.02,
+          "KYV4": 0.03,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.03,
@@ -87,7 +89,8 @@
       "heading": "Keep Commissioner Mike Crabb Orange County District 2",
       "text": "A safer, stronger future for Northwest Orange County.",
       "verdict": {
-        "commitment": 0.09,
+        "commitment": 0.1,
+        "own_commitment": 0.11,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -95,7 +98,7 @@
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.03,
-          "A5": 0.02,
+          "A5": 0.03,
           "A6": 0.02,
           "A7": 0.03,
           "B1": 0.04,
@@ -109,11 +112,11 @@
           "KYV1": 0.03,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.05,
+          "KYV3": 0.04,
           "KYV4": 0.03,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -126,6 +129,7 @@
       "text": "Commissioner Mike Crabb has earned the trust of public safety leaders because he has spent his life serving and protecting Orange County families. As a longtime deputy sheriff and public servant, Mike understands what it takes to keep communities safe and support the men and women who serve on the front lines.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -163,7 +167,8 @@
       "heading": "Backed by Law Enforcement & Community Leaders",
       "text": "Mike has earned the support of the organizations that know public safety, local government, and West Orange County best.",
       "verdict": {
-        "commitment": 0.03,
+        "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -182,10 +187,10 @@
           "B6": 0.02,
           "B7": 0.08,
           "B8": 0.02,
-          "KYV1": 0.02,
+          "KYV1": 0.03,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -201,7 +206,8 @@
       "heading": "West Orange Political Alliance",
       "text": "WOPA endorses candidates who share its commitment to responsible growth, strong communities, and effective local leadership in West Orange County.",
       "verdict": {
-        "commitment": 0.23,
+        "commitment": 0.25,
+        "own_commitment": 0.11,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -212,8 +218,8 @@
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.03,
-          "B1": 0.15,
-          "B2": 0.03,
+          "B1": 0.16,
+          "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
@@ -222,14 +228,14 @@
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.03,
-          "KYV2": 0.03,
-          "KYV3": 0.41,
-          "KYV4": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.47,
+          "KYV4": 0.03,
           "KYV5": 0.02,
-          "KYV6": 0.02,
-          "KYV7": 0.03,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.03,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     },
@@ -239,7 +245,8 @@
       "heading": "Florida State Fraternal Order of Police",
       "text": "The state's leading law enforcement organization stands with Mike — a proven public safety leader who will always back the badge.",
       "verdict": {
-        "commitment": 0.33,
+        "commitment": 0.29,
+        "own_commitment": 0.33,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -248,15 +255,15 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.03,
+          "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.02,
+          "B3": 0.03,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.03,
-          "B7": 0.67,
+          "B7": 0.65,
           "B8": 0.02,
           "KYV1": 0.05,
           "KYV10": 0.02,
@@ -278,6 +285,7 @@
       "text": "Mike's fellow Orange County deputies know his character and his record. Lodge 93 proudly endorses one of their own.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -293,8 +301,8 @@
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.03,
-          "B7": 0.15,
+          "B6": 0.02,
+          "B7": 0.16,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
@@ -316,6 +324,7 @@
       "text": "Orange County's professional firefighters proudly stand with Mike — a leader who has always had the backs of first responders.",
       "verdict": {
         "commitment": 0.11,
+        "own_commitment": 0.1,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -331,7 +340,7 @@
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.03,
+          "B6": 0.02,
           "B7": 0.05,
           "B8": 0.02,
           "KYV1": 0.02,
@@ -354,17 +363,18 @@
       "text": "Mike Crabb has dedicated his life to serving Orange County. With 30 years of service as a Deputy Sheriff, experience working with Orange County mayors, and a record of solving problems for local residents, Mike is ready to bring steady, practical leadership to Orange County Commission District 2.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -380,7 +390,7 @@
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.03,
+          "KYV8": 0.02,
           "KYV9": 0.02
         }
       }
@@ -392,6 +402,7 @@
       "text": "VP, Florida Safety Council Board of Directors",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -430,6 +441,7 @@
       "text": "Member, Florida Deputy Sheriff Association",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -467,7 +479,8 @@
       "heading": "Economic Affordability",
       "text": "Tackle housing costs, reduce taxes, and attract high-paying jobs.",
       "verdict": {
-        "commitment": 0.92,
+        "commitment": 0.91,
+        "own_commitment": 0.9,
         "states_policy": true,
         "issues": [
           "A2",
@@ -475,13 +488,13 @@
         ],
         "scores": {
           "A1": 0.03,
-          "A2": 0.92,
-          "A3": 0.41,
-          "A4": 0.64,
+          "A2": 0.93,
+          "A3": 0.45,
+          "A4": 0.61,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.87,
+          "B1": 0.89,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -496,7 +509,7 @@
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.05,
-          "KYV7": 0.08,
+          "KYV7": 0.07,
           "KYV8": 0.03,
           "KYV9": 0.02
         }
@@ -509,6 +522,7 @@
       "text": "Faster traffic technology, better connectivity, more options.",
       "verdict": {
         "commitment": 0.22,
+        "own_commitment": 0.33,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -517,11 +531,11 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.01,
-          "A7": 0.02,
-          "B1": 0.03,
+          "A6": 0.02,
+          "A7": 0.01,
+          "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.02,
+          "B3": 0.01,
           "B4": 0.02,
           "B5": 0.01,
           "B6": 0.02,
@@ -547,12 +561,13 @@
       "text": "Support first responders, prevent crime, keep families safe.",
       "verdict": {
         "commitment": 0.85,
-        "states_policy": true,
+        "own_commitment": 0.75,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
@@ -563,9 +578,9 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.8,
+          "B7": 0.79,
           "B8": 0.02,
-          "KYV1": 0.06,
+          "KYV1": 0.07,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -585,33 +600,34 @@
       "text": "Development that protects neighborhoods and pays for itself.",
       "verdict": {
         "commitment": 0.73,
+        "own_commitment": 0.47,
         "states_policy": false,
         "issues": [
           "KYV3"
         ],
         "scores": {
           "A1": 0.03,
-          "A2": 0.08,
+          "A2": 0.07,
           "A3": 0.06,
           "A4": 0.04,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.14,
+          "B1": 0.16,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.02,
-          "B8": 0.09,
+          "B7": 0.03,
+          "B8": 0.08,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.03,
-          "KYV3": 0.91,
+          "KYV3": 0.92,
           "KYV4": 0.03,
           "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV6": 0.03,
           "KYV7": 0.03,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -624,7 +640,8 @@
       "heading": "Parks & Conservation",
       "text": "Protect wildlife, natural resources, and our watershed.",
       "verdict": {
-        "commitment": 0.71,
+        "commitment": 0.72,
+        "own_commitment": 0.65,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -632,9 +649,9 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.27,
+          "A5": 0.26,
           "A6": 0.02,
-          "A7": 0.01,
+          "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
@@ -642,12 +659,12 @@
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.55,
+          "B8": 0.54,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.65,
-          "KYV4": 0.13,
+          "KYV3": 0.63,
+          "KYV4": 0.12,
           "KYV5": 0.32,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -663,6 +680,7 @@
       "text": "Meeting neighbors and celebrating with families across Northwest Orange County.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.13,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -700,7 +718,8 @@
       "heading": "Vision Zero Champion",
       "text": "Advocated for safer roads and pedestrian safety initiatives that protect families across Orange County.",
       "verdict": {
-        "commitment": 0.8,
+        "commitment": 0.81,
+        "own_commitment": 0.31,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -709,7 +728,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.03,
+          "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -738,7 +757,8 @@
       "heading": "Fiscal Responsibility",
       "text": "Secured millions in grant funding, saving taxpayer dollars and stretching every public dollar further.",
       "verdict": {
-        "commitment": 0.2,
+        "commitment": 0.22,
+        "own_commitment": 0.08,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -760,7 +780,7 @@
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -777,6 +797,7 @@
       "text": "Championed changes in state law and local policy to deliver safer streets and stronger communities.",
       "verdict": {
         "commitment": 0.39,
+        "own_commitment": 0.12,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -787,13 +808,13 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.02,
+          "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.46,
+          "B7": 0.44,
           "B8": 0.02,
           "KYV1": 0.04,
           "KYV10": 0.02,
@@ -815,6 +836,7 @@
       "text": "Worked with FDOT and state partners so Orange County receives its fair share of resources.",
       "verdict": {
         "commitment": 0.17,
+        "own_commitment": 0.08,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -822,10 +844,10 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.03,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.07,
+          "B1": 0.06,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -834,10 +856,10 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.02,
-          "KYV2": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.05,
-          "KYV4": 0.03,
+          "KYV4": 0.04,
           "KYV5": 0.03,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -853,6 +875,7 @@
       "text": "Supports Special Olympics Florida through the Law Enforcement Torch Run year after year.",
       "verdict": {
         "commitment": 0.12,
+        "own_commitment": 0.16,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -869,15 +892,15 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.04,
+          "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -891,6 +914,7 @@
       "text": "Mike has been married 39 years to Pamela, an elementary school principal in West Orange County. They have three grown children and one granddaughter.",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -899,7 +923,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.02,
+          "A6": 0.03,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -908,7 +932,7 @@
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.02,
+          "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
@@ -929,6 +953,7 @@
       "text": "Make your plan to vote for Commissioner Mike Crabb, Orange County Commission District 2.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -938,7 +963,7 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.21,
+          "A7": 0.23,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
@@ -966,7 +991,8 @@
       "heading": "Keep Commissioner Mike Crabb",
       "text": "Mike is running to bring experienced, common-sense leadership to Orange County Commission District 2. Your support will help us reach voters across Northwest Orange County.",
       "verdict": {
-        "commitment": 0.12,
+        "commitment": 0.11,
+        "own_commitment": 0.18,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -974,27 +1000,27 @@
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.03,
           "A6": 0.02,
           "A7": 0.03,
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.02,
+          "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.02,
+          "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.03,
+          "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.03,
+          "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     },
@@ -1005,6 +1031,7 @@
       "text": "Practical priorities for the families, neighborhoods, and small businesses of District 2.",
       "verdict": {
         "commitment": 0.08,
+        "own_commitment": 0.1,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1013,24 +1040,24 @@
           "A3": 0.04,
           "A4": 0.04,
           "A5": 0.03,
-          "A6": 0.03,
+          "A6": 0.04,
           "A7": 0.03,
           "B1": 0.06,
           "B2": 0.03,
-          "B3": 0.02,
-          "B4": 0.02,
+          "B3": 0.03,
+          "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.04,
           "B8": 0.02,
           "KYV1": 0.03,
-          "KYV10": 0.04,
+          "KYV10": 0.03,
           "KYV2": 0.03,
           "KYV3": 0.05,
           "KYV4": 0.03,
           "KYV5": 0.03,
           "KYV6": 0.03,
-          "KYV7": 0.04,
+          "KYV7": 0.03,
           "KYV8": 0.03,
           "KYV9": 0.03
         }
@@ -1043,6 +1070,7 @@
       "text": "Mike will work to tackle housing costs, reduce taxes, and attract high-paying jobs so families can afford to live, work, and thrive in Northwest Orange County.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.97,
         "states_policy": true,
         "issues": [
           "A2",
@@ -1051,8 +1079,8 @@
         "scores": {
           "A1": 0.03,
           "A2": 0.97,
-          "A3": 0.36,
-          "A4": 0.8,
+          "A3": 0.38,
+          "A4": 0.81,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -1071,7 +1099,7 @@
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.04,
-          "KYV7": 0.05,
+          "KYV7": 0.06,
           "KYV8": 0.03,
           "KYV9": 0.02
         }
@@ -1084,6 +1112,7 @@
       "text": "Mike supports faster implementation of technology to improve traffic flow, strengthen connectivity, and expand transportation options for residents.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.94,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1096,10 +1125,10 @@
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
-          "B3": 0.02,
+          "B3": 0.01,
           "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.02,
+          "B6": 0.01,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
@@ -1122,6 +1151,7 @@
       "text": "As a deputy sheriff with decades of experience, Mike understands that safe communities are the foundation of a strong quality of life. He will support first responders and work to ensure public safety remains a top priority.",
       "verdict": {
         "commitment": 0.93,
+        "own_commitment": 0.93,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1138,9 +1168,9 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.84,
+          "B7": 0.83,
           "B8": 0.02,
-          "KYV1": 0.04,
+          "KYV1": 0.03,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -1159,20 +1189,21 @@
       "heading": "Smart, Responsible Growth",
       "text": "Mike believes growth must be managed responsibly. Development should meet the needs of residents, protect existing neighborhoods, improve infrastructure, and pay for itself.",
       "verdict": {
-        "commitment": 0.92,
-        "states_policy": true,
+        "commitment": 0.93,
+        "own_commitment": 0.65,
+        "states_policy": false,
         "issues": [
           "KYV3"
         ],
         "scores": {
           "A1": 0.02,
-          "A2": 0.07,
+          "A2": 0.08,
           "A3": 0.05,
           "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.08,
+          "B1": 0.09,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -1183,12 +1214,12 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.03,
-          "KYV3": 0.95,
+          "KYV3": 0.96,
           "KYV4": 0.03,
           "KYV5": 0.03,
           "KYV6": 0.02,
           "KYV7": 0.03,
-          "KYV8": 0.02,
+          "KYV8": 0.03,
           "KYV9": 0.02
         }
       }
@@ -1200,6 +1231,7 @@
       "text": "Mike will work to protect wildlife, preserve natural resources, and secure grants to convert aging septic systems that are leaking into our watershed.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.97,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1214,10 +1246,10 @@
           "B2": 0.02,
           "B3": 0.01,
           "B4": 0.02,
-          "B5": 0.01,
+          "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.36,
+          "B8": 0.33,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.04,
@@ -1238,6 +1270,7 @@
       "text": "Mike Crabb works to make Northwest Orange County more affordable for families by tackling housing costs, reducing taxes, and attracting high-paying jobs.",
       "verdict": {
         "commitment": 0.93,
+        "own_commitment": 0.85,
         "states_policy": true,
         "issues": [
           "A2",
@@ -1245,14 +1278,14 @@
         ],
         "scores": {
           "A1": 0.03,
-          "A2": 0.97,
-          "A3": 0.61,
-          "A4": 0.74,
+          "A2": 0.96,
+          "A3": 0.59,
+          "A4": 0.75,
           "A5": 0.02,
-          "A6": 0.03,
+          "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.89,
-          "B2": 0.02,
+          "B1": 0.9,
+          "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
@@ -1261,7 +1294,7 @@
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.07,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -1279,6 +1312,7 @@
       "text": "Mike Crabb supports reducing traffic congestion with better roads, smarter traffic technology, and more transportation options across District 2.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1296,7 +1330,7 @@
           "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.03,
+          "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
@@ -1317,7 +1351,8 @@
       "text": "Mike Crabb supports law enforcement, crime prevention, and safe neighborhoods, drawing on 30 years as an Orange County deputy sheriff.",
       "verdict": {
         "commitment": 0.92,
-        "states_policy": true,
+        "own_commitment": 0.67,
+        "states_policy": false,
         "issues": [
           "B7"
         ],
@@ -1337,7 +1372,7 @@
           "B6": 0.02,
           "B7": 0.92,
           "B8": 0.02,
-          "KYV1": 0.03,
+          "KYV1": 0.04,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -1357,6 +1392,7 @@
       "text": "Mike Crabb supports smart, responsible growth that protects existing neighborhoods and pays for the infrastructure it requires.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.93,
         "states_policy": true,
         "issues": [
           "KYV3"
@@ -1369,14 +1405,14 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.17,
+          "B1": 0.18,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.03,
+          "B8": 0.04,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.03,
@@ -1397,6 +1433,7 @@
       "text": "Mike Crabb supports protecting the parks, wildlife, watershed, and natural places of District 2 for future generations.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.92,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1404,7 +1441,7 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.15,
+          "A5": 0.13,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
@@ -1413,8 +1450,8 @@
           "B4": 0.02,
           "B5": 0.01,
           "B6": 0.02,
-          "B7": 0.01,
-          "B8": 0.2,
+          "B7": 0.02,
+          "B8": 0.18,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
@@ -1435,6 +1472,7 @@
       "text": "Commissioner Mike Crabb has spent his life serving Orange County. He was appointed and sworn in on August 25, 2026 to the Orange County Board of County Commissioners, representing District 2. From 30 years patrolling and protecting our community as a Deputy Sheriff, to advising two Orange County Mayors, to building a small business right here at home, Mike's record is one of steady service, practical problem solving, and dedication to the people of Northwest Orange County.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1455,7 +1493,7 @@
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -1472,35 +1510,36 @@
       "heading": "Meet Commissioner Mike Crabb",
       "text": "As Orange County Commissioner for District 2, Mike is focused on what matters most to local families: safe neighborhoods, affordable living, responsible growth, better traffic, and protecting the parks and natural places that make our community special.",
       "verdict": {
-        "commitment": 0.77,
+        "commitment": 0.78,
+        "own_commitment": 0.63,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
-          "A2": 0.79,
+          "A2": 0.8,
           "A3": 0.04,
           "A4": 0.65,
           "A5": 0.03,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.13,
-          "B2": 0.02,
+          "B2": 0.03,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.26,
+          "B7": 0.25,
           "B8": 0.04,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.03,
-          "KYV3": 0.83,
+          "KYV3": 0.84,
           "KYV4": 0.03,
           "KYV5": 0.03,
-          "KYV6": 0.03,
+          "KYV6": 0.04,
           "KYV7": 0.03,
           "KYV8": 0.03,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -1511,15 +1550,16 @@
       "text": "Orange County Commissioner, District 2 — appointed and sworn in August 25, 2026",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.03,
+          "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.03,
-          "A6": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
@@ -1532,7 +1572,7 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -1548,7 +1588,8 @@
       "heading": "Meet Commissioner Mike Crabb",
       "text": "30 years of service as Deputy Sheriff, Orange County",
       "verdict": {
-        "commitment": 0.03,
+        "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1558,19 +1599,19 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
+          "A7": 0.03,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.03,
+          "B7": 0.04,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -1587,6 +1628,7 @@
       "text": "Vice President, Florida Safety Council Board of Directors",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1625,12 +1667,13 @@
       "text": "Educated locally — Evans High School graduate",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.02,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
@@ -1644,7 +1687,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.03,
+          "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
@@ -1663,12 +1706,13 @@
       "text": "Married 39 years to Pamela, an elementary school principal in West Orange County",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.02,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
@@ -1690,7 +1734,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     },
@@ -1701,6 +1745,7 @@
       "text": "Three grown children and one granddaughter",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.02,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1739,6 +1784,7 @@
       "text": "Married 39 years to Pamela, three grown children, one granddaughter — and a lifetime of service alongside the neighbors who make Orange County home.",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1756,7 +1802,7 @@
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.02,
+          "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
@@ -1800,7 +1846,7 @@
                 "text": "Mike Crabb works to make Northwest Orange County more affordable for families by tackling housing costs, reducing taxes, and attracting high-paying jobs.",
                 "retrieved_at": "2026-09-29T11:45:32.830Z"
               },
-              "score": 0.89
+              "score": 0.9
             },
             {
               "passage": {
@@ -1810,7 +1856,7 @@
                 "text": "Tackle housing costs, reduce taxes, and attract high-paying jobs.",
                 "retrieved_at": "2026-09-29T11:45:32.830Z"
               },
-              "score": 0.87
+              "score": 0.89
             }
           ]
         }
@@ -1844,7 +1890,7 @@
                 "text": "Mike Crabb works to make Northwest Orange County more affordable for families by tackling housing costs, reducing taxes, and attracting high-paying jobs.",
                 "retrieved_at": "2026-09-29T11:45:32.830Z"
               },
-              "score": 0.97
+              "score": 0.96
             },
             {
               "passage": {
@@ -1854,7 +1900,7 @@
                 "text": "Tackle housing costs, reduce taxes, and attract high-paying jobs.",
                 "retrieved_at": "2026-09-29T11:45:32.830Z"
               },
-              "score": 0.92
+              "score": 0.93
             }
           ]
         }
@@ -1879,40 +1925,6 @@
                 "retrieved_at": "2026-09-29T11:45:32.830Z"
               },
               "score": 0.96
-            },
-            {
-              "passage": {
-                "id": "11bdf44d",
-                "url": "https://ilikemikecrabb.com/issues",
-                "heading": "Smart, Responsible Growth",
-                "text": "Mike believes growth must be managed responsibly. Development should meet the needs of residents, protect existing neighborhoods, improve infrastructure, and pay for itself.",
-                "retrieved_at": "2026-09-29T11:45:32.830Z"
-              },
-              "score": 0.95
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "area": {
-        "id": "safety",
-        "label": "Public Safety & Crime"
-      },
-      "subIssues": [
-        {
-          "id": "B7",
-          "label": "Crime policy, policing and courts",
-          "citations": [
-            {
-              "passage": {
-                "id": "23fc3df6",
-                "url": "https://ilikemikecrabb.com/issues",
-                "heading": "Where does Mike Crabb stand on public safety?",
-                "text": "Mike Crabb supports law enforcement, crime prevention, and safe neighborhoods, drawing on 30 years as an Orange County deputy sheriff.",
-                "retrieved_at": "2026-09-29T11:45:32.830Z"
-              },
-              "score": 0.92
             }
           ]
         }
@@ -1920,7 +1932,7 @@
     }
   ],
   "usage": {
-    "input_tokens": 157283,
-    "output_tokens": 20610
+    "input_tokens": 166643,
+    "output_tokens": 21555
   }
 }

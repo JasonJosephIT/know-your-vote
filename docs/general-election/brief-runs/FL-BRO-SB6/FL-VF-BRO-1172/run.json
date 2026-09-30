@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://www.electroberto2026.com",
-  "created_at": "2026-09-29T11:44:08.765Z",
+  "created_at": "2026-09-30T01:58:50.940Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -49,13 +50,14 @@
       "heading": "Why I’m Running",
       "text": "For over 20 years, I’ve dedicated my life to Broward County’s students – as a teacher, instructional leader, and community advocate. I’m running for the School Board of Broward County because our students, families, and educators deserve experienced, thoughtful leadership that puts people, not politics, at the center of every decision.",
       "verdict": {
-        "commitment": 0.28,
+        "commitment": 0.3,
+        "own_commitment": 0.48,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.03,
+          "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.16,
@@ -88,12 +90,13 @@
       "text": "With a background in both military service and public education, I bring a commitment to integrity, accountability, and service to every challenge we face.",
       "verdict": {
         "commitment": 0.05,
+        "own_commitment": 0.22,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.03,
+          "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.03,
@@ -104,9 +107,9 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.04,
-          "B7": 0.02,
+          "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.03,
+          "KYV1": 0.04,
           "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -115,7 +118,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     },
@@ -126,11 +129,12 @@
       "text": "Served from 2000–2008, including overseas combat deployments in Djibouti, Ethiopia, and Kenya",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.02,
+          "A2": 0.01,
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
@@ -150,7 +154,7 @@
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.01,
+          "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -164,6 +168,7 @@
       "text": "Awarded the Joint Service Commendation Medal, Army Commendation Medal, Global War on Terrorism Expeditionary Medal and other commendations",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -201,7 +206,8 @@
       "heading": "Veteran, U.S. Army Reserve",
       "text": "Roles included Civil Affairs Specialist and Country Coordinator",
       "verdict": {
-        "commitment": 0.03,
+        "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -240,6 +246,7 @@
       "text": "Focused on humanitarian work: Infrastructure Development, Public Health, and Community Relations",
       "verdict": {
         "commitment": 0.18,
+        "own_commitment": 0.3,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -253,7 +260,7 @@
           "B1": 0.03,
           "B2": 0.12,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.03,
@@ -278,6 +285,7 @@
       "text": "Roberto Fernandez III is an honorably discharged veteran of the Army Reserve. Use of his military rank, job titles, and photographs in uniform does not imply endorsement by the Department of the Army or the DoD.",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -316,6 +324,7 @@
       "text": "20 years of service in Broward County Public Schools",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -335,7 +344,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.03,
+          "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -353,14 +362,15 @@
       "heading": "Educator & Leader",
       "text": "Current Instructional Facilitator in the Department of School Culture & Student Support",
       "verdict": {
-        "commitment": 0.02,
+        "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.02,
+          "A4": 0.01,
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.02,
@@ -373,7 +383,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -391,13 +401,14 @@
       "heading": "Educator & Leader",
       "text": "Former Social Studies Teacher at Boyd H. Anderson & Plantation High",
       "verdict": {
-        "commitment": 0.03,
+        "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.03,
@@ -413,13 +424,13 @@
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     },
@@ -430,6 +441,7 @@
       "text": "2013 Florida Social Studies Teacher of the Year",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -453,8 +465,8 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -468,6 +480,7 @@
       "text": "2013 Broward Social Studies Teacher of the Year",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -479,7 +492,7 @@
           "A6": 0.03,
           "A7": 0.02,
           "B1": 0.02,
-          "B2": 0.02,
+          "B2": 0.01,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
@@ -506,6 +519,7 @@
       "text": "2015 Florida Panthers Community Hero Among Us Award",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -531,7 +545,7 @@
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -544,6 +558,7 @@
       "text": "2020 Governor’s Black History Month Excellence in Education Award",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -582,10 +597,11 @@
       "text": "2022 Plantation High School Teacher of the Year",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.01,
+          "A1": 0.02,
           "A2": 0.01,
           "A3": 0.02,
           "A4": 0.02,
@@ -593,22 +609,22 @@
           "A6": 0.03,
           "A7": 0.02,
           "B1": 0.02,
-          "B2": 0.02,
-          "B3": 0.01,
-          "B4": 0.02,
+          "B2": 0.01,
+          "B3": 0.02,
+          "B4": 0.01,
           "B5": 0.01,
-          "B6": 0.02,
+          "B6": 0.01,
           "B7": 0.02,
-          "B8": 0.01,
-          "KYV1": 0.01,
+          "B8": 0.02,
+          "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
-          "KYV5": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
           "KYV6": 0.01,
           "KYV7": 0.02,
-          "KYV8": 0.01,
+          "KYV8": 0.02,
           "KYV9": 0.02
         }
       }
@@ -620,6 +636,7 @@
       "text": "Husband of 17 years and proud father of two students currently attending Broward County Public Schools",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -657,13 +674,14 @@
       "heading": "Rooted in Broward County",
       "text": "Resident of District 6 for over twenty eight years",
       "verdict": {
-        "commitment": 0.03,
+        "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
@@ -679,7 +697,7 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -695,7 +713,8 @@
       "heading": "Rooted in Broward County",
       "text": "Advocate for public education by testifying before the Florida Legislature in Tallahassee, seeking funding for curriculum development and the implementation of student service-learning projects",
       "verdict": {
-        "commitment": 0.84,
+        "commitment": 0.85,
+        "own_commitment": 0.52,
         "states_policy": false,
         "issues": [
           "A6"
@@ -717,7 +736,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.03,
-          "KYV10": 0.07,
+          "KYV10": 0.06,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -725,7 +744,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.04
         }
       }
     },
@@ -736,6 +755,7 @@
       "text": "Former Chair of the Broward County Historical Commission & Urban Wilderness Advisory Board",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -758,7 +778,7 @@
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.06,
-          "KYV4": 0.02,
+          "KYV4": 0.03,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -774,6 +794,7 @@
       "text": "Lifelong community volunteer, mentor, community advocate, and educational thought leader",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -781,9 +802,9 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.03,
+          "A5": 0.02,
           "A6": 0.03,
-          "A7": 0.02,
+          "A7": 0.03,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
@@ -793,7 +814,7 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.04,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -812,6 +833,7 @@
       "text": "Your voice matters. Your vote matters. With your support, I’ll bring meaningful, student-centered change to Broward’s schools.",
       "verdict": {
         "commitment": 0.6,
+        "own_commitment": 0.79,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -820,8 +842,8 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.13,
-          "A7": 0.09,
+          "A6": 0.12,
+          "A7": 0.08,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
@@ -846,7 +868,7 @@
   ],
   "areas": [],
   "usage": {
-    "input_tokens": 73345,
-    "output_tokens": 9618
+    "input_tokens": 77713,
+    "output_tokens": 10059
   }
 }

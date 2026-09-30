@@ -1,0 +1,3206 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://kimberlyoverman.com",
+  "created_at": "2026-09-29T11:42:05.596Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 73,
+    "asked": 73,
+    "states_policy": 16,
+    "with_issue": 14,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "2f516016",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "People First. Always.",
+      "text": "Kimberly Overman is running for Congress to put everyday Floridians back at the center of decision-making—with real solutions and leadership that listens.",
+      "verdict": {
+        "commitment": 0.33,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c5ed2985",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "From Local Impact to National Leadership.",
+      "text": "With a proven track record in Hillsborough County, Kimberly brings experience, empathy, and results-driven leadership to Washington.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "541b0654",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "Time for Government That Works.",
+      "text": "Families are struggling while politicians argue. Kimberly is focused on what matters: affordable housing, accessible healthcare, and a fair shot for all.",
+      "verdict": {
+        "commitment": 0.86,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.91,
+          "A3": 0.03,
+          "A4": 0.29,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.08,
+          "B2": 0.87,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.07,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.11,
+          "KYV7": 0.15,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "a18afc79",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "MEET KIMBERLY",
+      "text": "Kimberly Overman is a mom, grandmother, small business owner, and former Hillsborough County Commissioner running for Congress in Florida’s 12th District. A champion for working families and a proven leader during times of crisis, Kimberly brings both lived experience and a track record of results. From affordable housing to public health, she has always fought to make government work for the people—not special interests. Now, she’s ready to take that fight to Washington.",
+      "verdict": {
+        "commitment": 0.46,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.7,
+          "A3": 0.03,
+          "A4": 0.24,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.17,
+          "B2": 0.28,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.04,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.04,
+          "KYV4": 0.03,
+          "KYV5": 0.03,
+          "KYV6": 0.07,
+          "KYV7": 0.07,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "e9dc6867",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "THE ISSUES",
+      "text": "From the cost of living to the classroom, Kimberly Overman is running to make government deliver for working people—fighting for fair wages, quality healthcare, strong schools, and safe communities.",
+      "verdict": {
+        "commitment": 0.9,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.07,
+          "A3": 0.03,
+          "A4": 0.45,
+          "A5": 0.02,
+          "A6": 0.53,
+          "A7": 0.02,
+          "B1": 0.88,
+          "B2": 0.79,
+          "B3": 0.02,
+          "B4": 0.04,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.13,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.08,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.04,
+          "KYV8": 0.02,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "25e222d1",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "THE ISSUES",
+      "text": "Kimberly knows what it’s like to juggle bills and worry about rent. In Congress, she’ll fight for real solutions to rising costs, including affordable housing, infrastructure investment, and fair wages.",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.97,
+          "A3": 0.03,
+          "A4": 0.46,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.91,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.04,
+          "KYV3": 0.14,
+          "KYV4": 0.04,
+          "KYV5": 0.03,
+          "KYV6": 0.35,
+          "KYV7": 0.15,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "03a0f303",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "THE ISSUES",
+      "text": "Healthcare isn’t a luxury—it’s a right. Kimberly will work to expand access to care, lower prescription costs, and defend reproductive rights and mental health services.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B2",
+          "B5"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.05,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.99,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.9,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "7ca134b9",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "THE ISSUES",
+      "text": "Florida’s 12th is home to thousands of veterans. Kimberly will ensure they receive the benefits, healthcare, and respect they’ve earned.",
+      "verdict": {
+        "commitment": 0.92,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.62,
+          "B3": 0.02,
+          "B4": 0.11,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b2f87133",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "THE ISSUES",
+      "text": "Every child deserves a strong start. Kimberly will fight for fully funded public schools, better teacher pay, and pathways to college, trade careers, and lifelong learning.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A6",
+          "KYV10"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.99,
+          "A7": 0.02,
+          "B1": 0.37,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.93,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.09
+        }
+      }
+    },
+    {
+      "id": "0a8899c8",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "THE ISSUES",
+      "text": "Kimberly is committed to protecting voting rights, restoring trust in government, and making sure everyday people—not lobbyists—have a seat at the table.",
+      "verdict": {
+        "commitment": 0.9,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.84,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.17,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.54,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ea3bfcf9",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "THE ISSUES",
+      "text": "Safe communities start with smart investments. Kimberly supports balanced public safety policies that combine law enforcement with prevention, youth programs, and mental health care.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.13,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.94,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "efe034ab",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "Message from Kimberly",
+      "text": "I’m Kimberly Overman, and I’m running for Congress to put people first, always —with real solutions and results for working Floridians.",
+      "verdict": {
+        "commitment": 0.15,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.11,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "bfbb77f2",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "Fuel Our Movement.",
+      "text": "This campaign is powered by people, not special interests.",
+      "verdict": {
+        "commitment": 0.08,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.04,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.07,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ff4b866d",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "Fuel Our Movement.",
+      "text": "If you want a representative who delivers, please chip in whatever you can today!",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b5d012b9",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "Fuel Our Movement.",
+      "text": "Fuel a campaign powered by people, not special interests.",
+      "verdict": {
+        "commitment": 0.2,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.04,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.1,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "3bc800e9",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "Fuel Our Movement.",
+      "text": "Your support helps us connect with voters, grow our movement, and deliver real change. Chip in today to help Kimberly fight for Florida’s families and future.",
+      "verdict": {
+        "commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "61cb7c85",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "Fuel Our Movement.",
+      "text": "Whether you can knock doors, make calls, or share our message online—there’s a place for you on Team Overman. Sign up and help us bring integrity and results back to Congress.",
+      "verdict": {
+        "commitment": 0.11,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.06,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.07,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4fba2eb1",
+      "url": "https://kimberlyoverman.com/",
+      "heading": "In the News",
+      "text": "In the News – The word is getting out — Kimberly Overman’s people-first campaign is making headlines across Florida’s 12th District. Here’s the latest coverage of a movement built by working families, for working families.",
+      "verdict": {
+        "commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "975c42fc",
+      "url": "https://kimberlyoverman.com/issues",
+      "heading": "What Kimberly Stands For",
+      "text": "Kimberly Overman is running for Congress to deliver what Florida’s 12th District deserves but isn’t getting: leadership that listens, acts, and puts people first.",
+      "verdict": {
+        "commitment": 0.16,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "6907b54c",
+      "url": "https://kimberlyoverman.com/issues",
+      "heading": "What Kimberly Stands For",
+      "text": "Her approach is grounded in decades of public service, small business experience, and the realities of working-class life—from raising a family to navigating housing insecurity. She knows what’s at stake because she’s lived it.",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.07,
+          "A3": 0.03,
+          "A4": 0.05,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.04,
+          "KYV7": 0.07,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "0819d6e2",
+      "url": "https://kimberlyoverman.com/issues",
+      "heading": "What Kimberly Stands For",
+      "text": "Kimberly’s priorities reflect what voters across the district are demanding: affordable housing, accessible healthcare, economic stability, reproductive freedom, and a government that works for everyone—not just the wealthy or well-connected.",
+      "verdict": {
+        "commitment": 0.89,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "B2",
+          "B5"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.95,
+          "A3": 0.02,
+          "A4": 0.35,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.59,
+          "B2": 0.9,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.86,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.04,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.09,
+          "KYV7": 0.12,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a25a3aaf",
+      "url": "https://kimberlyoverman.com/issues",
+      "heading": "Affordable Housing & Cost of Living",
+      "text": "As someone who grew up in a working-class household and has helped others manage through financial hardship, Kimberly understands the urgent need for economic stability. In Congress, she’ll fight for increased investment in affordable housing, expanded transportation options, and stronger support for working families and small businesses. She believes housing, transit, and child care are essential infrastructure—and should be treated as such.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.98,
+          "A3": 0.03,
+          "A4": 0.41,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.4,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.06,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.1,
+          "KYV7": 0.1,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "cc710f7b",
+      "url": "https://kimberlyoverman.com/issues",
+      "heading": "Healthcare Access",
+      "text": "Kimberly has seen firsthand how medical bills can destabilize families. She will work to lower prescription drug costs, expand coverage—especially mental health care—and protect access to reproductive services. No one should have to choose between seeing a doctor and paying their rent.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B2",
+          "B5"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.06,
+          "A3": 0.02,
+          "A4": 0.14,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.99,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.87,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b5b04752",
+      "url": "https://kimberlyoverman.com/issues",
+      "heading": "Public Safety & Crime Prevention",
+      "text": "Kimberly supports public safety policies that work: strong law enforcement paired with investments in mental health services, youth engagement, and community-led crime prevention. She knows safety comes from both accountability and opportunity.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.08,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.96,
+          "B8": 0.02,
+          "KYV1": 0.05,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5dfb4c2d",
+      "url": "https://kimberlyoverman.com/issues",
+      "heading": "Education & Workforce Development",
+      "text": "Kimberly believes public education is the foundation of opportunity. She will advocate for stronger investments in schools, competitive teacher pay, and expanded access to early childhood education, vocational training, and higher education that prepares students for good-paying jobs.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A6",
+          "KYV10"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.98,
+          "A7": 0.02,
+          "B1": 0.41,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.98,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "fd3edd42",
+      "url": "https://kimberlyoverman.com/issues",
+      "heading": "Veterans & Military Families",
+      "text": "With over 45,000 veterans and active-duty personnel in the district, Kimberly knows our service members deserve more than just symbolic support. She’ll fight to improve access to VA care, mental health services, job training, and transitional support for returning veterans.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.3,
+          "B2": 0.87,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.78,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.06,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "088de975",
+      "url": "https://kimberlyoverman.com/issues",
+      "heading": "Reproductive Rights & Personal Freedom",
+      "text": "Kimberly trusts people to make their own healthcare decisions. She will fight to restore and protect the right to abortion and access to reproductive care—because these decisions belong to individuals, not politicians",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B5"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.39,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.98,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "3b021b7f",
+      "url": "https://kimberlyoverman.com/issues",
+      "heading": "Climate Resilience & Environmental Protection",
+      "text": "For Florida families, climate change isn’t abstract – it shows up in flooding, rising insurance costs, water quality, and extreme heat. Kimberly understands that climate resilience is affordability: when communities skip investment in drainage, flood mitigation, and clean water infrastructure, families pay through higher premiums and repair bills. In Congress, she’ll fight for resilient infrastructure, protection of the Florida Wildlife Corridor, and environmental justice for the communities hit hardest – because safeguarding our air, water, and coastline lowers long-term costs for working families.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B8",
+          "KYV4"
+        ],
+        "scores": {
+          "A1": 0.84,
+          "A2": 0.09,
+          "A3": 0.02,
+          "A4": 0.6,
+          "A5": 0.58,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.11,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.9,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.04,
+          "KYV3": 0.53,
+          "KYV4": 0.97,
+          "KYV5": 0.65,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "3e25c207",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Meet Kimberly",
+      "text": "From kitchen tables to county government—Kimberly’s journey is rooted in service, resilience, and results.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4c76dc07",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Meet Kimberly",
+      "text": "Kimberly Overman is a mom, a grandmother, a small business owner, and a public servant with deep roots in Florida’s 12th District. She’s running for Congress because she believes leadership should be about listening, showing up, and delivering real solutions—not playing politics or chasing headlines.",
+      "verdict": {
+        "commitment": 0.1,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.06,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "5b0f86d8",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Meet Kimberly",
+      "text": "Raised in a working-class family that faced housing insecurity, Kimberly learned early what it means to struggle—and to persevere. Her mother juggled multiple jobs to keep the family afloat, and those early experiences shaped Kimberly’s lifelong commitment to fairness, opportunity, and economic justice.",
+      "verdict": {
+        "commitment": 0.1,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.1,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.33,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.04,
+          "KYV7": 0.08,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "786378e7",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Meet Kimberly",
+      "text": "Over the years, Kimberly has worn many hats: she put herself through college, earned her Certified Financial Planner designation, and built a successful advisory firm focused on ethical financial guidance. She’s volunteered in her community for decades, applying her background in economics and planning to real-world challenges—especially around housing, transportation, and sustainability.",
+      "verdict": {
+        "commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.07,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.06,
+          "KYV1": 0.02,
+          "KYV10": 0.05,
+          "KYV2": 0.03,
+          "KYV3": 0.06,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.05,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c7d8ebae",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Meet Kimberly",
+      "text": "As a Hillsborough County Commissioner from 2018 to 2022, Kimberly delivered during some of the region’s most challenging moments. She led during the COVID-19 pandemic, championing emergency support for small businesses, childcare providers, and vulnerable residents. She pushed for expanded public health programs, affordable housing initiatives, and more equitable infrastructure investment.",
+      "verdict": {
+        "commitment": 0.49,
+        "states_policy": false,
+        "issues": [
+          "A2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.94,
+          "A3": 0.03,
+          "A4": 0.23,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.71,
+          "B2": 0.73,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.07,
+          "KYV4": 0.03,
+          "KYV5": 0.03,
+          "KYV6": 0.08,
+          "KYV7": 0.11,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "f1e0e186",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Meet Kimberly",
+      "text": "But what sets Kimberly apart isn’t just her experience—it’s her empathy. As a mother and grandmother, she knows what’s at stake for the next generation. She understands what families are facing because she’s lived it: the high cost of care, the fear of unexpected bills, the frustration with a system that too often leaves people behind.",
+      "verdict": {
+        "commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.06,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.09,
+          "B2": 0.59,
+          "B3": 0.02,
+          "B4": 0.04,
+          "B5": 0.02,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a2d0ff29",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Meet Kimberly",
+      "text": "In Washington, Kimberly will bring a grounded, no-nonsense approach to leadership—focused on solutions, service, and building a future where everyone has a fair shot.",
+      "verdict": {
+        "commitment": 0.2,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "bb1c91dd",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Boards Service:",
+      "text": "Hillsborough County Board of County Commissioners, Chair",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.03,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a7506863",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Boards Service:",
+      "text": "Hillsborough County Affordable Housing Advisory Board, Chair",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.07,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.06,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.04,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "20bc0128",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Boards Service:",
+      "text": "Hillsborough County Commission on Human Trafficking, Chair",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.06,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "58555c2f",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Boards Service:",
+      "text": "Department of Defense - Tampa Bay Chamber/ MacDill Air Force Base Support",
+      "verdict": {
+        "commitment": 0.08,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e74c4d3e",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Boards Service:",
+      "text": "HART - Hillsborough Area Regional Transit Authority",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "dd5ac9e3",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Boards Service:",
+      "text": "Hillsborough County Public Safety Coordinating Council",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.05,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "35381df7",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Boards Service:",
+      "text": "Hillsborough County Environment Protection Commission",
+      "verdict": {
+        "commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.04,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.03,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.05,
+          "KYV4": 0.03,
+          "KYV5": 0.04,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "651456a8",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Boards Service:",
+      "text": "Hillsborough County Transportation Planning Organization",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.04,
+          "KYV4": 0.03,
+          "KYV5": 0.03,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "42843690",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Boards Service:",
+      "text": "Hillsborough County Emergency Policy Group, Vice Chair",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "84b633ec",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Boards Service:",
+      "text": "Southwest Florida Water Management District Liaison",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.04,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.03,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.04,
+          "KYV4": 0.03,
+          "KYV5": 0.04,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "d5bcb9a5",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Past President of Heights Urban Core Chamber-Business Guild of Seminole Heights",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "83d16af0",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Surly Feminists for the Revolution, Member",
+      "verdict": {
+        "commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "af1ff8a1",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Indivisible Action Together Tampa Bay, Member",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.03,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "f930d597",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Hillsborough County Democratic Party, Precinct Captain",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b0fa0007",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Hillsborough County LGBTA Democratic Caucus, Member",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e7d6aac0",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "East Hillsborough County Democratic Club, Member",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c2473ac2",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Old Seminole Heights Neighborhood Association, Member",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "f55a3b96",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "South Seminole Heights Civic Association, Member",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "f3decbe8",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Hillsborough County Metropolitan Planning Organization, Citizen Advisory Committee Member",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.04,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "d30b4947",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "City of Tampa Budget & Finance Citizen Advisory Committee Member, Past Chair",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "0cbd0f05",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Seminole Heights Foundation, Board Member",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "6773e150",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Hillsborough County Housing Finance Authority – Past Chair",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.04,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "6374950e",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Greater Tampa Chamber of Commerce Women of Influence Committee – Former Member",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "edb66fa0",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Hillsborough Education Foundation Finance Committee – Former Member",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.05,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "06558f58",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Voices for Children, Former Board Member",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.04,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "94dfdb66",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Community in Schools, Former Board Member",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.04,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "9e281748",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Business and Professional Round Table, Founding Member",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "27df6c39",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Toastmasters – High Risers Chapter, Former Membe",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "9912cd69",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Business and Professional Women, Former Member",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "80cb9fc2",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Soroptimist International, Former Member",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "71ba09b1",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Tampa General Hospital Foundation Planned Giving Council Member",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.01,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ca5f7fa3",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Alzheimer’s Association Planned Giving Council Member",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "d2769860",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "H. Lee Moffitt Professional Advisory Council Member",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "bf879066",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Tampa Bay Estate Planning Council – Past President",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e3e01028",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Financial Planning Association of Florida Member – Past President",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "45595279",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Community Leadership:",
+      "text": "Financial Planning Association of Tampa Bay Member – Past Chair",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "64817808",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Professional Experience:",
+      "text": "Certified Financial Planner Practitioner, CFP Board of Standards",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.01,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e667e0a5",
+      "url": "https://kimberlyoverman.com/meet-kimberly",
+      "heading": "Professional Experience:",
+      "text": "Bachelor of Science, University of Maryland, College Park, Agricultural and Resource Economics",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.04,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "economy",
+        "label": "Economy & Affordability"
+      },
+      "subIssues": [
+        {
+          "id": "B1",
+          "label": "Economy, inflation, and jobs",
+          "citations": [
+            {
+              "passage": {
+                "id": "25e222d1",
+                "url": "https://kimberlyoverman.com/",
+                "heading": "THE ISSUES",
+                "text": "Kimberly knows what it’s like to juggle bills and worry about rent. In Congress, she’ll fight for real solutions to rising costs, including affordable housing, infrastructure investment, and fair wages.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.91
+            },
+            {
+              "passage": {
+                "id": "e9dc6867",
+                "url": "https://kimberlyoverman.com/",
+                "heading": "THE ISSUES",
+                "text": "From the cost of living to the classroom, Kimberly Overman is running to make government deliver for working people—fighting for fair wages, quality healthcare, strong schools, and safe communities.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.88
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "education",
+        "label": "Education"
+      },
+      "subIssues": [
+        {
+          "id": "A6",
+          "label": "Public school funding and teachers",
+          "citations": [
+            {
+              "passage": {
+                "id": "b2f87133",
+                "url": "https://kimberlyoverman.com/",
+                "heading": "THE ISSUES",
+                "text": "Every child deserves a strong start. Kimberly will fight for fully funded public schools, better teacher pay, and pathways to college, trade careers, and lifelong learning.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.99
+            },
+            {
+              "passage": {
+                "id": "5dfb4c2d",
+                "url": "https://kimberlyoverman.com/issues",
+                "heading": "Education & Workforce Development",
+                "text": "Kimberly believes public education is the foundation of opportunity. She will advocate for stronger investments in schools, competitive teacher pay, and expanded access to early childhood education, vocational training, and higher education that prepares students for good-paying jobs.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.98
+            }
+          ]
+        },
+        {
+          "id": "KYV10",
+          "label": "Career, vocational and higher education",
+          "citations": [
+            {
+              "passage": {
+                "id": "5dfb4c2d",
+                "url": "https://kimberlyoverman.com/issues",
+                "heading": "Education & Workforce Development",
+                "text": "Kimberly believes public education is the foundation of opportunity. She will advocate for stronger investments in schools, competitive teacher pay, and expanded access to early childhood education, vocational training, and higher education that prepares students for good-paying jobs.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "b2f87133",
+                "url": "https://kimberlyoverman.com/",
+                "heading": "THE ISSUES",
+                "text": "Every child deserves a strong start. Kimberly will fight for fully funded public schools, better teacher pay, and pathways to college, trade careers, and lifelong learning.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.93
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "healthcare",
+        "label": "Healthcare"
+      },
+      "subIssues": [
+        {
+          "id": "B2",
+          "label": "Healthcare access and costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "03a0f303",
+                "url": "https://kimberlyoverman.com/",
+                "heading": "THE ISSUES",
+                "text": "Healthcare isn’t a luxury—it’s a right. Kimberly will work to expand access to care, lower prescription costs, and defend reproductive rights and mental health services.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.99
+            },
+            {
+              "passage": {
+                "id": "cc710f7b",
+                "url": "https://kimberlyoverman.com/issues",
+                "heading": "Healthcare Access",
+                "text": "Kimberly has seen firsthand how medical bills can destabilize families. She will work to lower prescription drug costs, expand coverage—especially mental health care—and protect access to reproductive services. No one should have to choose between seeing a doctor and paying their rent.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.99
+            },
+            {
+              "passage": {
+                "id": "0819d6e2",
+                "url": "https://kimberlyoverman.com/issues",
+                "heading": "What Kimberly Stands For",
+                "text": "Kimberly’s priorities reflect what voters across the district are demanding: affordable housing, accessible healthcare, economic stability, reproductive freedom, and a government that works for everyone—not just the wealthy or well-connected.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.9
+            },
+            {
+              "passage": {
+                "id": "541b0654",
+                "url": "https://kimberlyoverman.com/",
+                "heading": "Time for Government That Works.",
+                "text": "Families are struggling while politicians argue. Kimberly is focused on what matters: affordable housing, accessible healthcare, and a fair shot for all.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.87
+            },
+            {
+              "passage": {
+                "id": "fd3edd42",
+                "url": "https://kimberlyoverman.com/issues",
+                "heading": "Veterans & Military Families",
+                "text": "With over 45,000 veterans and active-duty personnel in the district, Kimberly knows our service members deserve more than just symbolic support. She’ll fight to improve access to VA care, mental health services, job training, and transitional support for returning veterans.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.87
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "housing",
+        "label": "Housing"
+      },
+      "subIssues": [
+        {
+          "id": "A2",
+          "label": "Housing affordability",
+          "citations": [
+            {
+              "passage": {
+                "id": "a25a3aaf",
+                "url": "https://kimberlyoverman.com/issues",
+                "heading": "Affordable Housing & Cost of Living",
+                "text": "As someone who grew up in a working-class household and has helped others manage through financial hardship, Kimberly understands the urgent need for economic stability. In Congress, she’ll fight for increased investment in affordable housing, expanded transportation options, and stronger support for working families and small businesses. She believes housing, transit, and child care are essential infrastructure—and should be treated as such.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "25e222d1",
+                "url": "https://kimberlyoverman.com/",
+                "heading": "THE ISSUES",
+                "text": "Kimberly knows what it’s like to juggle bills and worry about rent. In Congress, she’ll fight for real solutions to rising costs, including affordable housing, infrastructure investment, and fair wages.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "0819d6e2",
+                "url": "https://kimberlyoverman.com/issues",
+                "heading": "What Kimberly Stands For",
+                "text": "Kimberly’s priorities reflect what voters across the district are demanding: affordable housing, accessible healthcare, economic stability, reproductive freedom, and a government that works for everyone—not just the wealthy or well-connected.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.95
+            },
+            {
+              "passage": {
+                "id": "541b0654",
+                "url": "https://kimberlyoverman.com/",
+                "heading": "Time for Government That Works.",
+                "text": "Families are struggling while politicians argue. Kimberly is focused on what matters: affordable housing, accessible healthcare, and a fair shot for all.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "environment",
+        "label": "Environment & Water"
+      },
+      "subIssues": [
+        {
+          "id": "B8",
+          "label": "Climate and environment (national)",
+          "citations": [
+            {
+              "passage": {
+                "id": "3b021b7f",
+                "url": "https://kimberlyoverman.com/issues",
+                "heading": "Climate Resilience & Environmental Protection",
+                "text": "For Florida families, climate change isn’t abstract – it shows up in flooding, rising insurance costs, water quality, and extreme heat. Kimberly understands that climate resilience is affordability: when communities skip investment in drainage, flood mitigation, and clean water infrastructure, families pay through higher premiums and repair bills. In Congress, she’ll fight for resilient infrastructure, protection of the Florida Wildlife Corridor, and environmental justice for the communities hit hardest – because safeguarding our air, water, and coastline lowers long-term costs for working families.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.9
+            }
+          ]
+        },
+        {
+          "id": "KYV4",
+          "label": "Storm resilience and flood protection",
+          "citations": [
+            {
+              "passage": {
+                "id": "3b021b7f",
+                "url": "https://kimberlyoverman.com/issues",
+                "heading": "Climate Resilience & Environmental Protection",
+                "text": "For Florida families, climate change isn’t abstract – it shows up in flooding, rising insurance costs, water quality, and extreme heat. Kimberly understands that climate resilience is affordability: when communities skip investment in drainage, flood mitigation, and clean water infrastructure, families pay through higher premiums and repair bills. In Congress, she’ll fight for resilient infrastructure, protection of the Florida Wildlife Corridor, and environmental justice for the communities hit hardest – because safeguarding our air, water, and coastline lowers long-term costs for working families.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.97
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "safety",
+        "label": "Public Safety & Crime"
+      },
+      "subIssues": [
+        {
+          "id": "B7",
+          "label": "Crime policy, policing and courts",
+          "citations": [
+            {
+              "passage": {
+                "id": "b5b04752",
+                "url": "https://kimberlyoverman.com/issues",
+                "heading": "Public Safety & Crime Prevention",
+                "text": "Kimberly supports public safety policies that work: strong law enforcement paired with investments in mental health services, youth engagement, and community-led crime prevention. She knows safety comes from both accountability and opportunity.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "ea3bfcf9",
+                "url": "https://kimberlyoverman.com/",
+                "heading": "THE ISSUES",
+                "text": "Safe communities start with smart investments. Kimberly supports balanced public safety policies that combine law enforcement with prevention, youth programs, and mental health care.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.94
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "abortion",
+        "label": "Abortion Policy"
+      },
+      "subIssues": [
+        {
+          "id": "B5",
+          "label": "Abortion policy",
+          "citations": [
+            {
+              "passage": {
+                "id": "088de975",
+                "url": "https://kimberlyoverman.com/issues",
+                "heading": "Reproductive Rights & Personal Freedom",
+                "text": "Kimberly trusts people to make their own healthcare decisions. She will fight to restore and protect the right to abortion and access to reproductive care—because these decisions belong to individuals, not politicians",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "03a0f303",
+                "url": "https://kimberlyoverman.com/",
+                "heading": "THE ISSUES",
+                "text": "Healthcare isn’t a luxury—it’s a right. Kimberly will work to expand access to care, lower prescription costs, and defend reproductive rights and mental health services.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.9
+            },
+            {
+              "passage": {
+                "id": "cc710f7b",
+                "url": "https://kimberlyoverman.com/issues",
+                "heading": "Healthcare Access",
+                "text": "Kimberly has seen firsthand how medical bills can destabilize families. She will work to lower prescription drug costs, expand coverage—especially mental health care—and protect access to reproductive services. No one should have to choose between seeing a doctor and paying their rent.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.87
+            },
+            {
+              "passage": {
+                "id": "0819d6e2",
+                "url": "https://kimberlyoverman.com/issues",
+                "heading": "What Kimberly Stands For",
+                "text": "Kimberly’s priorities reflect what voters across the district are demanding: affordable housing, accessible healthcare, economic stability, reproductive freedom, and a government that works for everyone—not just the wealthy or well-connected.",
+                "retrieved_at": "2026-09-29T11:41:52.934Z"
+              },
+              "score": 0.86
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 255484,
+    "output_tokens": 33434
+  }
+}

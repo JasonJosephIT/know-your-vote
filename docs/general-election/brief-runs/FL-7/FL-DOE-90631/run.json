@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://baledalton.com",
-  "created_at": "2026-09-29T11:43:34.478Z",
+  "created_at": "2026-09-30T01:58:39.715Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -38,8 +39,8 @@
   "counts": {
     "passages": 44,
     "asked": 44,
-    "states_policy": 18,
-    "with_issue": 9,
+    "states_policy": 10,
+    "with_issue": 6,
     "failed": 0
   },
   "passages": [
@@ -49,7 +50,8 @@
       "heading": "Support bale for congress",
       "text": "Bale Dalton has led Americans through life-or-death missions around the world, and he’s ready to take on Washington. Support his mission to put country over politics by donating today.",
       "verdict": {
-        "commitment": 0.18,
+        "commitment": 0.17,
+        "own_commitment": 0.41,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -59,18 +61,18 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.03,
+          "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
-          "B3": 0.02,
-          "B4": 0.02,
-          "B5": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
           "B6": 0.03,
           "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.07,
           "KYV10": 0.02,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -87,30 +89,31 @@
       "heading": "Put Floridians first.",
       "text": "After 24 years in the Navy—flying medevac helicopters in Iraq, leading combat missions against ISIS, al-Qaeda, and the Taliban, and later helping lead NASA—I know what real service looks like. It’s courage, sacrifice, and putting the mission, and the people, first. I’m running for Congress because Florida deserves leaders who put people ahead of politics, lower costs, and deliver results —not politicians who are only in it for themselves.",
       "verdict": {
-        "commitment": 0.68,
+        "commitment": 0.7,
+        "own_commitment": 0.71,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
           "A2": 0.04,
           "A3": 0.03,
-          "A4": 0.73,
+          "A4": 0.72,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.49,
+          "B1": 0.47,
           "B2": 0.15,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.03,
-          "B8": 0.02,
-          "KYV1": 0.04,
-          "KYV10": 0.02,
+          "B8": 0.03,
+          "KYV1": 0.05,
+          "KYV10": 0.03,
           "KYV2": 0.03,
           "KYV3": 0.02,
-          "KYV4": 0.03,
+          "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -126,6 +129,7 @@
       "text": "One of four raised in a hardworking Central Florida family, Bale graduated at the top of his class and was selected to attend the U.S. Naval Academy. He served in the U.S. Navy and Navy Reserve for 24 years, 13 years on active duty, with deployments to Iraq, Afghanistan, the Horn of Africa, and the Pacific. As a Navy helicopter pilot, Bale flew medical evacuation missions in Kuwait, delivered relief after Hurricane Katrina, supported special operations in Iraq and Africa, and directed combat air support in Afghanistan. Wherever American families needed protection, Bale was there.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -163,7 +167,8 @@
       "heading": "A decorated Navy Captain and former Chief of Staff at NASA, Bale Dalton has always answered the call to serve America.",
       "text": "After active duty, he worked at the State Department and for Senator Bill Nelson in Congress.",
       "verdict": {
-        "commitment": 0.02,
+        "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -171,7 +176,7 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.03,
+          "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
@@ -183,8 +188,8 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.02,
-          "KYV2": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
@@ -202,6 +207,7 @@
       "text": "Bale returned to active duty as commanding officer of the Navy’s special operations support squadron, then used his military background to improve efficiency and operations at an aerospace company in the private sector. As NASA Chief of Staff, he managed 16,500 employees and helped run one of the federal government’s most effective agencies.",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -239,13 +245,14 @@
       "heading": "A decorated Navy Captain and former Chief of Staff at NASA, Bale Dalton has always answered the call to serve America.",
       "text": "After a lifetime of service, Bale Dalton is fed up with politicians like Cory Mills who have turned their back on American families and put themselves ahead of the people they serve. Bale brings integrity, rational decision-making, and a true commitment to serving the American people that is needed to move our country forward.",
       "verdict": {
-        "commitment": 0.16,
+        "commitment": 0.14,
+        "own_commitment": 0.12,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.03,
@@ -253,21 +260,21 @@
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.03,
+          "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.12,
           "KYV10": 0.02,
-          "KYV2": 0.02,
+          "KYV2": 0.03,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     },
@@ -278,15 +285,16 @@
       "text": "For too many Florida families, the American Dream feels like a math problem that just doesn’t add up. We see it every time we walk through the checkout lane: a family of four now averages over $1,000 a month just for groceries. From the price of a gallon of gas or a pound of beef to soaring utility rates and skyrocketing property insurance rates , the cost of living is making it increasingly difficult, even impossible, for hardworking Floridians to get by and save for the future.",
       "verdict": {
         "commitment": 0.08,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [
           "A4"
         ],
         "scores": {
-          "A1": 0.54,
-          "A2": 0.26,
+          "A1": 0.55,
+          "A2": 0.24,
           "A3": 0.09,
-          "A4": 0.88,
+          "A4": 0.89,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -300,10 +308,10 @@
           "B8": 0.03,
           "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.28,
+          "KYV2": 0.31,
           "KYV3": 0.02,
           "KYV4": 0.03,
-          "KYV5": 0.02,
+          "KYV5": 0.03,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.03,
@@ -317,7 +325,8 @@
       "heading": "Priorities",
       "text": "But instead of working to fix these problems, DC politicians have voted time after time to make life harder and more expensive for Florida families. Our Congressman, Cory Mills, voted for the illegal tariffs that made everything from groceries to car repairs more expensive, while raising costs for families and small businesses. He created a crisis for his own constituents, by voting to raise the cost of health care premiums by thousands of dollars every month – all to pay for tax cuts for billionaires. And he championed the rudderless war with Iran that made our gas prices in Florida go through the roof.",
       "verdict": {
-        "commitment": 0.66,
+        "commitment": 0.62,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [
           "A4",
@@ -330,24 +339,24 @@
           "A3": 0.03,
           "A4": 0.97,
           "A5": 0.02,
-          "A6": 0.02,
+          "A6": 0.03,
           "A7": 0.02,
-          "B1": 0.95,
+          "B1": 0.96,
           "B2": 0.95,
-          "B3": 0.03,
+          "B3": 0.02,
           "B4": 0.05,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.02,
-          "B8": 0.04,
-          "KYV1": 0.04,
+          "B7": 0.03,
+          "B8": 0.05,
+          "KYV1": 0.05,
           "KYV10": 0.02,
-          "KYV2": 0.4,
+          "KYV2": 0.49,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -360,6 +369,7 @@
       "text": "My first priority in Congress will be working to make Florida affordable again. We need to stop the bleeding, by reversing health care premium hikes and illegal, unpredictable tariffs. But more than that, we need representatives who will fight for working families – not for another tax giveaway for corporations and billionaires.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.96,
         "states_policy": true,
         "issues": [
           "A4",
@@ -367,14 +377,14 @@
           "B2"
         ],
         "scores": {
-          "A1": 0.07,
+          "A1": 0.06,
           "A2": 0.09,
           "A3": 0.03,
           "A4": 0.96,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.9,
+          "B1": 0.88,
           "B2": 0.97,
           "B3": 0.02,
           "B4": 0.06,
@@ -402,6 +412,7 @@
       "text": "We need to crack down on the power companies and property insurers that are ripping Floridians off and raising rates year after year, without any improvement in service. Tallahassee has let these companies run state-sanctioned monopolies for too long. In Congress, I will be laser-focused on fostering competition, not consolidation, and fighting for a better deal for Florida families. With prices rising, wages also need to keep up – which is why I support raising the federal minimum wage and passing the PRO Act, so labor unions can advocate for workers in a changing economy.",
       "verdict": {
         "commitment": 0.99,
+        "own_commitment": 0.98,
         "states_policy": true,
         "issues": [
           "A1",
@@ -411,14 +422,14 @@
         ],
         "scores": {
           "A1": 0.96,
-          "A2": 0.14,
+          "A2": 0.15,
           "A3": 0.04,
-          "A4": 0.93,
+          "A4": 0.94,
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.02,
           "B1": 0.97,
-          "B2": 0.03,
+          "B2": 0.04,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
@@ -427,14 +438,14 @@
           "B8": 0.03,
           "KYV1": 0.03,
           "KYV10": 0.02,
-          "KYV2": 0.97,
-          "KYV3": 0.03,
+          "KYV2": 0.96,
+          "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.02,
+          "KYV5": 0.03,
           "KYV6": 0.03,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     },
@@ -444,7 +455,8 @@
       "heading": "Priorities",
       "text": "Too many Florida families are one health emergency away from financial disaster. While our health care system has been broken for a long time, Congress made the problem even worse last year by voting to cut Medicaid, Medicare, and to hike premium costs on hardworking families. Thanks to Congressman Mills, health insurance premiums for ACA plans are four times as high as they were just a year ago, and tens of thousands of Central Floridians have lost coverage altogether.",
       "verdict": {
-        "commitment": 0.51,
+        "commitment": 0.54,
+        "own_commitment": 0.09,
         "states_policy": false,
         "issues": [
           "B2"
@@ -453,14 +465,14 @@
           "A1": 0.03,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.51,
+          "A4": 0.55,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.25,
+          "B1": 0.22,
           "B2": 0.98,
           "B3": 0.02,
-          "B4": 0.75,
+          "B4": 0.76,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -484,7 +496,8 @@
       "heading": "Priorities",
       "text": "Even for seniors who have access to Medicare, premiums are on the rise and prescription medications are often unaffordable. Seniors who have worked their entire lives have earned retirement with dignity and security. And now, Social Security and the Medicare Trust Fund risk going bankrupt by 2033. Our government has created an absolute crisis in our health care and retirement systems, to fund tax breaks and FICA loopholes for the ultra-wealthy.",
       "verdict": {
-        "commitment": 0.55,
+        "commitment": 0.54,
+        "own_commitment": 0.08,
         "states_policy": false,
         "issues": [
           "B2",
@@ -499,7 +512,7 @@
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.16,
-          "B2": 0.97,
+          "B2": 0.96,
           "B3": 0.02,
           "B4": 0.96,
           "B5": 0.02,
@@ -511,7 +524,7 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.02,
+          "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -526,6 +539,7 @@
       "text": "We need to elect members of Congress who will restore funding to Medicaid, reverse premium cuts, and protect Social Security and Medicare for generations to come. We also must lower costs throughout our health care system, which is why I support negotiating drug prices in the United States – like every other wealthy country does – to keep Americans from being ripped off. We need to build on the Affordable Care Act to lower premiums, deductibles, and surprise medical bills that keep hardworking families from seeking care.",
       "verdict": {
         "commitment": 0.99,
+        "own_commitment": 0.97,
         "states_policy": true,
         "issues": [
           "B2",
@@ -539,7 +553,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.1,
+          "B1": 0.09,
           "B2": 0.99,
           "B3": 0.02,
           "B4": 0.98,
@@ -567,6 +581,7 @@
       "text": "And here in Florida, women and girls face yet another health crisis. The state’s dangerous, six-week abortion ban puts politicians between women and their doctors, making women everywhere less safe and less free. That’s why I support codifying Roe into federal law, to put these decisions back where they belong – with patients.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.96,
         "states_policy": true,
         "issues": [
           "B5"
@@ -580,7 +595,7 @@
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.02,
-          "B2": 0.53,
+          "B2": 0.57,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.99,
@@ -591,8 +606,8 @@
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
-          "KYV5": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -606,18 +621,19 @@
       "heading": "Priorities",
       "text": "Families in Volusia and Seminole Counties, and throughout Central Florida, don’t just deserve a tax cut – they need one, period. It’s that simple. But for too long, we’ve watched as billionaires and multinational corporations have been given massive tax giveaways and financial loopholes for their shareholders, all paid for by middle-class families who are left paying the tab.",
       "verdict": {
-        "commitment": 0.95,
-        "states_policy": true,
+        "commitment": 0.96,
+        "own_commitment": 0.54,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.07,
-          "A4": 0.29,
+          "A3": 0.08,
+          "A4": 0.3,
           "A5": 0.02,
-          "A6": 0.02,
+          "A6": 0.03,
           "A7": 0.02,
-          "B1": 0.5,
+          "B1": 0.49,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -628,7 +644,7 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -644,21 +660,22 @@
       "heading": "Priorities",
       "text": "Meanwhile, our government in Washington continues to waste countless billions of dollars, further eroding taxpayers’ trust, not to mention their hard-earned tax dollars. It’s outrageous that the Administration chose to spend $200 million on jets for Kristi Noem, $125 million on new plaques to rename the Pentagon, and $20 billion to bail out Argentina’s economy – all instead of helping people pay their bills in Florida. That’s our money they’re spending, and those priorities are totally backwards.",
       "verdict": {
-        "commitment": 0.72,
+        "commitment": 0.71,
+        "own_commitment": 0.09,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.04,
           "A2": 0.07,
           "A3": 0.03,
-          "A4": 0.79,
+          "A4": 0.78,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.68,
           "B2": 0.03,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.03,
@@ -667,7 +684,7 @@
           "KYV10": 0.02,
           "KYV2": 0.03,
           "KYV3": 0.02,
-          "KYV4": 0.05,
+          "KYV4": 0.06,
           "KYV5": 0.02,
           "KYV6": 0.03,
           "KYV7": 0.02,
@@ -682,7 +699,8 @@
       "heading": "Priorities",
       "text": "Our elected leaders are meant to be trustworthy stewards of our tax dollars, so that when you pay your fair share, you actually receive the services you would expect for what you paid. But with wasteful spending in Washington and a tax code skewed toward the ultra-rich, it is nearly impossible for middle-class families to believe they are truly seeing a return on their investments in our government.",
       "verdict": {
-        "commitment": 0.46,
+        "commitment": 0.47,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -693,13 +711,13 @@
           "A5": 0.02,
           "A6": 0.03,
           "A7": 0.02,
-          "B1": 0.4,
+          "B1": 0.43,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.02,
+          "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.07,
           "KYV10": 0.02,
@@ -721,6 +739,7 @@
       "text": "At the same time, our rising national debt – under both Democratic and Republican leadership – is increasingly a matter of grave national security, as foreign adversaries like China are able to buy up our debt and force taxpayers to send their hard-earned income abroad, instead of going toward securing our country, growing our economy, and improving our quality of life.",
       "verdict": {
         "commitment": 0.46,
+        "own_commitment": 0.08,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -734,7 +753,7 @@
           "B1": 0.56,
           "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.02,
+          "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -759,13 +778,14 @@
       "text": "While some of the income tax changes in the OBBB were a step in the right direction for working families, seniors, and small businesses, we need a Congress committed to providing immediate tax relief for Florida families and tackling wasteful spending.",
       "verdict": {
         "commitment": 0.93,
-        "states_policy": true,
+        "own_commitment": 0.55,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.03,
-          "A4": 0.24,
+          "A4": 0.23,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -797,6 +817,7 @@
       "text": "Trust in government is at all time lows, and with good reason. Here in Central Florida, our Congressman is being investigated by the House Ethics Committee for conflicts of interest, sexual misconduct, corruption, and campaign finance violations. And throughout Washington, members of Congress are getting rich by trading insider information on stock and prediction markets.",
       "verdict": {
         "commitment": 0.08,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -815,7 +836,7 @@
           "B6": 0.04,
           "B7": 0.09,
           "B8": 0.02,
-          "KYV1": 0.81,
+          "KYV1": 0.83,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -835,13 +856,14 @@
       "text": "As a Navy helicopter pilot and squadron leader, I’ve spent my career in environments that demand complete accountability – so this behavior is disgusting to me. That’s why, I support barring all federal employees and elected officials from betting on prediction markets. As a combat veteran, I was sickened to see folks placing bets on prediction markets about whether our F-15 pilot and Weapons System Officer in Iran would come home alive. It’s time to place real penalties on elected officials who bet against America and play by a different set of rules than the rest of us.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.02,
+          "A2": 0.01,
           "A3": 0.02,
-          "A4": 0.02,
+          "A4": 0.01,
           "A5": 0.01,
           "A6": 0.02,
           "A7": 0.02,
@@ -861,7 +883,7 @@
           "KYV5": 0.01,
           "KYV6": 0.01,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.01,
           "KYV9": 0.02
         }
       }
@@ -873,6 +895,7 @@
       "text": "We should also be making it illegal for politicians to profit off of their positions by trading stocks on the very companies they are supposed to regulate. We need to stop the influence of special interests and lobbyists who can pay for access to lawmakers. We need representation in DC that is fighting for the working class instead of their corporate billionaire friends and wealthy donors.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.87,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -891,7 +914,7 @@
           "B6": 0.03,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.66,
+          "KYV1": 0.7,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -899,7 +922,7 @@
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.01,
           "KYV9": 0.02
         }
       }
@@ -910,7 +933,8 @@
       "heading": "Priorities",
       "text": "As a Navy veteran, I’ve been fortunate enough to be able to use a VA loan to buy my home. I want home ownership to be accessible to all young people, not just those who have deployed overseas; and for many families in Central Florida today, that dream has become unreachable. Last year, the share of first-time home buyers dropped to an all-time low of just 21%, while the median age for first-time home buyers rose to 40-years-old, also a record. Even for those who are able to buy a house, homeownership has gone from a source of economic stability to a source of constant financial anxiety.",
       "verdict": {
-        "commitment": 0.48,
+        "commitment": 0.43,
+        "own_commitment": 0.11,
         "states_policy": false,
         "issues": [
           "A2"
@@ -919,20 +943,20 @@
           "A1": 0.02,
           "A2": 0.92,
           "A3": 0.03,
-          "A4": 0.3,
+          "A4": 0.29,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.25,
+          "B1": 0.24,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
@@ -951,22 +975,23 @@
       "text": "It’s not just the sticker price that is causing problems for families young and old throughout central Florida; it’s the mountain of costs that comes with it. Between high interest rates, skyrocketing HOA fees, and rising property taxes, families are being stretched to the breaking point. Home insurance rates also continue to climb year after year, and too often, when disaster strikes, that insurance is little more than the right to sue for the coverage you already paid for. Meanwhile, nonrenewal rates have increased by over 100% in many counties across the state just in the last few years.",
       "verdict": {
         "commitment": 0.1,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.84,
-          "A2": 0.83,
+          "A2": 0.84,
           "A3": 0.6,
           "A4": 0.84,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.02,
-          "B1": 0.25,
+          "A7": 0.01,
+          "B1": 0.19,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.01,
+          "B6": 0.02,
           "B7": 0.02,
           "B8": 0.03,
           "KYV1": 0.02,
@@ -977,7 +1002,7 @@
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.67,
+          "KYV8": 0.63,
           "KYV9": 0.02
         }
       }
@@ -989,19 +1014,20 @@
       "text": "Congress must act to address the housing affordability crisis that has swept our state and our country. While we absolutely need to enable the creation of more housing at all income levels in order to increase supply, we also should ban Wall Street speculators from buying up single-family homes, which further reduces options for families and drives up costs for everyone else.",
       "verdict": {
         "commitment": 0.98,
-        "states_policy": true,
+        "own_commitment": 0.82,
+        "states_policy": false,
         "issues": [
           "A2"
         ],
         "scores": {
           "A1": 0.02,
           "A2": 0.99,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.47,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.24,
+          "B1": 0.26,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -1012,10 +1038,10 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.61,
+          "KYV3": 0.62,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.07,
+          "KYV6": 0.08,
           "KYV7": 0.07,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -1029,6 +1055,7 @@
       "text": "As a lifelong outdoorsman, some of my best memories weren’t in the office, but out on the water – from beautiful Wekiwa Springs and Lake Monroe to the Canaveral National Seashore and Indian River Lagoon. Florida is the greatest state in the union, and that greatness is rooted in our natural landscape that has enabled our way of life for generations.",
       "verdict": {
         "commitment": 0.09,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1043,14 +1070,14 @@
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.12,
+          "B8": 0.13,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.26,
+          "KYV3": 0.24,
           "KYV4": 0.03,
           "KYV5": 0.04,
           "KYV6": 0.02,
@@ -1066,7 +1093,8 @@
       "heading": "Priorities",
       "text": "Florida also produces more energy than nearly every state in the union , trailing only Texas and Pennsylvania, thanks to our robust natural gas sector and a solar energy industry that even outstrips California . But for too many politicians in Washington – on both the left and the right – protecting clean air and clean water while meeting our energy needs is seen as a conflict, instead of an opportunity.",
       "verdict": {
-        "commitment": 0.63,
+        "commitment": 0.62,
+        "own_commitment": 0.11,
         "states_policy": false,
         "issues": [
           "B8",
@@ -1076,8 +1104,8 @@
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.02,
-          "A5": 0.41,
+          "A4": 0.03,
+          "A5": 0.44,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.16,
@@ -1090,10 +1118,10 @@
           "B8": 0.85,
           "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.93,
+          "KYV2": 0.94,
           "KYV3": 0.06,
           "KYV4": 0.02,
-          "KYV5": 0.32,
+          "KYV5": 0.34,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1108,6 +1136,7 @@
       "text": "Preserving environmental resources and preventing drilling off the coasts of Florida means protecting the Eglin Gulf Test and Training Range, as well as the Eastern Range, so that our military and our space program can continue to operate in order to keep our nation safe and secure. Endorsing an all-of-the-above energy policy means strengthening our nation’s energy independence and reducing our need for foreign oil and Chinese solar while also lowering costs for American consumers.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.85,
         "states_policy": true,
         "issues": [
           "B8",
@@ -1117,24 +1146,24 @@
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.18,
+          "A4": 0.17,
           "A5": 0.03,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.37,
+          "B1": 0.4,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.94,
+          "B8": 0.93,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.97,
-          "KYV3": 0.55,
+          "KYV3": 0.52,
           "KYV4": 0.02,
-          "KYV5": 0.03,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1148,7 +1177,8 @@
       "heading": "Priorities",
       "text": "In the greatest state in the greatest nation on earth, we need to think bigger and more ambitiously than the sorts of partisan false choices that many in Washington continue to pose.",
       "verdict": {
-        "commitment": 0.16,
+        "commitment": 0.14,
+        "own_commitment": 0.09,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1167,12 +1197,12 @@
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.05,
+          "KYV1": 0.06,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1186,7 +1216,8 @@
       "heading": "Priorities",
       "text": "During my 24 years and counting in the Navy and Navy Reserves, I’ve deployed to Iraq, Afghanistan, the Horn of Africa, and the Pacific, flying medevac missions and fighting extremist groups that mean America harm. I understand as well as anyone what our military is capable of with the right funding and the right priorities – and what it takes to get the job done for America.",
       "verdict": {
-        "commitment": 0.22,
+        "commitment": 0.24,
+        "own_commitment": 0.1,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1196,7 +1227,7 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.01,
+          "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
@@ -1225,6 +1256,7 @@
       "text": "I support a robust national security and border security infrastructure that prioritizes the American people and American interests, at home and abroad. China and other foreign adversaries are doing all they can to supplant the United States of America’s role, and are more than willing to weaken our country in order to achieve those goals.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.88,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1237,7 +1269,7 @@
           "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
-          "B3": 0.82,
+          "B3": 0.8,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
@@ -1248,11 +1280,11 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.02,
+          "KYV5": 0.01,
           "KYV6": 0.01,
           "KYV7": 0.02,
           "KYV8": 0.01,
-          "KYV9": 0.02
+          "KYV9": 0.01
         }
       }
     },
@@ -1263,6 +1295,7 @@
       "text": "We can meet these challenges and ensure that our economy and our defense capabilities remain the best in the world. But doing so requires avoiding more forever wars in the Middle East, and having clear, strategic goals that guide our military operations. Additionally, we need to ensure that our spending overseas generates an adequate return on investment for America – rather than spending millions mindlessly on bloated, international bureaucracies.",
       "verdict": {
         "commitment": 0.96,
+        "own_commitment": 0.85,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -1273,7 +1306,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.35,
+          "B1": 0.32,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -1286,10 +1319,10 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.01,
           "KYV9": 0.02
         }
       }
@@ -1301,18 +1334,19 @@
       "text": "We also must do more to ensure that every single American who serves their country, and their families, receives the benefits that they so rightly earned through their service. When we send men and women overseas to war and armed conflicts, we owe it to them to provide the support and services they need to thrive when they come home. As a veteran who has dedicated my career to service, I can promise to continue to put my country first – along with the brave men and women who serve it.",
       "verdict": {
         "commitment": 0.92,
-        "states_policy": true,
+        "own_commitment": 0.84,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.02,
+          "A4": 0.01,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.03,
-          "B2": 0.12,
+          "B2": 0.13,
           "B3": 0.02,
           "B4": 0.03,
           "B5": 0.02,
@@ -1323,11 +1357,11 @@
           "KYV10": 0.04,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
-          "KYV5": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.04,
-          "KYV8": 0.01,
+          "KYV8": 0.02,
           "KYV9": 0.02
         }
       }
@@ -1338,7 +1372,8 @@
       "heading": "Priorities",
       "text": "I grew up hunting in central Florida, and learned firearm safety at a young age from my father. At the Naval Academy, one of the first things we did was learn to operate, take care of, and shoot firearms. Since then, I’ve spent much of my adult life carrying a firearm in order to maintain my safety and the safety of those I worked and served with.",
       "verdict": {
-        "commitment": 0.06,
+        "commitment": 0.07,
+        "own_commitment": 0.07,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1351,21 +1386,21 @@
           "A7": 0.01,
           "B1": 0.02,
           "B2": 0.01,
-          "B3": 0.01,
+          "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.02,
+          "B6": 0.01,
           "B7": 0.08,
-          "B8": 0.01,
+          "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.02,
-          "KYV5": 0.01,
-          "KYV6": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.02,
+          "KYV6": 0.01,
           "KYV7": 0.01,
-          "KYV8": 0.02,
+          "KYV8": 0.01,
           "KYV9": 0.01
         }
       }
@@ -1376,7 +1411,8 @@
       "heading": "Priorities",
       "text": "As a gun owner today, I understand and deeply believe that the Second Amendment is a fundamental right for law-abiding citizens in this country, as it should be. I also believe that gun owners should be well-trained and responsible, and that violent criminals should not have access to firearms. Despite what the partisan rhetoric would have you think, these are commonsense and commonly held beliefs, in Florida and across the nation.",
       "verdict": {
-        "commitment": 0.8,
+        "commitment": 0.79,
+        "own_commitment": 0.25,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1393,9 +1429,9 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.43,
+          "B7": 0.41,
           "B8": 0.02,
-          "KYV1": 0.05,
+          "KYV1": 0.04,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -1414,7 +1450,8 @@
       "heading": "Priorities",
       "text": "Public safety, whether from gun violence or any other type of violent crime, is our government’s number one priority. Without safe communities and safe schools, we cannot have prosperous families and prosperous businesses. We must ensure that our police departments are fully funded and have the resources they need to do their job well.",
       "verdict": {
-        "commitment": 0.98,
+        "commitment": 0.97,
+        "own_commitment": 0.93,
         "states_policy": true,
         "issues": [
           "B7"
@@ -1427,7 +1464,7 @@
           "A5": 0.02,
           "A6": 0.06,
           "A7": 0.02,
-          "B1": 0.05,
+          "B1": 0.06,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -1455,7 +1492,8 @@
       "text": "I’m not interested in partisan politicians who refuse to talk about the need to keep firearms out of the hands of dangerous criminals, or who refuse to talk about the need to adequately fund our law enforcement agencies and public safety officers. We can safeguard our freedoms as law-abiding citizens in this country while also keeping crime off our streets and out of our schools.",
       "verdict": {
         "commitment": 0.95,
-        "states_policy": true,
+        "own_commitment": 0.57,
+        "states_policy": false,
         "issues": [
           "B7"
         ],
@@ -1465,7 +1503,7 @@
           "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
-          "A6": 0.05,
+          "A6": 0.06,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
@@ -1475,7 +1513,7 @@
           "B6": 0.02,
           "B7": 0.98,
           "B8": 0.02,
-          "KYV1": 0.06,
+          "KYV1": 0.07,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -1494,7 +1532,8 @@
       "heading": "Bale Dalton Calls for an End to the Iran War On the Six-Month Anniversary of the Conflict",
       "text": "Sanford, FL – Today, the U.S. war in Iran reached its six-month mark. Bale Dalton, a Navy combat veteran and the Democratic nominee in FL-07, issued the following statement regarding the ongoing conflict.",
       "verdict": {
-        "commitment": 0.77,
+        "commitment": 0.76,
+        "own_commitment": 0.64,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1518,7 +1557,7 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.02,
+          "KYV5": 0.01,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -1532,8 +1571,9 @@
       "heading": "Bale Dalton Calls for an End to the Iran War On the Six-Month Anniversary of the Conflict",
       "text": "“Today marks six months since the beginning of the war in Iran. A war that has no explained strategy or defined end state. A war in which, yet again, we the American people, are being misled about casualty rates and battle damage assessments. A war in which, yet again, the men and women of our Armed Forces are being put in harm’s way as pawns at the whim of politicians in power. A war in which tens of billions of dollars have been spent and munitions stockpiles depleted to perilous lows. A war that continues to sink our economy, from rising gas prices to fertilizer shortages. A war that has ultimately made us less safe.",
       "verdict": {
-        "commitment": 0.92,
-        "states_policy": true,
+        "commitment": 0.91,
+        "own_commitment": 0.48,
+        "states_policy": false,
         "issues": [
           "B1"
         ],
@@ -1542,22 +1582,22 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.03,
-          "A5": 0.02,
+          "A5": 0.01,
           "A6": 0.02,
-          "A7": 0.01,
-          "B1": 0.86,
+          "A7": 0.02,
+          "B1": 0.87,
           "B2": 0.02,
-          "B3": 0.02,
+          "B3": 0.01,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.03,
-          "KYV1": 0.16,
+          "KYV1": 0.14,
           "KYV10": 0.02,
           "KYV2": 0.1,
           "KYV3": 0.02,
-          "KYV4": 0.02,
+          "KYV4": 0.01,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -1572,8 +1612,9 @@
       "heading": "Bale Dalton Calls for an End to the Iran War On the Six-Month Anniversary of the Conflict",
       "text": "I have served in combat in Iraq and Afghanistan and know that our Armed Forces are the best in the world. When our troops are sent into harm’s way, with American taxpayers funding these operations, we are owed a clear plan and achievable end state from political leadership. We don’t have either.",
       "verdict": {
-        "commitment": 0.89,
-        "states_policy": true,
+        "commitment": 0.87,
+        "own_commitment": 0.46,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
@@ -1582,24 +1623,24 @@
           "A4": 0.01,
           "A5": 0.01,
           "A6": 0.02,
-          "A7": 0.01,
+          "A7": 0.02,
           "B1": 0.04,
-          "B2": 0.02,
+          "B2": 0.01,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.03,
-          "KYV10": 0.02,
+          "KYV10": 0.01,
           "KYV2": 0.02,
-          "KYV3": 0.01,
+          "KYV3": 0.02,
           "KYV4": 0.01,
           "KYV5": 0.01,
           "KYV6": 0.01,
           "KYV7": 0.02,
-          "KYV8": 0.01,
+          "KYV8": 0.02,
           "KYV9": 0.02
         }
       }
@@ -1610,8 +1651,9 @@
       "heading": "Bale Dalton Calls for an End to the Iran War On the Six-Month Anniversary of the Conflict",
       "text": "I fought in our Forever Wars. Our troops, their families, and we at home can’t afford another one. It’s past time to put an end to this.”",
       "verdict": {
-        "commitment": 0.91,
-        "states_policy": true,
+        "commitment": 0.9,
+        "own_commitment": 0.71,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
@@ -1619,8 +1661,8 @@
           "A3": 0.02,
           "A4": 0.01,
           "A5": 0.01,
-          "A6": 0.01,
-          "A7": 0.01,
+          "A6": 0.02,
+          "A7": 0.02,
           "B1": 0.08,
           "B2": 0.02,
           "B3": 0.02,
@@ -1634,7 +1676,7 @@
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.01,
           "KYV7": 0.02,
           "KYV8": 0.01,
@@ -1648,7 +1690,8 @@
       "heading": "Bale Dalton Calls for an End to the Iran War On the Six-Month Anniversary of the Conflict",
       "text": "Bale Dalton is a decorated Navy Reserve Captain and former NASA Chief of Staff who has always answered the call to serve America. One of four raised in a hardworking Central Florida family, Bale graduated from the U.S. Naval Academy and has served in the U.S. Navy and Navy Reserve for 24 years. He deployed to Iraq, Afghanistan, the Horn of Africa, and the Pacific, flying Navy helicopters and directing air combat support with Navy SEALs in Afghanistan.",
       "verdict": {
-        "commitment": 0.3,
+        "commitment": 0.29,
+        "own_commitment": 0.21,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1659,7 +1702,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.02,
+          "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -1668,12 +1711,12 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.03,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV6": 0.01,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -1687,6 +1730,7 @@
       "text": "Following active duty, he worked for Senator Bill Nelson, helping Florida veterans access the care and benefits they had earned. After an additional stint on active duty, Bale returned to government service as NASA Chief of Staff. At NASA, he managed 16,500 employees and helped run one of the federal government’s most effective agencies.",
       "verdict": {
         "commitment": 0.14,
+        "own_commitment": 0.14,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1700,13 +1744,13 @@
           "B1": 0.03,
           "B2": 0.09,
           "B3": 0.02,
-          "B4": 0.04,
+          "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.03,
+          "B8": 0.02,
           "KYV1": 0.03,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
@@ -1724,7 +1768,8 @@
       "heading": "Bale Dalton Calls for an End to the Iran War On the Six-Month Anniversary of the Conflict",
       "text": "After a lifetime of service, Bale is now running to represent his home, Florida’s 7th Congressional District, in the U.S. House of Representatives.",
       "verdict": {
-        "commitment": 0.5,
+        "commitment": 0.52,
+        "own_commitment": 0.44,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1745,14 +1790,14 @@
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.02,
-          "KYV2": 0.03,
-          "KYV3": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.02,
-          "KYV9": 0.02
+          "KYV9": 0.03
         }
       }
     }
@@ -1786,7 +1831,7 @@
                 "text": "We need to crack down on the power companies and property insurers that are ripping Floridians off and raising rates year after year, without any improvement in service. Tallahassee has let these companies run state-sanctioned monopolies for too long. In Congress, I will be laser-focused on fostering competition, not consolidation, and fighting for a better deal for Florida families. With prices rising, wages also need to keep up – which is why I support raising the federal minimum wage and passing the PRO Act, so labor unions can advocate for workers in a changing economy.",
                 "retrieved_at": "2026-09-29T11:43:27.483Z"
               },
-              "score": 0.93
+              "score": 0.94
             }
           ]
         },
@@ -1812,17 +1857,7 @@
                 "text": "My first priority in Congress will be working to make Florida affordable again. We need to stop the bleeding, by reversing health care premium hikes and illegal, unpredictable tariffs. But more than that, we need representatives who will fight for working families – not for another tax giveaway for corporations and billionaires.",
                 "retrieved_at": "2026-09-29T11:43:27.483Z"
               },
-              "score": 0.9
-            },
-            {
-              "passage": {
-                "id": "d2070875",
-                "url": "https://baledalton.com/bale-dalton-calls-for-an-end-to-the-iran-war-on-the-six-month-anniversary-of-the-conflict",
-                "heading": "Bale Dalton Calls for an End to the Iran War On the Six-Month Anniversary of the Conflict",
-                "text": "“Today marks six months since the beginning of the war in Iran. A war that has no explained strategy or defined end state. A war in which, yet again, we the American people, are being misled about casualty rates and battle damage assessments. A war in which, yet again, the men and women of our Armed Forces are being put in harm’s way as pawns at the whim of politicians in power. A war in which tens of billions of dollars have been spent and munitions stockpiles depleted to perilous lows. A war that continues to sink our economy, from rising gas prices to fertilizer shortages. A war that has ultimately made us less safe.",
-                "retrieved_at": "2026-09-29T11:43:27.483Z"
-              },
-              "score": 0.86
+              "score": 0.88
             }
           ]
         }
@@ -1864,30 +1899,6 @@
     },
     {
       "area": {
-        "id": "housing",
-        "label": "Housing"
-      },
-      "subIssues": [
-        {
-          "id": "A2",
-          "label": "Housing affordability",
-          "citations": [
-            {
-              "passage": {
-                "id": "56bc95d6",
-                "url": "https://baledalton.com/priorities",
-                "heading": "Priorities",
-                "text": "Congress must act to address the housing affordability crisis that has swept our state and our country. While we absolutely need to enable the creation of more housing at all income levels in order to increase supply, we also should ban Wall Street speculators from buying up single-family homes, which further reduces options for families and drives up costs for everyone else.",
-                "retrieved_at": "2026-09-29T11:43:27.483Z"
-              },
-              "score": 0.99
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "area": {
         "id": "environment",
         "label": "Environment & Water"
       },
@@ -1904,7 +1915,7 @@
                 "text": "Preserving environmental resources and preventing drilling off the coasts of Florida means protecting the Eglin Gulf Test and Training Range, as well as the Eastern Range, so that our military and our space program can continue to operate in order to keep our nation safe and secure. Endorsing an all-of-the-above energy policy means strengthening our nation’s energy independence and reducing our need for foreign oil and Chinese solar while also lowering costs for American consumers.",
                 "retrieved_at": "2026-09-29T11:43:27.483Z"
               },
-              "score": 0.94
+              "score": 0.93
             }
           ]
         },
@@ -1914,16 +1925,6 @@
           "citations": [
             {
               "passage": {
-                "id": "c4ff6a55",
-                "url": "https://baledalton.com/priorities",
-                "heading": "Priorities",
-                "text": "We need to crack down on the power companies and property insurers that are ripping Floridians off and raising rates year after year, without any improvement in service. Tallahassee has let these companies run state-sanctioned monopolies for too long. In Congress, I will be laser-focused on fostering competition, not consolidation, and fighting for a better deal for Florida families. With prices rising, wages also need to keep up – which is why I support raising the federal minimum wage and passing the PRO Act, so labor unions can advocate for workers in a changing economy.",
-                "retrieved_at": "2026-09-29T11:43:27.483Z"
-              },
-              "score": 0.97
-            },
-            {
-              "passage": {
                 "id": "6302bb1f",
                 "url": "https://baledalton.com/priorities",
                 "heading": "Priorities",
@@ -1931,6 +1932,16 @@
                 "retrieved_at": "2026-09-29T11:43:27.483Z"
               },
               "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "c4ff6a55",
+                "url": "https://baledalton.com/priorities",
+                "heading": "Priorities",
+                "text": "We need to crack down on the power companies and property insurers that are ripping Floridians off and raising rates year after year, without any improvement in service. Tallahassee has let these companies run state-sanctioned monopolies for too long. In Congress, I will be laser-focused on fostering competition, not consolidation, and fighting for a better deal for Florida families. With prices rising, wages also need to keep up – which is why I support raising the federal minimum wage and passing the PRO Act, so labor unions can advocate for workers in a changing economy.",
+                "retrieved_at": "2026-09-29T11:43:27.483Z"
+              },
+              "score": 0.96
             }
           ]
         }
@@ -1976,16 +1987,6 @@
                 "url": "https://baledalton.com/priorities",
                 "heading": "Priorities",
                 "text": "Public safety, whether from gun violence or any other type of violent crime, is our government’s number one priority. Without safe communities and safe schools, we cannot have prosperous families and prosperous businesses. We must ensure that our police departments are fully funded and have the resources they need to do their job well.",
-                "retrieved_at": "2026-09-29T11:43:27.483Z"
-              },
-              "score": 0.98
-            },
-            {
-              "passage": {
-                "id": "8db6d16e",
-                "url": "https://baledalton.com/priorities",
-                "heading": "Priorities",
-                "text": "I’m not interested in partisan politicians who refuse to talk about the need to keep firearms out of the hands of dangerous criminals, or who refuse to talk about the need to adequately fund our law enforcement agencies and public safety officers. We can safeguard our freedoms as law-abiding citizens in this country while also keeping crime off our streets and out of our schools.",
                 "retrieved_at": "2026-09-29T11:43:27.483Z"
               },
               "score": 0.98
@@ -2044,7 +2045,7 @@
     }
   ],
   "usage": {
-    "input_tokens": 156587,
-    "output_tokens": 20152
+    "input_tokens": 165739,
+    "output_tokens": 21076
   }
 }

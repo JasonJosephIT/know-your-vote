@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://www.electluizffgarcia.com",
-  "created_at": "2026-09-29T11:45:04.446Z",
+  "created_at": "2026-09-30T01:59:00.881Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -38,8 +39,8 @@
   "counts": {
     "passages": 30,
     "asked": 30,
-    "states_policy": 16,
-    "with_issue": 8,
+    "states_policy": 12,
+    "with_issue": 6,
     "failed": 0
   },
   "passages": [
@@ -50,6 +51,7 @@
       "text": "Transparency Every dollar matters. Every decision should be visible. I’m committed to ensuring the people of Hillsborough know exactly where their money goes — because trust is earned through openness.",
       "verdict": {
         "commitment": 0.95,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -68,10 +70,10 @@
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.16,
+          "KYV1": 0.17,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.02,
+          "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -87,14 +89,15 @@
       "heading": "I’m Luiz F. F. Garcia — and I’m running for County Commissioner to restore competence, raise standards, and build a Hillsborough where families and businesses can thrive.",
       "text": "Accountability No excuses. No finger-pointing. If something goes wrong, leadership must take responsibility and fix it. That’s the foundation of a government that actually serves its people.",
       "verdict": {
-        "commitment": 0.74,
+        "commitment": 0.77,
+        "own_commitment": 0.63,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.03,
-          "A4": 0.02,
+          "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.03,
@@ -126,23 +129,24 @@
       "text": "Community First Hillsborough’s strength comes from its people — the small business owners, teachers, and working families who build this county every day. My goal is to create opportunities, not obstacles, so every resident can move forward together.",
       "verdict": {
         "commitment": 0.62,
+        "own_commitment": 0.61,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.03,
-          "A3": 0.02,
-          "A4": 0.03,
+          "A3": 0.03,
+          "A4": 0.04,
           "A5": 0.02,
           "A6": 0.05,
           "A7": 0.02,
-          "B1": 0.48,
+          "B1": 0.46,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.02,
+          "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.03,
@@ -163,16 +167,17 @@
       "heading": "I’m Luiz F. F. Garcia — and I’m running for County Commissioner to restore competence, raise standards, and build a Hillsborough where families and businesses can thrive.",
       "text": "The Vision Together, we can rebuild faith in local government. Not through empty promises — but through integrity, transparency, and results that speak louder than words. The future starts with action , and that’s what I intend to deliver.",
       "verdict": {
-        "commitment": 0.44,
+        "commitment": 0.42,
+        "own_commitment": 0.66,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.02,
+          "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.02,
+          "A4": 0.03,
           "A5": 0.02,
-          "A6": 0.03,
+          "A6": 0.02,
           "A7": 0.03,
           "B1": 0.08,
           "B2": 0.02,
@@ -180,7 +185,7 @@
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.03,
-          "B7": 0.02,
+          "B7": 0.03,
           "B8": 0.02,
           "KYV1": 0.1,
           "KYV10": 0.02,
@@ -201,16 +206,17 @@
       "heading": "About Me",
       "text": "Luiz F. F. Garcia isn’t a career politician he’s a local business owner who understands what it takes to build something from the ground up. From long days running his coffee shop to late nights working with the community, he’s seen firsthand where Hillsborough County thrives and where it needs real change.",
       "verdict": {
-        "commitment": 0.05,
+        "commitment": 0.06,
+        "own_commitment": 0.05,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
-          "A2": 0.02,
+          "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.03,
-          "A5": 0.02,
-          "A6": 0.03,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.02,
           "A7": 0.02,
           "B1": 0.06,
           "B2": 0.02,
@@ -221,12 +227,12 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.02,
+          "KYV10": 0.03,
           "KYV2": 0.03,
           "KYV3": 0.03,
           "KYV4": 0.02,
           "KYV5": 0.02,
-          "KYV6": 0.02,
+          "KYV6": 0.03,
           "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.02
@@ -240,6 +246,7 @@
       "text": "Guided by authenticity, transparency, and accountability, Luiz is stepping up to give a voice back to the people who’ve been overlooked for too long.",
       "verdict": {
         "commitment": 0.2,
+        "own_commitment": 0.47,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -250,7 +257,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.03,
-          "B1": 0.03,
+          "B1": 0.02,
           "B2": 0.02,
           "B3": 0.03,
           "B4": 0.02,
@@ -278,13 +285,14 @@
       "text": "Infrastructure Improvements Modernize roads, reduce congestion, and enhance public spaces for better quality of life.",
       "verdict": {
         "commitment": 0.8,
+        "own_commitment": 0.76,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.03,
-          "A4": 0.03,
+          "A3": 0.02,
+          "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -298,8 +306,8 @@
           "B8": 0.03,
           "KYV1": 0.02,
           "KYV10": 0.02,
-          "KYV2": 0.03,
-          "KYV3": 0.15,
+          "KYV2": 0.02,
+          "KYV3": 0.16,
           "KYV4": 0.03,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -316,12 +324,13 @@
       "text": "Public Safety Invest in law enforcement, first responders, and crime prevention to keep neighborhoods safe.",
       "verdict": {
         "commitment": 0.96,
+        "own_commitment": 0.91,
         "states_policy": true,
         "issues": [
           "B7"
         ],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
@@ -336,14 +345,14 @@
           "B6": 0.02,
           "B7": 0.98,
           "B8": 0.02,
-          "KYV1": 0.05,
+          "KYV1": 0.06,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -355,7 +364,8 @@
       "heading": "Key Issues",
       "text": "Structured Growth Support local businesses, attract new industries, and create jobs to strengthen our economy.",
       "verdict": {
-        "commitment": 0.93,
+        "commitment": 0.92,
+        "own_commitment": 0.88,
         "states_policy": true,
         "issues": [
           "B1"
@@ -377,9 +387,9 @@
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.04,
-          "KYV2": 0.02,
-          "KYV3": 0.72,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.73,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -395,13 +405,14 @@
       "heading": "Key Issues",
       "text": "Transparency & Accountability Promote open government, ethical leadership, and fiscal responsibility to build trust with residents.",
       "verdict": {
-        "commitment": 0.69,
+        "commitment": 0.71,
+        "own_commitment": 0.26,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.03,
+          "A3": 0.02,
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
@@ -417,7 +428,7 @@
           "KYV1": 0.3,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.03,
+          "KYV3": 0.02,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -433,7 +444,8 @@
       "heading": "Key Issues",
       "text": "Community Services Expand parks, recreation, and social programs to support families and seniors.",
       "verdict": {
-        "commitment": 0.86,
+        "commitment": 0.87,
+        "own_commitment": 0.86,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -445,9 +457,9 @@
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.03,
-          "B2": 0.03,
+          "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.04,
+          "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
@@ -455,7 +467,7 @@
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.02,
-          "KYV3": 0.16,
+          "KYV3": 0.17,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -472,7 +484,8 @@
       "text": "Historical Preservation Modern development can — and should — respect the past. That means protecting historic buildings, honoring cultural heritage, and ensuring that any new projects enhance the character of the district rather than erase it.",
       "verdict": {
         "commitment": 0.91,
-        "states_policy": true,
+        "own_commitment": 0.58,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
@@ -485,15 +498,15 @@
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.01,
+          "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.02,
-          "B7": 0.02,
+          "B6": 0.01,
+          "B7": 0.01,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.72,
+          "KYV3": 0.73,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -509,7 +522,8 @@
       "heading": "Key Issues",
       "text": "Below are the priorities I’m committed to addressing in District 3. Learn more in depth, about my vision for infrastructure, safety, economic opportunities, transparent governance, and essential community services.",
       "verdict": {
-        "commitment": 0.32,
+        "commitment": 0.33,
+        "own_commitment": 0.76,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -518,12 +532,12 @@
           "A3": 0.03,
           "A4": 0.03,
           "A5": 0.03,
-          "A6": 0.03,
+          "A6": 0.04,
           "A7": 0.03,
           "B1": 0.15,
           "B2": 0.04,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
           "B6": 0.03,
           "B7": 0.08,
@@ -536,7 +550,7 @@
           "KYV5": 0.03,
           "KYV6": 0.03,
           "KYV7": 0.04,
-          "KYV8": 0.02,
+          "KYV8": 0.03,
           "KYV9": 0.03
         }
       }
@@ -548,6 +562,7 @@
       "text": "Infrastructure Improvements Hillsborough County is expanding rapidly, but growth without strategy leads to overcrowded roads, strained utilities, and communities that feel overwhelmed. My plan focuses on structured, intentional development that improves infrastructure before new projects break ground. That includes smarter traffic flow, upgraded drainage systems, modernized utilities, and transportation planning that reduces congestion rather than reacting to it. Development should enhance neighborhoods—not burden them—and that requires holding builders accountable, protecting taxpayer dollars, and ensuring every project benefits the people who already live here.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.93,
         "states_policy": true,
         "issues": [
           "KYV3"
@@ -555,9 +570,9 @@
         "scores": {
           "A1": 0.02,
           "A2": 0.04,
-          "A3": 0.1,
+          "A3": 0.09,
           "A4": 0.06,
-          "A5": 0.05,
+          "A5": 0.04,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.07,
@@ -571,9 +586,9 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.46,
-          "KYV3": 0.92,
-          "KYV4": 0.63,
-          "KYV5": 0.18,
+          "KYV3": 0.93,
+          "KYV4": 0.61,
+          "KYV5": 0.17,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -588,17 +603,18 @@
       "text": "At the same time, we must protect historic districts like Ybor City by revitalizing them without erasing their cultural identity. We can create new economic opportunities while preserving the architecture and character that define these areas. With disciplined planning, transparent budgeting, and a long-term vision for transportation and growth, we can build a stronger, safer, and more efficient county—one that honors its past while preparing intelligently for its future.",
       "verdict": {
         "commitment": 0.95,
+        "own_commitment": 0.86,
         "states_policy": true,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.03,
-          "A3": 0.02,
-          "A4": 0.02,
+          "A3": 0.03,
+          "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.61,
+          "B1": 0.62,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -609,8 +625,8 @@
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.77,
-          "KYV4": 0.03,
+          "KYV3": 0.76,
+          "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -626,6 +642,7 @@
       "text": "Public Safety A safe community is the foundation of a strong county, and public safety begins with leadership that supports law enforcement, invests in community wellbeing, and plans ahead instead of reacting after problems arise. My focus is on strengthening coordination between agencies, improving response times, and ensuring our deputies, firefighters, and first responders have the tools, training, and resources they need to protect our families. This includes addressing infrastructure issues that impact safety—like poor lighting, outdated intersections, and neighborhoods that need better visibility and road design to reduce accidents and crime.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.9,
         "states_policy": true,
         "issues": [
           "B7"
@@ -642,13 +659,13 @@
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.01,
+          "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.92,
+          "B7": 0.93,
           "B8": 0.02,
           "KYV1": 0.03,
           "KYV10": 0.02,
-          "KYV2": 0.03,
+          "KYV2": 0.02,
           "KYV3": 0.05,
           "KYV4": 0.03,
           "KYV5": 0.02,
@@ -666,7 +683,8 @@
       "text": "But true public safety goes beyond enforcement. It’s also about building environments that discourage crime before it happens , supporting youth programs, improving mental-health response options, and ensuring new developments follow proper safety guidelines from the start. By prioritizing prevention, strengthening community trust, and making sure taxpayer dollars are used efficiently, we can create a county where every resident—no matter the neighborhood—feels protected, supported, and secure.",
       "verdict": {
         "commitment": 0.93,
-        "states_policy": true,
+        "own_commitment": 0.76,
+        "states_policy": false,
         "issues": [
           "B7"
         ],
@@ -706,6 +724,7 @@
       "text": "Structured Growth Hillsborough County has enormous potential for economic expansion, but growth must be structured, intentional, and aligned with the needs of our communities. As a small business owner, I understand the challenges local entrepreneurs face—long permitting delays, inconsistent regulations, and county processes that slow progress. My approach focuses on cutting red tape, modernizing county operations, and ensuring that businesses receive timely, transparent, and accountable service. When government becomes more efficient and predictable, job creation accelerates, investment rises, and our economy becomes more resilient.",
       "verdict": {
         "commitment": 0.97,
+        "own_commitment": 0.88,
         "states_policy": true,
         "issues": [
           "B1",
@@ -714,16 +733,16 @@
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
-          "A3": 0.03,
-          "A4": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.96,
+          "B1": 0.97,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.01,
+          "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
@@ -747,7 +766,8 @@
       "text": "Strong economic development also means planning growth the right way , revitalizing underused districts, and encouraging new development that enhances neighborhoods rather than overwhelming them. Structured growth brings stability: it protects historic areas like Ybor City, supports small businesses, strengthens workforce opportunities, and guides large projects so they add long-term value to the county. With disciplined planning, strategic investment, and leadership that puts residents and local businesses first, Hillsborough County can build a thriving economy that benefits families today and sets the foundation for a prosperous future.",
       "verdict": {
         "commitment": 0.92,
-        "states_policy": true,
+        "own_commitment": 0.63,
+        "states_policy": false,
         "issues": [
           "B1",
           "KYV3"
@@ -765,13 +785,13 @@
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.01,
-          "B6": 0.02,
+          "B6": 0.01,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
           "KYV10": 0.05,
           "KYV2": 0.02,
-          "KYV3": 0.94,
+          "KYV3": 0.93,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -788,6 +808,7 @@
       "text": "Transparency & Accountability Hillsborough County deserves leadership that works for the people , not behind closed doors. Too many decisions are made without clear communication, predictable timelines, or proper oversight—leaving residents frustrated and businesses uncertain. My commitment is to bring full transparency to the county’s budgeting, permitting, and development processes. That means clear reporting, open communication, and ensuring taxpayers know exactly where their money is going and why. Accountability isn’t just a talking point; it’s a standard. Every department, every project, and every dollar spent should reflect the priorities of the community—not political convenience.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.96,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -802,14 +823,14 @@
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.01,
+          "B5": 0.02,
           "B6": 0.02,
-          "B7": 0.03,
+          "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.39,
+          "KYV1": 0.38,
           "KYV10": 0.02,
           "KYV2": 0.02,
-          "KYV3": 0.51,
+          "KYV3": 0.52,
           "KYV4": 0.02,
           "KYV5": 0.02,
           "KYV6": 0.02,
@@ -826,6 +847,7 @@
       "text": "True accountability also requires structured planning and measurable results. I will push for performance-based evaluations within county departments, realistic deadlines for public projects, and systems that prevent waste and mismanagement before they happen. Residents should have confidence that major initiatives, from infrastructure upgrades to economic development, are being handled responsibly, efficiently, and with integrity. My goal is to rebuild trust by setting a higher standard of leadership—one that is open, honest, and unwaveringly committed to serving the people of Hillsborough County.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.97,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -836,7 +858,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.25,
+          "B1": 0.24,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -844,7 +866,7 @@
           "B6": 0.02,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.17,
+          "KYV1": 0.18,
           "KYV10": 0.02,
           "KYV2": 0.03,
           "KYV3": 0.06,
@@ -863,7 +885,8 @@
       "heading": "Key Issues",
       "text": "Community Services A strong county begins with leaders who are present, involved, and committed to serving the people they represent. Community service means showing up—not just during election season, but year-round—to listen, help, and support the organizations, families, and local businesses that make Hillsborough County thrive. As a small business owner, I interact with residents every day, hearing their challenges firsthand and actively finding ways to make a positive impact. My goal is to strengthen partnerships with local nonprofits, schools, churches, and volunteer groups so we can address community needs together with real solutions, not political promises.",
       "verdict": {
-        "commitment": 0.7,
+        "commitment": 0.71,
+        "own_commitment": 0.81,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -873,8 +896,8 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.04,
-          "A7": 0.02,
-          "B1": 0.04,
+          "A7": 0.03,
+          "B1": 0.05,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -901,7 +924,8 @@
       "heading": "Key Issues",
       "text": "Community service is also about building a culture of connection and responsibility. Whether it’s supporting youth programs, organizing local clean-up efforts, helping vulnerable seniors, or creating spaces where neighbors feel safe and supported, I believe leadership should lead by example. I plan to expand county-backed initiatives that encourage civic engagement, promote mentorship, and build pride in our neighborhoods. When elected, I will continue being a hands-on, accessible, and proactive presence—working with residents directly to ensure every part of Hillsborough County has the attention, support, and opportunity it deserves.",
       "verdict": {
-        "commitment": 0.95,
+        "commitment": 0.94,
+        "own_commitment": 0.95,
         "states_policy": true,
         "issues": [],
         "scores": {
@@ -909,14 +933,14 @@
           "A2": 0.02,
           "A3": 0.02,
           "A4": 0.02,
-          "A5": 0.02,
+          "A5": 0.03,
           "A6": 0.02,
           "A7": 0.02,
           "B1": 0.03,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.02,
+          "B5": 0.01,
           "B6": 0.02,
           "B7": 0.05,
           "B8": 0.03,
@@ -939,7 +963,8 @@
       "heading": "From Building Dreams to Building a Better Hillsborough",
       "text": "My story isn’t one of politics it’s one of perseverance. From managing long days at my family’s coffee shop to navigating the challenges of running a business, I’ve learned that real leadership means showing up when it’s inconvenient and fighting for results when others give up. I’ve seen how hard everyday people work just to stay ahead, and I believe local government should work just as hard for them.",
       "verdict": {
-        "commitment": 0.17,
+        "commitment": 0.16,
+        "own_commitment": 0.2,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -950,16 +975,16 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.13,
+          "B1": 0.12,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
-          "B5": 0.01,
+          "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.02,
-          "KYV10": 0.03,
+          "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.03,
           "KYV4": 0.02,
@@ -978,6 +1003,7 @@
       "text": "Our children are the foundation of our county’s future which is why it’s time to properly fund and modernize our schools. Every child deserves access to quality education, safe facilities, and the tools to build a successful life right here in Hillsborough. But education can’t thrive if our infrastructure fails. We must fix the roads, reduce congestion, and modernize our public spaces to make it easier for families and small businesses to grow.",
       "verdict": {
         "commitment": 0.98,
+        "own_commitment": 0.88,
         "states_policy": true,
         "issues": [
           "A6"
@@ -988,9 +1014,9 @@
           "A3": 0.03,
           "A4": 0.03,
           "A5": 0.02,
-          "A6": 0.91,
+          "A6": 0.9,
           "A7": 0.02,
-          "B1": 0.29,
+          "B1": 0.27,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -1001,8 +1027,8 @@
           "KYV1": 0.02,
           "KYV10": 0.05,
           "KYV2": 0.02,
-          "KYV3": 0.15,
-          "KYV4": 0.02,
+          "KYV3": 0.14,
+          "KYV4": 0.03,
           "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
@@ -1018,7 +1044,8 @@
       "text": "My vision is simple: a county that invests in its people from classrooms to roadways with transparency, accountability, and results that make daily life better for everyone. This campaign isn’t about titles or ego; it’s about service, integrity, and building a Hillsborough County that rewards hard work instead of burying it in red tape.",
       "verdict": {
         "commitment": 0.86,
-        "states_policy": true,
+        "own_commitment": 0.76,
+        "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
@@ -1026,24 +1053,24 @@
           "A3": 0.03,
           "A4": 0.05,
           "A5": 0.02,
-          "A6": 0.34,
+          "A6": 0.36,
           "A7": 0.03,
-          "B1": 0.23,
-          "B2": 0.03,
+          "B1": 0.21,
+          "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.08,
+          "KYV1": 0.07,
           "KYV10": 0.08,
           "KYV2": 0.02,
           "KYV3": 0.05,
           "KYV4": 0.03,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.02,
+          "KYV7": 0.03,
           "KYV8": 0.02,
           "KYV9": 0.03
         }
@@ -1055,7 +1082,8 @@
       "heading": "FAQs",
       "text": "Why I Care I was raised to believe that a person’s character is measured by how they treat their community — not by what they say but by what they build. Hillsborough has given me everything I needed to grow as a man and as a business owner, and now it’s my turn to give back. I’m running because I want every young person in this county to have the same opportunities I did — to dream, to work hard, and to see that effort pay off right here at home.",
       "verdict": {
-        "commitment": 0.22,
+        "commitment": 0.23,
+        "own_commitment": 0.33,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1083,7 +1111,7 @@
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.03
+          "KYV9": 0.02
         }
       }
     },
@@ -1093,7 +1121,8 @@
       "heading": "FAQs",
       "text": "My Leadership Philosophy As a small business owner, I know the value of hard work, fairness, and results. I believe in leading by example and making decisions based on logic and compassion. True leadership means empowering people around me, holding our government accountable, and cutting through bureaucracy to get things done for our community.",
       "verdict": {
-        "commitment": 0.56,
+        "commitment": 0.57,
+        "own_commitment": 0.56,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1104,7 +1133,7 @@
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
-          "B1": 0.06,
+          "B1": 0.07,
           "B2": 0.02,
           "B3": 0.02,
           "B4": 0.02,
@@ -1112,7 +1141,7 @@
           "B6": 0.02,
           "B7": 0.03,
           "B8": 0.02,
-          "KYV1": 0.16,
+          "KYV1": 0.18,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.03,
@@ -1131,31 +1160,32 @@
       "heading": "FAQs",
       "text": "Looking Ahead This campaign isn’t just about winning an election—it’s about restoring trust in leadership and pride in our community. Together, we’ll build a safer, cleaner, and more connected Hillsborough. Whether it’s improving schools, fixing roads, creating good-paying jobs, or ensuring transparency at every level, I’ll never stop fighting for the people who make this county great—YOU.",
       "verdict": {
-        "commitment": 0.82,
+        "commitment": 0.83,
+        "own_commitment": 0.88,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.03,
-          "A3": 0.02,
+          "A3": 0.03,
           "A4": 0.03,
-          "A5": 0.04,
-          "A6": 0.15,
+          "A5": 0.03,
+          "A6": 0.16,
           "A7": 0.03,
-          "B1": 0.76,
-          "B2": 0.02,
+          "B1": 0.78,
+          "B2": 0.03,
           "B3": 0.02,
-          "B4": 0.03,
+          "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.03,
+          "B6": 0.04,
           "B7": 0.11,
           "B8": 0.03,
-          "KYV1": 0.1,
-          "KYV10": 0.06,
+          "KYV1": 0.11,
+          "KYV10": 0.07,
           "KYV2": 0.03,
-          "KYV3": 0.04,
+          "KYV3": 0.03,
           "KYV4": 0.03,
-          "KYV5": 0.02,
+          "KYV5": 0.03,
           "KYV6": 0.02,
           "KYV7": 0.03,
           "KYV8": 0.02,
@@ -1170,6 +1200,7 @@
       "text": "Real change begins with real conversations. Whether you have a question, want to volunteer, or simply want to share your thoughts, I’m here to listen.",
       "verdict": {
         "commitment": 0.04,
+        "own_commitment": 0.28,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -1183,17 +1214,17 @@
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
-          "B4": 0.02,
-          "B5": 0.01,
+          "B4": 0.01,
+          "B5": 0.02,
           "B6": 0.02,
           "B7": 0.02,
-          "B8": 0.02,
+          "B8": 0.01,
           "KYV1": 0.02,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.01,
-          "KYV5": 0.01,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.01,
@@ -1215,6 +1246,16 @@
           "citations": [
             {
               "passage": {
+                "id": "4ac0424e",
+                "url": "https://www.electluizffgarcia.com/issues",
+                "heading": "Key Issues",
+                "text": "Structured Growth Hillsborough County has enormous potential for economic expansion, but growth must be structured, intentional, and aligned with the needs of our communities. As a small business owner, I understand the challenges local entrepreneurs face—long permitting delays, inconsistent regulations, and county processes that slow progress. My approach focuses on cutting red tape, modernizing county operations, and ensuring that businesses receive timely, transparent, and accountable service. When government becomes more efficient and predictable, job creation accelerates, investment rises, and our economy becomes more resilient.",
+                "retrieved_at": "2026-09-29T11:44:59.402Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
                 "id": "c8206b7e",
                 "url": "https://www.electluizffgarcia.com/",
                 "heading": "Key Issues",
@@ -1222,26 +1263,6 @@
                 "retrieved_at": "2026-09-29T11:44:59.402Z"
               },
               "score": 0.96
-            },
-            {
-              "passage": {
-                "id": "4ac0424e",
-                "url": "https://www.electluizffgarcia.com/issues",
-                "heading": "Key Issues",
-                "text": "Structured Growth Hillsborough County has enormous potential for economic expansion, but growth must be structured, intentional, and aligned with the needs of our communities. As a small business owner, I understand the challenges local entrepreneurs face—long permitting delays, inconsistent regulations, and county processes that slow progress. My approach focuses on cutting red tape, modernizing county operations, and ensuring that businesses receive timely, transparent, and accountable service. When government becomes more efficient and predictable, job creation accelerates, investment rises, and our economy becomes more resilient.",
-                "retrieved_at": "2026-09-29T11:44:59.402Z"
-              },
-              "score": 0.96
-            },
-            {
-              "passage": {
-                "id": "3c44d900",
-                "url": "https://www.electluizffgarcia.com/issues",
-                "heading": "Key Issues",
-                "text": "Strong economic development also means planning growth the right way , revitalizing underused districts, and encouraging new development that enhances neighborhoods rather than overwhelming them. Structured growth brings stability: it protects historic areas like Ybor City, supports small businesses, strengthens workforce opportunities, and guides large projects so they add long-term value to the county. With disciplined planning, strategic investment, and leadership that puts residents and local businesses first, Hillsborough County can build a thriving economy that benefits families today and sets the foundation for a prosperous future.",
-                "retrieved_at": "2026-09-29T11:44:59.402Z"
-              },
-              "score": 0.91
             }
           ]
         }
@@ -1265,7 +1286,7 @@
                 "text": "Our children are the foundation of our county’s future which is why it’s time to properly fund and modernize our schools. Every child deserves access to quality education, safe facilities, and the tools to build a successful life right here in Hillsborough. But education can’t thrive if our infrastructure fails. We must fix the roads, reduce congestion, and modernize our public spaces to make it easier for families and small businesses to grow.",
                 "retrieved_at": "2026-09-29T11:44:59.402Z"
               },
-              "score": 0.91
+              "score": 0.9
             }
           ]
         }
@@ -1283,23 +1304,13 @@
           "citations": [
             {
               "passage": {
-                "id": "3c44d900",
-                "url": "https://www.electluizffgarcia.com/issues",
-                "heading": "Key Issues",
-                "text": "Strong economic development also means planning growth the right way , revitalizing underused districts, and encouraging new development that enhances neighborhoods rather than overwhelming them. Structured growth brings stability: it protects historic areas like Ybor City, supports small businesses, strengthens workforce opportunities, and guides large projects so they add long-term value to the county. With disciplined planning, strategic investment, and leadership that puts residents and local businesses first, Hillsborough County can build a thriving economy that benefits families today and sets the foundation for a prosperous future.",
-                "retrieved_at": "2026-09-29T11:44:59.402Z"
-              },
-              "score": 0.94
-            },
-            {
-              "passage": {
                 "id": "c042fd30",
                 "url": "https://www.electluizffgarcia.com/issues",
                 "heading": "Key Issues",
                 "text": "Infrastructure Improvements Hillsborough County is expanding rapidly, but growth without strategy leads to overcrowded roads, strained utilities, and communities that feel overwhelmed. My plan focuses on structured, intentional development that improves infrastructure before new projects break ground. That includes smarter traffic flow, upgraded drainage systems, modernized utilities, and transportation planning that reduces congestion rather than reacting to it. Development should enhance neighborhoods—not burden them—and that requires holding builders accountable, protecting taxpayer dollars, and ensuring every project benefits the people who already live here.",
                 "retrieved_at": "2026-09-29T11:44:59.402Z"
               },
-              "score": 0.92
+              "score": 0.93
             },
             {
               "passage": {
@@ -1343,17 +1354,7 @@
                 "text": "Public Safety A safe community is the foundation of a strong county, and public safety begins with leadership that supports law enforcement, invests in community wellbeing, and plans ahead instead of reacting after problems arise. My focus is on strengthening coordination between agencies, improving response times, and ensuring our deputies, firefighters, and first responders have the tools, training, and resources they need to protect our families. This includes addressing infrastructure issues that impact safety—like poor lighting, outdated intersections, and neighborhoods that need better visibility and road design to reduce accidents and crime.",
                 "retrieved_at": "2026-09-29T11:44:59.402Z"
               },
-              "score": 0.92
-            },
-            {
-              "passage": {
-                "id": "38616a43",
-                "url": "https://www.electluizffgarcia.com/issues",
-                "heading": "Key Issues",
-                "text": "But true public safety goes beyond enforcement. It’s also about building environments that discourage crime before it happens , supporting youth programs, improving mental-health response options, and ensuring new developments follow proper safety guidelines from the start. By prioritizing prevention, strengthening community trust, and making sure taxpayer dollars are used efficiently, we can create a county where every resident—no matter the neighborhood—feels protected, supported, and secure.",
-                "retrieved_at": "2026-09-29T11:44:59.402Z"
-              },
-              "score": 0.88
+              "score": 0.93
             }
           ]
         }
@@ -1361,7 +1362,7 @@
     }
   ],
   "usage": {
-    "input_tokens": 106244,
-    "output_tokens": 13740
+    "input_tokens": 112484,
+    "output_tokens": 14370
   }
 }

@@ -2,13 +2,14 @@
   "schema": "kyv.policy-run/1",
   "status": "complete",
   "site": "https://debbiewassermanschultz.com",
-  "created_at": "2026-09-29T11:42:39.688Z",
+  "created_at": "2026-09-30T01:58:16.464Z",
   "model": "jev-1.13.0",
   "taxonomy_version": "7",
   "threshold": 0.85,
-  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
   "question_ids": [
     "q_states_policy",
+    "q_own_commitment",
     "A1",
     "A2",
     "A3",
@@ -38,8 +39,8 @@
   "counts": {
     "passages": 8,
     "asked": 8,
-    "states_policy": 1,
-    "with_issue": 1,
+    "states_policy": 0,
+    "with_issue": 0,
     "failed": 0
   },
   "passages": [
@@ -49,29 +50,30 @@
       "heading": "Debbie Wasserman Schultz",
       "text": "Democrat Debbie Wasserman Schultz has spent her entire career fighting for Broward County to protect Social Security and Medicare, defend reproductive freedom, strengthen public schools, lower healthcare costs, prevent gun violence and fighting the reckless Trump agenda. Debbie has championed affordable healthcare, women’s health, veterans, seniors, and our environment. As Florida’s senior Congresswoman and a breast cancer survivor, she’s turned her own experiences into landmark laws that protect children, support survivors, and expand access to life-saving cancer screenings for minority populations and underserved communities.",
       "verdict": {
-        "commitment": 0.88,
-        "states_policy": true,
+        "commitment": 0.89,
+        "own_commitment": 0.22,
+        "states_policy": false,
         "issues": [
           "B2",
           "B4",
           "B5"
         ],
         "scores": {
-          "A1": 0.03,
+          "A1": 0.02,
           "A2": 0.03,
           "A3": 0.03,
           "A4": 0.1,
           "A5": 0.05,
-          "A6": 0.65,
+          "A6": 0.69,
           "A7": 0.03,
-          "B1": 0.08,
+          "B1": 0.07,
           "B2": 0.98,
-          "B3": 0.03,
-          "B4": 0.95,
-          "B5": 0.89,
+          "B3": 0.02,
+          "B4": 0.94,
+          "B5": 0.9,
           "B6": 0.03,
-          "B7": 0.29,
-          "B8": 0.59,
+          "B7": 0.3,
+          "B8": 0.58,
           "KYV1": 0.1,
           "KYV10": 0.06,
           "KYV2": 0.05,
@@ -79,9 +81,9 @@
           "KYV4": 0.03,
           "KYV5": 0.03,
           "KYV6": 0.03,
-          "KYV7": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.02,
-          "KYV9": 0.06
+          "KYV9": 0.05
         }
       }
     },
@@ -92,32 +94,33 @@
       "text": "As a senior appropriator and member of Democratic leadership, Debbie has brought home billions of dollars for South Florida – from Everglades restoration, infrastructure improvements, community health centers, veterans’ housing and healthcare, non-profit security grants, and the well-paying jobs that come with those projects.",
       "verdict": {
         "commitment": 0.11,
+        "own_commitment": 0.06,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.03,
-          "A2": 0.13,
-          "A3": 0.03,
+          "A2": 0.14,
+          "A3": 0.02,
           "A4": 0.03,
-          "A5": 0.41,
+          "A5": 0.39,
           "A6": 0.03,
           "A7": 0.02,
-          "B1": 0.5,
-          "B2": 0.3,
+          "B1": 0.54,
+          "B2": 0.28,
           "B3": 0.02,
           "B4": 0.03,
           "B5": 0.02,
           "B6": 0.02,
           "B7": 0.03,
-          "B8": 0.19,
+          "B8": 0.2,
           "KYV1": 0.02,
           "KYV10": 0.03,
           "KYV2": 0.03,
-          "KYV3": 0.24,
-          "KYV4": 0.18,
-          "KYV5": 0.06,
-          "KYV6": 0.03,
-          "KYV7": 0.14,
+          "KYV3": 0.23,
+          "KYV4": 0.16,
+          "KYV5": 0.07,
+          "KYV6": 0.02,
+          "KYV7": 0.15,
           "KYV8": 0.02,
           "KYV9": 0.02
         }
@@ -129,7 +132,8 @@
       "heading": "Support Debbie's Re-Election",
       "text": "Help us defeat Trump and MAGA by supporting a proven fighter like Debbie Wasserman Schultz",
       "verdict": {
-        "commitment": 0.26,
+        "commitment": 0.19,
+        "own_commitment": 0.1,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -148,7 +152,7 @@
           "B6": 0.03,
           "B7": 0.02,
           "B8": 0.02,
-          "KYV1": 0.15,
+          "KYV1": 0.12,
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
@@ -168,13 +172,14 @@
       "text": "If you’ve saved your information with ActBlue Express, your donation will go through immediately.",
       "verdict": {
         "commitment": 0.02,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
           "A1": 0.02,
           "A2": 0.02,
           "A3": 0.02,
-          "A4": 0.02,
+          "A4": 0.01,
           "A5": 0.02,
           "A6": 0.02,
           "A7": 0.02,
@@ -190,8 +195,8 @@
           "KYV10": 0.02,
           "KYV2": 0.02,
           "KYV3": 0.02,
-          "KYV4": 0.02,
-          "KYV5": 0.01,
+          "KYV4": 0.01,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
           "KYV8": 0.02,
@@ -206,24 +211,25 @@
       "text": "The Aug. 18 Democratic primary for U.S. House District 20 is highly anticipated and filled with controversy. Our choice is Wasserman Schultz, 59, a 21-year member of Congress. Read the full article here https://www.miamiherald.com/opinion/election-recommendations/article316686154.html",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.04,
         "states_policy": false,
         "issues": [],
         "scores": {
-          "A1": 0.02,
+          "A1": 0.03,
           "A2": 0.03,
           "A3": 0.03,
-          "A4": 0.02,
+          "A4": 0.03,
           "A5": 0.03,
           "A6": 0.03,
           "A7": 0.03,
-          "B1": 0.04,
+          "B1": 0.03,
           "B2": 0.03,
           "B3": 0.03,
           "B4": 0.03,
           "B5": 0.03,
-          "B6": 0.03,
+          "B6": 0.04,
           "B7": 0.03,
-          "B8": 0.02,
+          "B8": 0.03,
           "KYV1": 0.04,
           "KYV10": 0.03,
           "KYV2": 0.03,
@@ -231,7 +237,7 @@
           "KYV4": 0.03,
           "KYV5": 0.02,
           "KYV6": 0.02,
-          "KYV7": 0.03,
+          "KYV7": 0.02,
           "KYV8": 0.02,
           "KYV9": 0.03
         }
@@ -243,7 +249,8 @@
       "heading": "District 20, the Sun Sentinel Editorial Board recommends Democrat Debbie Wasserman Schultz",
       "text": "In the primary elections in U.S. House District 20, the Sun Sentinel Editorial Board recommends Democrat Debbie Wasserman Schultz and Republican Brent Andersen. Read the full article here https://www.sun-sentinel.com/2026/07/09/for-u-s-house-district-20-wasserman-schultz-andersen-endorsement/",
       "verdict": {
-        "commitment": 0.04,
+        "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -251,7 +258,7 @@
           "A2": 0.02,
           "A3": 0.03,
           "A4": 0.02,
-          "A5": 0.03,
+          "A5": 0.02,
           "A6": 0.03,
           "A7": 0.04,
           "B1": 0.03,
@@ -266,11 +273,11 @@
           "KYV10": 0.03,
           "KYV2": 0.03,
           "KYV3": 0.03,
-          "KYV4": 0.03,
-          "KYV5": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
           "KYV6": 0.02,
           "KYV7": 0.02,
-          "KYV8": 0.02,
+          "KYV8": 0.03,
           "KYV9": 0.03
         }
       }
@@ -282,6 +289,7 @@
       "text": "Polling conducted for Congresswoman Debbie Wasserman Schultz’s campaign shows she is viewed favorably by Black voters in the district where she’s seeking reelection — despite strenuous objection to her candidacy from Black candidates running for the same seat and some",
       "verdict": {
         "commitment": 0.03,
+        "own_commitment": 0.03,
         "states_policy": false,
         "issues": [],
         "scores": {
@@ -291,7 +299,7 @@
           "A4": 0.02,
           "A5": 0.02,
           "A6": 0.02,
-          "A7": 0.03,
+          "A7": 0.02,
           "B1": 0.02,
           "B2": 0.02,
           "B3": 0.02,
@@ -319,7 +327,8 @@
       "heading": "A crossroads moment for Broward Democrats | Editorial",
       "text": "Debbie Wasserman Schultz has never backed down from a fight, and she’s not about to start now. She is the obvious target of an illegal redrawing of Florida congressional districts, orchestrated by Gov. Ron DeSantis and his hyperpartisan Republican allies",
       "verdict": {
-        "commitment": 0.2,
+        "commitment": 0.21,
+        "own_commitment": 0.14,
         "states_policy": false,
         "issues": [
           "A7",
@@ -338,8 +347,8 @@
           "B3": 0.02,
           "B4": 0.02,
           "B5": 0.02,
-          "B6": 0.37,
-          "B7": 0.03,
+          "B6": 0.35,
+          "B7": 0.02,
           "B8": 0.02,
           "KYV1": 0.86,
           "KYV10": 0.02,
@@ -355,82 +364,9 @@
       }
     }
   ],
-  "areas": [
-    {
-      "area": {
-        "id": "healthcare",
-        "label": "Healthcare"
-      },
-      "subIssues": [
-        {
-          "id": "B2",
-          "label": "Healthcare access and costs",
-          "citations": [
-            {
-              "passage": {
-                "id": "3b9a6802",
-                "url": "https://debbiewassermanschultz.com/",
-                "heading": "Debbie Wasserman Schultz",
-                "text": "Democrat Debbie Wasserman Schultz has spent her entire career fighting for Broward County to protect Social Security and Medicare, defend reproductive freedom, strengthen public schools, lower healthcare costs, prevent gun violence and fighting the reckless Trump agenda. Debbie has championed affordable healthcare, women’s health, veterans, seniors, and our environment. As Florida’s senior Congresswoman and a breast cancer survivor, she’s turned her own experiences into landmark laws that protect children, support survivors, and expand access to life-saving cancer screenings for minority populations and underserved communities.",
-                "retrieved_at": "2026-09-29T11:42:38.094Z"
-              },
-              "score": 0.98
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "area": {
-        "id": "retirement",
-        "label": "Retirement & Benefits"
-      },
-      "subIssues": [
-        {
-          "id": "B4",
-          "label": "Social Security and Medicare",
-          "citations": [
-            {
-              "passage": {
-                "id": "3b9a6802",
-                "url": "https://debbiewassermanschultz.com/",
-                "heading": "Debbie Wasserman Schultz",
-                "text": "Democrat Debbie Wasserman Schultz has spent her entire career fighting for Broward County to protect Social Security and Medicare, defend reproductive freedom, strengthen public schools, lower healthcare costs, prevent gun violence and fighting the reckless Trump agenda. Debbie has championed affordable healthcare, women’s health, veterans, seniors, and our environment. As Florida’s senior Congresswoman and a breast cancer survivor, she’s turned her own experiences into landmark laws that protect children, support survivors, and expand access to life-saving cancer screenings for minority populations and underserved communities.",
-                "retrieved_at": "2026-09-29T11:42:38.094Z"
-              },
-              "score": 0.95
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "area": {
-        "id": "abortion",
-        "label": "Abortion Policy"
-      },
-      "subIssues": [
-        {
-          "id": "B5",
-          "label": "Abortion policy",
-          "citations": [
-            {
-              "passage": {
-                "id": "3b9a6802",
-                "url": "https://debbiewassermanschultz.com/",
-                "heading": "Debbie Wasserman Schultz",
-                "text": "Democrat Debbie Wasserman Schultz has spent her entire career fighting for Broward County to protect Social Security and Medicare, defend reproductive freedom, strengthen public schools, lower healthcare costs, prevent gun violence and fighting the reckless Trump agenda. Debbie has championed affordable healthcare, women’s health, veterans, seniors, and our environment. As Florida’s senior Congresswoman and a breast cancer survivor, she’s turned her own experiences into landmark laws that protect children, support survivors, and expand access to life-saving cancer screenings for minority populations and underserved communities.",
-                "retrieved_at": "2026-09-29T11:42:38.094Z"
-              },
-              "score": 0.89
-            }
-          ]
-        }
-      ]
-    }
-  ],
+  "areas": [],
   "usage": {
-    "input_tokens": 28290,
-    "output_tokens": 3664
+    "input_tokens": 29954,
+    "output_tokens": 3832
   }
 }

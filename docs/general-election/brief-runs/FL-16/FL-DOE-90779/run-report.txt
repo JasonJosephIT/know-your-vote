@@ -2,31 +2,22 @@
 What this site states, by policy area
 
 Economy & Affordability
-  A4  Cost of living in Florida  (1 citation(s))
-      0.85  "Government is supposed to solve problems for the people it serves. My first priority is, lowering the cost of living for Gulf Coast families — and protecting the healthcare and retirement security you’ve already earned. On day one, I wil…"
-            https://kellykirschner.com/  — section: When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.
-  B1  Economy, inflation, and jobs  (3 citation(s))
-      0.93  "Give small businesses, farmers, manufacturers, and commercial fishermen stable, predictable rules so they can invest, hire, and grow with confidence."
-            https://kellykirschner.com/  — section: Affordability isn’t just about prices. It’s about opportunity.
+  B1  Economy, inflation, and jobs  (1 citation(s))
       0.92  "Restore the workforce opportunities our Manasota region lost by supporting nursing, teacher preparation, veterans’ education, workforce training, apprenticeships, and affordable four-year degree pathways."
             https://kellykirschner.com/  — section: Affordability isn’t just about prices. It’s about opportunity.
-      0.90  "Make sure the AI revolution — which billionaires like Elon Musk are building with our data and our labor market — works for the middle class, not just for them."
-            https://kellykirschner.com/  — section: Congress just raised the national debt — and used the money to hand tax loopholes to corporations that already pay zero in federal taxes . Zero, while our kids and grandkids are handed the bill.
 
 Education
   KYV10  Career, vocational and higher education  (1 citation(s))
-      0.98  "Restore the workforce opportunities our Manasota region lost by supporting nursing, teacher preparation, veterans’ education, workforce training, apprenticeships, and affordable four-year degree pathways."
+      0.97  "Restore the workforce opportunities our Manasota region lost by supporting nursing, teacher preparation, veterans’ education, workforce training, apprenticeships, and affordable four-year degree pathways."
             https://kellykirschner.com/  — section: Affordability isn’t just about prices. It’s about opportunity.
 
 Healthcare
-  B2  Healthcare access and costs  (6 citation(s))
+  B2  Healthcare access and costs  (5 citation(s))
       0.98  "Lowering insurance, healthcare, and prescription drug costs by creating an insurance backstop, repeal cuts to Medicare and Medicaid, and allow government to negotiate for lower prescription drug prices."
             https://kellykirschner.com/  — section: When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.
       0.97  "Protect people with pre-existing conditions, and keep Social Security, Medicare, and Medicaid, the promises they’ve always been – an earned right."
             https://kellykirschner.com/  — section: When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.
       0.97  "Protect every patient with a pre-existing condition."
-            https://kellykirschner.com/  — section: One in three people in this district depend on Medicaid or Medicare. These aren’t handouts — they are promises.
-      0.97  "When Congress guts Medicaid, it isn't some abstraction — it's our brother or cousin choosing between medication and groceries. That ends."
             https://kellykirschner.com/  — section: One in three people in this district depend on Medicaid or Medicare. These aren’t handouts — they are promises.
       0.90  "Government is supposed to solve problems for the people it serves. My first priority is, lowering the cost of living for Gulf Coast families — and protecting the healthcare and retirement security you’ve already earned. On day one, I wil…"
             https://kellykirschner.com/  — section: When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.
@@ -38,13 +29,10 @@ Housing
       0.98  "Expand affordable housing and stop Wall Street from buying up single-family homes and gouging renters."
             https://kellykirschner.com/  — section: When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.
   KYV6  Renters and evictions  (1 citation(s))
-      0.86  "Expand affordable housing and stop Wall Street from buying up single-family homes and gouging renters."
+      0.85  "Expand affordable housing and stop Wall Street from buying up single-family homes and gouging renters."
             https://kellykirschner.com/  — section: When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.
 
 Environment & Water
-  A5  Water quality and Everglades restoration  (1 citation(s))
-      0.85  "If the answer isn’t the people who live here, work here, and raise their families here, it’s time to fix it. This region’s water, wetlands, and working lands have been sold off piece by piece for too long. When the algal blooms come, our…"
-            https://kellykirschner.com/  — section: Every decision about our water, growth, and natural resources should answer one question: Who does this help?
   B8  Climate and environment (national)  (3 citation(s))
       0.94  "Protect Tampa Bay, Sarasota Bay, and our coastline by prohibiting offshore drilling, stopping open-water fish farming, and enforcing the Clean Water Act."
             https://kellykirschner.com/  — section: Every decision about our water, growth, and natural resources should answer one question: Who does this help?
@@ -52,21 +40,17 @@ Environment & Water
             https://kellykirschner.com/  — section: Every decision about our water, growth, and natural resources should answer one question: Who does this help?
       0.87  "Keep public lands public. Invest in more conservation land upstream to protect our water and wildlife, and stop the push to privatize state and federal lands for golf courses, development, and additional resource extraction."
             https://kellykirschner.com/  — section: Every decision about our water, growth, and natural resources should answer one question: Who does this help?
-  KYV2  Energy and utilities  (3 citation(s))
+  KYV2  Energy and utilities  (2 citation(s))
       0.98  "Support affordable, reliable alternative energy that lowers utility bills, strengthens our electric grid, and gives families and businesses more certainty."
             https://kellykirschner.com/  — section: Affordability isn’t just about prices. It’s about opportunity.
-      0.97  "Keep AI hyperscale data centers out of District 16 until they prove they won’t drain our aquifers, raise utility costs, contaminate our air, or override local control."
+      0.96  "Keep AI hyperscale data centers out of District 16 until they prove they won’t drain our aquifers, raise utility costs, contaminate our air, or override local control."
             https://kellykirschner.com/  — section: Every decision about our water, growth, and natural resources should answer one question: Who does this help?
-      0.91  "Invest in affordable energy that lowers your bills."
-            https://kellykirschner.com/  — section: When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.
-  KYV3  Growth, development and land conservation  (4 citation(s))
+  KYV3  Growth, development and land conservation  (3 citation(s))
       0.98  "Keep public lands public. Invest in more conservation land upstream to protect our water and wildlife, and stop the push to privatize state and federal lands for golf courses, development, and additional resource extraction."
             https://kellykirschner.com/  — section: Every decision about our water, growth, and natural resources should answer one question: Who does this help?
       0.97  "Keep AI hyperscale data centers out of District 16 until they prove they won’t drain our aquifers, raise utility costs, contaminate our air, or override local control."
             https://kellykirschner.com/  — section: Every decision about our water, growth, and natural resources should answer one question: Who does this help?
       0.94  "Fix stormwater systems and stop rewarding the kind of overdevelopment that causes flooding and polluted runoff"
-            https://kellykirschner.com/  — section: Every decision about our water, growth, and natural resources should answer one question: Who does this help?
-      0.92  "If the answer isn’t the people who live here, work here, and raise their families here, it’s time to fix it. This region’s water, wetlands, and working lands have been sold off piece by piece for too long. When the algal blooms come, our…"
             https://kellykirschner.com/  — section: Every decision about our water, growth, and natural resources should answer one question: Who does this help?
   KYV4  Storm resilience and flood protection  (2 citation(s))
       0.97  "Fix stormwater systems and stop rewarding the kind of overdevelopment that causes flooding and polluted runoff"
@@ -77,15 +61,10 @@ Environment & Water
       0.96  "Keep AI hyperscale data centers out of District 16 until they prove they won’t drain our aquifers, raise utility costs, contaminate our air, or override local control."
             https://kellykirschner.com/  — section: Every decision about our water, growth, and natural resources should answer one question: Who does this help?
 
-Insurance & Property Costs
-  A1  Property insurance costs  (1 citation(s))
-      0.97  "Affordable home and flood insurance — and an end to the price-gouging and “business-as-usual” corruption that lets insurers lobby for immunity while your premiums skyrocket."
-            https://kellykirschner.com/  — section: The Insurance Crisis
-
 Retirement & Benefits
   B4  Social Security and Medicare  (2 citation(s))
       0.97  "Protect people with pre-existing conditions, and keep Social Security, Medicare, and Medicaid, the promises they’ve always been – an earned right."
             https://kellykirschner.com/  — section: When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.
-      0.87  "Lowering insurance, healthcare, and prescription drug costs by creating an insurance backstop, repeal cuts to Medicare and Medicaid, and allow government to negotiate for lower prescription drug prices."
+      0.85  "Lowering insurance, healthcare, and prescription drug costs by creating an insurance backstop, repeal cuts to Medicare and Medicaid, and allow government to negotiate for lower prescription drug prices."
             https://kellykirschner.com/  — section: When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.
 

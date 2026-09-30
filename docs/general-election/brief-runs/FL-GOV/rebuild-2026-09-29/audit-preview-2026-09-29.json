@@ -4,7 +4,7 @@
   "metrics": {
     "word_count": {
       "min": 0,
-      "max": 3403,
+      "max": 2720,
       "variance_pct": 100.0,
       "threshold": 150,
       "kind": "gate",
@@ -28,7 +28,7 @@
     },
     "stated_position_count": {
       "min": 0,
-      "max": 91,
+      "max": 59,
       "variance_pct": 100.0,
       "threshold": 15,
       "kind": "flag",
@@ -54,5 +54,5 @@
     "stated_position_asymmetry",
     "issue_coverage_asymmetry"
   ],
-  "flagged_at": "2026-09-29T19:21:58Z"
+  "flagged_at": "2026-09-30T02:00:46Z"
 }
