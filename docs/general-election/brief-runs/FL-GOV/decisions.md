@@ -99,3 +99,14 @@ On the options in `../review-2026-09-30.md` for the 16 passages still flagged un
 - **4 are kept, with the reviewer's note recorded in the same file.** They carry forward-looking wording: Lee, Gilbert, Nixon, and Jolly's `266196cf`.
 - **The rule, the same for every candidate:** a flagged passage is withheld only when it is a past record with no commitment.
 - **FL-GOV:** none of its passages are withheld. `rebuild-2026-09-29/plan.json` now points at the list, and the rebuilt `brief.sql` has the same rows as before, with one added header comment. It is still not applied.
+
+## Apply the rebuilt FL-GOV brief (founder, 2026-09-30)
+
+Asked whether to apply `rebuild-2026-09-29/brief.sql`, which replaces the live, published brief:
+
+> yes, apply the FL-GOV brief
+
+- **Applied** on 2026-09-30, 21:45–21:58 UTC, in 12 batches. The first batch took the race's profiles dark (`balance_check_passed = false`) in the same transaction as the deletes, so no reader could see a half-built brief. The race stayed `published` throughout.
+- **The live fingerprints equal the local reference** on claims, claim sources, positions, issues and profiles.
+- **The Balance Audit passes** on the applied profiles, with the `word_count` threshold of 150 decided on 2026-09-27. It was written back in the same shape as before. Datto and Abrams are flagged `stated_position_asymmetry`. Jewett is no longer flagged: his site was read in this rebuild.
+- Details, hashes and the rollback steps are in `rebuild-2026-09-29/apply-2026-09-30.md`. The audit is in `rebuild-2026-09-29/audit-2026-09-30.json`.
