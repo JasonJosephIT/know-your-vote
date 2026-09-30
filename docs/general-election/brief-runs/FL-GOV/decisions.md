@@ -86,3 +86,16 @@ Asked whether to keep 0.85 on the second gate and re-review all 90 runs, the fou
 - Across all runs, 81 pass and 9 fail, all on check 3, with 16 flagged passages.
 - For FL-GOV, Jewett and Burkett now pass. Jolly still fails on one About-page passage (`266196cf`).
 - That passage is a claim in `rebuild-2026-09-29/brief.sql`. The brief is still not applied.
+
+## The 16 flagged passages: withhold the past record only (founder, 2026-09-30)
+
+On the options in `../review-2026-09-30.md` for the 16 passages still flagged under check 3, the founder chose the middle path:
+
+> middle path
+
+- **12 are withheld.** They are only a past record: Soto's and Simpson's list items, Diaz-Balart's two appropriations lines, Ingoglia's résumé bullet and Bilirakis's funding line.
+  - They are listed with their reasons in `../withheld-2026-09-30.json`.
+  - A plan points at that list with `"withheld_from"`. `scripts/brief-rows-sql.ts` then emits no claim for them, records each as `withheld_after_review` with its reason in the SQL header, and refuses to build if an entry no longer names a policy passage in its run.
+- **4 are kept, with the reviewer's note recorded in the same file.** They carry forward-looking wording: Lee, Gilbert, Nixon, and Jolly's `266196cf`.
+- **The rule, the same for every candidate:** a flagged passage is withheld only when it is a past record with no commitment.
+- **FL-GOV:** none of its passages are withheld. `rebuild-2026-09-29/plan.json` now points at the list, and the rebuilt `brief.sql` has the same rows as before, with one added header comment. It is still not applied.

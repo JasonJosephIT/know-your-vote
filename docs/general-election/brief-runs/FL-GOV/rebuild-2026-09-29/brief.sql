@@ -5,6 +5,7 @@
 -- Passages that produced no row: {"states_no_policy":852,"no_issue_matched":100,"no_run":2}
 -- FL-DOE-90433: no run, silent on every spine issue: site unreadable: bot challenge (HTTP 403) did not clear in the browser on 2026-09-27, on the 2026-09-29 Jev-link ingest, and on its one identical re-run (FL-DOE-90433/reingest-2026-09-29/ingest.log and attempt-1-failed/); never solve a captcha; founder decision D3/D4: record silence
 -- FL-DOE-89630: no run, silent on every spine issue: no official_site (candidate-sites-2026-09-21.md); founder decision D3: record silence
+-- Withheld after review (../../withheld-2026-09-30.json): none in this race
 --
 -- Every claim is stated_position / single_source with a NULL verdict: a Noul
 -- scores relevance and cannot adjudicate. Nothing here is a checked fact.

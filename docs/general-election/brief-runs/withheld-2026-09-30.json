@@ -1,0 +1,43 @@
+{
+  "decided": "2026-09-30",
+  "decision": "Founder chose the middle path for the 16 passages the Step 3 re-reviews flagged under check 3 (review-2026-09-30.md): withhold the 12 that are only a past record, keep the 4 that carry forward-looking wording, with the reviewer's note recorded.",
+  "rule": "A passage that clears both gates is withheld only when a Step 3 reviewer flagged it under check 3 AND it is only a past record (something already done, funded or passed) with no commitment by the candidate. A flagged passage that also carries a forward-looking commitment is kept.",
+  "withheld": {
+    "FL-DOE-88868": [
+      { "passage_id": "dd27d7b2", "reason": "Past record: funding already delivered (\"$2M to expand mental-health services at Federally Qualified Health Centers.\"), no commitment. Step 3 check 3, 2026-09-30." }
+    ],
+    "FL-DOE-90330": [
+      { "passage_id": "8242653c", "reason": "Past record: FY26 Homeland Security funding he led as appropriations chair, no commitment. Step 3 check 3, 2026-09-30." },
+      { "passage_id": "05fe83f1", "reason": "Past record: FY25-to-FY26 spending cuts as chairman, no commitment. Step 3 check 3, 2026-09-30." }
+    ],
+    "FL-DOE-89339": [
+      { "passage_id": "735f07ca", "reason": "Past record: item in the list after \"he has brought billions of dollars back in federal funding to the district to:\", not a commitment. Step 3 check 3, 2026-09-30." },
+      { "passage_id": "16695c81", "reason": "Past record: item in the list after \"he has brought billions of dollars back in federal funding to the district to:\", not a commitment. Step 3 check 3, 2026-09-30." },
+      { "passage_id": "5a5199ba", "reason": "Past record: item in the list after \"he has brought billions of dollars back in federal funding to the district to:\", not a commitment. Step 3 check 3, 2026-09-30." },
+      { "passage_id": "b312e31b", "reason": "Past record: item in the list after \"he has brought billions of dollars back in federal funding to the district to:\", not a commitment. Step 3 check 3, 2026-09-30." }
+    ],
+    "FL-DOE-90560": [
+      { "passage_id": "91d076da", "reason": "Past record: item in the /economic-freedom list of tax relief already passed (\"Some of that tax relief includes:\"), not a commitment. Step 3 check 3, 2026-09-30." },
+      { "passage_id": "ed8c0672", "reason": "Past record: item in the /economic-freedom list of tax relief already passed (\"Some of that tax relief includes:\"), not a commitment. Step 3 check 3, 2026-09-30." },
+      { "passage_id": "33c5a1fd", "reason": "Past record: item in the /economic-freedom list of tax relief already passed (\"Some of that tax relief includes:\"), not a commitment. Step 3 check 3, 2026-09-30." },
+      { "passage_id": "d6e4045d", "reason": "Past record: item in the /economic-freedom list of tax relief already passed (\"Some of that tax relief includes:\"), not a commitment. Step 3 check 3, 2026-09-30." }
+    ],
+    "FL-DOE-89394": [
+      { "passage_id": "6c7aaec4", "reason": "Past record: résumé bullet from the homepage list of past accomplishments (\"Strengthened voter ID and election integrity laws\"), not a commitment. Step 3 check 3, 2026-09-30." }
+    ]
+  },
+  "kept_after_review": {
+    "FL-DOE-89121": [
+      { "passage_id": "d3bb1b7b", "note": "Reviewer read it as endorsement copy (third person, endorser's register). Kept: \"In Congress, Laurel is fighting tirelessly to ... Cut Taxes and Regulations ...\" names things she is working for." }
+    ],
+    "FL-DOE-91544": [
+      { "passage_id": "7bab3fc3", "note": "Reviewer read it as biography (his County Commission record). Kept: first person, and \"we have to overhaul our transportation system\" is forward-looking." }
+    ],
+    "FL-DOE-89243": [
+      { "passage_id": "266196cf", "note": "Reviewer read it as About-page biography. Kept: \"His campaign focuses on historic homeowner's insurance reform, expanding primary healthcare services, and investing in community public schools\" states campaign priorities." }
+    ],
+    "FL-DOE-90009": [
+      { "passage_id": "bf9027e8", "note": "Reviewer read it as fundraising copy (under \"Will You Chip In?\"). Kept: \"running to take on corporate greed, lower costs for hardworking families\" is a forward-looking pitch. Not cited under any issue." }
+    ]
+  }
+}

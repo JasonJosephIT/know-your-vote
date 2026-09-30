@@ -75,6 +75,11 @@ export interface CandidateRun {
       `no_stated_position_found` on every spine issue, and a `no_run`
       rejection says why. Silence rendered, never absence. */
   run: PolicyRun | null;
+  /** Passage ids a Step 3 review found to be no commitment by the candidate
+      (a past record, biography), mapped to the reason. They clear the gates
+      but become no claim; each comes back in `rejected` with its reason, so
+      what was held back stays readable next to what was published. */
+  withheld?: Readonly<Record<string, string>>;
 }
 
 export interface BriefRowsInput {
@@ -177,7 +182,10 @@ export interface Rejection {
     | "unparseable_url"
     | "no_verdict"
     | "states_no_policy"
+    | "withheld_after_review"
     | "no_issue_matched";
+  /** The recorded reason, for `withheld_after_review`. */
+  note?: string;
 }
 
 export interface BriefRowsResult {
@@ -270,7 +278,7 @@ export function buildBriefRows(input: BriefRowsInput): BriefRowsResult {
   });
   const spineIds = new Set(spine.map((s) => s.id));
 
-  for (const { candidateId, officialSite, run } of candidates) {
+  for (const { candidateId, officialSite, run, withheld = {} } of candidates) {
     if (run === null) {
       rejected.push({ candidate_id: candidateId, passage_id: null, reason: "no_run" });
     }
@@ -305,6 +313,15 @@ export function buildBriefRows(input: BriefRowsInput): BriefRowsResult {
           candidate_id: candidateId,
           passage_id: passage.id,
           reason: "states_no_policy",
+        });
+        continue;
+      }
+      if (Object.hasOwn(withheld, passage.id)) {
+        rejected.push({
+          candidate_id: candidateId,
+          passage_id: passage.id,
+          reason: "withheld_after_review",
+          note: withheld[passage.id],
         });
         continue;
       }

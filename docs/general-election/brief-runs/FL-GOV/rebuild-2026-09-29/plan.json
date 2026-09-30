@@ -1,6 +1,7 @@
 {
   "race_id": "FL-GOV-general",
   "retrieved_at": "2026-09-29T11:41:45Z",
+  "withheld_from": "../../withheld-2026-09-30.json",
   "spine": [
     {
       "id": "A1",
