@@ -49,7 +49,7 @@ The three gated passages, all on `https://thomasforclerk.com/`:
 |---|---|---|---|
 | `224fe4f4` | People First | 0.92 / 0.95 | "Our people are our greatest strength. We will invest in employees, develop leaders, and foster a culture that empowers every" |
 | `43631cf2` | Community Focused | 0.96 / 0.95 | "The Clerk's Office should be more than a place people visit- it should be an active partner throughout Orange County." |
-| `b17f6838` | Future Ready | 0.91 / 0.92 | "Preparing for tomorrow requires thoughtful leadership and responsible stewardship. We will embrace modern technology, cybersecurity, continuous improvement, and fiscal responsibility while" |
+| `b17f6838` | Future Ready | 0.91 / 0.92 | "Preparing for tomorrow requires thoughtful leadership and responsible stewardship. We will embrace modern technology, cybersecurity, continuous improvement, and fiscal responsibility" |
 
 Each contains an explicit forward commitment by the campaign ("We will invest in employees, develop leaders…"; "We will expand outreach, strengthen partnerships, improve accessibility…"; "We will embrace modern technology, cybersecurity, continuous improvement, and fiscal responsibility…"). None is only biography, an attack on an opponent, fundraising or event copy. The passages also carry the campaign's own framing ("build lasting public trust", "innovative, accountable"); a claim writer should attribute these as "The campaign website states…" and not restate the framing as fact.
 
@@ -73,7 +73,7 @@ I read all 40 passages marked `states_policy: false`. None plainly states a comm
 
 For the founder, the one near-gate passage:
 
-- `fae3cce0` (commitment 0.84, own_commitment 0.84, just under 0.85; top issue score 0.13), `/meet-terrell`, heading "Why I'm Running": "I believe we can honor the proud legacy of this office while embracing innovation, investing in our employees, strengthening community partnerships," It restates the three homepage commitments in first person. It names no taxonomy issue; at most it would be a second source for the candidate-tier material in check 3.
+- `fae3cce0` (commitment 0.84, own_commitment 0.84, just under 0.85; top issue score B1 0.13), `/meet-terrell`, heading "Why I'm Running": "I believe we can honor the proud legacy of this office while embracing innovation, investing in our employees, strengthening community" It restates the three homepage commitments in first person. It names no taxonomy issue; at most it would be a second source for the candidate-tier material in check 3.
 - `39623571` (commitment 0.20, own_commitment 0.60): "That same mindset will guide every decision I make as your Orange County Clerk of Court." It commits to an approach, not to a position on any issue.
 
 ### Other observations (no effect on the verdict)
