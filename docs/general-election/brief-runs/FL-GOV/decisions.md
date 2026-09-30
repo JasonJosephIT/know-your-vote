@@ -81,3 +81,8 @@ On the three options in `../review-2026-09-29.md` for the 70 passages flagged un
 > 1
 
 A second gate question is added to Step 2 (`OWN_COMMITMENT_ID`), and every run is re-run and re-reviewed. The same 0.85 threshold applies to it as to every other question. The wording, the pilot that shaped it, and the result are in `../gate2-2026-09-30.md`.
+
+Asked whether to keep 0.85 on the second gate and re-review all 90 runs, the founder answered: **keep 0.85, re-review**. The re-reviews are summarised in `../review-2026-09-30.md`.
+- Across all runs, 81 pass and 9 fail, all on check 3, with 16 flagged passages.
+- For FL-GOV, Jewett and Burkett now pass. Jolly still fails on one About-page passage (`266196cf`).
+- That passage is a claim in `rebuild-2026-09-29/brief.sql`. The brief is still not applied.
