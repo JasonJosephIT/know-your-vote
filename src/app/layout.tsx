@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Figtree, Inter, IBM_Plex_Mono } from "next/font/google";
 import Script from "next/script";
 import { SectionNav } from "@/components/nav/SectionNav";
+import { SitePrompts } from "@/components/features/SitePrompts";
 import "./globals.css";
 
 const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
@@ -104,6 +105,7 @@ export default function RootLayout({
           />
         )}
         <SectionNav />
+        <SitePrompts />
         {children}
       </body>
     </html>
