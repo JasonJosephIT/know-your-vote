@@ -1,0 +1,26 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  B1  Economy, inflation, and jobs  (1 citation(s))
+      0.90  "Lower taxes, reduce regulation, and let American entrepreneurs succeed."
+            https://www.brianlambertforcongress.com/issues  — section: Economy & Small Business
+
+Healthcare
+  B2  Healthcare access and costs  (1 citation(s))
+      0.92  "Restore patient choice, medical freedom, price transparency, and competition while reducing unnecessary federal interference in healthcare."
+            https://www.brianlambertforcongress.com/issues  — section: Healthcare Reform
+
+Immigration
+  B3  Immigration and border enforcement  (1 citation(s))
+      0.98  "Secure every border and port of entry while supporting legal immigration and the rule of law."
+            https://www.brianlambertforcongress.com/issues  — section: Border Security & Immigration
+
+Elections & Voting
+  A7  Elections administration and voting access  (1 citation(s))
+      0.95  "I support election systems that are secure, transparent, and easy for eligible citizens to use while making fraud difficult to commit and easy to detect."
+            https://www.brianlambertforcongress.com/issues/election-integrity  — section: Where I Stand
+  B6  Election integrity  (1 citation(s))
+      0.98  "I support election systems that are secure, transparent, and easy for eligible citizens to use while making fraud difficult to commit and easy to detect."
+            https://www.brianlambertforcongress.com/issues/election-integrity  — section: Where I Stand
+

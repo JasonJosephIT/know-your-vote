@@ -474,6 +474,41 @@ check(
     noSpine.rows.profiles.every((p) => p.audit.spine_issue_count === 0),
 );
 
+/* ---- a passage withheld after review becomes no claim, and says why ---- */
+const ADA_RECORD = "Ada cut the county's property tax rate two years in a row.";
+const recordId = passageId(`${SITE_A}/record`, ADA_RECORD);
+const withheldInput = baseInput();
+withheldInput.candidates = withheldInput.candidates.map((c) =>
+  c.candidateId === "cand-ada"
+    ? {
+        ...c,
+        run: policyRun([
+          ...c.run!.passages,
+          runPassage(`${SITE_A}/record`, ADA_RECORD, [ISSUE_A]),
+        ]),
+        withheld: { [recordId]: "Past record, no commitment." },
+      }
+    : c,
+);
+const withheldOut = buildBriefRows(withheldInput);
+check(
+  "a withheld passage produces no claim",
+  !withheldOut.rows.claims.some((c) => c.text === ADA_RECORD),
+);
+check(
+  "a withheld passage is reported with its recorded reason",
+  withheldOut.rejected.some(
+    (r) =>
+      r.passage_id === recordId &&
+      r.reason === "withheld_after_review" &&
+      r.note === "Past record, no commitment.",
+  ),
+);
+check(
+  "withholding one passage leaves every other claim as it was",
+  JSON.stringify(withheldOut.rows.claims) === JSON.stringify(rows.claims),
+);
+
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed.`);
   process.exit(1);

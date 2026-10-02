@@ -1,0 +1,18 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  A4  Cost of living in Florida  (1 citation(s))
+      0.86  "But the work isn’t done. Kathy Castor will continue to fight for a diverse and strong Tampa Bay economy that keeps costs for families in check, keeps health care and energy affordable, and protects our way of life."
+            https://castorforcongress.com/about  — section: About Kathy
+  B1  Economy, inflation, and jobs  (2 citation(s))
+      0.96  "She stands up to grow the middle class and boost small business owners, guaranteeing that everyone has an equal opportunity to succeed. She has successfully fought to bring new, good-paying job opportunities to the region by supporting b…"
+            https://castorforcongress.com/about  — section: About Kathy
+      0.91  "But the work isn’t done. Kathy Castor will continue to fight for a diverse and strong Tampa Bay economy that keeps costs for families in check, keeps health care and energy affordable, and protects our way of life."
+            https://castorforcongress.com/about  — section: About Kathy
+
+Healthcare
+  B2  Healthcare access and costs  (1 citation(s))
+      0.92  "But the work isn’t done. Kathy Castor will continue to fight for a diverse and strong Tampa Bay economy that keeps costs for families in check, keeps health care and energy affordable, and protects our way of life."
+            https://castorforcongress.com/about  — section: About Kathy
+

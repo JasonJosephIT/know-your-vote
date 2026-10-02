@@ -1,0 +1,88 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  B1  Economy, inflation, and jobs  (4 citation(s))
+      0.97  "Oliver will fight in Washington to reinvest in job training, especially in high-paying technical fields that can’t easily be taken away by AI, and to strengthen support for entrepreneurs and small business owners."
+            https://olivergilbert.vote/issues  — section: Investing in Jobs & Job Training
+      0.93  "Strengthen the SBA 504 program by expanding funding, modernizing eligibility, speeding project approvals, and creating a new 504 Express Expansion track for established businesses creating jobs."
+            https://olivergilbert.vote/build-business-act  — section: 02 / My Plan
+      0.88  "Provide enhanced financing incentives for businesses that establish employee ownership and profit-sharing programs."
+            https://olivergilbert.vote/build-business-act  — section: 02 / My Plan
+      0.88  "Every student deserves a pathway to purpose. The BUILD Act prepares students for the economy of tomorrow by connecting education to real careers, expanding apprenticeships, supporting teachers, rewarding innovation, and building the work…"
+            https://olivergilbert.vote/build-act  — section: College ready. Trade ready. Life ready.
+
+Education
+  A6  Public school funding and teachers  (1 citation(s))
+      0.97  "Enhanced grants for districts investing in teacher compensation, teacher retention, mentoring, and professional development. Teachers are America's first responders for the future."
+            https://olivergilbert.vote/build-act  — section: 02 / The BUILD Act Solution
+  KYV10  Career, vocational and higher education  (4 citation(s))
+      0.97  "Every student deserves a pathway to purpose. The BUILD Act prepares students for the economy of tomorrow by connecting education to real careers, expanding apprenticeships, supporting teachers, rewarding innovation, and building the work…"
+            https://olivergilbert.vote/build-act  — section: College ready. Trade ready. Life ready.
+      0.96  "Educational assistance for trade school, college, graduate school, and professional school in exchange for service in designated national priority industries."
+            https://olivergilbert.vote/build-act  — section: 02 / The BUILD Act Solution
+      0.95  "Increase funding for Historically Black Colleges and Universities and other colleges that provide education to underserved communities."
+            https://olivergilbert.vote/build-act  — section: 02 / The BUILD Act Solution
+      0.92  "Oliver will fight in Washington to reinvest in job training, especially in high-paying technical fields that can’t easily be taken away by AI, and to strengthen support for entrepreneurs and small business owners."
+            https://olivergilbert.vote/issues  — section: Investing in Jobs & Job Training
+
+Healthcare
+  B2  Healthcare access and costs  (5 citation(s))
+      0.98  "Expand access to Medicaid Buy-In so people can work without losing essential care."
+            https://olivergilbert.vote/care-act  — section: 05 / Healthcare and Care for Life
+      0.97  "Provide Medicaid wraparound coverage for services Medicare does not cover."
+            https://olivergilbert.vote/care-act  — section: 05 / Healthcare and Care for Life
+      0.96  "Prevent unnecessary interruptions in Medicaid for people with permanent qualifying disabilities."
+            https://olivergilbert.vote/care-act  — section: 05 / Healthcare and Care for Life
+      0.96  "We’re the richest country on earth, but we send billions of dollars to other countries so they can afford universal healthcare. How does that make sense? In Congress, Oliver will fight for a pathway to ensure that healthcare is a right f…"
+            https://olivergilbert.vote/issues  — section: Healthcare For All
+      0.94  "The CARE Act will establish continuous coverage and coordinated care for people with qualifying lifelong disabilities. Medicaid will remain the principal payer for long-term services and supports. Medicare will cover eligible medical ser…"
+            https://olivergilbert.vote/care-act  — section: 05 / Healthcare and Care for Life
+
+Housing
+  A2  Housing affordability  (10 citation(s))
+      0.98  "The HOME Act lowers monthly housing costs without weakening lending standards — helping responsible families own a home, build generational wealth, and gain long-term financial stability."
+            https://olivergilbert.vote/es/home-act  — section: Restore the American Dream.
+      0.98  "Home prices and mortgage rates have pushed monthly payments beyond what many hardworking families can carry — even when their income, credit, and employment are strong. The usual "fix" is to loosen lending standards, which is exactly wha…"
+            https://olivergilbert.vote/es/home-act  — section: 01 / The Affordability Problem
+      0.98  "When interest rates spike, first-time buyers are the first ones priced out — families with strong income and credit watch the same house drift out of reach. The HOME Act caps the interest rate on qualifying first-time homebuyer mortgages…"
+            https://olivergilbert.vote/es/home-act  — section: Capped Starter Rates
+      0.97  "And for the families locked out the longest — first-time and working-family buyers — it opens three more doors: expanded FHA lending, a homebuyer tax credit, and a cap on starter rates."
+            https://olivergilbert.vote/es/home-act  — section: Restore the American Dream.
+      0.97  "First-time buyers and working families face hurdles a lower payment alone can't fix: saving a down payment while paying rent, covering closing costs, and qualifying when rates spike. The HOME Act meets each one head-on. And every policy …"
+            https://olivergilbert.vote/es/home-act  — section: 04 / The First-Time Buyer Package
+      0.97  "FHA loans are how generations of American families bought a first home — low down payments, sound underwriting, and a public guarantee that makes lenders say yes. The HOME Act expands FHA lending for first-time buyers: loan limits that r…"
+            https://olivergilbert.vote/es/home-act  — section: Expanded FHA Lending
+      0.97  "A lower monthly payment. Expanded FHA lending. A first-time homebuyer tax credit. Capped starter rates. The HOME Act proves families don't have to choose between affordable payments and responsible lending. Add your support and help rest…"
+            https://olivergilbert.vote/es/home-act  — section: 05 / Frequently Asked Questions
+      0.95  "On the County Commission, I’ve focused on a new goal: Make Miami-Dade County a truly world-class community. To get there, we have to overhaul our transportation system, which is why I’ve led bold initiatives to build up density along our…"
+            https://olivergilbert.vote/about  — section: County Commission Chair
+      0.91  "Yes. The HOME Act is paired with policies to increase housing production — streamlining permitting, encouraging workforce housing, supporting modular construction, and discouraging institutional speculation."
+            https://olivergilbert.vote/es/home-act  — section: 05 / Frequently Asked Questions
+      0.89  "The HOME Act is paired with policies that increase housing production, streamline permitting, encourage workforce housing, support modular construction, and discourage institutional speculation."
+            https://olivergilbert.vote/es/home-act  — section: 03 / The Six Pillars
+
+Environment & Water
+  KYV3  Growth, development and land conservation  (3 citation(s))
+      0.91  "Yes. The HOME Act is paired with policies to increase housing production — streamlining permitting, encouraging workforce housing, supporting modular construction, and discouraging institutional speculation."
+            https://olivergilbert.vote/es/home-act  — section: 05 / Frequently Asked Questions
+      0.89  "The HOME Act is paired with policies that increase housing production, streamline permitting, encourage workforce housing, support modular construction, and discourage institutional speculation."
+            https://olivergilbert.vote/es/home-act  — section: 03 / The Six Pillars
+      0.87  "On the County Commission, I’ve focused on a new goal: Make Miami-Dade County a truly world-class community. To get there, we have to overhaul our transportation system, which is why I’ve led bold initiatives to build up density along our…"
+            https://olivergilbert.vote/about  — section: County Commission Chair
+
+Immigration
+  B3  Immigration and border enforcement  (1 citation(s))
+      0.98  "Our government has shamefully spent billions ripping families apart. They said ICE would only target criminals, but every day more and more hardworking people are being arrested and deported, often leaving young children behind to fend f…"
+            https://olivergilbert.vote/issues  — section: Stop ICE Raids Now
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (1 citation(s))
+      0.94  "Investigate and prosecute fraud aggressively."
+            https://olivergilbert.vote/build-business-act  — section: 04 / Protecting Taxpayer Dollars
+
+Retirement & Benefits
+  B4  Social Security and Medicare  (1 citation(s))
+      0.85  "The CARE Act will establish continuous coverage and coordinated care for people with qualifying lifelong disabilities. Medicaid will remain the principal payer for long-term services and supports. Medicare will cover eligible medical ser…"
+            https://olivergilbert.vote/care-act  — section: 05 / Healthcare and Care for Life
+

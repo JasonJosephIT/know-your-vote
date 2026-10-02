@@ -1,0 +1,14 @@
+(node:5570) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-site-ingest.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/user/know-your-vote/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  robots.txt read in the browser (plain fetch got an HTML page in its place, HTTP 200)
+site: https://danielaforschools.com/
+  only 73 characters of text, rendering in the browser: https://danielaforschools.com/
+  asking Jev about 2 link(s) as jev:jev-1.13.0/links/q-e03cabd0
+  14 links, 0 policy page(s) selected (cap 8), about page: https://danielaforschools.com/about
+  only 73 characters of text, rendering in the browser: https://danielaforschools.com/about
+    6 passage(s)  https://danielaforschools.com/about
+  2 page(s) fetched in the browser
+
+10 passage(s) -> docs/general-election/brief-runs/FL-HIL-SB2/FL-VF-HIL-2675/passages.jsonl

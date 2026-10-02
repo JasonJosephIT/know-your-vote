@@ -1,0 +1,58 @@
+{
+ "verdict": "PASS",
+ "race_id": "FL-GOV-general",
+ "metrics": {
+  "word_count": {
+   "min": 0,
+   "max": 2720,
+   "variance_pct": 100.0,
+   "threshold": 150,
+   "kind": "gate",
+   "breach": false
+  },
+  "verifiable_fact_count": {
+   "min": 0,
+   "max": 0,
+   "variance_pct": 0.0,
+   "threshold": 15,
+   "kind": "gate",
+   "breach": false
+  },
+  "fact_checks": {
+   "min": 0,
+   "max": 0,
+   "variance_pct": 0.0,
+   "threshold": 10,
+   "kind": "gate",
+   "breach": false
+  },
+  "stated_position_count": {
+   "min": 0,
+   "max": 59,
+   "variance_pct": 100.0,
+   "threshold": 15,
+   "kind": "flag",
+   "flagged": true,
+   "candidates": {
+    "low": "FL-DOE-89630",
+    "high": "FL-DOE-84076"
+   }
+  },
+  "spine_issue_coverage": {
+   "min": 0,
+   "max": 4,
+   "gap": 4,
+   "kind": "flag",
+   "flagged": true,
+   "candidates": {
+    "low": "FL-DOE-89630",
+    "high": "FL-DOE-84076"
+   }
+  }
+ },
+ "flags": [
+  "stated_position_asymmetry",
+  "issue_coverage_asymmetry"
+ ],
+ "flagged_at": "2026-09-30T21:58:22Z"
+}

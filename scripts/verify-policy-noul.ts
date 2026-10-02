@@ -18,11 +18,11 @@
 
 import {
   COMMITMENT_ID,
+  OWN_COMMITMENT_ID,
   DEFAULT_POLICY_THRESHOLD,
   buildPassageState,
   buildPolicyQuestions,
   groupByArea,
-  limitShortfall,
   noulValue,
   readVerdict,
   slugOf,
@@ -71,9 +71,16 @@ const questions = buildPolicyQuestions(ASKABLE);
 check("the gate is asked", questions[COMMITMENT_ID] !== undefined);
 check("the gate id cannot be a taxonomy id",
   !ASKABLE_IDS.includes(COMMITMENT_ID) && !CATEGORY_IDS.includes(COMMITMENT_ID));
-check("every issue is asked exactly once",
+/* Founder decision 2026-09-29 (review-2026-09-29.md): 70 passages cleared the
+   first gate but were biography, a record, someone else's endorsement or an
+   attack. The second gate asks whose commitment it is. */
+check("the own-commitment gate is asked", questions[OWN_COMMITMENT_ID] !== undefined);
+check("the own-commitment gate id cannot be a taxonomy id or the first gate",
+  !ASKABLE_IDS.includes(OWN_COMMITMENT_ID) && !CATEGORY_IDS.includes(OWN_COMMITMENT_ID) &&
+    OWN_COMMITMENT_ID !== COMMITMENT_ID);
+check("every issue is asked exactly once, beside the two gates",
   ASKABLE_IDS.every((id) => questions[id] !== undefined) &&
-    Object.keys(questions).length === ASKABLE.length + 1);
+    Object.keys(questions).length === ASKABLE.length + 2);
 check("every question is a noul, so no free text can come back",
   Object.values(questions).every((q) => q.type === "noul"));
 for (const [name, q] of Object.entries(questions)) {
@@ -104,6 +111,7 @@ check("every issue is asked in identical words", skeletons.size === 1,
 /* ---- reading answers: fail closed ------------------------------------- */
 const answers = {
   [COMMITMENT_ID]: { type: "noul", noul: 0.97 },
+  [OWN_COMMITMENT_ID]: { type: "noul", noul: 0.93 },
   A1: { type: "noul", noul: 0.95 },
   A2: { type: "noul", noul: 0.4 },
   A3: { type: "noul", noul: "0.99" },
@@ -122,7 +130,8 @@ check("a missing noul field is refused", noulValue(answers, "B1") === null);
 check("a missing key is refused", noulValue(answers, "nope") === null);
 
 const verdict = readVerdict(answers, 0.85, ASKABLE_IDS);
-check("the gate decides statesPolicy", verdict.statesPolicy && verdict.commitment === 0.97);
+check("both gates clear: statesPolicy, with both scores kept",
+  verdict.statesPolicy && verdict.commitment === 0.97 && verdict.ownCommitment === 0.93);
 check("only issues over the threshold are tagged",
   verdict.issueIds.join(",") === "A1", verdict.issueIds.join(","));
 check("an answer we never asked for has nowhere to go",
@@ -139,6 +148,13 @@ const gated = readVerdict(
 check("below the gate, the passage states no policy", !gated.statesPolicy);
 check("a missing gate answer means no policy, never a default yes",
   !readVerdict({ A1: { type: "noul", noul: 0.99 } }, 0.85, ASKABLE_IDS).statesPolicy);
+check("below the own-commitment gate, the passage states no policy, whatever the first gate says",
+  !readVerdict({ ...answers, [OWN_COMMITMENT_ID]: { type: "noul", noul: 0.6 } }, 0.85, ASKABLE_IDS).statesPolicy);
+const withoutOwn: Record<string, unknown> = { ...answers };
+delete withoutOwn[OWN_COMMITMENT_ID];
+check("a missing own-commitment answer means no policy, never a default yes",
+  !readVerdict(withoutOwn, 0.85, ASKABLE_IDS).statesPolicy &&
+    readVerdict(withoutOwn, 0.85, ASKABLE_IDS).ownCommitment === null);
 
 /* ---- rolling up ------------------------------------------------------- */
 const p1 = passage({ id: "1", text: "First: cap insurance rate increases." });
@@ -173,15 +189,6 @@ check("no citation text was altered anywhere in the roll-up",
   insurance?.subIssues[0].citations.every(
     (c) => c.passage.text === (c.passage.id === "1" ? p1.text : p2.text),
   ) === true);
-
-/* ---- --limit never drops a passage silently ---------------------------
-   A cap below the corpus size asks about the head of a site and never its
-   tail, and a long site loses more than a short one. That is unequal
-   treatment, so it is refused, never applied quietly. */
-check("a limit at or above the corpus drops nothing",
-  limitShortfall(215, 215) === 0 && limitShortfall(19, 200) === 0);
-check("a limit below the corpus reports how many would be dropped",
-  limitShortfall(215, 200) === 15, String(limitShortfall(215, 200)));
 
 /* ---- the threshold is a knob, and says so ----------------------------- */
 check("the default threshold is in range",

@@ -44,6 +44,9 @@ export type RunStatus =
 
 export interface RunVerdict {
   commitment: number | null;
+  /** The second gate (policy-noul.ts OWN_COMMITMENT_ID). Absent in runs made
+      before 2026-09-29's second gate; those runs are still readable. */
+  own_commitment?: number | null;
   states_policy: boolean;
   issues: string[];
   scores: Record<string, number>;
@@ -99,6 +102,7 @@ function sortedScores(scores: Record<string, number>): Record<string, number> {
 function toRunVerdict(verdict: PassageVerdict): RunVerdict {
   return {
     commitment: verdict.commitment,
+    ...(verdict.ownCommitment !== undefined ? { own_commitment: verdict.ownCommitment } : {}),
     states_policy: verdict.statesPolicy,
     issues: [...verdict.issueIds],
     scores: sortedScores(verdict.scores),

@@ -1,0 +1,778 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://www.electvictorres.com",
+  "created_at": "2026-09-29T11:45:50.704Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 16,
+    "asked": 16,
+    "states_policy": 4,
+    "with_issue": 3,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "a42ffc7d",
+      "url": "https://www.electvictorres.com/",
+      "heading": "GET TO KNOW VIC",
+      "text": "Victor “Vic” Torres is a lifelong public servant running for Orange County Commission District 8. A proud Puerto Rican, born on the West Side of New York City to working-class parents, Vic learned the values of hard work and community from an early age. He served in the U.S. Marine Corps before spending more than 20 years with the New York City Transit Police, retiring as a detective.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.04,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "faec2884",
+      "url": "https://www.electvictorres.com/",
+      "heading": "GET TO KNOW VIC",
+      "text": "After relocating to Florida over 30 years ago, Vic became a school bus driver in Marion County and later a city bus driver for LYNX in Orange County. His years behind the wheel brought him face-to-face with the daily realities of working families and informed his deep understanding of transportation infrastructure, traffic patterns, and the importance of supporting essential workers.",
+      "verdict": {
+        "commitment": 0.14,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.18,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "040fa536",
+      "url": "https://www.electvictorres.com/",
+      "heading": "GET TO KNOW VIC",
+      "text": "Elected to the Florida Legislature in 2012, Vic represented Orange County in the House and Senate for more than a decade. Throughout his tenure, he was known as an unwavering advocate for transportation access, affordable housing, healthcare access, living wages, and support for our veterans. He demonstrated the courage to oppose harmful legislation, often as the only no vote, when he believed it would hurt working families.",
+      "verdict": {
+        "commitment": 0.73,
+        "states_policy": false,
+        "issues": [
+          "A2",
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.91,
+          "A3": 0.03,
+          "A4": 0.5,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.8,
+          "B2": 0.85,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.04,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.06,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.06,
+          "KYV7": 0.1,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "5e5de7b4",
+      "url": "https://www.electvictorres.com/",
+      "heading": "GET TO KNOW VIC",
+      "text": "With more than 40 years of military, law enforcement, labor, and legislative experience, Vic brings an unmatched perspective to the Commission. A proud father and grandfather, he has lived his commitment to service across every stage of his life. He is running to make Orange County affordable, connected, and safer for every resident.",
+      "verdict": {
+        "commitment": 0.63,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.7,
+          "A3": 0.03,
+          "A4": 0.63,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.3,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.17,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "3b0eea04",
+      "url": "https://www.electvictorres.com/",
+      "heading": "Policy Priorities",
+      "text": "Expand Affordable Housing & Prevent Displacement Vic will advocate for policies that increase housing affordability, promote mixed-income developments, convert underutilized properties, and protect families from steep rent hikes. He understands that multiple families sharing a driveway means working people can’t find a place of their own.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.99,
+          "A3": 0.02,
+          "A4": 0.34,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.07,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.67,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.81,
+          "KYV7": 0.18,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "f4e40c14",
+      "url": "https://www.electvictorres.com/",
+      "heading": "Policy Priorities",
+      "text": "Reduce Traffic Congestion & Improve Transportation With firsthand experience as both a transit driver and legislator, Vic will push for long-term solutions like expanding transit options like SunRail and LYNX, exploring innovative models such as elevated transit, and ensuring road development aligns with growth to relieve gridlock.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.03,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.36,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "44606a62",
+      "url": "https://www.electvictorres.com/",
+      "heading": "Policy Priorities",
+      "text": "Invest in Flood Prevention & Resilient Infrastructure Vic will prioritize upgrades to stormwater systems, flood mitigation projects, and smarter planning to prevent neighborhoods from being repeatedly underwater after heavy rains.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "KYV4"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.01,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.01,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.24,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.19,
+          "KYV4": 0.99,
+          "KYV5": 0.04,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "3d10feb4",
+      "url": "https://www.electvictorres.com/",
+      "heading": "Policy Priorities",
+      "text": "Support Working Families & Veterans A longtime champion of living wages and access to care, Vic will continue fighting for workforce housing, workers’ rights, and strong services for veterans, seniors, and families. His legislation supporting PTSD treatment and honoring Tuskegee Airmen reflects his commitment to service members.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "B1",
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.9,
+          "A3": 0.03,
+          "A4": 0.21,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.89,
+          "B2": 0.88,
+          "B3": 0.02,
+          "B4": 0.04,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.07,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.11,
+          "KYV7": 0.13,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "f1e5f503",
+      "url": "https://www.electvictorres.com/",
+      "heading": "Policy Priorities",
+      "text": "Amy Mercado Orange County Property Appraiser",
+      "verdict": {
+        "commitment": 0.06,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.04,
+          "A2": 0.04,
+          "A3": 0.09,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.04,
+          "KYV4": 0.03,
+          "KYV5": 0.03,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "f6822606",
+      "url": "https://www.electvictorres.com/",
+      "heading": "Policy Priorities",
+      "text": "Carlos Guillermo Smith Florida State Senator",
+      "verdict": {
+        "commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.04,
+          "A2": 0.04,
+          "A3": 0.04,
+          "A4": 0.04,
+          "A5": 0.04,
+          "A6": 0.04,
+          "A7": 0.04,
+          "B1": 0.04,
+          "B2": 0.04,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.04,
+          "B7": 0.04,
+          "B8": 0.03,
+          "KYV1": 0.04,
+          "KYV10": 0.04,
+          "KYV2": 0.03,
+          "KYV3": 0.04,
+          "KYV4": 0.04,
+          "KYV5": 0.03,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "da0ed9b9",
+      "url": "https://www.electvictorres.com/",
+      "heading": "Policy Priorities",
+      "text": "IAFF Local 2057 Orange County Fire Fighters Association",
+      "verdict": {
+        "commitment": 0.08,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.04,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.05,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.06,
+          "B8": 0.03,
+          "KYV1": 0.03,
+          "KYV10": 0.04,
+          "KYV2": 0.03,
+          "KYV3": 0.04,
+          "KYV4": 0.03,
+          "KYV5": 0.03,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "261a531d",
+      "url": "https://www.electvictorres.com/",
+      "heading": "Policy Priorities",
+      "text": "Mark Pafford Former Democratic Leader & Florida House of Representatives",
+      "verdict": {
+        "commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.04,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.04,
+          "A7": 0.04,
+          "B1": 0.04,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.04,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.04,
+          "KYV10": 0.04,
+          "KYV2": 0.03,
+          "KYV3": 0.04,
+          "KYV4": 0.03,
+          "KYV5": 0.03,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "e778043a",
+      "url": "https://www.electvictorres.com/",
+      "heading": "Policy Priorities",
+      "text": "Melissa Vickers Orange County Public Defender",
+      "verdict": {
+        "commitment": 0.07,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.14,
+          "B8": 0.03,
+          "KYV1": 0.04,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.03,
+          "KYV6": 0.03,
+          "KYV7": 0.04,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "61b46fa6",
+      "url": "https://www.electvictorres.com/",
+      "heading": "Policy Priorities",
+      "text": "Rita Harris Florida House Representative",
+      "verdict": {
+        "commitment": 0.06,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.04,
+          "A2": 0.03,
+          "A3": 0.04,
+          "A4": 0.04,
+          "A5": 0.04,
+          "A6": 0.04,
+          "A7": 0.04,
+          "B1": 0.04,
+          "B2": 0.04,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.04,
+          "B6": 0.04,
+          "B7": 0.04,
+          "B8": 0.03,
+          "KYV1": 0.03,
+          "KYV10": 0.04,
+          "KYV2": 0.04,
+          "KYV3": 0.05,
+          "KYV4": 0.04,
+          "KYV5": 0.03,
+          "KYV6": 0.04,
+          "KYV7": 0.04,
+          "KYV8": 0.03,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "221e6119",
+      "url": "https://www.electvictorres.com/",
+      "heading": "Policy Priorities",
+      "text": "SEIU Florida Service Employees International Union",
+      "verdict": {
+        "commitment": 0.08,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.04,
+          "A3": 0.04,
+          "A4": 0.04,
+          "A5": 0.03,
+          "A6": 0.04,
+          "A7": 0.04,
+          "B1": 0.06,
+          "B2": 0.05,
+          "B3": 0.04,
+          "B4": 0.04,
+          "B5": 0.03,
+          "B6": 0.04,
+          "B7": 0.04,
+          "B8": 0.03,
+          "KYV1": 0.04,
+          "KYV10": 0.04,
+          "KYV2": 0.04,
+          "KYV3": 0.04,
+          "KYV4": 0.03,
+          "KYV5": 0.03,
+          "KYV6": 0.04,
+          "KYV7": 0.04,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "da59b48d",
+      "url": "https://www.electvictorres.com/",
+      "heading": "GET INVOLVED",
+      "text": "Vic has spent his life serving others — and now he’s asking for your help to keep Orange County affordable, connected, and safe. Sign up to volunteer, host a conversation in your neighborhood, or share our message with friends and family. Every action moves us closer to a stronger community.",
+      "verdict": {
+        "commitment": 0.26,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.52,
+          "A3": 0.03,
+          "A4": 0.09,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.11,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.07,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.04,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "economy",
+        "label": "Economy & Affordability"
+      },
+      "subIssues": [
+        {
+          "id": "B1",
+          "label": "Economy, inflation, and jobs",
+          "citations": [
+            {
+              "passage": {
+                "id": "3d10feb4",
+                "url": "https://www.electvictorres.com/",
+                "heading": "Policy Priorities",
+                "text": "Support Working Families & Veterans A longtime champion of living wages and access to care, Vic will continue fighting for workforce housing, workers’ rights, and strong services for veterans, seniors, and families. His legislation supporting PTSD treatment and honoring Tuskegee Airmen reflects his commitment to service members.",
+                "retrieved_at": "2026-09-29T11:45:48.054Z"
+              },
+              "score": 0.89
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "healthcare",
+        "label": "Healthcare"
+      },
+      "subIssues": [
+        {
+          "id": "B2",
+          "label": "Healthcare access and costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "3d10feb4",
+                "url": "https://www.electvictorres.com/",
+                "heading": "Policy Priorities",
+                "text": "Support Working Families & Veterans A longtime champion of living wages and access to care, Vic will continue fighting for workforce housing, workers’ rights, and strong services for veterans, seniors, and families. His legislation supporting PTSD treatment and honoring Tuskegee Airmen reflects his commitment to service members.",
+                "retrieved_at": "2026-09-29T11:45:48.054Z"
+              },
+              "score": 0.88
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "housing",
+        "label": "Housing"
+      },
+      "subIssues": [
+        {
+          "id": "A2",
+          "label": "Housing affordability",
+          "citations": [
+            {
+              "passage": {
+                "id": "3b0eea04",
+                "url": "https://www.electvictorres.com/",
+                "heading": "Policy Priorities",
+                "text": "Expand Affordable Housing & Prevent Displacement Vic will advocate for policies that increase housing affordability, promote mixed-income developments, convert underutilized properties, and protect families from steep rent hikes. He understands that multiple families sharing a driveway means working people can’t find a place of their own.",
+                "retrieved_at": "2026-09-29T11:45:48.054Z"
+              },
+              "score": 0.99
+            },
+            {
+              "passage": {
+                "id": "3d10feb4",
+                "url": "https://www.electvictorres.com/",
+                "heading": "Policy Priorities",
+                "text": "Support Working Families & Veterans A longtime champion of living wages and access to care, Vic will continue fighting for workforce housing, workers’ rights, and strong services for veterans, seniors, and families. His legislation supporting PTSD treatment and honoring Tuskegee Airmen reflects his commitment to service members.",
+                "retrieved_at": "2026-09-29T11:45:48.054Z"
+              },
+              "score": 0.9
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "environment",
+        "label": "Environment & Water"
+      },
+      "subIssues": [
+        {
+          "id": "KYV4",
+          "label": "Storm resilience and flood protection",
+          "citations": [
+            {
+              "passage": {
+                "id": "44606a62",
+                "url": "https://www.electvictorres.com/",
+                "heading": "Policy Priorities",
+                "text": "Invest in Flood Prevention & Resilient Infrastructure Vic will prioritize upgrades to stormwater systems, flood mitigation projects, and smarter planning to prevent neighborhoods from being repeatedly underwater after heavy rains.",
+                "retrieved_at": "2026-09-29T11:45:48.054Z"
+              },
+              "score": 0.99
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 56142,
+    "output_tokens": 7328
+  }
+}

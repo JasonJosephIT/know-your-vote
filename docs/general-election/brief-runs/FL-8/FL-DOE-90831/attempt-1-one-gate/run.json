@@ -1,0 +1,1388 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://jenkinsforfl.com",
+  "created_at": "2026-09-29T11:43:59.875Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 30,
+    "asked": 30,
+    "states_policy": 13,
+    "with_issue": 9,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "ada168b4",
+      "url": "https://jenkinsforfl.com/",
+      "heading": "Meet Jennifer Jenkins",
+      "text": "The daughter of a corrections officer and a mother living with a disability, Jennifer grew up in a working-class family. Florida’s affordability crisis isn’t theoretical to her. She and her husband have both worked multiple jobs to make ends meet.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.14,
+          "A3": 0.03,
+          "A4": 0.31,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.12,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.04,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "07c13a57",
+      "url": "https://jenkinsforfl.com/",
+      "heading": "Meet Jennifer Jenkins",
+      "text": "Jennifer built her career in education, working to ensure that every child has a chance to succeed. She served on the Brevard County School Board, taking on career politicians and extremists, making national headlines in 2020 when she defeated the co-founder of Moms for Liberty in a district Donald Trump won by double digits.",
+      "verdict": {
+        "commitment": 0.13,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.2,
+          "A7": 0.04,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.13,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.05
+        }
+      }
+    },
+    {
+      "id": "7a6a87a7",
+      "url": "https://jenkinsforfl.com/",
+      "heading": "Florida, It's not fine.",
+      "text": "Randy Fine is everything that’s wrong with our politics.",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.04,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.08,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "42812761",
+      "url": "https://jenkinsforfl.com/",
+      "heading": "Florida, It's not fine.",
+      "text": "A wealthy former casino executive, he’s made a career out of putting himself and his extreme agenda first — while Floridians are left paying the price.",
+      "verdict": {
+        "commitment": 0.06,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.1,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.08,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.04,
+          "B8": 0.03,
+          "KYV1": 0.3,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.04,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "9f25cda1",
+      "url": "https://jenkinsforfl.com/",
+      "heading": "Randy Fine doesn't govern. He lashes out.",
+      "text": "He bullies Floridians and his own colleagues in Congress. Instead of solving real problems, he pushes bills to take over Greenland and to legalize drivers running over protestors — yes, really.",
+      "verdict": {
+        "commitment": 0.33,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.3,
+          "B8": 0.09,
+          "KYV1": 0.56,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.04,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "7f97da0f",
+      "url": "https://jenkinsforfl.com/",
+      "heading": "It isn’t just rhetoric. It's misconduct.",
+      "text": "The Florida Ethics Commission found that he abused his elected office, using taxpayer dollars to punish communities that didn’t flatter him or make him feel important. He treated the government like a middle school lunch table, using OUR tax dollars to fulfill personal grudges.",
+      "verdict": {
+        "commitment": 0.06,
+        "states_policy": false,
+        "issues": [
+          "KYV1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.04,
+          "B8": 0.02,
+          "KYV1": 0.88,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "fd13b8ea",
+      "url": "https://jenkinsforfl.com/",
+      "heading": "Even his own party says he's the problem.",
+      "text": "Randy Fine barely won his seat , and even Ron DeSantis said his fellow Republican “repels people” and voters “didn’t like Randy Fine.”",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "e5ad958a",
+      "url": "https://jenkinsforfl.com/",
+      "heading": "Chip in Today",
+      "text": "We can’t do this without you. Grassroots supporters like you are powering this campaign forward. Can we count on you to chip in with a secure online donation today?",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c87a8d01",
+      "url": "https://jenkinsforfl.com/",
+      "heading": "Join Jennifer's Team",
+      "text": "To win across Florida, Jennifer needs the strength of a true grassroots campaign. That means she’s counting on supporters like you to stand with her.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c0340854",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Affordability",
+      "text": "Jennifer understands Florida’s cost crisis because she lives it. From groceries to property insurance, everyday expenses are out of control. In Congress, she will:",
+      "verdict": {
+        "commitment": 0.28,
+        "states_policy": false,
+        "issues": [
+          "A4"
+        ],
+        "scores": {
+          "A1": 0.32,
+          "A2": 0.23,
+          "A3": 0.06,
+          "A4": 0.85,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.44,
+          "B2": 0.04,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.04,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "56548925",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Affordability",
+      "text": "Stabilize Florida’s property insurance market through bipartisan federal reinsurance and catastrophe backstops.",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "A1"
+        ],
+        "scores": {
+          "A1": 0.97,
+          "A2": 0.41,
+          "A3": 0.03,
+          "A4": 0.54,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.16,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.16,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.09,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "21accd36",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Affordability",
+      "text": "Oppose reckless tariffs that drive up the cost of everyday goods.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.04,
+          "A3": 0.02,
+          "A4": 0.5,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.86,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.04,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "bce93cad",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Affordability",
+      "text": "Fight for tax and cost-of-living policies that put working families first, not special interests.",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.11,
+          "A3": 0.08,
+          "A4": 0.45,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.69,
+          "B2": 0.04,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.04,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "1a37f02f",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Healthcare",
+      "text": "While GOP leadership has stood with MAGA extremists who cut Medicaid and allowed Affordable Care Act Subsidies to expire, families are seeing health insurance premiums spike. Jennifer will:",
+      "verdict": {
+        "commitment": 0.37,
+        "states_policy": false,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.15,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.08,
+          "B2": 0.89,
+          "B3": 0.02,
+          "B4": 0.04,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "a85a5a67",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Healthcare",
+      "text": "Expand Medicaid so Floridians aren’t forced into emergency care or medical debt.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.13,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.98,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "176f584a",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Healthcare",
+      "text": "Restore and strengthen ACA subsidies to lower premiums immediately.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.06,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.98,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "640821fa",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Healthcare",
+      "text": "Protect coverage for pre-existing conditions and invest in access to mental health care.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.95,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4b6cd5c8",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Public Safety",
+      "text": "The daughter of a corrections officer, Jennifer Jenkins has always stood with law enforcement. She also knows that safety requires trust, not fear. In Congress, she will:",
+      "verdict": {
+        "commitment": 0.31,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.66,
+          "B8": 0.02,
+          "KYV1": 0.05,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b5b97b91",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Public Safety",
+      "text": "Ensure first responders have stable funding, training, and mental health support.",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.08,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.85,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.06,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "f013e79d",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Public Safety",
+      "text": "Support evidence-based public safety strategies that reduce violence and recidivism.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.89,
+          "B8": 0.02,
+          "KYV1": 0.06,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8bc09b3e",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Public Safety",
+      "text": "Protect the constitutional rights of U.S. citizens and immigrants alike, because safety and civil liberties go hand in hand.",
+      "verdict": {
+        "commitment": 0.91,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.51,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.57,
+          "B8": 0.02,
+          "KYV1": 0.2,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8022a4c2",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Education",
+      "text": "Jennifer Jenkins took on the co-founder of Moms for Liberty and won. On the Brevard County School Board, she fought back against culture war distractions to deliver results for students, parents, and teachers. In Congress, she will:",
+      "verdict": {
+        "commitment": 0.21,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.23,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.09,
+          "KYV10": 0.04,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "6f3d321a",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Education",
+      "text": "Protect the U.S. Department of Education and federal civil rights enforcement in schools.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.1,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.13,
+          "KYV10": 0.07,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "089e0cee",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Education",
+      "text": "Fully fund IDEA and defend Section 504, ensuring students with disabilities receive the supports they are guaranteed by law.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.01,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.44,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.01,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8df486c3",
+      "url": "https://jenkinsforfl.com/priorities",
+      "heading": "Education",
+      "text": "Expand Title I and invest in teachers, classrooms, and student mental health.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A6"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.97,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.05,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.04,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "bfe8b78a",
+      "url": "https://jenkinsforfl.com/about",
+      "heading": "Jennifer Jenkins is a mom, an educator, and a common-sense fighter for Florida’s families.",
+      "text": "The daughter of a corrections officer and a mother living with disability, Jennifer grew up in a working-class family. Florida’s affordability crisis isn’t theoretical to her. She and her husband have both worked multiple jobs to make ends meet.",
+      "verdict": {
+        "commitment": 0.07,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.16,
+          "A3": 0.03,
+          "A4": 0.45,
+          "A5": 0.02,
+          "A6": 0.04,
+          "A7": 0.02,
+          "B1": 0.2,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "15f790bb",
+      "url": "https://jenkinsforfl.com/about",
+      "heading": "Jennifer Jenkins is a mom, an educator, and a common-sense fighter for Florida’s families.",
+      "text": "On the school board, Jennifer stood up for public schools, pushed back against extremism, and defended students from political bullies — even when it brought threats, protests at her home, and harassment of her family. She never backed down.",
+      "verdict": {
+        "commitment": 0.41,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.46,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.32,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.06
+        }
+      }
+    },
+    {
+      "id": "1690a237",
+      "url": "https://jenkinsforfl.com/about",
+      "heading": "Jennifer Jenkins is a mom, an educator, and a common-sense fighter for Florida’s families.",
+      "text": "Jennifer went on to found Educated We Stand , a national organization dedicated to protecting families across the country from political extremism in public education. She built a national grassroots movement that flipped extremist-held school board seats, and won nearly 80% of endorsed races.",
+      "verdict": {
+        "commitment": 0.35,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.18,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.12,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "467dbd0c",
+      "url": "https://jenkinsforfl.com/about",
+      "heading": "Jennifer Jenkins is a mom, an educator, and a common-sense fighter for Florida’s families.",
+      "text": "Now, Jennifer is running for Congress to take that same courage and determination to Washington. She’ll fight to lower costs, address the broken property insurance system, protect health care, and ensure every Floridian has the freedom to thrive.",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [
+          "A1",
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.87,
+          "A2": 0.2,
+          "A3": 0.05,
+          "A4": 0.81,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.62,
+          "B2": 0.86,
+          "B3": 0.02,
+          "B4": 0.04,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.04,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.05,
+          "KYV3": 0.03,
+          "KYV4": 0.08,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.04,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "7e1bfc8b",
+      "url": "https://jenkinsforfl.com/about",
+      "heading": "Jennifer Jenkins is a mom, an educator, and a common-sense fighter for Florida’s families.",
+      "text": "Jennifer lives in Satellite Beach with her husband, a middle school history and civics teacher, and their daughter, who attends Brevard Public Schools.",
+      "verdict": {
+        "commitment": 0.07,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.05,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "economy",
+        "label": "Economy & Affordability"
+      },
+      "subIssues": [
+        {
+          "id": "B1",
+          "label": "Economy, inflation, and jobs",
+          "citations": [
+            {
+              "passage": {
+                "id": "21accd36",
+                "url": "https://jenkinsforfl.com/priorities",
+                "heading": "Affordability",
+                "text": "Oppose reckless tariffs that drive up the cost of everyday goods.",
+                "retrieved_at": "2026-09-29T11:43:54.143Z"
+              },
+              "score": 0.86
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "education",
+        "label": "Education"
+      },
+      "subIssues": [
+        {
+          "id": "A6",
+          "label": "Public school funding and teachers",
+          "citations": [
+            {
+              "passage": {
+                "id": "8df486c3",
+                "url": "https://jenkinsforfl.com/priorities",
+                "heading": "Education",
+                "text": "Expand Title I and invest in teachers, classrooms, and student mental health.",
+                "retrieved_at": "2026-09-29T11:43:54.143Z"
+              },
+              "score": 0.97
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "healthcare",
+        "label": "Healthcare"
+      },
+      "subIssues": [
+        {
+          "id": "B2",
+          "label": "Healthcare access and costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "a85a5a67",
+                "url": "https://jenkinsforfl.com/priorities",
+                "heading": "Healthcare",
+                "text": "Expand Medicaid so Floridians aren’t forced into emergency care or medical debt.",
+                "retrieved_at": "2026-09-29T11:43:54.143Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "176f584a",
+                "url": "https://jenkinsforfl.com/priorities",
+                "heading": "Healthcare",
+                "text": "Restore and strengthen ACA subsidies to lower premiums immediately.",
+                "retrieved_at": "2026-09-29T11:43:54.143Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "640821fa",
+                "url": "https://jenkinsforfl.com/priorities",
+                "heading": "Healthcare",
+                "text": "Protect coverage for pre-existing conditions and invest in access to mental health care.",
+                "retrieved_at": "2026-09-29T11:43:54.143Z"
+              },
+              "score": 0.95
+            },
+            {
+              "passage": {
+                "id": "467dbd0c",
+                "url": "https://jenkinsforfl.com/about",
+                "heading": "Jennifer Jenkins is a mom, an educator, and a common-sense fighter for Florida’s families.",
+                "text": "Now, Jennifer is running for Congress to take that same courage and determination to Washington. She’ll fight to lower costs, address the broken property insurance system, protect health care, and ensure every Floridian has the freedom to thrive.",
+                "retrieved_at": "2026-09-29T11:43:54.143Z"
+              },
+              "score": 0.86
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "insurance",
+        "label": "Insurance & Property Costs"
+      },
+      "subIssues": [
+        {
+          "id": "A1",
+          "label": "Property insurance costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "56548925",
+                "url": "https://jenkinsforfl.com/priorities",
+                "heading": "Affordability",
+                "text": "Stabilize Florida’s property insurance market through bipartisan federal reinsurance and catastrophe backstops.",
+                "retrieved_at": "2026-09-29T11:43:54.143Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "467dbd0c",
+                "url": "https://jenkinsforfl.com/about",
+                "heading": "Jennifer Jenkins is a mom, an educator, and a common-sense fighter for Florida’s families.",
+                "text": "Now, Jennifer is running for Congress to take that same courage and determination to Washington. She’ll fight to lower costs, address the broken property insurance system, protect health care, and ensure every Floridian has the freedom to thrive.",
+                "retrieved_at": "2026-09-29T11:43:54.143Z"
+              },
+              "score": 0.87
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "safety",
+        "label": "Public Safety & Crime"
+      },
+      "subIssues": [
+        {
+          "id": "B7",
+          "label": "Crime policy, policing and courts",
+          "citations": [
+            {
+              "passage": {
+                "id": "f013e79d",
+                "url": "https://jenkinsforfl.com/priorities",
+                "heading": "Public Safety",
+                "text": "Support evidence-based public safety strategies that reduce violence and recidivism.",
+                "retrieved_at": "2026-09-29T11:43:54.143Z"
+              },
+              "score": 0.89
+            },
+            {
+              "passage": {
+                "id": "b5b97b91",
+                "url": "https://jenkinsforfl.com/priorities",
+                "heading": "Public Safety",
+                "text": "Ensure first responders have stable funding, training, and mental health support.",
+                "retrieved_at": "2026-09-29T11:43:54.143Z"
+              },
+              "score": 0.85
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 105136,
+    "output_tokens": 13740
+  }
+}

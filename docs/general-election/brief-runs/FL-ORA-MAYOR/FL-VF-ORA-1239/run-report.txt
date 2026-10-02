@@ -1,0 +1,32 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  B1  Economy, inflation, and jobs  (2 citation(s))
+      0.96  "Orange County has an opportunity to attract high-paying, technology-driven employers—especially in the growing space industry. Chris will champion bringing a future Space Force Academy to Central Florida, attracting talent, innovation, a…"
+            https://www.chrismessina.com/platform  — section: Raise Wages. A Stronger Economy
+      0.94  "A good-paying career shouldn’t require a four-year degree. Orange County Works will expand vocational, technical, and workforce training—connecting residents with the trade skills employers need and creating a pathway from classroom to c…"
+            https://www.chrismessina.com/platform  — section: Build Skill. Fill High-Demand Jobs
+
+Education
+  KYV10  Career, vocational and higher education  (1 citation(s))
+      0.97  "A good-paying career shouldn’t require a four-year degree. Orange County Works will expand vocational, technical, and workforce training—connecting residents with the trade skills employers need and creating a pathway from classroom to c…"
+            https://www.chrismessina.com/platform  — section: Build Skill. Fill High-Demand Jobs
+
+Environment & Water
+  KYV3  Growth, development and land conservation  (1 citation(s))
+      0.95  "We need more housing—but we don’t need more sprawl. Chris will transform vacant and underused commercial properties into vibrant communities with housing, shops, restaurants, and services. He’ll use technology to modernize and right-size…"
+            https://www.chrismessina.com/platform  — section: Smarter Growth. Less Sprawl
+
+Insurance & Property Costs
+  A3  Property taxes  (1 citation(s))
+      0.98  "Orange County families are paying more while government continues to grow. Chris believes families deserve tax relief—not more wasteful spending. He supports YES on Amendment 3 to reduce the property-tax burden while protecting essential…"
+            https://www.chrismessina.com/platform  — section: Cut Taxes. Cut Waste
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (2 citation(s))
+      0.97  "Public safety is one of the most fundamental responsibilities of local government. As Orange County continues to grow, our investment in law enforcement, fire rescue, and emergency medical services must keep pace. As Mayor, I will ensure…"
+            https://www.chrismessina.com/platform  — section: Adequately Funding Public Safety
+      0.92  "Finally, we will strengthen partnerships with local, state, and federal law enforcement to combat human trafficking, with particular focus on protecting children from exploitation. Every child deserves to grow up safe, supported, and fre…"
+            https://www.chrismessina.com/platform  — section: Keep Our Children Safe
+

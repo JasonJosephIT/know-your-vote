@@ -1,0 +1,25 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  B1  Economy, inflation, and jobs  (1 citation(s))
+      0.89  "Support Working Families & Veterans A longtime champion of living wages and access to care, Vic will continue fighting for workforce housing, workers’ rights, and strong services for veterans, seniors, and families. His legislation suppo…"
+            https://www.electvictorres.com/  — section: Policy Priorities
+
+Healthcare
+  B2  Healthcare access and costs  (1 citation(s))
+      0.88  "Support Working Families & Veterans A longtime champion of living wages and access to care, Vic will continue fighting for workforce housing, workers’ rights, and strong services for veterans, seniors, and families. His legislation suppo…"
+            https://www.electvictorres.com/  — section: Policy Priorities
+
+Housing
+  A2  Housing affordability  (2 citation(s))
+      0.99  "Expand Affordable Housing & Prevent Displacement Vic will advocate for policies that increase housing affordability, promote mixed-income developments, convert underutilized properties, and protect families from steep rent hikes. He unde…"
+            https://www.electvictorres.com/  — section: Policy Priorities
+      0.89  "Support Working Families & Veterans A longtime champion of living wages and access to care, Vic will continue fighting for workforce housing, workers’ rights, and strong services for veterans, seniors, and families. His legislation suppo…"
+            https://www.electvictorres.com/  — section: Policy Priorities
+
+Environment & Water
+  KYV4  Storm resilience and flood protection  (1 citation(s))
+      0.99  "Invest in Flood Prevention & Resilient Infrastructure Vic will prioritize upgrades to stormwater systems, flood mitigation projects, and smarter planning to prevent neighborhoods from being repeatedly underwater after heavy rains."
+            https://www.electvictorres.com/  — section: Policy Priorities
+

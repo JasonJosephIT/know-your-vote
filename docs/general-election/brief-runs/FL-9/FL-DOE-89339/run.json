@@ -1,0 +1,800 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://www.darrensoto.com",
+  "created_at": "2026-09-30T01:58:42.219Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
+  "question_ids": [
+    "q_states_policy",
+    "q_own_commitment",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 15,
+    "asked": 15,
+    "states_policy": 5,
+    "with_issue": 3,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "848d75fb",
+      "url": "https://www.darrensoto.com/",
+      "heading": "Home",
+      "text": "Florida's families deserve a leader who champions bold solutions in the face of tough challenges.",
+      "verdict": {
+        "commitment": 0.15,
+        "own_commitment": 0.19,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e4849f19",
+      "url": "https://www.darrensoto.com/",
+      "heading": "I’m Congressman Darren Soto, and I’m running for re-election on the three C’s: Lower Costs. Protect Our Care. Stop Corruption.",
+      "text": "We must stop tariffs and other policies that are raising grocery, fuel, and housing costs, and hurting local agriculture. Stop Medicaid and ACA cuts causing thousands of Central Florida families to lose their healthcare. Protect Social Security and Medicare. And fight rampant corruption in Washington.",
+      "verdict": {
+        "commitment": 0.99,
+        "own_commitment": 0.94,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "A4",
+          "B1",
+          "B2",
+          "B4"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.89,
+          "A3": 0.03,
+          "A4": 0.95,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.88,
+          "B2": 0.98,
+          "B3": 0.02,
+          "B4": 0.98,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.05,
+          "B8": 0.03,
+          "KYV1": 0.31,
+          "KYV10": 0.03,
+          "KYV2": 0.16,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.04,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "8dd9de40",
+      "url": "https://www.darrensoto.com/",
+      "heading": "I’m Congressman Darren Soto, and I’m running for re-election on the three C’s: Lower Costs. Protect Our Care. Stop Corruption.",
+      "text": "I’m fighting for you and your family, and I ask for your vote this November.",
+      "verdict": {
+        "commitment": 0.84,
+        "own_commitment": 0.81,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.38,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.39,
+          "B2": 0.83,
+          "B3": 0.02,
+          "B4": 0.11,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.04,
+          "B8": 0.02,
+          "KYV1": 0.13,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "287a1da5",
+      "url": "https://www.darrensoto.com/",
+      "heading": "Meet Darren Soto",
+      "text": "Darren Soto was elected to Congress in 2016 to represent Florida’s Ninth Congressional District, which includes all of Osceola County, and parts of Orange and Polk Counties. Darren is proud to be the first person of Puerto Rican descent to serve in Congress from Florida.",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "0c5a367a",
+      "url": "https://www.darrensoto.com/",
+      "heading": "Meet Darren Soto",
+      "text": "Darren Soto is an accomplished lawyer, legislator, conservationist, and musician, and is proud to represent the diverse, hardworking people of Central Florida in Congress. After graduating law school, Darren went into practice in Orlando to stand up for people in the courtroom (and play music on the side). He became involved with the Young Democrats and was elected to the Florida House at the age of 29.",
+      "verdict": {
+        "commitment": 0.04,
+        "own_commitment": 0.06,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.04,
+          "B8": 0.04,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.05,
+          "KYV4": 0.03,
+          "KYV5": 0.03,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "3b47215a",
+      "url": "https://www.darrensoto.com/",
+      "heading": "Meet Darren Soto",
+      "text": "He served for five and a half years in the Florida House of Representatives before he was elected to the Florida Senate, where he served for four years. During his nearly 10 years in the Florida Legislature, Darren worked to bring high-paying, high-tech jobs to Central Florida at Lake Nona and NeoCity, protect our clean air, land, and water, expand and protect health care, stand up for families of fallen firefighters, help families facing foreclosure, and improve education and public safety. He also secured initial funding for the NeoCity Microchip Fabricator and Poinciana Valencia Campus.",
+      "verdict": {
+        "commitment": 0.37,
+        "own_commitment": 0.07,
+        "states_policy": false,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.32,
+          "A3": 0.03,
+          "A4": 0.07,
+          "A5": 0.56,
+          "A6": 0.12,
+          "A7": 0.03,
+          "B1": 0.87,
+          "B2": 0.79,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.18,
+          "B8": 0.18,
+          "KYV1": 0.02,
+          "KYV10": 0.31,
+          "KYV2": 0.08,
+          "KYV3": 0.65,
+          "KYV4": 0.04,
+          "KYV5": 0.21,
+          "KYV6": 0.04,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "2d859ca5",
+      "url": "https://www.darrensoto.com/",
+      "heading": "Meet Darren Soto",
+      "text": "In Congress, he serves on the powerful Energy and Commerce Committee and the Natural Resources Committee, where he fights to lower the cost of healthcare, energy, and consumer goods, boost American jobs, technology, and innovation, increase access to healthcare for all Americans, protect clean air and water, combat climate change, and protect consumers. He has also served on the Agriculture Committee to help local cattlemen, citrus growers, and farmers feed America.",
+      "verdict": {
+        "commitment": 0.86,
+        "own_commitment": 0.68,
+        "states_policy": false,
+        "issues": [
+          "B1",
+          "B2",
+          "B8"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.21,
+          "A5": 0.52,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.89,
+          "B2": 0.98,
+          "B3": 0.02,
+          "B4": 0.06,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.96,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.79,
+          "KYV3": 0.13,
+          "KYV4": 0.03,
+          "KYV5": 0.29,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c5cc59f8",
+      "url": "https://www.darrensoto.com/",
+      "heading": "Meet Darren Soto",
+      "text": "During his nearly 10 years in the House, he has brought billions of dollars back in federal funding to the district to:",
+      "verdict": {
+        "commitment": 0.07,
+        "own_commitment": 0.06,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.04,
+          "A7": 0.02,
+          "B1": 0.11,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.04,
+          "KYV5": 0.03,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "735f07ca",
+      "url": "https://www.darrensoto.com/",
+      "heading": "Meet Darren Soto",
+      "text": "Boost high-paying jobs at Lake Nona, NeoCity, University of Central Florida Research Park, and NASA/commercial space",
+      "verdict": {
+        "commitment": 0.89,
+        "own_commitment": 0.86,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.92,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.03,
+          "KYV1": 0.02,
+          "KYV10": 0.23,
+          "KYV2": 0.03,
+          "KYV3": 0.27,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "16695c81",
+      "url": "https://www.darrensoto.com/",
+      "heading": "Meet Darren Soto",
+      "text": "Expand I-4, Orlando International Airport, SunRail, and Kissimmee Gateway Airport",
+      "verdict": {
+        "commitment": 0.91,
+        "own_commitment": 0.89,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.2,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.04,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.47,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "5a5199ba",
+      "url": "https://www.darrensoto.com/",
+      "heading": "Meet Darren Soto",
+      "text": "Make food, healthcare, and housing more affordable",
+      "verdict": {
+        "commitment": 0.93,
+        "own_commitment": 0.88,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.04,
+          "A2": 0.95,
+          "A3": 0.04,
+          "A4": 0.66,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.32,
+          "B2": 0.94,
+          "B3": 0.02,
+          "B4": 0.04,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.04,
+          "KYV3": 0.06,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.13,
+          "KYV7": 0.22,
+          "KYV8": 0.05,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b312e31b",
+      "url": "https://www.darrensoto.com/",
+      "heading": "Meet Darren Soto",
+      "text": "Restore the Kissimmee Chain of Lakes, Lake Conway, and the Indian River Lagoon",
+      "verdict": {
+        "commitment": 0.91,
+        "own_commitment": 0.85,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.78,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.47,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.4,
+          "KYV4": 0.1,
+          "KYV5": 0.1,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "02994461",
+      "url": "https://www.darrensoto.com/",
+      "heading": "Meet Darren Soto",
+      "text": "Darren has also passed major legislation in Congress to protect the Kissimmee River and Great Florida Reef, improve commercial spaceflight, increase hurricane readiness, protect Florida’s coasts from foreign offshore oil drilling, preserve marine life, honor veterans and civil rights heroes, map sinkholes, designate the National Pulse Memorial, provide Medicaid parity and Hurricane María relief to Puerto Rico, and designate Temporary Protected Status to Venezuela.",
+      "verdict": {
+        "commitment": 0.22,
+        "own_commitment": 0.05,
+        "states_policy": false,
+        "issues": [
+          "B8"
+        ],
+        "scores": {
+          "A1": 0.04,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.26,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.08,
+          "B2": 0.78,
+          "B3": 0.81,
+          "B4": 0.06,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.89,
+          "KYV1": 0.04,
+          "KYV10": 0.03,
+          "KYV2": 0.42,
+          "KYV3": 0.35,
+          "KYV4": 0.8,
+          "KYV5": 0.07,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "68c41f37",
+      "url": "https://www.darrensoto.com/",
+      "heading": "Meet Darren Soto",
+      "text": "On the Energy and Commerce Committee, Darren worked directly on the American Rescue Plan, Bipartisan Infrastructure Law, CHIPS and Science Act, PACT Act, ACA Enhancement Act, CARES Act, and more. These efforts were critical to improving our economy, infrastructure, healthcare, environment, and quality of life in Central Florida.",
+      "verdict": {
+        "commitment": 0.09,
+        "own_commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.05,
+          "A5": 0.04,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.62,
+          "B2": 0.34,
+          "B3": 0.02,
+          "B4": 0.05,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.23,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.12,
+          "KYV3": 0.04,
+          "KYV4": 0.04,
+          "KYV5": 0.03,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "cad07633",
+      "url": "https://www.darrensoto.com/",
+      "heading": "Meet Darren Soto",
+      "text": "Darren is a graduate of Rutgers University and George Washington University School of Law. He had his own law firm for over 10 years, practicing commercial, real estate, family law, and voting rights.",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.06,
+          "B1": 0.03,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "economy",
+        "label": "Economy & Affordability"
+      },
+      "subIssues": [
+        {
+          "id": "A4",
+          "label": "Cost of living in Florida",
+          "citations": [
+            {
+              "passage": {
+                "id": "e4849f19",
+                "url": "https://www.darrensoto.com/",
+                "heading": "I’m Congressman Darren Soto, and I’m running for re-election on the three C’s: Lower Costs. Protect Our Care. Stop Corruption.",
+                "text": "We must stop tariffs and other policies that are raising grocery, fuel, and housing costs, and hurting local agriculture. Stop Medicaid and ACA cuts causing thousands of Central Florida families to lose their healthcare. Protect Social Security and Medicare. And fight rampant corruption in Washington.",
+                "retrieved_at": "2026-09-29T11:43:38.737Z"
+              },
+              "score": 0.95
+            }
+          ]
+        },
+        {
+          "id": "B1",
+          "label": "Economy, inflation, and jobs",
+          "citations": [
+            {
+              "passage": {
+                "id": "735f07ca",
+                "url": "https://www.darrensoto.com/",
+                "heading": "Meet Darren Soto",
+                "text": "Boost high-paying jobs at Lake Nona, NeoCity, University of Central Florida Research Park, and NASA/commercial space",
+                "retrieved_at": "2026-09-29T11:43:38.737Z"
+              },
+              "score": 0.92
+            },
+            {
+              "passage": {
+                "id": "e4849f19",
+                "url": "https://www.darrensoto.com/",
+                "heading": "I’m Congressman Darren Soto, and I’m running for re-election on the three C’s: Lower Costs. Protect Our Care. Stop Corruption.",
+                "text": "We must stop tariffs and other policies that are raising grocery, fuel, and housing costs, and hurting local agriculture. Stop Medicaid and ACA cuts causing thousands of Central Florida families to lose their healthcare. Protect Social Security and Medicare. And fight rampant corruption in Washington.",
+                "retrieved_at": "2026-09-29T11:43:38.737Z"
+              },
+              "score": 0.88
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "healthcare",
+        "label": "Healthcare"
+      },
+      "subIssues": [
+        {
+          "id": "B2",
+          "label": "Healthcare access and costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "e4849f19",
+                "url": "https://www.darrensoto.com/",
+                "heading": "I’m Congressman Darren Soto, and I’m running for re-election on the three C’s: Lower Costs. Protect Our Care. Stop Corruption.",
+                "text": "We must stop tariffs and other policies that are raising grocery, fuel, and housing costs, and hurting local agriculture. Stop Medicaid and ACA cuts causing thousands of Central Florida families to lose their healthcare. Protect Social Security and Medicare. And fight rampant corruption in Washington.",
+                "retrieved_at": "2026-09-29T11:43:38.737Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "5a5199ba",
+                "url": "https://www.darrensoto.com/",
+                "heading": "Meet Darren Soto",
+                "text": "Make food, healthcare, and housing more affordable",
+                "retrieved_at": "2026-09-29T11:43:38.737Z"
+              },
+              "score": 0.94
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "housing",
+        "label": "Housing"
+      },
+      "subIssues": [
+        {
+          "id": "A2",
+          "label": "Housing affordability",
+          "citations": [
+            {
+              "passage": {
+                "id": "5a5199ba",
+                "url": "https://www.darrensoto.com/",
+                "heading": "Meet Darren Soto",
+                "text": "Make food, healthcare, and housing more affordable",
+                "retrieved_at": "2026-09-29T11:43:38.737Z"
+              },
+              "score": 0.95
+            },
+            {
+              "passage": {
+                "id": "e4849f19",
+                "url": "https://www.darrensoto.com/",
+                "heading": "I’m Congressman Darren Soto, and I’m running for re-election on the three C’s: Lower Costs. Protect Our Care. Stop Corruption.",
+                "text": "We must stop tariffs and other policies that are raising grocery, fuel, and housing costs, and hurting local agriculture. Stop Medicaid and ACA cuts causing thousands of Central Florida families to lose their healthcare. Protect Social Security and Medicare. And fight rampant corruption in Washington.",
+                "retrieved_at": "2026-09-29T11:43:38.737Z"
+              },
+              "score": 0.89
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "retirement",
+        "label": "Retirement & Benefits"
+      },
+      "subIssues": [
+        {
+          "id": "B4",
+          "label": "Social Security and Medicare",
+          "citations": [
+            {
+              "passage": {
+                "id": "e4849f19",
+                "url": "https://www.darrensoto.com/",
+                "heading": "I’m Congressman Darren Soto, and I’m running for re-election on the three C’s: Lower Costs. Protect Our Care. Stop Corruption.",
+                "text": "We must stop tariffs and other policies that are raising grocery, fuel, and housing costs, and hurting local agriculture. Stop Medicaid and ACA cuts causing thousands of Central Florida families to lose their healthcare. Protect Social Security and Medicare. And fight rampant corruption in Washington.",
+                "retrieved_at": "2026-09-29T11:43:38.737Z"
+              },
+              "score": 0.98
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 55943,
+    "output_tokens": 7185
+  }
+}

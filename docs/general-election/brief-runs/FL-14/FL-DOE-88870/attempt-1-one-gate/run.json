@@ -1,0 +1,597 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://castorforcongress.com",
+  "created_at": "2026-09-29T11:42:31.567Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 12,
+    "asked": 12,
+    "states_policy": 2,
+    "with_issue": 2,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "3023ae45",
+      "url": "https://castorforcongress.com/",
+      "heading": "Meet Kathy",
+      "text": "Representative Kathy Castor has spent her career delivering proven results for our communities.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "7dfda9a9",
+      "url": "https://castorforcongress.com/",
+      "heading": "Meet Kathy",
+      "text": "From securing federal investments that drive the local economy to championing landmark environmental protections, she works tirelessly to lower family costs, create good-paying jobs, and protect Florida’s unique way of life. As a senior member of the House Energy and Commerce Committee, Congresswoman Castor is dedicated to building a strong, diverse economy that guarantees everyone an equal opportunity to succeed.",
+      "verdict": {
+        "commitment": 0.74,
+        "states_policy": false,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.04,
+          "A2": 0.06,
+          "A3": 0.03,
+          "A4": 0.8,
+          "A5": 0.08,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.95,
+          "B2": 0.07,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.78,
+          "KYV1": 0.02,
+          "KYV10": 0.04,
+          "KYV2": 0.12,
+          "KYV3": 0.2,
+          "KYV4": 0.04,
+          "KYV5": 0.03,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "98cdc9cd",
+      "url": "https://castorforcongress.com/",
+      "heading": "Interested in voting by mail?",
+      "text": "You must request to vote by mail again after every general election.",
+      "verdict": {
+        "commitment": 0.08,
+        "states_policy": false,
+        "issues": [
+          "A7"
+        ],
+        "scores": {
+          "A1": 0.01,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.86,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.15,
+          "B7": 0.02,
+          "B8": 0.01,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.01
+        }
+      }
+    },
+    {
+      "id": "4903083c",
+      "url": "https://castorforcongress.com/",
+      "heading": "Donate Now",
+      "text": "Help Kathy Castor continue to fight for FL-14 families.",
+      "verdict": {
+        "commitment": 0.06,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.04,
+          "KYV5": 0.03,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5e81fa0f",
+      "url": "https://castorforcongress.com/delivering-for-florida",
+      "heading": null,
+      "text": "Learn more about the infrastructure investments and community projects Kathy has brought to the district in recent years alone.",
+      "verdict": {
+        "commitment": 0.07,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.04,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.04,
+          "A7": 0.03,
+          "B1": 0.12,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.02,
+          "KYV10": 0.04,
+          "KYV2": 0.05,
+          "KYV3": 0.07,
+          "KYV4": 0.05,
+          "KYV5": 0.04,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "c37a21c1",
+      "url": "https://castorforcongress.com/about",
+      "heading": "About Kathy",
+      "text": "U.S. Representative Kathy Castor is a native Floridian and the first woman elected to represent the people of Hillsborough and Pinellas Counties in Congress. Since being elected, Kathy has dedicated her career to serving the Tampa Bay community, building a record of results that has earned trust across the region and across party lines. For nearly two decades, she has delivered for Tampa Bay families by strengthening the local economy, securing grants and investments that create good-paying jobs, and fighting to improve quality of life throughout the region.",
+      "verdict": {
+        "commitment": 0.09,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.59,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a6f1bf63",
+      "url": "https://castorforcongress.com/about",
+      "heading": "About Kathy",
+      "text": "Throughout her early legal career and as a Hillsborough County Commissioner, Castor has worked to enforce environmental and growth management laws that protect wetlands, Florida’s coastline, and sensitive lands.",
+      "verdict": {
+        "commitment": 0.21,
+        "states_policy": false,
+        "issues": [
+          "KYV3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.09,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.23,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.9,
+          "KYV4": 0.19,
+          "KYV5": 0.04,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "9d67e600",
+      "url": "https://castorforcongress.com/about",
+      "heading": "About Kathy",
+      "text": "Now, as a senior member of the House Energy and Commerce Committee, Kathy Castor has a record of working across the aisle to deliver for our families.",
+      "verdict": {
+        "commitment": 0.06,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.04,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "fac3c04f",
+      "url": "https://castorforcongress.com/about",
+      "heading": "About Kathy",
+      "text": "She worked to pass the Bipartisan Infrastructure Law and led bipartisan bills to improve healthcare for our nation’s sickest kids, including by expanding access to life-saving treatments for cancer and other rare diseases.",
+      "verdict": {
+        "commitment": 0.19,
+        "states_policy": false,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.11,
+          "B2": 0.86,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.05,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.05,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "91625c45",
+      "url": "https://castorforcongress.com/about",
+      "heading": "About Kathy",
+      "text": "She is a champion for veterans, co-chairing the Congressional Air Force and Congressional Special Operations Forces Caucus and consistently fighting to improve veteran services. She worked to improve healthcare outcomes for veterans exposed to toxins during their service, supported investments to expand the Tinker PreK-8 school on MacDill Air Force Base, and voted for the largest pay increase for service members in 20 years.",
+      "verdict": {
+        "commitment": 0.6,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.61,
+          "A7": 0.02,
+          "B1": 0.45,
+          "B2": 0.73,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.03,
+          "KYV1": 0.02,
+          "KYV10": 0.04,
+          "KYV2": 0.02,
+          "KYV3": 0.06,
+          "KYV4": 0.02,
+          "KYV5": 0.03,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "3a9f9573",
+      "url": "https://castorforcongress.com/about",
+      "heading": "About Kathy",
+      "text": "She stands up to grow the middle class and boost small business owners, guaranteeing that everyone has an equal opportunity to succeed. She has successfully fought to bring new, good-paying job opportunities to the region by supporting both small businesses and large economic engines, including Port Tampa Bay, the University of South Florida, Moffitt Cancer Center & Research Institute, Tampa International Airport, and federally-qualified community health centers.",
+      "verdict": {
+        "commitment": 0.87,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.96,
+          "B2": 0.22,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.17,
+          "KYV2": 0.02,
+          "KYV3": 0.06,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5b917f4e",
+      "url": "https://castorforcongress.com/about",
+      "heading": "About Kathy",
+      "text": "But the work isn’t done. Kathy Castor will continue to fight for a diverse and strong Tampa Bay economy that keeps costs for families in check, keeps health care and energy affordable, and protects our way of life.",
+      "verdict": {
+        "commitment": 0.88,
+        "states_policy": true,
+        "issues": [
+          "A4",
+          "B1",
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.04,
+          "A2": 0.14,
+          "A3": 0.03,
+          "A4": 0.86,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.91,
+          "B2": 0.92,
+          "B3": 0.03,
+          "B4": 0.04,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.05,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.8,
+          "KYV3": 0.04,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "economy",
+        "label": "Economy & Affordability"
+      },
+      "subIssues": [
+        {
+          "id": "A4",
+          "label": "Cost of living in Florida",
+          "citations": [
+            {
+              "passage": {
+                "id": "5b917f4e",
+                "url": "https://castorforcongress.com/about",
+                "heading": "About Kathy",
+                "text": "But the work isn’t done. Kathy Castor will continue to fight for a diverse and strong Tampa Bay economy that keeps costs for families in check, keeps health care and energy affordable, and protects our way of life.",
+                "retrieved_at": "2026-09-29T11:42:29.192Z"
+              },
+              "score": 0.86
+            }
+          ]
+        },
+        {
+          "id": "B1",
+          "label": "Economy, inflation, and jobs",
+          "citations": [
+            {
+              "passage": {
+                "id": "3a9f9573",
+                "url": "https://castorforcongress.com/about",
+                "heading": "About Kathy",
+                "text": "She stands up to grow the middle class and boost small business owners, guaranteeing that everyone has an equal opportunity to succeed. She has successfully fought to bring new, good-paying job opportunities to the region by supporting both small businesses and large economic engines, including Port Tampa Bay, the University of South Florida, Moffitt Cancer Center & Research Institute, Tampa International Airport, and federally-qualified community health centers.",
+                "retrieved_at": "2026-09-29T11:42:29.192Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "5b917f4e",
+                "url": "https://castorforcongress.com/about",
+                "heading": "About Kathy",
+                "text": "But the work isn’t done. Kathy Castor will continue to fight for a diverse and strong Tampa Bay economy that keeps costs for families in check, keeps health care and energy affordable, and protects our way of life.",
+                "retrieved_at": "2026-09-29T11:42:29.192Z"
+              },
+              "score": 0.91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "healthcare",
+        "label": "Healthcare"
+      },
+      "subIssues": [
+        {
+          "id": "B2",
+          "label": "Healthcare access and costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "5b917f4e",
+                "url": "https://castorforcongress.com/about",
+                "heading": "About Kathy",
+                "text": "But the work isn’t done. Kathy Castor will continue to fight for a diverse and strong Tampa Bay economy that keeps costs for families in check, keeps health care and energy affordable, and protects our way of life.",
+                "retrieved_at": "2026-09-29T11:42:29.192Z"
+              },
+              "score": 0.92
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 42195,
+    "output_tokens": 5496
+  }
+}

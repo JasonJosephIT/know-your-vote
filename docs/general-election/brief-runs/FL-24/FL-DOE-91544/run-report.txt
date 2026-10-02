@@ -1,0 +1,58 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  B1  Economy, inflation, and jobs  (4 citation(s))
+      0.97  "Oliver will fight in Washington to reinvest in job training, especially in high-paying technical fields that can’t easily be taken away by AI, and to strengthen support for entrepreneurs and small business owners."
+            https://olivergilbert.vote/issues  — section: Investing in Jobs & Job Training
+      0.93  "Strengthen the SBA 504 program by expanding funding, modernizing eligibility, speeding project approvals, and creating a new 504 Express Expansion track for established businesses creating jobs."
+            https://olivergilbert.vote/build-business-act  — section: 02 / My Plan
+      0.88  "Provide enhanced financing incentives for businesses that establish employee ownership and profit-sharing programs."
+            https://olivergilbert.vote/build-business-act  — section: 02 / My Plan
+      0.85  "The plan invests in direct support professionals through better reimbursement, competitive wages, training, career ladders, benefits, recruitment, retention, and emergency staffing."
+            https://olivergilbert.vote/care-act  — section: 02 / The CARE Act
+
+Education
+  A6  Public school funding and teachers  (1 citation(s))
+      0.98  "Enhanced grants for districts investing in teacher compensation, teacher retention, mentoring, and professional development. Teachers are America's first responders for the future."
+            https://olivergilbert.vote/build-act  — section: 02 / The BUILD Act Solution
+  KYV10  Career, vocational and higher education  (3 citation(s))
+      0.96  "Educational assistance for trade school, college, graduate school, and professional school in exchange for service in designated national priority industries."
+            https://olivergilbert.vote/build-act  — section: 02 / The BUILD Act Solution
+      0.95  "Increase funding for Historically Black Colleges and Universities and other colleges that provide education to underserved communities."
+            https://olivergilbert.vote/build-act  — section: 02 / The BUILD Act Solution
+      0.92  "Oliver will fight in Washington to reinvest in job training, especially in high-paying technical fields that can’t easily be taken away by AI, and to strengthen support for entrepreneurs and small business owners."
+            https://olivergilbert.vote/issues  — section: Investing in Jobs & Job Training
+
+Healthcare
+  B2  Healthcare access and costs  (5 citation(s))
+      0.98  "Expand access to Medicaid Buy-In so people can work without losing essential care."
+            https://olivergilbert.vote/care-act  — section: 05 / Healthcare and Care for Life
+      0.97  "Provide Medicaid wraparound coverage for services Medicare does not cover."
+            https://olivergilbert.vote/care-act  — section: 05 / Healthcare and Care for Life
+      0.96  "Prevent unnecessary interruptions in Medicaid for people with permanent qualifying disabilities."
+            https://olivergilbert.vote/care-act  — section: 05 / Healthcare and Care for Life
+      0.96  "We’re the richest country on earth, but we send billions of dollars to other countries so they can afford universal healthcare. How does that make sense? In Congress, Oliver will fight for a pathway to ensure that healthcare is a right f…"
+            https://olivergilbert.vote/issues  — section: Healthcare For All
+      0.95  "The CARE Act will establish continuous coverage and coordinated care for people with qualifying lifelong disabilities. Medicaid will remain the principal payer for long-term services and supports. Medicare will cover eligible medical ser…"
+            https://olivergilbert.vote/care-act  — section: 05 / Healthcare and Care for Life
+
+Housing
+  A2  Housing affordability  (3 citation(s))
+      0.98  "When interest rates spike, first-time buyers are the first ones priced out — families with strong income and credit watch the same house drift out of reach. The HOME Act caps the interest rate on qualifying first-time homebuyer mortgages…"
+            https://olivergilbert.vote/es/home-act  — section: Capped Starter Rates
+      0.97  "And for the families locked out the longest — first-time and working-family buyers — it opens three more doors: expanded FHA lending, a homebuyer tax credit, and a cap on starter rates."
+            https://olivergilbert.vote/es/home-act  — section: Restore the American Dream.
+      0.94  "On the County Commission, I’ve focused on a new goal: Make Miami-Dade County a truly world-class community. To get there, we have to overhaul our transportation system, which is why I’ve led bold initiatives to build up density along our…"
+            https://olivergilbert.vote/about  — section: County Commission Chair
+
+Environment & Water
+  KYV3  Growth, development and land conservation  (1 citation(s))
+      0.86  "On the County Commission, I’ve focused on a new goal: Make Miami-Dade County a truly world-class community. To get there, we have to overhaul our transportation system, which is why I’ve led bold initiatives to build up density along our…"
+            https://olivergilbert.vote/about  — section: County Commission Chair
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (1 citation(s))
+      0.94  "Investigate and prosecute fraud aggressively."
+            https://olivergilbert.vote/build-business-act  — section: 04 / Protecting Taxpayer Dollars
+

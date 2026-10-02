@@ -1,0 +1,864 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://reelectbastien.com",
+  "created_at": "2026-09-30T01:58:54.110Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
+  "question_ids": [
+    "q_states_policy",
+    "q_own_commitment",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 18,
+    "asked": 18,
+    "states_policy": 4,
+    "with_issue": 3,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "4b3e7853",
+      "url": "https://reelectbastien.com/",
+      "heading": null,
+      "text": "Thank you, District 2. The work continues — together.",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.09,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "81896268",
+      "url": "https://reelectbastien.com/",
+      "heading": "Thank you, District 2!",
+      "text": "District 2 re-elected Commissioner Marleine Bastien outright — 78% of the vote, won in one round, no runoff. That mandate belongs to every family, senior, and small business that believed in this work. Now we get back to it.",
+      "verdict": {
+        "commitment": 0.05,
+        "own_commitment": 0.2,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.04,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "042db9cf",
+      "url": "https://reelectbastien.com/",
+      "heading": "Results for District 2",
+      "text": "Since taking office in 2022, Commissioner Bastien has delivered for the families, seniors, and small businesses of Miami-Dade District 2.",
+      "verdict": {
+        "commitment": 0.04,
+        "own_commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.07,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "25a39462",
+      "url": "https://reelectbastien.com/",
+      "heading": "Affordable Housing & Anti-Displacement",
+      "text": "More than 1,800 new homes at every income level, including 155 dedicated senior units and 800+ homes for families earning 30 to 60% of area median income, plus a Community Benefits policy that gives residents a real voice in development.",
+      "verdict": {
+        "commitment": 0.78,
+        "own_commitment": 0.82,
+        "states_policy": false,
+        "issues": [
+          "A2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.95,
+          "A3": 0.02,
+          "A4": 0.21,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.01,
+          "B1": 0.06,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.61,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.15,
+          "KYV7": 0.08,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "d1470b15",
+      "url": "https://reelectbastien.com/",
+      "heading": "Parks & Wellness",
+      "text": "The Health is Wealth Initiative revitalized Oak Grove Park and Sidney Wynn Park at Arcola with nature-based playgrounds, new irrigation, and landscaping.",
+      "verdict": {
+        "commitment": 0.05,
+        "own_commitment": 0.09,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.01,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.01,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.03,
+          "KYV1": 0.01,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.1,
+          "KYV4": 0.02,
+          "KYV5": 0.04,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "1f0dccc4",
+      "url": "https://reelectbastien.com/",
+      "heading": "Small Business & Jobs",
+      "text": "The Mom & Pop Grant Program funds equipment, inventory, insurance and security for local shops, alongside facade improvements, an innovation hub, and workforce programs through five Community Redevelopment Agencies.",
+      "verdict": {
+        "commitment": 0.79,
+        "own_commitment": 0.73,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.13,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.74,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.04,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.33,
+          "KYV2": 0.03,
+          "KYV3": 0.21,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "bee0011e",
+      "url": "https://reelectbastien.com/",
+      "heading": "Seniors & Families",
+      "text": "$1.9 million for the Older Adults Home Modification Program lets residents 62 and older age safely at home, and the Eviction Diversion Program brings legal help to families facing eviction.",
+      "verdict": {
+        "commitment": 0.75,
+        "own_commitment": 0.75,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.47,
+          "A3": 0.02,
+          "A4": 0.09,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.06,
+          "B3": 0.02,
+          "B4": 0.04,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.05,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.78,
+          "KYV7": 0.07,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "60656e47",
+      "url": "https://reelectbastien.com/",
+      "heading": "Clean, Healthy Neighborhoods",
+      "text": "The county’s first Solid Waste Cares Program helps customers facing financial hardship with their fees, paired with new recycling and waste-diversion incentives to keep District 2 clean.",
+      "verdict": {
+        "commitment": 0.49,
+        "own_commitment": 0.44,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.24,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.1,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.08,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8f28ce78",
+      "url": "https://reelectbastien.com/",
+      "heading": "Civic & Financial Empowerment",
+      "text": "The county’s first Civic Engagement Academy teaches residents how their government works, while the Financial Literacy Program helps families build savings and lasting stability.",
+      "verdict": {
+        "commitment": 0.11,
+        "own_commitment": 0.26,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.04,
+          "B1": 0.1,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.04,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "9c91ef16",
+      "url": "https://reelectbastien.com/",
+      "heading": "A lifetime of service",
+      "text": "Marleine Bastien came to Miami from Pont-Benoit, Haiti, at 22 years old. She built her life here as a licensed clinical social worker and spent decades fighting for working families.",
+      "verdict": {
+        "commitment": 0.04,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.07,
+          "B2": 0.03,
+          "B3": 0.04,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5c8dd6ac",
+      "url": "https://reelectbastien.com/",
+      "heading": "A lifetime of service",
+      "text": "In 1991 she founded FANM (Family Action Network Movement), which became South Florida’s leading advocate for immigrant women and families. In 2022, she made history as the first Haitian-American woman elected to the Miami-Dade County Commission.",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.12,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "34b0bfdd",
+      "url": "https://reelectbastien.com/",
+      "heading": "A lifetime of service",
+      "text": "Today she chairs the County’s Housing Committee and she is just getting started. The work is not done.",
+      "verdict": {
+        "commitment": 0.04,
+        "own_commitment": 0.11,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.04,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.07,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.07,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4845e5c0",
+      "url": "https://reelectbastien.com/",
+      "heading": "Affordable housing & anti-displacement",
+      "text": "Keep building homes families can actually afford, and protect renters from being pushed out of the neighborhoods they built.",
+      "verdict": {
+        "commitment": 0.97,
+        "own_commitment": 0.88,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "KYV6"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.98,
+          "A3": 0.02,
+          "A4": 0.21,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.09,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.48,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.92,
+          "KYV7": 0.1,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "f54aba05",
+      "url": "https://reelectbastien.com/",
+      "heading": "A local economy for small business",
+      "text": "Grow the Mom & Pop grant program and bring jobs and investment to District 2’s commercial corridors.",
+      "verdict": {
+        "commitment": 0.97,
+        "own_commitment": 0.95,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.96,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.31,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c72830b8",
+      "url": "https://reelectbastien.com/",
+      "heading": "Modern infrastructure",
+      "text": "Fix the aging roads, drainage, and water systems that have been neglected in our community for far too long.",
+      "verdict": {
+        "commitment": 0.95,
+        "own_commitment": 0.88,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.09,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.06,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.08,
+          "KYV3": 0.06,
+          "KYV4": 0.68,
+          "KYV5": 0.79,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "10bd421f",
+      "url": "https://reelectbastien.com/",
+      "heading": "Jobs & opportunity for all",
+      "text": "Expand job training and real pathways so every family can build lasting financial security.",
+      "verdict": {
+        "commitment": 0.95,
+        "own_commitment": 0.92,
+        "states_policy": true,
+        "issues": [
+          "KYV10",
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.96,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.91,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "38e9eb2e",
+      "url": "https://reelectbastien.com/",
+      "heading": "Be part of the movement",
+      "text": "By checking this box, I agree to receive recurring automated campaign text messages (updates, events, and get-out-the-vote reminders) from Marleine Bastien for Miami-Dade County Commission District 2 at the number provided. Consent is not a condition of any donation or service. Message frequency varies. Message and data rates may apply. Reply STOP to opt out, HELP for help. See our Privacy Policy and SMS Terms .",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.15,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.06,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a7b73074",
+      "url": "https://reelectbastien.com/",
+      "heading": "Power the work",
+      "text": "Your contribution helps the campaign close out strong and keeps this movement organizing in District 2 year-round. Every dollar moves us forward.",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.07,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "economy",
+        "label": "Economy & Affordability"
+      },
+      "subIssues": [
+        {
+          "id": "B1",
+          "label": "Economy, inflation, and jobs",
+          "citations": [
+            {
+              "passage": {
+                "id": "f54aba05",
+                "url": "https://reelectbastien.com/",
+                "heading": "A local economy for small business",
+                "text": "Grow the Mom & Pop grant program and bring jobs and investment to District 2’s commercial corridors.",
+                "retrieved_at": "2026-09-29T11:44:24.246Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "10bd421f",
+                "url": "https://reelectbastien.com/",
+                "heading": "Jobs & opportunity for all",
+                "text": "Expand job training and real pathways so every family can build lasting financial security.",
+                "retrieved_at": "2026-09-29T11:44:24.246Z"
+              },
+              "score": 0.96
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "education",
+        "label": "Education"
+      },
+      "subIssues": [
+        {
+          "id": "KYV10",
+          "label": "Career, vocational and higher education",
+          "citations": [
+            {
+              "passage": {
+                "id": "10bd421f",
+                "url": "https://reelectbastien.com/",
+                "heading": "Jobs & opportunity for all",
+                "text": "Expand job training and real pathways so every family can build lasting financial security.",
+                "retrieved_at": "2026-09-29T11:44:24.246Z"
+              },
+              "score": 0.91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "housing",
+        "label": "Housing"
+      },
+      "subIssues": [
+        {
+          "id": "A2",
+          "label": "Housing affordability",
+          "citations": [
+            {
+              "passage": {
+                "id": "4845e5c0",
+                "url": "https://reelectbastien.com/",
+                "heading": "Affordable housing & anti-displacement",
+                "text": "Keep building homes families can actually afford, and protect renters from being pushed out of the neighborhoods they built.",
+                "retrieved_at": "2026-09-29T11:44:24.246Z"
+              },
+              "score": 0.98
+            }
+          ]
+        },
+        {
+          "id": "KYV6",
+          "label": "Renters and evictions",
+          "citations": [
+            {
+              "passage": {
+                "id": "4845e5c0",
+                "url": "https://reelectbastien.com/",
+                "heading": "Affordable housing & anti-displacement",
+                "text": "Keep building homes families can actually afford, and protect renters from being pushed out of the neighborhoods they built.",
+                "retrieved_at": "2026-09-29T11:44:24.246Z"
+              },
+              "score": 0.92
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 66847,
+    "output_tokens": 8622
+  }
+}

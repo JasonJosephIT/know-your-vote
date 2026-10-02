@@ -1,0 +1,53 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  B1  Economy, inflation, and jobs  (2 citation(s))
+      0.99  "Joe Biden’s economy crushed working families. Out-of control inflation, higher taxes, and reckless spending put the American Dream out of reach for millions of Americans. Under President Trump’s leadership, Mike helped pass historic tax …"
+            https://www.mike4congress.com/issues  — section: STRONG ECONOMY
+      0.98  "Stopping Illegal Immigration Addressing the catastrophic crisis at our southern border and securing our nation’s borders. Fixing Our Economy Making the American economy work for our families once again. Out-of-control inflation, higher t…"
+            https://www.mike4congress.com/  — section: Mike's Vision
+
+Healthcare
+  B2  Healthcare access and costs  (1 citation(s))
+      0.97  "Under Obamacare, prices have been spiraling out of control, and free-market competitive pricing has been reduced; keeping healthcare more expensive. Mike will always support measures that provide patient centered care and competition in …"
+            https://www.mike4congress.com/issues  — section: HEALTHCARE
+
+Housing
+  A2  Housing affordability  (1 citation(s))
+      0.97  "In Congress, he focuses his efforts on supporting our space industry, improving the water quality of our Indian River Lagoon, fighting to protect election integrity, banning insider trading in Congress, and expanding access to affordable…"
+            https://www.mike4congress.com/  — section: About Mike Haridopolos
+
+Immigration
+  B3  Immigration and border enforcement  (2 citation(s))
+      0.98  "Stopping Illegal Immigration Addressing the catastrophic crisis at our southern border and securing our nation’s borders. Fixing Our Economy Making the American economy work for our families once again. Out-of-control inflation, higher t…"
+            https://www.mike4congress.com/  — section: Mike's Vision
+      0.94  "Understanding the key issues that impact our country is crucial for making informed decisions. Mike Haridopolos is dedicated to addressing the most pressing concerns facing our district and our nation. From stopping illegal immigration t…"
+            https://www.mike4congress.com/issues  — section: ISSUES
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (1 citation(s))
+      0.97  "Mike will stand shoulder-to-shoulder key allies to end the weaponization of our justice system. Protecting the Indian River Lagoon Advancing common sense ideas to protect our environment and joining the Congressional Estuary Caucus. Supp…"
+            https://www.mike4congress.com/  — section: Mike's Vision
+
+Elections & Voting
+  A7  Elections administration and voting access  (2 citation(s))
+      0.95  "Protecting Our Elections Mike Haridopolos believes free and fair elections start with ensuring American elections are decided by American citizens. He supports the SAVE America Act and commonsense voter verification measures to protect t…"
+            https://www.mike4congress.com/  — section: Mike's Vision
+      0.95  "For too long, Washington Democrats have fought against commonsense election safeguards. I’m fighting to restore trust in our elections by supporting the SAVE America Act and ensuring proper voter verification measures are in place."
+            https://www.mike4congress.com/issues  — section: PROTECTING OUR ELECTIONS
+  B6  Election integrity  (4 citation(s))
+      0.98  "Protecting Our Elections Mike Haridopolos believes free and fair elections start with ensuring American elections are decided by American citizens. He supports the SAVE America Act and commonsense voter verification measures to protect t…"
+            https://www.mike4congress.com/  — section: Mike's Vision
+      0.97  "For too long, Washington Democrats have fought against commonsense election safeguards. I’m fighting to restore trust in our elections by supporting the SAVE America Act and ensuring proper voter verification measures are in place."
+            https://www.mike4congress.com/issues  — section: PROTECTING OUR ELECTIONS
+      0.97  "​ Protecting the ballot box isn’t partisan — it’s common sense. The American people deserve confidence that their voices will be heard and their votes will be protected. I will continue fighting for election integrity and standing up aga…"
+            https://www.mike4congress.com/issues  — section: PROTECTING OUR ELECTIONS
+      0.94  "In Congress, he focuses his efforts on supporting our space industry, improving the water quality of our Indian River Lagoon, fighting to protect election integrity, banning insider trading in Congress, and expanding access to affordable…"
+            https://www.mike4congress.com/  — section: About Mike Haridopolos
+
+Retirement & Benefits
+  B4  Social Security and Medicare  (1 citation(s))
+      0.95  "Stopping Illegal Immigration Addressing the catastrophic crisis at our southern border and securing our nation’s borders. Fixing Our Economy Making the American economy work for our families once again. Out-of-control inflation, higher t…"
+            https://www.mike4congress.com/  — section: Mike's Vision
+

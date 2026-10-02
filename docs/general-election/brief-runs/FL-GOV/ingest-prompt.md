@@ -57,3 +57,8 @@ Rules:
 - 2026-09-27, before the other six candidates: added `mkdir -p {{OUT_DIR}} &&`, because their
   run folders did not exist yet (Jolly's had been created by hand). Nothing else changed. The
   six ingests were dispatched with this version.
+- 2026-09-29: the ingest's default link choice changed from the keyword list to Jev
+  (`--links jev`, founder decision in `decisions.md`). The command above is unchanged,
+  and it now needs `TYPESAFE_API_KEY` in the environment. The re-ingest of every site
+  that day ran this command through `../jev-driver-2026-09-29.sh`, not per-candidate
+  subagents.

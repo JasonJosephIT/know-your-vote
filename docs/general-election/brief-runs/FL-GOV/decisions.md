@@ -50,3 +50,63 @@ The same rules hold for both parts: every candidate gets the same kinds of sourc
   - The soft flags still fire and are stored.
 - **`brief.sql` applied** over the Supabase MCP on the founder's yes. How it was applied, and how it was verified, is in `run-2026-09-27.md` under "Apply and audit".
 - **Publishing was then authorised separately:** "yes, publish FL-GOV". It was published at 2026-09-27 15:26 UTC (see `run-2026-09-27.md`).
+
+## Link picking, `--limit`, and re-ingesting FL-GOV (founder, 2026-09-29)
+
+After the keyword ingest of the other 46 races (`../ingest-2026-09-29-keywords.md`) found 32 of 81 readable sites read only at the homepage, and the About page read for 1 of 90:
+
+> Explain 1 and 2, and what the issues were there. After that, we can try doing it in Jev, and we can remove the limit.
+
+Asked which limit and whether FL-GOV is included, the founder answered: **the Jev `--limit` in Step 2**, and **yes, re-ingest FL-GOV too**.
+
+- **Links are picked by Jev** (`--links jev`, now the ingest default): every on-site content link on the homepage is judged by its path and text, links at or above 0.5 are followed up to the unchanged 8-page cap, plus the strongest About page.
+- **`--limit` is removed** from `candidate-policy-noul.ts`. Every passage is always asked.
+- **FL-GOV is re-ingested and re-run the same way**, into each candidate's `reingest-2026-09-29/`. The published brief is not changed by this; rebuilding it from the new runs is a separate decision.
+- **Unchanged:** the 8-page cap and the 0.85 threshold.
+
+## Re-run, reviews and FL-GOV rebuild (founder, 2026-09-29)
+
+Asked whether (1) every failure gets one identical re-run, (2) Step 3 reviews go ahead for every run, and (3) FL-GOV's brief is rebuilt from `reingest-2026-09-29/`:
+
+> Yes to all
+
+- **One identical re-run of every failure**, the same rule for every candidate: the 9 candidates whose Jev-link ingest failed were run again at 19:17 UTC with the same command (`jev-driver-2026-09-29.sh jev-retry-targets-2026-09-29.tsv`). The failed attempt is kept in each folder's `attempt-1-failed/`. Dan Green and Oliver Gilbert were read on the re-run; the other 7 failed again and are recorded silence. There is no second re-run.
+- **Step 3 reviews** for all 90 runs, one reviewer subagent each on `profiler-review-prompt.md` (header change recorded there).
+- **FL-GOV is rebuilt** from the new runs: a new `plan.json` and `brief.sql` in `FL-GOV/rebuild-2026-09-29/`. Applying it replaces the live, published brief, so it waits on its own yes.
+
+## The second commitment gate (founder, 2026-09-30)
+
+On the three options in `../review-2026-09-29.md` for the 70 passages flagged under check 3:
+
+> 1
+
+A second gate question is added to Step 2 (`OWN_COMMITMENT_ID`), and every run is re-run and re-reviewed. The same 0.85 threshold applies to it as to every other question. The wording, the pilot that shaped it, and the result are in `../gate2-2026-09-30.md`.
+
+Asked whether to keep 0.85 on the second gate and re-review all 90 runs, the founder answered: **keep 0.85, re-review**. The re-reviews are summarised in `../review-2026-09-30.md`.
+- Across all runs, 81 pass and 9 fail, all on check 3, with 16 flagged passages.
+- For FL-GOV, Jewett and Burkett now pass. Jolly still fails on one About-page passage (`266196cf`).
+- That passage is a claim in `rebuild-2026-09-29/brief.sql`. The brief is still not applied.
+
+## The 16 flagged passages: withhold the past record only (founder, 2026-09-30)
+
+On the options in `../review-2026-09-30.md` for the 16 passages still flagged under check 3, the founder chose the middle path:
+
+> middle path
+
+- **12 are withheld.** They are only a past record: Soto's and Simpson's list items, Diaz-Balart's two appropriations lines, Ingoglia's résumé bullet and Bilirakis's funding line.
+  - They are listed with their reasons in `../withheld-2026-09-30.json`.
+  - A plan points at that list with `"withheld_from"`. `scripts/brief-rows-sql.ts` then emits no claim for them, records each as `withheld_after_review` with its reason in the SQL header, and refuses to build if an entry no longer names a policy passage in its run.
+- **4 are kept, with the reviewer's note recorded in the same file.** They carry forward-looking wording: Lee, Gilbert, Nixon, and Jolly's `266196cf`.
+- **The rule, the same for every candidate:** a flagged passage is withheld only when it is a past record with no commitment.
+- **FL-GOV:** none of its passages are withheld. `rebuild-2026-09-29/plan.json` now points at the list, and the rebuilt `brief.sql` has the same rows as before, with one added header comment. It is still not applied.
+
+## Apply the rebuilt FL-GOV brief (founder, 2026-09-30)
+
+Asked whether to apply `rebuild-2026-09-29/brief.sql`, which replaces the live, published brief:
+
+> yes, apply the FL-GOV brief
+
+- **Applied** on 2026-09-30, 21:45–21:58 UTC, in 12 batches. The first batch took the race's profiles dark (`balance_check_passed = false`) in the same transaction as the deletes, so no reader could see a half-built brief. The race stayed `published` throughout.
+- **The live fingerprints equal the local reference** on claims, claim sources, positions, issues and profiles.
+- **The Balance Audit passes** on the applied profiles, with the `word_count` threshold of 150 decided on 2026-09-27. It was written back in the same shape as before. Datto and Abrams are flagged `stated_position_asymmetry`. Jewett is no longer flagged: his site was read in this rebuild.
+- Details, hashes and the rollback steps are in `rebuild-2026-09-29/apply-2026-09-30.md`. The audit is in `rebuild-2026-09-29/audit-2026-09-30.json`.

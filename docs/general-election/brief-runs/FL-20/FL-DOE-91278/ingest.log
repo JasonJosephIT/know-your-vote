@@ -1,0 +1,14 @@
+(node:2219) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-site-ingest.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/user/know-your-vote/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  robots.txt read in the browser (plain fetch got a bot challenge, HTTP 202)
+site: https://brentandersenfl.com/
+  bot challenge (HTTP 202), retrying in the browser: https://brentandersenfl.com/
+  asking Jev about 7 link(s) as jev:jev-1.13.0/links/q-e03cabd0
+  52 links, 0 policy page(s) selected (cap 8), about page: https://brentandersenfl.com/meet-brent
+  bot challenge (HTTP 202), retrying in the browser: https://brentandersenfl.com/meet-brent
+    8 passage(s)  https://brentandersenfl.com/meet-brent
+  2 page(s) fetched in the browser
+
+11 passage(s) -> docs/general-election/brief-runs/FL-20/FL-DOE-91278/passages.jsonl

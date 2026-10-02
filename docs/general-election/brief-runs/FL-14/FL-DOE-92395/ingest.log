@@ -1,0 +1,17 @@
+(node:1981) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-site-ingest.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/user/know-your-vote/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+site: https://www.brianlambertforcongress.com/
+  asking Jev about 10 link(s) as jev:jev-1.13.0/links/q-e03cabd0
+  30 links, 7 policy page(s) selected (cap 8), about page: https://www.brianlambertforcongress.com/about-brian
+   22 passage(s)  https://www.brianlambertforcongress.com/issues/fiscal-responsibility
+   24 passage(s)  https://www.brianlambertforcongress.com/issues/veterans
+   19 passage(s)  https://www.brianlambertforcongress.com/issues/election-integrity
+   13 passage(s)  https://www.brianlambertforcongress.com/issues/constitutional-government
+   15 passage(s)  https://www.brianlambertforcongress.com/issues/individual-liberty
+   13 passage(s)  https://www.brianlambertforcongress.com/issues
+   27 passage(s)  https://www.brianlambertforcongress.com/why-libertarian
+    5 passage(s)  https://www.brianlambertforcongress.com/about-brian
+
+171 passage(s) -> docs/general-election/brief-runs/FL-14/FL-DOE-92395/passages.jsonl
