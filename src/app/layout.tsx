@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Figtree, Inter, IBM_Plex_Mono } from "next/font/google";
 import Script from "next/script";
 import { SectionNav } from "@/components/nav/SectionNav";
+import { SitePrompts } from "@/components/features/SitePrompts";
 import "./globals.css";
 
 const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
@@ -103,25 +104,8 @@ export default function RootLayout({
             strategy="afterInteractive"
           />
         )}
-        {/* Google tag (gtag.js) — Google Ads AW-18487967912. Disclosed on
-            /privacy. The tag reports the page URL, and the no-JS ZIP path
-            lands on /candidates?zip=…, so page_location drops the ZIP before
-            Google sees it — the privacy page promises a ZIP is never kept. */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-18487967912"
-          strategy="afterInteractive"
-        />
-        <Script id="google-tag" strategy="afterInteractive">
-          {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-function kyvNoZip(u){try{var x=new URL(u);x.searchParams.delete('zip');return x.href;}catch(e){return '';}}
-gtag('config', 'AW-18487967912', {
-  page_location: kyvNoZip(window.location.href),
-  page_referrer: kyvNoZip(document.referrer)
-});`}
-        </Script>
         <SectionNav />
+        <SitePrompts />
         {children}
       </body>
     </html>

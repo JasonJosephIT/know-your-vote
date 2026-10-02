@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DistrictChip } from "@/components/features/DistrictChip";
+import { DONATE_URL } from "@/components/features/SitePrompts";
 
 const items = [
   {
@@ -50,8 +51,6 @@ const items = [
 
 /* Donations go through Zeffy, off-site. Same pill size as the district chip so
    the two sit together in either bar; filled so it reads as an action. */
-const DONATE_URL = "https://www.zeffy.com/en-US/donation-form/know-your-vote";
-
 function DonateLink({ className = "" }: { className?: string }) {
   return (
     <a
