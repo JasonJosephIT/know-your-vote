@@ -48,6 +48,23 @@ const items = [
   },
 ];
 
+/* Donations go through Zeffy, off-site. Same pill size as the district chip so
+   the two sit together in either bar; filled so it reads as an action. */
+const DONATE_URL = "https://www.zeffy.com/en-US/donation-form/know-your-vote";
+
+function DonateLink({ className = "" }: { className?: string }) {
+  return (
+    <a
+      href={DONATE_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`items-center rounded-full bg-primary px-3 py-1 text-caption text-on-primary hover:bg-primary-hover ${className}`}
+    >
+      Donate
+    </a>
+  );
+}
+
 export function SectionNav() {
   const pathname = usePathname();
 
@@ -67,9 +84,10 @@ export function SectionNav() {
           bar at the top — the corner voters look in for a location selector.
           Hidden at md:, where it sits in the nav itself. */}
       <div
-        className="fixed inset-x-0 top-0 z-40 flex justify-end border-b border-border bg-surface px-3 py-2 md:hidden"
+        className="fixed inset-x-0 top-0 z-40 flex items-center justify-between border-b border-border bg-surface px-3 py-2 md:hidden"
         style={{ paddingTop: "calc(0.5rem + env(safe-area-inset-top))" }}
       >
+        <DonateLink className="flex" />
         <DistrictChip />
       </div>
 
@@ -110,6 +128,7 @@ export function SectionNav() {
                 </Link>
               );
             })}
+            <DonateLink className="hidden self-center md:flex" />
             <DistrictChip className="hidden self-center md:flex" />
           </div>
         </div>
