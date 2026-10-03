@@ -113,3 +113,13 @@ Positions are the candidate's stated-position claims after both gates and the wi
 ## Next, on the founder's answers
 
 For every race the answers say to brief: a `plan.json` and a `brief.sql` built from the chosen spine, an audit preview, and a reviewer pass. Then the same apply and publish as FL-GOV, race by race, each on its own yes.
+
+## Decisions (founder, 2026-10-03)
+
+> By office (Recommended) · 150, like FL-GOV (Recommended) · Keep at listed tier (Recommended)
+
+1. **The spine is fixed by office,** as listed under Option 2 above.
+2. **`word_count_pct = 150` for every race,** the threshold FL-GOV runs under.
+3. **The 17 races with no claim stay at the listed tier** with no brief. The other 35, single-candidate races included, get a brief.
+
+The plans, briefs and audit previews built on these decisions are in [step4-2026-10-03.md](step4-2026-10-03.md).

@@ -1,0 +1,58 @@
+{
+ "verdict": "PASS",
+ "race_id": "FL-9-general",
+ "metrics": {
+  "word_count": {
+   "min": 215,
+   "max": 225,
+   "variance_pct": 4.4,
+   "threshold": 150,
+   "kind": "gate",
+   "breach": false
+  },
+  "verifiable_fact_count": {
+   "min": 0,
+   "max": 0,
+   "variance_pct": 0.0,
+   "threshold": 15,
+   "kind": "gate",
+   "breach": false
+  },
+  "fact_checks": {
+   "min": 0,
+   "max": 0,
+   "variance_pct": 0.0,
+   "threshold": 10,
+   "kind": "gate",
+   "breach": false
+  },
+  "stated_position_count": {
+   "min": 4,
+   "max": 5,
+   "variance_pct": 20.0,
+   "threshold": 15,
+   "kind": "flag",
+   "flagged": true,
+   "candidates": {
+    "low": "FL-DOE-91337",
+    "high": "FL-DOE-89339"
+   }
+  },
+  "spine_issue_coverage": {
+   "min": 1,
+   "max": 3,
+   "gap": 2,
+   "kind": "flag",
+   "flagged": true,
+   "candidates": {
+    "low": "FL-DOE-91337",
+    "high": "FL-DOE-89339"
+   }
+  }
+ },
+ "flags": [
+  "stated_position_asymmetry",
+  "issue_coverage_asymmetry"
+ ],
+ "flagged_at": "2026-10-03T00:00:00Z"
+}
