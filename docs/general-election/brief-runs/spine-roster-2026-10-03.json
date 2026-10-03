@@ -1,0 +1,1003 @@
+[
+ {
+  "race_id": "FL-10-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-89909",
+    "name": "Maxwell Alejandro Frost",
+    "site": "https://www.frostforcongress.com/",
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-11-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-88517",
+    "name": "Ralph Groves",
+    "site": "https://www.grovesforcongress.com/",
+    "party": "LPF"
+   },
+   {
+    "id": "FL-DOE-91715",
+    "name": "James Pericola",
+    "site": "https://jamespericola.com/",
+    "party": "DEM"
+   },
+   {
+    "id": "FL-DOE-91717",
+    "name": "Joe Strada",
+    "site": "https://votestrada.com/",
+    "party": "REP"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-12-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-88868",
+    "name": "Gus Michael Bilirakis",
+    "site": "https://bilirakisforcongress.com/",
+    "party": "REP"
+   },
+   {
+    "id": "FL-DOE-89453",
+    "name": "Kimberly Overman",
+    "site": "https://kimberlyoverman.com/",
+    "party": "DEM"
+   },
+   {
+    "id": "FL-DOE-89778",
+    "name": "Branden Scrivener",
+    "site": "https://brandenscrivenerfl.info/",
+    "party": "NPA"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-14-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-88870",
+    "name": "Kathy Castor",
+    "site": "https://castorforcongress.com/",
+    "party": "DEM"
+   },
+   {
+    "id": "FL-DOE-91313",
+    "name": "Mike Beltran",
+    "site": "https://beltranforcongress.com/",
+    "party": "REP"
+   },
+   {
+    "id": "FL-DOE-92395",
+    "name": "Brian Lambert",
+    "site": "https://www.brianlambertforcongress.com/",
+    "party": "LPF"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-15-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-89116",
+    "name": "Robert People",
+    "site": "https://www.peopleforcongress.com/",
+    "party": "DEM"
+   },
+   {
+    "id": "FL-DOE-89121",
+    "name": "Laurel Lee",
+    "site": "https://votelaurel.com/",
+    "party": "REP"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-16-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-89623",
+    "name": "Mark Davis",
+    "site": "https://markdavisforcongress.com/",
+    "party": "NPA"
+   },
+   {
+    "id": "FL-DOE-90251",
+    "name": "Sydney Gruters",
+    "site": "https://grutersforcongress.com/",
+    "party": "REP"
+   },
+   {
+    "id": "FL-DOE-90779",
+    "name": "Kelly Kirschner",
+    "site": "https://kellykirschner.com/",
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-20-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-90814",
+    "name": "Kedner Maxime",
+    "site": "https://www.maximeforcongress.com/",
+    "party": "IND"
+   },
+   {
+    "id": "FL-DOE-91278",
+    "name": "Brent Andersen",
+    "site": "https://brentandersenfl.com/",
+    "party": "REP"
+   },
+   {
+    "id": "FL-DOE-91577",
+    "name": "Debbie Wasserman Schultz",
+    "site": "https://debbiewassermanschultz.com/",
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-22-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-89301",
+    "name": "Pia Dandiya",
+    "site": "https://piaforcongress.com/",
+    "party": "DEM"
+   },
+   {
+    "id": "FL-DOE-92109",
+    "name": "Casey Askar",
+    "site": "https://www.caseyaskar.com/",
+    "party": "REP"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-24-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-90703",
+    "name": "Te Mayonna Brown",
+    "site": "https://tebrownforflorida.com/",
+    "party": "REP"
+   },
+   {
+    "id": "FL-DOE-91544",
+    "name": "Oliver G. Gilbert III",
+    "site": "https://olivergilbert.vote/",
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-25-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-88911",
+    "name": "Jared Moskowitz",
+    "site": "https://jaredforflorida.com/",
+    "party": "DEM"
+   },
+   {
+    "id": "FL-DOE-89801",
+    "name": "Scott Singer",
+    "site": "https://www.scottsingerusa.com/",
+    "party": "REP"
+   },
+   {
+    "id": "FL-DOE-92357",
+    "name": "Peter Jassenoff",
+    "site": null,
+    "party": "LPF"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-26-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-89980",
+    "name": "Nicole Locklin",
+    "site": "https://locklinforcongress.com/",
+    "party": "DEM"
+   },
+   {
+    "id": "FL-DOE-90330",
+    "name": "Mario Diaz-Balart",
+    "site": "https://mariodiazbalart.org/",
+    "party": "REP"
+   },
+   {
+    "id": "FL-DOE-92137",
+    "name": "Deborah Ann Meidinger Hosey",
+    "site": null,
+    "party": "NPA"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-27-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-89933",
+    "name": "Eliott Rodriguez",
+    "site": "https://eliottrodriguez.com/",
+    "party": "DEM"
+   },
+   {
+    "id": "FL-DOE-90721",
+    "name": "Maria Elvira Salazar",
+    "site": "https://mariaelvirasalazar.com/",
+    "party": "REP"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-28-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-90340",
+    "name": "Eddy Rojas",
+    "site": "https://www.eddyrojas.com/",
+    "party": "NPA"
+   },
+   {
+    "id": "FL-DOE-91226",
+    "name": "Carlos A. Gimenez",
+    "site": "https://carlosgimenezforcongress.com/",
+    "party": "REP"
+   },
+   {
+    "id": "FL-DOE-91699",
+    "name": "Phil \"Felipe\" Ehr",
+    "site": "https://ehrforcongress.us/",
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-7-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-90631",
+    "name": "Bale Dalton",
+    "site": "https://baledalton.com/",
+    "party": "DEM"
+   },
+   {
+    "id": "FL-DOE-90696",
+    "name": "Ryan Elijah",
+    "site": "https://elijahforcongress.com/",
+    "party": "REP"
+   },
+   {
+    "id": "FL-DOE-92377",
+    "name": "Christopher Dennison",
+    "site": "https://dennison4congress.com/",
+    "party": "LPF"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-8-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-89522",
+    "name": "Mike Haridopolos",
+    "site": "https://www.mike4congress.com/",
+    "party": "REP"
+   },
+   {
+    "id": "FL-DOE-90831",
+    "name": "Jennifer Jenkins",
+    "site": "https://jenkinsforfl.com/",
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-9-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-89339",
+    "name": "Darren Soto",
+    "site": "https://www.darrensoto.com/",
+    "party": "DEM"
+   },
+   {
+    "id": "FL-DOE-91337",
+    "name": "Dan Green",
+    "site": "https://dangreenfl.com/",
+    "party": "REP"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-AGR-general",
+  "office": "Commissioner of Agriculture",
+  "level": "state",
+  "cands": [
+   {
+    "id": "FL-DOE-90560",
+    "name": "Wilton Simpson",
+    "site": "https://wiltonsimpson.com/",
+    "party": "REP"
+   },
+   {
+    "id": "FL-DOE-92013",
+    "name": "Joey Mendoza Atkins",
+    "site": "https://www.joeyforflorida.com/",
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-ATG-general",
+  "office": "Attorney General",
+  "level": "state",
+  "cands": [
+   {
+    "id": "FL-DOE-89041",
+    "name": "James Uthmeier",
+    "site": "https://jamesforfl.com/",
+    "party": "REP"
+   },
+   {
+    "id": "FL-DOE-89231",
+    "name": "Jose Javier Rodriguez",
+    "site": "https://www.jjr.vote/",
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-BRO-CC6-general",
+  "office": "Broward County Commission, District 6",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-BRO-1041",
+    "name": "Caryl Sandler Shuham",
+    "site": "https://www.carylshuham.com/",
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-BRO-SB1-general",
+  "office": "Broward County School Board, District 1",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-BRO-1194",
+    "name": "Maura McCarthy Bulman",
+    "site": "https://www.mauraforbroward.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-BRO-SB4-general",
+  "office": "Broward County School Board, District 4",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-BRO-1191",
+    "name": "Nicole Morst",
+    "site": "https://nicolemorst.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-BRO-SB6-general",
+  "office": "Broward County School Board, District 6",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-BRO-1172",
+    "name": "Roberto Fernandez III",
+    "site": "https://www.electroberto2026.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-VF-BRO-1184",
+    "name": "Adam Cervera",
+    "site": "https://www.adamcervera.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-BRO-SB7-general",
+  "office": "Broward County School Board, District 7",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-BRO-1254",
+    "name": "Cynthia Alceus Dominique",
+    "site": "https://www.cynthiaforbrowardschools.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-BRO-SBAL8-general",
+  "office": "Broward County School Board, At Large 8",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-BRO-1195",
+    "name": "Allen Zeman",
+    "site": "https://electallenzeman.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-CFO-general",
+  "office": "Chief Financial Officer",
+  "level": "state",
+  "cands": [
+   {
+    "id": "FL-DOE-89394",
+    "name": "Blaise Ingoglia",
+    "site": "https://blaiseforflorida.com/",
+    "party": "REP"
+   },
+   {
+    "id": "FL-DOE-91310",
+    "name": "Annette Taddeo",
+    "site": "https://annettetaddeo.com/",
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-DAD-CC2-general",
+  "office": "Miami-Dade County Commission, District 2",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-DAD-2964",
+    "name": "Marleine Bastien",
+    "site": "https://reelectbastien.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-DAD-CC5-general",
+  "office": "Miami-Dade County Commission, District 5",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-DAD-2949",
+    "name": "Vicki L. Lopez",
+    "site": "https://vickilopez.vote/",
+    "party": ""
+   },
+   {
+    "id": "FL-VF-DAD-2998",
+    "name": "Rob Piper",
+    "site": "https://www.robpiperheretoserve.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-DAD-SB1-general",
+  "office": "Miami-Dade County School Board, District 1",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-DAD-3070",
+    "name": "Katrina Wilson",
+    "site": "https://wilsonforeducation.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-VF-DAD-3076",
+    "name": "Linda Cothiere",
+    "site": "https://lindaforschoolboard.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-HIL-CC1-general",
+  "office": "Hillsborough County Commission, District 1",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-HIL-2640",
+    "name": "Harry Cohen",
+    "site": "https://harrycohen.vote/",
+    "party": "DEM"
+   },
+   {
+    "id": "FL-VF-HIL-2880",
+    "name": "Jackie Toledo",
+    "site": "https://jackietoledo.com/",
+    "party": "REP"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-HIL-CC3-general",
+  "office": "Hillsborough County Commission, District 3",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-HIL-2621",
+    "name": "Gwen Myers",
+    "site": "https://www.votegwenmyers.com/",
+    "party": "DEM"
+   },
+   {
+    "id": "FL-VF-HIL-2646",
+    "name": "Luiz F. F. Garcia",
+    "site": "https://www.electluizffgarcia.com/",
+    "party": "REP"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-HIL-CC5-general",
+  "office": "Hillsborough County Commission, District 5",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-HIL-2636",
+    "name": "Neil Manimala",
+    "site": "https://www.neilmanimala.com/",
+    "party": "DEM"
+   },
+   {
+    "id": "FL-VF-HIL-2661",
+    "name": "Stacy Hahn",
+    "site": "https://www.votestacyhahn.com/",
+    "party": "REP"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-HIL-CC7-general",
+  "office": "Hillsborough County Commission, District 7",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-HIL-2620",
+    "name": "Joshua Wostal",
+    "site": "https://www.joshuawostal.com/",
+    "party": "REP"
+   },
+   {
+    "id": "FL-VF-HIL-2660",
+    "name": "Aileen Rodriguez",
+    "site": "https://voteaileen2026.com/",
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-HIL-SB2-general",
+  "office": "Hillsborough County School Board, District 2",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-HIL-2675",
+    "name": "Daniela Simic",
+    "site": "https://danielaforschools.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-VF-HIL-2677",
+    "name": "Brittany Lyssy",
+    "site": "https://www.votebrittanylyssy.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-HIL-SB4-general",
+  "office": "Hillsborough County School Board, District 4",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-HIL-2672",
+    "name": "Patricia \"Patti\" Rendon",
+    "site": "https://www.votepattirendon.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-HIL-SB6-general",
+  "office": "Hillsborough County School Board, District 6",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-HIL-2610",
+    "name": "Kenneth \"Ken\" Gay",
+    "site": "https://votekennethgay.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-VF-HIL-2645",
+    "name": "Karen Perez",
+    "site": "https://keepkarenperez.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-ORA-CC2-general",
+  "office": "Orange County Commission, District 2",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-ORA-1290",
+    "name": "Kamia Brown",
+    "site": "https://www.kamiafororangecounty.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-VF-ORA-1384",
+    "name": "Mike Crabb",
+    "site": "https://ilikemikecrabb.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-ORA-CC4-general",
+  "office": "Orange County Commission, District 4",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-ORA-1260",
+    "name": "Brian Jones",
+    "site": "https://brianhubertjones.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-VF-ORA-1279",
+    "name": "Johanna Lopez",
+    "site": "https://www.votejohannalopez.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-ORA-CC6-general",
+  "office": "Orange County Commission, District 6",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-ORA-1265",
+    "name": "Michael \"Mike\" Scott",
+    "site": "https://mymikescott.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-VF-ORA-1295",
+    "name": "Lawanna Gelzer",
+    "site": "https://www.lawannagelzer.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-ORA-CC7-general",
+  "office": "Orange County Commission, District 7",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-ORA-1271",
+    "name": "Vicki Vargo",
+    "site": "https://votevickivargo.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-VF-ORA-1283",
+    "name": "Patricia Rumph",
+    "site": "https://www.patriciarumph.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-ORA-CC8-general",
+  "office": "Orange County Commission, District 8",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-ORA-1272",
+    "name": "Victor M. Torres Jr.",
+    "site": "https://www.electvictorres.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-VF-ORA-1275",
+    "name": "Jeannette Quinones Hernandez",
+    "site": "https://www.jeannette2026.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-ORA-CLERK-general",
+  "office": "Orange County Clerk of the Courts",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-ORA-1364",
+    "name": "Terrell Thomas",
+    "site": "https://thomasforclerk.com/",
+    "party": "NPA"
+   },
+   {
+    "id": "FL-VF-ORA-1401",
+    "name": "Roberta Walton Johnson",
+    "site": "https://voteroberta.com/",
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-ORA-MAYOR-general",
+  "office": "Orange County Mayor",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-ORA-1236",
+    "name": "Tiffany Moore Russell",
+    "site": "https://tiffanyformayor.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-VF-ORA-1239",
+    "name": "Chris Messina",
+    "site": "https://www.chrismessina.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-ORA-SB1-general",
+  "office": "Orange County School Board, District 1",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-ORA-1270",
+    "name": "Melissa Lopez Marantes",
+    "site": "https://www.melissaforkids.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-ORA-SB2-general",
+  "office": "Orange County School Board, District 2",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-ORA-1318",
+    "name": "Gloria Reina O'Neal",
+    "site": "https://votegloriareina.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-ORA-SB3-general",
+  "office": "Orange County School Board, District 3",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-ORA-1242",
+    "name": "Susanne Pe\u00f1a",
+    "site": "https://www.vote4pena.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-VF-ORA-1314",
+    "name": "Diana Moore",
+    "site": "https://www.votefordianamoore.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-SEN-general",
+  "office": "United States Senator",
+  "level": "federal",
+  "cands": [
+   {
+    "id": "FL-DOE-89119",
+    "name": "Ashley Moody",
+    "site": "https://ashleymoody.com/",
+    "party": "REP"
+   },
+   {
+    "id": "FL-DOE-89955",
+    "name": "Neil J. Gillespie",
+    "site": "https://neilgillespie4senate.blogspot.com/",
+    "party": "NPA"
+   },
+   {
+    "id": "FL-DOE-90009",
+    "name": "Angie Nixon",
+    "site": "https://angienixon.com/",
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-GOV-general",
+  "office": "Governor",
+  "level": "state",
+  "cands": [
+   {
+    "id": "FL-DOE-84076",
+    "name": "Scott Eckhard Jewett",
+    "site": "https://scottjewett.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-DOE-88529",
+    "name": "Moliere \"Moe\" Dimanche",
+    "site": "https://nomoecorruption.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-DOE-89042",
+    "name": "Byron Donalds",
+    "site": "https://byrondonalds.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-DOE-89243",
+    "name": "David Jolly",
+    "site": "https://davidjolly.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-DOE-89571",
+    "name": "Frank J. Russo",
+    "site": "https://russo2026.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-DOE-90433",
+    "name": "Dean Ocean Abrams",
+    "site": "https://www.deanabrams.com/",
+    "party": ""
+   },
+   {
+    "id": "FL-DOE-90630",
+    "name": "Charles Burkett",
+    "site": "https://burkettforgov.com/",
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-BRO-CC2-general",
+  "office": "Broward County Commission, District 2",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-BRO-1179",
+    "name": "Mark D. Bogen",
+    "site": null,
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-BRO-CC4-general",
+  "office": "Broward County Commission, District 4",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-BRO-1178",
+    "name": "Lamar Fisher",
+    "site": null,
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-BRO-CC8-general",
+  "office": "Broward County Commission, District 8",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-BRO-1182",
+    "name": "Robert McKinzie",
+    "site": null,
+    "party": "DEM"
+   }
+  ]
+ },
+ {
+  "race_id": "FL-DAD-SB2-general",
+  "office": "Miami-Dade County School Board, District 2",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-DAD-2926",
+    "name": "Dorothy Bendross-Mindingall",
+    "site": null,
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-DAD-SB8-general",
+  "office": "Miami-Dade County School Board, District 8",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-DAD-2953",
+    "name": "Monica Colucci",
+    "site": null,
+    "party": ""
+   }
+  ]
+ },
+ {
+  "race_id": "FL-ORA-SBCHAIR-general",
+  "office": "Orange County School Board Chair",
+  "level": "county",
+  "cands": [
+   {
+    "id": "FL-VF-ORA-1245",
+    "name": "Angie Gallo",
+    "site": null,
+    "party": ""
+   }
+  ]
+ }
+]
