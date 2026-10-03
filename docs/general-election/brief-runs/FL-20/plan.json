@@ -1,0 +1,47 @@
+{
+  "race_id": "FL-20-general",
+  "retrieved_at": "2026-09-29T11:42:44Z",
+  "withheld_from": "../withheld-2026-09-30.json",
+  "spine": [
+    {
+      "id": "B1",
+      "title": "Economy, inflation, and jobs",
+      "description": null
+    },
+    {
+      "id": "B2",
+      "title": "Healthcare access and costs",
+      "description": null
+    },
+    {
+      "id": "B3",
+      "title": "Immigration and border enforcement",
+      "description": null
+    },
+    {
+      "id": "B4",
+      "title": "Social Security and Medicare",
+      "description": null
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "FL-DOE-90814",
+      "official_site": "https://www.maximeforcongress.com/",
+      "run": "FL-DOE-90814/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-DOE-91278",
+      "official_site": "https://brentandersenfl.com/",
+      "run": "FL-DOE-91278/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-DOE-91577",
+      "official_site": "https://debbiewassermanschultz.com/",
+      "run": "FL-DOE-91577/run.json",
+      "no_run_reason": null
+    }
+  ]
+}

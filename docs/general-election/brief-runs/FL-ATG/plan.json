@@ -1,0 +1,41 @@
+{
+  "race_id": "FL-ATG-general",
+  "retrieved_at": "2026-09-29T11:43:48Z",
+  "withheld_from": "../withheld-2026-09-30.json",
+  "spine": [
+    {
+      "id": "B7",
+      "title": "Crime policy, policing and courts",
+      "description": null
+    },
+    {
+      "id": "KYV1",
+      "title": "Threats to democratic institutions",
+      "description": null
+    },
+    {
+      "id": "B3",
+      "title": "Immigration and border enforcement",
+      "description": null
+    },
+    {
+      "id": "A1",
+      "title": "Property insurance costs",
+      "description": null
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "FL-DOE-89041",
+      "official_site": "https://jamesforfl.com/",
+      "run": "FL-DOE-89041/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-DOE-89231",
+      "official_site": "https://www.jjr.vote/",
+      "run": "FL-DOE-89231/run.json",
+      "no_run_reason": null
+    }
+  ]
+}

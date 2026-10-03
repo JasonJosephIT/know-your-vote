@@ -1,0 +1,41 @@
+{
+  "race_id": "FL-AGR-general",
+  "retrieved_at": "2026-09-29T11:43:51Z",
+  "withheld_from": "../withheld-2026-09-30.json",
+  "spine": [
+    {
+      "id": "A5",
+      "title": "Water quality and Everglades restoration",
+      "description": null
+    },
+    {
+      "id": "KYV5",
+      "title": "Water supply and drinking water",
+      "description": null
+    },
+    {
+      "id": "KYV3",
+      "title": "Growth, development and land conservation",
+      "description": null
+    },
+    {
+      "id": "A4",
+      "title": "Cost of living in Florida",
+      "description": null
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "FL-DOE-90560",
+      "official_site": "https://wiltonsimpson.com/",
+      "run": "FL-DOE-90560/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-DOE-92013",
+      "official_site": "https://www.joeyforflorida.com/",
+      "run": "FL-DOE-92013/run.json",
+      "no_run_reason": null
+    }
+  ]
+}

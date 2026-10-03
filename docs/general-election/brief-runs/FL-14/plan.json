@@ -1,0 +1,47 @@
+{
+  "race_id": "FL-14-general",
+  "retrieved_at": "2026-09-29T11:42:29Z",
+  "withheld_from": "../withheld-2026-09-30.json",
+  "spine": [
+    {
+      "id": "B1",
+      "title": "Economy, inflation, and jobs",
+      "description": null
+    },
+    {
+      "id": "B2",
+      "title": "Healthcare access and costs",
+      "description": null
+    },
+    {
+      "id": "B3",
+      "title": "Immigration and border enforcement",
+      "description": null
+    },
+    {
+      "id": "B4",
+      "title": "Social Security and Medicare",
+      "description": null
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "FL-DOE-88870",
+      "official_site": "https://castorforcongress.com/",
+      "run": "FL-DOE-88870/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-DOE-91313",
+      "official_site": "https://beltranforcongress.com/",
+      "run": null,
+      "no_run_reason": "site unreadable: bot challenge did not clear (never solved, by rule) on the 2026-09-29 Jev-link ingest and on its one identical re-run (FL-14/FL-DOE-91313/ingest-report.md, attempt-1-failed/); founder decision D3/D4: record silence"
+    },
+    {
+      "candidate_id": "FL-DOE-92395",
+      "official_site": "https://www.brianlambertforcongress.com/",
+      "run": "FL-DOE-92395/run.json",
+      "no_run_reason": null
+    }
+  ]
+}

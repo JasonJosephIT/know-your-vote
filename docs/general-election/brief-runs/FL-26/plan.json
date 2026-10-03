@@ -1,0 +1,47 @@
+{
+  "race_id": "FL-26-general",
+  "retrieved_at": "2026-09-29T11:43:05Z",
+  "withheld_from": "../withheld-2026-09-30.json",
+  "spine": [
+    {
+      "id": "B1",
+      "title": "Economy, inflation, and jobs",
+      "description": null
+    },
+    {
+      "id": "B2",
+      "title": "Healthcare access and costs",
+      "description": null
+    },
+    {
+      "id": "B3",
+      "title": "Immigration and border enforcement",
+      "description": null
+    },
+    {
+      "id": "B4",
+      "title": "Social Security and Medicare",
+      "description": null
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "FL-DOE-89980",
+      "official_site": "https://locklinforcongress.com/",
+      "run": "FL-DOE-89980/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-DOE-90330",
+      "official_site": "https://mariodiazbalart.org/",
+      "run": "FL-DOE-90330/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-DOE-92137",
+      "official_site": null,
+      "run": null,
+      "no_run_reason": "no official_site (spine-roster-2026-10-03.json); founder decision D3: record silence"
+    }
+  ]
+}

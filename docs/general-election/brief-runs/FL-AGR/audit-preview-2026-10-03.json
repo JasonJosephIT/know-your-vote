@@ -1,0 +1,53 @@
+{
+ "verdict": "PASS",
+ "race_id": "FL-AGR-general",
+ "metrics": {
+  "word_count": {
+   "min": 0,
+   "max": 40,
+   "variance_pct": 100.0,
+   "threshold": 150,
+   "kind": "gate",
+   "breach": false
+  },
+  "verifiable_fact_count": {
+   "min": 0,
+   "max": 0,
+   "variance_pct": 0.0,
+   "threshold": 15,
+   "kind": "gate",
+   "breach": false
+  },
+  "fact_checks": {
+   "min": 0,
+   "max": 0,
+   "variance_pct": 0.0,
+   "threshold": 10,
+   "kind": "gate",
+   "breach": false
+  },
+  "stated_position_count": {
+   "min": 0,
+   "max": 1,
+   "variance_pct": 100.0,
+   "threshold": 15,
+   "kind": "flag",
+   "flagged": true,
+   "candidates": {
+    "low": "FL-DOE-92013",
+    "high": "FL-DOE-90560"
+   }
+  },
+  "spine_issue_coverage": {
+   "min": 0,
+   "max": 0,
+   "gap": 0,
+   "kind": "flag",
+   "flagged": false
+  }
+ },
+ "flags": [
+  "stated_position_asymmetry"
+ ],
+ "flagged_at": "2026-10-03T00:00:00Z"
+}
