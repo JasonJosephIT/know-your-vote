@@ -4,6 +4,7 @@ import { Chip } from "@/components/ui/Chip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
 import { IssueSection } from "@/components/features/IssueSection";
 import type { CandidateBriefData } from "@/lib/briefs";
+import { CONTACT_EMAIL } from "@/lib/contact";
 
 /* One candidate's full brief. Structure is identical for every candidate in
    a race — equal space and equal scrutiny are layout invariants, not
@@ -70,11 +71,14 @@ export function CandidateBrief({
       ))}
 
       <footer className="mt-auto flex flex-wrap gap-x-4 gap-y-1 border-t border-border pt-3 text-caption text-on-surface-muted">
-        <Link href="/methodology" className="underline underline-offset-2 hover:text-on-surface">
+        <Link
+          href="/methodology"
+          className="underline underline-offset-2 hover:text-on-surface"
+        >
           How we stay fair
         </Link>
         <a
-          href={`mailto:flag@knowyourvote.example?subject=Flag%20brief%3A%20${candidate.candidate_id}`}
+          href={`mailto:${CONTACT_EMAIL}?subject=Flag%20brief%3A%20${candidate.candidate_id}`}
           className="underline underline-offset-2 hover:text-on-surface"
         >
           Flag this brief as biased
