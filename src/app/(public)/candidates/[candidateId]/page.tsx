@@ -54,7 +54,7 @@ export default async function CandidatePage({
         <h1 className="text-h1">This candidate isn&apos;t published yet</h1>
         <p className="text-body text-on-surface-muted">
           Candidates appear here once their race passes the Balance Audit and is
-          published — equal space and equal scrutiny come first.
+          published — the same checks for every candidate come first.
         </p>
         <Link
           href="/candidates?view=races"

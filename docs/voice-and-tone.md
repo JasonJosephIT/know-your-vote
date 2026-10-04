@@ -25,11 +25,18 @@ government pamphlet and not a hype account.
 
 - **Primary title / tagline:** "Know Your Vote, Know Your Ballot, Know Your Options"
 - **Short name:** "Know Your Vote"
-- **Lead description:** "See everyone on your ballot, what they say, what they've done, and
-  all facts no cap. Every claim linked to a source."
+- **Lead description:** "See everyone on your ballot and what they say, in their own words.
+  Every quote linked to its source."
 - **OG / social title:** "Know Your Vote — Your Ballot, Your Options"
-- **OG / social description:** "See everyone on your ballot what they say, what they've done,
-  and all facts no cap."
+- **OG / social description:** "See what Florida candidates say, in their own words, with a link
+  to every source. No ZIP needed."
+
+> **2026-10-04, recommended (pending founder confirmation):** the lead and OG descriptions
+> used to promise "what they've done, and all facts". No 2026 general brief carries a record
+> or a fact-check, only stated positions quoted from candidates' own sites, so the lines now
+> say what ships (handoff section 1; the site copy changed with them in `layout.tsx`,
+> `manifest.ts` and the landing page). Restore the old lines if records and fact-checks
+> return.
 
 The **triadic "Know Your ___, Know Your ___, Know Your ___"** structure is now a signature
 device — reuse it for section headers and campaigns (e.g. "Know the Race, Know the Record,

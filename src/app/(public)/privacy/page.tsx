@@ -6,6 +6,7 @@ export const metadata = { title: "Privacy — Know Your Vote" };
 
 export default function PrivacyPage() {
   const geocoder = geocoderHost();
+  const analyticsOn = Boolean(process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN);
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
       <h1 className="text-h1">Privacy, in plain language</h1>
@@ -131,10 +132,21 @@ export default function PrivacyPage() {
             the two are now stated separately. The tag is opt-in: SitePrompts
             loads it only after the visitor accepts. */}
         <h2 className="text-h2">Analytics, advertising, and errors</h2>
-        <p className="text-body">
-          We use cookieless, aggregate analytics (Plausible) — no cookies, no
-          personal data, no cross-site tracking.
-        </p>
+        {/* Read from the same variable the root layout uses to load the
+            script, so this sentence can't drift from what runs. On 2026-10-04
+            NEXT_PUBLIC_PLAUSIBLE_DOMAIN was unset in production and the page
+            still said "We use … Plausible" (docs/scope-changes.md). */}
+        {analyticsOn ? (
+          <p className="text-body">
+            We use cookieless, aggregate analytics (Plausible) — no cookies, no
+            personal data, no cross-site tracking.
+          </p>
+        ) : (
+          <p className="text-body">
+            We don&apos;t run site analytics right now. If we turn on
+            cookieless, aggregate analytics (Plausible), this page will say so.
+          </p>
+        )}
         <p className="text-body">
           We also advertise on Google. On your first visit we ask whether to
           load Google&apos;s advertising tag, which tells us whether an ad
@@ -168,6 +180,14 @@ export default function PrivacyPage() {
           Read the methodology
         </Link>{" "}
         — fairness and privacy are both things you can check, not just trust.
+        The rest of the ground rules are in our{" "}
+        <Link
+          href="/terms"
+          className="text-primary underline underline-offset-2"
+        >
+          terms of use
+        </Link>
+        .
       </p>
     </main>
   );

@@ -62,9 +62,9 @@ export default async function RacePage({
       <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
         <h1 className="text-h1">This race is still in review</h1>
         <p className="text-body text-on-surface-muted">
-          A race is published only when every candidate has equal space and
-          comparable scrutiny — our Balance Audit hasn&apos;t cleared this one
-          yet. Check back soon.
+          A race is published only after every candidate in it has been through
+          the same checks, including our Balance Audit, and this one
+          hasn&apos;t cleared them yet. Check back soon.
         </p>
         <Link
           href="/candidates?view=races"

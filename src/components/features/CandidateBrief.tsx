@@ -74,7 +74,7 @@ export function CandidateBrief({
           How we stay fair
         </Link>
         <a
-          href={`mailto:flag@knowyourvote.example?subject=Flag%20brief%3A%20${candidate.candidate_id}`}
+          href={`mailto:hello@knowyour.vote?subject=Flag%20brief%3A%20${candidate.candidate_id}`}
           className="underline underline-offset-2 hover:text-on-surface"
         >
           Flag this brief as biased

@@ -2,10 +2,52 @@ import type { Metadata, Viewport } from "next";
 import { Figtree, Inter, IBM_Plex_Mono } from "next/font/google";
 import Script from "next/script";
 import { SectionNav } from "@/components/nav/SectionNav";
+import { SiteFooter } from "@/components/nav/SiteFooter";
 import { SitePrompts } from "@/components/features/SitePrompts";
+import { COVERED_COUNTIES } from "@/lib/counties";
 import "./globals.css";
 
 const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
+
+/* The shared-link description, rewritten 2026-10-04 (launch handoff §1,
+   trust copy). It used to promise "what they've done, and what's been
+   verified": records and fact-checks that no published brief carries —
+   every published profile has verifiable_fact_count = 0 and
+   fact_checks_performed = 0. What ships is stated positions, quoted verbatim
+   from each candidate's own site with a link to the source, on shared issues
+   fixed by office (/methodology). "Equal space" went too: the Balance Audit's
+   word_count gate runs at 150, so space is deliberately not equalized.
+
+   "See everyone you can vote for" went too: it reads as a complete ballot,
+   and what ships is the statewide races and amendments plus the U.S. House,
+   county commission, school board, Orange mayor and Orange clerk races in
+   the four covered counties — no Florida House or Senate, no judges, no city
+   races (/methodology, "What we don't cover"). So the description names the
+   area instead, with the county names read from COVERED_COUNTIES.
+
+   RECOMMENDED wording (pending founder confirmation). To change it, edit
+   SITE_TITLE, SITE_DESCRIPTION and SHARE_DESCRIPTION; nothing else reads
+   them. docs/voice-and-tone.md's "canonical lines" still carry the old
+   promise and need the same change. */
+const COVERED_COUNTY_LIST = new Intl.ListFormat("en-US", {
+  style: "long",
+  type: "conjunction",
+}).format(COVERED_COUNTIES.map((c) => c.name));
+const SITE_DESCRIPTION = `See what Florida candidates say, quoted word for word from their own campaign sites, with a link to every source. Statewide races and amendments, plus U.S. House, county commission and school board races in ${COVERED_COUNTY_LIST} counties. No ZIP needed.`;
+const SHARE_DESCRIPTION =
+  "See what Florida candidates say, in their own words, with a link to every source. No ZIP needed.";
+
+/* The default page title and the share-card headline, which is the landing
+   page's: the shared link is the landing page. It used to read
+   "Know Your Vote — everything on every Florida ballot", which overclaims
+   for the reasons above: most Floridians' ballots carry races this site
+   doesn't cover.
+
+   RECOMMENDED (pending founder confirmation). TO FLIP BACK: set this to
+   "Know Your Vote — everything on every Florida ballot". The landing page's
+   h1 ("Everything on every Florida ballot." in src/app/(public)/page.tsx)
+   makes the same claim and should change with it, to keep the two in sync. */
+const SITE_TITLE = "Know Your Vote — Florida candidates, in their own words";
 
 const figtree = Figtree({
   variable: "--font-figtree",
@@ -30,17 +72,16 @@ export const metadata: Metadata = {
   /* Every public page sets its own title, so `default` is in practice the
      landing page's — and since TASK-067 that page no longer claims to show
      "your ballot" without a ZIP. The shared link is the landing page, so the
-     title and the OG card have to make the same honest claim it does. */
+     title and the OG card have to make the same honest claim it does
+     (SITE_TITLE, above). */
   title: {
-    default: "Know Your Vote — everything on every Florida ballot",
+    default: SITE_TITLE,
     template: "%s",
   },
-  description:
-    "See everyone you can vote for — what they say, what they've done, and what's been verified. Equal space, equal scrutiny, every claim linked to a source. No ZIP needed.",
+  description: SITE_DESCRIPTION,
   openGraph: {
-    title: "Know Your Vote — everything on every Florida ballot",
-    description:
-      "See everyone you can vote for — what they say, what they've done, and what's been verified. No ZIP needed.",
+    title: SITE_TITLE,
+    description: SHARE_DESCRIPTION,
     type: "website",
     siteName: "Know Your Vote",
     images: [
@@ -48,7 +89,7 @@ export const metadata: Metadata = {
         url: "/brand/site/og-card.png",
         width: 1200,
         height: 630,
-        alt: "Know Your Vote see who's on your local ballot.",
+        alt: "Know Your Vote: see who's on your local ballot.",
       },
     ],
   },
@@ -107,6 +148,9 @@ export default function RootLayout({
         <SectionNav />
         <SitePrompts />
         {children}
+        {/* After the page, inside the body padding above, so the fixed
+            mobile nav never covers it. */}
+        <SiteFooter />
       </body>
     </html>
   );
