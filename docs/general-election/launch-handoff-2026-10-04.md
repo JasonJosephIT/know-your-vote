@@ -56,9 +56,7 @@ The single biggest launch risk is that the methodology page promises things the 
 
 ## 2. This week
 
-1. **Confirm the 35 new race pages render** (Agent).
-   - At 18:06 UTC the pages still served the cached "Brief in review" version. The cache is 3600 s.
-   - A check-in is scheduled for 19:12 UTC. Record the result under "Live pages" in `brief-runs/apply-2026-10-04.md`.
+1. **Done: the 35 new race pages render.** A sample of six (FL-SEN, FL-10, FL-8, FL-ORA-MAYOR, FL-HIL-CC1, FL-AGR) was checked live at 19:13 UTC. It is recorded under "Live pages" in `brief-runs/apply-2026-10-04.md`.
 2. **Test the reminder pipeline once, end to end** (Founder + Agent).
    - Subscribe a test address.
    - Confirm `CRON_SECRET`, `RESEND_API_KEY` and `EMAIL_FROM` are set in Vercel production.
