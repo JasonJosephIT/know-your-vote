@@ -26,7 +26,7 @@
 
    Run: node scripts/verify-news-slots.ts */
 
-import { selectNewsSlots, type NewsSlotItem } from "../src/lib/news-slots.ts";
+import { NEWS_SLOTS_PER_CANDIDATE, selectNewsSlots, type NewsSlotItem } from "../src/lib/news-slots.ts";
 import type { LeanTag, SourceType } from "../src/lib/news-labels.ts";
 
 let failures = 0;
@@ -252,6 +252,26 @@ check("unrated does not collapse into the no-source bucket",
   ids(un2.slots) === "us,un", ids(un2.slots));
 check("unrated and no-source are two leans", leansOf(un2.slots).size === 2,
   [...leansOf(un2.slots)].join(","));
+
+/* ---- the recommended N (pending founder call, 2026-10-04) ------------- */
+/* news-slots.ts NEWS_SLOTS_PER_CANDIDATE. Whatever the founder sets, it has to
+   be a value the selector treats as a cap (a non-integer or negative n is
+   fail-open, uncapped), and at least 1: slots={0} with stories present would
+   print "No stories named this candidate" over a candidate who has some
+   (stream-surface-handoff.md §4). */
+check("NEWS_SLOTS_PER_CANDIDATE is a positive integer",
+  Number.isInteger(NEWS_SLOTS_PER_CANDIDATE) && NEWS_SLOTS_PER_CANDIDATE >= 1,
+  String(NEWS_SLOTS_PER_CANDIDATE));
+const many: NewsSlotItem[] = Array.from({ length: NEWS_SLOTS_PER_CANDIDATE + 4 }, (_, i) => ({
+  published_at: `2026-10-0${(i % 9) + 1}T00:00:00Z`, relation: "named",
+  source: { type: "factual_reporting", lean_tag: "unrated" },
+}));
+check("the recommended N caps a well-covered candidate at N",
+  selectNewsSlots(many, NEWS_SLOTS_PER_CANDIDATE).slots.length === NEWS_SLOTS_PER_CANDIDATE);
+check("the recommended N states a shortfall for a thinly covered one",
+  selectNewsSlots(many.slice(0, 1), NEWS_SLOTS_PER_CANDIDATE).shortfall === NEWS_SLOTS_PER_CANDIDATE - 1);
+check("the selector still caps nothing when no N is passed (the page today)",
+  selectNewsSlots(many).slots.length === many.length && selectNewsSlots(many).shortfall === 0);
 
 if (failures > 0) {
   console.error(`\nverify-news-slots: ${failures} failure(s)`);

@@ -53,13 +53,26 @@ import { OUTLETS, outletForUrl } from "../src/lib/news-sources.ts";
 import {
   dedupeKey,
   domainFromSourceId,
+  outletSourceRow,
   planAttachments,
   reviewPayloadFor,
+  UNMATCHED_ARTICLE_POLICY,
   type Attachment,
 } from "../src/lib/news-enqueue.ts";
 import type { SweptArticle } from "../src/lib/news-sweep.ts";
 
 loadEnvLocal(import.meta.url);
+
+/* A pending founder call (src/lib/news-enqueue.ts, UNMATCHED_ARTICLE_POLICY).
+   Only "drop" is built. Any other value stops here, before stdin or the
+   database, instead of running a pipeline that quietly ignores the setting. */
+if ((UNMATCHED_ARTICLE_POLICY as string) !== "drop") {
+  console.error(
+    `news-enqueue: UNMATCHED_ARTICLE_POLICY is "${UNMATCHED_ARTICLE_POLICY}", and only "drop" is built. `
+      + "A policy inlet is its own spec change (news-ingest-order-handoff-2026-09-23.md §5 and §7).",
+  );
+  process.exit(2);
+}
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
@@ -193,24 +206,17 @@ for (const sourceId of outletsNeeded) {
   const domain = domainFromSourceId(sourceId);
   const outlet = OUTLETS.find((o) => o.domain === domain);
   if (!outlet) die(`internal: no outlet for ${sourceId}`);
-  if (outlet.leanTag === null) {
+  /* outletSourceRow is shared with the admin approve path, so an outlet's
+     source row has one shape whichever of the two writes it first. */
+  const row = outletSourceRow(outlet);
+  if (row === null) {
     die(
       `${domain} has no signed-off leanTag, so its source row cannot be written `
         + "(source.lean_tag is NOT NULL). Sign the lean off in "
         + "src/lib/news-sources.ts, or drop this outlet from the sweep.",
     );
   }
-  const { error } = await db.from("source").upsert(
-    {
-      source_id: sourceId,
-      url: `https://${domain}`,
-      url_norm: domain,
-      publisher: outlet.publisher,
-      type: outlet.type,
-      lean_tag: outlet.leanTag,
-    },
-    { onConflict: "url_norm" },
-  );
+  const { error } = await db.from("source").upsert(row, { onConflict: "url_norm" });
   if (error) die(`could not upsert source ${sourceId}: ${error.message}`);
 }
 
