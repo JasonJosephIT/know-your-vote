@@ -32,8 +32,8 @@ export function ClaimList({
 export function NoStatedPosition() {
   return (
     <p className="rounded-md bg-surface-muted px-3 py-2 text-body-sm text-on-surface-muted">
-      No stated position found — we found no position on this issue on this
-      candidate&apos;s own campaign site, or could not read one. Silence is
+      No stated position found — we found no position on this issue that we
+      could quote from this candidate&apos;s own campaign website. Silence is
       recorded honestly, never filled in.
     </p>
   );

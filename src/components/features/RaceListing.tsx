@@ -3,7 +3,7 @@ import { PartyChip } from "@/components/ui/PartyChip";
 import { Chip } from "@/components/ui/Chip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
 import { safeHttpUrl } from "@/lib/format";
-import { BRIEF_IN_REVIEW_LINE } from "@/lib/listing-copy";
+import { listingCardLine } from "@/lib/listing-copy";
 import type {
   ListedCandidate,
   RaceListing as RaceListingData,
@@ -15,19 +15,22 @@ import type {
    a position, a claim or a summary, so there is nothing to invent.
 
    The structure is identical for every candidate, including the one muted
-   "Brief in review" line — which is the same sentence on every card so it can
-   never read as a remark about one person. It exists so an empty card is not
-   mistaken for "this candidate has no positions": the positions are not
-   missing, they are not written yet, for anyone in the race.
+   line under the name (listingCardLine: "No brief for this race" or "Brief
+   in review", by the race's status and founder decision 4) — which is the
+   same sentence on every card so it can never read as a remark about one
+   person. It exists so an empty card is not mistaken for "this candidate
+   has no positions".
 
    Header markup mirrors CandidateBrief's header so a race moving from listed
    to published changes what is under the name, not the name block itself. */
 export function ListedCandidateCard({
   data,
+  status,
   headingLevel = "h2",
   linkToDetail = true,
 }: {
   data: ListedCandidate;
+  status: RaceListingData["status"];
   headingLevel?: "h1" | "h2" | "h3";
   linkToDetail?: boolean;
 }) {
@@ -87,7 +90,7 @@ export function ListedCandidateCard({
       </header>
 
       <p className="text-body-sm text-on-surface-muted">
-        {BRIEF_IN_REVIEW_LINE}
+        {listingCardLine(status)}
       </p>
 
       <footer className="mt-auto flex flex-wrap gap-x-4 gap-y-1 border-t border-border pt-3 text-caption text-on-surface-muted">
@@ -114,7 +117,11 @@ export function RaceListing({ listing }: { listing: RaceListingData }) {
       style={{ "--cols": Math.min(count, 3) } as React.CSSProperties}
     >
       {listing.candidates.map((c) => (
-        <ListedCandidateCard key={c.candidate.candidate_id} data={c} />
+        <ListedCandidateCard
+          key={c.candidate.candidate_id}
+          data={c}
+          status={listing.status}
+        />
       ))}
     </div>
   );

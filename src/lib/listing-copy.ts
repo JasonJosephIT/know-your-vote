@@ -117,8 +117,8 @@ export interface ListingCopy {
    these races are actually being written (for example, if the founder
    allows a second source, decision 6). This one constant is the whole
    switch. Every export keeps its HEAD name and BRIEF_IN_REVIEW_LINE still
-   starts "Brief in review", so scripts/verify-listing.ts passes unchanged;
-   its added checks for the switch are requested of that file's owner. */
+   starts "Brief in review"; scripts/verify-listing.ts checks both
+   positions of the switch. */
 export const LISTED_IS_FINAL = true;
 
 const INTRO_PRINTED =
@@ -192,15 +192,9 @@ export const NO_BRIEF_CARD_LINE =
 /* The line every candidate card on a roster carries, identical for everyone
    in the race. `status` is RaceListing["status"]: a published race is on
    the roster only while its brief is unreadable, so it keeps the "in
-   review" line whatever LISTED_IS_FINAL says.
-
-   RaceListing.tsx renders BRIEF_IN_REVIEW_LINE directly until it and
-   CandidateListing.tsx pass listing.status to this (change requested of
-   their owners). Until then every roster card keeps the in-review line,
-   the tier's wording before decision 4. So this file can merge alone
-   without turning verify-listing red or putting "No brief" on a race that
-   has one. The copy agrees everywhere only once those components,
-   src/lib/races.ts and the methodology page land with it
+   review" line whatever LISTED_IS_FINAL says. RaceListing.tsx and
+   CandidateListing.tsx pass listing.status here, src/lib/races.ts takes
+   LISTED_RACE_LABEL below, and scripts/verify-listing.ts pins the switch
    (listed-races-2026-10-04.md §2). */
 export function listingCardLine(status: "listed" | "published"): string {
   return LISTED_IS_FINAL && status === "listed"
@@ -209,9 +203,8 @@ export function listingCardLine(status: "listed" | "published"): string {
 }
 
 /* The caption a race card carries on the landing page, Your races and the
-   county list for a listed race. src/lib/races.ts raceStatusLabel still
-   has its own "brief in review" literal; pointing it here puts that caption
-   under the same switch (change requested of that file's owner). */
+   county list for a listed race. src/lib/races.ts raceStatusLabel reads
+   it, so that caption follows the same switch as the roster cards. */
 export const LISTED_RACE_LABEL = LISTED_IS_FINAL
   ? "Names on the ballot · no brief"
   : "Names on the ballot · brief in review";
