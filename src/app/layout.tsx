@@ -59,10 +59,17 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+/* Not preloaded (a11y and performance audit 2026-10-04, P2). Every page
+   preloaded all three fonts, 79 KB and about a quarter of the page weight,
+   and Lighthouse counts each preload against LCP. The mono face only sets
+   source lines, dates and metadata, which sit below the fold, so it can load
+   when first used. Inter and Figtree set the first screen and stay
+   preloaded. */
 const ibmPlexMono = IBM_Plex_Mono({
   variable: "--font-ibm-plex-mono",
   subsets: ["latin"],
   weight: "400",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -136,8 +143,41 @@ export default function RootLayout({
       className={`${figtree.variable} ${inter.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
       {/* Bottom padding clears the fixed nav plus the home-indicator inset in
-          standalone PWA mode; top inset keeps content out of the status bar. */}
-      <body className="flex min-h-full flex-col pt-[calc(40px+env(safe-area-inset-top))] pb-[calc(88px+env(safe-area-inset-bottom))] md:pt-[72px] md:pb-0">
+          standalone PWA mode; top inset keeps content out of the status bar.
+
+          It also grows by --kyv-overlay-bottom, the open cookie banner's
+          height plus a gap, which ConsentBanner in SitePrompts publishes on
+          <html> (a11y audit 2026-10-04, fix 1; WCAG 2.4.11 Focus Not
+          Obscured). The root scroll-padding in globals.css makes Tab stop
+          above the banner, but only where there is room to scroll: without
+          this, the last stops on a page (the footer's links) stay under the
+          banner at phone width with the page already scrolled to its end.
+          It is unset once the banner is answered, which puts the padding
+          back to what it was. It has to be these classes: a base-layer rule
+          in globals.css would lose to them.
+
+          The minimum height grows by the same amount, so on a page shorter
+          than the window the extra room goes below the footer instead of
+          moving it up when the banner appears: a harness measured that move
+          as a layout shift of 0.09 at 390px, and 0 with this.
+          Recommended (pending founder confirmation), with the scroll padding.
+          To flip: drop the var() term from the min-h- and both pb- classes
+          here, from scroll-padding-bottom in globals.css, and the effect in
+          ConsentBanner that sets it. */}
+      <body className="flex min-h-[calc(100%+var(--kyv-overlay-bottom,0px))] flex-col pt-[calc(40px+env(safe-area-inset-top))] pb-[calc(88px+env(safe-area-inset-bottom)+var(--kyv-overlay-bottom,0px))] md:pt-[72px] md:pb-[var(--kyv-overlay-bottom,0px)]">
+        {/* Skip link (a11y audit 2026-10-04, fix 4; WCAG 2.4.1 Bypass
+            Blocks). Every page put 4 or 5 nav stops, and 3 more while the
+            cookie banner is open, before its content; this is the first Tab
+            stop instead. Hidden until focused, then pinned top-left above
+            every fixed bar, the cookie banner and the /admin shell (all
+            z-50 or lower), so focus on it is never covered. A plain <a>, so
+            the browser handles the jump itself. */}
+        <a
+          href="#content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-[calc(8px+env(safe-area-inset-top))] focus:left-3 focus:z-60 focus:rounded-md focus:bg-surface focus:px-4 focus:py-2 focus:text-label focus:text-primary focus:underline focus:underline-offset-2 focus:shadow-elevation-2"
+        >
+          Skip to content
+        </a>
         {plausibleDomain && (
           <Script
             src="https://plausible.io/js/script.js"
@@ -147,7 +187,18 @@ export default function RootLayout({
         )}
         <SectionNav />
         <SitePrompts />
-        {children}
+        {/* The skip link's target. tabIndex={-1} lets the jump move focus
+            here, so the next Tab is the first stop in the page; it takes no
+            Tab stop of its own, and shows no ring because it is not a
+            control. flex-1 and flex-col keep each page's main.flex-1
+            filling the height, as it did as a direct child of <body>. */}
+        <div
+          id="content"
+          tabIndex={-1}
+          className="flex flex-1 flex-col focus:outline-none"
+        >
+          {children}
+        </div>
         {/* After the page, inside the body padding above, so the fixed
             mobile nav never covers it. */}
         <SiteFooter />

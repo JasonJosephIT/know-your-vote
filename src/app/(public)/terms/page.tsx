@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CONTACT_EMAIL } from "@/lib/contact";
 
 export const metadata = { title: "Terms of use — Know Your Vote" };
 
@@ -22,8 +23,6 @@ export const metadata = { title: "Terms of use — Know Your Vote" };
 /* Bump on any change to the text below, so a reader can tell when it last
    changed. */
 const TERMS_EFFECTIVE_DATE = "2026-10-04";
-
-const CONTACT_EMAIL = "hello@knowyour.vote";
 
 const linkClass = "text-primary underline underline-offset-2";
 

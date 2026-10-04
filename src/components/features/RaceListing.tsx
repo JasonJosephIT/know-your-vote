@@ -22,7 +22,14 @@ import type {
    has no positions".
 
    Header markup mirrors CandidateBrief's header so a race moving from listed
-   to published changes what is under the name, not the name block itself. */
+   to published changes what is under the name, not the name block itself.
+   That includes the accessibility fixes from a11y-perf-2026-10-04.md: the
+   candidate's name as a visually hidden suffix on "Keep in mind" and
+   "Official site" (fix 6; WCAG 2.4.4, 2.4.6, label first for 2.5.3), and a
+   24 px minimum height on the site and social links (fix 9; WCAG 2.5.8
+   Target Size; min-h-[24px] because this theme's spacing-6 is 32 px). The
+   unlinked handle gets the same box so its text lines up with the links
+   beside it. */
 export function ListedCandidateCard({
   data,
   status,
@@ -56,7 +63,10 @@ export function ListedCandidateCard({
         <div className="flex flex-wrap items-center gap-2">
           <PartyChip party={candidate.party} />
           {candidate.is_incumbent && <Chip>Incumbent</Chip>}
-          <SaveToggle candidateId={candidate.candidate_id} />
+          <SaveToggle
+            candidateId={candidate.candidate_id}
+            name={candidate.legal_name}
+          />
         </div>
         <p className="flex flex-wrap gap-x-3 gap-y-1 text-caption text-on-surface-muted">
           {officialSite && (
@@ -64,9 +74,10 @@ export function ListedCandidateCard({
               href={officialSite}
               target="_blank"
               rel="noreferrer"
-              className="underline underline-offset-2 hover:text-on-surface"
+              className="inline-flex min-h-[24px] items-center underline underline-offset-2 hover:text-on-surface"
             >
               Official site
+              <span className="sr-only">: {candidate.legal_name}</span>
             </a>
           )}
           {socials.map((s) => {
@@ -78,12 +89,17 @@ export function ListedCandidateCard({
                 href={url}
                 target="_blank"
                 rel="noreferrer"
-                className="underline underline-offset-2 hover:text-on-surface"
+                className="inline-flex min-h-[24px] items-center underline underline-offset-2 hover:text-on-surface"
               >
                 {label}
               </a>
             ) : (
-              <span key={s.id}>{label}</span>
+              <span
+                key={s.id}
+                className="inline-flex min-h-[24px] items-center"
+              >
+                {label}
+              </span>
             );
           })}
         </p>
