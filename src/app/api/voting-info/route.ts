@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
+import {
+  emailSenderConfigured,
+  officialSources,
+  remindersPaused,
+} from "@/lib/notifications/config";
 import { verifiedStatewideEvents } from "@/lib/notifications/election-events";
+import { easternToday } from "@/lib/notifications/schedule";
+import { welcomeEmail } from "@/lib/notifications/templates";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { resolveZip, ZIP_RE } from "@/lib/resolve";
 import { createServiceClient } from "@/lib/supabase/service";
@@ -10,40 +17,11 @@ import { createServiceClient } from "@/lib/supabase/service";
    data. Stores exactly email + zip + consent timestamp + unsubscribe token,
    nothing else, and never claims success when delivery failed (PRD § 11). */
 
-const OFFICIAL_SOURCES: Record<string, { name: string; url: string }> = {
-  "Miami-Dade": {
-    name: "Miami-Dade Supervisor of Elections",
-    url: "https://www.miamidade.gov/global/elections/home.page",
-  },
-  Broward: {
-    name: "Broward Supervisor of Elections",
-    url: "https://www.browardvotes.gov",
-  },
-  Hillsborough: {
-    name: "Hillsborough Supervisor of Elections",
-    url: "https://www.votehillsborough.gov",
-  },
-  Orange: {
-    name: "Orange County Supervisor of Elections",
-    url: "https://www.ocfelections.gov",
-  },
-};
-
 const body = z.object({
   zip: z.string().regex(ZIP_RE, "Invalid ZIP"),
   email: z.string().email("Invalid email").max(254),
   consent: z.literal(true, { message: "Consent required" }),
 });
-
-function formatDate(iso?: string) {
-  if (!iso) return null;
-  return new Date(`${iso}T00:00:00`).toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-}
 
 export async function POST(request: NextRequest) {
   const { allowed } = rateLimit(`voting-info:${clientKey(request)}`, 5, 60_000);
@@ -64,7 +42,13 @@ export async function POST(request: NextRequest) {
     const first = parsed.error.issues[0]?.message ?? "Invalid request";
     return NextResponse.json({ error: first }, { status: 400 });
   }
-  const { zip, email } = parsed.data;
+  const { zip } = parsed.data;
+  /* One address, one spelling. The table is unique on (email, zip5) and
+     email is case-sensitive TEXT, so "Ana@x.com" and "ana@x.com" used to be
+     two subscriptions and two copies of every reminder. Mail providers
+     treat the address case-insensitively in practice; the live table held
+     no mixed-case rows when this landed (2026-10-04, 0 rows in all). */
+  const email = parsed.data.email.trim().toLowerCase();
 
   const resolved = await resolveZip(zip);
   if (!resolved.inCoverage || !resolved.county) {
@@ -73,9 +57,13 @@ export async function POST(request: NextRequest) {
       { status: 400 }
     );
   }
-  const source = OFFICIAL_SOURCES[resolved.county];
+  const sources = officialSources(resolved.county);
 
-  if (!process.env.RESEND_API_KEY || !process.env.EMAIL_FROM) {
+  /* Same check, same 503, same words as before src/lib/notifications/
+     config.ts existed — it is now the one place that names the variables.
+     A missing service-role key still lands in the createServiceClient catch
+     below, exactly as it did. */
+  if (!emailSenderConfigured()) {
     return NextResponse.json(
       { error: "Email delivery isn't configured yet — nothing was sent or stored." },
       { status: 503 }
@@ -107,41 +95,32 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  /* Dates come from founder-verified election_event rows (plan A5) — an
-     unverified or missing row simply drops its line from the email. */
+  /* Dates come from founder-verified election_event rows (plan A5). The
+     copy, and which dates it lists on a given Florida day, live in
+     welcomeEmail (src/lib/notifications/templates.ts), where
+     scripts/verify-reminder-schedule.ts renders it for every day of the
+     run-up. */
   const events = await verifiedStatewideEvents(service, "general_2026");
-  const byType = new Map(events.map((e) => [e.event_type, e]));
-  const general = formatDate(
-    resolved.races.length > 0 ? byType.get("election_day")?.event_date : undefined
-  );
-  const registration = formatDate(byType.get("registration_deadline")?.event_date);
-  const unsubscribeUrl = `${request.nextUrl.origin}/api/voting-info/unsubscribe?token=${subscription.unsubscribe_token}`;
+  const message = welcomeEmail({
+    zip,
+    county: resolved.county,
+    district: resolved.district ?? null,
+    office: sources.office,
+    stateUrl: sources.state.url,
+    origin: request.nextUrl.origin,
+    unsubscribeUrl: `${request.nextUrl.origin}/api/voting-info/unsubscribe?token=${subscription.unsubscribe_token}`,
+    events,
+    today: easternToday(),
+    hasRaces: resolved.races.length > 0,
+    remindersOn: !remindersPaused(),
+  });
 
   const resend = new Resend(process.env.RESEND_API_KEY);
   const { error: sendError } = await resend.emails.send({
-    from: process.env.EMAIL_FROM,
+    from: process.env.EMAIL_FROM!,
     to: email,
-    subject: `Where to vote in ${resolved.county} County`,
-    text: [
-      `Here's your voting info for ZIP ${zip} (${resolved.county} County${resolved.district ? `, ${resolved.district}` : ""}).`,
-      ``,
-      `Your polling place and sample ballot:`,
-      `${source?.name ?? "Your county Supervisor of Elections"} — ${source?.url ?? "https://dos.fl.gov/elections/"}`,
-      `(Precinct lookup on that site shows your exact polling place.)`,
-      ``,
-      registration ? `Registration deadline: ${registration}` : ``,
-      general ? `General election: ${general}` : ``,
-      registration || general
-        ? `Add the key dates to your calendar: ${request.nextUrl.origin}/api/calendar/general_2026.ics`
-        : ``,
-      `Every registered Florida voter gets the same ballot in the general election, whatever party you're registered with — including no party at all.`,
-      ``,
-      `Your ballot, laid out fairly: ${request.nextUrl.origin}`,
-      ``,
-      `You asked for this one-time email. Unsubscribe: ${unsubscribeUrl}`,
-    ]
-      .filter((line) => line !== ``)
-      .join("\n"),
+    subject: message.subject,
+    text: message.text,
   });
 
   if (sendError) {
