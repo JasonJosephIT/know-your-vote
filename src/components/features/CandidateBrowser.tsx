@@ -55,6 +55,13 @@ export async function CandidateBrowser({
         className="flex flex-col gap-3 sm:flex-row sm:items-center"
       >
         <input type="hidden" name="view" value="browse" />
+        {/* a11y-perf-2026-10-04.md fix 10. The search box's label is visually
+            hidden, so its border is its only outline: border-input (4.03:1
+            on white; recommended pending founder confirmation, how to flip in
+            globals.css @theme) replaces border-strong (1.68:1), for WCAG
+            1.4.11 Non-text Contrast. No focus:outline-none on these three
+            controls, so the global :focus-visible ring shows (WCAG 2.4.7);
+            the primary border on focus stays as an extra cue. */}
         <label htmlFor="candidate-q" className="sr-only">
           Search candidates by name, office, or party
         </label>
@@ -63,7 +70,7 @@ export async function CandidateBrowser({
           name="q"
           defaultValue={results.q}
           placeholder="Search by name, office, or party"
-          className="w-full rounded-md border border-border-strong bg-surface px-[14px] py-3 text-body text-on-surface placeholder:text-on-surface-muted focus:border-primary focus:shadow-[inset_0_0_0_1px_var(--color-primary)] focus:outline-none"
+          className="w-full rounded-md border border-border-input bg-surface px-[14px] py-3 text-body text-on-surface placeholder:text-on-surface-muted focus:border-primary focus:shadow-[inset_0_0_0_1px_var(--color-primary)]"
         />
         <label htmlFor="candidate-county" className="sr-only">
           County
@@ -72,7 +79,7 @@ export async function CandidateBrowser({
           id="candidate-county"
           name="county"
           defaultValue={countyFips ?? ""}
-          className="rounded-md border border-border-strong bg-surface px-3 py-3 text-body text-on-surface focus:border-primary focus:outline-none"
+          className="rounded-md border border-border-input bg-surface px-3 py-3 text-body text-on-surface focus:border-primary"
         >
           <option value="">All four counties</option>
           {COVERED_COUNTIES.map((c) => (
@@ -88,7 +95,7 @@ export async function CandidateBrowser({
           id="candidate-area"
           name="area"
           defaultValue={results.area ?? ""}
-          className="rounded-md border border-border-strong bg-surface px-3 py-3 text-body text-on-surface focus:border-primary focus:outline-none"
+          className="rounded-md border border-border-input bg-surface px-3 py-3 text-body text-on-surface focus:border-primary"
         >
           <option value="">Any policy area</option>
           {results.areaOptions.map((o) => (
@@ -104,8 +111,11 @@ export async function CandidateBrowser({
           set, some of these races are not printed, so the line counts them
           instead of claiming the whole set is on the ballot. */}
       <p className="text-caption text-on-surface-muted" role="status">
-        {results.total} candidate{results.total === 1 ? "" : "s"} across{" "}
-        {results.races.length} race{results.races.length === 1 ? "" : "s"}
+        {results.total} candidate{results.total === 1 ? "" : "s"}
+        {/* One string, not across{" "}{n}: a separate {" "} after text is
+            served as a whitespace-only node after a React comment, which
+            Chromium drops from the accessible text ("across53"). */}
+        {` across ${results.races.length} race${results.races.length === 1 ? "" : "s"}`}
         {results.decidedRaces === 0
           ? " on the ballot"
           : results.races.length === 1
@@ -128,17 +138,27 @@ export async function CandidateBrowser({
         results.races.map(({ race, candidates }) => (
           <section key={race.race_id} className="flex flex-col gap-3">
             <h2 className="text-h3">
+              {/* The district sits inside the link, so the link's name is
+                  "United States Representative FL-10" rather than sixteen
+                  identical "United States Representative" links
+                  (a11y-perf-2026-10-04.md fix 6; WCAG 2.4.4 Link Purpose).
+                  Same text, same order on screen. The space before the
+                  district ends the office's own text node. A separate {" "}
+                  does not work: React's server HTML puts <!-- --> between it
+                  and the office, and Chromium leaves a whitespace-only text
+                  node after a comment out of the accessible name, which read
+                  "United States RepresentativeFL-7". */}
               <Link href={`/races/${race.race_id}`} className="hover:underline">
-                {race.office}
-              </Link>{" "}
-              {/* A county race's office already names its county and seat
-                  ("Orange County Commission, District 2"); its district code
-                  is an internal key, not something a voter reads. */}
-              {race.level !== "county" && (
-                <span className="text-caption font-medium text-on-surface-muted">
-                  {race.district ?? "Statewide"}
-                </span>
-              )}
+                {race.level !== "county" ? `${race.office} ` : race.office}
+                {/* A county race's office already names its county and seat
+                    ("Orange County Commission, District 2"); its district
+                    code is an internal key, not something a voter reads. */}
+                {race.level !== "county" && (
+                  <span className="text-caption font-medium text-on-surface-muted">
+                    {race.district ?? "Statewide"}
+                  </span>
+                )}
+              </Link>
             </h2>
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {candidates.map((c) => (
@@ -178,6 +198,15 @@ export async function CandidateBrowser({
                         ))}
                       </ul>
                     )}
+                    {/* "Read their brief" / "About this candidate", "Official
+                        site" and "Keep in mind" repeat on every card, so each
+                        carries the candidate's name as a visually hidden
+                        suffix after its visible label (a11y-perf-2026-10-04.md
+                        fix 6; WCAG 2.4.4, 2.4.6, label first for 2.5.3).
+                        Fix 9's 24 px minimum height is not applied here: the
+                        audit found no target-size failure on /candidates,
+                        where these two links sit side by side, not in a
+                        wrapping row of short social handles. */}
                     <div className="mt-auto flex flex-wrap gap-x-3 gap-y-1 text-caption text-on-surface-muted">
                       <Link
                         href={`/candidates/${c.candidate_id}`}
@@ -186,6 +215,7 @@ export async function CandidateBrowser({
                         {c.hasBrief
                           ? "Read their brief"
                           : "About this candidate"}
+                        <span className="sr-only">: {c.legal_name}</span>
                       </Link>
                       {/* The campaign's own site — always selected, never
                           shown until now. Routed through safeHttpUrl like
@@ -199,9 +229,13 @@ export async function CandidateBrowser({
                           className="text-primary underline underline-offset-2"
                         >
                           Official site
+                          <span className="sr-only">: {c.legal_name}</span>
                         </a>
                       )}
-                      <SaveToggle candidateId={c.candidate_id} />
+                      <SaveToggle
+                        candidateId={c.candidate_id}
+                        name={c.legal_name}
+                      />
                     </div>
                   </Card>
                 </li>

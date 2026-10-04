@@ -107,17 +107,21 @@ Two smaller points for the founder, neither blocking:
 - **Revocation.** "Change your cookie choice" could also expire Google's
   first-party `_gcl_*` cookies. Today it only stops the tag loading again.
 
-**If the founder says remove it.** There is no single switch today; the
-change is one block of edits:
-1. `src/components/features/SitePrompts.tsx`: delete `ADS_ID`, `GoogleTag`,
-   `ConsentBanner`, `CONSENT_KEY` and `ResetAdsConsent`. Then change
-   `showDonate` so it no longer waits for `consent !== null`. **This is the
-   trap:** the donation prompt is sequenced after the cookie choice, so
-   removing the banner alone would silently stop the donation prompt too.
-2. `src/app/(public)/privacy/page.tsx`: remove the advertising paragraph, the
-   `ResetAdsConsent` import, `kyv.ads-consent` from "What stays on your
-   device" (five things become four), and the sentence about Google's own
-   cookies.
+**If the founder says remove it.** Set `ADS_TAG_ENABLED = false` in
+`src/lib/ads.ts` (added later on 2026-10-04). That one switch:
+- stops `SitePrompts` rendering the tag and the cookie banner;
+- shows the donation prompt without waiting for a cookie choice. **This is
+  the trap the switch avoids:** the prompt is sequenced after the cookie
+  choice, so removing the banner alone would silently stop it too;
+- hides `ResetAdsConsent` and `/privacy`'s advertising paragraph.
+
+What the switch doesn't do:
+1. `src/components/features/SitePrompts.tsx`: the switch leaves `ADS_ID`,
+   `GoogleTag`, `ConsentBanner` and `CONSENT_KEY` in place but unused. Delete
+   them once the decision is final.
+2. `src/app/(public)/privacy/page.tsx`: remove `kyv.ads-consent` from "What
+   stays on your device" (five things become four), and the sentence about
+   Google's own cookies.
 3. `scripts/verify-no-stored-location.ts`: remove `kyv.ads-consent` from
    `ALLOWED_LOCAL`.
 4. `docs/prd.md`: take the Google Ads lines out of §2, §7, §12 and §14 again.
@@ -127,11 +131,10 @@ change is one block of edits:
 `git revert` of the two commits is not a clean alternative: they also add the
 Donate button and the donation prompt.
 
-To make the flip a single constant, `SitePrompts.tsx` could gain
-`ADS_TAG_ENABLED`. When `false`, it would render neither the tag nor the
-banner, treat the cookie question as answered for the donation prompt, and
-let `/privacy` hide its advertising paragraph. That file is outside this
-docs pass, so the change is proposed, not made.
+The single switch is `ADS_TAG_ENABLED` in `src/lib/ads.ts`. It sits in a
+module without `"use client"` so that `/privacy`, a server component, reads
+the real value. Imported from `SitePrompts.tsx`, it would arrive as a client
+reference, which is always truthy.
 
 ### B. Plausible: wired, but off in production
 

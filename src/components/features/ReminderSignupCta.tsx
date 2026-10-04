@@ -28,7 +28,7 @@ export function ReminderSignupCta() {
     <section
       id={REMINDER_SIGNUP_ID}
       aria-label="Deadline reminders by email"
-      className="flex scroll-mt-6 flex-col gap-2 border-t border-border pt-6"
+      className="flex flex-col gap-2 border-t border-border pt-6"
     >
       <VotingInfo
         emailEnabled

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { geocoderHost } from "@/lib/geocode";
 import { ResetAdsConsent } from "@/components/features/SitePrompts";
+import { ADS_TAG_ENABLED } from "@/lib/ads";
 
 export const metadata = { title: "Privacy — Know Your Vote" };
 
@@ -11,8 +12,8 @@ export default function PrivacyPage() {
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
       <h1 className="text-h1">Privacy, in plain language</h1>
       <p className="text-body-lg text-on-surface-muted">
-        You can use everything here without an account or a login.
-        That&apos;s a design decision, not a settings page.
+        You can use everything here without an account or a login. That&apos;s a
+        design decision, not a settings page.
       </p>
 
       <section className="flex flex-col gap-2">
@@ -27,11 +28,11 @@ export default function PrivacyPage() {
           Five things, and you can check all five in your browser&apos;s
           devtools: the district you chose, the candidates you &quot;keep in
           mind&quot;, whether you dismissed the &quot;get the app&quot; prompt,
-          your answer to the cookie question (<code>kyv.ads-consent</code>),
-          and whether you closed the donation prompt
-          (<code>kyv.donate-dismissed</code>). That is the whole list of what
-          we store. They never reach our servers, and clearing your browser
-          data removes them completely. If you accept Google&apos;s ad cookies,
+          your answer to the cookie question (<code>kyv.ads-consent</code>), and
+          whether you closed the donation prompt (
+          <code>kyv.donate-dismissed</code>). That is the whole list of what we
+          store. They never reach our servers, and clearing your browser data
+          removes them completely. If you accept Google&apos;s ad cookies,
           Google stores cookies of its own; that is covered under analytics and
           advertising below.
         </p>
@@ -124,7 +125,6 @@ export default function PrivacyPage() {
         </p>
       </section>
 
-
       <section className="flex flex-col gap-2">
         {/* Rewritten when the Google Ads tag went into the root layout. The old
             copy said "no cookies, no cross-site tracking", which stopped being
@@ -147,24 +147,28 @@ export default function PrivacyPage() {
             cookieless, aggregate analytics (Plausible), this page will say so.
           </p>
         )}
-        <p className="text-body">
-          We also advertise on Google. On your first visit we ask whether to
-          load Google&apos;s advertising tag, which tells us whether an ad
-          brought you here. If you decline, it never loads. If you accept, it
-          runs on every page and sets cookies. Google receives the page you are on, your IP
-          address, and details about your browser, and can connect your visit
-          with other sites that use Google advertising. We remove your ZIP from
-          the page address before it is sent. What Google does with the rest is
-          covered by{" "}
-          <a
-            href="https://policies.google.com/technologies/ads"
-            className="text-primary underline underline-offset-2"
-          >
-            Google&apos;s advertising policy
-          </a>
-          . The site works exactly the same either way. <ResetAdsConsent />{" "}
-          to be asked again.
-        </p>
+        {/* Follows the ads switch (src/lib/ads.ts, founder decision 2), so a
+            flip can't leave this page describing a tag that no longer loads. */}
+        {ADS_TAG_ENABLED && (
+          <p className="text-body">
+            We also advertise on Google. On your first visit we ask whether to
+            load Google&apos;s advertising tag, which tells us whether an ad
+            brought you here. If you decline, it never loads. If you accept, it
+            runs on every page and sets cookies. Google receives the page you
+            are on, your IP address, and details about your browser, and can
+            connect your visit with other sites that use Google advertising. We
+            remove your ZIP from the page address before it is sent. What Google
+            does with the rest is covered by{" "}
+            <a
+              href="https://policies.google.com/technologies/ads"
+              className="text-primary underline underline-offset-2"
+            >
+              Google&apos;s advertising policy
+            </a>
+            . The site works exactly the same either way. <ResetAdsConsent /> to
+            be asked again.
+          </p>
+        )}
         <p className="text-body">
           Error reports are scrubbed of ZIPs, emails, and IP addresses before
           they leave the app.

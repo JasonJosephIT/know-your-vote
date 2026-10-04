@@ -5,6 +5,7 @@ import type { ProfileAudit } from "@/types/schema";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 import { CATEGORIES, SUB_ISSUES } from "@/lib/news-issues";
 import { COVERED_COUNTIES } from "@/lib/counties";
+import { CONTACT_EMAIL } from "@/lib/contact";
 
 export const revalidate = 3600;
 export const metadata = { title: "How we stay fair — Know Your Vote" };
@@ -404,7 +405,7 @@ export default async function MethodologyPage() {
         </p>
         <details
           id="issue-list"
-          className="scroll-mt-24 rounded-lg border border-border bg-surface p-4"
+          className="rounded-lg border border-border bg-surface p-4"
         >
           <summary className="cursor-pointer text-body-sm font-medium">
             All {SUB_ISSUES.length} issues
@@ -642,7 +643,7 @@ export default async function MethodologyPage() {
         </p>
       </section>
 
-      <section id="limits" className="flex scroll-mt-24 flex-col gap-2">
+      <section id="limits" className="flex flex-col gap-2">
         <h2 className="text-h2">Known limits</h2>
         <ul className="flex list-disc flex-col gap-2 pl-5 text-body">
           <li>
@@ -695,7 +696,7 @@ export default async function MethodologyPage() {
         </ul>
       </section>
 
-      <section id="not-covered" className="flex scroll-mt-24 flex-col gap-2">
+      <section id="not-covered" className="flex flex-col gap-2">
         <h2 className="text-h2">What we don&apos;t cover</h2>
         <ul className="flex list-disc flex-col gap-2 pl-5 text-body">
           <li>
@@ -884,8 +885,8 @@ export default async function MethodologyPage() {
           color-code parties. Candidate order follows one neutral rule (ballot
           order, otherwise alphabetical), applied identically everywhere. If
           anything here reads as slanted to you, email{" "}
-          <a href="mailto:hello@knowyour.vote" className={linkClass}>
-            hello@knowyour.vote
+          <a href={`mailto:${CONTACT_EMAIL}`} className={linkClass}>
+            {CONTACT_EMAIL}
           </a>
           . Skeptics are exactly who this page is for.
         </p>
