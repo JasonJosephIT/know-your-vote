@@ -4,6 +4,24 @@ Know Your Vote is live at knowyour.vote. This file lists what is left between no
 
 The live database was checked directly on 2026-10-04 at about 18:40 UTC. Where a repo document disagrees with it, this file follows the database and says so.
 
+> **Status, later on 2026-10-04.** A completion session did the agent work below. It built every founder decision as its recommended default, each one easy to flip, and recorded them in **`founder-decisions-2026-10-04.md`**: what was chosen, why, and the one place to switch each. The code is in PR #108. PR #107 is a small fix that should merge first.
+>
+> The session also found one thing this handoff missed. **Production's env vars are misnamed:** `SUPABASE`, `RESEND` and `JEV` are set, but nothing reads them. `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY` and `EMAIL_FROM` are unset. That is why there are 0 subscribers and 0 sends, the news stopped on 09-09, the deadline banner is blank and the calendar file returns 503. See `reminders-e2e-runbook.md`.
+>
+> | Section | Outcome |
+> | --- | --- |
+> | 1. Trust copy | Methodology rewritten; `/terms` and a site footer added; metadata and other copy stop promising records and fact-checks. Recommended, pending approval. |
+> | 1. Ads | Recommended: keep the consent-gated tag. The PRD and `scope-changes.md` are amended. |
+> | 2.2 Reminder test | Blocked on the env fix. Gating, banner rollover, Eastern-day fix, 5 p.m. vote-by-mail copy, rehearsal mode and a dry-run script are built, with a runbook. The end-to-end test is the founder's, by 10-20. |
+> | 2.3 Promote signup | Built behind `PROMOTE_REMINDER_SIGNUP`; it shows only once email works. |
+> | 2.4 Stale docs | Done: roadmap, README, `sessions/README.md`. |
+> | 3. Briefs | Decisions 4–8 built as recommended: `listed-races-2026-10-04.md`, `brief-runs/refresh-plan-2026-10.md`, `brief-runs/rerun-targets-2026-10.tsv`. The Dennison and Colucci checks are done. |
+> | 4. Measures | Amendment 1 held neutral-only; a judicial retention note added. |
+> | 5. News | `verify-news-ungated` is green, and the characterizer is scoped to news. The approve path sets source_id. 0042 is written so 0014 can apply; neither is applied. N, surname and inlet defaults are scaffolded. See `news-inlet-runbook.md`. |
+> | 6. Cuts | Recorded as recommended in `scope-changes.md`. |
+> | 7. CI | `.github/workflows/ci.yml` and `scripts/verify-all.mjs`; see `docs/ci.md`. |
+> | 7. Accessibility and performance | Audited live (`a11y-perf-2026-10-04.md`); fixes built in #108. |
+
 ## Key dates
 
 | Date | What | Status |
