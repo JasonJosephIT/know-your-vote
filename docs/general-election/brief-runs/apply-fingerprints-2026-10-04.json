@@ -1,0 +1,317 @@
+[
+ {
+  "race_id": "FL-10-general",
+  "n_claims": 4,
+  "claims": "9a37724386317ff42c69faa4bbe9d651",
+  "claim_sources": "57051a433c908ca0c7d3c701a4d0b184",
+  "positions": "bdcf89e333d2ffb3c61c8c4eaca0c695",
+  "issues": "d40f0c6ed25e737895578174b3788efc",
+  "profiles": "b209cf755b598bd4af8447be18e7065b"
+ },
+ {
+  "race_id": "FL-11-general",
+  "n_claims": 14,
+  "claims": "7660fc8f737fbf6caba38bbefc354019",
+  "claim_sources": "112e719ad48ae64462061fbb10d1fa0a",
+  "positions": "94cd139c890b79f49d778ac0b06f61b3",
+  "issues": "1a487e85e7b50d1fe2a8375d4c44591a",
+  "profiles": "e9cec3d85b1b35bf1d22b469f9ba696d"
+ },
+ {
+  "race_id": "FL-12-general",
+  "n_claims": 24,
+  "claims": "6eaa18e48d6844d654d28d3f29c5af2e",
+  "claim_sources": "02ff1567ab76c2f12c794c6433036d0b",
+  "positions": "0ae5a7df75b382ae2dc0ca81c689c166",
+  "issues": "1d2d74e5140134b8611d036762a99e42",
+  "profiles": "ddfdd013e87b9e285075994001b41998"
+ },
+ {
+  "race_id": "FL-14-general",
+  "n_claims": 8,
+  "claims": "5c170ef5c1842fd1dbdf0bb54832ae11",
+  "claim_sources": "b70f40daecfa361ddecd96f84b0183f9",
+  "positions": "c17a88c03a0f35559f8fc1830a6a3931",
+  "issues": "6159ede2f9fc7afde2884b980eded784",
+  "profiles": "4bdc99f37c3b21d71e6f8bed03a3c772"
+ },
+ {
+  "race_id": "FL-15-general",
+  "n_claims": 16,
+  "claims": "1c1c326c2a2e5382a34db8782829266a",
+  "claim_sources": "5fb5bea63a33f46dfc02fd155ebc5899",
+  "positions": "c5ef974f8d455e9a545a20f2ea8410e8",
+  "issues": "92634bc4586d20e02c91d9b121270040",
+  "profiles": "8df63a0b0d0c0578646a65a3ae64e01e"
+ },
+ {
+  "race_id": "FL-16-general",
+  "n_claims": 30,
+  "claims": "bf3afe1a7de8299bca737fb17cef18f5",
+  "claim_sources": "3e8e63ea785f9ffe335761dc8d231ca3",
+  "positions": "b0cbab03288cbd9f69037b2f4abf1c2e",
+  "issues": "a5c4ae4f97e58bc1833b90d370850029",
+  "profiles": "05c5763103db42ac6ff676410a4127a1"
+ },
+ {
+  "race_id": "FL-20-general",
+  "n_claims": 44,
+  "claims": "19035aec21e7accb87ee6a5b17b039c8",
+  "claim_sources": "5e7c29b295bd03d23d90baac62991bdc",
+  "positions": "83df4ebc2b22663bbb920564a9333b44",
+  "issues": "790361ae0eba6f377e1c95cb211fbd1a",
+  "profiles": "9a742eeb331e829d5edfef66a5d93e53"
+ },
+ {
+  "race_id": "FL-22-general",
+  "n_claims": 1,
+  "claims": "35ff6058c0057fe525455ac39681a127",
+  "claim_sources": "d6a63b62bfe33dc90b5d3be4a50429f4",
+  "positions": "12cb3f540a0caefd022d52e163d474f3",
+  "issues": "0cc75f78f46d1a1ccf9a0128f503f9d7",
+  "profiles": "265c3a749aca5ae792f8adc5fd4e64ba"
+ },
+ {
+  "race_id": "FL-24-general",
+  "n_claims": 39,
+  "claims": "32561fa09de881d1b4c988524d368f7d",
+  "claim_sources": "41ee347f9811dc87d6d1acb00a1036ac",
+  "positions": "4a346a9cbc9250a587fe685889f42666",
+  "issues": "090dcee0e46b9e11580611ea2f315fa7",
+  "profiles": "9a352b82ced9cb82d919e46f776b05d0"
+ },
+ {
+  "race_id": "FL-25-general",
+  "n_claims": 23,
+  "claims": "8c53c886283402d9c987883e830621fe",
+  "claim_sources": "715315e236aa07f5f5827f5ac663d583",
+  "positions": "0924fe3cf8f9c0f8f229b1ce62c9c427",
+  "issues": "fd87e6377203dfe9b6aff0cdaea5c46e",
+  "profiles": "0e0224f84f4e6479fdd7987b79ad1f31"
+ },
+ {
+  "race_id": "FL-26-general",
+  "n_claims": 24,
+  "claims": "3baf9a7b36c30a50ab9ad7de86008baa",
+  "claim_sources": "896c74aa63e5045b438e99e54f98803c",
+  "positions": "756407234cdb152661c7173088d56dd9",
+  "issues": "c7d0a10eb307d598ec97ad40affa1f24",
+  "profiles": "bb0f925a1c4f075f5aee9c90b8a050da"
+ },
+ {
+  "race_id": "FL-27-general",
+  "n_claims": 3,
+  "claims": "b74fe871818ab005a712cc9e7794c1ee",
+  "claim_sources": "c8ffc29477407e474adeeba4aed8433e",
+  "positions": "ad21066fcfd86e4974333292a4c37a48",
+  "issues": "7ccbcef1f04d70d058b314a6557c1be2",
+  "profiles": "a299e93c5ab22287e94b93514823fd3a"
+ },
+ {
+  "race_id": "FL-28-general",
+  "n_claims": 8,
+  "claims": "56aeb8b8f15a47e5735c217bc8843fef",
+  "claim_sources": "3a3522489d31c5f45d8c046b7f7bc5b6",
+  "positions": "f231eaf188c8afc8236230161dd01adb",
+  "issues": "b9e9a6854fb9b311f565bd0bdee83dd8",
+  "profiles": "fac4a87898ac187e28b2a23453974494"
+ },
+ {
+  "race_id": "FL-7-general",
+  "n_claims": 25,
+  "claims": "f8356889daec349e2ecdba44487affb9",
+  "claim_sources": "a097f31bbabf5307c60e8df7b57ba9e1",
+  "positions": "590e9a58fe1f6aa21f6975aa0049d68a",
+  "issues": "1c66fdfebc2c849b8662193b820989f1",
+  "profiles": "2e141775c3341f19e676e37f9aea48da"
+ },
+ {
+  "race_id": "FL-8-general",
+  "n_claims": 22,
+  "claims": "3fb5d1e58b52af795aac2263eacac476",
+  "claim_sources": "7fe3860d79254e70f19c93088a6ed04b",
+  "positions": "0987d49160772ef5a445509a9e1e7de2",
+  "issues": "8f01736a8daf7cc0a06771d3190985bd",
+  "profiles": "c651f034bd33f5359427ec8abafedd26"
+ },
+ {
+  "race_id": "FL-9-general",
+  "n_claims": 9,
+  "claims": "fcd43cbcea47cd89eac40981f2e29a3c",
+  "claim_sources": "23d99e11e638d9eb993d65474b915135",
+  "positions": "a40535ffe58e71c2be72eaec03286e08",
+  "issues": "5b67c5f311a5d9429b20613e42da32b3",
+  "profiles": "e06c05370f4e19c9d044c87520be4926"
+ },
+ {
+  "race_id": "FL-AGR-general",
+  "n_claims": 1,
+  "claims": "9b3203a10f61e159e46fedf8e22a498c",
+  "claim_sources": "10c2e63c27c4467254c2a2950ffc7c2b",
+  "positions": "8d8d5b09ba174b1791422a8c9a15075f",
+  "issues": "d4f224a7b4cb6ed4862d2d9c5a9e52da",
+  "profiles": "2c5efd4b602133fbdbe10a6a262f5d2a"
+ },
+ {
+  "race_id": "FL-ATG-general",
+  "n_claims": 1,
+  "claims": "b5fed7644d505585d590ce1c182c4fd4",
+  "claim_sources": "ee079d2a8c587bb52f800cc54b609263",
+  "positions": "513347329b5a7fbd34ad2e32d3c621b3",
+  "issues": "1544045d921785b69f3bf4199386f170",
+  "profiles": "8e1c6b5ba56708e1e68c37000ff826b8"
+ },
+ {
+  "race_id": "FL-BRO-SB1-general",
+  "n_claims": 1,
+  "claims": "70d8176c81db4eed70b083a9f4ad6b0e",
+  "claim_sources": "0cdb8ba5ae3bc80f06456d1ad2e66a86",
+  "positions": "102ae2b9fdc6595b039b521b7aa1c6d6",
+  "issues": "92fd1fa3a77d337500e36c1a29ab6e99",
+  "profiles": "d4b8092cd8cbaea6e15291b7174a4707"
+ },
+ {
+  "race_id": "FL-BRO-SB4-general",
+  "n_claims": 1,
+  "claims": "5266be2d32e3d8fcf8206149c3a87e60",
+  "claim_sources": "5f985c92735163b373058e1d5ced5641",
+  "positions": "b6620c661877f804da9529002b9a0e39",
+  "issues": "f8a3f2daf95568084859a63f96e721fc",
+  "profiles": "ac67ccbcdf257afe22d10c0a104361f4"
+ },
+ {
+  "race_id": "FL-BRO-SB7-general",
+  "n_claims": 4,
+  "claims": "4cf3b459771ab811bfd7564e4a49582d",
+  "claim_sources": "041024adf150fb0cf25e2e707c8c2e64",
+  "positions": "ed49b89cb39588ccb580b1c161d6d632",
+  "issues": "4735bb34cc4a9b100d337e8f383425d5",
+  "profiles": "d082da6ff15a8553acd3aad6882d9499"
+ },
+ {
+  "race_id": "FL-DAD-CC2-general",
+  "n_claims": 5,
+  "claims": "4664602554755e8dfee521f17082791a",
+  "claim_sources": "e5e40271f147df16795b87d00e85f68d",
+  "positions": "8f35a03da336e0a4b0307eb7d926be0e",
+  "issues": "5f0ec847e79fd0d1a2fae0939deb243b",
+  "profiles": "4651c243af56741252ba4d0f456e561f"
+ },
+ {
+  "race_id": "FL-DAD-CC5-general",
+  "n_claims": 3,
+  "claims": "86fca10ace9d5abd67be284a9d9d2370",
+  "claim_sources": "0636072daabde391cb60180acef858b4",
+  "positions": "4e0576aeccffc9969bfe6bfb36182bd2",
+  "issues": "9c6f8bcfbc241fcbbc0871c9e7b62017",
+  "profiles": "d22923491423aed73904955edd050554"
+ },
+ {
+  "race_id": "FL-DAD-SB1-general",
+  "n_claims": 9,
+  "claims": "3de4c764a4ddf61183628288ea1494a3",
+  "claim_sources": "fb1bd3af8fd2bebc0e1ddb7d3b68e312",
+  "positions": "c0f255eac9400c69cf22ab8940844e69",
+  "issues": "0a5cd55d04844cfe4e8a223d1307a3be",
+  "profiles": "ddff3749ee41ae62a0e65ade7ff6bd60"
+ },
+ {
+  "race_id": "FL-HIL-CC1-general",
+  "n_claims": 4,
+  "claims": "6646c2d4eb4068618b212d2629615beb",
+  "claim_sources": "4070bd8e13861a4b856d3d9c2be13510",
+  "positions": "736cbc9a000656a2ad58a0c2f727b64c",
+  "issues": "a401ef76c9febbc66e0b2f6bbf59bc9a",
+  "profiles": "f84f8b3e215963b25c24766b528965b0"
+ },
+ {
+  "race_id": "FL-HIL-CC3-general",
+  "n_claims": 7,
+  "claims": "31f3473a3281be3b813cb2b0a906d76e",
+  "claim_sources": "a462ec456869fbc3de9f09eab7c2a532",
+  "positions": "d535aa453d1f0cfc727cbbae00bffc3d",
+  "issues": "fea60fc41097791a8b77ed0c52f3f50f",
+  "profiles": "91cea2fc180e92762af44bc3ddc0a93a"
+ },
+ {
+  "race_id": "FL-HIL-CC5-general",
+  "n_claims": 5,
+  "claims": "bf91c55a8f5ddb1b52240eed320098ab",
+  "claim_sources": "d886273f134ee3da5a68ce64eb9ee72f",
+  "positions": "057feb40900f4ccd4f794720b6701dee",
+  "issues": "90ffa104db1dfe91ba9c4973265a7fe7",
+  "profiles": "3efbd07060b425bd6e1a9c07915b1630"
+ },
+ {
+  "race_id": "FL-HIL-CC7-general",
+  "n_claims": 5,
+  "claims": "3fa257dc9e0fa486902702dc254bc284",
+  "claim_sources": "b7d6e916676638c2d8b35cece96ca3fd",
+  "positions": "3f53f5cd22c6f4b0f536f4d6a397ad0e",
+  "issues": "412ce2bd5b6f1c28b1481215b702ae82",
+  "profiles": "08789d79a9fb768a0b2fdf35b9029c0d"
+ },
+ {
+  "race_id": "FL-HIL-SB2-general",
+  "n_claims": 1,
+  "claims": "5bf3f6585e37fc1817215b7c38e205b9",
+  "claim_sources": "609fb22534327356283b052b9e937bb0",
+  "positions": "60fb6dab05bae0dd7d559ac7e8344030",
+  "issues": "c23dcb57af01d325a5de56aa29b40eaf",
+  "profiles": "83d5cbeb487f751fde21036ad3ab6a77"
+ },
+ {
+  "race_id": "FL-ORA-CC2-general",
+  "n_claims": 13,
+  "claims": "24db7bb676e289e980c92be322f496df",
+  "claim_sources": "df660af5098abc60f8d4be41a17b8c51",
+  "positions": "98b64fd1e3b3455b370eabbe3a6f9d4a",
+  "issues": "38e72293f18490b27a64c276b9c0835f",
+  "profiles": "bda4e9f1a1947120b37ef3e34c5dbbe7"
+ },
+ {
+  "race_id": "FL-ORA-CC7-general",
+  "n_claims": 4,
+  "claims": "782d20515e14bfcbb54fa34c914c68e7",
+  "claim_sources": "c5d7f298623631026da02f30bb533511",
+  "positions": "a3b3155175308748457d75a3c5b8a23d",
+  "issues": "b39909081ef91cebcfe24af518bcd378",
+  "profiles": "4c446096e1057c9931fb8c7636fb9d02"
+ },
+ {
+  "race_id": "FL-ORA-CC8-general",
+  "n_claims": 5,
+  "claims": "526c5b0c7b931bff754ab86ee70c97d4",
+  "claim_sources": "e8f31d28c5c11783a2a635317b814a46",
+  "positions": "7f36d63b3bf69e90fa17612c414bb81f",
+  "issues": "cf42886715e88d0ccbee6300e8493f86",
+  "profiles": "492f112afeef53be937e7f3a046932c8"
+ },
+ {
+  "race_id": "FL-ORA-MAYOR-general",
+  "n_claims": 7,
+  "claims": "be6ea66567887fd5067951daf702401f",
+  "claim_sources": "2c75a1811250081fa852176ee9d26096",
+  "positions": "38a5d3877f8abc7ab47e0573bc24a3de",
+  "issues": "e2c89899e8b32fa8f2ea11e1cf15848d",
+  "profiles": "58cb412ceb1cfa8aa333e6039b810cc0"
+ },
+ {
+  "race_id": "FL-ORA-SB2-general",
+  "n_claims": 1,
+  "claims": "e58c1ae029412ee44d8c1c21e1a8883f",
+  "claim_sources": "daf76eb3085f40ee45d5c26e9c30a5be",
+  "positions": "737a835b8d0b33ce247564f550500c49",
+  "issues": "1ac3d04e29aefe0df2a8ec7c5c866a4e",
+  "profiles": "e402ba1505bca9c96fa4357e528ecf19"
+ },
+ {
+  "race_id": "FL-SEN-general",
+  "n_claims": 64,
+  "claims": "e9e33cb913554966f1fd72980db17d4d",
+  "claim_sources": "54b4c66c5786dd5f9a0e3f56d4435545",
+  "positions": "e9df87cb3123d25e86a7bf39b0ec90b3",
+  "issues": "f1b5bdf6b4a072295359967e8fd4def9",
+  "profiles": "e5632bd84cc45cdb8047ada431166a2d"
+ }
+]
