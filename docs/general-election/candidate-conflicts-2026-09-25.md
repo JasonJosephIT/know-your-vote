@@ -132,3 +132,51 @@ re-run the same day settled them:
 Rob Piper and Dean Abrams are now the only ballot candidates with a site the
 ingest cannot read. The pipeline gap is the same as Datto's: a website is the brief
 pipeline's only input.
+
+## 6. Re-checks, 2026-10-04 (launch handoff §3)
+
+Research only. **Nothing in the database was changed, and no change is proposed.** Each source was read with a single `GET`, and no bot challenge was solved.
+
+### Christopher Dennison (U.S. House FL-7): LPF candidacy confirmed
+
+- **Florida Division of Elections, Candidate Tracking System** (`dos.elections.myflorida.com/candidates/CanDetail.asp?account=92377`, read 2026-10-04 between 20:19 and 20:26 UTC):
+  - "2026 General Election · United States Representative · District 7 · Christopher Dennison (LPF)";
+  - Status "Qualified";
+  - Date Filed and Date Qualified 06/12/2026;
+  - Method "Paid Qualifying Fee".
+  - The listing shows no website.
+- **FEC** (`fec.gov/data/candidate/H6FL07249/`): "DENNISON, CHRISTOPHER ALLEN", "LIBERTARIAN PARTY", principal campaign committee "CHRISTOPHER DENNISON FOR CONGRESS" (C00952366).
+- **His site, re-read the same day:** h1 "Libertarian for U.S. Congress (FL D7)", and the footer "Paid for by Christopher "Chris" Dennison for Congress". The disclaimer names the committee he registered with the FEC.
+- **The LPF itself was not reached.** `lpf.org`, `lpf.org/candidates/` and `www.lpf.org/candidates` all still answer with Cloudflare's "Just a moment" (HTTP 403), as on 2026-09-24. It was not worked around.
+- **Live row:** `party = 'LPF'`, `qualifying_status = 'qualified'`, `ballot_status = 'ballot'`, `official_site = 'https://dennison4congress.com/'`. Every field the state lists matches.
+  - `fec_id` is NULL, but it is NULL for all 43 federal ballot candidates. Filling it for one row would make that row unlike the rest, so no `UPDATE` is proposed.
+
+**Status:**
+- **The party and the candidacy are Resolved** by the official state listing, which is a stronger source than the party's own page.
+- **The site attribution is stronger.** The site's disclaimer matches his FEC committee's name, and its own h1 names him, the LPF and FL D7. A confirmation from the LPF is now optional: an email from the founder, if wanted. §4's "Open: confirm with the LPF" can close on the founder's word.
+
+### Monica Colucci (Miami-Dade School Board D8): still compromised; keep NULL
+
+- **What was read:** `GET https://monicacolucci.com/` returns a 301 to `https://www.monicacolucci.com/`. That page returned 200 at about 20:26 UTC on 2026-10-04: 597,556 bytes of HTML, with no JavaScript run.
+  - Cloudflare served it from cache (`age` about 3.4 days).
+  - `last-modified: Thu, 01 Oct 2026 09:51:25 GMT`.
+- **The genuine page is intact:** the title "Home - Monica Colucci", and the disclaimer "paid for and approved by Monica Colucci for Miami-Dade School Board, District 8".
+- **The injection is still there, and larger than recorded on 2026-09-24:**
+  - Right after the footer sits a `<div style='position:absolute;left:-9511px;…'>`, placed off-screen so visitors do not see it.
+  - It holds about 475 KB of casino and gambling copy in several languages.
+  - It links to **164 distinct outside sites**: Polish, Czech, Romanian, Finnish and Spanish casino domains, among others.
+  - Counted in the HTML: "casino" 398 times, "bonus" 107, "poker" 78, "slots" 77, "jackpot" 64.
+- **What the voter sees today:** the `listed` roster card for Miami-Dade SB8, with no "Official site" link, because the row is NULL. Her seat was decided in the August primary (`elected_in_primary`), so it is not on the November ballot.
+- **Status: Decided (unchanged).** The 2026-09-25 decision holds: leave `official_site` NULL until the site is cleaned.
+  - Linking it would send voters to a compromised site.
+  - The ingest would read the hidden block, which is not her words.
+  - It will not fix itself. Telling her campaign is the only way it changes (a founder action, optional).
+  - If it is cleaned, re-check it the same way (no casino terms, no off-screen block) before storing it:
+
+```sql
+-- Only after a re-check finds the site clean; the founder runs it.
+UPDATE candidate
+   SET official_site = 'https://www.monicacolucci.com/',
+       site_last_verified_at = now()
+ WHERE candidate_id = 'FL-VF-DAD-2953' AND official_site IS NULL;
+```
