@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "verify": "node scripts/verify-all.mjs",
+    "verify:python": "node scripts/verify-all.mjs --python"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.109.1",

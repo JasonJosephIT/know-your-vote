@@ -79,6 +79,15 @@ await check("a no_stated_position_found position exists (silence is data)", asyn
 
 await db.exec("RESET ROLE;");
 
+/* Every non-demo source the migrations wrote, counted before teardown runs,
+   so the "leaves non-demo rows alone" check below compares against what was
+   really there instead of a hard-coded number. It was pinned at 4 (0014's
+   government sources) and went red when 0042 added four more. */
+const nonDemoSourcesBefore = Number(
+  (await db.query("SELECT count(*)::int AS n FROM source WHERE source_id NOT LIKE 'demo-%';"))
+    .rows[0].n
+);
+
 await db.exec(await readFile(path.join(root, "scripts", "demo-teardown.sql"), "utf8"));
 
 /* Scoped to `demo-%` on purpose. This counted every row in the three tables
@@ -98,14 +107,20 @@ await check("teardown removes every demo row", async () => {
 
 /* The half the old assertion was hiding. Scoping the check above to `demo-%`
    would, on its own, let a teardown that deleted the whole table pass. 0014
-   attaches four government sources to the real election_news rows and its
-   CHECK requires them, so a teardown that took them with it would leave the
-   live database violating a constraint it had just satisfied. */
+   and 0042 attach sources to the real election_news rows and 0014's CHECK
+   requires them, so a teardown that took them with it would leave the live
+   database violating a constraint it had just satisfied. The count must be
+   non-zero, or the comparison proves nothing. */
 await check("teardown leaves non-demo rows alone", async () => {
+  if (nonDemoSourcesBefore === 0) {
+    throw new Error("no non-demo sources before teardown — the check would be vacuous");
+  }
   const r = await db.query(
-    "SELECT count(*)::int AS n FROM source WHERE source_id LIKE 'src_gov_%';"
+    "SELECT count(*)::int AS n FROM source WHERE source_id NOT LIKE 'demo-%';"
   );
-  if (r.rows[0].n !== 4) throw new Error(`expected 4 government sources, saw ${r.rows[0].n}`);
+  if (r.rows[0].n !== nonDemoSourcesBefore) {
+    throw new Error(`expected ${nonDemoSourcesBefore} non-demo sources, saw ${r.rows[0].n}`);
+  }
 });
 
 if (failures) {
