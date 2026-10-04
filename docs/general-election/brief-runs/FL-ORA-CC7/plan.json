@@ -1,0 +1,41 @@
+{
+  "race_id": "FL-ORA-CC7-general",
+  "retrieved_at": "2026-09-29T11:45:48Z",
+  "withheld_from": "../withheld-2026-09-30.json",
+  "spine": [
+    {
+      "id": "A2",
+      "title": "Housing affordability",
+      "description": null
+    },
+    {
+      "id": "KYV3",
+      "title": "Growth, development and land conservation",
+      "description": null
+    },
+    {
+      "id": "KYV4",
+      "title": "Storm resilience and flood protection",
+      "description": null
+    },
+    {
+      "id": "B7",
+      "title": "Crime policy, policing and courts",
+      "description": null
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "FL-VF-ORA-1271",
+      "official_site": "https://votevickivargo.com/",
+      "run": "FL-VF-ORA-1271/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-VF-ORA-1283",
+      "official_site": "https://www.patriciarumph.com/",
+      "run": "FL-VF-ORA-1283/run.json",
+      "no_run_reason": null
+    }
+  ]
+}

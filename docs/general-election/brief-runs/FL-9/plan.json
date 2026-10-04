@@ -1,0 +1,41 @@
+{
+  "race_id": "FL-9-general",
+  "retrieved_at": "2026-09-29T19:18:19Z",
+  "withheld_from": "../withheld-2026-09-30.json",
+  "spine": [
+    {
+      "id": "B1",
+      "title": "Economy, inflation, and jobs",
+      "description": null
+    },
+    {
+      "id": "B2",
+      "title": "Healthcare access and costs",
+      "description": null
+    },
+    {
+      "id": "B3",
+      "title": "Immigration and border enforcement",
+      "description": null
+    },
+    {
+      "id": "B4",
+      "title": "Social Security and Medicare",
+      "description": null
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "FL-DOE-89339",
+      "official_site": "https://www.darrensoto.com/",
+      "run": "FL-DOE-89339/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-DOE-91337",
+      "official_site": "https://dangreenfl.com/",
+      "run": "FL-DOE-91337/run.json",
+      "no_run_reason": null
+    }
+  ]
+}

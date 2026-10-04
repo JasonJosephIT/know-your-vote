@@ -1,0 +1,47 @@
+{
+  "race_id": "FL-12-general",
+  "retrieved_at": "2026-09-29T11:41:54Z",
+  "withheld_from": "../withheld-2026-09-30.json",
+  "spine": [
+    {
+      "id": "B1",
+      "title": "Economy, inflation, and jobs",
+      "description": null
+    },
+    {
+      "id": "B2",
+      "title": "Healthcare access and costs",
+      "description": null
+    },
+    {
+      "id": "B3",
+      "title": "Immigration and border enforcement",
+      "description": null
+    },
+    {
+      "id": "B4",
+      "title": "Social Security and Medicare",
+      "description": null
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "FL-DOE-88868",
+      "official_site": "https://bilirakisforcongress.com/",
+      "run": "FL-DOE-88868/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-DOE-89453",
+      "official_site": "https://kimberlyoverman.com/",
+      "run": "FL-DOE-89453/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-DOE-89778",
+      "official_site": "https://brandenscrivenerfl.info/",
+      "run": "FL-DOE-89778/run.json",
+      "no_run_reason": null
+    }
+  ]
+}
