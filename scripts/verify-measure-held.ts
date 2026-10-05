@@ -33,5 +33,21 @@ check("page renders the neutral block for a held measure", /<MeasureNeutralBlock
 check("page renders the held note", /heldNote\(/.test(page));
 check("page never renders sided columns outside the published brief", !/brief\s*\?\s*\(?\s*<Column|support\.map|oppose\.map/.test(page));
 
+/* The held page shows the neutral resources (0041), so no copy may say it
+   shows the ballot text alone (launch fixes, 2026-10-05). The methodology
+   page is where skeptics read the rule. */
+const methodology = read("src/app/(public)/methodology/page.tsx").replace(/\s+/g, " ");
+check(
+  "methodology says a held question shows the ballot text plus sources that take no side, not the text alone",
+  !/ballot text alone/.test(methodology) &&
+    /Until then its page shows the ballot text and any official documents, research and reporting that take no side, but nothing that argues for either side\./.test(methodology),
+  methodology.match(/A ballot question is published only[^.]*\.[^.]*\./)?.[0] ?? "sentence not found"
+);
+const flatPage = page.replace(/\s+/g, " ");
+check(
+  "the fallback card says 'nothing else' only when there are no neutral resources",
+  /neutral\.length > 0 \? "the official ballot text and the explainers above, and no case for either side\." : "the official ballot text and nothing else\."/.test(flatPage)
+);
+
 if (failures > 0) { console.error(`\n${failures} check(s) failed.`); process.exit(1); }
 console.log("\nverify-measure-held: all checks passed.");

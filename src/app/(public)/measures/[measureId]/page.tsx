@@ -75,9 +75,15 @@ export default async function MeasurePage({
 
   /* `brief` is null for a listed measure, and for a published one that
      fails the symmetry re-check — the read layer refuses to render that one
-     lopsided. Both get the ballot text and nothing else: the verbatim summary
-     is the Division of Elections' own wording, so it needs no audit, while
-     the resource list waits for both sides. */
+     lopsided. A listed measure gets the ballot text plus its neutral rows
+     (stance 'neutral': official documents, research and reporting that take
+     no side; readable on a listed measure since 0041), and nothing that
+     argues a side — sided research waits with the positions and commentary.
+     The methodology page says the same. A published measure that fails the
+     re-check gets no neutral rows (fetchMeasureListing takes them from the
+     brief, which is null), so it shows the ballot text alone and the card
+     below says so. The verbatim summary is the Division of Elections' own
+     wording, so it needs no audit. */
   const { measure, brief, neutral = [] } = listing;
   const note = heldNote(measure.measure_id);
 
@@ -142,8 +148,11 @@ export default async function MeasurePage({
             ) : (
               <p className="text-body-sm text-on-surface-muted">
                 Resources on both sides are being collected. We publish them only
-                when both sides are represented &mdash; until then, this is the
-                official ballot text and nothing else.
+                when both sides are represented &mdash; until then, this page
+                shows{" "}
+                {neutral.length > 0
+                  ? "the official ballot text and the explainers above, and no case for either side."
+                  : "the official ballot text and nothing else."}
               </p>
             )}
           </Card>

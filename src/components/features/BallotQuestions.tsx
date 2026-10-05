@@ -15,7 +15,8 @@ import { getActiveMeasures } from "@/lib/measures";
 
    Renders nothing when no measure is visible, so it is safe on the page
    before TASK-066 content lands. Since 0033 a measure is visible at `listed`
-   (verbatim ballot text only) as well as `published`; a listed card says its
+   (verbatim ballot text, plus its neutral resources since 0041) as well as
+   `published`; a listed card says its
    resources are being collected so a voter does not open it expecting a
    two-sided list. `status !== "published"` rather than `=== "listed"`: a status
    missing from a stale cached shape must mean the weaker claim.

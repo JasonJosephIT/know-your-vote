@@ -186,12 +186,24 @@ export type AdminActionName =
   | "reject"
   | "cancel";
 
+/* An admin_action row as the Log reads it. The console writes the verbs
+   above against a UUID subject (subject_id). Publication changes write
+   their own against a TEXT subject_ref with subject_id NULL:
+   set_race_publication (0018, 0033) logs publish, unpublish, list, unlist
+   or set_status on 'race_publication'; the measure flips log publish (0038,
+   0040) and list (scripts/list-ballot-2026.sql) on 'measure_publication'.
+   Rows can also be inserted by hand: production holds one 'note' row, a
+   correction about an earlier batch, whose subject_ref is not an id. action
+   has no CHECK (0006), and exactly one of subject_id / subject_ref is set
+   (0018, admin_action_subject_one_of). On 2026-10-05 all 170 production rows
+   used subject_ref with subject_id NULL. */
 export interface AdminActionRow {
   id: string;
   actor: string;
-  action: AdminActionName;
-  subject_kind: "agent_run_request" | "review_item";
-  subject_id: string;
+  action: string;
+  subject_kind: string;
+  subject_id: string | null;
+  subject_ref: string | null;
   detail: unknown;
   created_at: string;
 }

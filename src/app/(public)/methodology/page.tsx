@@ -871,7 +871,9 @@ export default async function MethodologyPage() {
           documents and reporting are shown to everyone first; positions and
           commentary are shown under the side they argue for, in two columns of
           equal size. A ballot question is published only when both sides are
-          represented; until then the page shows the ballot text alone.
+          represented. Until then its page shows the ballot text and any
+          official documents, research and reporting that take no side, but
+          nothing that argues for either side.
         </p>
       </section>
 
