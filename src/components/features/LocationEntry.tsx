@@ -13,6 +13,7 @@ import { track } from "@/lib/analytics";
 import { coveredCountyNames } from "@/lib/counties";
 import { STATEWIDE_BALLOT_HREF } from "@/lib/coverage";
 import { writeDistrictCookie } from "@/lib/district-cookie";
+import { locationFieldCopy } from "@/lib/scope-copy";
 import type { AddressSuggestion } from "@/lib/address-lookup";
 import type { CoveredDistrict } from "@/lib/resolve";
 import type { ResolveResult } from "@/types/app";
@@ -43,9 +44,14 @@ type Stage =
 const MIN_ADDRESS_CHARS = 5;
 const DEBOUNCE_MS = 250;
 
+/* The field's words follow addressEnabled (locationFieldCopy): without a
+   geocoder it takes a ZIP only, so it must not ask for an address. The
+   default placeholder used to be "Your address or ZIP code" whatever the
+   flag said, and the races view and the home page both rendered it so in
+   production, where /privacy says the field takes a ZIP. */
 export function LocationEntry({
-  submitLabel = "See my ballot",
-  placeholder = "Your address or ZIP code",
+  submitLabel = "See my races",
+  placeholder,
   addressEnabled = false,
   districts = [],
 }: {
@@ -54,6 +60,7 @@ export function LocationEntry({
   addressEnabled?: boolean;
   districts?: CoveredDistrict[];
 } = {}) {
+  const field = locationFieldCopy(addressEnabled);
   const router = useRouter();
   const listId = useId();
   const [value, setValue] = useState("");
@@ -268,7 +275,7 @@ export function LocationEntry({
       >
         <input type="hidden" name="view" value="races" />
         <label htmlFor="location" className="sr-only">
-          Your address or ZIP code
+          {field.label}
         </label>
         <div className="relative flex w-full flex-col sm:max-w-[320px]">
           <Input
@@ -281,8 +288,9 @@ export function LocationEntry({
             aria-activedescendant={
               highlighted >= 0 ? `${listId}-${highlighted}` : undefined
             }
-            autoComplete="street-address"
-            placeholder={placeholder}
+            autoComplete={field.autoComplete}
+            inputMode={addressEnabled ? undefined : "numeric"}
+            placeholder={placeholder ?? field.label}
             value={value}
             onChange={(e) => {
               setValue(e.target.value);
