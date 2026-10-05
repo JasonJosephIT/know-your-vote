@@ -3,7 +3,7 @@ import {
   MeasureNeutralBlock,
   MeasureResourceLadder,
 } from "@/components/features/MeasureResourceLadder";
-import { MeasureThreshold } from "@/components/features/MeasureThreshold";
+import { MeasureVoteMeaning } from "@/components/features/MeasureVoteMeaning";
 import { Card } from "@/components/ui/Card";
 import { getActiveMeasures, getMeasureListing } from "@/lib/measures";
 import { heldNote } from "@/lib/measure-held-copy";
@@ -104,7 +104,10 @@ export default async function MeasurePage({
         </h1>
       </header>
 
-      <MeasureThreshold pct={measure.threshold_pct} />
+      {/* Mechanics only, the same for every amendment; the threshold lives
+          inside it (MeasureVoteMeaning). Before the ballot text, which its
+          YES box points down to. */}
+      <MeasureVoteMeaning pct={measure.threshold_pct} />
 
       <section className="flex flex-col gap-2">
         <h2 className="text-h3">What the ballot says</h2>
