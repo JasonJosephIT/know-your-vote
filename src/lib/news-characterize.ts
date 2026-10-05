@@ -47,6 +47,23 @@ export interface NewsIssue {
     (spec §6 item 4) is still what settles it. */
 export const DEFAULT_THRESHOLD = 0.85;
 
+/** The `news_item.item_type` values the characterizer reads: news, and only
+    news. news-ingest-order-results-2026-09-23.md §4 item 2 asked for this
+    before the first live run. Without it, 6 of the 14 live rows the first run
+    would read were `official_link` rows ("Florida Division of Elections",
+    "Register to vote…"). Jev would have tagged evergreen resource links with
+    policy issues, and each of those requests would have been billed.
+
+    `pipeline_event` is out for the same reason: "Race published: …" is our own
+    status line, not a story about an issue, and it has no url anyway.
+
+    This is the same pair that migration 0014's CHECK constrains and that
+    src/lib/neutrality.ts calls AGENT_ITEM_TYPES: rows written from journalism.
+    It is restated here, not imported, because this core takes no imports
+    (header). scripts/verify-news-characterize.ts pins the two lists equal
+    and checks that scripts/news-characterize.ts actually filters on this one. */
+export const CHARACTERIZED_ITEM_TYPES = ["candidate_news", "election_news"] as const;
+
 export interface CharacterizableArticle {
   title: string;
   /** Dek/summary. Null on sitemap-retrieved rows — that is the input floor. */

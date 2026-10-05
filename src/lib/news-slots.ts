@@ -43,13 +43,52 @@
    rotate between. The rule still behaves correctly; there is simply less
    spectrum in the data than the rule can express (news-fairness.md §5).
 
-   WHAT `n` IS NOT: this module picks no number. news-fairness.md §5 says `N`
-   comes from real per-candidate counts once N5 measures them, and N5 has no
-   data yet. Choosing a default here would be a guess dressed as a decision, so
-   `n` is the caller's parameter and `undefined` means "apply the ordering,
-   cap nothing". Shortfall is reported for the caller to STATE, never padded. */
+   WHAT `n` IS NOT: a default inside the selector. news-fairness.md §5 says `N`
+   comes from real per-candidate counts, so `n` stays the caller's parameter
+   and `undefined` still means "apply the ordering, cap nothing". Shortfall is
+   reported for the caller to STATE, never padded. The recommended value the
+   caller should pass is NEWS_SLOTS_PER_CANDIDATE below, which comes from the
+   first measurement and is not yet wired to any caller. */
 
 import type { NewsSource } from "./news-labels";
+
+/* ---- FOUNDER CALL: N, the news slots per candidate -------------------
+   RECOMMENDED (PENDING FOUNDER CONFIRMATION), 2026-10-04: N = 3. Launch
+   handoff §5; the pending decision is recorded in
+   docs/general-election/stream-surface-handoff.md §7.
+
+   THE MEASUREMENT. news-fairness.md §5 says to pick N from real
+   per-candidate counts. The first ones were taken on 2026-10-04 with
+   scripts/news-sweep.ts --days 30 (545 articles) and
+   planAttachments against the live enqueue roster (82 ballot candidates with
+   a profile, 36 races). Note these are sweep-pool counts, not approved rows:
+     - 69 of 82 candidates had no `named` story at all;
+     - 13 had at least one, with a median of 2 among them;
+     - the most covered was 14 (FL-SEN), against 0 for another candidate in
+       the same race. Six candidates had 3 or more.
+     - Every swept story came from an outlet rated 'unrated', because all 24
+       usable outlets are, so rule 2 (lean spread) has one bucket to rotate
+       through today.
+
+   WHY 3. It sits just above the median of covered candidates, so it binds
+   only on the handful the press covers most. Inside a race it turns a 14-to-0
+   layout into 3-to-0 plus the stated shortfall line, which is the "equal
+   slots" promise of news-fairness.md §2. While every outlet is 'unrated', a
+   larger N would add more stories of the same lean, not more spread. And 3
+   cards with hero images is a short section on a phone.
+
+   NOT WIRED, ON PURPOSE. The hard gate in news-fairness.md's N4 note still
+   stands: N must be passed to CandidateNews before candidate_news rows go
+   live. The caller is src/app/(public)/candidates/[candidateId]/page.tsx,
+   which renders <CandidateNews candidateId=… /> twice with no `slots`.
+   Wiring is one prop at each call site: slots={NEWS_SLOTS_PER_CANDIDATE}.
+   It must be at least 1, because `slots={0}` with stories present would
+   print the "No stories" line falsely (stream-surface-handoff.md §4).
+
+   TO FLIP: change the number. Re-measure once the first batch of
+   candidate_news rows has been approved; that is when N5's real
+   denominator exists. */
+export const NEWS_SLOTS_PER_CANDIDATE = 3;
 
 /** The minimum an item must carry to be slotted. Structural on purpose: the
     read model's row type (briefs.ts `CandidateNewsItem`) satisfies it, and so

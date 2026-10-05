@@ -71,8 +71,24 @@ export default async function NewsPage({
         </p>
       </header>
 
+      {/* a11y-perf-2026-10-04.md fix 3 (WCAG 1.4.10 Reflow). A <select> is
+          as wide as its longest option, and the Issue list's longest is wider
+          than a phone: the page measured 423px at 320 to 412px viewports. Each
+          field wrapper is a flex item, and a flex item's min-width:auto would
+          not let it shrink below that, so the select's own max-w-full had
+          nothing to bound it. min-w-0 max-w-full on both wrappers lets a field
+          narrow to the form's width; a long option is then cut short in the
+          closed select, and the open list still shows it in full.
+
+          Fix 10 (WCAG 1.4.11 Non-text Contrast; 2.4.7 Focus Visible). The
+          selects' edge is border-input (4.03:1 on white; recommended pending
+          founder confirmation, how to flip in globals.css @theme) instead of
+          border-strong (1.68:1). No focus:outline-none on the selects or the
+          button, so the global :focus-visible ring shows; the primary border
+          on focus stays as an extra cue. The button keeps border-strong: its
+          text names it, so its edge is not what identifies it. */}
       <form method="get" className="flex flex-wrap items-end gap-2">
-        <div className="flex flex-col gap-1">
+        <div className="flex min-w-0 max-w-full flex-col gap-1">
           <label
             htmlFor="news-county"
             className="text-caption text-on-surface-muted"
@@ -83,7 +99,7 @@ export default async function NewsPage({
             id="news-county"
             name="county"
             defaultValue={selected?.fips ?? ""}
-            className="rounded-md border border-border-strong bg-surface px-3 py-3 text-body text-on-surface focus:border-primary focus:outline-none"
+            className="rounded-md border border-border-input bg-surface px-3 py-3 text-body text-on-surface focus:border-primary"
           >
             <option value="">Statewide only</option>
             {COVERED_COUNTIES.map((c) => (
@@ -93,7 +109,7 @@ export default async function NewsPage({
             ))}
           </select>
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex min-w-0 max-w-full flex-col gap-1">
           <label
             htmlFor="news-issue"
             className="text-caption text-on-surface-muted"
@@ -107,7 +123,7 @@ export default async function NewsPage({
             id="news-issue"
             name="issue"
             defaultValue={issue ?? ""}
-            className="max-w-full rounded-md border border-border-strong bg-surface px-3 py-3 text-body text-on-surface focus:border-primary focus:outline-none"
+            className="max-w-full rounded-md border border-border-input bg-surface px-3 py-3 text-body text-on-surface focus:border-primary"
           >
             <option value="">All issues</option>
             <optgroup label="Issue areas">
@@ -130,7 +146,7 @@ export default async function NewsPage({
         </div>
         <button
           type="submit"
-          className="rounded-md border border-border-strong bg-surface px-4 py-3 text-body text-on-surface hover:bg-surface-muted focus:border-primary focus:outline-none"
+          className="rounded-md border border-border-strong bg-surface px-4 py-3 text-body text-on-surface hover:bg-surface-muted focus:border-primary"
         >
           Show news
         </button>

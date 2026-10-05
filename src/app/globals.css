@@ -11,6 +11,13 @@
   --color-on-surface-muted: #585e52;
   --color-border: #e4ded2;
   --color-border-strong: #cfc7b6;
+  /* The edge of a text input or select (a11y audit 2026-10-04, fix 10;
+     WCAG 1.4.11 Non-text Contrast). border-strong is 1.68:1 on white, and on
+     a control with a visually hidden label the border is its only outline.
+     This is 4.03:1 on surface and 3.64:1 on background.
+     Recommended (pending founder confirmation). To flip: change or remove
+     this one token; Input.tsx and the selects use it as border-border-input. */
+  --color-border-input: #857e6e;
   --color-primary: #2f6b4f;
   --color-primary-hover: #255a41;
   --color-primary-muted: #e4efe7;
@@ -100,6 +107,45 @@
 }
 
 @layer base {
+  /* Keep keyboard focus out from under the fixed bars (a11y audit
+     2026-10-04, fix 1; WCAG 2.4.11 Focus Not Obscured). When Tab reaches an
+     element near an edge, the browser scrolls only until it is technically in
+     view, which left it under the phone top bar, the bottom nav or the cookie
+     banner. Scroll padding makes that scroll, and every in-page anchor jump,
+     stop clear of them.
+
+     Phone: the top bar is about 45px plus the status-bar inset, and the
+     bottom nav about 77px plus the home-indicator inset; 96px is also where
+     the cookie banner's bottom edge sits. From md: the nav is a 77px top bar
+     and the banner sits 24px above the bottom of the window. Each value
+     leaves room for the 2px focus ring and its 2px offset.
+
+     --kyv-overlay-bottom is published by SitePrompts' ConsentBanner while it
+     is open: its height plus a small gap, so focus also stops above the
+     banner. Unset, it is 0px. The <body>'s bottom padding and minimum
+     height in layout.tsx grow by the same variable, so the last stops on a
+     page have room to scroll clear of the banner too.
+
+     This padding adds to any scroll-margin-top on an anchor target, so a
+     target needs no scroll-mt-* to clear the top bar; one sized for the bar
+     now lands that much lower.
+
+     Recommended (pending founder confirmation): keep the banner fixed and
+     pad around it. To flip: drop the --kyv-overlay-bottom term here, in the
+     body's min-h- and pb- classes in layout.tsx and the effect that sets
+     it, or move the phone banner into the page flow. */
+  html {
+    scroll-padding-top: calc(56px + env(safe-area-inset-top));
+    scroll-padding-bottom: calc(
+      96px + env(safe-area-inset-bottom) + var(--kyv-overlay-bottom, 0px)
+    );
+
+    @variant md {
+      scroll-padding-top: 88px;
+      scroll-padding-bottom: calc(24px + var(--kyv-overlay-bottom, 0px));
+    }
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-on-surface);

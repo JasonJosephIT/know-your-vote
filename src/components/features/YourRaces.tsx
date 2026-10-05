@@ -17,6 +17,11 @@ import {
 } from "@/lib/resolve";
 import { raceStatusLabel } from "@/lib/races";
 import { geocoderConfigured } from "@/lib/geocode";
+import {
+  emailDeliveryConfigured,
+  officialSources,
+  remindersPaused,
+} from "@/lib/notifications/config";
 import type { ResolveResultWithCounty } from "@/lib/resolve";
 
 const DISTRICT_RE = /^FL-\d{1,2}$/;
@@ -95,8 +100,11 @@ export async function YourRaces({
         <p className="text-body text-on-surface-muted">
           We can&apos;t place that ZIP on a ballot yet. Full statewide coverage
           isn&apos;t available: U.S. House and county races are only for{" "}
-          {coveredCountyNames()} counties so far. If you live in Florida, try
-          your street address, or{" "}
+          {coveredCountyNames()} counties so far. If you live in Florida,{" "}
+          {/* The address field only exists when a geocoder is configured
+              (PELIAS_BASE_URL, unset in production on 2026-10-04), so the
+              hint follows it rather than pointing at a field that isn't there. */}
+          {geocoderConfigured() ? "try your street address, or " : ""}
           <Link
             href={STATEWIDE_BALLOT_HREF}
             className="text-primary underline underline-offset-2"
@@ -170,9 +178,9 @@ export async function YourRaces({
       {result.races.length === 0 ? (
         (result.countyRaces?.length ?? 0) === 0 && (
           <p className="text-body text-on-surface-muted">
-            Your races aren&apos;t published yet — our Balance Audit publishes a
-            race only when every candidate has equal space and equal scrutiny.
-            Check back soon.
+            Your races aren&apos;t published yet — we publish a race only after
+            every candidate in it has been through the same checks. Check back
+            soon.
           </p>
         )
       ) : (
@@ -247,7 +255,17 @@ export async function YourRaces({
         </p>
       )}
 
-      <VotingInfo zip={zip && ZIP_RE.test(zip) ? zip : ""} />
+      {/* The flags are read here, on the server, because VotingInfo is a
+          client component and the env they depend on is secret.
+          Unconfigured, it shows this county's official sources instead of a
+          form that could only fail; while NOTIFICATIONS_PAUSED is set, its
+          copy stops promising reminders (launch handoff 2026-10-04, §2). */}
+      <VotingInfo
+        zip={zip && ZIP_RE.test(zip) ? zip : ""}
+        emailEnabled={emailDeliveryConfigured()}
+        remindersOn={!remindersPaused()}
+        sources={officialSources(result.county)}
+      />
     </div>
   );
 }

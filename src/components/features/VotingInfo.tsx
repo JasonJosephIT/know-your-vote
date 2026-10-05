@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { track } from "@/lib/analytics";
+import type { OfficialSources } from "@/lib/notifications/config";
 
 type Stage =
   | { kind: "idle" }
@@ -11,11 +13,48 @@ type Stage =
   | { kind: "sent" }
   | { kind: "error"; message: string };
 
-export function VotingInfo({ zip: initialZip = "" }: { zip?: string }) {
+/* The voting-info signup (FR-010): one email now with where to vote (the
+   county's official precinct lookup) and the key dates, then the deadline
+   reminders (send-reminders cron), which mail every active subscription.
+   The copy says both, because the privacy page already does and the second
+   email must not surprise anyone. It says "where to vote", not "your
+   polling place": the email links to the lookup, it does not name the
+   place.
+
+   Both flags come from a server component, because the env behind them is
+   secret (src/lib/notifications/config.ts; launch handoff 2026-10-04, §2):
+   - emailEnabled is emailDeliveryConfigured(). When delivery is not
+     configured the form could only end in a 503, so it is not offered:
+     the voter gets the official sources the email would have pointed to
+     instead, and nothing to fill in.
+   - remindersOn is !remindersPaused(). While NOTIFICATIONS_PAUSED stops
+     the cron (design doc §7: a wrong date caught, sends held), the form
+     and the welcome email stop promising reminders. */
+export function VotingInfo({
+  zip: initialZip = "",
+  emailEnabled,
+  remindersOn,
+  sources,
+  heading = "Get your polling place by email",
+  intro,
+}: {
+  zip?: string;
+  emailEnabled: boolean;
+  remindersOn: boolean;
+  /* Needed only for the no-email fallback. */
+  sources?: OfficialSources;
+  heading?: string;
+  /* Defaults to the races view's wording for remindersOn. */
+  intro?: string;
+}) {
   const [zip, setZip] = useState(initialZip);
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   const [stage, setStage] = useState<Stage>({ kind: "idle" });
+
+  if (!emailEnabled) {
+    return sources ? <OfficialSourcesCard sources={sources} /> : null;
+  }
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
@@ -48,66 +87,116 @@ export function VotingInfo({ zip: initialZip = "" }: { zip?: string }) {
   if (stage.kind === "sent") {
     return (
       <p className="rounded-md bg-primary-muted px-4 py-3 text-body-sm text-primary-hover" role="status">
-        Sent! Check your inbox for your polling place and key dates. There&apos;s
-        an unsubscribe link in the email.
+        {remindersOn
+          ? "Sent. Check your inbox for where to vote and the key dates. A short reminder follows as each remaining deadline comes up, and every email has an unsubscribe link."
+          : "Sent. Check your inbox for where to vote and the key dates. The email has an unsubscribe link."}
       </p>
     );
   }
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-3 rounded-lg border border-border bg-surface p-5">
-      <h2 className="text-h3">Get your polling place by email</h2>
-      <p className="text-body-sm text-on-surface-muted">
-        One email with where to vote and the key deadlines — the only time we
-        ever ask for anything personal.
-      </p>
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <Input
-          aria-label="ZIP code"
-          inputMode="numeric"
-          maxLength={5}
-          placeholder="ZIP code"
-          value={zip}
-          onChange={(e) => setZip(e.target.value.replace(/\D/g, ""))}
-          className="sm:max-w-[140px]"
-        />
-        <Input
-          aria-label="Email address"
-          type="email"
-          placeholder="you@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-      <label className="flex items-start gap-2 text-body-sm text-on-surface-muted">
-        <input
-          type="checkbox"
-          checked={consent}
-          onChange={(e) => setConsent(e.target.checked)}
-          className="mt-1 size-4 accent-[var(--color-primary)]"
-        />
-        Yes — email me my polling place and deadlines. We store only your email
-        and ZIP, never link them to your browsing, and every email has an
-        unsubscribe link.
-      </label>
-      {stage.kind === "error" && (
-        <p role="alert" className="text-body-sm text-error">
-          {stage.message}
+    <Card>
+      <form onSubmit={submit} className="flex flex-col gap-3">
+        <h2 className="text-h3">{heading}</h2>
+        <p className="text-body-sm text-on-surface-muted">
+          {intro ??
+            (remindersOn
+              ? "One email now with where to vote and the key deadlines, then a short reminder as each remaining deadline comes up, through Election Day. It's the only time we ever ask for anything personal."
+              : "One email with where to vote and the key deadlines — the only time we ever ask for anything personal.")}
         </p>
-      )}
-      <Button type="submit" disabled={stage.kind === "sending"} className="w-fit">
-        {stage.kind === "sending" ? "Sending…" : "Email my voting info"}
-      </Button>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Input
+            aria-label="ZIP code"
+            inputMode="numeric"
+            maxLength={5}
+            placeholder="ZIP code"
+            value={zip}
+            onChange={(e) => setZip(e.target.value.replace(/\D/g, ""))}
+            className="sm:max-w-[140px]"
+          />
+          <Input
+            aria-label="Email address"
+            type="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <label className="flex items-start gap-2 text-body-sm text-on-surface-muted">
+          <input
+            type="checkbox"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+            className="mt-1 size-4 accent-[var(--color-primary)]"
+          />
+          <span>
+            {remindersOn
+              ? "Yes — email me where to vote and the key deadlines now, and a reminder as each remaining deadline comes up."
+              : "Yes — email me where to vote and the key deadlines."}{" "}
+            We store only your email and ZIP, never link them to your
+            browsing, and every email has an unsubscribe link.
+          </span>
+        </label>
+        {stage.kind === "error" && (
+          <p role="alert" className="text-body-sm text-error">
+            {stage.message}
+          </p>
+        )}
+        <Button type="submit" disabled={stage.kind === "sending"} className="w-fit">
+          {stage.kind === "sending" ? "Sending…" : "Email my voting info"}
+        </Button>
+        <p className="text-caption text-on-surface-muted">
+          No email needed:{" "}
+          <a
+            href="/api/calendar/general_2026.ics"
+            className="underline underline-offset-2 hover:text-on-surface"
+          >
+            add the key dates straight to your calendar
+          </a>
+          .
+        </p>
+      </form>
+    </Card>
+  );
+}
+
+/* The fallback. Same offices the email names (officialSources), so a voter
+   gets the same answer either way, just without the inbox. No calendar link
+   here: the .ics route needs the same service-role key whose absence is the
+   likeliest reason this card is showing. */
+function OfficialSourcesCard({ sources }: { sources: OfficialSources }) {
+  const link = "text-primary underline underline-offset-2 hover:text-primary-hover";
+  return (
+    <Card className="flex flex-col gap-2">
+      <h2 className="text-h3">Find your polling place</h2>
+      <p className="text-body-sm text-on-surface-muted">
+        {sources.office ? (
+          <>
+            The{" "}
+            <a href={sources.office.url} className={link}>
+              {sources.office.name}
+            </a>{" "}
+            lists your polling place, its hours and your sample ballot. Its
+            precinct lookup shows exactly where you vote.
+          </>
+        ) : (
+          <>
+            Your county Supervisor of Elections lists your polling place, its
+            hours and your sample ballot, and the{" "}
+            <a href={sources.state.url} className={link}>
+              {sources.state.name}
+            </a>{" "}
+            can point you to yours.
+          </>
+        )}
+      </p>
       <p className="text-caption text-on-surface-muted">
-        No email needed:{" "}
-        <a
-          href="/api/calendar/general_2026.ics"
-          className="underline underline-offset-2 hover:text-on-surface"
-        >
-          add the key dates straight to your calendar
+        Registration, vote-by-mail and early voting dates are on the{" "}
+        <a href={sources.dates.url} className="underline underline-offset-2 hover:text-on-surface">
+          {sources.dates.name}
         </a>
         .
       </p>
-    </form>
+    </Card>
   );
 }

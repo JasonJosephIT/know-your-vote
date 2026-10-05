@@ -110,3 +110,44 @@ Asked whether to apply `rebuild-2026-09-29/brief.sql`, which replaces the live, 
 - **The live fingerprints equal the local reference** on claims, claim sources, positions, issues and profiles.
 - **The Balance Audit passes** on the applied profiles, with the `word_count` threshold of 150 decided on 2026-09-27. It was written back in the same shape as before. Datto and Abrams are flagged `stated_position_asymmetry`. Jewett is no longer flagged: his site was read in this rebuild.
 - Details, hashes and the rollback steps are in `rebuild-2026-09-29/apply-2026-09-30.md`. The audit is in `rebuild-2026-09-29/audit-2026-09-30.json`.
+
+## D1, the bio section: proposed (pending founder confirmation), 2026-10-04
+
+Launch handoff §3, founder decision 8: build the bio section D1 promised "for every candidate", or drop the promise. **Not decided.** This records the recommended call so the founder can confirm or flip it.
+
+**Proposed (pending founder confirmation): drop the bio section for 2026.** The D1 spine stays as decided. No bio is built, and nothing a voter sees promises one.
+
+- **It is not built, and neither half has a pipeline.**
+  - `src/lib/brief-rows.ts` emits stated positions only. Live on 2026-10-04, all 82 profiles have empty `facts`, `verifiable_fact_count = 0` and no `opinions`, and all 648 claims are `stated_position`.
+  - Part 1 (biography facts from the last 10 years, the Recorder's Allowlist B) has no ingest, no reviewer and no bucket in the writer.
+  - Part 2 (a verbatim "self-describes as" quote) has passages on disk but no rule. The second commitment gate (2026-09-30) was built to reject exactly this kind of text, biography, so a self-description needs its own path through Step 2 and its own reviewer check.
+- **The reach would be uneven.**
+  - The 2026-09-29 Jev-link ingest read an About page for 56 of the 90 readable sites (`../ingest-jev-2026-09-29.md`).
+  - The 9 ballot candidates with no site, and the walled ones, would have none.
+  - A section that 56 of 106 candidates can fill is the asymmetry the Balance Audit exists to flag.
+- **There is no review time.** A new content type needs:
+  - its gate or exemption;
+  - a reviewer check (verbatim, from the candidate's own About page, the candidate's own words and not a third party's);
+  - a block in `CandidateBrief`;
+  - its own audit decision;
+  - a methodology paragraph.
+
+  The refresh calendar (`../refresh-plan-2026-10.md`) has no room for that before early voting on 10-24.
+- **The voter loses little.** Every candidate card already links the candidate's official site, where the About page is.
+
+**Where the public UI stands (grep of `src/`, and live `GET`s of a race page and `/manifest.webmanifest`, 2026-10-04).**
+- No page or component promises a bio, biography or self-description. The methodology page being rewritten in this PR says "There is no bio section."
+- The nearest promise is the record and the facts, "what they've done". It appears in four places:
+  - the home page hero ("what they've done, and what's been verified") and caption ("says, has done, and what's verified"), `src/app/(public)/page.tsx`;
+  - the site metadata in `src/app/layout.tsx`. Live, every page's `description`, `og:description` and `twitter:description` say "what they've done, and what's been verified". `twitter:description` has no setting of its own, and the live tag matches the Open Graph text. The decision 1 rewrite in this PR replaces both texts;
+  - the PWA manifest, `src/app/manifest.ts` line 13 (served live as `/manifest.webmanifest`): "See everyone on your ballot, what they say, what they've done, and all facts no cap." Nothing in this PR changes it. "No cap" is the house register the voice guide allows for social copy. The problem is the promise of records and "all facts";
+  - the "canonical lines" in `docs/voice-and-tone.md` that the manifest copies.
+- All four belong to decision 1, the trust-copy rewrite. The manifest and the voice guide are flagged to its owner.
+- `IssueSection`'s "What They've Done" heading renders only when a bucket has items, and today none does.
+
+**To flip (build it):** the smallest honest version is part 2 alone.
+- One verbatim self-description per candidate, quoted from the About page their 2026-09-29 run already read, labelled "Self-describes as".
+- "No self-description found" for everyone else.
+- The same rule for all 106.
+
+It needs a writer bucket, the reviewer check, a UI block and the founder's call on the audit's treatment of a 56-of-106 section. Part 1 (Recorder facts) is a separate project, not one for this cycle.

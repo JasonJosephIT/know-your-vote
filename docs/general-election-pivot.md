@@ -140,7 +140,7 @@ Worth stating plainly, because it shrinks the job:
   needed) and was negative-tested. One documented exemption:
   `YourRaces.raceDates`, already scoped by ids `resolve.ts` filtered.
 
-- [ ] **TASK-058** — Verify the `general_2026` date rows *(liability gate)*
+- [x] **TASK-058** — Verify the `general_2026` date rows *(liability gate)*
   Files: `supabase/migrations/0010_verify_general_dates.sql`
   Notes: A human checks all five seeded dates against the Division of Elections
   page, then sets `verified_by`/`verified_at`. This is founder task F4 and it

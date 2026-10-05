@@ -13,10 +13,20 @@ const buckets = [
 export function IssueSection({ block }: { block: IssueBlock }) {
   return (
     <section className="flex flex-col gap-3 border-t border-border pt-4">
+      {/* A real space before the tag, not only a margin: with the margin
+          alone the heading's accessible name ran together as "School choice
+          and voucherscandidate-added issue" (a11y-perf-2026-10-04.md fix 8;
+          WCAG 2.4.6 Headings and Labels). The space ends the title's own
+          text node. A separate {" "} does not work: React's server HTML puts
+          <!-- --> between it and the title, and Chromium leaves a
+          whitespace-only text node after a comment out of the accessible
+          name. ml-1 plus the space keeps the visual gap that ml-2 gave. */}
       <h3 className="text-h3">
-        {block.issue.title}
+        {block.issue.tier === "candidate"
+          ? `${block.issue.title} `
+          : block.issue.title}
         {block.issue.tier === "candidate" && (
-          <span className="ml-2 align-middle text-caption font-medium text-on-surface-muted">
+          <span className="ml-1 align-middle text-caption font-medium text-on-surface-muted">
             candidate-added issue
           </span>
         )}

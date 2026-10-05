@@ -12,6 +12,12 @@
    wire sports; characterizing those would be waste, and it would measure the
    tag distribution over a different population than the coverage numbers use.
 
+   And only stored NEWS rows: `item_type` in CHARACTERIZED_ITEM_TYPES
+   (candidate_news, election_news). news-ingest-order-results-2026-09-23.md §4
+   item 2 found that the first live run would otherwise have sent the six
+   evergreen `official_link` rows to Jev, to be billed and tagged with policy
+   issues they are not about. Scoped 2026-10-04, before that first run.
+
    It never writes candidate_id or relation. src/lib/news-match.ts owns those,
    and the founder closed that question on 2026-09-18 ("A now, drop C").
 
@@ -38,6 +44,7 @@
 import { loadEnvLocal } from "./env-local.ts";
 import { createClient } from "@supabase/supabase-js";
 import {
+  CHARACTERIZED_ITEM_TYPES,
   DEFAULT_THRESHOLD,
   applyThreshold,
   buildQuestions,
@@ -111,12 +118,14 @@ const by = provenance(engine.modelId, questions, TAXONOMY_VERSION);
 
 const db = createClient(url, key);
 
-/* Only rows we have never characterized. `issues IS NULL` is the "never
+/* Only news rows we have never characterized. `issues IS NULL` is the "never
    looked" state; a row holding '{}' HAS been looked at and had nothing clear
-   the threshold, and a re-run must not silently re-bill it (§4.6). */
+   the threshold, and a re-run must not silently re-bill it (§4.6). The
+   item_type filter keeps official_link and pipeline_event rows out (header). */
 const { data: rows, error } = await db
   .from("news_item")
   .select("id, title, summary, url")
+  .in("item_type", [...CHARACTERIZED_ITEM_TYPES])
   .is("issues", null)
   .not("url", "is", null)
   .order("published_at", { ascending: false })
@@ -127,7 +136,9 @@ if (error) {
   process.exit(1);
 }
 if (!rows || rows.length === 0) {
-  console.error("no uncharacterized rows with a url — nothing to do");
+  console.error(
+    `no uncharacterized ${CHARACTERIZED_ITEM_TYPES.join("/")} rows with a url — nothing to do`,
+  );
   process.exit(1);
 }
 

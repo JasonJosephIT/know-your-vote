@@ -58,6 +58,13 @@ export function SavedCandidates() {
      card immediately and rows from a previous list never resurface. */
   const visible = rows.filter((c) => ids.includes(c.candidate_id));
 
+  /* Every card repeats "Keep in mind" and "Official site", so both carry the
+     candidate's name as a visually hidden suffix after the visible label
+     (a11y-perf-2026-10-04.md fix 6; WCAG 2.4.4, 2.4.6, label first for 2.5.3).
+     The site and social links get a 24 px minimum height (fix 9; WCAG 2.5.8
+     Target Size; min-h-[24px] because this theme's spacing-6 is 32 px). Same
+     markup as CandidateBrief's header. */
+
   return (
     <ul className="flex flex-col gap-4">
       {visible.map((c) => (
@@ -73,7 +80,7 @@ export function SavedCandidates() {
                 </Link>
               </h2>
               <PartyChip party={c.party} />
-              <SaveToggle candidateId={c.candidate_id} />
+              <SaveToggle candidateId={c.candidate_id} name={c.legal_name} />
             </div>
             <p className="text-body-sm text-on-surface-muted">{c.office_sought}</p>
             <p className="flex flex-wrap gap-x-3 gap-y-1 text-caption text-on-surface-muted">
@@ -82,9 +89,10 @@ export function SavedCandidates() {
                   href={c.official_site}
                   target="_blank"
                   rel="noreferrer"
-                  className="underline underline-offset-2 hover:text-on-surface"
+                  className="inline-flex min-h-[24px] items-center underline underline-offset-2 hover:text-on-surface"
                 >
                   Official site
+                  <span className="sr-only">: {c.legal_name}</span>
                 </a>
               )}
               {c.handles.map((h) => (
@@ -93,7 +101,7 @@ export function SavedCandidates() {
                   href={h.url ?? undefined}
                   target="_blank"
                   rel="noreferrer"
-                  className="underline underline-offset-2 hover:text-on-surface"
+                  className="inline-flex min-h-[24px] items-center underline underline-offset-2 hover:text-on-surface"
                 >
                   {h.handle} ({h.platform})
                 </a>

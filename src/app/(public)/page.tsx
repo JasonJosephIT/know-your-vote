@@ -3,6 +3,10 @@ import { cookies } from "next/headers";
 import { DISTRICT_COOKIE, parseDistrictCookie } from "@/lib/district-cookie";
 import { DeadlineBanner } from "@/components/features/DeadlineBanner";
 import { InstallCard } from "@/components/features/InstallCard";
+import {
+  REMINDER_SIGNUP_ID,
+  ReminderSignupCta,
+} from "@/components/features/ReminderSignupCta";
 import { SharedBallot } from "@/components/features/SharedBallot";
 import { TrackView } from "@/components/features/TrackView";
 import { LocationEntry } from "@/components/features/LocationEntry";
@@ -10,6 +14,7 @@ import { getActiveMeasures } from "@/lib/measures";
 import { getStatewideRaces } from "@/lib/races";
 import { getCoveredDistricts } from "@/lib/resolve";
 import { geocoderConfigured } from "@/lib/geocode";
+import { reminderPromotionLive } from "@/lib/notifications/config";
 
 /* Ballot first, ZIP optional (TASK-067).
 
@@ -47,15 +52,33 @@ export default async function Home() {
   );
   const ballotRendered = races.length > 0 || measures.length > 0;
 
+  /* FOUNDER DECISION 3 — promote the reminder signup. Recommended (pending
+     founder confirmation): yes, once email works. True only while email
+     delivery is configured, reminders are not paused and
+     PROMOTE_REMINDER_SIGNUP is on (src/lib/notifications/config.ts), so the
+     card and the banner's link to it switch on by themselves with the
+     redeploy after the env fix. Turn it off with that constant. The card
+     sits after the ballot and the House-race step, so the ballot still comes
+     first (TASK-067); the banner's link is what makes it visible from the
+     top of the page. */
+  const promoteReminders = reminderPromotionLive();
+
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-6 px-5 py-8">
-      <h1 className="text-display">Everything on every Florida ballot.</h1>
+      {/* Kept in step with SITE_TITLE in src/app/layout.tsx (founder decision
+          1, recommended): the old h1, "Everything on every Florida ballot.",
+          and the old promise of records and verified facts overclaimed what
+          ships. Flip both together. */}
+      <h1 className="text-display">Florida candidates, in their own words.</h1>
       <p className="text-body-lg text-on-surface-muted">
-        See everyone you can vote for — what they say, what they&apos;ve done,
-        and what&apos;s been verified. Equal space, equal scrutiny, every claim
-        linked to a source. No ZIP, no account, no agenda.
+        See everyone you can vote for and what they say, quoted word for word
+        from their own campaign sites, with a link to every source. The same
+        questions and the same rules for every candidate. No ZIP, no account,
+        no agenda.
       </p>
-      <DeadlineBanner />
+      <DeadlineBanner
+        remindersHref={promoteReminders ? `#${REMINDER_SIGNUP_ID}` : undefined}
+      />
 
       {ballotRendered && <TrackView event="ballot_viewed" />}
       <SharedBallot />
@@ -107,11 +130,13 @@ export default async function Home() {
         )}
       </section>
 
+      {promoteReminders && <ReminderSignupCta />}
+
       <InstallCard />
 
       <p className="text-caption text-on-surface-muted">
-        We describe what each candidate says, has done, and what&apos;s
-        verified. You decide.{" "}
+        We quote what each candidate says, in their own words. You
+        decide.{" "}
         <Link
           href="/methodology"
           className="underline underline-offset-2 hover:text-on-surface"

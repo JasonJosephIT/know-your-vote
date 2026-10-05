@@ -81,14 +81,20 @@ export function SectionNav() {
     <>
       {/* Mobile: the section nav is at the bottom, so the chip gets its own slim
           bar at the top — the corner voters look in for a location selector.
-          Hidden at md:, where it sits in the nav itself. */}
-      <div
+          Hidden at md:, where it sits in the nav itself.
+
+          A <header>, not a <div> (a11y audit 2026-10-04, fix 5; axe
+          "region"). As a child of <body> it is the page's banner landmark,
+          so screen-reader users moving by landmark reach Donate and the
+          district chip, the only place to change or forget a saved district.
+          From md it is display: none and the nav carries both. */}
+      <header
         className="fixed inset-x-0 top-0 z-40 flex items-center justify-between border-b border-border bg-surface px-3 py-2 md:hidden"
         style={{ paddingTop: "calc(0.5rem + env(safe-area-inset-top))" }}
       >
         <DonateLink className="flex" />
         <DistrictChip />
-      </div>
+      </header>
 
       <nav
         aria-label="Sections"

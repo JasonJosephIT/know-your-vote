@@ -24,9 +24,13 @@
 import {
   BRIEF_IN_REVIEW_LINE,
   COUNTY_NOTE,
+  LISTED_IS_FINAL,
+  LISTED_RACE_LABEL,
   LISTING_INTRO_NOT_PRINTED,
   LISTING_INTRO_PRINTED,
+  NO_BRIEF_CARD_LINE,
   WRITE_IN_NOTE,
+  listingCardLine,
   listingCopy,
   raceStatusLine,
   statusBranch,
@@ -137,6 +141,47 @@ check(
   "brief-in-review line says in review, not published",
   BRIEF_IN_REVIEW_LINE.startsWith("Brief in review") &&
     !/\bpublished\b/i.test(BRIEF_IN_REVIEW_LINE)
+);
+
+/* 3b. Founder decision 4 (launch handoff 2026-10-04): LISTED_IS_FINAL picks
+   a listed race's intros and card line. A published race on the roster is a
+   brief that is briefly unreadable (audit re-check, rebuild), so its cards
+   keep the in-review line either way. The no-brief line says so first,
+   never says published, and promises neither a review nor a later brief. */
+check(
+  "card line: a published race's roster always says in review",
+  listingCardLine("published") === BRIEF_IN_REVIEW_LINE
+);
+check(
+  "card line: a listed race follows LISTED_IS_FINAL",
+  listingCardLine("listed") ===
+    (LISTED_IS_FINAL ? NO_BRIEF_CARD_LINE : BRIEF_IN_REVIEW_LINE)
+);
+check(
+  "no-brief line: says so first, never published, promises nothing",
+  NO_BRIEF_CARD_LINE.startsWith("No brief for this race") &&
+    !/\bpublished\b|in review|\bonce\b|\bsoon\b|\byet\b/i.test(
+      NO_BRIEF_CARD_LINE
+    )
+);
+check(
+  "switch on: no listed-race copy promises a review",
+  !LISTED_IS_FINAL ||
+    ![
+      listingCardLine("listed"),
+      LISTING_INTRO_PRINTED,
+      LISTING_INTRO_NOT_PRINTED,
+      LISTED_RACE_LABEL,
+    ].some((l) => /in review/i.test(l))
+);
+check(
+  "switch off: the in-review wording is back",
+  LISTED_IS_FINAL ||
+    (LISTING_INTRO_PRINTED.endsWith("The full briefs are still in review.") &&
+      LISTING_INTRO_NOT_PRINTED.endsWith(
+        "The full brief is still in review."
+      ) &&
+      LISTED_RACE_LABEL === "Names on the ballot · brief in review")
 );
 
 /* 4. Captions only where the contest is printed. */

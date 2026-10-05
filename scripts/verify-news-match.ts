@@ -14,11 +14,18 @@
    Pure and offline. Run: node scripts/verify-news-match.ts */
 
 import {
+  SURNAME_ONLY_RULE,
   matchArticle,
   namedCountsByCandidate,
   type Match,
   type RosterCandidate,
 } from "../src/lib/news-match.ts";
+
+/* The surname-only rule is a pending founder call (news-match.ts, "FOUNDER
+   CALL" block). Checks that depend on it name the mode they test, so this
+   file stays green whichever way SURNAME_ONLY_RULE is set. */
+const BARE = { surnameOnly: "bare_surname" } as const;
+const TITLED = { surnameOnly: "title_and_surname" } as const;
 
 let failures = 0;
 function check(name: string, cond: boolean, detail = "") {
@@ -99,11 +106,17 @@ check("a bare surname never produces a named row", !smith.some((m) => m.relation
 /* One candidate could match, and it is STILL related — the match was not
    deterministic, and the tier records how it was made, not how confident we
    feel about it. */
-const vasquezOnly = matchArticle({ title: "Vasquez to hold a town hall" }, ROSTER);
+const vasquezOnly = matchArticle({ title: "Vasquez to hold a town hall" }, ROSTER, BARE);
 check(
-  "a unique surname is related, not named",
+  "a unique surname is related, not named (bare_surname)",
   shape(vasquezOnly) === "cand-1:related",
   shape(vasquezOnly),
+);
+const vasquezTitled = matchArticle({ title: "Rep. Vasquez to hold a town hall" }, ROSTER, TITLED);
+check(
+  "a unique title + surname is related, not named (title_and_surname)",
+  shape(vasquezTitled) === "cand-1:related",
+  shape(vasquezTitled),
 );
 
 /* The subtlety worth pinning: a full name contains a surname, but that
@@ -120,11 +133,22 @@ check(
 const both = matchArticle(
   { title: "John Smith wins", summary: "Smith will face the incumbent." },
   ROSTER,
+  BARE,
 );
 check(
-  "a leftover surname still relates after a full-name match",
+  "a leftover surname still relates after a full-name match (bare_surname)",
   shape(both) === "cand-2:named,cand-3:related",
   shape(both),
+);
+const bothTitled = matchArticle(
+  { title: "John Smith wins", summary: "Commissioner Smith will face the incumbent." },
+  ROSTER,
+  TITLED,
+);
+check(
+  "a leftover title + surname still relates after a full-name match (title_and_surname)",
+  shape(bothTitled) === "cand-2:named,cand-3:related",
+  shape(bothTitled),
 );
 
 /* ---- related (a): the race-level story -------------------------------- */
@@ -162,6 +186,44 @@ check("empty roster matches nothing", matchArticle({ title: "John Smith wins" },
 const a1 = shape(matchArticle({ title: "Commissioner Smith faces questions" }, ROSTER));
 const a2 = shape(matchArticle({ title: "Commissioner Smith faces questions" }, ROSTER));
 check("matching is deterministic", a1 === a2);
+
+/* ---- the surname-only rule (pending founder call, 2026-10-04) ---------- */
+
+/* The case that prompted it: a surname that is also an ordinary word. Under
+   bare_surname this is the 37-junk-rows-a-month "Robert People" problem
+   (news-ingest-order-results-2026-09-23.md §3); under title_and_surname the
+   word alone is not a mention. */
+const PEOPLE: RosterCandidate[] = [...ROSTER, c("cand-5", "Robert People", "race-3"), c("cand-6", "Katrina Wilson", "race-3")];
+const crowd = { title: "2 shot dead and dozens of people injured at a block party" };
+check("bare_surname: a common-word surname attaches as related (the measured problem)",
+  shape(matchArticle(crowd, PEOPLE, BARE)) === "cand-5:related", shape(matchArticle(crowd, PEOPLE, BARE)));
+check("title_and_surname: the same headline attaches to nobody",
+  matchArticle(crowd, PEOPLE, TITLED).length === 0, shape(matchArticle(crowd, PEOPLE, TITLED)));
+check("title_and_surname: a bare unique surname attaches to nobody",
+  matchArticle({ title: "Vasquez to hold a town hall" }, ROSTER, TITLED).length === 0);
+check("title_and_surname: a title before the surname still attaches",
+  shape(matchArticle({ title: "Rep. People votes on the budget" }, PEOPLE, TITLED)) === "cand-5:related");
+check("title_and_surname: the title must sit right before the surname",
+  matchArticle({ title: "U.S. Rep. Frederica Wilson announces grants" }, PEOPLE, TITLED).length === 0,
+  shape(matchArticle({ title: "U.S. Rep. Frederica Wilson announces grants" }, PEOPLE, TITLED)));
+check("title_and_surname: ambiguity with a title still resolves toward symmetry",
+  shape(matchArticle({ title: "U.S. Sen. Smith speaks" }, ROSTER, TITLED)) === "cand-2:related,cand-3:related");
+check("title_and_surname: Spanish titles count",
+  shape(matchArticle({ title: "El senador Smith visita Miami" }, ROSTER, TITLED)) === "cand-2:related,cand-3:related");
+check("title_and_surname: a multi-word title counts",
+  shape(matchArticle({ title: "School board member Wilson resigns" }, PEOPLE, TITLED)) === "cand-6:related");
+for (const opts of [BARE, TITLED]) {
+  check(`${opts.surnameOnly}: the named tier is unchanged`,
+    shape(matchArticle({ title: "Maria Elena Vasquez files" }, ROSTER, opts)) === "cand-1:named");
+  check(`${opts.surnameOnly}: race-scoped case (a) is unchanged`,
+    shape(matchArticle({ title: "Turnout low", raceId: "race-1" }, ROSTER, opts))
+      === "cand-1:related,cand-2:related,cand-3:related");
+}
+check("SURNAME_ONLY_RULE is one of the two modes",
+  SURNAME_ONLY_RULE === "title_and_surname" || SURNAME_ONLY_RULE === "bare_surname", String(SURNAME_ONLY_RULE));
+check("no options means SURNAME_ONLY_RULE decides",
+  shape(matchArticle({ title: "Vasquez to hold a town hall" }, ROSTER))
+    === shape(matchArticle({ title: "Vasquez to hold a town hall" }, ROSTER, { surnameOnly: SURNAME_ONLY_RULE })));
 
 /* ---- CN-R10: named rows only ----------------------------------------- */
 
@@ -214,4 +276,4 @@ if (failures > 0) {
   console.error(`\nverify-news-match: ${failures} failure(s)`);
   process.exit(1);
 }
-console.log("verify-news-match: OK — ambiguity resolves toward symmetry, and only named rows reach the audit");
+console.log(`verify-news-match: OK — ambiguity resolves toward symmetry, and only named rows reach the audit (surname-only rule: ${SURNAME_ONLY_RULE})`);
