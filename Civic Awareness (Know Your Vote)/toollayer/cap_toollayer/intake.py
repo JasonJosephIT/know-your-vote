@@ -183,6 +183,89 @@ _DOE_REQUIRED_COLS = (
     "StatusCode", "PartyCode", "NameLast", "NameFirst",
 )
 
+# --- Ballot order of race.candidate_ids (2026-10-05) -----------------------
+#
+# The app lists a race's candidates in Florida's general-election order, and
+# race.candidate_ids is the order everything else reads (src/lib/
+# ballot-order.ts holds the app's copy of this rule; keep the two in step):
+#   s. 101.151(3)(a), Fla. Stat.: the party whose candidate got the most votes
+#     in the last governor's race first, the second party second. 2022 went
+#     REP, then DEM, so REP is first and DEM second for 2026.
+#   s. 101.151(3)(b): minor-party candidates next, then no-party (NPA)
+#     candidates, each "in the order as they were qualified".
+# Every office this parser carries is partisan. Nonpartisan seats (school
+# board, county charter offices) come from the county seeds in migrations,
+# never through here.
+#
+# Until 2026-10-05 the array was written sorted by candidate-ID string, which
+# put 17 of 25 contested partisan races out of ballot order (migration 0044).
+#
+# QUALIFYING ORDER is not in the DoE export (no qualifying date), so it cannot
+# be derived here. It comes from the official sample ballot and lives in the
+# database: 0044 set FL-GOV's five NPA candidates in the order the Orange
+# County composite sample ballot prints them, and FL-GOV was the only 2026
+# race that needed it. doe_file_intake keeps that stored order on a
+# re-ingest (see _keep_stored_qualifying_order); a race with nothing stored,
+# or a candidate new to it, falls back to candidate ID inside its rank.
+_PARTY_RANK = {"REP": 0, "DEM": 1}
+_MINOR_PARTY_RANK = 2
+_NO_PARTY_RANK = 3
+_NOT_A_PARTY = frozenset({"", "NOP", _WRITE_IN_PARTY})
+
+
+def _party_rank(party_code: str | None) -> int:
+    """Where a party's candidate sits on a partisan general ballot. A blank
+    code in a partisan race is read as no party and ranked with NPA."""
+    code = (party_code or "").strip().upper()
+    if code in _PARTY_RANK:
+        return _PARTY_RANK[code]
+    if code == "NPA" or code in _NOT_A_PARTY:
+        return _NO_PARTY_RANK
+    return _MINOR_PARTY_RANK
+
+
+def _ballot_order(candidate_ids: Sequence[str], party_of: Mapping[str, str],
+                  stored: Sequence[str] = ()) -> list[str]:
+    """candidate_ids in ballot order: party rank, then position in the race's
+    stored candidate_ids (the qualifying order), then candidate ID. The party
+    rule always decides first, so a stored array with the Democrat first
+    still comes out Republican first. Deterministic and deduplicated."""
+    position = {cid: i for i, cid in enumerate(stored)}
+    return sorted(set(candidate_ids), key=lambda cid: (
+        _party_rank(party_of.get(cid)), position.get(cid, len(position)), cid))
+
+
+def _needs_qualifying_order(candidate_ids: Sequence[str],
+                            party_of: Mapping[str, str]) -> bool:
+    """True when two candidates share a party rank (in practice: two minor-
+    party or two NPA candidates), the one case the statute orders by
+    qualifying time rather than by party."""
+    ranks = [_party_rank(party_of.get(cid)) for cid in set(candidate_ids)]
+    return len(ranks) != len(set(ranks))
+
+
+def _keep_stored_qualifying_order(parsed: Mapping[str, Any],
+                                  store: Store) -> None:
+    """Put every parsed race's candidate_ids in ballot order, in place, before
+    they are written.
+
+    Only a race where two candidates share a party rank is read back
+    (store.read("race")), because only there does the stored array carry
+    something the DoE file cannot: the qualifying order from the official
+    sample ballot. Every other race is ordered by party alone and costs no
+    query, so a run that touches no such race issues the same statements as
+    before. Raises if the read fails; the caller rolls back, since the read
+    shares the store's one connection with the upserts that follow."""
+    party_of = {c["candidate_id"]: c.get("party") or ""
+                for c in parsed["candidates"]}
+    for race in parsed["races"].values():
+        stored: Sequence[str] = ()
+        if _needs_qualifying_order(race["candidate_ids"], party_of):
+            rows = store.read("race", {"race_id": race["race_id"]}, ())
+            stored = (rows[0].get("candidate_ids") or ()) if rows else ()
+        race["candidate_ids"] = _ballot_order(race["candidate_ids"], party_of,
+                                              stored)
+
 # --- T2 FEC named endpoint catalog (read-only) ----------------------------
 FEC_BASE = "https://api.open.fec.gov/v1"
 _FEC_ENDPOINTS = {
@@ -342,6 +425,12 @@ def parse_candidate_list(text: str) -> dict:
             race["candidate_ids"].append(candidate_id)
 
     for race in races.values():  # stable order -> idempotent arrays
+        # A canonical SET, sorted by ID so the parse is deterministic. This is
+        # NOT the order written to race.candidate_ids: doe_file_intake puts it
+        # in ballot order first (_ballot_order), because the qualifying order
+        # inside a party rank needs the race's stored array, which this pure
+        # parser cannot read. Writing this ID order as-is is how 17 of 25
+        # contested races reached the site out of ballot order (0044).
         race["candidate_ids"] = sorted(set(race["candidate_ids"]))
     return {"races": races, "candidates": candidates, "skipped": skipped,
             "skipped_detail": skipped_detail,
@@ -909,6 +998,16 @@ def build_intake_handlers(
             parsed = parse_candidate_list(text)
         except DoEFormatError as err:
             return {"ok": False, "error": errors.UPSTREAM_FAILED, "reasons": [str(err)]}
+        # Ballot order, not ID order, is what reaches race.candidate_ids. A
+        # failed read here leaves the shared transaction aborted, so it fails
+        # the call the way a failed upsert does, before anything is written.
+        try:
+            _keep_stored_qualifying_order(parsed, store)
+        except Exception as err:  # noqa: BLE001
+            store.rollback()
+            return {"ok": False, "error": errors.UPSTREAM_FAILED,
+                    "reasons": [f"stored ballot order read failed "
+                                f"({type(err).__name__})"]}
         try:
             for race in parsed["races"].values():
                 store.upsert_race(race)

@@ -1,4 +1,4 @@
-import { orderCandidates } from "@/lib/briefs";
+import { orderCandidates } from "@/lib/ballot-order";
 import {
   isPolicyAreaId,
   policyAreaIdsFor,
@@ -14,10 +14,11 @@ import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
 /* Browsable candidate directory across the four covered counties. RLS keeps
    this to races at `listed` or `published` (0033) — the roster is visible
-   before any brief is; within each race the fixed ballot-order rule applies,
-   and races sort by a neutral office ordering (statewide first, then
-   districts by number, then each county's own races) — never by anything
-   editorial.
+   before any brief is; within each race the fixed ballot-order rule applies
+   (ballot-order.ts, the same function the race page uses, so a name search
+   keeps the race's own order), and races sort by a neutral office ordering
+   (statewide first, then districts by number, then each county's own
+   races) — never by anything editorial.
 
    Candidate -> race comes from `race.candidate_ids`, not from `profile`:
    profiles exist only for published races (they are brief content, gated on
