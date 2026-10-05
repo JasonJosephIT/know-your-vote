@@ -23,7 +23,8 @@
 import type { PublicationStatus } from "@/types/app";
 
 /** The two tiers a voter can see. `listed` shows the verbatim ballot text
-    only; `published` adds the sourced case for and against. */
+    and the neutral resources (0041); `published` adds the sourced case for
+    and against. */
 export type MeasureVisibleStatus = Extract<
   PublicationStatus,
   "listed" | "published"

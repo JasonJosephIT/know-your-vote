@@ -38,9 +38,9 @@ check("page never renders sided columns outside the published brief", !/brief\s*
    page is where skeptics read the rule. */
 const methodology = read("src/app/(public)/methodology/page.tsx").replace(/\s+/g, " ");
 check(
-  "methodology says a held question shows the ballot text plus neutral sources, not the text alone",
+  "methodology says a held question shows the ballot text plus sources that take no side, not the text alone",
   !/ballot text alone/.test(methodology) &&
-    /Until then its page shows the ballot text and any official documents, research and reporting, but no positions or commentary from either side\./.test(methodology),
+    /Until then its page shows the ballot text and any official documents, research and reporting that take no side, but nothing that argues for either side\./.test(methodology),
   methodology.match(/A ballot question is published only[^.]*\.[^.]*\./)?.[0] ?? "sentence not found"
 );
 const flatPage = page.replace(/\s+/g, " ");

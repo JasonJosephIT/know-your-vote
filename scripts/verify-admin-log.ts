@@ -1,13 +1,14 @@
 /* The operator Log page renders every admin_action row production holds
    (launch fixes, 2026-10-05).
 
-   The page printed subject_id.slice(0, 8) unguarded. Publication flips
-   (set_race_publication, 0018/0033; the measure flips in 0038/0040) store
-   their subject in subject_ref with subject_id NULL, so the first such row
-   threw and the page never loaded. On 2026-10-05 all 170 production rows
-   were flips. These are their shapes, from a read-only GROUP BY that day:
-   list/publish/unpublish/set_status/note on race_publication, list/publish
-   on measure_publication.
+   The page printed subject_id.slice(0, 8) unguarded. Publication changes
+   (set_race_publication, 0018/0033; the measure flips in 0038/0040 and
+   scripts/list-ballot-2026.sql) store their subject in subject_ref with
+   subject_id NULL, so the first such row threw and the page never loaded.
+   On 2026-10-05 all 170 production rows had that shape: 169 flips and one
+   'note' row inserted by hand as a correction. These are their shapes, from
+   a read-only GROUP BY that day: list/publish/unpublish/set_status/note on
+   race_publication, list/publish on measure_publication.
 
    Run: node scripts/verify-admin-log.ts */
 
@@ -28,7 +29,8 @@ const PRODUCTION_SHAPES = [
   { action: "publish", subject_kind: "race_publication", subject_ref: "FL-27-general" },
   { action: "unpublish", subject_kind: "race_publication", subject_ref: "demo-fl-house-28" },
   { action: "set_status", subject_kind: "race_publication", subject_ref: "FL-DAD-SB1-general" },
-  { action: "note", subject_kind: "race_publication", subject_ref: "FL-AGR-general" },
+  /* The hand-written correction: its subject_ref is free text, not an id. */
+  { action: "note", subject_kind: "race_publication", subject_ref: "demo-* (9 races)" },
   { action: "list", subject_kind: "measure_publication", subject_ref: "FL-AM1-general" },
   { action: "publish", subject_kind: "measure_publication", subject_ref: "FL-AM3-general" },
 ];

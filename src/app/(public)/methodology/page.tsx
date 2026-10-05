@@ -872,8 +872,8 @@ export default async function MethodologyPage() {
           commentary are shown under the side they argue for, in two columns of
           equal size. A ballot question is published only when both sides are
           represented. Until then its page shows the ballot text and any
-          official documents, research and reporting, but no positions or
-          commentary from either side.
+          official documents, research and reporting that take no side, but
+          nothing that argues for either side.
         </p>
       </section>
 
