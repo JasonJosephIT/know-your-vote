@@ -86,7 +86,7 @@
           "start_url": "https://supabase.com/dashboard/project/pqracitpmzpiqfnzlngw/sql/new",
           "subgoal": "Run the SELECT and read the counts.",
           "sql": "SELECT count(*) FILTER (WHERE county_fips IS NOT NULL) AS county_rows, count(*) FILTER (WHERE county_fips IS NOT NULL AND verified_by IS NOT NULL) AS county_rows_verified FROM election_event WHERE election = 'general_2026';",
-          "expected_result": "county_rows = 8. county_rows_verified is 8 if the founder has done handoff task 1 (the stamp), else 0.",
+          "expected_result": "county_rows = 8 and county_rows_verified = 8: the founder stamped them on 2026-10-05. If county_rows_verified is not 8, report it to the founder; the stamp has been changed since.",
           "record_as": "county_dates_live",
           "branch": "county_dates_live = (county_rows_verified = 8). Several expected results below differ on it."
         }

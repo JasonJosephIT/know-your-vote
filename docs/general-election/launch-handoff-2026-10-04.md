@@ -28,7 +28,7 @@ The live database was checked directly on 2026-10-04 at about 18:40 UTC. Where a
 | ---- | ---- | ------ |
 | 2026-10-05 (Mon) | Voter registration deadline | `verified_by` set |
 | 2026-10-22 | Vote-by-mail request deadline | `verified_by` set |
-| 2026-10-24 to 10-31 | Early voting (statewide minimum; **2026-10-19 to 11-01 in all four covered counties**, found 2026-10-05, migration 0043) | `verified_by` set (statewide rows); 0043's county rows await the founder's stamp |
+| 2026-10-24 to 10-31 | Early voting (statewide minimum; **2026-10-19 to 11-01 in all four covered counties**, found 2026-10-05, migration 0043) | `verified_by` set (statewide rows; 0043's county rows since 2026-10-05) |
 | 2026-11-03 | Election Day, and the deadline for mail ballots to be received | `verified_by` set |
 
 All six `general_2026` rows in `election_event` are verified, `ballot_return_deadline` included. Some older docs (`sessions/README.md`) still say that deadline is unverified. They are stale.

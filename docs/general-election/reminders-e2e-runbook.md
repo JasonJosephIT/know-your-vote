@@ -183,7 +183,7 @@ Subscribe one address you read and leave it subscribed through Nov 3, so you rec
 
 ## County early-voting dates (0043)
 
-**Apply and stamp by Sunday 2026-10-18. Sooner is better:** until then the banner, the welcome email and the calendar file show early voting as Oct 24 to Oct 31 to voters in counties that open on Oct 19.
+**Done 2026-10-05: applied, then stamped at 15:54 UTC.** The banner, the welcome email, the calendar file and the reminders now give each covered county its own window.
 
 Florida's statewide window (Sat Oct 24 to Sat Oct 31) is the minimum every county must offer. A Supervisor of Elections may add the 15th to 11th days before the election and the 2nd (s. 101.657(1)(d), Fla. Stat.), and all four covered counties add every one of them. Each county's own site, checked twice on 2026-10-05, says early voting for the Nov 3 general runs **Monday Oct 19 to Sunday Nov 1**:
 
@@ -197,7 +197,7 @@ Florida's statewide window (Sat Oct 24 to Sat Oct 31) is the minimum every count
 `supabase/migrations/0043_county_early_voting_2026.sql` adds one `early_voting_start` (Oct 19) and one `early_voting_end` (Nov 1) row per county, with `verified_by` NULL. As with every `election_event` row, an unverified row reaches no page, email or calendar.
 
 1. ~~Run the file in the Supabase SQL editor.~~ **Done 2026-10-05:** applied to production with the founder's approval; the 8 rows are in, unverified. It is idempotent (`ON CONFLICT DO NOTHING`), so running it again changes nothing. It doesn't depend on 0042 or 0014, and those don't depend on it.
-2. Open each `details_url` above and check the dates. Then stamp the rows:
+2. ~~Open each `details_url` above and check the dates. Then stamp the rows.~~ **Done 2026-10-05 15:54 UTC** with the founder's approval: `UPDATE 8`. Just before it, the Miami-Dade, Broward and Orange pages were read again and matched. Hillsborough's site blocked the cloud session (Cloudflare 403), so its stamp rests on two direct reads earlier that day, the county's own news post and Fox 13 Tampa Bay (Oct 1); the founder's browser check is `cowork-handoff-2026-10-05.md` task 1. The SQL, for reference:
 
    ```sql
    UPDATE election_event

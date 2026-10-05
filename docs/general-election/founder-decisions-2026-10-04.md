@@ -24,18 +24,17 @@ Voter registration closes 10-05.
 2. **#107: merged 2026-10-05.**
    - The news cron writes each "Race published" item once and never updates it. Before #107 it said every candidate got "equal space and comparable scrutiny", which the Balance Audit does not enforce at 150%. #107 corrects that wording.
    - It also makes the banner move on from "Register by October 5" once 10-05 ends in Florida.
-3. **Early voting opens Mon Oct 19 in all four covered counties, not Sat Oct 24.** Migration `0043_county_early_voting_2026.sql` was **applied 2026-10-05** with your approval; stamp its 8 rows **by Sun 10-18, ideally now** (`cowork-handoff-2026-10-05.md` task 1). The SQL is in `reminders-e2e-runbook.md`, "County early-voting dates (0043)".
+3. **Early voting opens Mon Oct 19 in all four covered counties, not Sat Oct 24.** Migration `0043_county_early_voting_2026.sql` was **applied and stamped 2026-10-05** with your approval. One check is left: open Hillsborough's page in your browser (`cowork-handoff-2026-10-05.md` task 1), because its site blocked the cloud session on the day of the stamp.
    - Each county's Supervisor of Elections says early voting runs Oct 19 to Nov 1. Two agents checked each county's official page independently on 2026-10-05. The site only knew the statewide minimum, Oct 24 to Oct 31.
    - Without 0043, every subscriber gets "Early voting starts today" on Oct 24, five days after their county opened. Until then, the banner and the welcome email give the statewide window.
    - The code that reads the county rows is PR #112, and it works with or without them.
    - The end-to-end test deadline moves up with it: the first real send is now Oct 19, so finish it by **Sun 10-18**.
-   - **A late stamp drops that reminder.** Stamped on Oct 19 after 14:00 UTC, trigger the cron by hand that day. Stamped Oct 20 or later, no subscriber gets an early-voting reminder (the runbook explains why). The banner, the welcome email and the calendar are still fixed, so stamp anyway.
 4. **Change the Spacemail passwords for info@knowyour.vote (hello@ until 2026-10-05) and admin@knowyour.vote**, each to a different one. They shared the password that was pasted into the session chat. No agent used it or wrote it anywhere.
 
 ## This week
 
 - **Run the reminder end-to-end test** (`reminders-e2e-runbook.md` step 4), no later than **Sun 10-18** (was Tue 10-20 before the county dates, item 3 above).
-  - The next real send is the county early-voting reminder at 14:00 UTC on **Mon Oct 19**, once 0043 is stamped. Without it, the next send is the vote-by-mail reminder on Oct 21.
+  - The next real send is the county early-voting reminder at 14:00 UTC on **Mon Oct 19** (0043 was stamped on 2026-10-05).
   - A reminder sends only on its exact day, so a missed run loses it.
   - Rehearsal mode (step 4c) lets you test the full send path before then.
 - **Mail plumbing:**
