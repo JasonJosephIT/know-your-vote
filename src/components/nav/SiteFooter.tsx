@@ -9,7 +9,8 @@ import { usePathname } from "next/navigation";
    landing page and a few brief footers.
 
    RECOMMENDED (pending founder confirmation), founder decision 1: the
-   disclaimer wording and the three links. To change the wording, edit
+   disclaimer wording and the Methodology, Privacy and Terms links (About
+   came later, with the /about page). To change the wording, edit
    FOOTER_DISCLAIMER; to drop or add a link (for example /terms, if the founder
    decides against a terms page), edit FOOTER_LINKS. Nothing else reads them.
 
@@ -21,6 +22,7 @@ const FOOTER_DISCLAIMER =
   "Independent and nonpartisan. Not affiliated with any candidate, party or government agency. No endorsements.";
 
 const FOOTER_LINKS: readonly { href: string; label: string }[] = [
+  { href: "/about", label: "About" },
   { href: "/methodology", label: "Methodology" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms of use" },
