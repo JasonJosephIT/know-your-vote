@@ -8,6 +8,8 @@
      1b. The `rule` column (0021) reaches the voter: a received-by event
         says a postmark does not count, a postmarked-by event does not,
         and a rule-less event carries neither.
+     1c. A county's own early-voting rows (0043) name the county; a
+        statewide row still says "statewide window".
      2. Zero events -> a valid, empty VCALENDAR (the "nothing verified yet"
         response body).
      3. Unknown election ids never reach the builder — the route 404s them —
@@ -125,6 +127,47 @@ check(
   "rule-less event carries no rule sentence",
   dayBlock !== "" && /DESCRIPTION:Official source:/.test(dayBlock),
   dayBlock
+);
+
+/* (1c) A county's own early-voting rows (0043) say whose window they are;
+   a statewide row keeps "(statewide window)". */
+const county = buildElectionCalendar("general_2026", [
+  {
+    id: "44444444-4444-4444-4444-444444444444",
+    county_fips: "12086",
+    event_type: "early_voting_start" as const,
+    election: "general_2026",
+    event_date: "2026-10-19",
+    rule: null,
+    details_url: "https://www.miamidade.gov/elections/library/early-voting/2026-11-03-general-election-early-voting-schedule.pdf",
+  },
+  {
+    id: "55555555-5555-5555-5555-555555555555",
+    county_fips: "12095",
+    event_type: "early_voting_end" as const,
+    election: "general_2026",
+    event_date: "2026-11-01",
+    rule: null,
+    details_url: "https://voteorangefl.gov/vote-early/",
+  },
+  {
+    id: "66666666-6666-6666-6666-666666666666",
+    county_fips: null,
+    event_type: "early_voting_start" as const,
+    election: "general_2026",
+    event_date: "2026-10-24",
+    rule: null,
+    details_url: "https://dos.fl.gov/elections/for-voters/election-dates/",
+  },
+]);
+check(
+  "a county row names its county; a statewide row keeps the statewide label",
+  county.includes("SUMMARY:Early voting begins in Miami-Dade County — ") &&
+    county.includes("DTSTART;VALUE=DATE:20261019") &&
+    county.includes("SUMMARY:Early voting ends in Orange County — ") &&
+    county.includes("DTEND;VALUE=DATE:20261102") &&
+    county.includes("SUMMARY:Early voting begins (statewide window) — "),
+  county
 );
 
 const empty = buildElectionCalendar("general_2026", []);

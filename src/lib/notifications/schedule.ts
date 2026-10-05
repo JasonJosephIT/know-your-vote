@@ -91,12 +91,70 @@ export function dueReminders(
           template_id: rule.template_id,
           channel: rule.channel,
           offset_days: rule.offset_days,
-          dedupe_key: `${event.election}:${event.event_type}:T-${rule.offset_days}:${rule.channel}`,
+          /* A county row's reminder is its own send, claimed separately:
+             the statewide key stays exactly what it was, so a key already
+             in notification_send_log still matches. */
+          dedupe_key: `${event.election}:${event.event_type}:T-${rule.offset_days}:${rule.channel}${event.county_fips ? `:${event.county_fips}` : ""}`,
         });
       }
     }
   }
   return due;
+}
+
+/* The dates that apply to voters in one county (0043): the county's own
+   row for an event type where it has one, the statewide row otherwise.
+   countyFips null — a voter whose county is unknown, or a county with no
+   rows of its own — gets the statewide rows alone.
+
+   Why: Florida's statewide early-voting window (Oct 24 to Oct 31) is the
+   minimum every county must offer (s. 101.657(1)(d), Fla. Stat.). All four
+   covered counties also open Oct 19 to 23 and Nov 1, so for their voters
+   the statewide rows were wrong twice: "Early voting starts today" would
+   have reached them on Oct 24, five days late, and the banner would have
+   said early voting "starts October 24" while it was already open. */
+export function eventsForCounty(
+  events: ElectionEvent[],
+  countyFips: string | null
+): ElectionEvent[] {
+  const own = countyFips ? events.filter((e) => e.county_fips === countyFips) : [];
+  const replaced = new Set(own.map((e) => `${e.election}:${e.event_type}`));
+  return [
+    ...events.filter(
+      (e) => !e.county_fips && !replaced.has(`${e.election}:${e.event_type}`)
+    ),
+    ...own,
+  ].sort((a, b) => a.event_date.localeCompare(b.event_date));
+}
+
+/* The counties that have rows of their own. Every other county, and a
+   voter whose county is unknown, reads the statewide rows. */
+export function countiesWithOwnDates(events: ElectionEvent[]): string[] {
+  return [
+    ...new Set(events.flatMap((e) => (e.county_fips ? [e.county_fips] : []))),
+  ].sort();
+}
+
+/* Today's reminders for the cron, each with the scopes whose subscribers
+   get it. A scope is a county with rows of its own, or null for everyone
+   else (statewide). A statewide row's reminder goes to every scope that
+   has no row of its own for that date; a county row's reminder only to its
+   county. So on Oct 24 the statewide "Early voting starts today" goes to
+   the null scope only, and to nobody at all while every subscriber's
+   county has its own Oct 19 row. */
+export function dueRemindersByScope(
+  events: ElectionEvent[],
+  today: string
+): { reminder: DueReminder; scopes: (string | null)[] }[] {
+  const byKey = new Map<string, { reminder: DueReminder; scopes: (string | null)[] }>();
+  for (const scope of [null, ...countiesWithOwnDates(events)]) {
+    for (const reminder of dueReminders(eventsForCounty(events, scope), today)) {
+      const entry = byKey.get(reminder.dedupe_key) ?? { reminder, scopes: [] };
+      entry.scopes.push(scope);
+      byKey.set(reminder.dedupe_key, entry);
+    }
+  }
+  return [...byKey.values()];
 }
 
 /* The next reminder the schedule will send, on or after today: the first

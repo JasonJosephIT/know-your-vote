@@ -4,15 +4,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { emailSenderConfigured, remindersPaused } from "@/lib/notifications/config";
 import {
-  verifiedStatewideEvents,
+  verifiedElectionEvents,
   type ElectionEvent,
 } from "@/lib/notifications/election-events";
 import {
-  dueReminders,
+  countiesWithOwnDates,
+  dueRemindersByScope,
   easternToday,
+  eventsForCounty,
   nextReminder,
 } from "@/lib/notifications/schedule";
-import { renderTemplate, type Rendered } from "@/lib/notifications/templates";
+import {
+  reminderParams,
+  renderTemplate,
+  type Rendered,
+} from "@/lib/notifications/templates";
 import { secretEquals } from "@/lib/secret-compare";
 import { resendApiKey } from "@/lib/server-keys";
 import { createServiceClient } from "@/lib/supabase/service";
@@ -23,6 +29,11 @@ import { createServiceClient } from "@/lib/supabase/service";
    NOTHING is the idempotency — §6-H: no outbox, no drain), expand the
    cohort from voting_info_subscription, render the registry template, and
    send via Resend in batches of 100.
+
+   County dates (0043): a county with rows of its own gets reminders on its
+   own dates, under its own dedupe key, and the statewide reminder for that
+   date skips its subscribers (dueRemindersByScope). A subscriber's county
+   comes from their ZIP (zip_district), the same map the signup used.
 
    Failure semantics follow the design doc §7: a failed send DELETES its
    claim so a manual re-run retries it — some recipients may get a
@@ -111,7 +122,7 @@ async function run(request: NextRequest) {
   /* Florida's calendar day, not UTC's (easternToday explains the manual
      re-run that UTC got wrong). At the scheduled 14:00 UTC the two agree. */
   const today = easternToday();
-  const events = await verifiedStatewideEvents(service);
+  const events = await verifiedElectionEvents(service);
   const origin = request.nextUrl.origin;
 
   /* ---- REHEARSAL (launch handoff §2.2) ---------------------------------
@@ -128,17 +139,79 @@ async function run(request: NextRequest) {
   }
   /* ---- end REHEARSAL --------------------------------------------------- */
 
-  const due = dueReminders(events, today);
+  const due = dueRemindersByScope(events, today);
   if (due.length === 0) {
     return NextResponse.json({ due: 0, sent: [], skipped: [] });
+  }
+
+  /* The cohort is read once, before anything is claimed, so a failed read
+     leaves nothing to release. */
+  const { count, error: countError } = await service
+    .from("voting_info_subscription")
+    .select("email", { count: "exact", head: true })
+    .eq("active", true);
+  if (countError || count === null) {
+    return NextResponse.json(
+      { error: "Cohort count failed — nothing claimed, nothing sent.", sent: [] },
+      { status: 502 }
+    );
+  }
+  const subscriberCount = count;
+  if (count > COHORT_FUSE) {
+    Sentry.captureException(
+      new Error(`send-reminders fuse: cohort ${count} > ${COHORT_FUSE}`)
+    );
+    return NextResponse.json(
+      { error: "Cohort size fuse tripped — nothing sent.", sent: [] },
+      { status: 500 }
+    );
+  }
+
+  let cohort: Subscriber[];
+  try {
+    cohort = await activeSubscribers(service, count, countiesWithOwnDates(events));
+  } catch {
+    return NextResponse.json(
+      { error: "Cohort read failed — nothing claimed, nothing sent.", sent: [] },
+      { status: 502 }
+    );
   }
 
   const resend = new Resend(resendApiKey());
   const sent: { dedupe_key: string; recipients: number }[] = [];
   const skipped: string[] = [];
-  let subscriberCount: number | null = null;
+  /* Due today but no subscriber is in its scope — the statewide early
+     voting reminder while every subscriber's county has its own date. Not
+     claimed, so nothing is recorded as sent. */
+  const noRecipients: string[] = [];
+  /* Paces every batch call in the run, not just within one reminder: on
+     Oct 19 each county's early-voting reminder is its own send, so one run
+     makes several calls back to back. */
+  let batchCalls = 0;
 
-  for (const { event, template_id, dedupe_key: dedupeKey } of due) {
+  for (const { reminder, scopes } of due) {
+    const { event, template_id, dedupe_key: dedupeKey } = reminder;
+
+    /* One reminder per address, not per subscription. Rows are unique on
+       (email, zip5), so a voter who signed up from two ZIPs holds two rows.
+       The first row in token order is the one mailed, and its unsubscribe
+       link is the one the voter sees. Lower-cased because rows stored
+       before the signup route lower-cased addresses may differ only in
+       case. A voter subscribed from ZIPs in two counties with dates of
+       their own gets each county's reminder, each naming its county. */
+    const mailed = new Set<string>();
+    const recipients = cohort.filter((sub) => {
+      if (!scopes.includes(sub.scope)) return false;
+      const address = sub.email.toLowerCase();
+      if (mailed.has(address)) return false;
+      mailed.add(address);
+      return true;
+    });
+    if (recipients.length === 0) {
+      noRecipients.push(dedupeKey);
+      continue;
+    }
+
     /* Claim. ignoreDuplicates makes this INSERT ... ON CONFLICT DO NOTHING;
        an empty result means another run already owns this send. */
     const { data: claimed, error: claimError } = await service
@@ -162,76 +235,25 @@ async function run(request: NextRequest) {
     const releaseClaim = () =>
       service.from("notification_send_log").delete().eq("dedupe_key", dedupeKey);
 
-    const { count, error: countError } = await service
-      .from("voting_info_subscription")
-      .select("email", { count: "exact", head: true })
-      .eq("active", true);
-    if (countError || count === null) {
-      await releaseClaim();
-      return NextResponse.json(
-        { error: "Cohort count failed — claim released, nothing sent.", sent },
-        { status: 502 }
-      );
-    }
-    subscriberCount = count;
-    if (count > COHORT_FUSE) {
-      await releaseClaim();
-      Sentry.captureException(
-        new Error(`send-reminders fuse: cohort ${count} > ${COHORT_FUSE}`)
-      );
-      return NextResponse.json(
-        { error: "Cohort size fuse tripped — nothing sent.", sent },
-        { status: 500 }
-      );
-    }
+    const rendered = renderTemplate(template_id, reminderParams(event));
 
-    const rendered = renderTemplate(template_id, {
-      election: event.election,
-      date: event.event_date,
-      details_url: event.details_url,
-    });
-
-    let recipients = 0;
-    let batches = 0;
-    /* One reminder per address, not per subscription. Rows are unique on
-       (email, zip5), so a voter who signed up from two ZIPs holds two rows,
-       and reminders are statewide, the same for every ZIP. The first row
-       in token order is the one mailed, and its unsubscribe link is the
-       one the voter sees. Lower-cased because rows stored before the
-       signup route lower-cased addresses may differ only in case. */
-    const mailed = new Set<string>();
+    let delivered = 0;
     try {
-      for (let from = 0; from < count; from += PAGE_SIZE) {
-        const { data: page, error: pageError } = await service
-          .from("voting_info_subscription")
-          .select("email, unsubscribe_token")
-          .eq("active", true)
-          .order("unsubscribe_token")
-          .range(from, from + PAGE_SIZE - 1);
-        if (pageError) throw new Error(pageError.message);
-
-        const fresh = (page ?? []).filter((sub) => {
-          const address = sub.email.toLowerCase();
-          if (mailed.has(address)) return false;
-          mailed.add(address);
-          return true;
-        });
-        for (let i = 0; i < fresh.length; i += BATCH_SIZE) {
-          const chunk = fresh.slice(i, i + BATCH_SIZE);
-          if (batches++ > 0) {
-            await new Promise((r) => setTimeout(r, BATCH_PACING_MS));
-          }
-          const { error: sendError } = await resend.batch.send(
-            chunk.map((sub) => ({
-              from: process.env.EMAIL_FROM!,
-              to: sub.email,
-              subject: rendered.subject ?? rendered.title,
-              text: reminderText(rendered, origin, sub.unsubscribe_token),
-            }))
-          );
-          if (sendError) throw new Error(sendError.message);
-          recipients += chunk.length;
+      for (let i = 0; i < recipients.length; i += BATCH_SIZE) {
+        const chunk = recipients.slice(i, i + BATCH_SIZE);
+        if (batchCalls++ > 0) {
+          await new Promise((r) => setTimeout(r, BATCH_PACING_MS));
         }
+        const { error: sendError } = await resend.batch.send(
+          chunk.map((sub) => ({
+            from: process.env.EMAIL_FROM!,
+            to: sub.email,
+            subject: rendered.subject ?? rendered.title,
+            text: reminderText(rendered, origin, sub.unsubscribe_token),
+          }))
+        );
+        if (sendError) throw new Error(sendError.message);
+        delivered += chunk.length;
       }
     } catch (err) {
       /* Retry-forward: release the claim so a manual re-run retries this
@@ -241,7 +263,7 @@ async function run(request: NextRequest) {
       Sentry.captureException(err);
       return NextResponse.json(
         {
-          error: `Send failed for ${dedupeKey} after ${recipients} recipients — claim released for manual re-run.`,
+          error: `Send failed for ${dedupeKey} after ${delivered} recipients — claim released for manual re-run.`,
           sent,
         },
         { status: 502 }
@@ -250,29 +272,35 @@ async function run(request: NextRequest) {
 
     await service
       .from("notification_send_log")
-      .update({ recipient_count: recipients })
+      .update({ recipient_count: delivered })
       .eq("dedupe_key", dedupeKey);
-    sent.push({ dedupe_key: dedupeKey, recipients });
+    sent.push({ dedupe_key: dedupeKey, recipients: delivered });
   }
 
-  /* Founder digest (plan A9): only on days something actually went out —
-     zero-activity days send nothing at all. Best-effort: a digest failure
-     never fails a run that already delivered reminders. */
-  if (sent.length > 0) {
+  /* Founder digest (plan A9): only on days something was due — zero-activity
+     days send nothing at all. A due reminder that reached no one is
+     reported too: before the county rows it was claimed and logged with 0
+     recipients, and the digest said so. It now goes unclaimed, and this is
+     where the founder still sees it — including the case where 0043 was
+     stamped after Oct 19 and the Oct 24 statewide reminder no longer
+     covers any subscriber. Best-effort: a digest failure never fails a run
+     that already delivered reminders. */
+  if (sent.length > 0 || noRecipients.length > 0) {
     try {
       await resend.emails.send({
         from: process.env.EMAIL_FROM!,
         to: process.env.EMAIL_FROM!,
         subject: `Know Your Vote reminders digest — ${today}`,
         text: [
-          "Reminders sent today:",
+          sent.length > 0 ? "Reminders sent today:" : "No reminder was sent today.",
           ...sent.map((s) => `  ${s.dedupe_key} -> ${s.recipients} recipients`),
           skipped.length > 0
             ? `Skipped (already sent): ${skipped.join(", ")}`
             : "",
-          subscriberCount !== null
-            ? `Active subscriptions (one per address and ZIP): ${subscriberCount}`
+          noRecipients.length > 0
+            ? `Due today but sent to no one (no active subscriber in its scope): ${noRecipients.join(", ")}`
             : "",
+          `Active subscriptions (one per address and ZIP): ${subscriberCount}`,
         ]
           .filter(Boolean)
           .join("\n"),
@@ -282,7 +310,66 @@ async function run(request: NextRequest) {
     }
   }
 
-  return NextResponse.json({ due: due.length, sent, skipped });
+  return NextResponse.json({ due: due.length, sent, skipped, noRecipients });
+}
+
+type Subscriber = {
+  email: string;
+  unsubscribe_token: string;
+  /* The county whose dates this subscriber gets: their ZIP's county when it
+     has rows of its own, otherwise null, the statewide scope. */
+  scope: string | null;
+};
+
+/* Every active subscription, in token order, with its date scope. Paged
+   because PostgREST caps a read at 1000 rows. Throws on any read error:
+   the caller has claimed nothing yet, so it can simply stop. */
+async function activeSubscribers(
+  service: SupabaseClient,
+  count: number,
+  countyScopes: string[]
+): Promise<Subscriber[]> {
+  const rows: { email: string; unsubscribe_token: string; zip5: string }[] = [];
+  for (let from = 0; from < count; from += PAGE_SIZE) {
+    const { data: page, error } = await service
+      .from("voting_info_subscription")
+      .select("email, unsubscribe_token, zip5")
+      .eq("active", true)
+      .order("unsubscribe_token")
+      .range(from, from + PAGE_SIZE - 1);
+    if (error) throw new Error(error.message);
+    rows.push(...(page ?? []));
+  }
+  const countyOf = await zipCounties(service, rows.map((r) => r.zip5));
+  return rows.map((r) => {
+    const county = countyOf.get(r.zip5) ?? null;
+    return {
+      email: r.email,
+      unsubscribe_token: r.unsubscribe_token,
+      scope: county && countyScopes.includes(county) ? county : null,
+    };
+  });
+}
+
+/* ZIP -> county FIPS from zip_district, for the ZIPs given. Every ZIP in
+   the table sits in exactly one county (checked live 2026-10-05: 235 ZIPs,
+   none in two). A ZIP missing from the map reads as no county: statewide
+   dates. Throws on a read error. */
+async function zipCounties(
+  service: SupabaseClient,
+  zips: string[]
+): Promise<Map<string, string>> {
+  const unique = [...new Set(zips)];
+  const map = new Map<string, string>();
+  for (let i = 0; i < unique.length; i += 200) {
+    const { data, error } = await service
+      .from("zip_district")
+      .select("zip5, county_fips")
+      .in("zip5", unique.slice(i, i + 200));
+    if (error) throw new Error(error.message);
+    for (const row of data ?? []) map.set(row.zip5, row.county_fips);
+  }
+  return map;
 }
 
 /* The text every reminder carries. One function for the real send and the
@@ -345,19 +432,11 @@ async function rehearse(
   to: string,
   origin: string
 ) {
-  const next = nextReminder(events, today);
-  if (!next) {
-    return NextResponse.json(
-      { error: "No upcoming reminder to rehearse — nothing was sent." },
-      { status: 404 }
-    );
-  }
-
   /* Signups are stored lower-cased; the exact spelling is tried too, for
      any row saved before that. */
   const { data: subs, error: subError } = await service
     .from("voting_info_subscription")
-    .select("email, unsubscribe_token")
+    .select("email, unsubscribe_token, zip5")
     .in("email", [...new Set([to, to.toLowerCase()])])
     .eq("active", true)
     .limit(1);
@@ -378,6 +457,27 @@ async function rehearse(
     );
   }
 
+  /* The next reminder THIS subscriber will get: their county's dates when
+     it has its own (0043), the statewide ones otherwise — the same scope
+     the scheduled run gives them. */
+  let county: string | null;
+  try {
+    county = (await zipCounties(service, [sub.zip5])).get(sub.zip5) ?? null;
+  } catch {
+    return NextResponse.json(
+      { error: "ZIP lookup failed — nothing was sent." },
+      { status: 502 }
+    );
+  }
+  const scope = county && countiesWithOwnDates(events).includes(county) ? county : null;
+  const next = nextReminder(eventsForCounty(events, scope), today);
+  if (!next) {
+    return NextResponse.json(
+      { error: "No upcoming reminder to rehearse — nothing was sent." },
+      { status: 404 }
+    );
+  }
+
   const dedupeKey = `rehearsal:${next.reminder.dedupe_key}:${new Date().toISOString()}`;
   const { error: claimError } = await service
     .from("notification_send_log")
@@ -389,11 +489,10 @@ async function rehearse(
     );
   }
 
-  const rendered = renderTemplate(next.reminder.template_id, {
-    election: next.reminder.event.election,
-    date: next.reminder.event.event_date,
-    details_url: next.reminder.event.details_url,
-  });
+  const rendered = renderTemplate(
+    next.reminder.template_id,
+    reminderParams(next.reminder.event)
+  );
   const resend = new Resend(resendApiKey());
   const { error: sendError } = await resend.batch.send([
     {

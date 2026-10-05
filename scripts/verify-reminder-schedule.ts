@@ -37,6 +37,14 @@
         and late evening Eastern: it states the next date a voter can still
         act on, keeps a deadline through the end of its own Florida day,
         never states a passed date, and disappears after Election Day.
+     7. COUNTY DATES (0043). The four covered counties run early voting
+        Oct 19 to Nov 1, wider than the statewide Oct 24 to Oct 31. With
+        their rows verified: each county's subscribers get "Early voting
+        starts today" on Oct 19 under a county key, naming the county, and
+        never the statewide one on Oct 24; the reminders every scope shares
+        keep their statewide keys; the rehearsal, the welcome email and the
+        banner give a county voter the county's window; and before 0043 is
+        stamped, the cron's per-scope schedule is exactly the statewide one.
      6. DELIVERY GATE. emailDeliveryConfigured() is true only with a Resend
         key, EMAIL_FROM and a service-role key, each key under either name
         (src/lib/server-keys.ts: RESEND_API_KEY or RESEND,
@@ -57,15 +65,19 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ElectionEvent } from "../src/lib/notifications/election-events.ts";
+import { bannerLine } from "../src/lib/notifications/banner.ts";
 import {
   bannerDates,
   dueReminders,
+  dueRemindersByScope,
   easternToday,
+  eventsForCounty,
   isoDaysBefore,
   nextReminder,
   REMINDER_OFFSETS,
 } from "../src/lib/notifications/schedule.ts";
 import {
+  reminderParams,
   renderTemplate,
   welcomeEmail,
   type WelcomeEmailParams,
@@ -97,6 +109,27 @@ const EVENTS: ElectionEvent[] = [
   { id: "ret", event_type: "ballot_return_deadline", election: "general_2026", event_date: "2026-11-03", rule: "received_by", details_url: VBM },
   { id: "eday", event_type: "election_day", election: "general_2026", event_date: "2026-11-03", rule: null, details_url: DATES },
 ];
+
+/* 0043_county_early_voting_2026.sql, as the founder stamps it: each covered
+   county's own early-voting window, from its Supervisor of Elections. */
+const COUNTY_URL: Record<string, string> = {
+  "12086": "https://www.miamidade.gov/elections/library/early-voting/2026-11-03-general-election-early-voting-schedule.pdf",
+  "12011": "https://browardvotes.gov/voters/early-voting-ballot-return",
+  "12057": "https://www.votehillsborough.gov/EarlyVoting",
+  "12095": "https://voteorangefl.gov/vote-early/",
+};
+const COUNTY_NAME: Record<string, string> = {
+  "12086": "Miami-Dade",
+  "12011": "Broward",
+  "12057": "Hillsborough",
+  "12095": "Orange",
+};
+const COUNTIES = Object.keys(COUNTY_URL);
+const COUNTY_ROWS: ElectionEvent[] = COUNTIES.flatMap((fips) => [
+  { id: `evs-${fips}`, county_fips: fips, event_type: "early_voting_start" as const, election: "general_2026", event_date: "2026-10-19", rule: null, details_url: COUNTY_URL[fips] },
+  { id: `eve-${fips}`, county_fips: fips, event_type: "early_voting_end" as const, election: "general_2026", event_date: "2026-11-01", rule: null, details_url: COUNTY_URL[fips] },
+]);
+const ALL: ElectionEvent[] = [...EVENTS, ...COUNTY_ROWS];
 
 const FIRST_RUN = "2026-10-04";
 const LAST_RUN = "2026-11-04";
@@ -142,11 +175,7 @@ for (const day of RUN_DAYS) {
       continue;
     }
     ledger.add(r.dedupe_key);
-    const rendered = renderTemplate(r.template_id, {
-      election: r.event.election,
-      date: r.event.event_date,
-      details_url: r.event.details_url,
-    });
+    const rendered = renderTemplate(r.template_id, reminderParams(r.event));
     sent.push({
       day,
       template_id: r.template_id,
@@ -344,7 +373,7 @@ check(
 );
 check(
   "the cron mails each address once per reminder, across subscriptions and pages",
-  /const mailed = new Set<string>\(\);[\s\S]*mailed\.has\(address\)[\s\S]*fresh\.slice\(/.test(cronSource) &&
+  /const mailed = new Set<string>\(\);[\s\S]*mailed\.has\(address\)[\s\S]*recipients\.slice\(/.test(cronSource) &&
     /sub\.email\.toLowerCase\(\)/.test(cronSource)
 );
 
@@ -675,7 +704,8 @@ check(
 const home = source("src/app/(public)/page.tsx");
 check(
   "home page renders the signup card only behind reminderPromotionLive()",
-  /reminderPromotionLive\(\)/.test(home) && /\{promoteReminders && <ReminderSignupCta \/>\}/.test(home)
+  /reminderPromotionLive\(\)/.test(home) &&
+    /\{promoteReminders && <ReminderSignupCta countyFips=\{saved\?\.countyFips\} \/>\}/.test(home)
 );
 const votingInfo = source("src/components/features/VotingInfo.tsx");
 check(
@@ -694,6 +724,240 @@ const cta = source("src/components/features/ReminderSignupCta.tsx");
 check(
   "the home card does not claim the email contains the polling place",
   !/polling place comes first/i.test(cta) && /official link to look up your polling place/.test(cta)
+);
+
+/* ---- 7. county dates (0043) --------------------------------------------- */
+
+console.log("\n7. County early-voting dates (0043)");
+
+/* Before the founder stamps 0043 the live rows are statewide only, and the
+   cron's per-scope schedule must be exactly the statewide one it replaced:
+   same reminders, same keys, all to the statewide scope. */
+const scopeDrift: string[] = [];
+for (const day of RUN_DAYS) {
+  const plain = dueReminders(EVENTS, day).map((r) => r.dedupe_key);
+  const scoped = dueRemindersByScope(EVENTS, day);
+  const keys = scoped.map((g) => g.reminder.dedupe_key);
+  if (
+    JSON.stringify(plain) !== JSON.stringify(keys) ||
+    scoped.some((g) => g.scopes.length !== 1 || g.scopes[0] !== null)
+  ) {
+    scopeDrift.push(`${day}: ${plain.join(",")} vs ${keys.join(",")}`);
+  }
+}
+check(
+  "statewide rows only: the per-scope schedule is the statewide schedule, unchanged",
+  scopeDrift.length === 0,
+  scopeDrift.join("; ")
+);
+
+/* The daily walk again, with 0043's rows verified, through the function
+   the cron calls. Each scope's calendar is what its subscribers receive. */
+type ScopedSend = { day: string; template_id: string; dedupe_key: string; scopes: (string | null)[]; body: string; event_date: string };
+const countyLedger = new Set<string>();
+const countySends: ScopedSend[] = [];
+const countyRerun: string[] = [];
+for (const day of RUN_DAYS) {
+  for (const { reminder, scopes } of dueRemindersByScope(ALL, day)) {
+    if (countyLedger.has(reminder.dedupe_key)) continue;
+    countyLedger.add(reminder.dedupe_key);
+    countySends.push({
+      day,
+      template_id: reminder.template_id,
+      dedupe_key: reminder.dedupe_key,
+      scopes,
+      event_date: reminder.event.event_date,
+      body: renderTemplate(reminder.template_id, reminderParams(reminder.event)).body,
+    });
+  }
+  for (const { reminder } of dueRemindersByScope(ALL, easternToday(new Date(`${day}T20:00:00Z`)))) {
+    if (!countyLedger.has(reminder.dedupe_key)) countyRerun.push(`${day} ${reminder.dedupe_key}`);
+  }
+}
+const calendarOf = (scope: string | null) =>
+  countySends.filter((x) => x.scopes.includes(scope)).map((x) => `${x.day} ${x.template_id}`);
+
+check(
+  "statewide scope (a voter in no county with its own dates): the six statewide sends, early voting Oct 24",
+  JSON.stringify(calendarOf(null)) === JSON.stringify(EXPECTED),
+  calendarOf(null).join(", ")
+);
+const EXPECTED_COUNTY = [
+  "2026-10-04 reg_deadline_t1",
+  "2026-10-19 early_voting_start",
+  "2026-10-21 vbm_deadline_t1",
+  "2026-10-27 ballot_return_t7",
+  "2026-11-02 ballot_return_t1",
+  "2026-11-03 election_day",
+];
+for (const fips of COUNTIES) {
+  check(
+    `${COUNTY_NAME[fips]}: early voting on Oct 19, never the statewide Oct 24 reminder`,
+    JSON.stringify(calendarOf(fips)) === JSON.stringify(EXPECTED_COUNTY),
+    calendarOf(fips).join(", ")
+  );
+}
+const statewideEarly = countySends.find(
+  (x) => x.template_id === "early_voting_start" && x.event_date === "2026-10-24"
+);
+check(
+  "the statewide Oct 24 reminder goes to the statewide scope alone",
+  !!statewideEarly && JSON.stringify(statewideEarly.scopes) === JSON.stringify([null]),
+  JSON.stringify(statewideEarly?.scopes)
+);
+const countyEarly = countySends.filter(
+  (x) => x.template_id === "early_voting_start" && x.event_date === "2026-10-19"
+);
+check(
+  "each county's Oct 19 reminder is its own send, keyed by county, to that county only",
+  countyEarly.length === COUNTIES.length &&
+    COUNTIES.every((fips) =>
+      countyEarly.some(
+        (x) =>
+          x.dedupe_key === `general_2026:early_voting_start:T-0:email:${fips}` &&
+          JSON.stringify(x.scopes) === JSON.stringify([fips])
+      )
+    ),
+  countyEarly.map((x) => `${x.dedupe_key} -> ${JSON.stringify(x.scopes)}`).join("; ")
+);
+const shared = countySends.filter((x) => x.template_id !== "early_voting_start");
+check(
+  "every other reminder keeps its statewide key and reaches every scope",
+  shared.length === 5 &&
+    shared.every(
+      (x) => !/:\d{5}$/.test(x.dedupe_key) && x.scopes.length === COUNTIES.length + 1
+    ),
+  shared.map((x) => `${x.dedupe_key} -> ${x.scopes.length} scopes`).join("; ")
+);
+check("a same-day manual re-run sends nothing new (county keys included)", countyRerun.length === 0, countyRerun.join("; "));
+for (const x of countyEarly) {
+  const fips = x.scopes[0] as string;
+  check(
+    `${COUNTY_NAME[fips]}'s Oct 19 email says today, names the county, its date and its own early-voting page`,
+    /\btoday\b/.test(x.body) &&
+      x.body.includes(longDate("2026-10-19")) &&
+      x.body.includes(`in ${COUNTY_NAME[fips]} County`) &&
+      x.body.includes(COUNTY_URL[fips]) &&
+      !/statewide/.test(x.body),
+    x.body
+  );
+}
+check(
+  "the statewide email keeps its statewide wording",
+  !!statewideEarly && /statewide window/.test(statewideEarly.body) && !/ County\./.test(statewideEarly.body),
+  statewideEarly?.body
+);
+let rejectsUncovered = false;
+try {
+  renderTemplate("early_voting_start", { ...reminderParams(COUNTY_ROWS[0]), county: "Duval" });
+} catch {
+  rejectsUncovered = true;
+}
+check("the template refuses a county name that is not a covered county", rejectsUncovered);
+
+/* Rehearsal: the route rehearses the subscriber's own scope. */
+const dade = eventsForCounty(ALL, "12086");
+const dadeNext = (day: string) => {
+  const n = nextReminder(dade, day);
+  return n ? `${n.reminder.template_id} ${n.day}` : "nothing";
+};
+const beforeOpen = RUN_DAYS.filter((d) => d >= "2026-10-05" && d <= "2026-10-19");
+check(
+  "a Miami-Dade subscriber's rehearsal, Oct 5 to Oct 19, is early voting on Oct 19",
+  beforeOpen.every((d) => dadeNext(d) === "early_voting_start 2026-10-19"),
+  beforeOpen.map((d) => `${d}: ${dadeNext(d)}`).join("; ")
+);
+check(
+  "and Oct 20 to Oct 21, the Oct 21 vote-by-mail reminder",
+  ["2026-10-20", "2026-10-21"].every((d) => dadeNext(d) === "vbm_deadline_t1 2026-10-21")
+);
+check(
+  "the route works out the subscriber's scope and rehearses eventsForCounty, with reminderParams",
+  /nextReminder\(eventsForCounty\(events, scope\), today\)/.test(cronSource) &&
+    /dueRemindersByScope\(events, today\)/.test(cronSource) &&
+    (cronSource.match(/renderTemplate\([^;]*reminderParams\(/g) ?? []).length === 2
+);
+
+/* Welcome email for a Miami-Dade ZIP, every day. */
+const dadeWelcome: string[] = [];
+for (const day of RUN_DAYS) {
+  const { text } = welcomeEmail({ ...WELCOME_BASE, events: dade, today: day });
+  const line = `Early voting in Miami-Dade County: ${longDate("2026-10-19")} to ${longDate("2026-11-01")}. Sites and hours: ${COUNTY_URL["12086"]}`;
+  if (text.includes(line) !== day <= "2026-11-01") dadeWelcome.push(`${day}: county line ${text.includes(line) ? "present" : "missing"}`);
+  if (/October 24, 2026|October 31, 2026|statewide window/.test(text)) dadeWelcome.push(`${day}: statewide window shown`);
+  if (day <= "2026-11-03" && !text.includes("/api/calendar/general_2026.ics?county=12086")) dadeWelcome.push(`${day}: calendar link not the county's`);
+}
+check(
+  "welcome email (Miami-Dade ZIP): the county's window through Nov 1, never the statewide one, and the county calendar",
+  dadeWelcome.length === 0,
+  dadeWelcome.join("; ")
+);
+check(
+  "welcome email with statewide rows only keeps the statewide line and calendar",
+  /Early voting: Saturday, October 24, 2026 to Saturday, October 31, 2026 \(the statewide window/.test(
+    welcomeEmail(WELCOME_BASE).text
+  ) && /general_2026\.ics\n/.test(welcomeEmail(WELCOME_BASE).text)
+);
+check(
+  "the signup route gives welcomeEmail the voter's county's dates",
+  /eventsForCounty\(\s*await verifiedElectionEvents\(service, "general_2026"\),\s*resolved\.countyFips \?\? null\s*\)/.test(votingInfoRoute)
+);
+
+/* Banner, for a visitor whose saved district is in Miami-Dade. */
+function expectedNextCounty(day: string): ElectionEvent["event_type"] | null {
+  if (day <= "2026-10-05") return "registration_deadline";
+  if (day <= "2026-10-18") return "early_voting_start";
+  if (day <= "2026-10-22") return "vbm_request_deadline";
+  if (day <= "2026-11-01") return "early_voting_end";
+  if (day <= "2026-11-03") return "ballot_return_deadline";
+  return null;
+}
+const dadeBanner: string[] = [];
+for (const day of RUN_DAYS) {
+  const dates = bannerDates(dade, day);
+  const want = expectedNextCounty(day);
+  const got = dates?.next?.event_type ?? null;
+  if (want === null ? dates !== null : got !== want) dadeBanner.push(`${day}: want ${want}, got ${got}`);
+  if (dates?.next && dates.next.event_date < day) dadeBanner.push(`${day}: passed ${dates.next.event_type}`);
+  if (dates?.next && /early_voting/.test(dates.next.event_type)) {
+    const line = bannerLine(dates.next, dade, ALL);
+    if (line !== "Early voting runs October 19 to November 1 in Miami-Dade County") dadeBanner.push(`${day}: "${line}"`);
+  }
+}
+check(
+  "banner (Miami-Dade): the county's window from Oct 6 to Oct 18 and Oct 23 to Nov 1, never a passed date",
+  dadeBanner.length === 0,
+  dadeBanner.join("\n      ")
+);
+const statewideNext = bannerDates(EVENTS, "2026-10-23")?.next;
+check(
+  "banner (no saved county): the statewide window, then where it runs longer",
+  !!statewideNext &&
+    bannerLine(statewideNext, EVENTS, ALL) ===
+      "Early voting runs October 24 to October 31 statewide; October 19 to November 1 in Miami-Dade, Broward, Hillsborough and Orange counties",
+  statewideNext ? bannerLine(statewideNext, EVENTS, ALL) : "no next date"
+);
+check(
+  "banner with statewide rows only: the statewide window alone",
+  !!statewideNext && bannerLine(statewideNext, EVENTS, EVENTS) === "Early voting runs October 24 to October 31 statewide"
+);
+check(
+  "the home reminder card's calendar link carries the saved county, like the banner's",
+  /<ReminderSignupCta countyFips=\{saved\?\.countyFips\} \/>/.test(home) &&
+    /countyFips=\{countyFips\}/.test(source("src/components/features/ReminderSignupCta.tsx")) &&
+    /general_2026\.ics\$\{countyFips \? `\?county=\$\{countyFips\}` : ""\}/.test(votingInfo)
+);
+check(
+  "a reminder due to no one is reported in the digest, and pacing spans the whole run",
+  /if \(sent\.length > 0 \|\| noRecipients\.length > 0\)/.test(cronSource) &&
+    /if \(batchCalls\+\+ > 0\)/.test(cronSource)
+);
+const bannerSource = source("src/components/features/DeadlineBanner.tsx");
+check(
+  "DeadlineBanner reads the saved county's dates and links its calendar; the home page passes the cookie's county",
+  /eventsForCounty\(allEvents, scope\)/.test(bannerSource) &&
+    /\?county=\$\{scope\}/.test(bannerSource) &&
+    /countyFips=\{saved\?\.countyFips\}/.test(home)
 );
 
 if (failures > 0) {

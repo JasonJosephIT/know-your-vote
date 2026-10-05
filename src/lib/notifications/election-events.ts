@@ -17,6 +17,11 @@ export type ElectionEvent = {
     | "early_voting_end"
     | "election_day";
   election: string;
+  /* NULL (or absent, in fixtures) for a statewide row. A county row
+     (0043) replaces the statewide row of the same event_type for voters in
+     that county — eventsForCounty in ./schedule.ts is the one place that
+     applies the override. */
+  county_fips?: string | null;
   event_date: string; // ISO date
   /* How the deadline is satisfied (0021). A machine token, never rendered
      raw — ics.ts turns it into the sentence a voter reads. NULL for the
@@ -25,14 +30,24 @@ export type ElectionEvent = {
   details_url: string;
 };
 
-export async function verifiedStatewideEvents(
+/* Every verified row for the election, statewide and county (0043).
+   Callers never use the list raw: eventsForCounty (./schedule.ts) picks the
+   dates that apply to one county, or to a voter whose county is unknown.
+
+   This read used to be statewide-only (county_fips IS NULL), which was
+   right while every row was statewide. The four covered counties open
+   early voting on Oct 19 and close it on Nov 1 — five days before and one
+   day after the statewide minimum — so their rows now matter. No new
+   column is selected, so this reader works before and after 0043 is
+   applied (0021's lesson: a reader selecting a column the live table
+   lacks returns no dates at all). */
+export async function verifiedElectionEvents(
   service: SupabaseClient,
   election?: string
 ): Promise<ElectionEvent[]> {
   let query = service
     .from("election_event")
-    .select("id, event_type, election, event_date, rule, details_url")
-    .is("county_fips", null)
+    .select("id, county_fips, event_type, election, event_date, rule, details_url")
     .not("verified_by", "is", null)
     .order("event_date");
   if (election) query = query.eq("election", election);

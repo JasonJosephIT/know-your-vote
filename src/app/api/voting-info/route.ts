@@ -6,8 +6,8 @@ import {
   officialSources,
   remindersPaused,
 } from "@/lib/notifications/config";
-import { verifiedStatewideEvents } from "@/lib/notifications/election-events";
-import { easternToday } from "@/lib/notifications/schedule";
+import { verifiedElectionEvents } from "@/lib/notifications/election-events";
+import { easternToday, eventsForCounty } from "@/lib/notifications/schedule";
 import { welcomeEmail } from "@/lib/notifications/templates";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { resolveZip, ZIP_RE } from "@/lib/resolve";
@@ -96,12 +96,16 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  /* Dates come from founder-verified election_event rows (plan A5). The
-     copy, and which dates it lists on a given Florida day, live in
-     welcomeEmail (src/lib/notifications/templates.ts), where
-     scripts/verify-reminder-schedule.ts renders it for every day of the
-     run-up. */
-  const events = await verifiedStatewideEvents(service, "general_2026");
+  /* Dates come from founder-verified election_event rows (plan A5), the
+     voter's county's own where it has them (0043: early voting opens Oct 19
+     in all four covered counties). The copy, and which dates it lists on a
+     given Florida day, live in welcomeEmail (src/lib/notifications/
+     templates.ts), where scripts/verify-reminder-schedule.ts renders it for
+     every day of the run-up. */
+  const events = eventsForCounty(
+    await verifiedElectionEvents(service, "general_2026"),
+    resolved.countyFips ?? null
+  );
   const message = welcomeEmail({
     zip,
     county: resolved.county,

@@ -1,8 +1,13 @@
-import type { ElectionEvent } from "@/lib/notifications/election-events";
+/* Relative, with the extension: scripts/verify-calendar.ts loads this file
+   in plain Node, which doesn't know the @/ alias. */
+import { coveredCounty } from "../counties.ts";
+import type { ElectionEvent } from "./election-events";
 
-/* Builds the VCALENDAR for an election's verified statewide events
-   (plan A6). Pure so scripts/verify-calendar.mjs can check it without a
-   server. All-day VEVENTs: DTEND is exclusive, so it's start + 1 day.
+/* Builds the VCALENDAR for an election's verified events (plan A6): the
+   statewide rows, or one county's dates (eventsForCounty) when the route
+   is asked for a county. Pure so scripts/verify-calendar.mjs can check it
+   without a server. All-day VEVENTs: DTEND is exclusive, so it's start +
+   1 day.
    Summaries and URLs come from fixed labels and founder-verified rows —
    no user input reaches the file, so no ICS escaping is needed. */
 
@@ -23,6 +28,18 @@ const SUMMARY: Record<ElectionEvent["event_type"], string> = {
   early_voting_end: "Early voting ends (statewide window)",
   election_day: "Election Day",
 };
+
+/* A county's own row (0043) says whose window it is instead. */
+function summary(event: ElectionEvent): string {
+  const county = event.county_fips ? coveredCounty(event.county_fips)?.name : undefined;
+  if (county && event.event_type === "early_voting_start") {
+    return `Early voting begins in ${county} County`;
+  }
+  if (county && event.event_type === "early_voting_end") {
+    return `Early voting ends in ${county} County`;
+  }
+  return SUMMARY[event.event_type];
+}
 
 /* The `rule` column (0021) rendered into the sentence a voter actually
    reads. This is what the column is FOR — a date with the wrong rule beside
@@ -73,7 +90,7 @@ export function buildElectionCalendar(
       `DTSTAMP:${icsDate(event.event_date)}T000000Z`,
       `DTSTART;VALUE=DATE:${icsDate(event.event_date)}`,
       `DTEND;VALUE=DATE:${icsDate(nextDay(event.event_date))}`,
-      `SUMMARY:${SUMMARY[event.event_type]} — ${icsText(label)}`,
+      `SUMMARY:${summary(event)} — ${icsText(label)}`,
       `URL:${icsText(event.details_url)}`,
       `DESCRIPTION:${event.rule ? `${RULE_NOTE[event.rule]} ` : ""}Official source: ${icsText(event.details_url)}`,
       "END:VEVENT"

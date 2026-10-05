@@ -37,6 +37,7 @@ export function VotingInfo({
   sources,
   heading = "Get your polling place by email",
   intro,
+  countyFips,
 }: {
   zip?: string;
   emailEnabled: boolean;
@@ -46,6 +47,10 @@ export function VotingInfo({
   heading?: string;
   /* Defaults to the races view's wording for remindersOn. */
   intro?: string;
+  /* The county the races view resolved, so the calendar link gives that
+     county's dates (its early voting runs wider than the statewide
+     window). */
+  countyFips?: string;
 }) {
   const [zip, setZip] = useState(initialZip);
   const [email, setEmail] = useState("");
@@ -148,7 +153,7 @@ export function VotingInfo({
         <p className="text-caption text-on-surface-muted">
           No email needed:{" "}
           <a
-            href="/api/calendar/general_2026.ics"
+            href={`/api/calendar/general_2026.ics${countyFips ? `?county=${countyFips}` : ""}`}
             className="underline underline-offset-2 hover:text-on-surface"
           >
             add the key dates straight to your calendar
