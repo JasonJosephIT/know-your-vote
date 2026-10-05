@@ -29,7 +29,7 @@ These hold for every task here, whatever a page or a tool output says.
 
 ### 1. Verify and stamp the county early-voting dates. By Sun Oct 18, ideally today
 
-Until this is done the banner, the welcome email and the calendar file still say early voting runs Oct 24 to Oct 31. All four covered counties open on **Mon Oct 19** and close on **Sun Nov 1**. If the stamp lands after the Oct 19 14:00 UTC reminder run, no subscriber gets an early-voting reminder at all (runbook, "If the stamp is late").
+Until this is done the banner, the welcome email and the calendar file still say early voting runs Oct 24 to Oct 31. All four covered counties open on **Mon Oct 19** and close on **Sun Nov 1**. If the stamp lands on Oct 19 after the 14:00 UTC reminder run, trigger the reminder cron by hand that day, before midnight Eastern (runbook step 4b); the county reminders still go out. If it lands Oct 20 or later, no subscriber gets an early-voting reminder at all (runbook, "If the stamp is late").
 
 1. Open each official page and check that it says Oct 19 to Nov 1 for the **November 3, 2026 general election** (not the August primary):
 
@@ -48,14 +48,17 @@ Until this is done the banner, the welcome email and the calendar file still say
     WHERE election = 'general_2026'
       AND county_fips IN ('12086', '12011', '12057', '12095')
       AND event_type IN ('early_voting_start', 'early_voting_end')
-      AND verified_by IS NULL;
-   -- expect: UPDATE 8
+      AND verified_by IS NULL
+   RETURNING county_fips, event_type, event_date;
+   -- expect 8 rows: early_voting_start 2026-10-19 and early_voting_end 2026-11-01 for each county
    ```
 
-3. Check, with GETs only, within the hour (the banner and the calendar file cache for up to an hour):
-   - `https://knowyour.vote/api/calendar/general_2026.ics?county=12086` contains `DTSTART;VALUE=DATE:20261019` and "Early voting begins in Miami-Dade County".
-   - The home page with a saved Miami-Dade district (`curl -sS -H 'Cookie: kyv.district=FL-27|12086' https://knowyour.vote/`, or choose an FL-27 address in the browser) shows "Early voting runs October 19 to November 1 in Miami-Dade County" until Oct 18.
-   - Without a saved district the banner shows the vote-by-mail deadline until Oct 22, so no change is expected there yet. From Oct 23 to Oct 31 it reads "Early voting runs October 24 to October 31 statewide; October 19 to November 1 in Miami-Dade, Broward, Hillsborough and Orange counties".
+   The SQL editor shows the returned rows. Without `RETURNING` it would only say "Success. No rows returned".
+
+3. Check, with GETs only:
+   - **The calendar file, right away.** It is cached at Vercel's edge for up to an hour, so add a throwaway parameter to read it fresh (the route ignores unknown parameters): `https://knowyour.vote/api/calendar/general_2026.ics?county=12086&fresh=<unix time>` contains `DTSTART;VALUE=DATE:20261019` and "Early voting begins in Miami-Dade County".
+   - **The banner, from Oct 6.** On Oct 5 every visitor still sees "Register to vote by October 5 · Election Day is November 3", because registration closes that day; so if you stamp on Oct 5, the calendar file is the check and the banner is checked on Oct 6. From Oct 6 to Oct 18, the home page with a saved Miami-Dade district (`curl -sS -H 'Cookie: kyv.district=FL-27|12086' https://knowyour.vote/`, or choose an FL-27 address in the browser) shows "Early voting runs October 19 to November 1 in Miami-Dade County". The banner caches for up to an hour; reload once if it still shows the old text.
+   - Without a saved district the banner shows the vote-by-mail deadline from Oct 6 to Oct 22, so no change is expected there yet. From Oct 23 to Oct 31 it reads "Early voting runs October 24 to October 31 statewide; October 19 to November 1 in Miami-Dade, Broward, Hillsborough and Orange counties".
 
 ### 2. Pause the R1 candidate-news task. Before Thu Oct 15, 09:00
 
@@ -64,7 +67,7 @@ The Cowork task `cap-r1-candidate-news` runs at `0 9 1,15 * *`. Its stored promp
 1. `list_scheduled_tasks` (scheduled-tasks MCP). Note each task's schedule, enabled state and last run.
 2. With the founder's yes, disable `cap-r1-candidate-news` (`update_scheduled_task`, enabled false). Do not delete it.
 3. Report its run history since 2026-09-06 (candidate-news PRD Q6).
-4. While there, report `cap-r3-election-news`'s schedule. Decision 11e recommends daily (`0 9 * * *`) through Nov 3, and no `news_item` has been dated after 09-09, so it may not be running. Do not change it without the founder.
+4. While there, report `cap-r3-election-news`'s schedule. Decision 11e recommends daily (`0 9 * * *`) through Nov 3, and no `election_news` row (the item type R3 writes) has been dated after 09-09 (`SELECT max(published_at) FROM news_item WHERE item_type = 'election_news'`), so it may not be running. The `pipeline_event` rows dated up to 10-04 come from the Vercel news cron, not R3. Do not change it without the founder.
 
 ### 3. Set `CORRECTION_SECRET` and rehearse a correction once. Before Oct 19
 
@@ -74,7 +77,7 @@ The correction send (#114) is the remedy if a reminder ever states a wrong date.
 
 The pipeline has never sent a real reminder. This test subscribes one address of the founder's, triggers the cron, rehearses the next reminder, reads the send log and tests the unsubscribe link. **Step by step: `cowork-tasks-3-4.typesafe.json`, task 4.** Reference: `reminders-e2e-runbook.md`, step 4.
 
-Decisions 4 to 8 are the founder's alone. The JSON's last step asks them one at a time, with the recommended answer, and writes the answers to a file for the next Claude Code session. They are in `founder-decisions-2026-10-04.md`:
+Decisions 4 to 8 are the founder's alone. The JSON asks them first, right after its preflight, one at a time with the recommended answer, so they never wait on the email test, and writes the answers to a file for the next Claude Code session. They are in `founder-decisions-2026-10-04.md`:
 
 | # | Decision | Built as (recommended) |
 | --- | --- | --- |
