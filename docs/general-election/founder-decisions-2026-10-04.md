@@ -50,6 +50,7 @@ Voter registration closes 10-05.
   - `ADMIN_EMAILS` plus Supabase Auth open the admin console.
   - `PELIAS_BASE_URL` turns on address autocomplete. Optional.
 - **Review and merge #108.** Production's email env is now complete, so merging it turns on the home-page reminder card and the banner's reminder link at once, although the signup has not been seen working yet. CI runs on it for the first time. Once CI is green, require the `checks` and `build` jobs on main (`docs/ci.md`).
+- **Set up the correction send, then rehearse it once before 10-19.** Add a `CORRECTION_SECRET` (a long random value only you keep) to Vercel production and redeploy; the correction route refuses everything without it. Then dry-run and rehearse with an already-right date, as `reminders-e2e-runbook.md`, "Sending a correction", describes. Never run its real-send step as a test: it mails every subscriber.
 - **By Wed 10-07, answer decisions 4–8 below.** The refresh before early voting depends on them.
 
 ## Decisions, built as recommended

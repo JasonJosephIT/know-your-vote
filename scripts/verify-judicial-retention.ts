@@ -27,8 +27,10 @@
       BallotQuestions hands it on; the note selects through appealsForCounty
       and prints the Supreme Court line outside that choice; every resolve
       branch that reaches the note sets a covered county's name, except the
-      statewide-only result, which sets none; and the home page passes the
-      saved district's county name or nothing.
+      statewide-only result, which sets none; and the home page passes
+      nothing, so it keeps the full note: its caption tells a voter with a
+      saved district that the rest of the page is the same for every Florida
+      voter, and a narrowed judges note would make that false.
 
    The ZIP path's name comes from zip_district.county_name, which this cannot
    read offline. A read-only SELECT on 2026-10-05 found exactly the four
@@ -274,20 +276,13 @@ check(
     !/\bcounty\s*:/.test(fnBody("resolveStatewideOnly"))
 );
 
-/* The home page: the saved district's county name, or nothing. */
+/* The home page keeps the full note: it is the same for every visitor, as
+   its saved-district caption says the rest of the page is. */
 const home = flat(source("src/app/(public)/page.tsx"));
-check(
-  "home page derives the name from the saved district's FIPS",
-  /const savedCounty = saved && coveredCounty\(saved\.countyFips\);/.test(home)
-);
-check(
-  "home page passes that name, not the FIPS, to SharedBallot",
-  /<SharedBallot county=\{savedCounty\?\.name\} \/>/.test(home)
-);
 const shared = flat(source("src/components/features/SharedBallot.tsx"));
 check(
-  "SharedBallot hands its county to BallotQuestions",
-  /<BallotQuestions county=\{county\} \/>/.test(shared)
+  "home page renders SharedBallot with no county, and SharedBallot passes none on",
+  /<SharedBallot \/>/.test(home) && /<BallotQuestions \/>/.test(shared)
 );
 
 if (failures) {

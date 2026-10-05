@@ -68,9 +68,13 @@ export type CorrectionMode =
      in the subject, under a synthetic key. */
   | { kind: "rehearse"; to: string }
   /* The real send. confirmRecipients must equal the count a dry run
-     reports, checked by the route against the cohort it is about to mail:
-     the founder cannot reach a mass send without first seeing its size. */
-  | { kind: "send"; confirmRecipients: number };
+     reports, and confirmKey the dedupe_key that dry run reports, both
+     checked by the route against the correction and the cohort it is about
+     to mail: the founder cannot reach a mass send without first dry-running
+     THIS correction. The count alone was not enough: every statewide
+     correction except early voting reaches the same people, so a count from
+     one dry run would have unlocked another correction's send. */
+  | { kind: "send"; confirmRecipients: number; confirmKey: string };
 
 export type CorrectionRequest = {
   params: CorrectionParams;
@@ -96,11 +100,12 @@ const correctionRequestSchema = TEMPLATES.correction.schema
     dry_run: z.literal(true).optional(),
     rehearse: z.string().trim().min(1).optional(),
     confirm_recipients: z.number().int().positive().optional(),
+    confirm_key: z.string().trim().min(1).optional(),
   })
   .strict();
 
 const BODY_SHAPE =
-  '{"event_label":…,"election":…,"date":…,"details_url":…, optionally "county_fips":…, and one of "dry_run":true, "rehearse":"<address>" or "confirm_recipients":<count>}';
+  '{"event_label":…,"election":…,"date":…,"details_url":…, optionally "county_fips":…, and one of "dry_run":true, "rehearse":"<address>" or "confirm_recipients":<count> with "confirm_key":"<dedupe_key>"}';
 
 /* The POST body, as raw text: the route reads nothing from the URL. Every
    failure is a sentence the founder can act on, ending "Nothing was sent." */
@@ -120,18 +125,34 @@ export function parseCorrectionRequest(
     );
     return { invalid: `${problems.join("; ")}. Nothing was sent.` };
   }
-  const { county_fips, dry_run, rehearse, confirm_recipients, ...params } = parsed.data;
+  const { county_fips, dry_run, rehearse, confirm_recipients, confirm_key, ...params } =
+    parsed.data;
   const modes = MODES.filter((m) => parsed.data[m] !== undefined);
   if (modes.length !== 1) {
     return {
       invalid: `Give exactly one of "dry_run": true, "rehearse": "<address>" or "confirm_recipients": <the count from the dry run>${modes.length > 1 ? ` (got ${modes.join(", ")})` : ""}. Nothing was sent.`,
     };
   }
+  if (confirm_recipients !== undefined && confirm_key === undefined) {
+    return {
+      invalid:
+        'A real send needs "confirm_key": the dedupe_key the dry run of this correction reported, alongside "confirm_recipients". Nothing was sent.',
+    };
+  }
+  if (confirm_key !== undefined && confirm_recipients === undefined) {
+    return {
+      invalid: '"confirm_key" goes only with "confirm_recipients", for a real send. Nothing was sent.',
+    };
+  }
   const mode: CorrectionMode = dry_run
     ? { kind: "dry_run" }
     : rehearse !== undefined
       ? { kind: "rehearse", to: rehearse }
-      : { kind: "send", confirmRecipients: confirm_recipients as number };
+      : {
+          kind: "send",
+          confirmRecipients: confirm_recipients as number,
+          confirmKey: confirm_key as string,
+        };
   return { request: { params, countyFips: county_fips ?? null, mode } };
 }
 

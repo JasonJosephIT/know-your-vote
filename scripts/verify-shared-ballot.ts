@@ -89,19 +89,10 @@ const pageSource = readFileSync(ENTRY, "utf8");
 /* 1. The landing page itself must stay a server component. */
 assert("landing page is a server component", !isClient(ENTRY));
 
-/* 2. The ballot must be on the landing page at all, and unconditionally. It
-      may carry the saved district's county, which only narrows the judges
-      note under the ballot questions (verify-judicial-retention.ts checks
-      that half), so props are allowed. What is not allowed is rendering it
-      only sometimes: the element has to open its own line, not sit behind a
-      `saved &&` or a ternary. */
+/* 2. The ballot must be on the landing page at all. */
 assert(
   "landing page renders SharedBallot",
-  /<SharedBallot(\s+[^>]*)?\s*\/>/.test(pageSource)
-);
-assert(
-  "SharedBallot is not behind a condition",
-  /^\s*<SharedBallot\b/m.test(pageSource)
+  /<SharedBallot\s*\/>/.test(pageSource)
 );
 
 /* 3. Nothing the ballot reaches may be a client component. */

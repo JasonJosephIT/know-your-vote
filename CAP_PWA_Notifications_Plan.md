@@ -261,8 +261,9 @@ script exists and has run once.
   §7 if anything diverged.
   **Verify:** rehearsal including one correction send.
   **Built for email, 2026-10-05; the founder still rehearses once.**
-  `POST /api/cron/send-correction` (CRON_SECRET; body-only JSON; modes
-  `dry_run` / `rehearse` / `confirm_recipients`), pure logic in
+  `POST /api/cron/send-correction` (its own CORRECTION_SECRET, never
+  CRON_SECRET; body-only JSON; modes `dry_run` / `rehearse` /
+  `confirm_recipients` + `confirm_key`), pure logic in
   `src/lib/notifications/correction.ts`, checked by
   `scripts/verify-correction.ts`; cohort helpers shared with send-reminders
   in `src/lib/notifications/cohort.ts`. Diverged from the design doc, and

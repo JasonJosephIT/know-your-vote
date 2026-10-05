@@ -33,16 +33,20 @@ import { createServiceClient } from "@/lib/supabase/service";
 
 /* Manual correction send (design doc §7 playbook; plan C3). The one
    pre-approved manual broadcast: the `correction` template, stating a date
-   the founder has already verified, to the subscribers who got the wrong
-   one. Every decision that needs no database is in
+   the founder has already verified, to every active subscriber that date
+   applies to now. That is not limited to the people the wrong date
+   reached: someone who subscribed after it went out gets the correction
+   too. Every decision that needs no database is in
    src/lib/notifications/correction.ts, driven by
    scripts/verify-correction.ts. Runbook:
    docs/general-election/reminders-e2e-runbook.md, "Sending a correction".
 
-   Who calls it: the founder, by hand, with CRON_SECRET, exactly as the
-   reminder cron is authorized. Vercel Cron never does. The route is not in
-   vercel.json and exports POST only, so the GET that Vercel Cron sends
-   answers 405.
+   Who calls it: the founder, by hand, with CORRECTION_SECRET in an
+   x-correction-secret header. Not CRON_SECRET: that one is held by Vercel
+   Cron and by any scheduled caller, and it should not also be able to
+   mail the whole list. Without CORRECTION_SECRET set the route refuses
+   everything (503). Vercel Cron never calls it: the route is not in
+   vercel.json and exports POST only, so a GET answers 405.
 
    Everything comes from the JSON body; a URL carrying any query parameter
    is refused (400) before anything is read. The rehearsal's reason holds
@@ -58,9 +62,10 @@ import { createServiceClient } from "@/lib/supabase/service";
      which must hold an active subscription, with "[Rehearsal]" in the
      subject, under a synthetic "rehearsal:" key, like the reminder cron's
      rehearsal. It also says whether that address is in the real cohort.
-   - {"confirm_recipients": N}: the real send, and only when N equals the
-     recipient count right now. The founder cannot mass-send by accident:
-     the only way to the number is a dry run, which shows the email.
+   - {"confirm_recipients": N, "confirm_key": K}: the real send, and only
+     when N equals the recipient count right now and K is this
+     correction's dedupe_key. The founder cannot mass-send by accident: the
+     only way to both is this correction's dry run, which shows the email.
 
    Before any mode, the guard (correctionTarget): the date and details_url
    must be those of a verified election_event row of the type the label
@@ -70,8 +75,8 @@ import { createServiceClient } from "@/lib/supabase/service";
    the reminders while a correction is prepared, so a correction is exactly
    what gets sent while they are paused. If the pause blocked it, sending
    the correction would mean first resuming the very schedule that sent the
-   wrong date. The secret, the verified-date guard and the confirmed count
-   are this route's safety instead.
+   wrong date. Its own secret, the verified-date guard and the confirmed
+   key and count are this route's safety instead.
 
    The real send follows send-reminders: the cohort is read and the fuse
    checked before anything is claimed; the claim is INSERT ... ON CONFLICT
@@ -85,6 +90,15 @@ import { createServiceClient } from "@/lib/supabase/service";
 export const maxDuration = 60;
 
 export async function POST(request: NextRequest) {
+  if (!process.env.CORRECTION_SECRET) {
+    return NextResponse.json(
+      {
+        error:
+          "Corrections are off: CORRECTION_SECRET is not set in this environment. Nothing was sent.",
+      },
+      { status: 503 }
+    );
+  }
   if (!authorized(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -240,7 +254,7 @@ export async function POST(request: NextRequest) {
       next:
         recipients.length === 0
           ? "No active subscriber is in this correction's scope: there is nothing to send."
-          : `To send, POST the same fields with "confirm_recipients": ${recipients.length} in place of "dry_run".`,
+          : `To send, POST the same fields with "confirm_recipients": ${recipients.length} and "confirm_key": "${dedupeKey}" in place of "dry_run".`,
     });
   }
 
@@ -255,8 +269,17 @@ export async function POST(request: NextRequest) {
       { status: 404 }
     );
   }
-  /* The count is not echoed: the way to it is the dry run, which also
-     shows the email about to go out. */
+  /* The key ties the send to this correction's own dry run; the count is
+     not echoed: the way to both is that dry run, which also shows the email
+     about to go out. */
+  if (mode.confirmKey !== dedupeKey) {
+    return NextResponse.json(
+      {
+        error: `confirm_key is not this correction's key. Run the dry run for these exact fields and copy the dedupe_key it reports. Nothing was sent.`,
+      },
+      { status: 409 }
+    );
+  }
   if (mode.confirmRecipients !== recipients.length) {
     return NextResponse.json(
       {
@@ -361,15 +384,12 @@ export async function POST(request: NextRequest) {
   });
 }
 
-/* Same contract as send-reminders and refresh-news: x-cron-secret, or
-   Authorization: Bearer, both compared in constant time. */
+/* CORRECTION_SECRET, its own secret (see the header), in its own header,
+   compared in constant time. No Bearer form: nothing scheduled calls this. */
 function authorized(request: NextRequest): boolean {
-  const secret = process.env.CRON_SECRET;
+  const secret = process.env.CORRECTION_SECRET;
   if (!secret) return false;
-  return (
-    secretEquals(request.headers.get("x-cron-secret"), secret) ||
-    secretEquals(request.headers.get("authorization"), `Bearer ${secret}`)
-  );
+  return secretEquals(request.headers.get("x-correction-secret"), secret);
 }
 
 /* REHEARSAL: the correction, word for word, to ONE address that already

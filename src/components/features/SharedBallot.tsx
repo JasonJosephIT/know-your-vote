@@ -22,15 +22,7 @@ import { getStatewideRaces, raceStatusLabel } from "@/lib/races";
    Since the listed tier (0033) a race is visible as soon as its roster is,
    before any brief exists, so each card says which it is (raceStatusLabel).
    The "isn't published yet" copy below is now only the truly-empty case:
-   zero races AND zero measures, i.e. nothing at all is even listed.
-
-   `county` is optional and touches one thing: the judges note under the
-   ballot questions (JudicialRetentionNote), whose appeals court lines are
-   per county. The home page passes the saved district's county name when
-   there is one, so a voter who told us their county sees their own court
-   there as they do in "Your races"; with no saved district it is absent and
-   the note lists every covered county. Every race and amendment above it is
-   the same either way, and nothing waits on it. */
+   zero races AND zero measures, i.e. nothing at all is even listed. */
 
 function formatDate(iso: string | null) {
   if (!iso) return null;
@@ -41,11 +33,7 @@ function formatDate(iso: string | null) {
   });
 }
 
-export async function SharedBallot({
-  county,
-}: {
-  county?: string | null;
-} = {}) {
+export async function SharedBallot() {
   /* Both are cached and independent, so they overlap rather than queue. */
   const [races, measures] = await Promise.all([
     getStatewideRaces(),
@@ -98,7 +86,7 @@ export async function SharedBallot({
 
       {/* Statewide too, but a distinct kind of thing — a voter scanning for
           candidates should not mistake a ballot question for one. */}
-      <BallotQuestions county={county} />
+      <BallotQuestions />
     </div>
   );
 }

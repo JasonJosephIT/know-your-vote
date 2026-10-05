@@ -282,14 +282,16 @@ followed by the unsubscribe line every reminder carries.
 | `early voting end date` | `early_voting_end` |
 | `election day` | `election_day` |
 
-**Who gets it:** the subscribers the wrong date reached, each address once.
+**Who gets it:** every active subscriber the corrected date applies to now, each address once. That is not limited to the people the wrong date reached: someone who subscribed afterwards gets it too, and its "disregard the date in our earlier message" will not match anything they received.
 
 - **Statewide** (no `county_fips`): every active subscriber for whom the statewide row is the date that applies. Once 0043 is stamped, that leaves out the four counties' subscribers for early voting only, because they have rows of their own.
 - **One county** (`"county_fips":"12086"`, `12011`, `12057` or `12095`): that county's subscribers only. This needs the county's own row of that type. A county without one reads the statewide date, so its subscribers are covered by the statewide correction. The two never overlap, so nobody gets the same correction twice.
 
-**`NOTIFICATIONS_PAUSED` does not stop it, on purpose.** The playbook pauses the reminders while a correction is prepared, so the correction is what you send while they are paused. If the pause blocked it, you would have to resume the schedule that sent the wrong date in order to send the fix. The secret, the verified-date guard and the confirmed count are its safety instead.
+**`NOTIFICATIONS_PAUSED` does not stop it, on purpose.** The playbook pauses the reminders while a correction is prepared, so the correction is what you send while they are paused. If the pause blocked it, you would have to resume the schedule that sent the wrong date in order to send the fix. Its own secret, the verified-date guard and the confirmed key and count are its safety instead.
 
-**Everything goes in the JSON body.** A URL with any query parameter answers **400**. Each call takes exactly one of `"dry_run": true`, `"rehearse": "<address>"` or `"confirm_recipients": <count>`. A real send needs the count from a dry run, so it cannot happen by accident.
+**Its own secret.** The route checks `CORRECTION_SECRET` in an `x-correction-secret` header, not `CRON_SECRET`, which Vercel Cron and any scheduled caller also hold. Without `CORRECTION_SECRET` set, every call answers **503** and nothing is sent. **Set it once, before you need it:** generate a long random value (for example `openssl rand -hex 32`), keep it only in your password manager, add it in Vercel as `CORRECTION_SECRET` (Production, Sensitive), and redeploy.
+
+**Everything goes in the JSON body.** A URL with any query parameter answers **400**. Each call takes exactly one of `"dry_run": true`, `"rehearse": "<address>"` or `"confirm_recipients": <count>` (with `"confirm_key"`). A real send needs both the count and the `dedupe_key` from this correction's own dry run, so it cannot happen by accident, and a count from a different correction's dry run does not unlock it.
 
 ### Steps (Founder)
 
@@ -310,16 +312,16 @@ followed by the unsubscribe line every reminder carries.
 3. **Set the fields once**, in the shell you will send from. The three calls below differ only in their last key, so the dry run counts exactly the people the send will mail:
 
    ```sh
-   read -rs CRON_SECRET    # paste the value, press Enter; nothing is shown
+   read -rs CORRECTION_SECRET    # paste the value, press Enter; nothing is shown
    FIELDS='"event_label":"early voting start date","election":"general_2026","date":"2026-10-19","details_url":"https://www.miamidade.gov/elections/library/early-voting/2026-11-03-general-election-early-voting-schedule.pdf","county_fips":"12086"'
    ```
 
-   That example is Miami-Dade's own early-voting row. For a statewide correction, leave out `,"county_fips":"…"`. Copy `date` and `details_url` from the row exactly: a missing trailing slash is a mismatch.
+   That example is Miami-Dade's own early-voting row. For a statewide correction, leave out `,"county_fips":"…"`. Copy `date` and `details_url` from the row exactly: a missing trailing slash is a mismatch. Run this step in every new shell: steps 4 to 6 use both variables.
 4. **Dry run.** It sends nothing and writes nothing.
 
    ```sh
    curl -sS -X POST "https://knowyour.vote/api/cron/send-correction" \
-     -H "x-cron-secret: $CRON_SECRET" \
+     -H "x-correction-secret: $CORRECTION_SECRET" \
      -H "Content-Type: application/json" \
      --data "{$FIELDS,\"dry_run\":true}"
    ```
@@ -329,7 +331,7 @@ followed by the unsubscribe line every reminder carries.
 
    ```sh
    curl -sS -X POST "https://knowyour.vote/api/cron/send-correction" \
-     -H "x-cron-secret: $CRON_SECRET" \
+     -H "x-correction-secret: $CORRECTION_SECRET" \
      -H "Content-Type: application/json" \
      --data "{$FIELDS,\"rehearse\":\"<test address>\"}"
    ```
@@ -339,22 +341,31 @@ followed by the unsubscribe line every reminder carries.
 
    ```sh
    curl -sS -X POST "https://knowyour.vote/api/cron/send-correction" \
-     -H "x-cron-secret: $CRON_SECRET" \
+     -H "x-correction-secret: $CORRECTION_SECRET" \
      -H "Content-Type: application/json" \
-     --data "{$FIELDS,\"confirm_recipients\":<N from step 4>}"
+     --data "{$FIELDS,\"confirm_recipients\":<N from step 4>,\"confirm_key\":\"<dedupe_key from step 4>\"}"
    ```
 
-   **Expected:** `{"sent":true,"dedupe_key":"correction:…","scope":"…","recipients":<N>}`, then a digest to the `EMAIL_FROM` address, "Know Your Vote correction sent — <date>". If anyone subscribed or unsubscribed since the dry run, the call answers **409** and sends nothing. Run the dry run again and confirm the new number.
+   **Expected:** `{"sent":true,"dedupe_key":"correction:…","scope":"…","recipients":<N>}`, then a digest to the `EMAIL_FROM` address, "Know Your Vote correction sent — <date>". If anyone subscribed or unsubscribed since the dry run, or `confirm_key` is not this correction's `dedupe_key`, the call answers **409** and sends nothing. Run the dry run again and confirm what it reports.
 7. **Check** that 4d's query shows the `correction:…` row with `recipient_count` = N. Once every remaining date is right, delete `NOTIFICATIONS_PAUSED` and redeploy. A reminder whose day passed while paused is not sent later.
 
 **Once per date.** A correction is claimed in `notification_send_log` as `correction:<election>:<event_type>:<date>[:<FIPS>]` and goes out once. Sending it again answers **409** "Already sent". A correction to a different date, after you re-verify the row again, has a new key. To resend the same one deliberately, delete its row first: `DELETE FROM notification_send_log WHERE dedupe_key = '<key>';`.
 
-**Rehearse it once, before the first county reminder on Oct 19.** Recommended (pending founder confirmation); it is plan C3's Verify step. Nothing is wrong today, so rehearse with a date that is already right, such as the statewide vote-by-mail request deadline (`"event_label":"vote-by-mail request deadline","election":"general_2026","date":"2026-10-22","details_url":"https://dos.fl.gov/elections/for-voters/election-dates/"`): run steps 4 and 5 only. **Do not run step 6 for a rehearsal:** it would mail every subscriber a correction for a date that was never wrong.
+**Rehearse it once, before the first county reminder on Oct 19.** Recommended (pending founder confirmation); it is plan C3's Verify step. Nothing is wrong today, so rehearse with a date that is already right, such as the statewide vote-by-mail request deadline. Set `CORRECTION_SECRET` first (above). Then run step 3 with these fields, and steps 4 and 5:
+
+```sh
+read -rs CORRECTION_SECRET
+FIELDS='"event_label":"vote-by-mail request deadline","election":"general_2026","date":"2026-10-22","details_url":"https://dos.fl.gov/elections/for-voters/election-dates/"'
+```
+
+**Do not run step 6 for a rehearsal:** it would mail every subscriber a correction for a date that was never wrong.
 
 ## Troubleshooting
 
 | Symptom | Cause | Fix |
 | --- | --- | --- |
+| Correction: **503** "Corrections are off: CORRECTION_SECRET is not set" | `CORRECTION_SECRET` unset in Production | "Sending a correction": set it, then redeploy |
+| Correction: **401** `{"error":"Unauthorized"}` | Wrong header or value. The correction route takes `x-correction-secret: <CORRECTION_SECRET>`, never `CRON_SECRET` | Re-run step 3's `read -rs CORRECTION_SECRET` |
 | Cron: **401** `{"error":"Unauthorized"}` | `CRON_SECRET` unset in Production, or the header value is wrong | Check the header name (`x-cron-secret`, or `Authorization: Bearer …`). Rotate `CRON_SECRET` (Step 1) and redeploy. |
 | Cron: **503** "Email delivery isn't configured — nothing was sent." | `RESEND_API_KEY` and `RESEND` both unset or empty, or `EMAIL_FROM` unset, in Production | Step 1, then redeploy |
 | Cron: **503** "Service credentials missing — nothing was sent." | `SUPABASE_SERVICE_ROLE_KEY` and `SUPABASE` both unset or empty | Step 1, then redeploy |

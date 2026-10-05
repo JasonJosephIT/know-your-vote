@@ -9,7 +9,8 @@
         to its own election_event type, all six types, one each.
      2. REQUEST. parseCorrectionRequest(), the POST body: exactly one mode;
         the real send only through "confirm_recipients", a positive whole
-        number; the template's own rules on every param; unknown keys and
+        number, together with "confirm_key"; the template's own rules on
+        every param; unknown keys and
         uncovered counties refused; every refusal ends "Nothing was sent."
      3. VERIFIED-DATE GUARD. correctionTarget() accepts the matching
         verified row, statewide or the county's own, and refuses a wrong
@@ -24,10 +25,11 @@
         <date>[:<county>], distinct per row and never a reminder's key; the
         email is rendered from the verified row and fits BUDGETS for every
         label, every row and the longest date of the year.
-     6. ROUTE SOURCE. POST only; nothing read from the URL; authorized
-        exactly like send-reminders; the guard before any mode; the real
-        send only when confirm_recipients equals the recipient count, and
-        only after it; the "correction:" claim with ON CONFLICT DO NOTHING
+     6. ROUTE SOURCE. POST only; nothing read from the URL; authorized by
+        its own CORRECTION_SECRET (never CRON_SECRET), and off without it;
+        the guard before any mode; the real send only when confirm_key is
+        this correction's dedupe_key and confirm_recipients equals the
+        recipient count, and only after both; the "correction:" claim with ON CONFLICT DO NOTHING
         and its release on failure; the fuse, pacing and per-address
         dedupe; not gated on NOTIFICATIONS_PAUSED; and the cohort helpers
         shared with send-reminders, not copied.
@@ -193,10 +195,14 @@ check(
   reh?.kind === "rehearse" && reh.to === "you+kyv@example.com",
   JSON.stringify(reh)
 );
-const send = modeOf(body({ confirm_recipients: 12 }));
+const send = modeOf(
+  body({ confirm_recipients: 12, confirm_key: " correction:general_2026:election_day:2026-11-03 " })
+);
 check(
-  "confirm_recipients: 12 -> the real send, confirming 12",
-  send?.kind === "send" && send.confirmRecipients === 12,
+  "confirm_recipients: 12 with confirm_key -> the real send, confirming 12 and that (trimmed) key",
+  send?.kind === "send" &&
+    send.confirmRecipients === 12 &&
+    send.confirmKey === "correction:general_2026:election_day:2026-11-03",
   JSON.stringify(send)
 );
 const county = parse(body({ county_fips: "12086", dry_run: true }));
@@ -211,14 +217,18 @@ const INVALID: [string, string][] = [
   ["a JSON array", "[]"],
   ["JSON null", "null"],
   ["no mode at all", body({})],
-  ["two modes (dry_run and confirm_recipients)", body({ dry_run: true, confirm_recipients: 3 })],
-  ["two modes (rehearse and confirm_recipients)", body({ rehearse: "a@example.com", confirm_recipients: 3 })],
+  ["two modes (dry_run and confirm_recipients)", body({ dry_run: true, confirm_recipients: 3, confirm_key: "k" })],
+  ["confirm_recipients without confirm_key (a bare count unlocks nothing)", body({ confirm_recipients: 3 })],
+  ["confirm_key without confirm_recipients", body({ confirm_key: "k" })],
+  ["confirm_key on a dry run", body({ dry_run: true, confirm_key: "k" })],
+  ['confirm_key: ""', body({ confirm_recipients: 3, confirm_key: "" })],
+  ["two modes (rehearse and confirm_recipients)", body({ rehearse: "a@example.com", confirm_recipients: 3, confirm_key: "k" })],
   ["dry_run: false", body({ dry_run: false })],
   ['dry_run: "true"', body({ dry_run: "true" })],
-  ['confirm_recipients as a string ("12")', body({ confirm_recipients: "12" })],
-  ["confirm_recipients: 0", body({ confirm_recipients: 0 })],
-  ["confirm_recipients: -1", body({ confirm_recipients: -1 })],
-  ["confirm_recipients: 1.5", body({ confirm_recipients: 1.5 })],
+  ['confirm_recipients as a string ("12")', body({ confirm_recipients: "12", confirm_key: "k" })],
+  ["confirm_recipients: 0", body({ confirm_recipients: 0, confirm_key: "k" })],
+  ["confirm_recipients: -1", body({ confirm_recipients: -1, confirm_key: "k" })],
+  ["confirm_recipients: 1.5", body({ confirm_recipients: 1.5, confirm_key: "k" })],
   ['confirm: true (a real send must give the count)', body({ confirm: true })],
   ['rehearse: ""', body({ rehearse: "" })],
   ['rehearse: "   "', body({ rehearse: "   " })],
@@ -242,10 +252,10 @@ for (const [label, raw] of INVALID) {
 const realSendBodies = [
   body({ dry_run: true }),
   body({ rehearse: "a@example.com" }),
-  body({ confirm_recipients: 1 }),
+  body({ confirm_recipients: 1, confirm_key: "k" }),
 ];
 check(
-  'the only body that reaches a real send is one carrying "confirm_recipients"',
+  'the only body that reaches a real send is one carrying "confirm_recipients" and "confirm_key"',
   realSendBodies.map((raw) => modeOf(raw)?.kind).join(",") === "dry_run,rehearse,send"
 );
 
@@ -546,8 +556,17 @@ check(
 );
 const authOf = (code: string) => code.match(/function authorized\([\s\S]*?\n\}/)?.[0] ?? "";
 check(
-  "authorized() is send-reminders' own, character for character (CRON_SECRET via x-cron-secret or Bearer, secretEquals)",
-  authOf(route) !== "" && authOf(route) === authOf(reminders) && /secretEquals\(/.test(authOf(route))
+  "authorized() checks CORRECTION_SECRET in x-correction-secret with secretEquals, and never CRON_SECRET",
+  authOf(route) !== "" &&
+    /process\.env\.CORRECTION_SECRET/.test(authOf(route)) &&
+    /secretEquals\(request\.headers\.get\("x-correction-secret"\), secret\)/.test(authOf(route)) &&
+    !/CRON_SECRET|authorization|Bearer/.test(authOf(route).replace(/CORRECTION_SECRET/g, "")) &&
+    !/process\.env\.CRON_SECRET/.test(routeCode)
+);
+check(
+  "without CORRECTION_SECRET every call answers 503 before anything else",
+  /if \(!process\.env\.CORRECTION_SECRET\) \{[\s\S]{0,300}status: 503/.test(routeCode) &&
+    at(/if \(!process\.env\.CORRECTION_SECRET\)/) < at(/!authorized\(request\)/)
 );
 check(
   "reads the body with request.text(); a URL with any query parameter answers 400; nothing else touches the URL's parameters",
@@ -581,6 +600,12 @@ check(
       !write.test(routeCode.slice(0, at(/if \(recipients\.length === 0\)/)))
     );
   })()
+);
+check(
+  "a real send needs confirm_key equal to this correction's dedupe_key, checked before the claim and before any send",
+  /if \(mode\.confirmKey !== dedupeKey\) \{[\s\S]{0,400}status: 409/.test(routeCode) &&
+    at(/mode\.confirmKey !== dedupeKey/) < at(/\.upsert\(/) &&
+    at(/mode\.confirmKey !== dedupeKey/) < at(/resend\.batch\.send\(\s*chunk/)
 );
 check(
   "a real send needs confirm_recipients equal to the recipient count, checked before the claim",
