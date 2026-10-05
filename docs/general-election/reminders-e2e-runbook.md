@@ -196,7 +196,7 @@ Florida's statewide window (Sat Oct 24 to Sat Oct 31) is the minimum every count
 
 `supabase/migrations/0043_county_early_voting_2026.sql` adds one `early_voting_start` (Oct 19) and one `early_voting_end` (Nov 1) row per county, with `verified_by` NULL. As with every `election_event` row, an unverified row reaches no page, email or calendar.
 
-1. Run the file in the Supabase SQL editor. It is idempotent (`ON CONFLICT DO NOTHING`). It doesn't depend on 0042 or 0014, and those don't depend on it.
+1. ~~Run the file in the Supabase SQL editor.~~ **Done 2026-10-05:** applied to production with the founder's approval; the 8 rows are in, unverified. It is idempotent (`ON CONFLICT DO NOTHING`), so running it again changes nothing. It doesn't depend on 0042 or 0014, and those don't depend on it.
 2. Open each `details_url` above and check the dates. Then stamp the rows:
 
    ```sql

@@ -24,7 +24,7 @@ Voter registration closes 10-05.
 2. **#107: merged 2026-10-05.**
    - The news cron writes each "Race published" item once and never updates it. Before #107 it said every candidate got "equal space and comparable scrutiny", which the Balance Audit does not enforce at 150%. #107 corrects that wording.
    - It also makes the banner move on from "Register by October 5" once 10-05 ends in Florida.
-3. **Early voting opens Mon Oct 19 in all four covered counties, not Sat Oct 24.** Apply migration `0043_county_early_voting_2026.sql` and stamp its 8 rows **by Sun 10-18, ideally now**. The SQL is in `reminders-e2e-runbook.md`, "County early-voting dates (0043)".
+3. **Early voting opens Mon Oct 19 in all four covered counties, not Sat Oct 24.** Migration `0043_county_early_voting_2026.sql` was **applied 2026-10-05** with your approval; stamp its 8 rows **by Sun 10-18, ideally now** (`cowork-handoff-2026-10-05.md` task 1). The SQL is in `reminders-e2e-runbook.md`, "County early-voting dates (0043)".
    - Each county's Supervisor of Elections says early voting runs Oct 19 to Nov 1. Two agents checked each county's official page independently on 2026-10-05. The site only knew the statewide minimum, Oct 24 to Oct 31.
    - Without 0043, every subscriber gets "Early voting starts today" on Oct 24, five days after their county opened. Until then, the banner and the welcome email give the statewide window.
    - The code that reads the county rows is PR #112, and it works with or without them.
