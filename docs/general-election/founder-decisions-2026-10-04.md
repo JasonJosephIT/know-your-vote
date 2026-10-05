@@ -13,7 +13,7 @@ All database work in this session was read-only, and nothing was posted to the l
 Voter registration closes 10-05.
 
 1. **Production env: fixed 2026-10-05.** You confirmed that `SUPABASE`, `RESEND` and `JEV` hold the service-role, Resend and TypeSafe keys, and you added `EMAIL_FROM` on `knowyour.vote`.
-   - No renaming is needed. Since #109 the code reads either name (`src/lib/server-keys.ts`).
+   - No renaming is needed. Since #109 the deployed app reads either name (`src/lib/server-keys.ts`).
    - #107 had tried a startup mapping in the root `instrumentation.ts`. It never ran on Vercel: with a `src/` folder, Next.js deploys the instrumentation hook only from `src/`. #109 replaced it.
    - After #109 deployed, the calendar file returned 200 and the home page showed "Register to vote by October 5 · Election Day is November 3" (live GETs).
    - Not yet seen working: the email signup, the reminder cron and the news cron. Each needs a POST or a cron run, which agents don't trigger. The end-to-end test below covers the first two.
@@ -40,10 +40,10 @@ Voter registration closes 10-05.
 - **CRON_SECRET:** if you have no saved copy (Vercel won't show Sensitive values), rotate it.
 - **Optional env:**
   - `NEXT_PUBLIC_PLAUSIBLE_DOMAIN=knowyour.vote` turns analytics on. `/privacy` now says "we don't run analytics" while it is unset.
-  - `SENTRY_DSN` and `NEXT_PUBLIC_SENTRY_DSN` turn on error reporting.
+  - `NEXT_PUBLIC_SENTRY_DSN` turns on browser error reporting. `SENTRY_DSN` would report nothing yet: server-side Sentry starts only from the root `instrumentation.ts`, which is never deployed (see item 1), until that hook moves to `src/instrumentation.ts`.
   - `ADMIN_EMAILS` plus Supabase Auth open the admin console.
   - `PELIAS_BASE_URL` turns on address autocomplete. Optional.
-- **Review and merge #108.** CI runs on it for the first time. Once CI is green, require the `checks` and `build` jobs on main (`docs/ci.md`).
+- **Review and merge #108.** Production's email env is now complete, so merging it turns on the home-page reminder card and the banner's reminder link at once, although the signup has not been seen working yet. CI runs on it for the first time. Once CI is green, require the `checks` and `build` jobs on main (`docs/ci.md`).
 - **By Wed 10-07, answer decisions 4–8 below.** The refresh before early voting depends on them.
 
 ## Decisions, built as recommended
@@ -68,7 +68,7 @@ Voter registration closes 10-05.
 | 11b | Surnames that are common words | **Title and surname only** ("Rep. Lee"). On a 30-day sweep: 75 junk matches drop to 0, and all 51 named matches are kept. | `SURNAME_ONLY_RULE` in `src/lib/news-match.ts` |
 | 11c | Policy story naming no candidate | **Drop** (no automatic inlet before Nov 3) | `UNMATCHED_ARTICLE_POLICY` in `src/lib/news-enqueue.ts` |
 | 11d | Migration 0014 (news source required) | **Apply 0042 first, then 0014**, after #108 deploys. Production has 8 unsourced news rows; 0014 alone would fail. The approve path now sets source_id, and refuses the five outlets whose lean nobody signed off (C7-a). | `news-inlet-runbook.md` §4; TC-6 in `things-to-confirm.md` |
-| 11e | Refresh agent R3 | **Daily** on Cowork (`0 9 * * *`) through 11-03. Its prompt must set source_id once 0014 is live. Note that no news item has been written since 09-09. | Your Cowork task schedule |
+| 11e | Refresh agent R3 | **Daily** on Cowork (`0 9 * * *`) through 11-03. Its prompt must set source_id once 0014 is live. Note that as of 10-04 no news item had been written since 09-09. | Your Cowork task schedule |
 | 12 | Cuts for Nov 3 | **Cut:** SMS, web push, county district placement, statewide ZIPs, a quiz replacement | `docs/scope-changes.md` 2026-10-04 entry |
 | 13 | CI | **Yes.** It runs lint, typecheck, every verify script, the 435 Python tests and `next build` on every PR. The live-DB job is manual only and never gets the service-role key. | Delete `.github/workflows/ci.yml`; see `docs/ci.md` |
 | — | Accessibility fixes | The audit's fixes 1–10 and 12–14 are built. Three are recommended rather than plain fixes:<br>• fix 11, candidate jump links<br>• the input-border token<br>• `CONTACT_EMAIL`<br>Not built, pending you: rendering the cookie banner on the server, and `inlineCss`. | `a11y-perf-2026-10-04.md` "Recommendations pending founder confirmation" |
@@ -85,6 +85,6 @@ Voter registration closes 10-05.
   - no env changes;
   - no migrations (0042 and 0014 are written, not applied);
   - no publish or listing changes;
-  - no news inlet run, which needs `TYPESAFE_API_KEY` and the service-role key in your local `.env.local`.
+  - no news inlet run, which needs `TYPESAFE_API_KEY` and `SUPABASE_SERVICE_ROLE_KEY`, under those names, in your local `.env.local`.
 - **No screen-reader pass.** After #108 merges, do 15 minutes of VoiceOver on /, a race page, /candidates and /news. The audit lists what to listen for.
 - **No real-network Lighthouse.** Run PageSpeed Insights from your browser on the nine audited URLs.

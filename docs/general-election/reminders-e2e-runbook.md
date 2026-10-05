@@ -2,18 +2,18 @@
 
 Written 2026-10-04 for launch handoff items 2.2 (test the reminder pipeline end to end) and 2.3 (make the reminder signup visible). Every step marked **Founder** needs an account only the founder holds. Calls marked **Recommended (pending founder confirmation)** are an agent's choice, not the founder's decision, and each one says how to flip it.
 
-**Hard deadline: Tuesday 2026-10-20.** The first reminder that can still reach a voter is the vote-by-mail request reminder, sent in the 14:00 UTC cron on **Wednesday 2026-10-21**. A reminder is sent only on its exact day, so if the env is still broken that morning, that reminder is lost rather than delayed.
+**Hard deadline: Tuesday 2026-10-20.** The first reminder that can still reach a voter is the vote-by-mail request reminder, sent in the 14:00 UTC cron on **Wednesday 2026-10-21**. A reminder is sent only on its exact day, so if sending still fails that day, that reminder is lost rather than delayed.
 
-## Why nothing sends today
+## Why nothing sent before 2026-10-05
 
 Checked on 2026-10-04. The Vercel env metadata was read without decrypting any value. The 503s on the two POST routes follow from that env and the code; they were not triggered, because a live POST changes state. The calendar 503 and the missing banner were seen with live GETs.
 
 - **The keys were in Vercel under other names.** Production holds sensitive vars called `SUPABASE`, `RESEND` and `JEV`, created 2026-08-31. The founder confirmed on 2026-10-05 that they hold the service-role key, the Resend key and the TypeSafe key. The code read `SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY`, and nothing read the others. **Fixed in code on 2026-10-05 (#109):** the code now reads either name (`src/lib/server-keys.ts`, step 1). A first attempt in #107, a startup mapping in the root `instrumentation.ts`, never ran on Vercel: with a `src/` folder, Next.js deploys the instrumentation hook only from `src/`. After #109 deployed, the calendar file returned 200 and the banner rendered (live GETs). `EMAIL_FROM` was added on 2026-10-05.
 - **So, until #109, every email path failed, and so did everything else that needs the service role:**
   - `POST /api/voting-info` (the signup) answered 503 "Email delivery isn't configured yet".
-  - The 14:00 UTC reminder cron answered 503. Today's run would have sent the registration T-1 reminder; there were 0 subscribers, so no one missed it.
-  - The calendar file `/api/calendar/general_2026.ics` answered **503**, and the home-page deadline banner rendered nothing. Both read `election_event` through the service role, and both work since #109. The signup and the cron have not been seen working yet: that needs a POST, which is step 4.
-- **The signup form is still offered** on the "Your races" view, where it can only fail. This PR replaces it with official links until delivery is configured (see "What this PR changes").
+  - The 14:00 UTC reminder cron answered 503. The 2026-10-04 run would have sent the registration T-1 reminder; there were 0 subscribers, so no one missed it.
+  - The calendar file `/api/calendar/general_2026.ics` answered **503**, and the home-page deadline banner rendered nothing. Both read `election_event` through the service role, and both work since #109. The signup has not been seen working yet: that needs a POST (step 4a). Nor have the crons: their first runs with the keys are the scheduled GETs on 2026-10-05 (news at 10:00 UTC, reminders at 14:00 UTC). Until Oct 21 the reminder run should answer `{"due":0,…}`; steps 4b and 4c exercise it by hand.
+- **The signup form is offered** on the "Your races" view. Until #109 and `EMAIL_FROM` it could only fail. This PR replaces it with official links whenever delivery isn't configured (see "What this PR changes").
 
 ## Step 1. Fix the production env in Vercel (Founder)
 
@@ -115,9 +115,10 @@ Without the secret to hand, Vercel, Settings, Cron Jobs, `/api/cron/send-reminde
 
 | When you run it | Answer | What it proves |
 | --- | --- | --- |
-| Before **00:00 UTC Oct 5** (8 p.m. EDT Oct 4) on today's production code, or before midnight EDT once this PR is merged | `{"due":1,"sent":[{"dedupe_key":"general_2026:registration_deadline:T-1:email","recipients":N}],"skipped":[]}`, and every active subscriber gets "Voter registration closes tomorrow" | The whole path, for real. Only possible tonight. |
 | Oct 5 to Oct 20 | `{"due":0,"sent":[],"skipped":[]}` | Auth, env and the database read work. **Nothing is sent and nothing is logged**: no reminder is due. Use 4c for the send path. |
-| A send day, after its 14:00 UTC run | the same key under `"skipped"` | Idempotency: the scheduled run already claimed it. |
+| A send day, after its 14:00 UTC run | that day's key under `"skipped"` (on Oct 21, `general_2026:vbm_request_deadline:T-1:email`) | Idempotency: the scheduled run already claimed it. |
+
+The registration T-1 reminder was due on Oct 4, when the cron still answered 503 (see "Why nothing sent before 2026-10-05"). The production code takes the UTC date, so its Oct 4 ended at 00:00 UTC Oct 5 (8 p.m. EDT Oct 4), before #109 deployed. That reminder could never be sent and can't be tested live.
 
 ### 4c. Rehearse the next reminder (needs this PR merged)
 
@@ -143,7 +144,7 @@ ORDER BY sent_at DESC
 LIMIT 20;
 ```
 
-**Expected:** the `rehearsal:…` row with `recipient_count = 1`, or the real key from 4b with `recipient_count` equal to the number of distinct active addresses. The cron mails each address once, even when it holds subscriptions for two ZIPs:
+**Expected:** the `rehearsal:…` row with `recipient_count = 1`, or, after a send day's 14:00 UTC run, that day's real key (the one 4b shows under `"skipped"`) with `recipient_count` equal to the number of distinct active addresses. The cron mails each address once, even when it holds subscriptions for two ZIPs:
 
 ```sql
 SELECT count(*) AS subscriptions,
@@ -152,7 +153,7 @@ FROM voting_info_subscription
 WHERE active;
 ```
 
-The send-day digest reports the first number, as "Active subscriptions". A row with `recipient_count` NULL means a send claimed its key and never finished. That should not happen: failures release the claim. Look at Vercel's function logs and Sentry for that run.
+The send-day digest reports the first number, as "Active subscriptions". A row with `recipient_count` NULL means a send claimed its key and never finished. That should not happen: failures release the claim. Look at Vercel's function logs for that run.
 
 Rehearsal rows are a record that a rehearsal ran. They never match a real key, so leaving them is harmless. Like every row in this table, they hold a key and a count, never an address.
 
@@ -183,7 +184,7 @@ The output of `node scripts/verify-reminder-schedule.ts`: the real schedule and 
 
 | Send day (14:00 UTC run) | Eastern time | Template | Subject | For |
 | --- | --- | --- | --- | --- |
-| Sun 2026-10-04 | 10 a.m. EDT | `reg_deadline_t1` | Voter registration closes tomorrow | Registration deadline Oct 5 (postmarked by). **Missed today**: the cron returned 503, with 0 subscribers. |
+| Sun 2026-10-04 | 10 a.m. EDT | `reg_deadline_t1` | Voter registration closes tomorrow | Registration deadline Oct 5 (postmarked by). **Missed**: the cron returned 503, with 0 subscribers. |
 | Wed 2026-10-21 | 10 a.m. EDT | `vbm_deadline_t1` | Vote-by-mail request deadline is tomorrow | VBM request deadline Oct 22 (received by) |
 | Sat 2026-10-24 | 10 a.m. EDT | `early_voting_start` | Early voting starts today | Early voting Oct 24 to 31 |
 | Tue 2026-10-27 | 10 a.m. EDT | `ballot_return_t7` | Mail your ballot back this week | Ballot return Nov 3, 7 p.m. (received by) |
@@ -208,10 +209,10 @@ Vercel may start a scheduled run some minutes into the 14:00 UTC hour.
 | Symptom | Cause | Fix |
 | --- | --- | --- |
 | Cron: **401** `{"error":"Unauthorized"}` | `CRON_SECRET` unset in Production, or the header value is wrong | Check the header name (`x-cron-secret`, or `Authorization: Bearer …`). Rotate `CRON_SECRET` (Step 1) and redeploy. |
-| Cron: **503** "Email delivery isn't configured — nothing was sent." | `RESEND_API_KEY` or `EMAIL_FROM` unset in Production | Step 1, then redeploy |
-| Cron: **503** "Service credentials missing — nothing was sent." | `SUPABASE_SERVICE_ROLE_KEY` unset | Step 1, then redeploy |
-| Signup: **503** "Email delivery isn't configured yet — nothing was sent or stored." | `RESEND_API_KEY` or `EMAIL_FROM` unset | Step 1, then redeploy |
-| Signup: **503** "We couldn't save your request — nothing was sent." | `SUPABASE_SERVICE_ROLE_KEY` unset, or the upsert failed | Step 1, then the Supabase logs |
+| Cron: **503** "Email delivery isn't configured — nothing was sent." | `RESEND_API_KEY` and `RESEND` both unset or empty, or `EMAIL_FROM` unset, in Production | Step 1, then redeploy |
+| Cron: **503** "Service credentials missing — nothing was sent." | `SUPABASE_SERVICE_ROLE_KEY` and `SUPABASE` both unset or empty | Step 1, then redeploy |
+| Signup: **503** "Email delivery isn't configured yet — nothing was sent or stored." | `RESEND_API_KEY` and `RESEND` both unset or empty, or `EMAIL_FROM` unset | Step 1, then redeploy |
+| Signup: **503** "We couldn't save your request — nothing was sent." | `SUPABASE_SERVICE_ROLE_KEY` and `SUPABASE` both unset or empty, or the upsert failed | Step 1, then the Supabase logs |
 | Signup: **502** "We saved your request but the email didn't send" | Resend rejected the send: domain not verified, wrong key, daily cap reached, or rate limit | Resend, Logs. Step 2, items 1 and 5. |
 | Cron: **200** `{"paused":true,…}` | `NOTIFICATIONS_PAUSED` is set (any value) | The intended kill switch (design doc §7). To resume, delete it and redeploy. **A reminder whose day passes while paused is not sent later.** With this PR, pausing also hides the home-page signup card, and the races-view form and the welcome email stop promising reminders. |
 | Cron: **200** `{"due":0,…}` | No reminder is scheduled today (see "What fires when"), or the `election_event` rows lost `verified_by` | Normal on most days. Re-check the verified rows if it happens on a send day. |
@@ -222,32 +223,32 @@ Vercel may start a scheduled run some minutes into the 14:00 UTC hour.
 | Rehearsal: **400** "Send the rehearsal address in a JSON body…" | `rehearse` was put in the URL | Use the 4c command: the address goes in the `--data` body |
 | Rehearsal: **400** `"rehearse" must be an email address` | The body's `rehearse` is empty or not a string | Fix the body |
 | The email lands in spam | No DMARC, a new sending domain, or link-heavy text | Step 2, item 2. Mark it "Not spam" on the canary. |
-| Deadline banner missing on the home page | `SUPABASE_SERVICE_ROLE_KEY` unset, or the read failed (cached for up to an hour) | Step 1. A failed read clears within the hour. |
+| Deadline banner missing on the home page | `SUPABASE_SERVICE_ROLE_KEY` and `SUPABASE` both unset or empty, or the read failed (cached for up to an hour) | Step 1. A failed read clears within the hour. |
 
 ## What this PR changes (for the reviewer)
 
 ### Gate, copy and banner
 
 - **One gate.** `src/lib/notifications/config.ts` adds:
-  - `emailSenderConfigured()` (`RESEND_API_KEY` + `EMAIL_FROM`), used by both routes in place of their inline checks, with the same status codes and messages;
-  - `emailDeliveryConfigured()`, which adds `SUPABASE_SERVICE_ROLE_KEY`. Pages use it to decide whether to offer a signup.
+  - `emailSenderConfigured()` (the Resend key, `RESEND_API_KEY` or `RESEND`, plus `EMAIL_FROM`), used by both routes in place of their inline checks, with the same status codes and messages;
+  - `emailDeliveryConfigured()`, which adds the service-role key (`SUPABASE_SERVICE_ROLE_KEY` or `SUPABASE`, via `src/lib/server-keys.ts`). Pages use it to decide whether to offer a signup.
 - **No form that can only fail.** When delivery is off, `VotingInfo` on the "Your races" view shows the county Supervisor of Elections and the Division of Elections dates page instead. The flag is passed from `YourRaces`, a server component.
 - **Founder decision 3, promotion.** Recommended (pending founder confirmation): yes, once email works.
   - The home page gets a "Get deadline reminders by email" card (`ReminderSignupCta`), plus a link to it in the deadline banner.
-  - It renders only while delivery is configured and reminders are not paused, so it switches on with the redeploy after Step 1.
+  - It renders only while delivery is configured and reminders are not paused. Production's env is now complete, so it switches on as soon as this PR deploys.
   - **To turn it off:** set `PROMOTE_REMINDER_SIGNUP = false` in `src/lib/notifications/config.ts`.
 - **The copy now says what the signup does.**
   - The form and the welcome email used to call it "one email" and a "one-time email", while the cron mails every active subscriber before each deadline (as `/privacy` already said). They now say a reminder follows as each remaining deadline comes up.
   - While `NOTIFICATIONS_PAUSED` is set, the form (`remindersOn`, passed from `YourRaces`) and the welcome email drop that promise.
   - The form and the home card say "where to vote" and "the official link to look up your polling place", because the email links to the county's precinct lookup; it doesn't name a polling place.
-- **The deadline banner rolls forward** (`bannerDates()` in `schedule.ts`):
+- **The deadline banner rolls forward** (`bannerDates()` in `schedule.ts`; merged with #107, so already live). This PR only passes it the link to the reminder card (`remindersHref` from `src/app/(public)/page.tsx`). Since #107 it shows:
   - registration until the end of Oct 5;
   - the VBM request deadline through Oct 22;
   - early voting Oct 24 to 31;
   - the ballot-return deadline Nov 1 to 3;
   - then nothing after Election Day.
 
-  It used to say "Register to vote by October 5" forever.
+  Before #107 it said "Register to vote by October 5" forever.
 
 ### Route behaviour changes beyond the gate
 
@@ -262,10 +263,7 @@ These change what the two production routes do once this PR is merged. None of t
 
 ### To confirm (Founder)
 
-- **The vote-by-mail request cutoff time.** Florida Statutes s. 101.62(3)(c) (2025 text, read at flsenate.gov on 2026-10-04) says: "The deadline to submit a request for a ballot to be mailed is 5 p.m. local time on the 12th day before an upcoming election." No copy states a time yet: the reminder template, the welcome email and the banner all give only the date. As a result, someone who signs up on the evening of Oct 22 is still shown that day's deadline. Once you have confirmed it against dos.fl.gov, these three edits add the time:
-  - `src/lib/notifications/templates.ts`, `welcomeEmail()`: change "(your request must be received by then)" to "(your request must be received by 5 p.m. that day)".
-  - `src/components/features/DeadlineBanner.tsx`, `nextLine()`: change "Request a vote-by-mail ballot by ${…}" to "Request a vote-by-mail ballot by 5 p.m. on ${…}".
-  - `templates.ts`, `vbm_deadline_t1`: add "by 5 p.m." to its body. This is a founder-reviewed template; it goes out on Oct 21.
+- **The vote-by-mail request cutoff time.** Florida Statutes s. 101.62(3)(c) (2025 text, read at flsenate.gov on 2026-10-04) says: "The deadline to submit a request for a ballot to be mailed is 5 p.m. local time on the 12th day before an upcoming election." This PR adds that time to the reminder template (`vbm_deadline_t1`) and the welcome email (`welcomeEmail()`, when the event's rule is `received_by`), both in `src/lib/notifications/templates.ts`; the banner (`nextLine()` in `src/components/features/DeadlineBanner.tsx`) has said "5 p.m." since #107. Confirm the time against dos.fl.gov before Oct 21, when `vbm_deadline_t1` goes out. If it is wrong, those three strings are the edits.
 
 ## Verified, and not verified
 
@@ -275,7 +273,7 @@ These change what the two production routes do once this PR is merged. None of t
   - `tsc` and `eslint` on the changed files;
   - a static render (TypeScript transpile and `react-dom/server`) of the form with reminders on and paused, the no-email fallback and the home card, redone after the review fixes, and of the banner on each rollover day;
   - the rehearsal body parsing, run against real `Request` objects: GET, an empty POST, `{}` or a non-JSON body run the normal schedule; a body address is trimmed; a non-string, empty or URL `rehearse` gets a 400.
-- **Verified live (read-only):** the env names and types in Vercel (values never decrypted), the DNS records above, the six `election_event` rows, 0 subscribers and 0 send-log rows, and the 503 on the calendar file.
+- **Verified live (read-only):** the env names and types in Vercel (values never decrypted), the DNS records above, the six `election_event` rows, 0 subscribers and 0 send-log rows, and the 503 on the calendar file; on 2026-10-05, after #109 deployed, the 200 on the calendar file and the banner on `/`.
 - **Not verified:**
   - **any live POST**: signup, cron, rehearsal and unsubscribe all change state, so the whole of Step 4 is the founder's. The route behaviour changes listed above have run only as pure functions and source checks;
   - Resend's domain status, plan and limits;

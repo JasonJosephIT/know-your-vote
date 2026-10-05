@@ -37,11 +37,14 @@
         and late evening Eastern: it states the next date a voter can still
         act on, keeps a deadline through the end of its own Florida day,
         never states a passed date, and disappears after Election Day.
-     6. DELIVERY GATE. emailDeliveryConfigured() is true only with all of
-        RESEND_API_KEY, EMAIL_FROM and SUPABASE_SERVICE_ROLE_KEY set, and
-        the pages that offer a signup are gated on it. config.ts is
-        server-only, so it is loaded in a child Node with the react-server
-        condition rather than imported here.
+     6. DELIVERY GATE. emailDeliveryConfigured() is true only with a Resend
+        key, EMAIL_FROM and a service-role key, each key under either name
+        (src/lib/server-keys.ts: RESEND_API_KEY or RESEND,
+        SUPABASE_SERVICE_ROLE_KEY or SUPABASE), and the pages that offer a
+        signup are gated on it. A source check holds every read of either
+        key in src/ to server-keys.ts. config.ts is server-only, so it is
+        loaded in a child Node with the react-server condition rather than
+        imported here.
 
    What it cannot cover: anything that needs the database, Resend or a
    deployed route (the claim, the batch send, the unsubscribe link). That
@@ -50,7 +53,7 @@
    Run: node scripts/verify-reminder-schedule.ts */
 
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ElectionEvent } from "../src/lib/notifications/election-events.ts";
@@ -607,7 +610,7 @@ if (gate) {
       r.promoPaused !== false
   );
   check(
-    "emailDeliveryConfigured() only with RESEND_API_KEY + EMAIL_FROM + SUPABASE_SERVICE_ROLE_KEY; promotion follows it and stops while NOTIFICATIONS_PAUSED",
+    "emailDeliveryConfigured() only with RESEND_API_KEY + EMAIL_FROM + SUPABASE_SERVICE_ROLE_KEY (production names unset); promotion follows it and stops while NOTIFICATIONS_PAUSED",
     wrong.length === 0,
     JSON.stringify(wrong)
   );
@@ -618,6 +621,50 @@ if (gate) {
   );
   console.log(`      (PROMOTE_REMINDER_SIGNUP = ${gate.promote}: founder decision 3, recommended, pending confirmation)`);
 }
+
+/* Every read of either key in the deployed app goes through server-keys.ts
+   (README, Environment variables). A direct read sees one name only: in
+   production, where the keys are set only as RESEND and SUPABASE, a read
+   of the canonical name finds nothing after the gate above has said yes.
+   A bare new Resend() is such a read, since the SDK falls back to
+   process.env.RESEND_API_KEY. Neither pattern matches NEXT_PUBLIC_SUPABASE_*. */
+function sourceFiles(dir: string): string[] {
+  return readdirSync(path.join(root, dir), { withFileTypes: true }).flatMap((entry) => {
+    const rel = `${dir}/${entry.name}`;
+    if (entry.isDirectory()) return sourceFiles(rel);
+    return /\.tsx?$/.test(entry.name) ? [rel] : [];
+  });
+}
+const KEY_READ =
+  /process\.env(?:\??\.|\??\.?\[\s*["'`])(?:RESEND_API_KEY|SUPABASE_SERVICE_ROLE_KEY|RESEND|SUPABASE)\b/;
+const KEY_DESTRUCTURE =
+  /\b(?:RESEND_API_KEY|SUPABASE_SERVICE_ROLE_KEY|RESEND|SUPABASE)\b[^}]*\}\s*=\s*process\.env\b/;
+const SERVER_KEYS = "src/lib/server-keys.ts";
+const keyReaders: string[] = [];
+const resendCalls: string[] = [];
+let resendCount = 0;
+for (const rel of sourceFiles("src")) {
+  const code = source(rel);
+  if (rel !== SERVER_KEYS && (KEY_READ.test(code) || KEY_DESTRUCTURE.test(code))) keyReaders.push(rel);
+  for (const [call] of code.matchAll(/new\s+Resend\b[^;\n]*/g)) {
+    resendCount++;
+    if (!call.startsWith("new Resend(resendApiKey())")) resendCalls.push(`${rel}: ${call}`);
+  }
+}
+check(
+  "every read of either key in the deployed app (src/) goes through src/lib/server-keys.ts",
+  KEY_READ.test(source(SERVER_KEYS)) && keyReaders.length === 0,
+  keyReaders.join(", ") || `no key read found in ${SERVER_KEYS}`
+);
+check(
+  "every new Resend( in src/ is new Resend(resendApiKey())",
+  resendCount > 0 && resendCalls.length === 0,
+  resendCalls.join("; ") || "no new Resend( found"
+);
+check(
+  "src/lib/supabase/service.ts takes its key from serviceRoleKey()",
+  /= serviceRoleKey\(\)/.test(source("src/lib/supabase/service.ts"))
+);
 
 const yourRaces = source("src/components/features/YourRaces.tsx");
 check(

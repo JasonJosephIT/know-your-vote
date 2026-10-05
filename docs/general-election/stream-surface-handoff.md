@@ -101,10 +101,12 @@ There is no feature flag. Four things keep it off:
 2. **One way in.** `scripts/news-enqueue.ts` only queues `review_item` rows.
    A `news_item` row exists only after an operator approves it at
    `POST /api/admin/review/:id/decision`.
-3. **That way is closed in production.** `SUPABASE_SERVICE_ROLE_KEY` is unset,
-   so the service client throws and the route returns 503. `ADMIN_EMAILS` is
-   unset, so the console is closed. The enqueue and characterize scripts need
-   the same service key.
+3. **That way is closed in production.** `ADMIN_EMAILS` is unset, so the
+   console is closed and the route refuses (401/403 from `adminApiGuard`)
+   before it reaches the service client. (The service-role key itself is
+   readable since #109, as `SUPABASE`.) The enqueue and characterize scripts
+   run locally and read the service key only as `SUPABASE_SERVICE_ROLE_KEY`,
+   so they need it under that name in `.env.local`.
 4. **The N gate (§3 item 1) is open.** The candidate page passes no `slots`.
 
 Going live therefore means running the runbook and approving rows. It is not
@@ -118,7 +120,7 @@ first approval.
 | D1 | **N**, news slots per candidate | **3** | Measured 2026-10-04 (30-day sweep, live roster of 82): 69 candidates had no `named` story; the 13 who did had a median of 2 and a top of 14, against 0 for another candidate in the same race. 3 binds only on the most-covered and turns 14-to-0 into 3-to-0 plus the stated shortfall. Every usable outlet is `unrated`, so a larger N would add stories of the same lean, not spread. Re-measure after the first approved batch. | `src/lib/news-slots.ts` `NEWS_SLOTS_PER_CANDIDATE`. Change the number. **Wiring is separate:** pass `slots={NEWS_SLOTS_PER_CANDIDATE}` at both `<CandidateNews>` call sites in `src/app/(public)/candidates/[candidateId]/page.tsx`. |
 | D2 | **Surnames that are also common words** | **`title_and_surname`**: without the full name, a surname attaches only with a title right before it ("Rep. Lee", "Commissioner Smith"), for every candidate alike | The old bare-surname rule gave 75 `related` attachments in 30 days, at most one of them real; Robert People alone took 37. The new rule gives 0 and leaves the 51 `named` attachments untouched. A stop-list would mean deciding whose name is "common", which is a judgment about particular candidates, and it would still miss Strada, Rojas and Gilbert, which also misfired. A list of titles treats every name alike. Cost: a bare-surname headline with no title and no full name in the dek no longer reaches review (at most 1 in the sample). | `src/lib/news-match.ts` `SURNAME_ONLY_RULE`. `"bare_surname"` restores the previous behaviour exactly. `verify-news-match.ts` checks both modes. |
 | D3 | **A policy story that names no candidate** | **`"drop"`**: no automatic inlet before Nov 3; operator submission stays the path | A Jev-gated policy inlet reverses the pipeline order and was meant to be "its own spec change with its own PR". The model has never run on production rows (no key; a threshold set on ten fixtures). 507 of 545 swept articles matched nobody, and one operator would review whatever the model admitted. `NewsInsertRow` has no `county_fips`, so the approval boundary cannot carry a county-scoped row anyway. | `src/lib/news-enqueue.ts` `UNMATCHED_ARTICLE_POLICY`. `"policy_inlet"` is not built, and the enqueue script refuses to run with it. |
-| D4 | **R3 cadence for the final weeks** | **Daily on Cowork** from 10-05 to 11-03 (`0 9 * * *`). Do not build ADR-001 Option B now. | The plan's "daily in the final 8 weeks" default lapsed on 09-08. The key dates (10-05, 10-22, 10-24 to 10-31, 11-03) are too dense for a Wednesday-only run. Option B is a new route, a model key, the service key and monitoring, all built in the last four weeks. | The Cowork task's schedule, outside this repo. Leave it weekly to flip. |
+| D4 | **R3 cadence for the final weeks** | **Daily on Cowork** from 10-05 to 11-03 (`0 9 * * *`). Do not build ADR-001 Option B now. | The plan's "daily in the final 8 weeks" default lapsed on 09-08. The key dates (10-05, 10-22, 10-24 to 10-31, 11-03) are too dense for a Wednesday-only run. Option B is a new route, a model key and monitoring, all built in the last four weeks. | The Cowork task's schedule, outside this repo. Leave it weekly to flip. |
 | D5 | **The Ballotpedia row in 0042** | Attribute as `factual_reporting` / `unrated` ("No independent rating") | It is the only unlisted non-government source among the eight sourceless rows. `unrated` is the value 0028 made for "a lean applies and nobody rates it", as the measure resources used for other unlisted outlets. | The marked BALLOTPEDIA block in `supabase/migrations/0042_news_source_backfill.sql`. Swap it for the `DELETE` its header gives. Must be decided before 0042 is applied. |
 | D6 | **Apply 0014** (with 0042 first) | Yes, after this branch deploys and before the first approval | It is the backstop for "no source, no card". The approve path now satisfies it by construction. | Runbook §4. The rollback is one `DROP CONSTRAINT`. |
 

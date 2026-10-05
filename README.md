@@ -54,17 +54,18 @@ feature just stays off.
 
 There is one deliberate exception. Vercel production stores the Supabase
 service-role key as `SUPABASE` and the Resend API key as `RESEND` (the
-founder's names, confirmed 2026-10-05). Until #109, nothing read them, so
-the signup, both crons, the deadline banner and the calendar file all
-failed. `src/lib/server-keys.ts` now reads `SUPABASE_SERVICE_ROLE_KEY` and
-`RESEND_API_KEY`, falling back to `SUPABASE` and `RESEND` when the canonical
-name is unset or empty, and every read of either key goes through it. `JEV`
-holds the TypeSafe key, which Vercel doesn't need (`TYPESAFE_API_KEY`
-below). Every other variable must use the exact name.
-After adding or renaming a variable,
-compare its name against the list below character for character, then
-redeploy (Vercel applies env changes only to new deployments). The fix and an
-end-to-end test are in
+founder's names, confirmed 2026-10-05). Until #109 deployed on 2026-10-05,
+nothing read them, so the signup, both crons, the deadline banner and the
+calendar file all failed. `src/lib/server-keys.ts` now reads
+`SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY`, falling back to `SUPABASE`
+and `RESEND` when the canonical name is unset or empty, and every read of
+either key in the deployed app (`src/`) goes through it. Local scripts under
+`scripts/` still read only `SUPABASE_SERVICE_ROLE_KEY`, so `.env.local`
+needs that name. `JEV` holds the TypeSafe key, which Vercel doesn't need
+(`TYPESAFE_API_KEY` below). Every other variable must use the exact name.
+After adding or renaming a variable, compare its name against the list below
+character for character, then redeploy (Vercel applies env changes only to
+new deployments). The production env checklist and an end-to-end test are in
 [`docs/general-election/reminders-e2e-runbook.md`](docs/general-election/reminders-e2e-runbook.md).
 
 Also unset in production on 2026-10-04, under any name:
@@ -152,7 +153,12 @@ missing key degrades a surface, it never fakes one.
 - `NEXT_PUBLIC_SENTRY_DSN` — browser error reporting, loaded lazily after
   hydration so the SDK stays out of the initial bundle. Unset → never loaded.
 - `SENTRY_DSN` — server error reporting, PII-scrubbed (verified by
-  `node scripts/verify-sentry-scrub.ts`). Unset → Sentry stays disabled.
+  `node scripts/verify-sentry-scrub.ts`). **Not wired on Vercel yet:** the
+  server SDK starts only from the root `instrumentation.ts`, and with a
+  `src/` folder `next build` registers the hook only from
+  `src/instrumentation.ts`, so the root one is never deployed (the same
+  reason #107's key mapping never ran). Set or unset, the deployed app
+  reports no server errors until that hook moves to `src/`.
 
 The Google Ads tag has no variable. Its ID is a constant in
 `src/components/features/SitePrompts.tsx`, and it loads only after a visitor
@@ -254,10 +260,14 @@ each item, is in `docs/general-election/launch-handoff-2026-10-04.md`.
    admin sign-in), and optionally `NEXT_PUBLIC_SITE_URL`,
    `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` / `NEXT_PUBLIC_SENTRY_DSN` + `SENTRY_DSN`.
    See [Environment variables](#environment-variables) for what each one
-   degrades to when it's absent. **Not done in production on 2026-10-04:**
-   only `NEXT_PUBLIC_SITE_URL`, the two public Supabase variables and
-   `CRON_SECRET` are set under the right names (see the warning above);
-   `docs/general-election/reminders-e2e-runbook.md` step 1 is the fix.
+   degrades to when it's absent. **Production on 2026-10-05:** the two public
+   Supabase variables, `NEXT_PUBLIC_SITE_URL`, `CRON_SECRET` and `EMAIL_FROM`
+   are set under these names, and the service-role and Resend keys as
+   `SUPABASE` and `RESEND`, which the app reads since #109 (the exception
+   above). `ADMIN_EMAILS`, Plausible and Sentry are unset. The signup and
+   the crons have not been seen working yet;
+   `docs/general-election/reminders-e2e-runbook.md` step 4 (by 2026-10-20)
+   tests the signup and reminders end to end.
 2. In Vercel → Settings → Deployment Protection, set Vercel Authentication to
    "Only Preview Deployments" so the production URL is public. **Done
    2026-09-23**: `knowyour.vote` and the production `*.vercel.app` URLs are

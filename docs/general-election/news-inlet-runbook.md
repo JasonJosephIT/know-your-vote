@@ -37,9 +37,11 @@ not show on `/news`, because enqueued rows carry a `race_id` and no county, and
 ## 1. Why this could not run here, and the environment each step needs
 
 The session that wrote this had no `SUPABASE_SERVICE_ROLE_KEY` and no
-`TYPESAFE_API_KEY`. Vercel production does not hold them under those names
-either. The values were created on 2026-08-31 as `SUPABASE` and `JEV`, and no
-code reads those names. Everything in this file that touched production was a
+`TYPESAFE_API_KEY`. Vercel production holds the values as `SUPABASE` and `JEV`
+(created 2026-08-31). Since #109 (2026-10-05) the app reads `SUPABASE` as the
+service-role key (`src/lib/server-keys.ts`). Nothing reads `JEV`, and the
+scripts below read only `SUPABASE_SERVICE_ROLE_KEY` and `TYPESAFE_API_KEY`
+from `.env.local`. Everything in this file that touched production was a
 read-only `SELECT` through the Supabase MCP, plus one sweep (step 1, GET
 requests to listed outlets only).
 
@@ -51,18 +53,19 @@ never paste a key into a doc or a PR.
 | ---- | -------------------------- | --------------------------- | ------------------ | ----- |
 | 1 sweep | – | – | – | outbound HTTPS |
 | 2 enqueue, `--dry-run` included | ✔ | ✔ (the roster read comes before the dry-run exit) | – | – |
-| 3 approve in production | ✔ | ✔ in Vercel production | – | `ADMIN_EMAILS` and Supabase Auth (`admin-dashboard/roadmap.md`); the console is closed without them |
+| 3 approve in production | ✔ | ✔ in Vercel production, held there as `SUPABASE` (read since #109, `src/lib/server-keys.ts`); no rename needed | – | `ADMIN_EMAILS` and Supabase Auth (`admin-dashboard/roadmap.md`); the console is closed without them |
 | 3 approve locally (`npm run dev`) | ✔ | ✔ in `.env.local` | – | `ADMIN_EMAILS` in `.env.local` |
 | 4 characterize, `--dry-run` included | ✔ | ✔ | ✔ | – |
 
 `NEXT_PUBLIC_SUPABASE_URL` is `https://pqracitpmzpiqfnzlngw.supabase.co`.
 
-**The production news cron 503s today, for the same reason.**
-`/api/cron/refresh-news` creates a service client and returns
-`503 "Service credentials missing — feed left intact."` because
-`SUPABASE_SERVICE_ROLE_KEY` is unset. That cron does not sweep. It inserts one
-`pipeline_event` "Race published: …" row per published race. See §6 for what
-its first run will do once the key exists.
+**Until #109 (2026-10-05) the production news cron answered 503, for the same
+reason.** `/api/cron/refresh-news` creates a service client and returned
+`503 "Service credentials missing — feed left intact."` because nothing read
+`SUPABASE`. Since #109 the service client reads it. The cron's first run with
+the key is the 10:00 UTC run on 2026-10-05, which has not been observed. That
+cron does not sweep. It inserts one `pipeline_event` "Race published: …" row
+per published race. See §6.
 
 ## 2. Founder calls this inlet depends on: recommended defaults, all pending
 
@@ -296,20 +299,20 @@ Run from the repo root with `.env.local` holding the §1 keys.
 - **The founder calls:** flip the constants in §2. Nothing else depends on
   them.
 
-## 6. What the news cron does once the service key exists
+## 6. What the news cron does now that the service key is readable
 
-`/api/cron/refresh-news` runs daily at 10:00 UTC. Once
-`SUPABASE_SERVICE_ROLE_KEY` is set, its first run inserts one `pipeline_event`
-per published race not yet announced: **36 rows at once** on today's data,
-because live has 0 `pipeline_event` rows. Each is dated with the race's
-`published_at`, and each carries this summary:
+`/api/cron/refresh-news` runs daily at 10:00 UTC. Since #109 it reads the
+service-role key as `SUPABASE`, so its first run (10:00 UTC, 2026-10-05, not
+yet observed) inserts one `pipeline_event` per published race not yet
+announced: **36 rows at once** on 2026-10-04's data, because live had 0
+`pipeline_event` rows. Each is dated with the race's `published_at`, and each
+carries #107's summary:
 
-> "This race passed the Balance Audit — every candidate covered with equal
-> space and comparable scrutiny — and its briefs are now live."
+> "This race passed the Balance Audit and was approved for publishing, so
+> what each candidate says, quoted from their own site, is now live."
 
-The second half repeats the promise launch handoff §1 flags as untrue for the
-published briefs (`verifiable_fact_count = 0` on every profile). Reword it
-before setting the key, or accept it knowingly. The route belongs to the
+#107 replaced the old "equal space and comparable scrutiny" wording before the
+key became readable, so no row carries it. The route belongs to the
 coordinator's package, not this one.
 
 ## 7. R3 cadence in the final weeks: recommended, pending
@@ -326,12 +329,12 @@ without a decision. The newest `news_item` is dated 2026-09-09.
   vote-by-mail request deadline 10-22, early voting runs 10-24 to 10-31, and
   Election Day is 11-03. A Wednesday-only run can trail a changed early-voting
   site by six days.
-- **Option B is a build.** It needs a new `/api/cron/*` route, a model key
-  and the service-role key in Vercel (both unset under the names the code
-  reads), allowlist config and monitoring, all written and reviewed in the
-  last four weeks. ADR-001 itself says Cowork's weakness is reliability ("runs
-  while the app is open; a missed slot runs on next launch"). That is
-  acceptable if the app is opened daily.
+- **Option B is a build.** It needs a new `/api/cron/*` route, a model key in
+  Vercel (`TYPESAFE_API_KEY`; production's `JEV` is read by nothing), the
+  service-role key (readable as `SUPABASE` since #109), allowlist config and
+  monitoring, all written and reviewed in the last four weeks. ADR-001 itself
+  says Cowork's weakness is reliability ("runs while the app is open; a missed
+  slot runs on next launch"). That is acceptable if the app is opened daily.
 - **R3 must write a source.** It writes `election_news` rows. Once 0014 is
   applied, a row without a `source_id` is refused. R3's prompt lives in the
   Cowork task, outside this repo. Add "register each page as a `source` row
