@@ -233,6 +233,8 @@ export type WelcomeEmailParams = {
   office: { name: string; url: string } | null;
   /* The Division of Elections, when there is no county office to name. */
   stateUrl: string;
+  /* siteOrigin() and unsubscribeUrl() from src/lib/site-url.ts: the site's
+     fixed address, never the address the signup request came in on. */
   origin: string;
   unsubscribeUrl: string;
   /* The verified rows that apply to the voter's county: eventsForCounty

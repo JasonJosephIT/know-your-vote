@@ -180,13 +180,14 @@ export async function POST(request: NextRequest) {
 
   const rendered = renderCorrection(target, params.event_label);
   const dedupeKey = correctionDedupeKey(target);
-  const origin = request.nextUrl.origin;
+  /* The email's links come from src/lib/site-url.ts (reminderText), never
+     from this request's address. */
   const scopeLabel = target.county_fips
     ? `${coveredCounty(target.county_fips)?.name ?? target.county_fips} County`
     : "statewide";
 
   if (mode.kind === "rehearse") {
-    return rehearse(service, events, target, rendered, dedupeKey, mode.to, origin);
+    return rehearse(service, events, target, rendered, dedupeKey, mode.to);
   }
 
   /* The cohort is read once, before anything is claimed, so a failed read
@@ -248,7 +249,7 @@ export async function POST(request: NextRequest) {
       /* null when the log could not be read: unknown, not "no". */
       already_sent: logError ? null : Boolean(logged),
       subject,
-      text: reminderText(rendered, origin, "<unsubscribe token>"),
+      text: reminderText(rendered, "<unsubscribe token>"),
       recipients: recipients.length,
       active_subscriptions: count,
       next:
@@ -330,7 +331,7 @@ export async function POST(request: NextRequest) {
           from: process.env.EMAIL_FROM!,
           to: sub.email,
           subject,
-          text: reminderText(rendered, origin, sub.unsubscribe_token),
+          text: reminderText(rendered, sub.unsubscribe_token),
         }))
       );
       if (sendError) throw new Error(sendError.message);
@@ -406,8 +407,7 @@ async function rehearse(
   target: ElectionEvent,
   rendered: Rendered,
   dedupeKey: string,
-  to: string,
-  origin: string
+  to: string
 ) {
   /* Signups are stored lower-cased; the exact spelling is tried too, for
      any row saved before that. */
@@ -462,7 +462,7 @@ async function rehearse(
       from: process.env.EMAIL_FROM!,
       to: sub.email,
       subject: `[Rehearsal] ${rendered.subject ?? rendered.title}`,
-      text: reminderText(rendered, origin, sub.unsubscribe_token),
+      text: reminderText(rendered, sub.unsubscribe_token),
     },
   ]);
   if (sendError) {
