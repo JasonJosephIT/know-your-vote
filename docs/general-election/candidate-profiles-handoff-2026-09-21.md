@@ -10,6 +10,42 @@ than the rest. It is ingest and editorial work, not news work.
 
 ---
 
+> **SUPERSEDED IN PART, same day.** The founder had the nine demo races
+> **deleted** (migration `0030_drop_demo_races.sql`, applied 2026-09-21), so
+> §1's "all content belongs to a demo race" is now history rather than current
+> state. What the live database holds after that:
+>
+> | | Before | After |
+> |---|---|---|
+> | races | 30 | **21, all real** |
+> | ballot-tier candidates | 86 | **57 — this is the real ballot** |
+> | `profile` / `issue` / `position` / `claim` | 29 / 28 / 88 / 261 | **0 / 0 / 0 / 0** |
+> | `race_publication` | 9 draft | **0** |
+> | `news_item`, `source` | 14, 87 | **14, 87** — `news_item` untouched; the 87 `source` rows are the demo seed's sources (`demo-src-*`), not deleted and now cited by nothing |
+>
+> No foreign key was left dangling. But 0030 does not delete from `source`, so
+> the 87 demo-seed sources (29 each of `primary_doc`, `factual_reporting` and
+> `candidate_self`) survive with no `claim_source` pointing at them
+> (`profile-intake-handoff-2026-09-21.md` §2, open question 4). `news_item` was
+> untouched because none of its rows referenced a demo race or candidate.
+>
+> **So §7 question 1 is answered, and the "86 ballot candidates" figure in §1
+> was 57 real + 29 demo** — the demo candidates carried realistic names and a
+> `ballot` status, which is why they were counted as real here at first.
+>
+> What does NOT change: there is still **no written brief anywhere**, all 21 real
+> races are still empty, and nothing is published. The worklist in §5 and the
+> remaining questions in §7 stand exactly as written. One thing got cleaner:
+> the only worked example of the brief shape is now `scripts/demo-seed*.sql` in
+> the repo rather than rows in production (reference only: §5's rule against
+> seeding from it stands), and there is no longer a set of invented races one
+> `set_race_publication` call from being voter-facing.
+>
+> Also surfaced by the delete: `candidate_social_account` went 38 → **0**, so
+> every social account in the database had belonged to a demo candidate. The 57
+> real ballot candidates have none. That is a gap in the real roster, not
+> something the deletion caused.
+
 ## 1. The headline
 
 **Every piece of candidate brief content in the live database belongs to a demo
