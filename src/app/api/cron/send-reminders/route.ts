@@ -184,6 +184,10 @@ async function run(request: NextRequest) {
      voting reminder while every subscriber's county has its own date. Not
      claimed, so nothing is recorded as sent. */
   const noRecipients: string[] = [];
+  /* Paces every batch call in the run, not just within one reminder: on
+     Oct 19 each county's early-voting reminder is its own send, so one run
+     makes several calls back to back. */
+  let batchCalls = 0;
 
   for (const { reminder, scopes } of due) {
     const { event, template_id, dedupe_key: dedupeKey } = reminder;
@@ -237,7 +241,7 @@ async function run(request: NextRequest) {
     try {
       for (let i = 0; i < recipients.length; i += BATCH_SIZE) {
         const chunk = recipients.slice(i, i + BATCH_SIZE);
-        if (i > 0) {
+        if (batchCalls++ > 0) {
           await new Promise((r) => setTimeout(r, BATCH_PACING_MS));
         }
         const { error: sendError } = await resend.batch.send(
@@ -273,23 +277,28 @@ async function run(request: NextRequest) {
     sent.push({ dedupe_key: dedupeKey, recipients: delivered });
   }
 
-  /* Founder digest (plan A9): only on days something actually went out —
-     zero-activity days send nothing at all. Best-effort: a digest failure
-     never fails a run that already delivered reminders. */
-  if (sent.length > 0) {
+  /* Founder digest (plan A9): only on days something was due — zero-activity
+     days send nothing at all. A due reminder that reached no one is
+     reported too: before the county rows it was claimed and logged with 0
+     recipients, and the digest said so. It now goes unclaimed, and this is
+     where the founder still sees it — including the case where 0043 was
+     stamped after Oct 19 and the Oct 24 statewide reminder no longer
+     covers any subscriber. Best-effort: a digest failure never fails a run
+     that already delivered reminders. */
+  if (sent.length > 0 || noRecipients.length > 0) {
     try {
       await resend.emails.send({
         from: process.env.EMAIL_FROM!,
         to: process.env.EMAIL_FROM!,
         subject: `Know Your Vote reminders digest — ${today}`,
         text: [
-          "Reminders sent today:",
+          sent.length > 0 ? "Reminders sent today:" : "No reminder was sent today.",
           ...sent.map((s) => `  ${s.dedupe_key} -> ${s.recipients} recipients`),
           skipped.length > 0
             ? `Skipped (already sent): ${skipped.join(", ")}`
             : "",
           noRecipients.length > 0
-            ? `Due but no subscriber in its county scope: ${noRecipients.join(", ")}`
+            ? `Due today but sent to no one (no active subscriber in its scope): ${noRecipients.join(", ")}`
             : "",
           `Active subscriptions (one per address and ZIP): ${subscriberCount}`,
         ]

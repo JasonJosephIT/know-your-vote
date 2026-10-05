@@ -131,7 +131,7 @@ export default async function Home() {
         )}
       </section>
 
-      {promoteReminders && <ReminderSignupCta />}
+      {promoteReminders && <ReminderSignupCta countyFips={saved?.countyFips} />}
 
       <InstallCard />
 

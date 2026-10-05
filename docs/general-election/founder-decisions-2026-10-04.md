@@ -29,6 +29,7 @@ Voter registration closes 10-05.
    - Without 0043, every subscriber gets "Early voting starts today" on Oct 24, five days after their county opened. Until then, the banner and the welcome email give the statewide window.
    - The code that reads the county rows is PR #112, and it works with or without them.
    - The end-to-end test deadline moves up with it: the first real send is now Oct 19, so finish it by **Sun 10-18**.
+   - **A late stamp drops that reminder.** Stamped on Oct 19 after 14:00 UTC, trigger the cron by hand that day. Stamped Oct 20 or later, no subscriber gets an early-voting reminder (the runbook explains why). The banner, the welcome email and the calendar are still fixed, so stamp anyway.
 4. **Change the Spacemail passwords for info@knowyour.vote (hello@ until 2026-10-05) and admin@knowyour.vote**, each to a different one. They shared the password that was pasted into the session chat. No agent used it or wrote it anywhere.
 
 ## This week

@@ -116,7 +116,7 @@ Without the secret to hand, Vercel, Settings, Cron Jobs, `/api/cron/send-reminde
 | When you run it | Answer | What it proves |
 | --- | --- | --- |
 | Oct 5 to Oct 18 (to Oct 20 without 0043) | `{"due":0,"sent":[],"skipped":[]}` | Auth, env and the database read work. **Nothing is sent and nothing is logged**: no reminder is due. Use 4c for the send path. |
-| A send day, after its 14:00 UTC run | that day's key under `"skipped"` (on Oct 19, `general_2026:early_voting_start:T-0:email:12086` and the other three counties' keys; on Oct 21, `general_2026:vbm_request_deadline:T-1:email`) | Idempotency: the scheduled run already claimed it. |
+| A send day, after its 14:00 UTC run | that day's key under `"skipped"` (on Oct 21, `general_2026:vbm_request_deadline:T-1:email`; on Oct 19, `general_2026:early_voting_start:T-0:email:<FIPS>` for each county with at least one active subscriber, and under `"noRecipients"` for each county with none) | Idempotency: the scheduled run already claimed it. A key with no subscriber in its scope is never claimed, so it can never show as skipped. |
 | Oct 24, with 0043 stamped | `general_2026:early_voting_start:T-0:email` under `"noRecipients"` | The statewide "starts today" reminder is due but goes to nobody: every subscriber is in a covered county, and each county's own reminder went out on Oct 19. A reminder with no recipients is not claimed or logged. |
 
 The registration T-1 reminder was due on Oct 4, when the cron still answered 503 (see "Why nothing sent before 2026-10-05"). The production code takes the UTC date, so its Oct 4 ended at 00:00 UTC Oct 5 (8 p.m. EDT Oct 4), before #109 deployed. That reminder could never be sent and can't be tested live.
@@ -147,7 +147,7 @@ ORDER BY sent_at DESC
 LIMIT 20;
 ```
 
-**Expected:** the `rehearsal:…` row with `recipient_count = 1`, or, after a send day's 14:00 UTC run, that day's real key (the one 4b shows under `"skipped"`) with `recipient_count` equal to the number of distinct active addresses. The cron mails each address once, even when it holds subscriptions for two ZIPs:
+**Expected:** the `rehearsal:…` row with `recipient_count = 1`, or, after a send day's 14:00 UTC run, that day's real key (the one 4b shows under `"skipped"`) with `recipient_count` equal to the number of distinct active addresses. For a county key (`…:<FIPS>`, Oct 19), count only the addresses whose ZIP is in that county. A reminder due to no one is not logged at all; the digest lists it instead. The cron mails each address once per reminder, even when it holds subscriptions for two ZIPs:
 
 ```sql
 SELECT count(*) AS subscriptions,
@@ -218,6 +218,12 @@ Florida's statewide window (Sat Oct 24 to Sat Oct 31) is the minimum every count
     ORDER BY county_fips, event_type;
    -- expect 8 rows, all verified: early_voting_end 2026-11-01, early_voting_start 2026-10-19
    ```
+
+**If the stamp is late.** A reminder is sent only on its own day, and the statewide Oct 24 reminder no longer covers a county once that county's rows are stamped.
+
+- **Stamped on Oct 19, after the 14:00 UTC run.** Trigger the cron by hand the same day, before midnight Eastern (step 4b). The county reminders are still due that day and go out.
+- **Stamped Oct 20 or later.** No subscriber gets an early-voting reminder at all: the county reminders' day has passed, and the Oct 24 one now covers none of them. Stamp anyway. The Oct 24 "starts today" email would have been false for every subscriber, and the stamp still fixes the banner, the welcome email and the calendar file.
+- **Either way, the digest says so.** On any day a reminder was due but reached no one, the send-day digest lists it under "Due today but sent to no one".
 
 What changes once the rows are stamped. The code that reads them is already deployed, and it works without them:
 

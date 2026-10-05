@@ -704,7 +704,8 @@ check(
 const home = source("src/app/(public)/page.tsx");
 check(
   "home page renders the signup card only behind reminderPromotionLive()",
-  /reminderPromotionLive\(\)/.test(home) && /\{promoteReminders && <ReminderSignupCta \/>\}/.test(home)
+  /reminderPromotionLive\(\)/.test(home) &&
+    /\{promoteReminders && <ReminderSignupCta countyFips=\{saved\?\.countyFips\} \/>\}/.test(home)
 );
 const votingInfo = source("src/components/features/VotingInfo.tsx");
 check(
@@ -939,6 +940,17 @@ check(
 check(
   "banner with statewide rows only: the statewide window alone",
   !!statewideNext && bannerLine(statewideNext, EVENTS, EVENTS) === "Early voting runs October 24 to October 31 statewide"
+);
+check(
+  "the home reminder card's calendar link carries the saved county, like the banner's",
+  /<ReminderSignupCta countyFips=\{saved\?\.countyFips\} \/>/.test(home) &&
+    /countyFips=\{countyFips\}/.test(source("src/components/features/ReminderSignupCta.tsx")) &&
+    /general_2026\.ics\$\{countyFips \? `\?county=\$\{countyFips\}` : ""\}/.test(votingInfo)
+);
+check(
+  "a reminder due to no one is reported in the digest, and pacing spans the whole run",
+  /if \(sent\.length > 0 \|\| noRecipients\.length > 0\)/.test(cronSource) &&
+    /if \(batchCalls\+\+ > 0\)/.test(cronSource)
 );
 const bannerSource = source("src/components/features/DeadlineBanner.tsx");
 check(

@@ -32,7 +32,11 @@
 -- details_url and stamped it (founder task F4). The stamp is in
 -- docs/general-election/reminders-e2e-runbook.md, "County early-voting
 -- dates". The first county reminder is due Mon Oct 19 at 14:00 UTC, so
--- apply and stamp by Sun Oct 18.
+-- apply and stamp by Sun Oct 18. A reminder is sent only on its own day:
+-- stamped on Oct 19 after that run, trigger the cron by hand the same day;
+-- stamped from Oct 20 on, no subscriber in these counties gets an
+-- early-voting reminder at all, since the statewide Oct 24 one no longer
+-- covers them. The banner, welcome email and calendar are fixed either way.
 --
 -- Idempotent: ON CONFLICT DO NOTHING against uq_election_event_scope
 -- (state, COALESCE(county_fips, ''), event_type, election).
