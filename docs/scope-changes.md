@@ -89,8 +89,10 @@ written before advertising existed.
 **Recommended (pending founder confirmation): keep the consent-gated tag.**
 - It is opt-in with a real Decline. Nothing loads without Accept, and the
   site works the same either way.
-- The founder chose to advertise on Google (the banner and `/privacy` both
-  say "We advertise on Google"). Without the tag there is no way to tell
+- The founder chose to advertise on Google (on 2026-10-04 the banner and
+  `/privacy` both said "We advertise on Google"; since 2026-10-05 the banner
+  only asks about advertising cookies, and `/privacy` names Google as the ad
+  provider). Without the tag there is no way to tell
   whether that spend brings anyone to the site.
 - It touches no content. Briefs, candidate order and the Balance Audit are
   unaffected.

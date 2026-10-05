@@ -7,11 +7,12 @@ import "server-only";
    left the service client, the email signup, both crons, the deadline
    banner and the calendar file failing in production.
 
-   These are read at the call site, not mapped once at startup. A mapping
-   in the root instrumentation.ts never took effect on Vercel: with a src/
-   folder, next build looks for the hook only under src/ (it searches the
-   app folder's parent), so the compiled root hook is left out of
-   required-server-files.json and never deployed.
+   These are read at the call site, not mapped once at startup. #107 tried
+   a mapping in an instrumentation.ts at the repo root, and it never took
+   effect on Vercel: with a src/ folder, next build looks for the hook only
+   under src/ (it searches the app folder's parent), so a root hook is left
+   out of required-server-files.json and never deployed. The hook now lives
+   in src/instrumentation.ts and starts only Sentry.
 
    An empty canonical variable counts as unset and falls through to the
    production name (`||`, not `??`): every caller already treats an empty

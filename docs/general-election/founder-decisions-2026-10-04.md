@@ -40,7 +40,7 @@ Voter registration closes 10-05.
 - **CRON_SECRET:** if you have no saved copy (Vercel won't show Sensitive values), rotate it.
 - **Optional env:**
   - `NEXT_PUBLIC_PLAUSIBLE_DOMAIN=knowyour.vote` turns analytics on. `/privacy` now says "we don't run analytics" while it is unset.
-  - `NEXT_PUBLIC_SENTRY_DSN` turns on browser error reporting. `SENTRY_DSN` would report nothing yet: server-side Sentry starts only from the root `instrumentation.ts`, which is never deployed (see item 1), until that hook moves to `src/instrumentation.ts`.
+  - `NEXT_PUBLIC_SENTRY_DSN` turns on browser error reporting and `SENTRY_DSN` server error reporting (since 2026-10-05: the server hook moved to `src/instrumentation.ts`; at the root it was never deployed, see item 1). Redeploy after setting either; `/privacy` then says reports go to Sentry.
   - `ADMIN_EMAILS` plus Supabase Auth open the admin console.
   - `PELIAS_BASE_URL` turns on address autocomplete. Optional.
 - **Review and merge #108.** Production's email env is now complete, so merging it turns on the home-page reminder card and the banner's reminder link at once, although the signup has not been seen working yet. CI runs on it for the first time. Once CI is green, require the `checks` and `build` jobs on main (`docs/ci.md`).

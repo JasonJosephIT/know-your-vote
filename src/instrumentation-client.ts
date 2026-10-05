@@ -6,7 +6,7 @@ const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
 
 if (dsn) {
   const load = () => {
-    void import("./sentry.client.config");
+    void import("../sentry.client.config");
   };
   if ("requestIdleCallback" in window) {
     requestIdleCallback(load, { timeout: 5000 });

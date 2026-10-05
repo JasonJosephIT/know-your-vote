@@ -108,8 +108,8 @@ The full list, with owners and the founder decisions each item waits on, is
 7. **Infra** (§7): CI for the verify scripts; `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`,
    the Sentry DSNs and `PELIAS_BASE_URL` in production (all unset on
    2026-10-04, so no analytics, no error reports and no address completion;
-   server error reports also need the Sentry hook moved from the root
-   `instrumentation.ts`, which is never deployed, to `src/`); the admin
+   the server Sentry hook moved to `src/instrumentation.ts` on 2026-10-05,
+   so `SENTRY_DSN` now works); the admin
    console; a Lighthouse and screen-reader pass on real content.
 
 ### Next, in order (as written 2026-09-07, kept for the record)
