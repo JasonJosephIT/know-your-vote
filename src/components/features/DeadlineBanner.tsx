@@ -4,7 +4,7 @@ import {
   verifiedElectionEvents,
   type ElectionEvent,
 } from "@/lib/notifications/election-events";
-import { bannerLine, bannerLongDate } from "@/lib/notifications/banner";
+import { bannerLine, electionDayLine } from "@/lib/notifications/banner";
 import {
   bannerDates,
   countiesWithOwnDates,
@@ -51,7 +51,8 @@ async function bannerEvents(): Promise<ElectionEvent[]> {
    rolls forward on Florida's calendar day (bannerDates and easternToday in
    src/lib/notifications/schedule.ts; launch handoff 2026-10-04, §2). It used
    to state the registration deadline and Election Day forever. "Today" is
-   read per request: the home page is dynamic (it reads the district
+   read per request, and a date that falls today is worded as today ("Today,
+   October 5, is the last day to register to vote"): the home page is dynamic (it reads the district
    cookie), so the rollover is never older than the request.
 
    remindersHref links to the reminder signup when the home page shows it
@@ -73,13 +74,13 @@ export async function DeadlineBanner({
       ? countyFips
       : null;
   const events = eventsForCounty(allEvents, scope);
-  const dates = bannerDates(events, easternToday());
+  const today = easternToday();
+  const dates = bannerDates(events, today);
   if (!dates) return null;
 
   const parts = [
-    dates.next && bannerLine(dates.next, events, allEvents),
-    dates.electionDay &&
-      `Election Day is ${bannerLongDate(dates.electionDay.event_date)}`,
+    dates.next && bannerLine(dates.next, events, allEvents, today),
+    dates.electionDay && electionDayLine(dates.electionDay.event_date, today),
   ].filter(Boolean) as string[];
 
   /* 24 px tall at least (WCAG 2.5.8 Target Size, AA): as plain caption

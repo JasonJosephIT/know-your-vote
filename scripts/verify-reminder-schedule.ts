@@ -65,7 +65,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ElectionEvent } from "../src/lib/notifications/election-events.ts";
-import { bannerLine } from "../src/lib/notifications/banner.ts";
+import { bannerLine, electionDayLine } from "../src/lib/notifications/banner.ts";
 import {
   bannerDates,
   dueReminders,
@@ -578,10 +578,42 @@ check(
   "no rows (unverified, or no service key) -> no banner",
   bannerDates([], "2026-10-04") === null
 );
+const deadlineBanner = source("src/components/features/DeadlineBanner.tsx");
 check(
-  "DeadlineBanner reads the day from easternToday()",
-  /bannerDates\(events, easternToday\(\)\)/.test(source("src/components/features/DeadlineBanner.tsx"))
+  "DeadlineBanner reads the day from easternToday() and words a date that falls on it as today",
+  /const today = easternToday\(\);/.test(deadlineBanner) &&
+    /bannerDates\(events, today\)/.test(deadlineBanner) &&
+    /bannerLine\(dates\.next, events, allEvents, today\)/.test(deadlineBanner) &&
+    /electionDayLine\(dates\.electionDay\.event_date, today\)/.test(deadlineBanner)
 );
+{
+  const lineOn = (day: string) => {
+    const d = bannerDates(EVENTS, day);
+    return d?.next ? bannerLine(d.next, EVENTS, EVENTS, day) : null;
+  };
+  check(
+    "banner on the registration deadline says it's the last day",
+    lineOn("2026-10-05") === "Today, October 5, is the last day to register to vote",
+    String(lineOn("2026-10-05"))
+  );
+  check(
+    "banner the day before still states the date",
+    lineOn("2026-10-04") === "Register to vote by October 5",
+    String(lineOn("2026-10-04"))
+  );
+  check(
+    "banner on the last day of early voting, statewide",
+    lineOn("2026-10-31") === "Today, October 31, is the last day of early voting statewide",
+    String(lineOn("2026-10-31"))
+  );
+  check(
+    "banner on Election Day: mail ballots by 7 p.m. today, and today is Election Day",
+    lineOn("2026-11-03") === "Mail ballots must be received by 7 p.m. today, November 3" &&
+      electionDayLine("2026-11-03", "2026-11-03") === "Today, November 3, is Election Day" &&
+      electionDayLine("2026-11-03", "2026-11-02") === "Election Day is November 3",
+    String(lineOn("2026-11-03"))
+  );
+}
 
 /* ---- 6. delivery gate --------------------------------------------------- */
 

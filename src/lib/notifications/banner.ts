@@ -23,37 +23,63 @@ export function bannerLongDate(iso: string): string {
    their county's window when the saved district names a county with its
    own rows, otherwise the statewide one, which then also says where the
    window is longer, since every covered county opens early voting before
-   the statewide minimum (0043). */
+   the statewide minimum (0043).
+
+   today (easternToday()) changes only the words for a date that falls on
+   it: "Register to vote by October 5" read on October 5 doesn't say this is
+   the last day (inspiration pass 2026-10-05). Still a date, never a count. */
 export function bannerLine(
   next: ElectionEvent,
   events: ElectionEvent[],
-  allEvents: ElectionEvent[]
+  allEvents: ElectionEvent[],
+  today?: string
 ): string {
   const start = events.find((e) => e.event_type === "early_voting_start");
   const end = events.find((e) => e.event_type === "early_voting_end");
+  const date = bannerLongDate(next.event_date);
+  const isToday = next.event_date === today;
   switch (next.event_type) {
     case "registration_deadline":
-      return `Register to vote by ${bannerLongDate(next.event_date)}`;
+      return isToday
+        ? `Today, ${date}, is the last day to register to vote`
+        : `Register to vote by ${date}`;
     case "vbm_request_deadline":
       /* 5 p.m. local time: s. 101.62(3)(c), Fla. Stat. (checked 2026-10-04). */
-      return `Request a vote-by-mail ballot by 5 p.m. on ${bannerLongDate(next.event_date)}`;
+      return isToday
+        ? `Request a vote-by-mail ballot by 5 p.m. today, ${date}`
+        : `Request a vote-by-mail ballot by 5 p.m. on ${date}`;
     case "early_voting_start":
     case "early_voting_end": {
       if (!start || !end) {
-        return next.event_type === "early_voting_start"
-          ? `Early voting starts ${bannerLongDate(next.event_date)}`
-          : `Early voting ends ${bannerLongDate(next.event_date)}`;
+        if (next.event_type === "early_voting_start") return `Early voting starts ${date}`;
+        return isToday ? `Early voting ends today, ${date}` : `Early voting ends ${date}`;
+      }
+      const own = start.county_fips ? coveredCounty(start.county_fips)?.name : undefined;
+      /* bannerDates never offers early_voting_start on its own day, so
+         "today" here is always the last day of the window. */
+      if (isToday) {
+        return own
+          ? `Today, ${date}, is the last day of early voting in ${own} County`
+          : `Today, ${date}, is the last day of early voting statewide${longerWindows(start, end, allEvents)}`;
       }
       const window = `${bannerLongDate(start.event_date)} to ${bannerLongDate(end.event_date)}`;
-      const own = start.county_fips ? coveredCounty(start.county_fips)?.name : undefined;
       if (own) return `Early voting runs ${window} in ${own} County`;
       return `Early voting runs ${window} statewide${longerWindows(start, end, allEvents)}`;
     }
     case "ballot_return_deadline":
-      return `Mail ballots must be received by 7 p.m. on ${bannerLongDate(next.event_date)}`;
+      return isToday
+        ? `Mail ballots must be received by 7 p.m. today, ${date}`
+        : `Mail ballots must be received by 7 p.m. on ${date}`;
     case "election_day":
-      return `Election Day is ${bannerLongDate(next.event_date)}`;
+      return electionDayLine(next.event_date, today);
   }
+}
+
+/* The banner's second half, and the election_day case above. */
+export function electionDayLine(eventDate: string, today?: string): string {
+  return eventDate === today
+    ? `Today, ${bannerLongDate(eventDate)}, is Election Day`
+    : `Election Day is ${bannerLongDate(eventDate)}`;
 }
 
 /* "; October 19 to November 1 in Miami-Dade, Broward, Hillsborough and
