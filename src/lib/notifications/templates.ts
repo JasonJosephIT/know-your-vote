@@ -44,19 +44,28 @@ const earlyVotingParams = dateParams.extend({
 
 /* Correction is the one pre-approved manual-broadcast template (design doc
    §7 playbook). Still no free text: the wrong-date correction is composed
-   entirely from typed fields. */
+   entirely from typed fields. The labels are exported so ./correction.ts
+   can map each one to the election_event type it corrects: a Record over
+   this tuple, so a label added here without a mapping fails tsc. The only
+   sender is src/app/api/cron/send-correction/route.ts. */
+export const CORRECTION_EVENT_LABELS = [
+  "voter registration deadline",
+  "vote-by-mail request deadline",
+  /* Every date we can publish must be correctable — the ballot return
+     deadline reaches voters through the .ics calendar (0021). */
+  "vote-by-mail ballot return deadline",
+  "early voting start date",
+  "early voting end date",
+  "election day",
+] as const;
+
+export type CorrectionEventLabel = (typeof CORRECTION_EVENT_LABELS)[number];
+
 const correctionParams = dateParams.extend({
-  event_label: z.enum([
-    "voter registration deadline",
-    "vote-by-mail request deadline",
-    /* Every date we can publish must be correctable — the ballot return
-       deadline reaches voters through the .ics calendar (0021). */
-    "vote-by-mail ballot return deadline",
-    "early voting start date",
-    "early voting end date",
-    "election day",
-  ]),
+  event_label: z.enum(CORRECTION_EVENT_LABELS),
 });
+
+export type CorrectionParams = z.infer<typeof correctionParams>;
 
 export type Rendered = {
   subject?: string;

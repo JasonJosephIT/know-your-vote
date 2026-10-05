@@ -5,10 +5,17 @@ import { SaveToggle } from "@/components/ui/SaveToggle";
 import { IssueSection } from "@/components/features/IssueSection";
 import type { CandidateBriefData } from "@/lib/briefs";
 import { CONTACT_EMAIL } from "@/lib/contact";
+import { showIncumbentChip } from "@/lib/incumbency";
 
 /* One candidate's full brief. Structure is identical for every candidate in
    a race — equal space and equal scrutiny are layout invariants, not
    editorial choices.
+
+   That is why the Incumbent chip goes through showIncumbentChip and is off
+   for everyone for now: is_incumbent is filled for one ballot candidate in
+   106, so the chip marked one incumbent and left the rest looking like
+   challengers (src/lib/incumbency.ts, recommended pending founder
+   confirmation, says what must be true before it comes back).
 
    Accessibility (a11y-perf-2026-10-04.md):
    - The article's id, candidate-<candidate_id>, is the target of RaceCompare's
@@ -55,7 +62,7 @@ export function CandidateBrief({
         </Heading>
         <div className="flex flex-wrap items-center gap-2">
           <PartyChip party={candidate.party} />
-          {candidate.is_incumbent && <Chip>Incumbent</Chip>}
+          {showIncumbentChip(candidate) && <Chip>Incumbent</Chip>}
           <SaveToggle
             candidateId={candidate.candidate_id}
             name={candidate.legal_name}

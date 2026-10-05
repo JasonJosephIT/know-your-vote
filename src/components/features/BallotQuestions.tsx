@@ -27,7 +27,9 @@ import { getActiveMeasures } from "@/lib/measures";
    file). It rides on this section: with no measure visible nothing renders,
    because a "Ballot questions" heading over judges alone would read as if the
    amendments had been dropped. `county` is optional and only narrows the
-   note's appeals court lines; SharedBallot has no county and omits it. */
+   note's appeals court lines. It is a county name (result.county), not a
+   FIPS code: YourRaces passes the resolved county, SharedBallot passes the
+   saved district's county or nothing, and nothing means the full note. */
 export async function BallotQuestions({
   county,
 }: {

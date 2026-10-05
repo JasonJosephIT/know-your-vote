@@ -11,7 +11,8 @@ import type { Candidate, CandidateSocialAccount, Race } from "@/types/schema";
    and is not touched by any of this.
 
    What a listing is: who is on the ballot for a race — legal name, party,
-   incumbency, official site, verified socials, and the DoE's qualifying
+   incumbency (read, but not shown while src/lib/incumbency.ts keeps the
+   chip off), official site, verified socials, and the DoE's qualifying
    status. All of it is public record from the Florida Division of Elections
    and the county Supervisors of Elections, not editorial content, which is
    why it can be shown before the Balance Audit has cleared a brief.

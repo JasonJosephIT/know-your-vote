@@ -2,6 +2,15 @@ import * as Sentry from "@sentry/nextjs";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import {
+  activeSubscribers,
+  BATCH_PACING_MS,
+  BATCH_SIZE,
+  COHORT_FUSE,
+  reminderText,
+  zipCounties,
+  type Subscriber,
+} from "@/lib/notifications/cohort";
 import { emailSenderConfigured, remindersPaused } from "@/lib/notifications/config";
 import {
   verifiedElectionEvents,
@@ -14,11 +23,7 @@ import {
   eventsForCounty,
   nextReminder,
 } from "@/lib/notifications/schedule";
-import {
-  reminderParams,
-  renderTemplate,
-  type Rendered,
-} from "@/lib/notifications/templates";
+import { reminderParams, renderTemplate } from "@/lib/notifications/templates";
 import { secretEquals } from "@/lib/secret-compare";
 import { resendApiKey } from "@/lib/server-keys";
 import { createServiceClient } from "@/lib/supabase/service";
@@ -55,18 +60,10 @@ import { createServiceClient } from "@/lib/supabase/service";
 
 export const maxDuration = 60;
 
-const BATCH_SIZE = 100;
-/* Resend's default API limit is 2 requests per second (per team, when last
-   checked). Back-to-back batch calls past 200 recipients could draw a 429,
-   which the loop below treats as a failed send: claim released, and the
-   manual re-run re-mails everyone already reached. Pacing the calls costs
-   about half a second per 100 recipients; at maxDuration 60 that still
-   covers several thousand, far above the 2026 cohort. */
-const BATCH_PACING_MS = 600;
-const PAGE_SIZE = 1000;
-/* The "never mass-send by accident" fuse. The 2026 list is a four-metro
-   opt-in cohort; if it ever reads > 50k something upstream is corrupt. */
-const COHORT_FUSE = 50_000;
+/* BATCH_SIZE, BATCH_PACING_MS and COHORT_FUSE, and the cohort helpers
+   activeSubscribers, zipCounties and reminderText, live in
+   src/lib/notifications/cohort.ts, shared with the manual correction send
+   (src/app/api/cron/send-correction/route.ts). They moved there unchanged. */
 
 export async function POST(request: NextRequest) {
   return run(request);
@@ -311,75 +308,6 @@ async function run(request: NextRequest) {
   }
 
   return NextResponse.json({ due: due.length, sent, skipped, noRecipients });
-}
-
-type Subscriber = {
-  email: string;
-  unsubscribe_token: string;
-  /* The county whose dates this subscriber gets: their ZIP's county when it
-     has rows of its own, otherwise null, the statewide scope. */
-  scope: string | null;
-};
-
-/* Every active subscription, in token order, with its date scope. Paged
-   because PostgREST caps a read at 1000 rows. Throws on any read error:
-   the caller has claimed nothing yet, so it can simply stop. */
-async function activeSubscribers(
-  service: SupabaseClient,
-  count: number,
-  countyScopes: string[]
-): Promise<Subscriber[]> {
-  const rows: { email: string; unsubscribe_token: string; zip5: string }[] = [];
-  for (let from = 0; from < count; from += PAGE_SIZE) {
-    const { data: page, error } = await service
-      .from("voting_info_subscription")
-      .select("email, unsubscribe_token, zip5")
-      .eq("active", true)
-      .order("unsubscribe_token")
-      .range(from, from + PAGE_SIZE - 1);
-    if (error) throw new Error(error.message);
-    rows.push(...(page ?? []));
-  }
-  const countyOf = await zipCounties(service, rows.map((r) => r.zip5));
-  return rows.map((r) => {
-    const county = countyOf.get(r.zip5) ?? null;
-    return {
-      email: r.email,
-      unsubscribe_token: r.unsubscribe_token,
-      scope: county && countyScopes.includes(county) ? county : null,
-    };
-  });
-}
-
-/* ZIP -> county FIPS from zip_district, for the ZIPs given. Every ZIP in
-   the table sits in exactly one county (checked live 2026-10-05: 235 ZIPs,
-   none in two). A ZIP missing from the map reads as no county: statewide
-   dates. Throws on a read error. */
-async function zipCounties(
-  service: SupabaseClient,
-  zips: string[]
-): Promise<Map<string, string>> {
-  const unique = [...new Set(zips)];
-  const map = new Map<string, string>();
-  for (let i = 0; i < unique.length; i += 200) {
-    const { data, error } = await service
-      .from("zip_district")
-      .select("zip5, county_fips")
-      .in("zip5", unique.slice(i, i + 200));
-    if (error) throw new Error(error.message);
-    for (const row of data ?? []) map.set(row.zip5, row.county_fips);
-  }
-  return map;
-}
-
-/* The text every reminder carries. One function for the real send and the
-   rehearsal, so a rehearsal can never show copy the cohort will not get. */
-function reminderText(
-  rendered: Rendered,
-  origin: string,
-  unsubscribeToken: string
-): string {
-  return `${rendered.body}\n\nYou get these reminders because you asked for voting info. Unsubscribe: ${origin}/api/voting-info/unsubscribe?token=${unsubscribeToken}`;
 }
 
 /* REHEARSAL (see the header). The address travels in the POST body, never

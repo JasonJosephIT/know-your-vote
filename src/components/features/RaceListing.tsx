@@ -3,6 +3,7 @@ import { PartyChip } from "@/components/ui/PartyChip";
 import { Chip } from "@/components/ui/Chip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
 import { safeHttpUrl } from "@/lib/format";
+import { showIncumbentChip } from "@/lib/incumbency";
 import { listingCardLine } from "@/lib/listing-copy";
 import type {
   ListedCandidate,
@@ -23,13 +24,15 @@ import type {
 
    Header markup mirrors CandidateBrief's header so a race moving from listed
    to published changes what is under the name, not the name block itself.
-   That includes the accessibility fixes from a11y-perf-2026-10-04.md: the
-   candidate's name as a visually hidden suffix on "Keep in mind" and
-   "Official site" (fix 6; WCAG 2.4.4, 2.4.6, label first for 2.5.3), and a
-   24 px minimum height on the site and social links (fix 9; WCAG 2.5.8
-   Target Size; min-h-[24px] because this theme's spacing-6 is 32 px). The
-   unlinked handle gets the same box so its text lines up with the links
-   beside it. */
+   That includes the Incumbent chip's gate, showIncumbentChip, which is off
+   for every candidate until incumbency is filled for all of them
+   (src/lib/incumbency.ts), and the accessibility fixes from
+   a11y-perf-2026-10-04.md: the candidate's name as a visually hidden suffix
+   on "Keep in mind" and "Official site" (fix 6; WCAG 2.4.4, 2.4.6, label
+   first for 2.5.3), and a 24 px minimum height on the site and social links
+   (fix 9; WCAG 2.5.8 Target Size; min-h-[24px] because this theme's
+   spacing-6 is 32 px). The unlinked handle gets the same box so its text
+   lines up with the links beside it. */
 export function ListedCandidateCard({
   data,
   status,
@@ -62,7 +65,7 @@ export function ListedCandidateCard({
         </Heading>
         <div className="flex flex-wrap items-center gap-2">
           <PartyChip party={candidate.party} />
-          {candidate.is_incumbent && <Chip>Incumbent</Chip>}
+          {showIncumbentChip(candidate) && <Chip>Incumbent</Chip>}
           <SaveToggle
             candidateId={candidate.candidate_id}
             name={candidate.legal_name}

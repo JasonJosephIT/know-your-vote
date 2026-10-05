@@ -397,6 +397,10 @@ refresh cron) and add a load check to the pre-send rehearsal (§8).
   message ("check your official source"), and the rehearsal send (§8). A
   discovered error post-send has a playbook: correction template exists from
   day one (the one manual-broadcast template pre-approved for speed).
+  Sender built for email 2026-10-05: `POST /api/cron/send-correction`, which
+  states only an already-verified date and is not stopped by
+  `NOTIFICATIONS_PAUSED`; steps in
+  `docs/general-election/reminders-e2e-runbook.md`, "Sending a correction".
 - *Missed cron tick:* enqueue is idempotent and drains are catch-up (due rows,
   not tick-aligned), so a missed tick delays, never drops.
 - *Silent failure:* every drain writes a Sentry breadcrumb + the outbox row is
