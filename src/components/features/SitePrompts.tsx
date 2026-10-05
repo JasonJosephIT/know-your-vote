@@ -171,11 +171,12 @@ function ConsentBanner({
       aria-label="Cookie choice"
       className="fixed inset-x-3 bottom-[calc(96px+env(safe-area-inset-bottom))] z-50 rounded-md border border-border bg-surface p-4 shadow-elevation-2 md:inset-x-auto md:bottom-5 md:left-5 md:max-w-[400px]"
     >
-      <p className="text-label">Cookies for our Google ads</p>
+      {/* Kept to the question itself (founder, 2026-10-05). /privacy names
+          the ad provider and what it receives; Details links there. */}
+      <p className="text-label">Cookies</p>
       <p className="mt-1 text-body-sm text-on-surface-muted">
-        We advertise on Google. If you accept, Google&apos;s ad tag sets
-        cookies so we can tell whether an ad brought you here. Decline and it
-        never loads — the site works exactly the same.{" "}
+        We use advertising cookies to see whether our ads bring people here.
+        Decline and the site works the same.{" "}
         <Link
           href="/privacy"
           className="text-primary underline underline-offset-2"

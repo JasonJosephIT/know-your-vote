@@ -106,6 +106,97 @@ assert(
   cflat
 );
 
+/* The shape the server SDK sends for an unhandled route error
+   (onRequestError, captured from a local next start on 2026-10-05): the
+   request's headers and cookies ride along whatever sendDefaultPii says,
+   and the query appears in four places. */
+const serverEvent = scrubEvent({
+  request: {
+    method: "GET",
+    url: "https://knowyour.vote/api/cron/send-reminders?zip=33101&email=voter%40example.com&q=444+SW+2nd+Ave",
+    query_string: "zip=33101&email=voter%40example.com&q=444+SW+2nd+Ave",
+    headers: {
+      host: "knowyour.vote",
+      cookie: "kyv.district=FL-27; sb-access-token=session-secret",
+      authorization: "Bearer cron-secret-value",
+      "x-cron-secret": "cron-secret-value",
+      "x-forwarded-for": "203.0.113.9",
+      "x-real-ip": "203.0.113.9",
+      "x-vercel-ip-latitude": "25.7743",
+      "x-vercel-ip-city": "Miami",
+      referer: "https://knowyour.vote/candidates?gclid=gclid-value",
+      "user-agent": "curl/8.5.0",
+    },
+    cookies: { "kyv.district": "FL-27", "sb-access-token": "session-secret" },
+  },
+  contexts: {
+    nextjs: {
+      request_path: "/api/cron/send-reminders?email=voter%40example.com&q=444+SW+2nd+Ave",
+      router_path: "/api/cron/send-reminders",
+    },
+  },
+  breadcrumbs: [
+    {
+      category: "fetch",
+      data: {
+        url: "https://api.geocode.earth/v1/autocomplete?text=444+SW+2nd+Ave&api_key=pelias-secret",
+        "http.query": "text=444+SW+2nd+Ave&api_key=pelias-secret",
+        method: "GET",
+      },
+    },
+  ],
+});
+const serverFlat = JSON.stringify(serverEvent);
+for (const [name, secret] of [
+  ["saved district cookie", "FL-27"],
+  ["Supabase session cookie", "session-secret"],
+  ["CRON_SECRET (Authorization, x-cron-secret)", "cron-secret-value"],
+  ["forwarded client IP", "203.0.113.9"],
+  ["IP-based location (x-vercel-ip-*)", "25.7743"],
+  ["referring page's query", "gclid-value"],
+  ["URL-encoded email", "voter%40example.com"],
+  ["address in a query string", "2nd+Ave"],
+  ["PELIAS_API_KEY in a breadcrumb", "pelias-secret"],
+]) {
+  assert(`server event drops the ${name}`, !serverFlat.includes(secret), serverFlat);
+}
+assert(
+  "server event keeps the route and method",
+  serverFlat.includes("/api/cron/send-reminders?[query]") &&
+    serverFlat.includes('"router_path":"/api/cron/send-reminders"') &&
+    serverFlat.includes('"method":"GET"'),
+  serverFlat
+);
+assert(
+  "server event keeps harmless headers",
+  serverFlat.includes("curl/8.5.0") && serverFlat.includes('"host":"knowyour.vote"'),
+  serverFlat
+);
+
+const queryCrumb = JSON.stringify(
+  scrubBreadcrumb({ category: "console", message: "GET /api/resolve?district=FL-27 failed" })
+);
+assert(
+  "a query inside a breadcrumb message is dropped",
+  !queryCrumb.includes("FL-27") && queryCrumb.includes("/api/resolve?[query]"),
+  queryCrumb
+);
+for (const ip of ["2600:1700::1", "2001:db8::abcd", "::1", "fe80::1ff:fe23:4567:890a"]) {
+  assert(`short-form IPv6 ${ip} scrubbed`, scrubString(`from ${ip} then`) === "from [ip] then");
+}
+assert(
+  "code with :: is left alone",
+  scrubString("std::vector and Foo::Bar at 10:30") === "std::vector and Foo::Bar at 10:30"
+);
+const deep = JSON.stringify(
+  scrubEvent({ extra: { a: { b: { c: { d: { e: { f: { g: { h: { i: { j: "maria@example.com" } } } } } } } } } } })
+);
+assert("values nested past the depth limit are not kept", !deep.includes("maria"), deep);
+assert(
+  "prose with a question mark is left alone",
+  scrubString("Is this the right district? Check again.") === "Is this the right district? Check again."
+);
+
 if (failures) {
   console.error(`\n${failures} scrub check(s) failed`);
   process.exit(1);

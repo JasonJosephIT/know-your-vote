@@ -152,13 +152,19 @@ missing key degrades a surface, it never fakes one.
   Plausible as in use.
 - `NEXT_PUBLIC_SENTRY_DSN` — browser error reporting, loaded lazily after
   hydration so the SDK stays out of the initial bundle. Unset → never loaded.
-- `SENTRY_DSN` — server error reporting, PII-scrubbed (verified by
-  `node scripts/verify-sentry-scrub.ts`). **Not wired on Vercel yet:** the
-  server SDK starts only from the root `instrumentation.ts`, and with a
-  `src/` folder `next build` registers the hook only from
-  `src/instrumentation.ts`, so the root one is never deployed (the same
-  reason #107's key mapping never ran). Set or unset, the deployed app
-  reports no server errors until that hook moves to `src/`.
+- `SENTRY_DSN` — server error reporting, started by `src/instrumentation.ts`.
+  Unset → the server SDK never loads. The hook used to sit at the repo root,
+  where `next build` never registered it because the app has a `src/`
+  folder, so before 2026-10-05 no server error was ever reported.
+
+Both SDKs send scrubbed error reports and nothing else: no tracing, session
+counts or client reports (`src/lib/sentry-options.ts`). A report keeps the
+error, the route, the method and the user agent; cookies, credentials, query
+strings, ZIPs, emails and IPs are removed (`src/lib/sentry-scrub.ts`).
+`node scripts/verify-sentry-scrub.ts` tests the scrubber, and
+`node scripts/verify-sentry-server.ts` runs the real server SDK against a
+local stand-in and checks what leaves. `/privacy` describes error reports
+only while a DSN is set.
 
 The Google Ads tag has no variable. Its ID is a constant in
 `src/components/features/SitePrompts.tsx`, and it loads only after a visitor

@@ -8,6 +8,11 @@ export const metadata = { title: "Privacy — Know Your Vote" };
 export default function PrivacyPage() {
   const geocoder = geocoderHost();
   const analyticsOn = Boolean(process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN);
+  /* The same variables that start the two Sentry SDKs
+     (src/instrumentation.ts, src/instrumentation-client.ts). */
+  const errorReportsOn = Boolean(
+    process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN
+  );
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
       <h1 className="text-h1">Privacy, in plain language</h1>
@@ -148,31 +153,36 @@ export default function PrivacyPage() {
           </p>
         )}
         {/* Follows the ads switch (src/lib/ads.ts, founder decision 2), so a
-            flip can't leave this page describing a tag that no longer loads. */}
+            flip can't leave this page describing a tag that no longer loads.
+            Brief by the founder's choice (2026-10-05), but it still names the
+            provider and what it receives: Google's ad policies expect a site
+            using its ad cookies to say so, and the IP address is the personal
+            data the PRD's opt-in promise is about (docs/prd.md §2). */}
         {ADS_TAG_ENABLED && (
           <p className="text-body">
-            We also advertise on Google. On your first visit we ask whether to
-            load Google&apos;s advertising tag, which tells us whether an ad
-            brought you here. If you decline, it never loads. If you accept, it
-            runs on every page and sets cookies. Google receives the page you
-            are on, your IP address, and details about your browser, and can
-            connect your visit with other sites that use Google advertising. We
-            remove your ZIP from the page address before it is sent. What Google
-            does with the rest is covered by{" "}
+            We ask before setting advertising cookies. If you accept, our ad
+            provider (Google) receives the page you&apos;re on and your IP
+            address; decline and they&apos;re never set. See{" "}
             <a
               href="https://policies.google.com/technologies/ads"
               className="text-primary underline underline-offset-2"
             >
               Google&apos;s advertising policy
             </a>
-            . The site works exactly the same either way. <ResetAdsConsent /> to
-            be asked again.
+            . <ResetAdsConsent />.
           </p>
         )}
-        <p className="text-body">
-          Error reports are scrubbed of ZIPs, emails, and IP addresses before
-          they leave the app.
-        </p>
+        {/* What a report keeps is set by src/lib/sentry-scrub.ts and checked
+            by scripts/verify-sentry-server.ts. */}
+        {errorReportsOn ? (
+          <p className="text-body">
+            If something breaks, an error report goes to Sentry. It includes
+            the error and the page address, never your ZIP, email, IP address
+            or cookies.
+          </p>
+        ) : (
+          <p className="text-body">We don&apos;t collect error reports right now.</p>
+        )}
       </section>
 
       <p className="text-body-sm text-on-surface-muted">
