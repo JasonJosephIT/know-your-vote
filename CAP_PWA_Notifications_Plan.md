@@ -7,7 +7,8 @@
 **Status:** 9/15 agent tasks complete · Phase A complete — PR #3
 (feat/pwa-notifications-a). Founder gates open: F4 (verify dates — nothing
 sends until then), Resend env in Vercel, A2/A3 device smoke test. Phase B
-starts after A merges.
+starts after A merges. C3 (correction send) built for email 2026-10-05,
+unchecked until the founder's one rehearsal.
 **Design authority:** `docs/design/notification-pipeline-and-pwa.md` (full DDL,
 rationale, trade-offs) and `docs/adr/ADR-001-mobile-mirror-and-shell-parity.md`
 — **as amended by the ponytail decision of 2026-07-06 (user-approved), which
@@ -259,6 +260,17 @@ script exists and has run once.
   the wrong-date playbook in `docs/design/notification-pipeline-and-pwa.md`
   §7 if anything diverged.
   **Verify:** rehearsal including one correction send.
+  **Built for email, 2026-10-05; the founder still rehearses once.**
+  `POST /api/cron/send-correction` (CRON_SECRET; body-only JSON; modes
+  `dry_run` / `rehearse` / `confirm_recipients`), pure logic in
+  `src/lib/notifications/correction.ts`, checked by
+  `scripts/verify-correction.ts`; cohort helpers shared with send-reminders
+  in `src/lib/notifications/cohort.ts`. Diverged from the design doc, and
+  noted there: the correction states only an already-verified
+  `election_event` date, and is NOT stopped by `NOTIFICATIONS_PAUSED`.
+  The box stays open until the Verify step has run: the founder's one
+  rehearsal (`docs/general-election/reminders-e2e-runbook.md`, "Sending a
+  correction"). Not in Phase C's SMS gate: email needs nothing further.
 
 ---
 

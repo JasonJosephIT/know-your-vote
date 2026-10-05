@@ -36,7 +36,9 @@ export function emailDeliveryConfigured(): boolean {
 /* The reminder kill switch the cron already honoured (design doc §7
    playbook: a wrong date is caught, sends stop while a correction is
    prepared). Any non-empty value pauses. While paused we also stop
-   promoting the signup, since the promotion's whole promise is reminders. */
+   promoting the signup, since the promotion's whole promise is reminders.
+   The correction send (src/app/api/cron/send-correction) deliberately does
+   not read it: a correction is what goes out while reminders are paused. */
 export function remindersPaused(): boolean {
   return Boolean(process.env.NOTIFICATIONS_PAUSED);
 }

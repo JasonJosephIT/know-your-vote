@@ -263,6 +263,94 @@ There is no reminder for the end of early voting. Nothing about the dates in the
 
 Vercel may start a scheduled run some minutes into the 14:00 UTC hour.
 
+## Sending a correction
+
+Added 2026-10-05 (plan C3; design doc §7, "Wrong-date catastrophe"). Use it when an email we sent stated a wrong date. The route is `POST /api/cron/send-correction` (`src/app/api/cron/send-correction/route.ts`). It sends one thing only, the pre-approved `correction` template, which has no free-text field:
+
+> Correction: the <event> for the 2026 Florida general election is <date>. Please disregard the date in our earlier message — we're sorry for the error. Official source: <details_url>
+
+followed by the unsubscribe line every reminder carries.
+
+**It can only state a date you have already verified.** The `date` and `details_url` you send must equal those of a **verified** `election_event` row of the type `event_label` names: the statewide row, or a county's own row when you add `county_fips`. Anything else answers **422** and sends nothing. So the order is always: fix the row, verify it, then send. The email is rendered from that row.
+
+| `event_label` | Corrects |
+| --- | --- |
+| `voter registration deadline` | `registration_deadline` |
+| `vote-by-mail request deadline` | `vbm_request_deadline` |
+| `vote-by-mail ballot return deadline` | `ballot_return_deadline` |
+| `early voting start date` | `early_voting_start` |
+| `early voting end date` | `early_voting_end` |
+| `election day` | `election_day` |
+
+**Who gets it:** the subscribers the wrong date reached, each address once.
+
+- **Statewide** (no `county_fips`): every active subscriber for whom the statewide row is the date that applies. Once 0043 is stamped, that leaves out the four counties' subscribers for early voting only, because they have rows of their own.
+- **One county** (`"county_fips":"12086"`, `12011`, `12057` or `12095`): that county's subscribers only. This needs the county's own row of that type. A county without one reads the statewide date, so its subscribers are covered by the statewide correction. The two never overlap, so nobody gets the same correction twice.
+
+**`NOTIFICATIONS_PAUSED` does not stop it, on purpose.** The playbook pauses the reminders while a correction is prepared, so the correction is what you send while they are paused. If the pause blocked it, you would have to resume the schedule that sent the wrong date in order to send the fix. The secret, the verified-date guard and the confirmed count are its safety instead.
+
+**Everything goes in the JSON body.** A URL with any query parameter answers **400**. Each call takes exactly one of `"dry_run": true`, `"rehearse": "<address>"` or `"confirm_recipients": <count>`. A real send needs the count from a dry run, so it cannot happen by accident.
+
+### Steps (Founder)
+
+1. **Pause the reminders** if another wrong send could go out: in Vercel, add `NOTIFICATIONS_PAUSED` = `1` to Production, then redeploy.
+2. **Fix and re-verify the row.** Open the official page and check the date first. Then run this in the SQL Editor:
+
+   ```sql
+   UPDATE election_event
+      SET event_date = '<correct date>', details_url = '<official page>',
+          verified_by = '<your email>', verified_at = now()
+    WHERE election = 'general_2026'
+      AND event_type = '<event_type>'
+      AND county_fips IS NULL;     -- for a county row: AND county_fips = '<FIPS>'
+   -- expect: UPDATE 1
+   ```
+
+   This also fixes the banner (within the hour), the welcome email and the calendar file.
+3. **Set the fields once**, in the shell you will send from. The three calls below differ only in their last key, so the dry run counts exactly the people the send will mail:
+
+   ```sh
+   read -rs CRON_SECRET    # paste the value, press Enter; nothing is shown
+   FIELDS='"event_label":"early voting start date","election":"general_2026","date":"2026-10-19","details_url":"https://www.miamidade.gov/elections/library/early-voting/2026-11-03-general-election-early-voting-schedule.pdf","county_fips":"12086"'
+   ```
+
+   That example is Miami-Dade's own early-voting row. For a statewide correction, leave out `,"county_fips":"…"`. Copy `date` and `details_url` from the row exactly: a missing trailing slash is a mismatch.
+4. **Dry run.** It sends nothing and writes nothing.
+
+   ```sh
+   curl -sS -X POST "https://knowyour.vote/api/cron/send-correction" \
+     -H "x-cron-secret: $CRON_SECRET" \
+     -H "Content-Type: application/json" \
+     --data "{$FIELDS,\"dry_run\":true}"
+   ```
+
+   **Expected:** `{"dry_run":true,"dedupe_key":"correction:general_2026:early_voting_start:2026-10-19:12086","scope":"Miami-Dade County","already_sent":false,"subject":"Correction: an election date we sent was wrong","text":"…","recipients":<N>,"active_subscriptions":<M>,"next":"…"}`. Read `text`: it is the email word for word. The unsubscribe link shows `<unsubscribe token>` where each voter's own token goes.
+5. **Rehearse** to your own address. It must hold an active subscription (4a):
+
+   ```sh
+   curl -sS -X POST "https://knowyour.vote/api/cron/send-correction" \
+     -H "x-cron-secret: $CRON_SECRET" \
+     -H "Content-Type: application/json" \
+     --data "{$FIELDS,\"rehearse\":\"<test address>\"}"
+   ```
+
+   **Expected:** `{"rehearsal":true,"dedupe_key":"rehearsal:correction:…:<timestamp>","real_dedupe_key":"correction:…","in_cohort":true,"recipients":1}`, and an email "[Rehearsal] Correction: an election date we sent was wrong". If `in_cohort` is `false`, the real send will not reach that address, for example a county correction and a test ZIP in another county. The rehearsal is still sent.
+6. **Send**, with the count the dry run reported:
+
+   ```sh
+   curl -sS -X POST "https://knowyour.vote/api/cron/send-correction" \
+     -H "x-cron-secret: $CRON_SECRET" \
+     -H "Content-Type: application/json" \
+     --data "{$FIELDS,\"confirm_recipients\":<N from step 4>}"
+   ```
+
+   **Expected:** `{"sent":true,"dedupe_key":"correction:…","scope":"…","recipients":<N>}`, then a digest to the `EMAIL_FROM` address, "Know Your Vote correction sent — <date>". If anyone subscribed or unsubscribed since the dry run, the call answers **409** and sends nothing. Run the dry run again and confirm the new number.
+7. **Check** that 4d's query shows the `correction:…` row with `recipient_count` = N. Once every remaining date is right, delete `NOTIFICATIONS_PAUSED` and redeploy. A reminder whose day passed while paused is not sent later.
+
+**Once per date.** A correction is claimed in `notification_send_log` as `correction:<election>:<event_type>:<date>[:<FIPS>]` and goes out once. Sending it again answers **409** "Already sent". A correction to a different date, after you re-verify the row again, has a new key. To resend the same one deliberately, delete its row first: `DELETE FROM notification_send_log WHERE dedupe_key = '<key>';`.
+
+**Rehearse it once, before the first county reminder on Oct 19.** Recommended (pending founder confirmation); it is plan C3's Verify step. Nothing is wrong today, so rehearse with a date that is already right, such as the statewide vote-by-mail request deadline (`"event_label":"vote-by-mail request deadline","election":"general_2026","date":"2026-10-22","details_url":"https://dos.fl.gov/elections/for-voters/election-dates/"`): run steps 4 and 5 only. **Do not run step 6 for a rehearsal:** it would mail every subscriber a correction for a date that was never wrong.
+
 ## Troubleshooting
 
 | Symptom | Cause | Fix |
@@ -273,7 +361,7 @@ Vercel may start a scheduled run some minutes into the 14:00 UTC hour.
 | Signup: **503** "Email delivery isn't configured yet — nothing was sent or stored." | `RESEND_API_KEY` and `RESEND` both unset or empty, or `EMAIL_FROM` unset | Step 1, then redeploy |
 | Signup: **503** "We couldn't save your request — nothing was sent." | `SUPABASE_SERVICE_ROLE_KEY` and `SUPABASE` both unset or empty, or the upsert failed | Step 1, then the Supabase logs |
 | Signup: **502** "We saved your request but the email didn't send" | Resend rejected the send: domain not verified, wrong key, daily cap reached, or rate limit | Resend, Logs. Step 2, items 1 and 5. |
-| Cron: **200** `{"paused":true,…}` | `NOTIFICATIONS_PAUSED` is set (any value) | The intended kill switch (design doc §7). To resume, delete it and redeploy. **A reminder whose day passes while paused is not sent later.** With this PR, pausing also hides the home-page signup card, and the races-view form and the welcome email stop promising reminders. |
+| Cron: **200** `{"paused":true,…}` | `NOTIFICATIONS_PAUSED` is set (any value) | The intended kill switch (design doc §7). To resume, delete it and redeploy. **A reminder whose day passes while paused is not sent later.** With this PR, pausing also hides the home-page signup card, and the races-view form and the welcome email stop promising reminders. A correction still sends while paused, by design ("Sending a correction"). |
 | Cron: **200** `{"due":0,…}` | No reminder is scheduled today (see "What fires when"), or the `election_event` rows lost `verified_by` | Normal on most days. Re-check the verified rows if it happens on a send day. |
 | Cron: **502** "Claim failed …" or "Cohort count failed …" | Database error | Supabase logs. Nothing was sent; re-run. |
 | Cron: **502** "Send failed for … after N recipients — claim released" | Resend error mid-send (daily cap, rate limit, bad key) | Fix the cause and re-run the same day. The first N recipients get a duplicate, the accepted cost (design doc §7). |
@@ -281,6 +369,14 @@ Vercel may start a scheduled run some minutes into the 14:00 UTC hour.
 | Rehearsal: **404** "No active subscription for that address" | Address not subscribed, unsubscribed, or misspelled. Case doesn't matter. | Subscribe it (4a), then re-run 4c |
 | Rehearsal: **400** "Send the rehearsal address in a JSON body…" | `rehearse` was put in the URL | Use the 4c command: the address goes in the `--data` body |
 | Rehearsal: **400** `"rehearse" must be an email address` | The body's `rehearse` is empty or not a string | Fix the body |
+| Correction: **422** "… is <date>, not <date>", "details_url must be the verified row's own", or "is not verified" | The request does not match a verified row | Fix and re-verify the row first ("Sending a correction", step 2), then copy its `date` and `details_url` exactly |
+| Correction: **422** "There is no … County's own … row" | `county_fips` given for a type that county has no row of its own for | Leave `county_fips` out: the statewide correction covers that county |
+| Correction: **400** "… Nothing was sent." | A field is missing, misspelt or unknown, not exactly one mode was given, or the URL carries a query parameter | The message names the field. Everything goes in the `--data` body |
+| Correction: **409** "confirm_recipients is …" | The count changed since the dry run, or was mistyped | Dry-run again and confirm the number it reports |
+| Correction: **409** "Already sent" | This correction's key is already in `notification_send_log` | Nothing to do. To resend deliberately, delete that row first |
+| Correction: **404** "No active subscriber is in this correction's scope" | Nobody holds the date being corrected (for example the statewide early-voting row, once 0043 is stamped) | Nothing to send. Check `county_fips` |
+| Correction: **502** "Send failed for correction:… after N recipients — claim released" | Resend error mid-send | Fix the cause, dry-run and send again. The first N get a duplicate |
+| Correction: **405** | A GET, or a method other than POST | Use the curl commands in "Sending a correction" |
 | The email lands in spam | No DMARC, a new sending domain, or link-heavy text | Step 2, item 2. Mark it "Not spam" on the canary. |
 | Deadline banner missing on the home page | `SUPABASE_SERVICE_ROLE_KEY` and `SUPABASE` both unset or empty, or the read failed (cached for up to an hour) | Step 1. A failed read clears within the hour. |
 
