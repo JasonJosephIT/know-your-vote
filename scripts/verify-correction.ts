@@ -645,9 +645,18 @@ check(
 );
 check(
   "every email carries reminderText's unsubscribe footer; renders only through renderCorrection",
-  (routeCode.match(/reminderText\(rendered, origin, sub\.unsubscribe_token\)/g) ?? []).length === 2 &&
+  (routeCode.match(/reminderText\(rendered, sub\.unsubscribe_token\)/g) ?? []).length === 2 &&
     /renderCorrection\(target, params\.event_label\)/.test(routeCode) &&
     !/renderTemplate\(/.test(routeCode)
+);
+/* The footer's link is on the site's fixed address: Vercel Cron and a
+   manual call alike reach the route on whatever address they used, and a
+   *.vercel.app link in a voter's inbox is the bug this pins
+   (scripts/verify-email-origin.ts covers every sender). */
+check(
+  "the footer's link never comes from the request's address",
+  !/nextUrl\.origin|request\.url|\borigin\b/.test(routeCode) &&
+    /unsubscribeUrl\(unsubscribeToken\)/.test(stripComments(cohort))
 );
 check(
   'the rehearsal: an active subscription only, "[Rehearsal]" subject, synthetic rehearsal: key, released on failure',

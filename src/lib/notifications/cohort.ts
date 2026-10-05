@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { unsubscribeUrl } from "../site-url.ts";
 import type { Rendered } from "./templates";
 
 /* Who gets an email, and what every email carries at its foot: the cohort
@@ -88,11 +89,13 @@ export async function zipCounties(
 }
 
 /* The text every reminder carries. One function for the real send and the
-   rehearsal, so a rehearsal can never show copy the cohort will not get. */
+   rehearsal, so a rehearsal can never show copy the cohort will not get.
+   The unsubscribe link is on the site's fixed address (src/lib/site-url.ts),
+   never the address the request came in on, which for Vercel Cron can be
+   the deployment's own *.vercel.app URL. */
 export function reminderText(
   rendered: Rendered,
-  origin: string,
   unsubscribeToken: string
 ): string {
-  return `${rendered.body}\n\nYou get these reminders because you asked for voting info. Unsubscribe: ${origin}/api/voting-info/unsubscribe?token=${unsubscribeToken}`;
+  return `${rendered.body}\n\nYou get these reminders because you asked for voting info. Unsubscribe: ${unsubscribeUrl(unsubscribeToken)}`;
 }

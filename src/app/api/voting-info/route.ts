@@ -12,6 +12,7 @@ import { welcomeEmail } from "@/lib/notifications/templates";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { resolveZip, ZIP_RE } from "@/lib/resolve";
 import { resendApiKey } from "@/lib/server-keys";
+import { siteOrigin, unsubscribeUrl } from "@/lib/site-url";
 import { createServiceClient } from "@/lib/supabase/service";
 
 /* Where-to-vote opt-in email (FR-010) — the ONLY flow that handles personal
@@ -112,8 +113,11 @@ export async function POST(request: NextRequest) {
     district: resolved.district ?? null,
     office: sources.office,
     stateUrl: sources.state.url,
-    origin: request.nextUrl.origin,
-    unsubscribeUrl: `${request.nextUrl.origin}/api/voting-info/unsubscribe?token=${subscription.unsubscribe_token}`,
+    /* The site's fixed address (src/lib/site-url.ts), not this request's:
+       a signup that arrives on a preview or *.vercel.app address must
+       still send links to the site. */
+    origin: siteOrigin(),
+    unsubscribeUrl: unsubscribeUrl(subscription.unsubscribe_token),
     events,
     today: easternToday(),
     hasRaces: resolved.races.length > 0,
