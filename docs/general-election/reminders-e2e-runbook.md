@@ -43,7 +43,7 @@ Notes:
 
   Vercel Cron picks up the new value by itself. Anything else that calls `/api/cron/*` with the old value must be updated, such as a Cowork task.
 
-## Step 2. Mail DNS and the hello@ mailbox (Founder)
+## Step 2. Mail DNS and the info@ mailbox (Founder)
 
 Public DNS was checked on 2026-10-04:
 
@@ -58,12 +58,12 @@ Public DNS was checked on 2026-10-04:
 1. **Resend, Domains, `knowyour.vote` must show Verified.** If it shows Pending or Failed, compare the records Resend lists with Cloudflare DNS. Any CNAME must be "DNS only" (grey cloud), not proxied.
 2. **Add DMARC.** Recommended (pending founder confirmation).
    - Where: Cloudflare, `knowyour.vote`, DNS, Records, Add record.
-   - Type `TXT`, name `_dmarc`, content `v=DMARC1; p=none; rua=mailto:hello@knowyour.vote`, TTL Auto.
+   - Type `TXT`, name `_dmarc`, content `v=DMARC1; p=none; rua=mailto:info@knowyour.vote`, TTL Auto.
    - `p=none` only monitors; it never blocks mail. It is there because Gmail and Yahoo expect DMARC from domains that send in volume, and its absence counts against inbox placement.
    - Aggregate reports arrive as daily XML attachments. To skip them, drop the `rua=` part, or use Cloudflare's DMARC Management, which gives its own report address.
-3. **Make sure mail to hello@ reaches someone.** Cloudflare, Email, Email Routing, Routing rules: there must be an **Active** rule for `hello@knowyour.vote` (or a catch-all) whose destination is a **verified** address you read. Reminders go out from the `EMAIL_FROM` address (`info@` since 2026-10-05), and so does the daily send digest, so voters' replies and the digest land there. It needs an active rule. So does `hello@`, the public contact on /terms, /methodology and the flag-a-brief link (`CONTACT_EMAIL` in `src/lib/contact.ts`), and `admin@` if you use it.
-4. **If your hello@ mailbox is hosted at Spacemail:** with the MX at Cloudflare, inbound mail never reaches that mailbox, and Cloudflare cannot forward `hello@knowyour.vote` to itself. Choose one:
-   - **Recommended (pending founder confirmation):** keep Cloudflare Email Routing and forward hello@ to an inbox on another domain that you read. This is no MX change 30 days before the election.
+3. **Make sure mail to info@ reaches someone.** Cloudflare, Email, Email Routing, Routing rules: there must be an **Active** rule for `info@knowyour.vote` (or a catch-all) whose destination is a **verified** address you read. Since 2026-10-05 info@ is both the `EMAIL_FROM` address, so voters' replies and the daily send digest land there, and the public contact on /about, /terms, /methodology and the flag-a-brief link (`CONTACT_EMAIL` in `src/lib/contact.ts`; it was hello@ before). `admin@` needs a rule too if you use it.
+4. **If your info@ mailbox is hosted at Spacemail:** with the MX at Cloudflare, inbound mail never reaches that mailbox, and Cloudflare cannot forward `info@knowyour.vote` to itself. Choose one:
+   - **Recommended (pending founder confirmation):** keep Cloudflare Email Routing and forward info@ to an inbox on another domain that you read. This is no MX change 30 days before the election.
    - Or move the root MX to Spacemail and turn Email Routing off, following Spacemail's own DNS instructions. Add Spacemail to the root SPF if you will also *send* from it.
 
    Resend sending is unaffected either way: it uses `send.` and its own DKIM record.
@@ -80,7 +80,7 @@ After it is live, these GETs are safe to run from anywhere:
 
 ## Step 4. The end-to-end test (Founder)
 
-Use an address you read that is **not** hello@, such as a personal Gmail or Outlook address, so the test also covers delivery to a major provider. Gmail's plus addressing (`you+kyv1@gmail.com`) gives you a fresh test address each time.
+Use an address you read that is **not** info@, such as a personal Gmail or Outlook address, so the test also covers delivery to a major provider. Gmail's plus addressing (`you+kyv1@gmail.com`) gives you a fresh test address each time.
 
 Run SQL in the Supabase dashboard's SQL Editor. It runs as the database owner, which is what these service-role-only tables need.
 

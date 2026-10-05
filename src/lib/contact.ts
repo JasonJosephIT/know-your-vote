@@ -9,7 +9,11 @@
    on all 36 published race pages; /terms already defined this same address
    locally and the methodology rewrite named it inline.
 
+   Founder, 2026-10-05: hello@ became info@, the address EMAIL_FROM sends
+   reminders from, so voters' replies and the public contact land in one
+   mailbox.
+
    TO FLIP (a different mailbox, e.g. a dedicated flag@ inbox): change this
    one string. Every mailto and every printed address reads it, so nothing
    else needs editing. */
-export const CONTACT_EMAIL = "hello@knowyour.vote";
+export const CONTACT_EMAIL = "info@knowyour.vote";

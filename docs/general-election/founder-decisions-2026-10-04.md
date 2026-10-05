@@ -24,7 +24,7 @@ Voter registration closes 10-05.
 2. **#107: merged 2026-10-05.**
    - The news cron writes each "Race published" item once and never updates it. Before #107 it said every candidate got "equal space and comparable scrutiny", which the Balance Audit does not enforce at 150%. #107 corrects that wording.
    - It also makes the banner move on from "Register by October 5" once 10-05 ends in Florida.
-3. **Change the Spacemail password for hello@knowyour.vote.** It was pasted into the session chat. No agent used it or wrote it anywhere.
+3. **Change the Spacemail passwords for info@knowyour.vote (hello@ until 2026-10-05) and admin@knowyour.vote**, each to a different one. They shared the password that was pasted into the session chat. No agent used it or wrote it anywhere.
 
 ## This week
 
@@ -34,8 +34,8 @@ Voter registration closes 10-05.
   - Rehearsal mode (step 4c) lets you test the full send path before then.
 - **Mail plumbing:**
   - Confirm Resend shows knowyour.vote as **Verified**.
-  - Add a DMARC record: TXT `_dmarc` = `v=DMARC1; p=none; rua=mailto:hello@knowyour.vote`.
-  - Confirm Cloudflare Email Routing forwards hello@ to an inbox you read. The domain's MX points to Cloudflare, not Spacemail.
+  - Add a DMARC record: TXT `_dmarc` = `v=DMARC1; p=none; rua=mailto:info@knowyour.vote`.
+  - Confirm Cloudflare Email Routing forwards info@ to an inbox you read. It is both the reminder sender and the public contact. The domain's MX points to Cloudflare, not Spacemail.
   - Check your Resend plan's daily cap before promoting the signup.
 - **CRON_SECRET:** if you have no saved copy (Vercel won't show Sensitive values), rotate it.
 - **Optional env:**
