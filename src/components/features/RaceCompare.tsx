@@ -202,12 +202,12 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
                         block.say.length + block.done.length + block.factCheck.length;
                       return (
                         <li key={block.issue.issue_id}>
-                          <details className="group py-1">
+                          <details className="group/issue py-1">
                             <summary className="flex min-h-[32px] cursor-pointer list-none items-center justify-between gap-3 text-body-sm [&::-webkit-details-marker]:hidden">
                               <span className="flex items-baseline gap-2">
                                 <span
                                   aria-hidden="true"
-                                  className="inline-block w-3 text-on-surface-muted transition-transform group-open:rotate-90 motion-reduce:transition-none"
+                                  className="inline-block w-3 text-on-surface-muted transition-transform group-open/issue:rotate-90 motion-reduce:transition-none"
                                 >
                                   ›
                                 </span>

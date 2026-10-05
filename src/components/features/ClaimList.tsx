@@ -35,13 +35,13 @@ export function ClaimList({
     <div className="flex flex-col gap-3">
       <Claims items={shown} withVerdict={withVerdict} />
       {rest.length > 0 && (
-        <details className="group flex flex-col gap-3">
+        <details className="group/claims flex flex-col gap-3">
           <summary className="inline-flex min-h-[24px] w-fit cursor-pointer items-center text-caption text-primary underline underline-offset-2 hover:text-primary-hover">
-            <span className="group-open:hidden">
+            <span className="group-open/claims:hidden">
               Show {rest.length} more
               {name ? ` from ${name}` : ""}
             </span>
-            <span className="hidden group-open:inline">
+            <span className="hidden group-open/claims:inline">
               Show fewer
               {name ? <span className="sr-only"> from {name}</span> : null}
             </span>
