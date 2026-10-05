@@ -70,6 +70,12 @@ export function SitePrompts() {
     write(CONSENT_KEY, choice);
     setConsent(choice);
     setDecidedOn(pathname);
+    /* The button that had focus is about to disappear with the banner, and
+       focus would fall to <body>: screen readers announce nothing and some
+       browsers restart Tab from the top (production re-run, 2026-10-05).
+       Hand it to the page content, the skip link's own target, which
+       already takes programmatic focus (tabIndex -1) and shows no ring. */
+    document.getElementById("content")?.focus({ preventScroll: true });
   };
 
   const dismissDonate = () => {

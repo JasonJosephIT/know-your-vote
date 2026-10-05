@@ -110,29 +110,40 @@ export function VotingInfo({
               : "One email with where to vote and the key deadlines — the only time we ever ask for anything personal.")}
         </p>
         <div className="flex flex-col gap-3 sm:flex-row">
-          <Input
-            aria-label="ZIP code"
-            inputMode="numeric"
-            maxLength={5}
-            placeholder="ZIP code"
-            value={zip}
-            onChange={(e) => setZip(e.target.value.replace(/\D/g, ""))}
-            className="sm:max-w-[140px]"
-          />
-          <Input
-            aria-label="Email address"
-            type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          {/* Visible labels that stay put once the voter types (WCAG
+              3.3.2), and autocomplete tokens so autofill and assistive
+              tools know these ask for a postal code and an email (WCAG
+              1.3.5): production re-run, 2026-10-05. */}
+          <label className="flex flex-col gap-1 text-label text-on-surface sm:max-w-[140px]">
+            ZIP code
+            <Input
+              name="zip"
+              autoComplete="postal-code"
+              inputMode="numeric"
+              maxLength={5}
+              placeholder="33130"
+              value={zip}
+              onChange={(e) => setZip(e.target.value.replace(/\D/g, ""))}
+            />
+          </label>
+          <label className="flex flex-1 flex-col gap-1 text-label text-on-surface">
+            Email address
+            <Input
+              name="email"
+              autoComplete="email"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </label>
         </div>
         <label className="flex items-start gap-2 text-body-sm text-on-surface-muted">
           <input
             type="checkbox"
             checked={consent}
             onChange={(e) => setConsent(e.target.checked)}
-            className="mt-1 size-4 accent-[var(--color-primary)]"
+            className="mt-1 size-4 shrink-0 accent-[var(--color-primary)]"
           />
           <span>
             {remindersOn
