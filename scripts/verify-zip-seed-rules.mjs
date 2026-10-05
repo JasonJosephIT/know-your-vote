@@ -7,8 +7,14 @@
    The fixture pins, in order: coverage by dominant county, county derived
    from the block GEOID, the 5% split threshold at the boundary, the dominant
    district's inclusion below that threshold, is_split, the skip of blocks
-   that fall in no ZCTA, and county aggregation staying independent of
-   whether a block is in the enacted plan.
+   that fall in no ZCTA, county aggregation staying independent of
+   whether a block is in the enacted plan, and (0045) districts counted
+   over the covered county's own blocks only: a district whose land in the
+   ZIP lies across the county line belongs to no row, and does not count
+   toward the 5% denominator either. Before 0045 the build summed every
+   block in the ZIP, which put FL-7 on two Orange ZIPs whose FL-7 land is
+   in Seminole County; on that code 33101 came out FL-24, FL-25, FL-27 and
+   33102 came out split between FL-9 and FL-10.
 
    Run: node scripts/verify-zip-seed-rules.mjs */
 
@@ -37,10 +43,17 @@ const show = (rs) =>
   rs.map((r) => `${r.zip5} ${r.district} ${r.countyFips} split=${r.isSplit}`).join(", ");
 const forZip = (zip) => rows.filter((r) => r.zip5 === zip);
 
-/* 33101: FL-24 61%, FL-25 30%, FL-26 exactly 5%, FL-27 4% (a Monroe block). */
+/* 33101: Miami-Dade's 10000 land units are FL-24 65%, FL-25 30% and FL-26
+   exactly 5%. A Monroe block adds FL-27 (1000 units): over the whole ZIP
+   that would be 9.1%, and would push FL-26 down to 4.5%. */
 check(
-  "33101: the three districts at or above 5% qualify",
+  "33101: the three districts at or above 5% of Miami-Dade's land qualify",
   forZip("33101").map((r) => r.district).sort().join(",") === "FL-24,FL-25,FL-26",
+  show(forZip("33101"))
+);
+check(
+  "33101: FL-27, whose land in the ZIP is all in Monroe, gets no Miami-Dade row",
+  !forZip("33101").some((r) => r.district === "FL-27"),
   show(forZip("33101"))
 );
 check(
@@ -90,17 +103,27 @@ check(
   show(rows.filter((r) => !/^\d{5}$/.test(r.zip5)))
 );
 /* 33102: the land-majority block (Orange, 5000) has no entry in the
-   block-assignment file — a plan gap, not a missing ZIP — while the smaller
-   block (Hillsborough, 1000) does. County totals are summed from every
-   block with a ZCTA regardless of plan coverage, so Orange must still win
-   the county call; only the district total (which has no meaning off the
-   plan) skips the gap block. */
+   block-assignment file — a plan gap, not a missing ZIP — while the
+   Hillsborough block (1000, FL-9) does, and so does a small Orange block
+   (500, FL-10). County totals are summed from every block with a ZCTA
+   regardless of plan coverage, so Orange must still win the county call
+   (5500 to 1000; without the gap block it would lose, 500 to 1000); only
+   the district total (which has no meaning off the plan) skips the gap
+   block. Orange's districts then come from Orange's blocks alone: FL-10,
+   and not Hillsborough's FL-9. This is the shape of 32703 and 32751, the
+   Orange ZIPs whose FL-7 land lies in Seminole County (0045). */
 check(
   "33102: the land-majority county wins even though its block sits outside the enacted plan",
   forZip("33102").length === 1 &&
     forZip("33102")[0].countyFips === "12095" &&
     forZip("33102")[0].countyName === "Orange" &&
     forZip("33102")[0].metro === "orlando",
+  show(forZip("33102"))
+);
+check(
+  "33102: Orange gets only its own district (FL-10), unsplit; Hillsborough's FL-9 is not filed under Orange",
+  forZip("33102").map((r) => `${r.district} split=${r.isSplit}`).join(",") ===
+    "FL-10 split=false",
   show(forZip("33102"))
 );
 
