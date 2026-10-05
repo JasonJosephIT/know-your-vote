@@ -8,7 +8,7 @@ Written 2026-10-04 for launch handoff items 2.2 (test the reminder pipeline end 
 
 Checked on 2026-10-04. The Vercel env metadata was read without decrypting any value. The 503s on the two POST routes follow from that env and the code; they were not triggered, because a live POST changes state. The calendar 503 and the missing banner were seen with live GETs.
 
-- **The keys are in Vercel under the wrong names.** Production holds sensitive vars called `SUPABASE`, `RESEND` and `JEV` (created 2026-08-31). The code reads `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `EMAIL_FROM` and `TYPESAFE_API_KEY`, and none of those is set.
+- **The keys were in Vercel under other names.** Production holds sensitive vars called `SUPABASE`, `RESEND` and `JEV`, created 2026-08-31. The founder confirmed on 2026-10-05 that they hold the service-role key, the Resend key and the TypeSafe key. The code reads `SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY`, and nothing read the others. **Fixed in code since:** `instrumentation.ts` maps `SUPABASE` and `RESEND` to those names at server start (step 1). `EMAIL_FROM` was added on 2026-10-05.
 - **So every email path fails, and so does everything else that needs the service role:**
   - `POST /api/voting-info` (the signup) answers 503 "Email delivery isn't configured yet".
   - The 14:00 UTC reminder cron answers 503. Today's run would have sent the registration T-1 reminder; there were 0 subscribers, so no one missed it.
@@ -19,18 +19,22 @@ Checked on 2026-10-04. The Vercel env metadata was read without decrypting any v
 
 Vercel, project **know-your-vote**, Settings, Environment Variables. Every existing variable targets **Production** only. Keep that.
 
-| Action | Name | Value | Type |
-| --- | --- | --- | --- |
-| Add | `SUPABASE_SERVICE_ROLE_KEY` | Supabase dashboard, project `pqracitpmzpiqfnzlngw`, Project Settings, API Keys: the **service_role** key (Legacy API keys tab), or a new **Secret** key (`sb_secret_…`). Never the anon or publishable key. | Sensitive |
-| Add | `RESEND_API_KEY` | Resend, API Keys, Create API key: permission "Sending access", domain `knowyour.vote`. | Sensitive |
-| Add | `EMAIL_FROM` | `Know Your Vote <hello@knowyour.vote>` | Plain (not a secret) |
-| Delete | `SUPABASE` | Misnamed; nothing reads it. | |
-| Delete | `RESEND` | Misnamed; nothing reads it. | |
-| Delete | `JEV` | Misnamed; nothing reads it. **Do not re-create it as `TYPESAFE_API_KEY`**: see below. | |
+**Updated 2026-10-05: no renaming is needed.** `SUPABASE` holds the service-role key and `RESEND` the Resend key, as the founder confirmed. `instrumentation.ts` copies them to `SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY` when the server starts, unless the correct names are already set. The code change ships with #107 and #108. What's left:
+
+| Check | Name | Value |
+| --- | --- | --- |
+| Keep | `SUPABASE` | The service-role key. Mapped at server start. |
+| Keep | `RESEND` | The Resend API key, with sending access for `knowyour.vote`. Mapped at server start. |
+| **Confirm** | `EMAIL_FROM` | Must be an address **on `knowyour.vote`**, for example `Know Your Vote <info@knowyour.vote>`. `knowyourvote.com` is not ours: it's parked for sale, and its SPF record forbids all senders, so Resend would refuse every email from it. |
+| Optional | `JEV` | The TypeSafe key. No deployed code reads it, so it can stay or go. |
+| Not read | `EMAIL_SERVICE` | Nothing reads this name. To let `admin@knowyour.vote` sign in to the admin console, the name is `ADMIN_EMAILS`, and Supabase Auth must be enabled (`admin-dashboard/roadmap.md`). |
+
+After any env change, redeploy: env changes reach only new deployments. Merging #107 deploys.
+
+To retire the mapping later, add `SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY` under their own names, redeploy, and delete `mapProductionEnvNames()` from `instrumentation.ts`.
 
 Notes:
 
-- **The old values can't be copied across.** A Sensitive variable can't be read back, and Resend shows a key only once. Create fresh keys. Then delete the old key in Resend (API Keys, the one created around 2026-08-31) so no orphaned live key remains.
 - **`TYPESAFE_API_KEY` is not needed on Vercel.** It was checked on 2026-10-04: only `src/lib/news-characterize-engines.ts` reads it, and only local scripts import that file (`scripts/news-characterize.ts`, `scripts/candidate-site-ingest.ts` and the eval and demo scripts). No route, cron or page does. Add it to Vercel only if the news characterizer is ever moved into a Vercel cron (the R3 plan in `refresh-agents-plan.md`).
 - **`CRON_SECRET` is Sensitive (created 2026-07-02), so Vercel can't show it to you.** If you have no saved copy, rotate it:
   1. Generate a new value (`openssl rand -hex 32`).
@@ -57,7 +61,7 @@ Public DNS was checked on 2026-10-04:
    - Type `TXT`, name `_dmarc`, content `v=DMARC1; p=none; rua=mailto:hello@knowyour.vote`, TTL Auto.
    - `p=none` only monitors; it never blocks mail. It is there because Gmail and Yahoo expect DMARC from domains that send in volume, and its absence counts against inbox placement.
    - Aggregate reports arrive as daily XML attachments. To skip them, drop the `rua=` part, or use Cloudflare's DMARC Management, which gives its own report address.
-3. **Make sure mail to hello@ reaches someone.** Cloudflare, Email, Email Routing, Routing rules: there must be an **Active** rule for `hello@knowyour.vote` (or a catch-all) whose destination is a **verified** address you read. Reminders are sent From hello@, so voters' replies, DMARC reports and the daily send digest all go there.
+3. **Make sure mail to hello@ reaches someone.** Cloudflare, Email, Email Routing, Routing rules: there must be an **Active** rule for `hello@knowyour.vote` (or a catch-all) whose destination is a **verified** address you read. Reminders go out from the `EMAIL_FROM` address (`info@` since 2026-10-05), and so does the daily send digest, so voters' replies and the digest land there. It needs an active rule. So does `hello@`, the public contact on /terms, /methodology and the flag-a-brief link (`CONTACT_EMAIL` in `src/lib/contact.ts`), and `admin@` if you use it.
 4. **If your hello@ mailbox is hosted at Spacemail:** with the MX at Cloudflare, inbound mail never reaches that mailbox, and Cloudflare cannot forward `hello@knowyour.vote` to itself. Choose one:
    - **Recommended (pending founder confirmation):** keep Cloudflare Email Routing and forward hello@ to an inbox on another domain that you read. This is no MX change 30 days before the election.
    - Or move the root MX to Spacemail and turn Email Routing off, following Spacemail's own DNS instructions. Add Spacemail to the root SPF if you will also *send* from it.
@@ -84,7 +88,7 @@ Run SQL in the Supabase dashboard's SQL Editor. It runs as the database owner, w
 
 On `https://knowyour.vote/candidates?view=races&zip=33130`, or with this PR merged on the home-page card "Get deadline reminders by email": enter the test address and a covered ZIP, tick the consent box, then press "Email my voting info". The page should say "Sent."
 
-**Expected:** within a minute, an email titled "Where to vote in Miami-Dade County", from `Know Your Vote <hello@knowyour.vote>`. Check the spam folder. In Gmail, "Show original" should read **SPF: PASS, DKIM: PASS** (`knowyour.vote`), and **DMARC: PASS** once the record exists.
+**Expected:** within a minute, an email titled "Where to vote in Miami-Dade County", from your `EMAIL_FROM` address. Check the spam folder. In Gmail, "Show original" should read **SPF: PASS, DKIM: PASS** (`knowyour.vote`), and **DMARC: PASS** once the record exists.
 
 ```sql
 SELECT email, zip5, consent_at, last_sent_at, active,
@@ -171,7 +175,7 @@ WHERE lower(email) = lower('<their address>');
 
 ### 4f. Keep a canary (Recommended, pending founder confirmation)
 
-Subscribe one address you read and leave it subscribed through Nov 3, so you receive every real reminder as voters do. Submitting the form again re-activates an unsubscribed row. On each send day, a digest also goes to hello@ ("Know Your Vote reminders digest — <date>") with the counts. It goes out only on days something was sent.
+Subscribe one address you read and leave it subscribed through Nov 3, so you receive every real reminder as voters do. Submitting the form again re-activates an unsubscribed row. On each send day, a digest also goes to the `EMAIL_FROM` address ("Know Your Vote reminders digest — <date>") with the counts. It goes out only on days something was sent.
 
 ## What fires when
 

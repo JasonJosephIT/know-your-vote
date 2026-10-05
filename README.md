@@ -50,14 +50,16 @@ a chat transcript is burned: rotate it, don't delete it.
 
 **The NAME must match exactly.** The code reads each variable by its exact
 name, and a near miss is the same as no variable at all: nothing warns, the
-feature just stays off. As of 2026-10-04 Vercel production holds three
-sensitive variables named `SUPABASE`, `RESEND` and `JEV` (created
-2026-08-31), and nothing reads any of them. The code reads
-`SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY`, which are presumably what
-the first two hold (the values were not inspected). `EMAIL_FROM` is not set
-under any name. `JEV` is likely the TypeSafe key, which Vercel does not need
-at all (`TYPESAFE_API_KEY` below). So the voting-info signup, the reminder
-cron and the news cron all answer 503, and no reminder has ever been sent.
+feature just stays off.
+
+There is one deliberate exception. Vercel production stores the Supabase
+service-role key as `SUPABASE` and the Resend API key as `RESEND` (the
+founder's names, confirmed 2026-10-05). Until a later fix, nothing read them,
+so the signup, both crons, the deadline banner and the calendar file all
+failed. `instrumentation.ts` now copies them to `SUPABASE_SERVICE_ROLE_KEY`
+and `RESEND_API_KEY` when the server starts, unless the correct name is
+already set. `JEV` holds the TypeSafe key, which Vercel doesn't need
+(`TYPESAFE_API_KEY` below). Every other variable must use the exact name.
 After adding or renaming a variable,
 compare its name against the list below character for character, then
 redeploy (Vercel applies env changes only to new deployments). The fix and an

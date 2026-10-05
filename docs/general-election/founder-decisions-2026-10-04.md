@@ -11,12 +11,11 @@ All database work in this session was read-only, and nothing was posted to the l
 
 Voter registration closes tomorrow, 10-05.
 
-1. **Fix the production env names in Vercel.** Project know-your-vote → Settings → Environment Variables → Production.
-   - Add `SUPABASE_SERVICE_ROLE_KEY` (Sensitive). It comes from Supabase → Project Settings → API keys.
-   - Add `RESEND_API_KEY` (Sensitive). It comes from Resend → API Keys.
-   - Add `EMAIL_FROM` = `Know Your Vote <hello@knowyour.vote>`.
-   - Delete `SUPABASE`, `RESEND` and `JEV`. Nothing reads them.
-   - Until this is done, these fail in production:
+1. **Production env (updated 2026-10-05).** You confirmed that `SUPABASE`, `RESEND` and `JEV` hold the service-role, Resend and TypeSafe keys, and you added `EMAIL_FROM`.
+   - No renaming is needed. `instrumentation.ts`, shipped with #107 and #108, maps `SUPABASE` and `RESEND` to the names the code reads at server start.
+   - **Check that `EMAIL_FROM` is on `knowyour.vote`**, for example `Know Your Vote <info@knowyour.vote>`. `knowyourvote.com` is a parked domain for sale whose SPF forbids all senders, so Resend would refuse every email from it.
+   - `EMAIL_SERVICE` isn't read by anything. For `admin@knowyour.vote` to sign in to the admin console, the variable is `ADMIN_EMAILS`.
+   - Until #107 deploys, these fail in production:
      - the home-page deadline banner (blank);
      - the calendar file (503);
      - the email signup (503);
@@ -27,7 +26,7 @@ Voter registration closes tomorrow, 10-05.
 2. **Merge #107.** The merge deploys production with the new env, so no separate redeploy is needed. Order matters:
    - The news cron writes each "Race published" item once and never updates it.
    - On `main` it still says every candidate got "equal space and comparable scrutiny", which the Balance Audit does not enforce at 150%.
-   - #107 corrects that wording. It also makes the banner move on from "Register by October 5" after tomorrow.
+   - #107 corrects that wording. It also makes the banner move on from "Register by October 5" once today (10-05) ends.
 3. **Change the Spacemail password for hello@knowyour.vote.** It was pasted into the session chat. No agent used it or wrote it anywhere.
 
 ## This week
