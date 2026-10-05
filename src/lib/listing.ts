@@ -1,7 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
-import { orderCandidates } from "@/lib/briefs";
+import { orderCandidates } from "@/lib/ballot-order";
 import { isUnopposedContest, isDecidedInPrimary } from "@/lib/unopposed";
 import type { PublicationStatus } from "@/types/app";
 import type { Candidate, CandidateSocialAccount, Race } from "@/types/schema";
@@ -142,11 +142,13 @@ async function fetchRaceListing(raceId: string): Promise<RaceListing | null> {
 }
 
 /* Same cache shape and tags as getRaceBrief, so a set_race_publication
-   revalidation of `race:<id>` refreshes the listing and the brief together. */
+   revalidation of `race:<id>` refreshes the listing and the brief together.
+   v2 for the same reason as getRaceBrief's: the cards are now in Florida's
+   ballot order (ballot-order.ts), and an older deploy's entry is not. */
 export function getRaceListing(raceId: string) {
   return unstable_cache(
     () => fetchRaceListing(raceId),
-    ["race-listing", raceId],
+    ["race-listing", "v2", raceId],
     { revalidate: 3600, tags: ["races", `race:${raceId}`] }
   )();
 }

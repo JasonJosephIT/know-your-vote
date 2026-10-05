@@ -5,6 +5,7 @@ import type { NewsSource } from "@/lib/news-labels";
 import { RECENT_WINDOW_DAYS } from "@/lib/neutrality";
 import { isUnopposedContest, isDecidedInPrimary } from "@/lib/unopposed";
 import { categorizeIssue, type PolicyAreaRef } from "@/lib/policy-areas";
+import { orderCandidates } from "@/lib/ballot-order";
 import type { CandidateContact, NewsItem } from "@/types/app";
 import type {
   Candidate,
@@ -77,23 +78,11 @@ export interface RaceBrief {
 
 type ClaimRow = Claim & { claim_source: Array<{ source: Source }> };
 
-/* Fixed neutral order rule, identical for every race: the pipeline's
-   candidate_ids array is ballot order; when absent, alphabetical by
-   legal name (FR-003). */
-export function orderCandidates<
-  T extends { candidate_id: string; legal_name: string },
->(candidates: T[], ballotOrder: string[]): T[] {
-  if (ballotOrder.length > 0) {
-    const rank = new Map(ballotOrder.map((id, i) => [id, i]));
-    return [...candidates].sort(
-      (a, b) =>
-        (rank.get(a.candidate_id) ?? 999) - (rank.get(b.candidate_id) ?? 999)
-    );
-  }
-  return [...candidates].sort((a, b) =>
-    a.legal_name.localeCompare(b.legal_name)
-  );
-}
+/* Fixed neutral order rule, identical for every race (FR-003): Florida's
+   general-election ballot order, s. 101.151(3) for partisan races and
+   s. 105.041(2) for nonpartisan ones. The rule lives in ballot-order.ts;
+   re-exported here because this is where callers have always found it. */
+export { orderCandidates };
 
 function toSourced(rows: ClaimRow[]): SourcedClaim[] {
   return rows.map((row) => {
@@ -265,12 +254,18 @@ async function fetchRaceBrief(raceId: string): Promise<RaceBrief | null> {
 }
 
 /* Race/brief pages change at most daily; cache with tags so the news cron
-   and publication changes can revalidate on demand (TASK-024). */
+   and publication changes can revalidate on demand (TASK-024).
+
+   v2: candidates are in Florida's ballot order (ballot-order.ts) rather than
+   candidate_ids order. Same shape, different content, so a new key: an entry
+   cached by an older deploy would otherwise keep the old order for up to an
+   hour after this one ships. */
 export function getRaceBrief(raceId: string) {
-  return unstable_cache(() => fetchRaceBrief(raceId), ["race-brief", raceId], {
-    revalidate: 3600,
-    tags: ["races", `race:${raceId}`],
-  })();
+  return unstable_cache(
+    () => fetchRaceBrief(raceId),
+    ["race-brief", "v2", raceId],
+    { revalidate: 3600, tags: ["races", `race:${raceId}`] }
+  )();
 }
 
 export interface CandidateDetail {
