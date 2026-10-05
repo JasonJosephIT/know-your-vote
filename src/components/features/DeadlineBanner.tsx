@@ -24,10 +24,10 @@ function longDate(iso: string): string {
    early-voting dates. Same read, same hour-long
    cache, same "election-dates" tag, so a correction still revalidates it.
 
-   createServiceClient throws without SUPABASE_SERVICE_ROLE_KEY, inside the
-   cache, so a missing key is never cached as "no dates": the banner appears
-   on the first request after the founder's env fix and redeploy rather
-   than up to an hour later. */
+   createServiceClient throws without the service-role key (src/lib/
+   server-keys.ts), inside the cache, so a missing key is never cached as
+   "no dates": the banner appears on the first request after the key is
+   readable rather than up to an hour later. */
 const cachedEvents = unstable_cache(
   async (): Promise<ElectionEvent[]> =>
     verifiedStatewideEvents(createServiceClient(), ACTIVE_ELECTION),

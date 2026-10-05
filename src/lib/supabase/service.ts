@@ -1,6 +1,7 @@
 import "server-only";
 
 import { createClient } from "@supabase/supabase-js";
+import { serviceRoleKey } from "@/lib/server-keys";
 
 /* Service-role client — bypasses RLS. Import only from server code
    (route handlers, server actions, cron). The "server-only" import makes
@@ -8,10 +9,10 @@ import { createClient } from "@supabase/supabase-js";
    app-owned write paths: voting_info_subscription upserts and news_item
    rows from the daily cron. Never writes pipeline-owned tables. */
 export function createServiceClient() {
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const key = serviceRoleKey();
   if (!key) {
     throw new Error(
-      "SUPABASE_SERVICE_ROLE_KEY is not set — server-side writes are unavailable."
+      "SUPABASE_SERVICE_ROLE_KEY (or SUPABASE) is not set — server-side writes are unavailable."
     );
   }
   return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, key, {

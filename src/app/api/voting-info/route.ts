@@ -4,6 +4,7 @@ import { z } from "zod";
 import { verifiedStatewideEvents } from "@/lib/notifications/election-events";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { resolveZip, ZIP_RE } from "@/lib/resolve";
+import { resendApiKey } from "@/lib/server-keys";
 import { createServiceClient } from "@/lib/supabase/service";
 
 /* Where-to-vote opt-in email (FR-010) — the ONLY flow that handles personal
@@ -75,7 +76,7 @@ export async function POST(request: NextRequest) {
   }
   const source = OFFICIAL_SOURCES[resolved.county];
 
-  if (!process.env.RESEND_API_KEY || !process.env.EMAIL_FROM) {
+  if (!resendApiKey() || !process.env.EMAIL_FROM) {
     return NextResponse.json(
       { error: "Email delivery isn't configured yet — nothing was sent or stored." },
       { status: 503 }
@@ -117,7 +118,7 @@ export async function POST(request: NextRequest) {
   const registration = formatDate(byType.get("registration_deadline")?.event_date);
   const unsubscribeUrl = `${request.nextUrl.origin}/api/voting-info/unsubscribe?token=${subscription.unsubscribe_token}`;
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const resend = new Resend(resendApiKey());
   const { error: sendError } = await resend.emails.send({
     from: process.env.EMAIL_FROM,
     to: email,
