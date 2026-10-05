@@ -16,6 +16,13 @@ import { MeasureThreshold } from "@/components/features/MeasureThreshold";
    would read as a recommendation, the same reason the ladder's columns and
    the party chips are uncoloured.
 
+   They are WORDED the same too ("Equal space, equal scrutiny — in words
+   too", docs/voice-and-tone.md). Each box says only what the vote is, a
+   mirror of the other; what happens next depends on everyone's votes, so
+   it is said once, under both, for both outcomes. An earlier draft had NO
+   "keep the Constitution as it is", which is false for every NO voter
+   whenever the amendment passes (review 2026-10-05).
+
    The blank-vote line is true only for the 60% rule. Art. XI s.5(e), Fla.
    Const., counts "sixty percent of the electors voting on the measure", so
    an undervote counts toward neither side (checked against flsenate.gov
@@ -33,13 +40,16 @@ export function MeasureVoteMeaning({ pct }: { pct: number }) {
       </h2>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Box label="Voting YES">
-          Approves the change in the ballot summary below. If enough voters
-          approve it, it becomes part of the Florida Constitution.
+          Approves the change in the ballot summary below.
         </Box>
         <Box label="Voting NO">
-          Keeps the Florida Constitution as it is now.
+          Rejects the change in the ballot summary below.
         </Box>
       </div>
+      <p className="text-body-sm text-on-surface">
+        If it passes, the change becomes part of the Florida Constitution. If
+        it fails, nothing in the Constitution changes because of it.
+      </p>
       <MeasureThreshold pct={pct} />
       {blankCountsForNeither && (
         <p className="text-caption text-on-surface-muted">

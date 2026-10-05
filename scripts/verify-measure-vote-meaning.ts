@@ -52,6 +52,15 @@ check(
     (meaning.match(/function Box\(/g) ?? []).length === 1
 );
 check(
+  "YES and NO are worded as mirrors: only the verb differs",
+  /<Box label="Voting YES">\s*Approves the change in the ballot summary below\.\s*<\/Box>/.test(meaning) &&
+    /<Box label="Voting NO">\s*Rejects the change in the ballot summary below\.\s*<\/Box>/.test(meaning)
+);
+check(
+  "the outcome is stated once, for both sides, outside either box",
+  /If it passes, the change becomes part of the Florida Constitution\. If\s+it fails, nothing in the Constitution changes because of it\./.test(meaning)
+);
+check(
   "YES comes before NO",
   meaning.indexOf('label="Voting YES"') < meaning.indexOf('label="Voting NO"')
 );
