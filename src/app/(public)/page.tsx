@@ -78,6 +78,7 @@ export default async function Home() {
       </p>
       <DeadlineBanner
         remindersHref={promoteReminders ? `#${REMINDER_SIGNUP_ID}` : undefined}
+        countyFips={saved?.countyFips}
       />
 
       {ballotRendered && <TrackView event="ballot_viewed" />}

@@ -1,15 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifiedStatewideEvents } from "@/lib/notifications/election-events";
+import { verifiedElectionEvents } from "@/lib/notifications/election-events";
 import { buildElectionCalendar, ELECTION_LABEL } from "@/lib/notifications/ics";
+import { eventsForCounty } from "@/lib/notifications/schedule";
 import { createServiceClient } from "@/lib/supabase/service";
 
-/* GET /api/calendar/[election].ics — verified statewide dates as a calendar
-   file (plan A6). The zero-infrastructure reminder channel: no email, no
+/* GET /api/calendar/[election].ics — verified dates as a calendar file
+   (plan A6). The zero-infrastructure reminder channel: no email, no
    subscription row, the voter's own calendar app does the reminding.
-   Unverified rows never appear (verifiedStatewideEvents filters them). */
+   Unverified rows never appear (verifiedElectionEvents filters them).
+
+   ?county=<FIPS> gives that county's dates where it has its own (0043):
+   all four covered counties run early voting Oct 19 to Nov 1, wider than
+   the statewide Oct 24 to Oct 31. Without it, or for a county with no rows
+   of its own, the statewide dates. The banner, the races view and the
+   welcome email link the county file when they know the county. */
+
+const FIPS_RE = /^\d{5}$/;
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ election: string }> }
 ) {
   const { election: raw } = await params;
@@ -31,7 +40,11 @@ export async function GET(
     );
   }
 
-  const events = await verifiedStatewideEvents(service, election);
+  const county = request.nextUrl.searchParams.get("county");
+  const events = eventsForCounty(
+    await verifiedElectionEvents(service, election),
+    county && FIPS_RE.test(county) ? county : null
+  );
   return new NextResponse(buildElectionCalendar(election, events), {
     headers: {
       "Content-Type": "text/calendar; charset=utf-8",

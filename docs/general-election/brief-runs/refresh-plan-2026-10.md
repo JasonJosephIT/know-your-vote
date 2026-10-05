@@ -43,7 +43,7 @@ The TSV's rows are copied byte for byte from `ingest-targets-2026-09-29.tsv`. It
 | 4 | **Sat 10-17** | Apply, fingerprint check, audit at 150, `anon` read-back, publish; `BRIEF_SNAPSHOT_DATE` updated and deployed; live pages checked (Step 4). | Agent, plus the founder for non-MCP SQL |
 | Freeze | **Sun 10-18 to Tue 11-03** | No content changes except corrections (see "The freeze"). | Both |
 
-For reference: the vote-by-mail request deadline is 10-22, early voting runs 10-24 to 10-31, and Election Day is 11-03 (all `verified_by` in `election_event`).
+For reference: the vote-by-mail request deadline is 10-22, early voting runs 10-24 to 10-31 statewide and **10-19 to 11-01 in all four covered counties** (found 2026-10-05, migration 0043), and Election Day is 11-03. The freeze from 10-18 still starts before the counties open.
 
 **The cut-off:**
 - If Gate 1 or Gate 2 is missed, the refresh stops. Nothing has been applied, so nothing needs undoing, and the 2026-09-29 snapshot stays everywhere.

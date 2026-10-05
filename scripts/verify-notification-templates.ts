@@ -40,6 +40,16 @@ const SAMPLE_CORRECTION = {
   event_label: "voter registration deadline",
 };
 
+/* A county's own early-voting row (0043) renders with the county's name and
+   its own page; checked against the same budget below. */
+const SAMPLE_COUNTY_EARLY = {
+  election: "general_2026",
+  date: "2026-10-19",
+  details_url:
+    "https://www.miamidade.gov/elections/library/early-voting/2026-11-03-general-election-early-voting-schedule.pdf",
+  county: "Miami-Dade",
+};
+
 /* Words that would signal editorializing in what must be pure logistics
    copy. Deliberately small — the full list lives in verify-news-neutrality
    for agent-written content; templates are static and founder-reviewed. */
@@ -80,6 +90,16 @@ for (const [id, t] of Object.entries(TEMPLATES)) {
   );
   check(`${id}: neutral copy`, !PROHIBITED.test(rendered.body), rendered.body);
 }
+
+const countyEarly = renderTemplate("early_voting_start", SAMPLE_COUNTY_EARLY);
+check(
+  "early_voting_start for a county: within budget, names the county, ends with its own page",
+  countyEarly.body.length <= BUDGETS.email.body &&
+    countyEarly.body.includes("in Miami-Dade County") &&
+    countyEarly.body.endsWith(SAMPLE_COUNTY_EARLY.details_url) &&
+    !PROHIBITED.test(countyEarly.body),
+  `${countyEarly.body.length} chars: ${countyEarly.body}`
+);
 
 check(
   "unknown template_id throws",

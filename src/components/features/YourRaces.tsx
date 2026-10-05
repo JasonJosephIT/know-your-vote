@@ -265,6 +265,7 @@ export async function YourRaces({
         emailEnabled={emailDeliveryConfigured()}
         remindersOn={!remindersPaused()}
         sources={officialSources(result.county)}
+        countyFips={result.countyFips}
       />
     </div>
   );

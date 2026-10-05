@@ -27,6 +27,9 @@
         notification_send_log); anon can neither read nor write them;
         the event_type CHECK and the statewide-scope unique index reject
         bad rows; send_log ON CONFLICT DO NOTHING dedupes.
+    14c. 0043_county_early_voting_2026: both early-voting bounds for the
+        four covered counties (Oct 19, Nov 1), no rule, verified_by NULL;
+        the scope index rejects a second row for the same county.
     14b. 0021_ballot_return_deadline: event_type admits
         ballot_return_deadline; the rule CHECK rejects unknown tokens; a
         deadline cannot be stored without a rule and a non-deadline cannot
@@ -642,9 +645,11 @@ await db.exec(`
     ('c-pub', 'press@pub-candidate.example', 'https://pub-candidate.example/contact');
   INSERT INTO news_item (candidate_id, race_id, item_type, title, url, source_id) VALUES
     ('c-pub', 'r-pub', 'candidate_news', 'Filing shows X.', 'https://example.gov/story-1', 's1');
-  -- county-scoped fixture row: statewide rows come from 0008_election_seed
+  -- county-scoped fixture row: statewide rows come from 0008_election_seed,
+  -- the covered counties' rows from 0043, so this uses a county 0043 leaves
+  -- alone (Palm Beach)
   INSERT INTO election_event (county_fips, event_type, election, event_date, details_url) VALUES
-    ('12086', 'early_voting_start', 'general_2026', '2026-10-19', 'https://www.miamidade.gov/elections/');
+    ('12099', 'early_voting_start', 'general_2026', '2026-10-19', 'https://www.votepalmbeach.gov/');
   INSERT INTO notification_send_log (dedupe_key, recipient_count) VALUES
     ('general_2026:registration_deadline:T-7:email', 1);
 `);
@@ -1000,6 +1005,33 @@ await check("every seeded deadline carries a rule and nothing else does", async 
   if (missing !== 0) throw new Error(`${missing} deadline row(s) with no rule`);
   if (spurious !== 0) throw new Error(`${spurious} non-deadline row(s) carrying a rule`);
 });
+/* 0043_county_early_voting_2026. */
+await check("0043 seeded both early-voting bounds for the four covered counties, unverified", async () => {
+  const r = await db.query(
+    `SELECT county_fips, event_type, event_date::text AS event_date, rule, verified_by, details_url
+       FROM election_event
+      WHERE county_fips IN ('12086','12011','12057','12095')
+      ORDER BY county_fips, event_type;`
+  );
+  if (r.rows.length !== 8) throw new Error(`expected 8 rows, saw ${r.rows.length}`);
+  for (const row of r.rows) {
+    const want = row.event_type === "early_voting_start" ? "2026-10-19" : "2026-11-01";
+    if (!["early_voting_start", "early_voting_end"].includes(row.event_type)) {
+      throw new Error(`${row.county_fips}: unexpected ${row.event_type}`);
+    }
+    if (row.event_date !== want) throw new Error(`${row.county_fips} ${row.event_type}: ${row.event_date}, want ${want}`);
+    if (row.rule !== null) throw new Error(`${row.county_fips} ${row.event_type}: carries rule ${row.rule}`);
+    if (row.verified_by !== null) throw new Error(`${row.county_fips} ${row.event_type}: verified_by set by the migration`);
+    if (!row.details_url.startsWith("https://")) throw new Error(`${row.county_fips}: details_url ${row.details_url}`);
+  }
+});
+await expectConstraintViolation(
+  "unique index rejects a second row for the same county, event and election",
+  `INSERT INTO election_event (county_fips, event_type, election, event_date, details_url)
+   VALUES ('12086', 'early_voting_start', 'general_2026', '2026-10-20', 'https://x.example');`,
+  /duplicate key value violates unique constraint "uq_election_event_scope"/
+);
+
 await check("send_log ON CONFLICT DO NOTHING dedupes", async () => {
   await db.exec(
     `INSERT INTO notification_send_log (dedupe_key, recipient_count)

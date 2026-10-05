@@ -2,7 +2,7 @@
 
 Written 2026-10-04 for launch handoff items 2.2 (test the reminder pipeline end to end) and 2.3 (make the reminder signup visible). Every step marked **Founder** needs an account only the founder holds. Calls marked **Recommended (pending founder confirmation)** are an agent's choice, not the founder's decision, and each one says how to flip it.
 
-**Hard deadline: Tuesday 2026-10-20.** The first reminder that can still reach a voter is the vote-by-mail request reminder, sent in the 14:00 UTC cron on **Wednesday 2026-10-21**. A reminder is sent only on its exact day, so if sending still fails that day, that reminder is lost rather than delayed.
+**Hard deadline: Sunday 2026-10-18** (moved up from Tuesday 2026-10-20 on 2026-10-05). The first reminder that can still reach a voter is now "Early voting starts today" for the four covered counties, sent in the 14:00 UTC cron on **Monday 2026-10-19**. That needs migration 0043 applied and stamped first (see "County early-voting dates (0043)" below). Without it, the first send is the vote-by-mail request reminder on Wednesday 2026-10-21, and the early-voting reminder reaches voters on Oct 24, five days after their county opened. A reminder is sent only on its exact day, so if sending still fails that day, that reminder is lost rather than delayed.
 
 ## Why nothing sent before 2026-10-05
 
@@ -115,14 +115,15 @@ Without the secret to hand, Vercel, Settings, Cron Jobs, `/api/cron/send-reminde
 
 | When you run it | Answer | What it proves |
 | --- | --- | --- |
-| Oct 5 to Oct 20 | `{"due":0,"sent":[],"skipped":[]}` | Auth, env and the database read work. **Nothing is sent and nothing is logged**: no reminder is due. Use 4c for the send path. |
-| A send day, after its 14:00 UTC run | that day's key under `"skipped"` (on Oct 21, `general_2026:vbm_request_deadline:T-1:email`) | Idempotency: the scheduled run already claimed it. |
+| Oct 5 to Oct 18 (to Oct 20 without 0043) | `{"due":0,"sent":[],"skipped":[]}` | Auth, env and the database read work. **Nothing is sent and nothing is logged**: no reminder is due. Use 4c for the send path. |
+| A send day, after its 14:00 UTC run | that day's key under `"skipped"` (on Oct 19, `general_2026:early_voting_start:T-0:email:12086` and the other three counties' keys; on Oct 21, `general_2026:vbm_request_deadline:T-1:email`) | Idempotency: the scheduled run already claimed it. |
+| Oct 24, with 0043 stamped | `general_2026:early_voting_start:T-0:email` under `"noRecipients"` | The statewide "starts today" reminder is due but goes to nobody: every subscriber is in a covered county, and each county's own reminder went out on Oct 19. A reminder with no recipients is not claimed or logged. |
 
 The registration T-1 reminder was due on Oct 4, when the cron still answered 503 (see "Why nothing sent before 2026-10-05"). The production code takes the UTC date, so its Oct 4 ended at 00:00 UTC Oct 5 (8 p.m. EDT Oct 4), before #109 deployed. That reminder could never be sent and can't be tested live.
 
 ### 4c. Rehearse the next reminder (needs this PR merged)
 
-Recommended (pending founder confirmation). Between Oct 5 and Oct 20 a plain trigger sends nothing, so this PR adds a rehearsal mode. It sends the **next scheduled reminder**, word for word, to **one address that already has an active subscription**. The subject is prefixed "[Rehearsal]". It is logged under a synthetic key, so the real send for that day is untouched.
+Recommended (pending founder confirmation). Between Oct 5 and Oct 18 a plain trigger sends nothing, so this PR adds a rehearsal mode. It sends the **next scheduled reminder**, word for word, to **one address that already has an active subscription**. The subject is prefixed "[Rehearsal]". It is logged under a synthetic key, so the real send for that day is untouched.
 
 The address goes in a JSON body, never in the URL. Vercel's request logs keep every URL with its query string, but not request bodies. (Sentry also strips email addresses from every event: `src/lib/sentry-scrub.ts`.) The route answers **400** if `rehearse` appears in the URL.
 
@@ -133,7 +134,9 @@ curl -sS -X POST "https://knowyour.vote/api/cron/send-reminders" \
   --data '{"rehearse":"<test address>"}'
 ```
 
-**Expected:** `{"rehearsal":true,"dedupe_key":"rehearsal:general_2026:vbm_request_deadline:T-1:email:<timestamp>","template_id":"vbm_deadline_t1","real_send_date":"2026-10-21","recipients":1}`. The email is "[Rehearsal] Vote-by-mail request deadline is tomorrow", ending with an unsubscribe link. Its "tomorrow" refers to the real send date, Oct 21.
+**Expected, once 0043 is stamped** (the test address subscribed with a ZIP in one of the four counties): `{"rehearsal":true,"dedupe_key":"rehearsal:general_2026:early_voting_start:T-0:email:<county FIPS>:<timestamp>","template_id":"early_voting_start","real_send_date":"2026-10-19","recipients":1}`. The email is "[Rehearsal] Early voting starts today". It names the county, says early voting begins Monday, October 19, links the county's early-voting page, and ends with an unsubscribe link. Its "today" refers to the real send date, Oct 19. The rehearsal follows the subscriber's county, exactly as the scheduled run does.
+
+**Expected before 0043 is stamped,** or on Oct 20 and 21: `{"rehearsal":true,"dedupe_key":"rehearsal:general_2026:vbm_request_deadline:T-1:email:<timestamp>","template_id":"vbm_deadline_t1","real_send_date":"2026-10-21","recipients":1}`. The email is "[Rehearsal] Vote-by-mail request deadline is tomorrow", ending with an unsubscribe link. Its "tomorrow" refers to the real send date, Oct 21. Before 0043, the welcome email from 4a also still shows the statewide window (Oct 24 to Oct 31); after it, the county's (Oct 19 to Nov 1).
 
 ### 4d. Check the send log
 
@@ -178,15 +181,64 @@ WHERE lower(email) = lower('<their address>');
 
 Subscribe one address you read and leave it subscribed through Nov 3, so you receive every real reminder as voters do. Submitting the form again re-activates an unsubscribed row. On each send day, a digest also goes to the `EMAIL_FROM` address ("Know Your Vote reminders digest — <date>") with the counts. It goes out only on days something was sent.
 
+## County early-voting dates (0043)
+
+**Apply and stamp by Sunday 2026-10-18. Sooner is better:** until then the banner, the welcome email and the calendar file show early voting as Oct 24 to Oct 31 to voters in counties that open on Oct 19.
+
+Florida's statewide window (Sat Oct 24 to Sat Oct 31) is the minimum every county must offer. A Supervisor of Elections may add the 15th to 11th days before the election and the 2nd (s. 101.657(1)(d), Fla. Stat.), and all four covered counties add every one of them. Each county's own site, checked twice on 2026-10-05, says early voting for the Nov 3 general runs **Monday Oct 19 to Sunday Nov 1**:
+
+| County | FIPS | Hours | Official page (`details_url`) |
+| --- | --- | --- | --- |
+| Miami-Dade | 12086 | 7 a.m. to 7 p.m. | https://www.miamidade.gov/elections/library/early-voting/2026-11-03-general-election-early-voting-schedule.pdf |
+| Broward | 12011 | 7 a.m. to 7 p.m. | https://browardvotes.gov/voters/early-voting-ballot-return |
+| Hillsborough | 12057 | 7 a.m. to 7 p.m. | https://www.votehillsborough.gov/EarlyVoting |
+| Orange | 12095 | 8 a.m. to 8 p.m. | https://voteorangefl.gov/vote-early/ (ocfelections.gov now redirects here) |
+
+`supabase/migrations/0043_county_early_voting_2026.sql` adds one `early_voting_start` (Oct 19) and one `early_voting_end` (Nov 1) row per county, with `verified_by` NULL. As with every `election_event` row, an unverified row reaches no page, email or calendar.
+
+1. Run the file in the Supabase SQL editor. It is idempotent (`ON CONFLICT DO NOTHING`). It doesn't depend on 0042 or 0014, and those don't depend on it.
+2. Open each `details_url` above and check the dates. Then stamp the rows:
+
+   ```sql
+   UPDATE election_event
+      SET verified_by = '<your email>', verified_at = now()
+    WHERE election = 'general_2026'
+      AND county_fips IN ('12086', '12011', '12057', '12095')
+      AND event_type IN ('early_voting_start', 'early_voting_end')
+      AND verified_by IS NULL;
+   -- expect: UPDATE 8
+   ```
+
+3. Check:
+
+   ```sql
+   SELECT county_fips, event_type, event_date, verified_by IS NOT NULL AS verified
+     FROM election_event
+    WHERE county_fips IS NOT NULL
+    ORDER BY county_fips, event_type;
+   -- expect 8 rows, all verified: early_voting_end 2026-11-01, early_voting_start 2026-10-19
+   ```
+
+What changes once the rows are stamped. The code that reads them is already deployed, and it works without them:
+
+- **Reminders.** Each county's subscribers get "Early voting starts today" on Oct 19, naming their county and linking its page. Each county is its own send under its own key (`general_2026:early_voting_start:T-0:email:<FIPS>`). The statewide Oct 24 reminder skips them. A subscriber's county comes from their ZIP (`zip_district`).
+- **Banner.**
+  - A visitor whose saved district is in one of the four counties sees "Early voting runs October 19 to November 1 in <county> County".
+  - Everyone else sees "Early voting runs October 24 to October 31 statewide; October 19 to November 1 in Miami-Dade, Broward, Hillsborough and Orange counties".
+  - The banner's cache tag is `election-dates`, so it updates within the hour.
+- **Welcome email and calendar file.** Both give the voter's county's window. The calendar link carries `?county=<FIPS>`. `/api/calendar/general_2026.ics` without it stays statewide.
+
+Doing nothing is not neutral. The Oct 24 "Early voting starts today" email would tell every subscriber something false: their county opened five days earlier.
+
 ## What fires when
 
-The output of `node scripts/verify-reminder-schedule.ts`: the real schedule and template code, driven with the six verified `general_2026` rows as they stood on 2026-10-04, one run per day at 14:00 UTC from Oct 4 to Nov 4.
+The output of `node scripts/verify-reminder-schedule.ts`: the real schedule and template code, driven with the six verified `general_2026` rows as they stood on 2026-10-04, plus 0043's county rows stamped. One run a day at 14:00 UTC, Oct 4 to Nov 4. Every current subscriber is in one of the four covered counties (the signup accepts no other ZIP), so this is the calendar each of them gets.
 
 | Send day (14:00 UTC run) | Eastern time | Template | Subject | For |
 | --- | --- | --- | --- | --- |
 | Sun 2026-10-04 | 10 a.m. EDT | `reg_deadline_t1` | Voter registration closes tomorrow | Registration deadline Oct 5 (postmarked by). **Missed**: the cron returned 503, with 0 subscribers. |
+| Mon 2026-10-19 | 10 a.m. EDT | `early_voting_start` | Early voting starts today | Early voting in the subscriber's county, Oct 19 to Nov 1. One send per county; needs 0043 stamped |
 | Wed 2026-10-21 | 10 a.m. EDT | `vbm_deadline_t1` | Vote-by-mail request deadline is tomorrow | VBM request deadline Oct 22 (received by) |
-| Sat 2026-10-24 | 10 a.m. EDT | `early_voting_start` | Early voting starts today | Early voting Oct 24 to 31 |
 | Tue 2026-10-27 | 10 a.m. EDT | `ballot_return_t7` | Mail your ballot back this week | Ballot return Nov 3, 7 p.m. (received by) |
 | Mon 2026-11-02 | 9 a.m. EST | `ballot_return_t1` | Your ballot must be back by 7 p.m. tomorrow | Ballot return Nov 3 |
 | Tue 2026-11-03 | 9 a.m. EST | `election_day` | Today is Election Day | Election Day |
@@ -194,7 +246,8 @@ The output of `node scripts/verify-reminder-schedule.ts`: the real schedule and 
 The script asserts all of the following:
 
 - The VBM reminder fires before Oct 22.
-- The early-voting reminder fires on or before Oct 24.
+- With 0043 stamped, each county's early-voting reminder fires on Oct 19, under its own key, to that county only, and no county gets the statewide Oct 24 one. A voter in no county with its own dates (the statewide scope; none today) would still get the statewide reminder on Oct 24.
+- Before 0043 is stamped, the schedule is exactly the statewide one: early voting on Oct 24, and the other keys unchanged.
 - The Election Day reminder fires on or before Nov 3.
 - Nothing fires for a passed deadline: the registration T-7 of Sep 28 is never sent late, and nothing goes out on Nov 4.
 - Each key fires once, at most one email a day, and a same-day re-run sends nothing new.
@@ -244,7 +297,7 @@ Vercel may start a scheduled run some minutes into the 14:00 UTC hour.
 - **The deadline banner rolls forward** (`bannerDates()` in `schedule.ts`; merged with #107, so already live). This PR only passes it the link to the reminder card (`remindersHref` from `src/app/(public)/page.tsx`). Since #107 it shows:
   - registration until the end of Oct 5;
   - the VBM request deadline through Oct 22;
-  - early voting Oct 24 to 31;
+  - early voting Oct 24 to 31 (the statewide rows; since 2026-10-05, a visitor whose saved district is in a covered county sees that county's Oct 19 to Nov 1 window once 0043 is stamped, see "County early-voting dates (0043)");
   - the ballot-return deadline Nov 1 to 3;
   - then nothing after Election Day.
 
@@ -263,7 +316,7 @@ These change what the two production routes do once this PR is merged. None of t
 
 ### To confirm (Founder)
 
-- **The vote-by-mail request cutoff time.** Florida Statutes s. 101.62(3)(c) (2025 text, read at flsenate.gov on 2026-10-04) says: "The deadline to submit a request for a ballot to be mailed is 5 p.m. local time on the 12th day before an upcoming election." This PR adds that time to the reminder template (`vbm_deadline_t1`) and the welcome email (`welcomeEmail()`, when the event's rule is `received_by`), both in `src/lib/notifications/templates.ts`; the banner (`nextLine()` in `src/components/features/DeadlineBanner.tsx`) has said "5 p.m." since #107. Confirm the time against dos.fl.gov before Oct 21, when `vbm_deadline_t1` goes out. If it is wrong, those three strings are the edits.
+- **The vote-by-mail request cutoff time.** Florida Statutes s. 101.62(3)(c) (2025 text, read at flsenate.gov on 2026-10-04) says: "The deadline to submit a request for a ballot to be mailed is 5 p.m. local time on the 12th day before an upcoming election." This PR adds that time to the reminder template (`vbm_deadline_t1`) and the welcome email (`welcomeEmail()`, when the event's rule is `received_by`), both in `src/lib/notifications/templates.ts`; the banner (`bannerLine()` in `src/lib/notifications/banner.ts`, moved there from `DeadlineBanner.tsx` on 2026-10-05) has said "5 p.m." since #107. Confirm the time against dos.fl.gov before Oct 21, when `vbm_deadline_t1` goes out. If it is wrong, those three strings are the edits.
 
 ## Verified, and not verified
 

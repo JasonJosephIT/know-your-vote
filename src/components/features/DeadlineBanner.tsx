@@ -1,28 +1,26 @@
 import { unstable_cache } from "next/cache";
 import { ACTIVE_ELECTION } from "@/lib/election";
 import {
-  verifiedStatewideEvents,
+  verifiedElectionEvents,
   type ElectionEvent,
 } from "@/lib/notifications/election-events";
-import { bannerDates, easternToday } from "@/lib/notifications/schedule";
+import { bannerLine, bannerLongDate } from "@/lib/notifications/banner";
+import {
+  bannerDates,
+  countiesWithOwnDates,
+  easternToday,
+  eventsForCounty,
+} from "@/lib/notifications/schedule";
 import { createServiceClient } from "@/lib/supabase/service";
 
-/* Dates are stated, never counted down. A countdown ("28 days left") would
-   go stale the moment this page is served from a cache, and a wrong number
-   on a civic deadline is worse than no number. */
-function longDate(iso: string): string {
-  return new Date(`${iso}T00:00:00`).toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-  });
-}
-
-/* Every verified statewide date for the active election. This used to come
-   from getPublicElectionDates (src/lib/election-dates.ts, removed 2026-10-04
-   once nothing else read it), which kept only the registration deadline and
-   Election Day — not enough to roll forward to the vote-by-mail and
-   early-voting dates. Same read, same hour-long
+/* Every verified date for the active election, statewide and county
+   (0043). This used to come from getPublicElectionDates (src/lib/
+   election-dates.ts, removed 2026-10-04 once nothing else read it), which
+   kept only the registration deadline and Election Day — not enough to
+   roll forward to the vote-by-mail and early-voting dates. Same hour-long
    cache, same "election-dates" tag, so a correction still revalidates it.
+   The key changed with the county rows, so no entry cached before them
+   (statewide rows only) is served after.
 
    createServiceClient throws without the service-role key (src/lib/
    server-keys.ts), inside the cache, so a missing key is never cached as
@@ -30,8 +28,8 @@ function longDate(iso: string): string {
    readable rather than up to an hour later. */
 const cachedEvents = unstable_cache(
   async (): Promise<ElectionEvent[]> =>
-    verifiedStatewideEvents(createServiceClient(), ACTIVE_ELECTION),
-  ["deadline-banner-events", ACTIVE_ELECTION],
+    verifiedElectionEvents(createServiceClient(), ACTIVE_ELECTION),
+  ["deadline-banner-events-by-county", ACTIVE_ELECTION],
   { revalidate: 3600, tags: ["election-dates"] }
 );
 
@@ -40,33 +38,6 @@ async function bannerEvents(): Promise<ElectionEvent[]> {
     return await cachedEvents();
   } catch {
     return [];
-  }
-}
-
-/* What each date asks of a voter, in the banner's few words. The early
-   voting pair reads as one window when both rows exist, because the window
-   is the fact; counties may add days on either side, and the official
-   pages behind the calendar link say which. */
-function nextLine(next: ElectionEvent, events: ElectionEvent[]): string {
-  const start = events.find((e) => e.event_type === "early_voting_start");
-  const end = events.find((e) => e.event_type === "early_voting_end");
-  switch (next.event_type) {
-    case "registration_deadline":
-      return `Register to vote by ${longDate(next.event_date)}`;
-    case "vbm_request_deadline":
-      /* 5 p.m. local time: s. 101.62(3)(c), Fla. Stat. (checked 2026-10-04). */
-      return `Request a vote-by-mail ballot by 5 p.m. on ${longDate(next.event_date)}`;
-    case "early_voting_start":
-    case "early_voting_end":
-      return start && end
-        ? `Early voting runs ${longDate(start.event_date)} to ${longDate(end.event_date)} statewide`
-        : next.event_type === "early_voting_start"
-          ? `Early voting starts ${longDate(next.event_date)}`
-          : `Early voting ends ${longDate(next.event_date)}`;
-    case "ballot_return_deadline":
-      return `Mail ballots must be received by 7 p.m. on ${longDate(next.event_date)}`;
-    case "election_day":
-      return `Election Day is ${longDate(next.event_date)}`;
   }
 }
 
@@ -84,19 +55,31 @@ function nextLine(next: ElectionEvent, events: ElectionEvent[]): string {
    cookie), so the rollover is never older than the request.
 
    remindersHref links to the reminder signup when the home page shows it
-   (founder decision 3, src/lib/notifications/config.ts). */
+   (founder decision 3, src/lib/notifications/config.ts).
+
+   countyFips is the saved district's county (the kyv.district cookie),
+   when there is one. With it the banner states that county's dates and
+   links its calendar; without it, the statewide dates. */
 export async function DeadlineBanner({
   remindersHref,
+  countyFips,
 }: {
   remindersHref?: string;
+  countyFips?: string;
 }) {
-  const events = await bannerEvents();
+  const allEvents = await bannerEvents();
+  const scope =
+    countyFips && countiesWithOwnDates(allEvents).includes(countyFips)
+      ? countyFips
+      : null;
+  const events = eventsForCounty(allEvents, scope);
   const dates = bannerDates(events, easternToday());
   if (!dates) return null;
 
   const parts = [
-    dates.next && nextLine(dates.next, events),
-    dates.electionDay && `Election Day is ${longDate(dates.electionDay.event_date)}`,
+    dates.next && bannerLine(dates.next, events, allEvents),
+    dates.electionDay &&
+      `Election Day is ${bannerLongDate(dates.electionDay.event_date)}`,
   ].filter(Boolean) as string[];
 
   const link = "w-fit text-caption underline underline-offset-2";
@@ -108,7 +91,10 @@ export async function DeadlineBanner({
     >
       <p className="font-semibold">{parts.join(" · ")}</p>
       <p className="flex flex-wrap gap-x-4 gap-y-1">
-        <a href={`/api/calendar/${ACTIVE_ELECTION}.ics`} className={link}>
+        <a
+          href={`/api/calendar/${ACTIVE_ELECTION}.ics${scope ? `?county=${scope}` : ""}`}
+          className={link}
+        >
           Add these dates to your calendar
         </a>
         {remindersHref && (

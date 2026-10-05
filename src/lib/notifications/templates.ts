@@ -1,4 +1,7 @@
 import { z } from "zod";
+/* Relative, with the extension: scripts/verify-reminder-schedule.ts loads
+   this file in plain Node, which doesn't know the @/ alias. */
+import { COVERED_COUNTIES, coveredCounty } from "../counties.ts";
 import type { ElectionEvent } from "./election-events";
 
 /* Template registry (plan A7b) — the ONLY place notification copy exists
@@ -27,6 +30,16 @@ const dateParams = z.object({
   election: z.enum(["primary_2026", "general_2026"]),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   details_url: z.string().url().startsWith("https://"),
+});
+
+/* A county's own early-voting date (0043) names the county, so a voter
+   reading "begins today" knows whose calendar it is. Only a covered
+   county's name passes: still no free text. */
+const earlyVotingParams = dateParams.extend({
+  county: z
+    .string()
+    .refine((name) => COVERED_COUNTIES.some((c) => c.name === name))
+    .optional(),
 });
 
 /* Correction is the one pre-approved manual-broadcast template (design doc
@@ -127,11 +140,13 @@ export const TEMPLATES = {
   }),
   early_voting_start: template({
     channel: "email",
-    schema: dateParams,
+    schema: earlyVotingParams,
     render: (p) => ({
       subject: "Early voting starts today",
       title: "Early voting starts today",
-      body: `Early voting for the ${ELECTION_LABEL[p.election]} begins today, ${longDate(p.date)} (statewide window — days and sites vary by county). Official info: ${p.details_url}`,
+      body: p.county
+        ? `Early voting for the ${ELECTION_LABEL[p.election]} begins today, ${longDate(p.date)}, in ${p.county} County. The Supervisor of Elections lists the early voting sites and hours: ${p.details_url}`
+        : `Early voting for the ${ELECTION_LABEL[p.election]} begins today, ${longDate(p.date)} (statewide window — days and sites vary by county). Official info: ${p.details_url}`,
       url: p.details_url,
     }),
   }),
@@ -167,6 +182,25 @@ export const BUDGETS = {
   webpush: { title: 50, body: 120 },
 } as const;
 
+/* The typed params a scheduled reminder renders with, from its event row.
+   One function for the cron's send and its rehearsal, so the two can never
+   word a reminder differently. A county row (0043) adds the county's name;
+   the templates that don't take it strip it. */
+export function reminderParams(event: ElectionEvent): {
+  election: string;
+  date: string;
+  details_url: string;
+  county?: string;
+} {
+  const county = event.county_fips ? coveredCounty(event.county_fips)?.name : undefined;
+  return {
+    election: event.election,
+    date: event.event_date,
+    details_url: event.details_url,
+    ...(county ? { county } : {}),
+  };
+}
+
 export function renderTemplate(id: string, params: unknown): Rendered {
   const t = (TEMPLATES as Record<string, Template<z.ZodType>>)[id];
   if (!t) throw new Error(`unknown template_id: ${id}`);
@@ -192,7 +226,8 @@ export type WelcomeEmailParams = {
   stateUrl: string;
   origin: string;
   unsubscribeUrl: string;
-  /* Verified statewide rows for the election (verifiedStatewideEvents). */
+  /* The verified rows that apply to the voter's county: eventsForCounty
+     over verifiedElectionEvents (src/lib/notifications/schedule.ts). */
   events: ElectionEvent[];
   /* easternToday(): a date before it has passed in Florida. */
   today: string;
@@ -217,13 +252,21 @@ export function welcomeEmail(p: WelcomeEmailParams): {
     const iso = byType.get(type)?.event_date;
     return iso && iso >= p.today ? longDate(iso) : undefined;
   };
-  const earlyStartIso = byType.get("early_voting_start")?.event_date;
+  const earlyStartRow = byType.get("early_voting_start");
+  const earlyStartIso = earlyStartRow?.event_date;
   const registration = upcoming("registration_deadline");
   const vbmRequest = upcoming("vbm_request_deadline");
   const earlyStart = earlyStartIso ? longDate(earlyStartIso) : undefined;
   const earlyEnd = upcoming("early_voting_end");
   const ballotReturn = upcoming("ballot_return_deadline");
   const general = p.hasRaces ? upcoming("election_day") : undefined;
+  /* p.events are already this voter's county's dates (eventsForCounty), so
+     a county row here is the voter's own county. */
+  const earlyCounty = earlyStartRow?.county_fips
+    ? coveredCounty(earlyStartRow.county_fips)?.name
+    : undefined;
+  const countyFips = p.events.find((e) => e.county_fips)?.county_fips;
+  const calendarUrl = `${p.origin}/api/calendar/general_2026.ics${countyFips ? `?county=${countyFips}` : ""}`;
 
   const dateLines = [
     registration && `Registration deadline: ${registration}`,
@@ -231,7 +274,9 @@ export function welcomeEmail(p: WelcomeEmailParams): {
       `Vote-by-mail request deadline: ${vbmRequest}${byType.get("vbm_request_deadline")?.rule === "received_by" ? " (your request must be received by 5 p.m. local time that day)" : ""}`,
     earlyStart &&
       earlyEnd &&
-      `Early voting: ${earlyStart} to ${earlyEnd} (the statewide window; days and sites vary by county)`,
+      (earlyCounty
+        ? `Early voting in ${earlyCounty} County: ${earlyStart} to ${earlyEnd}. Sites and hours: ${earlyStartRow?.details_url}`
+        : `Early voting: ${earlyStart} to ${earlyEnd} (the statewide window; days and sites vary by county)`),
     ballotReturn &&
       `Vote-by-mail ballots must be received by 7 p.m. on ${ballotReturn}. A postmark does not count.`,
     general && `General election: ${general}`,
@@ -251,7 +296,7 @@ export function welcomeEmail(p: WelcomeEmailParams): {
       ? [
           `Key dates:`,
           ...dateLines,
-          `Add them to your calendar: ${p.origin}/api/calendar/general_2026.ics`,
+          `Add them to your calendar: ${calendarUrl}`,
           ``,
         ]
       : []),
