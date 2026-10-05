@@ -47,21 +47,12 @@ export default function manifest(): MetadataRoute.Manifest {
         purpose: "maskable",
       },
     ],
-    screenshots: [
-      {
-        src: "/brand/mobile/screenshot-1-ballot.png",
-        sizes: "1290x2796",
-        type: "image/png",
-        form_factor: "narrow",
-        label: "Enter your ZIP to see your ballot",
-      },
-      {
-        src: "/brand/mobile/screenshot-2-race.png",
-        sizes: "1290x2796",
-        type: "image/png",
-        form_factor: "narrow",
-        label: "Every race, side by side and equal",
-      },
-    ],
+    // No `screenshots` (removed 2026-10-05). The two PNGs listed here rendered
+    // as empty phone frames — the UI crop never made it into them — under
+    // captions that overclaimed ("every race"), and their SVG sources showed
+    // fact-check verdicts and a "verified record" no 2026 brief carries, plus
+    // a State Senate race the site doesn't cover. Without screenshots Android
+    // shows its basic install prompt. Add them back only as crops of the live
+    // UI (docs/brand-assets-roadmap.md: real UI crop, no fake data).
   };
 }

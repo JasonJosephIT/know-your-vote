@@ -23,7 +23,7 @@ export async function getAdminLog(limit = 100): Promise<AdminLogResult> {
 
   const { data, error } = await service
     .from("admin_action")
-    .select("id, actor, action, subject_kind, subject_id, detail, created_at")
+    .select("id, actor, action, subject_kind, subject_id, subject_ref, detail, created_at")
     .order("created_at", { ascending: false })
     .limit(limit);
 

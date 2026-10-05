@@ -186,12 +186,21 @@ export type AdminActionName =
   | "reject"
   | "cancel";
 
+/* An admin_action row as the Log reads it. The console writes the verbs
+   above against a UUID subject (subject_id). Publication flips write their
+   own: set_race_publication (0018, 0033) and the measure flips (0038, 0040)
+   log publish, unpublish, list, unlist, set_status or note against a TEXT
+   subject_ref ('race_publication' / 'measure_publication', the race or
+   measure id) with subject_id NULL. action has no CHECK (0006), and exactly
+   one of subject_id / subject_ref is set (0018, admin_action_subject_one_of).
+   On 2026-10-05 every one of production's 170 rows was a publication flip. */
 export interface AdminActionRow {
   id: string;
   actor: string;
-  action: AdminActionName;
-  subject_kind: "agent_run_request" | "review_item";
-  subject_id: string;
+  action: string;
+  subject_kind: string;
+  subject_id: string | null;
+  subject_ref: string | null;
   detail: unknown;
   created_at: string;
 }

@@ -1,20 +1,12 @@
 import { requireAdmin } from "@/lib/admin/guard";
 import { getAdminLog } from "@/lib/admin/log";
 import { relativeTime } from "@/lib/admin/format";
+import { actionChipClass, subjectLabel } from "@/lib/admin/log-row";
 import { Card } from "@/components/ui/Card";
 import { DegradedBanner } from "@/components/admin/DegradedBanner";
-import type { AdminActionName } from "@/types/admin";
 
 export const metadata = { title: "Log — Operator Console" };
 export const dynamic = "force-dynamic";
-
-const ACTION_CHIP: Record<AdminActionName, string> = {
-  trigger: "bg-accent-muted text-accent-strong",
-  submit: "bg-info/15 text-info",
-  approve: "bg-primary-muted text-success",
-  reject: "bg-surface-muted text-on-surface-muted",
-  cancel: "bg-warning/15 text-warning",
-};
 
 export default async function LogPage() {
   await requireAdmin();
@@ -53,15 +45,13 @@ export default async function LogPage() {
             >
               <div className="flex flex-wrap items-center gap-3">
                 <span
-                  className={`rounded-full px-2 py-[2px] text-caption ${
-                    ACTION_CHIP[row.action] ?? "bg-surface-muted text-on-surface-muted"
-                  }`}
+                  className={`rounded-full px-2 py-[2px] text-caption ${actionChipClass(row.action)}`}
                 >
                   {row.action}
                 </span>
                 <span className="text-caption text-on-surface-muted">{row.actor}</span>
                 <span className="font-mono text-caption text-on-surface-muted">
-                  {row.subject_kind}:{row.subject_id.slice(0, 8)}
+                  {subjectLabel(row)}
                 </span>
                 <span className="ml-auto text-caption text-on-surface-muted">
                   {relativeTime(row.created_at)}
