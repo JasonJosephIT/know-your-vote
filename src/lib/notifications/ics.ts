@@ -16,17 +16,27 @@ export const ELECTION_LABEL: Record<string, string> = {
   general_2026: "Florida general election 2026",
 };
 
+/* The hour a deadline falls at, where Florida law fixes one hour for every
+   county: a vote-by-mail request must be received by 5 p.m. local time
+   (s. 101.62(3)(c), Fla. Stat., the citation the banner and the reminder
+   emails carry), and a voted mail ballot by 7 p.m., when the polls close
+   (s. 101.67(2)). The hour is in the words, not the schema: event_date is a
+   bare DATE, and a timed VEVENT would need a VTIMEZONE block for "local
+   time" to mean anything (0021 header). So each event stays all-day, and
+   both its title and its note say the hour. */
+const DEADLINE_HOUR: Partial<Record<ElectionEvent["event_type"], string>> = {
+  vbm_request_deadline: "5 p.m.",
+  ballot_return_deadline: "7 p.m.",
+};
+
 const SUMMARY: Record<ElectionEvent["event_type"], string> = {
   registration_deadline: "Voter registration deadline",
-  vbm_request_deadline: "Vote-by-mail request deadline",
-  /* The hour is in the title, not the schema: event_date is a bare DATE and
-     a timed VEVENT would need a VTIMEZONE block for "local time" to mean
-     anything (0021 header). 7 p.m. is poll-closing time, identical for every
-     Florida election. */
-  ballot_return_deadline: "Vote-by-mail ballot must be received by 7 p.m.",
+  vbm_request_deadline: `Vote-by-mail request must be received by ${DEADLINE_HOUR.vbm_request_deadline}`,
+  ballot_return_deadline: `Vote-by-mail ballot must be received by ${DEADLINE_HOUR.ballot_return_deadline}`,
   early_voting_start: "Early voting begins (statewide window)",
   early_voting_end: "Early voting ends (statewide window)",
-  election_day: "Election Day",
+  /* The same hours in every Florida county: s. 100.011(1). */
+  election_day: "Election Day: polls open 7 a.m. to 7 p.m.",
 };
 
 /* A county's own row (0043) says whose window it is instead. */
@@ -44,13 +54,50 @@ function summary(event: ElectionEvent): string {
 /* The `rule` column (0021) rendered into the sentence a voter actually
    reads. This is what the column is FOR — a date with the wrong rule beside
    it still misinforms, and "a postmark counts" is the specific wrong belief
-   that costs people their vote on a returned ballot. */
-const RULE_NOTE: Record<NonNullable<ElectionEvent["rule"]>, string> = {
-  received_by:
-    "This is a RECEIVED-BY deadline: it must be in your Supervisor of Elections' hands by this date. A postmark does not count.",
-  postmarked_by:
-    "A mailed application counts if it is postmarked by this date. Registering online or in person must be completed by this date.",
-};
+   that costs people their vote on a returned ballot. A received-by deadline
+   names its hour, so the note cannot be read as "any time that day". */
+function ruleNote(event: ElectionEvent): string | null {
+  if (event.rule === "postmarked_by") {
+    return "A mailed application counts if it is postmarked by this date. Registering online or in person must be completed by this date.";
+  }
+  if (event.rule !== "received_by") return null;
+  const hour = DEADLINE_HOUR[event.event_type];
+  const by = hour ? `by ${hour} local time on this date` : "by this date";
+  const what =
+    event.event_type === "vbm_request_deadline"
+      ? "your request must reach your Supervisor of Elections"
+      : event.event_type === "ballot_return_deadline"
+        ? "your voted ballot must be in your Supervisor of Elections' hands"
+        : "it must be in your Supervisor of Elections' hands";
+  return `This is a RECEIVED-BY deadline: ${what} ${by}. A postmark does not count.`;
+}
+
+/* The hours, where a date has them. No commas or semicolons in any of these
+   sentences: RFC 5545 makes both special in a TEXT value, and this builder
+   does no escaping (header). Election Day's hours are statewide. Early
+   voting's are each county's own, and s. 101.657(1)(d) lets a county add
+   days on either side of the statewide window, so the statewide row says so
+   rather than implying one schedule for everyone. */
+function hoursNote(event: ElectionEvent): string | null {
+  switch (event.event_type) {
+    case "election_day":
+      return "Polls are open 7 a.m. to 7 p.m. local time. Anyone in line at 7 p.m. can still vote.";
+    case "early_voting_start":
+    case "early_voting_end":
+      return event.county_fips
+        ? "Early voting sites and hours are at the official source below."
+        : "Early voting sites and hours vary by county. A county may also add days on either side of this window.";
+    default:
+      return null;
+  }
+}
+
+/* Raised whenever an event's words change, so a calendar app that already
+   imported this file can take a re-import as an update to the same event
+   (the UID does not change) rather than a copy it ignores. 1: the
+   vote-by-mail request deadline and Election Day gained their hours,
+   2026-10-05. */
+const SEQUENCE = 1;
 
 /* ICS structure is line-oriented: a stray CR/LF in any interpolated value
    would inject properties. Rows are service-role-only writes, but sanitize
@@ -90,9 +137,13 @@ export function buildElectionCalendar(
       `DTSTAMP:${icsDate(event.event_date)}T000000Z`,
       `DTSTART;VALUE=DATE:${icsDate(event.event_date)}`,
       `DTEND;VALUE=DATE:${icsDate(nextDay(event.event_date))}`,
+      `SEQUENCE:${SEQUENCE}`,
       `SUMMARY:${summary(event)} — ${icsText(label)}`,
       `URL:${icsText(event.details_url)}`,
-      `DESCRIPTION:${event.rule ? `${RULE_NOTE[event.rule]} ` : ""}Official source: ${icsText(event.details_url)}`,
+      `DESCRIPTION:${[ruleNote(event), hoursNote(event)]
+        .filter((note) => note !== null)
+        .map((note) => `${note} `)
+        .join("")}Official source: ${icsText(event.details_url)}`,
       "END:VEVENT"
     );
   }

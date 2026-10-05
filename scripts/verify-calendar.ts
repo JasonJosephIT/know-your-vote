@@ -2,12 +2,17 @@
    with a minimal RFC 5545 structure parse — no server or env needed; the
    builder is pure (src/lib/notifications/ics.ts).
 
-     1. Three sample events -> three well-formed VEVENT blocks: UID,
-        DTSTAMP, DTSTART/DTEND all-day pair (DTEND exclusive = start + 1
-        day), SUMMARY, URL; CRLF line endings throughout.
+     1. Four sample events -> four well-formed VEVENT blocks: UID,
+        DTSTAMP, SEQUENCE, DTSTART/DTEND all-day pair (DTEND exclusive =
+        start + 1 day), SUMMARY, URL; CRLF line endings throughout.
      1b. The `rule` column (0021) reaches the voter: a received-by event
         says a postmark does not count, a postmarked-by event does not,
         and a rule-less event carries neither.
+     1d. Every hour Florida law fixes is in the file (2026-10-05): the
+        vote-by-mail request deadline says 5 p.m. in its title and its
+        note, the ballot return 7 p.m. in both, and Election Day its poll
+        hours. The request deadline used to be a bare all-day "deadline",
+        while the banner and the emails said 5 p.m.
      1c. A county's own early-voting rows (0043) name the county; a
         statewide row still says "statewide window".
      2. Zero events -> a valid, empty VCALENDAR (the "nothing verified yet"
@@ -54,6 +59,14 @@ const SAMPLE = [
     rule: null,
     details_url: "https://dos.fl.gov/elections/for-voters/election-dates/",
   },
+  {
+    id: "77777777-7777-7777-7777-777777777777",
+    event_type: "vbm_request_deadline" as const,
+    election: "general_2026",
+    event_date: "2026-10-22",
+    rule: "received_by" as const,
+    details_url: "https://dos.fl.gov/elections/for-voters/election-dates/",
+  },
 ];
 
 const ics = buildElectionCalendar("general_2026", SAMPLE);
@@ -85,7 +98,7 @@ check("one VEVENT per event", eventCount === SAMPLE.length, `saw ${eventCount}`)
 const blocks = [...ics.matchAll(/BEGIN:VEVENT\r\n([\s\S]*?)END:VEVENT/g)].map((m) => m[1]);
 for (const [i, block] of blocks.entries()) {
   const label = `event ${i + 1}`;
-  for (const prop of ["UID:", "DTSTAMP:", "DTSTART;VALUE=DATE:", "DTEND;VALUE=DATE:", "SUMMARY:", "URL:"]) {
+  for (const prop of ["UID:", "DTSTAMP:", "SEQUENCE:", "DTSTART;VALUE=DATE:", "DTEND;VALUE=DATE:", "SUMMARY:", "URL:"]) {
     check(`${label} has ${prop.replace(/[;:].*$/, "")}`, block.includes(prop), block);
   }
 }
@@ -125,8 +138,73 @@ check(
 const dayBlock = blocks.find((b) => b.includes("SUMMARY:Election Day")) ?? "";
 check(
   "rule-less event carries no rule sentence",
-  dayBlock !== "" && /DESCRIPTION:Official source:/.test(dayBlock),
+  dayBlock !== "" &&
+    !/RECEIVED-BY|postmark/i.test(dayBlock) &&
+    /DESCRIPTION:[^\r]*Official source: https:\/\//.test(dayBlock),
   dayBlock
+);
+
+/* (1d) The hours. A calendar file cannot be corrected once downloaded, so
+   the hour has to be right the first time, and the same as the banner's
+   and the emails'. */
+const field = (block: string, name: string) =>
+  block.match(new RegExp(`^${name}:([^\\r]*)$`, "m"))?.[1] ?? "";
+const requestBlock = blocks.find((b) => b.includes("UID:77777777-")) ?? "";
+check(
+  "vote-by-mail request deadline: 5 p.m. in the title",
+  /5 p\.m\./.test(field(requestBlock, "SUMMARY")),
+  field(requestBlock, "SUMMARY")
+);
+check(
+  "vote-by-mail request deadline: the note says received by 5 p.m. local time, postmark does not count",
+  /request must reach your Supervisor of Elections by 5 p\.m\. local time on this date\. A postmark does not count\./.test(
+    field(requestBlock, "DESCRIPTION")
+  ),
+  field(requestBlock, "DESCRIPTION")
+);
+check(
+  "ballot return: the note names 7 p.m. local time, the same hour as its title",
+  /ballot must be in your Supervisor of Elections' hands by 7 p\.m\. local time on this date/.test(
+    field(returnBlock, "DESCRIPTION")
+  ) && /7 p\.m\./.test(field(returnBlock, "SUMMARY")),
+  returnBlock
+);
+for (const block of blocks.filter((b) => /RECEIVED-BY/.test(b))) {
+  const hour = field(block, "SUMMARY").match(/\d{1,2} [ap]\.m\./)?.[0];
+  check(
+    `every received-by event states its hour in title and note alike (${field(block, "UID")})`,
+    !!hour && field(block, "DESCRIPTION").includes(`by ${hour} local time`),
+    block
+  );
+}
+check(
+  "Election Day states poll hours, 7 a.m. to 7 p.m., in title and note",
+  /7 a\.m\. to 7 p\.m\./.test(field(dayBlock, "SUMMARY")) &&
+    /Polls are open 7 a\.m\. to 7 p\.m\. local time\./.test(field(dayBlock, "DESCRIPTION")),
+  dayBlock
+);
+check(
+  "no event still carries the hourless received-by note",
+  !/hands by this date/.test(ics),
+  ics
+);
+/* The builder does no RFC 5545 escaping (ics.ts header), which holds only
+   while its own words carry no comma, semicolon or backslash. The URL is a
+   row's value and is left out. */
+for (const block of blocks) {
+  for (const name of ["SUMMARY", "DESCRIPTION"]) {
+    const words = field(block, name).split(" Official source: ")[0];
+    check(
+      `${field(block, "UID").slice(0, 8)} ${name} needs no escaping`,
+      !/[,;\\]/.test(words),
+      words
+    );
+  }
+}
+check(
+  "every event carries a SEQUENCE above 0, so a re-import replaces the old copy",
+  blocks.every((b) => Number(field(b, "SEQUENCE")) >= 1),
+  blocks.map((b) => field(b, "SEQUENCE")).join(",")
 );
 
 /* (1c) A county's own early-voting rows (0043) say whose window they are;
@@ -169,6 +247,21 @@ check(
     county.includes("SUMMARY:Early voting begins (statewide window) — "),
   county
 );
+check(
+  "early voting does not imply one schedule: a statewide row says hours and days vary by county",
+  /DESCRIPTION:Early voting sites and hours vary by county\. A county may also add days on either side of this window\./.test(
+    county
+  ) &&
+    (county.match(/DESCRIPTION:Early voting sites and hours are at the official source below\./g) ?? [])
+      .length === 2,
+  county
+);
+for (const block of [...county.matchAll(/BEGIN:VEVENT\r\n([\s\S]*?)END:VEVENT/g)].map((m) => m[1])) {
+  const words = ["SUMMARY", "DESCRIPTION"]
+    .map((name) => field(block, name).split(" Official source: ")[0])
+    .join(" ");
+  check(`early voting ${field(block, "UID").slice(0, 8)} needs no escaping`, !/[,;\\]/.test(words), words);
+}
 
 const empty = buildElectionCalendar("general_2026", []);
 check(
