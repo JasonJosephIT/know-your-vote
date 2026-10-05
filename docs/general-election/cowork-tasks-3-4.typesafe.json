@@ -3,15 +3,15 @@
   "written": "2026-10-05",
   "for": "Claude Cowork on the founder's computer, driving the browser and a terminal with the typesafe-computer-control skill (Claude plans and acts; TypeSafe Jev answers action / step_ok / goal_done / stuck at each step).",
   "companion_doc": "docs/general-election/cowork-handoff-2026-10-05.md (tasks 3 and 4). Reference: docs/general-election/reminders-e2e-runbook.md, step 4 and 'Sending a correction'.",
-
   "how_to_use": [
-    "Run the phases in `order`. Each step's `goal` (the task's goal), `subgoal` and `expected_result` are the strings to put in TypeSafe's `state` for that step; `start_url` is where to begin. Build the action options from the DOM as the skill describes.",
-    "kind 'browser' runs the TypeSafe loop. kind 'terminal' runs the `command` in the founder's terminal and checks the output against `expected_result` yourself (TypeSafe's step_ok can judge the output text as the page). kind 'founder' is done by the founder; wait for them. kind 'sql' types the SELECT into the Supabase SQL editor and reads the result.",
+    "Run the phases in `order`. A browser step usually takes several TypeSafe calls. In each call set state.goal to the step's `expected_result` (the end state of the step); the step is finished when goal_done > 0.85 and the page confirms it. Set state.subgoal to the step's `subgoal`. Set state.expected_result to what your ONE previous action should have produced (for example 'the Add Environment Variable form is open'): that is what step_ok judges. Put the phase `goal` in history[0] for context. `start_url` is where to begin. Build the action options from the DOM as the skill describes.",
+    "The skill's DOM snippet does not report typed values or checkbox and toggle states. In steps 3a-2, 4a-1 and 4f-1, before each TypeSafe call, append the form state to page.text_excerpt, read with: [...document.querySelectorAll('input:not([type=password]):not([type=hidden]),select,[role=switch],[role=checkbox]')].filter(e=>e.offsetParent).map(e=>(e.getAttribute('aria-label')||e.labels?.[0]?.innerText||e.name||e.getAttribute('role')||'').trim().slice(0,40)+' = '+(e.type==='checkbox'||e.type==='radio'?e.checked:(e.getAttribute('aria-checked')??e.value))).join('; ') . Never run it after the founder has pasted a secret into a field (3a-3 onward on that page).",
+    "kind 'terminal': steps 4b-2, 4c-1, 3b-2, 3b-3 and 3b-4 read $CRON_SECRET, $CORRECTION_SECRET or $FIELDS. Those exist only in the ONE interactive Terminal window the founder opens in 4b-1, where they ran `read -rs`. Run each of these steps in that window: type the command there with computer control and read the reply from the window, or show the founder the command (every <placeholder> filled) to paste. NEVER run them with your own shell tool: each of its calls is a new shell without those variables, so the cron answers 401 and the correction 401 or 400. 3a-6 uses no variable and can run anywhere. Check the output against expected_result yourself (TypeSafe's step_ok can judge the output text as the page).",
+    "kind 'founder' is done by the founder; wait for them. kind 'sql' types the SELECT into the Supabase SQL editor (https://supabase.com/dashboard/project/pqracitpmzpiqfnzlngw/sql/new) and reads the result grid.",
     "A step with `confirm_before` is outward-facing: stop, show the founder `confirm_prompt` and the exact command or button, and act only on an explicit yes.",
     "Fill `inputs` from the founder before the first step. Replace every <placeholder> in a command with the input of the same name. Never substitute a secret: secrets reach the shell only through `read -rs` typed by the founder.",
     "Record every step in `report_back` as you go."
   ],
-
   "run_config": {
     "typesafe_model": "jev-latest",
     "max_loop_steps_per_step": 12,
@@ -23,10 +23,10 @@
       "failures_on_same_subgoal_before_asking_founder": 2
     }
   },
-
   "guardrails": [
     "Never type into a password field and never type, paste, print, echo, log, screenshot or write to a file any secret value. The founder logs in to every site and pastes every secret.",
     "Secrets go into the shell only as `read -rs CORRECTION_SECRET` / `read -rs CRON_SECRET`, with the founder pasting the value. Do not run `echo $CORRECTION_SECRET`, `env`, `set` or anything else that would show them.",
+    "If the run stops anywhere after 4b-1 (an error, a pause, the founder leaving), first do 3b-5: `unset CORRECTION_SECRET CRON_SECRET FIELDS` in that Terminal window, or close it.",
     "Every POST to knowyour.vote, every form submit, every Vercel save or redeploy needs the founder's explicit yes first (confirm_before).",
     "NEVER send a correction with \"confirm_recipients\" (the real send). It mails every subscriber. Dry run and rehearse only.",
     "SQL is SELECT only. Do not run UPDATE, INSERT, DELETE or DDL in this plan.",
@@ -34,7 +34,6 @@
     "The site is https://knowyour.vote. Do not use knowyourvote.com (a parked domain that is not ours).",
     "When TypeSafe and the page disagree, trust the page, and note the override in report_back."
   ],
-
   "inputs": {
     "test_address": {
       "ask": "An email address you read that is NOT info@knowyour.vote, for example you+kyv1@gmail.com (Gmail plus addressing gives a fresh address each time).",
@@ -46,34 +45,31 @@
     },
     "zip": {
       "default": "33130",
-      "note": "A Miami-Dade ZIP. Any ZIP in Miami-Dade, Broward, Hillsborough or Orange works; the expected texts below assume 33130 (Miami-Dade, FIPS 12086)."
+      "note": "A Miami-Dade ZIP. Any ZIP in Miami-Dade, Broward, Hillsborough or Orange works, but the expected texts below (subject 'Where to vote in Miami-Dade County', the early-voting line, the rehearsal key ':12086') assume 33130. With another county's ZIP, read those texts with that county's name and FIPS (Broward 12011, Hillsborough 12057, Orange 12095)."
     },
     "founder_has_cron_secret": {
       "ask": "Do you have a saved copy of CRON_SECRET? Vercel cannot show it (it is Sensitive).",
       "secret": false
     }
   },
-
   "urls": {
     "site": "https://knowyour.vote",
-    "signup_races_view": "https://knowyour.vote/candidates?view=races&zip=33130",
+    "signup_races_view": "https://knowyour.vote/candidates?view=races&zip=<zip>",
     "vercel_env": "https://vercel.com/chazak/know-your-vote/settings/environment-variables",
     "vercel_deployments": "https://vercel.com/chazak/know-your-vote/deployments",
     "vercel_cron_jobs": "https://vercel.com/chazak/know-your-vote/settings/cron-jobs",
     "supabase_sql": "https://supabase.com/dashboard/project/pqracitpmzpiqfnzlngw/sql/new"
   },
-
   "order": [
     "preflight",
+    "task-4.decisions",
     "task-3.part-a",
     "task-4.subscribe",
     "task-4.cron-and-rehearsal",
     "task-3.part-b",
-    "task-4.unsubscribe-and-canary",
-    "task-4.decisions"
+    "task-4.unsubscribe-and-canary"
   ],
-  "order_reason": "The correction rehearsal (task 3 part B) mails one address that holds an active subscription, so it runs after the test address subscribes (task 4) and before that address unsubscribes (task 4).",
-
+  "order_reason": "The decisions (due 2026-10-07) come first: they need nothing else and must not wait on the email test (due 2026-10-18). The correction rehearsal (task 3 part B) mails one address that holds an active subscription, so it runs after the test address subscribes (task 4) and before that address unsubscribes (task 4).",
   "phases": {
     "preflight": {
       "goal": "Confirm the founder is logged in where needed and record which early-voting dates are live.",
@@ -96,7 +92,6 @@
         }
       ]
     },
-
     "task-3.part-a": {
       "task": "3",
       "goal": "Set CORRECTION_SECRET in Vercel production and redeploy, so the correction route accepts the founder's secret.",
@@ -105,7 +100,7 @@
         {
           "id": "3a-1",
           "kind": "founder",
-          "subgoal": "Generate a long random value in your password manager (or `openssl rand -hex 32` in a terminal the agent does not read) and save it there as CORRECTION_SECRET.",
+          "subgoal": "Generate a long random value in your password manager and save it there as CORRECTION_SECRET. If you use a terminal instead, run `openssl rand -hex 32 | pbcopy` (it prints nothing) and paste straight into the password manager. Never generate it in the Terminal window the agent will use in 4b-1.",
           "expected_result": "The founder says the value is saved. The agent never sees it."
         },
         {
@@ -113,7 +108,9 @@
           "kind": "browser",
           "start_url": "https://vercel.com/chazak/know-your-vote/settings/environment-variables",
           "subgoal": "Open the form to add a new environment variable, enter the key CORRECTION_SECRET, select only the Production environment, and turn on Sensitive. Leave the value field empty for the founder.",
-          "type_text": { "key field": "CORRECTION_SECRET" },
+          "type_text": {
+            "key field": "CORRECTION_SECRET"
+          },
           "expected_result": "The add-variable form shows key CORRECTION_SECRET, Production only, Sensitive on, and an empty value field.",
           "notes": "Use type_eN for the key field (never submit_eN). Every other existing variable targets Production only; keep that."
         },
@@ -152,7 +149,6 @@
         }
       ]
     },
-
     "task-4.subscribe": {
       "task": "4",
       "goal": "Subscribe the test address and confirm the welcome email arrives, authenticated, with the right dates.",
@@ -161,10 +157,12 @@
         {
           "id": "4a-1",
           "kind": "browser",
-          "start_url": "https://knowyour.vote/candidates?view=races&zip=33130",
-          "subgoal": "Find the 'Get your polling place by email' form; type the ZIP into the ZIP code field and the test address into the Email address field; tick the consent box. Do not press the button yet.",
-          "type_text": { "ZIP code": "<zip>", "Email address": "<test_address>" },
-          "expected_result": "The form shows the ZIP, the test address and a ticked consent box.",
+          "start_url": "https://knowyour.vote/candidates?view=races&zip=<zip>",
+          "subgoal": "Find the 'Get your polling place by email' form. The ZIP code field arrives filled from the URL: check that it reads <zip>. Type the test address into the Email address field (type_eN, never submit_eN) and tick the consent box. Do not press the button yet.",
+          "type_text": {
+            "Email address": "<test_address>"
+          },
+          "expected_result": "The form shows ZIP <zip>, the test address and a ticked consent box.",
           "notes": "The home page's 'Get deadline reminders by email' card is the same form and also works."
         },
         {
@@ -173,13 +171,13 @@
           "confirm_before": true,
           "confirm_prompt": "Press 'Email my voting info'? It stores the test address and sends it one welcome email.",
           "subgoal": "Press 'Email my voting info'.",
-          "expected_result": "The form is replaced by 'Sent. Check your inbox for where to vote and the key dates. …'. 'We saved your request but the email didn't send' or any other error is a failure: record it and stop task 4."
+          "expected_result": "The form is replaced by 'Sent. Check your inbox for where to vote and the key dates. …'. 'We saved your request but the email didn't send' or any other error is a failure: record it, then skip task-4.cron-and-rehearsal, task-3.part-b and task-4.unsubscribe-and-canary (they need this subscription)."
         },
         {
           "id": "4a-3",
           "kind": "browser",
           "subgoal": "In the test address's inbox (check spam too), open the email titled 'Where to vote in Miami-Dade County'. Open its original/headers view.",
-          "expected_result": "The email arrived within a few minutes from the EMAIL_FROM address on knowyour.vote. Headers show SPF PASS and DKIM PASS for knowyour.vote (DMARC PASS only once the _dmarc record exists).",
+          "expected_result": "The email arrived within a few minutes from the EMAIL_FROM address on knowyour.vote. Headers show SPF PASS (for send.knowyour.vote, Resend's return-path domain) and DKIM PASS for knowyour.vote (DMARC PASS only once the _dmarc record exists).",
           "check_in_body": {
             "if county_dates_live": "A line 'Early voting in Miami-Dade County: Monday, October 19, 2026 to Sunday, November 1, 2026. Sites and hours: <Miami-Dade PDF link>', and an 'Add them to your calendar' link ending '?county=12086'.",
             "if not county_dates_live": "A line 'Early voting: Saturday, October 24, 2026 to Saturday, October 31, 2026 (the statewide window; days and sites vary by county)'."
@@ -195,7 +193,6 @@
         }
       ]
     },
-
     "task-4.cron-and-rehearsal": {
       "task": "4",
       "goal": "Prove the reminder cron authenticates and reads the dates, and rehearse the next real reminder to the test address.",
@@ -210,25 +207,26 @@
         {
           "id": "4b-1",
           "kind": "founder",
-          "subgoal": "In the founder's terminal, run `read -rs CRON_SECRET` and paste the value, then press Enter.",
+          "subgoal": "Open ONE Terminal window and keep it open until 3b-5; every later terminal step runs in it. In it, run `read -rs CRON_SECRET`, paste the value and press Enter.",
           "expected_result": "The prompt returns and nothing is shown."
         },
         {
           "id": "4b-2",
           "kind": "terminal",
           "confirm_before": true,
-          "confirm_prompt": "Trigger the reminder cron by hand (a POST)? Between Oct 5 and Oct 18 no reminder is due, so it sends nothing.",
-          "command": "curl -sS -X POST \"https://knowyour.vote/api/cron/send-reminders\" -H \"x-cron-secret: $CRON_SECRET\"",
+          "confirm_prompt": "Trigger the reminder cron by hand (a POST)? Today is <date, Eastern>. From Oct 5 to Oct 18 no reminder is due, so it sends nothing.",
+          "command": "curl -sS -X POST \"https://knowyour.vote/api/cron/send-reminders\" -H \"x-cron-secret: ${CRON_SECRET:?run read -rs CRON_SECRET first}\"",
           "subgoal": "Trigger the cron once.",
-          "expected_result": "On Oct 5 to Oct 18: {\"due\":0,\"sent\":[],\"skipped\":[]}. 401 means the secret is wrong; 503 means an env problem (runbook Troubleshooting).",
-          "alternative": "Without the secret: Vercel, Settings, Cron Jobs, /api/cron/send-reminders, Run (https://vercel.com/chazak/know-your-vote/settings/cron-jobs). It sends the same request Vercel Cron does."
+          "expected_result": "On Oct 5 to Oct 18: {\"due\":0,\"sent\":[],\"skipped\":[]}. Before treating a 401 as a wrong secret, have the founder run `[ -n \"$CRON_SECRET\" ] && echo set || echo empty` in that window (it prints only set or empty; never ask for the value): 'empty' means the command ran in a shell without the variable. 503 means an env problem (runbook Troubleshooting).",
+          "alternative": "Without the secret: Vercel, Settings, Cron Jobs, /api/cron/send-reminders, Run (https://vercel.com/chazak/know-your-vote/settings/cron-jobs). It sends the same request Vercel Cron does.",
+          "when": "Today in America/New_York is 2026-10-05 to 2026-10-18. Otherwise skip 4b-2 and go to 4c-1: on a send day a manual trigger mails that day's real reminder to every subscriber."
         },
         {
           "id": "4c-1",
           "kind": "terminal",
           "confirm_before": true,
           "confirm_prompt": "Rehearse the next scheduled reminder to the test address only (a POST)? It sends one email, subject prefixed [Rehearsal]; no other subscriber gets anything.",
-          "command": "curl -sS -X POST \"https://knowyour.vote/api/cron/send-reminders\" -H \"x-cron-secret: $CRON_SECRET\" -H \"Content-Type: application/json\" --data '{\"rehearse\":\"<test_address>\"}'",
+          "command": "curl -sS -X POST \"https://knowyour.vote/api/cron/send-reminders\" -H \"x-cron-secret: ${CRON_SECRET:?run read -rs CRON_SECRET first}\" -H \"Content-Type: application/json\" --data '{\"rehearse\":\"<test_address>\"}'",
           "subgoal": "Rehearse the next reminder.",
           "expected_result": {
             "if county_dates_live (and today is on or before Oct 19)": "{\"rehearsal\":true,\"dedupe_key\":\"rehearsal:general_2026:early_voting_start:T-0:email:12086:<timestamp>\",\"template_id\":\"early_voting_start\",\"real_send_date\":\"2026-10-19\",\"recipients\":1}. Email '[Rehearsal] Early voting starts today' naming Miami-Dade County and Monday, October 19, with the county's early-voting link and an unsubscribe link.",
@@ -246,7 +244,6 @@
         }
       ]
     },
-
     "task-3.part-b": {
       "task": "3",
       "goal": "Rehearse a correction once: dry run, then send it to the test address only, using a date that is already right.",
@@ -254,14 +251,14 @@
         {
           "id": "3b-1",
           "kind": "founder",
-          "subgoal": "In the same terminal, run `read -rs CORRECTION_SECRET` and paste the value saved in 3a-1, then press Enter.",
+          "subgoal": "In the same Terminal window as 4b-1, run `read -rs CORRECTION_SECRET` and paste the value saved in 3a-1, then press Enter.",
           "expected_result": "The prompt returns and nothing is shown."
         },
         {
           "id": "3b-2",
           "kind": "terminal",
           "command": "FIELDS='\"event_label\":\"vote-by-mail request deadline\",\"election\":\"general_2026\",\"date\":\"2026-10-22\",\"details_url\":\"https://dos.fl.gov/elections/for-voters/election-dates/\"'",
-          "subgoal": "Set the correction fields to the statewide vote-by-mail request deadline, a verified date that is already right.",
+          "subgoal": "In that same window, set the correction fields to the statewide vote-by-mail request deadline, a verified date that is already right.",
           "expected_result": "No output."
         },
         {
@@ -269,9 +266,9 @@
           "kind": "terminal",
           "confirm_before": true,
           "confirm_prompt": "Dry-run the correction (a POST)? It sends nothing and writes nothing; it shows the email and how many people a real send would reach.",
-          "command": "curl -sS -X POST \"https://knowyour.vote/api/cron/send-correction\" -H \"x-correction-secret: $CORRECTION_SECRET\" -H \"Content-Type: application/json\" --data \"{$FIELDS,\\\"dry_run\\\":true}\"",
+          "command": "curl -sS -X POST \"https://knowyour.vote/api/cron/send-correction\" -H \"x-correction-secret: ${CORRECTION_SECRET:?run read -rs CORRECTION_SECRET first}\" -H \"Content-Type: application/json\" --data \"{${FIELDS:?run 3b-2 first},\\\"dry_run\\\":true}\"",
           "subgoal": "Dry-run the correction.",
-          "expected_result": "{\"dry_run\":true,\"dedupe_key\":\"correction:general_2026:vbm_request_deadline:2026-10-22\",\"scope\":\"statewide\",\"already_sent\":false,\"subject\":\"Correction: an election date we sent was wrong\",\"text\":\"Correction: the vote-by-mail request deadline for the 2026 Florida general election is Thursday, October 22, 2026. …\",\"recipients\":<N, at least 1>,\"active_subscriptions\":<M>,\"next\":\"…\"}. 401: wrong secret. 503: CORRECTION_SECRET not live (redo 3a-5). 422: the fields do not match the verified row (copy them exactly).",
+          "expected_result": "{\"dry_run\":true,\"dedupe_key\":\"correction:general_2026:vbm_request_deadline:2026-10-22\",\"scope\":\"statewide\",\"already_sent\":false,\"subject\":\"Correction: an election date we sent was wrong\",\"text\":\"Correction: the vote-by-mail request deadline for the 2026 Florida general election is Thursday, October 22, 2026. …\",\"recipients\":<N, at least 1>,\"active_subscriptions\":<M>,\"next\":\"…\"}. 401: the secret is wrong, or the command ran in a shell without $CORRECTION_SECRET (have the founder run `[ -n \"$CORRECTION_SECRET\" ] && echo set || echo empty` in that window). 503: CORRECTION_SECRET not live (redo 3a-5). 422: the fields do not match the verified row (copy them exactly).",
           "notes": "Record N and the dedupe_key, but DO NOT use them for a real send. The 'next' field describes the real send: ignore it."
         },
         {
@@ -279,7 +276,7 @@
           "kind": "terminal",
           "confirm_before": true,
           "confirm_prompt": "Rehearse the correction to the test address only (a POST)? It sends one email, subject '[Rehearsal] Correction: …', to that address and nobody else.",
-          "command": "curl -sS -X POST \"https://knowyour.vote/api/cron/send-correction\" -H \"x-correction-secret: $CORRECTION_SECRET\" -H \"Content-Type: application/json\" --data \"{$FIELDS,\\\"rehearse\\\":\\\"<test_address>\\\"}\"",
+          "command": "curl -sS -X POST \"https://knowyour.vote/api/cron/send-correction\" -H \"x-correction-secret: ${CORRECTION_SECRET:?run read -rs CORRECTION_SECRET first}\" -H \"Content-Type: application/json\" --data \"{${FIELDS:?run 3b-2 first},\\\"rehearse\\\":\\\"<test_address>\\\"}\"",
           "subgoal": "Rehearse the correction to the test address.",
           "expected_result": "{\"rehearsal\":true,\"dedupe_key\":\"rehearsal:correction:general_2026:vbm_request_deadline:2026-10-22:<timestamp>\",\"real_dedupe_key\":\"correction:general_2026:vbm_request_deadline:2026-10-22\",\"in_cohort\":true,\"recipients\":1}, and an email '[Rehearsal] Correction: an election date we sent was wrong' in the test inbox, naming Thursday, October 22, 2026, ending with an unsubscribe link.",
           "forbidden_next_step": "Do not run the same call with \"confirm_recipients\". That is the real send to every subscriber."
@@ -287,12 +284,11 @@
         {
           "id": "3b-5",
           "kind": "founder",
-          "subgoal": "Clear the secrets from this terminal: `unset CORRECTION_SECRET CRON_SECRET FIELDS`, or close the terminal.",
+          "subgoal": "In that Terminal window: `unset CORRECTION_SECRET CRON_SECRET FIELDS`, or close the window.",
           "expected_result": "Done."
         }
       ]
     },
-
     "task-4.unsubscribe-and-canary": {
       "task": "4",
       "goal": "Confirm the unsubscribe link works, then leave one canary address subscribed through Nov 3.",
@@ -314,10 +310,12 @@
         {
           "id": "4f-1",
           "kind": "browser",
-          "start_url": "https://knowyour.vote/candidates?view=races&zip=33130",
-          "subgoal": "Fill the same form with the ZIP and the canary address and tick the consent box. Do not press the button yet.",
-          "type_text": { "ZIP code": "<zip>", "Email address": "<canary_address>" },
-          "expected_result": "The form shows the ZIP, the canary address and a ticked consent box."
+          "start_url": "https://knowyour.vote/candidates?view=races&zip=<zip>",
+          "subgoal": "On the same form, check the ZIP code field reads <zip>, type the canary address into the Email address field (type_eN, never submit_eN) and tick the consent box. Do not press the button yet.",
+          "type_text": {
+            "Email address": "<canary_address>"
+          },
+          "expected_result": "The form shows ZIP <zip>, the canary address and a ticked consent box."
         },
         {
           "id": "4f-2",
@@ -329,23 +327,52 @@
         }
       ]
     },
-
     "task-4.decisions": {
       "task": "4",
-      "goal": "Collect the founder's answers to decisions 4 to 8 and the Incumbent chip, and save them for the next Claude Code session. Due 2026-10-07.",
+      "goal": "Collect the founder's answers to decisions 4 to 8 and the Incumbent chip, and save them for the next Claude Code session. Due 2026-10-07; runs right after preflight so it never waits on the email test.",
       "how": "Ask one decision at a time. Show the recommended answer and why (from docs/general-election/founder-decisions-2026-10-04.md). Accept 'yes' (keep as built), 'flip', or the founder's own words. Do not decide for the founder and do not change any code, data or task.",
       "decisions": [
-        { "id": "4", "question": "The 17 races that are only 'listed' on Election Day (roster, no brief): accept?", "recommended": "Accept. Their cards say 'No brief for this race' and why.", "switch": "LISTED_IS_FINAL in src/lib/listing-copy.ts" },
-        { "id": "5", "question": "One more identical re-run for candidates whose sites intermittently showed a bot wall (Taddeo, Shuham, Beltran, Dandiya, Rodriguez's /issues page), never solving a captcha?", "recommended": "Yes.", "switch": "docs/general-election/brief-runs/rerun-targets-2026-10.tsv" },
-        { "id": "6", "question": "A second source for candidates with no stated position on their own site?", "recommended": "No, not this cycle; they stay 'No stated position found'.", "switch": "docs/general-election/listed-races-2026-10-04.md §4" },
-        { "id": "7", "question": "One brief refresh before early voting, with a cut-off?", "recommended": "Yes: re-ingest and re-run by 10-12, review by 10-14, your yes by 10-15, publish by 10-17, freeze 10-18 to 11-03 (corrections only). 7a: a site that walls the re-run keeps its 09-29 run. 7b: a rebuilt race's SQL runs in your SQL editor.", "switch": "docs/general-election/brief-runs/refresh-plan-2026-10.md", "also_ask": "Will TYPESAFE_API_KEY be available to the refresh session (Gate 0)?" },
-        { "id": "8", "question": "A bio section on candidate briefs for 2026?", "recommended": "Drop for 2026 (about pages were read for only 56 of 106 candidates).", "switch": "Note under D1 in docs/general-election/brief-runs/FL-GOV/decisions.md" },
-        { "id": "incumbent-chip", "question": "Keep the Incumbent chip hidden until every ballot candidate's incumbency is set from a verified source?", "recommended": "Yes, keep it hidden.", "switch": "SHOW_INCUMBENT_CHIP in src/lib/incumbency.ts" }
+        {
+          "id": "4",
+          "question": "The 17 races that are only 'listed' on Election Day (roster, no brief): accept?",
+          "recommended": "Accept. Their cards say 'No brief for this race' and why.",
+          "switch": "LISTED_IS_FINAL in src/lib/listing-copy.ts"
+        },
+        {
+          "id": "5",
+          "question": "One more identical re-run for candidates whose sites intermittently showed a bot wall (Taddeo, Shuham, Beltran, Dandiya, Rodriguez's /issues page), never solving a captcha?",
+          "recommended": "Yes.",
+          "switch": "docs/general-election/brief-runs/rerun-targets-2026-10.tsv"
+        },
+        {
+          "id": "6",
+          "question": "A second source for candidates with no stated position on their own site?",
+          "recommended": "No, not this cycle; they stay 'No stated position found'.",
+          "switch": "docs/general-election/listed-races-2026-10-04.md §4"
+        },
+        {
+          "id": "7",
+          "question": "One brief refresh before early voting, with a cut-off?",
+          "recommended": "Yes: re-ingest and re-run by 10-12, review by 10-14, your yes by 10-15, publish by 10-17, freeze 10-18 to 11-03 (corrections only). 7a: a site that walls the re-run keeps its 09-29 run. 7b: a rebuilt race's SQL runs in your SQL editor.",
+          "switch": "docs/general-election/brief-runs/refresh-plan-2026-10.md",
+          "also_ask": "Will TYPESAFE_API_KEY be available to the refresh session (Gate 0)?"
+        },
+        {
+          "id": "8",
+          "question": "A bio section on candidate briefs for 2026?",
+          "recommended": "Drop for 2026 (about pages were read for only 56 of 106 candidates).",
+          "switch": "Note under D1 in docs/general-election/brief-runs/FL-GOV/decisions.md"
+        },
+        {
+          "id": "incumbent-chip",
+          "question": "Keep the Incumbent chip hidden until every ballot candidate's incumbency is set from a verified source?",
+          "recommended": "Yes, keep it hidden.",
+          "switch": "SHOW_INCUMBENT_CHIP in src/lib/incumbency.ts"
+        }
       ],
       "output_file": "founder-answers-2026-10.md in the connected folder: one line per decision, 'id: yes | flip | <founder's words>', plus the date."
     }
   },
-
   "report_back": {
     "format": "A short Markdown report the founder pastes into Claude Code. No secret values, ever.",
     "capture": [
