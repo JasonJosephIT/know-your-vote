@@ -65,7 +65,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ElectionEvent } from "../src/lib/notifications/election-events.ts";
-import { bannerLine } from "../src/lib/notifications/banner.ts";
+import { bannerLine, electionDayLine } from "../src/lib/notifications/banner.ts";
 import {
   bannerDates,
   dueReminders,
@@ -578,10 +578,42 @@ check(
   "no rows (unverified, or no service key) -> no banner",
   bannerDates([], "2026-10-04") === null
 );
+const deadlineBanner = source("src/components/features/DeadlineBanner.tsx");
 check(
-  "DeadlineBanner reads the day from easternToday()",
-  /bannerDates\(events, easternToday\(\)\)/.test(source("src/components/features/DeadlineBanner.tsx"))
+  "DeadlineBanner reads the day from easternToday() and words a date that falls on it as today",
+  /const today = easternToday\(\);/.test(deadlineBanner) &&
+    /bannerDates\(events, today\)/.test(deadlineBanner) &&
+    /bannerLine\(dates\.next, events, allEvents, today\)/.test(deadlineBanner) &&
+    /electionDayLine\(dates\.electionDay\.event_date, today\)/.test(deadlineBanner)
 );
+{
+  const lineOn = (day: string) => {
+    const d = bannerDates(EVENTS, day);
+    return d?.next ? bannerLine(d.next, EVENTS, EVENTS, day) : null;
+  };
+  check(
+    "banner on the registration deadline says it's the last day",
+    lineOn("2026-10-05") === "Today, October 5, is the last day to register to vote",
+    String(lineOn("2026-10-05"))
+  );
+  check(
+    "banner the day before still states the date",
+    lineOn("2026-10-04") === "Register to vote by October 5",
+    String(lineOn("2026-10-04"))
+  );
+  check(
+    "banner on the last day of early voting, statewide rows only",
+    lineOn("2026-10-31") === "Today, October 31, is the last day of the statewide early voting period",
+    String(lineOn("2026-10-31"))
+  );
+  check(
+    "banner on Election Day: mail ballots by 7 p.m. today, and today is Election Day",
+    lineOn("2026-11-03") === "Mail ballots must be received by 7 p.m. today, November 3" &&
+      electionDayLine("2026-11-03", "2026-11-03") === "Today, November 3, is Election Day" &&
+      electionDayLine("2026-11-03", "2026-11-02") === "Election Day is November 3",
+    String(lineOn("2026-11-03"))
+  );
+}
 
 /* ---- 6. delivery gate --------------------------------------------------- */
 
@@ -941,6 +973,26 @@ check(
   "banner with statewide rows only: the statewide window alone",
   !!statewideNext && bannerLine(statewideNext, EVENTS, EVENTS) === "Early voting runs October 24 to October 31 statewide"
 );
+{
+  /* The last statewide day, with the covered counties' rows present: say how
+     much longer they run, not "the last day statewide" and then a window that
+     contradicts it. */
+  const oct31 = bannerDates(EVENTS, "2026-10-31")?.next;
+  const line = oct31 ? bannerLine(oct31, EVENTS, ALL, "2026-10-31") : "no next date";
+  check(
+    "banner on the last statewide early voting day names the counties that run later",
+    line ===
+      "Today, October 31, is the last day of the statewide early voting period; it runs through November 1 in Miami-Dade, Broward, Hillsborough and Orange counties",
+    line
+  );
+  const nov1 = bannerDates(dade, "2026-11-01")?.next;
+  const dadeLine = nov1 ? bannerLine(nov1, dade, ALL, "2026-11-01") : "no next date";
+  check(
+    "banner (Miami-Dade) on its own last day of early voting",
+    dadeLine === "Today, November 1, is the last day of early voting in Miami-Dade County",
+    dadeLine
+  );
+}
 check(
   "the home reminder card's calendar link carries the saved county, like the banner's",
   /<ReminderSignupCta countyFips=\{saved\?\.countyFips\} \/>/.test(home) &&

@@ -47,20 +47,56 @@ export function IssueSection({ block }: { block: IssueBlock }) {
         </ul>
       )}
 
-      {block.coverage === "no_stated_position_found" && <NoStatedPosition />}
+      <IssueBuckets block={block} />
+    </section>
+  );
+}
 
+/* The coverage state and the three buckets, without the issue heading.
+   IssueSection wraps it for one candidate's brief; the race page's issue
+   rows (RaceCompare) put one per candidate under a shared heading, compact
+   and collapsed after two claims. Same buckets, same order, either way. */
+export function IssueBuckets({
+  block,
+  compact,
+  name,
+}: {
+  block: IssueBlock;
+  compact?: boolean;
+  name?: string;
+}) {
+  /* In a compact cell "What They Say" is dropped when it is the only
+     bucket: every live claim is a stated position (2026-10-05), so over
+     every cell it said nothing the row heading didn't. Any other bucket
+     keeps its label, alone or not, so a record or a fact-check can never
+     read as the candidate's own words. */
+  const filled = buckets.filter(({ key }) => block[key].length > 0).length;
+  const labelled = !compact || filled > 1 || block.say.length === 0;
+  return (
+    <>
+      {block.coverage === "no_stated_position_found" && (
+        <NoStatedPosition compact={compact} />
+      )}
       {buckets.map(({ key, label, tone }) => {
         const items = block[key];
         if (items.length === 0) return null;
         return (
           <div key={key} className="flex flex-col gap-2">
-            <h4 className={`text-overline uppercase tracking-[0.08em] ${tone}`}>
-              {label}
-            </h4>
-            <ClaimList items={items} withVerdict={key === "factCheck"} />
+            {labelled && (
+              <h4 className={`text-overline uppercase tracking-[0.08em] ${tone}`}>
+                {label}
+              </h4>
+            )}
+            <ClaimList
+              items={items}
+              withVerdict={key === "factCheck"}
+              collapseAfter={compact ? 2 : undefined}
+              name={name}
+              topic={block.issue.title}
+            />
           </div>
         );
       })}
-    </section>
+    </>
   );
 }

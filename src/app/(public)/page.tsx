@@ -10,6 +10,8 @@ import {
 import { SharedBallot } from "@/components/features/SharedBallot";
 import { TrackView } from "@/components/features/TrackView";
 import { LocationEntry } from "@/components/features/LocationEntry";
+import { CoverageSummary } from "@/components/features/CoverageSummary";
+import { HomeNews } from "@/components/features/HomeNews";
 import { getActiveMeasures } from "@/lib/measures";
 import { getStatewideRaces } from "@/lib/races";
 import { getCoveredDistricts } from "@/lib/resolve";
@@ -130,6 +132,13 @@ export default async function Home() {
           </>
         )}
       </section>
+
+      {/* Drafts from the inspiration pass (2026-10-05), recommended pending
+          founder confirmation: what the guide covers in one place, then the
+          newest statewide news. After the House-race step, so the ballot
+          still comes first (TASK-067). Remove either line to flip it. */}
+      <CoverageSummary hasDistrict={Boolean(saved)} />
+      <HomeNews />
 
       {promoteReminders && <ReminderSignupCta countyFips={saved?.countyFips} />}
 
