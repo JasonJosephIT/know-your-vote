@@ -78,12 +78,6 @@ export interface RaceBrief {
 
 type ClaimRow = Claim & { claim_source: Array<{ source: Source }> };
 
-/* Fixed neutral order rule, identical for every race (FR-003): Florida's
-   general-election ballot order, s. 101.151(3) for partisan races and
-   s. 105.041(2) for nonpartisan ones. The rule lives in ballot-order.ts;
-   re-exported here because this is where callers have always found it. */
-export { orderCandidates };
-
 function toSourced(rows: ClaimRow[]): SourcedClaim[] {
   return rows.map((row) => {
     const { claim_source, ...claim } = row;

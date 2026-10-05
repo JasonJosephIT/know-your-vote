@@ -735,7 +735,8 @@ export default async function MethodologyPage() {
             Orange County mayor and Orange County clerk races in those four
             counties. We don&apos;t cover Florida House or Florida Senate seats,
             other judicial races, county or city ballot questions, city races,
-            or local races anywhere else.
+            special districts such as soil and water conservation and community
+            development districts, or local races anywhere else.
           </li>
         </ul>
         <p className="text-body">

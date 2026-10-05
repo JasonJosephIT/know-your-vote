@@ -118,7 +118,11 @@ export default async function Home() {
         {saved ? (
           <>
             <div className="flex flex-col gap-1">
-              <h2 className="text-h3">Your U.S. House race</h2>
+              <h2 className="text-h3">
+                {savedSeat
+                  ? "No U.S. House race on your ballot"
+                  : "Your U.S. House race"}
+              </h2>
               {/* The House race is the race here that depends on where you
                   live, not "the one part of your ballot" that does: Florida
                   House and Senate seats, city races and more depend on it

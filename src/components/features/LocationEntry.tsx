@@ -38,7 +38,7 @@ type Stage =
   | { kind: "idle" }
   | { kind: "loading" }
   | { kind: "error"; message: string }
-  | { kind: "split"; zip: string; districts: string[] }
+  | { kind: "split"; zip: string; districts: string[]; countyFips?: string }
   | { kind: "outOfCoverage" };
 
 const MIN_ADDRESS_CHARS = 5;
@@ -201,7 +201,12 @@ export function LocationEntry({
         return;
       }
       if (data.needsCountyConfirm && data.candidateDistricts) {
-        setStage({ kind: "split", zip, districts: data.candidateDistricts });
+        setStage({
+          kind: "split",
+          zip,
+          districts: data.candidateDistricts,
+          countyFips: data.countyFips,
+        });
         return;
       }
       track("zip_resolved");
@@ -379,6 +384,7 @@ export function LocationEntry({
       {stage.kind === "split" && (
         <DistrictConfirm
           districts={stage.districts}
+          countyFips={stage.countyFips}
           onPick={(district) => void resolveZipCode(stage.zip, district)}
         />
       )}
