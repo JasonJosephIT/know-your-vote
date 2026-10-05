@@ -101,11 +101,21 @@ await check(
   1
 );
 /* status = 'published', not "no row": the listed tier (0033) means a
-   measure_publication row no longer implies a published measure. */
+   measure_publication row no longer implies a published measure. 0038
+   (Session A) and 0040 are the two migrations that DO publish a measure --
+   Amendment 3 (founder call F7) and Amendment 2 (spec
+   docs/superpowers/specs/2026-09-26-amendment-context-design.md §1) -- so
+   "no measure is published" is no longer true after every migration; what
+   stays true is that FL-AM3-general and FL-AM2-general are the only two. */
 await check(
-  "no measure is published (arguments do not exist yet)",
+  "exactly two measures are published (FL-AM3-general seeded by 0038, FL-AM2-general by 0040)",
   "SELECT count(*)::int n FROM measure_publication WHERE status = 'published'",
-  0
+  2
+);
+await check(
+  "the two published measures are FL-AM3-general and FL-AM2-general, not some other measure",
+  "SELECT count(*)::int n FROM measure_publication WHERE status = 'published' AND measure_id IN ('FL-AM3-general', 'FL-AM2-general')",
+  2
 );
 
 console.log("0031 + 0032 — Tier A local races");
@@ -114,9 +124,13 @@ await check(
   "SELECT count(*)::int n FROM race WHERE level='county'",
   32
 );
+/* 0038_county_roster_fixes swaps three wrongly seeded candidates for the
+   right ones: the three out stay as rows, marked withdrawn/excluded and
+   listed in no race, so the ballot tier is still 49. */
+const ROSTER_FIX_OUT = "('FL-VF-HIL-2639', 'FL-VF-HIL-2691', 'FL-VF-DAD-3080')";
 await check(
-  "forty-nine local candidates (34 contested + 15 decided)",
-  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%'",
+  "forty-nine ballot-tier local candidates (34 contested + 15 decided)",
+  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND ballot_status = 'ballot'",
   49
 );
 await check(
@@ -155,15 +169,30 @@ await check(
   0
 );
 await check(
-  "no local candidate is orphaned from its race",
+  "no ballot-tier local candidate is orphaned from its race",
   `SELECT count(*)::int n FROM candidate c
-    WHERE c.candidate_id LIKE 'FL-VF-%'
+    WHERE c.candidate_id LIKE 'FL-VF-%' AND c.ballot_status = 'ballot'
       AND NOT EXISTS (SELECT 1 FROM race r WHERE c.candidate_id = ANY(r.candidate_ids))`,
   0
 );
 await check(
-  "all local candidates are ballot tier",
-  "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND ballot_status <> 'ballot'",
+  "the only non-ballot local candidates are 0038's three roster-fix removals",
+  `SELECT count(*)::int n FROM candidate
+    WHERE candidate_id LIKE 'FL-VF-%' AND ballot_status <> 'ballot'
+      AND candidate_id NOT IN ${ROSTER_FIX_OUT}`,
+  0
+);
+await check(
+  "0038's three removals are withdrawn/excluded",
+  `SELECT count(*)::int n FROM candidate
+    WHERE candidate_id IN ${ROSTER_FIX_OUT}
+      AND ballot_status = 'excluded' AND qualifying_status = 'withdrawn'`,
+  3
+);
+await check(
+  "no race lists one of 0038's removals",
+  `SELECT count(*)::int n FROM race r, unnest(r.candidate_ids) cid
+    WHERE cid IN ${ROSTER_FIX_OUT}`,
   0
 );
 await check(
@@ -240,16 +269,23 @@ await check(
 
 console.log("0033 — listed tier, as the migrations leave it");
 /* Going live is a hand-run script, never a migration: applying 0033 must make
-   nothing visible, so a replay of every migration leaves nothing listed or
-   published anywhere. */
+   nothing visible, so a replay of every migration leaves nothing listed
+   anywhere, and the two exceptions to "nothing published" are 0038's and
+   0040's deliberate publishes of FL-AM3-general and FL-AM2-general (checked
+   above). */
 await check(
   "no race is listed or published by any migration",
   "SELECT count(*)::int n FROM race_publication WHERE status IN ('listed','published')",
   0
 );
 await check(
-  "no measure is listed or published by any migration",
-  "SELECT count(*)::int n FROM measure_publication WHERE status IN ('listed','published')",
+  "no measure is listed by any migration",
+  "SELECT count(*)::int n FROM measure_publication WHERE status = 'listed'",
+  0
+);
+await check(
+  "no measure OTHER than FL-AM3-general and FL-AM2-general is published by any migration",
+  "SELECT count(*)::int n FROM measure_publication WHERE status = 'published' AND measure_id NOT IN ('FL-AM3-general', 'FL-AM2-general')",
   0
 );
 await check(
@@ -260,16 +296,87 @@ await check(
                        WHERE rp.race_id = r.race_id AND rp.status = 'draft')`,
   0
 );
+/* 0033 itself still writes no measure_publication row -- the two rows that
+   exist after every migration (FL-AM3-general and FL-AM2-general, both
+   published) are 0038's and 0040's, not 0033's. */
 await check(
-  "0033 inserted no measure_publication rows",
+  "the only measure_publication rows after every migration are 0038's FL-AM3-general and 0040's FL-AM2-general publishes",
   "SELECT count(*)::int n FROM measure_publication",
-  0
+  2
+);
+/* 0038's publish flip writes its own admin_action row in the same statement
+   (finding #3, fix round 1) -- exactly one, not zero (forgotten) and not
+   more than one (duplicated by a naive re-run). */
+await check(
+  "0038's publish logged exactly one admin_action row",
+  `SELECT count(*)::int n FROM admin_action
+    WHERE action='publish' AND subject_kind='measure_publication'
+      AND subject_ref='FL-AM3-general'`,
+  1
+);
+/* 0040 mirrors 0038's self-auditing publish block for FL-AM2-general. */
+await check(
+  "0040's publish logged exactly one admin_action row",
+  `SELECT count(*)::int n FROM admin_action
+    WHERE action='publish' AND subject_kind='measure_publication'
+      AND subject_ref='FL-AM2-general'`,
+  1
+);
+
+/* Re-apply 0038 itself (idempotency, same proof style as 0033 below): the
+   admin_action guard (`prior.status IS DISTINCT FROM upserted.status`) must
+   see no change the second time -- still exactly one audit row, and AM3's
+   resource count must still be 15 (ON CONFLICT DO UPDATE re-writing the
+   same 14 rows, not appending duplicates). This check runs unrestricted
+   (no SET ROLE), so it counts total rows in the table, not what anon can
+   see -- the anon-scoped read-back is checked separately below. */
+await db.exec(
+  await readFile(
+    path.join(migrationsDir, "0038_measure_resources_am3.sql"),
+    "utf8"
+  )
+);
+await check(
+  "re-applying 0038 still logs exactly one admin_action row (no duplicate)",
+  `SELECT count(*)::int n FROM admin_action
+    WHERE action='publish' AND subject_kind='measure_publication'
+      AND subject_ref='FL-AM3-general'`,
+  1
+);
+await check(
+  "re-applying 0038 still leaves FL-AM3-general with 15 resources (no duplicates)",
+  "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM3-general'",
+  15
+);
+
+/* Same idempotency proof for 0040 / FL-AM2-general. */
+await db.exec(
+  await readFile(
+    path.join(migrationsDir, "0040_measure_resources_am2.sql"),
+    "utf8"
+  )
+);
+await check(
+  "re-applying 0040 still logs exactly one admin_action row (no duplicate)",
+  `SELECT count(*)::int n FROM admin_action
+    WHERE action='publish' AND subject_kind='measure_publication'
+      AND subject_ref='FL-AM2-general'`,
+  1
+);
+await check(
+  "re-applying 0040 still leaves FL-AM2-general with 18 resources (no duplicates)",
+  "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM2-general'",
+  18
 );
 
 /* scripts/list-ballot-2026.sql, the go-live flip, applied to this throwaway
    database after every migration. Proves it runs, flips through the door
-   (one admin_action row per race), lists every measure, publishes nothing,
-   and is a no-op the second time. */
+   (one admin_action row per race), lists every measure that has no
+   publication row yet, publishes nothing new, and is a no-op the second
+   time. FL-AM3-general and FL-AM2-general already have a row each (0038's
+   and 0040's 'published') by this point, so list-ballot-2026.sql's own NOT
+   EXISTS guard skips both -- only the other `measures - 2` measure (AM1)
+   gets listed here. */
 console.log("list-ballot-2026.sql — go-live flip (throwaway)");
 const listSql = await readFile(
   path.join(root, "scripts", "list-ballot-2026.sql"),
@@ -280,6 +387,9 @@ const generalRaces = await n(
 );
 const measures = await n(
   "SELECT count(*)::int n FROM ballot_measure WHERE election='general_2026'"
+);
+const measuresPublishedBefore = await n(
+  "SELECT count(*)::int n FROM measure_publication WHERE status='published'"
 );
 await db.exec(listSql);
 await check(
@@ -294,15 +404,15 @@ await check(
   0
 );
 await check(
-  "every general_2026 measure is listed",
+  "every measure without a prior row is now listed (all but FL-AM3-general and FL-AM2-general)",
   `SELECT count(*)::int n FROM ballot_measure bm JOIN measure_publication mp USING (measure_id)
     WHERE bm.election='general_2026' AND mp.status='listed'`,
-  measures
+  measures - 2
 );
 await check(
-  "no measure is published by the listing",
+  "the listing published nothing new (published count unchanged by the listing)",
   "SELECT count(*)::int n FROM measure_publication WHERE status='published'",
-  0
+  measuresPublishedBefore
 );
 await check(
   "every race flip went through the door and logged 'list'",
@@ -312,10 +422,10 @@ await check(
   generalRaces
 );
 await check(
-  "every measure listing logged an audit row",
+  "every newly-listed measure (all but FL-AM3-general and FL-AM2-general) logged an audit row",
   `SELECT count(*)::int n FROM admin_action
     WHERE subject_kind='measure_publication' AND action='list'`,
-  measures
+  measures - 2
 );
 await check(
   "listing stamped no published_at",
@@ -342,6 +452,69 @@ await check(
   "SELECT count(*)::int n FROM race_publication WHERE status='listed'",
   generalRaces
 );
+
+/* I-3: the path that actually happened in production (per the verified doc's
+   "Live state checked before this work") is list-ballot-2026.sql listing
+   ALL THREE amendments first, and 0038/0040 publishing AM3/AM2 out of
+   `listed` only later -- not out of "no row" (prior_status NULL), which is
+   all the harness has exercised so far since it applies every migration,
+   0038 and 0040 included, before list-ballot-2026.sql ever runs. AM1/AM2/AM3
+   are genuinely `listed` here (the real door, from the block above); reset
+   AM3 and AM2 back to `listed` to match and re-apply 0038/0040 to prove the
+   production transition for both. */
+console.log("0038/0040 vs the production path — AM1/AM2/AM3 already 'listed' before 0038/0040 run");
+await db.exec(
+  "UPDATE measure_publication SET status='listed' WHERE measure_id IN ('FL-AM3-general', 'FL-AM2-general');"
+);
+await db.exec(
+  await readFile(
+    path.join(migrationsDir, "0038_measure_resources_am3.sql"),
+    "utf8"
+  )
+);
+await check(
+  "0038 on the production path logs exactly one admin_action row transitioning listed -> published",
+  `SELECT count(*)::int n FROM admin_action
+    WHERE subject_kind='measure_publication' AND subject_ref='FL-AM3-general'
+      AND action='publish'
+      AND detail->>'prior_status'='listed' AND detail->>'new_status'='published'`,
+  1
+);
+await check(
+  "FL-AM3-general is published on the production path",
+  "SELECT count(*)::int n FROM measure_publication WHERE measure_id='FL-AM3-general' AND status='published'",
+  1
+);
+await check(
+  "FL-AM2-general is still listed after 0038 re-applies, before 0040 runs",
+  "SELECT count(*)::int n FROM measure_publication WHERE measure_id='FL-AM2-general' AND status='listed'",
+  1
+);
+await db.exec(
+  await readFile(
+    path.join(migrationsDir, "0040_measure_resources_am2.sql"),
+    "utf8"
+  )
+);
+await check(
+  "0040 on the production path logs exactly one admin_action row transitioning listed -> published",
+  `SELECT count(*)::int n FROM admin_action
+    WHERE subject_kind='measure_publication' AND subject_ref='FL-AM2-general'
+      AND action='publish'
+      AND detail->>'prior_status'='listed' AND detail->>'new_status'='published'`,
+  1
+);
+await check(
+  "FL-AM2-general is published on the production path",
+  "SELECT count(*)::int n FROM measure_publication WHERE measure_id='FL-AM2-general' AND status='published'",
+  1
+);
+await check(
+  "AM1 stays listed, untouched by 0038/0040 on the production path",
+  "SELECT count(*)::int n FROM measure_publication WHERE measure_id = 'FL-AM1-general' AND status='listed'",
+  1
+);
+
 /* What a voter's browser can now read: the whole roster, and no brief. */
 await db.exec("SET ROLE anon;");
 await check(
@@ -360,10 +533,39 @@ await check(
   measures
 );
 await check(
-  "anon reads no brief rows (profile/issue/position/claim/resource)",
+  "anon reads no brief rows (profile/issue/position/claim)",
   `SELECT ((SELECT count(*) FROM profile) + (SELECT count(*) FROM issue)
-         + (SELECT count(*) FROM position) + (SELECT count(*) FROM claim)
-         + (SELECT count(*) FROM measure_resource))::int n`,
+         + (SELECT count(*) FROM position) + (SELECT count(*) FROM claim))::int n`,
+  0
+);
+/* FL-AM3-general and FL-AM2-general are the two published measures (0038
+   and 0040, both untouched by the listing above except for the round-trip
+   through 'listed' just proved): anon sees AM3's resources -- 0038's 14 rows
+   plus the FL-AM3-general:booklet row 0035 already seeded, 15 total -- and
+   AM2's -- 0040's 17 rows plus the FL-AM2-general:booklet row 0035 already
+   seeded, 18 total. AM1 stays merely `listed` (this run's list-ballot-
+   2026.sql is what listed it), but 0041 widens the anon policy so a listed
+   measure's NEUTRAL rows are readable: anon now sees AM1's resources too --
+   0041's 9 neutral rows plus the FL-AM1-general:booklet row 0035 already
+   seeded, 10 total, 0 support / 0 oppose. */
+await check(
+  "anon reads FL-AM3-general's 15 published resources",
+  "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM3-general'",
+  15
+);
+await check(
+  "anon reads FL-AM2-general's 18 published resources",
+  "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM2-general'",
+  18
+);
+await check(
+  "anon reads FL-AM1-general's 10 neutral resources while merely listed (0 support, 0 oppose)",
+  "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM1-general'",
+  10
+);
+await check(
+  "anon reads 0 support/oppose FL-AM1-general resources while merely listed",
+  "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM1-general' AND stance IN ('support','oppose')",
   0
 );
 await db.exec("RESET ROLE;");
@@ -373,5 +575,5 @@ if (failures > 0) {
   process.exit(1);
 }
 console.log(
-  "\nverify-ballot-seeds: OK — measures and Tier A local races seeded as intended, none listed or published by a migration; list-ballot-2026.sql lists them all and publishes nothing."
+  "\nverify-ballot-seeds: OK — measures and Tier A local races seeded as intended; no race is listed or published by a migration, and FL-AM3-general/FL-AM2-general are the two measures 0038/0040 publish; list-ballot-2026.sql lists every race and every measure without a prior row (AM1), publishes nothing new, and anon reads back AM3's 15 resources, AM2's 18 and (since 0041) AM1's 10 neutral-only resources."
 );

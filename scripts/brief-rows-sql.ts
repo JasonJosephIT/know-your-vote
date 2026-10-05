@@ -23,7 +23,18 @@
      }
 
    `run` paths resolve relative to the plan file, so a plan and its runs move
-   together. */
+   together. A candidate with nothing to run (no `official_site`, or a site the
+   ingest could not read) is listed with `"run": null` and a `"no_run_reason"`;
+   they get a profile and `no_stated_position_found` on every spine issue,
+   never a gap in the race.
+
+   `"withheld_from"` (optional, relative to the plan) names the shared list of
+   passages a Step 3 review found to be no commitment by the candidate:
+     { "withheld": { "<candidate_id>": [{ "passage_id": "...", "reason": "..." }] } }
+   Every race points at the same list, so one rule covers every candidate.
+   Those passages become no claim and are listed, with their reasons, in the
+   SQL header. An entry that no longer matches a policy passage in the run is
+   an error: a stale list would hold back nothing and say it had. */
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -39,8 +50,14 @@ import type { PolicyRun } from "../src/lib/policy-run.ts";
 interface Plan {
   race_id: string;
   retrieved_at?: string;
+  withheld_from?: string;
   spine: SpineIssue[];
-  candidates: Array<{ candidate_id: string; official_site: string; run: string }>;
+  candidates: Array<{
+    candidate_id: string;
+    official_site: string | null;
+    run: string | null;
+    no_run_reason?: string;
+  }>;
 }
 
 function arg(name: string): string | undefined {
@@ -57,11 +74,53 @@ if (!planPath) {
 const planDir = dirname(resolve(planPath));
 const plan = JSON.parse(readFileSync(planPath, "utf8")) as Plan;
 
+/* A null run has to say why, in the plan, where a reviewer reads it: "no
+   site" and "a site we could not read" are different facts about the same
+   silence. */
+const unexplained = plan.candidates.filter((c) => c.run === null && !c.no_run_reason?.trim());
+if (unexplained.length > 0) {
+  console.error(
+    `every candidate with "run": null needs a "no_run_reason": ${unexplained.map((c) => c.candidate_id).join(", ")}`,
+  );
+  process.exit(2);
+}
+
+interface WithheldList {
+  withheld: Record<string, Array<{ passage_id: string; reason: string }>>;
+}
+
+const withheldList: WithheldList = plan.withheld_from
+  ? (JSON.parse(readFileSync(resolve(planDir, plan.withheld_from), "utf8")) as WithheldList)
+  : { withheld: {} };
+
 const candidates: CandidateRun[] = plan.candidates.map((c) => ({
   candidateId: c.candidate_id,
   officialSite: c.official_site,
-  run: JSON.parse(readFileSync(resolve(planDir, c.run), "utf8")) as PolicyRun,
+  run:
+    c.run === null
+      ? null
+      : (JSON.parse(readFileSync(resolve(planDir, c.run), "utf8")) as PolicyRun),
+  withheld: Object.fromEntries(
+    (withheldList.withheld[c.candidate_id] ?? []).map((w) => [w.passage_id, w.reason]),
+  ),
 }));
+
+const staleWithheld = candidates.flatMap(({ candidateId, run, withheld = {} }) =>
+  Object.entries(withheld)
+    .filter(
+      ([id, reason]) =>
+        !reason.trim() ||
+        !run?.passages.some((p) => p.id === id && p.verdict?.states_policy === true),
+    )
+    .map(([id]) => `${candidateId} ${id}`),
+);
+if (staleWithheld.length > 0) {
+  console.error(
+    "every withheld entry needs a reason and must name a passage that states a policy in its run:\n" +
+      staleWithheld.map((e) => `  - ${e}`).join("\n"),
+  );
+  process.exit(2);
+}
 
 /* A spine id outside the shared taxonomy is legal but worth saying out loud:
    it is a question only this race asks, so no other race's brief will ever
@@ -109,13 +168,28 @@ function render(rows: BriefRows): string {
   }, {});
 
   out.push(`-- Brief rows for ${plan.race_id}, built by scripts/brief-rows-sql.ts.`);
-  out.push(`-- Generated from ${plan.candidates.length} policy run(s). Review before applying.`);
+  const runs = plan.candidates.filter((c) => c.run !== null).length;
+  out.push(
+    `-- Generated from ${runs} policy run(s) for ${plan.candidates.length} candidate(s). Review before applying.`,
+  );
   out.push(`--`);
   out.push(
     `-- ${rows.sources.length} source, ${rows.issues.length} issue, ${rows.claims.length} claim, ` +
       `${rows.positions.length} position, ${rows.profiles.length} profile rows.`,
   );
   out.push(`-- Passages that produced no row: ${JSON.stringify(counts)}`);
+  for (const c of plan.candidates.filter((c) => c.run === null)) {
+    out.push(`-- ${c.candidate_id}: no run, silent on every spine issue: ${c.no_run_reason}`);
+  }
+  if (plan.withheld_from) {
+    const withheld = result.rejected.filter((r) => r.reason === "withheld_after_review");
+    out.push(
+      `-- Withheld after review (${plan.withheld_from}): ${withheld.length === 0 ? "none in this race" : withheld.length}`,
+    );
+    for (const r of withheld) {
+      out.push(`--   ${r.candidate_id} ${r.passage_id}: ${r.note}`);
+    }
+  }
   out.push(`--`);
   out.push(`-- Every claim is stated_position / single_source with a NULL verdict: a Noul`);
   out.push(`-- scores relevance and cannot adjudicate. Nothing here is a checked fact.`);

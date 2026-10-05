@@ -33,7 +33,7 @@
 
    Run: node scripts/verify-news-neutrality.ts
    Self-test: node scripts/verify-news-neutrality.ts --self-test
-   (Node >= 23 strips types natively — same as verify-quiz-guardrails.ts /
+   (Node >= 23 strips types natively — same as verify-measure-balance.ts /
    verify-sentry-scrub.ts. The relative import of the shared lib carries the
    explicit .ts extension for the same reason.) */
 

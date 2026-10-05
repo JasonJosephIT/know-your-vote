@@ -32,9 +32,10 @@ const FORMAT_LABEL: Record<MeasureFormat, string | null> = {
   audio: "Audio",
 };
 
-function minutes(seconds: number | null): string | null {
+function duration(seconds: number | null): string | null {
   if (seconds === null) return null;
-  return `${Math.max(1, Math.round(seconds / 60))} min`;
+  if (seconds < 60) return `${seconds} sec`;
+  return `${Math.round(seconds / 60)} min`;
 }
 
 function monthYear(iso: string | null): string | null {
@@ -87,7 +88,7 @@ export function MeasureResourceRow({
   const facts = [
     resource.author,
     FORMAT_LABEL[resource.format],
-    minutes(resource.duration_seconds),
+    duration(resource.duration_seconds),
     monthYear(resource.published_at),
   ].filter((f): f is string => Boolean(f));
 

@@ -2,6 +2,7 @@ import { unstable_cache } from "next/cache";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 import type { ResolveRaceSummary } from "@/types/app";
+import { LISTED_RACE_LABEL } from "@/lib/listing-copy";
 
 /* Location-free read of the races every Florida voter shares (TASK-067).
 
@@ -46,10 +47,10 @@ export function raceStatusOf(
    audited brief, or (at `listed`) the roster alone. Kept here so the landing
    page, Your races and the county list word it identically. Never
    "published" for a listed race (listed-tier brief). */
+/* The listed caption comes from listing-copy.ts so it follows the same
+   LISTED_IS_FINAL switch as the roster cards (founder decision 4). */
 export function raceStatusLabel(status: ResolveRaceSummary["status"]): string {
-  return status === "published"
-    ? "Full brief"
-    : "Names on the ballot · brief in review";
+  return status === "published" ? "Full brief" : LISTED_RACE_LABEL;
 }
 
 export type StatewideRace = ResolveRaceSummary & {

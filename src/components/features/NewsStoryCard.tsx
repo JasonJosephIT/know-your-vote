@@ -63,6 +63,13 @@ export interface NewsStoryCardProps {
       existed (news-ingest-order-handoff-2026-09-23.md §1). `href` makes a chip
       a link into the /news issue filter. */
   issues?: readonly { id: string; label: string; href?: string }[];
+  /** The headline's element (a11y-perf-2026-10-04.md fix 7; WCAG 1.3.1 Info
+      and Relationships). The default h3 is right where a section h2 sits
+      above the cards: CandidateNews ("In the news") and the outlet page
+      ("Stories we have from …"). /news has only its h1 above the list, so
+      NewsFeed passes h2; h3 there skipped a level (axe heading-order). The
+      look is the same either way: the class stays text-h3. */
+  headingLevel?: "h2" | "h3";
 }
 
 export function NewsStoryCard({
@@ -76,7 +83,9 @@ export function NewsStoryCard({
   footer = null,
   kindFallback = null,
   issues = [],
+  headingLevel = "h3",
 }: NewsStoryCardProps) {
+  const Heading = headingLevel;
   const href = safeHttpUrl(url);
   /* Images are validated https at parse time (news-sweep.ts `feedImage`), but
      a row could predate that or arrive by another path, so re-check here
@@ -89,6 +98,10 @@ export function NewsStoryCard({
      fallback, so an opinion column cannot be relabelled "update" by a caller
      that passed one. */
   const shownFlag = flag ?? (publisher ? null : kindFallback);
+  /* The "·" separates the date from a flag or outlet before it, so it is
+     printed only when one is there (a11y-perf-2026-10-04.md fix 14). A row
+     with neither, such as an unsourced story, read "· Sep 9, 2026". */
+  const dateSeparator = shownFlag || publisher ? "· " : "";
 
   return (
     <article
@@ -148,10 +161,15 @@ export function NewsStoryCard({
             ) : (
               <span>{publisher}</span>
             ))}
-          {dateLabel && <span>· {dateLabel}</span>}
+          {dateLabel && (
+            <span>
+              {dateSeparator}
+              {dateLabel}
+            </span>
+          )}
         </p>
 
-        <h3 className="text-h3">
+        <Heading className="text-h3">
           {href ? (
             <a
               href={href}
@@ -164,7 +182,7 @@ export function NewsStoryCard({
           ) : (
             title
           )}
-        </h3>
+        </Heading>
 
         {summary && (
           <p className="text-body-sm text-on-surface-muted">{summary}</p>

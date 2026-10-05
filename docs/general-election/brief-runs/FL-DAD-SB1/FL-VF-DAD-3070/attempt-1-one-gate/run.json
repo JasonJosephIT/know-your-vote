@@ -1,0 +1,90 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://wilsonforeducation.com",
+  "created_at": "2026-09-29T11:44:29.997Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 1,
+    "asked": 1,
+    "states_policy": 0,
+    "with_issue": 0,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "eae17f13",
+      "url": "https://wilsonforeducation.com/",
+      "heading": "Katrina Wilson is a native of Miami-Dade County and is a graduate of Miami Carol Senior High School. She received her Bachelor’s degree in Public Administration and a Master’s Degree in Reading K-12 from Florida Memorial University. She has also done post graduate work at Nova University in Educational Leadership. She is the proud mother of one very handsome and smart son – Aubrey Davis, Jr., affectionally known as AJ. In addition, she proudly serves as a member of Alpha Kappa Alpha Sorority, Inc., exemplifying its commitment to service, sisterhood, and academic excellence.",
+      "text": "In December, 2018 Katrina Wilson was sworn as Councilwoman in the City of Miami Gardens, Residential Seat 4.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    }
+  ],
+  "areas": [],
+  "usage": {
+    "input_tokens": 3620,
+    "output_tokens": 458
+  }
+}

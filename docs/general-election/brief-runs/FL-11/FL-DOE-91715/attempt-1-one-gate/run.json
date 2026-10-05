@@ -1,0 +1,894 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://jamespericola.com",
+  "created_at": "2026-09-29T11:42:14.941Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 18,
+    "asked": 18,
+    "states_policy": 5,
+    "with_issue": 4,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "4924c2d3",
+      "url": "https://jamespericola.com/",
+      "heading": "Lower costs. Common sense. Real results.",
+      "text": "“Working in Washington, I’ve seen how broken the system is. I’m running to fight back.”",
+      "verdict": {
+        "commitment": 0.27,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.04,
+          "A2": 0.04,
+          "A3": 0.03,
+          "A4": 0.11,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.37,
+          "B2": 0.08,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.11,
+          "KYV10": 0.02,
+          "KYV2": 0.04,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.04,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5c677490",
+      "url": "https://jamespericola.com/",
+      "heading": "Lower costs. Common sense. Real results.",
+      "text": "Thanks for joining — we’ll be in touch soon.",
+      "verdict": {
+        "commitment": 0.1,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.08,
+          "A2": 0.04,
+          "A3": 0.02,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.08,
+          "B2": 0.09,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.06,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5d63b0a7",
+      "url": "https://jamespericola.com/",
+      "heading": "A career bringing people together to get things done.",
+      "text": "Over more than 30 years, James Pericola has built a career in public service — as a Presidential appointee in the Clinton Administration, a congressional staff member, an attorney, and a senior government affairs executive. A husband and father, he’s running for Congress to lean on his decades of experience to lower costs and restore a common-sense approach to public service.",
+      "verdict": {
+        "commitment": 0.76,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.07,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.39,
+          "B2": 0.04,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.04,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "1d66a79b",
+      "url": "https://jamespericola.com/",
+      "heading": "A career bringing people together to get things done.",
+      "text": "James believes Washington has become consumed by division and partisan fights while too many families worry about making ends meet, affording healthcare, and building a secure future. He knows the problems facing Florida won’t be solved by slogans or political games — but by leaders willing to listen, build consensus, and do the hard work of delivering results.",
+      "verdict": {
+        "commitment": 0.27,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.04,
+          "A3": 0.03,
+          "A4": 0.26,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.26,
+          "B2": 0.18,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.1,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a2443d10",
+      "url": "https://jamespericola.com/",
+      "heading": "A career bringing people together to get things done.",
+      "text": "Caring for my aging mom, I’ve seen firsthand how complicated and expensive our healthcare system can be.",
+      "verdict": {
+        "commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.56,
+          "B3": 0.02,
+          "B4": 0.06,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.04,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ab66e4a5",
+      "url": "https://jamespericola.com/",
+      "heading": "A career bringing people together to get things done.",
+      "text": "For James, the fight to lower costs is personal. Helping his aging mother navigate an increasingly costly and complex healthcare system gave him a firsthand understanding of the challenges facing families across the district — and a determination to fix what’s broken.",
+      "verdict": {
+        "commitment": 0.34,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.17,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.24,
+          "B2": 0.76,
+          "B3": 0.02,
+          "B4": 0.06,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "eaaf01e7",
+      "url": "https://jamespericola.com/",
+      "heading": "What James will fight for",
+      "text": "James Pericola has the experience to not just talk, but get things done for our district. He’s already brought back millions in funding to central Florida during his career, and he’s ready to do the same for us.",
+      "verdict": {
+        "commitment": 0.38,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.13,
+          "A7": 0.02,
+          "B1": 0.12,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "dea2f60c",
+      "url": "https://jamespericola.com/",
+      "heading": "Protect Social Security & Medicare",
+      "text": "Oppose any cuts or privatization of Social Security and Medicare, and push to let Medicare negotiate lower prescription drug costs for seniors.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "B2",
+          "B4"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.96,
+          "B3": 0.02,
+          "B4": 0.99,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "13681d0d",
+      "url": "https://jamespericola.com/",
+      "heading": "Protect Affordable Healthcare",
+      "text": "Expand access to affordable, high-quality healthcare by protecting the Affordable Care Act.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.98,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "eea5ccf0",
+      "url": "https://jamespericola.com/",
+      "heading": "Lower Housing & Insurance Costs",
+      "text": "Secure federal funding to combat our housing crisis and lower property insurance costs.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "A1",
+          "A2"
+        ],
+        "scores": {
+          "A1": 0.97,
+          "A2": 0.96,
+          "A3": 0.04,
+          "A4": 0.7,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.12,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.06,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.06,
+          "KYV4": 0.1,
+          "KYV5": 0.02,
+          "KYV6": 0.07,
+          "KYV7": 0.22,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "3b4a6b48",
+      "url": "https://jamespericola.com/",
+      "heading": "Cut Taxes for Working Families",
+      "text": "Work to eliminate income taxes for those making less than $100,000 a year and cut taxes for middle-class families.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.09,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.65,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "044f25bf",
+      "url": "https://jamespericola.com/",
+      "heading": "Protecting Our Democracy",
+      "text": "James will fight to end gerrymandering, pass the John Lewis Voting Rights Act, and defend our democracy from MAGA attacks.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A7",
+          "KYV1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.98,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.26,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.88,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b3e62982",
+      "url": "https://jamespericola.com/",
+      "heading": "Experience residents deserve.",
+      "text": "James has spent his career at the table where decisions get made — and built a reputation as someone who brings diverse people together to solve hard problems.",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ff228014",
+      "url": "https://jamespericola.com/",
+      "heading": "Experience residents deserve.",
+      "text": "Presidential Appointee Served in President Clinton’s Administration as Special Assistant to the Chairman of the National Transportation Safety Board — working with the White House, Congress, and federal agencies to strengthen transportation safety and coordinate responses to major aviation disasters.",
+      "verdict": {
+        "commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ebaf2b50",
+      "url": "https://jamespericola.com/",
+      "heading": "Experience residents deserve.",
+      "text": "Trusted Problem-Solver Advised Fortune 100 companies, local governments, labor organizations, trade associations, and nonprofits — earning a reputation for bringing diverse stakeholders together to achieve meaningful results.",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "58e6a106",
+      "url": "https://jamespericola.com/",
+      "heading": "Experience residents deserve.",
+      "text": "Rooted in Florida Raised in Central Florida, James got his start in public service as a staff assistant to legendary U.S. Senator Bob Graham — traveling the state and learning the value of showing up, listening, working hard, and putting people first.",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5af1299d",
+      "url": "https://jamespericola.com/",
+      "heading": "Chip in to fight back.",
+      "text": "Grassroots support fuels this campaign. Pitch in what you can to help James lower costs and bring common sense back to Washington.",
+      "verdict": {
+        "commitment": 0.27,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.05,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.05,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.14,
+          "B2": 0.16,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "f8b21742",
+      "url": "https://jamespericola.com/",
+      "heading": "Chip in to fight back.",
+      "text": "Thank you! A member of the team will reach out.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "healthcare",
+        "label": "Healthcare"
+      },
+      "subIssues": [
+        {
+          "id": "B2",
+          "label": "Healthcare access and costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "13681d0d",
+                "url": "https://jamespericola.com/",
+                "heading": "Protect Affordable Healthcare",
+                "text": "Expand access to affordable, high-quality healthcare by protecting the Affordable Care Act.",
+                "retrieved_at": "2026-09-29T11:42:11.597Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "dea2f60c",
+                "url": "https://jamespericola.com/",
+                "heading": "Protect Social Security & Medicare",
+                "text": "Oppose any cuts or privatization of Social Security and Medicare, and push to let Medicare negotiate lower prescription drug costs for seniors.",
+                "retrieved_at": "2026-09-29T11:42:11.597Z"
+              },
+              "score": 0.96
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "housing",
+        "label": "Housing"
+      },
+      "subIssues": [
+        {
+          "id": "A2",
+          "label": "Housing affordability",
+          "citations": [
+            {
+              "passage": {
+                "id": "eea5ccf0",
+                "url": "https://jamespericola.com/",
+                "heading": "Lower Housing & Insurance Costs",
+                "text": "Secure federal funding to combat our housing crisis and lower property insurance costs.",
+                "retrieved_at": "2026-09-29T11:42:11.597Z"
+              },
+              "score": 0.96
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "insurance",
+        "label": "Insurance & Property Costs"
+      },
+      "subIssues": [
+        {
+          "id": "A1",
+          "label": "Property insurance costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "eea5ccf0",
+                "url": "https://jamespericola.com/",
+                "heading": "Lower Housing & Insurance Costs",
+                "text": "Secure federal funding to combat our housing crisis and lower property insurance costs.",
+                "retrieved_at": "2026-09-29T11:42:11.597Z"
+              },
+              "score": 0.97
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "elections",
+        "label": "Elections & Voting"
+      },
+      "subIssues": [
+        {
+          "id": "A7",
+          "label": "Elections administration and voting access",
+          "citations": [
+            {
+              "passage": {
+                "id": "044f25bf",
+                "url": "https://jamespericola.com/",
+                "heading": "Protecting Our Democracy",
+                "text": "James will fight to end gerrymandering, pass the John Lewis Voting Rights Act, and defend our democracy from MAGA attacks.",
+                "retrieved_at": "2026-09-29T11:42:11.597Z"
+              },
+              "score": 0.98
+            }
+          ]
+        },
+        {
+          "id": "KYV1",
+          "label": "Threats to democratic institutions",
+          "citations": [
+            {
+              "passage": {
+                "id": "044f25bf",
+                "url": "https://jamespericola.com/",
+                "heading": "Protecting Our Democracy",
+                "text": "James will fight to end gerrymandering, pass the John Lewis Voting Rights Act, and defend our democracy from MAGA attacks.",
+                "retrieved_at": "2026-09-29T11:42:11.597Z"
+              },
+              "score": 0.88
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "retirement",
+        "label": "Retirement & Benefits"
+      },
+      "subIssues": [
+        {
+          "id": "B4",
+          "label": "Social Security and Medicare",
+          "citations": [
+            {
+              "passage": {
+                "id": "dea2f60c",
+                "url": "https://jamespericola.com/",
+                "heading": "Protect Social Security & Medicare",
+                "text": "Oppose any cuts or privatization of Social Security and Medicare, and push to let Medicare negotiate lower prescription drug costs for seniors.",
+                "retrieved_at": "2026-09-29T11:42:11.597Z"
+              },
+              "score": 0.99
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 63097,
+    "output_tokens": 8244
+  }
+}

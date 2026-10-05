@@ -100,15 +100,24 @@ function Column({
   );
 }
 
+export function MeasureNeutralBlock({
+  items,
+}: {
+  items: MeasureResourceWithSource[];
+}) {
+  if (items.length === 0) return null;
+  return (
+    <section className="flex flex-col gap-3">
+      <h2 className="text-h3">Understand it first</h2>
+      <TieredList items={items} kinds={NEUTRAL_KINDS} />
+    </section>
+  );
+}
+
 export function MeasureResourceLadder({ brief }: { brief: MeasureBrief }) {
   return (
     <div className="flex flex-col gap-5">
-      {brief.neutral.length > 0 && (
-        <section className="flex flex-col gap-3">
-          <h2 className="text-h3">Understand it first</h2>
-          <TieredList items={brief.neutral} kinds={NEUTRAL_KINDS} />
-        </section>
-      )}
+      <MeasureNeutralBlock items={brief.neutral} />
       <div className="grid grid-cols-1 items-stretch gap-5 md:grid-cols-2">
         <Column heading="The case for a YES" items={brief.support} />
         <Column heading="The case for a NO" items={brief.oppose} />

@@ -1,15 +1,10 @@
 import * as Sentry from "@sentry/nextjs";
-import { scrubBreadcrumb, scrubEvent } from "@/lib/sentry-scrub";
+import { serverIntegrations, sharedOptions } from "@/lib/sentry-options";
 
+/* Loaded only when SENTRY_DSN is set (src/instrumentation.ts). */
 Sentry.init({
+  ...sharedOptions,
   dsn: process.env.SENTRY_DSN,
   enabled: Boolean(process.env.SENTRY_DSN),
-  sendDefaultPii: false,
-  tracesSampleRate: 0,
-  beforeSend(event) {
-    return scrubEvent(event);
-  },
-  beforeBreadcrumb(breadcrumb) {
-    return scrubBreadcrumb(breadcrumb);
-  },
+  integrations: serverIntegrations(Sentry),
 });

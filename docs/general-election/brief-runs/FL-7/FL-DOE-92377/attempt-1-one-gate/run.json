@@ -1,0 +1,827 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://dennison4congress.com",
+  "created_at": "2026-09-29T11:43:28.830Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 17,
+    "asked": 17,
+    "states_policy": 8,
+    "with_issue": 6,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "49346e1a",
+      "url": "https://dennison4congress.com/",
+      "heading": "Chris Dennison: Libertarian for U.S. Congress (FL D7)",
+      "text": "I served, I coached, I worked for a living. Now I'm running in Florida's 7th because my kids deserve a better country than the one we're handing them.",
+      "verdict": {
+        "commitment": 0.09,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "41b9675e",
+      "url": "https://dennison4congress.com/",
+      "heading": "FOREIGN POLICY",
+      "text": "I served, and I will not vote to send anyone else's kid into a war we cannot explain. We end the deployments, close the bases we do not need, and stop treating war as something that runs on autopilot. Bring them home.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.01,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a424af76",
+      "url": "https://dennison4congress.com/",
+      "heading": "FOURTH AMENDMENT",
+      "text": "Flock and Axon have turned our streets into a permanent lineup. Every plate, every face, every trip you take, logged and stored without a warrant and without your consent. I will get these systems out of public spaces and keep the Fourth Amendment from becoming a technicality.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.93,
+          "B8": 0.02,
+          "KYV1": 0.49,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "2dcb8eed",
+      "url": "https://dennison4congress.com/",
+      "heading": "SUPPORTING VETERANS",
+      "text": "Let Veterans Choose Their Own Care. My benefits should not be trapped inside one government hospital system. Veterans earned that care and should be able to take it to whatever doctor they trust, close to home, without waiting on a bureaucracy to approve it. Put the benefit in the veteran's hands.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.95,
+          "B3": 0.01,
+          "B4": 0.04,
+          "B5": 0.02,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.01,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "0e65de95",
+      "url": "https://dennison4congress.com/",
+      "heading": "Knock doors, make calls, put up a sign.",
+      "text": "Most people in this district have never had a Libertarian knock on their door. That's the whole job. Knock doors, make calls, put up a sign in your yard, or talk to your neighbors about one of the issues above. Give an hour or give a Saturday. Both help.",
+      "verdict": {
+        "commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "184a806e",
+      "url": "https://dennison4congress.com/issues-2",
+      "heading": "Chris Dennison: Libertarian for U.S. Congress District 7",
+      "text": "Every plank below is a position I will defend on the record. If one of them costs me your vote, I would rather you found out here than after the election.",
+      "verdict": {
+        "commitment": 0.13,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.05,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.04,
+          "A7": 0.04,
+          "B1": 0.05,
+          "B2": 0.04,
+          "B3": 0.04,
+          "B4": 0.03,
+          "B5": 0.04,
+          "B6": 0.04,
+          "B7": 0.04,
+          "B8": 0.04,
+          "KYV1": 0.04,
+          "KYV10": 0.04,
+          "KYV2": 0.04,
+          "KYV3": 0.04,
+          "KYV4": 0.03,
+          "KYV5": 0.03,
+          "KYV6": 0.04,
+          "KYV7": 0.04,
+          "KYV8": 0.03,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "83b70a8e",
+      "url": "https://dennison4congress.com/issues-2",
+      "heading": "Washington Doesn't Own Your Land",
+      "text": "If you want to build a data center on property you own, that is between you and your neighbors. The federal government has no business in that decision. What gets built on public land is a question for the community that lives there, not an agency a thousand miles away.",
+      "verdict": {
+        "commitment": 0.92,
+        "states_policy": true,
+        "issues": [
+          "KYV3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.08,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.14,
+          "KYV1": 0.06,
+          "KYV10": 0.02,
+          "KYV2": 0.83,
+          "KYV3": 0.97,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "1c672fe2",
+      "url": "https://dennison4congress.com/issues-2",
+      "heading": "End Qualified Immunity",
+      "text": "No government employee should be shielded from the consequences of their own actions. This is not about any one profession. It is about a simple rule that already applies to the rest of us: if you violate someone's rights, they get their day in court.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.01,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.92,
+          "B8": 0.02,
+          "KYV1": 0.46,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "2bee679f",
+      "url": "https://dennison4congress.com/issues-2",
+      "heading": "Abortion, Not a Federal Question",
+      "text": "The federal government has no authority here. This belongs to the states, and I will not vote to hand Washington power over it in either direction. That is where the Constitution leaves it and that is where I will leave it.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B5"
+        ],
+        "scores": {
+          "A1": 0.01,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.05,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.93,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.05,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a3d4dea8",
+      "url": "https://dennison4congress.com/issues-2",
+      "heading": "The State Should Not Decide Who Dies",
+      "text": "I do not trust any government that gets this wrong even once. Courts convict innocent people. I would rather one hundred guilty men live out their sentences than watch this country put one innocent man to death.",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.01,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.01,
+          "A6": 0.01,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.01,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.93,
+          "B8": 0.01,
+          "KYV1": 0.2,
+          "KYV10": 0.02,
+          "KYV2": 0.01,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.01
+        }
+      }
+    },
+    {
+      "id": "1537d983",
+      "url": "https://dennison4congress.com/issues-2",
+      "heading": "End Foreign Aid. Charge for Defense.",
+      "text": "Not one more dollar borrowed from my grandchildren to fund another country's government. If a nation wants American troops on its soil, it pays for them or it is a major trading partner with something real at stake. That is not retreat, it is refusing to subsidize the world on credit.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.22,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "86a55d23",
+      "url": "https://dennison4congress.com/issues-2",
+      "heading": "About",
+      "text": "I'm Chris Dennison. I'm an Air Force veteran, a father of two, and I spent twelve years coaching youth football in Volusia and Seminole County.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b2bf97cf",
+      "url": "https://dennison4congress.com/issues-2",
+      "heading": "About",
+      "text": "I grew up in Jacksonville and graduated high school there in 2001. In January 2002 I joined the Air Force. I served on active duty until 2004, then moved to the Reserves through the Palace Chase program so I could start a family and go to work.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "f53e222d",
+      "url": "https://dennison4congress.com/issues-2",
+      "heading": "About",
+      "text": "That's what I did. I met the mother of my children in 2004. Our son Austin was born in 2005, our daughter Alicia in 2007. I worked at Wachovia, then at Chase doing collections, and I moved to Central Florida when Austin was nine months old. In 2009 I started football coaching. I didn't stop until 2021.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.01,
+          "KYV1": 0.01,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "96fabaaf",
+      "url": "https://dennison4congress.com/issues-2",
+      "heading": "About",
+      "text": "I was an independent most of my life. In 2020, watching Jo Jorgensen and Spike Cohen run, I realized the Libertarian platform said what I had already believed for years. I'm not a conservative and I'm not a liberal. I'm a classical liberal, like Thomas Jefferson: individual liberty, limited government, free markets, private property, and the rule of law are all necessary schematics in building the foundation of a free society.",
+      "verdict": {
+        "commitment": 0.74,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.04,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.57,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.08,
+          "B8": 0.03,
+          "KYV1": 0.32,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.04,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "480de0ab",
+      "url": "https://dennison4congress.com/issues-2",
+      "heading": "About",
+      "text": "I'm running because a fellow Libertarian asked me to, and I said yes without hesitating. I wasn't raised to run for office. I'm a guy who works for a living to support his family. I'm not running for power and I'm not looking to make a career out of this. I'm running so my kids and my grandkids inherit a better country than the one we're handing them.",
+      "verdict": {
+        "commitment": 0.08,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "eca9438e",
+      "url": "https://dennison4congress.com/issues-2",
+      "heading": "That is how a coalition works",
+      "text": "Nobody signs all four without reservations, and I am not asking you to. Come argue with me about the one you do not like — I would rather have that conversation in person.",
+      "verdict": {
+        "commitment": 0.2,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.04,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.04,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "healthcare",
+        "label": "Healthcare"
+      },
+      "subIssues": [
+        {
+          "id": "B2",
+          "label": "Healthcare access and costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "2dcb8eed",
+                "url": "https://dennison4congress.com/",
+                "heading": "SUPPORTING VETERANS",
+                "text": "Let Veterans Choose Their Own Care. My benefits should not be trapped inside one government hospital system. Veterans earned that care and should be able to take it to whatever doctor they trust, close to home, without waiting on a bureaucracy to approve it. Put the benefit in the veteran's hands.",
+                "retrieved_at": "2026-09-29T11:43:25.768Z"
+              },
+              "score": 0.95
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "environment",
+        "label": "Environment & Water"
+      },
+      "subIssues": [
+        {
+          "id": "KYV3",
+          "label": "Growth, development and land conservation",
+          "citations": [
+            {
+              "passage": {
+                "id": "83b70a8e",
+                "url": "https://dennison4congress.com/issues-2",
+                "heading": "Washington Doesn't Own Your Land",
+                "text": "If you want to build a data center on property you own, that is between you and your neighbors. The federal government has no business in that decision. What gets built on public land is a question for the community that lives there, not an agency a thousand miles away.",
+                "retrieved_at": "2026-09-29T11:43:25.768Z"
+              },
+              "score": 0.97
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "safety",
+        "label": "Public Safety & Crime"
+      },
+      "subIssues": [
+        {
+          "id": "B7",
+          "label": "Crime policy, policing and courts",
+          "citations": [
+            {
+              "passage": {
+                "id": "a424af76",
+                "url": "https://dennison4congress.com/",
+                "heading": "FOURTH AMENDMENT",
+                "text": "Flock and Axon have turned our streets into a permanent lineup. Every plate, every face, every trip you take, logged and stored without a warrant and without your consent. I will get these systems out of public spaces and keep the Fourth Amendment from becoming a technicality.",
+                "retrieved_at": "2026-09-29T11:43:25.768Z"
+              },
+              "score": 0.93
+            },
+            {
+              "passage": {
+                "id": "a3d4dea8",
+                "url": "https://dennison4congress.com/issues-2",
+                "heading": "The State Should Not Decide Who Dies",
+                "text": "I do not trust any government that gets this wrong even once. Courts convict innocent people. I would rather one hundred guilty men live out their sentences than watch this country put one innocent man to death.",
+                "retrieved_at": "2026-09-29T11:43:25.768Z"
+              },
+              "score": 0.93
+            },
+            {
+              "passage": {
+                "id": "1c672fe2",
+                "url": "https://dennison4congress.com/issues-2",
+                "heading": "End Qualified Immunity",
+                "text": "No government employee should be shielded from the consequences of their own actions. This is not about any one profession. It is about a simple rule that already applies to the rest of us: if you violate someone's rights, they get their day in court.",
+                "retrieved_at": "2026-09-29T11:43:25.768Z"
+              },
+              "score": 0.92
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "abortion",
+        "label": "Abortion Policy"
+      },
+      "subIssues": [
+        {
+          "id": "B5",
+          "label": "Abortion policy",
+          "citations": [
+            {
+              "passage": {
+                "id": "2bee679f",
+                "url": "https://dennison4congress.com/issues-2",
+                "heading": "Abortion, Not a Federal Question",
+                "text": "The federal government has no authority here. This belongs to the states, and I will not vote to hand Washington power over it in either direction. That is where the Constitution leaves it and that is where I will leave it.",
+                "retrieved_at": "2026-09-29T11:43:25.768Z"
+              },
+              "score": 0.93
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 60014,
+    "output_tokens": 7786
+  }
+}

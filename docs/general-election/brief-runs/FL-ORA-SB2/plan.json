@@ -1,0 +1,30 @@
+{
+  "race_id": "FL-ORA-SB2-general",
+  "retrieved_at": "2026-09-29T11:46:11Z",
+  "withheld_from": "../withheld-2026-09-30.json",
+  "spine": [
+    {
+      "id": "A6",
+      "title": "Public school funding and teachers",
+      "description": null
+    },
+    {
+      "id": "KYV9",
+      "title": "School choice and vouchers",
+      "description": null
+    },
+    {
+      "id": "KYV10",
+      "title": "Career, vocational and higher education",
+      "description": null
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "FL-VF-ORA-1318",
+      "official_site": "https://votegloriareina.com/",
+      "run": "FL-VF-ORA-1318/run.json",
+      "no_run_reason": null
+    }
+  ]
+}

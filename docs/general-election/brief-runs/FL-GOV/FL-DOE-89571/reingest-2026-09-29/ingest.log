@@ -1,0 +1,17 @@
+(node:7258) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-site-ingest.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/user/know-your-vote/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+site: https://russo2026.com/
+  asking Jev about 21 link(s) as jev:jev-1.13.0/links/q-e03cabd0
+  62 links, 7 policy page(s) selected (cap 8), about page: https://russo2026.com/en/rachel
+   34 passage(s)  https://russo2026.com/en/priorities/children-teachers-trades
+   42 passage(s)  https://russo2026.com/en/priorities/immigration
+   19 passage(s)  https://russo2026.com/en/priorities
+   13 passage(s)  https://russo2026.com/en/priorities/affordability
+   10 passage(s)  https://russo2026.com/en/priorities/innovation
+   35 passage(s)  https://russo2026.com/en/priorities/medical-freedom
+   34 passage(s)  https://russo2026.com/en/priorities/florida-9-9
+    6 passage(s)  https://russo2026.com/en/rachel
+
+204 passage(s) -> docs/general-election/brief-runs/FL-GOV/FL-DOE-89571/reingest-2026-09-29/passages.jsonl

@@ -1,0 +1,18 @@
+(node:2201) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-site-ingest.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/user/know-your-vote/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+site: https://www.maximeforcongress.com/
+  asking Jev about 15 link(s) as jev:jev-1.13.0/links/q-e03cabd0
+  43 links, 8 policy page(s) selected (cap 8), about page: https://www.maximeforcongress.com/about
+    8 passage(s)  https://www.maximeforcongress.com/jobs
+   11 passage(s)  https://www.maximeforcongress.com/immigration
+    9 passage(s)  https://www.maximeforcongress.com/healthcare
+    9 passage(s)  https://www.maximeforcongress.com/education
+    9 passage(s)  https://www.maximeforcongress.com/lower-costs
+    9 passage(s)  https://www.maximeforcongress.com/small-business
+    8 passage(s)  https://www.maximeforcongress.com/students
+    8 passage(s)  https://www.maximeforcongress.com/ownership-equity
+   25 passage(s)  https://www.maximeforcongress.com/about
+
+108 passage(s) -> docs/general-election/brief-runs/FL-20/FL-DOE-90814/passages.jsonl

@@ -12,24 +12,88 @@
    to make.
 
      node scripts/candidate-site-ingest.ts --site https://example.com \
-       [--pages 8] [--out passages.jsonl]
+       [--pages 8] [--out passages.jsonl] [--browser auto|always|never] \
+       [--links jev|keywords]
 
    Polite by construction: robots.txt is read and honored, the crawl is capped
-   at --pages beyond the homepage, requests are serialized with a delay, and
-   only links that look like a policy section are followed. This is a handful
-   of requests to someone else's server, not a crawl.
+   at --pages beyond the homepage (plus one About page), requests are
+   serialized with a delay, and only links judged to hold the candidate's
+   positions are followed. This is a handful of requests to someone else's
+   server, not a crawl.
+
+   WHICH LINKS. With --links jev (the default), every on-site content link on
+   the homepage is put to Jev as its path and anchor text
+   (src/lib/link-noul.ts): does it lead to stated positions, and is it the
+   candidate's About page. The strongest policy links up to --pages are
+   fetched, plus the strongest About page. Every judgement is written to
+   links.jsonl next to --out. Needs TYPESAFE_API_KEY; without it the run
+   refuses before any request. --links keywords is the old word-list
+   selector (selectPolicyPages), which never follows an About page and
+   misses pages named "/taxes" or "/position-papers" (2026-09-29 ingest).
+
+   robots.txt is honored for our own UA token AND every Anthropic crawler
+   token (src/lib/candidate-site.ts, ROBOTS_AGENTS): what this fetches is read
+   into a model, so a site that disallows ClaudeBot or anthropic-ai is not
+   read, whatever our UA string says. Its Crawl-delay is honored too.
+
+   A robots.txt we cannot read (a server error, a failed fetch, or a
+   bot-challenge page served in its place) is treated as no rules, and the run
+   proceeds with a warning. Founder decision 2026-09-25: an unreadable file
+   states no policy to honor, and a readable one that refuses Anthropic's
+   crawlers still stops the run. The warning is the audit trail that the site's
+   stance was unknown when it was read
+   (docs/general-election/candidate-conflicts-2026-09-25.md §5).
+
+   BOT CHALLENGES. Many campaign hosts answer a plain fetch with an anti-bot
+   interstitial (SiteGround's "Robot Challenge Screen", Cloudflare's "Just a
+   moment..."). With --browser auto (the default), a response recognised as
+   one (looksLikeBotChallenge) is fetched again in headless Chromium, which
+   runs the host's own check the way any visitor's browser does. That goes for
+   robots.txt too, so a challenged policy is READ rather than skipped. The
+   browser identifies itself: its own UA with our token appended, never a
+   disguised one. It downloads no images, media or fonts, and it solves no
+   captchas. If the check does not clear, the page is reported unreachable and
+   nothing from it is quoted.
+
+   CLIENT-RENDERED PAGES. A page that loads but carries almost no text
+   (looksClientRendered: an empty `<div id="root">` shell whose words are
+   built by its scripts) is rendered in the same browser, under the same rules,
+   so its text and links exist to be read. --browser always skips the plain fetch;
+   --browser never restores fetch-only behavior. Needs Chromium for
+   playwright-core (`npx playwright-core install chromium`, or CHROMIUM_PATH).
 
    Fail-closed: a site that yields no passages exits non-zero. A silent empty
    file looks exactly like a candidate with no stated positions, and those are
    opposite facts. */
 
 import { writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { loadEnvLocal } from "./env-local.ts";
+import { jevEngine, JEV_MODEL_ID, type CharacterizeEngine } from "../src/lib/news-characterize-engines.ts";
 import {
+  DEFAULT_LINK_THRESHOLD,
+  buildLinkQuestions,
+  buildLinkState,
+  candidateLinks,
+  chooseLinks,
+  linkProvenance,
+  readLinkVerdict,
+  type ScoredLink,
+} from "../src/lib/link-noul.ts";
+import type { Browser, BrowserContext } from "playwright-core";
+import {
+  INGEST_AGENT,
+  MIN_PAGE_TEXT_CHARS,
+  blockedAgents,
+  crawlDelaySec,
   dedupeAcrossPages,
   extractLinks,
   extractPassages,
   isAllowedByRobots,
   canonicalizeUrl,
+  looksClientRendered,
+  looksLikeBotChallenge,
+  visibleTextLength,
   selectPolicyPages,
   type Passage,
 } from "../src/lib/candidate-site.ts";
@@ -43,56 +107,304 @@ const flag = (name: string): string | undefined => {
 const site = canonicalizeUrl(flag("site") ?? "");
 if (!site) {
   console.error(
-    "Usage: node scripts/candidate-site-ingest.ts --site https://example.com [--pages 8] [--out passages.jsonl]",
+    "Usage: node scripts/candidate-site-ingest.ts --site https://example.com [--pages 8] [--out passages.jsonl] [--browser auto|always|never] [--links jev|keywords]",
   );
   process.exit(2);
 }
 const pageLimit = Number(flag("pages") ?? 8);
 const outPath = flag("out");
+const browserMode = flag("browser") ?? "auto";
+if (!["auto", "always", "never"].includes(browserMode)) {
+  console.error(`--browser must be auto, always or never, not "${browserMode}"`);
+  process.exit(2);
+}
+const linkMode = flag("links") ?? "jev";
+if (!["jev", "keywords"].includes(linkMode)) {
+  console.error(`--links must be jev or keywords, not "${linkMode}"`);
+  process.exit(2);
+}
+/* Before any request: a run that cannot judge links must not start fetching. */
+loadEnvLocal(import.meta.url);
+let engine: CharacterizeEngine | null = null;
+if (linkMode === "jev") {
+  try {
+    engine = jevEngine();
+  } catch (e) {
+    console.error((e as Error).message);
+    process.exit(2);
+  }
+}
 
-const UA = "KnowYourVote/1.0 (+https://github.com/JasonJosephIT/know-your-vote)";
+const UA = `${INGEST_AGENT}/1.0 (+https://github.com/JasonJosephIT/know-your-vote)`;
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+/* Our own floor between requests; a site's Crawl-delay can only raise it. */
+const MIN_DELAY_MS = 1_000;
+
+/* ---- the browser, launched at most once and only when needed ---------- */
+
+/* How long the browser waits for a challenge to clear, or for a
+   client-rendered page's text to appear. SiteGround's challenge usually clears
+   in under 15 s; a rendered page, in a few. */
+const CHALLENGE_WAIT_MS = 30_000;
+
+let browser: Browser | null = null;
+let browserCtx: BrowserContext | null = null;
+let browserUnavailable = false;
+
+async function browserContext(): Promise<BrowserContext | null> {
+  if (browserCtx) return browserCtx;
+  if (browserUnavailable) return null;
+  try {
+    const { chromium } = await import("playwright-core");
+    const proxy = process.env.HTTPS_PROXY ?? process.env.https_proxy;
+    browser = await chromium.launch({
+      executablePath: process.env.CHROMIUM_PATH || undefined,
+      proxy: proxy ? { server: proxy } : undefined,
+    });
+    /* Honest identification: the browser's own UA, unaltered, plus ours. */
+    const probe = await browser.newPage();
+    const ownUA = await probe.evaluate(() => navigator.userAgent);
+    await probe.close();
+    browserCtx = await browser.newContext({ userAgent: `${ownUA} ${UA}` });
+    /* Page text is all we read; images, media and fonts are someone else's
+       bandwidth for nothing. */
+    await browserCtx.route("**/*", (route) =>
+      ["image", "media", "font"].includes(route.request().resourceType())
+        ? route.abort()
+        : route.continue(),
+    );
+    return browserCtx;
+  } catch (err) {
+    browserUnavailable = true;
+    console.error(
+      `  browser unavailable (${(err as Error).message.split("\n")[0]}); ` +
+        "install Chromium with `npx playwright-core install chromium` or set CHROMIUM_PATH.",
+    );
+    return null;
+  }
+}
+
+/** Load `url` in the browser and wait for any challenge to clear and the
+    page's text to appear. Returns the page's HTML, or for a text resource
+    (robots.txt) its rendered text. Null only when a bot challenge is still
+    showing at the deadline: a page that renders but stays short is still the
+    page, and is returned as it is. */
+async function browserGet(url: string, asText: boolean): Promise<string | null> {
+  const ctx = await browserContext();
+  if (!ctx) return null;
+  const page = await ctx.newPage();
+  try {
+    const res = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 45_000 });
+    const deadline = Date.now() + CHALLENGE_WAIT_MS;
+    let html = "";
+    while (Date.now() < deadline) {
+      html = await page.content().catch(() => "");
+      if (!looksLikeBotChallenge(html)) {
+        const text = await page.evaluate(() => document.body?.innerText ?? "").catch(() => "");
+        if (asText) {
+          /* A 4xx robots.txt is "none" in a browser too. */
+          if (res && res.status() >= 400 && res.status() < 500) return "";
+          if (!/^\s*</.test(text)) return text;
+        } else if (text.trim().length >= MIN_PAGE_TEXT_CHARS) {
+          return html;
+        }
+      }
+      await page.waitForTimeout(1_500);
+    }
+    if (!asText && html && !looksLikeBotChallenge(html)) {
+      console.error(`  rendered, but only ${visibleTextLength(html)} characters of text: ${url}`);
+      return html;
+    }
+    console.error(`  bot challenge did not clear in the browser: ${url}`);
+    return null;
+  } catch (err) {
+    /* The message's first line, not just the name: "Error" alone hid a
+       certificate failure (net::ERR_CERT_AUTHORITY_INVALID) that made two
+       readable sites look like bot walls. */
+    const { name, message } = err as Error;
+    console.error(`  browser ${name} (${message.split("\n")[0]}): ${url}`);
+    return null;
+  } finally {
+    await page.close().catch(() => {});
+  }
+}
+
+async function closeBrowser(): Promise<void> {
+  await browser?.close().catch(() => {});
+  browser = null;
+  browserCtx = null;
+}
+
+/* Every exit goes through here, so a launched browser is always closed. */
+async function done(code: number): Promise<never> {
+  await closeBrowser();
+  process.exit(code);
+}
+
+/* ---- fetching ----------------------------------------------------------- */
+
+let viaBrowser = 0;
+
+/** A page's HTML: plain fetch first; a bot challenge goes to the browser
+    (unless --browser never). Null, with the reason named, when neither
+    yields the page. */
 async function get(url: string): Promise<string | null> {
+  if (browserMode === "always") {
+    const html = await browserGet(url, false);
+    if (html !== null) viaBrowser++;
+    return html;
+  }
+  let status = 0;
+  let body = "";
   try {
     const res = await fetch(url, {
       headers: { "user-agent": UA, accept: "text/html,application/xhtml+xml" },
       redirect: "follow",
       signal: AbortSignal.timeout(25_000),
     });
-    if (!res.ok) {
-      console.error(`  HTTP ${res.status} ${url}`);
-      return null;
+    status = res.status;
+    body = await res.text();
+    if (res.ok && !looksLikeBotChallenge(body)) {
+      /* A client-rendered shell: its text only exists once its scripts run.
+         Render it; if the browser cannot, the shell is still what we got. */
+      if (browserMode === "never" || !looksClientRendered(body)) return body;
+      console.error(
+        `  only ${visibleTextLength(body)} characters of text, rendering in the browser: ${url}`,
+      );
+      const html = await browserGet(url, false);
+      if (html === null) return body;
+      viaBrowser++;
+      return html;
     }
-    return await res.text();
   } catch (err) {
     /* Degrade honestly: name the failure, never a silent empty result. */
     console.error(`  ${(err as Error).name}: ${url}`);
     return null;
   }
+  if (looksLikeBotChallenge(body)) {
+    if (browserMode === "never") {
+      console.error(`  bot challenge (HTTP ${status}), --browser never: ${url}`);
+      return null;
+    }
+    console.error(`  bot challenge (HTTP ${status}), retrying in the browser: ${url}`);
+    const html = await browserGet(url, false);
+    if (html !== null) viaBrowser++;
+    return html;
+  }
+  console.error(`  HTTP ${status} ${url}`);
+  return null;
 }
 
-/* robots.txt first, and a missing one means no rules — which is the correct
-   reading for a site that never published any, and the only safe one. */
-const robotsTxt = (await get(new URL("/robots.txt", site).toString())) ?? "";
+/* robots.txt first. A 4xx means the site published none (RFC 9309), so there
+   are no rules. A bot challenge in its place goes to the browser like any
+   page, so the policy is read where it can be. Anything still unreadable (a
+   5xx, a failed fetch, a challenge that did not clear) is named, then treated
+   as no rules (see the header). Returns the file's text, or "" for none. */
+async function getRobots(url: string): Promise<string> {
+  const unreadable = (why: string) => {
+    robotsUnreadable = true;
+    console.error(
+      `  WARNING robots.txt unreadable (${why}) at ${url} — its policy is unknown; proceeding with no rules.`,
+    );
+    return "";
+  };
+  const viaBrowserOr = async (why: string) => {
+    if (browserMode === "never") return unreadable(why);
+    const text = await browserGet(url, true);
+    if (text === null) return unreadable(`${why}; the browser could not clear it either`);
+    console.error(`  robots.txt read in the browser (${why})`);
+    return text;
+  };
+  if (browserMode === "always") return viaBrowserOr("--browser always");
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      headers: { "user-agent": UA, accept: "text/plain" },
+      redirect: "follow",
+      signal: AbortSignal.timeout(25_000),
+    });
+  } catch (err) {
+    return viaBrowserOr(`plain fetch failed: ${(err as Error).name}`);
+  }
+  const text = await res.text();
+  if (looksLikeBotChallenge(text)) return viaBrowserOr(`plain fetch got a bot challenge, HTTP ${res.status}`);
+  if (res.status >= 400 && res.status < 500) return "";
+  if (!res.ok) return unreadable(`HTTP ${res.status}`);
+  if (/^\s*</.test(text)) return viaBrowserOr(`plain fetch got an HTML page in its place, HTTP ${res.status}`);
+  return text;
+}
+
+let robotsUnreadable = false;
+
+const robotsTxt = await getRobots(new URL("/robots.txt", site).toString());
 const allowed = (url: string) => isAllowedByRobots(robotsTxt, url);
 
-if (!allowed(site)) {
-  console.error(`robots.txt disallows ${site} — stopping.`);
-  process.exit(1);
+const blocked = blockedAgents(robotsTxt, site);
+if (blocked.length > 0) {
+  console.error(`robots.txt disallows ${site} for ${blocked.join(", ")} — stopping.`);
+  await done(1);
 }
+
+const delaySec = crawlDelaySec(robotsTxt);
+const delayMs = Math.max(MIN_DELAY_MS, (delaySec ?? 0) * 1_000);
 
 console.error(`site: ${site}`);
-const homepage = await get(site);
-if (homepage === null) {
-  console.error("Could not fetch the homepage — stopping.");
-  process.exit(1);
-}
+if (delaySec !== null) console.error(`  honoring Crawl-delay: ${delaySec}s`);
+await sleep(delayMs);
+const homepage =
+  (await get(site)) ??
+  (console.error("Could not fetch the homepage — stopping."), await done(1));
 
 const links = extractLinks(homepage, site);
-const pages = selectPolicyPages(links, site, pageLimit).filter(allowed);
+
+/** Jev's judgement of every offered link. A request that fails is retried
+    once; a link still unjudged fails the run, because fetching the rest would
+    give this candidate a different crawl from everyone else's. */
+async function judgeLinks(): Promise<{ policy: string[]; about: string | null }> {
+  const offered = candidateLinks(links, site!);
+  const questions = buildLinkQuestions();
+  console.error(`  asking Jev about ${offered.length} link(s) as ${linkProvenance(JEV_MODEL_ID)}`);
+  const scored: (ScoredLink & { text: string })[] = [];
+  for (const link of offered) {
+    let verdict = null;
+    for (let attempt = 1; attempt <= 2 && verdict === null; attempt++) {
+      try {
+        const { answers } = await engine!.characterize({ ...buildLinkState(link) }, questions);
+        verdict = readLinkVerdict(answers);
+      } catch (err) {
+        console.error(`  link not judged (attempt ${attempt}, ${(err as Error).message.split("\n")[0]}): ${link.url}`);
+      }
+    }
+    if (verdict === null) {
+      console.error("Jev could not judge every link — stopping, so no candidate gets a partial crawl.");
+      await done(1);
+    }
+    scored.push({ url: link.url, text: link.text, ...verdict! });
+  }
+  const chosen = chooseLinks(scored, DEFAULT_LINK_THRESHOLD, pageLimit);
+  if (outPath) {
+    const rows = scored.map((s) =>
+      JSON.stringify({
+        ...s,
+        chosen: chosen.policy.includes(s.url) ? "policy" : chosen.about === s.url ? "about" : null,
+      }),
+    );
+    writeFileSync(join(dirname(outPath), "links.jsonl"), rows.length ? `${rows.join("\n")}\n` : "");
+  }
+  return chosen;
+}
+
+const chosen =
+  linkMode === "jev" ? await judgeLinks() : { policy: selectPolicyPages(links, site, pageLimit), about: null };
+const selected = chosen.about ? [...chosen.policy, chosen.about] : chosen.policy;
+const pages = selected.filter(allowed);
+for (const url of selected.filter((u) => !allowed(u))) {
+  console.error(`  skipped, robots.txt disallows it for ${blockedAgents(robotsTxt, url).join(", ")}: ${url}`);
+}
 console.error(
-  `  ${links.length} links, ${pages.length} policy page(s) selected (cap ${pageLimit})`,
+  `  ${links.length} links, ${chosen.policy.filter(allowed).length} policy page(s) selected (cap ${pageLimit})` +
+    (linkMode === "jev" ? `, about page: ${chosen.about && allowed(chosen.about) ? chosen.about : "none"}` : ""),
 );
 
 const all: Passage[] = [];
@@ -101,7 +413,7 @@ const all: Passage[] = [];
 for (const p of extractPassages(homepage, site)) all.push(p);
 
 for (const url of pages) {
-  await sleep(1_000);
+  await sleep(delayMs);
   const html = await get(url);
   if (html === null) continue;
   const passages = extractPassages(html, url);
@@ -117,10 +429,17 @@ const lines = passages.map((p) =>
 if (passages.length === 0) {
   console.error(
     `No passages from ${site}. That is a finding about the fetch, not about the ` +
-      `candidate: check whether the site renders its text client-side.`,
+      (robotsUnreadable
+        ? `candidate: robots.txt was unreadable too, so the site is most likely serving a ` +
+          `bot challenge to non-browser clients rather than its pages.`
+        : `candidate: check whether the site renders its text client-side, or serves ` +
+          `a bot challenge to non-browser clients.`),
   );
-  process.exit(1);
+  await done(1);
 }
+
+await closeBrowser();
+if (viaBrowser > 0) console.error(`  ${viaBrowser} page(s) fetched in the browser`);
 
 if (outPath) {
   writeFileSync(outPath, `${lines.join("\n")}\n`);

@@ -43,9 +43,8 @@ export async function SharedBallot() {
   if (races.length === 0 && measures.length === 0) {
     return (
       <p className="text-body text-on-surface-muted">
-        The ballot isn&apos;t published yet — our Balance Audit publishes a race
-        only when every candidate has equal space and equal scrutiny. Check back
-        soon.
+        The ballot isn&apos;t published yet — we publish a race only after every
+        candidate in it has been through the same checks. Check back soon.
       </p>
     );
   }

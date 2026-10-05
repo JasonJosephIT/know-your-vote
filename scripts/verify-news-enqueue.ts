@@ -17,13 +17,19 @@
 
    Run: node scripts/verify-news-enqueue.ts */
 
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import {
   dedupeKey,
   domainFromSourceId,
+  outletSourceRow,
   planAttachments,
+  planSourceAttribution,
   reviewPayloadFor,
   sourceIdFor,
+  UNMATCHED_ARTICLE_POLICY,
 } from "../src/lib/news-enqueue.ts";
+import { urlNorm } from "../src/lib/brief-rows.ts";
 import { matchArticle, type RosterCandidate } from "../src/lib/news-match.ts";
 import { OUTLETS, outletForUrl } from "../src/lib/news-sources.ts";
 import { ManualNewsPayloadSchema } from "../src/types/admin.ts";
@@ -70,9 +76,12 @@ check("a full-name match is tiered 'named'",
 check("the payload carries relation 'named'",
   reviewPayloadFor(named.attachments[0]).relation === "named");
 
-/* A bare shared surname is ambiguous, so §6 attaches it to EVERY candidate the
-   ambiguity admits — never to the most likely one. */
-const surname = plan([article({ title: "Vasquez to hold a town hall" })]);
+/* A shared surname is ambiguous, so §6 attaches it to EVERY candidate the
+   ambiguity admits — never to the most likely one. The fixture carries a
+   title ("Rep. Vasquez") because both settings of news-match.ts
+   SURNAME_ONLY_RULE (a pending founder call) admit that form; which bare
+   surnames attach is verify-news-match.ts's job, not this file's. */
+const surname = plan([article({ title: "Rep. Vasquez to hold a town hall" })]);
 check("an ambiguous surname attaches to both Vasquez candidates",
   surname.attachments.length === 2, JSON.stringify(surname.attachments.map((a) => a.candidateId)));
 check("every ambiguous attachment is tiered 'related'",
@@ -227,8 +236,92 @@ check("different candidates on one url are different keys",
 const shape = (r: ReturnType<typeof plan>) =>
   r.attachments.map((a) => `${a.candidateId}:${a.relation}`).sort().join(",");
 check("planning is deterministic",
-  shape(plan([article({ title: "Vasquez to hold a town hall" })]))
-    === shape(plan([article({ title: "Vasquez to hold a town hall" })])));
+  shape(plan([article({ title: "Rep. Vasquez to hold a town hall" })]))
+    === shape(plan([article({ title: "Rep. Vasquez to hold a town hall" })])));
+
+/* ---- 8. source attribution before approve (migration 0014) ------------- */
+/* 0014's CHECK makes source_id required on candidate_news / election_news. Its
+   header made a precondition of the approve path setting source_id itself, so
+   the CHECK is never what refuses an approval. planSourceAttribution is that
+   decision; the route below only does the reads. */
+
+const signed = OUTLETS.find((o) => o.leanTag !== null)!;
+const unsigned = OUTLETS.find((o) => o.leanTag === null);
+/* The canonical normalisation the route passes — source.url_norm is UNIQUE,
+   so a stand-in here could pass while the real one split a page in two. */
+const attribute = (url: string, given: string | null = null) =>
+  planSourceAttribution(url, given, outletFor, urlNorm, OUTLETS);
+
+check("outletSourceRow writes the outlet's own signed-off lean, type and publisher",
+  JSON.stringify(outletSourceRow(signed)) === JSON.stringify({
+    source_id: sourceIdFor(signed.domain), url: `https://${signed.domain}`, url_norm: signed.domain,
+    publisher: signed.publisher, type: signed.type, lean_tag: signed.leanTag,
+  }), JSON.stringify(outletSourceRow(signed)));
+if (unsigned) {
+  check("an outlet with no signed-off lean has no source row", outletSourceRow(unsigned) === null);
+}
+
+const givenOutlet = attribute("https://example.org/anything", sourceIdFor(signed.domain));
+check("a payload that names a source keeps it",
+  givenOutlet.kind === "given" && givenOutlet.sourceId === sourceIdFor(signed.domain), JSON.stringify(givenOutlet));
+check("a named outlet source carries the row to write if it is missing",
+  givenOutlet.kind === "given" && givenOutlet.outletRow?.source_id === sourceIdFor(signed.domain));
+const givenOther = attribute("https://www.wlrn.org/x", "src_gov_broward_early_voting_2026");
+check("a named non-outlet source is looked up, never written",
+  givenOther.kind === "given" && givenOther.outletRow === null, JSON.stringify(givenOther));
+check("a blank source id counts as none",
+  attribute(`https://${signed.domain}/2026/10/04/story`, "   ").kind === "outlet");
+
+const fromOutlet = attribute(`https://www.${signed.domain}/2026/10/04/story`);
+check("a URL on a signed-off outlet is attributed to that outlet",
+  fromOutlet.kind === "outlet" && fromOutlet.sourceId === sourceIdFor(signed.domain), JSON.stringify(fromOutlet));
+check("the outlet attribution is the same id a swept article carries",
+  fromOutlet.kind === "outlet"
+    && fromOutlet.sourceId === reviewPayloadFor(plan([article({
+      title: "Maria Elena Vasquez files", url: `https://www.${signed.domain}/s`,
+    })]).attachments[0]).source_id);
+if (unsigned) {
+  const u = attribute(`https://${unsigned.domain}/2026/10/04/story`);
+  check("a URL on an outlet whose lean is not signed off stops, and is not resolved to a page row",
+    u.kind === "unsigned" && u.domain === unsigned.domain, JSON.stringify(u));
+}
+const gov = attribute("https://www.votehillsborough.gov/291/2026-General-Election/");
+check("a page off the outlet list is looked up by its url_norm",
+  gov.kind === "page" && gov.urlNorm === "www.votehillsborough.gov/291/2026-General-Election", JSON.stringify(gov));
+check("an unparseable URL resolves to none", attribute("not a url").kind === "none");
+
+/* The route: source resolved BEFORE the insert, and the insert uses it. A
+   static read, because the route needs a database to run; this pins the order
+   that makes 0014 safe to apply. */
+const route = readFileSync(
+  resolve(import.meta.dirname, "../src/app/api/admin/review/[id]/decision/route.ts"), "utf8",
+).replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/[^\n]*/g, "$1");
+const resolveAt = route.indexOf("await resolveSource(service, plan.row)");
+const insertAt = route.indexOf('.from("news_item")');
+check("the approve path resolves a source before inserting news",
+  resolveAt !== -1 && insertAt !== -1 && resolveAt < insertAt, `resolve@${resolveAt} insert@${insertAt}`);
+check("the news insert writes the resolved source_id",
+  /\.insert\(\{\s*\.\.\.plan\.row,\s*source_id:\s*source\.sourceId\s*\}\)/.test(route));
+check("an unresolved source fails closed before any insert",
+  /if \(!source\.ok\)\s*\{\s*return failClosed\(/.test(route));
+check("the route uses planSourceAttribution with the canonical urlNorm",
+  /planSourceAttribution\(\s*row\.url,\s*row\.source_id,[\s\S]*?urlNorm,\s*OUTLETS\s*\)/.test(route));
+check("describeNewsInsertError names 0014's constraint instead of blaming 0005",
+  route.includes("news_item_agent_source_check") && route.includes("news_item_item_type_check"));
+
+/* ---- 9. the unmatched-article policy (pending founder call) ----------- */
+/* Only "drop" is built. The runner must refuse any other value BEFORE it reads
+   stdin or the database: a switch that silently did nothing would read as "no
+   policy news this week". */
+check("UNMATCHED_ARTICLE_POLICY is one of the two declared values",
+  UNMATCHED_ARTICLE_POLICY === "drop" || UNMATCHED_ARTICLE_POLICY === "policy_inlet",
+  String(UNMATCHED_ARTICLE_POLICY));
+const runner = readFileSync(resolve(import.meta.dirname, "news-enqueue.ts"), "utf8")
+  .replace(/\/\*[\s\S]*?\*\//g, "");
+const guardAt = runner.search(/if \(\(UNMATCHED_ARTICLE_POLICY as string\) !== "drop"\)\s*\{[\s\S]*?process\.exit\(2\)/);
+const stdinAt = runner.indexOf("process.stdin");
+check("the runner refuses an unbuilt unmatched-article policy before reading anything",
+  guardAt !== -1 && stdinAt !== -1 && guardAt < stdinAt, `guard@${guardAt} stdin@${stdinAt}`);
 
 if (failures > 0) {
   console.error(`\nverify-news-enqueue: ${failures} failure(s)`);

@@ -1,0 +1,47 @@
+{
+  "race_id": "FL-25-general",
+  "retrieved_at": "2026-09-29T11:43:34Z",
+  "withheld_from": "../withheld-2026-09-30.json",
+  "spine": [
+    {
+      "id": "B1",
+      "title": "Economy, inflation, and jobs",
+      "description": null
+    },
+    {
+      "id": "B2",
+      "title": "Healthcare access and costs",
+      "description": null
+    },
+    {
+      "id": "B3",
+      "title": "Immigration and border enforcement",
+      "description": null
+    },
+    {
+      "id": "B4",
+      "title": "Social Security and Medicare",
+      "description": null
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "FL-DOE-88911",
+      "official_site": "https://jaredforflorida.com/",
+      "run": "FL-DOE-88911/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-DOE-89801",
+      "official_site": "https://www.scottsingerusa.com/",
+      "run": "FL-DOE-89801/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-DOE-92357",
+      "official_site": null,
+      "run": null,
+      "no_run_reason": "no official_site (spine-roster-2026-10-03.json); founder decision D3: record silence"
+    }
+  ]
+}

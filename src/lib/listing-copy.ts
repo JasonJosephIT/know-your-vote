@@ -95,13 +95,47 @@ export interface ListingCopy {
   writeInNote: string | null;
 }
 
-export const LISTING_INTRO_PRINTED =
-  "These are the names printed on the ballot for this race, from the Florida Division of Elections and the county Supervisor of Elections. The full briefs are still in review.";
+/* Founder decision 4 (docs/general-election/launch-handoff-2026-10-04.md
+   §3): is "listed, no brief" the Election Day state for the 17 races where
+   no candidate's own site gave us a position we could quote?
+
+   RECOMMENDED (pending founder confirmation): yes. The evidence, race by
+   race, is in docs/general-election/listed-races-2026-10-04.md: 10 of the
+   17 are not on the November ballot at all (5 decided in August, 5
+   unopposed), and in the other 7 a brief would read "No stated position
+   found" in every cell.
+
+   Under that call the tier's first wording turns false: "still in review"
+   promises a brief that is not coming. So with this set, the intros drop
+   that sentence, and a listed race's cards say it has no brief, under
+   what rule, and that this is no judgment of the candidates
+   (NO_BRIEF_CARD_LINE, through listingCardLine below). A published race
+   shown as a roster keeps the in-review card line either way.
+
+   TO FLIP: set this to false. The intros say "still in review" again and
+   every card says "Brief in review", which is right only while briefs for
+   these races are actually being written (for example, if the founder
+   allows a second source, decision 6). This one constant is the whole
+   switch. Every export keeps its HEAD name and BRIEF_IN_REVIEW_LINE still
+   starts "Brief in review"; scripts/verify-listing.ts checks both
+   positions of the switch. */
+export const LISTED_IS_FINAL = true;
+
+const INTRO_PRINTED =
+  "These are the names printed on the ballot for this race, from the Florida Division of Elections and the county Supervisor of Elections.";
+
+export const LISTING_INTRO_PRINTED = LISTED_IS_FINAL
+  ? INTRO_PRINTED
+  : `${INTRO_PRINTED} The full briefs are still in review.`;
 
 /* A decided or unopposed seat has no printed names to speak of, so the
    printed-ballot intro would contradict the status line right above it. */
-export const LISTING_INTRO_NOT_PRINTED =
-  "The name below is from the Florida Division of Elections and the county Supervisor of Elections. The full brief is still in review.";
+const INTRO_NOT_PRINTED =
+  "The name below is from the Florida Division of Elections and the county Supervisor of Elections.";
+
+export const LISTING_INTRO_NOT_PRINTED = LISTED_IS_FINAL
+  ? INTRO_NOT_PRINTED
+  : `${INTRO_NOT_PRINTED} The full brief is still in review.`;
 
 /* Nothing places a voter inside a commission or school-board district yet
    (design brief: no crosswalk built). Some county seats are countywide and
@@ -129,6 +163,48 @@ export function listingCopy(input: ListingCopyInput): ListingCopy {
   };
 }
 
-/* The line every listed candidate card carries, identical for everyone. */
+/* The card line for a brief that is still coming: a listed race while its
+   briefs are being written (LISTED_IS_FINAL = false), and a PUBLISHED race
+   whose brief is briefly unreadable (src/lib/listing.ts: a published race
+   whose brief fails the audit re-check renders this roster, as it does for
+   the minutes of a rebuild, refresh-plan-2026-10.md Path B1). It names the
+   one source a brief quotes, and never says "published" about the roster.
+
+   It used to promise "what a candidate says, has done, and what's verified"
+   with "equal space": no published brief carries a record or a fact-check,
+   and the Balance Audit's word_count gate runs at 150, so space is not
+   equalized (the trust-copy rewrite in src/app/layout.tsx, 2026-10-04,
+   drops the same two promises). "The same rules" is what holds. */
 export const BRIEF_IN_REVIEW_LINE =
-  "Brief in review — we publish what a candidate says, has done, and what's verified only after every candidate in the race has equal space and equal scrutiny.";
+  "Brief in review — we publish what candidates state on their own campaign websites only after every candidate in the race has been held to the same rules.";
+
+/* The card line for a listed race when listed is the Election Day state.
+   It has to be true in all 17 races (listed-races-2026-10-04.md §3): no
+   site, a site we could not read, a site whose commitments fall outside
+   the 25 issues we cover (Orange Clerk has no issue at all, so finding a
+   quotable position there will never give it a brief), or a passage
+   withheld as a past record. So it states the rule as a condition the race
+   has not met, and promises no brief later. The last sentence is there
+   because an empty card can read as "this candidate has no positions". */
+export const NO_BRIEF_CARD_LINE =
+  "No brief for this race. We write a brief only when a candidate's own campaign website states a position we can quote on an issue we cover, and we have not found one here. That is about our sources, not a judgment of the candidates.";
+
+/* The line every candidate card on a roster carries, identical for everyone
+   in the race. `status` is RaceListing["status"]: a published race is on
+   the roster only while its brief is unreadable, so it keeps the "in
+   review" line whatever LISTED_IS_FINAL says. RaceListing.tsx and
+   CandidateListing.tsx pass listing.status here, src/lib/races.ts takes
+   LISTED_RACE_LABEL below, and scripts/verify-listing.ts pins the switch
+   (listed-races-2026-10-04.md §2). */
+export function listingCardLine(status: "listed" | "published"): string {
+  return LISTED_IS_FINAL && status === "listed"
+    ? NO_BRIEF_CARD_LINE
+    : BRIEF_IN_REVIEW_LINE;
+}
+
+/* The caption a race card carries on the landing page, Your races and the
+   county list for a listed race. src/lib/races.ts raceStatusLabel reads
+   it, so that caption follows the same switch as the roster cards. */
+export const LISTED_RACE_LABEL = LISTED_IS_FINAL
+  ? "Names on the ballot · no brief"
+  : "Names on the ballot · brief in review";

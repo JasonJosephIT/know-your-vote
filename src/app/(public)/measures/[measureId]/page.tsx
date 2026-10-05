@@ -1,10 +1,22 @@
 import Link from "next/link";
-import { MeasureResourceLadder } from "@/components/features/MeasureResourceLadder";
+import {
+  MeasureNeutralBlock,
+  MeasureResourceLadder,
+} from "@/components/features/MeasureResourceLadder";
 import { MeasureThreshold } from "@/components/features/MeasureThreshold";
 import { Card } from "@/components/ui/Card";
 import { getActiveMeasures, getMeasureListing } from "@/lib/measures";
+import { heldNote } from "@/lib/measure-held-copy";
 
 export const revalidate = 3600;
+
+function formatNoteDate(iso: string) {
+  return new Date(`${iso}T00:00:00`).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
 
 /* Prerender every visible measure — listed or published (0033).
    getActiveMeasures reads through RLS, so draft and in-review ones are absent
@@ -66,7 +78,8 @@ export default async function MeasurePage({
      lopsided. Both get the ballot text and nothing else: the verbatim summary
      is the Division of Elections' own wording, so it needs no audit, while
      the resource list waits for both sides. */
-  const { measure, brief } = listing;
+  const { measure, brief, neutral = [] } = listing;
+  const note = heldNote(measure.measure_id);
 
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-5 px-5 py-8">
@@ -110,14 +123,31 @@ export default async function MeasurePage({
         /* In place of the ladder, never beside an empty one: two blank
            YES/NO columns would read as "nobody has an argument", which is
            a claim we have not checked. */
-        <Card className="flex flex-col gap-2">
-          <h2 className="text-h3">What people say for and against it</h2>
-          <p className="text-body-sm text-on-surface-muted">
-            Resources on both sides are being collected. We publish them only
-            when both sides are represented &mdash; until then, this is the
-            official ballot text and nothing else.
-          </p>
-        </Card>
+        <>
+          <MeasureNeutralBlock items={neutral} />
+          <Card className="flex flex-col gap-2">
+            <h2 className="text-h3">What people say for and against it</h2>
+            {note ? (
+              <>
+                {note.paragraphs.map((p) => (
+                  <p key={p} className="text-body-sm text-on-surface-muted">
+                    {p}
+                  </p>
+                ))}
+                <p className="text-caption text-on-surface-muted">
+                  We look for new statements every week. This note was last
+                  updated {formatNoteDate(note.updated)}.
+                </p>
+              </>
+            ) : (
+              <p className="text-body-sm text-on-surface-muted">
+                Resources on both sides are being collected. We publish them only
+                when both sides are represented &mdash; until then, this is the
+                official ballot text and nothing else.
+              </p>
+            )}
+          </Card>
+        </>
       )}
 
       <footer className="flex flex-wrap gap-4 text-caption text-on-surface-muted">
@@ -127,7 +157,9 @@ export default async function MeasurePage({
         <span>
           {brief
             ? "We collect what each side says and order it by the kind of source. We write none of it. You decide."
-            : "We quote the ballot as it is printed. You decide."}
+            : neutral.length > 0
+              ? "We collect what others publish and order it by the kind of source. We write none of it. You decide."
+              : "We quote the ballot as it is printed. You decide."}
         </span>
       </footer>
     </main>

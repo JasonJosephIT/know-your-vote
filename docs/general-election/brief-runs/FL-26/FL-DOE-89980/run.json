@@ -1,0 +1,3461 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://locklinforcongress.com",
+  "created_at": "2026-09-30T01:58:36.798Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
+  "question_ids": [
+    "q_states_policy",
+    "q_own_commitment",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 78,
+    "asked": 78,
+    "states_policy": 19,
+    "with_issue": 12,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "eda3d427",
+      "url": "https://locklinforcongress.com/",
+      "heading": "Fuel the anti-corruption fight.",
+      "text": "If you’ve saved your payment information with ActBlue Express, your donation to help elect Nicole Locklin for U.S. Congress will go through immediately.",
+      "verdict": {
+        "commitment": 0.05,
+        "own_commitment": 0.11,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.05,
+          "B8": 0.02,
+          "KYV1": 0.07,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "96c575d5",
+      "url": "https://locklinforcongress.com/",
+      "heading": "For THe People",
+      "text": "Choose a world in which our money funds schools instead of cruelty, healthcare instead of corruption, and opportunity instead of war. Nicole Locklin is running for Congress to make that future real, today.",
+      "verdict": {
+        "commitment": 0.91,
+        "own_commitment": 0.77,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.79,
+          "A7": 0.02,
+          "B1": 0.12,
+          "B2": 0.5,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.08,
+          "B8": 0.03,
+          "KYV1": 0.08,
+          "KYV10": 0.13,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "7bb9b75c",
+      "url": "https://locklinforcongress.com/issues-affordability",
+      "heading": "TIME TO HIT THE Brakes!",
+      "text": "This is a dense topic so let me give you a quick summary first: - Prices are being pushed up while the economy is showing signs of slowing down. - War is raising energy costs. - Tariffs raise the price of goods. - A $40 trillion national debt is making borrowing more expensive. - Hiring is weakening. - The stock market depends on enormous expectations for AI. If prices keep rising while jobs and economic growth weaken, we risk stagflation , one of the hardest economic problems to fix. ‍",
+      "verdict": {
+        "commitment": 0.05,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.04,
+          "A3": 0.02,
+          "A4": 0.09,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.8,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.01,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.09,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c1f64042",
+      "url": "https://locklinforcongress.com/issues-affordability",
+      "heading": "Affordability crisis",
+      "text": "The war with Iran has disrupted global energy markets. Higher oil prices don't just mean more expensive gas. They increase the cost of shipping, farming, flying, manufacturing, and delivering almost everything we buy. Using our Strategic Petroleum Reserve can temporarily help, but it also leaves us with less emergency oil for the next crisis. At the same time, America's national debt has crossed $40 trillion. The government finances that debt by selling bonds. Think of the bond yield as the interest rate America has to pay to borrow money. When yields rise, borrowing gets more expensive. When they fall, borrowing gets cheaper.",
+      "verdict": {
+        "commitment": 0.08,
+        "own_commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.11,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.46,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.04,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.3,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "42029853",
+      "url": "https://locklinforcongress.com/issues-affordability",
+      "heading": "Affordability crisis",
+      "text": "‍ Higher Treasury yields can push up mortgages, car loans, business loans, and other interest rates. And America has to compete for investors. Japan, for example, has historically been a major buyer of U.S. debt. As Japanese bonds offer better returns at home, investors have less reason to send that money to Washington.There are also warning signs in the job market. Recent job reports have repeatedly been revised downward , meaning the economy was creating fewer jobs than we originally thought. Hiring is slowing even while families continue dealing with high prices. Meanwhile, much of the stock market's growth depends on huge expectations for artificial intelligence.",
+      "verdict": {
+        "commitment": 0.04,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.19,
+          "A3": 0.02,
+          "A4": 0.04,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.52,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8b5ab380",
+      "url": "https://locklinforcongress.com/issues-affordability",
+      "heading": "Affordability crisis",
+      "text": "AI could create tremendous value, but companies are spending and borrowing enormous amounts based on profits they expect in the future. If those expectations prove too optimistic, falling stock prices could hurt investment, retirement savings, hiring, and consumer confidence. ‍ That is the stagflation risk: prices remain high because of energy, tariffs, debt, and other costs while job creation and economic growth weaken. Families get squeezed from both directions. ‍ ‍",
+      "verdict": {
+        "commitment": 0.04,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.04,
+          "A3": 0.02,
+          "A4": 0.06,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.85,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.04,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.08,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "30dba4f7",
+      "url": "https://locklinforcongress.com/issues-affordability",
+      "heading": "What do we do?",
+      "text": "We need to stop adding costs to the economy. There a many ways for us to turn this around, but it all starts with HITTING THE BRAKES. After we remove Trump's puppet, Mario Díaz-Balart, we can start doing the obvious things: 1. End wars that disrupt energy markets. 2. Reduce unnecessary tariffs. 3. Bring deficits and debt under control without cutting healthcare and basic services. 4. Build more housing. 5. Invest in sustainable energy. 6. Spend our tax dollars right here in the USA. Instead, our representative, Mario Díaz-Balart makes the wrong choice, every. single. time. We should also recognize that legal immigration as an economic strength.",
+      "verdict": {
+        "commitment": 0.98,
+        "own_commitment": 0.85,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "B1",
+          "B3",
+          "KYV2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.89,
+          "A3": 0.03,
+          "A4": 0.63,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.95,
+          "B2": 0.8,
+          "B3": 0.89,
+          "B4": 0.21,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.79,
+          "KYV1": 0.05,
+          "KYV10": 0.03,
+          "KYV2": 0.87,
+          "KYV3": 0.47,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.05,
+          "KYV7": 0.14,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "89d7e517",
+      "url": "https://locklinforcongress.com/issues-affordability",
+      "heading": "What do we do?",
+      "text": "Immigrants expand our workforce, start businesses, fill critical jobs, pay taxes, and create demand throughout the economy. Cutting immigration while our population ages makes it harder for the economy to grow and can make worker shortages, and contributes to rising prices. Instead of asking working families to carry the cost of our debt, require billionaires and large corporations to contribute more. The answer to an affordability crisis is lowering unnecessary costs while building a larger, stronger, more productive economy. When we remove Mario Díaz-Balart on November 3rd, I will get to work fixing his mess.",
+      "verdict": {
+        "commitment": 0.97,
+        "own_commitment": 0.88,
+        "states_policy": true,
+        "issues": [
+          "B1",
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.11,
+          "A3": 0.03,
+          "A4": 0.83,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.98,
+          "B2": 0.03,
+          "B3": 0.94,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ab509239",
+      "url": "https://locklinforcongress.com/issues-immigration",
+      "heading": "ABOLISH I.C.E.",
+      "text": "America is not defined by ancestry. America is defined by a rulebook. That rulebook is the United States Constitution . It exists for one reason: to restrain power when government takes liberty away from THE PEOPLE. When that power is not restrained by law, it can be abused. Many families in this district understand that better than most. People here came from Cuba. From Colombia. From Venezuela. From Nicaragua. Many came because they saw what happens when governments stop following laws. They came to a country that promised something better. That promise is the United States Constitution . The rules are clear. A promise has been made. The Constitution guarantees due process.",
+      "verdict": {
+        "commitment": 0.88,
+        "own_commitment": 0.61,
+        "states_policy": false,
+        "issues": [
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.93,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.13,
+          "B8": 0.02,
+          "KYV1": 0.79,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "21d4ee0d",
+      "url": "https://locklinforcongress.com/issues-immigration",
+      "heading": "ABOLISH I.C.E.",
+      "text": "It requires the government to follow fair legal procedures before it detains or removes someone from this country. Courts have long recognized that these protections apply to all persons inside the United States , not only citizens. That principle matters because the power of government is enormous. Actually take a moment to imagine this. Imagine being accused - wrongly - of not belonging here. Imagine being taken away from your family and placed in detention before you even have the chance to prove who you are. If that happened to you, would you want the protection of the Constitution long enough to make your case?",
+      "verdict": {
+        "commitment": 0.82,
+        "own_commitment": 0.6,
+        "states_policy": false,
+        "issues": [
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.97,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.24,
+          "B8": 0.02,
+          "KYV1": 0.51,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "efc7b4d5",
+      "url": "https://locklinforcongress.com/issues-immigration",
+      "heading": "ABOLISH I.C.E.",
+      "text": "Should the government be able to send you away first and ask questions later? That is not a theoretical question. Across this country and my district, families, including American families, have already experienced the consequences when enforcement ignores the rulebook. Public safety matters. Genuine threats should be taken seriously. But here in America, we are the good guys! We must treat people fairly and humanely at all times . The rulebook matters because power, once unchecked, can lead to tyranny. The Constitution is not a suggestion, it is the promise that power will always answer to the law.",
+      "verdict": {
+        "commitment": 0.92,
+        "own_commitment": 0.64,
+        "states_policy": false,
+        "issues": [
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.98,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.2,
+          "B8": 0.02,
+          "KYV1": 0.81,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5bc0768f",
+      "url": "https://locklinforcongress.com/issues-immigration",
+      "heading": "ABOLISH I.C.E.",
+      "text": "The Constitution says that in America, every person deserves the chance to be heard before their freedoms are taken away . If a system repeatedly violates constitutional protections and harms communities, it is our duty to see that it STOPS.",
+      "verdict": {
+        "commitment": 0.97,
+        "own_commitment": 0.82,
+        "states_policy": false,
+        "issues": [
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.97,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.18,
+          "B8": 0.02,
+          "KYV1": 0.46,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e54fcbaf",
+      "url": "https://locklinforcongress.com/issues-immigration",
+      "heading": "FL26 PSA: AlLIGATOR ALCATRAZ",
+      "text": "Here in Florida's 26th district, they decided to build a detention center, “Alligator Alcatraz”, in the heart of one of the most fragile ecosystems in America: the Everglades. The Everglades are not just a landscape. They are the source of drinking water for millions of Floridians. They are home to rare wildlife and ecosystems that exist nowhere else on earth. People detained at “Alligator Alcatraz” describe overflowing toilets near sleeping areas, constant lighting, insects, poor food and water, lack of privacy, inadequate medical care, and the use of a tiny punishment cage known as “the box.” These are very serious allegations about how our government is treating people in its custody.",
+      "verdict": {
+        "commitment": 0.2,
+        "own_commitment": 0.06,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.15,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.16,
+          "B3": 0.84,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.79,
+          "B8": 0.17,
+          "KYV1": 0.19,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.48,
+          "KYV4": 0.02,
+          "KYV5": 0.26,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4443618e",
+      "url": "https://locklinforcongress.com/issues-immigration",
+      "heading": "FL26 PSA: AlLIGATOR ALCATRAZ",
+      "text": "This matters more because I.C.E. has documented case of detaining U.S. citizens. More than $406M was pulled from the state of Florida's emergency response fund since August 2025. This is money that would otherwise go toward disaster preparedness/relief. Florida has sustained damage from a major hurricane (Category 3+) in 2022, 2023, and 2024, but caught a break in 2025. ‍ Thank you for your attention to this matter.",
+      "verdict": {
+        "commitment": 0.13,
+        "own_commitment": 0.06,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.21,
+          "B2": 0.02,
+          "B3": 0.73,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.16,
+          "B8": 0.07,
+          "KYV1": 0.25,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.56,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "82c48ddb",
+      "url": "https://locklinforcongress.com/issues-healthcare",
+      "heading": "Your Cart",
+      "text": "We already pay enough for universal healthcare!",
+      "verdict": {
+        "commitment": 0.67,
+        "own_commitment": 0.24,
+        "states_policy": false,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.93,
+          "B3": 0.02,
+          "B4": 0.09,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "09cc2ed2",
+      "url": "https://locklinforcongress.com/issues-healthcare",
+      "heading": "We are getting robbed.",
+      "text": "Americans SPEND MORE on healthcare than citizens of any peer nation but GET WORSE coverage. Nicole wants to fix that. Díaz-Balart voted for us to get EVEN LESS.",
+      "verdict": {
+        "commitment": 0.81,
+        "own_commitment": 0.34,
+        "states_policy": false,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.05,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.97,
+          "B3": 0.02,
+          "B4": 0.09,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a68796f9",
+      "url": "https://locklinforcongress.com/issues-healthcare",
+      "heading": "We are getting robbed.",
+      "text": "U.S. ranking among peer nations in the Commonwealth Fund’s 2024 comparison.",
+      "verdict": {
+        "commitment": 0.08,
+        "own_commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.76,
+          "B3": 0.02,
+          "B4": 0.05,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "1294d335",
+      "url": "https://locklinforcongress.com/issues-healthcare",
+      "heading": "Cost is not the excuse.",
+      "text": "We pay more than other wealthy countries and get less.",
+      "verdict": {
+        "commitment": 0.24,
+        "own_commitment": 0.09,
+        "states_policy": false,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.94,
+          "B3": 0.02,
+          "B4": 0.07,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "84bf95cb",
+      "url": "https://locklinforcongress.com/issues-healthcare",
+      "heading": "Universal healthcare.",
+      "text": "Nicole supports the fastest responsible path to guaranteed care for every American: Medicare for All, a strong public option, Medicare buy-in, or any model that gets us to universal coverage.",
+      "verdict": {
+        "commitment": 0.98,
+        "own_commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.97,
+          "B3": 0.02,
+          "B4": 0.72,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "97d0090b",
+      "url": "https://locklinforcongress.com/issues-healthcare",
+      "heading": "Universal healthcare.",
+      "text": "No more medical bankruptcy (67% of filings)",
+      "verdict": {
+        "commitment": 0.9,
+        "own_commitment": 0.73,
+        "states_policy": false,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.96,
+          "B3": 0.02,
+          "B4": 0.04,
+          "B5": 0.02,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "31077c1a",
+      "url": "https://locklinforcongress.com/issues-healthcare",
+      "heading": "Corporate greed is the business model.",
+      "text": "Private insurers, drug companies, billing vendors, and middlemen are taking their cut. A single-payer system cuts out much of that waste, gives the public more bargaining power, and replaces corporate gatekeeping with one guarantee: care when you need it.",
+      "verdict": {
+        "commitment": 0.95,
+        "own_commitment": 0.51,
+        "states_policy": false,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.98,
+          "B3": 0.02,
+          "B4": 0.09,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "291e4cb9",
+      "url": "https://locklinforcongress.com/issues-healthcare",
+      "heading": "Corporate greed is the business model.",
+      "text": "Universal healthcare saves Americans money by cutting out the corruption.",
+      "verdict": {
+        "commitment": 0.85,
+        "own_commitment": 0.34,
+        "states_policy": false,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.13,
+          "B2": 0.97,
+          "B3": 0.02,
+          "B4": 0.06,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "f259c8e4",
+      "url": "https://locklinforcongress.com/issues-healthcare",
+      "heading": "Nicole Locklin",
+      "text": "Universal healthcare. Eliminates costs. Peace of mind. More protection for families.",
+      "verdict": {
+        "commitment": 0.95,
+        "own_commitment": 0.84,
+        "states_policy": false,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.08,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.98,
+          "B3": 0.02,
+          "B4": 0.05,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "81938b31",
+      "url": "https://locklinforcongress.com/issues-healthcare",
+      "heading": "Mario Díaz-Balart",
+      "text": "Voted against the ACA. Voted for repeal. Backed legislation CBO said would leave 23 million more people uninsured by 2026.",
+      "verdict": {
+        "commitment": 0.85,
+        "own_commitment": 0.09,
+        "states_policy": false,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.97,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "476bb18f",
+      "url": "https://locklinforcongress.com/issues-healthcare",
+      "heading": "Healthcare should be guaranteed.",
+      "text": "Nicole will fight for universal healthcare. Díaz-Balart has fought against the protections people already have.",
+      "verdict": {
+        "commitment": 0.98,
+        "own_commitment": 0.94,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.97,
+          "B3": 0.02,
+          "B4": 0.05,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "9c2973bb",
+      "url": "https://locklinforcongress.com/issues-healthcare",
+      "heading": "Healthcare should be guaranteed.",
+      "text": "Sources: CMS National Health Expenditures reported $5.3T in U.S. health spending and $15,474 per person in 2024; Commonwealth Fund ranked the U.S. last overall among peer nations in 2024; CBO estimated the 2017 ACA repeal bill would leave 23 million more people uninsured by 2026.",
+      "verdict": {
+        "commitment": 0.93,
+        "own_commitment": 0.54,
+        "states_policy": false,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.96,
+          "B3": 0.02,
+          "B4": 0.07,
+          "B5": 0.02,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "98159306",
+      "url": "https://locklinforcongress.com/issues-social-security",
+      "heading": "Commitment to Seniors and caregivers",
+      "text": "Social Security is not a handout. It is money Americans earned and paid into throughout their working lives. My first promise is that I will never vote to cut Social Security benefits, raise the retirement age, privatize the program, or reduce cost-of-living adjustments. Protecting Social Security also means making sure it will be there for future generations. Congress has waited too long to act. I support asking wealthy Americans to pay Social Security taxes on more of their income, just as working families already do. That would strengthen the program without cutting earned benefits.",
+      "verdict": {
+        "commitment": 0.99,
+        "own_commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "B4"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.07,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.86,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.01,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "48d8f2a2",
+      "url": "https://locklinforcongress.com/issues-social-security",
+      "heading": "Commitment to Seniors and caregivers",
+      "text": "I will also fight for a cost-of-living adjustment that reflects what seniors actually pay for, especially housing, health care, prescriptions, food, insurance, and utilities. In Congress, I will work to: • Protect every dollar of earned benefits • Oppose raising the retirement age • Oppose privatization • Require high-income Americans to contribute on more of their earnings • Improve benefits for low-income seniors and widows • Adopt a more accurate cost-of-living formula for seniors • Protect Social Security data and personal information • Fund Social Security offices so people can receive timely, in-person help",
+      "verdict": {
+        "commitment": 0.99,
+        "own_commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "B4"
+        ],
+        "scores": {
+          "A1": 0.11,
+          "A2": 0.43,
+          "A3": 0.04,
+          "A4": 0.18,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.2,
+          "B2": 0.56,
+          "B3": 0.01,
+          "B4": 0.9,
+          "B5": 0.02,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.01,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.18,
+          "KYV3": 0.01,
+          "KYV4": 0.01,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "70ee2368",
+      "url": "https://locklinforcongress.com/issues-social-security",
+      "heading": "Supporting Family Caregivers",
+      "text": "Family caregivers hold our health-care system together. They help loved ones bathe, eat, travel to medical appointments, manage prescriptions, and remain safely at home. Too often, caregivers spend their own money and reduce their work hours without receiving meaningful assistance. This is personal to me. When my brother experienced serious heart problems, I saw how quickly a medical crisis affects an entire family. Caregiving is an act of love, but love should not require someone to sacrifice their own financial security. One of my first actions in Congress will be to support the bipartisan Credit for Caring Act.",
+      "verdict": {
+        "commitment": 0.98,
+        "own_commitment": 0.97,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.21,
+          "B2": 0.3,
+          "B3": 0.02,
+          "B4": 0.11,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "66ef2a05",
+      "url": "https://locklinforcongress.com/issues-social-security",
+      "heading": "Supporting Family Caregivers",
+      "text": "It would provide eligible working family caregivers with a federal tax credit of up to $5,000 for expenses such as home care, transportation, medical supplies, respite care, and home modifications.",
+      "verdict": {
+        "commitment": 0.95,
+        "own_commitment": 0.89,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.04,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.01,
+          "B1": 0.15,
+          "B2": 0.54,
+          "B3": 0.02,
+          "B4": 0.1,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.01,
+          "B8": 0.01,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "59f12249",
+      "url": "https://locklinforcongress.com/issues-social-security",
+      "heading": "Supporting Family Caregivers",
+      "text": "I will also support: • Paid family and medical leave • Social Security credits for people who leave or reduce paid work to provide care • More respite-care and adult day-care funding • Easier access to home- and community-based care • Better training and assistance for caregivers navigating federal programs • Strong funding for Meals on Wheels and the Older Americans Act • Protection of Medicaid-funded long-term care Whenever it is safe and appropriate, seniors should be able to remain in their own homes instead of being forced into institutional care. Supporting family caregivers is one of the most effective ways to make that possible.",
+      "verdict": {
+        "commitment": 0.99,
+        "own_commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.07,
+          "B2": 0.65,
+          "B3": 0.02,
+          "B4": 0.68,
+          "B5": 0.02,
+          "B6": 0.01,
+          "B7": 0.01,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.04,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "2c6ade18",
+      "url": "https://locklinforcongress.com/issues-social-security",
+      "heading": "What I Will Do in My First Year",
+      "text": "During my first year in Congress, I will: 1. Cosponsor the Credit for Caring Act 2. Support Social Security legislation that protects benefits and requires high-income Americans to contribute more 3. Oppose any increase in the retirement age 4. Fight for adequate staffing and service at the Social Security Administration 5. Support Social Security caregiving credits 6. Protect Medicaid and home-based care from cuts 7. Establish bilingual senior and caregiver constituent services throughout FL-26 8. Hold regular roundtables with seniors and caregivers to track whether federal programs are actually working. I will not make promises that one member of Congress cannot deliver alone.",
+      "verdict": {
+        "commitment": 0.99,
+        "own_commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "B4"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.07,
+          "B2": 0.84,
+          "B3": 0.02,
+          "B4": 0.89,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8481a8a1",
+      "url": "https://locklinforcongress.com/issues-social-security",
+      "heading": "What I Will Do in My First Year",
+      "text": "I will make clear commitments about the bills I will support, the cuts I will oppose, and the work I will do to build bipartisan support. Seniors deserve security, caregivers deserve support, and every American deserves to know that Social Security will be there when they need it.",
+      "verdict": {
+        "commitment": 0.96,
+        "own_commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "B4"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.88,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "01fd398b",
+      "url": "https://locklinforcongress.com/issues-palestine",
+      "heading": "EMPATHIZE FOR THE PEOPLE",
+      "text": "What is happening to Palestinians is not something the United States should be explaining away, minimizing, or funding. Our campaign is not afraid to condemn the horrific actions of October 7th and also the subsequent genocide. We do not support killing civilians anywhere, by anyone, for any reason. An act of terrorism is not a pardon for future crimes against humanity. We will always fight on the side of preserving life and liberty, and we believe it is important to hold people accountable for their actions, especially when it leads to the death of civilians.",
+      "verdict": {
+        "commitment": 0.97,
+        "own_commitment": 0.91,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.01,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.01,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.05,
+          "B8": 0.01,
+          "KYV1": 0.06,
+          "KYV10": 0.01,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.01
+        }
+      }
+    },
+    {
+      "id": "cbb6afe6",
+      "url": "https://locklinforcongress.com/issues-palestine",
+      "heading": "EMPATHIZE FOR THE PEOPLE",
+      "text": "The scale of death, displacement, and destruction in Gaza has been documented by the United Nations, major human rights organizations, and international courts. UN bodies and leading rights groups have continued to warn that the pattern of conduct in Gaza is consistent with genocide. This is not an opinion formed in a vacuum: - Amnesty International concluded in December 2024 that Israel “has committed and is continuing to commit genocide” against Palestinians in Gaza.",
+      "verdict": {
+        "commitment": 0.1,
+        "own_commitment": 0.06,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.01,
+          "A2": 0.01,
+          "A3": 0.01,
+          "A4": 0.01,
+          "A5": 0.01,
+          "A6": 0.01,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.01,
+          "B5": 0.02,
+          "B6": 0.01,
+          "B7": 0.04,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.01
+        }
+      }
+    },
+    {
+      "id": "44548542",
+      "url": "https://locklinforcongress.com/issues-palestine",
+      "heading": "EMPATHIZE FOR THE PEOPLE",
+      "text": "- Human Rights Watch concluded that Israeli authorities were responsible for the crime against humanity of extermination and for acts of genocide through the deliberate deprivation of water, and said the pattern of conduct may amount to genocide. - United Nations experts have repeatedly warned of ongoing genocide in Gaza and described the destruction of civilian life, schools, hospitals, and basic infrastructure in terms that no serious government should ignore. The human toll is staggering.",
+      "verdict": {
+        "commitment": 0.11,
+        "own_commitment": 0.06,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.01,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.06,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.04,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.05,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.57,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.01
+        }
+      }
+    },
+    {
+      "id": "ca9df3c1",
+      "url": "https://locklinforcongress.com/issues-palestine",
+      "heading": "EMPATHIZE FOR THE PEOPLE",
+      "text": "Reuters reported in February 2025 that Gaza health authorities said more than 47,000 Palestinians had been killed , while UNICEF and OCHA have continued to document the enormous toll on children, repeated mass displacement, and the destruction of the conditions needed to sustain civilian life. More recent reporting has put the total death toll since October 2023 above 72,000 . OCHA has also continued to report worsening displacement and violence against Palestinians in the occupied West Bank, including rising settler attacks and large-scale forced displacement in 2026. A serious American response has to begin with one basic principle: we must not be complicit .",
+      "verdict": {
+        "commitment": 0.83,
+        "own_commitment": 0.32,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.01,
+          "A4": 0.01,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.03,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ee5a0d13",
+      "url": "https://locklinforcongress.com/issues-palestine",
+      "heading": "EMPATHIZE FOR THE PEOPLE",
+      "text": "That means the United States c annot keep sending weapons, ammunition, and diplomatic cover while claiming clean hands . Reuters reported that in February 2025 the Trump administration approved about $7.4 billion in military sales to Israel, including munitions, guidance kits, fuses, and Hellfire missiles. When American weapons, American money, and American political protection continue flowing amid overwhelming evidence of mass civilian harm, the United States is not a bystander. It is choosing involvement.",
+      "verdict": {
+        "commitment": 0.83,
+        "own_commitment": 0.13,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.01,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "501d1719",
+      "url": "https://locklinforcongress.com/issues-palestine",
+      "heading": "EMPATHIZE FOR THE PEOPLE",
+      "text": "Nicole Locklin’s position is simple and lawful: no blank checks for war crimes, no military aid used in violation of human rights, no immunity for officials because they are allied with Washington, and no pretending that this is too complicated to name. If there is credible evidence of genocide, apartheid, extermination, collective punishment, forced displacement, or starvation of civilians, then the United States has a duty under both domestic law and international law to stop facilitating it. That means immediate transparency on what weapons are being transferred, strict human-rights conditions on aid, full enforcement of existing U.S.",
+      "verdict": {
+        "commitment": 0.96,
+        "own_commitment": 0.84,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.01,
+          "A3": 0.01,
+          "A4": 0.01,
+          "A5": 0.01,
+          "A6": 0.01,
+          "A7": 0.01,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.07,
+          "KYV10": 0.01,
+          "KYV2": 0.01,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.01
+        }
+      }
+    },
+    {
+      "id": "0b1fd721",
+      "url": "https://locklinforcongress.com/issues-palestine",
+      "heading": "EMPATHIZE FOR THE PEOPLE",
+      "text": "law, and support for independent investigations and accountability mechanisms. This is not about being anti-Israeli or anti-anyone. It is about being pro-law, pro-humanity, and unwilling to accept a world in which children are buried under rubble, hospitals are destroyed, aid is obstructed, and entire families are erased while the most powerful country on earth looks the other way.",
+      "verdict": {
+        "commitment": 0.92,
+        "own_commitment": 0.75,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.01,
+          "A4": 0.01,
+          "A5": 0.01,
+          "A6": 0.01,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.08,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.19,
+          "B8": 0.02,
+          "KYV1": 0.42,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.02,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "640d583d",
+      "url": "https://locklinforcongress.com/issues-iran-war",
+      "heading": "THe HUMAN SIDE OF War",
+      "text": "War is never abstract when you know the people who serve. “Being a military kid is a blessing. It’s a large part of who I am today.” My husband said that to me during a long conversation about his childhood. Both of his parents served in the Army, and his older sister later joined the Navy. He grew up overseas, seeing much of Europe before he was ten years old. That kind of childhood comes with pride, service, and a deep love of country. It also comes with long separations and uncertainty. During the Gulf War, both of his parents deployed. Later, his father deployed multiple times during Operation Iraqi Freedom.",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.01,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "93ba7da4",
+      "url": "https://locklinforcongress.com/issues-iran-war",
+      "heading": "THe HUMAN SIDE OF War",
+      "text": "Military families understand something many people don’t: when our country goes to war, it isn’t just strategy or headlines. It’s parents leaving their children. It’s spouses waiting for the phone to ring. It’s families holding their breath. I can empathize with that loss. I lost my father suddenly to a plane crash; he was 57 years old. I lost my brother suddenly to an brain aneurysm; he was only 37. Losing someone you love without warning changes the way you see the world. It reminds you how fragile life is and how every loss sends shockwaves through the people left behind . That is why decisions about war must be made with the greatest seriousness and accountability.",
+      "verdict": {
+        "commitment": 0.34,
+        "own_commitment": 0.15,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.01,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "15d4759c",
+      "url": "https://locklinforcongress.com/issues-iran-war",
+      "heading": "THe HUMAN SIDE OF War",
+      "text": "The Constitution is clear. Article I, Section 8 gives Congress, not the President, the power to declare war. After the Vietnam War, Congress reinforced that responsibility through the War Powers Resolution of 1973 (50 U.S.C. §§ 1541–1548), requiring congressional authorization when U.S. forces are introduced into hostilities . Those laws exist because war should never be entered into casually, and never without the consent of the American people through their representatives.",
+      "verdict": {
+        "commitment": 0.59,
+        "own_commitment": 0.15,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.71,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ff93ee11",
+      "url": "https://locklinforcongress.com/issues-iran-war",
+      "heading": "THe HUMAN SIDE OF War",
+      "text": "When our nation uses military force without clear justification or without Congress fulfilling its constitutional role, we risk losing something deeper than political arguments, we risk losing the moral clarity that has always made America strongest . America must strive to be a defender of peace and stability, not an aggressor driven by political gain. Because behind every uniform is a person. Behind every casualty is a family. Behind every headline are parents who will never see their children again. These deaths are not numbers. They are people. God forbid it be someone you know. If our country asks men and women to risk their lives, we owe them more than rhetoric.",
+      "verdict": {
+        "commitment": 0.85,
+        "own_commitment": 0.27,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.01,
+          "A2": 0.01,
+          "A3": 0.01,
+          "A4": 0.01,
+          "A5": 0.01,
+          "A6": 0.01,
+          "A7": 0.01,
+          "B1": 0.02,
+          "B2": 0.01,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.5,
+          "KYV10": 0.01,
+          "KYV2": 0.02,
+          "KYV3": 0.01,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "99080d91",
+      "url": "https://locklinforcongress.com/issues-iran-war",
+      "heading": "THe HUMAN SIDE OF War",
+      "text": "We owe them honesty, lawful decisions, and a government that treats the choice of war with the gravity it deserves. A nything less dishonors the sacrifice of those who serve, and the families who carry that sacrifice with them for the rest of their lives.",
+      "verdict": {
+        "commitment": 0.65,
+        "own_commitment": 0.43,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.01,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.01,
+          "A6": 0.01,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.33,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.01
+        }
+      }
+    },
+    {
+      "id": "7412b922",
+      "url": "https://locklinforcongress.com/issues-iran-war",
+      "heading": "THE BOMBING OF MINAB School",
+      "text": "In late February 2026, a missile strike hit a primary school in Minab, Iran, killing over 168 people, at least 100 being children from 7-12 years old. This is a clear-cut war crime that must be prosecuted . We must also protect our military by sparing them from an illegal and deadly war. We must remember that like you and me, the civilians of Iran hope only to live their lives. Please take the time to listen to someone who speaks from experience, and speaks from the heart: Josephine Guilbeau is a former U.S. Army All-Source Intel Analyst. Her mobilizations include Operation Enduring Freedom, where she supported cyberspace operations for U.S.",
+      "verdict": {
+        "commitment": 0.85,
+        "own_commitment": 0.44,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.22,
+          "B8": 0.02,
+          "KYV1": 0.14,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "aa427b4f",
+      "url": "https://locklinforcongress.com/issues-iran-war",
+      "heading": "THE BOMBING OF MINAB School",
+      "text": "Cyber Command (USCYBERCOM) and the Cyber National Mission Force , earning an Army Commendation Medal for her vital role in mission success. Since her resignation from the military in 2023, Josephine has been advocating for peace in the Middle East, upholding the highest standards of professionalism and leadership. Her dedication to both her military duties and her community reflects her strong sense of duty and commitment to making a positive impact wherever she serves. Guilbeau earned a Bachelor of Science degree in Criminal Justice and is currently pursuing a Master’s degree in Cybersecurity Management and Policy.",
+      "verdict": {
+        "commitment": 0.08,
+        "own_commitment": 0.15,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.04,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5f611927",
+      "url": "https://locklinforcongress.com/issues-iran-war",
+      "heading": "THE BOMBING OF MINAB School",
+      "text": "Her awards and decorations include two Army Commendation Medals and three Army Achievement Medals , recognizing her outstanding service and valor in the face of adversity.",
+      "verdict": {
+        "commitment": 0.02,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.01,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.01,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4b44d1a0",
+      "url": "https://locklinforcongress.com/issues-cuba",
+      "heading": "People over Politics",
+      "text": "In Florida’s 26th District, Cuba is not a distant issue. It is a big part of our community. It is family, friends, and loved ones. It is the reason so many people here understand what it means to leave everything behind, and still fight for the country you love. That’s why we need change. Not slogans. Not politics. Cuban families are facing blackouts, shortages of food and medicine, and an economy that is not working for them. These conditions didn’t appear overnight. They are the result of decades of failure from a Cuban government that has restricted freedom and mismanaged its economy. It is also from U.S. policies that have isolated Cuba without delivering meaningful change.",
+      "verdict": {
+        "commitment": 0.5,
+        "own_commitment": 0.15,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.63,
+          "B2": 0.14,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.22,
+          "KYV10": 0.02,
+          "KYV2": 0.14,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.03,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "da138950",
+      "url": "https://locklinforcongress.com/issues-cuba",
+      "heading": "People over Politics",
+      "text": "Let me be clear: the Cuban government has failed its people. It has denied political freedom, limited opportunity, and punished dissent. Nothing excuses that. But after more than 60 years of the same U.S. approach, we also have to ask a hard question: what have our leaders actually done? ‍ The United States has maintained a broad economic embargo on Cuba for generations designed to pressure the government. In practice, broad restrictions on trade, financing, and access to global markets have made it harder for Cuba to obtain essential goods, including fuel, medicine, and infrastructure support.",
+      "verdict": {
+        "commitment": 0.3,
+        "own_commitment": 0.09,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.48,
+          "B2": 0.22,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.58,
+          "KYV10": 0.02,
+          "KYV2": 0.19,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.03,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "1a343bf8",
+      "url": "https://locklinforcongress.com/issues-cuba",
+      "heading": "People over Politics",
+      "text": "When those systems fail, When the power goes out, When hospitals don’t have what they need, It is not government officials who suffer. It's always the people. It's the Cuban families that go without. After six decades, the results are clear: the embargo has not brought democracy to Cuba. It has not ended political repression. It has contributed to hardship for ordinary people. If a policy hasn’t worked in 60 years, we have a responsibility to rethink it. Why is nothing being done about it? I’ve spoken with families here in South Florida who still have loved ones on the island. People who go to sleep wondering if their relatives have power, access to medicine, or enough food.",
+      "verdict": {
+        "commitment": 0.85,
+        "own_commitment": 0.24,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.01,
+          "A7": 0.02,
+          "B1": 0.15,
+          "B2": 0.41,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.31,
+          "KYV10": 0.02,
+          "KYV2": 0.14,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.03,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c4ee5b74",
+      "url": "https://locklinforcongress.com/issues-cuba",
+      "heading": "People over Politics",
+      "text": "This isn’t abstract. It’s happening to our community every single day and they deserve leaders focused on solutions, not just rhetoric. For years, politicians like Ron DeSantis and Mario Díaz-Balart have built entire political brands around talking about Cuba. Decades of the same approach . Strong rhetoric is not a strategy. Repeating the same policies without results is not leadership. What results have they delivered? If we are serious about supporting the Cuban people, then we need policies that actually do that. Being “for the people” means rejecting false choices. We can hold two truths at once: 1. The Cuban government must be held accountable for repression and corruption 2. U.S.",
+      "verdict": {
+        "commitment": 0.81,
+        "own_commitment": 0.36,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.04,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.11,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "acc0ed2b",
+      "url": "https://locklinforcongress.com/issues-cuba",
+      "heading": "People over Politics",
+      "text": "policies that worsen human suffering without achieving change must be re-evaluated A smarter, more effective, and somewhat obvious approach would be target the regime, not the people! Focus sanctions on officials responsible for corruption and human rights abuses, instead of broad restrictions that impact an entire population. Apply pressure where it matters, but allow greater access to food, medicine, humanitarian aid, and civilian infrastructure, especially energy. If elected, I will target sanctions on corrupt officials, not blanket hardship. I will work with international partners to stabilize access to fuel and essential services so families are not left in the dark (literally) .",
+      "verdict": {
+        "commitment": 0.99,
+        "own_commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "KYV2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.09,
+          "B2": 0.37,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.19,
+          "KYV10": 0.02,
+          "KYV2": 0.85,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.04,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "521531a8",
+      "url": "https://locklinforcongress.com/issues-cuba",
+      "heading": "People over Politics",
+      "text": "I will expand humanitarian access to food, medicine, and energy support. I will work to expand internet access and communication tools so Cubans can connect, organize, and advocate for their future. I will protect family connections through remittances and travel. I will do the work our past leaders only talk about. I will push policies focused on real outcomes. The Cuban people are not a talking point. They are not a political strategy. They are human beings who deserve freedom, dignity, opportunity, and they don't have to fight this on their own. Florida's 26th District needs an official that actually cares about people, not politics.",
+      "verdict": {
+        "commitment": 0.98,
+        "own_commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.15,
+          "B3": 0.09,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.12,
+          "KYV10": 0.02,
+          "KYV2": 0.7,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b8e09b8a",
+      "url": "https://locklinforcongress.com/issues-cuba",
+      "heading": "People over Politics",
+      "text": "I am asking you for the chance to deliver real results for Cuba.",
+      "verdict": {
+        "commitment": 0.15,
+        "own_commitment": 0.24,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.04,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b309531d",
+      "url": "https://locklinforcongress.com/corruption",
+      "heading": "Foreign Influence + Big Money = No Accountability",
+      "text": "Federal law bans foreign governments from donating directly to U.S. campaigns, but Washington created loopholes and powerful interests use them . Money flows through: - Foreign PACs - Corporate entities - Independent expenditure campaigns The American Israel Public Affairs Committee (AIPAC) and its affiliated PACs have funded hundreds of candidates, with billions of dollars, across both parties. A significant number of current members of Congress list AIPAC among their top lifetime contributors. ‍ The result? The U.S. has pledged to provide approximately $38 billion in military assistance to Israel . The current administration proudly committed to $12 billion more this year alone.",
+      "verdict": {
+        "commitment": 0.17,
+        "own_commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.09,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.73,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "d0f7bf2a",
+      "url": "https://locklinforcongress.com/corruption",
+      "heading": "Foreign Influence + Big Money = No Accountability",
+      "text": "This isn’t about Israel. This is about whether foreign policy decisions are shaped by the will of voters, or by campaign money. No organization, foreign or domestic, should be able to buy influence over Congress. If elected, Nicole Locklin will: - Refuse corporate PAC money - Support a full ban on corporate PAC contributions - Require complete donor transparency for all political spending - Push for publicly financed elections so representatives answer to voters, not megadonors If Congress is bought: You cannot fix healthcare. You cannot fix insurance. You cannot fix housing. Nicole Locklin isn’t running against a country. She’s running against corruption.",
+      "verdict": {
+        "commitment": 0.99,
+        "own_commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.04,
+          "A2": 0.14,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.05,
+          "B1": 0.05,
+          "B2": 0.17,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.07,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.8,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "bd823d0e",
+      "url": "https://locklinforcongress.com/corruption",
+      "heading": "Foreign Influence + Big Money = No Accountability",
+      "text": "If you can’t buy her, you can’t control her.",
+      "verdict": {
+        "commitment": 0.07,
+        "own_commitment": 0.06,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.1,
+          "B7": 0.11,
+          "B8": 0.02,
+          "KYV1": 0.69,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "cb7262c0",
+      "url": "https://locklinforcongress.com/corruption",
+      "heading": "LIES AND INTENTIONAL MISINFORMATION",
+      "text": "If a private citizen knowingly lies to the federal government, it’s a crime. If a politician knowingly lies to the public, there are often no consequences. That loophole enables corruption. Federal law already makes it illegal to knowingly make false statements to the government. Nicole Locklin believes elected officials should be held to the same standard when they deliberately deceive the people they serve.",
+      "verdict": {
+        "commitment": 0.92,
+        "own_commitment": 0.51,
+        "states_policy": false,
+        "issues": [
+          "KYV1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.06,
+          "B7": 0.71,
+          "B8": 0.02,
+          "KYV1": 0.86,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8dfc5d3c",
+      "url": "https://locklinforcongress.com/corruption",
+      "heading": "LIES AND INTENTIONAL MISINFORMATION",
+      "text": "If elected, Nicole Locklin will work to: - Establish enforceable standards for knowingly false statements made by elected officials in an official capacity - Apply accountability to formal public communications, reports, and certifications - Clearly distinguish intentional deception from opinion or political disagreement - Create real consequences, including ethics sanctions and public accountability - Protect whistleblowers who expose intentional dishonesty in government This is not about policing speech. It’s about stopping deliberate lies by people in power. Public office is a public trust — and lying to the public should never be part of the job.",
+      "verdict": {
+        "commitment": 0.99,
+        "own_commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "KYV1"
+        ],
+        "scores": {
+          "A1": 0.01,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.16,
+          "B7": 0.1,
+          "B8": 0.02,
+          "KYV1": 0.9,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a402d714",
+      "url": "https://locklinforcongress.com/corruption",
+      "heading": "Follow the Money: It’s About Priorities",
+      "text": "Congress decides where your tax dollars go. Right now, Washington spends billions on enforcement and bureaucracy, while teachers are underpaid, classrooms are overcrowded, and families are told there’s “no money” for the basics. That’s not a budget problem. That’s a priorities problem. If elected, Nicole will: - Push to redirect federal spending toward public education , including better pay for teachers - Invest in job creation and workforce development , not bloated enforcement budgets - Demand transparency and accountability for how federal agencies spend taxpayer money This isn’t about politics or slogans. It’s about using public money to make life better for the public.",
+      "verdict": {
+        "commitment": 0.99,
+        "own_commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A6",
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.98,
+          "A7": 0.02,
+          "B1": 0.9,
+          "B2": 0.02,
+          "B3": 0.36,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.67,
+          "B8": 0.02,
+          "KYV1": 0.09,
+          "KYV10": 0.72,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "abbcbff4",
+      "url": "https://locklinforcongress.com/corruption",
+      "heading": "Follow the Money: It’s About Priorities",
+      "text": "Nicole Locklin wants your tax dollars working for you, not disappearing into systems that keep asking for more while giving families less.",
+      "verdict": {
+        "commitment": 0.67,
+        "own_commitment": 0.23,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.05,
+          "A4": 0.13,
+          "A5": 0.02,
+          "A6": 0.05,
+          "A7": 0.03,
+          "B1": 0.26,
+          "B2": 0.04,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.06,
+          "B8": 0.03,
+          "KYV1": 0.24,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "5947d9e3",
+      "url": "https://locklinforcongress.com/corruption",
+      "heading": "Work Should Pay Enough to Live",
+      "text": "In Florida, someone working full-time at minimum wage takes home less than $30,000 a year , but the basic cost of living in Florida’s 26th District is closer to $40,000 a year . That math doesn’t work and it’s not because people aren’t working hard enough. It’s because the system is rigged to keep wages low while costs keep rising. Nicole Locklin believes that one full-time job should be enough to survive . If you work 40+ hours a week: - You should be able to pay rent - You should be able to afford groceries - You should not need a second or third job just to stay afloat This isn’t radical. It’s basic fairness.",
+      "verdict": {
+        "commitment": 0.86,
+        "own_commitment": 0.35,
+        "states_policy": false,
+        "issues": [
+          "A4",
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.62,
+          "A3": 0.02,
+          "A4": 0.87,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.98,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.12,
+          "KYV7": 0.05,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "56788ec8",
+      "url": "https://locklinforcongress.com/corruption",
+      "heading": "Work Should Pay Enough to Live",
+      "text": "Nicole Locklin is running to make sure working people aren’t told to accept poverty while corporations and billionaires keep raking it in. Because a hard day's work should mean dignity — not desperation.",
+      "verdict": {
+        "commitment": 0.81,
+        "own_commitment": 0.49,
+        "states_policy": false,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.06,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.95,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.04,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "242376c9",
+      "url": "https://locklinforcongress.com/corruption",
+      "heading": "The CONSTITUTION PROTECTS THE PEOPLE",
+      "text": "America is not defined by ancestry. It is defined by the Constitution which guarantees due process . It prohibits cruel and unusual punishment and it requires that the government follow the law, especially when it takes someone’s liberty . Immigration enforcement is a federal responsibility. Public safety matters. Violent crimes should be prioritized but enforcement cannot mean: - Detaining people without meaningful due process - Holding individuals in overcrowded or inhumane conditions - Conducting broad sweeps that disregard constitutional protections - Using methods that undermine the rights When the government deprives someone of liberty, it must follow the rulebook.",
+      "verdict": {
+        "commitment": 0.87,
+        "own_commitment": 0.43,
+        "states_policy": false,
+        "issues": [
+          "B3",
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.97,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.92,
+          "B8": 0.02,
+          "KYV1": 0.71,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "34f6d89f",
+      "url": "https://locklinforcongress.com/corruption",
+      "heading": "The CONSTITUTION PROTECTS THE PEOPLE",
+      "text": "That is not optional in America . Nicole Locklin believes: - Enforcement must be targeted toward genuine public safety - Due process must be protected, never bypassed - Conditions of detention must meet constitutional standards - Congress has a duty to exercise strict oversight of federal agencies - Taxpayer dollars should never fund unconstitutional conduct Nicole Locklin took an oath to uphold the Constitution. The rulebook is what makes us Americans, not where we came from .",
+      "verdict": {
+        "commitment": 0.96,
+        "own_commitment": 0.85,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.02,
+          "B3": 0.64,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.94,
+          "B8": 0.02,
+          "KYV1": 0.84,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "fcd78794",
+      "url": "https://locklinforcongress.com/corruption",
+      "heading": "PUBLIC OFFICE IS NOT A MONEY GRAB.",
+      "text": "Members of Congress write the laws. They regulate industries. They oversee federal contracts. They receive briefings that can move markets. They are also allowed to profit off this power and information. When lawmakers trade stocks in industries they regulate, Americans are right to ask: ‍ Are they protecting families, or protecting their portfolios? When insurance companies raise rates. When drug prices spike. When defense contracts expand. Voters deserve to know those decisions aren’t influenced by personal investments. Nicole Locklin believes: - Members of Congress should be banned from trading individual stocks while in office.",
+      "verdict": {
+        "commitment": 0.98,
+        "own_commitment": 0.89,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.1,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.21,
+          "B2": 0.32,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.78,
+          "KYV10": 0.02,
+          "KYV2": 0.05,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "55fb78e6",
+      "url": "https://locklinforcongress.com/corruption",
+      "heading": "PUBLIC OFFICE IS NOT A MONEY GRAB.",
+      "text": "- Assets should be placed in blind trusts or diversified index funds. - Violations should carry real financial penalties and ethics sanctions. - Disclosure rules should be strengthened and enforced in real time, not months later. You can't claim to regulate Wall Street while trading on non-public information. ‍ You can't fight corruption while personally profiting from policy decisions. Public office is a public trust, not a wealth-building strategy. If you can’t separate personal profit from public power, you shouldn’t hold the power.",
+      "verdict": {
+        "commitment": 0.96,
+        "own_commitment": 0.72,
+        "states_policy": false,
+        "issues": [
+          "KYV1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.16,
+          "B8": 0.02,
+          "KYV1": 0.9,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.01
+        }
+      }
+    },
+    {
+      "id": "e3d7e458",
+      "url": "https://locklinforcongress.com/corruption",
+      "heading": "TO BE CONTINUED...",
+      "text": "Corruption in Washington didn’t happen overnight and it won’t be fixed with one bill or one speech. This page highlights some of the most urgent issues affecting families in Florida’s 26th District. We will continue adding areas where special interests, dark money, and insider politics are blocking real solutions. If there’s an issue you believe reflects corruption or misplaced priorities, we want to hear from you. More importantly, this campaign isn’t just about talking. It’s about fixing what’s broken. Nicole Locklin is running to clean up a system that has been working for the powerful, and to make it work for the people who pay for it.",
+      "verdict": {
+        "commitment": 0.55,
+        "own_commitment": 0.47,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.04,
+          "B1": 0.05,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.67,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "227e6b2f",
+      "url": "https://locklinforcongress.com/corruption",
+      "heading": "TO BE CONTINUED...",
+      "text": "We will continue to add issues that are important to Florida 26 residents.",
+      "verdict": {
+        "commitment": 0.29,
+        "own_commitment": 0.72,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.04,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.04,
+          "B7": 0.05,
+          "B8": 0.02,
+          "KYV1": 0.09,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "d7d06bc3",
+      "url": "https://locklinforcongress.com/nicole-bio",
+      "heading": "A LIFE SHAPED BY RESILIENCE",
+      "text": "A LIFE OF SERVICE BEGINS (1988 - 2000) Nicole Locklin was born the middle child of three siblings. Nicole Locklin was raised in a family that believed a person’s life should reflect their values . She grew up watching her father live by a simple set of principles: love for family, generosity toward others, and the belief that doing the right thing matters, even when it is difficult . He taught his children that kindness is strength, that you treat people with dignity, and that your character is measured by how you show up for your community. Nicole carries those lessons with her today.",
+      "verdict": {
+        "commitment": 0.02,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "60b14395",
+      "url": "https://locklinforcongress.com/nicole-bio",
+      "heading": "A LIFE SHAPED BY RESILIENCE",
+      "text": "She believes leadership should be grounded in integrity, service, and compassion; that government, like any life well lived, should be guided by honesty, responsibility, and a genuine commitment to improving the lives of others . EARLY EDUCATION (2000-2012) From an early age, Nicole demonstrated leadership and a strong sense of civic responsibility. She grew up in a small agriculture town in Oklahoma with less than 1,000 people. As an eighth grader in 2001, in the days following the 9/11 attacks, Nicole organized a county-wide supply drive for victims and first responders, filling an entire semi-truck with donated supplies.",
+      "verdict": {
+        "commitment": 0.17,
+        "own_commitment": 0.31,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.05,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "2d73d1f6",
+      "url": "https://locklinforcongress.com/nicole-bio",
+      "heading": "A LIFE SHAPED BY RESILIENCE",
+      "text": "Nicole graduated high school in 2006 as valedictorian, also having served as student council president, and captain of the basketball team. In 2006, she enrolled at the University of Oklahoma as an Oklahoma Academic Scholar. She graduated in December 2009, becoming a first-generation college graduate. In 2010, shortly after graduating, Nicole moved to San Francisco, where she began her career working at a startup. She later returned home to spend the Fall of 2011 working with her father while saving money for law school.",
+      "verdict": {
+        "commitment": 0.02,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.01,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.01,
+          "KYV1": 0.01,
+          "KYV10": 0.04,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "6e717946",
+      "url": "https://locklinforcongress.com/nicole-bio",
+      "heading": "A LIFE SHAPED BY RESILIENCE",
+      "text": "Before starting law school, Nicole embarked on a solo backpacking trip around the world, traveling to 17 countries and gaining a broader understanding of global cultures and politics. LAW SCHOOL (2012 - 2015) Nicole began law school at Santa Clara University in Fall 2012, where she joined the Jessup International Law Moot Court Team and focused her studies on technology law. During this time, her family faced significant health challenges when her older brother Greg was diagnosed with Marfan syndrome in October 2012, requiring open-heart surgery and multiple major surgeries over the following decade.",
+      "verdict": {
+        "commitment": 0.02,
+        "own_commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "7c0c890a",
+      "url": "https://locklinforcongress.com/nicole-bio",
+      "heading": "A LIFE SHAPED BY RESILIENCE",
+      "text": "Nicole graduated from Santa Clara University School of Law in May 2015 with a High Tech Law Certificate with Honors, and was named to the Dean’s List. She passed the California Bar in November 2015. LITIGATION (2016 - 2020) In January 2016, Nicole began her legal career as a litigation associate at Lerch Sturmer LLP, where she practiced professional liability defense, representing attorneys in malpractice and complex litigation matters. Nicole’s life changed dramatically on May 30, 2018, when her father died in a plane crash. The tragedy forced her family to wind down their long-standing family crop-dusting business.",
+      "verdict": {
+        "commitment": 0.01,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.01,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b6924b68",
+      "url": "https://locklinforcongress.com/nicole-bio",
+      "heading": "A LIFE SHAPED BY RESILIENCE",
+      "text": "At the same time, her brother Greg, who had attempted to keep the business running, was forced to step away due to the health risks associated with Marfan syndrome. In September 2019, Nicole met her future husband, Chris, whose family embodies a deep tradition of military service. Chris was born in Germany while his parents were deployed overseas. His mother and father served in the U.S. Army, and his older sister served in the U.S. Navy. During Operation Desert Storm, both of Chris’s parents were deployed at the same time, and he spent two years living with his grandmother in Indiana. His father would later deploy multiple times during Operation Iraqi Freedom.",
+      "verdict": {
+        "commitment": 0.01,
+        "own_commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.01,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.01
+        }
+      }
+    },
+    {
+      "id": "53109798",
+      "url": "https://locklinforcongress.com/nicole-bio",
+      "heading": "A LIFE SHAPED BY RESILIENCE",
+      "text": "Chris’s mother is also a first-generation immigrant from Malaysia, adding another chapter of the American story to their family. LAWYER IN BIG TECH (2020 - PRESENT) Nicole joined Nextdoor in March 2020, a technology company focused on strengthening local communities. Chris proposed in July 2020, and the two were married in Miami, September 2021. Nicole later joined another Silicon Valley company in May 2022, continuing her work in the technology sector. Nicole and her family experienced another profound loss on March 8, 2023, when Nicole’s brother Greg died at age 37 from a brain aneurysm following heart surgery in Houston.",
+      "verdict": {
+        "commitment": 0.02,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "031867e5",
+      "url": "https://locklinforcongress.com/nicole-bio",
+      "heading": "A LIFE SHAPED BY RESILIENCE",
+      "text": "FLORIDA DISTRICT 26 In April 2024, Nicole and Chris moved to Miami full time, where Chris joined the Miami Dolphins organization after a lifetime of fandom. Nicole continued her role as Lead Counsel at Databricks. Her life has been shaped by leadership, public service, resilience through personal loss, and a deep belief that government should work for ordinary people. Together with Chris, whose life was shaped by the military, life as a Black man in America, and the immigrant experience, Nicole believes deeply in the promise of a country where hard work, integrity, and service to others still matter.",
+      "verdict": {
+        "commitment": 0.23,
+        "own_commitment": 0.08,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.05,
+          "B2": 0.03,
+          "B3": 0.05,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "economy",
+        "label": "Economy & Affordability"
+      },
+      "subIssues": [
+        {
+          "id": "B1",
+          "label": "Economy, inflation, and jobs",
+          "citations": [
+            {
+              "passage": {
+                "id": "89d7e517",
+                "url": "https://locklinforcongress.com/issues-affordability",
+                "heading": "What do we do?",
+                "text": "Immigrants expand our workforce, start businesses, fill critical jobs, pay taxes, and create demand throughout the economy. Cutting immigration while our population ages makes it harder for the economy to grow and can make worker shortages, and contributes to rising prices. Instead of asking working families to carry the cost of our debt, require billionaires and large corporations to contribute more. The answer to an affordability crisis is lowering unnecessary costs while building a larger, stronger, more productive economy. When we remove Mario Díaz-Balart on November 3rd, I will get to work fixing his mess.",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "30dba4f7",
+                "url": "https://locklinforcongress.com/issues-affordability",
+                "heading": "What do we do?",
+                "text": "We need to stop adding costs to the economy. There a many ways for us to turn this around, but it all starts with HITTING THE BRAKES. After we remove Trump's puppet, Mario Díaz-Balart, we can start doing the obvious things: 1. End wars that disrupt energy markets. 2. Reduce unnecessary tariffs. 3. Bring deficits and debt under control without cutting healthcare and basic services. 4. Build more housing. 5. Invest in sustainable energy. 6. Spend our tax dollars right here in the USA. Instead, our representative, Mario Díaz-Balart makes the wrong choice, every. single. time. We should also recognize that legal immigration as an economic strength.",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.95
+            },
+            {
+              "passage": {
+                "id": "a402d714",
+                "url": "https://locklinforcongress.com/corruption",
+                "heading": "Follow the Money: It’s About Priorities",
+                "text": "Congress decides where your tax dollars go. Right now, Washington spends billions on enforcement and bureaucracy, while teachers are underpaid, classrooms are overcrowded, and families are told there’s “no money” for the basics. That’s not a budget problem. That’s a priorities problem. If elected, Nicole will: - Push to redirect federal spending toward public education , including better pay for teachers - Invest in job creation and workforce development , not bloated enforcement budgets - Demand transparency and accountability for how federal agencies spend taxpayer money This isn’t about politics or slogans. It’s about using public money to make life better for the public.",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.9
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "education",
+        "label": "Education"
+      },
+      "subIssues": [
+        {
+          "id": "A6",
+          "label": "Public school funding and teachers",
+          "citations": [
+            {
+              "passage": {
+                "id": "a402d714",
+                "url": "https://locklinforcongress.com/corruption",
+                "heading": "Follow the Money: It’s About Priorities",
+                "text": "Congress decides where your tax dollars go. Right now, Washington spends billions on enforcement and bureaucracy, while teachers are underpaid, classrooms are overcrowded, and families are told there’s “no money” for the basics. That’s not a budget problem. That’s a priorities problem. If elected, Nicole will: - Push to redirect federal spending toward public education , including better pay for teachers - Invest in job creation and workforce development , not bloated enforcement budgets - Demand transparency and accountability for how federal agencies spend taxpayer money This isn’t about politics or slogans. It’s about using public money to make life better for the public.",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.98
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "healthcare",
+        "label": "Healthcare"
+      },
+      "subIssues": [
+        {
+          "id": "B2",
+          "label": "Healthcare access and costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "84bf95cb",
+                "url": "https://locklinforcongress.com/issues-healthcare",
+                "heading": "Universal healthcare.",
+                "text": "Nicole supports the fastest responsible path to guaranteed care for every American: Medicare for All, a strong public option, Medicare buy-in, or any model that gets us to universal coverage.",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "476bb18f",
+                "url": "https://locklinforcongress.com/issues-healthcare",
+                "heading": "Healthcare should be guaranteed.",
+                "text": "Nicole will fight for universal healthcare. Díaz-Balart has fought against the protections people already have.",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.97
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "housing",
+        "label": "Housing"
+      },
+      "subIssues": [
+        {
+          "id": "A2",
+          "label": "Housing affordability",
+          "citations": [
+            {
+              "passage": {
+                "id": "30dba4f7",
+                "url": "https://locklinforcongress.com/issues-affordability",
+                "heading": "What do we do?",
+                "text": "We need to stop adding costs to the economy. There a many ways for us to turn this around, but it all starts with HITTING THE BRAKES. After we remove Trump's puppet, Mario Díaz-Balart, we can start doing the obvious things: 1. End wars that disrupt energy markets. 2. Reduce unnecessary tariffs. 3. Bring deficits and debt under control without cutting healthcare and basic services. 4. Build more housing. 5. Invest in sustainable energy. 6. Spend our tax dollars right here in the USA. Instead, our representative, Mario Díaz-Balart makes the wrong choice, every. single. time. We should also recognize that legal immigration as an economic strength.",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.89
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "environment",
+        "label": "Environment & Water"
+      },
+      "subIssues": [
+        {
+          "id": "KYV2",
+          "label": "Energy and utilities",
+          "citations": [
+            {
+              "passage": {
+                "id": "30dba4f7",
+                "url": "https://locklinforcongress.com/issues-affordability",
+                "heading": "What do we do?",
+                "text": "We need to stop adding costs to the economy. There a many ways for us to turn this around, but it all starts with HITTING THE BRAKES. After we remove Trump's puppet, Mario Díaz-Balart, we can start doing the obvious things: 1. End wars that disrupt energy markets. 2. Reduce unnecessary tariffs. 3. Bring deficits and debt under control without cutting healthcare and basic services. 4. Build more housing. 5. Invest in sustainable energy. 6. Spend our tax dollars right here in the USA. Instead, our representative, Mario Díaz-Balart makes the wrong choice, every. single. time. We should also recognize that legal immigration as an economic strength.",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.87
+            },
+            {
+              "passage": {
+                "id": "acc0ed2b",
+                "url": "https://locklinforcongress.com/issues-cuba",
+                "heading": "People over Politics",
+                "text": "policies that worsen human suffering without achieving change must be re-evaluated A smarter, more effective, and somewhat obvious approach would be target the regime, not the people! Focus sanctions on officials responsible for corruption and human rights abuses, instead of broad restrictions that impact an entire population. Apply pressure where it matters, but allow greater access to food, medicine, humanitarian aid, and civilian infrastructure, especially energy. If elected, I will target sanctions on corrupt officials, not blanket hardship. I will work with international partners to stabilize access to fuel and essential services so families are not left in the dark (literally) .",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.85
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "immigration",
+        "label": "Immigration"
+      },
+      "subIssues": [
+        {
+          "id": "B3",
+          "label": "Immigration and border enforcement",
+          "citations": [
+            {
+              "passage": {
+                "id": "89d7e517",
+                "url": "https://locklinforcongress.com/issues-affordability",
+                "heading": "What do we do?",
+                "text": "Immigrants expand our workforce, start businesses, fill critical jobs, pay taxes, and create demand throughout the economy. Cutting immigration while our population ages makes it harder for the economy to grow and can make worker shortages, and contributes to rising prices. Instead of asking working families to carry the cost of our debt, require billionaires and large corporations to contribute more. The answer to an affordability crisis is lowering unnecessary costs while building a larger, stronger, more productive economy. When we remove Mario Díaz-Balart on November 3rd, I will get to work fixing his mess.",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.94
+            },
+            {
+              "passage": {
+                "id": "30dba4f7",
+                "url": "https://locklinforcongress.com/issues-affordability",
+                "heading": "What do we do?",
+                "text": "We need to stop adding costs to the economy. There a many ways for us to turn this around, but it all starts with HITTING THE BRAKES. After we remove Trump's puppet, Mario Díaz-Balart, we can start doing the obvious things: 1. End wars that disrupt energy markets. 2. Reduce unnecessary tariffs. 3. Bring deficits and debt under control without cutting healthcare and basic services. 4. Build more housing. 5. Invest in sustainable energy. 6. Spend our tax dollars right here in the USA. Instead, our representative, Mario Díaz-Balart makes the wrong choice, every. single. time. We should also recognize that legal immigration as an economic strength.",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.89
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "safety",
+        "label": "Public Safety & Crime"
+      },
+      "subIssues": [
+        {
+          "id": "B7",
+          "label": "Crime policy, policing and courts",
+          "citations": [
+            {
+              "passage": {
+                "id": "34f6d89f",
+                "url": "https://locklinforcongress.com/corruption",
+                "heading": "The CONSTITUTION PROTECTS THE PEOPLE",
+                "text": "That is not optional in America . Nicole Locklin believes: - Enforcement must be targeted toward genuine public safety - Due process must be protected, never bypassed - Conditions of detention must meet constitutional standards - Congress has a duty to exercise strict oversight of federal agencies - Taxpayer dollars should never fund unconstitutional conduct Nicole Locklin took an oath to uphold the Constitution. The rulebook is what makes us Americans, not where we came from .",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.94
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "elections",
+        "label": "Elections & Voting"
+      },
+      "subIssues": [
+        {
+          "id": "KYV1",
+          "label": "Threats to democratic institutions",
+          "citations": [
+            {
+              "passage": {
+                "id": "8dfc5d3c",
+                "url": "https://locklinforcongress.com/corruption",
+                "heading": "LIES AND INTENTIONAL MISINFORMATION",
+                "text": "If elected, Nicole Locklin will work to: - Establish enforceable standards for knowingly false statements made by elected officials in an official capacity - Apply accountability to formal public communications, reports, and certifications - Clearly distinguish intentional deception from opinion or political disagreement - Create real consequences, including ethics sanctions and public accountability - Protect whistleblowers who expose intentional dishonesty in government This is not about policing speech. It’s about stopping deliberate lies by people in power. Public office is a public trust — and lying to the public should never be part of the job.",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.9
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "retirement",
+        "label": "Retirement & Benefits"
+      },
+      "subIssues": [
+        {
+          "id": "B4",
+          "label": "Social Security and Medicare",
+          "citations": [
+            {
+              "passage": {
+                "id": "48d8f2a2",
+                "url": "https://locklinforcongress.com/issues-social-security",
+                "heading": "Commitment to Seniors and caregivers",
+                "text": "I will also fight for a cost-of-living adjustment that reflects what seniors actually pay for, especially housing, health care, prescriptions, food, insurance, and utilities. In Congress, I will work to: • Protect every dollar of earned benefits • Oppose raising the retirement age • Oppose privatization • Require high-income Americans to contribute on more of their earnings • Improve benefits for low-income seniors and widows • Adopt a more accurate cost-of-living formula for seniors • Protect Social Security data and personal information • Fund Social Security offices so people can receive timely, in-person help",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.9
+            },
+            {
+              "passage": {
+                "id": "2c6ade18",
+                "url": "https://locklinforcongress.com/issues-social-security",
+                "heading": "What I Will Do in My First Year",
+                "text": "During my first year in Congress, I will: 1. Cosponsor the Credit for Caring Act 2. Support Social Security legislation that protects benefits and requires high-income Americans to contribute more 3. Oppose any increase in the retirement age 4. Fight for adequate staffing and service at the Social Security Administration 5. Support Social Security caregiving credits 6. Protect Medicaid and home-based care from cuts 7. Establish bilingual senior and caregiver constituent services throughout FL-26 8. Hold regular roundtables with seniors and caregivers to track whether federal programs are actually working. I will not make promises that one member of Congress cannot deliver alone.",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.89
+            },
+            {
+              "passage": {
+                "id": "8481a8a1",
+                "url": "https://locklinforcongress.com/issues-social-security",
+                "heading": "What I Will Do in My First Year",
+                "text": "I will make clear commitments about the bills I will support, the cuts I will oppose, and the work I will do to build bipartisan support. Seniors deserve security, caregivers deserve support, and every American deserves to know that Social Security will be there when they need it.",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.88
+            },
+            {
+              "passage": {
+                "id": "98159306",
+                "url": "https://locklinforcongress.com/issues-social-security",
+                "heading": "Commitment to Seniors and caregivers",
+                "text": "Social Security is not a handout. It is money Americans earned and paid into throughout their working lives. My first promise is that I will never vote to cut Social Security benefits, raise the retirement age, privatize the program, or reduce cost-of-living adjustments. Protecting Social Security also means making sure it will be there for future generations. Congress has waited too long to act. I support asking wealthy Americans to pay Social Security taxes on more of their income, just as working families already do. That would strengthen the program without cutting earned benefits.",
+                "retrieved_at": "2026-09-29T11:43:05.663Z"
+              },
+              "score": 0.86
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 294779,
+    "output_tokens": 37362
+  }
+}

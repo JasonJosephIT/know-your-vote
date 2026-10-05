@@ -1,0 +1,185 @@
+# CI for Know Your Vote.
+#
+# Launch handoff §7, the CI item (founder decision 13, in
+# docs/general-election/launch-handoff-2026-10-04.md). Until now only Vercel
+# ran on a pull request, so none of the scripts/verify-* checks or the Python
+# tests gated a merge. docs/ci.md says what runs here, how to run the same
+# thing locally, and how to make these jobs required before merging.
+#
+# Recommended (pending founder confirmation): run on every pull request and
+# on every push to main, and make the `checks` and `build` jobs required
+# status checks on main. Nothing in this file deploys, and nothing writes to
+# the database: the token is read-only and the checks run on embedded
+# Postgres or placeholder settings.
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      live:
+        description: "Also run the read-only live-database checks (needs the two Supabase repository secrets)"
+        type: boolean
+        default: false
+  # Recommended (pending founder confirmation): no schedule. On 2026-10-04,
+  # 8 election_news rows in production have no source_id (migration 0014 is
+  # not applied; handoff §5). verify-news-neutrality.ts lints only the last
+  # 30 days, which holds 2 of them (dated 2026-09-09), so it fails today and
+  # turns green on its own from 2026-10-09 unless news arrives, with all 8
+  # rows still unsourced. A daily run would send failure emails until then,
+  # and a green one after it would not mean the rows were fixed. To run the
+  # live checks every morning instead, uncomment these two lines; the live-db
+  # job below already accepts the schedule event.
+  # schedule:
+  #   - cron: "17 11 * * *"
+
+permissions:
+  contents: read
+
+# A newer push to the same pull request cancels the run it replaces. Every
+# other run (a push to main, a manual run, a scheduled run) gets a group of
+# its own, keyed by its run id, so nothing ever cancels it or queues it
+# behind another: every commit that deploys gets its own result. A shared
+# group would not promise that even with cancel-in-progress off, because
+# GitHub keeps one pending run per group and a newer one replaces it, so
+# the middle of three quick pushes to main would get no result.
+concurrency:
+  group: ci-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  checks:
+    name: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        id: install
+        run: npm ci
+
+      # Each check after the install runs even when an earlier one failed, so
+      # a single run reports every problem rather than only the first.
+      - name: Lint
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run lint
+
+      - name: Type-check
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npx tsc --noEmit
+
+      # Every scripts/verify-*.ts|mjs. The live-database ones report SKIPPED
+      # (needs env) here, as warnings on the run; they do not fail it. See
+      # scripts/verify-all.mjs for how a skip is told apart from a failure.
+      - name: Verify scripts
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node scripts/verify-all.mjs
+
+      - uses: actions/setup-python@v7
+        if: ${{ !cancelled() }}
+        with:
+          python-version: "3.11"
+
+      # The unittest suites under "Civic Awareness (Know Your Vote)/". They
+      # need only the standard library; the runner handles the folder names
+      # with spaces and colons, and runs discovery once per folder.
+      - name: Python tests
+        if: ${{ !cancelled() }}
+        env:
+          PYTHON: python
+        run: node scripts/verify-all.mjs --python
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Next.js's own recommendation for GitHub Actions
+      # (node_modules/next/dist/docs/01-app/02-guides/ci-build-caching.md).
+      - uses: actions/cache@v6
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**/*.ts', 'src/**/*.tsx', 'src/**/*.css') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-
+
+      # Placeholders, never real values. Every read that runs at build time
+      # (generateStaticParams for races and measures, the sitemap, the
+      # methodology counts) catches a failed client or an error result and
+      # renders empty, so the build proves the app compiles and prerenders
+      # without reaching any database. The host uses the reserved .invalid
+      # TLD, which never resolves, so no request leaves the runner.
+      - name: next build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://ci-placeholder.invalid
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder-anon-key
+          NEXT_TELEMETRY_DISABLED: "1"
+        run: npm run build
+
+  # Read-only checks against the production database. Manual (Actions tab >
+  # CI > Run workflow > tick "live"), or on the schedule above if it is ever
+  # uncommented. Without the two repository secrets it does nothing but say
+  # so. It is never given SUPABASE_SERVICE_ROLE_KEY: the checks that need it
+  # (verify-admin-ops, the probe half of verify-refresh-schema and
+  # verify-notifications-schema) write, or try to write, probe rows, and
+  # production is not the place for that. They report SKIPPED here. Were the
+  # key ever added below, verify-all would still withhold it: write probes
+  # need --allow-write-probes, which it refuses for the production project.
+  live-db:
+    name: live-db
+    if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.live) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+    steps:
+      - name: Check the secrets exist
+        id: secrets
+        run: |
+          if [ -n "$NEXT_PUBLIC_SUPABASE_URL" ] && [ -n "$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning title=Live-database checks did not run::Add the repository secrets NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY (see docs/ci.md)."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v7
+        if: steps.secrets.outputs.ready == 'true'
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        if: steps.secrets.outputs.ready == 'true'
+        with:
+          node-version: 22
+          cache: npm
+
+      - if: steps.secrets.outputs.ready == 'true'
+        run: npm ci
+
+      - name: Live-database checks
+        if: steps.secrets.outputs.ready == 'true'
+        run: node scripts/verify-all.mjs --live

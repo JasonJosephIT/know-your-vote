@@ -33,7 +33,12 @@
    Run: node scripts/verify-coverage.ts */
 
 import { readFileSync } from "node:fs";
-import { districtRaceMissing } from "../src/lib/coverage.ts";
+import {
+  addressCoverage,
+  districtRaceMissing,
+  STATEWIDE_BALLOT_HREF,
+} from "../src/lib/coverage.ts";
+import { COVERED_COUNTIES, coveredCountyNames } from "../src/lib/counties.ts";
 
 let failures = 0;
 function check(name: string, cond: boolean, detail = "") {
@@ -151,6 +156,58 @@ check(
   input.length === 2 &&
     input[0].district === null &&
     input[1].district === "FL-28"
+);
+
+// (7) Coverage comes from the ADDRESS, not the ZIP table. A Florida block we
+//     cannot place is the statewide ballot, never "we don't cover this area".
+const placed = { district: "FL-27", countyFips: "12086" };
+check(
+  "a placed Florida block is district coverage",
+  addressCoverage("12", placed) === "district"
+);
+check(
+  "an unplaced Florida block is statewide, not out of coverage",
+  addressCoverage("12", null) === "statewide"
+);
+check(
+  "a non-Florida block is out of state even if a row came back",
+  addressCoverage("13", placed) === "out_of_state" &&
+    addressCoverage("13", null) === "out_of_state"
+);
+const routeSrc = readFileSync(
+  new URL("../src/app/api/address/resolve/route.ts", import.meta.url),
+  "utf8"
+);
+check(
+  "the address route falls back to the statewide ballot",
+  /resolveStatewideOnly\(\)/.test(routeSrc) &&
+    !/if \(!resolved\) return NextResponse\.json\(OUT_OF_COVERAGE\)/.test(
+      routeSrc
+    ),
+  "an unplaced Florida address must not get OUT_OF_COVERAGE"
+);
+check(
+  "the statewide link carries no location",
+  !/zip=|district=|county=/.test(STATEWIDE_BALLOT_HREF) &&
+    STATEWIDE_BALLOT_HREF.includes("scope=statewide")
+);
+
+// (8) The coverage copy names exactly the counties the resolver covers.
+const names = coveredCountyNames();
+check(
+  "every covered county is named in the coverage copy",
+  COVERED_COUNTIES.every((c) => names.includes(c.name)),
+  names
+);
+check(
+  "the list reads as prose",
+  names === "Miami-Dade, Broward, Hillsborough and Orange",
+  names
+);
+check(
+  "YourRaces says full statewide coverage is not available",
+  yourRaces.includes("Full statewide coverage isn&apos;t available") &&
+    /result\.coverage === "statewide"/.test(yourRaces)
 );
 
 if (failures > 0) {

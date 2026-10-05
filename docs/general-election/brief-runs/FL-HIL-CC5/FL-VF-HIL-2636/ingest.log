@@ -1,0 +1,11 @@
+(node:5444) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-site-ingest.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/user/know-your-vote/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+site: https://www.neilmanimala.com/
+  asking Jev about 4 link(s) as jev:jev-1.13.0/links/q-e03cabd0
+  57 links, 1 policy page(s) selected (cap 8), about page: https://www.neilmanimala.com/meetneil
+    6 passage(s)  https://www.neilmanimala.com/priorities
+    4 passage(s)  https://www.neilmanimala.com/meetneil
+
+17 passage(s) -> docs/general-election/brief-runs/FL-HIL-CC5/FL-VF-HIL-2636/passages.jsonl

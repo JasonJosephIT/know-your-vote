@@ -1,11 +1,30 @@
 # PRD — Know Your Vote
 
-> **⚠️ Two things in this document are out of date.** The "closed primary"
+> **⚠️ Parts of this document are out of date.** The "closed primary"
 > note (§433, §530) no longer applies to the November general election and was
 > removed from the app; and §182's "Vercel edge middleware" rate limiting is
 > in-route, not middleware. Hosting is Vercel, as described. Phase 7 also
 > amends the ZIP-first magic moment (FR-001 / TASK-015). Details in
 > [`docs/scope-changes.md`](./scope-changes.md).
+>
+> **Added 2026-10-04:**
+> - **What ships for the 2026 general is stated positions only**, quoted word
+>   for word from each candidate's own campaign site. *What They've Done*
+>   (records) and *Fact-Check* are not part of this cycle: every published
+>   profile has `verifiable_fact_count = 0` and `fact_checks_performed = 0`.
+>   §1, the Magic Moment and FR-004 describe all three buckets; read them as
+>   the long-term design, not as what voters see this year.
+> - **The Find My Candidates quiz was removed on 2026-09-25**
+>   (`docs/general-election/quiz-clipped-2026-09-25.md`). FR-007, US-003,
+>   `/api/quiz`, the Anthropic dependency and the quiz rows in §2, §7, §8 and
+>   §11 describe a feature that no longer exists. `src/lib/quiz-questions.ts`
+>   stays as the shared issue taxonomy.
+> - **Analytics and advertising changed.** A Google Ads tag loads after the
+>   visitor accepts a cookie banner, and Plausible is wired but not
+>   configured in production. Keeping the tag is **Recommended (pending
+>   founder confirmation)**. §2, §3, §7, §12 and §14 are amended in place;
+>   the reasoning and how to flip it are in `docs/scope-changes.md`
+>   (2026-10-04).
 
 *Technical blueprint for the voter-facing web app of the Civic Awareness Project (CAP). Read alongside `product-vision.md` (strategy/brand) and the authoritative backend specs: `CAP_Schema_v1.md` (data schema), `CAP_Agent_Plan_v1.md`, `CAP_MCP_Tool_Spec_v1.md`, `CAP_Balance_Audit_Spec_v1.md`, `CAP_Logging_Schema_v1.md`. Visual tokens live in `docs/design.md` (generate via the Design System skill before styling work).*
 
@@ -94,7 +113,8 @@ flowchart TD
 | Backend | Next.js Route Handlers + Server Actions on Vercel; Vercel Cron for the daily refresh | No separate backend service; server-side secrets (Claude, Resend, Supabase service role) never reach the client |
 | Database | Supabase (Postgres) | Matches the existing CAP schema exactly; enum `CHECK`s + FKs enforce "buckets are sacred" and "no source → dropped" at the DB level; RLS exposes only published data |
 | Auth | None (device-local) | Anonymous by default; saved candidates and quiz answers live in `localStorage`; no accounts, no login |
-| Analytics | Plausible (cookieless) | Privacy-first, no personal data, no consent banner; instruments aggregate funnel events only |
+| Analytics | Plausible (cookieless) | Privacy-first, no personal data, no consent banner; instruments aggregate funnel events only. *2026-10-04: wired, but `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` is unset in production, so it does not run* |
+| Advertising measurement *(added 2026-10-04)* | Google Ads tag (gtag.js), opt-in | Loads only after the visitor accepts the cookie banner; Decline means it never loads. Recommended to keep, pending founder confirmation (`docs/scope-changes.md`) |
 | Email | Resend | Opt-in transactional email only (polling place, deadlines, reminders) |
 | Error tracking | Sentry | Client + server error capture with strict PII scrubbing (no ZIP, email, or IP in payloads) |
 
@@ -113,7 +133,7 @@ flowchart TD
 **Integration patterns:**
 - **Reads go through Server Components** hitting Supabase directly with the anon client — no bespoke REST layer for browsing races/candidates/briefs. RLS is the security boundary.
 - **Mutations and AI/email go through Route Handlers** (`/api/*`) so secrets stay server-side.
-- **The quiz never sends PII to Claude** — only the ZIP (to resolve races) and the issue answers; no name, email, or identifiers.
+- **The quiz never sends PII to Claude** — only the ZIP (to resolve races) and the issue answers; no name, email, or identifiers. *(The quiz was removed on 2026-09-25; nothing in the app calls Claude now.)*
 
 **Common gotchas:**
 - Don't let the public anon key read `voting_info_subscription`. Lock it with RLS (no anon `SELECT`) and only touch it via the service-role client in server code.
@@ -121,7 +141,7 @@ flowchart TD
 - Split ZIPs (a ZIP spanning two congressional districts) must not silently pick one district — fall back to the county picker / district confirmation (see §11).
 
 **Required environment variables:**
-`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (server only), `ANTHROPIC_API_KEY` (server only), `RESEND_API_KEY` (server only), `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`, `SENTRY_DSN`, `SENTRY_AUTH_TOKEN`, `CRON_SECRET` (guards the cron route), `EMAIL_FROM` (verified Resend sender).
+`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (server only), `RESEND_API_KEY` (server only), `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`, `SENTRY_DSN`, `SENTRY_AUTH_TOKEN`, `CRON_SECRET` (guards the cron route), `EMAIL_FROM` (verified Resend sender). *(`ANTHROPIC_API_KEY` was dropped from the web app with the quiz on 2026-09-25. The names must match exactly, with one exception: Vercel production holds the service-role and Resend keys as `SUPABASE` and `RESEND`, which the app reads as fallbacks since #109 (2026-10-05, `src/lib/server-keys.ts`). Until then nothing read them and `EMAIL_FROM` was unset (the founder added it the same day), so every email path answered 503. `README.md` § Environment variables is the current list.)*
 
 Optional: `SHOW_CANDIDATE_CONTACT` (server only) — the candidate-page contact block from `candidate_contact` stays unrendered until this is `"true"` (CAP_Refresh_Agents_Plan §8 Q3: flip only after the first real R2 run's data is approved).
 
@@ -187,10 +207,10 @@ know-your-vote/
 
 - **RLS is the boundary.** Public (anon) role: `SELECT` only on published read models and `news_item`; **no access** to `voting_info_subscription`. All writes to `voting_info_subscription` go through server code using the service-role key after server-side validation and explicit consent.
 - **Published-only invariant.** The public brief query joins `race_publication` (`status='published'`) and filters `profile.balance_check_passed = true`; unpublished/failing races are unreachable, not merely hidden in the UI.
-- **No PII to third parties.** The quiz sends only ZIP + issue answers to Claude. Sentry is configured to scrub ZIP, email, and IP from all events and breadcrumbs. Plausible is cookieless and stores no personal data.
-- **Input validation.** Validate ZIP (5-digit US), email (RFC + MX-lightweight), and quiz payloads with `zod` at every route handler. Rate-limit `/api/quiz` and `/api/voting-info` (e.g. Vercel edge middleware or Upstash) to deter abuse.
+- **No PII to third parties without the visitor's opt-in.** *(Amended 2026-10-04; it read "No PII to third parties", which stopped being true for visitors who accept the Google Ads tag.)* Sentry is configured to scrub ZIP, email, and IP from all events and breadcrumbs. Plausible is cookieless and stores no personal data (and is not configured in production as of 2026-10-04). **The one exception is opt-in:** the Google Ads tag (`AW-18487967912`, `src/components/features/SitePrompts.tsx`) loads only after the visitor presses Accept on a cookie banner. The answer is kept on the device as `kyv.ads-consent` (`granted` or `denied`); Decline means the tag never loads and no request reaches Google. After Accept, Google receives the page address and referrer with any `zip` parameter removed, the visitor's IP address, browser details and its own cookies, and can connect the visit with other sites that use Google advertising. `/privacy` says all of this and lets the visitor change the answer. Keeping the tag is **Recommended (pending founder confirmation)**; the alternative, removing it, and what that touches are in `docs/scope-changes.md` (2026-10-04). The quiz, which sent ZIP + issue answers to Claude, was removed on 2026-09-25.
+- **Input validation.** Validate ZIP (5-digit US), email (RFC + MX-lightweight), and quiz payloads with `zod` at every route handler. Rate-limit `/api/quiz` and `/api/voting-info` (e.g. Vercel edge middleware or Upstash) to deter abuse. *(`/api/quiz` was removed on 2026-09-25.)*
 - **Email safety.** Double-opt-in optional; always include an unsubscribe link (tokenized) and honor it. Store the minimum: email, ZIP, consent timestamp, unsubscribe token.
-- **Secrets** live only in Vercel env; service-role key, `ANTHROPIC_API_KEY`, `RESEND_API_KEY`, and `CRON_SECRET` are never `NEXT_PUBLIC_`.
+- **Secrets** live only in Vercel env; service-role key, `RESEND_API_KEY`, and `CRON_SECRET` are never `NEXT_PUBLIC_`. (`ANTHROPIC_API_KEY` left the web app with the quiz on 2026-09-25.)
 
 ### Cost Estimate
 
@@ -282,6 +302,8 @@ CREATE TABLE voting_info_subscription (
 ```
 
 **No `user` table. No `saved_candidate` table.** Saved candidates and in-progress quiz answers are stored client-side in `localStorage` (keys: `kyv.saved` = array of `candidate_id`; `kyv.quiz` = last answers). This is deliberate — anonymous by default.
+
+*As built, 2026-10-04:* `kyv.quiz` never shipped (quiz answers lived in React state) and the quiz itself is gone. The device holds `kyv.saved`, `kyv.install-dismissed`, `kyv.ads-consent` (the Google Ads cookie answer, `granted` or `denied`) and `kyv.donate-dismissed` in `localStorage`, plus one cookie, `kyv.district` (a district and county such as `FL-27|12086`, never an address or ZIP). `/privacy` describes all five, and `scripts/verify-no-stored-location.ts` is the check that holds the code to that list (it was red on `main` on 2026-10-04 over how it resolves the keys in `SitePrompts.tsx`; see the launch handoff).
 
 ### Relationships
 
@@ -507,8 +529,8 @@ Related: US-007
 ### Security
 - OWASP Top 10 addressed; all inputs validated with `zod`.
 - RLS: no anon access to `voting_info_subscription`; service-role key server-only.
-- Rate limiting on `/api/quiz` and `/api/voting-info`.
-- Sentry scrubs ZIP/email/IP; no PII in logs or analytics.
+- Rate limiting on `/api/quiz` and `/api/voting-info`. *(`/api/quiz` removed 2026-09-25.)*
+- Sentry scrubs ZIP/email/IP; no PII in logs or analytics. Advertising measurement (the Google Ads tag) runs only after the visitor opts in; Google then receives the IP address (§2 Security Considerations, amended 2026-10-04).
 
 ### Accessibility
 - WCAG 2.1 AA: full keyboard navigation, visible focus, screen-reader-tested nav and briefs, sufficient contrast (verify against `design.md` tokens).
@@ -670,21 +692,22 @@ Not applicable. Know Your Vote is a free civic tool with no paid tiers, checkout
 
 ### Third-Party Services
 - **Supabase** — Postgres + RLS. Env: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`. Shared with the CAP pipeline (app reads; writes only app-owned tables).
-- **Anthropic Claude API** — quiz interpretation. Env: `ANTHROPIC_API_KEY`. Server-only. Recommended model: a current mid-tier Claude (e.g. `claude-sonnet-5`) for latency/cost; swap to a flagship (e.g. `claude-opus-4-8`) if free-response quality needs it. Send no PII. Verify model IDs and pricing against current Anthropic docs.
+- **Anthropic Claude API** — quiz interpretation. Env: `ANTHROPIC_API_KEY`. Server-only. Recommended model: a current mid-tier Claude (e.g. `claude-sonnet-5`) for latency/cost; swap to a flagship (e.g. `claude-opus-4-8`) if free-response quality needs it. Send no PII. Verify model IDs and pricing against current Anthropic docs. *(Removed from the web app with the quiz on 2026-09-25. The `@anthropic-ai/sdk` dependency is still listed in `package.json` but nothing imports it.)*
 - **Resend** — opt-in transactional email. Env: `RESEND_API_KEY`, `EMAIL_FROM`. Free tier ~3,000 emails/mo.
-- **Plausible** — cookieless analytics. Env: `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`. Events: `zip_resolved`, `brief_viewed`, `quiz_completed`, `candidate_saved`, `voting_info_requested` — aggregate only, no identifiers.
+- **Plausible** — cookieless analytics. Env: `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`. Events: `zip_resolved`, `brief_viewed`, `quiz_completed`, `candidate_saved`, `voting_info_requested` — aggregate only, no identifiers. *(2026-10-04: the events are now `ballot_viewed`, `zip_resolved`, `district_set`, `brief_viewed`, `candidate_saved` and `voting_info_requested`. The script is wired in `src/app/layout.tsx`, but `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` is unset in Vercel production, so no analytics run. Turning it on is Recommended (pending founder confirmation); `docs/scope-changes.md` 2026-10-04 §B.)*
+- **Google Ads tag** *(added 2026-10-01, recorded 2026-10-04)* — gtag.js for `AW-18487967912`, in `src/components/features/SitePrompts.tsx`. No env var; the ID is a constant there. Loads only after the visitor accepts the cookie banner, and never on `/admin`. Sends a page view per full page load with `zip` stripped from the page address and referrer; Google also receives the IP address and its own cookies. No conversion event is fired in code. Keeping it is **Recommended (pending founder confirmation)**; removal steps in `docs/scope-changes.md` 2026-10-04 §A.
 - **Sentry** — error tracking. Env: `SENTRY_DSN`, `SENTRY_AUTH_TOKEN`. Configure PII scrubbing (drop ZIP/email/IP).
 - **External data (via the pipeline, not the app):** FL Division of Elections, FEC API, FL Legislature, Census (for `zip_district` seed). The app consumes their *processed* output from Supabase.
 
 ## 13. Out of Scope
 
 - **User accounts / cross-device sync** — contradicts anonymous-by-default; adds auth + privacy surface. Reconsider only on clear user demand.
-- **Mass SMS delivery** — needs A2P 10DLC registration + TCPA compliance. Reconsider post-launch.
+- **Mass SMS delivery** — needs A2P 10DLC registration + TCPA compliance. Reconsider post-launch. *(2026-10-04: still out for Nov 3, and recommended cut pending founder confirmation; Twilio toll-free verification was never started. `docs/scope-changes.md`.)*
 - **Geography beyond the four FL metros** — depth first. Next expansion is the remaining FL districts, then state legislature.
 - **User comments / ratings / any UGC** — reintroduces the bias/moderation problem the project exists to avoid.
 - **External news aggregation** — inconsistent with pipeline-and-official-sources neutrality control.
 - **In-app candidate rebuttals / claim disputes** — route through the existing pipeline flag path for now.
-- **Push notifications** — not in MVP.
+- **Push notifications** — not in MVP. *(2026-10-04: web push is recommended cut for Nov 3, pending founder confirmation.)*
 
 ## 14. Open Questions
 
@@ -692,4 +715,4 @@ Not applicable. Know Your Vote is a free civic tool with no paid tiers, checkout
 - **Polling-place + deadline data for the email.** Options: FL Supervisor-of-Elections per-county sources vs. a third-party civic API (e.g. a voting-info API). *Recommended default:* start with curated official county sources for the four metros; evaluate an API when expanding.
 - **Where the daily news cron reads pipeline events from.** Options: directly off `action_log`/`claim` changes vs. a pipeline-published "events" view. *Recommended default:* a dedicated read view the pipeline maintains, so the app never couples to internal log internals.
 - **Quiz model + guardrail placement.** Confirm the model tier and whether the non-ranking/full-field guarantee is enforced purely by prompt or also by a post-processing check. *Recommended default:* both — prompt for it and validate/normalize the response server-side before returning.
-- **Analytics choice.** `VISION.md` picks Plausible for privacy; confirm vs. a cookieless PostHog if richer funnels are wanted later.
+- **Analytics choice.** `VISION.md` picks Plausible for privacy; confirm vs. a cookieless PostHog if richer funnels are wanted later. *(2026-10-04: two open founder calls now sit here. **Plausible** is wired but `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` is unset in production, so no analytics run; Recommended (pending founder confirmation): set it. **Advertising:** a Google Ads tag loads after cookie-banner consent; Recommended (pending founder confirmation): keep it, with the PRD amended as in §2. The alternative is to remove the tag. Both are in `docs/scope-changes.md` 2026-10-04.)*

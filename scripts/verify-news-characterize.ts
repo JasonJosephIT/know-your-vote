@@ -23,7 +23,10 @@
 
    Pure and offline. Run: node scripts/verify-news-characterize.ts */
 
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import {
+  CHARACTERIZED_ITEM_TYPES,
   DEFAULT_THRESHOLD,
   applyThreshold,
   buildQuestions,
@@ -32,6 +35,7 @@ import {
   slugPath,
   type NewsIssue,
 } from "../src/lib/news-characterize.ts";
+import { AGENT_ITEM_TYPES } from "../src/lib/neutrality.ts";
 
 let failures = 0;
 function check(name: string, cond: boolean, detail = "") {
@@ -159,8 +163,37 @@ check("provenance changes when the taxonomy version changes",
 check("provenance changes when the taxonomy itself changes",
   provenance("jev-1.13.0", buildQuestions(TAXONOMY.slice(0, 2)), VERSION) !== p1);
 
+/* ---- scope: news rows only (2026-10-04) -------------------------------- */
+/* news-ingest-order-results-2026-09-23.md §4 item 2: the first live run would
+   have sent the six evergreen official_link rows to Jev. The scope is a
+   constant in the pure core, and the runner must actually apply it — a
+   constant nobody filters on would read as fixed and change nothing. */
+check("the characterizer scope is exactly candidate_news and election_news",
+  JSON.stringify([...CHARACTERIZED_ITEM_TYPES].sort()) === '["candidate_news","election_news"]',
+  JSON.stringify(CHARACTERIZED_ITEM_TYPES));
+check("official_link is out of scope",
+  !(CHARACTERIZED_ITEM_TYPES as readonly string[]).includes("official_link"));
+check("pipeline_event is out of scope",
+  !(CHARACTERIZED_ITEM_TYPES as readonly string[]).includes("pipeline_event"));
+/* The same pair the neutrality lint and migration 0014 treat as journalism.
+   If one list grows, this says so instead of the two drifting quietly. */
+check("the scope matches neutrality.ts AGENT_ITEM_TYPES",
+  JSON.stringify([...CHARACTERIZED_ITEM_TYPES].sort()) === JSON.stringify([...AGENT_ITEM_TYPES].sort()),
+  `${JSON.stringify(CHARACTERIZED_ITEM_TYPES)} vs ${JSON.stringify(AGENT_ITEM_TYPES)}`);
+
+const runner = readFileSync(
+  resolve(import.meta.dirname, "news-characterize.ts"), "utf8",
+).replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/[^\n]*/g, "$1");
+/* The query that picks rows must filter on the constant, in the same chain as
+   `.is("issues", null)` — a filter on some other query would not scope this one. */
+const selectChain = runner.match(/\.from\("news_item"\)[\s\S]*?\.limit\(limit\)/)?.[0] ?? "";
+check("the runner's row query was found", selectChain.includes('.is("issues", null)'));
+check("the runner's row query filters item_type on CHARACTERIZED_ITEM_TYPES",
+  /\.in\(\s*"item_type"\s*,\s*\[\.\.\.CHARACTERIZED_ITEM_TYPES\]\s*\)/.test(selectChain),
+  selectChain.replace(/\s+/g, " ").slice(0, 200));
+
 if (failures > 0) {
   console.error(`\nverify-news-characterize: ${failures} failure(s)`);
   process.exit(1);
 }
-console.log("verify-news-characterize: OK — no identity in the state, closed response set, reproducible provenance");
+console.log("verify-news-characterize: OK — no identity in the state, closed response set, reproducible provenance, news rows only");

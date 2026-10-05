@@ -1,0 +1,73 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  B1  Economy, inflation, and jobs  (2 citation(s))
+      0.93  "Bring all major development permits under a single digital hub so job creators spend less time in lines and more time hiring workers."
+            https://byrondonalds.com/issues/economy  — section: Streamlined State Reviews:
+      0.85  "Require every Florida business to use the E-Verify system so legal workers keep the jobs and wages they've earned."
+            https://byrondonalds.com/issues/law-and-order  — section: Enforce Workplace Rules:
+
+Education
+  A6  Public school funding and teachers  (1 citation(s))
+      0.90  "Reward top-performing reading teachers with real bonus pay for getting results."
+            https://byrondonalds.com/issues/education  — section: Read to Succeed (Early Literacy):
+  KYV9  School choice and vouchers  (1 citation(s))
+      0.97  "Let education money follow the student so parents can choose the best school for their child."
+            https://byrondonalds.com/issues/education  — section: Parental Rights and Classroom Focus:
+  KYV10  Career, vocational and higher education  (1 citation(s))
+      0.97  "Connect high schools and community colleges with local businesses to offer paid apprenticeships in construction, advanced manufacturing, and defense."
+            https://byrondonalds.com/issues/education  — section: LaunchPad Florida (Debt-Free Careers):
+
+Healthcare
+  B2  Healthcare access and costs  (4 citation(s))
+      0.98  "Require doctors and hospitals to post plain, guaranteed cash prices for the 50 most common medical tests and procedures."
+            https://byrondonalds.com/issues/healthcare  — section: Upfront, Clear Cash Prices:
+      0.97  "Ensure everyday patients paying cash get the lowest discounted rate that the hospital gives to big insurance companies."
+            https://byrondonalds.com/issues/healthcare  — section: Best Price Guarantee:
+      0.97  "Let what you pay to an out-of-network doctor count directly toward your yearly insurance deductible."
+            https://byrondonalds.com/issues/healthcare  — section: No Out-of-Network Traps:
+      0.96  "Require insurance companies to approve common treatments within three days instead of letting paperwork delay your care."
+            https://byrondonalds.com/issues/healthcare  — section: Fast Insurance Approvals:
+
+Environment & Water
+  KYV3  Growth, development and land conservation  (2 citation(s))
+      0.94  "Put every business, building, and road permit on an open state website with a ticking clock, forcing local offices to approve projects on time."
+            https://byrondonalds.com/issues/economy  — section: A Public Shot Clock on Permits:
+      0.91  "Bring all major development permits under a single digital hub so job creators spend less time in lines and more time hiring workers."
+            https://byrondonalds.com/issues/economy  — section: Streamlined State Reviews:
+  KYV4  Storm resilience and flood protection  (1 citation(s))
+      0.91  "Reform the My Safe Florida Home program and other grants programs to fund real, storm-hardening upgrades that lower your annual premium the most."
+            https://byrondonalds.com/issues/affordability  — section: Bring Down Your Insurance Bill:
+
+Immigration
+  B3  Immigration and border enforcement  (5 citation(s))
+      0.98  "We must secure our borders, keep local neighborhoods safe, stop taxpayer handouts to illegal immigration, and keep deadly drugs off our streets."
+            https://byrondonalds.com/  — section: Law and Order
+      0.98  "“We must secure our borders, keep local neighborhoods safe, stop taxpayer handouts to illegal immigration, and keep deadly drugs off our streets.”"
+            https://byrondonalds.com/issues/law-and-order  — section: Law and Order
+      0.96  "Cut off state funds, subsidies, and free perks that encourage illegal immigration into Florida."
+            https://byrondonalds.com/issues/law-and-order  — section: No Taxpayer Handouts:
+      0.95  "Coordinate state and local police directly with federal authorities to quickly deport noncitizens who commit crimes in our communities."
+            https://byrondonalds.com/issues/law-and-order  — section: Remove Dangerous Criminals:
+      0.89  "Require every Florida business to use the E-Verify system so legal workers keep the jobs and wages they've earned."
+            https://byrondonalds.com/issues/law-and-order  — section: Enforce Workplace Rules:
+
+Insurance & Property Costs
+  A1  Property insurance costs  (4 citation(s))
+      0.98  "Keep Citizens Insurance small so everyday drivers and homeowners never get hit with a surprise "hurricane tax" bill after a big storm."
+            https://byrondonalds.com/issues/affordability  — section: Bring Down Your Insurance Bill:
+      0.97  "Reform the My Safe Florida Home program and other grants programs to fund real, storm-hardening upgrades that lower your annual premium the most."
+            https://byrondonalds.com/issues/affordability  — section: Bring Down Your Insurance Bill:
+      0.95  "Protect reforms and stop lawsuit abuse that jacks up rates for everyone, saving homeowners hundreds of dollars a year."
+            https://byrondonalds.com/issues/affordability  — section: Bring Down Your Insurance Bill:
+      0.95  "Cut the red tape and slow permitting that make rebuilding a home after a storm needlessly expensive and drive up your insurance premiums."
+            https://byrondonalds.com/issues/affordability  — section: Bring Down Your Insurance Bill:
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (2 citation(s))
+      0.97  "Target drug cartels with heavy penalties and joint police task forces to take deadly fentanyl off Florida streets."
+            https://byrondonalds.com/issues/law-and-order  — section: Crack Down on Fentanyl:
+      0.89  "Coordinate state and local police directly with federal authorities to quickly deport noncitizens who commit crimes in our communities."
+            https://byrondonalds.com/issues/law-and-order  — section: Remove Dangerous Criminals:
+

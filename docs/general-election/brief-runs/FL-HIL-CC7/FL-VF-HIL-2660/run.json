@@ -1,0 +1,678 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://voteaileen2026.com",
+  "created_at": "2026-09-30T01:59:03.723Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
+  "question_ids": [
+    "q_states_policy",
+    "q_own_commitment",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 14,
+    "asked": 14,
+    "states_policy": 4,
+    "with_issue": 3,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "97aaf2bb",
+      "url": "https://voteaileen2026.com/",
+      "heading": "MEET AILEEN",
+      "text": "Aileen is a public affairs executive with more than 20 years of experience leading public relations and communications efforts for organizations in the arenas of health, education, government, and transportation. She is currently the principal of AR Public Affairs & Strategic Solutions. Prior roles include working for the United States Senate, Moffitt Cancer Center, Helios Education Foundation, the Tampa Bay Host Committee for the RNC, and the TGH Experience at the Tampa Bay Super Bowl VL.",
+      "verdict": {
+        "commitment": 0.02,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "4f81533e",
+      "url": "https://voteaileen2026.com/",
+      "heading": "MEET AILEEN",
+      "text": "Aileen has demonstrated her commitment to community service through her involvement with various community organizations. Her contributions include prior service on the Hillsborough Community College Foundation Board, the City of Tampa’s Human Rights Board, the Florida Public Relations Association, the FBI Citizens Academy, the University of South Florida Latin Community Advisory Committee, and the Children’s Board of Hillsborough County Grant Review Committee.",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.04,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.04,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "bfe8a270",
+      "url": "https://voteaileen2026.com/",
+      "heading": "MEET AILEEN",
+      "text": "Awards and honors include receiving the 2019 NFL/Tampa Bay Buccaneers Hispanic Heritage Leadership Award and the 2019 City of Tampa Mayor's Hispanic Advisory Council Leadership Award. She was also honored as a 2009 Hillsborough Community College Top 40 Alumni and received the 2008 Leadership in Business Award.",
+      "verdict": {
+        "commitment": 0.02,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "06169f8b",
+      "url": "https://voteaileen2026.com/",
+      "heading": "MEET AILEEN",
+      "text": "Aileen was born in San Juan, Puerto Rico and moved to the Tampa Bay area as a young child. She attended Hillsborough Community College and the University of South Florida. Aileen holds a BA in Organizational and Interpersonal Communications with a concentration in Psychology from the University of South Florida. She received leadership training through the American Management Association and earned a certificate of Inclusive and Ethical Leadership through the University of South Florida.",
+      "verdict": {
+        "commitment": 0.02,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "fa521e91",
+      "url": "https://voteaileen2026.com/",
+      "heading": "MEET AILEEN",
+      "text": "Aileen resides in Tampa with her husband and two children.",
+      "verdict": {
+        "commitment": 0.02,
+        "own_commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "50aa3bbc",
+      "url": "https://voteaileen2026.com/",
+      "heading": "ISSUES",
+      "text": "LOWER THE COST OF LIVING Hillsborough should be a place where everyone can afford to live. Aileen will tackle the housing and transportation costs that burden our wallets, ensuring teachers, first responders, and young families aren’t priced out of our community.",
+      "verdict": {
+        "commitment": 0.98,
+        "own_commitment": 0.94,
+        "states_policy": true,
+        "issues": [
+          "A2"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.97,
+          "A3": 0.03,
+          "A4": 0.72,
+          "A5": 0.02,
+          "A6": 0.12,
+          "A7": 0.02,
+          "B1": 0.33,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.05,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.1,
+          "KYV7": 0.08,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b80bb664",
+      "url": "https://voteaileen2026.com/",
+      "heading": "ISSUES",
+      "text": "FIX OUR INFRASTRUCTURE Our roads shouldn’t be failing us. Aileen will fight to reinvest tax dollars directly into the neighborhoods most impacted by development. It’s time our infrastructure kept pace with growth.",
+      "verdict": {
+        "commitment": 0.98,
+        "own_commitment": 0.95,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.06,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.1,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.52,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "df8e73f5",
+      "url": "https://voteaileen2026.com/",
+      "heading": "ISSUES",
+      "text": "PROTECT OUR LANDS & NEIGHBORHOODS Our community’s character is not for sale. Aileen will hold developers accountable and ensure they pay their fair share, preserving the unique culture and natural beauty of our County from reckless sprawl.",
+      "verdict": {
+        "commitment": 0.97,
+        "own_commitment": 0.95,
+        "states_policy": true,
+        "issues": [
+          "KYV3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.09,
+          "A3": 0.07,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.09,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.13,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.97,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a4725eef",
+      "url": "https://voteaileen2026.com/",
+      "heading": "ISSUES",
+      "text": "PRIORITIZE PUBLIC SAFETY In an emergency, every second counts. Aileen will support funding the fire and police stations our growing population needs to ensure fast response times for every resident—no matter your zip code.",
+      "verdict": {
+        "commitment": 0.98,
+        "own_commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.96,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b19bf48d",
+      "url": "https://voteaileen2026.com/",
+      "heading": "ISSUES",
+      "text": "Fentrice Driskell State Representative and House Minority Leader",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "12fe2acc",
+      "url": "https://voteaileen2026.com/",
+      "heading": "ISSUES",
+      "text": "Frank Sanchez Former U.S. Under Secretary of Commerce for International Trade",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "fa865ffc",
+      "url": "https://voteaileen2026.com/",
+      "heading": "JOIN THE CAMPAIGN!",
+      "text": "This campaign is about bringing experience, integrity, and community-focused leadership to the work ahead. Whether you want to volunteer, stay informed, or support the campaign, there’s a place for you here.",
+      "verdict": {
+        "commitment": 0.05,
+        "own_commitment": 0.13,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "dec0e6c8",
+      "url": "https://voteaileen2026.com/",
+      "heading": "JOIN THE CAMPAIGN!",
+      "text": "Fill out the form to get involved and receive updates on events, opportunities, and ways to help move this campaign forward.",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "3f8fb37f",
+      "url": "https://voteaileen2026.com/",
+      "heading": "FOLLOW THE CAMPAIGN",
+      "text": "Please send campaign checks to: 8870 N Himes Ave, Suite 336, Tampa, FL 33614",
+      "verdict": {
+        "commitment": 0.02,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "housing",
+        "label": "Housing"
+      },
+      "subIssues": [
+        {
+          "id": "A2",
+          "label": "Housing affordability",
+          "citations": [
+            {
+              "passage": {
+                "id": "50aa3bbc",
+                "url": "https://voteaileen2026.com/",
+                "heading": "ISSUES",
+                "text": "LOWER THE COST OF LIVING Hillsborough should be a place where everyone can afford to live. Aileen will tackle the housing and transportation costs that burden our wallets, ensuring teachers, first responders, and young families aren’t priced out of our community.",
+                "retrieved_at": "2026-09-29T11:45:08.501Z"
+              },
+              "score": 0.97
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "environment",
+        "label": "Environment & Water"
+      },
+      "subIssues": [
+        {
+          "id": "KYV3",
+          "label": "Growth, development and land conservation",
+          "citations": [
+            {
+              "passage": {
+                "id": "df8e73f5",
+                "url": "https://voteaileen2026.com/",
+                "heading": "ISSUES",
+                "text": "PROTECT OUR LANDS & NEIGHBORHOODS Our community’s character is not for sale. Aileen will hold developers accountable and ensure they pay their fair share, preserving the unique culture and natural beauty of our County from reckless sprawl.",
+                "retrieved_at": "2026-09-29T11:45:08.501Z"
+              },
+              "score": 0.97
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "safety",
+        "label": "Public Safety & Crime"
+      },
+      "subIssues": [
+        {
+          "id": "B7",
+          "label": "Crime policy, policing and courts",
+          "citations": [
+            {
+              "passage": {
+                "id": "a4725eef",
+                "url": "https://voteaileen2026.com/",
+                "heading": "ISSUES",
+                "text": "PRIORITIZE PUBLIC SAFETY In an emergency, every second counts. Aileen will support funding the fire and police stations our growing population needs to ensure fast response times for every resident—no matter your zip code.",
+                "retrieved_at": "2026-09-29T11:45:08.501Z"
+              },
+              "score": 0.96
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 52143,
+    "output_tokens": 6706
+  }
+}

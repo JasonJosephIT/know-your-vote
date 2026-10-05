@@ -1,0 +1,10 @@
+(node:4697) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-site-ingest.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/user/know-your-vote/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  bot challenge did not clear in the browser: https://www.robpiperheretoserve.com/robots.txt
+  WARNING robots.txt unreadable (plain fetch got a bot challenge, HTTP 403; the browser could not clear it either) at https://www.robpiperheretoserve.com/robots.txt — its policy is unknown; proceeding with no rules.
+site: https://www.robpiperheretoserve.com/
+  bot challenge (HTTP 403), retrying in the browser: https://www.robpiperheretoserve.com/
+  bot challenge did not clear in the browser: https://www.robpiperheretoserve.com/
+Could not fetch the homepage — stopping.

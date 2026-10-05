@@ -1,0 +1,5851 @@
+[
+ {
+  "race_id": "FL-10-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-89909",
+    "name": "Maxwell Alejandro Frost",
+    "party": "DEM",
+    "site": "https://www.frostforcongress.com/",
+    "run": "FL-10/FL-DOE-89909",
+    "reason": null,
+    "perIssue": {
+     "B2": 1,
+     "B4": 1,
+     "B7": 1,
+     "B8": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B8",
+    "title": "Climate and environment (national)",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "description": null
+   },
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "description": null
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "description": null
+   },
+   {
+    "id": "B8",
+    "title": "Climate and environment (national)",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-89909",
+    "race_id": "FL-10-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-89909-f4af7195",
+     "claim-FL-DOE-89909-52e47f5f",
+     "claim-FL-DOE-89909-284b1dcc",
+     "claim-FL-DOE-89909-6d3851cb"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 260,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 4,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   }
+  ],
+  "counts": {
+   "claims": 4,
+   "positions": 4,
+   "issues": 4
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-11-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-88517",
+    "name": "Ralph Groves",
+    "party": "LPF",
+    "site": "https://www.grovesforcongress.com/",
+    "run": "FL-11/FL-DOE-88517",
+    "reason": null,
+    "perIssue": {
+     "B5": 1,
+     "B3": 1,
+     "KYV9": 1,
+     "B1": 1,
+     "B4": 1,
+     "B7": 1,
+     "KYV5": 1
+    }
+   },
+   {
+    "id": "FL-DOE-91715",
+    "name": "James Pericola",
+    "party": "DEM",
+    "site": "https://jamespericola.com/",
+    "run": "FL-11/FL-DOE-91715",
+    "reason": null,
+    "perIssue": {
+     "B2": 2,
+     "B4": 1,
+     "A1": 1,
+     "A2": 1,
+     "A7": 1,
+     "KYV1": 1
+    }
+   },
+   {
+    "id": "FL-DOE-91717",
+    "name": "Joe Strada",
+    "party": "REP",
+    "site": "https://votestrada.com/",
+    "run": "FL-11/FL-DOE-91717",
+    "reason": null,
+    "perIssue": {}
+   }
+  ],
+  "issues": [
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "covered": 2,
+    "passages": 2
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "A1",
+    "title": "Property insurance costs",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "A7",
+    "title": "Elections administration and voting access",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B5",
+    "title": "Abortion policy",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV1",
+    "title": "Threats to democratic institutions",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV5",
+    "title": "Water supply and drinking water",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV9",
+    "title": "School choice and vouchers",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "description": null
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "description": null
+   },
+   {
+    "id": "A1",
+    "title": "Property insurance costs",
+    "description": null
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-88517",
+    "race_id": "FL-11-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-88517-53162ec9",
+     "claim-FL-DOE-88517-295f33ba",
+     "claim-FL-DOE-88517-8a1000ba",
+     "claim-FL-DOE-88517-49921854",
+     "claim-FL-DOE-88517-a61ad4ad",
+     "claim-FL-DOE-88517-32f75a7d",
+     "claim-FL-DOE-88517-c8537343"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 595,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 7,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 1
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-91715",
+    "race_id": "FL-11-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-91715-7a21d202",
+     "claim-FL-DOE-91715-9350f0ac",
+     "claim-FL-DOE-91715-cf1fb00c",
+     "claim-FL-DOE-91715-c8d288d5",
+     "claim-FL-DOE-91715-4554ebc2",
+     "claim-FL-DOE-91715-71f0bee8",
+     "claim-FL-DOE-91715-b716e7ef"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 122,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 7,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-91717",
+    "race_id": "FL-11-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 14,
+   "positions": 20,
+   "issues": 12
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-12-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-88868",
+    "name": "Gus Michael Bilirakis",
+    "party": "REP",
+    "site": "https://bilirakisforcongress.com/",
+    "run": "FL-12/FL-DOE-88868",
+    "reason": null,
+    "perIssue": {
+     "A1": 1,
+     "B3": 1,
+     "A4": 1,
+     "B2": 1
+    }
+   },
+   {
+    "id": "FL-DOE-89453",
+    "name": "Kimberly Overman",
+    "party": "DEM",
+    "site": "https://kimberlyoverman.com/",
+    "run": "FL-12/FL-DOE-89453",
+    "reason": null,
+    "perIssue": {
+     "A2": 2,
+     "B1": 1,
+     "B2": 3,
+     "B5": 3,
+     "A6": 2,
+     "KYV10": 2,
+     "B7": 2,
+     "B8": 1,
+     "KYV4": 1
+    }
+   },
+   {
+    "id": "FL-DOE-89778",
+    "name": "Branden Scrivener",
+    "party": "NPA",
+    "site": "https://brandenscrivenerfl.info/",
+    "run": "FL-12/FL-DOE-89778",
+    "reason": null,
+    "perIssue": {
+     "A6": 1,
+     "KYV9": 1,
+     "KYV3": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 2,
+    "passages": 4
+   },
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "covered": 2,
+    "passages": 3
+   },
+   {
+    "id": "B5",
+    "title": "Abortion policy",
+    "covered": 1,
+    "passages": 3
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "KYV10",
+    "title": "Career, vocational and higher education",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "A1",
+    "title": "Property insurance costs",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "A4",
+    "title": "Cost of living in Florida",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B8",
+    "title": "Climate and environment (national)",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV4",
+    "title": "Storm resilience and flood protection",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV9",
+    "title": "School choice and vouchers",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "description": null
+   },
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "description": null
+   },
+   {
+    "id": "B5",
+    "title": "Abortion policy",
+    "description": null
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-88868",
+    "race_id": "FL-12-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-88868-2f801b42",
+     "claim-FL-DOE-88868-4b3b34c7",
+     "claim-FL-DOE-88868-a847832b",
+     "claim-FL-DOE-88868-1583a410"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 135,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 4,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 1
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-89453",
+    "race_id": "FL-12-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-89453-540524fb",
+     "claim-FL-DOE-89453-a9e535b1",
+     "claim-FL-DOE-89453-3c5f5a3d",
+     "claim-FL-DOE-89453-64d08b16",
+     "claim-FL-DOE-89453-f00baf6a",
+     "claim-FL-DOE-89453-2d29c97c",
+     "claim-FL-DOE-89453-41f2667b",
+     "claim-FL-DOE-89453-b85a0e58",
+     "claim-FL-DOE-89453-b2aa2262",
+     "claim-FL-DOE-89453-ac741061",
+     "claim-FL-DOE-89453-54052afb",
+     "claim-FL-DOE-89453-b4402448",
+     "claim-FL-DOE-89453-e82feb92",
+     "claim-FL-DOE-89453-467efbcb",
+     "claim-FL-DOE-89453-fea43122",
+     "claim-FL-DOE-89453-72050d80",
+     "claim-FL-DOE-89453-692393dc"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 678,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 17,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-89778",
+    "race_id": "FL-12-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-89778-22595edf",
+     "claim-FL-DOE-89778-35a5d459",
+     "claim-FL-DOE-89778-5b07ded9"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 235,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 3,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 1
+    }
+   }
+  ],
+  "counts": {
+   "claims": 24,
+   "positions": 22,
+   "issues": 14
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-14-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-88870",
+    "name": "Kathy Castor",
+    "party": "DEM",
+    "site": "https://castorforcongress.com/",
+    "run": "FL-14/FL-DOE-88870",
+    "reason": null,
+    "perIssue": {
+     "A4": 1,
+     "B1": 1,
+     "B2": 1
+    }
+   },
+   {
+    "id": "FL-DOE-91313",
+    "name": "Mike Beltran",
+    "party": "REP",
+    "site": "https://beltranforcongress.com/",
+    "run": null,
+    "reason": "robots.txt disallows the crawl (honoured)",
+    "perIssue": {}
+   },
+   {
+    "id": "FL-DOE-92395",
+    "name": "Brian Lambert",
+    "party": "LPF",
+    "site": "https://www.brianlambertforcongress.com/",
+    "run": "FL-14/FL-DOE-92395",
+    "reason": null,
+    "perIssue": {
+     "A7": 1,
+     "B6": 1,
+     "B3": 1,
+     "B2": 1,
+     "B1": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 2,
+    "passages": 2
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 2,
+    "passages": 2
+   },
+   {
+    "id": "A4",
+    "title": "Cost of living in Florida",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "A7",
+    "title": "Elections administration and voting access",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B6",
+    "title": "Election integrity",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "description": null
+   },
+   {
+    "id": "A4",
+    "title": "Cost of living in Florida",
+    "description": null
+   },
+   {
+    "id": "A7",
+    "title": "Elections administration and voting access",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-88870",
+    "race_id": "FL-14-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-88870-ee2f2f3f",
+     "claim-FL-DOE-88870-67ecb233",
+     "claim-FL-DOE-88870-e2bd23b8"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 114,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 3,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 3
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-91313",
+    "race_id": "FL-14-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-92395",
+    "race_id": "FL-14-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-92395-1bfe0349",
+     "claim-FL-DOE-92395-a1209a21",
+     "claim-FL-DOE-92395-4a4bd848",
+     "claim-FL-DOE-92395-e957fac2",
+     "claim-FL-DOE-92395-bebf2602"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 91,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 5,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 3
+    }
+   }
+  ],
+  "counts": {
+   "claims": 8,
+   "positions": 14,
+   "issues": 6
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-15-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-89116",
+    "name": "Robert People",
+    "party": "DEM",
+    "site": "https://www.peopleforcongress.com/",
+    "run": "FL-15/FL-DOE-89116",
+    "reason": null,
+    "perIssue": {
+     "A7": 1,
+     "B2": 3,
+     "B4": 2,
+     "KYV2": 1,
+     "KYV3": 1,
+     "A6": 1,
+     "B1": 1
+    }
+   },
+   {
+    "id": "FL-DOE-89121",
+    "name": "Laurel Lee",
+    "party": "REP",
+    "site": "https://votelaurel.com/",
+    "run": "FL-15/FL-DOE-89121",
+    "reason": null,
+    "perIssue": {
+     "B1": 2,
+     "B3": 1,
+     "KYV2": 1,
+     "KYV10": 1,
+     "A7": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 2,
+    "passages": 3
+   },
+   {
+    "id": "A7",
+    "title": "Elections administration and voting access",
+    "covered": 2,
+    "passages": 2
+   },
+   {
+    "id": "KYV2",
+    "title": "Energy and utilities",
+    "covered": 2,
+    "passages": 2
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 1,
+    "passages": 3
+   },
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV10",
+    "title": "Career, vocational and higher education",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   },
+   {
+    "id": "A7",
+    "title": "Elections administration and voting access",
+    "description": null
+   },
+   {
+    "id": "KYV2",
+    "title": "Energy and utilities",
+    "description": null
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-89116",
+    "race_id": "FL-15-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-89116-f7bc7cc1",
+     "claim-FL-DOE-89116-0ab67745",
+     "claim-FL-DOE-89116-56f90873",
+     "claim-FL-DOE-89116-d17ae36d",
+     "claim-FL-DOE-89116-c0a8b9ec",
+     "claim-FL-DOE-89116-a82b690c",
+     "claim-FL-DOE-89116-ea55778b",
+     "claim-FL-DOE-89116-5247d71e",
+     "claim-FL-DOE-89116-44a9a4bc",
+     "claim-FL-DOE-89116-54411a82"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 528,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 10,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-89121",
+    "race_id": "FL-15-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-89121-0ad326db",
+     "claim-FL-DOE-89121-f3d4721d",
+     "claim-FL-DOE-89121-c7fabbe0",
+     "claim-FL-DOE-89121-70c8f89a",
+     "claim-FL-DOE-89121-6c871b6a",
+     "claim-FL-DOE-89121-8be3b799"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 353,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 6,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 3
+    }
+   }
+  ],
+  "counts": {
+   "claims": 16,
+   "positions": 13,
+   "issues": 9
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-16-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-89623",
+    "name": "Mark Davis",
+    "party": "NPA",
+    "site": "https://markdavisforcongress.com/",
+    "run": "FL-16/FL-DOE-89623",
+    "reason": null,
+    "perIssue": {
+     "KYV10": 1
+    }
+   },
+   {
+    "id": "FL-DOE-90251",
+    "name": "Sydney Gruters",
+    "party": "REP",
+    "site": "https://grutersforcongress.com/",
+    "run": "FL-16/FL-DOE-90251",
+    "reason": null,
+    "perIssue": {
+     "A4": 1,
+     "B1": 1,
+     "B3": 1,
+     "B6": 1,
+     "A2": 1,
+     "KYV3": 1,
+     "B4": 1
+    }
+   },
+   {
+    "id": "FL-DOE-90779",
+    "name": "Kelly Kirschner",
+    "party": "DEM",
+    "site": "https://kellykirschner.com/",
+    "run": "FL-16/FL-DOE-90779",
+    "reason": null,
+    "perIssue": {
+     "B2": 5,
+     "B4": 2,
+     "A2": 1,
+     "KYV6": 1,
+     "B8": 3,
+     "KYV3": 3,
+     "KYV2": 2,
+     "KYV5": 1,
+     "KYV4": 2,
+     "KYV10": 1,
+     "B1": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "covered": 2,
+    "passages": 4
+   },
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "covered": 2,
+    "passages": 3
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 2,
+    "passages": 2
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 2,
+    "passages": 2
+   },
+   {
+    "id": "KYV10",
+    "title": "Career, vocational and higher education",
+    "covered": 2,
+    "passages": 2
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 1,
+    "passages": 5
+   },
+   {
+    "id": "B8",
+    "title": "Climate and environment (national)",
+    "covered": 1,
+    "passages": 3
+   },
+   {
+    "id": "KYV2",
+    "title": "Energy and utilities",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "KYV4",
+    "title": "Storm resilience and flood protection",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "A4",
+    "title": "Cost of living in Florida",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B6",
+    "title": "Election integrity",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV5",
+    "title": "Water supply and drinking water",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV6",
+    "title": "Renters and evictions",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "description": null
+   },
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "description": null
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "description": null
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-89623",
+    "race_id": "FL-16-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-89623-605b7bc0"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 14,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 1,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-90251",
+    "race_id": "FL-16-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-90251-44084951",
+     "claim-FL-DOE-90251-f48dcb55",
+     "claim-FL-DOE-90251-d60833d4",
+     "claim-FL-DOE-90251-993fd70c",
+     "claim-FL-DOE-90251-5cff7e79",
+     "claim-FL-DOE-90251-05308259",
+     "claim-FL-DOE-90251-04879c7f"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 241,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 7,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-90779",
+    "race_id": "FL-16-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-90779-c322f6e9",
+     "claim-FL-DOE-90779-c4aefbe7",
+     "claim-FL-DOE-90779-4a591921",
+     "claim-FL-DOE-90779-9b0fdd97",
+     "claim-FL-DOE-90779-f6ca139d",
+     "claim-FL-DOE-90779-966c0e84",
+     "claim-FL-DOE-90779-175c6349",
+     "claim-FL-DOE-90779-8d669fdf",
+     "claim-FL-DOE-90779-5319509e",
+     "claim-FL-DOE-90779-d56db86c",
+     "claim-FL-DOE-90779-34185b3f",
+     "claim-FL-DOE-90779-3db19630",
+     "claim-FL-DOE-90779-632741bb",
+     "claim-FL-DOE-90779-1582c2ce",
+     "claim-FL-DOE-90779-a7e0c368",
+     "claim-FL-DOE-90779-ff28f1d1",
+     "claim-FL-DOE-90779-c4d59572",
+     "claim-FL-DOE-90779-4106d372",
+     "claim-FL-DOE-90779-fa3a9102",
+     "claim-FL-DOE-90779-79c76ad3",
+     "claim-FL-DOE-90779-b0690ebc",
+     "claim-FL-DOE-90779-f097046a"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 515,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 22,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   }
+  ],
+  "counts": {
+   "claims": 30,
+   "positions": 23,
+   "issues": 15
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-20-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-90814",
+    "name": "Kedner Maxime",
+    "party": "IND",
+    "site": "https://www.maximeforcongress.com/",
+    "run": "FL-20/FL-DOE-90814",
+    "reason": null,
+    "perIssue": {
+     "A2": 5,
+     "B1": 7,
+     "B2": 10,
+     "A6": 4,
+     "KYV10": 9,
+     "A4": 1,
+     "B4": 3,
+     "B3": 3
+    }
+   },
+   {
+    "id": "FL-DOE-91278",
+    "name": "Brent Andersen",
+    "party": "REP",
+    "site": "https://brentandersenfl.com/",
+    "run": "FL-20/FL-DOE-91278",
+    "reason": null,
+    "perIssue": {
+     "A4": 1,
+     "B3": 1
+    }
+   },
+   {
+    "id": "FL-DOE-91577",
+    "name": "Debbie Wasserman Schultz",
+    "party": "DEM",
+    "site": "https://debbiewassermanschultz.com/",
+    "run": "FL-20/FL-DOE-91577",
+    "reason": null,
+    "perIssue": {}
+   }
+  ],
+  "issues": [
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "covered": 2,
+    "passages": 4
+   },
+   {
+    "id": "A4",
+    "title": "Cost of living in Florida",
+    "covered": 2,
+    "passages": 2
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 1,
+    "passages": 10
+   },
+   {
+    "id": "KYV10",
+    "title": "Career, vocational and higher education",
+    "covered": 1,
+    "passages": 9
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 1,
+    "passages": 7
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 1,
+    "passages": 5
+   },
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "covered": 1,
+    "passages": 4
+   },
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "covered": 1,
+    "passages": 3
+   }
+  ],
+  "spine": [
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "description": null
+   },
+   {
+    "id": "A4",
+    "title": "Cost of living in Florida",
+    "description": null
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "description": null
+   },
+   {
+    "id": "KYV10",
+    "title": "Career, vocational and higher education",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-90814",
+    "race_id": "FL-20-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-90814-57a81da1",
+     "claim-FL-DOE-90814-25f3455b",
+     "claim-FL-DOE-90814-4969b0cc",
+     "claim-FL-DOE-90814-65e33c05",
+     "claim-FL-DOE-90814-37818dfc",
+     "claim-FL-DOE-90814-51bab1b3",
+     "claim-FL-DOE-90814-f2794d31",
+     "claim-FL-DOE-90814-4e84b3e1",
+     "claim-FL-DOE-90814-8357cb52",
+     "claim-FL-DOE-90814-607e9662",
+     "claim-FL-DOE-90814-d07df3d8",
+     "claim-FL-DOE-90814-d8edc0f4",
+     "claim-FL-DOE-90814-82edcf3e",
+     "claim-FL-DOE-90814-4feb218d",
+     "claim-FL-DOE-90814-4bd2ae18",
+     "claim-FL-DOE-90814-a53ef162",
+     "claim-FL-DOE-90814-aed98fa9",
+     "claim-FL-DOE-90814-762e162d",
+     "claim-FL-DOE-90814-2475351a",
+     "claim-FL-DOE-90814-ed8218fe",
+     "claim-FL-DOE-90814-9852504e",
+     "claim-FL-DOE-90814-10255205",
+     "claim-FL-DOE-90814-04a2d73a",
+     "claim-FL-DOE-90814-21cb3d0a",
+     "claim-FL-DOE-90814-597dd75b",
+     "claim-FL-DOE-90814-0299665d",
+     "claim-FL-DOE-90814-71483f64",
+     "claim-FL-DOE-90814-ee02bade",
+     "claim-FL-DOE-90814-fb434ea0",
+     "claim-FL-DOE-90814-1d3bc9fd",
+     "claim-FL-DOE-90814-bc7e6c5d",
+     "claim-FL-DOE-90814-1b42d450",
+     "claim-FL-DOE-90814-a230f1fc",
+     "claim-FL-DOE-90814-2905114d",
+     "claim-FL-DOE-90814-bbe2c1e1",
+     "claim-FL-DOE-90814-3ecc781e",
+     "claim-FL-DOE-90814-933698b7",
+     "claim-FL-DOE-90814-53b82696",
+     "claim-FL-DOE-90814-48fc950a",
+     "claim-FL-DOE-90814-8e1b7aed",
+     "claim-FL-DOE-90814-1742c08a",
+     "claim-FL-DOE-90814-9eafa7a4"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 720,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 42,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-91278",
+    "race_id": "FL-20-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-91278-921d3b36",
+     "claim-FL-DOE-91278-623defdc"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 146,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 2,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 2
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-91577",
+    "race_id": "FL-20-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 44,
+   "positions": 16,
+   "issues": 8
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-22-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-89301",
+    "name": "Pia Dandiya",
+    "party": "DEM",
+    "site": "https://piaforcongress.com/",
+    "run": null,
+    "reason": "robots.txt disallows the crawl (honoured)",
+    "perIssue": {}
+   },
+   {
+    "id": "FL-DOE-92109",
+    "name": "Casey Askar",
+    "party": "REP",
+    "site": "https://www.caseyaskar.com/",
+    "run": "FL-22/FL-DOE-92109",
+    "reason": null,
+    "perIssue": {
+     "B1": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-89301",
+    "race_id": "FL-22-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 1,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-92109",
+    "race_id": "FL-22-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-92109-c00a4e8b"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 48,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 1,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 1,
+     "spine_issues_covered": 1
+    }
+   }
+  ],
+  "counts": {
+   "claims": 1,
+   "positions": 2,
+   "issues": 1
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-24-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-90703",
+    "name": "Te Mayonna Brown",
+    "party": "REP",
+    "site": "https://tebrownforflorida.com/",
+    "run": "FL-24/FL-DOE-90703",
+    "reason": null,
+    "perIssue": {
+     "A2": 4,
+     "B1": 5,
+     "A4": 1,
+     "B2": 1,
+     "B4": 1,
+     "KYV10": 1,
+     "B7": 1,
+     "KYV9": 2,
+     "B3": 5
+    }
+   },
+   {
+    "id": "FL-DOE-91544",
+    "name": "Oliver G. Gilbert III",
+    "party": "DEM",
+    "site": "https://olivergilbert.vote/",
+    "run": "FL-24/FL-DOE-91544",
+    "reason": null,
+    "perIssue": {
+     "A2": 3,
+     "B1": 4,
+     "B7": 1,
+     "B2": 5,
+     "KYV10": 3,
+     "A6": 1,
+     "KYV3": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 2,
+    "passages": 9
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 2,
+    "passages": 7
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 2,
+    "passages": 6
+   },
+   {
+    "id": "KYV10",
+    "title": "Career, vocational and higher education",
+    "covered": 2,
+    "passages": 4
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 2,
+    "passages": 2
+   },
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "covered": 1,
+    "passages": 5
+   },
+   {
+    "id": "KYV9",
+    "title": "School choice and vouchers",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "A4",
+    "title": "Cost of living in Florida",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "description": null
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "description": null
+   },
+   {
+    "id": "KYV10",
+    "title": "Career, vocational and higher education",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-90703",
+    "race_id": "FL-24-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-90703-64ac8b75",
+     "claim-FL-DOE-90703-bf891d43",
+     "claim-FL-DOE-90703-125488fa",
+     "claim-FL-DOE-90703-24679a80",
+     "claim-FL-DOE-90703-a141e3b4",
+     "claim-FL-DOE-90703-d7953ab7",
+     "claim-FL-DOE-90703-53e4c16d",
+     "claim-FL-DOE-90703-508a7829",
+     "claim-FL-DOE-90703-dbab370f",
+     "claim-FL-DOE-90703-9747c644",
+     "claim-FL-DOE-90703-c60d3613",
+     "claim-FL-DOE-90703-5675c99b",
+     "claim-FL-DOE-90703-0e306de1",
+     "claim-FL-DOE-90703-14abd606",
+     "claim-FL-DOE-90703-c9fbde74",
+     "claim-FL-DOE-90703-5328e450",
+     "claim-FL-DOE-90703-f1b9ca7c",
+     "claim-FL-DOE-90703-1e512c70",
+     "claim-FL-DOE-90703-9e4fe3ea",
+     "claim-FL-DOE-90703-b8db074a",
+     "claim-FL-DOE-90703-4dcf963b"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 1586,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 21,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-91544",
+    "race_id": "FL-24-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-91544-6a74ebf3",
+     "claim-FL-DOE-91544-2ff59253",
+     "claim-FL-DOE-91544-b079f7a7",
+     "claim-FL-DOE-91544-d16758fd",
+     "claim-FL-DOE-91544-6268338e",
+     "claim-FL-DOE-91544-6c992df3",
+     "claim-FL-DOE-91544-e177bbb4",
+     "claim-FL-DOE-91544-d8ac2287",
+     "claim-FL-DOE-91544-7e831ca8",
+     "claim-FL-DOE-91544-2fd47745",
+     "claim-FL-DOE-91544-2fc8d613",
+     "claim-FL-DOE-91544-c0793efd",
+     "claim-FL-DOE-91544-4b38c02a",
+     "claim-FL-DOE-91544-5ec3acec",
+     "claim-FL-DOE-91544-4ececce6",
+     "claim-FL-DOE-91544-66fe3c76",
+     "claim-FL-DOE-91544-97754437",
+     "claim-FL-DOE-91544-9550c217"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 548,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 18,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   }
+  ],
+  "counts": {
+   "claims": 39,
+   "positions": 16,
+   "issues": 12
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-25-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-88911",
+    "name": "Jared Moskowitz",
+    "party": "DEM",
+    "site": "https://jaredforflorida.com/",
+    "run": "FL-25/FL-DOE-88911",
+    "reason": null,
+    "perIssue": {
+     "A1": 2,
+     "A4": 2,
+     "B2": 2,
+     "B4": 2,
+     "B7": 1
+    }
+   },
+   {
+    "id": "FL-DOE-89801",
+    "name": "Scott Singer",
+    "party": "REP",
+    "site": "https://www.scottsingerusa.com/",
+    "run": "FL-25/FL-DOE-89801",
+    "reason": null,
+    "perIssue": {
+     "B1": 5,
+     "B3": 3,
+     "B7": 2,
+     "KYV2": 1,
+     "KYV10": 1,
+     "A1": 1,
+     "A3": 1
+    }
+   },
+   {
+    "id": "FL-DOE-92357",
+    "name": "Peter Jassenoff",
+    "party": "LPF",
+    "site": null,
+    "run": null,
+    "reason": "no official_site",
+    "perIssue": {}
+   }
+  ],
+  "issues": [
+   {
+    "id": "A1",
+    "title": "Property insurance costs",
+    "covered": 2,
+    "passages": 3
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 2,
+    "passages": 3
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 1,
+    "passages": 5
+   },
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "covered": 1,
+    "passages": 3
+   },
+   {
+    "id": "A4",
+    "title": "Cost of living in Florida",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "A3",
+    "title": "Property taxes",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV2",
+    "title": "Energy and utilities",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV10",
+    "title": "Career, vocational and higher education",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "A1",
+    "title": "Property insurance costs",
+    "description": null
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "description": null
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   },
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-88911",
+    "race_id": "FL-25-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-88911-6cc6771d",
+     "claim-FL-DOE-88911-847087b4",
+     "claim-FL-DOE-88911-f87837fb",
+     "claim-FL-DOE-88911-d687318a",
+     "claim-FL-DOE-88911-4a4dbd69",
+     "claim-FL-DOE-88911-7d0dc4cc",
+     "claim-FL-DOE-88911-9adf0faf",
+     "claim-FL-DOE-88911-32b42d05",
+     "claim-FL-DOE-88911-04d33031"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 363,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 9,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 2
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-89801",
+    "race_id": "FL-25-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-89801-feab8db3",
+     "claim-FL-DOE-89801-122793c1",
+     "claim-FL-DOE-89801-02ec8c9e",
+     "claim-FL-DOE-89801-4f71d26a",
+     "claim-FL-DOE-89801-1712d8ec",
+     "claim-FL-DOE-89801-e64a2b24",
+     "claim-FL-DOE-89801-80309b5b",
+     "claim-FL-DOE-89801-d805c734",
+     "claim-FL-DOE-89801-f4e057cb",
+     "claim-FL-DOE-89801-b99f5f81",
+     "claim-FL-DOE-89801-d8227a8d",
+     "claim-FL-DOE-89801-180164b4",
+     "claim-FL-DOE-89801-c3c15697",
+     "claim-FL-DOE-89801-b3bd2d67"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 718,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 14,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-92357",
+    "race_id": "FL-25-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 23,
+   "positions": 18,
+   "issues": 10
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-26-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-89980",
+    "name": "Nicole Locklin",
+    "party": "DEM",
+    "site": "https://locklinforcongress.com/",
+    "run": "FL-26/FL-DOE-89980",
+    "reason": null,
+    "perIssue": {
+     "A2": 1,
+     "B1": 3,
+     "B3": 2,
+     "KYV2": 2,
+     "B2": 2,
+     "B4": 4,
+     "KYV1": 1,
+     "A6": 1,
+     "B7": 1
+    }
+   },
+   {
+    "id": "FL-DOE-90330",
+    "name": "Mario Diaz-Balart",
+    "party": "REP",
+    "site": "https://mariodiazbalart.org/",
+    "run": "FL-26/FL-DOE-90330",
+    "reason": null,
+    "perIssue": {
+     "A4": 2,
+     "B3": 2,
+     "B7": 2,
+     "B1": 1
+    }
+   },
+   {
+    "id": "FL-DOE-92137",
+    "name": "Deborah Ann Meidinger Hosey",
+    "party": "NPA",
+    "site": null,
+    "run": null,
+    "reason": "no official_site",
+    "perIssue": {}
+   }
+  ],
+  "issues": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 2,
+    "passages": 4
+   },
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "covered": 2,
+    "passages": 4
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 2,
+    "passages": 3
+   },
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "covered": 1,
+    "passages": 4
+   },
+   {
+    "id": "A4",
+    "title": "Cost of living in Florida",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "KYV2",
+    "title": "Energy and utilities",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV1",
+    "title": "Threats to democratic institutions",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   },
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "description": null
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "description": null
+   },
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-89980",
+    "race_id": "FL-26-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-89980-69bb0f35",
+     "claim-FL-DOE-89980-14706d23",
+     "claim-FL-DOE-89980-e19f556d",
+     "claim-FL-DOE-89980-8ed957e8",
+     "claim-FL-DOE-89980-29c02b94",
+     "claim-FL-DOE-89980-f56144ae",
+     "claim-FL-DOE-89980-13893910",
+     "claim-FL-DOE-89980-20feb24d",
+     "claim-FL-DOE-89980-dc4f1644",
+     "claim-FL-DOE-89980-ccbaa182",
+     "claim-FL-DOE-89980-87ca6591",
+     "claim-FL-DOE-89980-005b2925",
+     "claim-FL-DOE-89980-94891091",
+     "claim-FL-DOE-89980-74aaad88",
+     "claim-FL-DOE-89980-8f5bb2a1",
+     "claim-FL-DOE-89980-115e4b43",
+     "claim-FL-DOE-89980-13b3cd82"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 1485,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 17,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-90330",
+    "race_id": "FL-26-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-90330-5f9715ce",
+     "claim-FL-DOE-90330-ae430d30",
+     "claim-FL-DOE-90330-78c6ccc3",
+     "claim-FL-DOE-90330-0c64d1b7",
+     "claim-FL-DOE-90330-b619a4f9",
+     "claim-FL-DOE-90330-9881b425",
+     "claim-FL-DOE-90330-962d298f"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 150,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 7,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 3
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-92137",
+    "race_id": "FL-26-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 24,
+   "positions": 18,
+   "issues": 10
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-27-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-89933",
+    "name": "Eliott Rodriguez",
+    "party": "DEM",
+    "site": "https://eliottrodriguez.com/",
+    "run": "FL-27/FL-DOE-89933",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-DOE-90721",
+    "name": "Maria Elvira Salazar",
+    "party": "REP",
+    "site": "https://mariaelvirasalazar.com/",
+    "run": "FL-27/FL-DOE-90721",
+    "reason": null,
+    "perIssue": {
+     "KYV1": 1,
+     "A5": 1,
+     "KYV4": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "A5",
+    "title": "Water quality and Everglades restoration",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV1",
+    "title": "Threats to democratic institutions",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV4",
+    "title": "Storm resilience and flood protection",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "A5",
+    "title": "Water quality and Everglades restoration",
+    "description": null
+   },
+   {
+    "id": "KYV1",
+    "title": "Threats to democratic institutions",
+    "description": null
+   },
+   {
+    "id": "KYV4",
+    "title": "Storm resilience and flood protection",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-89933",
+    "race_id": "FL-27-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 3,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-90721",
+    "race_id": "FL-27-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-90721-6b71139c",
+     "claim-FL-DOE-90721-07ab97d3",
+     "claim-FL-DOE-90721-0639d933"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 204,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 3,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 3,
+     "spine_issues_covered": 3
+    }
+   }
+  ],
+  "counts": {
+   "claims": 3,
+   "positions": 6,
+   "issues": 3
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-28-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-90340",
+    "name": "Eddy Rojas",
+    "party": "NPA",
+    "site": "https://www.eddyrojas.com/",
+    "run": "FL-28/FL-DOE-90340",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-DOE-91226",
+    "name": "Carlos A. Gimenez",
+    "party": "REP",
+    "site": "https://carlosgimenezforcongress.com/",
+    "run": "FL-28/FL-DOE-91226",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-DOE-91699",
+    "name": "Phil \"Felipe\" Ehr",
+    "party": "DEM",
+    "site": "https://ehrforcongress.us/",
+    "run": "FL-28/FL-DOE-91699",
+    "reason": null,
+    "perIssue": {
+     "B2": 2,
+     "A2": 1,
+     "B7": 1,
+     "KYV1": 1,
+     "B3": 1,
+     "KYV2": 1,
+     "KYV3": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV1",
+    "title": "Threats to democratic institutions",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV2",
+    "title": "Energy and utilities",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "description": null
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "description": null
+   },
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "description": null
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-90340",
+    "race_id": "FL-28-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-91226",
+    "race_id": "FL-28-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-91699",
+    "race_id": "FL-28-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-91699-d34083eb",
+     "claim-FL-DOE-91699-d3eb0c42",
+     "claim-FL-DOE-91699-788998ae",
+     "claim-FL-DOE-91699-3ed02dca",
+     "claim-FL-DOE-91699-9d20fad4",
+     "claim-FL-DOE-91699-d0472f93",
+     "claim-FL-DOE-91699-5daef59e",
+     "claim-FL-DOE-91699-67d18b2f"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 204,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 8,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   }
+  ],
+  "counts": {
+   "claims": 8,
+   "positions": 15,
+   "issues": 7
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-7-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-90631",
+    "name": "Bale Dalton",
+    "party": "DEM",
+    "site": "https://baledalton.com/",
+    "run": "FL-7/FL-DOE-90631",
+    "reason": null,
+    "perIssue": {
+     "A4": 2,
+     "B1": 2,
+     "B2": 2,
+     "A1": 1,
+     "KYV2": 2,
+     "B4": 1,
+     "B5": 1,
+     "B8": 1,
+     "B7": 1
+    }
+   },
+   {
+    "id": "FL-DOE-90696",
+    "name": "Ryan Elijah",
+    "party": "REP",
+    "site": "https://elijahforcongress.com/",
+    "run": "FL-7/FL-DOE-90696",
+    "reason": null,
+    "perIssue": {
+     "KYV9": 2,
+     "B1": 1,
+     "B2": 2,
+     "KYV4": 1,
+     "B7": 1,
+     "B3": 1,
+     "A7": 1
+    }
+   },
+   {
+    "id": "FL-DOE-92377",
+    "name": "Christopher Dennison",
+    "party": "LPF",
+    "site": "https://dennison4congress.com/",
+    "run": "FL-7/FL-DOE-92377",
+    "reason": null,
+    "perIssue": {
+     "B7": 1,
+     "B2": 1,
+     "B5": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 3,
+    "passages": 5
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 3,
+    "passages": 3
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 2,
+    "passages": 3
+   },
+   {
+    "id": "B5",
+    "title": "Abortion policy",
+    "covered": 2,
+    "passages": 2
+   },
+   {
+    "id": "A4",
+    "title": "Cost of living in Florida",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "KYV2",
+    "title": "Energy and utilities",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "KYV9",
+    "title": "School choice and vouchers",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "A1",
+    "title": "Property insurance costs",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "A7",
+    "title": "Elections administration and voting access",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B8",
+    "title": "Climate and environment (national)",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV4",
+    "title": "Storm resilience and flood protection",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "description": null
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "description": null
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   },
+   {
+    "id": "B5",
+    "title": "Abortion policy",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-90631",
+    "race_id": "FL-7-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-90631-f72e678d",
+     "claim-FL-DOE-90631-97e87ba1",
+     "claim-FL-DOE-90631-72f5edc2",
+     "claim-FL-DOE-90631-7f36f35d",
+     "claim-FL-DOE-90631-98dfe0e4",
+     "claim-FL-DOE-90631-ab772bb0",
+     "claim-FL-DOE-90631-97857aff",
+     "claim-FL-DOE-90631-78bf2fcf",
+     "claim-FL-DOE-90631-bef6a31d",
+     "claim-FL-DOE-90631-213acb45",
+     "claim-FL-DOE-90631-37501a8b",
+     "claim-FL-DOE-90631-236b20a5",
+     "claim-FL-DOE-90631-8902d2d0"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 967,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 13,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-90696",
+    "race_id": "FL-7-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-90696-d248d6a2",
+     "claim-FL-DOE-90696-f2f93bfc",
+     "claim-FL-DOE-90696-296dd4a3",
+     "claim-FL-DOE-90696-35d62745",
+     "claim-FL-DOE-90696-3ad6ff6f",
+     "claim-FL-DOE-90696-42e114da",
+     "claim-FL-DOE-90696-de94c48a",
+     "claim-FL-DOE-90696-152e1b45",
+     "claim-FL-DOE-90696-73684b30"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 211,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 9,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 3
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-92377",
+    "race_id": "FL-7-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-92377-7714a85b",
+     "claim-FL-DOE-92377-760e8942",
+     "claim-FL-DOE-92377-25fab632"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 139,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 3,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 3
+    }
+   }
+  ],
+  "counts": {
+   "claims": 25,
+   "positions": 21,
+   "issues": 13
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-8-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-89522",
+    "name": "Mike Haridopolos",
+    "party": "REP",
+    "site": "https://www.mike4congress.com/",
+    "run": "FL-8/FL-DOE-89522",
+    "reason": null,
+    "perIssue": {
+     "A2": 1,
+     "B6": 4,
+     "A7": 2,
+     "B1": 2,
+     "B3": 2,
+     "B4": 1,
+     "B7": 1,
+     "B2": 1
+    }
+   },
+   {
+    "id": "FL-DOE-90831",
+    "name": "Jennifer Jenkins",
+    "party": "DEM",
+    "site": "https://jenkinsforfl.com/",
+    "run": "FL-8/FL-DOE-90831",
+    "reason": null,
+    "perIssue": {
+     "A1": 1,
+     "B1": 1,
+     "B2": 3,
+     "B7": 2,
+     "A6": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 2,
+    "passages": 4
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 2,
+    "passages": 3
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 2,
+    "passages": 3
+   },
+   {
+    "id": "B6",
+    "title": "Election integrity",
+    "covered": 1,
+    "passages": 4
+   },
+   {
+    "id": "A7",
+    "title": "Elections administration and voting access",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "A1",
+    "title": "Property insurance costs",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "description": null
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "description": null
+   },
+   {
+    "id": "B6",
+    "title": "Election integrity",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-89522",
+    "race_id": "FL-8-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-89522-f00a2024",
+     "claim-FL-DOE-89522-228ac665",
+     "claim-FL-DOE-89522-380a7f6c",
+     "claim-FL-DOE-89522-4b0b7984",
+     "claim-FL-DOE-89522-96a9046b",
+     "claim-FL-DOE-89522-8a0b7d25",
+     "claim-FL-DOE-89522-527d1f26",
+     "claim-FL-DOE-89522-68f8e7e0",
+     "claim-FL-DOE-89522-4e1fc035",
+     "claim-FL-DOE-89522-80050670",
+     "claim-FL-DOE-89522-1df28da8",
+     "claim-FL-DOE-89522-f70a8906",
+     "claim-FL-DOE-89522-3135e832",
+     "claim-FL-DOE-89522-4ec4f47d"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 860,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 14,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-90831",
+    "race_id": "FL-8-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-90831-4cdc5521",
+     "claim-FL-DOE-90831-39cfec2b",
+     "claim-FL-DOE-90831-0a42bfa1",
+     "claim-FL-DOE-90831-b9822dd9",
+     "claim-FL-DOE-90831-6455e425",
+     "claim-FL-DOE-90831-5445da99",
+     "claim-FL-DOE-90831-318469b1",
+     "claim-FL-DOE-90831-3f7a4fbc"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 90,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 8,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 3
+    }
+   }
+  ],
+  "counts": {
+   "claims": 22,
+   "positions": 14,
+   "issues": 10
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-9-general",
+  "office": "United States Representative",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-89339",
+    "name": "Darren Soto",
+    "party": "DEM",
+    "site": "https://www.darrensoto.com/",
+    "run": "FL-9/FL-DOE-89339",
+    "reason": null,
+    "perIssue": {
+     "A2": 1,
+     "A4": 1,
+     "B1": 1,
+     "B2": 1,
+     "B4": 1
+    }
+   },
+   {
+    "id": "FL-DOE-91337",
+    "name": "Dan Green",
+    "party": "REP",
+    "site": "https://dangreenfl.com/",
+    "run": "FL-9/FL-DOE-91337",
+    "reason": null,
+    "perIssue": {
+     "A4": 1,
+     "B1": 2,
+     "A2": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 2,
+    "passages": 3
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 2,
+    "passages": 2
+   },
+   {
+    "id": "A4",
+    "title": "Cost of living in Florida",
+    "covered": 2,
+    "passages": 2
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "description": null
+   },
+   {
+    "id": "A4",
+    "title": "Cost of living in Florida",
+    "description": null
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-89339",
+    "race_id": "FL-9-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-89339-c3ff8a36",
+     "claim-FL-DOE-89339-0cf71d84",
+     "claim-FL-DOE-89339-564d8720",
+     "claim-FL-DOE-89339-b6d9012f",
+     "claim-FL-DOE-89339-6bbf69bd"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 225,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 5,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-91337",
+    "race_id": "FL-9-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-91337-9f766633",
+     "claim-FL-DOE-91337-6d3e57f7",
+     "claim-FL-DOE-91337-ddd018b8",
+     "claim-FL-DOE-91337-1741e229"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 215,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 4,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 3
+    }
+   }
+  ],
+  "counts": {
+   "claims": 9,
+   "positions": 9,
+   "issues": 5
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-AGR-general",
+  "office": "Commissioner of Agriculture",
+  "level": "state",
+  "candidates": [
+   {
+    "id": "FL-DOE-90560",
+    "name": "Wilton Simpson",
+    "party": "REP",
+    "site": "https://wiltonsimpson.com/",
+    "run": "FL-AGR/FL-DOE-90560",
+    "reason": null,
+    "perIssue": {
+     "KYV9": 1
+    }
+   },
+   {
+    "id": "FL-DOE-92013",
+    "name": "Joey Mendoza Atkins",
+    "party": "DEM",
+    "site": "https://www.joeyforflorida.com/",
+    "run": "FL-AGR/FL-DOE-92013",
+    "reason": null,
+    "perIssue": {}
+   }
+  ],
+  "issues": [
+   {
+    "id": "KYV9",
+    "title": "School choice and vouchers",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "KYV9",
+    "title": "School choice and vouchers",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-90560",
+    "race_id": "FL-AGR-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-90560-86215895"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 40,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 1,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 1,
+     "spine_issues_covered": 1
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-92013",
+    "race_id": "FL-AGR-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 1,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 1,
+   "positions": 2,
+   "issues": 1
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-ATG-general",
+  "office": "Attorney General",
+  "level": "state",
+  "candidates": [
+   {
+    "id": "FL-DOE-89041",
+    "name": "James Uthmeier",
+    "party": "REP",
+    "site": "https://jamesforfl.com/",
+    "run": "FL-ATG/FL-DOE-89041",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-DOE-89231",
+    "name": "Jose Javier Rodriguez",
+    "party": "DEM",
+    "site": "https://www.jjr.vote/",
+    "run": "FL-ATG/FL-DOE-89231",
+    "reason": null,
+    "perIssue": {
+     "B7": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-89041",
+    "race_id": "FL-ATG-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 1,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-89231",
+    "race_id": "FL-ATG-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-89231-b57f4332"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 12,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 1,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 1,
+     "spine_issues_covered": 1
+    }
+   }
+  ],
+  "counts": {
+   "claims": 1,
+   "positions": 2,
+   "issues": 1
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-BRO-CC6-general",
+  "office": "Broward County Commission, District 6",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-BRO-1041",
+    "name": "Caryl Sandler Shuham",
+    "party": "DEM",
+    "site": "https://www.carylshuham.com/",
+    "run": null,
+    "reason": "robots.txt disallows the crawl (honoured)",
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-BRO-1041",
+    "race_id": "FL-BRO-CC6-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-BRO-SB1-general",
+  "office": "Broward County School Board, District 1",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-BRO-1194",
+    "name": "Maura McCarthy Bulman",
+    "party": "",
+    "site": "https://www.mauraforbroward.com/",
+    "run": "FL-BRO-SB1/FL-VF-BRO-1194",
+    "reason": null,
+    "perIssue": {
+     "A6": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-BRO-1194",
+    "race_id": "FL-BRO-SB1-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-BRO-1194-1df12a39"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 59,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 1,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 1,
+     "spine_issues_covered": 1
+    }
+   }
+  ],
+  "counts": {
+   "claims": 1,
+   "positions": 1,
+   "issues": 1
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-BRO-SB4-general",
+  "office": "Broward County School Board, District 4",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-BRO-1191",
+    "name": "Nicole Morst",
+    "party": "",
+    "site": "https://nicolemorst.com/",
+    "run": "FL-BRO-SB4/FL-VF-BRO-1191",
+    "reason": null,
+    "perIssue": {
+     "A6": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-BRO-1191",
+    "race_id": "FL-BRO-SB4-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-BRO-1191-8255cd74"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 96,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 1,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 1,
+     "spine_issues_covered": 1
+    }
+   }
+  ],
+  "counts": {
+   "claims": 1,
+   "positions": 1,
+   "issues": 1
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-BRO-SB6-general",
+  "office": "Broward County School Board, District 6",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-BRO-1172",
+    "name": "Roberto Fernandez III",
+    "party": "",
+    "site": "https://www.electroberto2026.com/",
+    "run": "FL-BRO-SB6/FL-VF-BRO-1172",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-VF-BRO-1184",
+    "name": "Adam Cervera",
+    "party": "",
+    "site": "https://www.adamcervera.com/",
+    "run": "FL-BRO-SB6/FL-VF-BRO-1184",
+    "reason": null,
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-BRO-1172",
+    "race_id": "FL-BRO-SB6-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-VF-BRO-1184",
+    "race_id": "FL-BRO-SB6-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-BRO-SB7-general",
+  "office": "Broward County School Board, District 7",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-BRO-1254",
+    "name": "Cynthia Alceus Dominique",
+    "party": "",
+    "site": "https://www.cynthiaforbrowardschools.com/",
+    "run": "FL-BRO-SB7/FL-VF-BRO-1254",
+    "reason": null,
+    "perIssue": {
+     "KYV10": 2,
+     "A6": 2
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "KYV10",
+    "title": "Career, vocational and higher education",
+    "covered": 1,
+    "passages": 2
+   }
+  ],
+  "spine": [
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "description": null
+   },
+   {
+    "id": "KYV10",
+    "title": "Career, vocational and higher education",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-BRO-1254",
+    "race_id": "FL-BRO-SB7-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-BRO-1254-c0babd08",
+     "claim-FL-VF-BRO-1254-1ba15b71",
+     "claim-FL-VF-BRO-1254-ec0248cf",
+     "claim-FL-VF-BRO-1254-67833796"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 55,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 4,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 2,
+     "spine_issues_covered": 2
+    }
+   }
+  ],
+  "counts": {
+   "claims": 4,
+   "positions": 2,
+   "issues": 2
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-BRO-SBAL8-general",
+  "office": "Broward County School Board, At Large 8",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-BRO-1195",
+    "name": "Allen Zeman",
+    "party": "",
+    "site": "https://electallenzeman.com/",
+    "run": "FL-BRO-SBAL8/FL-VF-BRO-1195",
+    "reason": null,
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-BRO-1195",
+    "race_id": "FL-BRO-SBAL8-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-CFO-general",
+  "office": "Chief Financial Officer",
+  "level": "state",
+  "candidates": [
+   {
+    "id": "FL-DOE-89394",
+    "name": "Blaise Ingoglia",
+    "party": "REP",
+    "site": "https://blaiseforflorida.com/",
+    "run": "FL-CFO/FL-DOE-89394",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-DOE-91310",
+    "name": "Annette Taddeo",
+    "party": "DEM",
+    "site": "https://annettetaddeo.com/",
+    "run": null,
+    "reason": "robots.txt disallows the crawl (honoured)",
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-89394",
+    "race_id": "FL-CFO-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-91310",
+    "race_id": "FL-CFO-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-DAD-CC2-general",
+  "office": "Miami-Dade County Commission, District 2",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-DAD-2964",
+    "name": "Marleine Bastien",
+    "party": "",
+    "site": "https://reelectbastien.com/",
+    "run": "FL-DAD-CC2/FL-VF-DAD-2964",
+    "reason": null,
+    "perIssue": {
+     "A2": 1,
+     "KYV6": 1,
+     "B1": 2,
+     "KYV10": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV6",
+    "title": "Renters and evictions",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV10",
+    "title": "Career, vocational and higher education",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "description": null
+   },
+   {
+    "id": "KYV6",
+    "title": "Renters and evictions",
+    "description": null
+   },
+   {
+    "id": "KYV10",
+    "title": "Career, vocational and higher education",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-DAD-2964",
+    "race_id": "FL-DAD-CC2-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-DAD-2964-b649cf8c",
+     "claim-FL-VF-DAD-2964-7bd71c59",
+     "claim-FL-VF-DAD-2964-87d4c6a4",
+     "claim-FL-VF-DAD-2964-2ce284c6",
+     "claim-FL-VF-DAD-2964-f0a67a76"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 83,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 5,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   }
+  ],
+  "counts": {
+   "claims": 5,
+   "positions": 4,
+   "issues": 4
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-DAD-CC5-general",
+  "office": "Miami-Dade County Commission, District 5",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-DAD-2949",
+    "name": "Vicki L. Lopez",
+    "party": "",
+    "site": "https://vickilopez.vote/",
+    "run": "FL-DAD-CC5/FL-VF-DAD-2949",
+    "reason": null,
+    "perIssue": {
+     "A2": 1,
+     "B1": 1,
+     "KYV4": 1
+    }
+   },
+   {
+    "id": "FL-VF-DAD-2998",
+    "name": "Rob Piper",
+    "party": "",
+    "site": "https://www.robpiperheretoserve.com/",
+    "run": null,
+    "reason": "robots.txt disallows the crawl (honoured)",
+    "perIssue": {}
+   }
+  ],
+  "issues": [
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV4",
+    "title": "Storm resilience and flood protection",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "description": null
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   },
+   {
+    "id": "KYV4",
+    "title": "Storm resilience and flood protection",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-DAD-2949",
+    "race_id": "FL-DAD-CC5-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-DAD-2949-5c7dcc1e",
+     "claim-FL-VF-DAD-2949-4a602195",
+     "claim-FL-VF-DAD-2949-77b9680f"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 25,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 3,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 3,
+     "spine_issues_covered": 3
+    }
+   },
+   {
+    "candidate_id": "FL-VF-DAD-2998",
+    "race_id": "FL-DAD-CC5-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 3,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 3,
+   "positions": 6,
+   "issues": 3
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-DAD-SB1-general",
+  "office": "Miami-Dade County School Board, District 1",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-DAD-3070",
+    "name": "Katrina Wilson",
+    "party": "",
+    "site": "https://wilsonforeducation.com/",
+    "run": "FL-DAD-SB1/FL-VF-DAD-3070",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-VF-DAD-3076",
+    "name": "Linda Cothiere",
+    "party": "",
+    "site": "https://lindaforschoolboard.com/",
+    "run": "FL-DAD-SB1/FL-VF-DAD-3076",
+    "reason": null,
+    "perIssue": {
+     "A6": 7,
+     "B1": 2
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "covered": 1,
+    "passages": 7
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 1,
+    "passages": 2
+   }
+  ],
+  "spine": [
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "description": null
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-DAD-3070",
+    "race_id": "FL-DAD-SB1-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 2,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-VF-DAD-3076",
+    "race_id": "FL-DAD-SB1-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-DAD-3076-a0c5a4d8",
+     "claim-FL-VF-DAD-3076-2d0e66a5",
+     "claim-FL-VF-DAD-3076-0627700c",
+     "claim-FL-VF-DAD-3076-435573f9",
+     "claim-FL-VF-DAD-3076-a0463068",
+     "claim-FL-VF-DAD-3076-d8bdf3da",
+     "claim-FL-VF-DAD-3076-6b526eb0",
+     "claim-FL-VF-DAD-3076-b41bcbcc",
+     "claim-FL-VF-DAD-3076-09d65132"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 191,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 9,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 2,
+     "spine_issues_covered": 2
+    }
+   }
+  ],
+  "counts": {
+   "claims": 9,
+   "positions": 4,
+   "issues": 2
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-HIL-CC1-general",
+  "office": "Hillsborough County Commission, District 1",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-HIL-2640",
+    "name": "Harry Cohen",
+    "party": "DEM",
+    "site": "https://harrycohen.vote/",
+    "run": "FL-HIL-CC1/FL-VF-HIL-2640",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-VF-HIL-2880",
+    "name": "Jackie Toledo",
+    "party": "REP",
+    "site": "https://jackietoledo.com/",
+    "run": "FL-HIL-CC1/FL-VF-HIL-2880",
+    "reason": null,
+    "perIssue": {
+     "A2": 1,
+     "KYV3": 1,
+     "B7": 1,
+     "KYV4": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV4",
+    "title": "Storm resilience and flood protection",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "description": null
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "description": null
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "description": null
+   },
+   {
+    "id": "KYV4",
+    "title": "Storm resilience and flood protection",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-HIL-2640",
+    "race_id": "FL-HIL-CC1-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-VF-HIL-2880",
+    "race_id": "FL-HIL-CC1-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-HIL-2880-4ff54fbd",
+     "claim-FL-VF-HIL-2880-76e8559d",
+     "claim-FL-VF-HIL-2880-64156b30",
+     "claim-FL-VF-HIL-2880-9ce581a8"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 129,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 4,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   }
+  ],
+  "counts": {
+   "claims": 4,
+   "positions": 8,
+   "issues": 4
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-HIL-CC3-general",
+  "office": "Hillsborough County Commission, District 3",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-HIL-2621",
+    "name": "Gwen Myers",
+    "party": "DEM",
+    "site": "https://www.votegwenmyers.com/",
+    "run": "FL-HIL-CC3/FL-VF-HIL-2621",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-VF-HIL-2646",
+    "name": "Luiz F. F. Garcia",
+    "party": "REP",
+    "site": "https://www.electluizffgarcia.com/",
+    "run": "FL-HIL-CC3/FL-VF-HIL-2646",
+    "reason": null,
+    "perIssue": {
+     "B7": 2,
+     "B1": 2,
+     "KYV3": 2,
+     "A6": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "description": null
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "description": null
+   },
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-HIL-2621",
+    "race_id": "FL-HIL-CC3-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-VF-HIL-2646",
+    "race_id": "FL-HIL-CC3-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-HIL-2646-c14ee21d",
+     "claim-FL-VF-HIL-2646-340e22cd",
+     "claim-FL-VF-HIL-2646-a59e0292",
+     "claim-FL-VF-HIL-2646-682695c1",
+     "claim-FL-VF-HIL-2646-1e64a26d",
+     "claim-FL-VF-HIL-2646-950e4d8f",
+     "claim-FL-VF-HIL-2646-2228a01d"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 446,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 7,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   }
+  ],
+  "counts": {
+   "claims": 7,
+   "positions": 8,
+   "issues": 4
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-HIL-CC5-general",
+  "office": "Hillsborough County Commission, District 5",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-HIL-2636",
+    "name": "Neil Manimala",
+    "party": "DEM",
+    "site": "https://www.neilmanimala.com/",
+    "run": "FL-HIL-CC5/FL-VF-HIL-2636",
+    "reason": null,
+    "perIssue": {
+     "B2": 1,
+     "B7": 1
+    }
+   },
+   {
+    "id": "FL-VF-HIL-2661",
+    "name": "Stacy Hahn",
+    "party": "REP",
+    "site": "https://www.votestacyhahn.com/",
+    "run": "FL-HIL-CC5/FL-VF-HIL-2661",
+    "reason": null,
+    "perIssue": {
+     "B7": 2,
+     "KYV3": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 2,
+    "passages": 3
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "description": null
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "description": null
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-HIL-2636",
+    "race_id": "FL-HIL-CC5-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-HIL-2636-31e838da",
+     "claim-FL-VF-HIL-2636-3aadd31b"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 27,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 2,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 3,
+     "spine_issues_covered": 2
+    }
+   },
+   {
+    "candidate_id": "FL-VF-HIL-2661",
+    "race_id": "FL-HIL-CC5-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-HIL-2661-b154783c",
+     "claim-FL-VF-HIL-2661-f47b72e8",
+     "claim-FL-VF-HIL-2661-def2c632"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 167,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 3,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 3,
+     "spine_issues_covered": 2
+    }
+   }
+  ],
+  "counts": {
+   "claims": 5,
+   "positions": 6,
+   "issues": 3
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-HIL-CC7-general",
+  "office": "Hillsborough County Commission, District 7",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-HIL-2620",
+    "name": "Joshua Wostal",
+    "party": "REP",
+    "site": "https://www.joshuawostal.com/",
+    "run": "FL-HIL-CC7/FL-VF-HIL-2620",
+    "reason": null,
+    "perIssue": {
+     "A3": 2
+    }
+   },
+   {
+    "id": "FL-VF-HIL-2660",
+    "name": "Aileen Rodriguez",
+    "party": "DEM",
+    "site": "https://voteaileen2026.com/",
+    "run": "FL-HIL-CC7/FL-VF-HIL-2660",
+    "reason": null,
+    "perIssue": {
+     "A2": 1,
+     "KYV3": 1,
+     "B7": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "A3",
+    "title": "Property taxes",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "A3",
+    "title": "Property taxes",
+    "description": null
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "description": null
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "description": null
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-HIL-2620",
+    "race_id": "FL-HIL-CC7-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-HIL-2620-59684d21",
+     "claim-FL-VF-HIL-2620-aef39a5f"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 140,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 2,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 1
+    }
+   },
+   {
+    "candidate_id": "FL-VF-HIL-2660",
+    "race_id": "FL-HIL-CC7-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-HIL-2660-b048085f",
+     "claim-FL-VF-HIL-2660-b3b99570",
+     "claim-FL-VF-HIL-2660-e544ea7f"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 112,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 3,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 3
+    }
+   }
+  ],
+  "counts": {
+   "claims": 5,
+   "positions": 8,
+   "issues": 4
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-HIL-SB2-general",
+  "office": "Hillsborough County School Board, District 2",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-HIL-2675",
+    "name": "Daniela Simic",
+    "party": "",
+    "site": "https://danielaforschools.com/",
+    "run": "FL-HIL-SB2/FL-VF-HIL-2675",
+    "reason": null,
+    "perIssue": {
+     "A6": 1
+    }
+   },
+   {
+    "id": "FL-VF-HIL-2677",
+    "name": "Brittany Lyssy",
+    "party": "",
+    "site": "https://www.votebrittanylyssy.com/",
+    "run": "FL-HIL-SB2/FL-VF-HIL-2677",
+    "reason": null,
+    "perIssue": {}
+   }
+  ],
+  "issues": [
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-HIL-2675",
+    "race_id": "FL-HIL-SB2-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-HIL-2675-f5a3aa56"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 28,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 1,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 1,
+     "spine_issues_covered": 1
+    }
+   },
+   {
+    "candidate_id": "FL-VF-HIL-2677",
+    "race_id": "FL-HIL-SB2-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 1,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 1,
+   "positions": 2,
+   "issues": 1
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-HIL-SB4-general",
+  "office": "Hillsborough County School Board, District 4",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-HIL-2672",
+    "name": "Patricia \"Patti\" Rendon",
+    "party": "",
+    "site": "https://www.votepattirendon.com/",
+    "run": "FL-HIL-SB4/FL-VF-HIL-2672",
+    "reason": null,
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-HIL-2672",
+    "race_id": "FL-HIL-SB4-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-HIL-SB6-general",
+  "office": "Hillsborough County School Board, District 6",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-HIL-2610",
+    "name": "Kenneth \"Ken\" Gay",
+    "party": "",
+    "site": "https://votekennethgay.com/",
+    "run": "FL-HIL-SB6/FL-VF-HIL-2610",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-VF-HIL-2645",
+    "name": "Karen Perez",
+    "party": "",
+    "site": "https://keepkarenperez.com/",
+    "run": "FL-HIL-SB6/FL-VF-HIL-2645",
+    "reason": null,
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-HIL-2610",
+    "race_id": "FL-HIL-SB6-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-VF-HIL-2645",
+    "race_id": "FL-HIL-SB6-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-ORA-CC2-general",
+  "office": "Orange County Commission, District 2",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-ORA-1290",
+    "name": "Kamia Brown",
+    "party": "",
+    "site": "https://www.kamiafororangecounty.com/",
+    "run": "FL-ORA-CC2/FL-VF-ORA-1290",
+    "reason": null,
+    "perIssue": {
+     "A2": 2,
+     "KYV3": 3,
+     "KYV4": 1
+    }
+   },
+   {
+    "id": "FL-VF-ORA-1384",
+    "name": "Mike Crabb",
+    "party": "",
+    "site": "https://ilikemikecrabb.com/",
+    "run": "FL-ORA-CC2/FL-VF-ORA-1384",
+    "reason": null,
+    "perIssue": {
+     "A2": 3,
+     "B1": 3,
+     "KYV3": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 2,
+    "passages": 5
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "covered": 2,
+    "passages": 4
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 1,
+    "passages": 3
+   },
+   {
+    "id": "KYV4",
+    "title": "Storm resilience and flood protection",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "description": null
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "description": null
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   },
+   {
+    "id": "KYV4",
+    "title": "Storm resilience and flood protection",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-ORA-1290",
+    "race_id": "FL-ORA-CC2-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-ORA-1290-3436cd1a",
+     "claim-FL-VF-ORA-1290-bc65fe5a",
+     "claim-FL-VF-ORA-1290-0fb494c6",
+     "claim-FL-VF-ORA-1290-539edeac",
+     "claim-FL-VF-ORA-1290-6dd110d4",
+     "claim-FL-VF-ORA-1290-3e2eec0e"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 45,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 6,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 3
+    }
+   },
+   {
+    "candidate_id": "FL-VF-ORA-1384",
+    "race_id": "FL-ORA-CC2-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-ORA-1384-764938b4",
+     "claim-FL-VF-ORA-1384-a8959ebe",
+     "claim-FL-VF-ORA-1384-1dd4dbec",
+     "claim-FL-VF-ORA-1384-dfba9baa",
+     "claim-FL-VF-ORA-1384-731a42a1",
+     "claim-FL-VF-ORA-1384-7253519f",
+     "claim-FL-VF-ORA-1384-6636f79c"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 131,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 7,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 3
+    }
+   }
+  ],
+  "counts": {
+   "claims": 13,
+   "positions": 8,
+   "issues": 4
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-ORA-CC4-general",
+  "office": "Orange County Commission, District 4",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-ORA-1260",
+    "name": "Brian Jones",
+    "party": "",
+    "site": "https://brianhubertjones.com/",
+    "run": "FL-ORA-CC4/FL-VF-ORA-1260",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-VF-ORA-1279",
+    "name": "Johanna Lopez",
+    "party": "",
+    "site": "https://www.votejohannalopez.com/",
+    "run": "FL-ORA-CC4/FL-VF-ORA-1279",
+    "reason": null,
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-ORA-1260",
+    "race_id": "FL-ORA-CC4-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-VF-ORA-1279",
+    "race_id": "FL-ORA-CC4-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-ORA-CC6-general",
+  "office": "Orange County Commission, District 6",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-ORA-1265",
+    "name": "Michael \"Mike\" Scott",
+    "party": "",
+    "site": "https://mymikescott.com/",
+    "run": "FL-ORA-CC6/FL-VF-ORA-1265",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-VF-ORA-1295",
+    "name": "Lawanna Gelzer",
+    "party": "",
+    "site": "https://www.lawannagelzer.com/",
+    "run": "FL-ORA-CC6/FL-VF-ORA-1295",
+    "reason": null,
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-ORA-1265",
+    "race_id": "FL-ORA-CC6-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-VF-ORA-1295",
+    "race_id": "FL-ORA-CC6-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-ORA-CC7-general",
+  "office": "Orange County Commission, District 7",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-ORA-1271",
+    "name": "Vicki Vargo",
+    "party": "",
+    "site": "https://votevickivargo.com/",
+    "run": "FL-ORA-CC7/FL-VF-ORA-1271",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-VF-ORA-1283",
+    "name": "Patricia Rumph",
+    "party": "",
+    "site": "https://www.patriciarumph.com/",
+    "run": "FL-ORA-CC7/FL-VF-ORA-1283",
+    "reason": null,
+    "perIssue": {
+     "B7": 1,
+     "A2": 2,
+     "KYV3": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "description": null
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "description": null
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-ORA-1271",
+    "race_id": "FL-ORA-CC7-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 3,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-VF-ORA-1283",
+    "race_id": "FL-ORA-CC7-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-ORA-1283-97c34f98",
+     "claim-FL-VF-ORA-1283-4f514f45",
+     "claim-FL-VF-ORA-1283-98fba80b",
+     "claim-FL-VF-ORA-1283-a2fe59b0"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 137,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 4,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 3,
+     "spine_issues_covered": 3
+    }
+   }
+  ],
+  "counts": {
+   "claims": 4,
+   "positions": 6,
+   "issues": 3
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-ORA-CC8-general",
+  "office": "Orange County Commission, District 8",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-ORA-1272",
+    "name": "Victor M. Torres Jr.",
+    "party": "",
+    "site": "https://www.electvictorres.com/",
+    "run": "FL-ORA-CC8/FL-VF-ORA-1272",
+    "reason": null,
+    "perIssue": {
+     "A2": 2,
+     "KYV4": 1,
+     "B1": 1,
+     "B2": 1
+    }
+   },
+   {
+    "id": "FL-VF-ORA-1275",
+    "name": "Jeannette Quinones Hernandez",
+    "party": "",
+    "site": "https://www.jeannette2026.com/",
+    "run": null,
+    "reason": "robots.txt disallows the crawl (honoured)",
+    "perIssue": {}
+   }
+  ],
+  "issues": [
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV4",
+    "title": "Storm resilience and flood protection",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "description": null
+   },
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "description": null
+   },
+   {
+    "id": "KYV4",
+    "title": "Storm resilience and flood protection",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-ORA-1272",
+    "race_id": "FL-ORA-CC8-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-ORA-1272-8ba25426",
+     "claim-FL-VF-ORA-1272-c0f1d21e",
+     "claim-FL-VF-ORA-1272-e1cd886b",
+     "claim-FL-VF-ORA-1272-d81c7ecd",
+     "claim-FL-VF-ORA-1272-f8bd68ce"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 217,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 5,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   },
+   {
+    "candidate_id": "FL-VF-ORA-1275",
+    "race_id": "FL-ORA-CC8-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 5,
+   "positions": 8,
+   "issues": 4
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-ORA-CLERK-general",
+  "office": "Orange County Clerk of the Courts",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-ORA-1364",
+    "name": "Terrell Thomas",
+    "party": "NPA",
+    "site": "https://thomasforclerk.com/",
+    "run": "FL-ORA-CLERK/FL-VF-ORA-1364",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-VF-ORA-1401",
+    "name": "Roberta Walton Johnson",
+    "party": "DEM",
+    "site": "https://voteroberta.com/",
+    "run": "FL-ORA-CLERK/FL-VF-ORA-1401",
+    "reason": null,
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-ORA-1364",
+    "race_id": "FL-ORA-CLERK-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-VF-ORA-1401",
+    "race_id": "FL-ORA-CLERK-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-ORA-MAYOR-general",
+  "office": "Orange County Mayor",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-ORA-1236",
+    "name": "Tiffany Moore Russell",
+    "party": "",
+    "site": "https://tiffanyformayor.com/",
+    "run": "FL-ORA-MAYOR/FL-VF-ORA-1236",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-VF-ORA-1239",
+    "name": "Chris Messina",
+    "party": "",
+    "site": "https://www.chrismessina.com/",
+    "run": "FL-ORA-MAYOR/FL-VF-ORA-1239",
+    "reason": null,
+    "perIssue": {
+     "A3": 1,
+     "KYV10": 1,
+     "B1": 2,
+     "KYV3": 1,
+     "B7": 2
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "A3",
+    "title": "Property taxes",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV10",
+    "title": "Career, vocational and higher education",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "description": null
+   },
+   {
+    "id": "A3",
+    "title": "Property taxes",
+    "description": null
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-ORA-1236",
+    "race_id": "FL-ORA-MAYOR-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-VF-ORA-1239",
+    "race_id": "FL-ORA-MAYOR-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-ORA-1239-87720592",
+     "claim-FL-VF-ORA-1239-5f6e1da7",
+     "claim-FL-VF-ORA-1239-4411f757",
+     "claim-FL-VF-ORA-1239-52b6487b",
+     "claim-FL-VF-ORA-1239-b5f77560",
+     "claim-FL-VF-ORA-1239-72273337",
+     "claim-FL-VF-ORA-1239-590e0452"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 304,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 7,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   }
+  ],
+  "counts": {
+   "claims": 7,
+   "positions": 9,
+   "issues": 5
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-ORA-SB1-general",
+  "office": "Orange County School Board, District 1",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-ORA-1270",
+    "name": "Melissa Lopez Marantes",
+    "party": "",
+    "site": "https://www.melissaforkids.com/",
+    "run": "FL-ORA-SB1/FL-VF-ORA-1270",
+    "reason": null,
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-ORA-1270",
+    "race_id": "FL-ORA-SB1-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-ORA-SB2-general",
+  "office": "Orange County School Board, District 2",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-ORA-1318",
+    "name": "Gloria Reina O'Neal",
+    "party": "",
+    "site": "https://votegloriareina.com/",
+    "run": "FL-ORA-SB2/FL-VF-ORA-1318",
+    "reason": null,
+    "perIssue": {
+     "A6": 1
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-ORA-1318",
+    "race_id": "FL-ORA-SB2-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-VF-ORA-1318-98c344c1"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 11,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 1,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 1,
+     "spine_issues_covered": 1
+    }
+   }
+  ],
+  "counts": {
+   "claims": 1,
+   "positions": 1,
+   "issues": 1
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-ORA-SB3-general",
+  "office": "Orange County School Board, District 3",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-ORA-1242",
+    "name": "Susanne Peña",
+    "party": "",
+    "site": "https://www.vote4pena.com/",
+    "run": "FL-ORA-SB3/FL-VF-ORA-1242",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-VF-ORA-1314",
+    "name": "Diana Moore",
+    "party": "",
+    "site": "https://www.votefordianamoore.com/",
+    "run": "FL-ORA-SB3/FL-VF-ORA-1314",
+    "reason": null,
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-ORA-1242",
+    "race_id": "FL-ORA-SB3-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-VF-ORA-1314",
+    "race_id": "FL-ORA-SB3-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-SEN-general",
+  "office": "United States Senator",
+  "level": "federal",
+  "candidates": [
+   {
+    "id": "FL-DOE-89119",
+    "name": "Ashley Moody",
+    "party": "REP",
+    "site": "https://ashleymoody.com/",
+    "run": "FL-SEN/FL-DOE-89119",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-DOE-89955",
+    "name": "Neil J. Gillespie",
+    "party": "NPA",
+    "site": "https://neilgillespie4senate.blogspot.com/",
+    "run": "FL-SEN/FL-DOE-89955",
+    "reason": null,
+    "perIssue": {}
+   },
+   {
+    "id": "FL-DOE-90009",
+    "name": "Angie Nixon",
+    "party": "DEM",
+    "site": "https://angienixon.com/",
+    "run": "FL-SEN/FL-DOE-90009",
+    "reason": null,
+    "perIssue": {
+     "B1": 9,
+     "A2": 8,
+     "KYV6": 5,
+     "B2": 7,
+     "B4": 3,
+     "B5": 1,
+     "KYV10": 2,
+     "A6": 2,
+     "A1": 1,
+     "KYV4": 2,
+     "KYV2": 5,
+     "B8": 3,
+     "KYV3": 1,
+     "B3": 4,
+     "B7": 7,
+     "A7": 4
+    }
+   }
+  ],
+  "issues": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "covered": 1,
+    "passages": 9
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "covered": 1,
+    "passages": 8
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "covered": 1,
+    "passages": 7
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "covered": 1,
+    "passages": 7
+   },
+   {
+    "id": "KYV2",
+    "title": "Energy and utilities",
+    "covered": 1,
+    "passages": 5
+   },
+   {
+    "id": "KYV6",
+    "title": "Renters and evictions",
+    "covered": 1,
+    "passages": 5
+   },
+   {
+    "id": "A7",
+    "title": "Elections administration and voting access",
+    "covered": 1,
+    "passages": 4
+   },
+   {
+    "id": "B3",
+    "title": "Immigration and border enforcement",
+    "covered": 1,
+    "passages": 4
+   },
+   {
+    "id": "B4",
+    "title": "Social Security and Medicare",
+    "covered": 1,
+    "passages": 3
+   },
+   {
+    "id": "B8",
+    "title": "Climate and environment (national)",
+    "covered": 1,
+    "passages": 3
+   },
+   {
+    "id": "A6",
+    "title": "Public school funding and teachers",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "KYV4",
+    "title": "Storm resilience and flood protection",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "KYV10",
+    "title": "Career, vocational and higher education",
+    "covered": 1,
+    "passages": 2
+   },
+   {
+    "id": "A1",
+    "title": "Property insurance costs",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "B5",
+    "title": "Abortion policy",
+    "covered": 1,
+    "passages": 1
+   },
+   {
+    "id": "KYV3",
+    "title": "Growth, development and land conservation",
+    "covered": 1,
+    "passages": 1
+   }
+  ],
+  "spine": [
+   {
+    "id": "B1",
+    "title": "Economy, inflation, and jobs",
+    "description": null
+   },
+   {
+    "id": "A2",
+    "title": "Housing affordability",
+    "description": null
+   },
+   {
+    "id": "B2",
+    "title": "Healthcare access and costs",
+    "description": null
+   },
+   {
+    "id": "B7",
+    "title": "Crime policy, policing and courts",
+    "description": null
+   }
+  ],
+  "profiles": [
+   {
+    "candidate_id": "FL-DOE-89119",
+    "race_id": "FL-SEN-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-89955",
+    "race_id": "FL-SEN-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 0
+    }
+   },
+   {
+    "candidate_id": "FL-DOE-90009",
+    "race_id": "FL-SEN-general",
+    "facts": [],
+    "positions": [
+     "claim-FL-DOE-90009-6ded0d73",
+     "claim-FL-DOE-90009-95d4cba6",
+     "claim-FL-DOE-90009-cec15b5f",
+     "claim-FL-DOE-90009-c29b226f",
+     "claim-FL-DOE-90009-9673b2f6",
+     "claim-FL-DOE-90009-fe8a4f5a",
+     "claim-FL-DOE-90009-031885e7",
+     "claim-FL-DOE-90009-21f5f369",
+     "claim-FL-DOE-90009-7dbc0909",
+     "claim-FL-DOE-90009-ef53aad4",
+     "claim-FL-DOE-90009-12914f1e",
+     "claim-FL-DOE-90009-b8589e27",
+     "claim-FL-DOE-90009-efd73b28",
+     "claim-FL-DOE-90009-17e9a562",
+     "claim-FL-DOE-90009-9ddeab92",
+     "claim-FL-DOE-90009-0e87b8aa",
+     "claim-FL-DOE-90009-5ea5061a",
+     "claim-FL-DOE-90009-ecc86e76",
+     "claim-FL-DOE-90009-db635737",
+     "claim-FL-DOE-90009-c1402562",
+     "claim-FL-DOE-90009-e4e5a5f8",
+     "claim-FL-DOE-90009-654c0799",
+     "claim-FL-DOE-90009-15332d92",
+     "claim-FL-DOE-90009-705b1a63",
+     "claim-FL-DOE-90009-119f8bed",
+     "claim-FL-DOE-90009-aed5ab8a",
+     "claim-FL-DOE-90009-6e7bffe2",
+     "claim-FL-DOE-90009-a902cad9",
+     "claim-FL-DOE-90009-f4b683cb",
+     "claim-FL-DOE-90009-5fd1cbc7",
+     "claim-FL-DOE-90009-38c767ae",
+     "claim-FL-DOE-90009-7b2f37c0",
+     "claim-FL-DOE-90009-3965c775",
+     "claim-FL-DOE-90009-b77b5aaf",
+     "claim-FL-DOE-90009-c755c8ac",
+     "claim-FL-DOE-90009-cca08908",
+     "claim-FL-DOE-90009-02d8b1a0",
+     "claim-FL-DOE-90009-b7aff350",
+     "claim-FL-DOE-90009-2946b926",
+     "claim-FL-DOE-90009-713459c1",
+     "claim-FL-DOE-90009-4b7238a9",
+     "claim-FL-DOE-90009-80b4e644",
+     "claim-FL-DOE-90009-a5a4fe1d",
+     "claim-FL-DOE-90009-1806ef91",
+     "claim-FL-DOE-90009-2bd07199",
+     "claim-FL-DOE-90009-b4ba5724",
+     "claim-FL-DOE-90009-dbe27f2a",
+     "claim-FL-DOE-90009-73f24d47",
+     "claim-FL-DOE-90009-434ba8c5",
+     "claim-FL-DOE-90009-5817e032",
+     "claim-FL-DOE-90009-cdcf1c29",
+     "claim-FL-DOE-90009-3df54ce4",
+     "claim-FL-DOE-90009-3e42621e",
+     "claim-FL-DOE-90009-f8d772d5",
+     "claim-FL-DOE-90009-91094050",
+     "claim-FL-DOE-90009-e52ab2e1",
+     "claim-FL-DOE-90009-4812e7cb",
+     "claim-FL-DOE-90009-05f08423",
+     "claim-FL-DOE-90009-dfb412ee",
+     "claim-FL-DOE-90009-e639ecb8",
+     "claim-FL-DOE-90009-6bcbf7f9",
+     "claim-FL-DOE-90009-822c1970",
+     "claim-FL-DOE-90009-45632a73",
+     "claim-FL-DOE-90009-150fb43e"
+    ],
+    "opinions": [],
+    "audit": {
+     "word_count": 1593,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 64,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 4,
+     "spine_issues_covered": 4
+    }
+   }
+  ],
+  "counts": {
+   "claims": 64,
+   "positions": 24,
+   "issues": 16
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-BRO-CC2-general",
+  "office": "Broward County Commission, District 2",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-BRO-1179",
+    "name": "Mark D. Bogen",
+    "party": "DEM",
+    "site": null,
+    "run": null,
+    "reason": "no official_site",
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-BRO-1179",
+    "race_id": "FL-BRO-CC2-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-BRO-CC4-general",
+  "office": "Broward County Commission, District 4",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-BRO-1178",
+    "name": "Lamar Fisher",
+    "party": "DEM",
+    "site": null,
+    "run": null,
+    "reason": "no official_site",
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-BRO-1178",
+    "race_id": "FL-BRO-CC4-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-BRO-CC8-general",
+  "office": "Broward County Commission, District 8",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-BRO-1182",
+    "name": "Robert McKinzie",
+    "party": "DEM",
+    "site": null,
+    "run": null,
+    "reason": "no official_site",
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-BRO-1182",
+    "race_id": "FL-BRO-CC8-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-DAD-SB2-general",
+  "office": "Miami-Dade County School Board, District 2",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-DAD-2926",
+    "name": "Dorothy Bendross-Mindingall",
+    "party": "",
+    "site": null,
+    "run": null,
+    "reason": "no official_site",
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-DAD-2926",
+    "race_id": "FL-DAD-SB2-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-DAD-SB8-general",
+  "office": "Miami-Dade County School Board, District 8",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-DAD-2953",
+    "name": "Monica Colucci",
+    "party": "",
+    "site": null,
+    "run": null,
+    "reason": "no official_site",
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-DAD-2953",
+    "race_id": "FL-DAD-SB8-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ },
+ {
+  "race_id": "FL-ORA-SBCHAIR-general",
+  "office": "Orange County School Board Chair",
+  "level": "county",
+  "candidates": [
+   {
+    "id": "FL-VF-ORA-1245",
+    "name": "Angie Gallo",
+    "party": "",
+    "site": null,
+    "run": null,
+    "reason": "no official_site",
+    "perIssue": {}
+   }
+  ],
+  "issues": [],
+  "spine": [],
+  "profiles": [
+   {
+    "candidate_id": "FL-VF-ORA-1245",
+    "race_id": "FL-ORA-SBCHAIR-general",
+    "facts": [],
+    "positions": [],
+    "opinions": [],
+    "audit": {
+     "word_count": 0,
+     "verifiable_fact_count": 0,
+     "stated_position_count": 0,
+     "fact_checks_performed": 0,
+     "spine_issue_count": 0,
+     "spine_issues_covered": 0
+    }
+   }
+  ],
+  "counts": {
+   "claims": 0,
+   "positions": 0,
+   "issues": 0
+  },
+  "misattributed": 0
+ }
+]

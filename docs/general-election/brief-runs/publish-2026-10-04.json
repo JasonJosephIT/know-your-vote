@@ -1,0 +1,317 @@
+[
+ {
+  "race_id": "FL-10-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "e5a5d1b9-dff5-4dd3-b8fb-8a2a066e4370",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 1 profile, 4 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-10/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-11-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "2d5d17f4-198d-43fa-8f4f-34a15f9ea528",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 3 profiles, 14 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-11/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-12-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "835c4253-7f81-41a4-9b15-11ab252e4af0",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 3 profiles, 24 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-12/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-14-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "30174f01-1ad0-413e-b74d-355106fc4dfb",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 3 profiles, 8 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-14/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-15-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "0efdc8b5-123c-496d-8842-13cfe38b715e",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 16 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-15/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-16-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "2e6eaee2-7856-4c20-a672-150e859763a4",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 3 profiles, 30 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-16/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-20-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "4e6f6328-14c4-4606-9ad0-ce924a6d002c",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 3 profiles, 44 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-20/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-22-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "379f8938-b408-4ec5-895e-3d7b906b1396",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 1 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-22/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-24-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "cb9e38dd-1c2c-419d-a0db-0f77df9e739e",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 39 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-24/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-25-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "20b5bd29-98de-45c6-8e29-6b8150ff1c60",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 3 profiles, 23 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-25/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-26-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "db0a975b-e0fe-4865-a4f0-fabbc2c641f2",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 3 profiles, 24 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-26/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-27-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "cca1f2c2-c368-4027-8398-141d28d2c0cc",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 3 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-27/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-28-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "884cafdb-b8de-4b20-969f-8e466c9d861c",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 3 profiles, 8 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 2 candidates with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-28/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-7-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "e714a5bd-746e-4f5b-bddf-ec7ecc625781",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 3 profiles, 25 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-7/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-8-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "00f32a81-35cf-404f-a98c-5a375263285d",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 22 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-8/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-9-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "ba443b4c-1fdb-44d1-ae9a-a8f1fae977ed",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 9 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-9/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-AGR-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "f8d19964-b283-493d-a622-09aff35731fa",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 1 verbatim candidate-site claims, office spine A5,KYV5,KYV3,A4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-AGR/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-ATG-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:04:52Z",
+  "admin_action_id": "9511828a-6562-4aba-a1c7-e66d008223b6",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 1 verbatim candidate-site claims, office spine B7,KYV1,B3,A1 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-ATG/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-BRO-SB1-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "b5e86e78-49f7-4f12-8cc4-70a8f278f206",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 1 profile, 1 verbatim candidate-site claims, office spine A6,KYV9,KYV10 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-BRO-SB1/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-BRO-SB4-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "064d1016-1ecd-448d-9656-5fb7457e70dd",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 1 profile, 1 verbatim candidate-site claims, office spine A6,KYV9,KYV10 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-BRO-SB4/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-BRO-SB7-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "57612fb5-aa3e-40a3-b5e2-f35cb318791b",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 1 profile, 4 verbatim candidate-site claims, office spine A6,KYV9,KYV10 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-BRO-SB7/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-DAD-CC2-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "086f9866-aa86-478d-9025-31e3256bfb87",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 1 profile, 5 verbatim candidate-site claims, office spine A2,KYV3,KYV4,B7 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-DAD-CC2/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-DAD-CC5-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "948794aa-c9e5-4d45-a53a-ff67826dcc07",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 3 verbatim candidate-site claims, office spine A2,KYV3,KYV4,B7 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-DAD-CC5/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-DAD-SB1-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "21109d04-bb99-4802-bb82-52d5fe3c30fd",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 9 verbatim candidate-site claims, office spine A6,KYV9,KYV10 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-DAD-SB1/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-HIL-CC1-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "3b9807ca-8564-4852-9c2a-915d4a005f0f",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 4 verbatim candidate-site claims, office spine A2,KYV3,KYV4,B7 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-HIL-CC1/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-HIL-CC3-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "c2b2f090-1bda-4cd9-8afd-3a6194bc3e61",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 7 verbatim candidate-site claims, office spine A2,KYV3,KYV4,B7 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-HIL-CC3/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-HIL-CC5-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "f2c75cc7-6e47-4b96-b3bc-c5a85633cd76",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 5 verbatim candidate-site claims, office spine A2,KYV3,KYV4,B7 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-HIL-CC5/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-HIL-CC7-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "0af57b75-c3ba-4e58-a5bd-6eac39c31132",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 5 verbatim candidate-site claims, office spine A2,KYV3,KYV4,B7 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-HIL-CC7/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-HIL-SB2-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "51e54033-942b-46dc-9a0e-e40c65aed1aa",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 1 verbatim candidate-site claims, office spine A6,KYV9,KYV10 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-HIL-SB2/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-ORA-CC2-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "2eb5897f-5a84-474c-86ff-cbac60049450",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 13 verbatim candidate-site claims, office spine A2,KYV3,KYV4,B7 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-ORA-CC2/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-ORA-CC7-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "bec5d900-d4ff-4f23-8984-64d95fe08e09",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 4 verbatim candidate-site claims, office spine A2,KYV3,KYV4,B7 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-ORA-CC7/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-ORA-CC8-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "d04eee4c-658f-4189-8925-04d295b54884",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 5 verbatim candidate-site claims, office spine A2,KYV3,KYV4,B7 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-ORA-CC8/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-ORA-MAYOR-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "df25e0ee-888b-4ffd-9fa4-fa044766da60",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 2 profiles, 7 verbatim candidate-site claims, office spine A2,KYV3,KYV4,B7 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 1 candidate with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-ORA-MAYOR/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-ORA-SB2-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "f955fe3a-1503-4abd-99b9-caa287d7d28d",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 1 profile, 1 verbatim candidate-site claims, office spine A6,KYV9,KYV10 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). docs/general-election/brief-runs/FL-ORA-SB2/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ },
+ {
+  "race_id": "FL-SEN-general",
+  "prior_status": "listed",
+  "new_status": "published",
+  "published_at": "2026-10-04T18:05:30Z",
+  "admin_action_id": "9a8b5709-0343-4c00-b890-6db519424d5a",
+  "actor": "founder",
+  "reason": "Founder answered \"Publish\" (all 35 races) in chat, Session C2. Brief: 3 profiles, 64 verbatim candidate-site claims, office spine B1,B2,B3,B4 (founder decision 2026-10-03); Balance Audit PASS at word_count_pct=150 (founder decision 2026-10-03). 2 candidates with no claim, shown as no_stated_position_found. docs/general-election/brief-runs/FL-SEN/audit-2026-10-04.json, apply-2026-10-04.md, step4-2026-10-03.md."
+ }
+]

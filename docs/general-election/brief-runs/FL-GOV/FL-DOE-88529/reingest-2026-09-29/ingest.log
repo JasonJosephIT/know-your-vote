@@ -1,0 +1,11 @@
+(node:7086) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-site-ingest.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/user/know-your-vote/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+site: https://nomoecorruption.com/
+  asking Jev about 17 link(s) as jev:jev-1.13.0/links/q-e03cabd0
+  91 links, 2 policy page(s) selected (cap 8), about page: none
+   29 passage(s)  https://nomoecorruption.com/2024/12/06/judicial-cleanup
+   82 passage(s)  https://nomoecorruption.com/judicial-corruption
+
+123 passage(s) -> docs/general-election/brief-runs/FL-GOV/FL-DOE-88529/reingest-2026-09-29/passages.jsonl

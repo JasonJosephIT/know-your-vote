@@ -146,3 +146,84 @@ Official-site seed (B3, now for the 2026-map field), live DoE run into the datab
 ## 6. Paste-ready prompt
 
 > "Continue the ballots-by-ZIP work. Read `docs/general-election/ballots-handoff.md` first, then `docs/general-election/ballots/README.md`. The derived data is committed under `docs/general-election/ballots/`, except `EOGPCRP2026_block_assignment.txt`, which is gitignored — re-fetch it from flsenate.gov if a task needs it. Take §4 in order: (4.1) if today is on or after 2026-09-24, fetch the four counties' general-election sample ballots and add the county contests to each ZIP's manifest; otherwise skip to (4.2) and rebuild `zip_district` from the enacted 2026 congressional plan (`EOGPCRP2026_block_assignment.txt` + Census ZCTA↔block), claiming a migration number in the ledger before writing the file. Never commit the raw DoE export. Remote sessions have no network; anything that fetches runs on this Mac with `/usr/bin/python3`."
+
+---
+
+## 7. Decisions, 2026-10-04: judicial retention and Amendment 1
+
+**Recommended (pending founder confirmation).** These are the launch handoff's founder decisions 9 and 10 (`launch-handoff-2026-10-04.md` §4). The founder asked agents to take the best recommended path, build around it and leave the decision to them. Neither call below is the founder's decision yet, and each one flips in one place.
+
+### 7.1 Decision 10, judicial retention: say it is out of scope, link to official pages
+
+**Recommended (pending founder confirmation):** don't model retention for Nov 3. Say on the ballot list that the ballot also asks about judges, that Know Your Vote doesn't cover those questions, and link to the courts' and the Division of Elections' own pages.
+
+**Why:** retention is on every ballot, so leaving it unmentioned makes the "Ballot questions" list read as the whole ballot. Modelling it properly (a table, a read path, a neutral source ladder for judges) is more than 30 days of work allows. The methodology page as rewritten in this same handoff lists judicial retention under "What we don't cover", so the note matches it.
+
+**What was built:**
+
+- `src/components/features/JudicialRetentionNote.tsx` (new, server component). It renders a short aside headed "Judges on your ballot". The aside names Justice Carlos G. Muñiz (on every ballot, linked to his page on the Supreme Court site) and gives the number of appeals court judges per covered county. Each count links to the Division of Elections' list, the one official page that names exactly who is up, grouped by district; a second link, "about this court's judges", goes to that court's own judges page for background. It closes with the Division of Elections' full list again and a line saying circuit judge races aren't covered either. It takes an optional `county`: with one, it shows only that county's appeals court line; without one, it shows all four counties, which is true for everyone.
+- `src/components/features/BallotQuestions.tsx` renders the note after the amendments list, inside the same section, and accepts an optional `county` that it passes through. `SharedBallot` passes nothing. `YourRaces` could pass `result.county` (requested from that file's owner). Until it does, the four-county version shows there too.
+
+**How to flip:** set `SHOW_JUDICIAL_RETENTION_NOTE = false` in `JudicialRetentionNote.tsx` and the note renders nothing. To remove it for good, delete that file and the one `<JudicialRetentionNote county={county} />` line in `BallotQuestions.tsx`. Choosing "model retention" instead is a new build: a retention-question table and a rule for which sources may be shown about a judge.
+
+**What the ballot holds (checked 2026-10-04, official sources only):**
+
+| County | Circuit (F.S. 26.021) | District court of appeal (F.S. ch. 35) | Retention questions | Circuit judge races on the general ballot |
+|---|---|---|---|---|
+| All | — | — | Justice Carlos G. Muñiz, Supreme Court (the only justice up) | — |
+| Miami-Dade | 11th | 3rd (F.S. 35.04) | Gooden, Gordo, Lobree, Logue, Miller (5) | Group 5 (McNeil, Segura); Group 69 (Rita Maria Baez, Jones-Peabody) |
+| Broward | 17th | 4th (F.S. 35.042) | Forst, Klingensmith, Lott, Shaw, Shepherd (5) | Group 52 (Fry, Hamilton) |
+| Hillsborough | 13th | 2nd (F.S. 35.03) | Atkinson, Silberman, Sleet, Andrea Teves Smith (4) | none |
+| Orange | 9th | **6th** since 2023-01-01 (F.S. 35.044, ch. 2022-163) | none: the state list has no 6th District retention this year | Group 1 (Hampton-Johnson, Hart) |
+
+This matches §4.5 above. The other two districts on the state list (1st: 5 judges, 5th: 3) don't reach a covered county. The site names only Muñiz and the counts. It does not name the appeals court judges, so a late change on the bench can only make a count wrong, not a name.
+
+**Review fixes (2026-10-04, adversarial review of this package):**
+
+- The intro first said "The links go to the courts' own pages", but one link goes to the Division of Elections, which is not a court. It now reads "The links go to the state's list of who is up and to the courts' own pages."
+- Each county's count ("5 judges of the 3rd District Court of Appeal") first linked to the court's judges page. Those pages list every sitting judge, not just the ones up for retention. On 2026-10-04 the rosters held 15 names (2nd), 10 (3rd) and 11 (4th) against 4, 5 and 5 on the ballot, so a voter could not tell who was on their ballot. The count now links to the Division of Elections' list, and the court page stays as a second link. The state list was re-read on 2026-10-04 (WebFetch; plain `curl` got a Cloudflare challenge, 403, which a normal browser passes): Supreme Court, Muñiz only; District 3, Gooden, Gordo, Lobree, Logue and Miller; District 4, Forst, Klingensmith, Lott, Shaw and Shepherd; District 6, none. District 2 (Atkinson, Silberman, Sleet and Smith) was re-read in the same session.
+
+**URLs verified (GET, 2026-10-04):**
+
+| URL | Publisher | What it showed | Linked from the site? |
+|---|---|---|---|
+| https://dos.elections.myflorida.com/candidates/CanList.asp?elecid=20261103-GEN&OfficeGroup=JUD | Florida Division of Elections | Judicial offices only, 2026 general. Supreme Court Justice: Muñiz, Carlos G., Qualified (sole entry). DCA 1–5 retention lists as in the table; no DCA 6 entries. Circuit judge groups, including the runoffs above | Yes: each county's count, and the closing line |
+| https://supremecourt.flcourts.gov/the-court/about-the-court/justices/justice-carlos-g.-muniz | Supreme Court of Florida | Page titled "Justice Carlos G. Muñiz", the court's own biography (appointed 2019) | Yes |
+| https://supremecourt.flcourts.gov/Justices | Supreme Court of Florida | The court's justices page; Muñiz listed | No (the bio page is linked) |
+| https://2dca.flcourts.gov/Judges | 2nd District Court of Appeal | Judges page, 15 judges listed; Atkinson, Silberman, Sleet and Smith among them | Yes, as the second link ("about this court's judges") |
+| https://3dca.flcourts.gov/Judges | 3rd District Court of Appeal | Judges page, 10 judges listed; Gooden, Gordo, Lobree, Logue and Miller among them | Yes, as the second link |
+| https://4dca.flcourts.gov/Judges | 4th District Court of Appeal | Judges page, 11 judges listed; Forst, Klingensmith, Lott, Shaw and Shepherd among them | Yes, as the second link |
+| https://6dca.flcourts.gov/Judges | 6th District Court of Appeal | Judges page (loads) | No (Orange has no retention line) |
+| https://2dca.flcourts.gov/ | 2nd District Court of Appeal | "The Sixth Judicial Circuit (Pinellas and Pasco counties), the Twelfth … and The Thirteenth Judicial Circuit (Hillsborough County)" | No |
+| https://4dca.flcourts.gov/ | 4th District Court of Appeal | Appeals "from the Fifteenth, Seventeenth, and Nineteenth Judicial Circuits … Palm Beach, Broward, St. Lucie, Martin, Indian River, and Okeechobee Counties" | No |
+| https://www.flsenate.gov/Laws/Statutes/2026/Chapter35/All | The Florida Senate (Florida Statutes) | 35.03: 2nd = 6th, 12th, 13th Circuits. 35.04: 3rd = 11th, 16th. 35.042: 4th = 15th, 17th, 19th. 35.044: 6th = 9th, 10th, 20th (s. 8, ch. 2022-163) | No |
+| https://www.flsenate.gov/Session/Bill/2022/2522/Analyses/2022s02522.ap.PDF | The Florida Senate (staff analysis, SB 2522, 2022) | Creates the Sixth Appellate District (Ninth, Tenth and Twentieth Circuits), "effective January 1, 2023", and realigns the 1st, 2nd and 5th | No |
+| https://www.flsenate.gov/Laws/Statutes/2026/26.021 | The Florida Senate (Florida Statutes) | 9th = Orange and Osceola; 11th = Miami-Dade; 13th = Hillsborough; 17th = Broward | No |
+| https://dos.fl.gov/elections/candidates-committees/offices-up-for-election/ | Florida Division of Elections | "Offices Up for Election and Retention in 2026". Judicial Retention (Nonpartisan): Supreme Court justices and DCA judges "only those whose terms expire January 2027" | No |
+| https://dos.fl.gov/elections/contacts/frequently-asked-questions/faq-elections/ | Florida Division of Elections | "Justices of the Supreme Court and Judges of the District Courts of Appeal are subject to retention voting. Circuit judges and county judges are subject to election" | No |
+| https://www.miamidade.gov/elections/library/2026-11-03-general-election-master-ballot.pdf | Miami-Dade Supervisor of Elections | "FINAL Official General Election Ballot, November 3, 2026": "Shall Justice Carlos G. Muñiz of the Supreme Court be retained in office?", five 3rd District questions, and circuit Groups 5 and 69 | No |
+
+Deliberately not linked: The Florida Bar's "The Vote's in Your Court" and its retention poll, Ballotpedia, LWV/Vote411, news voter guides and every advocacy page. The county Supervisor homepages already in `src/lib/notifications/config.ts` still resolve, but two of them redirect: `miamidade.gov/global/elections/home.page` goes to `votemiamidade.gov/elections/home.page`, and `ocfelections.gov` goes to `voteorangefl.gov`. Orange's `/sample-ballots/` page listed only municipal ballots when checked.
+
+### 7.2 Decision 9, Amendment 1: keep the neutral-only page
+
+**Recommended (pending founder confirmation):** keep `FL-AM1-general` `listed`, showing the official record and neutral material only, with no YES/NO columns.
+
+**What voters see now (checked 2026-10-04):**
+
+- A SELECT on production found AM1 `listed` with 10 `measure_resource` rows, all `neutral`: 4 official, 1 analysis (James Madison Institute) and 5 reporting (CBS Miami, WFLA, WUSF, Bradenton Times, Ocala Gazette). It has no sided rows. AM2 and AM3 are `published`.
+- A GET of https://knowyour.vote/measures/FL-AM1-general returned 200. The page shows the 60% threshold, the verbatim ballot summary, a link to the full text, the "Understand it first" block (official documents, research, reporting) and the held note. It shows no YES/NO columns.
+
+**Copy fixed:** the held note (`src/lib/measure-held-copy.ts`) said opponents "have so far only listed themselves as opposed, without giving their reasons". That was wrong. The reporting the same page links quotes opponents' reasons: CBS Miami and WUSF quote the governor's stated reasons from his 2026-09-14 post on X, and the Ocala Gazette quotes Florida AFL-CIO testimony. The note now says only what is true: both sides have given reasons and the reports above quote them. The site adds for/against columns only from each side's own case read at its own source, and that has been done for supporters (RPOF's release) but not yet for opponents. It names no one, and `updated` moved to 2026-10-04. `page.tsx` needed no change. Its "We look for new statements every week" is backed by the routine "Weekly amendment source re-check (FL AM1/AM2)", which is enabled and runs Mondays at 12:07 UTC.
+
+**Why hold rather than publish:**
+
+1. **The NO column would be the thin side.** What has been read at source is RPOF's release (support, with reasons), Florida TaxWatch (support, analysis) and one Substack each way. FEA and LWV Florida, on their own pages, list themselves as opposed with no reasons. A published page would set a party release and a think-tank analysis against two reasonless listings and one personal blog. It passes the ≤2× count and still reads lopsided.
+2. **Voters can already read both sides' reasons.** The neutral reporting on the page quotes supporters and opponents in their own words.
+3. **Publishing is a production write 30 days out.** It needs a new seeding migration and a status flip, for a column that one opponent's own statement would make solid.
+
+**The case for flipping:** AM2 was published with the same two FEA/LWV bare listings in its NO column (founder call D2, 2026-09-26). Consistency would argue for publishing AM1 on the same footing. The difference is that AM2's NO side also had reasoned rows of its own.
+
+**How to flip (publish AM1):** have an agent write a migration modelled on `supabase/migrations/0040_measure_resources_am2.sql`. Take the next free number in `supabase/migrations/README.md`; 0042 is being claimed by the news backfill in this same handoff. The migration seeds AM1's sided rows from `measure-resources-verified-2026-09-24.md`: the RPOF release, TaxWatch, the Freedom Vanguard Substack, the FEA toolkit, the LWV Vote411 page and the Amanda Informed Substack. It then sets `measure_publication` to `published` with an `admin_action` row. Run `node scripts/verify-measure-balance.ts` and `node scripts/verify-measure-resources.ts`, then read back as anon. The page switches to the YES/NO ladder by itself once a brief exists. Then delete the `"FL-AM1-general"` entry in `HELD_NOTES`, the clearly marked block in `src/lib/measure-held-copy.ts`; `scripts/verify-measure-held.ts` asserts that entry exists, so update that check in the same change.
+
+**What would change the recommendation:** an opponent's own reasoned statement read at its source. The likeliest is the governor's 2026-09-14 post on X. No session has opened it at its source: it is known only as quoted in the reporting, and the founder could check it in a logged-in browser. Others are a Florida AFL-CIO, FEA or LWV Florida page that gives reasons, or a Florida Channel clip of the 2025 House Budget Committee testimony. The weekly routine is looking for these.

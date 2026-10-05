@@ -111,29 +111,13 @@ export interface ResolveResult {
   needsCountyConfirm?: boolean;
   races: ResolveRaceSummary[];
   message?: string;
-}
-
-/* POST /api/quiz response (PRD § 4). */
-export interface QuizResultCandidate {
-  candidateId: string;
-  legalName: string;
-  party: string;
-  raceId: string;
-  office: string;
-  /* What this candidate has SAID about the issues the voter picked —
-     described on its own terms, not measured against the voter's answers.
-     Renamed from alignmentNote in TASK-065: in a two-way general, "aligns
-     with you" is a verdict even when nothing is ranked. */
-  stanceSummary: string;
-  /* Which of the voter's chosen issues this candidate has a stated position
-     on. A coverage fact, not a score. */
-  issuesCovered: string[];
-}
-
-export interface QuizResponse {
-  races: Array<{ raceId: string; office: string }>;
-  results: QuizResultCandidate[];
-  disclaimer: string;
+  /* How much of the ballot this result places. "district": a congressional
+     district resolved (its House race may still be unpublished -- see
+     districtRaceMissing). "statewide": a Florida location we cannot place in a
+     district yet, so `races` is only the ballot every Florida voter shares.
+     Absent reads as "district", which is what every result meant before the
+     field existed. */
+  coverage?: "district" | "statewide";
 }
 
 /* Ballot measures (0010, 0034). App-owned, unlike the pipeline's race tables. */

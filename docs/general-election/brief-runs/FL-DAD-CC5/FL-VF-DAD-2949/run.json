@@ -1,0 +1,485 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://vickilopez.vote",
+  "created_at": "2026-09-30T01:58:52.823Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
+  "question_ids": [
+    "q_states_policy",
+    "q_own_commitment",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 9,
+    "asked": 9,
+    "states_policy": 6,
+    "with_issue": 3,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "311fe3b2",
+      "url": "https://vickilopez.vote/",
+      "heading": "Leading with Transparency, Accountability, and Collaboration",
+      "text": "From protecting our environment to standing with our residents, Commissioner Vicki Lopez has been hard at work delivering results for residents. Now, she’s counting on our support to build on her record of results and lifetime of public service! Commissioner Lopez was named the 2025 Housing Advocate of the Year by the Miami Association of Realtors for her work advancing condominium reform and championing Accessory Dwelling Units (ADUs) as a tool to expand attainable housing options for Miami-Dade families.",
+      "verdict": {
+        "commitment": 0.42,
+        "own_commitment": 0.11,
+        "states_policy": false,
+        "issues": [
+          "A2"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.86,
+          "A3": 0.03,
+          "A4": 0.17,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.06,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.67,
+          "KYV4": 0.04,
+          "KYV5": 0.02,
+          "KYV6": 0.05,
+          "KYV7": 0.05,
+          "KYV8": 0.09,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "be66cc78",
+      "url": "https://vickilopez.vote/",
+      "heading": "Action Plan for District 5",
+      "text": "Lead with transparency and accountability by regularly communicating with residents, businesses, and condo associations",
+      "verdict": {
+        "commitment": 0.94,
+        "own_commitment": 0.93,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.11,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.04,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b1c5a17c",
+      "url": "https://vickilopez.vote/",
+      "heading": "Action Plan for District 5",
+      "text": "Improve quality of life with senior programming investments",
+      "verdict": {
+        "commitment": 0.92,
+        "own_commitment": 0.92,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.05,
+          "B3": 0.02,
+          "B4": 0.07,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "00ef817e",
+      "url": "https://vickilopez.vote/",
+      "heading": "Action Plan for District 5",
+      "text": "Create more affordable and workforce housing",
+      "verdict": {
+        "commitment": 0.96,
+        "own_commitment": 0.93,
+        "states_policy": true,
+        "issues": [
+          "A2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.96,
+          "A3": 0.03,
+          "A4": 0.46,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.21,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.57,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.14,
+          "KYV7": 0.15,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "03d294d0",
+      "url": "https://vickilopez.vote/",
+      "heading": "Action Plan for District 5",
+      "text": "Invest in infrastructure to reduce traffic and improve mobility",
+      "verdict": {
+        "commitment": 0.95,
+        "own_commitment": 0.94,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.03,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.09,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "0b5c0e56",
+      "url": "https://vickilopez.vote/",
+      "heading": "Action Plan for District 5",
+      "text": "Stand with our first responders to keep our communities safe",
+      "verdict": {
+        "commitment": 0.76,
+        "own_commitment": 0.66,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.64,
+          "B8": 0.02,
+          "KYV1": 0.05,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "22313929",
+      "url": "https://vickilopez.vote/",
+      "heading": "Action Plan for District 5",
+      "text": "Support small businesses to grow our economy and create opportunities",
+      "verdict": {
+        "commitment": 0.96,
+        "own_commitment": 0.93,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.95,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.09,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8f45134e",
+      "url": "https://vickilopez.vote/",
+      "heading": "Action Plan for District 5",
+      "text": "Protect Biscayne Bay, defend our environment, and mitigate flooding",
+      "verdict": {
+        "commitment": 0.94,
+        "own_commitment": 0.89,
+        "states_policy": true,
+        "issues": [
+          "KYV4"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.36,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.33,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.4,
+          "KYV4": 0.93,
+          "KYV5": 0.05,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4646aa2c",
+      "url": "https://vickilopez.vote/",
+      "heading": "Contribute Today",
+      "text": "Vicki is relying on your support. Please make a secure online contribution today.",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "economy",
+        "label": "Economy & Affordability"
+      },
+      "subIssues": [
+        {
+          "id": "B1",
+          "label": "Economy, inflation, and jobs",
+          "citations": [
+            {
+              "passage": {
+                "id": "22313929",
+                "url": "https://vickilopez.vote/",
+                "heading": "Action Plan for District 5",
+                "text": "Support small businesses to grow our economy and create opportunities",
+                "retrieved_at": "2026-09-29T11:44:28.820Z"
+              },
+              "score": 0.95
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "housing",
+        "label": "Housing"
+      },
+      "subIssues": [
+        {
+          "id": "A2",
+          "label": "Housing affordability",
+          "citations": [
+            {
+              "passage": {
+                "id": "00ef817e",
+                "url": "https://vickilopez.vote/",
+                "heading": "Action Plan for District 5",
+                "text": "Create more affordable and workforce housing",
+                "retrieved_at": "2026-09-29T11:44:28.820Z"
+              },
+              "score": 0.96
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "environment",
+        "label": "Environment & Water"
+      },
+      "subIssues": [
+        {
+          "id": "KYV4",
+          "label": "Storm resilience and flood protection",
+          "citations": [
+            {
+              "passage": {
+                "id": "8f45134e",
+                "url": "https://vickilopez.vote/",
+                "heading": "Action Plan for District 5",
+                "text": "Protect Biscayne Bay, defend our environment, and mitigate flooding",
+                "retrieved_at": "2026-09-29T11:44:28.820Z"
+              },
+              "score": 0.93
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 33307,
+    "output_tokens": 4311
+  }
+}

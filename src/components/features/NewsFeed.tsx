@@ -163,6 +163,11 @@ export function NewsFeed({
               image / outlet / headline shape and the opinion treatment live
               there, so this list cannot drift from the candidate page's. */}
           <NewsStoryCard
+            /* h2, not the card's default h3: on /news the only heading above
+               this list is the page's h1, so h3 skipped a level
+               (a11y-perf-2026-10-04.md fix 7; WCAG 1.3.1 Info and
+               Relationships; axe heading-order). It looks the same. */
+            headingLevel="h2"
             title={item.title}
             url={item.url}
             imageUrl={item.imageUrl}

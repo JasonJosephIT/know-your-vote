@@ -1,16 +1,24 @@
 import Link from "next/link";
 import { geocoderHost } from "@/lib/geocode";
+import { ResetAdsConsent } from "@/components/features/SitePrompts";
+import { ADS_TAG_ENABLED } from "@/lib/ads";
 
 export const metadata = { title: "Privacy — Know Your Vote" };
 
 export default function PrivacyPage() {
   const geocoder = geocoderHost();
+  const analyticsOn = Boolean(process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN);
+  /* The same variables that start the two Sentry SDKs
+     (src/instrumentation.ts, src/instrumentation-client.ts). */
+  const errorReportsOn = Boolean(
+    process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN
+  );
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
       <h1 className="text-h1">Privacy, in plain language</h1>
       <p className="text-body-lg text-on-surface-muted">
-        You can use everything here without an account, a login, or leaving a
-        trace. That&apos;s a design decision, not a settings page.
+        You can use everything here without an account or a login. That&apos;s a
+        design decision, not a settings page.
       </p>
 
       <section className="flex flex-col gap-2">
@@ -22,11 +30,16 @@ export default function PrivacyPage() {
             devtools beats a claim you have to trust. */}
         <h2 className="text-h2">What stays on your device</h2>
         <p className="text-body">
-          Three things, and you can check all three in your browser&apos;s
+          Five things, and you can check all five in your browser&apos;s
           devtools: the district you chose, the candidates you &quot;keep in
-          mind&quot;, and whether you dismissed the &quot;get the app&quot;
-          prompt. That is the whole list. They never reach our servers, and
-          clearing your browser data removes them completely.
+          mind&quot;, whether you dismissed the &quot;get the app&quot; prompt,
+          your answer to the cookie question (<code>kyv.ads-consent</code>), and
+          whether you closed the donation prompt (
+          <code>kyv.donate-dismissed</code>). That is the whole list of what we
+          store. They never reach our servers, and clearing your browser data
+          removes them completely. If you accept Google&apos;s ad cookies,
+          Google stores cookies of its own; that is covered under analytics and
+          advertising below.
         </p>
         {/* Named exactly, with its value, because that is the only version of
             this claim a skeptic can check. The district is a public electoral
@@ -38,11 +51,6 @@ export default function PrivacyPage() {
           Not your address. Not your ZIP. Not a coordinate. It is written only
           when you ask for it, the chip at the top of every page shows it, and
           &quot;Forget my district&quot; deletes it on the spot.
-        </p>
-        <p className="text-body">
-          Your quiz answers aren&apos;t stored anywhere — not on your device,
-          not with us. They exist while you are answering and are gone when you
-          close the tab.
         </p>
         <p className="text-body">
           Your address and your ZIP aren&apos;t stored either — not on your
@@ -123,23 +131,58 @@ export default function PrivacyPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-h2">The quiz and AI</h2>
-        <p className="text-body">
-          Quiz answers are interpreted by an AI model. We send it only the races
-          on your ballot and your issue answers — never your name, email, or any
-          identifier. Candidates are even anonymized in that request, so the
-          model can&apos;t favor anyone it recognizes. Take the quiz without a
-          ZIP and the races are simply the statewide ones.
-        </p>
-      </section>
-
-      <section className="flex flex-col gap-2">
-        <h2 className="text-h2">Analytics and errors</h2>
-        <p className="text-body">
-          We use cookieless, aggregate analytics (Plausible) — no cookies, no
-          personal data, no cross-site tracking. Error reports are scrubbed of
-          ZIPs, emails, and IP addresses before they leave the app.
-        </p>
+        {/* Rewritten when the Google Ads tag went into the root layout. The old
+            copy said "no cookies, no cross-site tracking", which stopped being
+            true for the site as a whole — the Plausible claim still holds, so
+            the two are now stated separately. The tag is opt-in: SitePrompts
+            loads it only after the visitor accepts. */}
+        <h2 className="text-h2">Analytics, advertising, and errors</h2>
+        {/* Read from the same variable the root layout uses to load the
+            script, so this sentence can't drift from what runs. On 2026-10-04
+            NEXT_PUBLIC_PLAUSIBLE_DOMAIN was unset in production and the page
+            still said "We use … Plausible" (docs/scope-changes.md). */}
+        {analyticsOn ? (
+          <p className="text-body">
+            We use cookieless, aggregate analytics (Plausible) — no cookies, no
+            personal data, no cross-site tracking.
+          </p>
+        ) : (
+          <p className="text-body">
+            We don&apos;t run site analytics right now. If we turn on
+            cookieless, aggregate analytics (Plausible), this page will say so.
+          </p>
+        )}
+        {/* Follows the ads switch (src/lib/ads.ts, founder decision 2), so a
+            flip can't leave this page describing a tag that no longer loads.
+            Brief by the founder's choice (2026-10-05), but it still names the
+            provider and what it receives: Google's ad policies expect a site
+            using its ad cookies to say so, and the IP address is the personal
+            data the PRD's opt-in promise is about (docs/prd.md §2). */}
+        {ADS_TAG_ENABLED && (
+          <p className="text-body">
+            We ask before setting advertising cookies. If you accept, our ad
+            provider (Google) receives the page you&apos;re on and your IP
+            address; decline and they&apos;re never set. See{" "}
+            <a
+              href="https://policies.google.com/technologies/ads"
+              className="text-primary underline underline-offset-2"
+            >
+              Google&apos;s advertising policy
+            </a>
+            . <ResetAdsConsent />.
+          </p>
+        )}
+        {/* What a report keeps is set by src/lib/sentry-scrub.ts and checked
+            by scripts/verify-sentry-server.ts. */}
+        {errorReportsOn ? (
+          <p className="text-body">
+            If something breaks, an error report goes to Sentry. It includes
+            the error and the page address, never your ZIP, email, IP address
+            or cookies.
+          </p>
+        ) : (
+          <p className="text-body">We don&apos;t collect error reports right now.</p>
+        )}
       </section>
 
       <p className="text-body-sm text-on-surface-muted">
@@ -151,6 +194,14 @@ export default function PrivacyPage() {
           Read the methodology
         </Link>{" "}
         — fairness and privacy are both things you can check, not just trust.
+        The rest of the ground rules are in our{" "}
+        <Link
+          href="/terms"
+          className="text-primary underline underline-offset-2"
+        >
+          terms of use
+        </Link>
+        .
       </p>
     </main>
   );

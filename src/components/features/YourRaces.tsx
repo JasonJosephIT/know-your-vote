@@ -5,16 +5,23 @@ import { CountyRaces } from "@/components/features/CountyRaces";
 import { VotingInfo } from "@/components/features/VotingInfo";
 import { LocationEntry } from "@/components/features/LocationEntry";
 import { createAnonServerClient } from "@/lib/supabase/server";
-import { districtRaceMissing } from "@/lib/coverage";
+import { districtRaceMissing, STATEWIDE_BALLOT_HREF } from "@/lib/coverage";
+import { coveredCountyNames } from "@/lib/counties";
 import {
   getCoveredDistricts,
   resolveCounty,
   resolveDistrict,
+  resolveStatewideOnly,
   resolveZip,
   ZIP_RE,
 } from "@/lib/resolve";
 import { raceStatusLabel } from "@/lib/races";
 import { geocoderConfigured } from "@/lib/geocode";
+import {
+  emailDeliveryConfigured,
+  officialSources,
+  remindersPaused,
+} from "@/lib/notifications/config";
 import type { ResolveResultWithCounty } from "@/lib/resolve";
 
 const DISTRICT_RE = /^FL-\d{1,2}$/;
@@ -49,10 +56,14 @@ export async function YourRaces({
   zip,
   district,
   county,
+  scope,
 }: {
   zip?: string;
   district?: string;
   county?: string;
+  /* "statewide": a Florida voter we cannot place in a district yet (the
+     address path's answer outside the covered counties). */
+  scope?: string;
 }) {
   const districts = await getCoveredDistricts();
 
@@ -65,6 +76,8 @@ export async function YourRaces({
     result = await resolveDistrict(county, district);
   } else if (county) {
     result = await resolveCounty(county);
+  } else if (scope === "statewide") {
+    result = await resolveStatewideOnly();
   }
 
   if (!result) {
@@ -85,9 +98,20 @@ export async function YourRaces({
     return (
       <div className="flex flex-col gap-4">
         <p className="text-body text-on-surface-muted">
-          We don&apos;t cover that area yet — right now it&apos;s the Miami,
-          Fort Lauderdale, Tampa, and Orlando metros. Try another ZIP or pick a
-          county:
+          We can&apos;t place that ZIP on a ballot yet. Full statewide coverage
+          isn&apos;t available: U.S. House and county races are only for{" "}
+          {coveredCountyNames()} counties so far. If you live in Florida,{" "}
+          {/* The address field only exists when a geocoder is configured
+              (PELIAS_BASE_URL, unset in production on 2026-10-04), so the
+              hint follows it rather than pointing at a field that isn't there. */}
+          {geocoderConfigured() ? "try your street address, or " : ""}
+          <Link
+            href={STATEWIDE_BALLOT_HREF}
+            className="text-primary underline underline-offset-2"
+          >
+            see the statewide ballot every Florida voter shares
+          </Link>
+          .
         </p>
         <LocationEntry
           addressEnabled={geocoderConfigured()}
@@ -118,7 +142,9 @@ export async function YourRaces({
   return (
     <div className="flex flex-col gap-5">
       <p className="flex flex-wrap items-center gap-2 text-body-sm text-on-surface-muted">
-        {result.county}
+        {result.coverage === "statewide"
+          ? "Florida · statewide ballot"
+          : result.county}
         {result.district ? ` · ${result.district}` : ""}
         <Link
           href="/candidates?view=races"
@@ -128,6 +154,22 @@ export async function YourRaces({
         </Link>
       </p>
 
+      {/* Said first, before any race: the list below is complete for the
+          statewide half and silent about the rest, and a voter must not read
+          it as their whole ballot. */}
+      {result.coverage === "statewide" && (
+        <p
+          role="status"
+          className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
+        >
+          Full statewide coverage isn&apos;t available yet. Your address is in
+          Florida, but outside the counties where we can place U.S. House and
+          county races ({coveredCountyNames()}). Below is the statewide ballot
+          every Florida voter shares. Your House race and any county or local
+          races aren&apos;t here yet.
+        </p>
+      )}
+
       {/* The truly-empty case only. Since the listed tier (0033) the roster is
           visible before any brief is, so an empty list now means nothing at
           all is visible for this location — and if county races did come
@@ -136,9 +178,9 @@ export async function YourRaces({
       {result.races.length === 0 ? (
         (result.countyRaces?.length ?? 0) === 0 && (
           <p className="text-body text-on-surface-muted">
-            Your races aren&apos;t published yet — our Balance Audit publishes a
-            race only when every candidate has equal space and equal scrutiny.
-            Check back soon.
+            Your races aren&apos;t published yet — we publish a race only after
+            every candidate in it has been through the same checks. Check back
+            soon.
           </p>
         )
       ) : (
@@ -204,14 +246,26 @@ export async function YourRaces({
         you can vote on all of this.
       </p>
 
-      {!result.district && result.races.length > 0 && (
+      {!result.district &&
+        result.coverage !== "statewide" &&
+        result.races.length > 0 && (
         <p className="text-caption text-on-surface-muted">
           Showing statewide races. Enter your ZIP above to add your
           congressional district&apos;s races.
         </p>
       )}
 
-      <VotingInfo zip={zip && ZIP_RE.test(zip) ? zip : ""} />
+      {/* The flags are read here, on the server, because VotingInfo is a
+          client component and the env they depend on is secret.
+          Unconfigured, it shows this county's official sources instead of a
+          form that could only fail; while NOTIFICATIONS_PAUSED is set, its
+          copy stops promising reminders (launch handoff 2026-10-04, §2). */}
+      <VotingInfo
+        zip={zip && ZIP_RE.test(zip) ? zip : ""}
+        emailEnabled={emailDeliveryConfigured()}
+        remindersOn={!remindersPaused()}
+        sources={officialSources(result.county)}
+      />
     </div>
   );
 }

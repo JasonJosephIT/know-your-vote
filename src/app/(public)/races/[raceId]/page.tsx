@@ -2,13 +2,15 @@ import Link from "next/link";
 import { RaceCompare } from "@/components/features/RaceCompare";
 import { TrackView } from "@/components/features/TrackView";
 import { RaceListing } from "@/components/features/RaceListing";
+import { RaceHeader } from "@/components/features/RaceHeader";
+import { IssueFilter } from "@/components/features/IssueFilter";
 import { getRaceBrief } from "@/lib/briefs";
 import {
   getRaceListing,
   type RaceListing as RaceListingData,
 } from "@/lib/listing";
 import { listingCopy, raceStatusLine } from "@/lib/listing-copy";
-import type { Race } from "@/types/schema";
+import { spineOptions } from "@/lib/issue-pick";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
@@ -29,15 +31,6 @@ export async function generateStaticParams() {
   }
 }
 
-function formatDate(iso?: string) {
-  if (!iso) return null;
-  return new Date(`${iso}T00:00:00`).toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
 export async function generateMetadata({
   params,
 }: {
@@ -52,30 +45,6 @@ export async function generateMetadata({
       ? `${office} — Know Your Vote`
       : "Race in review — Know Your Vote",
   };
-}
-
-/* Office, district and dates — identical for a brief and a listing, so a
-   race moving from listed to published keeps its heading. */
-function RaceHeader({
-  race,
-  children,
-}: {
-  race: Race;
-  children: React.ReactNode;
-}) {
-  const general = formatDate(race.key_dates?.general_date);
-  const registration = formatDate(race.key_dates?.registration_deadline);
-  return (
-    <header className="flex flex-col gap-1">
-      <h1 className="text-h1">{race.office}</h1>
-      <p className="text-body-sm text-on-surface-muted">
-        {race.district ?? "Statewide"}
-        {general ? ` · General election ${general}` : ""}
-        {registration ? ` · Register by ${registration}` : ""}
-      </p>
-      {children}
-    </header>
-  );
 }
 
 export default async function RacePage({
@@ -93,9 +62,9 @@ export default async function RacePage({
       <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
         <h1 className="text-h1">This race is still in review</h1>
         <p className="text-body text-on-surface-muted">
-          A race is published only when every candidate has equal space and
-          comparable scrutiny — our Balance Audit hasn&apos;t cleared this one
-          yet. Check back soon.
+          A race is published only after every candidate in it has been through
+          the same checks, including our Balance Audit, and this one
+          hasn&apos;t cleared them yet. Check back soon.
         </p>
         <Link
           href="/candidates?view=races"
@@ -157,6 +126,11 @@ export default async function RacePage({
       </RaceHeader>
 
       <TrackView event="brief_viewed" />
+      <IssueFilter
+        raceId={raceId}
+        options={spineOptions(brief.spineIssues)}
+        selected={[]}
+      />
       <RaceCompare brief={brief} />
 
       <footer className="flex flex-wrap gap-4 text-caption text-on-surface-muted">

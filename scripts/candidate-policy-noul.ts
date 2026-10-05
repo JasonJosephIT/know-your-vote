@@ -23,9 +23,12 @@
        also writes a run MANIFEST: the corpus and the questions with every
        verdict null, which is what a later real run is compared against.
 
-     node scripts/candidate-policy-noul.ts --in passages.jsonl [--limit N]
+     node scripts/candidate-policy-noul.ts --in passages.jsonl
        [--threshold 0.85] [--json report.json]
-       Ask, and print the report. One request per passage.
+       Ask, and print the report. One request per passage, every passage.
+       There is no --limit: it once cut long sites silently, then refused
+       them, and the founder removed it (2026-09-29). Every candidate's whole
+       corpus is asked; the cost is cents.
 
    Fail-closed: a missing key, an unreadable input, or zero passages exits
    non-zero. A silent empty report looks exactly like a candidate who has
@@ -71,12 +74,17 @@ function numericFlag(name: string, fallback: number): number {
 
 const inPath = flag("in");
 const jsonPath = flag("json");
-const limit = numericFlag("limit", 200);
+/* Removed, not ignored: an old command that still passes --limit would
+   otherwise read as if it had capped something. */
+if (flag("limit") !== undefined) {
+  console.error("--limit was removed (2026-09-29): every passage is always asked. Drop the flag.");
+  process.exit(2);
+}
 const threshold = numericFlag("threshold", DEFAULT_POLICY_THRESHOLD);
 
 if (!inPath) {
   console.error(
-    "Usage: node scripts/candidate-policy-noul.ts --in passages.jsonl [--dry-run] [--limit N] [--threshold 0.85] [--json report.json]",
+    "Usage: node scripts/candidate-policy-noul.ts --in passages.jsonl [--dry-run] [--threshold 0.85] [--json report.json]",
   );
   process.exit(2);
 }
@@ -94,8 +102,7 @@ try {
   passages = readFileSync(inPath, "utf8")
     .split("\n")
     .filter((line) => line.trim().length > 0)
-    .map((line) => JSON.parse(line) as Passage)
-    .slice(0, limit);
+    .map((line) => JSON.parse(line) as Passage);
 } catch (e) {
   console.error(`could not read ${inPath}: ${(e as Error).message}`);
   process.exit(2);

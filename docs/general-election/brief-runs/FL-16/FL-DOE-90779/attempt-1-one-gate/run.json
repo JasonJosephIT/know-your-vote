@@ -1,0 +1,3324 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://kellykirschner.com",
+  "created_at": "2026-09-29T11:42:37.547Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 73,
+    "asked": 73,
+    "states_policy": 28,
+    "with_issue": 20,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "51fbeff3",
+      "url": "https://kellykirschner.com/",
+      "heading": "Courageous Leadership For Florida Families.",
+      "text": "Washington has been sold. It's time to take it back. Kelly is running for Congress to lower costs, defend health care, and bring opportunity home to the Gulf Coast.",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.04,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.7,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.72,
+          "B2": 0.89,
+          "B3": 0.02,
+          "B4": 0.05,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.03,
+          "KYV1": 0.04,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "75bfd320",
+      "url": "https://kellykirschner.com/",
+      "heading": "Washington Has Been Sold. Time To Take It Back.",
+      "text": "We own this government — and it's time it worked that way again. For too long it's been run like a private club for lobbyists, the super wealthy, and corporations who can buy access, not the people who actually live here. So, we pay more for groceries, insurance, prescriptions, and rent while they pay less in taxes. Our kids inherit the debt while big donors pocket the tax breaks. Our neighbors rebuild after the storm on their own while the powerful rebuild their portfolios. What about us?",
+      "verdict": {
+        "commitment": 0.56,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.17,
+          "A2": 0.53,
+          "A3": 0.04,
+          "A4": 0.1,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.72,
+          "B2": 0.74,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.36,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.17,
+          "KYV5": 0.02,
+          "KYV6": 0.08,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "59a85054",
+      "url": "https://kellykirschner.com/",
+      "heading": "Washington Has Been Sold. Time To Take It Back.",
+      "text": "Here's the good news: this is fixable. Kelly Kirschner has spent his life fighting for people like us. When a developer tried to drop ten-story condos into single-family neighborhoods, he organized hundreds of residents, ran for office, and beat a well-funded incumbent with 75% of the vote. As Commissioner and Mayor, he took on and beat powerful interests like Florida Power & Light and predatory developers. To get big money out of local politics, he led the effort to pass the strongest local campaign finance reform in Florida — approved by more than 80% of voters. And just last year, as a private citizen, he helped stop a special-interest grab of the Ringling Museum.",
+      "verdict": {
+        "commitment": 0.33,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.22,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.08,
+          "B1": 0.05,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.05,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.46,
+          "KYV10": 0.02,
+          "KYV2": 0.17,
+          "KYV3": 0.8,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b383623d",
+      "url": "https://kellykirschner.com/",
+      "heading": "Washington Has Been Sold. Time To Take It Back.",
+      "text": "He's ready to do it for us in Washington. Let's fix this.",
+      "verdict": {
+        "commitment": 0.14,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.16,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a8d57065",
+      "url": "https://kellykirschner.com/",
+      "heading": "When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.",
+      "text": "Government is supposed to solve problems for the people it serves. My first priority is, lowering the cost of living for Gulf Coast families — and protecting the healthcare and retirement security you’ve already earned. On day one, I will get to work on:",
+      "verdict": {
+        "commitment": 0.94,
+        "states_policy": true,
+        "issues": [
+          "A4",
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.68,
+          "A2": 0.07,
+          "A3": 0.03,
+          "A4": 0.85,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.62,
+          "B2": 0.9,
+          "B3": 0.02,
+          "B4": 0.71,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.04,
+          "KYV1": 0.04,
+          "KYV10": 0.03,
+          "KYV2": 0.04,
+          "KYV3": 0.03,
+          "KYV4": 0.05,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "45f9b165",
+      "url": "https://kellykirschner.com/",
+      "heading": "When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.",
+      "text": "Lowering insurance, healthcare, and prescription drug costs by creating an insurance backstop, repeal cuts to Medicare and Medicaid, and allow government to negotiate for lower prescription drug prices.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B2",
+          "B4"
+        ],
+        "scores": {
+          "A1": 0.19,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.19,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.28,
+          "B2": 0.98,
+          "B3": 0.02,
+          "B4": 0.87,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "369461db",
+      "url": "https://kellykirschner.com/",
+      "heading": "When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.",
+      "text": "Expand affordable housing and stop Wall Street from buying up single-family homes and gouging renters.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "KYV6"
+        ],
+        "scores": {
+          "A1": 0.61,
+          "A2": 0.98,
+          "A3": 0.03,
+          "A4": 0.36,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.47,
+          "B2": 0.4,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.06,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.4,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.86,
+          "KYV7": 0.11,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "7c1f6b8e",
+      "url": "https://kellykirschner.com/",
+      "heading": "When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.",
+      "text": "Protect people with pre-existing conditions, and keep Social Security, Medicare, and Medicaid, the promises they’ve always been – an earned right.",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "B2",
+          "B4"
+        ],
+        "scores": {
+          "A1": 0.13,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.05,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.14,
+          "B2": 0.97,
+          "B3": 0.02,
+          "B4": 0.97,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.06,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "89f891dc",
+      "url": "https://kellykirschner.com/",
+      "heading": "When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.",
+      "text": "Invest in affordable energy that lowers your bills.",
+      "verdict": {
+        "commitment": 0.89,
+        "states_policy": true,
+        "issues": [
+          "KYV2"
+        ],
+        "scores": {
+          "A1": 0.62,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.62,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.57,
+          "B2": 0.23,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.63,
+          "KYV1": 0.08,
+          "KYV10": 0.02,
+          "KYV2": 0.91,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a718dc23",
+      "url": "https://kellykirschner.com/",
+      "heading": "When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.",
+      "text": "Tear up the tax breaks that let billionaires pay less than we do.",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.55,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.05,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.45,
+          "B2": 0.74,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.07,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "86f94c8f",
+      "url": "https://kellykirschner.com/",
+      "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+      "text": "If the answer isn’t the people who live here, work here, and raise their families here, it’s time to fix it. This region’s water, wetlands, and working lands have been sold off piece by piece for too long. When the algal blooms come, our families, small businesses, and tourism economy pay for someone else’s shortcut.",
+      "verdict": {
+        "commitment": 0.88,
+        "states_policy": true,
+        "issues": [
+          "A5",
+          "KYV3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.04,
+          "A5": 0.85,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.33,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.46,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.04,
+          "KYV3": 0.92,
+          "KYV4": 0.08,
+          "KYV5": 0.53,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b97cfa2b",
+      "url": "https://kellykirschner.com/",
+      "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+      "text": "When the next Piney Point happens, our bays absorb it, and our families foot the bill. When disaster money gets handed out, the neighborhoods with the least influence are always last in line.",
+      "verdict": {
+        "commitment": 0.58,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.08,
+          "A5": 0.55,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.08,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.63,
+          "KYV1": 0.1,
+          "KYV10": 0.02,
+          "KYV2": 0.16,
+          "KYV3": 0.52,
+          "KYV4": 0.31,
+          "KYV5": 0.2,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "27812425",
+      "url": "https://kellykirschner.com/",
+      "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+      "text": "Protect Tampa Bay, Sarasota Bay, and our coastline by prohibiting offshore drilling, stopping open-water fish farming, and enforcing the Clean Water Act.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B8"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.7,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.94,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.52,
+          "KYV3": 0.26,
+          "KYV4": 0.09,
+          "KYV5": 0.14,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "99132142",
+      "url": "https://kellykirschner.com/",
+      "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+      "text": "Keep public lands public. Invest in more conservation land upstream to protect our water and wildlife, and stop the push to privatize state and federal lands for golf courses, development, and additional resource extraction.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B8",
+          "KYV3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.17,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.87,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.16,
+          "KYV3": 0.98,
+          "KYV4": 0.1,
+          "KYV5": 0.67,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "2b067790",
+      "url": "https://kellykirschner.com/",
+      "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+      "text": "Hold phosphate companies accountable and strengthen clean air protections, so toxic waste and dirty air don’t become the taxpayers’ cleanup bill.",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "B8"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.04,
+          "A4": 0.07,
+          "A5": 0.42,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.07,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.91,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.07,
+          "KYV3": 0.16,
+          "KYV4": 0.02,
+          "KYV5": 0.2,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a14261e8",
+      "url": "https://kellykirschner.com/",
+      "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+      "text": "Keep AI hyperscale data centers out of District 16 until they prove they won’t drain our aquifers, raise utility costs, contaminate our air, or override local control.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "KYV2",
+          "KYV3",
+          "KYV5"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.37,
+          "A5": 0.15,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.17,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.39,
+          "KYV1": 0.14,
+          "KYV10": 0.02,
+          "KYV2": 0.97,
+          "KYV3": 0.97,
+          "KYV4": 0.03,
+          "KYV5": 0.96,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "850f1c8f",
+      "url": "https://kellykirschner.com/",
+      "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+      "text": "Fix stormwater systems and stop rewarding the kind of overdevelopment that causes flooding and polluted runoff",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "KYV3",
+          "KYV4"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.05,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.5,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.69,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.04,
+          "KYV3": 0.94,
+          "KYV4": 0.97,
+          "KYV5": 0.16,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "2819fa01",
+      "url": "https://kellykirschner.com/",
+      "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+      "text": "Make sure disaster and insurance dollars reach every community based on need, not zip code or political influence.",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.31,
+          "A2": 0.04,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.04,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.07,
+          "B2": 0.04,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.35,
+          "KYV1": 0.16,
+          "KYV10": 0.02,
+          "KYV2": 0.05,
+          "KYV3": 0.15,
+          "KYV4": 0.52,
+          "KYV5": 0.15,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5717fc9d",
+      "url": "https://kellykirschner.com/",
+      "heading": "Affordability isn’t just about prices. It’s about opportunity.",
+      "text": "Whether you’re raising a family , starting a career, serving our country, building a business, or enjoying retirement, you should be able to build a good life right here in our community.",
+      "verdict": {
+        "commitment": 0.28,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.36,
+          "A3": 0.03,
+          "A4": 0.38,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.38,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.04,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.08,
+          "KYV2": 0.02,
+          "KYV3": 0.04,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.04,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c5c0eb63",
+      "url": "https://kellykirschner.com/",
+      "heading": "Affordability isn’t just about prices. It’s about opportunity.",
+      "text": "You should be able to afford a home, a college education, quality healthcare, reliable insurance, and a secure retirement. Young people should be able to stay and build their future here. Veterans should have every opportunity to build the next chapter of their lives close to home. Small businesses should have the confidence to invest and grow.",
+      "verdict": {
+        "commitment": 0.49,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.09,
+          "A2": 0.84,
+          "A3": 0.03,
+          "A4": 0.51,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.45,
+          "B2": 0.82,
+          "B3": 0.02,
+          "B4": 0.19,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.64,
+          "KYV2": 0.02,
+          "KYV3": 0.04,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.04,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "78029a6a",
+      "url": "https://kellykirschner.com/",
+      "heading": "Affordability isn’t just about prices. It’s about opportunity.",
+      "text": "Restore the workforce opportunities our Manasota region lost by supporting nursing, teacher preparation, veterans’ education, workforce training, apprenticeships, and affordable four-year degree pathways.",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [
+          "KYV10",
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.17,
+          "A5": 0.02,
+          "A6": 0.46,
+          "A7": 0.02,
+          "B1": 0.92,
+          "B2": 0.06,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.98,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "44847856",
+      "url": "https://kellykirschner.com/",
+      "heading": "Affordability isn’t just about prices. It’s about opportunity.",
+      "text": "Oppose federal funding that rewards states for dismantling successful public institutions through political patronage. Federal investments should strengthen communities—not political agendas, nor line the pockets of the well-connected.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.17,
+          "A3": 0.02,
+          "A4": 0.06,
+          "A5": 0.02,
+          "A6": 0.2,
+          "A7": 0.03,
+          "B1": 0.29,
+          "B2": 0.06,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.44,
+          "KYV10": 0.29,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.04,
+          "KYV8": 0.02,
+          "KYV9": 0.48
+        }
+      }
+    },
+    {
+      "id": "ee6a3ffb",
+      "url": "https://kellykirschner.com/",
+      "heading": "Affordability isn’t just about prices. It’s about opportunity.",
+      "text": "Protect the Gulf Coast that powers our economy. Clean water, healthy beaches, and resilient coastlines protect tourism, commercial fishing, home values, and thousands of local jobs.",
+      "verdict": {
+        "commitment": 0.74,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.04,
+          "A2": 0.1,
+          "A3": 0.03,
+          "A4": 0.15,
+          "A5": 0.65,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.82,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.72,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.46,
+          "KYV4": 0.7,
+          "KYV5": 0.19,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "7a0b9d9f",
+      "url": "https://kellykirschner.com/",
+      "heading": "Affordability isn’t just about prices. It’s about opportunity.",
+      "text": "Support affordable, reliable alternative energy that lowers utility bills, strengthens our electric grid, and gives families and businesses more certainty.",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "KYV2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.57,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.01,
+          "B1": 0.41,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.01,
+          "B8": 0.73,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.98,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b267f328",
+      "url": "https://kellykirschner.com/",
+      "heading": "Affordability isn’t just about prices. It’s about opportunity.",
+      "text": "Give small businesses, farmers, manufacturers, and commercial fishermen stable, predictable rules so they can invest, hire, and grow with confidence.",
+      "verdict": {
+        "commitment": 0.91,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.05,
+          "A3": 0.02,
+          "A4": 0.14,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.93,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.08,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.04,
+          "KYV3": 0.08,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "d93c9da2",
+      "url": "https://kellykirschner.com/",
+      "heading": "One in three people in this district depend on Medicaid or Medicare. These aren’t handouts — they are promises.",
+      "text": "Medicare and Medicaid are pledges made to seniors who worked their whole lives, to families doing their best, to veterans who gave their bodies and minds in service.",
+      "verdict": {
+        "commitment": 0.4,
+        "states_policy": false,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.07,
+          "B2": 0.9,
+          "B3": 0.02,
+          "B4": 0.81,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "198acb64",
+      "url": "https://kellykirschner.com/",
+      "heading": "One in three people in this district depend on Medicaid or Medicare. These aren’t handouts — they are promises.",
+      "text": "Congress just broke that promise, stripping healthcare from nearly 280,000 of your neighbors in this district alone.",
+      "verdict": {
+        "commitment": 0.57,
+        "states_policy": false,
+        "issues": [
+          "B2",
+          "B4"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.96,
+          "B3": 0.02,
+          "B4": 0.88,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "936a05a4",
+      "url": "https://kellykirschner.com/",
+      "heading": "One in three people in this district depend on Medicaid or Medicare. These aren’t handouts — they are promises.",
+      "text": "Protect every patient with a pre-existing condition.",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.97,
+          "B3": 0.02,
+          "B4": 0.67,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "6b148798",
+      "url": "https://kellykirschner.com/",
+      "heading": "One in three people in this district depend on Medicaid or Medicare. These aren’t handouts — they are promises.",
+      "text": "Make crystal clear to every hospital along the Gulf Coast: we are not abandoning you.",
+      "verdict": {
+        "commitment": 0.8,
+        "states_policy": false,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.1,
+          "B2": 0.93,
+          "B3": 0.02,
+          "B4": 0.81,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "86c9c4aa",
+      "url": "https://kellykirschner.com/",
+      "heading": "One in three people in this district depend on Medicaid or Medicare. These aren’t handouts — they are promises.",
+      "text": "When Congress guts Medicaid, it isn't some abstraction — it's our brother or cousin choosing between medication and groceries. That ends.",
+      "verdict": {
+        "commitment": 0.9,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.06,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.1,
+          "B2": 0.97,
+          "B3": 0.02,
+          "B4": 0.72,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8f04a1c1",
+      "url": "https://kellykirschner.com/",
+      "heading": "Congress just raised the national debt — and used the money to hand tax loopholes to corporations that already pay zero in federal taxes . Zero, while our kids and grandkids are handed the bill.",
+      "text": "Close those loopholes and pay down the debt.",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.71,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "91d578a6",
+      "url": "https://kellykirschner.com/",
+      "heading": "Congress just raised the national debt — and used the money to hand tax loopholes to corporations that already pay zero in federal taxes . Zero, while our kids and grandkids are handed the bill.",
+      "text": "Put the savings to work for working families instead of offshore accounts.",
+      "verdict": {
+        "commitment": 0.9,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.78,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.05,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "21088dc0",
+      "url": "https://kellykirschner.com/",
+      "heading": "Congress just raised the national debt — and used the money to hand tax loopholes to corporations that already pay zero in federal taxes . Zero, while our kids and grandkids are handed the bill.",
+      "text": "Make sure the AI revolution — which billionaires like Elon Musk are building with our data and our labor market — works for the middle class, not just for them.",
+      "verdict": {
+        "commitment": 0.85,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.9,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.05,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "2443752c",
+      "url": "https://kellykirschner.com/",
+      "heading": "Congress just raised the national debt — and used the money to hand tax loopholes to corporations that already pay zero in federal taxes . Zero, while our kids and grandkids are handed the bill.",
+      "text": "Workers deserve protection. Consumers deserve rights.",
+      "verdict": {
+        "commitment": 0.67,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.74,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "35dbd634",
+      "url": "https://kellykirschner.com/",
+      "heading": "Congress just raised the national debt — and used the money to hand tax loopholes to corporations that already pay zero in federal taxes . Zero, while our kids and grandkids are handed the bill.",
+      "text": "The future of this country should not be engineered by a handful of unelected tech oligarchs.",
+      "verdict": {
+        "commitment": 0.65,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.71,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.56,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "35758def",
+      "url": "https://kellykirschner.com/",
+      "heading": "There is no higher responsibility for a Member of Congress than the power to send our sons and daughters into harm’s way.",
+      "text": "Yet, for too long, Washington has treated this solemn duty as a secondary concern. Under the Constitution, Congress — and only Congress — has the power to declare war.",
+      "verdict": {
+        "commitment": 0.51,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.01,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.26,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.01
+        }
+      }
+    },
+    {
+      "id": "a8f788c8",
+      "url": "https://kellykirschner.com/",
+      "heading": "There is no higher responsibility for a Member of Congress than the power to send our sons and daughters into harm’s way.",
+      "text": "It’s a moral outrage that when we face the prospect of “wars of choice,” leadership in Washington often ducks debate, choosing to take two-week vacations before even beginning a serious deliberation on “excursions” that cost American lives and billions of taxpayer dollars.",
+      "verdict": {
+        "commitment": 0.76,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.01,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.01,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.01,
+          "KYV1": 0.33,
+          "KYV10": 0.01,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.01
+        }
+      }
+    },
+    {
+      "id": "455b9cfa",
+      "url": "https://kellykirschner.com/",
+      "heading": "There is no higher responsibility for a Member of Congress than the power to send our sons and daughters into harm’s way.",
+      "text": "These poorly thought-out conflicts, funded with blank taxpayer checks and met with a Congressional blind eye, are eroding decades of trust throughout the world and putting our children’s future in peril.",
+      "verdict": {
+        "commitment": 0.68,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.16,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "95fca85d",
+      "url": "https://kellykirschner.com/",
+      "heading": "There is no higher responsibility for a Member of Congress than the power to send our sons and daughters into harm’s way.",
+      "text": "If it’s worth American blood, it is worth a full, public, and rigorous debate in the halls of Congress.",
+      "verdict": {
+        "commitment": 0.85,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.01,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.01,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.01,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.16,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "984d2a4a",
+      "url": "https://kellykirschner.com/",
+      "heading": "As the younger brother of a career Army officer who served tours throughout the Middle East and Afghanistan, Kelly doesn’t just thank veterans for their service — he knows what that service actually costs.",
+      "text": "It costs marriages, sleep, and sometimes limbs and lives. We owe our veterans a VA that answers the phone, a crisis line that works at 3 a.m., and a government that doesn’t make them fight a second war just to get their benefits.",
+      "verdict": {
+        "commitment": 0.87,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.51,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "01cbb163",
+      "url": "https://kellykirschner.com/",
+      "heading": "As the younger brother of a career Army officer who served tours throughout the Middle East and Afghanistan, Kelly doesn’t just thank veterans for their service — he knows what that service actually costs.",
+      "text": "Restore the Veterans Crisis Line to full 24/7 operation.",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.34,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a6f9f678",
+      "url": "https://kellykirschner.com/",
+      "heading": "As the younger brother of a career Army officer who served tours throughout the Middle East and Afghanistan, Kelly doesn’t just thank veterans for their service — he knows what that service actually costs.",
+      "text": "Make sure no veteran ever has to choose between their dignity and their bureaucracy.",
+      "verdict": {
+        "commitment": 0.67,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.08,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.2,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "6337985a",
+      "url": "https://kellykirschner.com/",
+      "heading": "Accessible. Accountable. For you.",
+      "text": "Kelly is running to be a serious elected official for all the constituents of the new D16 — from the neighborhoods of St. Pete, Bradenton and Sarasota to the farms of Manatee, DeSoto, Hardee and Polk counties.",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.04,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "252195ad",
+      "url": "https://kellykirschner.com/",
+      "heading": "Disaster Readiness",
+      "text": "A fully funded, proactive FEMA so that when hurricanes strike, our region isn’t left waiting for help.",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "KYV4"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.01,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.15,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.85,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "597e965e",
+      "url": "https://kellykirschner.com/",
+      "heading": "The Insurance Crisis",
+      "text": "Affordable home and flood insurance — and an end to the price-gouging and “business-as-usual” corruption that lets insurers lobby for immunity while your premiums skyrocket.",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [
+          "A1"
+        ],
+        "scores": {
+          "A1": 0.97,
+          "A2": 0.64,
+          "A3": 0.02,
+          "A4": 0.52,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.35,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.24,
+          "KYV1": 0.18,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.14,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "934549b0",
+      "url": "https://kellykirschner.com/",
+      "heading": "Support Small Business",
+      "text": "Whether you’re a small business owner in St. Pete, a farmer in the eastern part of the district, or a commercial fisherman on the Gulf — I will be your voice.",
+      "verdict": {
+        "commitment": 0.73,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.53,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8bfd3871",
+      "url": "https://kellykirschner.com/",
+      "heading": "Accessibility",
+      "text": "You won’t have to look for me in a lobbyist’s office. I’ll be in our community, listening and working for the families who actually live here with town halls and individually.",
+      "verdict": {
+        "commitment": 0.82,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "9677d526",
+      "url": "https://kellykirschner.com/",
+      "heading": "The Bottom Line",
+      "text": "The Founders built this Republic for we, the people — not we, the donors . Kelly Kirschner has beaten a rigged system before. He's ready to do it again — for you, for our families, for the middle class, and for a Gulf Coast that deserves better than what Washington has been selling.",
+      "verdict": {
+        "commitment": 0.24,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.05,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.1,
+          "B1": 0.15,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.11,
+          "B7": 0.02,
+          "B8": 0.03,
+          "KYV1": 0.27,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "24029b9c",
+      "url": "https://kellykirschner.com/",
+      "heading": "The Bottom Line",
+      "text": "He is asking for your vote and for your support.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.05,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "35bd4d27",
+      "url": "https://kellykirschner.com/",
+      "heading": "Every dollar fuels this fight.",
+      "text": "Grassroots donors—not corporate PACs—power this campaign. A donation today helps us reach more voters across the Gulf Coast.",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.04,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.03,
+          "KYV1": 0.05,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "22a03eb2",
+      "url": "https://kellykirschner.com/",
+      "heading": "In The News .",
+      "text": "Press, photos, and stories from the trail across Florida's 16th District.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "1b8f3386",
+      "url": "https://kellykirschner.com/",
+      "heading": "Endorsements",
+      "text": "“I am proud to stand with the working men and women of Florida. It is a true honor to be endorsed by the Florida AFL-CIO and the West Central Florida Labor Council, Social Security Works, the Florida High School Democrats, the Democratic Environmental Caucus of Florida, the Sierra Club, the Florida LGBTQ+ Democratic Caucus, the National Organization for Women, and Florida Veterans for Common Sense. I am committed to fighting for, and protecting, everyone's rights in Congress.” – Kelly Kirschner",
+      "verdict": {
+        "commitment": 0.33,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.08,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.08,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.07,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "43ed59e0",
+      "url": "https://kellykirschner.com/",
+      "heading": "Endorsements",
+      "text": "More than two dozen current and former elected officials from across the district—spanning federal, state, and local government—have endorsed Kelly Kirschner. Here's a sampling:",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "bdb7833e",
+      "url": "https://kellykirschner.com/",
+      "heading": "Endorsements",
+      "text": "“Kelly Kirschner will do right by veterans, and bring back value-driven leadership.\" Rev. Willie Shaw, former Sarasota Mayor",
+      "verdict": {
+        "commitment": 0.23,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.07,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8d4d3158",
+      "url": "https://kellykirschner.com/",
+      "heading": "Endorsements",
+      "text": "“He has a proven record solving problems.” Rick Kriseman, former St. Petersburg Mayor",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a4b37e3b",
+      "url": "https://kellykirschner.com/",
+      "heading": "Endorsements",
+      "text": "“His decades of service to others are the antidote to the ‘me-first’ mentality in D.C.” Jennifer Webb, Gulfport City Council Member, former State Representative",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.09,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b2a08ff1",
+      "url": "https://kellykirschner.com/",
+      "heading": "Even Republican Senators Reject Trump’s Taxpayer Funded Ads. Does Congressional Candidate Sydney Gruters?",
+      "text": "Kelly Kirschner condemned President Donald Trump’s illegal use of taxpayer money for political propaganda promoting himself and called on his opponent, Sydney Gruters, to reject the corrupt misuse of public power for private gain, including her husband’s – Joe Gruters, RNC Chair.",
+      "verdict": {
+        "commitment": 0.72,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.04,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.06,
+          "B7": 0.05,
+          "B8": 0.02,
+          "KYV1": 0.84,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4b0bb589",
+      "url": "https://kellykirschner.com/",
+      "heading": "Prominent Republicans Cross Party Lines to Endorse Democrat Kelly Kirschner for Congress: “He Cares About 850,000 Residents of District 16, Not Just One Resident of the White House.”",
+      "text": "In a dramatic break with their own party, a coalition of Republican officeholders and community leaders — led by former Congressman Dan Miller and Commissioner George Kruse — publicly endorsed Democrat Kelly Kirschner for Congress.",
+      "verdict": {
+        "commitment": 0.06,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.07,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "61a7bce7",
+      "url": "https://kellykirschner.com/",
+      "heading": "Poll: Kirschner & Gruters in Dead Heat in FL-16",
+      "text": "Democrat Kelly Kirschner leads Republican Sydney Gruters 40% to 39% in a new survey of Florida’s 16th Congressional District. The live interviewer/text to web poll was conducted by SEA Research & Political Design from August 25 to 29 and surveyed 400 respondents across the newly drawn 16th Congressional District which spans from St. Petersburg to Arcadia.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.04,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4b2c2512",
+      "url": "https://kellykirschner.com/",
+      "heading": "This Campaign Needs You .",
+      "text": "From knocking on doors to writing postcards from your kitchen table, there's a place for every Floridian who wants a Congress that works again.",
+      "verdict": {
+        "commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "942d8eb1",
+      "url": "https://kellykirschner.com/",
+      "heading": "Donate",
+      "text": "Grassroots dollars fuel every door knocked and every postcard sent. Chip in any amount.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "531f4d1f",
+      "url": "https://kellykirschner.com/",
+      "heading": "Spread the Word",
+      "text": "Follow Kelly on social media and share with family, friends, and neighbors across the district.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "192008a2",
+      "url": "https://kellykirschner.com/",
+      "heading": "Ready to send a problem-solver to Washington?",
+      "text": "Pitch in $5, $25, or whatever you can. Every contribution moves us closer to victory in November.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "f31050c5",
+      "url": "https://kellykirschner.com/",
+      "heading": "Florida Roots. Florida Fight.",
+      "text": "A third-generation Floridian, Peace Corps volunteer, former Mayor of Sarasota, and a single father who built a non-profit lifting first-generation students into the country's top universities — debt-free.",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.2,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "c6a47167",
+      "url": "https://kellykirschner.com/",
+      "heading": "Florida Roots. Florida Fight.",
+      "text": "Kelly Kirschner is a third-generation Floridian who grew up near the Sarasota-Bradenton airport, in the kind of neighborhood where a hard day's work was the baseline expectation. After school and on weekends, Kelly worked the family fruit stand, Blue Heron Fruit Shippers , selling oranges and grapefruit alongside the rest of his family. Those long hours and thin margins taught him early that most people aren't asking for much: an honest product, a fair price, and to be treated like they matter.",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.12,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "56f7f090",
+      "url": "https://kellykirschner.com/",
+      "heading": "Florida Roots. Florida Fight.",
+      "text": "After earning his bachelor's and master's degrees from Georgetown University , on a full scholarship working as the head manager of the men's basketball team, Kelly chose a different path than his classmates. In 1999, he joined the Peace Corps , spending four years in northern Guatemala helping Mayan farming families reach new markets and grow household income. It was measurable, lasting work — not press releases.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.07,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.07,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b1f060ef",
+      "url": "https://kellykirschner.com/",
+      "heading": "Florida Roots. Florida Fight.",
+      "text": "Service is the Kirschner family's common thread; Kelly's brother served multiple tours as a U.S. Army officer in the Middle East and Afghanistan. That same conviction — that you owe something to a cause bigger than yourself — has anchored Kelly since he was a kid bagging tangerines at the Blue Heron.",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "11cd5f6e",
+      "url": "https://kellykirschner.com/",
+      "heading": "Florida Roots. Florida Fight.",
+      "text": "Kelly has spent his life taking on the “untouchables” — and winning for those who have long been ignored.",
+      "verdict": {
+        "commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.04,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "30f6e54a",
+      "url": "https://kellykirschner.com/",
+      "heading": "Florida Roots. Florida Fight.",
+      "text": "Back home, Kelly proved he could deliver in the private sector, scaling sales at Manatee County's Bio-Pro Research from $60,000 to over $2.5 million in just three years . But the pull of public service remained. When Sarasota's government spent decades dodging its promise to fund Payne Park, Kelly organized his neighbors until the insiders ran out of excuses and the park was finally built. When a developer tried to drop ten-story condos into a single-family neighborhood, Kelly stopped them — and then ran for City Commission. He beat a well-funded incumbent who outspent him 3-to-1, winning with 75% of the vote .",
+      "verdict": {
+        "commitment": 0.16,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.16,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.06,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.09,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.79,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "d73872e3",
+      "url": "https://kellykirschner.com/",
+      "heading": "Florida Roots. Florida Fight.",
+      "text": "As Commissioner and Mayor, Kelly took on the heavyweights. He led the passage of Florida's strongest local campaign finance reforms (approved by more than 80% of the electorate ), pushed FPL for unprecedented resident concessions, and clawed back millions for taxpayers by exposing a sweetheart lease at Marina Jacks. Most recently, in 2025, he stood with community leaders to stop special interests from seizing control of the Ringling Museum of Art.",
+      "verdict": {
+        "commitment": 0.19,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.08,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.05,
+          "B1": 0.14,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.04,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.43,
+          "KYV10": 0.02,
+          "KYV2": 0.65,
+          "KYV3": 0.04,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "3245bd43",
+      "url": "https://kellykirschner.com/",
+      "heading": "Florida Roots. Florida Fight.",
+      "text": "Outside of City Hall, Kelly spent a decade raising his two children and building institutions that work. He grew UnidosNow into an organization that has helped over 1,000 first-generation students earn debt-free admission to elite universities, and led executive leadership development and lifelong learning programs as Vice President at Eckerd College .",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.24,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "597b22fa",
+      "url": "https://kellykirschner.com/",
+      "heading": "Florida Roots. Florida Fight.",
+      "text": "The system has been rigged against ordinary families for too long. Kelly has spent his life taking on the “untouchables” — from the Guatemalan government, to predatory developers, to corporate monopolies — and winning for those who have long been ignored. He's running because protecting our kids and standing up for working families shouldn't be up for negotiation. It's time for a leader who knows that public service is a debt you owe your community, not a ladder for yourself.",
+      "verdict": {
+        "commitment": 0.46,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.07,
+          "A3": 0.02,
+          "A4": 0.07,
+          "A5": 0.02,
+          "A6": 0.04,
+          "A7": 0.03,
+          "B1": 0.31,
+          "B2": 0.03,
+          "B3": 0.1,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.04,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.14,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.22,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "efb57f55",
+      "url": "https://kellykirschner.com/",
+      "heading": "Sign Up to Help.",
+      "text": "Tell us a little about yourself and how you'd like to pitch in. We'll be in touch soon.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "economy",
+        "label": "Economy & Affordability"
+      },
+      "subIssues": [
+        {
+          "id": "A4",
+          "label": "Cost of living in Florida",
+          "citations": [
+            {
+              "passage": {
+                "id": "a8d57065",
+                "url": "https://kellykirschner.com/",
+                "heading": "When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.",
+                "text": "Government is supposed to solve problems for the people it serves. My first priority is, lowering the cost of living for Gulf Coast families — and protecting the healthcare and retirement security you’ve already earned. On day one, I will get to work on:",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.85
+            }
+          ]
+        },
+        {
+          "id": "B1",
+          "label": "Economy, inflation, and jobs",
+          "citations": [
+            {
+              "passage": {
+                "id": "b267f328",
+                "url": "https://kellykirschner.com/",
+                "heading": "Affordability isn’t just about prices. It’s about opportunity.",
+                "text": "Give small businesses, farmers, manufacturers, and commercial fishermen stable, predictable rules so they can invest, hire, and grow with confidence.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.93
+            },
+            {
+              "passage": {
+                "id": "78029a6a",
+                "url": "https://kellykirschner.com/",
+                "heading": "Affordability isn’t just about prices. It’s about opportunity.",
+                "text": "Restore the workforce opportunities our Manasota region lost by supporting nursing, teacher preparation, veterans’ education, workforce training, apprenticeships, and affordable four-year degree pathways.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.92
+            },
+            {
+              "passage": {
+                "id": "21088dc0",
+                "url": "https://kellykirschner.com/",
+                "heading": "Congress just raised the national debt — and used the money to hand tax loopholes to corporations that already pay zero in federal taxes . Zero, while our kids and grandkids are handed the bill.",
+                "text": "Make sure the AI revolution — which billionaires like Elon Musk are building with our data and our labor market — works for the middle class, not just for them.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.9
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "education",
+        "label": "Education"
+      },
+      "subIssues": [
+        {
+          "id": "KYV10",
+          "label": "Career, vocational and higher education",
+          "citations": [
+            {
+              "passage": {
+                "id": "78029a6a",
+                "url": "https://kellykirschner.com/",
+                "heading": "Affordability isn’t just about prices. It’s about opportunity.",
+                "text": "Restore the workforce opportunities our Manasota region lost by supporting nursing, teacher preparation, veterans’ education, workforce training, apprenticeships, and affordable four-year degree pathways.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.98
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "healthcare",
+        "label": "Healthcare"
+      },
+      "subIssues": [
+        {
+          "id": "B2",
+          "label": "Healthcare access and costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "45f9b165",
+                "url": "https://kellykirschner.com/",
+                "heading": "When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.",
+                "text": "Lowering insurance, healthcare, and prescription drug costs by creating an insurance backstop, repeal cuts to Medicare and Medicaid, and allow government to negotiate for lower prescription drug prices.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "7c1f6b8e",
+                "url": "https://kellykirschner.com/",
+                "heading": "When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.",
+                "text": "Protect people with pre-existing conditions, and keep Social Security, Medicare, and Medicaid, the promises they’ve always been – an earned right.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "936a05a4",
+                "url": "https://kellykirschner.com/",
+                "heading": "One in three people in this district depend on Medicaid or Medicare. These aren’t handouts — they are promises.",
+                "text": "Protect every patient with a pre-existing condition.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "86c9c4aa",
+                "url": "https://kellykirschner.com/",
+                "heading": "One in three people in this district depend on Medicaid or Medicare. These aren’t handouts — they are promises.",
+                "text": "When Congress guts Medicaid, it isn't some abstraction — it's our brother or cousin choosing between medication and groceries. That ends.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "a8d57065",
+                "url": "https://kellykirschner.com/",
+                "heading": "When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.",
+                "text": "Government is supposed to solve problems for the people it serves. My first priority is, lowering the cost of living for Gulf Coast families — and protecting the healthcare and retirement security you’ve already earned. On day one, I will get to work on:",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.9
+            },
+            {
+              "passage": {
+                "id": "51fbeff3",
+                "url": "https://kellykirschner.com/",
+                "heading": "Courageous Leadership For Florida Families.",
+                "text": "Washington has been sold. It's time to take it back. Kelly is running for Congress to lower costs, defend health care, and bring opportunity home to the Gulf Coast.",
+                "retrieved_at": "2026-09-29T11:42:25.555Z"
+              },
+              "score": 0.89
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "housing",
+        "label": "Housing"
+      },
+      "subIssues": [
+        {
+          "id": "A2",
+          "label": "Housing affordability",
+          "citations": [
+            {
+              "passage": {
+                "id": "369461db",
+                "url": "https://kellykirschner.com/",
+                "heading": "When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.",
+                "text": "Expand affordable housing and stop Wall Street from buying up single-family homes and gouging renters.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.98
+            }
+          ]
+        },
+        {
+          "id": "KYV6",
+          "label": "Renters and evictions",
+          "citations": [
+            {
+              "passage": {
+                "id": "369461db",
+                "url": "https://kellykirschner.com/",
+                "heading": "When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.",
+                "text": "Expand affordable housing and stop Wall Street from buying up single-family homes and gouging renters.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.86
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "environment",
+        "label": "Environment & Water"
+      },
+      "subIssues": [
+        {
+          "id": "A5",
+          "label": "Water quality and Everglades restoration",
+          "citations": [
+            {
+              "passage": {
+                "id": "86f94c8f",
+                "url": "https://kellykirschner.com/",
+                "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+                "text": "If the answer isn’t the people who live here, work here, and raise their families here, it’s time to fix it. This region’s water, wetlands, and working lands have been sold off piece by piece for too long. When the algal blooms come, our families, small businesses, and tourism economy pay for someone else’s shortcut.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.85
+            }
+          ]
+        },
+        {
+          "id": "B8",
+          "label": "Climate and environment (national)",
+          "citations": [
+            {
+              "passage": {
+                "id": "27812425",
+                "url": "https://kellykirschner.com/",
+                "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+                "text": "Protect Tampa Bay, Sarasota Bay, and our coastline by prohibiting offshore drilling, stopping open-water fish farming, and enforcing the Clean Water Act.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.94
+            },
+            {
+              "passage": {
+                "id": "2b067790",
+                "url": "https://kellykirschner.com/",
+                "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+                "text": "Hold phosphate companies accountable and strengthen clean air protections, so toxic waste and dirty air don’t become the taxpayers’ cleanup bill.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.91
+            },
+            {
+              "passage": {
+                "id": "99132142",
+                "url": "https://kellykirschner.com/",
+                "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+                "text": "Keep public lands public. Invest in more conservation land upstream to protect our water and wildlife, and stop the push to privatize state and federal lands for golf courses, development, and additional resource extraction.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.87
+            }
+          ]
+        },
+        {
+          "id": "KYV2",
+          "label": "Energy and utilities",
+          "citations": [
+            {
+              "passage": {
+                "id": "7a0b9d9f",
+                "url": "https://kellykirschner.com/",
+                "heading": "Affordability isn’t just about prices. It’s about opportunity.",
+                "text": "Support affordable, reliable alternative energy that lowers utility bills, strengthens our electric grid, and gives families and businesses more certainty.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "a14261e8",
+                "url": "https://kellykirschner.com/",
+                "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+                "text": "Keep AI hyperscale data centers out of District 16 until they prove they won’t drain our aquifers, raise utility costs, contaminate our air, or override local control.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "89f891dc",
+                "url": "https://kellykirschner.com/",
+                "heading": "When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.",
+                "text": "Invest in affordable energy that lowers your bills.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.91
+            }
+          ]
+        },
+        {
+          "id": "KYV3",
+          "label": "Growth, development and land conservation",
+          "citations": [
+            {
+              "passage": {
+                "id": "99132142",
+                "url": "https://kellykirschner.com/",
+                "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+                "text": "Keep public lands public. Invest in more conservation land upstream to protect our water and wildlife, and stop the push to privatize state and federal lands for golf courses, development, and additional resource extraction.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "a14261e8",
+                "url": "https://kellykirschner.com/",
+                "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+                "text": "Keep AI hyperscale data centers out of District 16 until they prove they won’t drain our aquifers, raise utility costs, contaminate our air, or override local control.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "850f1c8f",
+                "url": "https://kellykirschner.com/",
+                "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+                "text": "Fix stormwater systems and stop rewarding the kind of overdevelopment that causes flooding and polluted runoff",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.94
+            },
+            {
+              "passage": {
+                "id": "86f94c8f",
+                "url": "https://kellykirschner.com/",
+                "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+                "text": "If the answer isn’t the people who live here, work here, and raise their families here, it’s time to fix it. This region’s water, wetlands, and working lands have been sold off piece by piece for too long. When the algal blooms come, our families, small businesses, and tourism economy pay for someone else’s shortcut.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.92
+            }
+          ]
+        },
+        {
+          "id": "KYV4",
+          "label": "Storm resilience and flood protection",
+          "citations": [
+            {
+              "passage": {
+                "id": "850f1c8f",
+                "url": "https://kellykirschner.com/",
+                "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+                "text": "Fix stormwater systems and stop rewarding the kind of overdevelopment that causes flooding and polluted runoff",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "252195ad",
+                "url": "https://kellykirschner.com/",
+                "heading": "Disaster Readiness",
+                "text": "A fully funded, proactive FEMA so that when hurricanes strike, our region isn’t left waiting for help.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.85
+            }
+          ]
+        },
+        {
+          "id": "KYV5",
+          "label": "Water supply and drinking water",
+          "citations": [
+            {
+              "passage": {
+                "id": "a14261e8",
+                "url": "https://kellykirschner.com/",
+                "heading": "Every decision about our water, growth, and natural resources should answer one question: Who does this help?",
+                "text": "Keep AI hyperscale data centers out of District 16 until they prove they won’t drain our aquifers, raise utility costs, contaminate our air, or override local control.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.96
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "insurance",
+        "label": "Insurance & Property Costs"
+      },
+      "subIssues": [
+        {
+          "id": "A1",
+          "label": "Property insurance costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "597e965e",
+                "url": "https://kellykirschner.com/",
+                "heading": "The Insurance Crisis",
+                "text": "Affordable home and flood insurance — and an end to the price-gouging and “business-as-usual” corruption that lets insurers lobby for immunity while your premiums skyrocket.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.97
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "retirement",
+        "label": "Retirement & Benefits"
+      },
+      "subIssues": [
+        {
+          "id": "B4",
+          "label": "Social Security and Medicare",
+          "citations": [
+            {
+              "passage": {
+                "id": "7c1f6b8e",
+                "url": "https://kellykirschner.com/",
+                "heading": "When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.",
+                "text": "Protect people with pre-existing conditions, and keep Social Security, Medicare, and Medicaid, the promises they’ve always been – an earned right.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "45f9b165",
+                "url": "https://kellykirschner.com/",
+                "heading": "When insurance companies raise your premiums while lobbying Congress to leave them alone, that’s not business; it’s socialism for the rich and powerful.",
+                "text": "Lowering insurance, healthcare, and prescription drug costs by creating an insurance backstop, repeal cuts to Medicare and Medicaid, and allow government to negotiate for lower prescription drug prices.",
+                "retrieved_at": "2026-09-29T11:42:25.556Z"
+              },
+              "score": 0.87
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 257147,
+    "output_tokens": 33434
+  }
+}

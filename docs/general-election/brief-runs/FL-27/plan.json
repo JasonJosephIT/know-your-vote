@@ -1,0 +1,41 @@
+{
+  "race_id": "FL-27-general",
+  "retrieved_at": "2026-09-29T11:44:37Z",
+  "withheld_from": "../withheld-2026-09-30.json",
+  "spine": [
+    {
+      "id": "B1",
+      "title": "Economy, inflation, and jobs",
+      "description": null
+    },
+    {
+      "id": "B2",
+      "title": "Healthcare access and costs",
+      "description": null
+    },
+    {
+      "id": "B3",
+      "title": "Immigration and border enforcement",
+      "description": null
+    },
+    {
+      "id": "B4",
+      "title": "Social Security and Medicare",
+      "description": null
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "FL-DOE-89933",
+      "official_site": "https://eliottrodriguez.com/",
+      "run": "FL-DOE-89933/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-DOE-90721",
+      "official_site": "https://mariaelvirasalazar.com/",
+      "run": "FL-DOE-90721/run.json",
+      "no_run_reason": null
+    }
+  ]
+}

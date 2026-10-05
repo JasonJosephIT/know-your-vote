@@ -199,6 +199,7 @@ for (const p of points) {
     error = `${(err as Error).name}: ${(err as Error).message}`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- a one-off probe: this response's shape is what the script exists to discover
   const fields = (payload as any)?.results?.[0]?.fields ?? {};
   const school = fields.school_districts ?? null;
   const cong = fields.congressional_districts?.[0]?.name ?? null;

@@ -45,9 +45,36 @@ export function isoDaysBefore(isoDate: string, days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
-/* today is an ISO date (UTC). A reminder is due when event_date minus its
-   offset lands exactly on today — a missed cron day misses that reminder
-   loudly (Vercel cron alerting) rather than double-sending the next day. */
+/* The voter's calendar day, as an ISO date (launch handoff 2026-10-04, §2).
+
+   Every deadline in election_event is a Florida date, and all four covered
+   counties keep Eastern time, so "today" means today in America/New_York —
+   never UTC. The cron used to take the UTC date. At its scheduled 14:00 UTC
+   the two always agree (9 or 10 a.m. Eastern), which is why nothing looked
+   wrong, but from 8 p.m. Eastern (7 p.m. after Nov 1) UTC is already
+   tomorrow. A manual re-run in that window — the design doc's recovery path
+   after a failed send — would skip the day's released reminder and send
+   tomorrow's a day early ("Early voting begins today" the night before). The
+   landing-page banner had the same edge: it would drop a deadline at 8 p.m.
+   on the deadline day itself, while online registration is still open.
+   scripts/verify-reminder-schedule.ts pins the boundary both ways. */
+const EASTERN_DAY = new Intl.DateTimeFormat("en-US", {
+  timeZone: "America/New_York",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
+export function easternToday(now: Date = new Date()): string {
+  const parts = EASTERN_DAY.formatToParts(now);
+  const part = (type: string) => parts.find((p) => p.type === type)?.value;
+  return `${part("year")}-${part("month")}-${part("day")}`;
+}
+
+/* today is an ISO date — easternToday(), see above. A reminder is due when
+   event_date minus its offset lands exactly on today — a missed cron day
+   misses that reminder loudly (Vercel cron alerting) rather than
+   double-sending the next day. */
 export function dueReminders(
   events: ElectionEvent[],
   today: string
@@ -70,4 +97,73 @@ export function dueReminders(
     }
   }
   return due;
+}
+
+/* The next reminder the schedule will send, on or after today: the first
+   day, walking forward, on which dueReminders finds anything (the first of
+   that day's reminders if there are several). 120 days is longer than any
+   gap between two reminders in a cycle. Used only by the cron's REHEARSAL
+   mode; it lives here, pure, so scripts/verify-reminder-schedule.ts checks
+   it against the same send calendar it walks. */
+export function nextReminder(
+  events: ElectionEvent[],
+  today: string
+): { day: string; reminder: DueReminder } | null {
+  for (let i = 0; i <= 120; i++) {
+    const day = isoDaysBefore(today, -i);
+    const [reminder] = dueReminders(events, day);
+    if (reminder) return { day, reminder };
+  }
+  return null;
+}
+
+/* The landing-page banner's rollover (DeadlineBanner; launch handoff
+   2026-10-04, §2 item 5). The banner used to state the registration
+   deadline and Election Day forever, so from Oct 6 it would have told every
+   visitor to "register by October 5". It now states the NEXT date a voter
+   can still act on, then Election Day, and disappears once Election Day has
+   passed.
+
+   "Still act on" is inclusive of the day itself — Oct 5 is a registration
+   day — except for the start of early voting: on the day it opens, the
+   useful fact is when it closes, so the start rolls to the end. Ties on a
+   date fall back to the order below. Pure and type-only like the rest of
+   this file, so scripts/verify-reminder-schedule.ts walks it day by day. */
+const BANNER_ORDER: ReadonlyArray<ElectionEvent["event_type"]> = [
+  "registration_deadline",
+  "vbm_request_deadline",
+  "early_voting_start",
+  "early_voting_end",
+  "ballot_return_deadline",
+];
+
+export type BannerDates = {
+  next: ElectionEvent | null;
+  electionDay: ElectionEvent | null;
+};
+
+export function bannerDates(
+  events: ElectionEvent[],
+  today: string
+): BannerDates | null {
+  const electionDay =
+    events.find((e) => e.event_type === "election_day") ?? null;
+  if (electionDay && electionDay.event_date < today) return null;
+
+  const next =
+    events
+      .filter((e) => BANNER_ORDER.includes(e.event_type))
+      .filter((e) =>
+        e.event_type === "early_voting_start"
+          ? e.event_date > today
+          : e.event_date >= today
+      )
+      .sort(
+        (a, b) =>
+          a.event_date.localeCompare(b.event_date) ||
+          BANNER_ORDER.indexOf(a.event_type) - BANNER_ORDER.indexOf(b.event_type)
+      )[0] ?? null;
+
+  if (!next && !electionDay) return null;
+  return { next, electionDay };
 }
