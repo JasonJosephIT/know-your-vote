@@ -1,6 +1,7 @@
 "use client";
 
 import { COVERED_COUNTIES } from "@/lib/counties";
+import { supervisorLink } from "@/lib/supervisors";
 
 /* Two jobs (FR-001): the "or pick your county" path, and district
    confirmation for split ZIPs — we never auto-pick a district. */
@@ -32,13 +33,19 @@ export function CountyPicker({
   );
 }
 
+/* `countyFips` is the split ZIP's county (every split ZIP lies in one), so
+   the help line can name that county's Supervisor of Elections. Without it
+   the line links the state's list of all 67 Supervisors. */
 export function DistrictConfirm({
   districts,
+  countyFips,
   onPick,
 }: {
   districts: string[];
+  countyFips?: string;
   onPick: (district: string) => void;
 }) {
+  const supervisor = supervisorLink(countyFips);
   return (
     <div className="flex flex-col gap-2">
       <p className="text-body-sm text-on-surface-muted">
@@ -61,11 +68,11 @@ export function DistrictConfirm({
         Not sure? Your voter registration card or{" "}
         <a
           className="underline"
-          href="https://www.fldoe.org"
+          href={supervisor.url}
           target="_blank"
           rel="noreferrer"
         >
-          your county Supervisor of Elections
+          {supervisor.label}
         </a>{" "}
         lists your district.
       </p>
