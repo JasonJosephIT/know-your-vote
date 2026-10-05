@@ -602,8 +602,8 @@ check(
     String(lineOn("2026-10-04"))
   );
   check(
-    "banner on the last day of early voting, statewide",
-    lineOn("2026-10-31") === "Today, October 31, is the last day of early voting statewide",
+    "banner on the last day of early voting, statewide rows only",
+    lineOn("2026-10-31") === "Today, October 31, is the last day of the statewide early voting period",
     String(lineOn("2026-10-31"))
   );
   check(
@@ -973,6 +973,26 @@ check(
   "banner with statewide rows only: the statewide window alone",
   !!statewideNext && bannerLine(statewideNext, EVENTS, EVENTS) === "Early voting runs October 24 to October 31 statewide"
 );
+{
+  /* The last statewide day, with the covered counties' rows present: say how
+     much longer they run, not "the last day statewide" and then a window that
+     contradicts it. */
+  const oct31 = bannerDates(EVENTS, "2026-10-31")?.next;
+  const line = oct31 ? bannerLine(oct31, EVENTS, ALL, "2026-10-31") : "no next date";
+  check(
+    "banner on the last statewide early voting day names the counties that run later",
+    line ===
+      "Today, October 31, is the last day of the statewide early voting period; it runs through November 1 in Miami-Dade, Broward, Hillsborough and Orange counties",
+    line
+  );
+  const nov1 = bannerDates(dade, "2026-11-01")?.next;
+  const dadeLine = nov1 ? bannerLine(nov1, dade, ALL, "2026-11-01") : "no next date";
+  check(
+    "banner (Miami-Dade) on its own last day of early voting",
+    dadeLine === "Today, November 1, is the last day of early voting in Miami-Dade County",
+    dadeLine
+  );
+}
 check(
   "the home reminder card's calendar link carries the saved county, like the banner's",
   /<ReminderSignupCta countyFips=\{saved\?\.countyFips\} \/>/.test(home) &&

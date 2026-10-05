@@ -4,11 +4,12 @@ import { Chip } from "@/components/ui/Chip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
 import { PolicyAreaChip, policyAreaHref } from "@/components/ui/PolicyAreaChip";
 import { IssueBuckets } from "@/components/features/IssueSection";
-import { NO_STATED_POSITION_NOTE } from "@/components/features/ClaimList";
+import { NoStatedPositionNote } from "@/components/features/ClaimList";
 import type { RaceBrief } from "@/lib/briefs";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { showIncumbentChip } from "@/lib/incumbency";
 import { candidateExtras, raceRows } from "@/lib/race-rows";
+import { statusBranch } from "@/lib/listing-copy";
 
 /* The race page, issue first (inspiration pass 2026-10-05, after CalMatters'
    2026 guide). It used to be one full CandidateBrief column per candidate,
@@ -45,20 +46,36 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
   const rows = raceRows(brief);
   const extras = candidateExtras(brief);
   const anyExtras = extras.some((e) => e.blocks.length > 0);
+  /* The roster's heading follows the same status rule as the line above it
+     (src/lib/listing-copy.ts): a seat settled in August or elected without
+     opposition has nobody "running" on this ballot. */
+  const branch = statusBranch({
+    decidedInPrimary: brief.decidedInPrimary,
+    notPrintedOnBallot: brief.notPrintedOnBallot,
+    count,
+  });
+  const rosterHeading =
+    branch === "decided_in_primary"
+      ? count === 1 ? "The winner" : "The winners"
+      : branch === "not_printed"
+        ? "Elected without opposition"
+        : "Who's running";
 
   return (
     <>
       <section aria-labelledby="whos-running" className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
           <h2 id="whos-running" className="text-h2">
-            Who&apos;s running
+            {rosterHeading}
           </h2>
-          <p className="text-body-sm text-on-surface-muted">
-            {count === 1 ? "One candidate." : `${count} candidates, in ballot order.`}
-          </p>
+          {count > 1 && (
+            <p className="text-body-sm text-on-surface-muted">
+              {count} candidates, in ballot order.
+            </p>
+          )}
         </div>
         <ul className={grid} style={cols}>
-          {brief.candidates.map(({ candidate }) => (
+          {brief.candidates.map(({ candidate, socials }) => (
             <li
               key={candidate.candidate_id}
               id={`candidate-${candidate.candidate_id}`}
@@ -85,7 +102,7 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
                   href={`/candidates/${candidate.candidate_id}`}
                   className="inline-flex min-h-[24px] items-center text-primary underline underline-offset-2 hover:text-primary-hover"
                 >
-                  Full profile and socials
+                  {socials.length > 0 ? "Full profile and socials" : "Full profile"}
                   <span className="sr-only">: {candidate.legal_name}</span>
                 </Link>
                 {candidate.official_site && (
@@ -103,7 +120,9 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
                   href={`mailto:${CONTACT_EMAIL}?subject=Flag%20brief%3A%20${candidate.candidate_id}`}
                   className="inline-flex min-h-[24px] items-center underline underline-offset-2 hover:text-on-surface"
                 >
-                  Flag as biased
+                  {/* The same words as the candidate page (CandidateBrief): the
+                      object is our brief, never the candidate. */}
+                  Flag this brief as biased
                   <span className="sr-only">: {candidate.legal_name}</span>
                 </a>
               </p>
@@ -112,11 +131,7 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
         </ul>
       </section>
 
-      {rows.length > 0 && (
-        <p className="max-w-[680px] text-caption text-on-surface-muted">
-          {NO_STATED_POSITION_NOTE}
-        </p>
-      )}
+      {rows.length > 0 && <NoStatedPositionNote />}
 
       {rows.map((row) => (
         <section
@@ -179,9 +194,9 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
               Other issues they raise
             </h2>
             <p className="max-w-[680px] text-body-sm text-on-surface-muted">
-              Issues a candidate brings up on their own campaign website beyond
-              the ones above. Only that candidate is quoted on each, so these
-              aren&apos;t side by side.
+              Issues beyond the ones above where we quoted a candidate from
+              their own campaign website. Each is quoted for one candidate
+              only, so these aren&apos;t side by side.
             </p>
           </div>
           <div className={`${grid} items-start`} style={cols}>
@@ -191,9 +206,11 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
                 className="flex flex-col gap-2 rounded-md border border-border bg-surface p-4"
               >
                 <h3 className="text-label">{candidate.legal_name}</h3>
+                {/* About our process, not the candidate: an empty list here
+                    is what we quoted, not what they said. */}
                 {blocks.length === 0 ? (
                   <p className="text-body-sm text-on-surface-muted">
-                    None beyond the issues above.
+                    We quoted no other issues.
                   </p>
                 ) : (
                   <ul className="flex flex-col divide-y divide-border">
@@ -215,6 +232,11 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
                               </span>
                               <span className="shrink-0 text-caption text-on-surface-muted">
                                 {n === 0 ? "" : n === 1 ? "1 quote" : `${n} quotes`}
+                                {/* Two candidates can raise the same issue, so
+                                    the control names whose it is
+                                    (a11y-perf-2026-10-04.md fix 6). After the
+                                    visible words, for 2.5.3 Label in Name. */}
+                                <span className="sr-only"> from {candidate.legal_name}</span>
                               </span>
                             </summary>
                             <div className="flex flex-col gap-2 pt-2 pb-3">

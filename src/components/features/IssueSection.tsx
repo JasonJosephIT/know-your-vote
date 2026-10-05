@@ -65,11 +65,13 @@ export function IssueBuckets({
   compact?: boolean;
   name?: string;
 }) {
-  /* In a compact cell the bucket label is shown only when it tells two
-     buckets apart. Today every live claim is a stated position (2026-10-05),
-     so "What They Say" over every cell said nothing the row heading didn't. */
+  /* In a compact cell "What They Say" is dropped when it is the only
+     bucket: every live claim is a stated position (2026-10-05), so over
+     every cell it said nothing the row heading didn't. Any other bucket
+     keeps its label, alone or not, so a record or a fact-check can never
+     read as the candidate's own words. */
   const filled = buckets.filter(({ key }) => block[key].length > 0).length;
-  const labelled = !compact || filled > 1;
+  const labelled = !compact || filled > 1 || block.say.length === 0;
   return (
     <>
       {block.coverage === "no_stated_position_found" && (
@@ -90,6 +92,7 @@ export function IssueBuckets({
               withVerdict={key === "factCheck"}
               collapseAfter={compact ? 2 : undefined}
               name={name}
+              topic={block.issue.title}
             />
           </div>
         );

@@ -137,7 +137,7 @@ export default async function Home() {
           founder confirmation: what the guide covers in one place, then the
           newest statewide news. After the House-race step, so the ballot
           still comes first (TASK-067). Remove either line to flip it. */}
-      <CoverageSummary />
+      <CoverageSummary hasDistrict={Boolean(saved)} />
       <HomeNews />
 
       {promoteReminders && <ReminderSignupCta countyFips={saved?.countyFips} />}

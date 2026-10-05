@@ -3,7 +3,6 @@ import { unstable_cache } from "next/cache";
 import { NewsStoryCard } from "@/components/features/NewsStoryCard";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { dedupeByUrl } from "@/lib/news-feed";
-import { formatNewsDate } from "@/lib/format";
 import { outletForUrl } from "@/lib/news-sources";
 import type { NewsSource } from "@/lib/news-labels";
 import type { NewsItemType } from "@/types/app";
@@ -13,9 +12,15 @@ import type { NewsItemType } from "@/types/app";
    without leaving the ballot.
 
    Statewide only, the same scope /api/news gives with no county (race,
-   metro and county all null). That keeps it clear of news-fairness.md §2:
-   no candidate-scoped row can appear here, so there is no per-candidate slot
-   count for this block to get wrong.
+   metro and county all null), and no candidate either: /admin can write a
+   candidate_news row with only a candidate set, and one candidate's story on
+   the home page would skip news-fairness.md §2's equal slots. The query
+   enforces that, rather than this comment assuming it.
+
+   Dates are formatted in Florida's time zone. This renders on the server
+   (UTC on Vercel), and a story from 9 p.m. Eastern would otherwise show
+   tomorrow's date here and today's on /news, which formats in the reader's
+   own zone.
 
    No lean on these cards, for the same reason as everywhere else
    (news-fairness.md §1, amended 2026-09-19): NewsStoryCard has no lean field,
@@ -24,6 +29,16 @@ import type { NewsItemType } from "@/types/app";
    failure: the ballot is the page, this is a pointer. */
 
 const SHOW = 3;
+
+/* formatNewsDate's format, pinned to Florida's zone (see above). */
+function floridaDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "America/New_York",
+  });
+}
 
 type Row = {
   id: string;
@@ -44,6 +59,7 @@ const latestStatewide = unstable_cache(
       .is("race_id", null)
       .is("metro", null)
       .is("county_fips", null)
+      .is("candidate_id", null)
       .order("published_at", { ascending: false })
       .limit(12);
     if (error) throw error;
@@ -75,7 +91,7 @@ export async function HomeNews() {
           Latest election news
         </h2>
         <p className="text-caption text-on-surface-muted">
-          Statewide stories and official notices, newest first. No hot takes.
+          Statewide stories and official notices, newest first.
         </p>
       </div>
       <ul className="flex flex-col gap-3">
@@ -89,7 +105,7 @@ export async function HomeNews() {
                 imageUrl={i.image_url}
                 source={source}
                 outletDomain={i.url ? (outletForUrl(i.url)?.domain ?? null) : null}
-                dateLabel={formatNewsDate(i.published_at)}
+                dateLabel={floridaDate(i.published_at)}
                 kindFallback={
                   i.item_type === "official_link"
                     ? "Official resource"

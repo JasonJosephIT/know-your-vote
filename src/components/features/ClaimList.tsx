@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { VerdictBadge } from "@/components/ui/VerdictBadge";
 import { SourceLinks } from "@/components/features/SourceLinks";
 import type { SourcedClaim } from "@/lib/briefs";
@@ -12,19 +13,30 @@ import type { SourcedClaim } from "@/lib/briefs";
    full, which made FL-GOV 37,837 px tall. Same N for every candidate, the
    count is always stated, and <details> needs no JavaScript and is found by
    the browser's find-in-page. The candidate's own page leaves it off and
-   shows everything. */
+   shows everything. That is still "length is shown, not evened out"
+   (methodology, Known limits): every claim is one tap away and its count is
+   on the control.
+
+   The control's accessible name carries the candidate and, visually hidden,
+   the issue ("Show 3 more from Jane Doe on Housing"): one candidate gets one
+   in several issue rows, and a list of buttons must tell them apart
+   (a11y-perf-2026-10-04.md fix 6 and N8). */
 export function ClaimList({
   items,
   withVerdict,
   collapseAfter,
   name,
+  topic,
 }: {
   items: SourcedClaim[];
   withVerdict?: boolean;
   collapseAfter?: number;
   /* Whose claims these are, for the "Show N more" label. */
   name?: string;
+  /* Which issue, for the label's visually hidden suffix. */
+  topic?: string;
 }) {
+  const onTopic = topic ? <span className="sr-only"> on {topic}</span> : null;
   const cut =
     collapseAfter !== undefined && items.length > collapseAfter + 1
       ? collapseAfter
@@ -40,10 +52,12 @@ export function ClaimList({
             <span className="group-open/claims:hidden">
               Show {rest.length} more
               {name ? ` from ${name}` : ""}
+              {onTopic}
             </span>
             <span className="hidden group-open/claims:inline">
               Show fewer
               {name ? <span className="sr-only"> from {name}</span> : null}
+              {onTopic}
             </span>
           </summary>
           <div className="mt-3">
@@ -81,14 +95,16 @@ function Claims({
    every view, so silence is described the same way everywhere.
 
    compact: the race page's issue rows, where the full sentence repeated in
-   every empty cell outweighed the quotes beside it. It keeps the same
-   opening words, and the race page states the rest once above the rows
-   (NO_STATED_POSITION_NOTE), so nothing is dropped, only not repeated. */
+   every empty cell outweighed the quotes beside it. It is the phrase itself,
+   exactly as the methodology quotes it ("No stated position found."), with
+   nothing added: "on their campaign website" would be wrong for a candidate
+   with no site, who shows this too (methodology, Known limits). The race
+   page explains it once above the rows (NoStatedPositionNote). */
 export function NoStatedPosition({ compact }: { compact?: boolean }) {
   if (compact) {
     return (
       <p className="text-body-sm text-on-surface-muted">
-        No stated position found on their campaign website.
+        No stated position found.
       </p>
     );
   }
@@ -101,5 +117,20 @@ export function NoStatedPosition({ compact }: { compact?: boolean }) {
   );
 }
 
-export const NO_STATED_POSITION_NOTE =
-  "Where a candidate's own campaign website says nothing we could quote on an issue, we say so: \"No stated position found.\" Silence is recorded honestly, never filled in.";
+/* What the compact phrase means, said once per race page, in the
+   methodology's own terms: our finding, not the candidate's silence. */
+export function NoStatedPositionNote() {
+  return (
+    <p className="max-w-[680px] text-caption text-on-surface-muted">
+      &ldquo;No stated position found&rdquo; means we found no position on that
+      issue that passed our checks on the candidate&apos;s own campaign
+      website, not that they have none. We never fill the gap.{" "}
+      <Link
+        href="/methodology#limits"
+        className="underline underline-offset-2 hover:text-on-surface"
+      >
+        Why a position can be missed
+      </Link>
+    </p>
+  );
+}

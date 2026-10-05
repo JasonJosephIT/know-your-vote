@@ -60,7 +60,7 @@ export function bannerLine(
       if (isToday) {
         return own
           ? `Today, ${date}, is the last day of early voting in ${own} County`
-          : `Today, ${date}, is the last day of early voting statewide${longerWindows(start, end, allEvents)}`;
+          : `Today, ${date}, is the last day of the statewide early voting period${laterEnds(end, allEvents)}`;
       }
       const window = `${bannerLongDate(start.event_date)} to ${bannerLongDate(end.event_date)}`;
       if (own) return `Early voting runs ${window} in ${own} County`;
@@ -80,6 +80,35 @@ export function electionDayLine(eventDate: string, today?: string): string {
   return eventDate === today
     ? `Today, ${bannerLongDate(eventDate)}, is Election Day`
     : `Election Day is ${bannerLongDate(eventDate)}`;
+}
+
+/* "; it runs through November 1 in Miami-Dade, Broward, Hillsborough and
+   Orange counties": every county whose own window ends after the statewide
+   one, grouped by end date. The "today" form of longerWindows. On the last
+   statewide day, restating whole windows that began weeks ago would read as
+   a contradiction ("the last day ... statewide; October 19 to November 1 in
+   ..."), and what a voter there needs is how much longer they have. Empty
+   when no county runs later. */
+function laterEnds(end: ElectionEvent, allEvents: ElectionEvent[]): string {
+  const groups = new Map<string, string[]>();
+  const withOwn = countiesWithOwnDates(allEvents);
+  for (const { fips, name } of COVERED_COUNTIES.filter((c) => withOwn.includes(c.fips))) {
+    const ownEnd = eventsForCounty(allEvents, fips).find(
+      (e) => e.event_type === "early_voting_end"
+    );
+    if (!ownEnd || ownEnd.event_date <= end.event_date) continue;
+    const key = bannerLongDate(ownEnd.event_date);
+    groups.set(key, [...(groups.get(key) ?? []), name]);
+  }
+  return [...groups]
+    .map(([until, names], i) => {
+      const list =
+        names.length === 1
+          ? names[0]
+          : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+      return `${i === 0 ? "; it runs" : ", and"} through ${until} in ${list} ${names.length === 1 ? "County" : "counties"}`;
+    })
+    .join("");
 }
 
 /* "; October 19 to November 1 in Miami-Dade, Broward, Hillsborough and

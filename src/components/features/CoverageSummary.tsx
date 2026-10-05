@@ -16,16 +16,30 @@ import { COVERED_COUNTIES } from "@/lib/counties";
    render, so they can't disagree with the list above. Server component, no
    client JavaScript.
 
+   The county and "not covered" rows say what the methodology's "What we
+   don't cover" section says (src/app/(public)/methodology/page.tsx,
+   #not-covered), and link to it; change them together.
+
+   hasDistrict: the home page shows the address field above only when no
+   district is saved, so the county row points to it only then.
+
    Recommended (pending founder confirmation). TO FLIP: remove
    <CoverageSummary /> from src/app/(public)/page.tsx. */
-export async function CoverageSummary() {
+export async function CoverageSummary({
+  hasDistrict,
+}: {
+  hasDistrict: boolean;
+}) {
   const [races, measures] = await Promise.all([
     getStatewideRaces(),
     getActiveMeasures(),
   ]);
   const briefs = races.filter((r) => r.published).length;
   const counties = COVERED_COUNTIES.map((c) => c.name);
-  const countyList = `${counties.slice(0, -1).join(", ")} and ${counties[counties.length - 1]}`;
+  const countyList =
+    counties.length === 1
+      ? counties[0]
+      : `${counties.slice(0, -1).join(", ")} and ${counties[counties.length - 1]}`;
 
   const statewide = [
     races.length > 0 &&
@@ -49,15 +63,26 @@ export async function CoverageSummary() {
             ? `${statewide.join(" and ")}, the same for everyone, whatever your ZIP or party.`
             : "The statewide races and amendments, once they're published."}
         </Row>
-        <Row term={`${countyList} counties`}>
-          Your U.S. House race, and the county commission and school board
-          seats we&apos;ve covered so far. Add your address or ZIP above to see
-          yours. Other counties are next.
+        <Row term={`${countyList} ${counties.length === 1 ? "County" : "counties"}`}>
+          The U.S. House races, and the county commission, school board,
+          Orange County mayor and Orange County clerk races.{" "}
+          {hasDistrict
+            ? "Your House race is linked above."
+            : "Add your address or ZIP above for your House race."}{" "}
+          Your county&apos;s sample ballot says which commission and school
+          board seats are yours.
         </Row>
         <Row term="Not covered">
-          Judges up for retention, circuit judge races, and city or
-          special-district contests. Your county elections office has your
-          full sample ballot.
+          Florida House and Florida Senate seats, judges (retention questions
+          and other judicial races), county and city ballot questions, city
+          races, and local races in other counties. Your county Supervisor of
+          Elections has your official sample ballot.{" "}
+          <Link
+            href="/methodology#not-covered"
+            className="underline underline-offset-2 hover:text-on-surface"
+          >
+            What we don&apos;t cover
+          </Link>
         </Row>
       </dl>
       <p className="text-caption text-on-surface-muted">
