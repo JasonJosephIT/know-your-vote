@@ -32,6 +32,17 @@ for (const empty of [null, undefined, "", "   "]) {
 /* Rule 2 — the write-in marker is not an affiliation. */
 check("WRI renders no chip", partyLabel("WRI") === null, String(partyLabel("WRI")));
 
+/* Rule 3 — neither is the nonpartisan marker. School board races are
+   nonpartisan statewide and several county offices are nonpartisan by
+   charter; Miami-Dade codes that as NOP while the other three counties leave
+   the field blank. Both must render identically, or the same fact looks
+   different depending on which county the voter lives in. */
+check("NOP renders no chip", partyLabel("NOP") === null, String(partyLabel("NOP")));
+check("NOP and a blank field agree",
+  partyLabel("NOP") === partyLabel(""), String(partyLabel("NOP")));
+check("surrounding whitespace does not resurrect NOP",
+  partyLabel("  NOP  ") === null, String(partyLabel("  NOP  ")));
+
 /* The major parties still print. */
 for (const code of ["REP", "DEM", "NPA"]) {
   check(`${code} prints itself`, partyLabel(code) === code, String(partyLabel(code)));
@@ -66,4 +77,4 @@ if (failures > 0) {
   console.error(`\nverify-party-label: ${failures} failure(s)`);
   process.exit(1);
 }
-console.log("verify-party-label: OK — no empty chips, WRI is not a party, minor parties keep their code");
+console.log("verify-party-label: OK — no empty chips, WRI and NOP are not parties, minor parties keep their code");

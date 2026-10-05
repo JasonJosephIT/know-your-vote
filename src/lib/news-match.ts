@@ -78,6 +78,79 @@ function nameParts(legalName: string) {
 
 const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+/* ---- FOUNDER CALL: surnames that are also common words ----------------
+   RECOMMENDED (PENDING FOUNDER CONFIRMATION), 2026-10-04. Launch handoff §5;
+   the open question is news-ingest-order-results-2026-09-23.md §4 item 3, and
+   the pending decision is recorded in docs/general-election/stream-surface-handoff.md §7.
+
+   THE PROBLEM, MEASURED. Case (b) below used to attach a BARE surname anywhere
+   in the title or dek. Over a 30-day sweep (2026-10-04: 545 articles, 23/24
+   feeds) against the live enqueue roster (82 ballot candidates with a
+   profile), that produced 75 `related` attachments. Hand-reading all 75 found
+   at most one about the candidate. "Robert People" took 37 ("2 shot dead and
+   dozens injured at neighborhood block party"), and Lee, Garcia, Wilson,
+   Brown, Singer, Russell and Davis took most of the rest. Meanwhile `named`
+   gave 51 attachments over 38 articles, all of them recognisably campaign or
+   officeholder stories. The approval boundary would catch every bad row, but
+   the queue would open at three junk rows for every two real ones.
+
+   THE RECOMMENDED RULE: `title_and_surname`. A surname without the full name
+   attaches only in candidate-news-PRD.md §6's own "title + surname" form: a
+   political title immediately before it ("Rep. Lee", "Commissioner Smith",
+   "Sen. Moody"). It applies to every candidate identically. On the same
+   sweep it leaves 0 of the 75. `named` and case (a) are untouched.
+
+   WHY NOT A STOP-LIST OF COMMON WORDS. Someone would have to decide whose
+   surname is "common", and that is a judgment about particular candidates'
+   names. The 75 also included uncommon surnames (Strada, Rojas, Gilbert)
+   matched on unrelated people, so a list would not have been enough. This
+   rule needs no list of names, only a list of titles, and treats every name
+   alike: "ambiguity resolves toward symmetry" still holds.
+
+   WHAT IT COSTS. A headline that names a candidate by bare surname, with no
+   title and no full name anywhere in the title or dek, no longer reaches the
+   review queue. In the 30-day sample that was at most one story. The
+   founder's 2026-09-07 direction ("if it's a bit ambiguous, we can still
+   relate") still applies to ambiguity that comes with a title, so "Commissioner
+   Smith" still attaches to every Smith.
+
+   TO FLIP: set SURNAME_ONLY_RULE to "bare_surname". That restores the
+   pre-2026-10-04 behaviour exactly; scripts/verify-news-match.ts runs both
+   modes. Nothing reads this until scripts/news-enqueue.ts runs, and nothing
+   that script queues reaches a voter until approved. */
+export type SurnameOnlyRule = "title_and_surname" | "bare_surname";
+export const SURNAME_ONLY_RULE: SurnameOnlyRule = "title_and_surname";
+
+/** Titles that make a bare surname a `title + surname` mention, in the
+    normalised form `normalize` produces ("U.S. Rep." reads as "u s rep").
+    Office titles only: no party, no ideology, nothing that varies by
+    candidate. Spanish and French forms are included because Spanish- and
+    French-language outlets are on the outlet list, and a rule that only
+    understood English titles would not treat their readers' candidates alike. */
+export const SURNAME_TITLES: readonly string[] = [
+  "rep", "representative", "congressman", "congresswoman",
+  "sen", "senator", "gov", "governor", "lt gov",
+  "attorney general", "commissioner", "commish", "mayor", "clerk",
+  "councilman", "councilwoman", "council member",
+  "board member", "school board member", "chair", "chairman", "chairwoman",
+  "candidate",
+  "representante", "congresista", "senador", "senadora", "gobernador",
+  "gobernadora", "fiscal general", "comisionado", "comisionada", "alcalde",
+  "alcaldesa", "senateur", "gouverneur", "maire", "commissaire",
+];
+
+export interface MatchOptions {
+  /** Overrides SURNAME_ONLY_RULE. For guardrails that test both modes; the
+      enqueue runner passes nothing, so the constant decides. */
+  surnameOnly?: SurnameOnlyRule;
+}
+
+function surnameRegex(last: string, rule: SurnameOnlyRule): RegExp {
+  if (rule === "bare_surname") return new RegExp(`\\b${esc(last)}\\b`);
+  const titles = SURNAME_TITLES.map((t) => t.split(" ").map(esc).join("\\s+"));
+  return new RegExp(`\\b(?:${titles.join("|")})\\s+${esc(last)}\\b`);
+}
+
 /* A full-name match is "first ... last", where the only thing allowed in
    between is one of THIS candidate's own middle tokens or an initial of one.
    Allowing any filler would make "Maria met John Vasquez" a match for Maria
@@ -95,7 +168,9 @@ function fullNameRegex(parts: NonNullable<ReturnType<typeof nameParts>>): RegExp
 export function matchArticle(
   article: MatchableArticle,
   roster: readonly RosterCandidate[],
+  options: MatchOptions = {},
 ): Match[] {
+  const surnameRule = options.surnameOnly ?? SURNAME_ONLY_RULE;
   const haystack = normalize(`${article.title} ${article.summary ?? ""}`);
   if (!haystack) return [];
 
@@ -121,15 +196,17 @@ export function matchArticle(
     relation: "named" as const,
   }));
 
-  /* §6 case (b): a surname (or title + surname) left over after the full-name
-     pass. Attaches to EVERY candidate whose surname it could be — including
-     when that is exactly one, because the match still was not deterministic. */
+  /* §6 case (b): a surname left over after the full-name pass, in the form
+     SURNAME_ONLY_RULE admits (title + surname by default; see the founder-call
+     block above). Attaches to EVERY candidate whose surname it could be,
+     including when that is exactly one, because the match still was not
+     deterministic. */
   const surnamed = new Set<string>();
   for (const candidate of roster) {
     if (named.has(candidate.candidateId)) continue;
     const parts = nameParts(candidate.legalName);
     if (!parts) continue;
-    if (new RegExp(`\\b${esc(parts.last)}\\b`).test(residue)) {
+    if (surnameRegex(parts.last, surnameRule).test(residue)) {
       surnamed.add(candidate.candidateId);
     }
   }

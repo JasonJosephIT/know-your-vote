@@ -1,0 +1,59 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://blake-sunder.example.com",
+  "created_at": "2026-09-21T00:00:00Z",
+  "model": "fixture-model",
+  "taxonomy_version": "fixture",
+  "threshold": 0.85,
+  "provenance": "jev:fixture-model/tax-fixture/q-fixture",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A5"
+  ],
+  "counts": {
+    "passages": 2,
+    "asked": 2,
+    "states_policy": 2,
+    "with_issue": 2,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "a8d1e06d",
+      "url": "https://blake-sunder.example.com/platform",
+      "heading": null,
+      "text": "Blake Sunder will freeze the state property tax rate for homesteaded owners over sixty-five.",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [
+          "A3"
+        ],
+        "scores": {
+          "A3": 0.92
+        }
+      }
+    },
+    {
+      "id": "3dd55906",
+      "url": "https://blake-sunder.example.com/platform/housing",
+      "heading": null,
+      "text": "Blake Sunder will remove the parking minimum on infill lots so smaller homes can be built near transit.",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [
+          "A2"
+        ],
+        "scores": {
+          "A2": 0.9
+        }
+      }
+    }
+  ],
+  "areas": [],
+  "usage": null
+}

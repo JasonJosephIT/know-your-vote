@@ -1,0 +1,14 @@
+{
+  "_note": "Pilot-only plan (one candidate) used to measure word_count. The race plan (all 8) is Step 4's brief-runs/FL-GOV/plan.json.",
+  "race_id": "FL-GOV-general",
+  "retrieved_at": "2026-09-27T12:37:03Z",
+  "spine": [
+    { "id": "A1", "title": "Property insurance costs", "description": null },
+    { "id": "A3", "title": "Property taxes", "description": null },
+    { "id": "A2", "title": "Housing affordability", "description": null },
+    { "id": "A4", "title": "Cost of living in Florida", "description": null }
+  ],
+  "candidates": [
+    { "candidate_id": "FL-DOE-89243", "official_site": "https://davidjolly.com/", "run": "run.json" }
+  ]
+}

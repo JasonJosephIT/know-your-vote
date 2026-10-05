@@ -4,7 +4,7 @@
 
    Founder direction 2026-09-18: the quiz's eight become CATEGORIES; the
    fifteen researched issues from CAP_Issue_List_FL_2026_v1.md become the
-   SUB_ISSUES underneath them. Five `KYV`-prefixed sub-issues have been added
+   SUB_ISSUES underneath them. Ten `KYV`-prefixed sub-issues have been added
    since, each where a measured gap or the quiz's own wording showed a subject
    with nowhere to go — see TAXONOMY_VERSION and the KYV entries below.
 
@@ -29,7 +29,7 @@
    labels for the eight are verbatim from src/lib/quiz-questions.ts (TASK-032,
    neutrality-reviewed). A- and B-prefixed sub-issue labels are verbatim from
    CAP_Issue_List_FL_2026_v1.md (2026-07-15, sourced and balance-checked). The
-   three non-quiz category labels, the five `KYV` sub-issue labels and every
+   three non-quiz category labels, the ten `KYV` sub-issue labels and every
    `aliases` array were written here — that is the part a human must read in
    review, because nothing upstream has vetted them.
 
@@ -49,7 +49,27 @@ export type { NewsIssue };
 /* 2 — 2026-09-18: CAP's B6 split into B6 + KYV1; A4/A6/B2 aliases widened
    after the gold-set evaluation. Bumped because tags written under v1 are
    not comparable to tags written under v2. */
-/* 3 — 2026-09-20: the `environment` category gained KYV2 (energy and
+/* 4 — 2026-09-21: the CATEGORY aliases were folded into their sub-issues.
+   When the category questions were dropped on 2026-09-18 (measured redundant:
+   a parent never fired alone across 10 fixtures), 20 alias terms silently
+   stopped being asked anywhere, because they lived only on a category —
+   "homelessness", "police", "sheriff", "courts", "public schools", "teachers",
+   "classroom funding", "property taxes", "visas", "redistricting" and more.
+
+   This was not caught by the 116-row gold set, because the worst-hit issues
+   had zero gold examples there. It surfaced in an 834-article corpus run where
+   A2 housing scored 0.0% while the corpus carried two homelessness stories.
+
+   `verify-news-issues.ts` now asserts no category alias is orphaned, so this
+   cannot recur silently.
+
+   MEASURE BEFORE TRUSTING IT. The one previous time aliases were widened, A6
+   went 14 -> 11 on the same corpus: more vocabulary is not monotonically
+   better, and past roughly a dozen terms it appears to blur a question rather
+   than sharpen it. This restores what was lost; it does not claim to improve
+   recall. Re-run the gold set.
+
+   3 — 2026-09-20: the `environment` category gained KYV2 (energy and
    utilities), KYV3 (growth, development and land conservation), KYV4 (storm
    resilience and flood protection) and KYV5 (water supply and drinking
    water); A5's aliases widened to the ambient-quality vocabulary it lacked.
@@ -57,7 +77,54 @@ export type { NewsIssue };
    article was a miss the taxonomy could not express, and a v3 row tagged `{}`
    on the same article is a real negative. The two are not comparable, so the
    version has to say which one you are reading. */
-export const TAXONOMY_VERSION = "3";
+/* 5 — 2026-09-21: `housing` gained KYV6 (renters and evictions) and KYV7
+   (homelessness); `insurance` gained KYV8 (condominium and HOA costs).
+
+   KYV7 IS THE v4 FOLD DONE PROPERLY, NOT A SECOND ATTEMPT AT IT. v4 restored
+   "homelessness" by adding it to A2's aliases, which fixed the orphan and
+   made the term askable again. But A2's label — CAP's, verbatim — is "Housing
+   affordability", and asking a model whether a story about an encampment
+   ordinance relates to housing AFFORDABILITY invites the answer the label
+   deserves. That is the B6 failure exactly, and the KYV4 failure exactly: two
+   subjects under one label, and the label is what the model is actually
+   answering. So "homelessness" and "unhoused" move off A2 and onto KYV7,
+   where the label says what the question means. The v4 invariant still holds
+   — every category alias is asked somewhere — which is the property
+   verify-news-issues.ts asserts, deliberately not "asked under its own
+   category".
+
+   WHAT IS AND IS NOT MEASURED HERE. KYV7 has real support: A2 scored 0.0%
+   across the 834-article corpus that carried two homelessness stories (v4's
+   note). KYV6 and KYV8 have none — the 116-row gold set holds no eviction,
+   condo or insurance story at all, and A1/A2 sat at zero gold rows there.
+   Those two rest on the quiz's wording and Florida's issue space, the KYV4
+   standard rather than the B8 standard.
+
+   A1 and A2 ALIASES WIDENED SPARINGLY, and v4's warning is why. A6 went
+   14 -> 11 on that same corpus when its aliases grew; past roughly a dozen
+   terms the vocabulary blurs the question. A1 lands at 7 and A2 at 8, and
+   terms that were merely adjacent (mortgage rates, homeownership, rate
+   filing, insurer insolvency) were dropped rather than kept for completeness. */
+/* 6 — 2026-09-21: A6 split three ways — A6 keeps CAP's id and the
+   public-school half, KYV9 takes school choice, KYV10 takes career,
+   vocational and higher education. Bumped because an A6 tag under v5 could
+   mean a voucher story or a teacher-pay story and under v6 it can only mean
+   the second: the two are not comparable, and every A6 row written before
+   today needs re-reading rather than re-labelling.
+
+   THE RECALL NUMBERS DO NOT CARRY OVER. A6's measured 100%/50% was for the
+   two-subject label. The split is justified by an alias count past a measured
+   threshold and by the B6 precedent, not by a number that predicts the
+   outcome. Re-run the gold set before quoting anything about education. */
+/* 7 — 2026-09-22: B7 narrowed from "Crime and public safety" to "Crime
+   policy, policing and courts", and the `safety` category's bare aliases
+   retired with it. The largest tag in the taxonomy was catching crime blotter:
+   18 of its 25 gold rows are individual arrests and shootings with no policy
+   content. Bumped because a B7 tag meant "a crime happened" under v6 and
+   means "a policy question about crime" under v7 — the opposite kinds of row,
+   not comparable at all. Every B7 row ever written needs re-reading, and 18
+   gold labels need correcting before the numbers mean anything (eval §10). */
+export const TAXONOMY_VERSION = "7";
 
 export interface IssueCategory {
   /** For the eight, this is verbatim QUIZ_QUESTIONS[].id — the shared key that
@@ -84,7 +151,12 @@ export const CATEGORIES: readonly IssueCategory[] = [
   { id: "healthcare", label: "Healthcare", inQuiz: true,
     aliases: ["hospitals", "clinics", "coverage", "prescription costs"] },
   { id: "housing", label: "Housing", inQuiz: true,
-    aliases: ["rent", "homebuying", "development", "homelessness"] },
+    /* "development" was dropped in v4 rather than folded into a sub-issue: as
+       a question word it is too generic, and it made "Economic Development"
+       classify as an environment issue. Its specific senses live on KYV3
+       ("suburban development", "development moratorium") and A2
+       ("housing supply"). */
+    aliases: ["rent", "homebuying", "homelessness"] },
   { id: "environment", label: "Environment & Water", inQuiz: true,
     aliases: ["water quality", "conservation", "climate", "coastal flooding"] },
   { id: "immigration", label: "Immigration", inQuiz: true,
@@ -92,7 +164,13 @@ export const CATEGORIES: readonly IssueCategory[] = [
   { id: "insurance", label: "Insurance & Property Costs", inQuiz: true,
     aliases: ["property insurance", "premiums", "property taxes", "homestead exemption"] },
   { id: "safety", label: "Public Safety & Crime", inQuiz: true,
-    aliases: ["police", "sheriff", "courts", "sentencing"] },
+    /* The bare words `police`, `sheriff`, `courts` and `sentencing` were
+       retired in v7, on the same precedent that retired bare `development` in
+       v4: as question words they matched the phenomenon rather than the
+       policy, and every one of them appears in routine crime coverage
+       ("deputies say", "sheriff's office"). The policy senses are B7's. */
+    aliases: ["police funding", "police oversight", "court system",
+              "sentencing laws"] },
 
   /* Not in the quiz — see the header. */
   { id: "elections", label: "Elections & Voting", inQuiz: false,
@@ -108,11 +186,30 @@ export const CATEGORIES: readonly IssueCategory[] = [
    voters weigh) and are kept so a tag traces back to a sourced entry. */
 export const SUB_ISSUES: readonly TaxonomyIssue[] = [
   { id: "A1", categoryId: "insurance", label: "Property insurance costs",
-    aliases: ["property insurance", "premiums", "hurricane coverage", "Citizens Property Insurance"] },
+    /* Widened 2026-09-21. In Florida wind, flood and the residual market are
+       three different policies and three different arguments, and the original
+       four aliases named only the first. Held to three additions, not the six
+       first drafted: v4 measured A6 losing ground at 14 terms, so "rate
+       filing" and "insurer insolvency" were dropped as insider vocabulary
+       that no headline uses. Condominium and association costs are KYV8's. */
+    aliases: ["property insurance", "premiums", "hurricane coverage",
+              "Citizens Property Insurance", "flood insurance",
+              "windstorm coverage", "reinsurance"] },
   { id: "A2", categoryId: "housing", label: "Housing affordability",
-    aliases: ["housing costs", "rent", "housing supply", "first-time buyers"] },
+    /* COST, SUPPLY and BUYING: what a home costs and whether enough are being
+       built. `rent` stays because a rent level is a price; the landlord-tenant
+       relationship is KYV6's. "zoning" is KYV3's.
+
+       "homelessness" and "unhoused" came here in the v4 fold and moved to
+       KYV7 in v5 — see TAXONOMY_VERSION. They are still asked, which is what
+       the orphan check requires; they are asked under a label that describes
+       them. `homebuying` stays: buying a home is this issue. */
+    aliases: ["housing costs", "rent", "housing supply", "first-time buyers",
+              "homebuying", "home prices", "down payment assistance",
+              "affordable housing"] },
   { id: "A3", categoryId: "insurance", label: "Property taxes",
-    aliases: ["property tax", "homestead exemption", "property assessments", "millage"] },
+    aliases: ["property tax", "property taxes", "homestead exemption",
+              "property assessments", "millage"] },
   { id: "A4", categoryId: "economy", label: "Cost of living in Florida",
     /* Widened 2026-09-18: 0% recall. Missed a gas-price story and a minimum-wage
        rise — the model tagged only what a headline was ABOUT, not what it cost
@@ -120,7 +217,8 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
        collapsing the two. */
     aliases: ["household costs", "utility bills", "groceries", "affordability",
               "gas prices", "fuel costs", "grocery prices", "everyday expenses",
-              "household budgets", "price increases", "paying the bills"] },
+              "household budgets", "price increases", "paying the bills",
+              "cost of living"] },
   { id: "A5", categoryId: "environment", label: "Water quality and Everglades restoration",
     /* Widened 2026-09-20 — the aliases named the Everglades and red tide but
        not the everyday ways water quality reaches the news. AMBIENT quality
@@ -129,30 +227,84 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
     aliases: ["water quality", "Everglades", "red tide", "nutrient pollution", "restoration",
               "algae blooms", "blue-green algae", "sewage spill", "wastewater discharge",
               "septic to sewer", "nutrient runoff", "water pollution", "springs", "seagrass"] },
-  { id: "A6", categoryId: "education", label: "Public education and school choice",
-    /* Widened 2026-09-18: 25% recall. Missed AI-in-schools rules, a work-based
-       learning grant and a public-education polling story — all plainly
-       education policy, none matching the narrow original alias set. */
-    aliases: ["public school funding", "vouchers", "school choice", "teacher pay",
-              "K-12", "school districts", "school board", "classrooms", "curriculum",
-              "students", "education policy", "state colleges", "universities"] },
+  /* ── A6 SPLIT THREE WAYS, 2026-09-21 ───────────────────────────────────
+     CAP's label was "Public education and school choice", and that is two
+     subjects — in Florida it is the two SIDES of one argument, which is worse.
+     The history is the same as B6's:
+
+       v1  narrow aliases          25% recall
+       v2  widened to 13 terms     50% recall, 100% precision
+       v4  fold added 3 more, 16   the 834-corpus count fell 14 -> 11
+
+     So the alias lever is spent: A6 sat at 16 terms, past the ~dozen where
+     that corpus measured vocabulary starting to blur a question rather than
+     sharpen it, and it still missed half of the real education stories in the
+     gold set. B6 was in exactly this position and the split bought +9 points
+     of recall at no cost to precision. This is the fourth application of the
+     rule those episodes established: when an issue underperforms, suspect the
+     label before the vocabulary.
+
+     WHY THREE AND NOT TWO. `universities` is an `education` CATEGORY alias, so
+     the v4 invariant requires some sub-issue to ask about it. Splitting
+     funding from choice leaves higher education with no honest home — its
+     terms would have to sit under a label about K-12 funding, which is the
+     defect being fixed. KYV10 is therefore not an optional third: the
+     invariant makes it necessary, and it happens to fill the quiz's third
+     education option ("More vocational and career-path programs"), which had
+     no vocabulary anywhere, and to cover the work-based learning grant the
+     gold set recorded A6 missing.
+
+     A6 KEEPS CAP'S ID AND THE PUBLIC-SCHOOL HALF, exactly as B6 kept its id
+     and the election-specific half. `education policy` is dropped rather than
+     reassigned, on the v4 precedent that retired bare `development`: as a
+     question word it is too generic to sharpen anything. */
+  { id: "A6", categoryId: "education", label: "Public school funding and teachers",
+    aliases: ["public school funding", "teacher pay", "teachers", "classroom funding",
+              "public schools", "school districts", "school board", "K-12"] },
+  { id: "KYV9", categoryId: "education", label: "School choice and vouchers",
+    aliases: ["vouchers", "school choice", "scholarship programs", "charter schools",
+              "open enrollment", "private school enrollment"] },
+  { id: "KYV10", categoryId: "education", label: "Career, vocational and higher education",
+    aliases: ["vocational training", "career and technical education", "apprenticeships",
+              "workforce training", "state colleges", "universities", "financial aid"] },
   { id: "A7", categoryId: "elections", label: "Elections administration and voting access",
-    aliases: ["voting access", "election administration", "ballot initiative process", "voter registration"] },
+    aliases: ["voting access", "election administration", "ballot initiative process",
+              "voter registration", "ballot access", "redistricting"] },
   { id: "B1", categoryId: "economy", label: "Economy, inflation, and jobs",
     aliases: ["economy", "inflation", "jobs", "wages", "unemployment"] },
   { id: "B2", categoryId: "healthcare", label: "Healthcare access and costs",
     /* Widened 2026-09-18: 20% recall. Missed a vaccine-access rule, a disease
        outbreak death and a Medicaid drug-pricing announcement. Public health is
-       part of how people reach care, so it is named here explicitly. */
+       part of how people reach care, so it is named here explicitly.
+
+       DELIBERATELY NOT SPLIT ALONGSIDE A6, though it shows two of the same
+       symptoms: 13 aliases, 40% recall, and a vocabulary that has quietly
+       absorbed public health (vaccines, disease outbreaks) which is arguably
+       its own subject — plus the quiz's third healthcare option, "keeping
+       hospitals and clinics open where they're scarce", has no vocabulary
+       beyond the bare words `hospitals` and `clinics`.
+
+       The reason to wait is that a split is only adjudicable against labelled
+       rows, and B2 has five of them. news-corpus-analysis-2026-09-19.md is
+       explicit: 116 rows with several issues at n=0 is "too thin for a ±3
+       swing. Label more rows first." A6 could go ahead of that because its
+       alias count had passed a measured threshold, which is a defect visible
+       without new labels. B2's case rests on its recall number, and that
+       number is what more labels would move. Splitting it now would spend the
+       only healthcare measurement this project has. */
     aliases: ["healthcare costs", "coverage", "hospitals", "prescription prices",
               "public health", "vaccines", "Medicaid", "clinics", "pharmacies",
-              "drug prices", "disease outbreaks", "insurance coverage"] },
+              "drug prices", "disease outbreaks", "insurance coverage",
+              "prescription costs"] },
   { id: "B3", categoryId: "immigration", label: "Immigration and border enforcement",
-    aliases: ["immigration", "border enforcement", "migrants", "detention", "asylum"] },
+    aliases: ["immigration", "border enforcement", "migrants", "detention", "asylum",
+              "visas"] },
   { id: "B4", categoryId: "retirement", label: "Social Security and Medicare",
-    aliases: ["Social Security", "Medicare", "retirement benefits", "entitlements"] },
+    aliases: ["Social Security", "Medicare", "retirement benefits", "entitlements",
+              "retirement income", "benefits"] },
   { id: "B5", categoryId: "abortion", label: "Abortion policy",
-    aliases: ["abortion", "gestational limits", "reproductive health policy"] },
+    aliases: ["abortion", "gestational limits", "reproductive health policy",
+              "abortion law"] },
   /* CAP's B6 was "Election integrity and threats to democracy" — two distinct
      subjects under one label, and the 2026-09-18 evaluation measured the cost:
      25% precision, 20% recall. The annotator read it broadly (press freedom
@@ -169,8 +321,55 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
   { id: "KYV1", categoryId: "elections", label: "Threats to democratic institutions",
     aliases: ["press freedom", "freedom of the press", "rule of law", "political violence",
               "checks and balances", "abuse of office", "democratic norms"] },
-  { id: "B7", categoryId: "safety", label: "Crime and public safety",
-    aliases: ["crime", "policing", "public safety", "sentencing"] },
+  /* ── B7 NARROWED TO POLICY, 2026-09-22 ─────────────────────────────────
+     THIS IS THE BIGGEST TAG IN THE TAXONOMY AND IT WAS MEASURING THE WRONG
+     THING. B7 scored 83% precision and 96% recall on 25 gold rows — the best
+     numbers in the project — and carried 155 of 834 articles, 18.6% of the
+     corpus, several times any other issue. Reading those 25 rows is what the
+     numbers could not say:
+
+       - 18 are crime blotter with no policy content whatever. Individual
+         arrests, roommate shootings, a road-rage incident involving thrown
+         mayonnaise, a man robbed buying cooking oil.
+       - 3 are near-duplicate execution-scheduling notices for one kind of
+         case.
+       - 3 are actual policy: a St. Petersburg budget vote on Axon and Flock
+         contracts, a prison-staff safety bill, a package of senior-scam and
+         fraud bills.
+       - 1 is a road-safety statistic.
+
+     So 96% recall meant B7 was excellent at catching crime blotter, and the
+     83% precision was measured against labels that call blotter "Crime and
+     public safety". The label invited it: asked whether a shooting relates to
+     "crime", a model correctly says yes. This is the KYV4 defect — the label
+     naming the phenomenon rather than the policy — at the largest scale in
+     the taxonomy, and it is the fifth instance of the same lesson after B6,
+     KYV4, A2/KYV7 and A6.
+
+     IT MATTERS MORE HERE THAN ANYWHERE ELSE. This is a nonpartisan voter
+     guide. A tag whose job is "news on the issues you picked" would have put
+     last night's shooting under a political issue heading beside candidate
+     names, at roughly a fifth of the feed. What a voter needs from this
+     category is where candidates stand on policing, courts and sentencing —
+     not the crime report.
+
+     B7 KEEPS CAP'S ID AND TAKES THE POLICY HALF, as B6 and A6 did before it.
+     Bare `crime` is dropped rather than reassigned, exactly as bare
+     `development` was in v4: it is the phenomenon, and no sub-issue should ask
+     for it.
+
+     THE MEASURED NUMBERS RETIRE WITH THE OLD LABEL, and the next run will
+     look like a collapse — B7's recall against the CURRENT gold labels should
+     fall to roughly the 4 rows in 25 that are policy, because 18 of those
+     labels are what this change says are wrong. That is the B8 situation in
+     reverse: there the labels were suspect and the model was right; here the
+     model was right about the label it was given. Re-labelling those rows is
+     founder work (eval §0, recommendation 6) and eval §10 lists them. Do not
+     read the drop as a regression until they are re-labelled. */
+  { id: "B7", categoryId: "safety", label: "Crime policy, policing and courts",
+    aliases: ["police funding", "police oversight", "policing policy",
+              "sentencing laws", "criminal justice reform", "court system",
+              "public safety budget", "prison policy", "fraud and scam enforcement"] },
   /* B8 stays NATIONAL in scope, and its alias list is deliberately not
      widened: the 2026-09-18 evaluation scored it 0% recall, and the diagnosis
      was that all four gold rows were mislabelled rather than missed (eval §3).
@@ -180,8 +379,12 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
      the A4/B1 overlap, where a broad label swallows every story a narrow one
      was added to catch. */
   { id: "B8", categoryId: "environment", label: "Climate and environment (national)",
+    /* v4 adds the bare word "climate" only. That is B8's own subject — its
+       label begins with it — not a broadening into a neighbour's territory,
+       which is what the note above guards against. "energy" still stays out,
+       with KYV2. */
     aliases: ["climate policy", "emissions", "environmental regulation",
-              "federal environmental rules", "offshore drilling"] },
+              "federal environmental rules", "offshore drilling", "climate"] },
 
   /* ── The environment category, expanded 2026-09-20 ──────────────────────
      Two independent readings asked for the same three issues.
@@ -216,9 +419,19 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
               "rate case", "power plants", "solar", "natural gas",
               "energy policy", "data centers", "data center power demand"] },
   { id: "KYV3", categoryId: "environment", label: "Growth, development and land conservation",
+    /* v4 adds the bare "conservation" — in this issue's own label, and an
+       `environment` category alias that stopped being asked.
+
+       "development" was tried here and REVERTED. It is in the label too, but
+       as a question word it is too generic: `verify-policy-areas.ts` caught
+       "Economic Development" classifying as an environment issue. The
+       specific senses are already covered — "suburban development" and
+       "development moratorium" here, "housing supply" on A2 — so the bare
+       word buys nothing and costs a false positive. */
     aliases: ["land use", "zoning", "development moratorium", "growth management",
               "wetlands", "permitting", "state parks", "conservation land",
-              "rural boundary", "suburban development", "data centers"] },
+              "rural boundary", "suburban development", "data centers",
+              "conservation"] },
   /* No gold row scores this — the position A1, A2, A5, B4 and B5 are also in.
      It exists because the quiz asks about it and Florida votes on it, not
      because the evaluation demanded it.
@@ -257,6 +470,71 @@ export const SUB_ISSUES: readonly TaxonomyIssue[] = [
               "water restrictions", "desalination", "water utility",
               "water rates", "water main", "reclaimed water",
               "drinking water contamination"] },
+
+  /* ── Housing and property costs, 2026-09-21 ────────────────────────────
+     TWO CATEGORIES, THREE SUB-ISSUES BETWEEN THEM, AND A QUIZ THAT ASKS
+     ABOUT MORE THAN THAT. `housing` had one child (A2, affordability) while
+     its quiz question offers three priorities: building more, help for
+     first-time buyers, and stronger protections for renters. The first two
+     are A2's and KYV3's. The third had nothing. And the category's own alias
+     list has named `homelessness` since it was written, with no sub-issue
+     able to catch it — a tag that can never fire is a promise the taxonomy
+     does not keep.
+
+     KYV7 IS MEASURED; KYV6 AND KYV8 ARE NOT. The 834-article corpus that
+     prompted v4 carried two homelessness stories and A2 caught neither, so
+     the homelessness gap is a number rather than an opinion. The 116-row gold
+     set holds no eviction, condo or insurance story at all — A1 and A2 sat at
+     zero gold rows there — so KYV6 and KYV8 rest on the quiz's wording and on
+     Florida's issue space, the KYV4 standard rather than the B8 standard.
+     Whoever reads the first v5 evaluation should expect those two to be the
+     least validated rows in it. */
+  { id: "KYV6", categoryId: "housing", label: "Renters and evictions",
+    /* The quiz's "stronger protections and stability for renters". Aliases
+       name the TENANCY, not the price — a rent level is A2's. */
+    aliases: ["renters", "tenants", "eviction", "landlord-tenant law",
+              "rental assistance", "security deposits", "tenant protections",
+              "lease terms", "rent stabilization"] },
+  /* THE ONE ENTRY HERE WITH A MEASURED CASE, and the alias route was measured
+     to fail before this one was written. A2 scored 0.0% across 834 articles
+     that carried two homelessness stories, and
+     docs/general-election/news-corpus-analysis-2026-09-19.md says why, in its
+     own words: the two articles "are about homelessness *services*, not
+     housing **affordability**, which is A2's label. Adding 'homelessness' as
+     an alias did not change it, and the label is right to resist. CAP's 15 has
+     no concept for housing insecurity — a taxonomy gap to note, not a tagging
+     failure."
+
+     So this is not a second opinion about A2's label. It is the missing
+     concept that analysis asked for. `unhoused` comes across from the v4 fold
+     for the same reason "homelessness" does. */
+  { id: "KYV7", categoryId: "housing", label: "Homelessness",
+    aliases: ["homelessness", "unhoused", "homeless services", "encampments",
+              "public camping", "emergency shelters", "unsheltered",
+              "transitional housing"] },
+  /* THE WEAKEST ENTRY IN THE TAXONOMY, and the 834-article corpus is why.
+     Its `Insurance & Property Costs` category totals 13 articles, and A1 (3)
+     plus A3 (10) account for all 13 — nothing unexplained is sitting there
+     waiting for a condo issue. Twenty-five days of 29 Florida outlets produced
+     no condominium story that any issue caught.
+
+     That is evidence against URGENCY, not against correctness: a special-
+     assessment story could be sitting in the corpus's 531 untagged articles,
+     which is exactly what this would catch, and the pool file was not
+     preserved so nobody can look. The test is to label rows, which is what
+     that report says to do about every zero in it.
+
+     PARENT IS `insurance`, NOT `housing`, AND THAT IS A JUDGMENT CALL. The
+     category's quiz question reads "On property insurance and what it costs to
+     keep a home", and a five-figure special assessment is the sharpest example
+     of that cost Florida offers. The argument for `housing` — a condominium is
+     a home, milestone inspections are building safety — is not weak. Moving it
+     is free while the sweep has never run and no row carries the tag. */
+  { id: "KYV8", categoryId: "insurance", label: "Condominium and HOA costs",
+    aliases: ["condominium association", "HOA", "homeowners association",
+              "special assessment", "milestone inspection",
+              "structural integrity reserve", "condo fees", "association dues",
+              "condo board", "reserve funding"] },
 ];
 
 /* What the model is asked about: THE SUB-ISSUES ONLY.
@@ -295,4 +573,116 @@ export function categoriesFor(ids: readonly string[]): string[] {
     if (sub) set.add(sub.categoryId);
   }
   return CATEGORY_IDS.filter((c) => set.has(c));
+}
+
+/* ---- display and filter helpers ------------------------------------------
+   Added 2026-09-23 so a stored tag can reach a story card and the /news
+   filter. Pure, like everything above; scripts/verify-news-issues.ts drives
+   them.
+
+   THE HARD RULE THESE SERVE (news-ingest-order-handoff-2026-09-23.md §1, spec
+   §4.6): the characterizer tags rows that are ALREADY STORED, it never gates
+   them. `issues` NULL means "never characterized" and `{}` means
+   "characterized, nothing cleared the threshold" — and in both cases the row
+   still renders. So every helper here treats null, undefined and an empty
+   array as "no chips", never as a reason to drop anything. A card with no
+   tags is the common case, not an error. */
+
+/** The voter-facing label of one sub-issue, or null for anything else —
+    including a category id, which has its own label on CATEGORIES. */
+export function subIssueLabel(id: string): string | null {
+  return SUB_ISSUES.find((s) => s.id === id)?.label ?? null;
+}
+
+export interface IssueChipData {
+  id: string;
+  label: string;
+  categoryId: string;
+  categoryLabel: string;
+}
+
+/** A stored tag set, as chips a card can render.
+
+    Stored order is kept (the characterizer writes in ASKABLE order, so this is
+    stable without re-sorting), duplicates collapse to the first, and an id
+    this taxonomy does not know is DROPPED rather than printed raw — a row
+    tagged under an older TAXONOMY_VERSION may carry an id that has since been
+    split, and "B6" on a card means nothing to a voter.
+
+    A category id is accepted as a tag, because `categoriesFor()` already is:
+    restoring the parent questions (see ASKABLE) would store them. Its chip
+    carries its own label as both label and category. */
+export function issueChips(
+  ids: readonly string[] | null | undefined
+): IssueChipData[] {
+  if (!ids || ids.length === 0) return [];
+  const seen = new Set<string>();
+  const out: IssueChipData[] = [];
+  for (const id of ids) {
+    if (seen.has(id)) continue;
+    seen.add(id);
+    const sub = SUB_ISSUES.find((s) => s.id === id);
+    if (sub) {
+      const cat = CATEGORIES.find((c) => c.id === sub.categoryId);
+      if (!cat) continue; // unreachable while verify-news-issues passes
+      out.push({
+        id,
+        label: sub.label,
+        categoryId: cat.id,
+        categoryLabel: cat.label,
+      });
+      continue;
+    }
+    const cat = CATEGORIES.find((c) => c.id === id);
+    if (cat) {
+      out.push({
+        id,
+        label: cat.label,
+        categoryId: cat.id,
+        categoryLabel: cat.label,
+      });
+    }
+  }
+  return out;
+}
+
+/** Every id the /news issue filter accepts: the categories, then the
+    sub-issues. The route's zod schema is built from this, so the filter can
+    never be handed a value outside the taxonomy. */
+export const ISSUE_FILTER_IDS: readonly string[] = [
+  ...CATEGORY_IDS,
+  ...SUB_ISSUE_IDS,
+];
+
+/** The stored tags that satisfy a filter on `id`, for a PostgREST
+    `overlaps` (`issues && ARRAY[...]`, the GIN-indexed query migration 0027
+    was shaped for).
+
+    A sub-issue matches only itself. A CATEGORY matches itself plus every
+    sub-issue under it — categories are a derived display layer that is never
+    stored today, so filtering on the bare category id would match nothing at
+    all and read as "no coverage". The category id stays in the list because
+    a restored parent question would store it.
+
+    Null for an id outside the taxonomy: the caller ignores the filter rather
+    than guessing at what was meant. */
+export function issueFilterIds(id: string | null | undefined): string[] | null {
+  if (!id) return null;
+  if (SUB_ISSUE_IDS.includes(id)) return [id];
+  if (CATEGORY_IDS.includes(id)) {
+    return [
+      id,
+      ...SUB_ISSUES.filter((s) => s.categoryId === id).map((s) => s.id),
+    ];
+  }
+  return null;
+}
+
+/** The label to show for an active filter — category or sub-issue — or null
+    when the id is not in the taxonomy. */
+export function issueFilterLabel(id: string | null | undefined): string | null {
+  if (!id) return null;
+  return (
+    subIssueLabel(id) ?? CATEGORIES.find((c) => c.id === id)?.label ?? null
+  );
 }

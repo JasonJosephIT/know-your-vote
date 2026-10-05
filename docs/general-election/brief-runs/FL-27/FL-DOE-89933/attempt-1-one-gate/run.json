@@ -1,0 +1,171 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://eliottrodriguez.com",
+  "created_at": "2026-09-29T11:43:43.838Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 3,
+    "asked": 3,
+    "states_policy": 0,
+    "with_issue": 0,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "4bed1c26",
+      "url": "https://eliottrodriguez.com/",
+      "heading": "Why I'm Running",
+      "text": "I’m running because families in Miami can’t afford to live here anymore, because our democracy is under real stress, and because the politics of cruelty toward immigrants is not who we are. I’ve spent forty years telling South Florida’s story. Now I want to fight for it.",
+      "verdict": {
+        "commitment": 0.52,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.75,
+          "A3": 0.03,
+          "A4": 0.71,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.26,
+          "B2": 0.02,
+          "B3": 0.82,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.79,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.05,
+          "KYV7": 0.07,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a8090594",
+      "url": "https://eliottrodriguez.com/",
+      "heading": "Why I'm Running",
+      "text": "Affordability is the defining economic issue for working families right now. Groceries cost more. Insurance costs more. Borrowing costs more. And for too many households, wages have not kept pace. People feel squeezed.",
+      "verdict": {
+        "commitment": 0.1,
+        "states_policy": false,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.15,
+          "A2": 0.05,
+          "A3": 0.02,
+          "A4": 0.47,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.88,
+          "B2": 0.27,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e3f0136a",
+      "url": "https://eliottrodriguez.com/",
+      "heading": "Why I'm Running",
+      "text": "And making South Florida affordable again",
+      "verdict": {
+        "commitment": 0.74,
+        "states_policy": false,
+        "issues": [
+          "A2",
+          "A4"
+        ],
+        "scores": {
+          "A1": 0.08,
+          "A2": 0.88,
+          "A3": 0.09,
+          "A4": 0.89,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.59,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.05,
+          "KYV3": 0.12,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.07,
+          "KYV7": 0.05,
+          "KYV8": 0.05,
+          "KYV9": 0.02
+        }
+      }
+    }
+  ],
+  "areas": [],
+  "usage": {
+    "input_tokens": 10516,
+    "output_tokens": 1374
+  }
+}

@@ -111,6 +111,30 @@ for (const spec of BALLOT_ROOTS) {
   );
 }
 
+/* 3b. The county-races section must stay server-rendered too. It is not on
+       the landing page — YourRaces renders it, and YourRaces reaches client
+       components (LocationEntry) by design — so it cannot ride on check 3.
+       But it is the same kind of thing as SharedBallot: a list of what is on
+       the ballot, which has to be in the first HTML response. */
+{
+  const countyEntry = resolveImport("@/components/features/CountyRaces", ENTRY);
+  if (!countyEntry) {
+    assert(
+      "@/components/features/CountyRaces resolves",
+      false,
+      "module not found"
+    );
+  } else {
+    const graph = reachableFrom(countyEntry);
+    const clients = [...graph.keys()].filter(isClient);
+    assert(
+      `CountyRaces reaches no client components (${graph.size} modules)`,
+      clients.length === 0,
+      clients.map(rel).join(", ")
+    );
+  }
+}
+
 /* 4. The ZIP upgrade must work without JavaScript: a plain GET form that lands
       on the races view. Without action/method the field is inert for a voter
       with scripts off — the field would be there and do nothing.

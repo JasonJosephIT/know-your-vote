@@ -212,7 +212,7 @@ scripts green; PR opened referencing this plan §1.
 - [ ] **B2 — Shell parity (lean).** `NEXT_PUBLIC_BUILD_SHA` from
   `VERCEL_GIT_COMMIT_SHA` (next.config env), shell detection
   (`?shell=pwa` param + `display-mode` media query) → Sentry tags
-  `shell.kind`/`build.sha` in `instrumentation-client.ts`, and `/shell-check`
+  `shell.kind`/`build.sha` in `src/instrumentation-client.ts`, and `/shell-check`
   as a **static client page** rendering the live capability matrix (SW, push
   permission, storage persistence, cookies, safe-area insets, viewport, UA,
   build SHA). **Ponytail cut:** no `shell_report` table, no

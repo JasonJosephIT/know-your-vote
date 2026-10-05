@@ -1,0 +1,42 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  A4  Cost of living in Florida  (2 citation(s))
+      0.93  "Sin impuestos sobre propinas ni horas extra, recortes permanentes para familias trabajadoras y alivio para adultos mayores — evitando un aumento fiscal promedio del 24% en FL-26."
+            https://mariodiazbalart.org/  — section: Reducir el Costo de Vida
+      0.85  "No tax on tips or overtime, permanent tax cuts for working families, and relief for seniors — sparing FL-26 taxpayers an average 24% tax increase."
+            https://mariodiazbalart.org/  — section: Reducir el Costo de Vida
+  B1  Economy, inflation, and jobs  (2 citation(s))
+      0.97  "Backing the 21,000+ manufacturing jobs and $1.9B in annual wages that power FL-26 — with expanded tax relief and renewed Opportunity Zones."
+            https://mariodiazbalart.org/  — section: Apoyar a las Pequeñas Empresas
+      0.95  "Respaldando los más de 21,000 empleos manufactureros y $1.9B en salarios anuales de FL-26 — con alivio fiscal ampliado y Zonas de Oportunidad renovadas."
+            https://mariodiazbalart.org/  — section: Apoyar a las Pequeñas Empresas
+
+Education
+  KYV9  School choice and vouchers  (2 citation(s))
+      0.97  "Increased charter school funding by $60 million, preserved Pell Grants and magnet schools, and backed the first federal school choice tax credit. Prevented a $1,700 tax hike on families, added $500 to the Child Tax Credit, quadrupled the…"
+            https://mariodiazbalart.org/  — section: Elección Escolar y Alivio Fiscal Familiar
+      0.96  "Aumentó los fondos para escuelas chárter en $60 millones, preservó las Becas Pell y las escuelas magnet, y respaldó el primer crédito fiscal federal de elección escolar. Evitó un aumento de $1,700 en impuestos a las familias, sumó $500 a…"
+            https://mariodiazbalart.org/  — section: Elección Escolar y Alivio Fiscal Familiar
+
+Immigration
+  B3  Immigration and border enforcement  (4 citation(s))
+      0.98  "Led FY26 Homeland Security funding prioritizing border security, detention and swift removal of criminal aliens, and expanded resources to stop fentanyl trafficking — plus stronger protections for vulnerable children, hardened cybersecur…"
+            https://mariodiazbalart.org/  — section: Seguridad Fronteriza e Interdicción de Fentanilo
+      0.98  "Lideró los fondos de Seguridad Nacional FY26 priorizando la seguridad fronteriza, la detención y pronta expulsión de extranjeros criminales, y más recursos para frenar el tráfico de fentanilo — además de mayores protecciones para niños v…"
+            https://mariodiazbalart.org/  — section: Seguridad Fronteriza e Interdicción de Fentanilo
+      0.98  "Detaining and removing criminal aliens, cracking down on fentanyl trafficking, and backing the men and women who enforce our laws."
+            https://mariodiazbalart.org/  — section: Frontera Segura
+      0.97  "Deteniendo y expulsando a criminales, combatiendo el tráfico de fentanilo y apoyando a quienes hacen cumplir nuestras leyes."
+            https://mariodiazbalart.org/  — section: Frontera Segura
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (3 citation(s))
+      0.98  "Delivered over $11 million in FY26 funding for Miami-Dade and regional law enforcement — new patrol vehicles, upgraded technology, and mobile command centers — while championing House-passed bills like the LEOSA Reform Act and the Combat…"
+            https://mariodiazbalart.org/  — section: $11M+ para Apoyar a la Policía
+      0.95  "Deteniendo y expulsando a criminales, combatiendo el tráfico de fentanilo y apoyando a quienes hacen cumplir nuestras leyes."
+            https://mariodiazbalart.org/  — section: Frontera Segura
+      0.94  "Detaining and removing criminal aliens, cracking down on fentanyl trafficking, and backing the men and women who enforce our laws."
+            https://mariodiazbalart.org/  — section: Frontera Segura
+

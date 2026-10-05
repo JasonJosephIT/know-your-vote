@@ -23,7 +23,7 @@
 
    Pure and dependency-free (the one import is type-only, so it is erased at
    runtime) — scripts/verify-unopposed.ts drives it, same split as
-   party-label.ts and measure-balance.ts. */
+   party-label.ts and measure-ladder.ts. */
 
 import type { Candidate } from "@/types/schema";
 
@@ -42,6 +42,31 @@ export function isUnopposedContest(
   return (
     ballotCandidates.length === 1 &&
     ballotCandidates[0].qualifying_status === "unopposed" &&
+    !hasWriteIn
+  );
+}
+
+/** Whether this contest was settled in the August primary.
+
+    The third state D-B's reasoning implies but 2026-09-07 had no case for.
+    Florida's nonpartisan county races — school board everywhere, plus county
+    offices in charter counties — are decided in the primary when someone
+    clears 50%, so the seat never reaches the November ballot. From the
+    outside that looks exactly like `unopposed`: one candidate, contest not
+    printed. It is the opposite fact. Mark D. Bogen drew nobody; Caryl Sandler
+    Shuham beat three people. Telling the second voter "no one filed against
+    this candidate" would be a plain untruth about an election that happened.
+
+    Deliberately a separate predicate rather than a widened
+    isUnopposedContest: a caller that wants "not on your November ballot"
+    should have to ask for both and therefore decide what to say about each. */
+export function isDecidedInPrimary(
+  ballotCandidates: ReadonlyArray<Pick<Candidate, "qualifying_status">>,
+  hasWriteIn: boolean
+): boolean {
+  return (
+    ballotCandidates.length === 1 &&
+    ballotCandidates[0].qualifying_status === "elected_in_primary" &&
     !hasWriteIn
   );
 }

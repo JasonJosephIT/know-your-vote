@@ -1,0 +1,8 @@
+(node:4564) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-site-ingest.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/user/know-your-vote/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+site: https://www.votefordianamoore.com/
+  22 links, 0 policy page(s) selected (cap 8)
+
+13 passage(s) -> docs/general-election/brief-runs/FL-ORA-SB3/FL-VF-ORA-1314/passages.jsonl

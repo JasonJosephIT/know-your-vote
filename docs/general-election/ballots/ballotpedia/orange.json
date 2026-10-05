@@ -1,0 +1,535 @@
+{
+  "source": "Ballotpedia (ballotpedia.org) — Tier 2 corroboration source; acknowledged as a source per founder, 2026-09-22",
+  "retrieved_at": "2026-09-22T01:36:51Z",
+  "county": "Orange",
+  "pages_consulted": [
+    {
+      "url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)",
+      "status": 200,
+      "carries": "County mayor, Clerk of the courts (special), County commission (primary + general tables), Soil & Water, judicial"
+    },
+    {
+      "url": "https://ballotpedia.org/Orange_County_Public_Schools,_Florida,_elections_(2026)",
+      "status": 200,
+      "carries": "School board Chair, District 1, District 2, District 3"
+    },
+    {
+      "url": "https://ballotpedia.org/Orange_County,_Florida,_elections,_2026",
+      "status": 200,
+      "carries": "County overview: Mayor, Clerk (special), county court groups, Soil & Water, school board; OMITS county commission"
+    }
+  ],
+  "method_notes": "Pages fetched live via Firecrawl (maxAge 0, markdown, onlyMainContent), one request at a time to honor Ballotpedia's Crawl-delay: 2. Only the Nov 3 general-election field was extracted; for the three school-board seats Ballotpedia reports as 'won election outright' in the Aug 18 primary, ballotpedia_candidates holds the primary winner for name comparison and on_november_ballot_per_ballotpedia is false. Ballotpedia party labels normalized to our codes (D->DEM, No Party Affiliation->NPA, Nonpartisan->''); the county-commission general table shows no party labels at all. One write-in noted (County Commission District 4). Read-only: no database rows or other repo files were modified. Ballotpedia is Tier 2 — every difference here is a report, not a correction.",
+  "races": [
+    {
+      "race_id": "FL-ORA-CC2-general",
+      "office": "Orange County Commission, District 2",
+      "district": "ORA-CC-2",
+      "ballotpedia_url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)#County_commission",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Kamia Brown",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Mike Crabb",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-ORA-1290",
+          "legal_name": "Kamia Brown",
+          "party": "",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-ORA-1384",
+          "legal_name": "Mike Crabb",
+          "party": "",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Kamia Brown",
+          "Mike Crabb"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "'County commission general election' table on the Municipal elections page lists exactly Kamia Brown and Mike Crabb for District 2; neither marked (i). The table shows no party labels (nonpartisan office), consistent with our empty party code. Aug 18 primary field per the same page: Brown, Crabb, Wes Hodge, George Oliver III, Marsha Summersill. The county overview page (Orange_County,_Florida,_elections,_2026) omits county commission entirely. Table carries Ballotpedia's standard caveat 'The candidate list in this election may not be complete.'"
+    },
+    {
+      "race_id": "FL-ORA-CC4-general",
+      "office": "Orange County Commission, District 4",
+      "district": "ORA-CC-4",
+      "ballotpedia_url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)#County_commission",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Brian Jones",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Johanna López",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Isabella Arthur",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [
+        "Isabella Arthur (Write-in)"
+      ],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-ORA-1260",
+          "legal_name": "Brian Jones",
+          "party": "",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-ORA-1279",
+          "legal_name": "Johanna Lopez",
+          "party": "",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Brian Jones",
+          "Johanna Lopez"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": [
+          {
+            "ours": "Johanna Lopez",
+            "ballotpedia": "Johanna López",
+            "kind": "spelling"
+          }
+        ]
+      },
+      "notes": "General-election table lists Brian Jones, Johanna López, and 'Isabella Arthur (Write-in)'. Jones and López match ours (accent on López is a spelling variant only). The write-in Isabella Arthur has no counterpart in our roster; Florida does not print write-in names on the ballot (a blank write-in line appears), so this is reported for awareness, not as a missing printed-ballot candidate — whether our race should carry a write-in record is a product decision. Primary table marks Jones and López with '*' = 'The primary was canceled and the candidate advanced', and lists 'Did not make the ballot: Javier De Rothschild, Eric Gray, Jermaine Hampton'. No incumbent marked. BP candidate URL for Jones: https://ballotpedia.org/Brian_Jones_(Florida_county_commission_candidate)."
+    },
+    {
+      "race_id": "FL-ORA-CC6-general",
+      "office": "Orange County Commission, District 6",
+      "district": "ORA-CC-6",
+      "ballotpedia_url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)#County_commission",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Michael Scott",
+          "party": "",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Lawanna Gelzer",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-ORA-1295",
+          "legal_name": "Lawanna Gelzer",
+          "party": "",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-ORA-1265",
+          "legal_name": "Michael \"Mike\" Scott",
+          "party": "",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Lawanna Gelzer",
+          "Michael \"Mike\" Scott"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": [
+          {
+            "ours": "Michael \"Mike\" Scott",
+            "ballotpedia": "Michael Scott",
+            "kind": "spelling"
+          }
+        ]
+      },
+      "notes": "General-election table lists 'Michael Scott (i)' and Lawanna Gelzer. Ballotpedia marks Scott as the incumbent; our roster has no incumbent flag in this query, so that is informational. Our stored name carries the quoted nickname 'Mike'; Ballotpedia uses plain 'Michael Scott' (BP page: https://ballotpedia.org/Michael_Scott_(Florida)) — nickname variant, not a different person. Primary field per BP: Scott, Loody Delice, Gelzer, Cynthia Harris, Hedder Pierre-Joseph."
+    },
+    {
+      "race_id": "FL-ORA-CC7-general",
+      "office": "Orange County Commission, District 7",
+      "district": "ORA-CC-7",
+      "ballotpedia_url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)#County_commission",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Patricia Rumph",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Vicki Vargo",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-ORA-1283",
+          "legal_name": "Patricia Rumph",
+          "party": "",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-ORA-1271",
+          "legal_name": "Vicki Vargo",
+          "party": "",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Patricia Rumph",
+          "Vicki Vargo"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "General-election table lists exactly Patricia Rumph and Vicki Vargo; no incumbent marked (open seat). Exact name match. The Aug 18 primary field on the same page was large (Selina Carter, Shannon Currie, Nate Douglas '(unofficially withdrew)', Shakaya Filmore, Angie Gardner, Deidre Graybill, Rasheeda Jones, Gloria Joyner, ... — the scraped table row was truncated in our capture beyond this point, but the general-election row was captured in full)."
+    },
+    {
+      "race_id": "FL-ORA-CC8-general",
+      "office": "Orange County Commission, District 8",
+      "district": "ORA-CC-8",
+      "ballotpedia_url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)#County_commission",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Jeannette Quinones Hernandez",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Victor Torres",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-ORA-1275",
+          "legal_name": "Jeannette Quinones Hernandez",
+          "party": "",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-ORA-1272",
+          "legal_name": "Victor M. Torres Jr.",
+          "party": "",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Jeannette Quinones Hernandez",
+          "Victor M. Torres Jr."
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": [
+          {
+            "ours": "Victor M. Torres Jr.",
+            "ballotpedia": "Victor Torres",
+            "kind": "spelling"
+          }
+        ]
+      },
+      "notes": "General-election table lists Jeannette Quinones Hernandez and Victor Torres (BP page: https://ballotpedia.org/Victor_Torres_(Florida)); no incumbent marked. Our 'Victor M. Torres Jr.' differs only by middle initial and suffix — same person per the primary field on the same page (Isaiah Anderson, Tatiana Fernandez, George Haas, Quinones Hernandez, Julio Rocha, Torres, ...). Jeannette Quinones Hernandez matches exactly."
+    },
+    {
+      "race_id": "FL-ORA-CLERK-general",
+      "office": "Orange County Clerk of the Courts",
+      "district": "ORA-CLERK",
+      "ballotpedia_url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)#Clerk_of_the_courts",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Roberta Walton Johnson",
+          "party": "DEM",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Terrell Thomas",
+          "party": "NPA",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-ORA-1364",
+          "legal_name": "Terrell Thomas",
+          "party": "NPA",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-ORA-1401",
+          "legal_name": "Roberta Walton Johnson",
+          "party": "DEM",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Roberta Walton Johnson",
+          "Terrell Thomas"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Ballotpedia styles this a 'Special general election for Orange County Clerk of the Courts' on Nov 3, 2026: 'Roberta Walton Johnson (D) and Terrell Thomas (No Party Affiliation) are running'. Parties match ours (D->DEM, No Party Affiliation->NPA). 'There are no incumbents in this race.' Same two names appear under 'November 3, 2026 (Special)' on the county overview page. Special Democratic primary Aug 18: Walton Johnson 53.5% defeated Rick Singh 28.6% and Maribel Gomez Cordero 17.9% '(Withdrew, still on ballot)'; 'The Republican primary scheduled for August 18, 2026, was canceled' (no Republican on the general). Aside (not from Ballotpedia): our stored ballot order is Thomas (NPA) then Walton Johnson (DEM); F.S. 101.151(3) places major-party candidates before NPA candidates on the general ballot, so that order may be worth checking against the county sample ballot."
+    },
+    {
+      "race_id": "FL-ORA-MAYOR-general",
+      "office": "Orange County Mayor",
+      "district": "ORA-MAYOR",
+      "ballotpedia_url": "https://ballotpedia.org/Municipal_elections_in_Orange_County,_Florida_(2026)#County_mayor",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Chris Messina",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Tiffany Moore Russell",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-ORA-1239",
+          "legal_name": "Chris Messina",
+          "party": "",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-ORA-1236",
+          "legal_name": "Tiffany Moore Russell",
+          "party": "",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Chris Messina",
+          "Tiffany Moore Russell"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "'Chris Messina (Nonpartisan) and Tiffany Moore Russell (Nonpartisan) are running in the general election for Mayor of Orange County on November 3, 2026.' 'There are no incumbents in this race.' Same pair listed under 'November 3, 2026 (General)' on the county overview page. Nonpartisan primary Aug 18: Moore Russell 31.8%, Messina 27.5% advanced over Stephanie Murphy 26.1% and Mayra Uribe 14.6%. Withdrawn/disqualified before the primary (not general-election candidates): Safraaz Alli, Randy Fust, Brandy Griffin."
+    },
+    {
+      "race_id": "FL-ORA-SB1-general",
+      "office": "Orange County School Board, District 1",
+      "district": "ORA-SB-1",
+      "ballotpedia_url": "https://ballotpedia.org/Orange_County_Public_Schools,_Florida,_elections_(2026)#District_1",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": false,
+      "ballotpedia_candidates": [
+        {
+          "name": "Melissa Lopez Marantes",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-ORA-1270",
+          "legal_name": "Melissa Lopez Marantes",
+          "party": "",
+          "qualifying_status": "elected_in_primary"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Melissa Lopez Marantes"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "DECIDED. Ballotpedia: 'Melissa Lopez Marantes won election outright against David Shepard in the primary for Orange County Public Schools school board District 1 on August 18, 2026' (59.6% / 11,703 vs 40.4% / 7,918; 'There were no incumbents in this race'). The seat has NO 'General election' section on the school-board page, and the county overview page lists only District 3 under School board 'November 3, 2026 (General)'. This agrees with our qualifying_status 'elected_in_primary' (F.S. 101.151(7): contest not on the November ballot). The ballotpedia_candidates entry is the primary winner for name comparison, not a Nov 3 listing. Withdrawn/disqualified pre-primary: Eryn Vargo, Taylor Koffinas, Nancy St. Clair."
+    },
+    {
+      "race_id": "FL-ORA-SB2-general",
+      "office": "Orange County School Board, District 2",
+      "district": "ORA-SB-2",
+      "ballotpedia_url": "https://ballotpedia.org/Orange_County_Public_Schools,_Florida,_elections_(2026)#District_2",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": false,
+      "ballotpedia_candidates": [
+        {
+          "name": "Gloria Reina O'Neal",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-ORA-1318",
+          "legal_name": "Gloria Reina O'Neal",
+          "party": "",
+          "qualifying_status": "elected_in_primary"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Gloria Reina O'Neal"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "DECIDED. Ballotpedia: \"Gloria Reina O'Neal won election outright against Marisol Lugo in the primary ... on August 18, 2026\" (57.3% / 11,478 vs 42.7% / 8,561). No 'General election' section for District 2; county overview page lists District 2 only under the Aug 18 primary. Agrees with our 'elected_in_primary'. Withdrawn/disqualified: William Badillo and Maria Salamanca (Salamanca is shown in bold on the page, Ballotpedia's convention for the incumbent — so the incumbent withdrew and the seat was decided in the primary between two non-incumbents)."
+    },
+    {
+      "race_id": "FL-ORA-SB3-general",
+      "office": "Orange County School Board, District 3",
+      "district": "ORA-SB-3",
+      "ballotpedia_url": "https://ballotpedia.org/Orange_County_Public_Schools,_Florida,_elections_(2026)#District_3",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Diana Moore",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Susanne Marie Pena",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-ORA-1314",
+          "legal_name": "Diana Moore",
+          "party": "",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-ORA-1242",
+          "legal_name": "Susanne Peña",
+          "party": "",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Diana Moore",
+          "Susanne Peña"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": [
+          {
+            "ours": "Susanne Peña",
+            "ballotpedia": "Susanne Marie Pena",
+            "kind": "spelling"
+          }
+        ]
+      },
+      "notes": "'Diana Moore and Susanne Marie Pena are running in the general election for Orange County Public Schools school board District 3 on November 3, 2026.' 'There are no incumbents in this race.' Same pair appears under School board 'November 3, 2026 (General)' on the county overview page. Our 'Susanne Peña' vs BP 'Susanne Marie Pena' (BP page: https://ballotpedia.org/Susanne_Marie_Pena) differs by middle name and the ñ/n accent — same person (she led the Aug 18 primary 45.7%, Moore 30.0%, Ilia Adorno 24.2% eliminated). Diana Moore matches exactly."
+    },
+    {
+      "race_id": "FL-ORA-SBCHAIR-general",
+      "office": "Orange County School Board Chair",
+      "district": "ORA-SBCHAIR",
+      "ballotpedia_url": "https://ballotpedia.org/Orange_County_Public_Schools,_Florida,_elections_(2026)#Chair",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": false,
+      "ballotpedia_candidates": [
+        {
+          "name": "Angie Gallo",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-ORA-1245",
+          "legal_name": "Angie Gallo",
+          "party": "",
+          "qualifying_status": "elected_in_primary"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Angie Gallo"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "DECIDED. Ballotpedia: 'Angie Gallo won election outright against Alicia K. Farrant in the primary for Orange County Public Schools school board Chair on August 18, 2026' (59.1% / 96,268 vs 40.9% / 66,672; 'There were no incumbents in this race'). No 'General election' section for Chair; county overview lists Chair only under the Aug 18 primary. Agrees with our 'elected_in_primary'. Withdrawn/disqualified pre-primary: Mike Armbruster."
+    }
+  ]
+}

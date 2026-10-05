@@ -1,0 +1,6144 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://angienixon.com",
+  "created_at": "2026-09-29T11:46:53.336Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 133,
+    "asked": 133,
+    "states_policy": 102,
+    "with_issue": 50,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "cf5972d7",
+      "url": "https://angienixon.com/",
+      "heading": "For Florida.",
+      "text": "Angie Nixon is running to lower costs, raise wages, and build a people-powered government that puts working families first, not greedy billionaires.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.04,
+          "A3": 0.03,
+          "A4": 0.76,
+          "A5": 0.02,
+          "A6": 0.04,
+          "A7": 0.03,
+          "B1": 0.96,
+          "B2": 0.06,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.05,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e21732ed",
+      "url": "https://angienixon.com/",
+      "heading": "What Led To This Moment",
+      "text": "Angie is a Florida State Representative, union organizer, and mother born and raised in Jacksonville who has spent her career fighting for hardworking Floridians.",
+      "verdict": {
+        "commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.08,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "3bb48a39",
+      "url": "https://angienixon.com/",
+      "heading": "What Led To This Moment",
+      "text": "Expanded childcare and took on corporate price-gouging in the State House",
+      "verdict": {
+        "commitment": 0.56,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.5,
+          "A5": 0.02,
+          "A6": 0.04,
+          "A7": 0.02,
+          "B1": 0.51,
+          "B2": 0.04,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.03,
+          "KYV2": 0.06,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "582fd03b",
+      "url": "https://angienixon.com/",
+      "heading": "What Led To This Moment",
+      "text": "Led the fight against DeSantis's unfair voting maps",
+      "verdict": {
+        "commitment": 0.45,
+        "states_policy": false,
+        "issues": [
+          "A7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.92,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.31,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.81,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "35a5155a",
+      "url": "https://angienixon.com/",
+      "heading": "What Led To This Moment",
+      "text": "Watched her mom work two jobs and lost her cousin to gun violence. This is her lived experience and one of the reasons behind her leadership & run.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.05,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "61f54337",
+      "url": "https://angienixon.com/",
+      "heading": "WHAT ANGIE WILL FIGHT FOR",
+      "text": "A government that works for working people — not corporations, billionaires, or the political establishment in either party.",
+      "verdict": {
+        "commitment": 0.82,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.41,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.06,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "53ad9313",
+      "url": "https://angienixon.com/",
+      "heading": "Medicare for All",
+      "text": "Health care as a right, not a privilege tied to your paycheck.",
+      "verdict": {
+        "commitment": 0.93,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.07,
+          "B2": 0.95,
+          "B3": 0.02,
+          "B4": 0.8,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "989b08bd",
+      "url": "https://angienixon.com/",
+      "heading": "Housing You Can Afford",
+      "text": "A national rent freeze and a real moratorium on evictions.",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "KYV6"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.97,
+          "A3": 0.03,
+          "A4": 0.27,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.2,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.98,
+          "KYV7": 0.24,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "639a5750",
+      "url": "https://angienixon.com/",
+      "heading": "Free Child Care & Pre-K",
+      "text": "So no parent has to choose between working and their kids.",
+      "verdict": {
+        "commitment": 0.89,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.1,
+          "A5": 0.02,
+          "A6": 0.06,
+          "A7": 0.02,
+          "B1": 0.26,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "ae4a4e21",
+      "url": "https://angienixon.com/",
+      "heading": "Standing With Workers",
+      "text": "A union organizer who'll fight for the Working Families Guarantee.",
+      "verdict": {
+        "commitment": 0.91,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.77,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.04,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "bf9027e8",
+      "url": "https://angienixon.com/",
+      "heading": "Will You Chip In?",
+      "text": "Angie Nixon is running to take on corporate greed, lower costs for hardworking families, and ensure the government actually works for the people. Help power a grassroots movement built by Florida, for Florida.",
+      "verdict": {
+        "commitment": 0.87,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.05,
+          "A2": 0.05,
+          "A3": 0.03,
+          "A4": 0.78,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.69,
+          "B2": 0.07,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.03,
+          "KYV2": 0.04,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "7b899649",
+      "url": "https://angienixon.com/",
+      "heading": "VOLUNTEER WITH ANGIE",
+      "text": "Canvass a neighborhood, phonebank, or host an event — the campaign runs on the people, not consultants. Together, let’s build a people-powered movement that respects our dignity, and puts us first.",
+      "verdict": {
+        "commitment": 0.14,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "6f2f9c54",
+      "url": "https://angienixon.com/",
+      "heading": "Rep. Angie Nixon Condemns Trump Administration Decision To Kick 750,000+ Americans Off Health Insurance",
+      "text": "Following reports that the Trump administration is kicking over 750,000 Americans off of their Affordable Care Act (ACA) coverage under the guise of an “anti-fraud”...",
+      "verdict": {
+        "commitment": 0.58,
+        "states_policy": false,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.07,
+          "B2": 0.94,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.15,
+          "B8": 0.02,
+          "KYV1": 0.07,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c9c9db66",
+      "url": "https://angienixon.com/",
+      "heading": "U.S. Senate Nominee Angie Nixon Condemns Ashley Moody’s Hypocrisy on Immigration and Blind Support for Trump’s Mass Deportations",
+      "text": "In full support of protestors, clergy, and others seeking reinstatement of TPs protections for Haitians, Rep. Angie Nixon sets the record straight. JACKSONVILLE, FL –...",
+      "verdict": {
+        "commitment": 0.84,
+        "states_policy": false,
+        "issues": [
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.95,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.06,
+          "B8": 0.02,
+          "KYV1": 0.08,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "6cbffde5",
+      "url": "https://angienixon.com/",
+      "heading": "Rep. Angie Nixon Statement on Nine-Year Anniversary of Hurricane Maria",
+      "text": "On the ninth anniversary of Hurricane Maria making landfall in Puerto Rico, Rep. Angie Nixon released the following statement: “Nine years ago today, Hurricane Maria...",
+      "verdict": {
+        "commitment": 0.06,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.06,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.05,
+          "KYV3": 0.03,
+          "KYV4": 0.07,
+          "KYV5": 0.04,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "d9a86a3a",
+      "url": "https://angienixon.com/",
+      "heading": "U.S. Senate Candidate Angie Nixon Reflects on the 25th Anniversary of 9/11",
+      "text": "Marking the 25th Anniversary of 9/11, U.S. Senate Candidate Angie Nixon released the following statement: “As our nation solemnly marks 25 years since the most...",
+      "verdict": {
+        "commitment": 0.07,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "3317aa97",
+      "url": "https://angienixon.com/",
+      "heading": "Leaders We Deserve Endorses Angie Nixon for U.S. Senate",
+      "text": "Today, Leaders We Deserve, the grassroots organization co-founded by David Hogg to elect young progressives across the country, endorsed Angie Nixon for U.S. Senate. Nixon...",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.04,
+          "B1": 0.03,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "c9e524b0",
+      "url": "https://angienixon.com/",
+      "heading": "Ashley Moody Refuses to Debate; U.S. Senate Candidate Angie Nixon Responds",
+      "text": "Following reports that unelected U.S. Senator Ashley Moody is refusing an invitation to debate U.S. Senate candidate Angie Nixon after a Jacksonville-based media outlet offered...",
+      "verdict": {
+        "commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.13,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "61f8fa13",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Where Angie Stands",
+      "text": "Hardworking people should get to determine and shape what their communities look like and what their economies look like. – Alphonso Mayfield (Labor Leader and Fighter for all Floridians)",
+      "verdict": {
+        "commitment": 0.61,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.04,
+          "A3": 0.02,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.04,
+          "B1": 0.68,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.05,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.16,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "be888830",
+      "url": "https://angienixon.com/priorities",
+      "heading": "A Government that Works for its People, Not Corporations",
+      "text": "Angie believes that the government should work for working people — not corporations, not billionaires, and not the political establishment in either party that keeps letting them win.",
+      "verdict": {
+        "commitment": 0.77,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.35,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.12,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "893c712e",
+      "url": "https://angienixon.com/priorities",
+      "heading": "A Government that Works for its People, Not Corporations",
+      "text": "Ask any Florida family what’s on their mind — whether they’re a Democrat, Republican, or don’t care much for either party — and you’ll hear the same thing: everything costs too much, and their paycheck can’t keep up.",
+      "verdict": {
+        "commitment": 0.26,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.07,
+          "A3": 0.03,
+          "A4": 0.68,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.59,
+          "B2": 0.06,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "d7bd9763",
+      "url": "https://angienixon.com/priorities",
+      "heading": "A Government that Works for its People, Not Corporations",
+      "text": "Since the pandemic, household expenses have jumped nearly a third. In Florida, the cost of living is climbing almost five times faster than it did a decade ago. Meanwhile, wages have stayed the same. Today, only a third of Floridians think our own state is affordable.",
+      "verdict": {
+        "commitment": 0.2,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.25,
+          "A3": 0.03,
+          "A4": 0.72,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.75,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "dfcaf30c",
+      "url": "https://angienixon.com/priorities",
+      "heading": "A Government that Works for its People, Not Corporations",
+      "text": "This isn’t an accident. It isn’t inevitable. While the average American is struggling, corporate landlords, insurance companies, and grocery chains have posted record profits. This year, Elon Musk became the world’s first trillionaire. And instead of delivering relief, politicians in Washington have spent months absorbed in a war that’s driving gas and energy prices even higher, while killing innocent civilians and American service people. Enough is enough.",
+      "verdict": {
+        "commitment": 0.49,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.07,
+          "A2": 0.38,
+          "A3": 0.02,
+          "A4": 0.16,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.74,
+          "B2": 0.1,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.04,
+          "KYV1": 0.06,
+          "KYV10": 0.02,
+          "KYV2": 0.27,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.2,
+          "KYV7": 0.04,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ddb81e18",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for the Working Families Guarantee",
+      "text": "A National Rent Freeze and Moratorium on Evictions",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "KYV6"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.97,
+          "A3": 0.03,
+          "A4": 0.43,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.35,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.07,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.98,
+          "KYV7": 0.28,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ed1d4f22",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for the Working Families Guarantee",
+      "text": "A universal jobs program with inflation-adjusted wages",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.06,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.98,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.05,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "928092d9",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for the Working Families Guarantee",
+      "text": "Tax the billionaires so that everyone pays their fair share",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.05,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.82,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c4e00314",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for the Working Families Guarantee",
+      "text": "Prioritize the needs of everyday Americans instead of spending trillions on war and violence overseas",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.81,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8eee7a5b",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in Medicare for All.",
+      "text": "The United States is the richest country on earth but doesn’t guarantee healthcare to all its people. Americans pay more for worse outcomes than anywhere else in the developed world. That’s not a healthcare system, it’s a protection racket for insurance and drug companies.",
+      "verdict": {
+        "commitment": 0.92,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.98,
+          "B3": 0.02,
+          "B4": 0.81,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "78c287b3",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in Medicare for All.",
+      "text": "Roughly 100 million Americans — about 4 in 10 adults — carry some form of medical debt, totaling at least $220 billion nationwide. People aren’t going into debt because they made bad choices; they’re going into debt because they got sick, had a baby or broke a bone.",
+      "verdict": {
+        "commitment": 0.8,
+        "states_policy": false,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.07,
+          "B2": 0.91,
+          "B3": 0.02,
+          "B4": 0.74,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "3111b02f",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Medicare for All that covers every person in America — free at the point of service, with no premiums, no deductibles, no copays, and no surprise bills.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "B2",
+          "B4"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.99,
+          "B3": 0.02,
+          "B4": 0.92,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8ae65445",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Comprehensive coverage , including dental, vision, hearing, mental health and substance use treatment, reproductive and maternity care, and prescription drugs.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.96,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.58,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "9d155a8f",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Capping prescription drug costs and ending price gouging by drug companies.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.24,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.33,
+          "B2": 0.98,
+          "B3": 0.02,
+          "B4": 0.04,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "654a35d4",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Protecting reproductive freedom , including the right to abortion, contraception, and IVF, free from political interference.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B5"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.35,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.98,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "0ea538b3",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Expanding home and community-based long-term care so seniors and people with disabilities can age with dignity.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.04,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.65,
+          "B3": 0.02,
+          "B4": 0.06,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c358a279",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Canceling the medical debt crushing families. Canceling existing medical debt, wiping it off credit reports for good, and banning debt collectors from coming after patients for medical bill. Angie support senator Sanders’ bipartisan-backed Medical Debt Cancellation Act.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.08,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.12,
+          "B2": 0.94,
+          "B3": 0.02,
+          "B4": 0.04,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "6f8d7797",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Paid family and medical leave for every worker in America, guaranteed by law",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.45,
+          "B2": 0.13,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "fb2572e9",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in Universal Child Care & Pre-K.",
+      "text": "Child care in America costs more than college tuition in most states. As a mom of 5, Angie knows this struggle deeply because she is experiencing it.",
+      "verdict": {
+        "commitment": 0.91,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.04,
+          "A7": 0.02,
+          "B1": 0.09,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.04,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "9fe52326",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Universal, high-quality child care and pre-kindergarten for every family, regardless of income, capping costs so no family pays more than a small share of their income.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.25,
+          "A5": 0.02,
+          "A6": 0.05,
+          "A7": 0.01,
+          "B1": 0.12,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.01,
+          "B7": 0.01,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "c8c427de",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Living wages for child care and early-childhood educators , who are among the most underpaid workers in the country despite doing some of its most important work.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.05,
+          "A5": 0.02,
+          "A6": 0.05,
+          "A7": 0.02,
+          "B1": 0.95,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.05,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "f2c50785",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Universal school meals so no child goes hungry during the school day.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.16,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "71f1a280",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in quality Public Education.",
+      "text": "Getting an education in America shouldn’t mean a lifetime of debt. About 43 million Americans now owe nearly $2 trillion in student loan debt. That’s about $43,500 per borrower, meaning people owe more for simply trying to get an education than they do on their cars or credit cards.",
+      "verdict": {
+        "commitment": 0.53,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.07,
+          "A7": 0.02,
+          "B1": 0.17,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.81,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "df49be9c",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in quality Public Education.",
+      "text": "A degree that was once a ticket to the middle class has become a financial trap for millions of families, forcing young people to delay buying a home, starting a family, or saving for retirement just to keep up with payments on an education they were told they needed to get ahead. It’s not a personal failure; it’s the predictable result of a system that treats higher education as a private commodity instead of a public good.",
+      "verdict": {
+        "commitment": 0.66,
+        "states_policy": false,
+        "issues": [
+          "KYV10"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.17,
+          "A3": 0.02,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.08,
+          "A7": 0.02,
+          "B1": 0.27,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.95,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.06
+        }
+      }
+    },
+    {
+      "id": "b7664fab",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Tuition-free public college and trade school , and canceling student debt.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "KYV10"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.14,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.98,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "eb3f0ea8",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Fully funding public K-12 schools and increased teacher wages",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A6"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.99,
+          "A7": 0.02,
+          "B1": 0.74,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.05
+        }
+      }
+    },
+    {
+      "id": "a4a34c19",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Expanding vocational and apprenticeship programs that lead directly to good union jobs.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "KYV10",
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.95,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.97,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "024dad02",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in housing you can actually afford.",
+      "text": "Rent is too high, homeownership is out of reach for millions, and Wall Street landlords are buying up housing stock and squeezing renters to enrich themselves. Florida is getting hit the hardest, and is now the worst state in the country for renters. On top of this, Florida homeowners now pay some of the highest insurance premiums in the nation — often as high as $10,000 a year — nearly three to four times the national average. Housing is a human right, not a speculative asset for the billionaire class.",
+      "verdict": {
+        "commitment": 0.66,
+        "states_policy": false,
+        "issues": [
+          "A2",
+          "A4",
+          "KYV6"
+        ],
+        "scores": {
+          "A1": 0.67,
+          "A2": 0.98,
+          "A3": 0.03,
+          "A4": 0.85,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.24,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.03,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.04,
+          "KYV3": 0.05,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.85,
+          "KYV7": 0.08,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "0e2d258d",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Massive investment in permanently affordable housing , building millions of new affordable units nationwide.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.99,
+          "A3": 0.02,
+          "A4": 0.16,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.08,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.24,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.23,
+          "KYV7": 0.21,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "778d3bea",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "A national rent stabilization standard , just-cause eviction protections, and the right to counsel in eviction proceedings.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "KYV6"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.95,
+          "A3": 0.02,
+          "A4": 0.19,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.08,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.12,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.99,
+          "KYV7": 0.1,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "99a917e5",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Cracking down on corporate landlords and Wallstreet speculators buying up single-family homes and driving up rents.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "KYV6"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.97,
+          "A3": 0.03,
+          "A4": 0.53,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.56,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.09,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.91,
+          "KYV7": 0.08,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "281001d4",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Expanding Section 8 vouchers so every eligible family can access one without languishing on a waitlist.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "KYV6"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.94,
+          "A3": 0.02,
+          "A4": 0.14,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.88,
+          "KYV7": 0.17,
+          "KYV8": 0.02,
+          "KYV9": 0.05
+        }
+      }
+    },
+    {
+      "id": "f79f6561",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Federal action on the property insurance crisis , including reinsurance backstops and stronger consumer protections, so Floridians aren’t priced out of their own homes by an insurance market that keeps failing them.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A1"
+        ],
+        "scores": {
+          "A1": 0.98,
+          "A2": 0.76,
+          "A3": 0.03,
+          "A4": 0.68,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.17,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.08,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.05,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "8d557e7f",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Disaster resilience funding to harden homes against hurricanes",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "KYV4"
+        ],
+        "scores": {
+          "A1": 0.07,
+          "A2": 0.04,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.49,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.05,
+          "KYV3": 0.04,
+          "KYV4": 0.97,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "6ea13f38",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in standing with workers & unions.",
+      "text": "For too long, corporations have rigged labor law against working people. Angie was a labor organizer and will fight for the dignity of all workers.",
+      "verdict": {
+        "commitment": 0.91,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.04,
+          "A7": 0.02,
+          "B1": 0.75,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "34ae9ee7",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Passing the PRO Act to make it easier to form a union and harder for corporations to bust one.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.71,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "54b3783b",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Paid family and medical leave for every worker in America, guaranteed by law.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.39,
+          "B2": 0.15,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "37151b54",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Raising the federal minimum wage to a real living wage, indexed to inflation, for every worker, including immigrant and incarcerated workers.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.09,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.98,
+          "B2": 0.02,
+          "B3": 0.21,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.26,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "f03f29ab",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Ending “right to work” laws and extending labor protections to workers historically excluded from them, including farmworkers and domestic workers.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.89,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5adc7ea2",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Protecting pensions and Social Security , and expanding benefits rather than cutting them.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.1,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.74,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "3c5bb879",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Fighting outsourcing and trade policy that has hollowed out American manufacturing towns",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.94,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "47923aa7",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in reining in big tech & AI companies.",
+      "text": "AI companies are racing to build massive data centers, and everyday families are getting stuck with the bill through higher electricity rates, strained water supplies and job cuts — while a handful of billionaires reap the profits.",
+      "verdict": {
+        "commitment": 0.72,
+        "states_policy": false,
+        "issues": [
+          "B1",
+          "KYV2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.3,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.88,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.36,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.9,
+          "KYV3": 0.63,
+          "KYV4": 0.02,
+          "KYV5": 0.67,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "551e0e9f",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in reining in big tech & AI companies.",
+      "text": "On top of this, AI companies are rushing products to market that millions now use every day — — with little to no safety testing and no accountability when things go wrong. And things have gone wrong: families have testified before Congress after AI chatbots encouraged self-harm, failed to intervene during a mental health crisis, or in the most tragic cases, were linked to a child’s suicide. This isn’t a hypothetical harm. It’s already happened, and the companies that built these products have moved faster than the laws meant to hold them accountable.",
+      "verdict": {
+        "commitment": 0.83,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.04,
+          "B8": 0.02,
+          "KYV1": 0.07,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "68e70ce2",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Making tech companies pay for the energy and water they use , not passing those costs on to ratepayers.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "KYV2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.53,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.2,
+          "B2": 0.02,
+          "B3": 0.01,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.52,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.97,
+          "KYV3": 0.1,
+          "KYV4": 0.02,
+          "KYV5": 0.74,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "1190bf2f",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "No new construction of data centers before there are real federal guardrails put in place , including environmental review and community input requirements.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B8",
+          "KYV2",
+          "KYV3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.12,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.91,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.96,
+          "KYV3": 0.97,
+          "KYV4": 0.02,
+          "KYV5": 0.03,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "2d34d9cb",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Protecting workers from AI-driven job displacement , including a real seat at the table for workers and unions as automation reshapes their industries.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.96,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.06,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "046a0765",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Breaking up concentrated tech monopolies and strengthening antitrust enforcement against Big Tech.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.35,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.08,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "46831a24",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Protecting personal data privacy and preventing AI-driven surveillance and discrimination.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.1,
+          "B8": 0.02,
+          "KYV1": 0.08,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "febb389c",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Real safety requirements for AI chatbots and companion apps , including mandatory protocols to detect suicidal ideation and connect users to real crisis resources — not silence, and not an AI pretending to be a therapist.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.01,
+          "A2": 0.01,
+          "A3": 0.01,
+          "A4": 0.02,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.01,
+          "B1": 0.02,
+          "B2": 0.06,
+          "B3": 0.02,
+          "B4": 0.01,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "9f81c61d",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Clear disclosure that a user is talking to a machine, not a person — at the start of every conversation and repeated regularly, so no one, especially a child, is confused or manipulated into an unhealthy emotional dependency.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.01,
+          "A2": 0.02,
+          "A3": 0.01,
+          "A4": 0.02,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.01,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.01,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.01,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.01,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e6726a28",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Banning AI companies from letting chatbots impersonate licensed doctors, therapists, or attorneys",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.09,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.34,
+          "B8": 0.02,
+          "KYV1": 0.1,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "6e1963f1",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Independent safety testing before AI products reach kids , not after the harm is already done.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.01,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5befee22",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Funding for families and survivors to pursue accountability, and support for the crisis-response infrastructure (like 988) that these products should be routing kids toward, not away from.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.3,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.2,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4d4681f9",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in a foreign policy rooted in diplomacy, human rights, and restraint.",
+      "text": "Angie believes American foreign policy should reflect the values of everyday Americans, not the interests of billionaire defense contractors. This year, lawmakers signed a $1.01 trillion defense budget while Americans at home struggle to afford housing and healthcare.",
+      "verdict": {
+        "commitment": 0.93,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.39,
+          "A3": 0.02,
+          "A4": 0.05,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.3,
+          "B2": 0.35,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.05,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.05,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "66cfdc5b",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "End to the war in Iran and rebalance the federal budget toward investments in everyday people here at home",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.57,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "271c0af0",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Uphold international law and institutions. Angie believes we should use the UN and multilateral diplomacy, not unilateral military action, as the first tool for resolving international conflicts, including in the Middle East.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.05,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "7cd6bbfe",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Build a future of lasting peace for Palestinians and Israelis in the region rooted in safety, equality and democracy for all people and respect for international law and human rights. This includes an end to US support for illegal settlements in the West Bank and upholding the ceasefire agreement in Gaza.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.22,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.05,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c094389b",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Surge aid to places facing humanitarian crises such as: Gaza, the Westbank, Lebanon, Yemen, the Congo and Sudan",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.03,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "bbf6c2ca",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Uphold US law, including the The Leahy Law, which states U.S. taxpayer dollars and military assistance can never be used to enable violations of human rights, regardless of which country receives that aid.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.09,
+          "B8": 0.02,
+          "KYV1": 0.2,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "2238ba18",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Restore U.S. participation and funding across UN agencies and public health programs that Americans and the rest of the world rely on.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.57,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.04,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.04,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.03,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "6c649eff",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Restore humanitarian funding, including support that helps deliver food, medicine, and aid to refugees and children in crisis zones around the world.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.11,
+          "B3": 0.09,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4092ac2e",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in supporting human dignity, ending mass incarceration and deportation.",
+      "text": "The US has the largest policing, incarceration and deportation system in the world. Millions of people — disproportionately Black, brown, and poor — are locked in cages or living in fear of a knock on the door, while corporations get rich off their suffering. This is not about safety. It is about control and profit. I don’t believe any person is illegal, and I don’t believe human beings should be treated as commodities in a system built to punish rather than to heal. Real safety comes from good jobs, strong schools, affordable housing, and healthcare for all — not from more cameras, more cages, and more agents tearing families apart.",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "B3",
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.9,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.11,
+          "A7": 0.02,
+          "B1": 0.68,
+          "B2": 0.84,
+          "B3": 0.97,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.97,
+          "B8": 0.02,
+          "KYV1": 0.06,
+          "KYV10": 0.07,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.05,
+          "KYV7": 0.11,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "279a407d",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in supporting human dignity, ending mass incarceration and deportation.",
+      "text": "It is time we had the courage to say it plainly: mass incarceration and mass deportation are moral failures, and I will fight in the United States Senate to end them.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "B3",
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.93,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.91,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "84d79c9b",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Ending mass incarceration , including federal decriminalization of marijuana and investment in treatment over incarceration for substance use.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.08,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.97,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e515153e",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Demilitarizing policing and investing in community-based public safety, violence prevention and crisis response",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.98,
+          "B8": 0.02,
+          "KYV1": 0.08,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "fc621a25",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "A humane immigration system , including a swift path to citizenship for Dreamers and undocumented residents, and a moratorium on deportations pending a full audit of enforcement practices.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.99,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.09,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "1cea0362",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Abolishing ICE and rebuilding immigration enforcement from scratch. Since its creation in 2003, ICE has operated with almost no accountability — and that’s escalated into real tragedy, including U.S. citizens killed by federal immigration agents during enforcement surges in cities like Minneapolis. Angie believes an agency that has repeatedly shown it cannot be trusted with the power it has should not be reformed at the margins — it should be dismantled, with any legitimate immigration enforcement function rebuilt under new, accountable civilian oversight, due process protections, and a mission that reflects American values instead of terror tactics.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "B3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.99,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.51,
+          "B8": 0.02,
+          "KYV1": 0.4,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "aa882618",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Ending for-profit prisons and detention centers",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.62,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.97,
+          "B8": 0.02,
+          "KYV1": 0.07,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "995eda18",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in protecting your privacy and ending mass surveillance.",
+      "text": "Across the country, communities are pushing back against the rapid, unregulated spread of AI-powered surveillance technology — including automated license plate readers (ALPRs) like those sold by Flock Safety. These systems can track every vehicle that passes a camera, building a searchable record of where people go, when, and how often. That data can end up in the hands of federal immigration agents, out-of-state law enforcement, or bad actors — often without a warrant, without public knowledge, and without meaningful oversight. I believe you shouldn’t have to choose between public safety and your right to privacy.",
+      "verdict": {
+        "commitment": 0.9,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.3,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.8,
+          "B8": 0.02,
+          "KYV1": 0.3,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4c5dd114",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Requiring warrants for Surveillance Data Access. Law enforcement should not be able to search months of a person’s movements without judicial oversight. I will fight for federal standards requiring a warrant before ALPR or similar location data can be accessed in most circumstances.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.91,
+          "B8": 0.02,
+          "KYV1": 0.43,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "1bd49aea",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Ending Data Sharing with Federal Immigration Enforcement. Local police departments should not become a surveillance arm of ICE or CBP. I support legislation prohibiting the sharing of license plate and location data with federal immigration authorities absent a criminal warrant.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "B3",
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.96,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.92,
+          "B8": 0.02,
+          "KYV1": 0.19,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "368a85e8",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Mandatory Data Deletion Windows. Indefinite retention of everyone’s movements — regardless of suspicion — is not acceptable. I will push for federal guidelines requiring surveillance data to be deleted within a short, defined window (in line with state laws that already require deletion within weeks) unless it is tied to an active investigation.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.78,
+          "B8": 0.02,
+          "KYV1": 0.23,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c7d33f42",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Transparency and Public Accountability. Communities deserve to know when surveillance systems are installed, who has access to the data, how it’s used, and how often it leads to shared information with outside agencies. I support requiring public reporting and independent audits for any federally funded surveillance program.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.72,
+          "B8": 0.02,
+          "KYV1": 0.45,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "49a17ccb",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Ending Federal Funding for Mass Surveillance Systems Without Guardrails. Taxpayer dollars should not underwrite surveillance systems that lack basic privacy protections. I will advocate for tying federal grants and infrastructure funding to clear limits on ALPR use, data sharing, and retention.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.07,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.8,
+          "B8": 0.02,
+          "KYV1": 0.24,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "1ccc7de5",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Protect Vulnerable Communities from Targeting. Surveillance systems have a documented history of disproportionately impacting immigrants, communities of color, and political dissidents. Any federal framework must include explicit protections against discriminatory use and misuse for political or retaliatory purposes.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.34,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.04,
+          "B7": 0.5,
+          "B8": 0.02,
+          "KYV1": 0.48,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "dd359280",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Local Control and Consent. Decisions about whether to deploy surveillance technology in a community should involve real public input — not be made unilaterally by a mayor’s office or a single department. I support requiring community consent processes before new surveillance contracts are signed or renewed with federal support.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.81,
+          "B8": 0.02,
+          "KYV1": 0.41,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "005211ea",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in climate action that matches the scale of the crisis.",
+      "text": "The climate crisis is an existential threat, and the fossil fuel industry has spent decades lying about it while cashing in. Angie rejects the false choice between good jobs and a livable planet.",
+      "verdict": {
+        "commitment": 0.82,
+        "states_policy": false,
+        "issues": [
+          "B8"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.73,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.93,
+          "KYV1": 0.02,
+          "KYV10": 0.04,
+          "KYV2": 0.58,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ea130e22",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "A bold, union-built transition to renewable energy , creating millions of good-paying, union jobs in wind, solar, and grid modernization, prioritizing the frontline communities that have borne the brunt of pollution for generations.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B1",
+          "B8",
+          "KYV2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.95,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.97,
+          "KYV1": 0.02,
+          "KYV10": 0.06,
+          "KYV2": 0.98,
+          "KYV3": 0.04,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c747db52",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Ending taxpayer subsidies for fossil fuel corporations and making polluters pay for the damage they’ve caused.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B8",
+          "KYV2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.16,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.96,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.89,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "9a52996d",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Rebuilding and hardening the electric grid , so it’s resilient, affordable, and ready for a clean-energy future",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "KYV2"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.28,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.19,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.63,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.98,
+          "KYV3": 0.03,
+          "KYV4": 0.36,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ce95d983",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Disaster resilience funding to harden homes against hurricanes.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "KYV4"
+        ],
+        "scores": {
+          "A1": 0.07,
+          "A2": 0.04,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.5,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.05,
+          "KYV3": 0.03,
+          "KYV4": 0.97,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "48e18d06",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Taking FEMA out of the Department of Homeland Security",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.05,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "d596d512",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in protecting and expanding democracy, and getting money out of politics.",
+      "text": "When a handful of billionaires can spend hundreds of millions of dollars to influence an election and the average person gets one vote, that’s not a democracy for the many, but a corrupt government working for a few. Angie will fight to make this country a real democracy, so that this government works for all of us, not just the wealthy elite",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.08,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.07,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.56,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5a6c39e7",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Overturning Citizens United so corporations and billionaires can no longer buy elections with unlimited, often secret spending.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.13,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.17,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.74,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "15f77f8e",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Abolishing super PACs and imposing real contribution limits. I suppor the Abolish Super PACs Act which would cap super PAC contributions at $5,000 — replacing today’s unlimited-money free-for-all with public financing that amplifies small-dollar donors instead of billionaire donors.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.04,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.06,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.38,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "f5124db1",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Restoring and expanding the Voting Rights Act , including automatic voter registration for every American over 18, and ending racist voter suppression and burdensome voter ID laws.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "A7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.99,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.36,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.54,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "bacb1b46",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Ending partisan gerrymandering with independent redistricting commissions.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.97,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.2,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.67,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e5a8dfa6",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Making Election Day a national holiday , so working people don’t have to choose between their paycheck and their vote.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.96,
+          "B1": 0.2,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.04,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.28,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "46f744e1",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Re-enfranchising Americans with felony convictions , restoring voting rights to the millions of Americans who have served their time and deserve to have their voice back.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.96,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.06,
+          "B7": 0.81,
+          "B8": 0.02,
+          "KYV1": 0.2,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "f1080919",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Public financing of elections , so candidates can run competitive campaigns without relying on corporate donors.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.07,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.04,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.3,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "cad8b51c",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Banning members of Congress from trading individual stocks while in office.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.1,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.39,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e83dea39",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Closing the revolving door between Congress, federal agencies, and the corporate lobbyists who work to influence them.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.61,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "d3ccc5fc",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Full transparency in campaign spending , ending dark money in our elections.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.14,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.14,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.53,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "00386bac",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Term limits and ethics reform for the Supreme Court , including binding ethics rules for all federal judges.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.74,
+          "B8": 0.02,
+          "KYV1": 0.72,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "6f5bb5d0",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Statehood for Washington, D.C. , so its residents finally get full representation in Congress.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.28,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.13,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5ca9ddbb",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "A real, binding process for Puerto Rico to determine its own political future — statehood, independence, free association, or another path — decided by the people of Puerto Rico themselves, not dictated by Washington. More than 3 million American citizens on the island currently have no vote for president and no voting representation in Congress, despite paying certain federal taxes and serving in the U.S. military at high rates.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.51,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.18,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "7b30037b",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in making billionaires and corporations pay their fair share.",
+      "text": "Billionaire fortunes have exploded over the past few years while working families fall further behind on rent, groceries, and medical bills. Florida is home to more billionaires than almost any other state and meanwhile, everyday Floridians are struggling more than anyone with housing costs, healthcare cuts, job loss and inflation. Angie believes we can afford Medicare for All, universal child care, and a clean-energy future. What we can’t afford is letting the richest people in the country keep paying less in taxes than a nurse or a line cook.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B2",
+          "B4"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.33,
+          "A3": 0.03,
+          "A4": 0.66,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.84,
+          "B2": 0.96,
+          "B3": 0.02,
+          "B4": 0.86,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.66,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.5,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.08,
+          "KYV7": 0.04,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "259cd111",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "A 5% annual wealth tax on billionaires. I support Senator Sanders’ Make Billionaires Pay Their Fair Share Act , which would apply only to net worth above $1 billion — hitting fewer than 1,000 people in the entire country. Independent economists estimate it would raise roughly $4.4 trillion over ten years without raising taxes by a single dollar on anyone worth less than $1 billion.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.6,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "0ebda502",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Direct relief for working families , funded by that revenue — including direct payments to households earning under $150,000 a year, expanding Medicare to cover dental, vision, and hearing, and building millions of affordable homes.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "B2",
+          "B4"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.98,
+          "A3": 0.03,
+          "A4": 0.54,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.62,
+          "B2": 0.96,
+          "B3": 0.02,
+          "B4": 0.88,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.25,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.07,
+          "KYV7": 0.3,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "cd9f50a8",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Taxing capital gains the same as wages , so a billionaire’s stock portfolio isn’t taxed at a lower rate than a worker’s paycheck.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.75,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "bb9a0c96",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Closing the loopholes that let profitable corporations pay $0 in federal income tax , including offshore tax havens and the “stepped-up basis” loophole that lets fortunes pass tax-free from one generation to the next.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.44,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "959b0401",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "A federal asset registry and real IRS enforcement , so the ultra-wealthy can no longer hide assets or dodge audits — while ensuring the IRS stays focused on high-dollar evasion, not everyday taxpayers.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.13,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.3,
+          "B8": 0.02,
+          "KYV1": 0.09,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b18c3170",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Cracking down on corporate price gouging in groceries, housing, and health care, where record corporate profits have tracked closely with what families are paying at the register.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "A2",
+          "B1",
+          "B2"
+        ],
+        "scores": {
+          "A1": 0.04,
+          "A2": 0.9,
+          "A3": 0.03,
+          "A4": 0.7,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.85,
+          "B2": 0.94,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.1,
+          "KYV7": 0.04,
+          "KYV8": 0.05,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "fdd07df2",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in combatting anti-blackness, anti-semitism, Islamophobia, Nativism, transphobia, and all forms of hate.",
+      "text": "Hatred rooted in identity — whether directed at someone’s religion, race, gender or immigration status — has no place in American life. But hate is not a single, undifferentiated force. It takes distinct historical shapes and requires leaders who understand those differences. As a candidate for the United States Senate, I am committed to fighting antisemitism, Islamophobia, anti-immigrant hate, anti-Black racism and all forms of discrimination with the specificity and seriousness each demands, and to standing against hate crimes of every kind.",
+      "verdict": {
+        "commitment": 0.93,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.2,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.14,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a23a89fa",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in combatting anti-blackness, anti-semitism, Islamophobia, Nativism, transphobia, and all forms of hate.",
+      "text": "Throughout history, the tools of division have shifted targets but repeated their logic – from the pogroms and killing of 6M Jewish people during the Holocaust to the Trans Atlantic Slave trade and Jim crow to the surveillence of Muslim and Arab communities after 9/11 to the violent attacks happening against immigrants in this country today. In each of these instances, the rich and powerful have worked to turn us against each other—so that instead of uniting around an agenda that guarantees everyone the chance at a healthy, thriving life, we’re left blaming our neighbors for problems they didn’t cause.",
+      "verdict": {
+        "commitment": 0.38,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.07,
+          "B3": 0.28,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.05,
+          "B8": 0.02,
+          "KYV1": 0.09,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "14097200",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie believes in combatting anti-blackness, anti-semitism, Islamophobia, Nativism, transphobia, and all forms of hate.",
+      "text": "But we have far more in common with our neighbors — whatever their faith or background — than we do with the people counting on our division to keep their power intact. My campaign is committed to bringing all people together – across race, religion, geography and partisanship – to build a Florida where the safety, freedom and dignity of all people is protected.",
+      "verdict": {
+        "commitment": 0.68,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.06,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.04,
+          "B8": 0.02,
+          "KYV1": 0.12,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "53f95638",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Real History in Our Schools. Support federal funding incentives for states and school districts that teach comprehensive history. Oppose federal or state efforts to ban books, censor curricula, or punish teachers for teaching accurate history, while supporting age-appropriate standards developed by educators and historians rather than political appointees.",
+      "verdict": {
+        "commitment": 0.99,
+        "states_policy": true,
+        "issues": [
+          "A6"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.86,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.31,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "d82ad9b4",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Hate Crime Enforcement. Support robust funding and enforcement for laws addressing hate crimes targeting. Ensure law enforcement agencies have training to recognize and respond to antisemitic, anti-Palestinian, Islamaphobic, anti-Black, anti-Immigrant and all threats and violence.",
+      "verdict": {
+        "commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.09,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.94,
+          "B8": 0.02,
+          "KYV1": 0.07,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "beb5d0a2",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Angie will fight for:",
+      "text": "Safe Campuses and Communities. Ensure all students and community members can engage in public life, including on college campuses, free from harassment, intimidation, or violence — while protecting the rights of all students to engage in political speech and protest, including on Israel-Palestine.",
+      "verdict": {
+        "commitment": 0.97,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.01,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.12,
+          "B8": 0.02,
+          "KYV1": 0.3,
+          "KYV10": 0.12,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "5c86248e",
+      "url": "https://angienixon.com/priorities",
+      "heading": "The Nixon Record: Built from the Ground Up",
+      "text": "Angie Nixon did not rise through political machines or party gatekeepers. She built power in her community. From founding the Melanin Market to support local creators, to opening Natalie’s Nook to fight food insecurity, her work reflects a simple principle:",
+      "verdict": {
+        "commitment": 0.08,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.11,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "cc09f935",
+      "url": "https://angienixon.com/priorities",
+      "heading": "Change Can’t Wait",
+      "text": "This campaign is not asking for permission. Not from corporate donors. Not from party leadership. Not from anyone invested in the status quo.",
+      "verdict": {
+        "commitment": 0.16,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.05,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e458a7ce",
+      "url": "https://angienixon.com/meet-angie",
+      "heading": "Meet Angie",
+      "text": "Angie Nixon is a Democratic State Representative, union organizer, mother, and proven fighter born and raised in Jacksonville. In the State House, Angie has been a leading champion for working and middle class Floridians—from expanding childcare for thousands of families; to stopping a major grocery chain from gouging their prices; to leading the resistance to DeSantis’s unfair voting maps.",
+      "verdict": {
+        "commitment": 0.75,
+        "states_policy": false,
+        "issues": [
+          "A4",
+          "A7"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.86,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.89,
+          "B1": 0.78,
+          "B2": 0.04,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.2,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.71,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "9ce54d14",
+      "url": "https://angienixon.com/meet-angie",
+      "heading": "Meet Angie",
+      "text": "Angie’s pathbreaking leadership includes serving as Executive Director of Florida for All, a statewide coalition that has registered tens of thousands of new voters while raising resources for campaigns and issue-based organizing across the state. At home in Jacksonville, she runs a bookstore and community hub focused on bringing healthy food and educational opportunities to local families.",
+      "verdict": {
+        "commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.22,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.04,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "8c3ad91f",
+      "url": "https://angienixon.com/meet-angie",
+      "heading": "Meet Angie",
+      "text": "Angie’s leadership is rooted in her upbringing. She saw her mother work two jobs to make sure she and her brother never went hungry. Throughout elementary school, she was bused across town because her predominantly Black neighborhood school didn’t have adequate resources. Later, she tragically lost her favorite cousin to gun violence.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.08,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.04,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "ceac6de5",
+      "url": "https://angienixon.com/meet-angie",
+      "heading": "Meet Angie",
+      "text": "With our state’s rich resources, we all deserve to thrive. Angie is fighting for better opportunities for our children. For lower costs and higher wages. For a government that stands up to corrupt billionaires and corporate greed—while opening the door to the people. For the heart and soul of our country.",
+      "verdict": {
+        "commitment": 0.89,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.08,
+          "A3": 0.03,
+          "A4": 0.67,
+          "A5": 0.02,
+          "A6": 0.06,
+          "A7": 0.03,
+          "B1": 0.94,
+          "B2": 0.06,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.17,
+          "KYV10": 0.04,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "economy",
+        "label": "Economy & Affordability"
+      },
+      "subIssues": [
+        {
+          "id": "B1",
+          "label": "Economy, inflation, and jobs",
+          "citations": [
+            {
+              "passage": {
+                "id": "ed1d4f22",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for the Working Families Guarantee",
+                "text": "A universal jobs program with inflation-adjusted wages",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "37151b54",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Raising the federal minimum wage to a real living wage, indexed to inflation, for every worker, including immigrant and incarcerated workers.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "cf5972d7",
+                "url": "https://angienixon.com/",
+                "heading": "For Florida.",
+                "text": "Angie Nixon is running to lower costs, raise wages, and build a people-powered government that puts working families first, not greedy billionaires.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "2d34d9cb",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Protecting workers from AI-driven job displacement , including a real seat at the table for workers and unions as automation reshapes their industries.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "c8c427de",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Living wages for child care and early-childhood educators , who are among the most underpaid workers in the country despite doing some of its most important work.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.95
+            },
+            {
+              "passage": {
+                "id": "a4a34c19",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Expanding vocational and apprenticeship programs that lead directly to good union jobs.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.95
+            },
+            {
+              "passage": {
+                "id": "ea130e22",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "A bold, union-built transition to renewable energy , creating millions of good-paying, union jobs in wind, solar, and grid modernization, prioritizing the frontline communities that have borne the brunt of pollution for generations.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.95
+            },
+            {
+              "passage": {
+                "id": "3c5bb879",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Fighting outsourcing and trade policy that has hollowed out American manufacturing towns",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.94
+            },
+            {
+              "passage": {
+                "id": "ceac6de5",
+                "url": "https://angienixon.com/meet-angie",
+                "heading": "Meet Angie",
+                "text": "With our state’s rich resources, we all deserve to thrive. Angie is fighting for better opportunities for our children. For lower costs and higher wages. For a government that stands up to corrupt billionaires and corporate greed—while opening the door to the people. For the heart and soul of our country.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.94
+            },
+            {
+              "passage": {
+                "id": "f03f29ab",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Ending “right to work” laws and extending labor protections to workers historically excluded from them, including farmworkers and domestic workers.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.89
+            },
+            {
+              "passage": {
+                "id": "b18c3170",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Cracking down on corporate price gouging in groceries, housing, and health care, where record corporate profits have tracked closely with what families are paying at the register.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.85
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "education",
+        "label": "Education"
+      },
+      "subIssues": [
+        {
+          "id": "A6",
+          "label": "Public school funding and teachers",
+          "citations": [
+            {
+              "passage": {
+                "id": "eb3f0ea8",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Fully funding public K-12 schools and increased teacher wages",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.99
+            },
+            {
+              "passage": {
+                "id": "53f95638",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Real History in Our Schools. Support federal funding incentives for states and school districts that teach comprehensive history. Oppose federal or state efforts to ban books, censor curricula, or punish teachers for teaching accurate history, while supporting age-appropriate standards developed by educators and historians rather than political appointees.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.86
+            }
+          ]
+        },
+        {
+          "id": "KYV10",
+          "label": "Career, vocational and higher education",
+          "citations": [
+            {
+              "passage": {
+                "id": "b7664fab",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Tuition-free public college and trade school , and canceling student debt.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "a4a34c19",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Expanding vocational and apprenticeship programs that lead directly to good union jobs.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.97
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "healthcare",
+        "label": "Healthcare"
+      },
+      "subIssues": [
+        {
+          "id": "B2",
+          "label": "Healthcare access and costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "3111b02f",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Medicare for All that covers every person in America — free at the point of service, with no premiums, no deductibles, no copays, and no surprise bills.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.99
+            },
+            {
+              "passage": {
+                "id": "8eee7a5b",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie believes in Medicare for All.",
+                "text": "The United States is the richest country on earth but doesn’t guarantee healthcare to all its people. Americans pay more for worse outcomes than anywhere else in the developed world. That’s not a healthcare system, it’s a protection racket for insurance and drug companies.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "9d155a8f",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Capping prescription drug costs and ending price gouging by drug companies.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "8ae65445",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Comprehensive coverage , including dental, vision, hearing, mental health and substance use treatment, reproductive and maternity care, and prescription drugs.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "7b30037b",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie believes in making billionaires and corporations pay their fair share.",
+                "text": "Billionaire fortunes have exploded over the past few years while working families fall further behind on rent, groceries, and medical bills. Florida is home to more billionaires than almost any other state and meanwhile, everyday Floridians are struggling more than anyone with housing costs, healthcare cuts, job loss and inflation. Angie believes we can afford Medicare for All, universal child care, and a clean-energy future. What we can’t afford is letting the richest people in the country keep paying less in taxes than a nurse or a line cook.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "0ebda502",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Direct relief for working families , funded by that revenue — including direct payments to households earning under $150,000 a year, expanding Medicare to cover dental, vision, and hearing, and building millions of affordable homes.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "53ad9313",
+                "url": "https://angienixon.com/",
+                "heading": "Medicare for All",
+                "text": "Health care as a right, not a privilege tied to your paycheck.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.95
+            },
+            {
+              "passage": {
+                "id": "c358a279",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Canceling the medical debt crushing families. Canceling existing medical debt, wiping it off credit reports for good, and banning debt collectors from coming after patients for medical bill. Angie support senator Sanders’ bipartisan-backed Medical Debt Cancellation Act.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.94
+            },
+            {
+              "passage": {
+                "id": "b18c3170",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Cracking down on corporate price gouging in groceries, housing, and health care, where record corporate profits have tracked closely with what families are paying at the register.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.94
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "housing",
+        "label": "Housing"
+      },
+      "subIssues": [
+        {
+          "id": "A2",
+          "label": "Housing affordability",
+          "citations": [
+            {
+              "passage": {
+                "id": "0e2d258d",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Massive investment in permanently affordable housing , building millions of new affordable units nationwide.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.99
+            },
+            {
+              "passage": {
+                "id": "0ebda502",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Direct relief for working families , funded by that revenue — including direct payments to households earning under $150,000 a year, expanding Medicare to cover dental, vision, and hearing, and building millions of affordable homes.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "989b08bd",
+                "url": "https://angienixon.com/",
+                "heading": "Housing You Can Afford",
+                "text": "A national rent freeze and a real moratorium on evictions.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "ddb81e18",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for the Working Families Guarantee",
+                "text": "A National Rent Freeze and Moratorium on Evictions",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "99a917e5",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Cracking down on corporate landlords and Wallstreet speculators buying up single-family homes and driving up rents.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "778d3bea",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "A national rent stabilization standard , just-cause eviction protections, and the right to counsel in eviction proceedings.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.95
+            },
+            {
+              "passage": {
+                "id": "281001d4",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Expanding Section 8 vouchers so every eligible family can access one without languishing on a waitlist.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.94
+            },
+            {
+              "passage": {
+                "id": "4092ac2e",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie believes in supporting human dignity, ending mass incarceration and deportation.",
+                "text": "The US has the largest policing, incarceration and deportation system in the world. Millions of people — disproportionately Black, brown, and poor — are locked in cages or living in fear of a knock on the door, while corporations get rich off their suffering. This is not about safety. It is about control and profit. I don’t believe any person is illegal, and I don’t believe human beings should be treated as commodities in a system built to punish rather than to heal. Real safety comes from good jobs, strong schools, affordable housing, and healthcare for all — not from more cameras, more cages, and more agents tearing families apart.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.9
+            },
+            {
+              "passage": {
+                "id": "b18c3170",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Cracking down on corporate price gouging in groceries, housing, and health care, where record corporate profits have tracked closely with what families are paying at the register.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.9
+            }
+          ]
+        },
+        {
+          "id": "KYV6",
+          "label": "Renters and evictions",
+          "citations": [
+            {
+              "passage": {
+                "id": "778d3bea",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "A national rent stabilization standard , just-cause eviction protections, and the right to counsel in eviction proceedings.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.99
+            },
+            {
+              "passage": {
+                "id": "989b08bd",
+                "url": "https://angienixon.com/",
+                "heading": "Housing You Can Afford",
+                "text": "A national rent freeze and a real moratorium on evictions.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "ddb81e18",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for the Working Families Guarantee",
+                "text": "A National Rent Freeze and Moratorium on Evictions",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "99a917e5",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Cracking down on corporate landlords and Wallstreet speculators buying up single-family homes and driving up rents.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.91
+            },
+            {
+              "passage": {
+                "id": "281001d4",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Expanding Section 8 vouchers so every eligible family can access one without languishing on a waitlist.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.88
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "environment",
+        "label": "Environment & Water"
+      },
+      "subIssues": [
+        {
+          "id": "B8",
+          "label": "Climate and environment (national)",
+          "citations": [
+            {
+              "passage": {
+                "id": "ea130e22",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "A bold, union-built transition to renewable energy , creating millions of good-paying, union jobs in wind, solar, and grid modernization, prioritizing the frontline communities that have borne the brunt of pollution for generations.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "c747db52",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Ending taxpayer subsidies for fossil fuel corporations and making polluters pay for the damage they’ve caused.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "1190bf2f",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "No new construction of data centers before there are real federal guardrails put in place , including environmental review and community input requirements.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.91
+            }
+          ]
+        },
+        {
+          "id": "KYV2",
+          "label": "Energy and utilities",
+          "citations": [
+            {
+              "passage": {
+                "id": "ea130e22",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "A bold, union-built transition to renewable energy , creating millions of good-paying, union jobs in wind, solar, and grid modernization, prioritizing the frontline communities that have borne the brunt of pollution for generations.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "9a52996d",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Rebuilding and hardening the electric grid , so it’s resilient, affordable, and ready for a clean-energy future",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "68e70ce2",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Making tech companies pay for the energy and water they use , not passing those costs on to ratepayers.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "1190bf2f",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "No new construction of data centers before there are real federal guardrails put in place , including environmental review and community input requirements.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "c747db52",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Ending taxpayer subsidies for fossil fuel corporations and making polluters pay for the damage they’ve caused.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.89
+            }
+          ]
+        },
+        {
+          "id": "KYV3",
+          "label": "Growth, development and land conservation",
+          "citations": [
+            {
+              "passage": {
+                "id": "1190bf2f",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "No new construction of data centers before there are real federal guardrails put in place , including environmental review and community input requirements.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.97
+            }
+          ]
+        },
+        {
+          "id": "KYV4",
+          "label": "Storm resilience and flood protection",
+          "citations": [
+            {
+              "passage": {
+                "id": "8d557e7f",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Disaster resilience funding to harden homes against hurricanes",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "ce95d983",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Disaster resilience funding to harden homes against hurricanes.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.97
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "immigration",
+        "label": "Immigration"
+      },
+      "subIssues": [
+        {
+          "id": "B3",
+          "label": "Immigration and border enforcement",
+          "citations": [
+            {
+              "passage": {
+                "id": "fc621a25",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "A humane immigration system , including a swift path to citizenship for Dreamers and undocumented residents, and a moratorium on deportations pending a full audit of enforcement practices.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.99
+            },
+            {
+              "passage": {
+                "id": "1cea0362",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Abolishing ICE and rebuilding immigration enforcement from scratch. Since its creation in 2003, ICE has operated with almost no accountability — and that’s escalated into real tragedy, including U.S. citizens killed by federal immigration agents during enforcement surges in cities like Minneapolis. Angie believes an agency that has repeatedly shown it cannot be trusted with the power it has should not be reformed at the margins — it should be dismantled, with any legitimate immigration enforcement function rebuilt under new, accountable civilian oversight, due process protections, and a mission that reflects American values instead of terror tactics.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.99
+            },
+            {
+              "passage": {
+                "id": "4092ac2e",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie believes in supporting human dignity, ending mass incarceration and deportation.",
+                "text": "The US has the largest policing, incarceration and deportation system in the world. Millions of people — disproportionately Black, brown, and poor — are locked in cages or living in fear of a knock on the door, while corporations get rich off their suffering. This is not about safety. It is about control and profit. I don’t believe any person is illegal, and I don’t believe human beings should be treated as commodities in a system built to punish rather than to heal. Real safety comes from good jobs, strong schools, affordable housing, and healthcare for all — not from more cameras, more cages, and more agents tearing families apart.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "1bd49aea",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Ending Data Sharing with Federal Immigration Enforcement. Local police departments should not become a surveillance arm of ICE or CBP. I support legislation prohibiting the sharing of license plate and location data with federal immigration authorities absent a criminal warrant.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "279a407d",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie believes in supporting human dignity, ending mass incarceration and deportation.",
+                "text": "It is time we had the courage to say it plainly: mass incarceration and mass deportation are moral failures, and I will fight in the United States Senate to end them.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.93
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "insurance",
+        "label": "Insurance & Property Costs"
+      },
+      "subIssues": [
+        {
+          "id": "A1",
+          "label": "Property insurance costs",
+          "citations": [
+            {
+              "passage": {
+                "id": "f79f6561",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Federal action on the property insurance crisis , including reinsurance backstops and stronger consumer protections, so Floridians aren’t priced out of their own homes by an insurance market that keeps failing them.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.98
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "safety",
+        "label": "Public Safety & Crime"
+      },
+      "subIssues": [
+        {
+          "id": "B7",
+          "label": "Crime policy, policing and courts",
+          "citations": [
+            {
+              "passage": {
+                "id": "e515153e",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Demilitarizing policing and investing in community-based public safety, violence prevention and crisis response",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.98
+            },
+            {
+              "passage": {
+                "id": "4092ac2e",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie believes in supporting human dignity, ending mass incarceration and deportation.",
+                "text": "The US has the largest policing, incarceration and deportation system in the world. Millions of people — disproportionately Black, brown, and poor — are locked in cages or living in fear of a knock on the door, while corporations get rich off their suffering. This is not about safety. It is about control and profit. I don’t believe any person is illegal, and I don’t believe human beings should be treated as commodities in a system built to punish rather than to heal. Real safety comes from good jobs, strong schools, affordable housing, and healthcare for all — not from more cameras, more cages, and more agents tearing families apart.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "84d79c9b",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Ending mass incarceration , including federal decriminalization of marijuana and investment in treatment over incarceration for substance use.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "aa882618",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Ending for-profit prisons and detention centers",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "d82ad9b4",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Hate Crime Enforcement. Support robust funding and enforcement for laws addressing hate crimes targeting. Ensure law enforcement agencies have training to recognize and respond to antisemitic, anti-Palestinian, Islamaphobic, anti-Black, anti-Immigrant and all threats and violence.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.94
+            },
+            {
+              "passage": {
+                "id": "1bd49aea",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Ending Data Sharing with Federal Immigration Enforcement. Local police departments should not become a surveillance arm of ICE or CBP. I support legislation prohibiting the sharing of license plate and location data with federal immigration authorities absent a criminal warrant.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.92
+            },
+            {
+              "passage": {
+                "id": "279a407d",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie believes in supporting human dignity, ending mass incarceration and deportation.",
+                "text": "It is time we had the courage to say it plainly: mass incarceration and mass deportation are moral failures, and I will fight in the United States Senate to end them.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.91
+            },
+            {
+              "passage": {
+                "id": "4c5dd114",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Requiring warrants for Surveillance Data Access. Law enforcement should not be able to search months of a person’s movements without judicial oversight. I will fight for federal standards requiring a warrant before ALPR or similar location data can be accessed in most circumstances.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "elections",
+        "label": "Elections & Voting"
+      },
+      "subIssues": [
+        {
+          "id": "A7",
+          "label": "Elections administration and voting access",
+          "citations": [
+            {
+              "passage": {
+                "id": "f5124db1",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Restoring and expanding the Voting Rights Act , including automatic voter registration for every American over 18, and ending racist voter suppression and burdensome voter ID laws.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.99
+            },
+            {
+              "passage": {
+                "id": "bacb1b46",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Ending partisan gerrymandering with independent redistricting commissions.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "e5a8dfa6",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Making Election Day a national holiday , so working people don’t have to choose between their paycheck and their vote.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "46f744e1",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Re-enfranchising Americans with felony convictions , restoring voting rights to the millions of Americans who have served their time and deserve to have their voice back.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.96
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "retirement",
+        "label": "Retirement & Benefits"
+      },
+      "subIssues": [
+        {
+          "id": "B4",
+          "label": "Social Security and Medicare",
+          "citations": [
+            {
+              "passage": {
+                "id": "3111b02f",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Medicare for All that covers every person in America — free at the point of service, with no premiums, no deductibles, no copays, and no surprise bills.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.92
+            },
+            {
+              "passage": {
+                "id": "0ebda502",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Direct relief for working families , funded by that revenue — including direct payments to households earning under $150,000 a year, expanding Medicare to cover dental, vision, and hearing, and building millions of affordable homes.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.88
+            },
+            {
+              "passage": {
+                "id": "7b30037b",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie believes in making billionaires and corporations pay their fair share.",
+                "text": "Billionaire fortunes have exploded over the past few years while working families fall further behind on rent, groceries, and medical bills. Florida is home to more billionaires than almost any other state and meanwhile, everyday Floridians are struggling more than anyone with housing costs, healthcare cuts, job loss and inflation. Angie believes we can afford Medicare for All, universal child care, and a clean-energy future. What we can’t afford is letting the richest people in the country keep paying less in taxes than a nurse or a line cook.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.86
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "abortion",
+        "label": "Abortion Policy"
+      },
+      "subIssues": [
+        {
+          "id": "B5",
+          "label": "Abortion policy",
+          "citations": [
+            {
+              "passage": {
+                "id": "654a35d4",
+                "url": "https://angienixon.com/priorities",
+                "heading": "Angie will fight for:",
+                "text": "Protecting reproductive freedom , including the right to abortion, contraception, and IVF, free from political interference.",
+                "retrieved_at": "2026-09-29T11:46:31.626Z"
+              },
+              "score": 0.98
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 467605,
+    "output_tokens": 60914
+  }
+}

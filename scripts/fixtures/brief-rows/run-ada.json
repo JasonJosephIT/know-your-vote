@@ -1,0 +1,89 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://ada-rivers.example.com",
+  "created_at": "2026-09-21T00:00:00Z",
+  "model": "fixture-model",
+  "taxonomy_version": "fixture",
+  "threshold": 0.85,
+  "provenance": "jev:fixture-model/tax-fixture/q-fixture",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A5"
+  ],
+  "counts": {
+    "passages": 4,
+    "asked": 4,
+    "states_policy": 3,
+    "with_issue": 3,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "30f930e8",
+      "url": "https://ada-rivers.example.com/issues/insurance",
+      "heading": null,
+      "text": "Ada Rivers will cap annual homestead insurance premium increases at five percent and publish every rate filing in plain language.",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [
+          "A1"
+        ],
+        "scores": {
+          "A1": 0.94
+        }
+      }
+    },
+    {
+      "id": "a14dcce5",
+      "url": "https://ada-rivers.example.com/issues/housing",
+      "heading": null,
+      "text": "Ada Rivers will convert surplus county land into workforce housing and tie new permits to a local affordability target.",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [
+          "A2"
+        ],
+        "scores": {
+          "A2": 0.91
+        }
+      }
+    },
+    {
+      "id": "de86b95b",
+      "url": "https://ada-rivers.example.com/issues/water",
+      "heading": null,
+      "text": "Ada Rivers will fund the reservoir project and hold the utility to its nutrient discharge limits, which also lowers the surcharge on every household bill.",
+      "verdict": {
+        "commitment": 0.95,
+        "states_policy": true,
+        "issues": [
+          "A5",
+          "A1"
+        ],
+        "scores": {
+          "A5": 0.93,
+          "A1": 0.87
+        }
+      }
+    },
+    {
+      "id": "a9f03be8",
+      "url": "https://ada-rivers.example.com/about",
+      "heading": null,
+      "text": "Ada Rivers grew up in Pinellas County and taught high school civics for eleven years.",
+      "verdict": {
+        "commitment": 0.2,
+        "states_policy": false,
+        "issues": [],
+        "scores": {}
+      }
+    }
+  ],
+  "areas": [],
+  "usage": null
+}

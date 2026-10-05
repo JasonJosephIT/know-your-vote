@@ -23,6 +23,7 @@ export function PipelinePanel({
               </span>
             </div>
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-caption text-on-surface-muted">
+              <span>{d.listed} listed</span>
               <span>{d.draft ?? "—"} draft</span>
               <span>{d.in_review ?? "—"} in review</span>
               <span>

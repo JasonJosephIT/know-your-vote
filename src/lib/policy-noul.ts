@@ -46,6 +46,15 @@ import { SUB_ISSUES } from "./news-issues.ts";
     silently turn the gate's answer into an issue tag. */
 export const COMMITMENT_ID = "q_states_policy";
 
+/** The second gate: WHOSE commitment is it? The first gate alone let through
+    biography, records of past work, other people's endorsements and attack
+    lines — 70 passages across 19 of 90 runs on 2026-09-29
+    (docs/general-election/brief-runs/review-2026-09-29.md). A threshold change
+    could not separate them (they scored 0.85–0.99), so the founder chose to
+    ask the question directly. A passage states a policy only if it clears
+    BOTH gates. */
+export const OWN_COMMITMENT_ID = "q_own_commitment";
+
 /** Inherited from the news characterizer (0.85), where it WAS measured — on
     headlines. A passage is a different input, so treat this as a starting
     point that a gold set has yet to confirm, not a tuned value. The runner
@@ -83,7 +92,7 @@ export function buildPassageState(passage: Passage): PassageState {
   };
 }
 
-/* One gate plus one Noul per issue, in ONE request per passage: independent
+/* Two gates plus one Noul per issue, in ONE request per passage: independent
    questions over the same state are evaluated together, so a passage costs a
    request, not seventeen.
 
@@ -107,6 +116,26 @@ export function buildPolicyQuestions(
         false:
           "The passage is biography, endorsement, event, fundraising, or " +
           "other text that states no policy position.",
+      },
+    },
+    [OWN_COMMITMENT_ID]: {
+      type: "noul",
+      instructions:
+        "Does this passage commit the candidate to something they will do, support, " +
+        "oppose, fund, or change? The candidate may be written about in the first " +
+        "person (\"I will\") or the third person (\"she will\", \"he supports\"), and a " +
+        "bare plan item (\"Cut property taxes\") counts. Answer no if the passage only " +
+        "gives biography, a past record or result, words or an endorsement from someone " +
+        "else, a description of a problem or of current conditions, or criticism of " +
+        "someone else, with no commitment by the candidate. Judge only whether the " +
+        "candidate commits to something. Do not judge whether it is good, workable, " +
+        "popular, or correct.",
+      criteria: {
+        true: "The passage commits the candidate to something they will do, support, oppose, fund, or change.",
+        false:
+          "The passage is only biography, a past record, someone else's words or " +
+          "endorsement, a description of conditions, or criticism of someone else, " +
+          "with no commitment by the candidate.",
       },
     },
   };
@@ -148,6 +177,9 @@ export interface PassageVerdict {
       fact from "we never asked". */
   statesPolicy: boolean;
   commitment: number | null;
+  /** The second gate's score. Optional only so that runs made before it
+      existed still read; every new verdict sets it, null when unanswered. */
+  ownCommitment?: number | null;
   /** Sub-issue ids over the threshold, in taxonomy order. Empty when the
       passage cleared the gate but matched no issue. */
   issueIds: string[];
@@ -161,6 +193,7 @@ export function readVerdict(
   issueIds: readonly string[]
 ): PassageVerdict {
   const commitment = noulValue(answers, COMMITMENT_ID);
+  const ownCommitment = noulValue(answers, OWN_COMMITMENT_ID);
   const scores: Record<string, number> = {};
   for (const id of issueIds) {
     const value = noulValue(answers, id);
@@ -168,7 +201,11 @@ export function readVerdict(
   }
   return {
     commitment,
-    statesPolicy: commitment !== null && commitment >= threshold,
+    ownCommitment,
+    /* Both gates, fail-closed: an unanswered gate is a no. */
+    statesPolicy:
+      commitment !== null && commitment >= threshold &&
+      ownCommitment !== null && ownCommitment >= threshold,
     /* The same fail-closed reader the news path uses, over the taxonomy rather
        than over the response, so a key we did not ask for has nowhere to go. */
     issueIds: applyThreshold(answers, threshold, issueIds),

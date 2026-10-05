@@ -1,12 +1,26 @@
 import Link from "next/link";
-import { MeasureCompare } from "@/components/features/MeasureCompare";
+import {
+  MeasureNeutralBlock,
+  MeasureResourceLadder,
+} from "@/components/features/MeasureResourceLadder";
 import { MeasureThreshold } from "@/components/features/MeasureThreshold";
-import { getActiveMeasures, getMeasureBrief } from "@/lib/measures";
+import { Card } from "@/components/ui/Card";
+import { getActiveMeasures, getMeasureListing } from "@/lib/measures";
+import { heldNote } from "@/lib/measure-held-copy";
 
 export const revalidate = 3600;
 
-/* Prerender every published measure; getActiveMeasures reads through RLS, so
-   unpublished ones are absent by construction rather than filtered here. */
+function formatNoteDate(iso: string) {
+  return new Date(`${iso}T00:00:00`).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+/* Prerender every visible measure — listed or published (0033).
+   getActiveMeasures reads through RLS, so draft and in-review ones are absent
+   by construction rather than filtered here. */
 export async function generateStaticParams() {
   try {
     const measures = await getActiveMeasures();
@@ -22,10 +36,10 @@ export async function generateMetadata({
   params: Promise<{ measureId: string }>;
 }) {
   const { measureId } = await params;
-  const brief = await getMeasureBrief(measureId);
+  const listing = await getMeasureListing(measureId);
   return {
-    title: brief
-      ? `Amendment ${brief.measure.number}: ${brief.measure.official_title} — Know Your Vote`
+    title: listing
+      ? `Amendment ${listing.measure.number}: ${listing.measure.official_title} — Know Your Vote`
       : "Ballot question in review — Know Your Vote",
   };
 }
@@ -36,17 +50,17 @@ export default async function MeasurePage({
   params: Promise<{ measureId: string }>;
 }) {
   const { measureId } = await params;
-  const brief = await getMeasureBrief(measureId);
+  const listing = await getMeasureListing(measureId);
 
-  /* Unpublished, or published but lopsided — the read layer refuses both.
+  /* Neither listed nor published: the measure row itself is hidden by RLS.
      Same honest-degradation copy as an unpublished race. */
-  if (!brief) {
+  if (!listing) {
     return (
       <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
         <h1 className="text-h1">This ballot question is still in review</h1>
         <p className="text-body text-on-surface-muted">
-          We publish a ballot question only when the case for it and the case
-          against it are both present and comparably sourced. This one
+          We publish a ballot question only when what people say for it and
+          against it are both collected and comparably sourced. This one
           hasn&apos;t cleared that yet. Check back soon.
         </p>
         <Link
@@ -59,7 +73,13 @@ export default async function MeasurePage({
     );
   }
 
-  const { measure } = brief;
+  /* `brief` is null for a listed measure, and for a published one that
+     fails the symmetry re-check — the read layer refuses to render that one
+     lopsided. Both get the ballot text and nothing else: the verbatim summary
+     is the Division of Elections' own wording, so it needs no audit, while
+     the resource list waits for both sides. */
+  const { measure, brief, neutral = [] } = listing;
+  const note = heldNote(measure.measure_id);
 
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-5 px-5 py-8">
@@ -97,15 +117,49 @@ export default async function MeasurePage({
         </a>
       </section>
 
-      <MeasureCompare brief={brief} />
+      {brief ? (
+        <MeasureResourceLadder brief={brief} />
+      ) : (
+        /* In place of the ladder, never beside an empty one: two blank
+           YES/NO columns would read as "nobody has an argument", which is
+           a claim we have not checked. */
+        <>
+          <MeasureNeutralBlock items={neutral} />
+          <Card className="flex flex-col gap-2">
+            <h2 className="text-h3">What people say for and against it</h2>
+            {note ? (
+              <>
+                {note.paragraphs.map((p) => (
+                  <p key={p} className="text-body-sm text-on-surface-muted">
+                    {p}
+                  </p>
+                ))}
+                <p className="text-caption text-on-surface-muted">
+                  We look for new statements every week. This note was last
+                  updated {formatNoteDate(note.updated)}.
+                </p>
+              </>
+            ) : (
+              <p className="text-body-sm text-on-surface-muted">
+                Resources on both sides are being collected. We publish them only
+                when both sides are represented &mdash; until then, this is the
+                official ballot text and nothing else.
+              </p>
+            )}
+          </Card>
+        </>
+      )}
 
       <footer className="flex flex-wrap gap-4 text-caption text-on-surface-muted">
         <Link href="/methodology" className="underline underline-offset-2">
           How we stay fair
         </Link>
         <span>
-          We describe what each side argues and what the measure does. You
-          decide.
+          {brief
+            ? "We collect what each side says and order it by the kind of source. We write none of it. You decide."
+            : neutral.length > 0
+              ? "We collect what others publish and order it by the kind of source. We write none of it. You decide."
+              : "We quote the ballot as it is printed. You decide."}
         </span>
       </footer>
     </main>

@@ -1,0 +1,1587 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://www.chrismessina.com",
+  "created_at": "2026-09-30T01:59:19.423Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-e7282116",
+  "question_ids": [
+    "q_states_policy",
+    "q_own_commitment",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 35,
+    "asked": 35,
+    "states_policy": 9,
+    "with_issue": 6,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "01302343",
+      "url": "https://www.chrismessina.com/",
+      "heading": "Make Your Voice Count Register to Vote",
+      "text": "Voting is one of the most important ways you can make your voice heard and have a say in the future of your community. Don’t wait until Election Day to discover that you aren’t registered or that your information is out of date. Register as early as possible , and take a moment to verify your registration well before the deadline—especially if you have recently moved or changed your name. Being prepared now means you’ll be ready to make your vote count when Election Day arrives.",
+      "verdict": {
+        "commitment": 0.06,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.8,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.21,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.05,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "632a7416",
+      "url": "https://www.chrismessina.com/",
+      "heading": "Vote-By-Mail",
+      "text": "You can request a Vote-By-Mail (VBM) ballot here . The deadline to request a VBM ballot is October 22.",
+      "verdict": {
+        "commitment": 0.04,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.41,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.04,
+          "B7": 0.02,
+          "B8": 0.01,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "64239e8b",
+      "url": "https://www.chrismessina.com/",
+      "heading": "Early Voting",
+      "text": "You can vote early between October 19-November 1 from 8am-8pm at ANY of the Early Voting locations .",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.01,
+          "A3": 0.01,
+          "A4": 0.01,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.64,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.01,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.03,
+          "B7": 0.01,
+          "B8": 0.01,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.01,
+          "KYV3": 0.01,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.01,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "50e14bfc",
+      "url": "https://www.chrismessina.com/",
+      "heading": "Vote on Election Day",
+      "text": "You must go to your designated polling location . Polls will be open November 3 from 7am-7pm.",
+      "verdict": {
+        "commitment": 0.04,
+        "own_commitment": 0.05,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.01,
+          "A6": 0.02,
+          "A7": 0.52,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.01,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.01,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "9ee55efa",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "Platform",
+      "text": "Highlighting one of Chris’ priorities: Orange County Works Program",
+      "verdict": {
+        "commitment": 0.42,
+        "own_commitment": 0.42,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.04,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.36,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.03,
+          "KYV1": 0.03,
+          "KYV10": 0.4,
+          "KYV2": 0.03,
+          "KYV3": 0.06,
+          "KYV4": 0.03,
+          "KYV5": 0.03,
+          "KYV6": 0.03,
+          "KYV7": 0.06,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "de28396b",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "Cut Taxes. Cut Waste",
+      "text": "Orange County families are paying more while government continues to grow. Chris believes families deserve tax relief—not more wasteful spending. He supports YES on Amendment 3 to reduce the property-tax burden while protecting essential services.",
+      "verdict": {
+        "commitment": 0.98,
+        "own_commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "A3"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.15,
+          "A3": 0.98,
+          "A4": 0.54,
+          "A5": 0.02,
+          "A6": 0.05,
+          "A7": 0.05,
+          "B1": 0.27,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.04,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "56bcebc5",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "Build Skill. Fill High-Demand Jobs",
+      "text": "A good-paying career shouldn’t require a four-year degree. Orange County Works will expand vocational, technical, and workforce training—connecting residents with the trade skills employers need and creating a pathway from classroom to career.",
+      "verdict": {
+        "commitment": 0.94,
+        "own_commitment": 0.89,
+        "states_policy": true,
+        "issues": [
+          "KYV10",
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.94,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.97,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "3b007dd7",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "Raise Wages. A Stronger Economy",
+      "text": "Orange County has an opportunity to attract high-paying, technology-driven employers—especially in the growing space industry. Chris will champion bringing a future Space Force Academy to Central Florida, attracting talent, innovation, and investment.",
+      "verdict": {
+        "commitment": 0.96,
+        "own_commitment": 0.94,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.96,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.65,
+          "KYV2": 0.02,
+          "KYV3": 0.06,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4bfd03b3",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "Smarter Growth. Less Sprawl",
+      "text": "We need more housing—but we don’t need more sprawl. Chris will transform vacant and underused commercial properties into vibrant communities with housing, shops, restaurants, and services. He’ll use technology to modernize and right-size LYNX and work to make Downtown Orlando safer, cleaner, and more vibrant.",
+      "verdict": {
+        "commitment": 0.98,
+        "own_commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "KYV3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.58,
+          "A3": 0.02,
+          "A4": 0.06,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.13,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.29,
+          "B8": 0.06,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.95,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.04,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "6d7e0325",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "Diversify Our Economy",
+      "text": "According to the Bureau of Labor Statistics, Greater Orlando/Orange County has among the lowest average wages of the nation’s largest metropolitan areas. Yet we have a tremendous opportunity to change that by attracting high-paying, technology-based employers. Space technology (“SpaceTech”) offers Orange County an exceptional opportunity to lead the next generation of innovation and economic growth. Our community already possesses many of the assets needed to become a hub for this rapidly expanding industry. At the same time, the movement to bring advanced manufacturing back to the United States creates an opportunity to attract companies relocating from elsewhere.",
+      "verdict": {
+        "commitment": 0.7,
+        "own_commitment": 0.32,
+        "states_policy": false,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.94,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.04,
+          "KYV2": 0.03,
+          "KYV3": 0.07,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "471b2d6c",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "Diversify Our Economy",
+      "text": "With strong leadership, a clear vision, and a commitment to economic development, we can build a more prosperous future and ensure that Orange County remains a place where businesses invest, jobs grow and residents thrive.",
+      "verdict": {
+        "commitment": 0.67,
+        "own_commitment": 0.54,
+        "states_policy": false,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.92,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.2,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4a3e5d96",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "Keep Our Children Safe",
+      "text": "Nothing is more important than protecting our children and ensuring they are safe, healthy, and given every opportunity to succeed. My administration will safeguard children at home, in our schools, and throughout our communities. We will address environmental factors that may affect children and expectant mothers while promoting public health, transparency, and informed decision-making. We will also work with schools, parents, community organizations, and faith-based leaders to expand mentorship and opportunities that help young people develop strong character and reach their potential—something I have experienced firsthand as a volunteer high school football coach.",
+      "verdict": {
+        "commitment": 0.97,
+        "own_commitment": 0.97,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.04,
+          "A6": 0.07,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.21,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.03,
+          "B6": 0.01,
+          "B7": 0.05,
+          "B8": 0.34,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.04,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "4b344bdb",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "Keep Our Children Safe",
+      "text": "Finally, we will strengthen partnerships with local, state, and federal law enforcement to combat human trafficking, with particular focus on protecting children from exploitation. Every child deserves to grow up safe, supported, and free from abuse and fear.",
+      "verdict": {
+        "commitment": 0.98,
+        "own_commitment": 0.97,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.04,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.92,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "45c92f23",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "More Efficient, Effective and Transparent Government",
+      "text": "For too long, Orange County’s response to challenges like transportation, housing, and infrastructure has been to ask taxpayers for more. I believe there is a better way. As Mayor, I will conduct a top-to-bottom review of County spending to eliminate waste, reduce bureaucracy, identify unnecessary costs, and ensure every tax dollar is spent wisely, efficiently, and transparently. By restructuring spending and finding savings, we can direct more resources toward the priorities that matter most—modernizing transportation, expanding housing opportunities, improving public safety, strengthening infrastructure, and supporting economic growth.",
+      "verdict": {
+        "commitment": 0.99,
+        "own_commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.7,
+          "A3": 0.08,
+          "A4": 0.08,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.56,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.18,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.1,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.07,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "694d3b29",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "More Efficient, Effective and Transparent Government",
+      "text": "Government should deliver better results, not bigger bureaucracy. With fiscal discipline and accountability, we can meet Orange County’s challenges without placing unnecessary burdens on hardworking taxpayers.",
+      "verdict": {
+        "commitment": 0.92,
+        "own_commitment": 0.62,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.08,
+          "A4": 0.04,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.26,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "9eb78e01",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "Opposing Unnecessary Tax Increases",
+      "text": "Orange County families are already facing rising costs for housing, groceries, insurance, and everyday necessities—the last thing they need is another tax increase. As Mayor, I will prioritize efficiency, eliminate waste, and make better use of existing resources before asking taxpayers to contribute more. Rather than treating tax increases as the only solution to transportation and infrastructure challenges, we should pursue innovative, cost-effective alternatives, including public-private partnerships, ridesharing, and on-demand transit.",
+      "verdict": {
+        "commitment": 0.99,
+        "own_commitment": 0.98,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.1,
+          "A2": 0.16,
+          "A3": 0.14,
+          "A4": 0.65,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.43,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "fd757f07",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "Opposing Unnecessary Tax Increases",
+      "text": "Government should find smarter ways to deliver better results without placing an unnecessary burden on hardworking families, seniors, and those living on fixed incomes.",
+      "verdict": {
+        "commitment": 0.96,
+        "own_commitment": 0.74,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.08,
+          "A4": 0.15,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.38,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.08,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "36d56f37",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "Adequately Funding Public Safety",
+      "text": "Public safety is one of the most fundamental responsibilities of local government. As Orange County continues to grow, our investment in law enforcement, fire rescue, and emergency medical services must keep pace. As Mayor, I will ensure our first responders have the staffing, training, equipment, and resources they need to protect our residents and respond effectively. We will strengthen recruitment and retention, evaluate staffing levels and response times, and invest in effective crime prevention and community policing. Public safety is not a partisan issue—it is a quality-of-life issue.",
+      "verdict": {
+        "commitment": 0.98,
+        "own_commitment": 0.98,
+        "states_policy": true,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.04,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.97,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.04,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "94b7022b",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "Adequately Funding Public Safety",
+      "text": "By supporting our first responders and holding public safety agencies accountable, we can build a safer, stronger and more prosperous Orange County for everyone.",
+      "verdict": {
+        "commitment": 0.93,
+        "own_commitment": 0.84,
+        "states_policy": false,
+        "issues": [
+          "B7"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.94,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "4df0be4d",
+      "url": "https://www.chrismessina.com/platform",
+      "heading": "Supporting the Arts and Cultural Life",
+      "text": "The arts enrich our lives, strengthen our communities, and help define Orange County’s unique character. Our vibrant arts and cultural community not only provides opportunities for creativity and expression but also supports tourism, local businesses, jobs, and economic growth. The arts are especially valuable for young people, helping build confidence, discipline, creativity, teamwork, and critical-thinking skills. The arts are not a luxury—they are an essential part of a thriving community. We must continue expanding opportunities for residents of all ages to experience, participate in, and benefit from the arts while keeping Orange County a place where creativity and culture flourish.",
+      "verdict": {
+        "commitment": 0.9,
+        "own_commitment": 0.76,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.4,
+          "B2": 0.02,
+          "B3": 0.01,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.01,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "69496cfd",
+      "url": "https://www.chrismessina.com/our-vision-2",
+      "heading": "Vision",
+      "text": "We launched our campaign because Orange County has not been prioritizing properly. Our current politicians’ only solution is to raise the price of everything through higher taxes. The continual push to the sales tax shows that career politicians have failed us; it’s time for practical solutions. Chief among these is to diversify Orange County’s economy.",
+      "verdict": {
+        "commitment": 0.95,
+        "own_commitment": 0.75,
+        "states_policy": false,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.04,
+          "A4": 0.42,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.95,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.03,
+          "KYV2": 0.03,
+          "KYV3": 0.08,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "a834c4f4",
+      "url": "https://www.chrismessina.com/our-vision-2",
+      "heading": "Leadership that Unites",
+      "text": "Leadership that champions economic diversification by attracting advanced manufacturing, fostering innovation, and creating sustainable, good-paying careers for Orange County residents.",
+      "verdict": {
+        "commitment": 0.9,
+        "own_commitment": 0.82,
+        "states_policy": false,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.03,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.96,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.04,
+          "KYV1": 0.02,
+          "KYV10": 0.11,
+          "KYV2": 0.03,
+          "KYV3": 0.1,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "6db52957",
+      "url": "https://www.chrismessina.com/our-vision-2",
+      "heading": "Leadership that Unites",
+      "text": "Leadership that prioritizes the safety and well-being of our children at home, in our schools, and throughout our communities.",
+      "verdict": {
+        "commitment": 0.56,
+        "own_commitment": 0.44,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.05,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.1,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "3c9e7100",
+      "url": "https://www.chrismessina.com/our-vision-2",
+      "heading": "Leadership that Unites",
+      "text": "Leadership that helps Orange County’s families and small businesses thrive by making government more efficient and accountable, reducing unnecessary bureaucracy, and easing the financial burden of inflation through responsible stewardship of your tax dollars.",
+      "verdict": {
+        "commitment": 0.93,
+        "own_commitment": 0.82,
+        "states_policy": false,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.05,
+          "A4": 0.28,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.93,
+          "B2": 0.03,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ba4e257c",
+      "url": "https://www.chrismessina.com/our-vision-2",
+      "heading": "Leadership that Unites",
+      "text": "Leadership that embraces innovative solutions to help every Orange County resident achieve an affordable home protected from excessive property taxes.",
+      "verdict": {
+        "commitment": 0.82,
+        "own_commitment": 0.71,
+        "states_policy": false,
+        "issues": [
+          "A2",
+          "A3"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.96,
+          "A3": 0.92,
+          "A4": 0.19,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.08,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.05,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.06,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "23a38dd9",
+      "url": "https://www.chrismessina.com/our-vision-2",
+      "heading": "Leadership that Unites",
+      "text": "Leadership that invests in innovative technology to create smarter, safer, and more efficient transportation solutions.",
+      "verdict": {
+        "commitment": 0.68,
+        "own_commitment": 0.73,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.01,
+          "A7": 0.01,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.05,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.03,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.01,
+          "KYV9": 0.01
+        }
+      }
+    },
+    {
+      "id": "0384fea0",
+      "url": "https://www.chrismessina.com/our-vision-2",
+      "heading": "Leadership that Unites",
+      "text": "Leadership that delivers real public safety results through action, accountability, and responsible investment – not more bureaucracy.",
+      "verdict": {
+        "commitment": 0.81,
+        "own_commitment": 0.61,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.05,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.7,
+          "B8": 0.02,
+          "KYV1": 0.04,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "da090b95",
+      "url": "https://www.chrismessina.com/about-chris",
+      "heading": "Pro-Family — Pro-Familia",
+      "text": "Chris Messina’s vision for greater Orlando and Orange County is to see it become one of the top metropolitan areas in America with a diversified economic base, vibrant, safe neighborhoods and efficient, transparent government. Chris is a tech entrepreneur and education philanthropist with over 30 years of business experience. He lives in Winter Park, Orange County. He successfully founded and ran several medical technology businesses and served on multiple boards, among them industry consortiums, hospitals and educational non-profits. Chris has been married for over 20 years to his wife Julie, a naturalized U.S. citizen.",
+      "verdict": {
+        "commitment": 0.51,
+        "own_commitment": 0.4,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.03,
+          "A3": 0.03,
+          "A4": 0.03,
+          "A5": 0.03,
+          "A6": 0.03,
+          "A7": 0.03,
+          "B1": 0.63,
+          "B2": 0.04,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.09,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.06,
+          "KYV2": 0.02,
+          "KYV3": 0.05,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.03
+        }
+      }
+    },
+    {
+      "id": "9e431020",
+      "url": "https://www.chrismessina.com/about-chris",
+      "heading": "Pro-Family — Pro-Familia",
+      "text": "They have three children – two at colleges in Florida and one at an Orange County Christian school, where he serves as a volunteer football coach. Chris has an MBA from Harvard, a BS in Economics and a Masters in City & Regional Planning from Rutgers.",
+      "verdict": {
+        "commitment": 0.04,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.03,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.03,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.04
+        }
+      }
+    },
+    {
+      "id": "764407c7",
+      "url": "https://www.chrismessina.com/about-chris",
+      "heading": "Awards",
+      "text": "Orange County High School, Assistant Football Coach (Volunteer) Orange County Watch FL No on A4 Campaign",
+      "verdict": {
+        "commitment": 0.33,
+        "own_commitment": 0.08,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.17,
+          "A2": 0.19,
+          "A3": 0.17,
+          "A4": 0.05,
+          "A5": 0.21,
+          "A6": 0.1,
+          "A7": 0.53,
+          "B1": 0.04,
+          "B2": 0.07,
+          "B3": 0.1,
+          "B4": 0.04,
+          "B5": 0.2,
+          "B6": 0.18,
+          "B7": 0.19,
+          "B8": 0.07,
+          "KYV1": 0.05,
+          "KYV10": 0.04,
+          "KYV2": 0.09,
+          "KYV3": 0.48,
+          "KYV4": 0.14,
+          "KYV5": 0.21,
+          "KYV6": 0.07,
+          "KYV7": 0.11,
+          "KYV8": 0.13,
+          "KYV9": 0.17
+        }
+      }
+    },
+    {
+      "id": "a4019327",
+      "url": "https://www.chrismessina.com/about-chris",
+      "heading": "Awards",
+      "text": "Orange County Precinct Clerk, 2024 Election",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.03,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.05,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "636c85e7",
+      "url": "https://www.chrismessina.com/about-chris",
+      "heading": "Awards",
+      "text": "Project Outreach, Harvard Business School",
+      "verdict": {
+        "commitment": 0.02,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c6c2261a",
+      "url": "https://www.chrismessina.com/about-chris",
+      "heading": "Awards",
+      "text": "Church Children’s Ministry- Volunteer leader",
+      "verdict": {
+        "commitment": 0.02,
+        "own_commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "00c55354",
+      "url": "https://www.chrismessina.com/about-chris",
+      "heading": "Awards",
+      "text": "Big Brothers/Big Sisters Association – youth mentor",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.01,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "30f09235",
+      "url": "https://www.chrismessina.com/about-chris",
+      "heading": "Awards",
+      "text": "Big Brothers/Big Sisters Association (Newark/Essex County), Director",
+      "verdict": {
+        "commitment": 0.03,
+        "own_commitment": 0.04,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "economy",
+        "label": "Economy & Affordability"
+      },
+      "subIssues": [
+        {
+          "id": "B1",
+          "label": "Economy, inflation, and jobs",
+          "citations": [
+            {
+              "passage": {
+                "id": "3b007dd7",
+                "url": "https://www.chrismessina.com/platform",
+                "heading": "Raise Wages. A Stronger Economy",
+                "text": "Orange County has an opportunity to attract high-paying, technology-driven employers—especially in the growing space industry. Chris will champion bringing a future Space Force Academy to Central Florida, attracting talent, innovation, and investment.",
+                "retrieved_at": "2026-09-29T11:47:59.140Z"
+              },
+              "score": 0.96
+            },
+            {
+              "passage": {
+                "id": "56bcebc5",
+                "url": "https://www.chrismessina.com/platform",
+                "heading": "Build Skill. Fill High-Demand Jobs",
+                "text": "A good-paying career shouldn’t require a four-year degree. Orange County Works will expand vocational, technical, and workforce training—connecting residents with the trade skills employers need and creating a pathway from classroom to career.",
+                "retrieved_at": "2026-09-29T11:47:59.140Z"
+              },
+              "score": 0.94
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "education",
+        "label": "Education"
+      },
+      "subIssues": [
+        {
+          "id": "KYV10",
+          "label": "Career, vocational and higher education",
+          "citations": [
+            {
+              "passage": {
+                "id": "56bcebc5",
+                "url": "https://www.chrismessina.com/platform",
+                "heading": "Build Skill. Fill High-Demand Jobs",
+                "text": "A good-paying career shouldn’t require a four-year degree. Orange County Works will expand vocational, technical, and workforce training—connecting residents with the trade skills employers need and creating a pathway from classroom to career.",
+                "retrieved_at": "2026-09-29T11:47:59.140Z"
+              },
+              "score": 0.97
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "environment",
+        "label": "Environment & Water"
+      },
+      "subIssues": [
+        {
+          "id": "KYV3",
+          "label": "Growth, development and land conservation",
+          "citations": [
+            {
+              "passage": {
+                "id": "4bfd03b3",
+                "url": "https://www.chrismessina.com/platform",
+                "heading": "Smarter Growth. Less Sprawl",
+                "text": "We need more housing—but we don’t need more sprawl. Chris will transform vacant and underused commercial properties into vibrant communities with housing, shops, restaurants, and services. He’ll use technology to modernize and right-size LYNX and work to make Downtown Orlando safer, cleaner, and more vibrant.",
+                "retrieved_at": "2026-09-29T11:47:59.140Z"
+              },
+              "score": 0.95
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "insurance",
+        "label": "Insurance & Property Costs"
+      },
+      "subIssues": [
+        {
+          "id": "A3",
+          "label": "Property taxes",
+          "citations": [
+            {
+              "passage": {
+                "id": "de28396b",
+                "url": "https://www.chrismessina.com/platform",
+                "heading": "Cut Taxes. Cut Waste",
+                "text": "Orange County families are paying more while government continues to grow. Chris believes families deserve tax relief—not more wasteful spending. He supports YES on Amendment 3 to reduce the property-tax burden while protecting essential services.",
+                "retrieved_at": "2026-09-29T11:47:59.140Z"
+              },
+              "score": 0.98
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "safety",
+        "label": "Public Safety & Crime"
+      },
+      "subIssues": [
+        {
+          "id": "B7",
+          "label": "Crime policy, policing and courts",
+          "citations": [
+            {
+              "passage": {
+                "id": "36d56f37",
+                "url": "https://www.chrismessina.com/platform",
+                "heading": "Adequately Funding Public Safety",
+                "text": "Public safety is one of the most fundamental responsibilities of local government. As Orange County continues to grow, our investment in law enforcement, fire rescue, and emergency medical services must keep pace. As Mayor, I will ensure our first responders have the staffing, training, equipment, and resources they need to protect our residents and respond effectively. We will strengthen recruitment and retention, evaluate staffing levels and response times, and invest in effective crime prevention and community policing. Public safety is not a partisan issue—it is a quality-of-life issue.",
+                "retrieved_at": "2026-09-29T11:47:59.140Z"
+              },
+              "score": 0.97
+            },
+            {
+              "passage": {
+                "id": "4b344bdb",
+                "url": "https://www.chrismessina.com/platform",
+                "heading": "Keep Our Children Safe",
+                "text": "Finally, we will strengthen partnerships with local, state, and federal law enforcement to combat human trafficking, with particular focus on protecting children from exploitation. Every child deserves to grow up safe, supported, and free from abuse and fear.",
+                "retrieved_at": "2026-09-29T11:47:59.140Z"
+              },
+              "score": 0.92
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 130567,
+    "output_tokens": 16765
+  }
+}

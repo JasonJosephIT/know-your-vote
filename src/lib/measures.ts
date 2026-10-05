@@ -1,54 +1,81 @@
 import { unstable_cache } from "next/cache";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION } from "@/lib/election";
-/* The same rule the database enforces (0010), re-checked here so a measure
-   that somehow reached 'published' without it never renders one-sided. Lives
-   in its own module so the verify script can run it without next/cache. */
-import { sidesBalanced } from "@/lib/measure-balance";
+/* The ladder and the symmetry rule, in their own module so the verify script
+   can run them without next/cache. */
+import { compareResources, sidesBalanced } from "@/lib/measure-ladder";
+import {
+  measureVisibleStatus,
+  type MeasureVisibleStatus,
+} from "@/lib/measure-status";
 import type { Source } from "@/types/schema";
-import type { BallotMeasure, MeasureArgument, MeasureSide } from "@/types/app";
+import type {
+  BallotMeasure,
+  MeasureResource,
+  MeasureStance,
+} from "@/types/app";
 
-/* Published-only read layer for ballot measures (TASK-062), mirroring
-   briefs.ts:
+/* Read layer for ballot measures, mirroring briefs.ts. Two tiers since 0033
+   (docs/general-election/listed-tier-2026-09-23.md): a `listed` measure
+   exposes the measure row itself — the verbatim ballot text — and a
+   `published` one adds the two-sided resource list (0034). Resources stay
+   gated on `published` in RLS, so the rules below still describe every
+   resource this module can ever return:
 
-   1. RLS already hides every row tied to an unpublished measure, so the gate
-      is at the database, not here.
+   1. RLS lets anon read a `listed` measure's neutral resources (0041); sided
+      (`support`/`oppose`) rows stay hidden until the measure is `published`.
+      That split is enforced at the database, not here.
    2. This module re-checks the symmetry rule anyway — belt and braces over
       the publication trigger, exactly as briefs.ts re-checks
       balance_check_passed over the publication gate.
-   3. Arguments carry a NOT NULL source_id, so "no source -> dropped" is a
-      schema guarantee rather than a query detail. The join is still inner:
-      a dangling source reference drops the argument rather than rendering
-      one with nothing behind it.
+   3. Resources carry a NOT NULL source_id, so "no source -> dropped" is a
+      schema guarantee. The join is still inner: a dangling source reference
+      drops the resource rather than rendering one with nothing behind it.
+   4. Order is the ladder (measure-ladder.ts), applied here so every caller
+      gets rows already in credible-first order and none re-sorts.
 
    Note the election vocabulary here is the cycle key ('general_2026'), not
    the race enum — see src/lib/election.ts for why those are separate. */
 
 export { sidesBalanced };
+export type { MeasureVisibleStatus };
 
-export interface MeasureArgumentWithSource {
-  argument: MeasureArgument;
+export interface MeasureResourceWithSource {
+  resource: MeasureResource;
   source: Source;
 }
 
 export interface MeasureBrief {
   measure: BallotMeasure;
-  support: MeasureArgumentWithSource[];
-  oppose: MeasureArgumentWithSource[];
+  /* Shared context: official documents, research, reporting. Tier-ordered. */
+  neutral: MeasureResourceWithSource[];
+  /* The case for a YES. Tier-ordered. */
+  support: MeasureResourceWithSource[];
+  /* The case for a NO. Tier-ordered. */
+  oppose: MeasureResourceWithSource[];
 }
 
-type ArgumentRow = MeasureArgument & { source: Source | null };
+type ResourceRow = MeasureResource & { source: Source | null };
 
-function toSourced(rows: ArgumentRow[], side: MeasureSide): MeasureArgumentWithSource[] {
+function toSourced(
+  rows: ResourceRow[],
+  stance: MeasureStance
+): MeasureResourceWithSource[] {
   return rows
-    .filter((row) => row.side === side && row.source !== null)
+    .filter((row) => row.stance === stance && row.source !== null)
     .map((row) => {
-      const { source, ...argument } = row;
-      return { argument: argument as MeasureArgument, source: source as Source };
-    });
+      const { source, ...resource } = row;
+      return {
+        resource: resource as MeasureResource,
+        source: source as Source,
+      };
+    })
+    .sort((a, b) => compareResources(a.resource, b.resource));
 }
 
-async function fetchMeasureBrief(measureId: string): Promise<MeasureBrief | null> {
+async function fetchMeasureBrief(
+  measureId: string
+): Promise<MeasureBrief | null> {
   const supabase = await createAnonServerClient();
 
   const { data: measure } = await supabase
@@ -60,18 +87,18 @@ async function fetchMeasureBrief(measureId: string): Promise<MeasureBrief | null
   if (!measure) return null;
 
   const { data: rows } = await supabase
-    .from("measure_argument")
+    .from("measure_resource")
     .select("*, source!inner(*)")
-    .eq("measure_id", measureId)
-    .order("display_order");
+    .eq("measure_id", measureId);
 
-  const all = (rows ?? []) as ArgumentRow[];
+  const all = (rows ?? []) as ResourceRow[];
   const support = toSourced(all, "support");
   const oppose = toSourced(all, "oppose");
+  const neutral = toSourced(all, "neutral");
 
   if (!sidesBalanced(support.length, oppose.length)) return null;
 
-  return { measure, support, oppose };
+  return { measure, neutral, support, oppose };
 }
 
 export function getMeasureBrief(measureId: string) {
@@ -82,7 +109,86 @@ export function getMeasureBrief(measureId: string) {
   )();
 }
 
-async function fetchActiveMeasures(): Promise<BallotMeasure[]> {
+/* Listing mode for one measure: the measure row and which tier made it
+   visible, plus the brief when (and only when) the measure is published and
+   its sides are balanced.
+
+   `brief` is null in two different cases, and the page treats them alike on
+   purpose: a `listed` measure (only its neutral resources are readable — RLS
+   gates support/oppose rows on `published`, 0041), and a `published` one
+   that fails the symmetry re-check. Either way the voter sees the ballot
+   text and never a one-sided support/oppose list.
+
+   `neutral` is filled from the brief once published, and read directly for a
+   listed measure — RLS returns only the neutral rows in that state, so no
+   extra filtering is needed here. */
+export interface MeasureListing {
+  measure: BallotMeasure;
+  status: MeasureVisibleStatus;
+  brief: MeasureBrief | null;
+  neutral: MeasureResourceWithSource[];
+}
+
+type MeasureWithPublication = BallotMeasure & {
+  measure_publication: { status: string } | { status: string }[] | null;
+};
+
+/* Splits the embed off so callers get a plain BallotMeasure — the shape every
+   existing consumer was written against — and the status beside it. */
+function splitPublication(row: MeasureWithPublication): {
+  measure: BallotMeasure;
+  status: MeasureVisibleStatus | null;
+} {
+  const { measure_publication, ...measure } = row;
+  return { measure, status: measureVisibleStatus(measure_publication) };
+}
+
+async function fetchMeasureListing(
+  measureId: string
+): Promise<MeasureListing | null> {
+  const supabase = await createAnonServerClient();
+
+  const { data } = await supabase
+    .from("ballot_measure")
+    .select("*, measure_publication(status)")
+    .eq("measure_id", measureId)
+    .eq("election", ACTIVE_ELECTION)
+    .maybeSingle<MeasureWithPublication>();
+  if (!data) return null;
+
+  const { measure, status } = splitPublication(data);
+  if (!status) return null;
+
+  let neutral: MeasureResourceWithSource[] = [];
+  let brief: MeasureBrief | null = null;
+  if (status === "published") {
+    brief = await fetchMeasureBrief(measureId);
+    neutral = brief?.neutral ?? [];
+  } else {
+    const { data: rows } = await supabase
+      .from("measure_resource")
+      .select("*, source!inner(*)")
+      .eq("measure_id", measureId)
+      .eq("stance", "neutral");
+    neutral = toSourced((rows ?? []) as ResourceRow[], "neutral");
+  }
+  return { measure, status, brief, neutral };
+}
+
+export function getMeasureListing(measureId: string) {
+  return unstable_cache(
+    () => fetchMeasureListing(measureId),
+    ["measure-listing-v2", measureId],
+    { revalidate: 3600, tags: ["measures", `measure:${measureId}`] }
+  )();
+}
+
+/* A measure as the ballot-questions list needs it: every BallotMeasure field,
+   untouched, plus the tier. An intersection rather than a new shape so every
+   caller written against BallotMeasure[] still type-checks. */
+export type ActiveMeasure = BallotMeasure & { status: MeasureVisibleStatus };
+
+async function fetchActiveMeasures(): Promise<ActiveMeasure[]> {
   let supabase;
   try {
     supabase = await createAnonServerClient();
@@ -94,18 +200,27 @@ async function fetchActiveMeasures(): Promise<BallotMeasure[]> {
   }
   const { data } = await supabase
     .from("ballot_measure")
-    .select("*")
+    .select("*, measure_publication(status)")
     .eq("election", ACTIVE_ELECTION)
     .order("display_order");
-  return (data ?? []) as BallotMeasure[];
+  /* RLS already hides every measure without a listed or published row; a
+     row whose status still fails the re-check is dropped, not shown. */
+  return ((data ?? []) as MeasureWithPublication[]).flatMap((row) => {
+    const { measure, status } = splitPublication(row);
+    return status ? [{ ...measure, status }] : [];
+  });
 }
 
-/* Every published measure for the active election. Statewide measures are on
-   every Florida voter's ballot, so this needs no ZIP — which is what lets
-   Phase 7 render them with no input at all. */
+/* Every visible measure for the active election — listed or published.
+   Statewide measures are on every Florida voter's ballot, so this needs no
+   ZIP — which is what lets Phase 7 render them with no input at all. */
 export function getActiveMeasures() {
-  return unstable_cache(fetchActiveMeasures, ["active-measures", ACTIVE_ELECTION], {
-    revalidate: 3600,
-    tags: ["measures"],
-  })();
+  return unstable_cache(
+    fetchActiveMeasures,
+    ["active-measures", ACTIVE_ELECTION],
+    {
+      revalidate: 3600,
+      tags: ["measures"],
+    }
+  )();
 }

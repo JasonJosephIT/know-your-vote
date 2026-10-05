@@ -16,7 +16,7 @@
         either way is the regression this rule exists to catch.
 
    Pure and offline: no DB, no network, no browser. Same idiom as
-   verify-quiz-guardrails.ts (Node >= 22 strips types natively).
+   verify-measure-balance.ts (Node >= 22 strips types natively).
 
    Run: node scripts/verify-news-labels.ts */
 

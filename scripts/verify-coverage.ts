@@ -18,6 +18,9 @@
         with `races.length > 0` so the "not published yet" copy keeps that
         case. This pins the composition too, since dropping it is the silent
         way to show two messages for one absence.
+     6. County races (0031/0032, listed per county since 0033) stay out of
+        `races`: their district is non-null, so one inside the list would
+        silence the notice. They travel as ResolveResult `countyRaces`.
 
    Mutation-checked: replacing the predicate body with `false` fails case 1;
    with `Boolean(district)` fails case 2; dropping the empty-string handling
@@ -30,7 +33,12 @@
    Run: node scripts/verify-coverage.ts */
 
 import { readFileSync } from "node:fs";
-import { districtRaceMissing } from "../src/lib/coverage.ts";
+import {
+  addressCoverage,
+  districtRaceMissing,
+  STATEWIDE_BALLOT_HREF,
+} from "../src/lib/coverage.ts";
+import { COVERED_COUNTIES, coveredCountyNames } from "../src/lib/counties.ts";
 
 let failures = 0;
 function check(name: string, cond: boolean, detail = "") {
@@ -111,6 +119,30 @@ check(
   "a gap notice that does not say which district is not actionable"
 );
 
+// (6) County races must stay out of `races`. They carry a non-null district
+//     ('ORA-CC-2'), so one inside the list would satisfy the predicate and
+//     silence the House-race notice for a voter whose House race is missing —
+//     and it would place a county seat on a ballot we cannot place it on.
+check(
+  "a county race in the list would mask the missing House race",
+  districtRaceMissing("FL-9", [statewide, { district: "ORA-CC-2" }]) === false,
+  "documents why the next two checks exist"
+);
+const resolveSrc = readFileSync(
+  new URL("../src/lib/resolve.ts", import.meta.url),
+  "utf8"
+);
+check(
+  "racesForDistrict matches only statewide or the exact district",
+  /\.or\(`district\.is\.null,district\.eq\.\$\{district\}`\)/.test(resolveSrc),
+  "a wider match would pull county races into `races`"
+);
+check(
+  "YourRaces feeds the predicate result.races, never countyRaces",
+  !/districtRaceMissing\([^)]*countyRaces/.test(yourRaces.replace(/\s+/g, " ")),
+  "county races are county-matched and must not answer for the district"
+);
+
 // The predicate takes no side and reads nothing global.
 check(
   "deterministic across calls",
@@ -121,8 +153,61 @@ const input: Race[] = [statewide, house("FL-28")];
 districtRaceMissing("FL-28", input);
 check(
   "input array is not mutated",
-  input.length === 2 && input[0].district === null &&
+  input.length === 2 &&
+    input[0].district === null &&
     input[1].district === "FL-28"
+);
+
+// (7) Coverage comes from the ADDRESS, not the ZIP table. A Florida block we
+//     cannot place is the statewide ballot, never "we don't cover this area".
+const placed = { district: "FL-27", countyFips: "12086" };
+check(
+  "a placed Florida block is district coverage",
+  addressCoverage("12", placed) === "district"
+);
+check(
+  "an unplaced Florida block is statewide, not out of coverage",
+  addressCoverage("12", null) === "statewide"
+);
+check(
+  "a non-Florida block is out of state even if a row came back",
+  addressCoverage("13", placed) === "out_of_state" &&
+    addressCoverage("13", null) === "out_of_state"
+);
+const routeSrc = readFileSync(
+  new URL("../src/app/api/address/resolve/route.ts", import.meta.url),
+  "utf8"
+);
+check(
+  "the address route falls back to the statewide ballot",
+  /resolveStatewideOnly\(\)/.test(routeSrc) &&
+    !/if \(!resolved\) return NextResponse\.json\(OUT_OF_COVERAGE\)/.test(
+      routeSrc
+    ),
+  "an unplaced Florida address must not get OUT_OF_COVERAGE"
+);
+check(
+  "the statewide link carries no location",
+  !/zip=|district=|county=/.test(STATEWIDE_BALLOT_HREF) &&
+    STATEWIDE_BALLOT_HREF.includes("scope=statewide")
+);
+
+// (8) The coverage copy names exactly the counties the resolver covers.
+const names = coveredCountyNames();
+check(
+  "every covered county is named in the coverage copy",
+  COVERED_COUNTIES.every((c) => names.includes(c.name)),
+  names
+);
+check(
+  "the list reads as prose",
+  names === "Miami-Dade, Broward, Hillsborough and Orange",
+  names
+);
+check(
+  "YourRaces says full statewide coverage is not available",
+  yourRaces.includes("Full statewide coverage isn&apos;t available") &&
+    /result\.coverage === "statewide"/.test(yourRaces)
 );
 
 if (failures > 0) {

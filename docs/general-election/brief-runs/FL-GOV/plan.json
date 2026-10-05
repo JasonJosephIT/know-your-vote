@@ -1,0 +1,23 @@
+{
+  "race_id": "FL-GOV-general",
+  "retrieved_at": "2026-09-27T12:50:23Z",
+  "spine": [
+    { "id": "A1", "title": "Property insurance costs", "description": null },
+    { "id": "A3", "title": "Property taxes", "description": null },
+    { "id": "A2", "title": "Housing affordability", "description": null },
+    { "id": "A4", "title": "Cost of living in Florida", "description": null }
+  ],
+  "candidates": [
+    { "candidate_id": "FL-DOE-89042", "official_site": "https://byrondonalds.com/", "run": "FL-DOE-89042/run.json" },
+    { "candidate_id": "FL-DOE-90630", "official_site": "https://burkettforgov.com/", "run": "FL-DOE-90630/run.json" },
+    { "candidate_id": "FL-DOE-89243", "official_site": "https://davidjolly.com/", "run": "FL-DOE-89243/run.json" },
+    { "candidate_id": "FL-DOE-90433", "official_site": "https://www.deanabrams.com/", "run": null,
+      "no_run_reason": "site unreadable: bot challenge (HTTP 403) did not clear in the browser, 2026-09-27 (FL-DOE-90433/ingest.log); founder decision D3/D4: record silence" },
+    { "candidate_id": "FL-DOE-89571", "official_site": "https://russo2026.com/", "run": "FL-DOE-89571/run.json" },
+    { "candidate_id": "FL-DOE-89630", "official_site": null, "run": null,
+      "no_run_reason": "no official_site (candidate-sites-2026-09-21.md); founder decision D3: record silence" },
+    { "candidate_id": "FL-DOE-88529", "official_site": "https://nomoecorruption.com/", "run": "FL-DOE-88529/run.json" },
+    { "candidate_id": "FL-DOE-84076", "official_site": "https://scottjewett.com/", "run": null,
+      "no_run_reason": "site unreadable: bot challenge (HTTP 202) did not clear in the browser, 2026-09-27 (FL-DOE-84076/ingest.log); never solve a captcha; founder decision D4: record silence" }
+  ]
+}

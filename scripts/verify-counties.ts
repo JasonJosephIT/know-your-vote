@@ -9,7 +9,11 @@
 
 import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { COVERED_COUNTIES, coveredCounty } from "../src/lib/counties.ts";
+import {
+  COVERED_COUNTIES,
+  countyForRaceDistrict,
+  coveredCounty,
+} from "../src/lib/counties.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const stripComments = (src: string) =>
@@ -41,6 +45,53 @@ assert(
   "coveredCounty rejects an uncovered county",
   coveredCounty("12087") === undefined
 );
+
+/* County-race prefixes (0031 / 0032 district codes). These are how a county
+   race finds its county at all — resolve.ts racesForCounty filters on
+   `<prefix>-%` and the directory's county filter on countyForRaceDistrict —
+   so a wrong or duplicated prefix silently moves a seat to another county's
+   list, or drops it from every list. */
+assert(
+  "the expected race-district prefixes, per FIPS",
+  COVERED_COUNTIES.map((c) => `${c.fips}=${c.raceDistrictPrefix}`).join(",") ===
+    "12086=DAD,12011=BRO,12057=HIL,12095=ORA"
+);
+assert(
+  "race-district prefixes are unique",
+  new Set(COVERED_COUNTIES.map((c) => c.raceDistrictPrefix)).size ===
+    COVERED_COUNTIES.length
+);
+for (const [district, fips] of [
+  ["ORA-CC-2", "12095"],
+  ["ORA-MAYOR", "12095"],
+  ["ORA-SBCHAIR", "12095"],
+  ["BRO-SB-6", "12011"],
+  ["BRO-SBAL-8", "12011"],
+  ["DAD-SB-1", "12086"],
+  ["HIL-CC-5", "12057"],
+] as const) {
+  assert(
+    `countyForRaceDistrict(${district}) is ${fips}`,
+    countyForRaceDistrict(district)?.fips === fips
+  );
+}
+for (const district of [
+  null,
+  undefined,
+  "",
+  "FL-10",
+  "FL-27",
+  "ORA",
+  "ORANGE-CC-2",
+  "-CC-2",
+  "PBC-CC-1",
+  "ora-cc-2",
+]) {
+  assert(
+    `countyForRaceDistrict(${JSON.stringify(district)}) is no county`,
+    countyForRaceDistrict(district) === undefined
+  );
+}
 
 /* No surface may redeclare the list. Both files must reach it by import. */
 for (const rel of [

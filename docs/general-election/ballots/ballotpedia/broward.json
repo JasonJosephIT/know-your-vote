@@ -1,0 +1,328 @@
+{
+  "source": "Ballotpedia (ballotpedia.org) — Tier 2 corroboration source; acknowledged as a source per founder, 2026-09-22",
+  "retrieved_at": "2026-09-22T00:18:32+00:00",
+  "county": "Broward",
+  "pages_consulted": [
+    {
+      "url": "https://ballotpedia.org/Broward_County_Public_Schools,_Florida,_elections_(2026)",
+      "status": 200,
+      "oldid": "11280173"
+    },
+    {
+      "url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026",
+      "status": 200,
+      "oldid": "11109514"
+    },
+    {
+      "url": "https://ballotpedia.org/Caryl_Sandler_Shuham_(Broward_County_Board_of_County_Commissioners_District_6,_Florida,_candidate_2026)",
+      "status": 200,
+      "oldid": "11643076"
+    },
+    {
+      "url": "https://ballotpedia.org/Broward_County,_Florida_elections,_2026",
+      "status": 404,
+      "note": "guessed title without the second comma; page does not exist"
+    }
+  ],
+  "method_notes": "Pages fetched live via Firecrawl (maxAge 0, markdown, onlyMainContent), one request at a time to honor Ballotpedia's Crawl-delay. Only the Nov 3 general-election field was extracted; for races Ballotpedia reports as won outright in the Aug 18 primary, ballotpedia_candidates holds the primary winner for name comparison and on_november_ballot_per_ballotpedia is false. No write-in candidates were noted on any page. Read-only: no database or other repo files were modified.",
+  "races": [
+    {
+      "race_id": "FL-BRO-CC2-general",
+      "office": "Broward County Commission, District 2",
+      "district": "BRO-CC-2",
+      "ballotpedia_url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026",
+      "coverage": "not_covered",
+      "on_november_ballot_per_ballotpedia": null,
+      "ballotpedia_candidates": [],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-BRO-1179",
+          "legal_name": "Mark D. Bogen",
+          "party": "DEM",
+          "qualifying_status": "unopposed"
+        }
+      ],
+      "diff": {
+        "matched": [],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Ballotpedia's 2026 Broward county-elections page lists only Board of County Commissioners District 6 under 'County elections and candidates' (Aug 18 primary); this district does not appear at all, and no Nov 3 (General) county section exists. A firecrawl_search restricted to ballotpedia.org for the candidate's name returned no 2026 candidate page. Absence is consistent with our 'unopposed' status (F.S. 101.151(7): unopposed candidates are deemed elected and omitted from the ballot), but Ballotpedia does not affirmatively state this, so it is recorded as not_covered rather than corroborated. Search found only a 2022 page for this candidate (https://ballotpedia.org/Mark_David_Bogen_(Broward_County_Commission,_District_2,_Florida,_candidate_2022)); nothing for 2026."
+    },
+    {
+      "race_id": "FL-BRO-CC4-general",
+      "office": "Broward County Commission, District 4",
+      "district": "BRO-CC-4",
+      "ballotpedia_url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026",
+      "coverage": "not_covered",
+      "on_november_ballot_per_ballotpedia": null,
+      "ballotpedia_candidates": [],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-BRO-1178",
+          "legal_name": "Lamar Fisher",
+          "party": "DEM",
+          "qualifying_status": "unopposed"
+        }
+      ],
+      "diff": {
+        "matched": [],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Ballotpedia's 2026 Broward county-elections page lists only Board of County Commissioners District 6 under 'County elections and candidates' (Aug 18 primary); this district does not appear at all, and no Nov 3 (General) county section exists. A firecrawl_search restricted to ballotpedia.org for the candidate's name returned no 2026 candidate page. Absence is consistent with our 'unopposed' status (F.S. 101.151(7): unopposed candidates are deemed elected and omitted from the ballot), but Ballotpedia does not affirmatively state this, so it is recorded as not_covered rather than corroborated."
+    },
+    {
+      "race_id": "FL-BRO-CC6-general",
+      "office": "Broward County Commission, District 6",
+      "district": "BRO-CC-6",
+      "ballotpedia_url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": false,
+      "ballotpedia_candidates": [
+        {
+          "name": "Caryl Sandler Shuham",
+          "party": "DEM",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-BRO-1041",
+          "legal_name": "Caryl Sandler Shuham",
+          "party": "DEM",
+          "qualifying_status": "elected_in_primary"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Caryl Sandler Shuham"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Ballotpedia covers this seat ONLY as an Aug 18, 2026 Democratic primary (Eugen Mihai Bold, Jeffery Jones, Archibald John Ryan IV, Caryl Sandler Shuham, all D); the county page has no Nov 3 (General) county-commission section, so on_november_ballot=false is inferred from absence. Shuham's candidate page (https://ballotpedia.org/Caryl_Sandler_Shuham_(Broward_County_Board_of_County_Commissioners_District_6,_Florida,_candidate_2026)) shows DDHQ primary results: Shuham 41.9% (8,328), Bold 27.7%, Ryan 21.2%, Jones 9.2%, >95% reporting, last updated Sep 21, 2026. Incumbency: 'Incumbency information for this race was not available'. Party DEM matches. AMBIGUITY: unlike the school-board page, Ballotpedia does NOT explicitly say Shuham 'won election outright' or that no general election will be held; the page still reads 'ran for election ... was on the ballot in the Democratic primary' and carries categories '2026 primary'/'2026 challenger' with no general-election category. The ballotpedia_candidates entry above is the primary winner, not a listed Nov 3 general candidate. Consistent with our elected_in_primary but not affirmatively corroborated."
+    },
+    {
+      "race_id": "FL-BRO-CC8-general",
+      "office": "Broward County Commission, District 8",
+      "district": "BRO-CC-8",
+      "ballotpedia_url": "https://ballotpedia.org/Broward_County,_Florida,_elections,_2026",
+      "coverage": "not_covered",
+      "on_november_ballot_per_ballotpedia": null,
+      "ballotpedia_candidates": [],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-BRO-1182",
+          "legal_name": "Robert McKinzie",
+          "party": "DEM",
+          "qualifying_status": "unopposed"
+        }
+      ],
+      "diff": {
+        "matched": [],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Ballotpedia's 2026 Broward county-elections page lists only Board of County Commissioners District 6 under 'County elections and candidates' (Aug 18 primary); this district does not appear at all, and no Nov 3 (General) county section exists. A firecrawl_search restricted to ballotpedia.org for the candidate's name returned no 2026 candidate page. Absence is consistent with our 'unopposed' status (F.S. 101.151(7): unopposed candidates are deemed elected and omitted from the ballot), but Ballotpedia does not affirmatively state this, so it is recorded as not_covered rather than corroborated."
+    },
+    {
+      "race_id": "FL-BRO-SB1-general",
+      "office": "Broward County School Board, District 1",
+      "district": "BRO-SB-1",
+      "ballotpedia_url": "https://ballotpedia.org/Broward_County_Public_Schools,_Florida,_elections_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": false,
+      "ballotpedia_candidates": [
+        {
+          "name": "Maura McCarthy Bulman",
+          "party": "",
+          "incumbent": true,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-BRO-1194",
+          "legal_name": "Maura McCarthy Bulman",
+          "party": "",
+          "qualifying_status": "elected_in_primary"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Maura McCarthy Bulman"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "DECIDED. Ballotpedia: 'Incumbent Maura McCarthy Bulman won election outright against Carmen Gimenez in the primary ... on August 18, 2026' (71.5%, 17,364 of 24,284). No general-election section for District 1. The ballotpedia_candidates entry is the primary-outright winner, not a Nov 3 listing. Name and nonpartisan status match ours."
+    },
+    {
+      "race_id": "FL-BRO-SB4-general",
+      "office": "Broward County School Board, District 4",
+      "district": "BRO-SB-4",
+      "ballotpedia_url": "https://ballotpedia.org/Broward_County_Public_Schools,_Florida,_elections_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": false,
+      "ballotpedia_candidates": [
+        {
+          "name": "Nicole Morst",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-BRO-1191",
+          "legal_name": "Nicole Morst",
+          "party": "",
+          "qualifying_status": "elected_in_primary"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Nicole Morst"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "DECIDED. Ballotpedia: 'Nicole Morst won election outright against Sharry Kimmel in the primary ... on August 18, 2026' (59.7%, 17,574 of 29,424); 'There were no incumbents in this race.' No general-election section for District 4. Name and nonpartisan status match ours."
+    },
+    {
+      "race_id": "FL-BRO-SB6-general",
+      "office": "Broward County School Board, District 6",
+      "district": "BRO-SB-6",
+      "ballotpedia_url": "https://ballotpedia.org/Broward_County_Public_Schools,_Florida,_elections_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": true,
+      "ballotpedia_candidates": [
+        {
+          "name": "Adam Cervera",
+          "party": "",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Roberto Fernandez",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-BRO-1184",
+          "legal_name": "Adam Cervera",
+          "party": "",
+          "qualifying_status": "qualified"
+        },
+        {
+          "candidate_id": "FL-VF-BRO-1172",
+          "legal_name": "Roberto Fernandez III",
+          "party": "",
+          "qualifying_status": "qualified"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Adam Cervera",
+          "Roberto Fernandez III"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": [
+          {
+            "ours": "Roberto Fernandez III",
+            "ballotpedia": "Roberto Fernandez",
+            "kind": "spelling"
+          }
+        ]
+      },
+      "notes": "Ballotpedia shows a Nov 3, 2026 general (runoff) for District 6: 'Incumbent Adam Cervera and Roberto Fernandez are running in the general election ... on November 3, 2026', with the caveat 'The candidate list in this election may not be complete.' Primary (Aug 18): Cervera 38.3%, Fernandez 26.3%, Jessie Bastos 21.6%, Makai Aline Henry 7.1%, Lester L. Wilks Jr. 6.6% (28,400 votes). Two-candidate field and order match ours. Only variance: Ballotpedia omits the 'III' suffix (candidate page title 'Roberto Fernandez (Florida)', https://ballotpedia.org/Roberto_Fernandez_(Florida)); recorded as a spelling mismatch, not a missing candidate. Also listed under 'School board elections and candidates / November 3, 2026 (General)' on the county page (https://ballotpedia.org/Broward_County,_Florida,_elections,_2026)."
+    },
+    {
+      "race_id": "FL-BRO-SB7-general",
+      "office": "Broward County School Board, District 7",
+      "district": "BRO-SB-7",
+      "ballotpedia_url": "https://ballotpedia.org/Broward_County_Public_Schools,_Florida,_elections_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": false,
+      "ballotpedia_candidates": [
+        {
+          "name": "Cynthia Alceus Dominique",
+          "party": "",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-BRO-1254",
+          "legal_name": "Cynthia Alceus Dominique",
+          "party": "",
+          "qualifying_status": "elected_in_primary"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Cynthia Alceus Dominique"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "DECIDED. Ballotpedia: 'Cynthia Alceus Dominique won election outright against Rochelle Soffer in the primary ... on August 18, 2026' (59.7%, 17,073 of 28,598). No general-election section for District 7. Withdrawn or disqualified (primary): Nora Rupert (incumbent, nonpartisan) and Felicia Shuman (nonpartisan) — neither is in our data, which is correct for a general-election roster. Name and nonpartisan status match ours."
+    },
+    {
+      "race_id": "FL-BRO-SBAL8-general",
+      "office": "Broward County School Board, At Large 8",
+      "district": "BRO-SBAL-8",
+      "ballotpedia_url": "https://ballotpedia.org/Broward_County_Public_Schools,_Florida,_elections_(2026)",
+      "coverage": "covered",
+      "on_november_ballot_per_ballotpedia": false,
+      "ballotpedia_candidates": [
+        {
+          "name": "Allen Zeman",
+          "party": "",
+          "incumbent": true,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-VF-BRO-1195",
+          "legal_name": "Allen Zeman",
+          "party": "",
+          "qualifying_status": "elected_in_primary"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Allen Zeman"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "DECIDED. Ballotpedia (section 'District 8', race titled 'At-large Seat 8'): 'Incumbent Allen Zeman won election outright against Sonja Azim in the primary ... on August 18, 2026' (55.1%, 112,076 of 203,309). No general-election section. Name and nonpartisan status match ours."
+    }
+  ]
+}

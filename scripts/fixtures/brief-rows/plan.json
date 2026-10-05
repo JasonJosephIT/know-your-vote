@@ -1,0 +1,34 @@
+{
+  "_note": "FIXTURE — invented candidates on example.com domains, for verifying the writer offline. Never apply to a real race.",
+  "race_id": "FIXTURE-race-general",
+  "retrieved_at": "2026-09-21T00:00:00Z",
+  "spine": [
+    {
+      "id": "A1",
+      "title": "Property insurance costs",
+      "description": null
+    },
+    {
+      "id": "A2",
+      "title": "Housing affordability",
+      "description": null
+    },
+    {
+      "id": "A5",
+      "title": "Water quality and Everglades restoration",
+      "description": null
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "fixture-cand-rivers",
+      "official_site": "https://ada-rivers.example.com",
+      "run": "run-ada.json"
+    },
+    {
+      "candidate_id": "fixture-cand-sunder",
+      "official_site": "https://blake-sunder.example.com",
+      "run": "run-blake.json"
+    }
+  ]
+}

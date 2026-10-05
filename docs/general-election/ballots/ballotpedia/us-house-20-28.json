@@ -1,0 +1,381 @@
+{
+  "source": "Ballotpedia (ballotpedia.org) — Tier 2 corroboration source; acknowledged as a source per founder, 2026-09-22",
+  "retrieved_at": "2026-09-22T01:38:02Z",
+  "method": "One live FireCrawl scrape (maxAge 0, markdown, onlyMainContent) per district page; only the 'Candidates and election results > General election' block for Nov 3, 2026 was used. Withdrawn candidates listed in that block are included with withdrawn=true and excluded from the diff; '(Write-in)'-tagged entries are recorded in write_ins_noted and excluded from the diff. Party mapping: D=DEM, R=REP, L=LPF, 'No Party Affiliation'=NPA, 'Independent Party of Florida'=IND. Read-only: no database or repo edits.",
+  "races": [
+    {
+      "race_id": "FL-20-general",
+      "office": "United States Representative",
+      "district": "FL-20",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_20th_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Debbie Wasserman Schultz",
+          "party": "D",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Brent Andersen",
+          "party": "R",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Kedner Maxime",
+          "party": "Independent Party of Florida",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Kevin McClellan",
+          "party": "No Party Affiliation",
+          "incumbent": false,
+          "withdrawn": true
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-90814",
+          "legal_name": "Kedner Maxime",
+          "party": "IND"
+        },
+        {
+          "candidate_id": "FL-DOE-91278",
+          "legal_name": "Brent Andersen",
+          "party": "REP"
+        },
+        {
+          "candidate_id": "FL-DOE-91577",
+          "legal_name": "Debbie Wasserman Schultz",
+          "party": "DEM"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Debbie Wasserman Schultz (DEM=D)",
+          "Brent Andersen (REP=R)",
+          "Kedner Maxime (IND=Independent Party of Florida)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Ballotpedia page carries the disclaimer 'The candidate list in this election may not be complete.' All three of our candidates appear on Ballotpedia's Nov 3, 2026 general-election list with matching parties; names match exactly. Ballotpedia lists Kevin McClellan (No Party Affiliation) under 'Withdrawn or disqualified candidates' for the general election; he is not on our ballot, which is consistent. No write-ins listed for the 2026 general (the only write-in on the page, Shelley Fain, is in the 2022 special-election history). Incumbent per Ballotpedia: Wasserman Schultz."
+    },
+    {
+      "race_id": "FL-22-general",
+      "office": "United States Representative",
+      "district": "FL-22",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_22nd_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Pia Dandiya",
+          "party": "D",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Casey Askar",
+          "party": "R",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-89301",
+          "legal_name": "Pia Dandiya",
+          "party": "DEM"
+        },
+        {
+          "candidate_id": "FL-DOE-92109",
+          "legal_name": "Casey Askar",
+          "party": "REP"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Pia Dandiya (DEM=D)",
+          "Casey Askar (REP=R)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Ballotpedia page carries the disclaimer 'The candidate list in this election may not be complete.' Exact match on names and parties. Ballotpedia states 'There are no incumbents in this race.' No withdrawn or write-in candidates listed for the 2026 general."
+    },
+    {
+      "race_id": "FL-24-general",
+      "office": "United States Representative",
+      "district": "FL-24",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_24th_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Oliver Gilbert",
+          "party": "D",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Te Brown",
+          "party": "R",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Andy Daro",
+          "party": "No Party Affiliation",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [
+        "Patricia Gonzalez (No Party Affiliation) — tagged '(Write-in)' on Ballotpedia; FEC table on the page shows $1,333 raised as of July 29, 2026"
+      ],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-90703",
+          "legal_name": "Te Mayonna Brown",
+          "party": "REP"
+        },
+        {
+          "candidate_id": "FL-DOE-91544",
+          "legal_name": "Oliver G. Gilbert III",
+          "party": "DEM"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Oliver G. Gilbert III ~ Oliver Gilbert (DEM=D; middle initial + suffix in ours only)",
+          "Te Mayonna Brown ~ Te Brown (REP=R; middle name in ours only)"
+        ],
+        "only_on_ballotpedia": [
+          "Andy Daro (No Party Affiliation)"
+        ],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Ballotpedia page carries the disclaimer 'The candidate list in this election may not be complete.' DISCREPANCY: Ballotpedia lists a third non-write-in general-election candidate, Andy Daro (No Party Affiliation), who is not on our FL-24 ballot. Ballotpedia's campaign-finance table on the same page shows Daro with $0 raised and 'Data not available' (FEC). Ballotpedia is Tier 2; this is reported, not corrected — verify against the Florida DOE qualified-candidate list before any change. Patricia Gonzalez (NPA) is listed by Ballotpedia with a '(Write-in)' tag and is recorded separately, not as a missing candidate. Ballotpedia states 'There are no incumbents in this race'; Frederica S. Wilson (D) is listed under 'Withdrawn or disqualified candidates' in the Democratic primary block, and the Republican primary was canceled with Te Brown advancing. Name-form differences (Gilbert middle initial/suffix, Brown middle name) are within loose-match tolerance and are not flagged as mismatches."
+    },
+    {
+      "race_id": "FL-25-general",
+      "office": "United States Representative",
+      "district": "FL-25",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_25th_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Jared Evan Moskowitz",
+          "party": "D",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Scott Singer",
+          "party": "R",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Peter Jassenoff",
+          "party": "L",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [
+        "Michaelangelo Hamilton (No Party Affiliation) — tagged '(Write-in)' on Ballotpedia"
+      ],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-88911",
+          "legal_name": "Jared Moskowitz",
+          "party": "DEM"
+        },
+        {
+          "candidate_id": "FL-DOE-89801",
+          "legal_name": "Scott Singer",
+          "party": "REP"
+        },
+        {
+          "candidate_id": "FL-DOE-92357",
+          "legal_name": "Peter Jassenoff",
+          "party": "LPF"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Jared Moskowitz ~ Jared Evan Moskowitz (DEM=D; Ballotpedia includes middle name)",
+          "Scott Singer (REP=R)",
+          "Peter Jassenoff (LPF=L, Libertarian)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Ballotpedia page carries the disclaimer 'The candidate list in this election may not be complete.' All three of our candidates match; Ballotpedia's '(L)' maps to our LPF. Incumbent per Ballotpedia: Moskowitz. Write-in Michaelangelo Hamilton (NPA) is noted separately. No withdrawn candidates in the general block (Claudia Villatoro (R) is listed as withdrawn from the Republican primary only). Ballotpedia notes the Libertarian primary was canceled and Jassenoff advanced."
+    },
+    {
+      "race_id": "FL-26-general",
+      "office": "United States Representative",
+      "district": "FL-26",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_26th_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Mario Diaz-Balart",
+          "party": "R",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Nicole Locklin",
+          "party": "D",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Deborah Meidinger Hosey",
+          "party": "No Party Affiliation",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-89980",
+          "legal_name": "Nicole Locklin",
+          "party": "DEM"
+        },
+        {
+          "candidate_id": "FL-DOE-90330",
+          "legal_name": "Mario Diaz-Balart",
+          "party": "REP"
+        },
+        {
+          "candidate_id": "FL-DOE-92137",
+          "legal_name": "Deborah Ann Meidinger Hosey",
+          "party": "NPA"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Nicole Locklin (DEM=D)",
+          "Mario Diaz-Balart (REP=R)",
+          "Deborah Ann Meidinger Hosey ~ Deborah Meidinger Hosey (NPA=No Party Affiliation; middle name in ours only)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Ballotpedia page carries the disclaimer 'The candidate list in this election may not be complete.' All three match on party; Hosey's middle name 'Ann' appears only in our record (loose-match tolerance). Incumbent per Ballotpedia: Diaz-Balart. No write-ins and no withdrawn candidates listed for the 2026 general."
+    },
+    {
+      "race_id": "FL-27-general",
+      "office": "United States Representative",
+      "district": "FL-27",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_27th_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Maria Elvira Salazar",
+          "party": "R",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Eliott Rodriguez",
+          "party": "D",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-89933",
+          "legal_name": "Eliott Rodriguez",
+          "party": "DEM"
+        },
+        {
+          "candidate_id": "FL-DOE-90721",
+          "legal_name": "Maria Elvira Salazar",
+          "party": "REP"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Eliott Rodriguez (DEM=D)",
+          "Maria Elvira Salazar (REP=R)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Ballotpedia page carries the disclaimer 'The candidate list in this election may not be complete.' Exact match on names and parties. Incumbent per Ballotpedia: Salazar. No write-ins or withdrawn candidates in the 2026 general block (the only '(Write-in)' on the page, Frank Polo Sr., is in the 2022 history)."
+    },
+    {
+      "race_id": "FL-28-general",
+      "office": "United States Representative",
+      "district": "FL-28",
+      "ballotpedia_url": "https://ballotpedia.org/Florida%27s_28th_Congressional_District_election,_2026",
+      "coverage": "covered",
+      "ballotpedia_candidates": [
+        {
+          "name": "Carlos Gimenez",
+          "party": "R",
+          "incumbent": true,
+          "withdrawn": false
+        },
+        {
+          "name": "Phil Ehr",
+          "party": "D",
+          "incumbent": false,
+          "withdrawn": false
+        },
+        {
+          "name": "Eddy Rojas",
+          "party": "No Party Affiliation",
+          "incumbent": false,
+          "withdrawn": false
+        }
+      ],
+      "write_ins_noted": [],
+      "ours": [
+        {
+          "candidate_id": "FL-DOE-90340",
+          "legal_name": "Eddy Rojas",
+          "party": "NPA"
+        },
+        {
+          "candidate_id": "FL-DOE-91226",
+          "legal_name": "Carlos A. Gimenez",
+          "party": "REP"
+        },
+        {
+          "candidate_id": "FL-DOE-91699",
+          "legal_name": "Phil \"Felipe\" Ehr",
+          "party": "DEM"
+        }
+      ],
+      "diff": {
+        "matched": [
+          "Eddy Rojas (NPA=No Party Affiliation)",
+          "Carlos A. Gimenez ~ Carlos Gimenez (REP=R; middle initial in ours only)",
+          "Phil \"Felipe\" Ehr ~ Phil Ehr (DEM=D; quoted nickname in ours only)"
+        ],
+        "only_on_ballotpedia": [],
+        "only_in_ours": [],
+        "mismatches": []
+      },
+      "notes": "Ballotpedia page carries the disclaimer 'The candidate list in this election may not be complete.' All three match on party; name-form differences (Gimenez middle initial, Ehr quoted nickname) are within loose-match tolerance. Incumbent per Ballotpedia: Gimenez. No write-ins or withdrawn candidates in the 2026 general block (write-in Jeremiah Schaffer and withdrawn Elan Vyskocil are in the 2024 history)."
+    }
+  ]
+}

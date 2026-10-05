@@ -1,0 +1,47 @@
+{
+  "race_id": "FL-28-general",
+  "retrieved_at": "2026-09-29T11:43:14Z",
+  "withheld_from": "../withheld-2026-09-30.json",
+  "spine": [
+    {
+      "id": "B1",
+      "title": "Economy, inflation, and jobs",
+      "description": null
+    },
+    {
+      "id": "B2",
+      "title": "Healthcare access and costs",
+      "description": null
+    },
+    {
+      "id": "B3",
+      "title": "Immigration and border enforcement",
+      "description": null
+    },
+    {
+      "id": "B4",
+      "title": "Social Security and Medicare",
+      "description": null
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "FL-DOE-90340",
+      "official_site": "https://www.eddyrojas.com/",
+      "run": "FL-DOE-90340/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-DOE-91226",
+      "official_site": "https://carlosgimenezforcongress.com/",
+      "run": "FL-DOE-91226/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-DOE-91699",
+      "official_site": "https://ehrforcongress.us/",
+      "run": "FL-DOE-91699/run.json",
+      "no_run_reason": null
+    }
+  ]
+}

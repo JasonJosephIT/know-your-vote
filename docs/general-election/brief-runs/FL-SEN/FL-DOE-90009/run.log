@@ -1,0 +1,15 @@
+asking 133 passage(s) at threshold 0.85 as jev:jev-1.13.0/tax-7/q-e7282116
+(node:2637) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/user/know-your-vote/scripts/candidate-policy-noul.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/user/know-your-vote/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  20/133
+  40/133
+  60/133
+  80/133
+  100/133
+  120/133
+
+done: 133 asked, 94 state a policy, 48 state a policy the taxonomy has no question for, 39 state no policy, 0 failed
+tokens: 495269 in, 63707 out
+run -> docs/general-election/brief-runs/FL-SEN/FL-DOE-90009/run.json

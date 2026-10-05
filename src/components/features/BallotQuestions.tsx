@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
+import { JudicialRetentionNote } from "@/components/features/JudicialRetentionNote";
 import { getActiveMeasures } from "@/lib/measures";
 
 /* The ballot questions every Florida voter shares (TASK-063).
@@ -12,9 +13,25 @@ import { getActiveMeasures } from "@/lib/measures";
    rewrite. (The Phase 6 plan listed resolve.ts and app.ts for this task; it
    was written before the measure tables existed.)
 
-   Renders nothing when no measure is published, so it is safe on the page
-   before TASK-066 content lands. */
-export async function BallotQuestions() {
+   Renders nothing when no measure is visible, so it is safe on the page
+   before TASK-066 content lands. Since 0033 a measure is visible at `listed`
+   (verbatim ballot text only) as well as `published`; a listed card says its
+   resources are being collected so a voter does not open it expecting a
+   two-sided list. `status !== "published"` rather than `=== "listed"`: a status
+   missing from a stale cached shape must mean the weaker claim.
+
+   The judicial retention questions are on the same ballot but not modelled,
+   so JudicialRetentionNote follows the list and says so (founder decision 10,
+   recommended, pending founder confirmation; how to remove it is in that
+   file). It rides on this section: with no measure visible nothing renders,
+   because a "Ballot questions" heading over judges alone would read as if the
+   amendments had been dropped. `county` is optional and only narrows the
+   note's appeals court lines; SharedBallot has no county and omits it. */
+export async function BallotQuestions({
+  county,
+}: {
+  county?: string | null;
+} = {}) {
   const measures = await getActiveMeasures();
   if (measures.length === 0) return null;
 
@@ -37,16 +54,19 @@ export async function BallotQuestions() {
                 </h3>
                 <p className="text-body-sm text-on-surface-muted">
                   {m.jurisdiction === "FL" ? "Statewide" : m.jurisdiction} ·
-                  Needs {Number.isInteger(m.threshold_pct)
+                  Needs{" "}
+                  {Number.isInteger(m.threshold_pct)
                     ? m.threshold_pct
                     : m.threshold_pct.toFixed(1)}
                   % to pass
+                  {m.status !== "published" ? " · resources being collected" : ""}
                 </p>
               </Card>
             </Link>
           </li>
         ))}
       </ul>
+      <JudicialRetentionNote county={county} />
     </section>
   );
 }

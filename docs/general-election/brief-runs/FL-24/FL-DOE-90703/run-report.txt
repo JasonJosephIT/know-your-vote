@@ -1,0 +1,68 @@
+
+What this site states, by policy area
+
+Economy & Affordability
+  A4  Cost of living in Florida  (1 citation(s))
+      0.91  "1. Affordability & Homeownership — Lower the barriers to buying a home, build more affordable housing, and address the cost of living. 2. Healthcare That Works — Increase transparency, lower prescription and healthcare costs, and protect…"
+            https://tebrownforflorida.com/the-people-first-agenda  — section: The People First Agenda
+  B1  Economy, inflation, and jobs  (5 citation(s))
+      0.96  "1. Affordability & Homeownership — Lower the barriers to buying a home, build more affordable housing, and address the cost of living. 2. Healthcare That Works — Increase transparency, lower prescription and healthcare costs, and protect…"
+            https://tebrownforflorida.com/the-people-first-agenda  — section: The People First Agenda
+      0.96  "As a former teacher, she believes every child deserves access to a quality education and that parents—not government bureaucrats—should have the freedom to choose the best educational path for their children. She is a strong advocate for…"
+            https://tebrownforflorida.com/meet-te-brown  — section: Meet Te Brown
+      0.93  "A bold agenda focused on lowering the cost of living, making housing and childcare more affordable, protecting seniors and veterans, creating jobs, protecting the healthcare system, strengthening communities, and putting families first."
+            https://tebrownforflorida.com/the-people-first-agenda  — section: Putting People Before Politics. Delivering Results That Matter.
+      0.93  "The H-1B program should serve America’s workforce—not be used to undercut American workers’ wages or replace qualified Americans. I support reforms that prioritize American workers, require employers to pay competitive wages, crack down …"
+            https://tebrownforflorida.com/issues  — section: PROTECT AMERICAN WORKERS & REFORM H-1B
+      0.93  "Te believes America is strongest when government is limited, communities are safe, the economy is growing, and every family has the opportunity to succeed through hard work. As your next representative in Congress, Te Mayonna Brown will …"
+            https://tebrownforflorida.com/meet-te-brown  — section: Meet Te Brown
+
+Education
+  KYV9  School choice and vouchers  (2 citation(s))
+      0.98  "Every child in Florida’s 24th District deserves a quality education, not a zip code assignment. Te Brown supports taking federal education dollars that currently prop up failing schools and putting that money directly in the hands of par…"
+            https://tebrownforflorida.com/issues  — section: School Choice
+      0.98  "As a former teacher, she believes every child deserves access to a quality education and that parents—not government bureaucrats—should have the freedom to choose the best educational path for their children. She is a strong advocate for…"
+            https://tebrownforflorida.com/meet-te-brown  — section: Meet Te Brown
+  KYV10  Career, vocational and higher education  (1 citation(s))
+      0.95  "Safe & Strong Communities — Support law enforcement, address crime, and make communities safer. 7. Education & Opportunity — Expand educational choices and make sure children have pathways to careers, trades, college, or entrepreneurship…"
+            https://tebrownforflorida.com/the-people-first-agenda  — section: The People First Agenda
+
+Healthcare
+  B2  Healthcare access and costs  (1 citation(s))
+      0.98  "1. Affordability & Homeownership — Lower the barriers to buying a home, build more affordable housing, and address the cost of living. 2. Healthcare That Works — Increase transparency, lower prescription and healthcare costs, and protect…"
+            https://tebrownforflorida.com/the-people-first-agenda  — section: The People First Agenda
+
+Housing
+  A2  Housing affordability  (4 citation(s))
+      0.98  "1. Affordability & Homeownership — Lower the barriers to buying a home, build more affordable housing, and address the cost of living. 2. Healthcare That Works — Increase transparency, lower prescription and healthcare costs, and protect…"
+            https://tebrownforflorida.com/the-people-first-agenda  — section: The People First Agenda
+      0.98  "Te Brown supports redirecting federal housing dollars away from lifelong rental subsidies and toward helping low-income families in our district buy their first home. Instead of keeping hardworking Americans trapped as permanent renters,…"
+            https://tebrownforflorida.com/issues  — section: Make Housing Affordable Again
+      0.96  "A bold agenda focused on lowering the cost of living, making housing and childcare more affordable, protecting seniors and veterans, creating jobs, protecting the healthcare system, strengthening communities, and putting families first."
+            https://tebrownforflorida.com/the-people-first-agenda  — section: Putting People Before Politics. Delivering Results That Matter.
+      0.91  "As a former teacher, she believes every child deserves access to a quality education and that parents—not government bureaucrats—should have the freedom to choose the best educational path for their children. She is a strong advocate for…"
+            https://tebrownforflorida.com/meet-te-brown  — section: Meet Te Brown
+
+Immigration
+  B3  Immigration and border enforcement  (5 citation(s))
+      0.99  "I support securing our southern border, enforcing our immigration laws, and prioritizing the removal of criminals and those who pose a threat to public safety."
+            https://tebrownforflorida.com/issues  — section: SECURE BORDERS & A LEGAL IMMIGRATION SYSTEM
+      0.98  "At the same time, we should create a clear, lawful process for people who have earned the right to remain, while ending policies that encourage illegal immigration and ensuring that those who follow the rules are not left behind."
+            https://tebrownforflorida.com/issues  — section: SECURE BORDERS & A LEGAL IMMIGRATION SYSTEM
+      0.98  "For 15 years, Washington has told Haitian families in South Florida that their status was temporary, and for 15 years nothing changed. During that time, the situation in Haiti has only worsened, and many community members have built busi…"
+            https://tebrownforflorida.com/issues  — section: TPS Holder
+      0.96  "A Republican Congress did this in 1998 with the Haitian Refugee Immigration Fairness Act, and it was right then. Those who have worked, paid taxes, built our communities, and embodied the American experience should not be cast aside, but…"
+            https://tebrownforflorida.com/issues  — section: TPS Holder
+      0.95  "The H-1B program should serve America’s workforce—not be used to undercut American workers’ wages or replace qualified Americans. I support reforms that prioritize American workers, require employers to pay competitive wages, crack down …"
+            https://tebrownforflorida.com/issues  — section: PROTECT AMERICAN WORKERS & REFORM H-1B
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (1 citation(s))
+      0.96  "Safe & Strong Communities — Support law enforcement, address crime, and make communities safer. 7. Education & Opportunity — Expand educational choices and make sure children have pathways to careers, trades, college, or entrepreneurship…"
+            https://tebrownforflorida.com/the-people-first-agenda  — section: The People First Agenda
+
+Retirement & Benefits
+  B4  Social Security and Medicare  (1 citation(s))
+      0.98  "1. Affordability & Homeownership — Lower the barriers to buying a home, build more affordable housing, and address the cost of living. 2. Healthcare That Works — Increase transparency, lower prescription and healthcare costs, and protect…"
+            https://tebrownforflorida.com/the-people-first-agenda  — section: The People First Agenda
+

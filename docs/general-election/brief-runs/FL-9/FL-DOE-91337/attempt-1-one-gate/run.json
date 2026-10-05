@@ -1,0 +1,936 @@
+{
+  "schema": "kyv.policy-run/1",
+  "status": "complete",
+  "site": "https://dangreenfl.com",
+  "created_at": "2026-09-29T19:18:23.189Z",
+  "model": "jev-1.13.0",
+  "taxonomy_version": "7",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "question_ids": [
+    "q_states_policy",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "KYV9",
+    "KYV10",
+    "A7",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "KYV1",
+    "B7",
+    "B8",
+    "KYV2",
+    "KYV3",
+    "KYV4",
+    "KYV5",
+    "KYV6",
+    "KYV7",
+    "KYV8"
+  ],
+  "counts": {
+    "passages": 21,
+    "asked": 21,
+    "states_policy": 6,
+    "with_issue": 3,
+    "failed": 0
+  },
+  "passages": [
+    {
+      "id": "febdc5f2",
+      "url": "https://dangreenfl.com/",
+      "heading": "Fighting For Us. Always.",
+      "text": "“I didn't fight radical extremists overseas just to stand by and watch left-wing extremists attack our freedoms here at home. I'm running for Congress because I believe that access to opportunity and prosperity for those willing to work for it are American ideals worth protecting. In Congress, I will fight to make America affordable again, because when groceries and gas prices are too high, Florida's families, farmers and small business owners suffer.”",
+      "verdict": {
+        "commitment": 0.94,
+        "states_policy": true,
+        "issues": [
+          "A4",
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.06,
+          "A3": 0.03,
+          "A4": 0.96,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.95,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.06,
+          "B8": 0.03,
+          "KYV1": 0.29,
+          "KYV10": 0.03,
+          "KYV2": 0.13,
+          "KYV3": 0.03,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "0d207428",
+      "url": "https://dangreenfl.com/",
+      "heading": "Meet Dan Green",
+      "text": "Dan was working in the Pentagon on September 11th and experienced the devastating attack firsthand. The attack on our nation greatly impacted Dan and strengthened his resolve to serve his country. Dan joined the United States Navy, where he completed four tours throughout the Middle East and Central Asia. He also completed a civilian tour of duty to southern Afghanistan with the U.S. Department of State. Dan has earned the rank of Commander and has been selected for promotion to Captain.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.01,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.01,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "9a5c852f",
+      "url": "https://dangreenfl.com/",
+      "heading": "Meet Dan Green",
+      "text": "While serving in Afghanistan and Iraq, Dan was attached to two SEAL Team deployments, including in Fallujah and southern Afghanistan; he also served in Baghdad and Kabul. His boots-on-the-ground experience has made him an expert in counterterrorism, foreign policy, and the toll of war on our brave veterans.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "30528d96",
+      "url": "https://dangreenfl.com/",
+      "heading": "On the Issues",
+      "text": "Floridians deserve proven leaders in Washington who will stand with President Trump to safeguard our constitutional government and protect our American way of life.",
+      "verdict": {
+        "commitment": 0.63,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.04,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.63,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "c88d0824",
+      "url": "https://dangreenfl.com/",
+      "heading": "Follow the Constitution",
+      "text": "As a member of the U.S. Navy Reserve, Dan has dedicated his life to serving our Constitution. Unfortunately, progressive members of Congress don't share his commitment. That's why Dan will work to safeguard our Constitutional rights on day one.",
+      "verdict": {
+        "commitment": 0.85,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.02,
+          "B5": 0.03,
+          "B6": 0.03,
+          "B7": 0.04,
+          "B8": 0.02,
+          "KYV1": 0.51,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "f88d44f6",
+      "url": "https://dangreenfl.com/",
+      "heading": "Restoring Peace Through Strength",
+      "text": "The United States is the greatest military force on earth. Our armed forces guarantee peace for the American people, protect our way of life, and secure our interests abroad. Dan will work with President Trump to ensure our military remains funded and fit for action.",
+      "verdict": {
+        "commitment": 0.96,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.03,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.03,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e8eddc69",
+      "url": "https://dangreenfl.com/",
+      "heading": "Stop Over-development in Florida",
+      "text": "While we welcome freedom-loving Americans to our great state, overdevelopment has started to push native Floridians out of their communities. Dan is here to find real solutions to overdevelopment in Florida to protect our way of life.",
+      "verdict": {
+        "commitment": 0.84,
+        "states_policy": false,
+        "issues": [
+          "KYV3"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.29,
+          "A3": 0.03,
+          "A4": 0.14,
+          "A5": 0.03,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.06,
+          "B2": 0.02,
+          "B3": 0.06,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.07,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.93,
+          "KYV4": 0.03,
+          "KYV5": 0.03,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "db0b42b7",
+      "url": "https://dangreenfl.com/",
+      "heading": "Lower Property Insurance Rates",
+      "text": "Florida homeowners are feeling the impact of rising insurance rates. Dan Green stands with our homeowners and is ready to take their fight to Washington. Together we can make Florida affordable again.",
+      "verdict": {
+        "commitment": 0.74,
+        "states_policy": false,
+        "issues": [
+          "A1"
+        ],
+        "scores": {
+          "A1": 0.93,
+          "A2": 0.66,
+          "A3": 0.03,
+          "A4": 0.73,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.18,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.04,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.03,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "d1838a83",
+      "url": "https://dangreenfl.com/",
+      "heading": "Make Groceries & Gas Affordable Again",
+      "text": "We are still paying for the bad policies of the Biden Administration. Dan Green and President Trump will do everything necessary to lower fuel costs, groceries, and the ever rising cost of living.",
+      "verdict": {
+        "commitment": 0.91,
+        "states_policy": true,
+        "issues": [
+          "B1"
+        ],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.72,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.92,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.08,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.54,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "b8c84c52",
+      "url": "https://dangreenfl.com/",
+      "heading": "Housing Affordability",
+      "text": "The American Dream of owning a home is not dead, but it is becoming more and more difficult for the next generation of homebuyers. Dan will use time-tested conservative values to lower housing costs and keep them low!",
+      "verdict": {
+        "commitment": 0.92,
+        "states_policy": true,
+        "issues": [
+          "A2"
+        ],
+        "scores": {
+          "A1": 0.03,
+          "A2": 0.96,
+          "A3": 0.05,
+          "A4": 0.17,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.12,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.06,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.03,
+          "KYV7": 0.03,
+          "KYV8": 0.03,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "cb7f1f44",
+      "url": "https://dangreenfl.com/on-the-issues",
+      "heading": "Oops! That page can’t be found.",
+      "text": "It looks like nothing was found at this location.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.01,
+          "KYV1": 0.01,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.01,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "86eb55ed",
+      "url": "https://dangreenfl.com/meet-dan",
+      "heading": "Meet Dan",
+      "text": "“Floridians deserve proven leaders in Washington who will stand with President Trump to protect our constitutional government and ensure access to the American Dream. Hard working families and small business owners can’t afford the gridlock in Congress that keeps our nation in debt and our liberties at risk. It’s been 30 years since they last passed a budget, making it impossible to control spending.” – Dan Green",
+      "verdict": {
+        "commitment": 0.88,
+        "states_policy": true,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.03,
+          "A3": 0.02,
+          "A4": 0.1,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.62,
+          "B2": 0.03,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.03,
+          "B8": 0.02,
+          "KYV1": 0.53,
+          "KYV10": 0.03,
+          "KYV2": 0.04,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "66f76441",
+      "url": "https://dangreenfl.com/meet-dan",
+      "heading": "Meet Dan",
+      "text": "As the child of an Army veteran and a school teacher, Dan grew up in Indian River County learning about service, sacrifice, and solution-oriented leadership. Dan attended American University, Florida State University, and George Washington University with a focus on Political Science and International Relations.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.03,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "7c2052ac",
+      "url": "https://dangreenfl.com/meet-dan",
+      "heading": "Meet Dan",
+      "text": "In 2019, Dan was appointed by President Trump as the Deputy Assistant Secretary of Defense for Strategy & Force Development at the U.S. Department of Defense. While in the Department of Defense, Dan played a pivotal role in our ongoing defense strategy and scenario planning.",
+      "verdict": {
+        "commitment": 0.03,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "ba884b17",
+      "url": "https://dangreenfl.com/meet-dan",
+      "heading": "Meet Dan",
+      "text": "Dan is a recipient of several honors, including the Secretary of Defense’s Medal for Outstanding Public Service (2021), the Office of the Secretary of Defense’s Exceptional Public Service Award (2009), the U.S. Department of State’s Superior Honor Award (2005), and the U.S. Army’s Superior Civilian Honor Award (2005).",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "085ef795",
+      "url": "https://dangreenfl.com/meet-dan",
+      "heading": "Meet Dan",
+      "text": "Dan Green has never sat on the sidelines. He believes in hard work, resilience, and the rule of law. As our representative in Washington, Dan will continue to fight for the future of our country.",
+      "verdict": {
+        "commitment": 0.23,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.03,
+          "B1": 0.04,
+          "B2": 0.02,
+          "B3": 0.03,
+          "B4": 0.03,
+          "B5": 0.02,
+          "B6": 0.03,
+          "B7": 0.17,
+          "B8": 0.02,
+          "KYV1": 0.48,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "2d3cc73c",
+      "url": "https://dangreenfl.com/meet-dan",
+      "heading": "Awards and Accolades",
+      "text": "Secretary of Defense’s Award for Outstanding Public Service.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "876c0963",
+      "url": "https://dangreenfl.com/meet-dan",
+      "heading": "Awards and Accolades",
+      "text": "Office of the Secretary of Defense Exceptional Public Service Award.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.02,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "0ca10991",
+      "url": "https://dangreenfl.com/meet-dan",
+      "heading": "Awards and Accolades",
+      "text": "Personal Letter of Commendation, Chairman of the Joint Chiefs of Staff, Peter Pace.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.01,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.01,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "31afe37f",
+      "url": "https://dangreenfl.com/meet-dan",
+      "heading": "Awards and Accolades",
+      "text": "Superior Honor Award, U.S. Department of State, Afghanistan.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.02,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.02,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.02,
+          "B6": 0.02,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.02,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.02,
+          "KYV7": 0.02,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    },
+    {
+      "id": "e7342751",
+      "url": "https://dangreenfl.com/meet-dan",
+      "heading": "Awards and Accolades",
+      "text": "Superior Civilian Honor Award, U.S. Army, Afghanistan.",
+      "verdict": {
+        "commitment": 0.02,
+        "states_policy": false,
+        "issues": [],
+        "scores": {
+          "A1": 0.02,
+          "A2": 0.02,
+          "A3": 0.01,
+          "A4": 0.01,
+          "A5": 0.02,
+          "A6": 0.02,
+          "A7": 0.02,
+          "B1": 0.01,
+          "B2": 0.02,
+          "B3": 0.02,
+          "B4": 0.02,
+          "B5": 0.01,
+          "B6": 0.01,
+          "B7": 0.02,
+          "B8": 0.02,
+          "KYV1": 0.01,
+          "KYV10": 0.02,
+          "KYV2": 0.02,
+          "KYV3": 0.02,
+          "KYV4": 0.02,
+          "KYV5": 0.02,
+          "KYV6": 0.01,
+          "KYV7": 0.01,
+          "KYV8": 0.02,
+          "KYV9": 0.02
+        }
+      }
+    }
+  ],
+  "areas": [
+    {
+      "area": {
+        "id": "economy",
+        "label": "Economy & Affordability"
+      },
+      "subIssues": [
+        {
+          "id": "A4",
+          "label": "Cost of living in Florida",
+          "citations": [
+            {
+              "passage": {
+                "id": "febdc5f2",
+                "url": "https://dangreenfl.com/",
+                "heading": "Fighting For Us. Always.",
+                "text": "“I didn't fight radical extremists overseas just to stand by and watch left-wing extremists attack our freedoms here at home. I'm running for Congress because I believe that access to opportunity and prosperity for those willing to work for it are American ideals worth protecting. In Congress, I will fight to make America affordable again, because when groceries and gas prices are too high, Florida's families, farmers and small business owners suffer.”",
+                "retrieved_at": "2026-09-29T19:18:19.433Z"
+              },
+              "score": 0.96
+            }
+          ]
+        },
+        {
+          "id": "B1",
+          "label": "Economy, inflation, and jobs",
+          "citations": [
+            {
+              "passage": {
+                "id": "febdc5f2",
+                "url": "https://dangreenfl.com/",
+                "heading": "Fighting For Us. Always.",
+                "text": "“I didn't fight radical extremists overseas just to stand by and watch left-wing extremists attack our freedoms here at home. I'm running for Congress because I believe that access to opportunity and prosperity for those willing to work for it are American ideals worth protecting. In Congress, I will fight to make America affordable again, because when groceries and gas prices are too high, Florida's families, farmers and small business owners suffer.”",
+                "retrieved_at": "2026-09-29T19:18:19.433Z"
+              },
+              "score": 0.95
+            },
+            {
+              "passage": {
+                "id": "d1838a83",
+                "url": "https://dangreenfl.com/",
+                "heading": "Make Groceries & Gas Affordable Again",
+                "text": "We are still paying for the bad policies of the Biden Administration. Dan Green and President Trump will do everything necessary to lower fuel costs, groceries, and the ever rising cost of living.",
+                "retrieved_at": "2026-09-29T19:18:19.442Z"
+              },
+              "score": 0.92
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": {
+        "id": "housing",
+        "label": "Housing"
+      },
+      "subIssues": [
+        {
+          "id": "A2",
+          "label": "Housing affordability",
+          "citations": [
+            {
+              "passage": {
+                "id": "b8c84c52",
+                "url": "https://dangreenfl.com/",
+                "heading": "Housing Affordability",
+                "text": "The American Dream of owning a home is not dead, but it is becoming more and more difficult for the next generation of homebuyers. Dan will use time-tested conservative values to lower housing costs and keep them low!",
+                "retrieved_at": "2026-09-29T19:18:19.442Z"
+              },
+              "score": 0.96
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 73844,
+    "output_tokens": 9618
+  }
+}

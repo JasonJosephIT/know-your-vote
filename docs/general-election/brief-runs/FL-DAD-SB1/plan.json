@@ -1,0 +1,36 @@
+{
+  "race_id": "FL-DAD-SB1-general",
+  "retrieved_at": "2026-09-29T11:44:35Z",
+  "withheld_from": "../withheld-2026-09-30.json",
+  "spine": [
+    {
+      "id": "A6",
+      "title": "Public school funding and teachers",
+      "description": null
+    },
+    {
+      "id": "KYV9",
+      "title": "School choice and vouchers",
+      "description": null
+    },
+    {
+      "id": "KYV10",
+      "title": "Career, vocational and higher education",
+      "description": null
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "FL-VF-DAD-3070",
+      "official_site": "https://wilsonforeducation.com/",
+      "run": "FL-VF-DAD-3070/run.json",
+      "no_run_reason": null
+    },
+    {
+      "candidate_id": "FL-VF-DAD-3076",
+      "official_site": "https://lindaforschoolboard.com/",
+      "run": "FL-VF-DAD-3076/run.json",
+      "no_run_reason": null
+    }
+  ]
+}

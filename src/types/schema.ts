@@ -21,9 +21,19 @@ export type BallotStatus = "ballot" | "write_in" | "excluded";
    BallotStatus because the two are different axes: an unopposed candidate is
    still a ballot-tier filing, briefed and shown like any other
    (ballots-handoff.md §2 F2, decision D-B, founder 2026-09-07). */
+/* `elected_in_primary` was added by 0032 for county offices, and it is NOT a
+   synonym for `unopposed`. An unopposed candidate drew nobody; a candidate
+   elected in the primary beat someone — Florida's nonpartisan county races
+   (school board, and county offices in charter counties) end in August when
+   someone clears 50%. Both contests are absent from the November ballot, and
+   for opposite reasons, so telling a voter "elected without opposition" about
+   the second is simply false. Same reasoning that kept `unopposed` from being
+   derived from candidate count under D-B: two different facts that look
+   identical once you only count rows. */
 export type QualifyingStatus =
   | "qualified"
   | "unopposed"
+  | "elected_in_primary"
   | "withdrawn"
   | "other";
 
@@ -39,7 +49,11 @@ export type ClaimBucket = "verifiable_fact" | "stated_position" | "outside_opini
 
 export type VerificationStatus = "verified" | "single_source" | "unverified";
 
-export type RaceLevel = "federal" | "state";
+/* 'county' arrived with 0031 (county commission, school board, county mayor,
+   clerk of the courts). These come from the county Supervisors of Elections,
+   not the DoE export, and they are the only level whose `district` is not a
+   bare number — see 0031 on why nothing resolves a voter to one yet. */
+export type RaceLevel = "federal" | "state" | "county";
 
 export type ElectionKind = "primary" | "general";
 

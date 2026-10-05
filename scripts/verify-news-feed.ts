@@ -21,8 +21,12 @@ function check(name: string, cond: boolean, detail = "") {
   console.error(`  FAIL ${name}${detail ? ` — ${detail}` : ""}`);
 }
 
-const row = (id: string, url: string | null, candidateId: string | null, publishedAt = "2026-09-06T00:00:00Z"): FeedRow =>
-  ({ id, url, candidateId, publishedAt });
+const row = (
+  id: string,
+  url: string | null,
+  candidateId: string | null,
+  publishedAt = "2026-09-06T00:00:00Z"
+): FeedRow => ({ id, url, candidateId, publishedAt });
 
 /* One story, three candidates — the §6 shape. */
 const three = dedupeByUrl([
@@ -30,13 +34,24 @@ const three = dedupeByUrl([
   row("2", "https://x.test/a", "cand-2"),
   row("3", "https://x.test/a", "cand-3"),
 ]);
-check("three rows collapse to one card", three.length === 1, `got ${three.length}`);
-check("the merged card claims no candidate", three[0]?.candidateId === null, String(three[0]?.candidateId));
+check(
+  "three rows collapse to one card",
+  three.length === 1,
+  `got ${three.length}`
+);
+check(
+  "the merged card claims no candidate",
+  three[0]?.candidateId === null,
+  String(three[0]?.candidateId)
+);
 
 /* One story, one candidate — the link must survive. Dropping it always would
    be the opposite failure: a card that could name its candidate and doesn't. */
 const one = dedupeByUrl([row("1", "https://x.test/b", "cand-1")]);
-check("a single-candidate card keeps its link", one[0]?.candidateId === "cand-1");
+check(
+  "a single-candidate card keeps its link",
+  one[0]?.candidateId === "cand-1"
+);
 
 /* The same URL under one candidate and once unattached (§6 writes the
    candidate_id NULL row only when nothing matched, but the read path must not
@@ -45,8 +60,15 @@ const mixed = dedupeByUrl([
   row("1", "https://x.test/c", "cand-1"),
   row("2", "https://x.test/c", null),
 ]);
-check("candidate + unattached collapse", mixed.length === 1, `got ${mixed.length}`);
-check("null vs a candidate is a conflict, so no claim", mixed[0]?.candidateId === null);
+check(
+  "candidate + unattached collapse",
+  mixed.length === 1,
+  `got ${mixed.length}`
+);
+check(
+  "null vs a candidate is a conflict, so no claim",
+  mixed[0]?.candidateId === null
+);
 
 /* Order is the caller's sort, and the first survivor keeps its position. */
 const ordered = dedupeByUrl([
@@ -54,14 +76,21 @@ const ordered = dedupeByUrl([
   row("2", "https://x.test/old", null, "2026-09-01T00:00:00Z"),
   row("3", "https://x.test/new", null, "2026-09-06T00:00:00Z"),
 ]);
-check("order preserved", ordered.map((r) => r.id).join(",") === "1,2", ordered.map((r) => r.id).join(","));
+check(
+  "order preserved",
+  ordered.map((r) => r.id).join(",") === "1,2",
+  ordered.map((r) => r.id).join(",")
+);
 
 /* Rows with no URL are events, not stories: two of them are two things. */
 const noUrl = dedupeByUrl([row("1", null, null), row("2", null, null)]);
 check("null urls never merge", noUrl.length === 2, `got ${noUrl.length}`);
 
 /* Distinct stories stay distinct. */
-const distinct = dedupeByUrl([row("1", "https://x.test/a", null), row("2", "https://x.test/b", null)]);
+const distinct = dedupeByUrl([
+  row("1", "https://x.test/a", null),
+  row("2", "https://x.test/b", null),
+]);
 check("different urls stay separate", distinct.length === 2);
 
 /* Empty in, empty out — no crash on the quiet case the feed shows most. */
@@ -72,10 +101,46 @@ const withExtras = dedupeByUrl([
   { ...row("1", "https://x.test/d", "cand-1"), title: "Kept" },
   { ...row("2", "https://x.test/d", "cand-2"), title: "Dropped" },
 ]);
-check("non-FeedRow fields survive", withExtras[0]?.title === "Kept", String(withExtras[0]?.title));
+check(
+  "non-FeedRow fields survive",
+  withExtras[0]?.title === "Kept",
+  String(withExtras[0]?.title)
+);
+
+/* Issue tags ride through the merge with the kept row (the route reads
+   `issues` off the survivor), and an untagged row is never dropped for being
+   untagged: NULL (never characterized) and [] (nothing over threshold) are
+   ordinary rows that must still become cards
+   (news-ingest-order-handoff-2026-09-23.md §1). */
+const tagged = dedupeByUrl([
+  {
+    ...row("1", "https://x.test/e", "cand-1"),
+    issues: ["A1"] as string[] | null,
+  },
+  {
+    ...row("2", "https://x.test/e", "cand-2"),
+    issues: ["A1", "A3"] as string[] | null,
+  },
+  { ...row("3", "https://x.test/f", null), issues: null },
+  { ...row("4", "https://x.test/g", null), issues: [] },
+]);
+check(
+  "tags survive the merge on the kept row",
+  JSON.stringify(tagged[0]?.issues) === '["A1"]',
+  JSON.stringify(tagged[0]?.issues)
+);
+check(
+  "untagged rows (NULL and []) still become cards",
+  tagged.length === 3 &&
+    tagged[1]?.issues === null &&
+    tagged[2]?.issues?.length === 0,
+  `got ${tagged.length}`
+);
 
 if (failures > 0) {
   console.error(`\nverify-news-feed: ${failures} failure(s)`);
   process.exit(1);
 }
-console.log("verify-news-feed: OK — one story is one card, and it claims no candidate it cannot");
+console.log(
+  "verify-news-feed: OK — one story is one card, and it claims no candidate it cannot"
+);

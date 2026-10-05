@@ -3,8 +3,10 @@
 
      1. All migrations apply cleanly, in order.
      2. anon cannot read voting_info_subscription at all.
-     3. anon sees only published races (draft/in_review are invisible).
-     4. anon sees claims/profiles only for published races.
+     3. anon sees only listed and published races (draft/in_review are
+        invisible).
+     4. anon sees claims/profiles/issues/positions only for published races
+        (a listed race exposes none of them).
      5. anon cannot write anything.
      6. Only status='verified' social handles are visible to anon.
      7. 0005_refresh_agents objects exist: candidate_contact,
@@ -70,6 +72,19 @@
         range index exist; the CHECK rejects an inverted range; a GEOID inside a
         seeded range resolves; anon can SELECT it (it is a public district map)
         but cannot INSERT.
+    19. 0033_listed_publication (the roster tier): anon reads a listed race,
+        its race_publication status, and the ballot-tier candidates named in
+        its candidate_ids -- even with NO profile row -- plus their verified
+        handles; a filer outside candidate_ids (write-in, D1) stays hidden; a
+        listed race's profile, issue, position, claim and claim_source rows
+        stay invisible (the safety argument: those policies never mention
+        'listed'); set_race_publication accepts 'listed', logs 'list' /
+        'unlist' ('unpublish' for published -> listed), never stamps
+        published_at on a listing, and stays service_role-only; each
+        publication table keeps exactly one status CHECK; a listed measure
+        with zero arguments is accepted and anon sees its ballot_measure and
+        measure_publication rows but none of its arguments; the 32 county
+        races 0033 seeds at draft stay invisible.
 
 
    Supabase provides the anon/authenticated/service_role roles out of the box;
@@ -578,32 +593,50 @@ for (const table of ["election_event", "notification_send_log"]) {
 }
 
 /* Fixture: one published race, one draft race, each with a candidate,
-   profile, claim (sourced), and a social handle. */
+   profile, claim (sourced), and a social handle. Plus one LISTED race (0033):
+   c-listed is named in its candidate_ids with no profile at all (the roster
+   case, which is every live race today), and c-listed-2 is named too but also
+   carries a profile, issue, position, claim and claim_source -- the brief rows
+   the listed tier must NOT expose. c-listed-wri filed for the same office but
+   is not in candidate_ids (a write-in, D1), so nothing may surface it. */
 await db.exec(`
-  INSERT INTO race (race_id, office, level, election) VALUES
-    ('r-pub',   'Governor',   'state', 'general'),
-    ('r-draft', 'US Senate',  'federal', 'general');
+  INSERT INTO race (race_id, office, level, election, candidate_ids) VALUES
+    ('r-pub',    'Governor',   'state',   'general', '{}'),
+    ('r-draft',  'US Senate',  'federal', 'general', '{}'),
+    ('r-listed', 'Attorney General', 'state', 'general', ARRAY['c-listed','c-listed-2']);
   INSERT INTO race_publication (race_id, status, published_at) VALUES
     ('r-pub', 'published', NOW()),
-    ('r-draft', 'draft', NULL);
+    ('r-draft', 'draft', NULL),
+    ('r-listed', 'listed', NULL);
   INSERT INTO candidate (candidate_id, legal_name, party, office_sought, qualifying_status) VALUES
     ('c-pub',   'Pub Candidate',   'NPA', 'Governor',  'qualified'),
-    ('c-draft', 'Draft Candidate', 'NPA', 'US Senate', 'qualified');
+    ('c-draft', 'Draft Candidate', 'NPA', 'US Senate', 'qualified'),
+    ('c-listed',     'Listed Candidate',     'DEM', 'Attorney General', 'qualified'),
+    ('c-listed-2',   'Listed Candidate Two', 'REP', 'Attorney General', 'qualified'),
+    ('c-listed-wri', 'Listed Write-In',      'WRI', 'Attorney General', 'qualified');
   INSERT INTO profile (candidate_id, race_id, audit) VALUES
     ('c-pub', 'r-pub', '{"balance_check_passed": true}'),
-    ('c-draft', 'r-draft', '{"balance_check_passed": true}');
+    ('c-draft', 'r-draft', '{"balance_check_passed": true}'),
+    ('c-listed-2', 'r-listed', '{"balance_check_passed": true}');
   INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag) VALUES
     ('s1', 'https://example.gov/a', 'example.gov/a', 'Example Gov', 'primary_doc', 'N/A');
   INSERT INTO issue (issue_id, race_id, tier, title, display_order) VALUES
     ('i-pub', 'r-pub', 'spine', 'Economy', 1),
-    ('i-draft', 'r-draft', 'spine', 'Economy', 1);
+    ('i-draft', 'r-draft', 'spine', 'Economy', 1),
+    ('i-listed', 'r-listed', 'spine', 'Economy', 1);
   INSERT INTO claim (claim_id, candidate_id, race_id, issue_id, text, bucket, attributed, verdict, verification) VALUES
     ('cl-pub', 'c-pub', 'r-pub', 'i-pub', 'Voted for X on date Y.', 'verifiable_fact', false, 'accurate', 'verified'),
-    ('cl-draft', 'c-draft', 'r-draft', 'i-draft', 'Voted for Z on date W.', 'verifiable_fact', false, 'accurate', 'verified');
-  INSERT INTO claim_source VALUES ('cl-pub', 's1'), ('cl-draft', 's1');
+    ('cl-draft', 'c-draft', 'r-draft', 'i-draft', 'Voted for Z on date W.', 'verifiable_fact', false, 'accurate', 'verified'),
+    ('cl-listed-2', 'c-listed-2', 'r-listed', 'i-listed', 'Voted for Q on date R.', 'verifiable_fact', false, 'accurate', 'verified');
+  INSERT INTO claim_source VALUES ('cl-pub', 's1'), ('cl-draft', 's1'), ('cl-listed-2', 's1');
+  INSERT INTO position (position_id, candidate_id, race_id, issue_id, stance_summary, claim_ids, coverage) VALUES
+    ('p-listed-2', 'c-listed-2', 'r-listed', 'i-listed', 'Supports Q.', ARRAY['cl-listed-2'], 'stated');
   INSERT INTO candidate_social_account (candidate_id, platform, handle, handle_norm, provenance, status) VALUES
     ('c-pub', 'twitter', '@pub_v', 'pub_v', 'linked_from_official_site', 'verified'),
-    ('c-pub', 'facebook', 'pub_u', 'pub_u2', 'doe_filing', 'unverified');
+    ('c-pub', 'facebook', 'pub_u', 'pub_u2', 'doe_filing', 'unverified'),
+    ('c-listed', 'twitter', '@listed_v', 'listed_v', 'linked_from_official_site', 'verified'),
+    ('c-listed', 'facebook', 'listed_u', 'listed_u', 'doe_filing', 'unverified'),
+    ('c-listed-wri', 'twitter', '@wri_v', 'wri_v', 'linked_from_official_site', 'verified');
   INSERT INTO voting_info_subscription (email, zip5) VALUES ('voter@example.com', '33101');
   INSERT INTO candidate_contact (candidate_id, campaign_email, source_url) VALUES
     ('c-pub', 'press@pub-candidate.example', 'https://pub-candidate.example/contact');
@@ -619,10 +652,13 @@ await db.exec(`
 /* Everything below runs as anon. */
 await db.exec("SET ROLE anon;");
 
-await check("anon sees only the published race", async () => {
+/* 0033 seeded a 'draft' race_publication row for every general race the
+   migrations load (the 32 county races), so "only listed and published" here
+   also proves those drafts stayed invisible. */
+await check("anon sees the published and the listed race, never a draft", async () => {
   const r = await db.query("SELECT race_id FROM race ORDER BY race_id;");
   const ids = r.rows.map((x) => x.race_id).join(",");
-  if (ids !== "r-pub") throw new Error(`saw [${ids}], expected [r-pub]`);
+  if (ids !== "r-listed,r-pub") throw new Error(`saw [${ids}], expected [r-listed,r-pub]`);
 });
 
 await check("anon sees only published-race claims", async () => {
@@ -631,22 +667,54 @@ await check("anon sees only published-race claims", async () => {
   if (ids !== "cl-pub") throw new Error(`saw [${ids}], expected [cl-pub]`);
 });
 
-await check("anon sees only published-race candidates", async () => {
-  const r = await db.query("SELECT candidate_id FROM candidate;");
+/* c-listed has no profile row: it is visible only through r-listed's
+   candidate_ids, which is the path that makes the roster readable before any
+   brief exists. c-draft (draft race) and c-listed-wri (same office, not in
+   candidate_ids -- a write-in under D1) must both stay hidden. */
+await check("anon sees published-race and listed-race (candidate_ids) candidates only", async () => {
+  const r = await db.query("SELECT candidate_id FROM candidate ORDER BY candidate_id;");
   const ids = r.rows.map((x) => x.candidate_id).join(",");
-  if (ids !== "c-pub") throw new Error(`saw [${ids}], expected [c-pub]`);
+  if (ids !== "c-listed,c-listed-2,c-pub") {
+    throw new Error(`saw [${ids}], expected [c-listed,c-listed-2,c-pub]`);
+  }
 });
 
-await check("anon sees only verified social handles", async () => {
-  const r = await db.query("SELECT handle, status FROM candidate_social_account;");
-  if (r.rows.length !== 1 || r.rows[0].status !== "verified")
-    throw new Error(`saw ${JSON.stringify(r.rows)}`);
+await check("anon sees only verified social handles, for visible candidates only", async () => {
+  const r = await db.query(
+    "SELECT candidate_id, handle, status FROM candidate_social_account ORDER BY handle;"
+  );
+  const got = r.rows.map((x) => `${x.candidate_id}:${x.handle}:${x.status}`).join(",");
+  if (got !== "c-listed:@listed_v:verified,c-pub:@pub_v:verified") throw new Error(`saw [${got}]`);
 });
 
-await check("anon sees draft race_publication as absent", async () => {
-  const r = await db.query("SELECT race_id FROM race_publication;");
-  const ids = r.rows.map((x) => x.race_id).join(",");
-  if (ids !== "r-pub") throw new Error(`saw [${ids}]`);
+await check("anon sees listed and published race_publication rows with their status, never draft", async () => {
+  const r = await db.query("SELECT race_id, status FROM race_publication ORDER BY race_id;");
+  const got = r.rows.map((x) => `${x.race_id}:${x.status}`).join(",");
+  if (got !== "r-listed:listed,r-pub:published") throw new Error(`saw [${got}]`);
+});
+
+/* 0033's safety argument, asserted from the outside: r-listed carries a
+   complete brief for c-listed-2 (profile, issue, position, claim,
+   claim_source), and none of it may be readable, because those six policies
+   still say status = 'published' and never mention 'listed'. */
+await check("anon reads no brief rows for a listed race (profile/issue/position/claim/claim_source)", async () => {
+  const r = await db.query(`
+    SELECT (SELECT count(*)::int FROM profile      WHERE race_id = 'r-listed')    AS profiles,
+           (SELECT count(*)::int FROM issue        WHERE race_id = 'r-listed')    AS issues,
+           (SELECT count(*)::int FROM position     WHERE race_id = 'r-listed')    AS positions,
+           (SELECT count(*)::int FROM claim        WHERE race_id = 'r-listed')    AS claims,
+           (SELECT count(*)::int FROM claim_source WHERE claim_id = 'cl-listed-2') AS claim_sources;`);
+  const g = r.rows[0];
+  const leaked = Object.entries(g).filter(([, v]) => v !== 0);
+  if (leaked.length) throw new Error(`listed race leaked ${JSON.stringify(g)}`);
+});
+await check("anon still reads the published race's brief rows", async () => {
+  const r = await db.query(`
+    SELECT (SELECT count(*)::int FROM profile WHERE race_id = 'r-pub') AS profiles,
+           (SELECT count(*)::int FROM issue   WHERE race_id = 'r-pub') AS issues;`);
+  if (r.rows[0].profiles !== 1 || r.rows[0].issues !== 1) {
+    throw new Error(`saw ${JSON.stringify(r.rows[0])}, expected 1 profile and 1 issue`);
+  }
 });
 
 await check("anon can SELECT candidate_contact", async () => {
@@ -1052,6 +1120,93 @@ await expectConstraintViolation(
   /admin_action_subject_one_of/
 );
 
+/* 0033: the door admits 'listed' and logs it under its own verbs. r-draft is
+   at in_review here (the unpublish test above left it there) with a
+   published_at stamped by the earlier publish -- which is exactly what lets
+   us assert that listing does NOT re-stamp it. */
+await check("set_race_publication lists a race, logs 'list', and never stamps published_at", async () => {
+  const before = await db.query(
+    "SELECT published_at FROM race_publication WHERE race_id='r-draft';"
+  );
+  await db.exec(
+    "SELECT set_race_publication('r-draft','listed','op@example.com','roster is public record');"
+  );
+  const r = await db.query(`
+    SELECT rp.status, rp.published_at,
+           (SELECT action FROM admin_action WHERE subject_ref='r-draft'
+             ORDER BY created_at DESC, action LIMIT 1) AS latest_action,
+           (SELECT detail->>'new_status' FROM admin_action WHERE subject_ref='r-draft'
+             AND action='list') AS logged_status,
+           (SELECT detail->>'prior_status' FROM admin_action WHERE subject_ref='r-draft'
+             AND action='list') AS logged_prior
+      FROM race_publication rp WHERE rp.race_id='r-draft';`);
+  const g = r.rows[0];
+  if (g.status !== "listed") throw new Error(`status=${g.status}`);
+  if (String(g.published_at) !== String(before.rows[0].published_at))
+    throw new Error("listing must leave published_at alone");
+  if (g.latest_action !== "list") throw new Error(`latest_action=${g.latest_action}`);
+  if (g.logged_status !== "listed" || g.logged_prior !== "in_review")
+    throw new Error(`logged ${g.logged_prior} -> ${g.logged_status}`);
+});
+/* Listing r-draft exposes the race row, but not c-draft: r-draft's
+   candidate_ids is empty, and c-draft's profile path still needs 'published'.
+   Nor cl-draft: the claim policy never heard of 'listed'. */
+await check("a race listed through the door is anon-visible; its profile-only candidate and claims are not", async () => {
+  await db.exec("SET ROLE anon;");
+  const races = await db.query("SELECT race_id FROM race WHERE race_id='r-draft';");
+  const cands = await db.query("SELECT candidate_id FROM candidate WHERE candidate_id='c-draft';");
+  const claims = await db.query("SELECT claim_id FROM claim WHERE race_id='r-draft';");
+  await db.exec("RESET ROLE; SET ROLE service_role;");
+  if (races.rows.length !== 1) throw new Error("listed r-draft is not visible to anon");
+  if (cands.rows.length !== 0) throw new Error("c-draft surfaced without being in candidate_ids");
+  if (claims.rows.length !== 0) throw new Error("a listed race's claim is visible to anon");
+});
+await check("leaving listed logs 'unlist'; published -> listed logs 'unpublish'", async () => {
+  await db.exec(
+    "SELECT set_race_publication('r-draft','draft','op@example.com','back to draft');"
+  );
+  await db.exec(
+    "SELECT set_race_publication('r-pub','listed','op@example.com','brief pulled, roster stays');"
+  );
+  const r = await db.query(`
+    SELECT subject_ref, action FROM admin_action
+     WHERE subject_ref IN ('r-draft','r-pub')
+       AND detail->>'reason' IN ('back to draft','brief pulled, roster stays')
+     ORDER BY subject_ref;`);
+  const got = r.rows.map((x) => `${x.subject_ref}:${x.action}`).join(",");
+  if (got !== "r-draft:unlist,r-pub:unpublish") throw new Error(`logged [${got}]`);
+  await db.exec(
+    "SELECT set_race_publication('r-pub','published','op@example.com','restore fixture');"
+  );
+});
+/* The ACL survives CREATE OR REPLACE -- and 0033 re-states it anyway. Checked
+   from the catalog so a future replace that forgets is caught even if no
+   probe above happens to run as the wrong role. */
+await check("0033 leaves set_race_publication executable by service_role only", async () => {
+  const r = await db.query(`
+    SELECT has_function_privilege('anon', 'set_race_publication(text,text,text,text)', 'EXECUTE') AS anon,
+           has_function_privilege('authenticated', 'set_race_publication(text,text,text,text)', 'EXECUTE') AS authn,
+           has_function_privilege('cap_tool_wrapper', 'set_race_publication(text,text,text,text)', 'EXECUTE') AS capw,
+           has_function_privilege('service_role', 'set_race_publication(text,text,text,text)', 'EXECUTE') AS svc;`);
+  const g = r.rows[0];
+  if (g.anon || g.authn || g.capw) throw new Error(`EXECUTE leaked: ${JSON.stringify(g)}`);
+  if (!g.svc) throw new Error("service_role lost EXECUTE");
+});
+await check("0033 leaves exactly one status CHECK on each publication table", async () => {
+  const r = await db.query(`
+    SELECT conrelid::regclass::text AS t, count(*)::int AS n FROM pg_constraint
+     WHERE conrelid IN ('race_publication'::regclass, 'measure_publication'::regclass)
+       AND contype='c' AND pg_get_constraintdef(oid) ILIKE '%status%'
+     GROUP BY 1 ORDER BY 1;`);
+  const got = r.rows.map((x) => `${x.t}:${x.n}`).join(",");
+  if (got !== "measure_publication:1,race_publication:1") throw new Error(`found [${got}]`);
+});
+await expectConstraintViolation(
+  "race_publication status CHECK still rejects an unknown status",
+  "INSERT INTO race_publication (race_id, status) VALUES ('r-nope','live');",
+  /race_publication_status_check/
+);
+
 await db.exec("RESET ROLE;");
 
 /* 0009_action_log_roles (invariant 15). Object existence first. */
@@ -1117,7 +1272,7 @@ await check("cap_tool_wrapper can UPDATE candidate freshness", async () => {
 });
 await check("cap_tool_wrapper sees unpublished claims too (T8 db_read)", async () => {
   const r = await db.query("SELECT count(*)::int AS n FROM claim;");
-  if (r.rows[0].n !== 2) throw new Error(`saw ${r.rows[0].n} claims, expected 2`);
+  if (r.rows[0].n !== 3) throw new Error(`saw ${r.rows[0].n} claims, expected 3`);
 });
 await expectDenied(
   "cap_tool_wrapper cannot DELETE claims",
@@ -1151,7 +1306,7 @@ await check("cap_readonly can SELECT action_log", async () => {
 });
 await check("cap_readonly sees ALL claims (traceability needs unpublished)", async () => {
   const r = await db.query("SELECT count(*)::int AS n FROM claim;");
-  if (r.rows[0].n !== 2) throw new Error(`saw ${r.rows[0].n} claims, expected 2`);
+  if (r.rows[0].n !== 3) throw new Error(`saw ${r.rows[0].n} claims, expected 3`);
 });
 await expectDenied(
   "cap_readonly cannot INSERT action_log",
@@ -1189,59 +1344,177 @@ await expectDenied(
 await db.exec("RESET ROLE;");
 
 /* ---------------------------------------------------------------- *
- * 16. 0010/0011 ballot measures (TASK-061).
+ * 16. 0010/0011/0034 ballot measures.
  *
  * Same posture as races: anon sees a measure only through a published
  * measure_publication row, and can write nothing. Plus the symmetry rule,
- * which is the part that is specific to measures — an amendment has no
- * campaign obliged to balance it, so the database refuses to publish a
- * lopsided one rather than trusting a reviewer to notice.
+ * which is the part specific to measures — an amendment has no campaign
+ * obliged to balance it, so the database refuses to publish a lopsided one
+ * rather than trusting a reviewer to notice. Since 0034 the unit is an
+ * outside RESOURCE (a link), not an argument we wrote, and the rule is
+ * "both sides present, larger <= 2x smaller".
  * ---------------------------------------------------------------- */
+
+await check("0034 dropped measure_argument", async () => {
+  const res = await db.query("SELECT to_regclass('public.measure_argument') AS t;");
+  if (res.rows[0].t !== null) throw new Error("measure_argument still exists");
+});
 
 await db.exec(`
   INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag) VALUES
-    ('s-m', 'https://example.gov/m', 'example.gov/m', 'Example Gov', 'primary_doc', 'N/A');
+    ('s-gov', 'https://example.gov/m',   'example.gov/m',   'Example Gov',   'primary_doc',       'N/A'),
+    ('s-n1',  'https://example.news/1',  'example.news/1',  'Example News',  'factual_reporting', 'unrated'),
+    ('s-o1',  'https://example.org/1',   'example.org/1',   'Example Org',   'opinion',           'unrated'),
+    ('s-o2',  'https://example.org/2',   'example.org/2',   'Example Org',   'opinion',           'unrated'),
+    ('s-o3',  'https://example.org/3',   'example.org/3',   'Example Org',   'opinion',           'unrated'),
+    ('s-o4',  'https://example.org/4',   'example.org/4',   'Example Org',   'opinion',           'unrated'),
+    ('s-o5',  'https://example.org/5',   'example.org/5',   'Example Org',   'opinion',           'unrated'),
+    ('s-o6',  'https://example.org/6',   'example.org/6',   'Example Org',   'opinion',           'unrated'),
+    ('s-yt',  'https://video.example/1', 'video.example/1', 'Some Channel',  'opinion',           'unrated');
 
   INSERT INTO ballot_measure
     (measure_id, election, number, official_title, ballot_summary, full_text_url,
      placed_by, threshold_pct, jurisdiction, display_order) VALUES
-    ('m-pub',   'general_2026', '1', 'Published Measure', 'Summary.', 'https://example.gov/1', 'legislature', 60, 'FL', 1),
-    ('m-draft', 'general_2026', '2', 'Draft Measure',     'Summary.', 'https://example.gov/2', 'legislature', 60, 'FL', 2),
-    ('m-skew',  'general_2026', '3', 'Lopsided Measure',  'Summary.', 'https://example.gov/3', 'legislature', 60, 'FL', 3);
+    ('m-pub',    'general_2026', '1', 'Published Measure',  'Summary.', 'https://example.gov/1', 'legislature', 60, 'FL', 1),
+    ('m-draft',  'general_2026', '2', 'Draft Measure',      'Summary.', 'https://example.gov/2', 'legislature', 60, 'FL', 2),
+    ('m-skew',   'general_2026', '3', 'Lopsided Measure',   'Summary.', 'https://example.gov/3', 'legislature', 60, 'FL', 3),
+    ('m-review', 'general_2026', '5', 'In-review Measure',  'Summary.', 'https://example.gov/5', 'legislature', 60, 'FL', 5);
 
-  INSERT INTO measure_argument (argument_id, measure_id, side, text, source_id) VALUES
-    ('a1', 'm-pub',   'support', 'For.',     's-m'),
-    ('a2', 'm-pub',   'oppose',  'Against.', 's-m'),
-    ('a3', 'm-draft', 'support', 'For.',     's-m'),
-    ('a4', 'm-draft', 'oppose',  'Against.', 's-m'),
+  INSERT INTO measure_resource
+    (resource_id, measure_id, source_id, stance, kind, format, title, published_at) VALUES
+    ('r1', 'm-pub',   's-gov', 'neutral', 'official',  'document', 'Staff analysis', '2026-01-01'),
+    ('r2', 'm-pub',   's-o1',  'support', 'argument',  'article',  'For.',           '2026-02-01'),
+    ('r3', 'm-pub',   's-o2',  'oppose',  'argument',  'article',  'Against.',       '2026-02-01'),
+    ('r4', 'm-draft', 's-o3',  'support', 'argument',  'article',  'For.',           NULL),
+    ('r5', 'm-draft', 's-o4',  'oppose',  'argument',  'article',  'Against.',       NULL),
+    -- 0041: a neutral row on a draft measure must stay unreadable, same as a
+    -- sided one -- draft/in_review is a wall, not a door for any stance.
+    ('r5n', 'm-draft', 's-n1', 'neutral', 'official',  'document', 'Draft-stage staff note', NULL),
     -- m-skew: three for, none against.
-    ('a5', 'm-skew',  'support', 'For A.',   's-m'),
-    ('a6', 'm-skew',  'support', 'For B.',   's-m'),
-    ('a7', 'm-skew',  'support', 'For C.',   's-m');
+    ('r6', 'm-skew',  's-o5',  'support', 'argument',  'article',  'For A.',         NULL),
+    ('r7', 'm-skew',  's-o6',  'support', 'argument',  'article',  'For B.',         NULL),
+    ('r8', 'm-skew',  's-yt',  'support', 'commentary','video',    'For C.',         NULL),
+    -- 0041: same wall for in_review as for draft.
+    ('r-rev1', 'm-review', 's-n1', 'neutral', 'official', 'document', 'In-review staff note', NULL);
 
   INSERT INTO measure_publication (measure_id, status) VALUES
     ('m-pub', 'published'),
-    ('m-draft', 'draft');
+    ('m-draft', 'draft'),
+    ('m-review', 'in_review');
 `);
 
-await check("anon sees only published measures", async () => {
-  await db.exec("SET ROLE anon;");
-  const res = await db.query("SELECT measure_id FROM ballot_measure ORDER BY measure_id;");
-  await db.exec("RESET ROLE;");
-  const ids = res.rows.map((r) => r.measure_id);
-  if (ids.length !== 1 || ids[0] !== "m-pub") {
-    throw new Error(`expected only m-pub, got [${ids.join(", ")}]`);
+/* 0033: a listed measure is its ballot text alone. Inserted as service_role
+   with ZERO resources -- the balance trigger checks only status =
+   'published', so this must be accepted. A resource added afterwards stays
+   editable (the resource-side trigger guards published measures only) and
+   must stay invisible to anon. */
+await check("a listed measure with zero resources is accepted", async () => {
+  await db.exec("SET ROLE service_role;");
+  try {
+    await db.exec(`
+      INSERT INTO ballot_measure
+        (measure_id, election, number, official_title, ballot_summary, full_text_url,
+         placed_by, threshold_pct, jurisdiction, display_order) VALUES
+        ('m-listed', 'general_2026', '4', 'Listed Measure', 'Summary.', 'https://example.gov/4', 'legislature', 60, 'FL', 4);
+      INSERT INTO measure_publication (measure_id, status) VALUES ('m-listed', 'listed');
+      INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title) VALUES
+        ('r-l1', 'm-listed', 's-o1', 'support', 'argument', 'article', 'For, unpublished.'),
+        -- 0041: the neutral row on a *listed* measure is the one case that
+        -- opens early -- neutral material takes no side, so showing it
+        -- before publication cannot make the page one-sided.
+        ('r-l2', 'm-listed', 's-gov', 'neutral', 'official', 'document', 'Listed-stage staff note');`);
+  } finally {
+    await db.exec("RESET ROLE;");
   }
 });
 
-await check("anon sees arguments only for published measures", async () => {
+/* Scoped to this fixture's own 'm-%' ids: 0038 seeds a genuinely published
+   real-world measure (FL-AM3-general), and an unscoped SELECT here would
+   pick that up too and make this fixture's assertion depend on unrelated
+   seed data. */
+await check("anon sees published and listed measures, never draft", async () => {
   await db.exec("SET ROLE anon;");
-  const res = await db.query("SELECT argument_id FROM measure_argument ORDER BY argument_id;");
+  const res = await db.query(
+    "SELECT measure_id FROM ballot_measure WHERE measure_id LIKE 'm-%' ORDER BY measure_id;"
+  );
   await db.exec("RESET ROLE;");
-  const ids = res.rows.map((r) => r.argument_id);
-  if (ids.length !== 2 || ids[0] !== "a1" || ids[1] !== "a2") {
-    throw new Error(`expected a1,a2 only, got [${ids.join(", ")}]`);
-  }
+  const ids = res.rows.map((r) => r.measure_id).join(",");
+  if (ids !== "m-listed,m-pub") throw new Error(`expected m-listed,m-pub, got [${ids}]`);
+});
+
+await check("anon sees listed and published measure_publication rows with their status", async () => {
+  await db.exec("SET ROLE anon;");
+  const res = await db.query(
+    "SELECT measure_id, status FROM measure_publication WHERE measure_id LIKE 'm-%' ORDER BY measure_id;"
+  );
+  await db.exec("RESET ROLE;");
+  const got = res.rows.map((r) => `${r.measure_id}:${r.status}`).join(",");
+  if (got !== "m-listed:listed,m-pub:published") throw new Error(`saw [${got}]`);
+});
+
+/* 0041: r-l1 (support) stays behind the door on the listed m-listed --
+   listing exposes the ballot text and neutral material only, never a side.
+   r-l2 (neutral, m-listed) is the new admission: a listed measure's neutral
+   rows are readable. r1/r2/r3 (m-pub, published) are unchanged -- a
+   published measure still shows every row, sided or not. */
+await check("anon sees a listed measure's neutral resources plus every published one, never a listed measure's sided rows", async () => {
+  await db.exec("SET ROLE anon;");
+  const res = await db.query(
+    "SELECT resource_id FROM measure_resource WHERE measure_id LIKE 'm-%' ORDER BY resource_id;"
+  );
+  await db.exec("RESET ROLE;");
+  const ids = res.rows.map((r) => r.resource_id).join(",");
+  if (ids !== "r-l2,r1,r2,r3") throw new Error(`expected r-l2,r1,r2,r3 only, got [${ids}]`);
+});
+
+await check("anon reads m-listed's neutral row and none of its sided rows", async () => {
+  await db.exec("SET ROLE anon;");
+  const res = await db.query(
+    "SELECT resource_id, stance FROM measure_resource WHERE measure_id = 'm-listed' ORDER BY resource_id;"
+  );
+  await db.exec("RESET ROLE;");
+  const ids = res.rows.map((r) => r.resource_id).join(",");
+  if (ids !== "r-l2") throw new Error(`expected r-l2 only, got [${ids}]`);
+});
+
+await check("anon reads every one of m-pub's rows, sided and neutral, unchanged by 0041", async () => {
+  await db.exec("SET ROLE anon;");
+  const res = await db.query("SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'm-pub';");
+  await db.exec("RESET ROLE;");
+  const cnt = res.rows[0].n;
+  if (cnt !== 3) throw new Error(`expected 3, got ${cnt}`);
+});
+
+await check("a draft or in_review measure's neutral rows stay unreadable to anon", async () => {
+  await db.exec("SET ROLE anon;");
+  const res = await db.query(
+    "SELECT count(*)::int n FROM measure_resource WHERE measure_id IN ('m-draft','m-review') AND stance = 'neutral';"
+  );
+  await db.exec("RESET ROLE;");
+  const cnt = res.rows[0].n;
+  if (cnt !== 0) throw new Error(`expected 0, got ${cnt}`);
+});
+
+/* 0038 and 0040 publish the real FL-AM3-general and FL-AM2-general measures:
+   anon must see all 15 of AM3's resources (0038's 14 plus the
+   FL-AM3-general:booklet row 0035 already seeded) and all 18 of AM2's
+   (0040's 17 plus the FL-AM2-general:booklet row 0035 already seeded), and
+   0 for AM1 here even though 0041 seeded AM1's neutral rows too -- AM1 has
+   no measure_publication row at all at the migration level (it only becomes
+   'listed' via the hand-run scripts/list-ballot-2026.sql), and 0041's policy
+   only opens a neutral row once its measure has a 'listed' or 'published'
+   row to point at. */
+await check("anon sees all 15 FL-AM3-general and 18 FL-AM2-general resources, 0 for AM1", async () => {
+  await db.exec("SET ROLE anon;");
+  const res = await db.query(
+    `SELECT measure_id, count(*)::int n FROM measure_resource
+      WHERE measure_id IN ('FL-AM1-general', 'FL-AM2-general', 'FL-AM3-general')
+      GROUP BY measure_id ORDER BY measure_id;`
+  );
+  await db.exec("RESET ROLE;");
+  const got = res.rows.map((r) => `${r.measure_id}:${r.n}`).join(",");
+  if (got !== "FL-AM2-general:18,FL-AM3-general:15")
+    throw new Error(`expected FL-AM2-general:18,FL-AM3-general:15 only, got [${got}]`);
 });
 
 await db.exec("SET ROLE anon;");
@@ -1251,9 +1524,9 @@ await expectDenied(
    VALUES ('m-x','general_2026','9','X','S','https://e.gov/x','legislature',60);`
 );
 await expectDenied(
-  "anon cannot INSERT a measure_argument",
-  `INSERT INTO measure_argument (argument_id, measure_id, side, text, source_id)
-   VALUES ('a-x','m-pub','support','X','s-m');`
+  "anon cannot INSERT a measure_resource",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r-x','m-pub','s-o1','support','argument','article','X');`
 );
 await expectDenied(
   "anon cannot publish a measure",
@@ -1261,49 +1534,110 @@ await expectDenied(
 );
 await db.exec("RESET ROLE;");
 
-/* The symmetry rule. These run as service_role: the trigger must hold for
-   the role that actually writes, not only for anon. */
+/* The symmetry rule, as service_role: the trigger must hold for the role
+   that actually writes. */
 await db.exec("SET ROLE service_role;");
 await expectConstraintViolation(
-  "a measure with no opposing argument cannot be published",
+  "a measure with no opposing resource cannot be published",
   "INSERT INTO measure_publication (measure_id, status) VALUES ('m-skew','published');",
-  /must both exist and differ by at most one/
+  /both sides must be present and the larger at most twice the smaller/
 );
-/* The INSERT above was rejected, so m-skew has no publication row yet; give
-   it a draft one so the UPDATE path is actually exercised rather than
-   matching zero rows. */
 await db.exec("INSERT INTO measure_publication (measure_id, status) VALUES ('m-skew','draft');");
 await expectConstraintViolation(
   "a skewed measure cannot be published by UPDATE either",
   "UPDATE measure_publication SET status='published' WHERE measure_id='m-skew';",
-  /must both exist and differ by at most one/
+  /both sides must be present and the larger at most twice the smaller/
 );
-await check("a balanced measure still publishes", async () => {
+/* m-skew is unpublished, so this insert is free (the resource-side trigger
+   guards published measures only). It makes m-skew 3 vs 1. */
+await db.exec(
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r9','m-skew','s-gov','oppose','analysis','document','Against A.');`
+);
+await expectConstraintViolation(
+  "3 vs 1 is still lopsided under the 2x rule",
+  "UPDATE measure_publication SET status='published' WHERE measure_id='m-skew';",
+  /both sides must be present and the larger at most twice the smaller/
+);
+await check("3 vs 2 publishes (within 2x)", async () => {
   await db.exec(
-    `INSERT INTO measure_argument (argument_id, measure_id, side, text, source_id)
-     VALUES ('a8','m-skew','oppose','Against A.','s-m'), ('a9','m-skew','oppose','Against B.','s-m');`
+    `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+     VALUES ('r10','m-skew','s-n1','oppose','argument','article','Against B.');`
   );
   await db.exec("UPDATE measure_publication SET status='published' WHERE measure_id='m-skew';");
   const res = await db.query("SELECT status FROM measure_publication WHERE measure_id='m-skew';");
-  if (res.rows[0].status !== "published") throw new Error("expected m-skew to publish once balanced");
+  if (res.rows[0].status !== "published") throw new Error("expected m-skew to publish at 3 vs 2");
 });
 
 /* The hole the publication-side trigger alone leaves: a measure published
    while balanced, then skewed by removing the other side. */
 await expectConstraintViolation(
-  "a published measure cannot be skewed by deleting an argument",
-  "DELETE FROM measure_argument WHERE argument_id='a2';",
-  /is published: support and oppose arguments/
+  "a published measure cannot be skewed by deleting a resource",
+  "DELETE FROM measure_resource WHERE resource_id='r3';",
+  /is published: both sides must be present/
 );
 await expectConstraintViolation(
-  "a published measure cannot be skewed by flipping an argument's side",
-  "UPDATE measure_argument SET side='support' WHERE argument_id='a2';",
-  /is published: support and oppose arguments/
+  "a published measure cannot be skewed by flipping a resource's stance",
+  "UPDATE measure_resource SET stance='support' WHERE resource_id='r3';",
+  /is published: both sides must be present/
 );
-await check("an unpublished measure's arguments can still be edited freely", async () => {
-  /* m-draft is not published, so the rule does not apply to it. */
-  await db.exec("DELETE FROM measure_argument WHERE argument_id='a4';");
+await check("neutral resources do not count toward either side", async () => {
+  /* m-pub is 1 vs 1 with one neutral; adding two more neutrals must not
+     trip the 2x rule, and removing one must not either. */
+  await db.exec(
+    `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+     VALUES ('r11','m-pub','s-n1','neutral','reporting','article','Explainer'),
+            ('r12','m-pub','s-o3','neutral','analysis','document','Study');
+     DELETE FROM measure_resource WHERE resource_id='r12';`
+  );
 });
+await check("an unpublished measure's resources can still be edited freely", async () => {
+  await db.exec("DELETE FROM measure_resource WHERE resource_id='r5';");
+});
+
+/* The cross-column CHECKs. */
+await expectConstraintViolation(
+  "an official document cannot take a side",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r-bad1','m-draft','s-gov','support','official','document','X');`,
+  /measure_resource_neutral_kinds/
+);
+await expectConstraintViolation(
+  "reporting cannot take a side",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r-bad2','m-draft','s-n1','oppose','reporting','article','X');`,
+  /measure_resource_neutral_kinds/
+);
+await expectConstraintViolation(
+  "an argument cannot be neutral",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r-bad3','m-draft','s-o1','neutral','argument','article','X');`,
+  /measure_resource_sided_kinds/
+);
+await expectConstraintViolation(
+  "commentary cannot be neutral",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r-bad4','m-draft','s-yt','neutral','commentary','video','X');`,
+  /measure_resource_sided_kinds/
+);
+await expectConstraintViolation(
+  "duration belongs to video and audio only",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title, duration_seconds)
+   VALUES ('r-bad5','m-draft','s-o1','support','argument','article','X', 600);`,
+  /measure_resource_duration_format/
+);
+await expectConstraintViolation(
+  "a note is attribution, at most 140 characters",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title, note)
+   VALUES ('r-bad6','m-draft','s-o1','support','argument','article','X', repeat('x', 141));`,
+  /measure_resource_note_length/
+);
+await expectConstraintViolation(
+  "one URL is one resource per measure",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r-dup','m-pub','s-o1','support','argument','article','Again');`,
+  /measure_resource_measure_id_source_id_key/
+);
 await expectConstraintViolation(
   "threshold_pct must be a real percentage",
   `INSERT INTO ballot_measure (measure_id, election, number, official_title, ballot_summary, full_text_url, placed_by, threshold_pct)
@@ -1311,10 +1645,10 @@ await expectConstraintViolation(
   /threshold_pct/
 );
 await expectConstraintViolation(
-  "side must be support or oppose",
-  `INSERT INTO measure_argument (argument_id, measure_id, side, text, source_id)
-   VALUES ('a-bad','m-pub','maybe','X','s-m');`,
-  /side/
+  "stance must be support, oppose or neutral",
+  `INSERT INTO measure_resource (resource_id, measure_id, source_id, stance, kind, format, title)
+   VALUES ('r-bad7','m-pub','s-o1','maybe','argument','article','X');`,
+  /stance/
 );
 /* 17. block_district — public reference data for address lookup. */
 await db.exec("SET ROLE service_role;");

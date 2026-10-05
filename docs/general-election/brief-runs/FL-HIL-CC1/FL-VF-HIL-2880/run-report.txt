@@ -1,0 +1,21 @@
+
+What this site states, by policy area
+
+Housing
+  A2  Housing affordability  (1 citation(s))
+      0.96  "Jackie believes infrastructure should come before unchecked development and that growth must be managed responsibly. She will work to implement smarter planning, better infrastructure coordination, protect neighborhoods and for greater t…"
+            https://jackietoledo.com/issues  — section: Responsible Growth
+
+Environment & Water
+  KYV3  Growth, development and land conservation  (1 citation(s))
+      0.96  "Jackie believes infrastructure should come before unchecked development and that growth must be managed responsibly. She will work to implement smarter planning, better infrastructure coordination, protect neighborhoods and for greater t…"
+            https://jackietoledo.com/issues  — section: Responsible Growth
+  KYV4  Storm resilience and flood protection  (1 citation(s))
+      0.97  "Jackie will prioritize infrastructure resilience, stormwater improvements, flood mitigation, and emergency preparedness to protect residents and property."
+            https://jackietoledo.com/issues  — section: Flood Protection and Storm Preparedness
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (1 citation(s))
+      0.85  "Jackie will strongly support law enforcement, firefighters, emergency responders, and emergency management professionals who keep our communities safe."
+            https://jackietoledo.com/issues  — section: Public Safety First
+

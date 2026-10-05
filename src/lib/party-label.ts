@@ -14,7 +14,17 @@
    2. WRI is not a party. It is the write-in marker occupying the PartyCode
       column, and a chip reading "WRI" would present an unknown affiliation as
       a known one. (Write-ins are excluded from the app entirely under D1;
-      this is the belt to that brace, at one condition.) */
+      this is the belt to that brace, at one condition.)
+   3. NOP is not a party either, and arrives for the same structural reason.
+      Florida school board races are nonpartisan by constitution, and several
+      county offices are nonpartisan by charter — those ballots print no party
+      at all. The counties disagree only on how they say so: Miami-Dade's
+      candidate list emits the code NOP, while Orange, Broward and
+      Hillsborough leave the field blank for the very same kind of race. Rule
+      1 already handles the blank; without this, the identical fact would
+      render as a chip reading "NOP" in one county and as nothing in the next.
+      Same reasoning as WRI — a non-affiliation must not be printed as an
+      affiliation. */
 
 import type { Party } from "@/types/schema";
 
@@ -29,7 +39,7 @@ import type { Party } from "@/types/schema";
     for all of them. */
 export function partyLabel(party: Party | null | undefined): string | null {
   const code = (party ?? "").trim();
-  if (!code || code === "WRI") return null;
+  if (!code || code === "WRI" || code === "NOP") return null;
   /* The schema's catch-all bucket is the one code that is not a real DoE
      PartyCode, so it is the one that needs prose. */
   return code === "other" ? "Other" : code;

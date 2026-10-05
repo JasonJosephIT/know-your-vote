@@ -1,0 +1,23 @@
+
+What this site states, by policy area
+
+Healthcare
+  B2  Healthcare access and costs  (1 citation(s))
+      0.97  "I’m running for Congress because I know we won’t change the system until we change our leadership. It’s time for poor, working-class, and young people to have a seat at the table. As the first generation-z member of Congress, from day on…"
+            https://www.frostforcongress.com/  — section: I’ve spent my life as an organizer, fighting for the future we deserve.
+
+Environment & Water
+  B8  Climate and environment (national)  (1 citation(s))
+      0.95  "I’m running for Congress because I know we won’t change the system until we change our leadership. It’s time for poor, working-class, and young people to have a seat at the table. As the first generation-z member of Congress, from day on…"
+            https://www.frostforcongress.com/  — section: I’ve spent my life as an organizer, fighting for the future we deserve.
+
+Public Safety & Crime
+  B7  Crime policy, policing and courts  (1 citation(s))
+      0.92  "I’m running for Congress because I know we won’t change the system until we change our leadership. It’s time for poor, working-class, and young people to have a seat at the table. As the first generation-z member of Congress, from day on…"
+            https://www.frostforcongress.com/  — section: I’ve spent my life as an organizer, fighting for the future we deserve.
+
+Retirement & Benefits
+  B4  Social Security and Medicare  (1 citation(s))
+      0.91  "I’m running for Congress because I know we won’t change the system until we change our leadership. It’s time for poor, working-class, and young people to have a seat at the table. As the first generation-z member of Congress, from day on…"
+            https://www.frostforcongress.com/  — section: I’ve spent my life as an organizer, fighting for the future we deserve.
+

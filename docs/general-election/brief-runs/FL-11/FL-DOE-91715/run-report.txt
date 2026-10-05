@@ -1,0 +1,33 @@
+
+What this site states, by policy area
+
+Healthcare
+  B2  Healthcare access and costs  (2 citation(s))
+      0.98  "Expand access to affordable, high-quality healthcare by protecting the Affordable Care Act."
+            https://jamespericola.com/  — section: Protect Affordable Healthcare
+      0.96  "Oppose any cuts or privatization of Social Security and Medicare, and push to let Medicare negotiate lower prescription drug costs for seniors."
+            https://jamespericola.com/  — section: Protect Social Security & Medicare
+
+Housing
+  A2  Housing affordability  (1 citation(s))
+      0.96  "Secure federal funding to combat our housing crisis and lower property insurance costs."
+            https://jamespericola.com/  — section: Lower Housing & Insurance Costs
+
+Insurance & Property Costs
+  A1  Property insurance costs  (1 citation(s))
+      0.97  "Secure federal funding to combat our housing crisis and lower property insurance costs."
+            https://jamespericola.com/  — section: Lower Housing & Insurance Costs
+
+Elections & Voting
+  A7  Elections administration and voting access  (1 citation(s))
+      0.98  "James will fight to end gerrymandering, pass the John Lewis Voting Rights Act, and defend our democracy from MAGA attacks."
+            https://jamespericola.com/  — section: Protecting Our Democracy
+  KYV1  Threats to democratic institutions  (1 citation(s))
+      0.90  "James will fight to end gerrymandering, pass the John Lewis Voting Rights Act, and defend our democracy from MAGA attacks."
+            https://jamespericola.com/  — section: Protecting Our Democracy
+
+Retirement & Benefits
+  B4  Social Security and Medicare  (1 citation(s))
+      0.99  "Oppose any cuts or privatization of Social Security and Medicare, and push to let Medicare negotiate lower prescription drug costs for seniors."
+            https://jamespericola.com/  — section: Protect Social Security & Medicare
+

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { COVERED_COUNTIES, resolveZip, ZIP_RE } from "@/lib/resolve";
 import { dedupeByUrl } from "@/lib/news-feed";
+import { ISSUE_FILTER_IDS, issueFilterIds } from "@/lib/news-issues";
 import { type NewsSource } from "@/lib/news-labels";
 import { outletForUrl } from "@/lib/news-sources";
 import type { NewsItemType } from "@/types/app";
@@ -22,6 +23,11 @@ type NewsRow = {
   url: string | null;
   published_at: string;
   image_url: string | null;
+  /* Migration 0027. NULL = never characterized, {} = characterized with
+     nothing over threshold. Both render; the API flattens both to [] because
+     a card has nothing to show in either case, and the distinction is the
+     characterizer's to report, not the reader's to decode. */
+  issues: string[] | null;
   source: NewsSource | NewsSource[] | null;
 };
 
@@ -37,6 +43,14 @@ const params = z.object({
     .string()
     .regex(/^FL-\d{1,2}$/)
     .optional(),
+  /* The issue filter (/news `?issue=`). A category or sub-issue id from the
+     taxonomy; anything else is IGNORED rather than a 400 — a stale link to an
+     id retired by a TAXONOMY_VERSION bump should still show the feed, not an
+     error. `.catch` is what makes an unknown value fall back to "no filter". */
+  issue: z
+    .enum(ISSUE_FILTER_IDS as [string, ...string[]])
+    .optional()
+    .catch(undefined),
 });
 
 /* News scoped to the voter: items for their races, their county, their
@@ -53,6 +67,7 @@ export async function GET(request: NextRequest) {
     metro: request.nextUrl.searchParams.get("metro") ?? undefined,
     county: request.nextUrl.searchParams.get("county") ?? undefined,
     district: request.nextUrl.searchParams.get("district") ?? undefined,
+    issue: request.nextUrl.searchParams.get("issue") ?? undefined,
   });
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid location" }, { status: 400 });
@@ -80,18 +95,36 @@ export async function GET(request: NextRequest) {
   if (county) scopes.push(`county_fips.eq.${county}`);
   if (raceIds.length > 0) scopes.push(`race_id.in.(${raceIds.join(",")})`);
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("news_item")
     .select(
-      "id, race_id, candidate_id, metro, county_fips, item_type, title, summary, url, published_at, image_url, "
-        + "source(publisher, type, lean_tag)",
+      "id, race_id, candidate_id, metro, county_fips, item_type, title, summary, url, published_at, image_url, issues, " +
+        "source(publisher, type, lean_tag)"
     )
-    .or(scopes.join(","))
+    .or(scopes.join(","));
+
+  /* The issue filter narrows WITHIN the scope above, never replaces it: a
+     Broward reader filtering on housing sees Broward-plus-statewide housing
+     stories, not every housing story in the state.
+
+     `overlaps` is `issues && ARRAY[...]`, the GIN-indexed query migration 0027
+     was built for. `issueFilterIds` expands a category into itself plus its
+     sub-issues, because categories are derived for display and not stored —
+     filtering on the bare category id would match nothing. A row whose
+     `issues` is NULL or {} cannot match any filter, which is correct: only an
+     unfiltered feed promises every stored row. */
+  const filterIds = issueFilterIds(parsed.data.issue);
+  if (filterIds) query = query.overlaps("issues", filterIds);
+
+  const { data, error } = await query
     .order("published_at", { ascending: false })
     .limit(50);
 
   if (error) {
-    return NextResponse.json({ error: "Couldn't load the feed — try again." }, { status: 500 });
+    return NextResponse.json(
+      { error: "Couldn't load the feed — try again." },
+      { status: 500 }
+    );
   }
 
   /* One article matched to several candidates is several rows (§6) and one
@@ -106,7 +139,7 @@ export async function GET(request: NextRequest) {
       ...i,
       candidateId: i.candidate_id,
       publishedAt: i.published_at,
-    })),
+    }))
   );
 
   return NextResponse.json({
@@ -139,6 +172,7 @@ export async function GET(request: NextRequest) {
         candidateId: i.candidateId,
         countyFips: i.county_fips,
         publishedAt: i.published_at,
+        issues: i.issues ?? [],
         source,
         outletDomain: outlet?.domain ?? null,
       };

@@ -20,6 +20,7 @@ colors:
   on-surface-muted: "#585E52"
   border: "#E4DED2"
   border-strong: "#CFC7B6"
+  border-input: "#857E6E"
   primary: "#2F6B4F"
   primary-hover: "#255A41"
   primary-muted: "#E4EFE7"
@@ -172,7 +173,7 @@ components:
     typography: "{typography.body}"
     rounded: "{rounded.md}"
     padding: "12px 14px"
-    border: "1px solid {colors.border-strong}"
+    border: "1px solid {colors.border-input}"
   input-text-focus:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.on-surface}"
@@ -252,6 +253,8 @@ Marketing assets (social posts, flyers, stickers, event banners) may turn the wa
 
 The palette is built to be **calm, optimistic, and pointedly non-partisan**. The primary is a muted **sage green** (`primary` `#2F6B4F`) — trustworthy and growth-associated without belonging to either party — reserved for primary actions, active states, and key emphasis. Neutrals are **warm sand**, not cold gray: `background` `#F6F3EC` is a soft paper tone, `surface` is white for cards, and `surface-muted` provides quiet fills; text is a warm near-black (`on-surface` `#22271F`) with `on-surface-muted` for secondary copy. A warm clay **accent** (`#B26836`) adds cheerful, human punctuation — use it for small highlights, illustrative marks, and the nav's active indicator, not for large blocks (for accent-colored text use `accent-strong` to hold WCAG AA). Semantic states are deliberately muted (`success`, `warning`, `error` as a warm brick rather than a fire-engine red, `info` as a calm teal) so nothing feels alarmist. The six **verdict** colors run a restrained green→amber→brick scale for fact-check outcomes — but color is always paired with the verdict's text label; it is never the only signal. All text pairings meet at least WCAG AA (`primary` on white ≈ 5.8:1, `on-surface` on `background` ≈ 13:1).
 
+**Form-control edges** use their own token, `border-input` `#857E6E`: 4.03:1 on `surface` and 3.64:1 on `background`, above the 3:1 that WCAG 1.4.11 (Non-text Contrast) asks of a control's boundary. It is the edge of every text input and select (Tailwind `border-border-input`). `border-strong` (1.68:1 on white) is too faint for that job: on a field whose label is visually hidden, such as the candidate search box, the border is the only thing that shows where the field is. `border-strong` stays for edges that are not the only cue, such as the secondary button and chips, whose text already identifies them. Added from the accessibility audit of 2026-10-04 (`docs/general-election/a11y-perf-2026-10-04.md`, fix 10). **Recommended (pending founder confirmation).** To flip it, change or remove the one token in the `@theme` block of `src/app/globals.css` and this entry.
+
 ## Typography
 
 The type system is **humanist sans** — friendly and legible, the opposite of institutional. Headings use **Figtree** (a warm, slightly geometric humanist sans) at tight tracking; body copy uses **Inter**, a workhorse chosen for its exceptional small-size legibility on phones. A monospace (**IBM Plex Mono**) is reserved for source citations, dates, and data snippets so the "receipts" feel precise. The scale is purposeful: `display` and `h1` for hero and page titles, `h2`/`h3` for race and section headings, `body-lg` for the reassuring intro sentences, `body`/`body-sm` for the substance, `label` for buttons and controls, `caption` for meta and badges, and `overline` (uppercased in use, wide-tracked) for small section eyebrows. We deliberately avoid **Public Sans** and other USWDS/government typefaces — the whole point is to not look like a `.gov`. Never set long body copy in the display face, and never go below `body-sm` (14px) for anything a voter must read.
@@ -270,7 +273,7 @@ The shape language is **minimalist and straight-lined with a small, consistent s
 
 ## Components
 
-**Buttons:** `button-primary` (sage fill, white label) is the single strong call-to-action per view — "See my ballot," "Take the quiz." `button-secondary` is an outlined/quiet variant on `surface` with a `border-strong` edge; on hover it fills with `primary-muted`. `button-primary-disabled` drops to `surface-muted` with muted text. **Inputs:** `input-text` carries a `border-strong` edge that thickens to a 2px `primary` ring on focus (`input-text-focus`) — focus is always clearly visible for keyboard users. **Cards** are the workhorse container: white surface, 1px `border`, `lg` radius, generous `spacing.5` padding. **Navigation:** `nav-bar` is a bordered surface bar; `nav-item` is quiet by default and becomes `nav-item-active` with a `primary-muted` background and `primary-hover` text plus a small accent indicator. **Verdict badges** use the `caption` type in a pill; the background stays neutral `surface-muted` and the **verdict color is applied to a leading dot and the label text**, so meaning survives for colorblind users and never shouts. **Party chips** are intentionally uniform — the *same* neutral `surface-muted` treatment for REP, DEM, NPA, and every other party, carrying only the text label. This is a hard rule: parties are never color-coded. **Chips** (saved filters, issue tags) use the soft `primary-muted` fill.
+**Buttons:** `button-primary` (sage fill, white label) is the single strong call-to-action per view — "See my ballot," "Take the quiz." `button-secondary` is an outlined/quiet variant on `surface` with a `border-strong` edge; on hover it fills with `primary-muted`. `button-primary-disabled` drops to `surface-muted` with muted text. **Inputs:** `input-text` carries a `border-input` edge that thickens to a 2px `primary` ring on focus (`input-text-focus`) — focus is always clearly visible for keyboard users. Selects take the same `border-input` edge. **Cards** are the workhorse container: white surface, 1px `border`, `lg` radius, generous `spacing.5` padding. **Navigation:** `nav-bar` is a bordered surface bar; `nav-item` is quiet by default and becomes `nav-item-active` with a `primary-muted` background and `primary-hover` text plus a small accent indicator. **Verdict badges** use the `caption` type in a pill; the background stays neutral `surface-muted` and the **verdict color is applied to a leading dot and the label text**, so meaning survives for colorblind users and never shouts. **Party chips** are intentionally uniform — the *same* neutral `surface-muted` treatment for REP, DEM, NPA, and every other party, carrying only the text label. This is a hard rule: parties are never color-coded. **Chips** (saved filters, issue tags) use the soft `primary-muted` fill.
 
 ## Do's and Don'ts
 
@@ -291,3 +294,4 @@ The shape language is **minimalist and straight-lined with a small, consistent s
 - Never let the accent or verdict reds dominate; they punctuate, they don't drive.
 - Never set body copy in the display face or shrink readable text below 14px.
 - Never use alarmist, saturated colors — the app is calm and reassuring, even when a fact-check verdict is "Inaccurate."
+- Never give an anchor target a `scroll-mt-*` to clear the fixed nav. The root `scroll-padding` in `src/app/globals.css` already keeps anchor jumps and keyboard focus clear of the top bar, the bottom nav and the cookie banner, and a scroll margin adds to it, so the target lands that much lower (a11y audit 2026-10-04, fix 1).

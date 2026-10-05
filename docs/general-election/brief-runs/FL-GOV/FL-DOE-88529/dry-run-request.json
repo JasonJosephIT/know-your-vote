@@ -1,0 +1,308 @@
+{
+  "model": "jev-1.13.0",
+  "threshold": 0.85,
+  "provenance": "jev:jev-1.13.0/tax-7/q-b2171346",
+  "passages": 18,
+  "questions": {
+    "q_states_policy": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position: something the speaker says they would do, support, oppose, fund, or change if elected? Judge only whether a position is stated. Do not judge whether the position is good, workable, popular, or correct.",
+      "criteria": {
+        "true": "The passage states a policy position the speaker holds.",
+        "false": "The passage is biography, endorsement, event, fundraising, or other text that states no policy position."
+      }
+    },
+    "A1": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Property insurance costs\"? That issue covers topics such as: property insurance, premiums, hurricane coverage, Citizens Property Insurance, flood insurance, windstorm coverage, reinsurance. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Property insurance costs.",
+        "false": "The passage states no position on Property insurance costs."
+      }
+    },
+    "A2": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Housing affordability\"? That issue covers topics such as: housing costs, rent, housing supply, first-time buyers, homebuying, home prices, down payment assistance, affordable housing. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Housing affordability.",
+        "false": "The passage states no position on Housing affordability."
+      }
+    },
+    "A3": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Property taxes\"? That issue covers topics such as: property tax, property taxes, homestead exemption, property assessments, millage. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Property taxes.",
+        "false": "The passage states no position on Property taxes."
+      }
+    },
+    "A4": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Cost of living in Florida\"? That issue covers topics such as: household costs, utility bills, groceries, affordability, gas prices, fuel costs, grocery prices, everyday expenses, household budgets, price increases, paying the bills, cost of living. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Cost of living in Florida.",
+        "false": "The passage states no position on Cost of living in Florida."
+      }
+    },
+    "A5": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Water quality and Everglades restoration\"? That issue covers topics such as: water quality, Everglades, red tide, nutrient pollution, restoration, algae blooms, blue-green algae, sewage spill, wastewater discharge, septic to sewer, nutrient runoff, water pollution, springs, seagrass. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Water quality and Everglades restoration.",
+        "false": "The passage states no position on Water quality and Everglades restoration."
+      }
+    },
+    "A6": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Public school funding and teachers\"? That issue covers topics such as: public school funding, teacher pay, teachers, classroom funding, public schools, school districts, school board, K-12. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Public school funding and teachers.",
+        "false": "The passage states no position on Public school funding and teachers."
+      }
+    },
+    "KYV9": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"School choice and vouchers\"? That issue covers topics such as: vouchers, school choice, scholarship programs, charter schools, open enrollment, private school enrollment. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on School choice and vouchers.",
+        "false": "The passage states no position on School choice and vouchers."
+      }
+    },
+    "KYV10": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Career, vocational and higher education\"? That issue covers topics such as: vocational training, career and technical education, apprenticeships, workforce training, state colleges, universities, financial aid. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Career, vocational and higher education.",
+        "false": "The passage states no position on Career, vocational and higher education."
+      }
+    },
+    "A7": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Elections administration and voting access\"? That issue covers topics such as: voting access, election administration, ballot initiative process, voter registration, ballot access, redistricting. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Elections administration and voting access.",
+        "false": "The passage states no position on Elections administration and voting access."
+      }
+    },
+    "B1": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Economy, inflation, and jobs\"? That issue covers topics such as: economy, inflation, jobs, wages, unemployment. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Economy, inflation, and jobs.",
+        "false": "The passage states no position on Economy, inflation, and jobs."
+      }
+    },
+    "B2": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Healthcare access and costs\"? That issue covers topics such as: healthcare costs, coverage, hospitals, prescription prices, public health, vaccines, Medicaid, clinics, pharmacies, drug prices, disease outbreaks, insurance coverage, prescription costs. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Healthcare access and costs.",
+        "false": "The passage states no position on Healthcare access and costs."
+      }
+    },
+    "B3": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Immigration and border enforcement\"? That issue covers topics such as: immigration, border enforcement, migrants, detention, asylum, visas. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Immigration and border enforcement.",
+        "false": "The passage states no position on Immigration and border enforcement."
+      }
+    },
+    "B4": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Social Security and Medicare\"? That issue covers topics such as: Social Security, Medicare, retirement benefits, entitlements, retirement income, benefits. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Social Security and Medicare.",
+        "false": "The passage states no position on Social Security and Medicare."
+      }
+    },
+    "B5": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Abortion policy\"? That issue covers topics such as: abortion, gestational limits, reproductive health policy, abortion law. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Abortion policy.",
+        "false": "The passage states no position on Abortion policy."
+      }
+    },
+    "B6": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Election integrity\"? That issue covers topics such as: election integrity, certification, election security, voter rolls, ballot counting, election fraud allegations, recounts. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Election integrity.",
+        "false": "The passage states no position on Election integrity."
+      }
+    },
+    "KYV1": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Threats to democratic institutions\"? That issue covers topics such as: press freedom, freedom of the press, rule of law, political violence, checks and balances, abuse of office, democratic norms. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Threats to democratic institutions.",
+        "false": "The passage states no position on Threats to democratic institutions."
+      }
+    },
+    "B7": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Crime policy, policing and courts\"? That issue covers topics such as: police funding, police oversight, policing policy, sentencing laws, criminal justice reform, court system, public safety budget, prison policy, fraud and scam enforcement. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Crime policy, policing and courts.",
+        "false": "The passage states no position on Crime policy, policing and courts."
+      }
+    },
+    "B8": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Climate and environment (national)\"? That issue covers topics such as: climate policy, emissions, environmental regulation, federal environmental rules, offshore drilling, climate. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Climate and environment (national).",
+        "false": "The passage states no position on Climate and environment (national)."
+      }
+    },
+    "KYV2": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Energy and utilities\"? That issue covers topics such as: electricity, power grid, electric rates, power bills, rate case, power plants, solar, natural gas, energy policy, data centers, data center power demand. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Energy and utilities.",
+        "false": "The passage states no position on Energy and utilities."
+      }
+    },
+    "KYV3": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Growth, development and land conservation\"? That issue covers topics such as: land use, zoning, development moratorium, growth management, wetlands, permitting, state parks, conservation land, rural boundary, suburban development, data centers, conservation. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Growth, development and land conservation.",
+        "false": "The passage states no position on Growth, development and land conservation."
+      }
+    },
+    "KYV4": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Storm resilience and flood protection\"? That issue covers topics such as: storm resilience, hurricane preparedness, flood mitigation, flood control, resilience funding, sea-level rise, coastal flooding, stormwater infrastructure, drainage projects, beach renourishment, sea walls, evacuation routes. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Storm resilience and flood protection.",
+        "false": "The passage states no position on Storm resilience and flood protection."
+      }
+    },
+    "KYV5": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Water supply and drinking water\"? That issue covers topics such as: drinking water, water supply, aquifer, wellfield, water restrictions, desalination, water utility, water rates, water main, reclaimed water, drinking water contamination. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Water supply and drinking water.",
+        "false": "The passage states no position on Water supply and drinking water."
+      }
+    },
+    "KYV6": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Renters and evictions\"? That issue covers topics such as: renters, tenants, eviction, landlord-tenant law, rental assistance, security deposits, tenant protections, lease terms, rent stabilization. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Renters and evictions.",
+        "false": "The passage states no position on Renters and evictions."
+      }
+    },
+    "KYV7": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Homelessness\"? That issue covers topics such as: homelessness, unhoused, homeless services, encampments, public camping, emergency shelters, unsheltered, transitional housing. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Homelessness.",
+        "false": "The passage states no position on Homelessness."
+      }
+    },
+    "KYV8": {
+      "type": "noul",
+      "instructions": "Does this passage state a policy position on \"Condominium and HOA costs\"? That issue covers topics such as: condominium association, HOA, homeowners association, special assessment, milestone inspection, structural integrity reserve, condo fees, association dues, condo board, reserve funding. Judge only the subject matter of the passage. Do not judge the position's tone, slant, fairness, or which side it favours.",
+      "criteria": {
+        "true": "The passage states a position on Condominium and HOA costs.",
+        "false": "The passage states no position on Condominium and HOA costs."
+      }
+    }
+  },
+  "states": [
+    {
+      "heading": "SUPPORT MOE",
+      "text": "Tune in to The Moe Dimanche Show , available wherever you get your podcasts!",
+      "slug": null
+    },
+    {
+      "heading": "MEET MOE DIMANCHE",
+      "text": "Florida grown and a first-generation American, Moe Dimanche, born Moliere Dimanche, grew up under financial hardship in a single-parent home in Orlando, Florida. Moe and his brothers found joy, even during the hard times. His family briefly sought refuge at the Orlando Union Rescue Mission when Moe was just 7 years old while his mother went to Avanti to earn her cosmetology license, and escape poverty with her sons. She went on to become an instructor at Avanti and later opened her own salon in Jacksonville, instilling the principles of perseverance into her sons. A trip to Disney while the family was homeless was his mother’s way of hiding the effects of poverty from her sons.",
+      "slug": null
+    },
+    {
+      "heading": "MEET MOE DIMANCHE",
+      "text": "The pictures below are held by Moe’s father, who had been deported to Haiti in 1988.",
+      "slug": null
+    },
+    {
+      "heading": "MEET MOE DIMANCHE",
+      "text": "Moe is a product of Pine Hills. He attended Meadowbrook Middle School and Evans Ninth Grade Center briefly, before going on to attend West Orange High School. As a teen he held jobs at Winn-Dixie, Burger King, and Target before he found work with community pillar, Pops Garcia, at the family-owned Garcia’s Flooring & Remodeling. In 2005, Moe helped rebuild the entire assisted living facility, Antioch Manor, on Mercy Drive alongside the Garcia crew.",
+      "slug": null
+    },
+    {
+      "heading": "EMPOWERING THE PEOPLE",
+      "text": "Municipal incorporation of unincorporated county land is imperative to ensure public safety and full service to our communities. Moe led the push to incorporate Pine Hills into a municipality, and seeks the same for the entire western Orange County, and all unincorporated lands across the State of Florida, where 911 is deficient , infrastructure is poor, and crime is rampant.",
+      "slug": null
+    },
+    {
+      "heading": "EMPOWERING THE PEOPLE",
+      "text": "The key to public happiness is giving the members of the communities in these areas more control over their own well-being, their own tax dollars, and their own public works when counties underserve and ignore constituents in unincorporated areas.",
+      "slug": null
+    },
+    {
+      "heading": "CLOSING ALLIGATOR ALCATRAZ",
+      "text": "After Ron DeSantis and his attorney general introduced the plan for Alligator Alcatraz, the federal government tweeted out an image of alligators wearing ICE hats. This horrifying imagery is chilling, and promotes the idea that Floridians support the idea of feeding migrants to alligators.",
+      "slug": null
+    },
+    {
+      "heading": "CLOSING ALLIGATOR ALCATRAZ",
+      "text": "While our laws will be followed, we will not re-enact Jim Crow. During the Jim Crow era, Black babies were often fed to alligators under the racist name “ licorice drops “. This cruel practice has been extensively documented by the Jim Crow Museum , and with DeSantis and James Uthmeier bringing that back to make migrants the new licorice drops , this nation has already been set back more than 100 years. On Day 1 , Moe will permanently close Alligator Alcatraz.",
+      "slug": null
+    },
+    {
+      "heading": "ABOLISHING HOAs and PROPERTY TAXES ON HOMESTEADS",
+      "text": "HOAs are unconstitutional, and property taxes on Floridians’ homesteads infringes on ownership rights. While property taxes are an important way to fund our schools and public works, the state can fund these efforts without taxing property held as the homestead.",
+      "slug": null
+    },
+    {
+      "heading": "ABOLISHING HOAs and PROPERTY TAXES ON HOMESTEADS",
+      "text": "And with new HOA scams arising every single day throughout the state, Floridians are paying double their property taxes when unelected HOA boards “assess dues” for the exact same thing Floridians are paying the county for.",
+      "slug": null
+    },
+    {
+      "heading": "ABOLISHING HOAs and PROPERTY TAXES ON HOMESTEADS",
+      "text": "Everybody knows HOAs are a honeypot for taxation without representation, and are manipulated to initiate scam foreclosures against our most vulnerable citizens, the elderly. And in Orange County, malicious neighbors are taxing their communities through unauthorized HOAs without even being licensed CAMs.",
+      "slug": null
+    },
+    {
+      "heading": "ABOLISHING HOAs and PROPERTY TAXES ON HOMESTEADS",
+      "text": "HOAs will be abolished under the Dimanche Administration, and Floridians will enjoy their Constitutional right to the pursuit of happiness/property in their own homes.",
+      "slug": null
+    },
+    {
+      "heading": "Byron Donalds Gets Sued for Assault, but Fishback’s Racist Response is Worse. Why Voting NPA is the BEST Option for Governor of Florida",
+      "text": "A bombshell lawsuit (or a dud) was filed against Florida gubernatorial candidate Byron Donalds by a woman named Kelly Mason over a confrontation that occurred in 2022. Mason alleges that she was cornered by Donalds before he threatened her, but the video shows Donalds losing his cool in, what most social media users describe as an argument, and a “set up”.",
+      "slug": "/2026/07/09/byron-donalds-gets-sued-for-assault-but-fishbacks-racist-response-is-worse-why-voting-npa-is-the-best-option-for-governor-of-florida"
+    },
+    {
+      "heading": "Byron Donalds Gets Sued for Assault, but Fishback’s Racist Response is Worse. Why Voting NPA is the BEST Option for Governor of Florida",
+      "text": "Sure, Donalds may have anger management issues, but the real controversy surrounds the response from the other republican candidate, James Fishback, who shares the same lawyer as Kelly Mason . Fishback took to X to release a racist statement on the nature of the lawsuit , before stating that Donalds “ chimped out ” in another X post.",
+      "slug": "/2026/07/09/byron-donalds-gets-sued-for-assault-but-fishbacks-racist-response-is-worse-why-voting-npa-is-the-best-option-for-governor-of-florida"
+    },
+    {
+      "heading": "Byron Donalds Gets Sued for Assault, but Fishback’s Racist Response is Worse. Why Voting NPA is the BEST Option for Governor of Florida",
+      "text": "Fishback described Donalds as a 6’5, 260 pound man (Donalds is 6’2) who cornered a “blonde woman”, echoing Jim Crow era pretextual sentiments used to portray Black men as a danger to White women. In addition to this, Fishback adopted the term “chimping out”, coined by prolific racist Chud the Builder , who is currently behind bars on hate crime charges after he shot a Black man he called a slur. Some Fishback supporters expressed that use of that term cost him their vote while others stated that it was worse than using the N-word.",
+      "slug": "/2026/07/09/byron-donalds-gets-sued-for-assault-but-fishbacks-racist-response-is-worse-why-voting-npa-is-the-best-option-for-governor-of-florida"
+    },
+    {
+      "heading": "Byron Donalds Gets Sued for Assault, but Fishback’s Racist Response is Worse. Why Voting NPA is the BEST Option for Governor of Florida",
+      "text": "Fishback doubled down on his use of the term “chimping out”, and formally issued a press release using the racist language.",
+      "slug": "/2026/07/09/byron-donalds-gets-sued-for-assault-but-fishbacks-racist-response-is-worse-why-voting-npa-is-the-best-option-for-governor-of-florida"
+    },
+    {
+      "heading": "Byron Donalds Gets Sued for Assault, but Fishback’s Racist Response is Worse. Why Voting NPA is the BEST Option for Governor of Florida",
+      "text": "The chaos between the republicans came to a head this week, but not before yet, another confrontation in Collier County where members of Fishback’s entourage had a physical altercation with elderly voters at a Donalds event. Fishback’s online supporters called the elderly people “Byron’s Boomer Enforcers”. While no one was arrested for assaulting any of the elderly attendees, Fishback was removed from the event.",
+      "slug": "/2026/07/09/byron-donalds-gets-sued-for-assault-but-fishbacks-racist-response-is-worse-why-voting-npa-is-the-best-option-for-governor-of-florida"
+    },
+    {
+      "heading": "Byron Donalds Gets Sued for Assault, but Fishback’s Racist Response is Worse. Why Voting NPA is the BEST Option for Governor of Florida",
+      "text": "The Republican Party and its candidates are in utter chaos right now, and are simply not an option in this Florida gubernatorial race. Voters have had it with racism, bad behavior and division. The next Governor of Florida must be an NPA with No Party Affiliation. That’s why Moe Dimanche is in this race, because sensible Republican voters would rather vote for a common-sense NPA than racist and divisive Republican candidates. This is also why donors to Republican candidates have pledged their money in an effort to stop Moe.",
+      "slug": "/2026/07/09/byron-donalds-gets-sued-for-assault-but-fishbacks-racist-response-is-worse-why-voting-npa-is-the-best-option-for-governor-of-florida"
+    }
+  ]
+}

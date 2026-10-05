@@ -86,7 +86,11 @@ async function refresh(request: NextRequest) {
         item_type: "pipeline_event" as const,
         title: `Race published: ${race?.office ?? p.race_id}`,
         summary:
-          "This race passed the Balance Audit — every candidate covered with equal space and comparable scrutiny — and its briefs are now live.",
+          /* Inserted once per race and never updated (see alreadyAnnounced),
+             so the wording has to be right before the first run. The Balance
+             Audit's word_count gate runs at 150%, so "equal space and
+             comparable scrutiny" overclaimed (launch handoff 2026-10-04, §1). */
+          "This race passed the Balance Audit and was approved for publishing, so what each candidate says, quoted from their own site, is now live.",
         url: null,
         published_at: p.published_at ?? new Date().toISOString(),
       };

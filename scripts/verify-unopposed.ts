@@ -20,7 +20,7 @@
    Run: node scripts/verify-unopposed.ts
    (Node >= 23 strips types natively — same as verify-measure-balance.ts.) */
 
-import { isUnopposedContest } from "../src/lib/unopposed.ts";
+import { isUnopposedContest, isDecidedInPrimary } from "../src/lib/unopposed.ts";
 import type { Candidate } from "../src/types/schema.ts";
 
 let failures = 0;
@@ -82,7 +82,7 @@ check(
 /* Only `unopposed` triggers it. A stale cache entry written before D-B, or a
    row the pipeline has not re-ingested, carries one of the older three
    values; none of them may claim a race is off the ballot. */
-for (const status of ["qualified", "withdrawn", "other"] as const) {
+for (const status of ["qualified", "withdrawn", "other", "elected_in_primary"] as const) {
   check(
     `a lone '${status}' candidate is a printed race`,
     !isUnopposedContest([cand(status)], NO_WRITE_IN)
@@ -101,8 +101,47 @@ check(
     isUnopposedContest([cand("unopposed")], NO_WRITE_IN)
 );
 
+/* 0032's third state. The two predicates must never both fire, and neither
+   may answer for the other: "no one filed against this candidate" is false
+   about someone who won a contested August primary, and "decided in the
+   primary" is false about someone nobody ran against. Conflating them is the
+   one way this feature tells a voter something untrue. */
+check(
+  "a lone 'elected_in_primary' candidate is decided in the primary",
+  isDecidedInPrimary([cand("elected_in_primary")], NO_WRITE_IN)
+);
+check(
+  "'unopposed' does NOT read as decided in the primary",
+  !isDecidedInPrimary([cand("unopposed")], NO_WRITE_IN)
+);
+check(
+  "'elected_in_primary' does NOT read as unopposed",
+  !isUnopposedContest([cand("elected_in_primary")], NO_WRITE_IN)
+);
+check(
+  "the two states are mutually exclusive for every status",
+  (["qualified", "unopposed", "elected_in_primary", "withdrawn", "other"] as const).every(
+    (s) =>
+      !(
+        isUnopposedContest([cand(s)], NO_WRITE_IN) &&
+        isDecidedInPrimary([cand(s)], NO_WRITE_IN)
+      )
+  )
+);
+/* A qualified write-in IS opposition, so the office is printed with a blank
+   line under it — the same second half of the legal test that governs
+   `unopposed` has to govern this state too. */
+check(
+  "a qualified write-in keeps a primary-decided contest on the ballot",
+  !isDecidedInPrimary([cand("elected_in_primary")], true)
+);
+check(
+  "two candidates are never decided in the primary",
+  !isDecidedInPrimary([cand("elected_in_primary"), cand("qualified")], NO_WRITE_IN)
+);
+
 if (failures > 0) {
   console.error(`\nverify-unopposed: ${failures} failure(s)`);
   process.exit(1);
 }
-console.log("\nUnopposed-contest checks passed.");
+console.log("\nUnopposed and primary-decided contest checks passed.");

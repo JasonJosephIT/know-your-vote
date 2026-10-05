@@ -2,6 +2,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { DISTRICT_COOKIE, parseDistrictCookie } from "@/lib/district-cookie";
 import { CandidateBrowser } from "@/components/features/CandidateBrowser";
+import { OutsideResources } from "@/components/features/OutsideResources";
 import { SavedCandidates } from "@/components/features/SavedCandidates";
 import { YourRaces } from "@/components/features/YourRaces";
 
@@ -17,8 +18,8 @@ const TABS: Array<{ view: View; label: string }> = [
 
 const SUBTITLES: Record<View, string> = {
   browse:
-    "Every candidate in every published race across the four covered counties — equal space, equal scrutiny.",
-  races: "Your ballot by ZIP or county, races laid out side by side.",
+    "Every candidate across the four covered counties, including seats already decided — the same rules for every candidate.",
+  races: "Your ballot by address, ZIP or county, races laid out side by side.",
   saved: "Candidates you've saved, with their official links in one place.",
 };
 
@@ -33,6 +34,7 @@ export default async function CandidatesPage({
     zip?: string;
     district?: string;
     change?: string;
+    scope?: string;
   }>;
 }) {
   const sp = await searchParams;
@@ -45,7 +47,12 @@ export default async function CandidatesPage({
   const saved = sp.change
     ? null
     : parseDistrictCookie((await cookies()).get(DISTRICT_COOKIE)?.value);
-  const hasUrlLocation = Boolean(sp.zip || sp.county || sp.district);
+  /* `scope=statewide` counts: it is an answer about where the voter is (in
+     Florida, not placeable yet), and a saved district must not override it. */
+  const hasUrlLocation = Boolean(
+    sp.zip || sp.county || sp.district || sp.scope
+  );
+  const scope = sp.scope === "statewide" ? "statewide" : undefined;
   const zip = sp.zip;
   const district =
     sp.district ?? (hasUrlLocation ? undefined : saved?.district);
@@ -57,7 +64,8 @@ export default async function CandidatesPage({
      is a browse filter, so it pins the browse tab the same way — that is what
      the policy-area chips on a brief link to. */
   const view: View =
-    requested ?? (sp.area ? "browse" : zip || county ? "races" : "browse");
+    requested ??
+    (sp.area ? "browse" : zip || county || scope ? "races" : "browse");
 
   /* The races tab keeps any location already in the URL. */
   const tabHref = (tab: View) => {
@@ -66,6 +74,7 @@ export default async function CandidatesPage({
       if (zip) params.set("zip", zip);
       if (district) params.set("district", district);
       if (!zip && county) params.set("county", county);
+      if (scope && !zip && !county && !district) params.set("scope", scope);
       return `/candidates?${params}`;
     }
     return tab === "browse" ? "/candidates" : `/candidates?view=${tab}`;
@@ -98,11 +107,18 @@ export default async function CandidatesPage({
         })}
       </nav>
 
+      <OutsideResources />
+
       {view === "browse" && (
         <CandidateBrowser q={sp.q} countyFips={sp.county} area={sp.area} />
       )}
       {view === "races" && (
-        <YourRaces zip={zip} district={district} county={county} />
+        <YourRaces
+          zip={zip}
+          district={district}
+          county={county}
+          scope={scope}
+        />
       )}
       {view === "saved" && <SavedCandidates />}
     </main>

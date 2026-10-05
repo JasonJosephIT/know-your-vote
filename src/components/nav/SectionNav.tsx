@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DistrictChip } from "@/components/features/DistrictChip";
+import { DONATE_URL } from "@/components/features/SitePrompts";
 
 const items = [
   {
@@ -46,28 +47,22 @@ const items = [
       </svg>
     ),
   },
-  {
-    href: "/where-i-stand",
-    label: "Where I Stand",
-    alsoMatch: [] as string[],
-    icon: (
-      <svg
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        aria-hidden
-      >
-        <circle cx="10" cy="10" r="7.5" />
-        <path
-          d="M7.8 7.7a2.2 2.2 0 1 1 3.1 2.5c-.6.3-.9.8-.9 1.4"
-          strokeLinecap="round"
-        />
-        <path d="M10 14.2h.01" strokeLinecap="round" strokeWidth="2.2" />
-      </svg>
-    ),
-  },
 ];
+
+/* Donations go through Zeffy, off-site. Same pill size as the district chip so
+   the two sit together in either bar; filled so it reads as an action. */
+function DonateLink({ className = "" }: { className?: string }) {
+  return (
+    <a
+      href={DONATE_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`items-center rounded-full bg-primary px-3 py-1 text-caption text-on-primary hover:bg-primary-hover ${className}`}
+    >
+      Donate
+    </a>
+  );
+}
 
 export function SectionNav() {
   const pathname = usePathname();
@@ -86,13 +81,20 @@ export function SectionNav() {
     <>
       {/* Mobile: the section nav is at the bottom, so the chip gets its own slim
           bar at the top — the corner voters look in for a location selector.
-          Hidden at md:, where it sits in the nav itself. */}
-      <div
-        className="fixed inset-x-0 top-0 z-40 flex justify-end border-b border-border bg-surface px-3 py-2 md:hidden"
+          Hidden at md:, where it sits in the nav itself.
+
+          A <header>, not a <div> (a11y audit 2026-10-04, fix 5; axe
+          "region"). As a child of <body> it is the page's banner landmark,
+          so screen-reader users moving by landmark reach Donate and the
+          district chip, the only place to change or forget a saved district.
+          From md it is display: none and the nav carries both. */}
+      <header
+        className="fixed inset-x-0 top-0 z-40 flex items-center justify-between border-b border-border bg-surface px-3 py-2 md:hidden"
         style={{ paddingTop: "calc(0.5rem + env(safe-area-inset-top))" }}
       >
+        <DonateLink className="flex" />
         <DistrictChip />
-      </div>
+      </header>
 
       <nav
         aria-label="Sections"
@@ -131,6 +133,7 @@ export function SectionNav() {
                 </Link>
               );
             })}
+            <DonateLink className="hidden self-center md:flex" />
             <DistrictChip className="hidden self-center md:flex" />
           </div>
         </div>

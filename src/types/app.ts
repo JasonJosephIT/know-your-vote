@@ -17,7 +17,11 @@ export interface ZipDistrict {
   in_coverage: boolean;
 }
 
-export type PublicationStatus = "draft" | "in_review" | "published";
+/* `listed` (migration 0033) is the roster tier: the race, its ballot-tier
+   candidates and the publication status itself are anon-readable, while every
+   brief table (profile, issue, position, claim, claim_source) stays gated on
+   `published`. See docs/general-election/listed-tier-2026-09-23.md. */
+export type PublicationStatus = "draft" | "in_review" | "listed" | "published";
 
 export interface RacePublication {
   race_id: string;
@@ -29,10 +33,7 @@ export interface RacePublication {
 /* Migration 0005 widened item_type to four values and added candidate_id;
    this type was left behind and no longer matched the live database. */
 export type NewsItemType =
-  | "pipeline_event"
-  | "official_link"
-  | "candidate_news"
-  | "election_news";
+  "pipeline_event" | "official_link" | "candidate_news" | "election_news";
 
 export interface NewsItem {
   id: string;
@@ -53,6 +54,10 @@ export interface NewsItem {
      NULL is a real and common state, not a backlog — many feeds carry no image
      and the card has a text-only variant. */
   image_url: string | null;
+  /* Issue tags from the characterizer (migration 0027). NULL means never
+     characterized, [] means characterized with nothing over threshold. Both
+     render as "no tags"; neither ever hides the row (design spec §4.2). */
+  issues: string[] | null;
 }
 
 /* Contact & logistics layer written by the R2 refresher (migration 0005) —
@@ -85,6 +90,10 @@ export interface ResolveRaceSummary {
   level: string;
   district: string | null;
   published: boolean;
+  /* Which tier made the race visible (0033). Optional because cached shapes
+     written before this field existed come back without it, and `undefined`
+     has to mean the weaker claim — treat as `listed`, never as `published`. */
+  status?: "listed" | "published";
 }
 
 export interface ResolveResult {
@@ -102,33 +111,29 @@ export interface ResolveResult {
   needsCountyConfirm?: boolean;
   races: ResolveRaceSummary[];
   message?: string;
+  /* How much of the ballot this result places. "district": a congressional
+     district resolved (its House race may still be unpublished -- see
+     districtRaceMissing). "statewide": a Florida location we cannot place in a
+     district yet, so `races` is only the ballot every Florida voter shares.
+     Absent reads as "district", which is what every result meant before the
+     field existed. */
+  coverage?: "district" | "statewide";
 }
 
-/* POST /api/quiz response (PRD § 4). */
-export interface QuizResultCandidate {
-  candidateId: string;
-  legalName: string;
-  party: string;
-  raceId: string;
-  office: string;
-  /* What this candidate has SAID about the issues the voter picked —
-     described on its own terms, not measured against the voter's answers.
-     Renamed from alignmentNote in TASK-065: in a two-way general, "aligns
-     with you" is a verdict even when nothing is ranked. */
-  stanceSummary: string;
-  /* Which of the voter's chosen issues this candidate has a stated position
-     on. A coverage fact, not a score. */
-  issuesCovered: string[];
-}
+/* Ballot measures (0010, 0034). App-owned, unlike the pipeline's race tables. */
+export type MeasureStance = "support" | "oppose" | "neutral";
 
-export interface QuizResponse {
-  races: Array<{ raceId: string; office: string }>;
-  results: QuizResultCandidate[];
-  disclaimer: string;
-}
+/* The credibility ladder, top to bottom. The tier is RESOURCE_TIER[kind] in
+   src/lib/measure-ladder.ts and nowhere else. */
+export type MeasureKind =
+  | "official"
+  | "analysis"
+  | "reporting"
+  | "argument"
+  | "commentary";
 
-/* Ballot measures (0010). App-owned, unlike the pipeline's race tables. */
-export type MeasureSide = "support" | "oppose";
+/* Format is NOT credibility: a think tank's video is `analysis` + `video`. */
+export type MeasureFormat = "document" | "article" | "video" | "audio";
 
 export interface BallotMeasure {
   measure_id: string;
@@ -145,12 +150,21 @@ export interface BallotMeasure {
   display_order: number;
 }
 
-export interface MeasureArgument {
-  argument_id: string;
+/* One outside resource about a measure (0034). Publisher, URL, type and
+   lean come from the joined `source` row, never duplicated here. */
+export interface MeasureResource {
+  resource_id: string;
   measure_id: string;
-  side: MeasureSide;
-  text: string;
   source_id: string;
-  attributed: boolean;
+  stance: MeasureStance;
+  kind: MeasureKind;
+  format: MeasureFormat;
+  title: string;
+  author: string | null;
+  /* ISO date (YYYY-MM-DD) or null when the resource is undated. */
+  published_at: string | null;
+  duration_seconds: number | null;
+  /* ≤140 chars of attribution, never summary (spec F4). */
+  note: string | null;
   display_order: number;
 }
