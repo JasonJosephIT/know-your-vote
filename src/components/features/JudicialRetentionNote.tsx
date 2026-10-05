@@ -100,6 +100,10 @@ export function JudicialRetentionNote({ county }: { county?: string | null }) {
                   className={linkClass}
                 >
                   about this court&apos;s judges
+                  {/* Three of these sit on one page; a links list must
+                      say which court each is (production re-run,
+                      2026-10-05). */}
+                  <span className="sr-only">: {a.court}</span>
                   <NewTab />
                 </a>
                 )

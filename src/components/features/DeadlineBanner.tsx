@@ -82,9 +82,15 @@ export async function DeadlineBanner({
       `Election Day is ${bannerLongDate(dates.electionDay.event_date)}`,
   ].filter(Boolean) as string[];
 
-  const link = "w-fit text-caption underline underline-offset-2";
+  /* 24 px tall at least (WCAG 2.5.8 Target Size, AA): as plain caption
+     text the two links were 18 px and wrapped 4 px apart on a phone, and
+     axe and Lighthouse both failed them (production re-run, 2026-10-05).
+     min-h-[24px], not min-h-6: this theme's spacing makes min-h-6 32 px. */
+  const link =
+    "inline-flex min-h-[24px] w-fit items-center text-caption underline underline-offset-2";
   return (
     <aside
+      aria-label="Key dates"
       /* Calm, not alarmed — the design brief's reference librarian, not a
          campaign banner. No red, no siren, no exclamation. */
       className="flex flex-col gap-1 rounded-md bg-primary-muted px-4 py-3 text-body-sm text-primary-hover"
