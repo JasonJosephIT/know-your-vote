@@ -1,15 +1,19 @@
 import "server-only";
 
+/* Relative, with the extension: scripts/verify-reminder-schedule.ts loads
+   this file in plain Node, which doesn't know the @/ alias. */
+import { resendApiKey, serviceRoleKey } from "../server-keys.ts";
+
 /* Email delivery: is it switched on, and where do we point voters when it
    is not (launch handoff 2026-10-04, §2 items 2–3).
 
    Production ran for weeks with the signup form live and email delivery
-   impossible: the keys were saved in Vercel under the wrong names (SUPABASE,
-   RESEND), so RESEND_API_KEY, EMAIL_FROM and SUPABASE_SERVICE_ROLE_KEY all
-   read as unset and every signup ended in a 503 the voter could do nothing
-   about. These helpers are the one place that says which variables delivery
-   needs, so the routes that send and the pages that offer a signup can never
-   disagree about it. Server-only: they read secrets' presence, never values,
+   impossible: the keys were saved in Vercel under names the code didn't
+   read (SUPABASE, RESEND), and EMAIL_FROM was unset, so every signup ended
+   in a 503 the voter could do nothing about. The keys are now read under
+   either name (src/lib/server-keys.ts). These helpers are the one place
+   that says what delivery needs, so the routes that send and the pages
+   that offer a signup can never disagree about it. Server-only: they read secrets' presence, never values,
    and the answer travels to the browser as a plain boolean prop.
 
    The env runbook is docs/general-election/reminders-e2e-runbook.md. */
@@ -17,7 +21,7 @@ import "server-only";
 /* Resend can send: an API key and a From address. The two routes check this
    first and keep their existing 503 wording for it. */
 export function emailSenderConfigured(): boolean {
-  return Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM);
+  return Boolean(resendApiKey() && process.env.EMAIL_FROM);
 }
 
 /* The whole signup works end to end: Resend can send AND the service role
@@ -26,9 +30,7 @@ export function emailSenderConfigured(): boolean {
    status codes and messages exactly as they were; pages use this to decide
    whether to offer a form at all. */
 export function emailDeliveryConfigured(): boolean {
-  return (
-    emailSenderConfigured() && Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY)
-  );
+  return emailSenderConfigured() && Boolean(serviceRoleKey());
 }
 
 /* The reminder kill switch the cron already honoured (design doc §7

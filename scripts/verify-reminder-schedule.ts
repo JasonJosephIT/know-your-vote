@@ -567,7 +567,20 @@ for (let mask = 0; mask < 8; mask++) {
   row.promoPaused = m.reminderPromotionLive();
   rows.push(row);
 }
-console.log(JSON.stringify({ rows, promote: m.PROMOTE_REMINDER_SIGNUP }));
+/* Production's names (src/lib/server-keys.ts): SUPABASE and RESEND stand in
+   for the canonical names when those are unset or empty. */
+const fallback = [];
+for (const canonical of [undefined, ""]) {
+  delete process.env.NOTIFICATIONS_PAUSED;
+  for (const v of ["RESEND_API_KEY", "SUPABASE_SERVICE_ROLE_KEY"]) {
+    if (canonical === undefined) delete process.env[v]; else process.env[v] = canonical;
+  }
+  process.env.EMAIL_FROM = "set";
+  process.env.RESEND = "set";
+  process.env.SUPABASE = "set";
+  fallback.push({ canonical: canonical ?? "unset", sender: m.emailSenderConfigured(), delivery: m.emailDeliveryConfigured() });
+}
+console.log(JSON.stringify({ rows, fallback, promote: m.PROMOTE_REMINDER_SIGNUP }));
 `;
 const probe = spawnSync(
   process.execPath,
@@ -576,6 +589,7 @@ const probe = spawnSync(
 );
 let gate: {
   rows: { mask: number; sender: boolean; delivery: boolean; promo: boolean; promoPaused: boolean }[];
+  fallback: { canonical: string; sender: boolean; delivery: boolean }[];
   promote: boolean;
 } | null = null;
 try {
@@ -596,6 +610,11 @@ if (gate) {
     "emailDeliveryConfigured() only with RESEND_API_KEY + EMAIL_FROM + SUPABASE_SERVICE_ROLE_KEY; promotion follows it and stops while NOTIFICATIONS_PAUSED",
     wrong.length === 0,
     JSON.stringify(wrong)
+  );
+  check(
+    "production's names (RESEND, SUPABASE) count when the canonical names are unset or empty",
+    gate.fallback.length === 2 && gate.fallback.every((r) => r.sender && r.delivery),
+    JSON.stringify(gate.fallback)
   );
   console.log(`      (PROMOTE_REMINDER_SIGNUP = ${gate.promote}: founder decision 3, recommended, pending confirmation)`);
 }

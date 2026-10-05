@@ -11,6 +11,7 @@ import { easternToday } from "@/lib/notifications/schedule";
 import { welcomeEmail } from "@/lib/notifications/templates";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { resolveZip, ZIP_RE } from "@/lib/resolve";
+import { resendApiKey } from "@/lib/server-keys";
 import { createServiceClient } from "@/lib/supabase/service";
 
 /* Where-to-vote opt-in email (FR-010) — the ONLY flow that handles personal
@@ -60,9 +61,9 @@ export async function POST(request: NextRequest) {
   const sources = officialSources(resolved.county);
 
   /* Same check, same 503, same words as before src/lib/notifications/
-     config.ts existed — it is now the one place that names the variables.
-     A missing service-role key still lands in the createServiceClient catch
-     below, exactly as it did. */
+     config.ts existed — it is now the one place that decides it. A missing
+     service-role key still lands in the createServiceClient catch below,
+     exactly as it did. */
   if (!emailSenderConfigured()) {
     return NextResponse.json(
       { error: "Email delivery isn't configured yet — nothing was sent or stored." },
@@ -115,7 +116,7 @@ export async function POST(request: NextRequest) {
     remindersOn: !remindersPaused(),
   });
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const resend = new Resend(resendApiKey());
   const { error: sendError } = await resend.emails.send({
     from: process.env.EMAIL_FROM!,
     to: email,

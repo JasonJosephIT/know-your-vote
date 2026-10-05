@@ -8,30 +8,30 @@ Written 2026-10-04 for launch handoff items 2.2 (test the reminder pipeline end 
 
 Checked on 2026-10-04. The Vercel env metadata was read without decrypting any value. The 503s on the two POST routes follow from that env and the code; they were not triggered, because a live POST changes state. The calendar 503 and the missing banner were seen with live GETs.
 
-- **The keys were in Vercel under other names.** Production holds sensitive vars called `SUPABASE`, `RESEND` and `JEV`, created 2026-08-31. The founder confirmed on 2026-10-05 that they hold the service-role key, the Resend key and the TypeSafe key. The code reads `SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY`, and nothing read the others. **Fixed in code since:** `instrumentation.ts` maps `SUPABASE` and `RESEND` to those names at server start (step 1). `EMAIL_FROM` was added on 2026-10-05.
-- **So every email path fails, and so does everything else that needs the service role:**
-  - `POST /api/voting-info` (the signup) answers 503 "Email delivery isn't configured yet".
-  - The 14:00 UTC reminder cron answers 503. Today's run would have sent the registration T-1 reminder; there were 0 subscribers, so no one missed it.
-  - The calendar file `/api/calendar/general_2026.ics` answers **503**, and the home-page deadline banner renders nothing. Both read `election_event` through the service role.
+- **The keys were in Vercel under other names.** Production holds sensitive vars called `SUPABASE`, `RESEND` and `JEV`, created 2026-08-31. The founder confirmed on 2026-10-05 that they hold the service-role key, the Resend key and the TypeSafe key. The code read `SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY`, and nothing read the others. **Fixed in code on 2026-10-05 (#109):** the code now reads either name (`src/lib/server-keys.ts`, step 1). A first attempt in #107, a startup mapping in the root `instrumentation.ts`, never ran on Vercel: with a `src/` folder, Next.js deploys the instrumentation hook only from `src/`. After #109 deployed, the calendar file returned 200 and the banner rendered (live GETs). `EMAIL_FROM` was added on 2026-10-05.
+- **So, until #109, every email path failed, and so did everything else that needs the service role:**
+  - `POST /api/voting-info` (the signup) answered 503 "Email delivery isn't configured yet".
+  - The 14:00 UTC reminder cron answered 503. Today's run would have sent the registration T-1 reminder; there were 0 subscribers, so no one missed it.
+  - The calendar file `/api/calendar/general_2026.ics` answered **503**, and the home-page deadline banner rendered nothing. Both read `election_event` through the service role, and both work since #109. The signup and the cron have not been seen working yet: that needs a POST, which is step 4.
 - **The signup form is still offered** on the "Your races" view, where it can only fail. This PR replaces it with official links until delivery is configured (see "What this PR changes").
 
 ## Step 1. Fix the production env in Vercel (Founder)
 
 Vercel, project **know-your-vote**, Settings, Environment Variables. Every existing variable targets **Production** only. Keep that.
 
-**Updated 2026-10-05: no renaming is needed.** `SUPABASE` holds the service-role key and `RESEND` the Resend key, as the founder confirmed. `instrumentation.ts` copies them to `SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY` when the server starts, unless the correct names are already set. The code change ships with #107 and #108. What's left:
+**Updated 2026-10-05: no renaming is needed.** `SUPABASE` holds the service-role key and `RESEND` the Resend key, as the founder confirmed. The code reads `SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY` when they are set and non-empty, and otherwise `SUPABASE` and `RESEND` (`src/lib/server-keys.ts`, live since #109 on 2026-10-05). What's left:
 
 | Check | Name | Value |
 | --- | --- | --- |
-| Keep | `SUPABASE` | The service-role key. Mapped at server start. |
-| Keep | `RESEND` | The Resend API key, with sending access for `knowyour.vote`. Mapped at server start. |
-| **Confirm** | `EMAIL_FROM` | Must be an address **on `knowyour.vote`**, for example `Know Your Vote <info@knowyour.vote>`. `knowyourvote.com` is not ours: it's parked for sale, and its SPF record forbids all senders, so Resend would refuse every email from it. |
+| Keep | `SUPABASE` | The service-role key. Read as the fallback name. |
+| Keep | `RESEND` | The Resend API key, with sending access for `knowyour.vote`. Read as the fallback name. |
+| Keep | `EMAIL_FROM` | An address **on `knowyour.vote`**, for example `Know Your Vote <info@knowyour.vote>`. The founder confirmed on 2026-10-05 that it is. It must stay there: `knowyourvote.com` is not ours. It's parked for sale, and its SPF record forbids all senders, so Resend would refuse every email from it. |
 | Optional | `JEV` | The TypeSafe key. No deployed code reads it, so it can stay or go. |
 | Not read | `EMAIL_SERVICE` | Nothing reads this name. To let `admin@knowyour.vote` sign in to the admin console, the name is `ADMIN_EMAILS`, and Supabase Auth must be enabled (`admin-dashboard/roadmap.md`). |
 
-After any env change, redeploy: env changes reach only new deployments. Merging #107 deploys.
+After any env change, redeploy: env changes reach only new deployments. A merge to `main` deploys.
 
-To retire the mapping later, add `SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY` under their own names, redeploy, and delete `mapProductionEnvNames()` from `instrumentation.ts`.
+To retire the fallbacks later, add `SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY` under their own names, redeploy, and reduce each function in `src/lib/server-keys.ts` to its first operand.
 
 Notes:
 

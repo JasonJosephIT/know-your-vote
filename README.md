@@ -54,12 +54,13 @@ feature just stays off.
 
 There is one deliberate exception. Vercel production stores the Supabase
 service-role key as `SUPABASE` and the Resend API key as `RESEND` (the
-founder's names, confirmed 2026-10-05). Until a later fix, nothing read them,
-so the signup, both crons, the deadline banner and the calendar file all
-failed. `instrumentation.ts` now copies them to `SUPABASE_SERVICE_ROLE_KEY`
-and `RESEND_API_KEY` when the server starts, unless the correct name is
-already set. `JEV` holds the TypeSafe key, which Vercel doesn't need
-(`TYPESAFE_API_KEY` below). Every other variable must use the exact name.
+founder's names, confirmed 2026-10-05). Until #109, nothing read them, so
+the signup, both crons, the deadline banner and the calendar file all
+failed. `src/lib/server-keys.ts` now reads `SUPABASE_SERVICE_ROLE_KEY` and
+`RESEND_API_KEY`, falling back to `SUPABASE` and `RESEND` when the canonical
+name is unset or empty, and every read of either key goes through it. `JEV`
+holds the TypeSafe key, which Vercel doesn't need (`TYPESAFE_API_KEY`
+below). Every other variable must use the exact name.
 After adding or renaming a variable,
 compare its name against the list below character for character, then
 redeploy (Vercel applies env changes only to new deployments). The fix and an
@@ -90,12 +91,12 @@ missing key degrades a surface, it never fakes one.
 
 ### Feature keys, and what happens without them
 
-- `SUPABASE_SERVICE_ROLE_KEY` — the two app-owned write paths (voting-info
-  signups and the news cron's `news_item` upserts), the reminder cron, and
-  every read of the verified election dates in `election_event`: the
-  deadline banner on `/` and the calendar file `/api/calendar/general_2026.ics`.
-  Bypasses RLS, so it is server-only in the strongest sense. Unset →
-  `POST /api/voting-info` returns 503 with nothing sent or stored, both crons
+- `SUPABASE_SERVICE_ROLE_KEY` (or `SUPABASE`, production's name) — the two
+  app-owned write paths (voting-info signups and the news cron's `news_item`
+  upserts), the reminder cron, and every read of the verified election dates
+  in `election_event`: the deadline banner on `/` and the calendar file
+  `/api/calendar/general_2026.ics`. Bypasses RLS, so it is server-only in the
+  strongest sense. Unset under both names → `POST /api/voting-info` returns 503 with nothing sent or stored, both crons
   return 503 (the news feed keeps yesterday's items), the calendar file
   returns 503, and the deadline banner renders nothing.
 - `PELIAS_BASE_URL` — address completion in the location field. **Where it
@@ -109,10 +110,11 @@ missing key degrades a surface, it never fakes one.
 - `PELIAS_API_KEY` — hosted Pelias only; Geocode Earth authenticates by query
   parameter. A self-hosted instance normally needs nothing here, so an absent
   key is normal rather than an error.
-- `RESEND_API_KEY` + `EMAIL_FROM` — opt-in transactional email: the
-  voting-info reply and the deadline reminders. Both are required; one alone
-  counts as unconfigured. Unset → the voting-info POST and the reminder cron
-  both return 503 without sending or storing anything.
+- `RESEND_API_KEY` (or `RESEND`, production's name) + `EMAIL_FROM` — opt-in
+  transactional email: the voting-info reply and the deadline reminders. Both
+  are required; one alone counts as unconfigured. Unset → the voting-info
+  POST and the reminder cron both return 503 without sending or storing
+  anything.
 - `CRON_SECRET` — authenticates both cron routes. Vercel Cron invokes with
   `GET` + `Authorization: Bearer …`; the manual contract is `POST` +
   `x-cron-secret`. Compared in constant time (`secretEquals`), never `===`.

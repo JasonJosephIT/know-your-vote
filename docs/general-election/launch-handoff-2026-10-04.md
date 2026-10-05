@@ -4,7 +4,7 @@ Know Your Vote is live at knowyour.vote. This file lists what is left between no
 
 The live database was checked directly on 2026-10-04 at about 18:40 UTC. Where a repo document disagrees with it, this file follows the database and says so.
 
-> **Status, later on 2026-10-04.** A completion session did the agent work below. It built every founder decision as its recommended default, each one easy to flip, and recorded them in **`founder-decisions-2026-10-04.md`**: what was chosen, why, and the one place to switch each. The code is in PR #108. PR #107 is a small fix that should merge first.
+> **Status, later on 2026-10-04.** A completion session did the agent work below. It built every founder decision as its recommended default, each one easy to flip, and recorded them in **`founder-decisions-2026-10-04.md`**: what was chosen, why, and the one place to switch each. The code is in PR #108. PR #107, a small fix, merged first on 2026-10-05, followed by #109, which made production read its key names.
 >
 > The session also found one thing this handoff missed. **Production's env vars are misnamed:** `SUPABASE`, `RESEND` and `JEV` are set, but nothing reads them. `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY` and `EMAIL_FROM` are unset. That is why there are 0 subscribers and 0 sends, the news stopped on 09-09, the deadline banner is blank and the calendar file returns 503. See `reminders-e2e-runbook.md`.
 >

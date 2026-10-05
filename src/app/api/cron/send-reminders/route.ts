@@ -14,6 +14,7 @@ import {
 } from "@/lib/notifications/schedule";
 import { renderTemplate, type Rendered } from "@/lib/notifications/templates";
 import { secretEquals } from "@/lib/secret-compare";
+import { resendApiKey } from "@/lib/server-keys";
 import { createServiceClient } from "@/lib/supabase/service";
 
 /* Daily reminder cron (plan A8). The whole delivery machine: for each
@@ -87,7 +88,7 @@ async function run(request: NextRequest) {
     });
   }
 
-  /* emailSenderConfigured is the same RESEND_API_KEY + EMAIL_FROM check this
+  /* emailSenderConfigured is the same Resend key + EMAIL_FROM check this
      line always made, now shared with the signup route and the pages that
      decide whether to offer a signup (src/lib/notifications/config.ts). */
   if (!emailSenderConfigured()) {
@@ -132,7 +133,7 @@ async function run(request: NextRequest) {
     return NextResponse.json({ due: 0, sent: [], skipped: [] });
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const resend = new Resend(resendApiKey());
   const sent: { dedupe_key: string; recipients: number }[] = [];
   const skipped: string[] = [];
   let subscriberCount: number | null = null;
@@ -393,7 +394,7 @@ async function rehearse(
     date: next.reminder.event.event_date,
     details_url: next.reminder.event.details_url,
   });
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const resend = new Resend(resendApiKey());
   const { error: sendError } = await resend.batch.send([
     {
       from: process.env.EMAIL_FROM!,

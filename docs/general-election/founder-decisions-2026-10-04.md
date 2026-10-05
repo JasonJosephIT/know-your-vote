@@ -3,30 +3,27 @@
 The handoff (`launch-handoff-2026-10-04.md`) asked for 13 founder decisions. You asked the agents to finish everything else first, so each decision is already **built as its recommended default**. Each one can be switched back from one place, listed in the table below. Nothing is final until you confirm it.
 
 - Code: PR #108 (`claude/launch-handoff-completion`).
-- The deadline banner fix and the news-cron wording fix: PR #107, kept small so it can merge first.
+- PR #107 (deadline banner rollover, news-cron wording): merged 2026-10-05.
+- PR #109 (reads the production key names): merged and deployed 2026-10-05.
 
 All database work in this session was read-only, and nothing was posted to the live site.
 
-## Do today (Sunday 10-04)
+## First (10-04 and 10-05)
 
-Voter registration closes tomorrow, 10-05.
+Voter registration closes 10-05.
 
-1. **Production env (updated 2026-10-05).** You confirmed that `SUPABASE`, `RESEND` and `JEV` hold the service-role, Resend and TypeSafe keys, and you added `EMAIL_FROM`.
-   - No renaming is needed. `instrumentation.ts`, shipped with #107 and #108, maps `SUPABASE` and `RESEND` to the names the code reads at server start.
-   - **Check that `EMAIL_FROM` is on `knowyour.vote`**, for example `Know Your Vote <info@knowyour.vote>`. `knowyourvote.com` is a parked domain for sale whose SPF forbids all senders, so Resend would refuse every email from it.
+1. **Production env: fixed 2026-10-05.** You confirmed that `SUPABASE`, `RESEND` and `JEV` hold the service-role, Resend and TypeSafe keys, and you added `EMAIL_FROM` on `knowyour.vote`.
+   - No renaming is needed. Since #109 the code reads either name (`src/lib/server-keys.ts`).
+   - #107 had tried a startup mapping in the root `instrumentation.ts`. It never ran on Vercel: with a `src/` folder, Next.js deploys the instrumentation hook only from `src/`. #109 replaced it.
+   - After #109 deployed, the calendar file returned 200 and the home page showed "Register to vote by October 5 · Election Day is November 3" (live GETs).
+   - Not yet seen working: the email signup, the reminder cron and the news cron. Each needs a POST or a cron run, which agents don't trigger. The end-to-end test below covers the first two.
+   - Keep `EMAIL_FROM` on `knowyour.vote`. `knowyourvote.com` is a parked domain for sale whose SPF forbids all senders, so Resend would refuse every email from it.
    - `EMAIL_SERVICE` isn't read by anything. For `admin@knowyour.vote` to sign in to the admin console, the variable is `ADMIN_EMAILS`.
-   - Until #107 deploys, these fail in production:
-     - the home-page deadline banner (blank);
-     - the calendar file (503);
-     - the email signup (503);
-     - the reminder cron (503);
-     - the news cron (503).
 
    Full steps: `reminders-e2e-runbook.md` step 1.
-2. **Merge #107.** The merge deploys production with the new env, so no separate redeploy is needed. Order matters:
-   - The news cron writes each "Race published" item once and never updates it.
-   - On `main` it still says every candidate got "equal space and comparable scrutiny", which the Balance Audit does not enforce at 150%.
-   - #107 corrects that wording. It also makes the banner move on from "Register by October 5" once today (10-05) ends.
+2. **#107: merged 2026-10-05.**
+   - The news cron writes each "Race published" item once and never updates it. Before #107 it said every candidate got "equal space and comparable scrutiny", which the Balance Audit does not enforce at 150%. #107 corrects that wording.
+   - It also makes the banner move on from "Register by October 5" once 10-05 ends in Florida.
 3. **Change the Spacemail password for hello@knowyour.vote.** It was pasted into the session chat. No agent used it or wrote it anywhere.
 
 ## This week
