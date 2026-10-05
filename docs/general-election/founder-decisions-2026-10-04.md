@@ -78,6 +78,7 @@ Voter registration closes 10-05.
 | 12 | Cuts for Nov 3 | **Cut:** SMS, web push, county district placement, statewide ZIPs, a quiz replacement | `docs/scope-changes.md` 2026-10-04 entry |
 | 13 | CI | **Yes.** It runs lint, typecheck, every verify script, the 435 Python tests and `next build` on every PR. The live-DB job is manual only and never gets the service-role key. | Delete `.github/workflows/ci.yml`; see `docs/ci.md` |
 | — | Accessibility fixes | The audit's fixes 1–10 and 12–14 are built. Three are recommended rather than plain fixes:<br>• fix 11, candidate jump links<br>• the input-border token<br>• `CONTACT_EMAIL`<br>Not built, pending you: rendering the cookie banner on the server, and `inlineCss`. | `a11y-perf-2026-10-04.md` "Recommendations pending founder confirmation" |
+| — | Incumbent chip (10-05) | **Hidden for every candidate** until `is_incumbent` is set from a verified source for all 106 ballot candidates. Production had it true for one, Rendon (Hillsborough School Board 4, unopposed). Every other sitting officeholder, Moody and Castor among them, was false, which only ever meant "unknown" (the B4 incumbency run never wrote), so they read as challengers beside her. No data was changed. | `SHOW_INCUMBENT_CHIP` in `src/lib/incumbency.ts`, which lists what must be true first |
 
 ## Candidate checks
 

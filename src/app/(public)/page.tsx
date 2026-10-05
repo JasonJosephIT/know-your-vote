@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
+import { coveredCounty } from "@/lib/counties";
 import { DISTRICT_COOKIE, parseDistrictCookie } from "@/lib/district-cookie";
 import { DeadlineBanner } from "@/components/features/DeadlineBanner";
 import { InstallCard } from "@/components/features/InstallCard";
@@ -51,6 +52,12 @@ export default async function Home() {
     (await cookies()).get(DISTRICT_COOKIE)?.value
   );
   const ballotRendered = races.length > 0 || measures.length > 0;
+  /* The saved district's county, by name, for the judges note under the
+     ballot questions: its appeals court lines are per county, and the name
+     is what that note is keyed by. undefined for no cookie or a county we do
+     not cover (a hand-edited value), and the note then lists every covered
+     county, as it does for everyone else. The ballot itself is unchanged. */
+  const savedCounty = saved && coveredCounty(saved.countyFips);
 
   /* FOUNDER DECISION 3 — promote the reminder signup. Recommended (pending
      founder confirmation): yes, once email works. True only while email
@@ -82,7 +89,7 @@ export default async function Home() {
       />
 
       {ballotRendered && <TrackView event="ballot_viewed" />}
-      <SharedBallot />
+      <SharedBallot county={savedCounty?.name} />
 
       <section className="flex flex-col gap-3 border-t border-border pt-6">
         {saved ? (

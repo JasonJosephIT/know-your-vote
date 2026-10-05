@@ -236,8 +236,17 @@ export async function YourRaces({
 
       {/* Statewide, so they belong below the location-specific races rather
           than inside that list — a voter scanning for candidates should not
-          mistake a ballot question for one. */}
-      <BallotQuestions />
+          mistake a ballot question for one.
+
+          The judges note under them is not statewide: each county votes on
+          its own district court of appeal. result.county is the county NAME
+          the note is keyed by (the `county` prop above is a FIPS code), so it
+          shows this voter's court only. Every branch that reaches here sets
+          it from a covered county (resolveZip from zip_district.county_name,
+          resolveDistrict and resolveCounty from COVERED_COUNTIES) except the
+          statewide-only result, which has no county and so gets the full
+          note, as the home page without a saved district does. */}
+      <BallotQuestions county={result.county} />
 
       <p className="text-caption text-on-surface-muted">
         Every registered Florida voter gets the same ballot in the general

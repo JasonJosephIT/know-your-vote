@@ -20,76 +20,21 @@
    in BallotQuestions.tsx.
    ------------------------------------------------------------------------
 
-   Every name, count and link below was checked on 2026-10-04 against
-   official pages only (the record is in docs/general-election/
-   ballots-handoff.md §7):
-   - The Division of Elections' 2026 general-election candidate list,
-     judicial offices: Justice Muñiz is the only justice up for retention;
-     district 2 has four judges up, districts 3 and 4 five each, district 6
-     none.
-   - Florida Statutes 26.021 and 35.02–35.044 (2026): Miami-Dade is the 11th
-     Circuit and so the 3rd District; Broward the 17th, 4th District;
-     Hillsborough the 13th, 2nd District; Orange the 9th, which moved to the
-     new 6th District in 2023.
-   - Miami-Dade's own 2026-11-03 master ballot prints the Muñiz question and
-     five 3rd District questions, matching the state list.
-   Bar polls, voter guides and advocacy pages are deliberately not linked.
+   The facts (every name, count and link, with where each was checked on
+   2026-10-04) live in src/lib/judicial-retention.ts, so that
+   scripts/verify-judicial-retention.ts can check each covered county's lines
+   under plain node. Re-check them there if a judge leaves the bench before
+   Election Day. After the election this content is stale and should go with
+   the 2026 cycle. */
 
-   Re-check the list if a judge leaves the bench before Election Day. After
-   the election this content is stale and should go with the 2026 cycle. */
+import {
+  appealsForCounty,
+  appealsLineLabel,
+  DOE_JUDICIAL_LIST,
+  SUPREME_COURT,
+} from "@/lib/judicial-retention";
 
 export const SHOW_JUDICIAL_RETENTION_NOTE = true;
-
-/* The state's list of every judge on the 2026 general-election ballot. It is
-   the only official page that names exactly who is up, grouped by court
-   ("District Court of Appeal", "District 3" and so on), so each county's
-   count links here. The courts' judges pages list every sitting judge (the
-   3rd District's has 10 for 5 questions, checked 2026-10-04), so they are
-   kept only as a second link for background (adversarial review,
-   2026-10-04). */
-const DOE_JUDICIAL_LIST =
-  "https://dos.elections.myflorida.com/candidates/CanList.asp?elecid=20261103-GEN&OfficeGroup=JUD";
-
-const SUPREME_COURT = {
-  justice: "Justice Carlos G. Muñiz",
-  url: "https://supremecourt.flcourts.gov/the-court/about-the-court/justices/justice-carlos-g.-muniz",
-};
-
-/* One row per covered county, in COVERED_COUNTIES order. `judges: 0` is a
-   real answer (Orange's 6th District has no one up this year), not missing
-   data. Keyed by county name, the same value resolve returns. `url` is the
-   court's own judges page, the secondary "about this court's judges" link. */
-const APPEALS_BY_COUNTY: readonly {
-  county: string;
-  court: string;
-  judges: number;
-  url: string;
-}[] = [
-  {
-    county: "Miami-Dade",
-    court: "3rd District Court of Appeal",
-    judges: 5,
-    url: "https://3dca.flcourts.gov/Judges",
-  },
-  {
-    county: "Broward",
-    court: "4th District Court of Appeal",
-    judges: 5,
-    url: "https://4dca.flcourts.gov/Judges",
-  },
-  {
-    county: "Hillsborough",
-    court: "2nd District Court of Appeal",
-    judges: 4,
-    url: "https://2dca.flcourts.gov/Judges",
-  },
-  {
-    county: "Orange",
-    court: "6th District Court of Appeal",
-    judges: 0,
-    url: "https://6dca.flcourts.gov/Judges",
-  },
-];
 
 const linkClass = "text-primary underline underline-offset-2";
 
@@ -97,14 +42,17 @@ function NewTab() {
   return <span className="sr-only"> (opens in a new tab)</span>;
 }
 
-/* `county` narrows the appeals court lines to the voter's own county when it
-   is known (the "Your races" view). Without it, or for a county outside the
-   list, every covered county is shown, which is still true for everyone. */
+/* `county` is a county NAME, the value resolve returns as result.county
+   ("Miami-Dade", not "12086"). It narrows the appeals court lines to the
+   voter's own county when it is known: the "Your races" view, and the home
+   page when the saved district names a covered county. Without it, or for a
+   county outside the list, every covered county is shown, which is still
+   true for everyone (appealsForCounty). The Supreme Court line is outside
+   that choice: Justice Muñiz is on every Florida ballot. */
 export function JudicialRetentionNote({ county }: { county?: string | null }) {
   if (!SHOW_JUDICIAL_RETENTION_NOTE) return null;
 
-  const own = APPEALS_BY_COUNTY.filter((a) => a.county === county);
-  const appeals = own.length > 0 ? own : APPEALS_BY_COUNTY;
+  const appeals = appealsForCounty(county);
 
   return (
     <aside
@@ -141,7 +89,7 @@ export function JudicialRetentionNote({ county }: { county?: string | null }) {
                   rel="noreferrer"
                   className={linkClass}
                 >
-                  {a.judges} judges of the {a.court}
+                  {appealsLineLabel(a)}
                   <NewTab />
                 </a>{" "}
                 (
@@ -157,7 +105,7 @@ export function JudicialRetentionNote({ county }: { county?: string | null }) {
                 )
               </>
             ) : (
-              <>no appeals court judges this year</>
+              <>{appealsLineLabel(a)}</>
             )}
           </li>
         ))}
