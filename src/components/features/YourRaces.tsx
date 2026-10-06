@@ -166,7 +166,7 @@ export async function YourRaces({
           : result.county}
         {result.district ? ` · ${result.district}` : ""}
         <Link
-          href="/candidates?view=races"
+          href="/candidates?view=races&change=1"
           className="text-caption text-primary underline underline-offset-2"
         >
           Change location

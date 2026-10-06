@@ -28,6 +28,11 @@ export type ElectionEvent = {
      rows that are not deadlines: early voting bounds and election day. */
   rule: "postmarked_by" | "received_by" | null;
   details_url: string;
+  /* When the row was last verified (stamped). A corrected date is
+     re-stamped, so ics.ts derives SEQUENCE and DTSTAMP from it: a calendar
+     that imported the old date takes the new file as an update. Absent in
+     fixtures. */
+  verified_at?: string | null;
 };
 
 /* Every verified row for the election, statewide and county (0043).
@@ -47,7 +52,9 @@ export async function verifiedElectionEvents(
 ): Promise<ElectionEvent[]> {
   let query = service
     .from("election_event")
-    .select("id, county_fips, event_type, election, event_date, rule, details_url")
+    .select(
+      "id, county_fips, event_type, election, event_date, rule, details_url, verified_at"
+    )
     .not("verified_by", "is", null)
     .order("event_date");
   if (election) query = query.eq("election", election);

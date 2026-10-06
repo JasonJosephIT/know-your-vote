@@ -167,9 +167,14 @@ const fnBody = (name: string) => {
 };
 const districtBody = fnBody("racesForDistrict");
 check(
-  "racesForDistrict reads candidate_ids and marks decided seats",
-  /candidate_ids/.test(districtBody) && /decidedSeatsFor\(/.test(districtBody),
+  "racesForDistrict marks the district's decided seat from the cached districtRace",
+  /districtRace\(district\)/.test(districtBody) &&
+    /decided: own\.decided \?\? null/.test(districtBody),
   "the district list must carry the decided state, as the county list does"
+);
+check(
+  "districtRace's fetch decides through decidedSeatsFor",
+  /decidedSeatsFor\(/.test(fnBody("fetchDistrictRace"))
 );
 check(
   "the county list marks seats through the same helper",
@@ -222,7 +227,7 @@ const homeSrc = stripComments(source("src/app/(public)/page.tsx")).replace(
 );
 check(
   "the home page reads the saved district's race",
-  /districtRace\(saved\.district\)/.test(homeSrc)
+  /districtRace\(cookieDistrict\.district\)/.test(homeSrc)
 );
 check(
   "the home page says a decided House race is not on the ballot",

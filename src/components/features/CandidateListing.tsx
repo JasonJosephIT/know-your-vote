@@ -29,8 +29,10 @@ export function CandidateListing({
 
   return (
     <>
+      {/* A decided seat isn't on the November ballot: the line below says
+          how it was decided, so this one doesn't say "Running for". */}
       <p className="text-body-sm text-on-surface-muted">
-        Running for{" "}
+        {absent ? "" : "Running for "}
         <Link
           href={`/races/${listing.raceId}`}
           className="underline underline-offset-2 hover:text-on-surface"

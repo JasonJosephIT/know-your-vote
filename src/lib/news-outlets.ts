@@ -200,7 +200,9 @@ export type OutletReadingState =
 export interface OutletReading {
   state: OutletReadingState;
   reading: boolean;
-  /** Short: "We read its stories" / "Not read". */
+  /** Short: "Cleared to read" / "Not read". Cleared, not "we read": the
+      sweep that would read it is run by hand, and nothing from any outlet is
+      published yet (src/lib/news-outlet-index.ts says how many are). */
   label: string;
   /** One neutral sentence on why, or null when we do read it. */
   explanation: string | null;
@@ -215,7 +217,7 @@ export function outletReading(
     return {
       state: "reading",
       reading: true,
-      label: "We read its stories",
+      label: "Cleared to read",
       explanation: null,
     };
   }

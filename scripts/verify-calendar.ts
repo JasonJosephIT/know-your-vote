@@ -271,6 +271,46 @@ check(
     !empty.includes("VEVENT")
 );
 
+/* 4. A corrected date reaches a calendar that already imported the old
+   one. The fix re-stamps the row, so SEQUENCE and DTSTAMP follow
+   verified_at: a later stamp gives a higher SEQUENCE and a later DTSTAMP,
+   even when the corrected date is EARLIER than the old one (review,
+   2026-10-05: DTSTAMP used to come from the event date, so moving a date
+   earlier made the fix look older than the copy it replaces). */
+const before = {
+  ...SAMPLE[0],
+  event_date: "2026-10-22",
+  verified_at: "2026-09-07T03:22:37Z",
+};
+const corrected = {
+  ...before,
+  event_date: "2026-10-21",
+  verified_at: "2026-10-20T15:00:00Z",
+};
+const blockOf = (event: typeof before) =>
+  [
+    ...buildElectionCalendar("general_2026", [event]).matchAll(
+      /BEGIN:VEVENT\r\n([\s\S]*?)END:VEVENT/g
+    ),
+  ][0]?.[1] ?? "";
+const oldBlock = blockOf(before);
+const newBlock = blockOf(corrected);
+check(
+  "a re-stamped (corrected) row has a higher SEQUENCE",
+  Number(field(newBlock, "SEQUENCE")) > Number(field(oldBlock, "SEQUENCE")),
+  `${field(oldBlock, "SEQUENCE")} -> ${field(newBlock, "SEQUENCE")}`
+);
+check(
+  "and a later DTSTAMP, although its date moved earlier",
+  field(newBlock, "DTSTAMP") > field(oldBlock, "DTSTAMP") &&
+    /^\d{8}T\d{6}Z$/.test(field(newBlock, "DTSTAMP")),
+  `${field(oldBlock, "DTSTAMP")} -> ${field(newBlock, "DTSTAMP")}`
+);
+check(
+  "SEQUENCE stays a small integer (well inside 32 bits)",
+  Number(field(newBlock, "SEQUENCE")) < 2 ** 31
+);
+
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed`);
   process.exit(1);

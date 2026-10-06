@@ -109,6 +109,11 @@ export interface ResolveResult {
   isSplit?: boolean;
   candidateDistricts?: string[];
   needsCountyConfirm?: boolean;
+  /* Part of this ZIP lies in a county the guide does not cover, and the
+     people there vote in another House district (uncovered-zip-parts.ts).
+     Set only with needsCountyConfirm, so the voter can say so instead of
+     picking one of candidateDistricts. */
+  uncoveredPart?: { county: string; district: string; raceId: string };
   races: ResolveRaceSummary[];
   message?: string;
   /* How much of the ballot this result places. "district": a congressional

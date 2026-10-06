@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   title: "Where the news comes from — Know Your Vote",
   description:
     "The newsrooms on Know Your Vote's list for Florida election coverage, " +
-    "which of them we read, and how each one's political lean is disclosed.",
+    "which of them are cleared to be read, and how each one's political lean is disclosed.",
 };
 
 /* Re-rendered at most every 15 minutes, like the home page's news block,
@@ -175,8 +175,8 @@ export default async function OutletsIndexPage() {
                       {reading.explanation}
                     </span>
                   )}
-                  {/* Read is not published: say which, so "We read its
-                      stories" never stands in for stories on the site. */}
+                  {/* Cleared is not published: say which, so "Cleared to
+                      read" never stands in for stories on the site. */}
                   {publishedNote && (
                     <span className="block text-on-surface-muted">
                       {publishedNote}

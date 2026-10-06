@@ -91,14 +91,21 @@ check(
   /async function runningFor\([\s\S]*?officeTitle\(race\)/.test(candidatePage)
 );
 check(
-  '<title> says "<name>, running for <office>"',
-  /title: `\$\{shown\.candidate\.legal_name\}, running for \$\{office\} — Know Your Vote`/.test(candidatePage) &&
-    /const office = await runningFor\(shown\.raceId, shown\.office\);/.test(candidatePage)
+  '<title> says "<name>, running for <office>", or how a decided seat was decided',
+  /`\$\{shown\.candidate\.legal_name\}, running for \$\{office\} — Know Your Vote`/.test(candidatePage) &&
+    /`\$\{shown\.candidate\.legal_name\}, \$\{office\}: \$\{settled\} — Know Your Vote`/.test(candidatePage) &&
+    /const \{ office, settled \} = await runningFor\(shown\.raceId, shown\.office\);/.test(candidatePage)
+);
+check(
+  'a decided seat is never "running for": FL-10 (unopposed) and the primary-decided seats',
+  /"elected without opposition"/.test(candidatePage) &&
+    /"decided in the August primary"/.test(candidatePage) &&
+    /\{settled \? "" : "Running for "\}/.test(candidatePage)
 );
 check(
   '"Running for" uses it in the brief and the listed state',
-  /const office = await runningFor\(detail\.raceId, detail\.office\);/.test(candidatePage) &&
-    /const office = await runningFor\(listing\.raceId, listing\.office\);/.test(candidatePage) &&
+  /const \{ office, settled \} = await runningFor\(detail\.raceId, detail\.office\);/.test(candidatePage) &&
+    /const \{ office \} = await runningFor\(listing\.raceId, listing\.office\);/.test(candidatePage) &&
     /<CandidateListing listing=\{\{ \.\.\.listing, office \}\} \/>/.test(candidatePage) &&
     !/\{detail\.office\}/.test(candidatePage)
 );

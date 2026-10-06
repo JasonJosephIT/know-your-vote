@@ -23,7 +23,11 @@
    of the four covered metros. Its districts are counted over that county's
    blocks only: a row says which district that county's part of the ZIP
    votes in, so land across the county line, which no covered ballot
-   serves, adds no district (0045). A ZIP is is_split=true when two or more
+   serves, adds no district row (0045). The people who live across that
+   line still type the ZIP: where they are more than a sliver (32703 and
+   32751, about a quarter of each, in Seminole and FL-7), the resolver still
+   asks, from src/lib/uncovered-zip-parts.ts, not from these rows. A ZIP is
+   is_split=true when two or more
    districts each cover >= 5% of its land in that county — those ZIPs get
    one row per qualifying district and the resolver must ask the voter to
    confirm rather than auto-picking (FR-001).

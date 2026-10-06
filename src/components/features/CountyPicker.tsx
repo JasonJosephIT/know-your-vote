@@ -1,6 +1,8 @@
 "use client";
 
-import { COVERED_COUNTIES } from "@/lib/counties";
+import Link from "next/link";
+import { COVERED_COUNTIES, coveredCounty } from "@/lib/counties";
+import { STATEWIDE_BALLOT_HREF } from "@/lib/coverage";
 import { supervisorLink } from "@/lib/supervisors";
 
 /* Two jobs (FR-001): the "or pick your county" path, and district
@@ -35,22 +37,33 @@ export function CountyPicker({
 
 /* `countyFips` is the split ZIP's county (every split ZIP lies in one), so
    the help line can name that county's Supervisor of Elections. Without it
-   the line links the state's list of all 67 Supervisors. */
+   the line links the state's list of all 67 Supervisors.
+
+   `uncoveredPart` is set for a ZIP that crosses into a county we don't
+   cover (uncovered-zip-parts.ts: 32703 and 32751 reach into Seminole, which
+   votes in FL-7). The buttons are then the covered county's districts, and
+   a line below names the other side's House race and links it, without
+   saving a district: we would have to file a Seminole voter under Orange
+   County, and show them Orange's races and dates. */
 export function DistrictConfirm({
   districts,
   countyFips,
+  uncoveredPart,
   onPick,
 }: {
   districts: string[];
   countyFips?: string;
+  uncoveredPart?: { county: string; district: string; raceId: string };
   onPick: (district: string) => void;
 }) {
   const supervisor = supervisorLink(countyFips);
+  const countyName = countyFips ? coveredCounty(countyFips)?.name : undefined;
   return (
     <div className="flex flex-col gap-2">
       <p className="text-body-sm text-on-surface-muted">
-        Your ZIP spans more than one congressional district. Pick yours to be
-        sure we show the right races:
+        {uncoveredPart && countyName
+          ? `Your ZIP is partly in ${countyName} County and partly in ${uncoveredPart.county} County. If you live in the ${countyName} County part, pick your congressional district:`
+          : "Your ZIP spans more than one congressional district. Pick yours to be sure we show the right races:"}
       </p>
       <div className="flex flex-wrap gap-2">
         {districts.map((d) => (
@@ -64,6 +77,26 @@ export function DistrictConfirm({
           </button>
         ))}
       </div>
+      {uncoveredPart && (
+        <p className="text-body-sm text-on-surface-muted">
+          In the {uncoveredPart.county} County part? Your U.S. House race is{" "}
+          <Link
+            href={`/races/${uncoveredPart.raceId}`}
+            className="text-primary underline underline-offset-2 hover:text-primary-hover"
+          >
+            {uncoveredPart.district}
+          </Link>
+          . We don&apos;t cover {uncoveredPart.county} County&apos;s local races
+          yet;{" "}
+          <Link
+            href={STATEWIDE_BALLOT_HREF}
+            className="text-primary underline underline-offset-2 hover:text-primary-hover"
+          >
+            see the statewide ballot
+          </Link>
+          .
+        </p>
+      )}
       <p className="text-caption text-on-surface-muted">
         Not sure? Your voter registration card or{" "}
         <a

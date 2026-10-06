@@ -4,6 +4,7 @@ import { COVERED_COUNTIES, coveredCounty } from "@/lib/counties";
 import { districtFromBlockRows } from "@/lib/address-lookup";
 import { getStatewideRaces, raceStatusOf } from "@/lib/races";
 import { decidedSeatOf, type DecidedSeat } from "@/lib/unopposed";
+import { uncoveredPartOf } from "@/lib/uncovered-zip-parts";
 import type { ResolveRaceSummary, ResolveResult } from "@/types/app";
 import type { Candidate } from "@/types/schema";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
@@ -159,28 +160,37 @@ function toDistrictRace(
    honest answer here. Which of the two tiers each race is at comes from the
    race_publication embed — see raceStatusOf.
 
-   Each row carries its decided state (DistrictRaceSummary). A failed
-   candidate read degrades to rows without it instead of throwing: the
-   voter still gets their races, as they did before the state existed. */
+   The district's own House race carries its decided state (FL-10 is
+   unopposed and not printed), read through the cached districtRace the home
+   page uses, so a resolve costs a cache hit rather than a candidate query.
+   Statewide rows carry no decided key, as in the county and statewide-only
+   views. If districtRace fails it returns null and the row says nothing
+   about it, as before the state existed. */
 async function racesForDistrict(
   district: string
 ): Promise<DistrictRaceSummary[]> {
   const supabase = await createAnonServerClient();
-  const { data, error } = await supabase
-    .from("race")
-    .select(
-      "race_id, office, level, district, candidate_ids, race_publication(status)"
-    )
-    .eq("election", ACTIVE_ELECTION_KIND)
-    .or(`district.is.null,district.eq.${district}`)
-    .order("level", { ascending: false })
-    .order("race_id");
+  const [{ data, error }, own] = await Promise.all([
+    supabase
+      .from("race")
+      .select("race_id, office, level, district, race_publication(status)")
+      .eq("election", ACTIVE_ELECTION_KIND)
+      .or(`district.is.null,district.eq.${district}`)
+      .order("level", { ascending: false })
+      .order("race_id"),
+    districtRace(district),
+  ]);
   if (error) throw new Error(`race lookup failed: ${error.message}`);
-  const rows = data ?? [];
-  const seats = await decidedSeatsFor(supabase, rows, "district").catch(
-    () => null
-  );
-  return rows.map((r) => toDistrictRace(r, seats));
+  return (data ?? []).map((r) => {
+    const row = toDistrictRace(r, null);
+    return own && r.race_id === own.raceId
+      ? {
+          ...row,
+          decided: own.decided ?? null,
+          ...(own.holder ? { holder: own.holder } : {}),
+        }
+      : row;
+  });
 }
 
 /* The saved district's own race, for the landing page.
@@ -311,7 +321,11 @@ export async function racesForCounty(
 
 /* Resolve a ZIP; when it spans districts, never auto-pick — return the
    candidate districts and ask for confirmation (FR-001). A confirmed
-   district (from the picker) completes resolution. */
+   district (from the picker) completes resolution.
+
+   A ZIP that crosses into a county we don't cover (uncovered-zip-parts.ts)
+   asks too, even with one covered district left: the voter may live on the
+   other side, in another House district. */
 export async function resolveZip(
   zip: string,
   confirmedDistrict?: string
@@ -344,7 +358,8 @@ export async function resolveZip(
     ...new Set(rows.map((r) => r.congressional_district)),
   ].sort((a, b) => districtNumber(a) - districtNumber(b));
 
-  if (districts.length > 1) {
+  const uncoveredPart = uncoveredPartOf(zip);
+  if (districts.length > 1 || uncoveredPart) {
     const confirmed =
       confirmedDistrict && districts.includes(confirmedDistrict)
         ? confirmedDistrict
@@ -359,6 +374,7 @@ export async function resolveZip(
         isSplit: true,
         candidateDistricts: districts,
         needsCountyConfirm: true,
+        ...(uncoveredPart ? { uncoveredPart } : {}),
         races: [],
       };
     }
@@ -491,6 +507,17 @@ export async function resolveDistrict(
 ): Promise<ResolveResultWithCounty | null> {
   const county = coveredCounty(countyFips);
   if (!county) return null;
+  /* A pair coverage no longer holds -- FL-7 in Orange, which 0045 dropped --
+     arrives from a cookie saved before, or a shared link. Show the county
+     instead of filing the voter under a House race no one in that county
+     votes in. An empty list means the read failed: unknown, not invalid. */
+  const covered = await getCoveredDistricts();
+  if (
+    covered.length > 0 &&
+    !covered.some((d) => d.countyFips === county.fips && d.district === district)
+  ) {
+    return resolveCounty(county.fips);
+  }
   const [races, countyRaces] = await Promise.all([
     racesForDistrict(district),
     racesForCounty(county.fips),

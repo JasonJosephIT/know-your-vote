@@ -1,9 +1,10 @@
 -- 0045_orange_fl7_zip_district.sql
--- Two Orange County ZIPs offered FL-7, a House race that is on no Orange
--- County ballot. 0022_zip_seed_2026 gave 32703 (Apopka) the districts
--- FL-10, FL-11 and FL-7, and 32751 (Maitland) FL-10 and FL-7, all under
--- county_fips 12095. A voter there was asked to pick between them, and
--- picking FL-7 showed them a race they cannot vote in.
+-- Two Orange County ZIPs offered FL-7 as an Orange County district, and no
+-- Orange County ballot carries FL-7. 0022_zip_seed_2026 gave 32703 (Apopka)
+-- the districts FL-10, FL-11 and FL-7, and 32751 (Maitland) FL-10 and FL-7,
+-- all under county_fips 12095. An Orange voter there could pick FL-7 and be
+-- shown a race they cannot vote in, and the district picker listed
+-- "FL-7 · Orange".
 --
 -- WHY THE ROWS WERE WRONG. scripts/build-zip-seed.mjs summed district land
 -- over every census block in a ZIP, whatever county the block sat in, then
@@ -25,9 +26,18 @@
 -- FL-7, about 2.5 hectares in all, inside ZIP 32816, which 0022 already maps
 -- to FL-8 alone; the composite ballot shows no Orange voter lives in them.
 --
--- WHAT CHANGES. The two (12095, FL-7) rows go. is_split then follows the
--- rows that remain: 32751 has only FL-10 and stops asking the voter to
--- pick; 32703 keeps FL-10 and FL-11 and still asks. The seed source now
+-- WHAT CHANGES. The two (12095, FL-7) rows go, and with them "FL-7 ·
+-- Orange" in the picker. is_split then follows the Orange rows that remain
+-- (32751 FL-10 alone; 32703 FL-10 and FL-11).
+--
+-- WHAT DOES NOT. People on the Seminole side of both ZIPs do vote in FL-7:
+-- 6,413 of 32751's 23,230 residents and 11,420 of 32703's 54,805 (2020
+-- census block populations against the enacted plan). So both ZIPs still
+-- ask, from src/lib/uncovered-zip-parts.ts rather than from is_split: the
+-- voter picks an Orange district, or says they live in the Seminole part
+-- and is pointed to FL-7 without being filed under Orange County. This
+-- file alone, without that code, would have resolved 32751 to FL-10 for
+-- everyone. The seed source now
 -- applies the same rule, so a rebuild cannot bring the pairing back: the
 -- build counts only the covered county's own blocks, and
 -- docs/general-election/ballots/zip_districts_2026.csv drops the two rows.

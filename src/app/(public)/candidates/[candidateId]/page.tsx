@@ -13,12 +13,26 @@ export const revalidate = 3600;
 /* The race as the race page names it: "U.S. Representative, District 27"
    for a House race (officeTitle), which the candidate rows do not carry, so
    the race's own row is read. Both reads are the race page's cached ones.
-   Falls back to the bare office if neither returns the race. */
-async function runningFor(raceId: string, office: string): Promise<string> {
-  const race =
-    (await getRaceBrief(raceId))?.race ??
-    (await getRaceListing(raceId))?.race;
-  return race ? officeTitle(race) : office;
+   Falls back to the bare office if neither returns the race.
+
+   `settled` says how a seat already decided was decided (FL-10's one
+   candidate was unopposed; ten seats were won in the August primary), so
+   the page never says such a candidate is "running for" a seat that is not
+   on the November ballot. */
+async function runningFor(
+  raceId: string,
+  office: string
+): Promise<{ office: string; settled: string | null }> {
+  const brief = await getRaceBrief(raceId);
+  const listing = brief ? null : await getRaceListing(raceId);
+  const race = brief?.race ?? listing?.race;
+  const settled =
+    brief?.notPrintedOnBallot || listing?.notPrintedOnBallot
+      ? "elected without opposition"
+      : brief?.decidedInPrimary || listing?.decidedInPrimary
+        ? "decided in the August primary"
+        : null;
+  return { office: race ? officeTitle(race) : office, settled };
 }
 
 export async function generateMetadata({
@@ -31,10 +45,12 @@ export async function generateMetadata({
   const shown = detail?.brief ? detail : await getCandidateListing(candidateId);
   if (!shown) return { title: "Candidate — Know Your Vote" };
   /* "running for", never the office alone: a challenger's title must not
-     read as if they held the seat. */
-  const office = await runningFor(shown.raceId, shown.office);
+     read as if they held the seat. A seat already decided says how. */
+  const { office, settled } = await runningFor(shown.raceId, shown.office);
   return {
-    title: `${shown.candidate.legal_name}, running for ${office} — Know Your Vote`,
+    title: settled
+      ? `${shown.candidate.legal_name}, ${office}: ${settled} — Know Your Vote`
+      : `${shown.candidate.legal_name}, running for ${office} — Know Your Vote`,
   };
 }
 
@@ -57,7 +73,7 @@ export default async function CandidatePage({
     if (listing) {
       /* CandidateListing prints "Running for {office}"; it gets the
          district-named office (runningFor). */
-      const office = await runningFor(listing.raceId, listing.office);
+      const { office } = await runningFor(listing.raceId, listing.office);
       return (
         <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
           <CandidateListing listing={{ ...listing, office }} />
@@ -83,17 +99,18 @@ export default async function CandidatePage({
     );
   }
 
-  const office = await runningFor(detail.raceId, detail.office);
+  const { office, settled } = await runningFor(detail.raceId, detail.office);
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
       <p className="text-body-sm text-on-surface-muted">
-        Running for{" "}
+        {settled ? "" : "Running for "}
         <Link
           href={`/races/${detail.raceId}`}
           className="underline underline-offset-2 hover:text-on-surface"
         >
           {office}
         </Link>
+        {settled ? ` · ${settled}, so not on the November ballot` : ""}
       </p>
       <TrackView event="brief_viewed" />
       <CandidateBrief

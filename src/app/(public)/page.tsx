@@ -42,7 +42,7 @@ export default async function Home() {
      which is why only this page and /candidates do it — the data behind the
      ballot still comes through unstable_cache, so what changes is the shell, not
      the queries. */
-  const saved = parseDistrictCookie(
+  const cookieDistrict = parseDistrictCookie(
     (await cookies()).get(DISTRICT_COOKIE)?.value
   );
 
@@ -59,13 +59,28 @@ export default async function Home() {
      printed at all. FL-10 has one candidate, unopposed, so its voters have
      no House race, and this section used to present it as theirs. Cached
      (districtRace), and null on any failure, which keeps the ordinary copy. */
-  const savedRaceRead = saved && districtRace(saved.district);
+  const savedRaceRead = cookieDistrict && districtRace(cookieDistrict.district);
   const [races, measures, districts, savedRace] = await Promise.all([
     getStatewideRaces(),
     getActiveMeasures(),
     getCoveredDistricts(),
     savedRaceRead,
   ]);
+  /* A saved pair coverage no longer holds -- FL-7 in Orange, which 0045
+     dropped -- is no saved district, the same rule resolveDistrict applies,
+     so the page never files a voter under a House race their county doesn't
+     vote in (or shows that county's dates for it). An empty list means the
+     read failed: unknown, not invalid. */
+  const saved =
+    cookieDistrict &&
+    (districts.length === 0 ||
+      districts.some(
+        (d) =>
+          d.countyFips === cookieDistrict.countyFips &&
+          d.district === cookieDistrict.district
+      ))
+      ? cookieDistrict
+      : null;
   const savedSeat =
     savedRace?.decided && savedRace.holder
       ? { decided: savedRace.decided, holder: savedRace.holder }

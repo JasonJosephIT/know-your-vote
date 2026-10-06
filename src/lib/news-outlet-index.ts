@@ -21,7 +21,9 @@ import { outletForUrl, type Outlet } from "./news-sources.ts";
    one article matched to several candidates is several news_item rows
    (news-fairness.md §6) and still one story. A URL belongs to an outlet by
    `outletForUrl`, the same fail-closed rule the outlet page and the feed
-   use, so the index and the outlet page can never count differently. */
+   use, so the two never disagree about whose story a URL is. The outlet
+   page lists from the newest 200 URL rows, deduplicated the same way; past
+   200 stories in all it can show fewer than this counts. */
 export function publishedStoriesByOutlet(
   urls: readonly (string | null)[],
   outlets: readonly Outlet[]
@@ -65,7 +67,7 @@ export function publishedLine(published: ReadonlyMap<string, number> | null): st
 }
 
 /* One row's published count, under its reading status. An outlet we read
-   but have published nothing from says so, so "We read its stories" is never
+   but have published nothing from says so, so "Cleared to read" is never
    taken to mean its stories are here. Nothing for an outlet we do not read
    and have nothing from: its row already says why. */
 export function outletPublishedLine(

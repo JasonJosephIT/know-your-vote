@@ -149,6 +149,19 @@ check(
     /export const revalidate = 900;/.test(page)
 );
 
+/* 6. The rows and the page's description don't say "we read" either: the
+   sweep that would read a cleared outlet is run by hand, and nothing from
+   any outlet is published (review, 2026-10-05). */
+const outletsSrc = code("src/lib/news-outlets.ts");
+check(
+  'no outlet row is labelled "We read its stories"',
+  !/label: "We read/.test(outletsSrc) && /label: "Cleared to read"/.test(outletsSrc)
+);
+check(
+  'the page description does not say "which of them we read"',
+  !/which of them we read/i.test(page)
+);
+
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed`);
   process.exit(1);

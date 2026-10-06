@@ -92,12 +92,39 @@ function hoursNote(event: ElectionEvent): string | null {
   }
 }
 
-/* Raised whenever an event's words change, so a calendar app that already
-   imported this file can take a re-import as an update to the same event
-   (the UID does not change) rather than a copy it ignores. 1: the
-   vote-by-mail request deadline and Election Day gained their hours,
-   2026-10-05. */
-const SEQUENCE = 1;
+/* SEQUENCE tells a calendar app that already imported this file to take a
+   re-import as an update to the same event (the UID does not change)
+   rather than a copy it ignores. It has to rise on both kinds of change:
+     - the words: WORDING_SEQUENCE, raised by hand. 1: the vote-by-mail
+       request deadline and Election Day gained their hours, 2026-10-05.
+     - the date: a corrected row is re-stamped, so its verified_at moves
+       forward. Minutes since 2026-01-01 at that stamp keep the number small
+       (well inside a 32-bit integer) and rising.
+   A row with no verified_at (fixtures) counts from the epoch base: 0. */
+const WORDING_SEQUENCE = 1;
+const SEQUENCE_BASE_MS = Date.UTC(2026, 0, 1);
+
+function verifiedMs(event: ElectionEvent): number | null {
+  const ms = event.verified_at ? Date.parse(event.verified_at) : NaN;
+  return Number.isNaN(ms) ? null : ms;
+}
+
+function sequence(event: ElectionEvent): number {
+  const ms = verifiedMs(event);
+  const minutes =
+    ms === null ? 0 : Math.max(0, Math.floor((ms - SEQUENCE_BASE_MS) / 60_000));
+  return WORDING_SEQUENCE + minutes;
+}
+
+/* DTSTAMP is required by RFC 5545. From the row's last stamp, so it moves
+   when a date is corrected; from the event date for a row without one.
+   Deterministic either way, so the file stays cache-friendly. */
+function dtstamp(event: ElectionEvent): string {
+  const ms = verifiedMs(event);
+  return ms === null
+    ? `${icsDate(event.event_date)}T000000Z`
+    : `${new Date(ms).toISOString().replace(/[-:]/g, "").slice(0, 15)}Z`;
+}
 
 /* ICS structure is line-oriented: a stray CR/LF in any interpolated value
    would inject properties. Rows are service-role-only writes, but sanitize
@@ -132,12 +159,10 @@ export function buildElectionCalendar(
     lines.push(
       "BEGIN:VEVENT",
       `UID:${event.id}@knowyourvote`,
-      /* DTSTAMP is required by RFC 5545; derived from the event date so the
-         file is deterministic and cache-friendly. */
-      `DTSTAMP:${icsDate(event.event_date)}T000000Z`,
+      `DTSTAMP:${dtstamp(event)}`,
       `DTSTART;VALUE=DATE:${icsDate(event.event_date)}`,
       `DTEND;VALUE=DATE:${icsDate(nextDay(event.event_date))}`,
-      `SEQUENCE:${SEQUENCE}`,
+      `SEQUENCE:${sequence(event)}`,
       `SUMMARY:${summary(event)} — ${icsText(label)}`,
       `URL:${icsText(event.details_url)}`,
       `DESCRIPTION:${[ruleNote(event), hoursNote(event)]
