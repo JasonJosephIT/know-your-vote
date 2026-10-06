@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { Card } from "@/components/ui/Card";
+import { LinkRow, LinkRowList } from "@/components/ui/LinkRows";
 import { JudicialRetentionNote } from "@/components/features/JudicialRetentionNote";
 import { getActiveMeasures } from "@/lib/measures";
 
@@ -47,28 +46,27 @@ export async function BallotQuestions({
           supermajority to pass, not a simple majority.
         </p>
       </div>
-      <ul className="flex flex-col gap-4">
+      {/* Same row shell as the race lists (LinkRows), so the races and
+          the questions read as one ballot. Content unchanged. */}
+      <LinkRowList>
         {measures.map((m) => (
-          <li key={m.measure_id}>
-            <Link href={`/measures/${m.measure_id}`} className="block">
-              <Card className="transition-shadow hover:shadow-elevation-1">
-                <h3 className="text-h3">
-                  Amendment {m.number}: {m.official_title}
-                </h3>
-                <p className="text-body-sm text-on-surface-muted">
-                  {m.jurisdiction === "FL" ? "Statewide" : m.jurisdiction} ·
-                  Needs{" "}
-                  {Number.isInteger(m.threshold_pct)
-                    ? m.threshold_pct
-                    : m.threshold_pct.toFixed(1)}
-                  % to pass
-                  {m.status !== "published" ? " · resources being collected" : ""}
-                </p>
-              </Card>
-            </Link>
-          </li>
+          <LinkRow
+            key={m.measure_id}
+            href={`/measures/${m.measure_id}`}
+            title={`Amendment ${m.number}: ${m.official_title}`}
+          >
+            <p className="text-body-sm text-on-surface-muted">
+              {m.jurisdiction === "FL" ? "Statewide" : m.jurisdiction} ·
+              Needs{" "}
+              {Number.isInteger(m.threshold_pct)
+                ? m.threshold_pct
+                : m.threshold_pct.toFixed(1)}
+              % to pass
+              {m.status !== "published" ? " · resources being collected" : ""}
+            </p>
+          </LinkRow>
         ))}
-      </ul>
+      </LinkRowList>
       <JudicialRetentionNote county={county} />
     </section>
   );

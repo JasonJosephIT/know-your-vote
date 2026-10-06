@@ -604,9 +604,12 @@ const EXPECTED_CALLERS = [
   "src/lib/briefs.ts",
   "src/lib/directory.ts",
   "src/lib/listing.ts",
+  /* The landing page's race rows (getStatewideRaces), so the names on the
+     home page read in the same order as the race page they link to. */
+  "src/lib/races.ts",
 ];
 check(
-  "orderCandidates is called from the four known places",
+  "orderCandidates is called from the five known places",
   same(callers, EXPECTED_CALLERS),
   callers.join(", ")
 );
@@ -634,6 +637,10 @@ check(
   'briefs.ts and listing.ts read candidate with select("*")',
   /from\("candidate"\)\s*\.select\("\*"\)/.test(src("src/lib/briefs.ts")) &&
     /from\("candidate"\)\s*\.select\("\*"\)/.test(src("src/lib/listing.ts"))
+);
+check(
+  "races.ts selects party for the home rows it orders",
+  /\.select\("candidate_id, legal_name, party"\)/.test(src("src/lib/races.ts"))
 );
 check(
   "directory.ts selects party for the cards it orders",

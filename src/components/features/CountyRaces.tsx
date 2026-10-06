@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Card } from "@/components/ui/Card";
+import { LinkRow, LinkRowList } from "@/components/ui/LinkRows";
 import { raceStatusLabel } from "@/lib/races";
 import type { CountyRaceSummary } from "@/lib/resolve";
 
@@ -93,28 +93,26 @@ export function CountyRaces({
       {contested.length > 0 && (
         <div className="flex flex-col gap-3">
           <h3 className="text-label">On the November ballot</h3>
-          <ul className="flex flex-col gap-4">
+          <LinkRowList>
             {contested.map((race) => {
               const general = formatDate(race.generalDate);
               return (
-                <li key={race.raceId}>
-                  <Link href={`/races/${race.raceId}`} className="block">
-                    <Card className="transition-shadow hover:shadow-elevation-1">
-                      <h4 className="text-h3">{race.office}</h4>
-                      {general && (
-                        <p className="text-body-sm text-on-surface-muted">
-                          General election {general}
-                        </p>
-                      )}
-                      <p className="text-caption text-on-surface-muted">
-                        {raceStatusLabel(race.status)}
-                      </p>
-                    </Card>
-                  </Link>
-                </li>
+                <LinkRow
+                  key={race.raceId}
+                  href={`/races/${race.raceId}`}
+                  title={race.office}
+                  aside={raceStatusLabel(race.status)}
+                  headingLevel="h4"
+                >
+                  {general && (
+                    <p className="text-body-sm text-on-surface-muted">
+                      General election {general}
+                    </p>
+                  )}
+                </LinkRow>
               );
             })}
-          </ul>
+          </LinkRowList>
         </div>
       )}
 

@@ -200,7 +200,7 @@ const yourRacesSrc = stripComments(
 ).replace(/\s+/g, " ");
 check(
   "the races view's card list holds printed races only",
-  /printed\.map\(\(race\) => \{[^]*?<Card/.test(yourRacesSrc) &&
+  /printed\.map\(\(race\) => \{[^]*?<(?:Card|LinkRow)\b/.test(yourRacesSrc) &&
     !/result\.races\.map\(\(race\)/.test(yourRacesSrc),
   "a decided race rendered as a card reads as one the voter can vote in"
 );

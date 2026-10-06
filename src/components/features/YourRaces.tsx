@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Card } from "@/components/ui/Card";
+import { LinkRow, LinkRowList } from "@/components/ui/LinkRows";
 import { BallotQuestions } from "@/components/features/BallotQuestions";
 import { CountyRaces } from "@/components/features/CountyRaces";
 import { VotingInfo } from "@/components/features/VotingInfo";
@@ -266,28 +266,25 @@ export async function YourRaces({
         )
       ) : (
         printed.length > 0 && (
-          <ul className="flex flex-col gap-4">
+          <LinkRowList>
             {printed.map((race) => {
               const extra = dates.get(race.raceId);
               const general = formatDate(extra?.key_dates?.general_date);
               return (
-                <li key={race.raceId}>
-                  <Link href={`/races/${race.raceId}`} className="block">
-                    <Card className="transition-shadow hover:shadow-elevation-1">
-                      <h3 className="text-h3">{race.office}</h3>
-                      <p className="text-body-sm text-on-surface-muted">
-                        {race.district ?? "Statewide"}
-                        {general ? ` · General election ${general}` : ""}
-                      </p>
-                      <p className="text-caption text-on-surface-muted">
-                        {raceStatusLabel(race.status)}
-                      </p>
-                    </Card>
-                  </Link>
-                </li>
+                <LinkRow
+                  key={race.raceId}
+                  href={`/races/${race.raceId}`}
+                  title={race.office}
+                  aside={raceStatusLabel(race.status)}
+                >
+                  <p className="text-body-sm text-on-surface-muted">
+                    {race.district ?? "Statewide"}
+                    {general ? ` · General election ${general}` : ""}
+                  </p>
+                </LinkRow>
               );
             })}
-          </ul>
+          </LinkRowList>
         )
       )}
 
