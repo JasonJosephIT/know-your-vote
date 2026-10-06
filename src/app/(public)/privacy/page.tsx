@@ -106,11 +106,20 @@ export default function PrivacyPage() {
 
       <section className="flex flex-col gap-2">
         <h2 className="text-h2">The one thing we ever store</h2>
+        {/* This said the link "works immediately" and the next paragraph
+            called it "instant". Opening the link no longer unsubscribes,
+            because mail scanners open links before the voter does: it shows
+            a confirm button, and the button (or the mail app's own
+            Unsubscribe, RFC 8058) does it. See
+            src/lib/notifications/unsubscribe.ts. */}
         <p className="text-body">
-          If you ask us to email your polling place, we store exactly four
-          things: your email, your ZIP, when you consented, and an unsubscribe
-          token. Nothing is linked to your browsing, nothing is shared or sold,
-          and the unsubscribe link in every email works immediately.
+          If you ask us to email your polling place, we store your email, your
+          ZIP, when you consented, an unsubscribe token, whether you&apos;re
+          still subscribed, and when we last sent you the welcome email (so we
+          send it at most once a day). Nothing is linked to your browsing, nothing is shared or sold,
+          and every email has an unsubscribe link: open it and press the
+          confirm button, and you&apos;re off the list. Your mail app&apos;s
+          own Unsubscribe button works too.
         </p>
         <p className="text-body">
           That same signup also gets you a handful of deadline reminders by
@@ -118,7 +127,7 @@ export default function PrivacyPage() {
           returning your vote-by-mail ballot, and election day. Every reminder
           contains only dates and official links, every date is verified against
           its official source before anything sends, and every email carries the
-          same instant unsubscribe link. Our send records store counts, never
+          same unsubscribe link. Our send records store counts, never
           addresses. Prefer zero email? The same dates are available as a{" "}
           <a
             href="/api/calendar/general_2026.ics"

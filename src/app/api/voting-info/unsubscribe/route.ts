@@ -1,51 +1,34 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import {
+  subscriptionStore,
+  unsubscribeResponse,
+} from "@/lib/notifications/unsubscribe";
 import { createServiceClient } from "@/lib/supabase/service";
 
-/* The token is the credential (PRD § 4). */
+/* The unsubscribe link (PRD § 4: the token is the credential). GET (and
+   HEAD, which Next.js answers with GET) shows a confirm page and never
+   writes, because mail scanners open links; POST, from that page's button
+   or from a mail app's one-click Unsubscribe (RFC 8058), unsubscribes.
+   Both answer HTML pages. The why, the pages and the queries are in
+   src/lib/notifications/unsubscribe.ts, which
+   scripts/verify-unsubscribe.ts drives. */
+
+/* createServiceClient throws without the service-role key; inside
+   unsubscribeResponse that is the "try again shortly" page, a 503. */
+const openStore = () => subscriptionStore(createServiceClient());
+
 export async function GET(request: NextRequest) {
-  const token = request.nextUrl.searchParams.get("token") ?? "";
-  if (!/^[a-f0-9]{32}$/.test(token)) {
-    return NextResponse.json({ error: "Unknown token" }, { status: 404 });
-  }
+  return unsubscribeResponse(
+    "GET",
+    request.nextUrl.searchParams.get("token"),
+    openStore
+  );
+}
 
-  let service;
-  try {
-    service = createServiceClient();
-  } catch {
-    return NextResponse.json(
-      { error: "Unsubscribe isn't available right now — try again shortly." },
-      { status: 503 }
-    );
-  }
-
-  const { data, error } = await service
-    .from("voting_info_subscription")
-    .update({ active: false })
-    .eq("unsubscribe_token", token)
-    .select("email");
-
-  if (error || !data || data.length === 0) {
-    return NextResponse.json({ error: "Unknown token" }, { status: 404 });
-  }
-
-  /* Rows are unique on (email, zip5), so a voter who signed up from two ZIPs
-     holds two rows, and the cron (which dedupes by address) keeps mailing
-     them while either row is active. The page below promises "we won't email
-     you again", so every row for the address goes. Exact match on purpose:
-     the signup route stores addresses trimmed and lower-cased, and ilike would
-     read "_" in an address as a wildcard and could stop someone else's mail.
-     A failure here is not reported: the token's own row is already off. */
-  const email = data[0].email;
-  if (email) {
-    await service
-      .from("voting_info_subscription")
-      .update({ active: false })
-      .eq("email", email)
-      .eq("active", true);
-  }
-
-  return new NextResponse(
-    "You're unsubscribed. We won't email you again unless you ask.",
-    { status: 200, headers: { "Content-Type": "text/plain" } }
+export async function POST(request: NextRequest) {
+  return unsubscribeResponse(
+    "POST",
+    request.nextUrl.searchParams.get("token"),
+    openStore
   );
 }

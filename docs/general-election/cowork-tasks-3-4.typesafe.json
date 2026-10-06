@@ -171,7 +171,7 @@
           "confirm_before": true,
           "confirm_prompt": "Press 'Email my voting info'? It stores the test address and sends it one welcome email.",
           "subgoal": "Press 'Email my voting info'.",
-          "expected_result": "The form is replaced by 'Sent. Check your inbox for where to vote and the key dates. …'. 'We saved your request but the email didn't send' or any other error is a failure: record it, then skip task-4.cron-and-rehearsal, task-3.part-b and task-4.unsubscribe-and-canary (they need this subscription)."
+          "expected_result": "The form is replaced by 'Done. Check your inbox for where to vote and the key dates. …'. If the test address was signed up with the same ZIP in the last 24 hours, no new welcome email goes (one per address and ZIP per day) and the page says the same; use a fresh plus address. 'We saved your request but the email didn't send' or any other error is a failure: record it, then skip task-4.cron-and-rehearsal, task-3.part-b and task-4.unsubscribe-and-canary (they need this subscription)."
         },
         {
           "id": "4a-3",
@@ -296,8 +296,16 @@
         {
           "id": "4e-1",
           "kind": "browser",
-          "subgoal": "In the test inbox, open the unsubscribe link at the bottom of the welcome email or either rehearsal email.",
-          "expected_result": "A plain page reading 'You're unsubscribed. We won't email you again unless you ask.'"
+          "subgoal": "In the test inbox, open the unsubscribe link at the bottom of the welcome email or either rehearsal email. Do not press anything yet.",
+          "expected_result": "A page titled 'Unsubscribe from Know Your Vote?' naming the test address masked (first letter, '***', then '@' and the domain), with one 'Unsubscribe' button. Opening the link alone changes nothing."
+        },
+        {
+          "id": "4e-1b",
+          "kind": "browser",
+          "confirm_before": true,
+          "confirm_prompt": "Press 'Unsubscribe'? It unsubscribes the test address.",
+          "subgoal": "Press 'Unsubscribe'.",
+          "expected_result": "A page reading 'You're unsubscribed. We won't email <masked address> again unless you ask.'"
         },
         {
           "id": "4e-2",
@@ -323,7 +331,7 @@
           "confirm_before": true,
           "confirm_prompt": "Subscribe the canary address? It stays subscribed through Nov 3 and receives every real reminder.",
           "subgoal": "Press 'Email my voting info'.",
-          "expected_result": "The form is replaced by 'Sent. Check your inbox …', and a welcome email reaches the canary inbox."
+          "expected_result": "The form is replaced by 'Done. Check your inbox …', and a welcome email reaches the canary inbox, unless the canary is the test address from 4a-2 with the same ZIP and that was less than 24 hours ago: then no second welcome goes (one per address and ZIP per day), and the subscription is still saved."
         }
       ]
     },
@@ -382,7 +390,7 @@
       "4a-2: what the page said; 4a-3: whether the welcome email arrived, which early-voting line it showed, and SPF/DKIM/DMARC",
       "4a-4, 4d-1, 4e-2: the SQL rows (email addresses may be shortened)",
       "4b-2, 4c-1, 3b-3, 3b-4: each command's JSON response",
-      "4e-1 and 4f-2: the page text",
+      "4e-1, 4e-1b and 4f-2: the page text",
       "Every step whose result did not match expected_result, and every step where the agent overrode TypeSafe",
       "task-4.decisions: the founder's answers (also in founder-answers-2026-10.md)"
     ]

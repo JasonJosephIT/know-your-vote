@@ -9,15 +9,22 @@ import {
 import { verifiedElectionEvents } from "@/lib/notifications/election-events";
 import { easternToday, eventsForCounty } from "@/lib/notifications/schedule";
 import { welcomeEmail } from "@/lib/notifications/templates";
+import { welcomeSentWithinWindow } from "@/lib/notifications/welcome-throttle";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { resolveZip, ZIP_RE } from "@/lib/resolve";
 import { resendApiKey } from "@/lib/server-keys";
-import { siteOrigin, unsubscribeUrl } from "@/lib/site-url";
+import { siteOrigin, unsubscribeHeaders, unsubscribeUrl } from "@/lib/site-url";
 import { createServiceClient } from "@/lib/supabase/service";
 
 /* Where-to-vote opt-in email (FR-010) — the ONLY flow that handles personal
-   data. Stores exactly email + zip + consent timestamp + unsubscribe token,
-   nothing else, and never claims success when delivery failed (PRD § 11). */
+   data. Stores email, zip, consent timestamp, unsubscribe token, whether
+   the address is still subscribed and when the welcome was last sent,
+   nothing else, and never claims success when delivery failed (PRD § 11).
+
+   The welcome email goes at most once a day per address and ZIP, and at
+   most three times a day per address (src/lib/notifications/
+   welcome-throttle.ts): a repeat is saved but sends nothing, and answers
+   with the status and body a send does. */
 
 const body = z.object({
   zip: z.string().regex(ZIP_RE, "Invalid ZIP"),
@@ -97,6 +104,24 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  /* One welcome email per address and ZIP per 24 hours (three per address),
+     so this endpoint can't be used to flood someone's inbox or spend the
+     Resend quota. The row above is saved (or switched back on) either way.
+     A skipped send returns the status and body a real one does; it answers
+     sooner, which welcome-throttle.ts lists among its known limits. If the
+     check itself fails, nothing is sent and the voter is told so, as for a
+     failed send. */
+  let sentRecently: boolean;
+  try {
+    sentRecently = await welcomeSentWithinWindow(service, email, zip);
+  } catch {
+    return NextResponse.json(
+      { error: "We saved your request but the email didn't send — try again shortly." },
+      { status: 502 }
+    );
+  }
+  if (sentRecently) return signedUp();
+
   /* Dates come from founder-verified election_event rows (plan A5), the
      voter's county's own where it has them (0043: early voting opens Oct 19
      in all four covered counties). The copy, and which dates it lists on a
@@ -130,6 +155,9 @@ export async function POST(request: NextRequest) {
     to: email,
     subject: message.subject,
     text: message.text,
+    /* The mail app's own Unsubscribe button, on the same link as the
+       email's footer (RFC 8058; src/lib/site-url.ts). */
+    headers: unsubscribeHeaders(subscription.unsubscribe_token),
   });
 
   if (sendError) {
@@ -139,10 +167,19 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  /* The stamp the 24-hour check reads. Best-effort, as before: if it
+     fails, the next signup for this address sends again. */
   await service
     .from("voting_info_subscription")
     .update({ last_sent_at: new Date().toISOString() })
     .eq("unsubscribe_token", subscription.unsubscribe_token);
 
+  return signedUp();
+}
+
+/* The one success answer, whether this request sent the welcome email or
+   skipped it as a repeat within 24 hours. One function, so the two can
+   never drift apart. */
+function signedUp() {
   return NextResponse.json({ ok: true });
 }

@@ -86,7 +86,9 @@ Run SQL in the Supabase dashboard's SQL Editor. It runs as the database owner, w
 
 ### 4a. Subscribe
 
-On `https://knowyour.vote/candidates?view=races&zip=33130`, or with this PR merged on the home-page card "Get deadline reminders by email": enter the test address and a covered ZIP, tick the consent box, then press "Email my voting info". The page should say "Sent."
+On `https://knowyour.vote/candidates?view=races&zip=33130`, or with this PR merged on the home-page card "Get deadline reminders by email": enter the test address and a covered ZIP, tick the consent box, then press "Email my voting info". The page should say "Done. Check your inbox for where to vote and the key dates."
+
+**One welcome email per address and ZIP per day, three per address.** A second signup for the same address and ZIP within 24 hours, or a fourth ZIP that day, saves the subscription but sends no email, and the page says the same "Done." (`src/lib/notifications/welcome-throttle.ts`). A different ZIP within the day does get its own welcome. If you repeat 4a, use a fresh plus address (`you+kyv2@gmail.com`), or check that `last_sent_at` in the query below is more than a day old.
 
 **Expected:** within a minute, an email titled "Where to vote in Miami-Dade County", from your `EMAIL_FROM` address. Check the spam folder. In Gmail, "Show original" should read **SPF: PASS, DKIM: PASS** (`knowyour.vote`), and **DMARC: PASS** once the record exists.
 
@@ -162,15 +164,19 @@ Rehearsal rows are a record that a rehearsal ran. They never match a real key, s
 
 ### 4e. Test the unsubscribe link
 
-Open the link at the bottom of the welcome email or the rehearsal. **Expected:** a plain page reading "You're unsubscribed. We won't email you again unless you ask."
+Open the link at the bottom of the welcome email or the rehearsal. **Expected:** a page titled "Unsubscribe from Know Your Vote?" naming the test address masked (for example `y***@gmail.com`), with one **Unsubscribe** button. Opening the link changes nothing: mail scanners open links before the voter does (`src/lib/notifications/unsubscribe.ts`). Run the query below now and `active` is still `true`.
+
+Press **Unsubscribe**. **Expected:** "You're unsubscribed. We won't email y***@gmail.com again unless you ask." Pressing it again, or opening the link again, says "You're already unsubscribed".
 
 ```sql
 SELECT email, active FROM voting_info_subscription WHERE lower(email) = lower('<test address>');
 ```
 
-**Expected:** `active = false`. Running 4c again for that address now answers **404**, "No active subscription for that address": an unsubscribed address gets nothing.
+**Expected:** `active = false` on every row for the address, one per ZIP it signed up from. Running 4c again for that address now answers **404**, "No active subscription for that address": an unsubscribed address gets nothing.
 
-**Known limit, not fixed in this PR:** the link deactivates only the row it belongs to. An address subscribed from two ZIPs keeps its other row, so the next reminder still reaches it, carrying the other row's link. The fix belongs in `src/app/api/voting-info/unsubscribe/route.ts`, which is outside this package: deactivate every row whose `lower(email)` matches the token's row. Until it lands, a voter who reports this can be unsubscribed by hand. Run this in the SQL Editor:
+**The mail app's own button.** Every email to a subscriber carries `List-Unsubscribe` and `List-Unsubscribe-Post: List-Unsubscribe=One-Click` (RFC 8058). In Gmail, "Show original" lists both. RFC 8058 asks the receiver to honour one-click only when the DKIM signature covers both headers, so check that the `DKIM-Signature` header's `h=` list includes `list-unsubscribe` and `list-unsubscribe-post`. Gmail may also show an "Unsubscribe" link beside the sender's name, more often once the domain has some sending history. Pressing it POSTs to the same link and unsubscribes with no page. To try it, subscribe a second test address and use it there.
+
+**Exact address match.** The button turns off every row whose address matches the token's row exactly. The signup route has stored addresses lower-cased since 2026-10-04, when the table was empty, so every row is lower-case. A row stored with capitals before that would not match. A voter who reports still getting email after unsubscribing can be unsubscribed by hand. Run this in the SQL Editor:
 
 ```sql
 UPDATE voting_info_subscription SET active = false
@@ -179,7 +185,7 @@ WHERE lower(email) = lower('<their address>');
 
 ### 4f. Keep a canary (Recommended, pending founder confirmation)
 
-Subscribe one address you read and leave it subscribed through Nov 3, so you receive every real reminder as voters do. Submitting the form again re-activates an unsubscribed row. On each send day, a digest also goes to the `EMAIL_FROM` address ("Know Your Vote reminders digest — <date>") with the counts. It goes out only on days something was sent.
+Subscribe one address you read and leave it subscribed through Nov 3, so you receive every real reminder as voters do. Submitting the form again re-activates an unsubscribed row; it sends a new welcome email only if that address had none in the last 24 hours, so a canary that reuses the 4a address gets no second welcome the same day, and still gets every reminder. On each send day, a digest also goes to the `EMAIL_FROM` address ("Know Your Vote reminders digest — <date>") with the counts. It goes out only on days something was sent.
 
 ## County early-voting dates (0043)
 
