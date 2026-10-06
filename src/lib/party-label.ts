@@ -27,6 +27,7 @@
       affiliation. */
 
 import type { Party } from "@/types/schema";
+import { partyRank } from "./ballot-order.ts";
 
 /** What to print for a party code, or null for "print no chip at all".
 
@@ -43,4 +44,46 @@ export function partyLabel(party: Party | null | undefined): string | null {
   /* The schema's catch-all bucket is the one code that is not a real DoE
      PartyCode, so it is the one that needs prose. */
   return code === "other" ? "Other" : code;
+}
+
+/* What each code means, for the one legend line above a list of candidates
+   (interface review 2026-10-05: DoE codes such as NPA and LPF are jargon to
+   most voters, and nothing explained them). The chips and rows keep the code
+   exactly as the ballot prints it, the same form for every party; the
+   legend says once what the codes in that list stand for.
+
+   The names are the Division of Elections' own PartyDesc for each code, as
+   the candidate file carries them (docs/general-election/data-ingest.md,
+   intake run). One edit: NPA's "No Party Affiliation (Partisan)" drops
+   "(Partisan)", the DoE's marker for a no-party candidate in a partisan
+   race, which is every place this legend appears. IND is the Independent
+   Party of Florida, a party, which is exactly the kind of thing a voter
+   would otherwise misread. A code with no entry here is left out of the
+   legend rather than guessed at. */
+const PARTY_NAMES: Record<string, string> = {
+  REP: "Republican Party of Florida",
+  DEM: "Florida Democratic Party",
+  CPF: "Constitution Party of Florida",
+  IND: "Independent Party of Florida",
+  LPF: "Libertarian Party of Florida",
+  NPA: "no party affiliation",
+};
+
+/** One sentence naming every party code in `parties`, in ballot order (the
+    two major parties, then minor parties, then NPA), or null when there is
+    nothing to explain (a nonpartisan list). */
+export function partyLegend(
+  parties: ReadonlyArray<Party | string | null | undefined>
+): string | null {
+  const codes = [
+    ...new Set(
+      parties
+        .map((p) => partyLabel(p as Party))
+        .filter((c): c is string => c !== null && c in PARTY_NAMES)
+    ),
+  ].sort((a, b) => partyRank(a) - partyRank(b) || (a < b ? -1 : a > b ? 1 : 0));
+  if (codes.length === 0) return null;
+  return `Party codes, as the ballot prints them: ${codes
+    .map((c) => `${c}, ${PARTY_NAMES[c]}`)
+    .join("; ")}.`;
 }

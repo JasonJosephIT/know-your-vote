@@ -6,7 +6,7 @@ import {
   raceStatusLabel,
   type StatewideRaceCandidate,
 } from "@/lib/races";
-import { partyLabel } from "@/lib/party-label";
+import { partyLabel, partyLegend } from "@/lib/party-label";
 
 /* The ballot every Florida voter shares, rendered with no input at all
    (TASK-067).
@@ -73,16 +73,25 @@ export async function SharedBallot() {
     );
   }
 
+  /* One line saying what the party codes in the rows stand for, built from
+     the codes actually present, in ballot order (party-label.ts). */
+  const legend = partyLegend(
+    races.flatMap((r) => r.candidates.map((c) => c.party))
+  );
+
   return (
     <div className="flex flex-col gap-6">
       {races.length > 0 && (
         <section className="flex flex-col gap-3">
           <div className="flex flex-col gap-1">
             <h2 className="text-h3">Statewide races</h2>
-            <p className="text-caption text-on-surface-muted">
+            <p className="text-body-sm text-on-surface-muted">
               Every Florida voter gets these, whatever your ZIP and whatever
               party you&apos;re registered with — including no party at all.
             </p>
+            {legend && (
+              <p className="text-body-sm text-on-surface-muted">{legend}</p>
+            )}
           </div>
           <LinkRowList>
             {races.map((race) => {

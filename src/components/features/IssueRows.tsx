@@ -28,7 +28,7 @@ export function IssueRows({ rows }: { rows: IssueRow[] }) {
                 <h3 className="text-h3">
                   <Link
                     href={`/candidates/${cell.candidateId}`}
-                    className="underline-offset-2 hover:underline"
+                    className="text-primary underline-offset-2 hover:text-primary-hover hover:underline"
                   >
                     {cell.name}
                   </Link>

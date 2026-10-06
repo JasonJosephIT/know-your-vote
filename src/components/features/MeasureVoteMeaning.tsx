@@ -46,13 +46,13 @@ export function MeasureVoteMeaning({ pct }: { pct: number }) {
           Rejects the change in the ballot summary below.
         </Box>
       </div>
-      <p className="text-body-sm text-on-surface">
+      <p className="max-w-[680px] text-body-sm text-on-surface">
         If it passes, the change becomes part of the Florida Constitution. If
         it fails, nothing in the Constitution changes because of it.
       </p>
       <MeasureThreshold pct={pct} />
       {blankCountsForNeither && (
-        <p className="text-caption text-on-surface-muted">
+        <p className="max-w-[680px] text-body-sm text-on-surface-muted">
           Leaving this question blank counts toward neither side: the 60% is
           of the people who vote on it.{" "}
           <a
