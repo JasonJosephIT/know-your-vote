@@ -12,6 +12,7 @@ import {
 import { track } from "@/lib/analytics";
 import { coveredCountyNames } from "@/lib/counties";
 import { STATEWIDE_BALLOT_HREF } from "@/lib/coverage";
+import type { UncoveredPart } from "@/lib/uncovered-zip-parts";
 import { writeDistrictCookie } from "@/lib/district-cookie";
 import { locationFieldCopy } from "@/lib/scope-copy";
 import type { AddressSuggestion } from "@/lib/address-lookup";
@@ -43,7 +44,7 @@ type Stage =
       zip: string;
       districts: string[];
       countyFips?: string;
-      uncoveredPart?: { county: string; district: string; raceId: string };
+      uncoveredPart?: UncoveredPart;
     }
   | { kind: "outOfCoverage" };
 

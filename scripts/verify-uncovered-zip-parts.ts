@@ -41,26 +41,44 @@ function check(name: string, ok: boolean, detail = "") {
   }
 }
 
-console.log("1. The two ZIPs");
+console.log("1. The six ZIPs (a fifth to a half of their people across the line)");
 for (const zip of ["32703", "32751"]) {
   const part = uncoveredPartOf(zip);
   check(
-    `${zip}: Seminole County, FL-7, race FL-7-general`,
+    `${zip}: Seminole County, FL-7, race FL-7-general, not an Orange district`,
     part?.county === "Seminole" &&
       part.district === "FL-7" &&
-      part.raceId === "FL-7-general",
+      part.raceId === "FL-7-general" &&
+      part.onCoveredBallot === false,
     JSON.stringify(part)
   );
 }
-for (const zip of ["32801", "33598", "33101", "32816", ""]) {
+for (const zip of ["33549", "33556", "33558", "33559"]) {
+  const part = uncoveredPartOf(zip);
+  check(
+    `${zip}: Pasco County, FL-12, race FL-12-general, also on Hillsborough's ballot`,
+    part?.county === "Pasco" &&
+      part.district === "FL-12" &&
+      part.raceId === "FL-12-general" &&
+      part.onCoveredBallot === true,
+    JSON.stringify(part)
+  );
+}
+/* Slivers stay unasked: 33548 (2.2%), 34787 (1.8%), 33598 (1.1%). */
+for (const zip of ["32801", "33598", "33548", "34787", "33101", "32816", ""]) {
   check(`${zip || "(empty)"}: no uncovered part`, uncoveredPartOf(zip) === null);
 }
 
 console.log("\n2. resolveZip");
 const resolve = code("src/lib/resolve.ts");
 check(
+  "drops a part's district from the covered choices only when no covered ballot carries it (FL-7, not FL-12)",
+  /\.filter\(\s*\(d\) =>\s*!uncoveredPart \|\|\s*uncoveredPart\.onCoveredBallot \|\|\s*d !== uncoveredPart\.district\s*\)/.test(resolve)
+);
+check(
   "asks when the ZIP spans districts OR has an uncovered part",
-  /const uncoveredPart = uncoveredPartOf\(zip\);\s*if \(districts\.length > 1 \|\| uncoveredPart\) \{/.test(resolve)
+  /const uncoveredPart = uncoveredPartOf\(zip\);/.test(resolve) &&
+    /if \(districts\.length > 1 \|\| uncoveredPart\) \{/.test(resolve)
 );
 check(
   "returns the part with the question",
@@ -98,6 +116,20 @@ check(
   "the home page drops a cookie whose pair coverage no longer holds",
   /const saved =\s*cookieDistrict &&\s*\(districts\.length === 0 \|\|\s*districts\.some\(/.test(home) &&
     !/const saved = parseDistrictCookie/.test(home)
+);
+
+const chip = code("src/components/features/DistrictChip.tsx");
+check(
+  "the header chip treats a retired pair (FL-7|12095) as no district",
+  /RETIRED_DISTRICT_PAIRS\.has\(`\$\{choice\.district\}\|\$\{choice\.countyFips\}`\)/.test(chip) &&
+    /if \(!choice \|\| !county \|\| retired\)/.test(chip)
+);
+const yourRaces = code("src/components/features/YourRaces.tsx");
+check(
+  "the server-rendered prompt names the other county and links its House race",
+  /const part = result\.uncoveredPart;/.test(yourRaces) &&
+    /href=\{`\/races\/\$\{part\.raceId\}`\}/.test(yourRaces) &&
+    /href=\{`\/candidates\?view=races&zip=\$\{zip\}&district=\$\{d\}`\}/.test(yourRaces)
 );
 
 console.log("\n6. racesForDistrict");

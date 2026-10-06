@@ -24,9 +24,11 @@
    blocks only: a row says which district that county's part of the ZIP
    votes in, so land across the county line, which no covered ballot
    serves, adds no district row (0045). The people who live across that
-   line still type the ZIP: where they are more than a sliver (32703 and
-   32751, about a quarter of each, in Seminole and FL-7), the resolver still
-   asks, from src/lib/uncovered-zip-parts.ts, not from these rows. A ZIP is
+   line still type the ZIP: where they are more than a sliver (six ZIPs, a
+   fifth to a half of their people: 32703 and 32751 into Seminole, 33549,
+   33556, 33558 and 33559 into Pasco), the resolver asks which side the
+   voter is on, from src/lib/uncovered-zip-parts.ts, not from these rows.
+   A ZIP is
    is_split=true when two or more
    districts each cover >= 5% of its land in that county — those ZIPs get
    one row per qualifying district and the resolver must ask the voter to

@@ -136,13 +136,60 @@ export async function YourRaces({
   }
 
   if (result.needsCountyConfirm) {
+    /* A ZIP that crosses into a county we don't cover (uncovered-zip-parts.ts)
+       says so here too, for the visitor who reaches this server-rendered
+       answer without JavaScript or from a shared ?zip= link: each covered
+       district is a plain link (resolveZip accepts it as confirmed), and the
+       other side gets its House race and the statewide ballot, never a
+       district filed under the covered county. */
+    const part = result.uncoveredPart;
     return (
       <div className="flex flex-col gap-4">
-        <p className="text-body text-on-surface-muted">
-          That ZIP spans more than one congressional district (
-          {result.candidateDistricts?.join(", ")}). Re-enter it below and
-          we&apos;ll ask which district is yours:
-        </p>
+        {part ? (
+          <>
+            <p className="text-body text-on-surface-muted">
+              That ZIP is partly in {result.county} County and partly in{" "}
+              {part.county} County. If you live in the {result.county} County
+              part, pick your congressional district:
+            </p>
+            <ul className="flex flex-wrap gap-2">
+              {(result.candidateDistricts ?? []).map((d) => (
+                <li key={d}>
+                  <Link
+                    href={`/candidates?view=races&zip=${zip}&district=${d}`}
+                    className="block rounded-md border border-border-strong bg-surface px-4 py-3 text-label text-primary transition-colors hover:border-primary hover:bg-primary-muted hover:text-primary-hover"
+                  >
+                    {d}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="text-body-sm text-on-surface-muted">
+              In the {part.county} County part? Your U.S. House race is{" "}
+              <Link
+                href={`/races/${part.raceId}`}
+                className="text-primary underline underline-offset-2 hover:text-primary-hover"
+              >
+                {part.district}
+              </Link>
+              . We don&apos;t cover {part.county} County&apos;s local races
+              yet;{" "}
+              <Link
+                href={STATEWIDE_BALLOT_HREF}
+                className="text-primary underline underline-offset-2 hover:text-primary-hover"
+              >
+                see the statewide ballot
+              </Link>
+              .
+            </p>
+          </>
+        ) : (
+          <p className="text-body text-on-surface-muted">
+            That ZIP spans more than one congressional district (
+            {result.candidateDistricts?.join(", ")}). Re-enter it below and
+            we&apos;ll ask which district is yours:
+          </p>
+        )}
         <LocationEntry
           addressEnabled={geocoderConfigured()}
           districts={districts}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { COVERED_COUNTIES, coveredCounty } from "@/lib/counties";
 import { STATEWIDE_BALLOT_HREF } from "@/lib/coverage";
 import { supervisorLink } from "@/lib/supervisors";
+import type { UncoveredPart } from "@/lib/uncovered-zip-parts";
 
 /* Two jobs (FR-001): the "or pick your county" path, and district
    confirmation for split ZIPs — we never auto-pick a district. */
@@ -40,11 +41,12 @@ export function CountyPicker({
    the line links the state's list of all 67 Supervisors.
 
    `uncoveredPart` is set for a ZIP that crosses into a county we don't
-   cover (uncovered-zip-parts.ts: 32703 and 32751 reach into Seminole, which
-   votes in FL-7). The buttons are then the covered county's districts, and
-   a line below names the other side's House race and links it, without
-   saving a district: we would have to file a Seminole voter under Orange
-   County, and show them Orange's races and dates. */
+   cover (uncovered-zip-parts.ts: two Orange ZIPs reach into Seminole, four
+   Hillsborough ZIPs into Pasco). The buttons are then the covered county's
+   districts, and a line below names the other side's House race and links
+   it, without saving a district: saving one would file a Seminole or Pasco
+   voter under Orange or Hillsborough County, with that county's races and
+   dates. */
 export function DistrictConfirm({
   districts,
   countyFips,
@@ -53,7 +55,7 @@ export function DistrictConfirm({
 }: {
   districts: string[];
   countyFips?: string;
-  uncoveredPart?: { county: string; district: string; raceId: string };
+  uncoveredPart?: UncoveredPart;
   onPick: (district: string) => void;
 }) {
   const supervisor = supervisorLink(countyFips);

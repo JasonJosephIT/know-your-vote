@@ -354,11 +354,19 @@ export async function resolveZip(
      name — the news feed scopes on FIPS, not on the display name. */
   const countyFips = rows[0].county_fips;
   const metro = rows[0].metro;
-  const districts = [
-    ...new Set(rows.map((r) => r.congressional_district)),
-  ].sort((a, b) => districtNumber(a) - districtNumber(b));
-
+  /* A part across the county line whose district no covered ballot here
+     carries (FL-7 in Orange) is never a district of this county, even
+     while 0045's rows are not yet applied. */
   const uncoveredPart = uncoveredPartOf(zip);
+  const districts = [...new Set(rows.map((r) => r.congressional_district))]
+    .filter(
+      (d) =>
+        !uncoveredPart ||
+        uncoveredPart.onCoveredBallot ||
+        d !== uncoveredPart.district
+    )
+    .sort((a, b) => districtNumber(a) - districtNumber(b));
+
   if (districts.length > 1 || uncoveredPart) {
     const confirmed =
       confirmedDistrict && districts.includes(confirmedDistrict)
