@@ -29,6 +29,7 @@ import { countiesWithOwnDates, easternToday } from "@/lib/notifications/schedule
 import type { Rendered } from "@/lib/notifications/templates";
 import { secretEquals } from "@/lib/secret-compare";
 import { resendApiKey } from "@/lib/server-keys";
+import { unsubscribeHeaders } from "@/lib/site-url";
 import { createServiceClient } from "@/lib/supabase/service";
 
 /* Manual correction send (design doc §7 playbook; plan C3). The one
@@ -326,12 +327,15 @@ export async function POST(request: NextRequest) {
       if (batchCalls++ > 0) {
         await new Promise((r) => setTimeout(r, BATCH_PACING_MS));
       }
+      /* Per item, as in send-reminders: the subscriber's own one-click
+         unsubscribe headers, on the same link as the footer. */
       const { error: sendError } = await resend.batch.send(
         chunk.map((sub) => ({
           from: process.env.EMAIL_FROM!,
           to: sub.email,
           subject,
           text: reminderText(rendered, sub.unsubscribe_token),
+          headers: unsubscribeHeaders(sub.unsubscribe_token),
         }))
       );
       if (sendError) throw new Error(sendError.message);
@@ -396,11 +400,11 @@ function authorized(request: NextRequest): boolean {
 /* REHEARSAL: the correction, word for word, to ONE address that already
    holds an active subscription, as send-reminders' rehearsal does. The
    subject says "[Rehearsal]"; the text is the real one, unsubscribe link
-   included. The claim is a synthetic key, unique per run, so the real
-   correction's key stays free. Like every row in notification_send_log,
-   it holds a key and a count, never an address. in_cohort says whether
-   the real send would reach this address (a county correction reaches only
-   that county's subscribers). */
+   and one-click headers included. The claim is a synthetic key, unique
+   per run, so the real correction's key stays free. Like every row in
+   notification_send_log, it holds a key and a count, never an address.
+   in_cohort says whether the real send would reach this address (a county
+   correction reaches only that county's subscribers). */
 async function rehearse(
   service: SupabaseClient,
   events: ElectionEvent[],
@@ -463,6 +467,7 @@ async function rehearse(
       to: sub.email,
       subject: `[Rehearsal] ${rendered.subject ?? rendered.title}`,
       text: reminderText(rendered, sub.unsubscribe_token),
+      headers: unsubscribeHeaders(sub.unsubscribe_token),
     },
   ]);
   if (sendError) {

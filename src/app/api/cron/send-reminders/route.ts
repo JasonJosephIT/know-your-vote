@@ -26,6 +26,7 @@ import {
 import { reminderParams, renderTemplate } from "@/lib/notifications/templates";
 import { secretEquals } from "@/lib/secret-compare";
 import { resendApiKey } from "@/lib/server-keys";
+import { unsubscribeHeaders } from "@/lib/site-url";
 import { createServiceClient } from "@/lib/supabase/service";
 
 /* Daily reminder cron (plan A8). The whole delivery machine: for each
@@ -243,12 +244,16 @@ async function run(request: NextRequest) {
         if (batchCalls++ > 0) {
           await new Promise((r) => setTimeout(r, BATCH_PACING_MS));
         }
+        /* Each item carries its own subscriber's one-click unsubscribe
+           headers (RFC 8058), on the same link as its footer; Resend's
+           batch API takes headers per email. */
         const { error: sendError } = await resend.batch.send(
           chunk.map((sub) => ({
             from: process.env.EMAIL_FROM!,
             to: sub.email,
             subject: rendered.subject ?? rendered.title,
             text: reminderText(rendered, sub.unsubscribe_token),
+            headers: unsubscribeHeaders(sub.unsubscribe_token),
           }))
         );
         if (sendError) throw new Error(sendError.message);
@@ -350,9 +355,9 @@ async function rehearsalRequest(
    address, and only to an address with an active subscription: the caller
    already holds CRON_SECRET, and this keeps the mode from mailing anyone
    who did not sign up. The subject says "[Rehearsal]"; the body is the real
-   one, unsubscribe link included, so the link can be tested too. The claim
-   is a synthetic key, unique per run and never a real dedupe_key, so the
-   scheduled send for that day is untouched. It stays in
+   one, unsubscribe link and one-click headers included, so both can be
+   tested too. The claim is a synthetic key, unique per run and never a
+   real dedupe_key, so the scheduled send for that day is untouched. It stays in
    notification_send_log as the record that the rehearsal ran; like every
    row there it holds a key and a count, never an address. */
 async function rehearse(
@@ -429,6 +434,7 @@ async function rehearse(
       to: sub.email,
       subject: `[Rehearsal] ${rendered.subject ?? rendered.title}`,
       text: reminderText(rendered, sub.unsubscribe_token),
+      headers: unsubscribeHeaders(sub.unsubscribe_token),
     },
   ]);
   if (sendError) {

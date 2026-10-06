@@ -23,7 +23,30 @@ export function siteOrigin(): string {
   return (configured || PRODUCTION_ORIGIN).replace(/\/+$/, "");
 }
 
-/* The one-click unsubscribe link every email carries. */
+/* The unsubscribe link every email carries. Opening it shows a confirm
+   page and changes nothing; the page's button POSTs back to the same
+   address, and that POST is the unsubscribe
+   (src/app/api/voting-info/unsubscribe/route.ts). */
 export function unsubscribeUrl(token: string): string {
   return `${siteOrigin()}/api/voting-info/unsubscribe?token=${token}`;
+}
+
+/* The headers that give a mail app its own "Unsubscribe" button, on every
+   email to a subscriber: the welcome email, each reminder and each
+   correction, rehearsals included. Never the founder digest, which goes to
+   EMAIL_FROM. RFC 8058 one-click: the mail provider POSTs
+   "List-Unsubscribe=One-Click" to this same link, with no page and no
+   second click, and the route treats that POST as the confirm button.
+   Gmail and Yahoo expect both headers from bulk senders.
+
+   https only, no mailto: the repo has no mailbox that processes
+   unsubscribe requests. info@ (src/lib/contact.ts) is read by a person,
+   and some mail apps use a mailto ahead of the https link when both are
+   present, which would turn an instant unsubscribe into a wait for
+   someone to read it. */
+export function unsubscribeHeaders(token: string): Record<string, string> {
+  return {
+    "List-Unsubscribe": `<${unsubscribeUrl(token)}>`,
+    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+  };
 }

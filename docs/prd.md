@@ -369,16 +369,26 @@ Auth: none
 Body: { zip: string, email: string, consent: true }
 Behavior: validate; upsert voting_info_subscription (service-role, server-side); look up polling place +
           deadlines for the ZIP; send via Resend; never store more than email+zip+consent+token.
+          At most one welcome email per address per 24 hours (any row's last_sent_at): a repeat is
+          saved but not sent, and answers the same 200, so the endpoint never says whether an
+          address is already subscribed. Every email carries List-Unsubscribe and
+          List-Unsubscribe-Post (RFC 8058).
 Response 200: { ok: true }
 Response 400: { error: "Consent required" | "Invalid email" | "Invalid ZIP" }
 Response 429: { error: "Too many requests" }
 ```
 
 ```
-GET /api/voting-info/unsubscribe?token=...
-Auth: none (token is the credential)
-Behavior: set active=false for the matching subscription.
-Response 200: { ok: true }   Response 404: { error: "Unknown token" }
+GET  /api/voting-info/unsubscribe?token=...
+POST /api/voting-info/unsubscribe?token=...
+Auth: none (token is the credential; no CSRF token)
+Behavior: GET (and HEAD) shows a confirm page naming the address masked (j***@gmail.com), with
+          one button, and never writes: mail scanners open links. POST, from that button or from a
+          mail app's RFC 8058 one-click (body "List-Unsubscribe=One-Click"), sets active=false on
+          the token's row and every active row for the same address. The body is not read.
+Response: HTML pages, never JSON; Cache-Control: no-store, Referrer-Policy: no-referrer, noindex.
+          200 confirm | unsubscribed | already unsubscribed   404 link not valid (malformed or
+          unknown token)   503 database unavailable, try again
 ```
 
 ```
