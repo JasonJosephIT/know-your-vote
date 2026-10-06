@@ -42,33 +42,29 @@
    approval boundary yet. Widening that is a separate change; inventing a metro
    value to squeeze it through would put a story in the wrong county's feed.
 
+   SINCE 2026-10-06 the matching and writing live in src/lib/news-intake.ts
+   (enqueueIntake), shared with the twice-weekly cron, and an article that
+   names no candidate is still queued when it is about the election
+   (UNMATCHED_ARTICLE_POLICY = "election_keywords", src/lib/news-enqueue.ts).
+   This script keeps stdin, the env and the exit codes.
+
    Fail-closed throughout: no stdin, no roster, or a failed write all exit
    non-zero. A silent empty success is the one outcome this must never produce,
    because it looks exactly like "the press wrote nothing about these people". */
 
 import { loadEnvLocal } from "./env-local.ts";
 import { createClient } from "@supabase/supabase-js";
-import { matchArticle, type RosterCandidate } from "../src/lib/news-match.ts";
-import { OUTLETS, outletForUrl } from "../src/lib/news-sources.ts";
-import {
-  dedupeKey,
-  domainFromSourceId,
-  outletSourceRow,
-  planAttachments,
-  reviewPayloadFor,
-  UNMATCHED_ARTICLE_POLICY,
-  type Attachment,
-} from "../src/lib/news-enqueue.ts";
+import { UNMATCHED_ARTICLE_POLICY } from "../src/lib/news-enqueue.ts";
+import { enqueueIntake } from "../src/lib/news-intake.ts";
 import type { SweptArticle } from "../src/lib/news-sweep.ts";
 
 loadEnvLocal(import.meta.url);
 
-/* A pending founder call (src/lib/news-enqueue.ts, UNMATCHED_ARTICLE_POLICY).
-   Only "drop" is built. Any other value stops here, before stdin or the
-   database, instead of running a pipeline that quietly ignores the setting. */
-if ((UNMATCHED_ARTICLE_POLICY as string) !== "drop") {
+/* "policy_inlet" (a model-gated inlet) is not built. A switch that silently
+   did nothing would read as "no policy news this week", so refuse instead. */
+if ((UNMATCHED_ARTICLE_POLICY as string) === "policy_inlet") {
   console.error(
-    `news-enqueue: UNMATCHED_ARTICLE_POLICY is "${UNMATCHED_ARTICLE_POLICY}", and only "drop" is built. `
+    'news-enqueue: UNMATCHED_ARTICLE_POLICY is "policy_inlet", which is not built. '
       + "A policy inlet is its own spec change (news-ingest-order-handoff-2026-09-23.md §5 and §7).",
   );
   process.exit(2);
@@ -93,14 +89,12 @@ const stdin = await new Promise<string>((resolve, reject) => {
   process.stdin.on("end", () => resolve(buf));
   process.stdin.on("error", reject);
 });
-
 if (!stdin.trim()) {
   die(
     "no articles on stdin. Pipe the sweep in:\n"
       + "  node scripts/news-sweep.ts | node scripts/news-enqueue.ts --dry-run",
   );
 }
-
 let articles: SweptArticle[];
 try {
   const parsed: unknown = JSON.parse(stdin);
@@ -111,166 +105,25 @@ try {
 }
 if (articles.length === 0) die("stdin held an empty array — nothing to match");
 
-/* ---- 2. the roster ------------------------------------------------------ */
+/* ---- 2. match and queue (src/lib/news-intake.ts) ------------------------ */
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-if (!url || !key) {
-  die("NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required");
-}
-const db = createClient(url, key);
+if (!url || !key) die("NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required");
 
-/* `profile` is what links a candidate to a race (src/lib/briefs.ts does the
-   same join). Ballot-tier only: a withdrawn filing has no page to put news on,
-   and matching against them would hand `related` rows to names that are not on
-   the ballot. */
-const { data: profiles, error: rosterErr } = await db
-  .from("profile")
-  .select("candidate_id, race_id, candidate!inner(legal_name, ballot_status)");
-if (rosterErr) die(`could not read the roster: ${rosterErr.message}`);
-
-type ProfileRow = {
-  candidate_id: string;
-  race_id: string;
-  candidate: { legal_name: string; ballot_status: string } | { legal_name: string; ballot_status: string }[] | null;
-};
-
-const roster: RosterCandidate[] = ((profiles ?? []) as unknown as ProfileRow[])
-  .map((p) => {
-    const c = Array.isArray(p.candidate) ? p.candidate[0] : p.candidate;
-    return c && c.ballot_status === "ballot"
-      ? { candidateId: p.candidate_id, legalName: c.legal_name, raceId: p.race_id }
-      : null;
-  })
-  .filter((r): r is RosterCandidate => r !== null);
-
-if (roster.length === 0) {
-  die(
-    "the roster is empty — no ballot-tier candidate has a profile row. "
-      + "Matching against nobody would report 'no coverage' for every candidate, "
-      + "which is indistinguishable from the press ignoring them.",
-  );
-}
-
-/* ---- 3. match ----------------------------------------------------------- */
-
-/* The decidable half lives in src/lib/news-enqueue.ts so it can be driven
-   offline (scripts/verify-news-enqueue.ts). This script keeps the I/O. */
-const { attachments: pending, counts } = planAttachments(
-  articles,
-  roster,
-  matchArticle,
-  (u) => outletForUrl(u, OUTLETS),
-);
-const { unmatched, offList } = counts;
-
-const capped: Attachment[] = Number.isFinite(limit) ? pending.slice(0, limit) : pending;
-
-console.error(
-  `news-enqueue: ${articles.length} article(s) in -> ${pending.length} candidate attachment(s) `
-    + `(${capped.filter((p) => p.relation === "named").length} named, `
-    + `${capped.filter((p) => p.relation === "related").length} related), `
-    + `${unmatched} matched no candidate, ${offList} from no listed outlet, `
-    + `roster ${roster.length}`,
-);
-
-if (capped.length === 0) {
-  die(
-    "nothing to enqueue. That is a real outcome, not an error to ignore: either "
-      + "the sweep found no story naming anyone on the ballot, or the roster and "
-      + "the corpus do not overlap. Check the counts above before re-running.",
-  );
-}
-
-/* ---- 4. dry run --------------------------------------------------------- */
-
-if (dryRun) {
-  /* The EXACT payload the real path would enqueue, so a dry run reviews what
-     would be written rather than a summary of it. */
-  for (const p of capped) console.log(JSON.stringify(reviewPayloadFor(p)));
-  console.error("news-enqueue: --dry-run, wrote nothing");
-  process.exit(0);
-}
-
-/* ---- 5. source rows ----------------------------------------------------- */
-
-/* One `source` row per OUTLET, not per article — the source IS the outlet, which
-   is how 0014's own seed attributes rows. Migration 0014 requires every
-   candidate_news / election_news row to carry a source_id, and `lean_tag` is
-   NOT NULL, so this is only insertable at all because the founder designated the
-   31 local outlets `unrated` on 2026-09-19 (32 with floridaphoenix.com,
-   2026-09-21). Before that, a swept local article
-   had no legal lean value and could never have satisfied the CHECK. */
-const outletsNeeded = [...new Set(capped.map((p) => p.sourceId))];
-for (const sourceId of outletsNeeded) {
-  const domain = domainFromSourceId(sourceId);
-  const outlet = OUTLETS.find((o) => o.domain === domain);
-  if (!outlet) die(`internal: no outlet for ${sourceId}`);
-  /* outletSourceRow is shared with the admin approve path, so an outlet's
-     source row has one shape whichever of the two writes it first. */
-  const row = outletSourceRow(outlet);
-  if (row === null) {
+try {
+  const result = await enqueueIntake(createClient(url, key), articles, { dryRun, limit });
+  if (dryRun) {
+    /* The EXACT payloads the real path would queue. */
+    for (const p of result.payloads) console.log(JSON.stringify(p));
+  }
+  console.error(`news-enqueue: ${result.summary}`);
+  if (!dryRun && result.attachments + result.elections === 0) {
     die(
-      `${domain} has no signed-off leanTag, so its source row cannot be written `
-        + "(source.lean_tag is NOT NULL). Sign the lean off in "
-        + "src/lib/news-sources.ts, or drop this outlet from the sweep.",
+      "nothing to enqueue. That is a real outcome, not an error to ignore: the sweep found no "
+        + "story naming anyone on the ballot and no election story. Check the counts above.",
     );
   }
-  const { error } = await db.from("source").upsert(row, { onConflict: "url_norm" });
-  if (error) die(`could not upsert source ${sourceId}: ${error.message}`);
+} catch (err) {
+  die((err as Error).message);
 }
-
-/* ---- 6. enqueue -------------------------------------------------------- */
-
-/* Skip anything already queued or already published for this (url, candidate).
-   0005's uq_news_item_url_candidate would reject the duplicate at APPROVAL
-   time, which is the worst place to find out: an operator would approve a row
-   and watch it fail. */
-const urls = [...new Set(capped.map((p) => p.article.url))];
-const { data: existingNews } = await db
-  .from("news_item")
-  .select("url, candidate_id")
-  .in("url", urls);
-const { data: existingQueue } = await db
-  .from("review_item")
-  .select("payload, status")
-  .eq("kind", "manual_news")
-  .in("status", ["pending", "approved"]);
-
-const seen = new Set<string>();
-for (const r of (existingNews ?? []) as { url: string; candidate_id: string | null }[]) {
-  seen.add(dedupeKey(r.url, r.candidate_id));
-}
-for (const r of (existingQueue ?? []) as { payload: { url?: string; candidate_id?: string | null } }[]) {
-  if (r.payload?.url) seen.add(dedupeKey(r.payload.url, r.payload.candidate_id ?? null));
-}
-
-const rows = capped
-  .filter((p) => !seen.has(dedupeKey(p.article.url, p.candidateId)))
-  .map((p) => ({
-    kind: "manual_news",
-    /* `source` records WHO proposed this, which is what distinguishes a swept
-       article from an operator's hand-add; the payload shape is identical, so
-       the existing `manual_news` kind is correct and no CHECK widening is
-       needed. */
-    source: "agent:R1",
-    status: "pending",
-    payload: reviewPayloadFor(p),
-  }));
-
-const skipped = capped.length - rows.length;
-if (rows.length === 0) {
-  console.error(
-    `news-enqueue: all ${capped.length} attachment(s) were already queued or published — nothing new`,
-  );
-  process.exit(0);
-}
-
-const { error: insertErr } = await db.from("review_item").insert(rows);
-if (insertErr) die(`could not enqueue: ${insertErr.message}`);
-
-console.error(
-  `news-enqueue: queued ${rows.length} review item(s) as pending`
-    + (skipped > 0 ? `, skipped ${skipped} already queued or published` : "")
-    + ". Nothing is voter-facing until approved in the console.",
-);
