@@ -272,8 +272,13 @@ check(
   );
 }
 check(
-  "Accept and Decline carry the same weight",
-  (code("src/components/features/SitePrompts.tsx").match(/variant="secondary"/g) ?? []).length >= 3
+  "cookie banner: Accept is the filled primary, Decline the outlined secondary (founder 2026-10-06)",
+  /<Button className="px-4 py-2" onClick=\{\(\) => onDecide\("granted"\)\}>\s*Accept\s*<\/Button>/.test(
+    code("src/components/features/SitePrompts.tsx")
+  ) &&
+    /<Button\s+variant="secondary"\s+className="px-4 py-2"\s+onClick=\{\(\) => onDecide\("denied"\)\}\s*>\s*Decline/.test(
+      code("src/components/features/SitePrompts.tsx")
+    )
 );
 {
   const lost = code("src/app/not-found.tsx") + code("src/app/error.tsx");

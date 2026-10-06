@@ -190,17 +190,13 @@ function ConsentBanner({
           Details
         </Link>
       </p>
-      {/* Two peer answers to one question, so the same weight: Accept used
-          to be the filled primary beside an outlined Decline, which tilts
-          the choice the copy above calls equal (interface review
-          2026-10-05). Recommended (pending founder confirmation); to flip,
-          drop variant="secondary" from Accept. */}
+      {/* Accept is the filled primary and Decline the outlined secondary
+          (founder, 2026-10-06). The 2026-10-05 interface review suggested
+          equal weight for the two answers; the founder kept Accept
+          distinct. Decline stays the same size, clearly labelled, and the
+          copy above says the site works the same either way. */}
       <div className="mt-3 flex gap-2">
-        <Button
-          variant="secondary"
-          className="px-4 py-2"
-          onClick={() => onDecide("granted")}
-        >
+        <Button className="px-4 py-2" onClick={() => onDecide("granted")}>
           Accept
         </Button>
         <Button
