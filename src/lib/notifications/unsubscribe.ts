@@ -117,7 +117,15 @@ export async function unsubscribeResponse(
     return (await store.unsubscribe(email)) > 0
       ? page("done", email)
       : page("already", email);
-  } catch {
+  } catch (err) {
+    /* The only trace a failed unsubscribe leaves. The message is a missing
+       key or a PostgREST/fetch error; neither carries the token or the
+       address, and neither is logged here. */
+    console.error(
+      "unsubscribe: store error",
+      method,
+      err instanceof Error ? err.message : String(err)
+    );
     return page("error");
   }
 }

@@ -1,5 +1,5 @@
-/* One welcome email per address per 24 hours, and the same answer either
-   way.
+/* One welcome email per address and ZIP per 24 hours, at most three per
+   address, and the same status and body either way.
 
    POST /api/voting-info saved the subscription and sent the welcome email
    on every request, so anyone could make the site mail any address five
@@ -9,16 +9,18 @@
    after saving and before sending:
 
      1. THE QUERY it sends, recorded with a fake Supabase client that also
-        applies the recorded filters to in-memory rows: any row for exactly
-        this address with last_sent_at in the last 24 hours. Stamped 23h59m
-        ago counts, 24h01m ago does not, NULL never does, another ZIP's row
-        for the same address does, another address's never does. A
+        applies the recorded filters to in-memory rows: the address's rows
+        with last_sent_at in the last 24 hours, up to WELCOME_DAILY_CAP.
+        The same ZIP stamped 23h59m ago skips, 24h01m ago does not, NULL
+        never does; another ZIP's recent row does not skip (a voter fixing
+        a mistyped ZIP gets the right county's email), until the address
+        has WELCOME_DAILY_CAP of them; another address's never counts. A
         database error throws.
      2. THE ROUTE. Upsert first (the subscription is saved or switched
         back on either way), then the check, then the dates read and the
-        send. A recent send skips both and returns the very same success
-        answer as a send, from one function, so the endpoint never says
-        whether an address is already subscribed. A failed check sends
+        send. A recent send skips both and returns the same success answer
+        as a send, from one function (it answers sooner, a limit the module
+        states). A failed check sends
         nothing and says so, as a failed send does. last_sent_at is stamped
         only after Resend accepts the email, and nothing else writes it:
         reminders and corrections do not count.
@@ -35,6 +37,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
+  WELCOME_DAILY_CAP,
   WELCOME_WINDOW_MS,
   welcomeSentWithinWindow,
 } from "../src/lib/notifications/welcome-throttle.ts";
@@ -57,6 +60,7 @@ function check(name: string, ok: boolean, detail = "") {
 
 console.log("1. welcomeSentWithinWindow()");
 check("the window is 24 hours", WELCOME_WINDOW_MS === 24 * 60 * 60 * 1000);
+check("the per-address cap is 3", WELCOME_DAILY_CAP === 3);
 
 type Row = { id: string; email: string; zip5: string; last_sent_at: string | null };
 type Call = [string, ...unknown[]];
@@ -80,7 +84,7 @@ function fakeTable(rows: Row[], error: unknown = null) {
     }
     return unknown
       ? { data: null, error: { message: `unexpected .${unknown}()` } }
-      : { data: out.map((r) => ({ id: r.id })), error: null };
+      : { data: out.map((r) => ({ id: r.id, zip5: r.zip5 })), error: null };
   };
   const builder: object = new Proxy(
     {},
@@ -111,19 +115,20 @@ const ago = (ms: number) => new Date(NOW.getTime() - ms).toISOString();
 const H = 60 * 60 * 1000;
 const M = 60 * 1000;
 const ANA = "ana@example.com";
+const ZIP = "33130";
 
 {
   const t = fakeTable([]);
-  await welcomeSentWithinWindow(t.client, ANA, NOW);
+  await welcomeSentWithinWindow(t.client, ANA, ZIP, NOW);
   check(
-    "reads voting_info_subscription: any row with exactly this address and last_sent_at >= now - 24h",
+    "reads voting_info_subscription: this address's ZIPs with last_sent_at >= now - 24h, up to the cap",
     JSON.stringify(t.calls) ===
       JSON.stringify([
         ["from", "voting_info_subscription"],
-        ["select", "id"],
+        ["select", "zip5"],
         ["eq", "email", ANA],
         ["gte", "last_sent_at", "2026-10-05T15:00:00.000Z"],
-        ["limit", 1],
+        ["limit", WELCOME_DAILY_CAP],
       ]),
     JSON.stringify(t.calls)
   );
@@ -136,23 +141,40 @@ const CASES: [string, Row[], boolean][] = [
   ["mailed exactly 24h ago", [{ id: "1", email: ANA, zip5: "33130", last_sent_at: ago(24 * H) }], true],
   ["mailed 24h01m ago", [{ id: "1", email: ANA, zip5: "33130", last_sent_at: ago(24 * H + M) }], false],
   [
-    "this ZIP's row is old, but the address's other ZIP was mailed an hour ago",
+    "this ZIP's row is old, the address's other ZIP was mailed an hour ago (a ZIP fix): send",
     [
       { id: "1", email: ANA, zip5: "33130", last_sent_at: ago(72 * H) },
       { id: "2", email: ANA, zip5: "32801", last_sent_at: ago(H) },
+    ],
+    false,
+  ],
+  [
+    "two other ZIPs mailed today, this one not yet: send (under the cap)",
+    [
+      { id: "2", email: ANA, zip5: "32801", last_sent_at: ago(H) },
+      { id: "3", email: ANA, zip5: "33602", last_sent_at: ago(2 * H) },
+    ],
+    false,
+  ],
+  [
+    "three other ZIPs mailed today: skip (the cap)",
+    [
+      { id: "2", email: ANA, zip5: "32801", last_sent_at: ago(H) },
+      { id: "3", email: ANA, zip5: "33602", last_sent_at: ago(2 * H) },
+      { id: "4", email: ANA, zip5: "33301", last_sent_at: ago(3 * H) },
     ],
     true,
   ],
   ["someone else was mailed an hour ago", [{ id: "1", email: "bo@example.com", zip5: "33130", last_sent_at: ago(H) }], false],
 ];
 for (const [label, rows, expected] of CASES) {
-  const got = await welcomeSentWithinWindow(fakeTable(rows).client, ANA, NOW);
+  const got = await welcomeSentWithinWindow(fakeTable(rows).client, ANA, ZIP, NOW);
   check(`${label}: ${expected ? "skip the send" : "send"}`, got === expected, `got ${got}`);
 }
 {
   let threw = false;
   try {
-    await welcomeSentWithinWindow(fakeTable([], { message: "timeout" }).client, ANA, NOW);
+    await welcomeSentWithinWindow(fakeTable([], { message: "timeout" }).client, ANA, ZIP, NOW);
   } catch {
     threw = true;
   }
@@ -165,14 +187,14 @@ console.log("\n2. POST /api/voting-info");
 const route = code("src/app/api/voting-info/route.ts");
 const at = (re: RegExp) => route.search(re);
 const upsert = at(/\.upsert\(\s*\{ email, zip5: zip, active: true \}/);
-const throttle = at(/await welcomeSentWithinWindow\(service, email\)/);
+const throttle = at(/await welcomeSentWithinWindow\(service, email, zip\)/);
 const skip = at(/if \(sentRecently\) return signedUp\(\);/);
 const events = at(/await verifiedElectionEvents\(/);
 const send = at(/resend\.emails\.send\(/);
 const stamp = at(/\.update\(\{ last_sent_at: /);
 const sendErrorCheck = at(/if \(sendError\) \{/);
 check(
-  "upsert, then the 24-hour check with the normalised address, then the dates read and the send",
+  "upsert, then the 24-hour check with the normalised address and the ZIP, then the dates read and the send",
   upsert > 0 && throttle > upsert && skip > throttle && events > skip && send > events,
   `upsert ${upsert}, check ${throttle}, skip ${skip}, events ${events}, send ${send}`
 );
@@ -194,7 +216,7 @@ check(
 );
 check(
   "a failed check sends nothing and answers like a failed send: saved, not sent, 502",
-  /try \{\s*sentRecently = await welcomeSentWithinWindow\(service, email\);\s*\} catch \{\s*return NextResponse\.json\(\s*\{ error: "We saved your request but the email didn't send — try again shortly\." \},\s*\{ status: 502 \}\s*\);\s*\}/.test(
+  /try \{\s*sentRecently = await welcomeSentWithinWindow\(service, email, zip\);\s*\} catch \{\s*return NextResponse\.json\(\s*\{ error: "We saved your request but the email didn't send — try again shortly\." \},\s*\{ status: 502 \}\s*\);\s*\}/.test(
     route
   )
 );
@@ -223,9 +245,9 @@ console.log("\n3. The signup form's success line");
 const form = code("src/components/features/VotingInfo.tsx");
 const lines = [...form.matchAll(/"(Done\.[^"]*|Sent\.[^"]*)"/g)].map((m) => m[1]);
 check(
-  "both success lines hold when this request sent nothing: no \"Sent.\", and they say the email goes once a day",
+  "both success lines hold when this request sent nothing: no \"Sent.\", and they say the email goes once a day per ZIP",
   lines.length === 2 &&
-    lines.every((l) => !l.startsWith("Sent.") && /at most once a day/.test(l)),
+    lines.every((l) => !l.startsWith("Sent.") && /at most once a day for each ZIP/.test(l)),
   lines.join("\n      ")
 );
 

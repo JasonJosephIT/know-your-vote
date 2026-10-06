@@ -369,10 +369,10 @@ Auth: none
 Body: { zip: string, email: string, consent: true }
 Behavior: validate; upsert voting_info_subscription (service-role, server-side); look up polling place +
           deadlines for the ZIP; send via Resend; never store more than email+zip+consent+token.
-          At most one welcome email per address per 24 hours (any row's last_sent_at): a repeat is
-          saved but not sent, and answers the same 200, so the endpoint never says whether an
-          address is already subscribed. Every email carries List-Unsubscribe and
-          List-Unsubscribe-Post (RFC 8058).
+          At most one welcome email per address and ZIP per 24 hours, and three per address
+          (last_sent_at): a repeat is saved but not sent, and answers with the same status and
+          body; response time can still show that the address was mailed a welcome in the last
+          day. Every email carries List-Unsubscribe and List-Unsubscribe-Post (RFC 8058).
 Response 200: { ok: true }
 Response 400: { error: "Consent required" | "Invalid email" | "Invalid ZIP" }
 Response 429: { error: "Too many requests" }

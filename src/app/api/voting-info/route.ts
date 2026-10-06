@@ -17,13 +17,14 @@ import { siteOrigin, unsubscribeHeaders, unsubscribeUrl } from "@/lib/site-url";
 import { createServiceClient } from "@/lib/supabase/service";
 
 /* Where-to-vote opt-in email (FR-010) — the ONLY flow that handles personal
-   data. Stores exactly email + zip + consent timestamp + unsubscribe token,
+   data. Stores email, zip, consent timestamp, unsubscribe token, whether
+   the address is still subscribed and when the welcome was last sent,
    nothing else, and never claims success when delivery failed (PRD § 11).
 
-   The welcome email goes at most once a day per address
-   (src/lib/notifications/welcome-throttle.ts): a signup for an address
-   already mailed in the last 24 hours is saved but sends nothing, and
-   answers exactly what a send does. */
+   The welcome email goes at most once a day per address and ZIP, and at
+   most three times a day per address (src/lib/notifications/
+   welcome-throttle.ts): a repeat is saved but sends nothing, and answers
+   with the status and body a send does. */
 
 const body = z.object({
   zip: z.string().regex(ZIP_RE, "Invalid ZIP"),
@@ -103,15 +104,16 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  /* One welcome email per address per 24 hours, so this endpoint can't be
-     used to flood someone's inbox or spend the Resend quota. The row above
-     is saved (or switched back on) either way. A skipped send returns the
-     same answer as a real one, so nobody can use this to learn whether an
-     address is signed up. If the check itself fails, nothing is sent and
-     the voter is told so, as for a failed send. */
+  /* One welcome email per address and ZIP per 24 hours (three per address),
+     so this endpoint can't be used to flood someone's inbox or spend the
+     Resend quota. The row above is saved (or switched back on) either way.
+     A skipped send returns the status and body a real one does; it answers
+     sooner, which welcome-throttle.ts lists among its known limits. If the
+     check itself fails, nothing is sent and the voter is told so, as for a
+     failed send. */
   let sentRecently: boolean;
   try {
-    sentRecently = await welcomeSentWithinWindow(service, email);
+    sentRecently = await welcomeSentWithinWindow(service, email, zip);
   } catch {
     return NextResponse.json(
       { error: "We saved your request but the email didn't send — try again shortly." },

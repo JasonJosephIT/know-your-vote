@@ -88,7 +88,7 @@ Run SQL in the Supabase dashboard's SQL Editor. It runs as the database owner, w
 
 On `https://knowyour.vote/candidates?view=races&zip=33130`, or with this PR merged on the home-page card "Get deadline reminders by email": enter the test address and a covered ZIP, tick the consent box, then press "Email my voting info". The page should say "Done. Check your inbox for where to vote and the key dates."
 
-**One welcome email per address per day.** A second signup for the same address within 24 hours, from any ZIP, saves the subscription but sends no email, and the page says the same "Done." (`src/lib/notifications/welcome-throttle.ts`). If you repeat 4a, use a fresh plus address (`you+kyv2@gmail.com`), or check that `last_sent_at` in the query below is more than a day old.
+**One welcome email per address and ZIP per day, three per address.** A second signup for the same address and ZIP within 24 hours, or a fourth ZIP that day, saves the subscription but sends no email, and the page says the same "Done." (`src/lib/notifications/welcome-throttle.ts`). A different ZIP within the day does get its own welcome. If you repeat 4a, use a fresh plus address (`you+kyv2@gmail.com`), or check that `last_sent_at` in the query below is more than a day old.
 
 **Expected:** within a minute, an email titled "Where to vote in Miami-Dade County", from your `EMAIL_FROM` address. Check the spam folder. In Gmail, "Show original" should read **SPF: PASS, DKIM: PASS** (`knowyour.vote`), and **DMARC: PASS** once the record exists.
 

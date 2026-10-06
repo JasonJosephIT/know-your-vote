@@ -93,13 +93,14 @@ export function VotingInfo({
     return (
       <p className="rounded-md bg-primary-muted px-4 py-3 text-body-sm text-primary-hover" role="status">
         {/* "Sent." stopped being true for every success: the route sends
-            the welcome email at most once a day per address and answers a
-            repeat exactly as it answers a send, so the form can't tell
-            them apart (src/lib/notifications/welcome-throttle.ts). These
-            lines hold either way. */}
+            the welcome email at most once a day per address and ZIP (three
+            a day per address) and answers a repeat with the same status and
+            body as a send, so the form can't tell them apart
+            (src/lib/notifications/welcome-throttle.ts). These lines hold
+            either way. */}
         {remindersOn
-          ? "Done. Check your inbox for where to vote and the key dates. We send that email at most once a day, so if you signed up in the last day, it's the one you already have. A short reminder follows as each remaining deadline comes up, and every email has an unsubscribe link."
-          : "Done. Check your inbox for where to vote and the key dates. We send that email at most once a day, so if you signed up in the last day, it's the one you already have. The email has an unsubscribe link."}
+          ? "Done. Check your inbox for where to vote and the key dates. We send it at most once a day for each ZIP, so if you already signed up with this ZIP today, it's the email you already have. A short reminder follows as each remaining deadline comes up, and every email has an unsubscribe link."
+          : "Done. Check your inbox for where to vote and the key dates. We send it at most once a day for each ZIP, so if you already signed up with this ZIP today, it's the email you already have. The email has an unsubscribe link."}
       </p>
     );
   }

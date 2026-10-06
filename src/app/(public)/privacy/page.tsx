@@ -113,9 +113,10 @@ export default function PrivacyPage() {
             Unsubscribe, RFC 8058) does it. See
             src/lib/notifications/unsubscribe.ts. */}
         <p className="text-body">
-          If you ask us to email your polling place, we store exactly four
-          things: your email, your ZIP, when you consented, and an unsubscribe
-          token. Nothing is linked to your browsing, nothing is shared or sold,
+          If you ask us to email your polling place, we store your email, your
+          ZIP, when you consented, an unsubscribe token, whether you&apos;re
+          still subscribed, and when we last sent you the welcome email (so we
+          send it at most once a day). Nothing is linked to your browsing, nothing is shared or sold,
           and every email has an unsubscribe link: open it and press the
           confirm button, and you&apos;re off the list. Your mail app&apos;s
           own Unsubscribe button works too.

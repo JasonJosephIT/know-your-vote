@@ -171,7 +171,7 @@
           "confirm_before": true,
           "confirm_prompt": "Press 'Email my voting info'? It stores the test address and sends it one welcome email.",
           "subgoal": "Press 'Email my voting info'.",
-          "expected_result": "The form is replaced by 'Done. Check your inbox for where to vote and the key dates. …'. If the test address was signed up in the last 24 hours, no new welcome email goes (one per address per day) and the page says the same; use a fresh plus address. 'We saved your request but the email didn't send' or any other error is a failure: record it, then skip task-4.cron-and-rehearsal, task-3.part-b and task-4.unsubscribe-and-canary (they need this subscription)."
+          "expected_result": "The form is replaced by 'Done. Check your inbox for where to vote and the key dates. …'. If the test address was signed up with the same ZIP in the last 24 hours, no new welcome email goes (one per address and ZIP per day) and the page says the same; use a fresh plus address. 'We saved your request but the email didn't send' or any other error is a failure: record it, then skip task-4.cron-and-rehearsal, task-3.part-b and task-4.unsubscribe-and-canary (they need this subscription)."
         },
         {
           "id": "4a-3",
@@ -331,7 +331,7 @@
           "confirm_before": true,
           "confirm_prompt": "Subscribe the canary address? It stays subscribed through Nov 3 and receives every real reminder.",
           "subgoal": "Press 'Email my voting info'.",
-          "expected_result": "The form is replaced by 'Done. Check your inbox …', and a welcome email reaches the canary inbox, unless the canary is the test address from 4a-2 and that was less than 24 hours ago: then no second welcome goes (one per address per day), and the subscription is still saved."
+          "expected_result": "The form is replaced by 'Done. Check your inbox …', and a welcome email reaches the canary inbox, unless the canary is the test address from 4a-2 with the same ZIP and that was less than 24 hours ago: then no second welcome goes (one per address and ZIP per day), and the subscription is still saved."
         }
       ]
     },
