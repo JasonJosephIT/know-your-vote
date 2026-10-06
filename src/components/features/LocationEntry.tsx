@@ -388,7 +388,7 @@ export function LocationEntry({
           counties should know before typing that their House and county
           races are not here yet. */}
       <p className="text-body-sm text-on-surface-muted">
-        Full statewide coverage isn&apos;t available yet. Every Florida voter
+        Full statewide coverage isn&rsquo;t available yet. Every Florida voter
         gets the statewide races and amendments; U.S. House and county races
         are only for {coveredCountyNames()} counties so far.
       </p>
@@ -402,8 +402,8 @@ export function LocationEntry({
       {stage.kind === "outOfCoverage" && (
         <div className="flex flex-col gap-3" role="status">
           <p className="text-body-sm text-on-surface-muted">
-            We can&apos;t place that location on a ballot yet. Full statewide
-            coverage isn&apos;t available: we have U.S. House and county races
+            We can&rsquo;t place that location on a ballot yet. Full statewide
+            coverage isn&rsquo;t available: we have U.S. House and county races
             only for {coveredCountyNames()} counties.
             {addressEnabled
               ? " If you live in Florida, enter your street address instead — your address, not your ZIP, decides what we can show."

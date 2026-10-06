@@ -67,7 +67,7 @@ export async function SharedBallot() {
   if (races.length === 0 && measures.length === 0) {
     return (
       <p className="text-body text-on-surface-muted">
-        The ballot isn&apos;t published yet — we publish a race only after every
+        The ballot isn&rsquo;t published yet — we publish a race only after every
         candidate in it has been through the same checks. Check back soon.
       </p>
     );
@@ -87,7 +87,7 @@ export async function SharedBallot() {
             <h2 className="text-h3">Statewide races</h2>
             <p className="text-body-sm text-on-surface-muted">
               Every Florida voter gets these, whatever your ZIP and whatever
-              party you&apos;re registered with — including no party at all.
+              party you&rsquo;re registered with — including no party at all.
             </p>
             {legend && (
               <p className="text-body-sm text-on-surface-muted">{legend}</p>

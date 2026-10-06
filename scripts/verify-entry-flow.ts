@@ -92,8 +92,8 @@ check(
 
 /* ---- 4. unreadable IDs --------------------------------------------------- */
 for (const [file, h1] of [
-  ["src/app/(public)/races/[raceId]/page.tsx", "This race isn&apos;t published"],
-  ["src/app/(public)/measures/[measureId]/page.tsx", "This ballot question isn&apos;t published"],
+  ["src/app/(public)/races/[raceId]/page.tsx", "This race isn&rsquo;t published"],
+  ["src/app/(public)/measures/[measureId]/page.tsx", "This ballot question isn&rsquo;t published"],
 ] as const) {
   const src = code(file).replace(/\s+/g, " ");
   check(`${file}: says it isn't published, not that it's coming`, src.includes(h1) && !/Check back soon/.test(src));
@@ -215,7 +215,7 @@ for (const [file, phrase] of [
   ["src/components/features/BallotQuestions.tsx", "Each needs a"],
   ["src/components/features/ClaimList.tsx", "No stated position found&rdquo; means"],
   ["src/components/features/MeasureVoteMeaning.tsx", "Leaving this question blank"],
-  ["src/components/features/LocationEntry.tsx", "Full statewide coverage isn&apos;t available yet"],
+  ["src/components/features/LocationEntry.tsx", "Full statewide coverage isn&rsquo;t available yet"],
   ["src/components/features/JudicialRetentionNote.tsx", "The Florida Division of Elections"],
 ] as const) {
   const src = code(file);

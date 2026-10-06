@@ -212,8 +212,8 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
                 "quoted for one candidate only" was false (interface review
                 2026-10-05). */}
             <p className="max-w-[680px] text-body-sm text-on-surface-muted">
-              More issues we quoted from each candidate&apos;s own campaign
-              website, listed under that candidate. They aren&apos;t lined up
+              More issues we quoted from each candidate&rsquo;s own campaign
+              website, listed under that candidate. They aren&rsquo;t lined up
               side by side, so the same issue can appear under more than one
               name.
             </p>

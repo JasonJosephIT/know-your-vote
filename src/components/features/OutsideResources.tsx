@@ -13,7 +13,7 @@ export function OutsideResources() {
       <h2 className="text-label">Another view</h2>
       <p className="text-body-sm text-on-surface-muted">
         Ballotpedia, a nonpartisan encyclopedia, has a sample-ballot lookup and
-        candidates&apos; own survey answers.
+        candidates&rsquo; own survey answers.
       </p>
       <a
         href="https://ballotpedia.org/Sample_Ballot_Lookup"

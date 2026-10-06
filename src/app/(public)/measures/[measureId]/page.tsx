@@ -62,7 +62,7 @@ export default async function MeasurePage({
             is coming. The old line ("only when what people say for it and
             against it are both collected") also predated the listed tier,
             under which a measure is visible before its sides are. */}
-        <h1 className="text-h1">This ballot question isn&apos;t published</h1>
+        <h1 className="text-h1">This ballot question isn&rsquo;t published</h1>
         <p className="text-body text-on-surface-muted">
           It may still be in review, or the link may be out of date.
         </p>

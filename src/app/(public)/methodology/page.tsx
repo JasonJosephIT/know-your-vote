@@ -295,7 +295,7 @@ export default async function MethodologyPage() {
           </a>{" "}
           and{" "}
           <a href="#not-covered" className={linkClass}>
-            what we don&apos;t cover
+            what we don&rsquo;t cover
           </a>
           .
         </p>
@@ -306,14 +306,14 @@ export default async function MethodologyPage() {
         <p className="text-body">
           A brief shows one thing: what each candidate says about the issues,
           quoted word for word from their own official campaign website. We
-          don&apos;t summarize, paraphrase or rewrite, and no one edits a quote
+          don&rsquo;t summarize, paraphrase or rewrite, and no one edits a quote
           by hand. The website is one we have opened and confirmed names the
           candidate and the office.
         </p>
         <p className="text-body">
           We quote nothing else: not news coverage, not opponents, not parties,
           advocacy groups or endorsers. A quote shows what a candidate says. It
-          is not a fact we have checked, and we don&apos;t rate whether it is
+          is not a fact we have checked, and we don&rsquo;t rate whether it is
           true.
         </p>
       </section>
@@ -337,7 +337,7 @@ export default async function MethodologyPage() {
           <li>
             <strong>We read the site.</strong> The homepage, then up to 8 more
             pages linked from it that are most likely to hold the
-            candidate&apos;s positions, plus their About page when the site has
+            candidate&rsquo;s positions, plus their About page when the site has
             one we can find. The site is split into passages, each kept exactly
             as written.
           </li>
@@ -345,8 +345,8 @@ export default async function MethodologyPage() {
             <strong>Two questions for every passage, then its issue.</strong> An
             AI model asks whether the passage commits the candidate to something
             they will do, support, oppose, fund or change, and whether that
-            commitment is the candidate&apos;s own, rather than biography, a
-            past record, someone else&apos;s endorsement or criticism of an
+            commitment is the candidate&rsquo;s own, rather than biography, a
+            past record, someone else&rsquo;s endorsement or criticism of an
             opponent. It also asks which of our{" "}
             <a href="#issue-list" className={linkClass}>
               {SUB_ISSUES.length} issues
@@ -358,8 +358,8 @@ export default async function MethodologyPage() {
           </li>
           <li>
             <strong>A second review.</strong> A separate review checks every
-            candidate&apos;s results against one fixed checklist: every passage
-            comes from the candidate&apos;s own site, every quote matches the
+            candidate&rsquo;s results against one fixed checklist: every passage
+            comes from the candidate&rsquo;s own site, every quote matches the
             site character for character, nothing that is only biography or a
             past record is counted as a position, and silence is recorded rather
             than filled. That review is also done by an AI model, with the same
@@ -384,7 +384,7 @@ export default async function MethodologyPage() {
           Each brief lines the candidates up side by side on a few shared
           issues. Those issues are set by the office, the same for every race
           for that office, rather than picked from what the candidates happened
-          to write about, so no candidate&apos;s emphasis, or the length of
+          to write about, so no candidate&rsquo;s emphasis, or the length of
           their website, decides what everyone is compared on:
         </p>
         <ul className="flex list-disc flex-col gap-1 pl-5 text-body">
@@ -409,7 +409,7 @@ export default async function MethodologyPage() {
           A position on one of our other issues still appears, under that issue,
           so the shared issues decide only what is compared side by side. But we
           show a position only when it fits one of our {SUB_ISSUES.length}{" "}
-          issues. A position on anything outside that list isn&apos;t shown (see{" "}
+          issues. A position on anything outside that list isn&rsquo;t shown (see{" "}
           <a href="#limits" className={linkClass}>
             known limits
           </a>
@@ -439,14 +439,14 @@ export default async function MethodologyPage() {
           drop the issue.
         </p>
         <p className="text-body">
-          It can mean several things, and we don&apos;t guess which: the
-          candidate&apos;s site doesn&apos;t state a position on it; it does,
-          but our two questions missed it or we didn&apos;t match it to this
-          issue; it does, on a page we didn&apos;t read (see{" "}
+          It can mean several things, and we don&rsquo;t guess which: the
+          candidate&rsquo;s site doesn&rsquo;t state a position on it; it does,
+          but our two questions missed it or we didn&rsquo;t match it to this
+          issue; it does, on a page we didn&rsquo;t read (see{" "}
           <a href="#limits" className={linkClass}>
             known limits
           </a>
-          ); or we could not read the site at all, because there isn&apos;t one,
+          ); or we could not read the site at all, because there isn&rsquo;t one,
           it blocked us, or it asked not to be read.
         </p>
       </section>
@@ -455,15 +455,15 @@ export default async function MethodologyPage() {
         <h2 className="text-h2">How we read campaign sites</h2>
         <p className="text-body">
           We read a campaign site the way a polite visitor would: a handful of
-          pages, one at a time, with a pause between them. If a site&apos;s
+          pages, one at a time, with a pause between them. If a site&rsquo;s
           robots.txt file asks crawlers to stay out, whether all crawlers, ours
-          by name, or Anthropic&apos;s AI crawlers, we don&apos;t read it.
+          by name, or Anthropic&rsquo;s AI crawlers, we don&rsquo;t read it.
         </p>
         <p className="text-body">
           Our reader says who it is and never poses as anything else. Some sites
           show an automatic &quot;checking your browser&quot; screen; we let
-          that check run, as any visitor&apos;s browser does. We never solve a
-          captcha and never work around a block. If a site still won&apos;t let
+          that check run, as any visitor&rsquo;s browser does. We never solve a
+          captcha and never work around a block. If a site still won&rsquo;t let
           us in, we quote nothing from it.
         </p>
       </section>
@@ -478,8 +478,8 @@ export default async function MethodologyPage() {
           candidates. It is plain arithmetic, with no AI in it, over counts like
           the ones in the table below. For each count it measures the gap
           between the candidate with the most and the candidate with the least,
-          as a share of the most. If one candidate&apos;s quotes add up to 1,000
-          words and another&apos;s to 250, the gap is 75%. A gap can never be
+          as a share of the most. If one candidate&rsquo;s quotes add up to 1,000
+          words and another&rsquo;s to 250, the gap is 75%. A gap can never be
           more than 100%.
         </p>
         <ul className="flex list-disc flex-col gap-2 pl-5 text-body">
@@ -499,13 +499,13 @@ export default async function MethodologyPage() {
                 in length, some candidates have no site at all, and holding a
                 race back for that would mean publishing nothing about what any
                 of its candidates say. The difference is shown instead of
-                hidden: every candidate&apos;s word count is in the table below.
+                hidden: every candidate&rsquo;s word count is in the table below.
               </>
             )}
           </li>
           <li>
             <strong>Verified facts and fact-checks</strong> have checks of the
-            same kind, but we don&apos;t collect either yet. Every candidate has
+            same kind, but we don&rsquo;t collect either yet. Every candidate has
             zero of both, so those two checks pass without measuring anything.
           </li>
           <li>
@@ -520,11 +520,11 @@ export default async function MethodologyPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-h2">The audit&apos;s numbers, in the open</h2>
+        <h2 className="text-h2">The audit&rsquo;s numbers, in the open</h2>
         <p className="text-body-sm text-on-surface-muted">
           For every published race, what the audit measured for each candidate.
           A quote filed under two issues appears twice in the brief, so it
-          counts twice here. You&apos;re welcome to check the math against any
+          counts twice here. You&rsquo;re welcome to check the math against any
           brief.
         </p>
         {briefed.length === 0 ? (
@@ -630,10 +630,10 @@ export default async function MethodologyPage() {
           A race reaches this site in two steps. First it is{" "}
           <strong>listed</strong>: we show who is on the ballot and nothing
           more. That means the names printed on the ballot &mdash; from the
-          Florida Division of Elections&apos; general-election candidate list
+          Florida Division of Elections&rsquo; general-election candidate list
           for state and federal races, and from each county Supervisor of
-          Elections&apos; candidate list for county seats &mdash; each
-          candidate&apos;s party as they filed it, their official campaign site
+          Elections&rsquo; candidate list for county seats &mdash; each
+          candidate&rsquo;s party as they filed it, their official campaign site
           where we have opened the page and confirmed it names the candidate and
           the office, and whether the seat was already decided. All of that is
           public record, and every candidate in the race gets the same card.
@@ -646,7 +646,7 @@ export default async function MethodologyPage() {
         </p>
         <p className="text-body">
           A race stays listed, with no brief, when there is nothing to compare:
-          when we read its candidates&apos; sites, none of them stated a
+          when we read its candidates&rsquo; sites, none of them stated a
           position that passed our checks, or none had a site we could read. A
           page that said &quot;No stated position found&quot; for every
           candidate on every issue would add nothing to the list of names, and
@@ -662,7 +662,7 @@ export default async function MethodologyPage() {
             <strong>Some real positions are missed.</strong> The two questions
             are strict on purpose, to keep biography and past records out, and
             that costs some real commitments. When we checked the first question
-            against one candidate&apos;s site, it missed about 1 in 7 of the
+            against one candidate&rsquo;s site, it missed about 1 in 7 of the
             positions a reviewer found. The second question, added later, turns
             away more, and we have not measured how many. So &quot;No stated
             position found&quot; means we found none that passed our checks, not
@@ -670,7 +670,7 @@ export default async function MethodologyPage() {
           </li>
           <li>
             <strong>
-              Positions outside our list of issues aren&apos;t shown.
+              Positions outside our list of issues aren&rsquo;t shown.
             </strong>{" "}
             A commitment that fits none of our{" "}
             <a href="#issue-list" className={linkClass}>
@@ -686,9 +686,9 @@ export default async function MethodologyPage() {
             position stated only deeper in a site can be missed.
           </li>
           <li>
-            <strong>Briefs are a snapshot.</strong> We read the candidates&apos;
+            <strong>Briefs are a snapshot.</strong> We read the candidates&rsquo;
             sites on {SNAPSHOT_LABEL}. Anything added or changed since then
-            isn&apos;t here yet.
+            isn&rsquo;t here yet.
           </li>
           <li>
             <strong>Some races have no brief.</strong> When no candidate in a
@@ -709,31 +709,31 @@ export default async function MethodologyPage() {
       </section>
 
       <section id="not-covered" className="flex flex-col gap-2">
-        <h2 className="text-h2">What we don&apos;t cover</h2>
+        <h2 className="text-h2">What we don&rsquo;t cover</h2>
         <ul className="flex list-disc flex-col gap-2 pl-5 text-body">
           <li>
-            <strong>Records and votes.</strong> We don&apos;t cover what a
+            <strong>Records and votes.</strong> We don&rsquo;t cover what a
             candidate has done in office, how they voted, or what they passed.
           </li>
           <li>
-            <strong>Fact-checks.</strong> We don&apos;t rate whether what a
+            <strong>Fact-checks.</strong> We don&rsquo;t rate whether what a
             candidate says is true.
           </li>
           <li>
             <strong>Biographies.</strong> There is no bio section. We quote a
-            candidate&apos;s About page only where it states a position.
+            candidate&rsquo;s About page only where it states a position.
           </li>
           <li>
             <strong>Judicial retention.</strong> The questions on whether to
             keep a Florida Supreme Court justice or an appeals court judge in
-            office are on Florida ballots, but we don&apos;t cover them.
+            office are on Florida ballots, but we don&rsquo;t cover them.
           </li>
           <li>
             <strong>Races outside our area.</strong> We cover the statewide
             races and amendments, the U.S. House districts that include part of{" "}
             {COUNTY_LIST} County, and the county commission, school board,
             Orange County mayor and Orange County clerk races in those four
-            counties. We don&apos;t cover Florida House or Florida Senate seats,
+            counties. We don&rsquo;t cover Florida House or Florida Senate seats,
             other judicial races, county or city ballot questions, city races,
             special districts such as soil and water conservation and community
             development districts, or local races anywhere else.
@@ -741,7 +741,7 @@ export default async function MethodologyPage() {
         </ul>
         <p className="text-body">
           For your official sample ballot, and for anything this site
-          doesn&apos;t cover, check with your county Supervisor of Elections or
+          doesn&rsquo;t cover, check with your county Supervisor of Elections or
           the{" "}
           <a href="https://dos.fl.gov/elections/" className={linkClass}>
             Florida Division of Elections
@@ -753,7 +753,7 @@ export default async function MethodologyPage() {
       <section className="flex flex-col gap-2">
         <h2 className="text-h2">We show the ballot, not the filing list</h2>
         <p className="text-body">
-          The state&apos;s filing list includes everyone who ever ran for a
+          The state&rsquo;s filing list includes everyone who ever ran for a
           seat, not everyone who will appear on Election Day. We show only the
           candidates with a printed line on the ballot &mdash; those marked
           Qualified (QUA) or Unopposed (UNO). We leave out candidates who were
@@ -767,12 +767,12 @@ export default async function MethodologyPage() {
         <p className="text-body">
           Some seats are settled before November, and we list them rather than
           leave a gap &mdash; a voter whose seat was decided should be able to
-          see who holds it and why it isn&apos;t on the ballot. They come in two
+          see who holds it and why it isn&rsquo;t on the ballot. They come in two
           kinds, and we keep them apart. A seat is <strong>unopposed</strong>{" "}
           when nobody filed against the candidate: Florida law (F.S. 101.151(7))
           then keeps the contest off the ballot, and the candidate takes the
           office. A seat was <strong>decided in the primary</strong> when a
-          candidate won it outright in August, as Florida&apos;s nonpartisan
+          candidate won it outright in August, as Florida&rsquo;s nonpartisan
           county races, such as school board, do when someone clears half the
           vote. Both are missing from the November ballot, for opposite reasons:
           in one, no one ran against the winner; in the other, people did, and
@@ -786,13 +786,13 @@ export default async function MethodologyPage() {
         <h2 className="text-h2">How we label the news</h2>
         <p className="text-body">
           Every news card shows its publisher and whether the piece is reporting
-          or opinion, so you always know what kind of writing you&apos;re
+          or opinion, so you always know what kind of writing you&rsquo;re
           looking at, and opinion pieces are set apart visually from reporting
           rather than left to blend in.
         </p>
         <p className="text-body">
-          A card does not carry the outlet&apos;s political lean; the
-          outlet&apos;s own page does, next to where the rating came from.{" "}
+          A card does not carry the outlet&rsquo;s political lean; the
+          outlet&rsquo;s own page does, next to where the rating came from.{" "}
           <Link href="/news/outlet" className={linkClass}>
             Every outlet we draw from
           </Link>{" "}
@@ -839,7 +839,7 @@ export default async function MethodologyPage() {
           measuring how much coverage candidates actually get, and we have not
           measured it yet &mdash; until we do, every sourced story from the last
           30 days is shown, ordered by the same rule for every candidate. If we
-          can&apos;t fill a candidate&apos;s slots with sourced stories, we say
+          can&rsquo;t fill a candidate&rsquo;s slots with sourced stories, we say
           so plainly &mdash; a shortfall is stated, never padded with unrelated
           or unsourced items.
         </p>
@@ -878,7 +878,7 @@ export default async function MethodologyPage() {
         </ol>
         <p className="text-body">
           The group decides where a link sits on the page, most established
-          first. Nothing else does &mdash; not the outlet&apos;s lean, not
+          first. Nothing else does &mdash; not the outlet&rsquo;s lean, not
           whether it is a video or an article, and never our opinion of it. A
           video can sit in any group depending on who made it. Official
           documents and reporting are shown to everyone first; positions and
@@ -907,10 +907,10 @@ export default async function MethodologyPage() {
             both statutes. It used to say "ballot order, otherwise
             alphabetical" while the code sorted by candidate ID. */}
         <p className="text-body">
-          Candidates are listed in Florida&apos;s order for the November ballot,
+          Candidates are listed in Florida&rsquo;s order for the November ballot,
           the same rule in every race: the Republican, then the Democrat,
           because their parties came first and second in the 2022
-          governor&apos;s race (F.S. 101.151(3)); then minor-party candidates,
+          governor&rsquo;s race (F.S. 101.151(3)); then minor-party candidates,
           then candidates with no party, each in the order they qualified.
           Nonpartisan races, such as school board, are alphabetical by last
           name, as county ballots print them (F.S. 105.041).

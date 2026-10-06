@@ -84,7 +84,7 @@ export default async function RacePage({
             2026-10-05). The way out goes to the races we do cover, which
             every visitor has, rather than "your races", which a visitor with
             no saved district doesn't. */}
-        <h1 className="text-h1">This race isn&apos;t published</h1>
+        <h1 className="text-h1">This race isn&rsquo;t published</h1>
         <p className="text-body text-on-surface-muted">
           It may still be in review, or the link may be out of date. A race is
           published only after every candidate in it has been through the same

@@ -98,7 +98,7 @@ export async function YourRaces({
     return (
       <div className="flex flex-col gap-4">
         <p className="text-body text-on-surface-muted">
-          Add your ZIP and we&apos;ll show the races we cover on your ballot.
+          Add your ZIP and we&rsquo;ll show the races we cover on your ballot.
         </p>
         <LocationEntry
           addressEnabled={geocoderConfigured()}
@@ -112,8 +112,8 @@ export async function YourRaces({
     return (
       <div className="flex flex-col gap-4">
         <p className="text-body text-on-surface-muted">
-          We can&apos;t place that ZIP on a ballot yet. Full statewide coverage
-          isn&apos;t available: U.S. House and county races are only for{" "}
+          We can&rsquo;t place that ZIP on a ballot yet. Full statewide coverage
+          isn&rsquo;t available: U.S. House and county races are only for{" "}
           {coveredCountyNames()} counties so far. If you live in Florida,{" "}
           {/* The address field only exists when a geocoder is configured
               (PELIAS_BASE_URL, unset in production on 2026-10-04), so the
@@ -172,7 +172,7 @@ export async function YourRaces({
               >
                 {part.district}
               </Link>
-              . We don&apos;t cover {part.county} County&apos;s local races
+              . We don&rsquo;t cover {part.county} County&rsquo;s local races
               yet;{" "}
               <Link
                 href={STATEWIDE_BALLOT_HREF}
@@ -187,7 +187,7 @@ export async function YourRaces({
           <p className="text-body text-on-surface-muted">
             That ZIP spans more than one congressional district (
             {result.candidateDistricts?.join(", ")}). Re-enter it below and
-            we&apos;ll ask which district is yours:
+            we&rsquo;ll ask which district is yours:
           </p>
         )}
         <LocationEntry
@@ -228,11 +228,11 @@ export async function YourRaces({
           role="status"
           className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
         >
-          Full statewide coverage isn&apos;t available yet. Your address is in
+          Full statewide coverage isn&rsquo;t available yet. Your address is in
           Florida, but outside the counties where we can place U.S. House and
           county races ({coveredCountyNames()}). Below is the statewide ballot
           every Florida voter shares. Your House race and any county or local
-          races aren&apos;t here yet.
+          races aren&rsquo;t here yet.
         </p>
       )}
 
@@ -247,7 +247,7 @@ export async function YourRaces({
           href="/methodology#not-covered"
           className="underline underline-offset-2 hover:text-on-surface"
         >
-          What we don&apos;t cover
+          What we don&rsquo;t cover
         </Link>
       </p>
 
@@ -259,7 +259,7 @@ export async function YourRaces({
       {result.races.length === 0 ? (
         (result.countyRaces?.length ?? 0) === 0 && (
           <p className="text-body text-on-surface-muted">
-            Your races aren&apos;t published yet — we publish a race only after
+            Your races aren&rsquo;t published yet — we publish a race only after
             every candidate in it has been through the same checks. Check back
             soon.
           </p>
@@ -341,9 +341,9 @@ export async function YourRaces({
             role="status"
             className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
           >
-            We don&apos;t have the U.S. House race for {result.district} yet.
+            We don&rsquo;t have the U.S. House race for {result.district} yet.
             The races above are the statewide ones every Florida voter shares
-            — your district&apos;s race will appear here once it&apos;s
+            — your district&rsquo;s race will appear here once it&rsquo;s
             published.
           </p>
         )}
@@ -376,10 +376,10 @@ export async function YourRaces({
           by where you live, as this page shows — when what it meant is that
           party doesn't limit the general election. */}
       <p className="text-body-sm text-on-surface-muted">
-        Your party doesn&apos;t limit what you can vote on in November.
-        Whatever party you&apos;re registered with — including no party at
+        Your party doesn&rsquo;t limit what you can vote on in November.
+        Whatever party you&rsquo;re registered with — including no party at
         all — you can vote in every race on your general election ballot, even
-        if you couldn&apos;t vote in August&apos;s closed primary.
+        if you couldn&rsquo;t vote in August&rsquo;s closed primary.
       </p>
 
       {!result.district &&

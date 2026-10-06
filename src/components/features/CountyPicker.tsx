@@ -88,7 +88,7 @@ export function DistrictConfirm({
           >
             {uncoveredPart.district}
           </Link>
-          . We don&apos;t cover {uncoveredPart.county} County&apos;s local races
+          . We don&rsquo;t cover {uncoveredPart.county} County&rsquo;s local races
           yet;{" "}
           <Link
             href={STATEWIDE_BALLOT_HREF}

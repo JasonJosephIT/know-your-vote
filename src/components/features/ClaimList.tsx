@@ -111,7 +111,7 @@ export function NoStatedPosition({ compact }: { compact?: boolean }) {
   return (
     <p className="rounded-md bg-surface-muted px-3 py-2 text-body-sm text-on-surface-muted">
       No stated position found — we found no position on this issue that we
-      could quote from this candidate&apos;s own campaign website. Silence is
+      could quote from this candidate&rsquo;s own campaign website. Silence is
       recorded honestly, never filled in.
     </p>
   );
@@ -123,7 +123,7 @@ export function NoStatedPositionNote() {
   return (
     <p className="max-w-[680px] text-body-sm text-on-surface-muted">
       &ldquo;No stated position found&rdquo; means we found no position on that
-      issue that passed our checks on the candidate&apos;s own campaign
+      issue that passed our checks on the candidate&rsquo;s own campaign
       website, not that they have none. We never fill the gap.{" "}
       <Link
         href="/methodology#limits"

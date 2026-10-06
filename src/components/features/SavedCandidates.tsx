@@ -47,8 +47,8 @@ export function SavedCandidates() {
   if (ids.length === 0) {
     return (
       <p className="text-body text-on-surface-muted">
-        You haven&apos;t saved anyone yet. Tap &quot;keep in mind&quot; on any
-        candidate and they&apos;ll be here on your next visit — saved on this
+        You haven&rsquo;t saved anyone yet. Tap &quot;keep in mind&quot; on any
+        candidate and they&rsquo;ll be here on your next visit — saved on this
         device only, never on our servers.
       </p>
     );

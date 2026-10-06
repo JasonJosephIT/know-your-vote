@@ -17,7 +17,7 @@ export default function PrivacyPage() {
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
       <h1 className="text-h1">Privacy, in plain language</h1>
       <p className="text-body-lg text-on-surface-muted">
-        You can use everything here without an account or a login. That&apos;s a
+        You can use everything here without an account or a login. That&rsquo;s a
         design decision, not a settings page.
       </p>
 
@@ -30,14 +30,14 @@ export default function PrivacyPage() {
             devtools beats a claim you have to trust. */}
         <h2 className="text-h2">What stays on your device</h2>
         <p className="text-body">
-          Five things, and you can check all five in your browser&apos;s
+          Five things, and you can check all five in your browser&rsquo;s
           devtools: the district you chose, the candidates you &quot;keep in
           mind&quot;, whether you dismissed the &quot;get the app&quot; prompt,
           your answer to the cookie question (<code>kyv.ads-consent</code>), and
           whether you closed the donation prompt (
           <code>kyv.donate-dismissed</code>). That is the whole list of what we
           store. They never reach our servers, and clearing your browser data
-          removes them completely. If you accept Google&apos;s ad cookies,
+          removes them completely. If you accept Google&rsquo;s ad cookies,
           Google stores cookies of its own; that is covered under analytics and
           advertising below.
         </p>
@@ -53,7 +53,7 @@ export default function PrivacyPage() {
           &quot;Forget my district&quot; deletes it on the spot.
         </p>
         <p className="text-body">
-          Your address and your ZIP aren&apos;t stored either — not on your
+          Your address and your ZIP aren&rsquo;t stored either — not on your
           device, not with us. We use them to work out which district you are
           in, keep the district, and forget the rest. The single exception is
           below, and only if you ask for it: an email reminder needs a ZIP to
@@ -80,7 +80,7 @@ export default function PrivacyPage() {
               </a>
               , an open-source geocoder built on public address data. What you
               type goes to <strong>{geocoder}</strong> so it can finish the
-              address. We don&apos;t log it and we don&apos;t store it.
+              address. We don&rsquo;t log it and we don&rsquo;t store it.
             </p>
             <p className="text-body">
               Turning that address into a district takes no second lookup:
@@ -88,7 +88,7 @@ export default function PrivacyPage() {
               picked, and we send just those coordinates to the U.S. Census
               Bureau to find which census block they fall in. The Census Bureau
               never receives your address. The block tells us your district,
-              using Florida&apos;s enacted 2026 map, and the district is the
+              using Florida&rsquo;s enacted 2026 map, and the district is the
               only thing that is kept.
             </p>
           </>
@@ -148,7 +148,7 @@ export default function PrivacyPage() {
           </p>
         ) : (
           <p className="text-body">
-            We don&apos;t run site analytics right now. If we turn on
+            We don&rsquo;t run site analytics right now. If we turn on
             cookieless, aggregate analytics (Plausible), this page will say so.
           </p>
         )}
@@ -161,13 +161,13 @@ export default function PrivacyPage() {
         {ADS_TAG_ENABLED && (
           <p className="text-body">
             We ask before setting advertising cookies. If you accept, our ad
-            provider (Google) receives the page you&apos;re on and your IP
-            address; decline and they&apos;re never set. See{" "}
+            provider (Google) receives the page you&rsquo;re on and your IP
+            address; decline and they&rsquo;re never set. See{" "}
             <a
               href="https://policies.google.com/technologies/ads"
               className="text-primary underline underline-offset-2"
             >
-              Google&apos;s advertising policy
+              Google&rsquo;s advertising policy
             </a>
             . <ResetAdsConsent />.
           </p>
@@ -181,7 +181,7 @@ export default function PrivacyPage() {
             or cookies.
           </p>
         ) : (
-          <p className="text-body">We don&apos;t collect error reports right now.</p>
+          <p className="text-body">We don&rsquo;t collect error reports right now.</p>
         )}
       </section>
 

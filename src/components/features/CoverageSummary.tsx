@@ -79,7 +79,7 @@ export async function CoverageSummary({
           {hasDistrict
             ? "Your district's races are linked above."
             : `Add your ${locationFieldCopy(addressEnabled).noun} above for your House race.`}{" "}
-          Your county&apos;s sample ballot says which commission and school
+          Your county&rsquo;s sample ballot says which commission and school
           board seats are yours.
         </Row>
         <Row term="Not covered">
@@ -93,7 +93,7 @@ export async function CoverageSummary({
             href="/methodology#not-covered"
             className="underline underline-offset-2 hover:text-on-surface"
           >
-            What we don&apos;t cover
+            What we don&rsquo;t cover
           </Link>
         </Row>
       </dl>

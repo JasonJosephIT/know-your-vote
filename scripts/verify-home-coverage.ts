@@ -58,11 +58,11 @@ const stripComments = (src: string) =>
   src
     .replace(/\/\*[\s\S]*?\*\//g, "")
     .replace(/(^|\s)\/\/[^\n]*/g, "$1");
-/* Comment-free, one line, and JSX's &apos; read as the apostrophe a voter
-   sees, so copy split across lines or escaped still matches. */
+/* Comment-free, one line, and JSX's &apos; / &rsquo; read as the apostrophe
+   a voter sees, so copy split across lines or escaped still matches. */
 const rendered = (file: string) =>
   stripComments(source(file))
-    .replace(/&apos;/g, "'")
+    .replace(/&apos;|&rsquo;/g, "'")
     .replace(/\{" "\}/g, " ")
     .replace(/\s+/g, " ");
 
