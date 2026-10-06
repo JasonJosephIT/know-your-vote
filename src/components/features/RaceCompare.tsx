@@ -193,10 +193,16 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
             <h2 id="other-issues" className="text-h2">
               Other issues they raise
             </h2>
+            {/* Said as a fact about the layout, not about who raised what:
+                the same issue often appears under several candidates (13 of
+                FL-GOV's 17 here do), and an earlier line saying each was
+                "quoted for one candidate only" was false (interface review
+                2026-10-05). */}
             <p className="max-w-[680px] text-body-sm text-on-surface-muted">
-              Issues beyond the ones above where we quoted a candidate from
-              their own campaign website. Each is quoted for one candidate
-              only, so these aren&apos;t side by side.
+              More issues we quoted from each candidate&apos;s own campaign
+              website, listed under that candidate. They aren&apos;t lined up
+              side by side, so the same issue can appear under more than one
+              name.
             </p>
           </div>
           <div className={`${grid} items-start`} style={cols}>

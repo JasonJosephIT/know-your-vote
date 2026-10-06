@@ -6,6 +6,32 @@ import { DistrictChip } from "@/components/features/DistrictChip";
 import { DONATE_URL } from "@/components/features/SitePrompts";
 
 const items = [
+  /* The shared ballot, first (interface review 2026-10-05). Below md the
+     "Know Your Vote" wordmark is hidden and nothing else linked to "/", so a
+     voter who opened a shared race or amendment link on a phone had no way
+     to the statewide ballot or the House-race step. Ballot amendment pages
+     belong here, since the landing page is where they are listed. isActive
+     treats "/" as an exact match: startsWith("//") never matches. */
+  {
+    href: "/",
+    label: "Ballot",
+    alsoMatch: ["/measures"],
+    icon: (
+      <svg
+        viewBox="0 0 20 20"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        aria-hidden
+      >
+        <rect x="4" y="3.5" width="12" height="13" rx="1.5" />
+        <path
+          d="M7 8h6M7 11h6M7 14h3.5"
+          strokeLinecap="round"
+        />
+      </svg>
+    ),
+  },
   {
     href: "/candidates",
     label: "Candidates",

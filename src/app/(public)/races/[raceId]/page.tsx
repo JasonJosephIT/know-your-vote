@@ -49,7 +49,7 @@ export async function generateMetadata(
   const { raceId } = await params;
   const brief = await getRaceBrief(raceId);
   const race = brief?.race ?? (await getRaceListing(raceId))?.race;
-  if (!race) return { title: "Race in review — Know Your Vote" };
+  if (!race) return { title: "Race not published — Know Your Vote" };
   const title = `${officeTitle(race)} — Know Your Vote`;
   const og = (await parent).openGraph;
   return {
@@ -77,17 +77,24 @@ export default async function RacePage({
     if (listing) return <ListedRace listing={listing} />;
     return (
       <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
-        <h1 className="text-h1">This race is still in review</h1>
+        {/* Anonymous reads can't tell a race in review from one that doesn't
+            exist (RLS hides both), so this can't promise it's coming: a
+            mistyped, retired or stale shared link lands here too, and "check
+            back soon" would never work for those (interface review
+            2026-10-05). The way out goes to the races we do cover, which
+            every visitor has, rather than "your races", which a visitor with
+            no saved district doesn't. */}
+        <h1 className="text-h1">This race isn&apos;t published</h1>
         <p className="text-body text-on-surface-muted">
-          A race is published only after every candidate in it has been through
-          the same checks, including our Balance Audit, and this one
-          hasn&apos;t cleared them yet. Check back soon.
+          It may still be in review, or the link may be out of date. A race is
+          published only after every candidate in it has been through the same
+          checks, including our Balance Audit.
         </p>
         <Link
-          href="/candidates?view=races"
+          href="/"
           className="text-label text-primary underline underline-offset-2"
         >
-          Back to your races
+          See the races we cover
         </Link>
       </main>
     );
