@@ -46,12 +46,16 @@ export default async function NewsPage({
             this page is statewide, and calling that local would be the same
             overclaim the landing page dropped in TASK-067. */}
         <h1 className="text-h1">Electoral news</h1>
+        {/* Only what this feed shows. It used to promise candidate news and
+            pipeline updates, but both are scoped to a race and /news asks
+            for no race, so neither ever appeared here. The county pick now
+            matches the county's rows (newsScopes in src/lib/news-scope.ts),
+            so "add its items" is true. */}
         <p className="text-body-sm text-on-surface-muted">
-          A calm digest of what actually changed — election news, candidate
-          news, pipeline updates, and official sources only, no hot takes.
+          A calm digest of election news and official sources, no hot takes.
           {selected
             ? ` Showing ${selected.name} County plus statewide items.`
-            : " Statewide by default — pick a county to see its news too."}
+            : " Statewide by default — pick a county to add its items."}
           {/* A category matches any of its sub-issues (issueFilterIds), so
               the wording says "an issue under", not "tagged". */}
           {issueLabel &&

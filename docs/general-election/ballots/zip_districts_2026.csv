@@ -1,11 +1,9 @@
 zip5,county,county_fips,metro,cd_2026_map,cd_share,cd_seed_2024_map,state_senate,state_house,changed
 32703,Orange,12095,orlando,FL-10,0.562,FL-7|FL-11,SD-15|SD-10,HD-39,yes
 32703,Orange,12095,orlando,FL-11,0.347,FL-7|FL-11,SD-15|SD-10,HD-39,yes
-32703,Orange,12095,orlando,FL-7,0.091,FL-7|FL-11,SD-15|SD-10,HD-39,yes
 32709,Orange,12095,orlando,FL-8,1.0,FL-8|FL-9,SD-17,HD-35,yes
 32712,Orange,12095,orlando,FL-11,0.999,FL-11,SD-15,HD-39,no
-32751,Orange,12095,orlando,FL-10,0.747,FL-7|FL-10,SD-10|SD-15,HD-42|HD-38,no
-32751,Orange,12095,orlando,FL-7,0.253,FL-7|FL-10,SD-10|SD-15,HD-42|HD-38,no
+32751,Orange,12095,orlando,FL-10,0.747,FL-7|FL-10,SD-10|SD-15,HD-42|HD-38,yes
 32768,Orange,12095,orlando,FL-11,1.0,FL-11,SD-15,HD-39,no
 32789,Orange,12095,orlando,FL-10,1.0,FL-10,SD-10,HD-42,no
 32798,Orange,12095,orlando,FL-11,1.0,FL-11,SD-15,HD-39,no

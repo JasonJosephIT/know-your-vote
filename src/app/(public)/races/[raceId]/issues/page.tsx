@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getRaceBrief } from "@/lib/briefs";
+import { officeTitle } from "@/lib/office-title";
 import { RaceHeader } from "@/components/features/RaceHeader";
 import { IssueFilter } from "@/components/features/IssueFilter";
 import { IssueRows } from "@/components/features/IssueRows";
@@ -38,10 +39,13 @@ export async function generateMetadata({ params, searchParams }: Props) {
     .filter((o) => selected.includes(o.id))
     .map((o) => o.title)
     .join(", ");
+  /* Named as the race page names it (officeTitle): a House race says its
+     district in words. */
+  const office = officeTitle(brief.race);
   return {
     title: titles
-      ? `${brief.race.office}: ${titles} — Know Your Vote`
-      : `${brief.race.office} — Know Your Vote`,
+      ? `${office}: ${titles} — Know Your Vote`
+      : `${office} — Know Your Vote`,
     robots: { index: false, follow: true },
     alternates: { canonical: pickHref(raceId, selected) },
   };
@@ -61,7 +65,7 @@ export default async function RaceIssuesPage({ params, searchParams }: Props) {
 
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-5 px-5 py-8">
-      <RaceHeader race={brief.race} />
+      <RaceHeader race={{ ...brief.race, office: officeTitle(brief.race) }} />
       <IssueFilter raceId={raceId} options={options} selected={selected} />
       <IssueRows rows={issueRowsFor(brief, selected)} />
       <footer className="flex flex-wrap gap-4 text-caption text-on-surface-muted">

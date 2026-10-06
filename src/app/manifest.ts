@@ -10,7 +10,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Know Your Vote, Know Your Ballot, Know Your Options",
     short_name: "Know Your Vote",
     description:
-      "See everyone on your ballot and what they say, in their own words. Every quote linked to its source.",
+      "See the races we cover on your Florida ballot and what each candidate says, in their own words. Every quote linked to its source.",
     // ?shell=pwa marks launches from the installed shell (notifications Phase A).
     start_url: "/?shell=pwa",
     scope: "/",

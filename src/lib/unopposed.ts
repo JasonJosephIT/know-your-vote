@@ -70,3 +70,46 @@ export function isDecidedInPrimary(
     !hasWriteIn
   );
 }
+
+/** The two reasons a contest is not printed: the opposite facts above. */
+export type DecidedState = "unopposed" | "elected_in_primary";
+
+/** A seat that will not be printed, and the one person who takes it.
+
+    The holder is named only here, for a decided seat, never for a contested
+    one, where naming a single candidate would read as a pick. Every race
+    list that marks decided seats (the county list and the voter's district
+    races in resolve.ts) builds this one shape, so the two cannot disagree
+    about FL-10 the way the race page and the races view once did. */
+export interface DecidedSeat {
+  decided: DecidedState;
+  holder: { candidateId: string; legalName: string };
+}
+
+/** Which state a race is in and who takes the seat, or null while the
+    contest is still printed on the November ballot (or has no ballot lines
+    yet). Same inputs and same meaning as the two predicates, asked in turn;
+    they are exclusive on `qualifying_status`, so the order cannot change an
+    answer. */
+export function decidedSeatOf(
+  ballotCandidates: ReadonlyArray<
+    Pick<Candidate, "candidate_id" | "legal_name" | "qualifying_status">
+  >,
+  hasWriteIn: boolean
+): DecidedSeat | null {
+  const decided: DecidedState | null = isUnopposedContest(
+    ballotCandidates,
+    hasWriteIn
+  )
+    ? "unopposed"
+    : isDecidedInPrimary(ballotCandidates, hasWriteIn)
+      ? "elected_in_primary"
+      : null;
+  if (!decided) return null;
+  /* Both predicates require exactly one ballot candidate, so [0] is it. */
+  const [only] = ballotCandidates;
+  return {
+    decided,
+    holder: { candidateId: only.candidate_id, legalName: only.legal_name },
+  };
+}

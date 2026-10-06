@@ -6,6 +6,7 @@ import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 import { CATEGORIES, SUB_ISSUES } from "@/lib/news-issues";
 import { COVERED_COUNTIES } from "@/lib/counties";
 import { CONTACT_EMAIL } from "@/lib/contact";
+import { orderCandidates } from "@/lib/ballot-order";
 
 export const revalidate = 3600;
 export const metadata = { title: "How we stay fair — Know Your Vote" };
@@ -175,11 +176,12 @@ const raceLabel = (race: {
     ? `${race.office}, ${race.district}`
     : race.office;
 
+type ProfileCandidate = { legal_name?: string; party?: string | null };
 type ProfileRow = {
   candidate_id: string;
   race_id: string;
   audit: ProfileAudit;
-  candidate: { legal_name?: string } | { legal_name?: string }[] | null;
+  candidate: ProfileCandidate | ProfileCandidate[] | null;
 };
 
 const getScrutinyCounts = unstable_cache(
@@ -196,34 +198,44 @@ const getScrutinyCounts = unstable_cache(
       const [racesRes, profilesRes] = await Promise.all([
         supabase
           .from("race")
-          .select("race_id, office, level, district")
+          .select("race_id, office, level, district, candidate_ids")
           .eq("election", ACTIVE_ELECTION_KIND),
         supabase
           .from("profile")
-          .select("candidate_id, race_id, audit, candidate(legal_name)"),
+          .select("candidate_id, race_id, audit, candidate(legal_name, party)"),
       ]);
       const profiles = (profilesRes.data ?? []) as ProfileRow[];
+      /* Rows in the same ballot order as the race page (ballot-order.ts),
+         not by first name: the copy at the foot of this page says one rule
+         applies in every race, and this table is a race. */
       return (racesRes.data ?? []).map((race) => ({
         raceId: race.race_id,
         label: raceLabel(race),
-        rows: profiles
-          .filter((p) => p.race_id === race.race_id)
-          .map((p) => {
-            const c = Array.isArray(p.candidate) ? p.candidate[0] : p.candidate;
-            return {
-              name: c?.legal_name ?? p.candidate_id,
-              audit: p.audit,
-            };
-          })
-          .sort((a, b) => a.name.localeCompare(b.name)),
+        rows: orderCandidates(
+          profiles
+            .filter((p) => p.race_id === race.race_id)
+            .map((p) => {
+              const c = Array.isArray(p.candidate)
+                ? p.candidate[0]
+                : p.candidate;
+              return {
+                candidate_id: p.candidate_id,
+                legal_name: c?.legal_name ?? p.candidate_id,
+                party: c?.party ?? null,
+                audit: p.audit,
+              };
+            }),
+          (race.candidate_ids ?? []) as string[]
+        ).map((row) => ({ name: row.legal_name, audit: row.audit })),
       }));
     } catch {
       return [];
     }
   },
   /* Bump on any change to the cached shape (v3: `label` replaced `office`),
-     so an entry cached by an older deploy is never read as the new one. */
-  ["scrutiny-counts-v3"],
+     so an entry cached by an older deploy is never read as the new one. v4:
+     same shape, but rows are in ballot order rather than by first name. */
+  ["scrutiny-counts-v4"],
   { revalidate: 3600, tags: ["races"] }
 );
 
@@ -723,7 +735,8 @@ export default async function MethodologyPage() {
             Orange County mayor and Orange County clerk races in those four
             counties. We don&apos;t cover Florida House or Florida Senate seats,
             other judicial races, county or city ballot questions, city races,
-            or local races anywhere else.
+            special districts such as soil and water conservation and community
+            development districts, or local races anywhere else.
           </li>
         </ul>
         <p className="text-body">
@@ -884,9 +897,26 @@ export default async function MethodologyPage() {
             flag@knowyourvote.example, until 2026-10-04). */}
         <p className="text-body">
           We never tell you who to vote for, never rank candidates, and never
-          color-code parties. Candidate order follows one neutral rule (ballot
-          order, otherwise alphabetical), applied identically everywhere. If
-          anything here reads as slanted to you, email{" "}
+          color-code parties.
+        </p>
+        {/* The order rule as Florida law states it, with the reason the
+            Republican is first in 2026: s. 101.151(3) puts the parties that
+            came first and second in the last governor's race first and
+            second. src/lib/ballot-order.ts applies it and
+            scripts/verify-ballot-order.ts checks this paragraph still names
+            both statutes. It used to say "ballot order, otherwise
+            alphabetical" while the code sorted by candidate ID. */}
+        <p className="text-body">
+          Candidates are listed in Florida&apos;s order for the November ballot,
+          the same rule in every race: the Republican, then the Democrat,
+          because their parties came first and second in the 2022
+          governor&apos;s race (F.S. 101.151(3)); then minor-party candidates,
+          then candidates with no party, each in the order they qualified.
+          Nonpartisan races, such as school board, are alphabetical by last
+          name, as county ballots print them (F.S. 105.041).
+        </p>
+        <p className="text-body">
+          If anything here reads as slanted to you, email{" "}
           <a href={`mailto:${CONTACT_EMAIL}`} className={linkClass}>
             {CONTACT_EMAIL}
           </a>

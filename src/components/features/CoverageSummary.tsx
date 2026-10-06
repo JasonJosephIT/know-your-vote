@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getActiveMeasures } from "@/lib/measures";
 import { getStatewideRaces } from "@/lib/races";
 import { COVERED_COUNTIES } from "@/lib/counties";
+import { locationFieldCopy } from "@/lib/scope-copy";
 
 /* "What this guide covers": the home page's one statement of scope
    (inspiration pass 2026-10-05, draft; GOV.UK summary list). Before it, what
@@ -20,15 +21,24 @@ import { COVERED_COUNTIES } from "@/lib/counties";
    don't cover" section says (src/app/(public)/methodology/page.tsx,
    #not-covered), and link to it; change them together.
 
-   hasDistrict: the home page shows the address field above only when no
+   hasDistrict: the home page shows the location field above only when no
    district is saved, so the county row points to it only then.
+   addressEnabled: whether that field takes an address at all
+   (geocoderConfigured(), read by the page). Without a geocoder it takes a
+   ZIP only, so the row asks for a ZIP (locationFieldCopy).
+
+   The "Not covered" row is the long form of NOT_COVERED_SENTENCE
+   (src/lib/scope-copy.ts), which the House-race step and the races view
+   print; change them together.
 
    Recommended (pending founder confirmation). TO FLIP: remove
    <CoverageSummary /> from src/app/(public)/page.tsx. */
 export async function CoverageSummary({
   hasDistrict,
+  addressEnabled,
 }: {
   hasDistrict: boolean;
+  addressEnabled: boolean;
 }) {
   const [races, measures] = await Promise.all([
     getStatewideRaces(),
@@ -67,16 +77,18 @@ export async function CoverageSummary({
           The U.S. House races, and the county commission, school board,
           Orange County mayor and Orange County clerk races.{" "}
           {hasDistrict
-            ? "Your House race is linked above."
-            : "Add your address or ZIP above for your House race."}{" "}
+            ? "Your district's races are linked above."
+            : `Add your ${locationFieldCopy(addressEnabled).noun} above for your House race.`}{" "}
           Your county&apos;s sample ballot says which commission and school
           board seats are yours.
         </Row>
         <Row term="Not covered">
           Florida House and Florida Senate seats, judges (retention questions
           and other judicial races), county and city ballot questions, city
-          races, and local races in other counties. Your county Supervisor of
-          Elections has your official sample ballot.{" "}
+          races, special districts such as soil and water conservation and
+          community development districts, and local races in other counties.
+          Your county Supervisor of Elections has your official sample
+          ballot.{" "}
           <Link
             href="/methodology#not-covered"
             className="underline underline-offset-2 hover:text-on-surface"

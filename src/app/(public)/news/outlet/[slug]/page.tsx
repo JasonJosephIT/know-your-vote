@@ -74,11 +74,18 @@ export default async function OutletPage({
       | null;
   };
 
+  /* One story is one URL: an article matched to several candidates is
+     several news_item rows (news-fairness.md §6). Newest first, so the
+     first copy is the one kept, and the list matches the index's count. */
+  const seenUrls = new Set<string>();
   const rows = error
     ? []
-    : ((data ?? []) as unknown as Row[]).filter(
-        (r) => r.url !== null && urlBelongsTo(r.url, outlet)
-      );
+    : ((data ?? []) as unknown as Row[]).filter((r) => {
+        if (r.url === null || !urlBelongsTo(r.url, outlet)) return false;
+        if (seenUrls.has(r.url)) return false;
+        seenUrls.add(r.url);
+        return true;
+      });
 
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">

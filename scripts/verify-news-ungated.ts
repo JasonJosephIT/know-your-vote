@@ -458,12 +458,16 @@ function runChecks(src: Sources): { lines: string[]; failures: number } {
   }
 
   /* With no parameters at all, the statewide scope is what comes back. It is
-     the first scope and it is added unconditionally. */
+     the first scope and it is added unconditionally: since 2026-10-05 by
+     newsScopes() (src/lib/news-scope.ts), which the route builds its filter
+     with, so both halves are read. */
+  const scopeModule = stripComments(src.module("@/lib/news-scope", ROUTE_PATH)?.text ?? "");
   assert(
     "the statewide scope is always queried",
-    /const scopes = \[\s*"and\(race_id\.is\.null,metro\.is\.null,county_fips\.is\.null\)"\s*\]/.test(
-      route
-    )
+    /const scopes = newsScopes\(\{[^}]*\}\);/.test(route) &&
+      /const scopes = \[\s*"and\(race_id\.is\.null,metro\.is\.null,county_fips\.is\.null\)"\s*\]/.test(
+        scopeModule
+      )
   );
 
   /* Copy honesty (TASK-067's rule): with no location this page is statewide,

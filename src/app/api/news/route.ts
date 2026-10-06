@@ -5,6 +5,7 @@ import { COVERED_COUNTIES, resolveZip, ZIP_RE } from "@/lib/resolve";
 import { dedupeByUrl } from "@/lib/news-feed";
 import { ISSUE_FILTER_IDS, issueFilterIds } from "@/lib/news-issues";
 import { type NewsSource } from "@/lib/news-labels";
+import { newsScopes } from "@/lib/news-scope";
 import { outletForUrl } from "@/lib/news-sources";
 import type { NewsItemType } from "@/types/app";
 
@@ -88,12 +89,10 @@ export async function GET(request: NextRequest) {
   }
 
   const supabase = await createAnonServerClient();
-  /* The statewide scope must exclude county-scoped items too, or a Broward
-     story with no race and no metro would reach every voter in the state. */
-  const scopes = ["and(race_id.is.null,metro.is.null,county_fips.is.null)"];
-  if (metro) scopes.push(`metro.eq.${metro}`);
-  if (county) scopes.push(`county_fips.eq.${county}`);
-  if (raceIds.length > 0) scopes.push(`race_id.in.(${raceIds.join(",")})`);
+  /* Statewide, plus the voter's metro, county and races. A county brings in
+     its metro too: the county rows live today carry only a metro
+     (newsScopes explains). */
+  const scopes = newsScopes({ metro, county, raceIds });
 
   let query = supabase
     .from("news_item")

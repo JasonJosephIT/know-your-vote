@@ -25,8 +25,11 @@ government pamphlet and not a hype account.
 
 - **Primary title / tagline:** "Know Your Vote, Know Your Ballot, Know Your Options"
 - **Short name:** "Know Your Vote"
-- **Lead description:** "See everyone on your ballot and what they say, in their own words.
-  Every quote linked to its source."
+- **Lead description:** "See the races we cover on your Florida ballot and what each candidate
+  says, in their own words. Every quote linked to its source." (Until 2026-10-05 this read "See
+  everyone on your ballot", which claimed the whole ballot; the site covers statewide races,
+  amendments, U.S. House and selected county races, not Florida House or Senate, judges, city or
+  special-district races.)
 - **OG / social title:** "Know Your Vote — Your Ballot, Your Options"
 - **OG / social description:** "See what Florida candidates say, in their own words, with a link
   to every source. No ZIP needed."
@@ -44,8 +47,8 @@ Know the Receipts"). Keep it to three beats; don't stretch it to four.
 
 ## Voice principles
 
-1. **Plain over formal.** Short sentences, everyday words, active voice. "See everyone on
-   your ballot," not "View a comprehensive roster of candidates."
+1. **Plain over formal.** Short sentences, everyday words, active voice. "See who's running,"
+   not "View a comprehensive roster of candidates."
 2. **Warm and a little playful — on the wrapper, not the facts.** Casual asides and light
    slang ("all facts, no cap") are welcome in headlines, intros, empty states, and social.
    They **never** appear inside a fact-check verdict, a source citation, or a candidate's

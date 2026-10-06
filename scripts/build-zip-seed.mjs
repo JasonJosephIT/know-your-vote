@@ -20,10 +20,25 @@
    rather than from a third Census file.
 
    A ZIP is included when its dominant county (largest land overlap) is one
-   of the four covered metros. A ZIP is is_split=true when two or more
-   districts each cover >= 5% of its land area — those ZIPs get one row per
-   qualifying district and the resolver must ask the voter to confirm rather
-   than auto-picking (FR-001).
+   of the four covered metros. Its districts are counted over that county's
+   blocks only: a row says which district that county's part of the ZIP
+   votes in, so land across the county line, which no covered ballot
+   serves, adds no district row (0045). The people who live across that
+   line still type the ZIP: where they are more than a sliver (six ZIPs, a
+   fifth to a half of their people: 32703 and 32751 into Seminole, 33549,
+   33556, 33558 and 33559 into Pasco), the resolver asks which side the
+   voter is on, from src/lib/uncovered-zip-parts.ts, not from these rows.
+   A ZIP is
+   is_split=true when two or more
+   districts each cover >= 5% of its land in that county — those ZIPs get
+   one row per qualifying district and the resolver must ask the voter to
+   confirm rather than auto-picking (FR-001).
+
+   Re-running it on the real inputs no longer reproduces 0022 as applied:
+   it leaves out 32703 and 32751 -> FL-7, which 0045 deletes, and 33598 ->
+   FL-16, which is still live pending an official Hillsborough ballot (0045
+   header). 0022 is applied and must not be rewritten; write a new migration
+   from the diff instead.
 
    Run: node scripts/build-zip-seed.mjs <block_assignment.txt> <zcta_tabblock.txt> */
 
@@ -97,6 +112,7 @@ export function zipDistrictRows(blockAssignmentText, zctaBlockText) {
     if (!zcta) continue;
     const land = Number(parts[LAND]) || 0;
     let agg = byZcta.get(zcta);
+    /* districts: county FIPS -> district -> land (see below). */
     if (!agg) byZcta.set(zcta, (agg = { counties: new Map(), districts: new Map() }));
     /* County comes from the block GEOID alone and is summed for every block
        that has a ZCTA, whether or not the block is in the enacted plan. A
@@ -111,19 +127,35 @@ export function zipDistrictRows(blockAssignmentText, zctaBlockText) {
     agg.counties.set(county, (agg.counties.get(county) ?? 0) + land);
     const district = districtByBlock.get(parts[BLOCK]);
     if (district !== undefined) {
-      agg.districts.set(district, (agg.districts.get(district) ?? 0) + land);
+      /* District land is kept per county, because a row is a claim about
+         ONE county's voters: (zip5, county_fips, district) says that
+         county's part of the ZIP votes in that district. */
+      let byDistrict = agg.districts.get(county);
+      if (!byDistrict) agg.districts.set(county, (byDistrict = new Map()));
+      byDistrict.set(district, (byDistrict.get(district) ?? 0) + land);
     }
   }
 
   const rows = [];
   for (const zcta of [...byZcta.keys()].sort()) {
-    const { counties, districts } = byZcta.get(zcta);
+    const { counties, districts: districtsByCounty } = byZcta.get(zcta);
     const countyFips = dominantKey(counties);
     const covered = METROS[countyFips];
     if (!covered) continue;
-    /* Shares are taken over the land we can attribute to a district, not over
+    /* Only the covered county's own blocks count toward its districts
+       (0045). The ZIP's other counties are not covered, so their districts
+       belong to no row. Summing every block in the ZCTA, as this script did
+       until 2026-10-05, gave Orange ZIPs 32703 and 32751 the FL-7 share
+       that lies in Seminole County, so Orange voters were offered a House
+       race that is on no Orange ballot (Orange composite sample ballot,
+       2026 general: Congress districts 8, 9 and 11 only, FL-10 being
+       unopposed and unprinted). It also gave Hillsborough's 33598 the FL-16
+       share that lies in Manatee County.
+
+       Shares are taken over the land we can attribute to a district, not over
        AREALAND_ZCTA5_20: the relationship file is the national one filtered to
        Florida, so that column can count land outside the enacted plan. */
+    const districts = districtsByCounty.get(countyFips) ?? new Map();
     const total = [...districts.values()].reduce((a, b) => a + b, 0) || 1;
     const dominant = dominantKey(districts);
     const qualifying = [...districts]

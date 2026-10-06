@@ -3,6 +3,12 @@
    docs/general-election/ballots/zip_districts_2026.csv, an answer to the same
    question derived independently from the same two Census/plan inputs.
 
+   The seed is checked as production holds it: 0022 followed by every later
+   *_zip_district.sql correction (0045 removed two Orange -> FL-7 rows whose
+   FL-7 land is in Seminole County), applied to an embedded Postgres by
+   ./zip-district-state.mjs, which boots @electric-sql/pglite. The CSV
+   carries the same corrections, so the two still agree pair for pair.
+
    The (zip5, congressional_district) pairs must match exactly: same count, no
    extras, no omissions. The CSV's cd_share and legislative columns have no
    home in zip_district and are not compared. A disagreement is a finding
@@ -14,9 +20,9 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { zipCorrections, zipDistrictAsApplied } from "./zip-district-state.mjs";
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const seedFile = path.join(root, "supabase", "migrations", "0022_zip_seed_2026.sql");
 const ORACLE = "docs/general-election/ballots/zip_districts_2026.csv";
 const ORACLE_REF = "claude/ballots-handoff-docs-835025";
 const METRO_FIPS = ["12086", "12011", "12057", "12095"];
@@ -30,25 +36,22 @@ function check(name, ok, detail = "") {
   }
 }
 
-/* The generated migration. */
-const sql = readFileSync(seedFile, "utf8");
-const body = sql.split("VALUES\n")[1] ?? "";
-const rowRe =
-  /^\('(\d{5})','(\d{5})','([^']*)','(FL-\d+)','([a-z_]+)',(true|false),true\)/gm;
-const rows = [...body.matchAll(rowRe)].map(
-  ([, zip5, countyFips, countyName, district, metro, isSplit]) => ({
-    zip5,
-    countyFips,
-    countyName,
-    district,
-    metro,
-    isSplit: isSplit === "true",
-  })
+/* The generated migration, and every correction after it. */
+let rows = [];
+try {
+  rows = await zipDistrictAsApplied();
+} catch (err) {
+  check("0022 and its corrections apply", false, err.message);
+}
+check(
+  `0022 applies, then ${zipCorrections().join(", ") || "no correction"}`,
+  rows.length > 0,
+  "no rows"
 );
 check(
-  "every VALUES row parses",
-  rows.length === (body.match(/^\(/gm) ?? []).length && rows.length > 0,
-  `parsed ${rows.length} of ${(body.match(/^\(/gm) ?? []).length} tuples`
+  "every row is in coverage",
+  rows.every((r) => r.inCoverage === true),
+  rows.filter((r) => !r.inCoverage).map((r) => `${r.zip5} ${r.district}`).join(", ")
 );
 
 const seedByZip = new Map();
