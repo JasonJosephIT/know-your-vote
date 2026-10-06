@@ -48,7 +48,23 @@ export function InstallCard() {
   );
   const [dismissed, setDismissed] = useState(false);
 
-  if (!hydrated || dismissed) return null;
+  if (!hydrated) return null;
+  /* Dismiss removes the focused button with the card. Rather than let focus
+     fall to <body>, it lands on this stand-in where the card was, which
+     reads what happened and keeps the Tab order in place (interface review
+     2026-10-05). Only after a dismiss in this visit: a card dismissed on an
+     earlier visit renders nothing at all. */
+  if (dismissed) {
+    return (
+      <span
+        ref={(el) => el?.focus({ preventScroll: true })}
+        tabIndex={-1}
+        className="sr-only"
+      >
+        Get the app card dismissed
+      </span>
+    );
+  }
 
   /* Client-only environment reads — safe after the hydration gate. */
   const standalone =

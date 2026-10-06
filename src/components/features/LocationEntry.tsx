@@ -38,7 +38,9 @@ import type { ResolveResult } from "@/types/app";
 type Stage =
   | { kind: "idle" }
   | { kind: "loading" }
-  | { kind: "error"; message: string }
+  /* `field` (the default) marks an error about what was typed, which sits on
+     the field; false marks one that isn't (the network failed). */
+  | { kind: "error"; message: string; field?: boolean }
   | {
       kind: "split";
       zip: string;
@@ -70,6 +72,8 @@ export function LocationEntry({
   const field = locationFieldCopy(addressEnabled);
   const router = useRouter();
   const listId = useId();
+  const errorId = useId();
+  const inputRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState("");
   const [stage, setStage] = useState<Stage>({ kind: "idle" });
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
@@ -90,6 +94,16 @@ export function LocationEntry({
      is what React 19's set-state-in-effect rule warns about, and deriving is
      simply correct anyway: there is nothing to remember. */
   const visible = addressMode ? suggestions : [];
+  const fieldError = stage.kind === "error" && stage.field !== false;
+
+  /* Errors that announce (interface review 2026-10-05). An error about what
+     was typed belongs to the field: the field reports itself invalid, reads
+     the message as its description, and gets focus back, which also
+     rescues focus from the submit button that "Looking up…" disabled. Only
+     an error that isn't about the field (the network) is a role=alert. */
+  useEffect(() => {
+    if (fieldError) inputRef.current?.focus();
+  }, [fieldError, stage]);
   const highlighted = addressMode ? activeIndex : -1;
 
   /* Suggestions, debounced. A keystroke is a billed request, so this waits for a
@@ -184,6 +198,7 @@ export function LocationEntry({
       setStage({
         kind: "error",
         message: "Something went wrong — give it another try.",
+        field: false,
       });
     }
   }
@@ -228,6 +243,7 @@ export function LocationEntry({
       setStage({
         kind: "error",
         message: "Something went wrong — give it another try.",
+        field: false,
       });
     }
   }
@@ -284,7 +300,7 @@ export function LocationEntry({
         onSubmit={submit}
         action="/candidates"
         method="get"
-        className="flex w-full flex-col gap-3 sm:flex-row"
+        className="flex w-full flex-col gap-3 sm:flex-row sm:items-start"
       >
         <input type="hidden" name="view" value="races" />
         <label htmlFor="location" className="sr-only">
@@ -292,8 +308,11 @@ export function LocationEntry({
         </label>
         <div className="relative flex w-full flex-col sm:max-w-[320px]">
           <Input
+            ref={inputRef}
             id="location"
             name="zip"
+            aria-invalid={fieldError || undefined}
+            aria-describedby={fieldError ? errorId : undefined}
             role="combobox"
             aria-expanded={visible.length > 0}
             aria-controls={listId}
@@ -311,6 +330,11 @@ export function LocationEntry({
             }}
             onKeyDown={onKeyDown}
           />
+          {stage.kind === "error" && stage.field !== false && (
+            <p id={errorId} className="mt-2 text-body-sm text-error">
+              {stage.message}
+            </p>
+          )}
           {visible.length > 0 && (
             <ul
               id={listId}
@@ -350,13 +374,13 @@ export function LocationEntry({
       {/* Always visible, not only after a miss: a voter outside the four
           counties should know before typing that their House and county
           races are not here yet. */}
-      <p className="text-caption text-on-surface-muted">
+      <p className="text-body-sm text-on-surface-muted">
         Full statewide coverage isn&apos;t available yet. Every Florida voter
         gets the statewide races and amendments; U.S. House and county races
         are only for {coveredCountyNames()} counties so far.
       </p>
 
-      {stage.kind === "error" && (
+      {stage.kind === "error" && stage.field === false && (
         <p role="alert" className="text-body-sm text-error">
           {stage.message}
         </p>
