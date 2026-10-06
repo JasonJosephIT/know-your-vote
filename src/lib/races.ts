@@ -3,6 +3,8 @@ import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 import type { ResolveRaceSummary } from "@/types/app";
 import { LISTED_RACE_LABEL } from "@/lib/listing-copy";
+import { orderCandidates } from "@/lib/briefs";
+import type { Party } from "@/types/schema";
 
 /* Location-free read of the races every Florida voter shares (TASK-067).
 
@@ -53,11 +55,25 @@ export function raceStatusLabel(status: ResolveRaceSummary["status"]): string {
   return status === "published" ? "Full brief" : LISTED_RACE_LABEL;
 }
 
+/* Who is on the ballot, for the landing page's race rows (inspiration pass
+   2026-10-05): enough to recognise a race without opening it. Ballot tier
+   only and in ballot order, the same two rules as the race page
+   (listing.ts), so the row and the page it links to can't disagree about
+   who is running or in what order. Name and party code only; the row
+   prints the party through partyLabel, so it follows the same neutrality
+   rules as every chip. */
+export interface StatewideRaceCandidate {
+  candidateId: string;
+  name: string;
+  party: Party | null;
+}
+
 export type StatewideRace = ResolveRaceSummary & {
   /* From race.key_dates, so the card can name the election day without a
      second query per race (which is what YourRaces still does for the
      district path). */
   generalDate: string | null;
+  candidates: StatewideRaceCandidate[];
 };
 
 async function fetchStatewideRaces(): Promise<StatewideRace[]> {
@@ -76,7 +92,7 @@ async function fetchStatewideRaces(): Promise<StatewideRace[]> {
   const { data, error } = await supabase
     .from("race")
     .select(
-      "race_id, office, level, district, key_dates, race_publication(status)"
+      "race_id, office, level, district, key_dates, candidate_ids, race_publication(status)"
     )
     .eq("election", ACTIVE_ELECTION_KIND)
     .is("district", null)
@@ -91,8 +107,35 @@ async function fetchStatewideRaces(): Promise<StatewideRace[]> {
      indistinguishable from an outage here — an honest limit of degrading, and
      the better of the two failures. */
   if (error) return [];
+
+  /* One query for every race's candidates rather than one per race. A
+     failure here costs the rows their names, not the ballot: the races
+     still render, as they did before this field existed. */
+  const ids = [...new Set((data ?? []).flatMap((r) => r.candidate_ids ?? []))];
+  const { data: people } =
+    ids.length > 0
+      ? await supabase
+          .from("candidate")
+          .select("candidate_id, legal_name, party")
+          .in("candidate_id", ids)
+          .eq("ballot_status", "ballot")
+      : { data: [] };
+  const byId = new Map(
+    ((people ?? []) as { candidate_id: string; legal_name: string; party: Party | null }[]).map(
+      (p) => [p.candidate_id, p]
+    )
+  );
+
   return (data ?? []).map((r) => {
     const status = raceStatusOf(r.race_publication);
+    const ballotOrder: string[] = r.candidate_ids ?? [];
+    const candidates = orderCandidates(
+      ballotOrder.flatMap((id) => {
+        const p = byId.get(id);
+        return p ? [p] : [];
+      }),
+      ballotOrder
+    ).map((p) => ({ candidateId: p.candidate_id, name: p.legal_name, party: p.party }));
     return {
       raceId: r.race_id,
       office: r.office,
@@ -104,6 +147,7 @@ async function fetchStatewideRaces(): Promise<StatewideRace[]> {
       status,
       generalDate:
         (r.key_dates as Record<string, string> | null)?.general_date ?? null,
+      candidates,
     };
   });
 }
@@ -113,8 +157,8 @@ export function getStatewideRaces() {
     fetchStatewideRaces,
     /* v2: the shape gained `status` (0033). A new key rather than trusting
        old entries to age out, although an old entry would still be read
-       safely — a missing status is `listed`. */
-    ["statewide-races", "v2", ACTIVE_ELECTION_KIND],
+       safely — a missing status is `listed`. v3: `candidates`. */
+    ["statewide-races", "v3", ACTIVE_ELECTION_KIND],
     { revalidate: 3600, tags: ["races"] }
   )();
 }

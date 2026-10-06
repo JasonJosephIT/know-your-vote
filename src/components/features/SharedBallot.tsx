@@ -1,8 +1,12 @@
-import Link from "next/link";
-import { Card } from "@/components/ui/Card";
+import { LinkRow, LinkRowList } from "@/components/ui/LinkRows";
 import { BallotQuestions } from "@/components/features/BallotQuestions";
 import { getActiveMeasures } from "@/lib/measures";
-import { getStatewideRaces, raceStatusLabel } from "@/lib/races";
+import {
+  getStatewideRaces,
+  raceStatusLabel,
+  type StatewideRaceCandidate,
+} from "@/lib/races";
+import { partyLabel } from "@/lib/party-label";
 
 /* The ballot every Florida voter shares, rendered with no input at all
    (TASK-067).
@@ -22,7 +26,27 @@ import { getStatewideRaces, raceStatusLabel } from "@/lib/races";
    Since the listed tier (0033) a race is visible as soon as its roster is,
    before any brief exists, so each card says which it is (raceStatusLabel).
    The "isn't published yet" copy below is now only the truly-empty case:
-   zero races AND zero measures, i.e. nothing at all is even listed. */
+   zero races AND zero measures, i.e. nothing at all is even listed.
+
+   Race rows (inspiration pass 2026-10-05). Each race used to be a tall card
+   saying only its office, "Statewide" and its status, so five races filled
+   a screen and none said who was running. Now they share one bordered
+   list, one row each: the office (the row's only link), its status, and
+   every candidate on the ballot with their party, in ballot order. Every
+   name is printed, never "and 5 more": a cut-off list would give the first
+   names on the ballot a place the rest don't get. Party is plain text
+   through partyLabel, never a colour. The whole row is clickable through
+   the link's ::after, so the link's accessible name stays the office alone
+   (the names are read as the row's text). */
+
+function candidateList(candidates: StatewideRaceCandidate[]) {
+  return candidates
+    .map((c) => {
+      const party = partyLabel(c.party);
+      return party ? `${c.name} (${party})` : c.name;
+    })
+    .join(", ");
+}
 
 function formatDate(iso: string | null) {
   if (!iso) return null;
@@ -60,27 +84,32 @@ export async function SharedBallot() {
               party you&apos;re registered with — including no party at all.
             </p>
           </div>
-          <ul className="flex flex-col gap-4">
+          <LinkRowList>
             {races.map((race) => {
               const general = formatDate(race.generalDate);
+              const n = race.candidates.length;
               return (
-                <li key={race.raceId}>
-                  <Link href={`/races/${race.raceId}`} className="block">
-                    <Card className="transition-shadow hover:shadow-elevation-1">
-                      <h3 className="text-h3">{race.office}</h3>
-                      <p className="text-body-sm text-on-surface-muted">
-                        Statewide
-                        {general ? ` · General election ${general}` : ""}
-                      </p>
-                      <p className="text-caption text-on-surface-muted">
-                        {raceStatusLabel(race.status)}
-                      </p>
-                    </Card>
-                  </Link>
-                </li>
+                <LinkRow
+                  key={race.raceId}
+                  href={`/races/${race.raceId}`}
+                  title={race.office}
+                  aside={raceStatusLabel(race.status)}
+                >
+                  {n > 0 && (
+                    <p className="text-body-sm text-on-surface-muted">
+                      {n === 1 ? "1 candidate" : `${n} candidates`}:{" "}
+                      {candidateList(race.candidates)}
+                    </p>
+                  )}
+                  {general && (
+                    <p className="text-caption text-on-surface-muted">
+                      General election {general}
+                    </p>
+                  )}
+                </LinkRow>
               );
             })}
-          </ul>
+          </LinkRowList>
         </section>
       )}
 
