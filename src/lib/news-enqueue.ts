@@ -23,38 +23,61 @@ import type { NewsRelation, RosterCandidate, Match } from "./news-match";
 import type { SweptArticle } from "./news-sweep";
 import type { Outlet } from "./news-sources";
 
-/* ---- FOUNDER CALL: a policy story that names no candidate -------------
-   RECOMMENDED (PENDING FOUNDER CONFIRMATION), 2026-10-04: "drop". There is
-   no automatic inlet for it before Election Day, and operator submission
-   through the admin form stays the path. Launch handoff §5; the options are
-   news-ingest-order-handoff-2026-09-23.md §5, and the pending decision is
-   recorded in docs/general-election/stream-surface-handoff.md §7.
+/* ---- FOUNDER CALL: a story that names no candidate ----------------------
+   DECIDED (founder, 2026-10-06): "election_keywords". An article that matches
+   no candidate is still queued for review when its title or summary is about
+   the election (isElectionRelated below), as an election_news row: statewide
+   when its outlet is statewide, county-scoped when the outlet is a county's.
+   Everything else that matches no one is dropped, as before. It is queued,
+   never published: an operator approves each one in the console.
 
-   WHY. The option that matches the founder's first description of the
-   workflow is a Jev-tagged policy inlet (option 2). It would make the model a
-   gate, reversing the order the pipeline was built on, and that handoff's §7
-   asks for it to be "its own spec change with its own PR", chosen
-   deliberately. Four weeks out, it would gate on a model that has never run
-   against production rows: TYPESAFE_API_KEY is unset, the 0.85 threshold
-   comes from ten fixtures, and the gold set is the sweep pool, not the feed.
-   The pool is also large. With the recommended surname rule, 507 of the 545
-   articles in the 2026-10-04 30-day sweep matched no candidate, and one
-   operator would review whatever share of them the model admitted. The
-   approval boundary cannot carry a county-scoped row yet either, because
-   NewsInsertRow (src/lib/admin/effects.ts) has no county_fips. Option 3,
-   race-scoping at match time, needs a race identifier the sweep does not
-   produce.
+   Why keywords and not the Jev-tagged inlet the 2026-09-23 handoff (§5,
+   option 2) described: TYPESAFE_API_KEY is unset and the model has never
+   run against production rows, while a keyword gate is deterministic, testable
+   offline and only decides what an operator sees, not what voters see. On the
+   2026-10-06 sweep it admitted 43 of 488 unmatched articles, nearly all of
+   them election stories; "vote" and "campaign" were left out because on
+   their own they admitted ad campaigns and charity drives.
 
-   WHAT IT COSTS. A statewide policy story that names nobody on the ballot
-   does not reach /news on its own. An operator can still post it, which is
-   how all eight live election_news rows arrived.
+   History: until 2026-10-06 this was "drop" (recommended 2026-10-04,
+   pending), so a statewide story naming nobody on the ballot never reached
+   /news unless an operator typed it in. "policy_inlet" is still not built. */
+export type UnmatchedArticlePolicy = "drop" | "election_keywords" | "policy_inlet";
+export const UNMATCHED_ARTICLE_POLICY: UnmatchedArticlePolicy = "election_keywords";
 
-   TO FLIP: "policy_inlet" is NOT BUILT. Setting it makes
-   scripts/news-enqueue.ts refuse to run and say so, because a switch that
-   silently did nothing would read as "no policy news this week". Building it
-   is the spec change described above. */
-export type UnmatchedArticlePolicy = "drop" | "policy_inlet";
-export const UNMATCHED_ARTICLE_POLICY: UnmatchedArticlePolicy = "drop";
+/* Whole words only, case-insensitive. Each term is about elections in
+   itself; see the policy note above for what was left out and why. */
+const ELECTION_TERMS =
+  /\b(elections?|electoral|ballots?|amendments?|voters?|voting|vote-by-mail|candidates?|referendums?|polling places?|supervisors? of elections|early vote|midterms?)\b/i;
+
+/** Whether a story that names no candidate is about the election, from its
+    title and summary. */
+export function isElectionRelated(article: { title: string; summary: string | null }): boolean {
+  return ELECTION_TERMS.test(`${article.title} ${article.summary ?? ""}`);
+}
+
+/** The `manual_news` payload for an election story that names no candidate:
+    election_news, scoped to the outlet's county when it has one, otherwise
+    explicitly statewide. No race, candidate or metro is guessed, and no
+    relation tier is set (it isn't a candidate match). */
+export function electionPayloadFor(article: SweptArticle, sourceId: string) {
+  const county = article.countyFips ?? null;
+  return {
+    item_type: "election_news" as const,
+    title: article.title,
+    summary: article.summary,
+    url: article.url,
+    metro: null,
+    race_id: null,
+    candidate_id: null,
+    published_at: article.publishedAt,
+    relation: null,
+    image_url: article.imageUrl,
+    source_id: sourceId,
+    county_fips: county,
+    statewide: county === null ? true : null,
+  };
+}
 
 /** One article attached to one candidate. The sweep's article can produce
     several of these — a `related` surname match attaches to every candidate the
@@ -69,16 +92,25 @@ export interface Attachment {
 }
 
 export interface PlanCounts {
-  /** Articles that matched nobody on the roster. Dropped, and counted — a
-      silent drop here looks like "the press ignored these people". */
+  /** Articles that matched nobody on the roster. Counted — a silent drop here
+      looks like "the press ignored these people". The election-related ones
+      are queued as election_news (`elections` on the plan); the rest dropped. */
   unmatched: number;
   /** Articles whose host matched no listed outlet. Dropped: attributing a story
       to an outlet we do not read would put an unverifiable publisher on a card. */
   offList: number;
 }
 
+/** An article that named no candidate but is about the election, with the
+    outlet it came from. Queued as election_news under the 2026-10-06 policy. */
+export interface ElectionItem {
+  article: SweptArticle;
+  sourceId: string;
+}
+
 export interface EnqueuePlan {
   attachments: Attachment[];
+  elections: ElectionItem[];
   counts: PlanCounts;
 }
 
@@ -187,6 +219,7 @@ export function planAttachments(
   outletFor: (url: string) => Outlet | null,
 ): EnqueuePlan {
   const attachments: Attachment[] = [];
+  const elections: ElectionItem[] = [];
   let unmatched = 0;
   let offList = 0;
 
@@ -199,6 +232,9 @@ export function planAttachments(
     const matches = matchFn({ title: article.title, summary: article.summary }, roster);
     if (matches.length === 0) {
       unmatched++;
+      if (UNMATCHED_ARTICLE_POLICY === "election_keywords" && isElectionRelated(article)) {
+        elections.push({ article, sourceId: sourceIdFor(outlet.domain) });
+      }
       continue;
     }
     for (const m of matches) {
@@ -216,7 +252,7 @@ export function planAttachments(
     }
   }
 
-  return { attachments, counts: { unmatched, offList } };
+  return { attachments, elections, counts: { unmatched, offList } };
 }
 
 /** The `manual_news` payload for one attachment.

@@ -66,6 +66,16 @@ export const ManualNewsPayloadSchema = z
        migration. An operator hand-adding a story may not have one; a swept
        article always does. */
     source_id: z.string().trim().nullish(),
+    /* County scope for an election_news row that names no candidate and no
+       race (founder 2026-10-06: the sweep queues election-related stories
+       from county outlets too). news_item.county_fips already exists and the
+       /news county filter reads it; this lets such a row survive approval. */
+    county_fips: z.string().trim().regex(/^\d{5}$/, "A county FIPS is 5 digits").nullish(),
+    /* Explicitly statewide: an election story scoped to no race, candidate,
+       metro or county, which is what the home page's statewide news shows.
+       A flag rather than "no scope at all", so an operator's form still has
+       to pick a scope and can't post an unscoped row by leaving it blank. */
+    statewide: z.boolean().nullish(),
   })
   .refine((p) => !p.candidate_id || Boolean(p.relation), {
     message:
@@ -73,10 +83,22 @@ export const ManualNewsPayloadSchema = z
       + "without it an ambiguous surname match renders as though it named the candidate.",
     path: ["relation"],
   })
-  .refine((p) => Boolean(p.race_id || p.candidate_id || p.metro), {
-    message: "Pick at least one scope (race, candidate, or metro).",
-    path: ["race_id"],
-  });
+  .refine(
+    (p) => Boolean(p.race_id || p.candidate_id || p.metro || p.county_fips || p.statewide),
+    {
+      message: "Pick at least one scope (race, candidate, metro, county, or statewide).",
+      path: ["race_id"],
+    }
+  )
+  /* Statewide means no narrower scope; both at once would be a contradiction
+     the feed can't place. */
+  .refine(
+    (p) => !p.statewide || !(p.race_id || p.candidate_id || p.metro || p.county_fips),
+    {
+      message: "A statewide story can't also carry a race, candidate, metro or county.",
+      path: ["statewide"],
+    }
+  );
 
 export const GatedDiffPayloadSchema = z.object({
   table: z.string().min(1),

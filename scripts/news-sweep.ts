@@ -25,33 +25,15 @@
        request per day in the window. Print the articles. Fail-closed: no usable
        outlets means no output and a non-zero exit, never a silent empty success. */
 
-import { OUTLETS, sitemapUrlFor, urlBelongsTo, usableOutlets, type Outlet } from "../src/lib/news-sources.ts";
-import { parseNewsSitemap, sweep } from "../src/lib/news-sweep.ts";
+import { OUTLETS } from "../src/lib/news-sources.ts";
+import { fetchText, runSweep } from "../src/lib/news-intake.ts";
 
 const args = process.argv.slice(2);
 const days = Number(args[args.indexOf("--days") + 1]) || 14;
-const UA = "KnowYourVote/1.0 (+https://github.com/JasonJosephIT/know-your-vote)";
 
-async function get(url: string): Promise<string | null> {
-  try {
-    const res = await fetch(url, {
-      headers: { "user-agent": UA, accept: "application/rss+xml, application/atom+xml, text/html" },
-      redirect: "follow",
-      signal: AbortSignal.timeout(20_000),
-    });
-    if (!res.ok) {
-      console.error(`  HTTP ${res.status} ${url}`);
-      return null;
-    }
-    return await res.text();
-  } catch (err) {
-    /* Degrade honestly: name the failure, never a silent empty result. */
-    console.error(`  ${(err as Error).name}: ${url}`);
-    return null;
-  }
-}
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+/* The fetch, its user agent and its failure logging live in
+   src/lib/news-intake.ts, shared with the twice-weekly cron. */
+const get = (url: string) => fetchText(url, (line) => console.error(line));
 
 if (args.includes("--probe")) {
   for (const outlet of OUTLETS) {
@@ -69,54 +51,13 @@ if (args.includes("--probe")) {
   process.exit(0);
 }
 
-const usable = usableOutlets();
-if (usable.length === 0) {
-  console.error(
-    `No usable outlets: ${OUTLETS.length} listed, 0 with both a signed-off leanTag and a retrieval path (verified feed or sitemap).\n` +
-      `Fill those in (see the header of src/lib/news-sources.ts) — run --probe to find the feeds.`,
-  );
+/* The sweep itself is src/lib/news-intake.ts runSweep, the same code the
+   twice-weekly cron runs (src/app/api/cron/news-sweep/route.ts). */
+try {
+  const result = await runSweep({ days, log: (line) => console.error(line) });
+  console.error(result.summary);
+  console.log(JSON.stringify(result.articles, null, 2));
+} catch (err) {
+  console.error((err as Error).message + "\nFill those in (see the header of src/lib/news-sources.ts) — run --probe to find the feeds.");
   process.exit(1);
 }
-
-const now = new Date();
-const feeds: { outlet: Outlet; xml: string; format?: "feed" | "news-sitemap" }[] = [];
-let feedOutlets = 0;
-let sitemapDays = 0;
-let sitemapDaysOk = 0;
-
-for (const outlet of usable) {
-  if (outlet.feed !== null) {
-    const xml = await get(outlet.feed);
-    if (xml) {
-      feeds.push({ outlet, xml });
-      feedOutlets++;
-    }
-    continue;
-  }
-
-  /* Retrieval mode 2: one request per UTC day in the window, oldest first,
-     with a polite gap. A day that fails is logged by get() and skipped; a
-     day that parses to nothing is logged here — silence is the failure mode
-     gate C7-b exists to prevent. Never retried inside a run. */
-  if (outlet.sitemap) {
-    for (let back = days; back >= 0; back--) {
-      const url = sitemapUrlFor(outlet.sitemap.daily, new Date(now.getTime() - back * 86_400_000));
-      sitemapDays++;
-      const xml = await get(url);
-      if (xml) {
-        if (parseNewsSitemap(xml).length === 0) console.error(`  0 entries: ${url}`);
-        feeds.push({ outlet, xml, format: "news-sitemap" });
-        sitemapDaysOk++;
-      }
-      await sleep(1000);
-    }
-  }
-}
-
-const articles = sweep({ feeds, now, windowDays: days, belongsTo: urlBelongsTo });
-const sitemapOutlets = usable.filter((o) => o.feed === null && o.sitemap).length;
-console.error(
-  `swept ${feedOutlets}/${usable.length - sitemapOutlets} feeds + ${sitemapDaysOk}/${sitemapDays} sitemap days ` +
-    `(${sitemapOutlets} outlet${sitemapOutlets === 1 ? "" : "s"}) -> ${articles.length} articles in the last ${days} days`,
-);
-console.log(JSON.stringify(articles, null, 2));

@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/Card";
 import { safeHttpUrl } from "@/lib/format";
+import { coveredCounty } from "@/lib/counties";
 import { relativeTime } from "@/lib/admin/format";
 import { DecisionControls } from "@/components/admin/DecisionControls";
 import {
@@ -141,6 +142,16 @@ function Body({ item }: { item: ReviewItemRow }) {
           ) : null}
           {p.metro ? (
             <Chip className="bg-surface-muted text-on-surface-muted">{p.metro}</Chip>
+          ) : null}
+          {/* Election stories that name no candidate (sweep, 2026-10-06):
+              say where approving one will show it. */}
+          {p.county_fips ? (
+            <Chip className="bg-surface-muted text-on-surface-muted">
+              county: {coveredCounty(p.county_fips)?.name ?? p.county_fips}
+            </Chip>
+          ) : null}
+          {p.statewide ? (
+            <Chip className="bg-surface-muted text-on-surface-muted">statewide</Chip>
           ) : null}
           <span className="text-caption text-on-surface-muted">{p.published_at}</span>
         </div>

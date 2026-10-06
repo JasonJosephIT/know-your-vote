@@ -22,6 +22,8 @@ import { resolve } from "node:path";
 import {
   dedupeKey,
   domainFromSourceId,
+  electionPayloadFor,
+  isElectionRelated,
   outletSourceRow,
   planAttachments,
   planSourceAttribution,
@@ -309,24 +311,87 @@ check("the route uses planSourceAttribution with the canonical urlNorm",
 check("describeNewsInsertError names 0014's constraint instead of blaming 0005",
   route.includes("news_item_agent_source_check") && route.includes("news_item_item_type_check"));
 
-/* ---- 9. the unmatched-article policy (pending founder call) ----------- */
-/* Only "drop" is built. The runner must refuse any other value BEFORE it reads
-   stdin or the database: a switch that silently did nothing would read as "no
-   policy news this week". */
-check("UNMATCHED_ARTICLE_POLICY is one of the two declared values",
-  UNMATCHED_ARTICLE_POLICY === "drop" || UNMATCHED_ARTICLE_POLICY === "policy_inlet",
-  String(UNMATCHED_ARTICLE_POLICY));
+/* ---- 9. the unmatched-article policy (founder 2026-10-06) ------------- */
+/* "election_keywords": a story naming no candidate is queued as election_news
+   when it is about the election; anything else unmatched is dropped. The
+   model-gated "policy_inlet" is still not built, and the runner refuses it
+   before reading anything: a switch that silently did nothing would read as
+   "no policy news this week". */
+check("UNMATCHED_ARTICLE_POLICY is the founder's election_keywords",
+  UNMATCHED_ARTICLE_POLICY === "election_keywords", String(UNMATCHED_ARTICLE_POLICY));
 const runner = readFileSync(resolve(import.meta.dirname, "news-enqueue.ts"), "utf8")
   .replace(/\/\*[\s\S]*?\*\//g, "");
-const guardAt = runner.search(/if \(\(UNMATCHED_ARTICLE_POLICY as string\) !== "drop"\)\s*\{[\s\S]*?process\.exit\(2\)/);
+const guardAt = runner.search(/if \(\(UNMATCHED_ARTICLE_POLICY as string\) === "policy_inlet"\)\s*\{[\s\S]*?process\.exit\(2\)/);
 const stdinAt = runner.indexOf("process.stdin");
-check("the runner refuses an unbuilt unmatched-article policy before reading anything",
+check("the runner refuses the unbuilt policy_inlet before reading anything",
   guardAt !== -1 && stdinAt !== -1 && guardAt < stdinAt, `guard@${guardAt} stdin@${stdinAt}`);
+
+/* The keyword gate: about the election in so many words, and nothing broader. */
+for (const [title, want] of [
+  ["Voter registration deadline arrives ahead of Florida homestead exemption vote", true],
+  ["What to know about 3 Florida amendments on the ballot before the election", true],
+  ["Miami-Dade supervisor of elections denies ICE presence at polls", true],
+  ["North Miami voters face mayoral election in November", true],
+  ["Pink fire truck tours the city for breast cancer campaign", false],
+  ["Arkansas campaign ad sparks backlash", false],
+  ["City Council voted to extend the bus route", false],
+  ["Hurricane season winds down with no landfall", false],
+] as const) {
+  check(`isElectionRelated: ${title}`, isElectionRelated({ title, summary: null }) === want);
+}
+check("isElectionRelated reads the summary too",
+  isElectionRelated({ title: "What changes next week", summary: "Early vote sites open Monday." }));
+
+/* Unmatched election stories land on the plan, others don't. */
+{
+  const p = plan([
+    article({ title: "County ballots mailed this week", url: "https://www.wlrn.org/ballots" }),
+    article({ title: "New bakery opens downtown", url: "https://www.wlrn.org/bakery" }),
+  ]);
+  check("an unmatched election story is planned as an election item, other unmatched are not",
+    p.elections.length === 1 && p.elections[0].article.url.endsWith("/ballots") && p.counts.unmatched === 2,
+    JSON.stringify({ elections: p.elections.length, unmatched: p.counts.unmatched }));
+}
+
+/* The election payload: county-scoped from a county outlet, statewide
+   otherwise, never a guessed race/candidate/metro, and it parses with the
+   real schema (so it can be approved). */
+{
+  const county = electionPayloadFor(article({ title: "Ballots go out", countyFips: "12086" }), "outlet:wlrn.org");
+  const state = electionPayloadFor(article({ title: "Ballots go out", countyFips: null }), "outlet:floridaphoenix.com");
+  check("county election payload carries county_fips, not statewide",
+    county.county_fips === "12086" && county.statewide === null && county.race_id === null && county.candidate_id === null && county.metro === null && county.relation === null);
+  check("statewide election payload is explicitly statewide with no county",
+    state.county_fips === null && state.statewide === true);
+  check("both election payloads parse with the real ManualNewsPayloadSchema",
+    ManualNewsPayloadSchema.safeParse(county).success && ManualNewsPayloadSchema.safeParse(state).success,
+    JSON.stringify([ManualNewsPayloadSchema.safeParse(county).error?.issues, ManualNewsPayloadSchema.safeParse(state).error?.issues]));
+  check("the schema refuses a story with no scope at all",
+    !ManualNewsPayloadSchema.safeParse({ ...state, statewide: null }).success);
+  check("the schema refuses statewide plus a narrower scope",
+    !ManualNewsPayloadSchema.safeParse({ ...state, county_fips: "12086" }).success);
+}
+
+/* The twice-weekly cron (founder 2026-10-06). */
+{
+  const vercel = JSON.parse(readFileSync(resolve(import.meta.dirname, "..", "vercel.json"), "utf8"));
+  const cron = (vercel.crons ?? []).find((c: { path: string }) => c.path === "/api/cron/news-sweep");
+  check("vercel.json runs /api/cron/news-sweep Mondays and Thursdays", cron?.schedule === "0 11 * * 1,4", JSON.stringify(cron));
+  const routeSrc = readFileSync(resolve(import.meta.dirname, "..", "src/app/api/cron/news-sweep/route.ts"), "utf8");
+  check("the cron is CRON_SECRET-gated and runs the shared intake",
+    /secretEquals\(request\.headers\.get\("authorization"\), `Bearer \$\{secret\}`\)/.test(routeSrc) &&
+      /runSweep\(/.test(routeSrc) && /enqueueIntake\(service, sweep\.articles\)/.test(routeSrc));
+  const intake = readFileSync(resolve(import.meta.dirname, "..", "src/lib/news-intake.ts"), "utf8");
+  check("the intake only ever writes pending review items",
+    /status: "pending"/.test(intake) && !/from\("news_item"\)\s*\.insert/.test(intake));
+  check("rejected stories aren't re-queued on the next run",
+    /\.in\("status", \["pending", "approved", "rejected"\]\)/.test(intake));
+}
 
 if (failures > 0) {
   console.error(`\nverify-news-enqueue: ${failures} failure(s)`);
   process.exit(1);
 }
 console.log(
-  "verify-news-enqueue: OK — the relation tier reaches the payload for both tiers, every payload parses with the real ManualNewsPayloadSchema, off-list and unmatched articles are dropped and counted",
+  "verify-news-enqueue: OK — the relation tier reaches the payload for both tiers, every payload parses with the real ManualNewsPayloadSchema, off-list articles are dropped, unmatched election stories are queued as election_news and the rest dropped",
 );

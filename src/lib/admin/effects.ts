@@ -48,6 +48,9 @@ export interface NewsInsertRow {
      row. Carried here so an approved insert satisfies that CHECK instead of
      failing with the wrong migration named. */
   source_id: string | null;
+  /* County scope (election_news from a county outlet; founder 2026-10-06).
+     Null for statewide and for every race- or candidate-scoped row. */
+  county_fips: string | null;
 }
 
 export type EffectPlan =
@@ -105,6 +108,7 @@ export function planEffect(content: ReviewItemContent): EffectPlan {
           relation: p.relation ?? null,
           image_url: p.image_url ?? null,
           source_id: p.source_id ?? null,
+          county_fips: p.county_fips ?? null,
         },
       };
     }
