@@ -35,6 +35,8 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 import {
   isPartisanRace,
+  officeRank,
+  orderRaces,
   orderCandidates,
   partyRank,
   surnameOf,
@@ -686,6 +688,32 @@ check(
   "methodology still has the #not-covered anchor other pages link to",
   methodology.includes('id="not-covered"')
 );
+
+/* ---- office order (s. 101.151(2)(a); interface review 2026-10-05) ------- */
+{
+  const rows = [
+    { raceId: "FL-AGR-general", office: "Commissioner of Agriculture" },
+    { raceId: "FL-ATG-general", office: "Attorney General" },
+    { raceId: "FL-CFO-general", office: "Chief Financial Officer" },
+    { raceId: "FL-GOV-general", office: "Governor" },
+    { raceId: "FL-SEN-general", office: "United States Senator" },
+    { raceId: "FL-23-general", office: "United States Representative" },
+    { raceId: "FL-ORA-MAYOR-general", office: "Orange County Mayor" },
+  ];
+  check(
+    "races list in statutory office order, unknown offices last",
+    same(
+      orderRaces(rows).map((r) => r.raceId),
+      ["FL-SEN-general", "FL-23-general", "FL-GOV-general", "FL-ATG-general", "FL-CFO-general", "FL-AGR-general", "FL-ORA-MAYOR-general"]
+    ),
+    orderRaces(rows).map((r) => r.raceId).join(", ")
+  );
+  check("officeRank tolerates surrounding spaces", officeRank(" Governor ") === officeRank("Governor"));
+  for (const file of ["src/lib/races.ts", "src/lib/resolve.ts"]) {
+    const s = src(file);
+    check(`${file}: orders its race list with orderRaces, not by level`, /orderRaces\(/.test(s) && !/\.order\("level"/.test(s));
+  }
+}
 
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed.`);

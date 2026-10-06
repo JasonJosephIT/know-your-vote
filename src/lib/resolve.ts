@@ -1,3 +1,4 @@
+import { orderRaces } from "@/lib/ballot-order";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { unstable_cache } from "next/cache";
 import { COVERED_COUNTIES, coveredCounty } from "@/lib/counties";
@@ -176,12 +177,13 @@ async function racesForDistrict(
       .select("race_id, office, level, district, race_publication(status)")
       .eq("election", ACTIVE_ELECTION_KIND)
       .or(`district.is.null,district.eq.${district}`)
-      .order("level", { ascending: false })
+      /* Deterministic read only; ballot order of offices is applied below
+         (orderRaces, s. 101.151(2)(a)), as on the landing page. */
       .order("race_id"),
     districtRace(district),
   ]);
   if (error) throw new Error(`race lookup failed: ${error.message}`);
-  return (data ?? []).map((r) => {
+  return orderRaces((data ?? []).map((r) => {
     const row = toDistrictRace(r, null);
     return own && r.race_id === own.raceId
       ? {
@@ -190,7 +192,7 @@ async function racesForDistrict(
           ...(own.holder ? { holder: own.holder } : {}),
         }
       : row;
-  });
+  }));
 }
 
 /* The saved district's own race, for the landing page.
