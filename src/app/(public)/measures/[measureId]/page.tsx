@@ -40,7 +40,7 @@ export async function generateMetadata({
   return {
     title: listing
       ? `Amendment ${listing.measure.number}: ${listing.measure.official_title} — Know Your Vote`
-      : "Ballot question in review — Know Your Vote",
+      : "Ballot question not published — Know Your Vote",
   };
 }
 
@@ -53,21 +53,24 @@ export default async function MeasurePage({
   const listing = await getMeasureListing(measureId);
 
   /* Neither listed nor published: the measure row itself is hidden by RLS.
-     Same honest-degradation copy as an unpublished race. */
+     Same copy rule as an unpublished race. */
   if (!listing) {
     return (
       <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
-        <h1 className="text-h1">This ballot question is still in review</h1>
+        {/* Same reasoning as the race page's: RLS hides a measure in review
+            and an ID that doesn't exist alike, so the copy can't promise it
+            is coming. The old line ("only when what people say for it and
+            against it are both collected") also predated the listed tier,
+            under which a measure is visible before its sides are. */}
+        <h1 className="text-h1">This ballot question isn&apos;t published</h1>
         <p className="text-body text-on-surface-muted">
-          We publish a ballot question only when what people say for it and
-          against it are both collected and comparably sourced. This one
-          hasn&apos;t cleared that yet. Check back soon.
+          It may still be in review, or the link may be out of date.
         </p>
         <Link
-          href="/candidates?view=races"
+          href="/"
           className="text-label text-primary underline underline-offset-2"
         >
-          Back to your ballot
+          See the ballot questions we cover
         </Link>
       </main>
     );

@@ -29,7 +29,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
   const brief = await getRaceBrief(raceId);
   if (!brief) {
     return {
-      title: "Race in review — Know Your Vote",
+      title: "Race not published — Know Your Vote",
       robots: { index: false, follow: true },
     };
   }
