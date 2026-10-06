@@ -23,7 +23,7 @@ export function IssueRows({ rows }: { rows: IssueRow[] }) {
             {row.cells.map((cell) => (
               <article
                 key={cell.candidateId}
-                className="flex flex-col gap-2 rounded-md border border-border p-4"
+                className="flex flex-col gap-2 rounded-lg border border-border p-4"
               >
                 <h3 className="text-h3">
                   <Link

@@ -35,7 +35,7 @@ export function MeasureVoteMeaning({ pct }: { pct: number }) {
   const blankCountsForNeither = Number(pct) === 60;
   return (
     <section aria-labelledby="your-vote" className="flex flex-col gap-3">
-      <h2 id="your-vote" className="text-h3">
+      <h2 id="your-vote" className="text-h2">
         What your vote does
       </h2>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -71,7 +71,7 @@ export function MeasureVoteMeaning({ pct }: { pct: number }) {
 
 function Box({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-1 rounded-md border border-border border-l-4 border-l-border-strong bg-surface px-4 py-3">
+    <div className="flex flex-col gap-1 rounded-lg border border-border border-l-4 border-l-border-strong bg-surface px-4 py-3">
       <h3 className="text-label">{label}</h3>
       <p className="text-body-sm text-on-surface">{children}</p>
     </div>

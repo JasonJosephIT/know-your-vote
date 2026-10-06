@@ -76,14 +76,15 @@ const items = [
 ];
 
 /* Donations go through Zeffy, off-site. Same pill size as the district chip so
-   the two sit together in either bar; filled so it reads as an action. */
+   the two sit together in either bar (a 1px border like the chip's, so the
+   two boxes really are the same height); filled so it reads as an action. */
 function DonateLink({ className = "" }: { className?: string }) {
   return (
     <a
       href={DONATE_URL}
       target="_blank"
       rel="noopener noreferrer"
-      className={`items-center rounded-full bg-primary px-3 py-1 text-caption text-on-primary hover:bg-primary-hover ${className}`}
+      className={`items-center rounded-full border border-primary bg-primary px-3 py-1 text-caption text-on-primary transition-colors hover:border-primary-hover hover:bg-primary-hover ${className}`}
     >
       Donate
     </a>
@@ -142,13 +143,16 @@ export function SectionNav() {
                   key={item.href}
                   href={item.href}
                   aria-current={active ? "page" : undefined}
-                  className={`relative flex min-w-[72px] flex-col items-center gap-[2px] rounded-sm px-2 py-2 text-caption md:min-w-[76px] ${
+                  className={`relative flex min-w-[72px] flex-col items-center gap-[2px] rounded-sm px-2 py-2 text-caption transition-colors md:min-w-[76px] ${
                     active
                       ? "bg-primary-muted text-primary-hover"
                       : "text-on-surface-muted hover:text-on-surface"
                   }`}
                 >
-                  <span className="size-5">{item.icon}</span>
+                  {/* size-[20px], the icons' own grid: this theme's
+                      spacing-5 is 24px, which drew them at 1.2x
+                      (interface review 2026-10-05). */}
+                  <span className="size-[20px]">{item.icon}</span>
                   {item.label}
                   {active && (
                     <span

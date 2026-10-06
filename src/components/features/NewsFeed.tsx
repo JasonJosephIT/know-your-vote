@@ -114,7 +114,7 @@ export function NewsFeed({
   if (stage.kind === "error") {
     return (
       <p className="text-body text-on-surface-muted" role="alert">
-        Couldn&apos;t load the feed — refresh to try again.
+        Couldn&rsquo;t load the feed — refresh to try again.
       </p>
     );
   }

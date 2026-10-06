@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { pickHref, togglePickHref, type SpineOption } from "@/lib/issue-pick";
+import { CheckGlyph } from "@/components/ui/Glyphs";
 
 /* Chips for the race's spine issues. Each one is a plain link that adds or
    removes that issue in the URL, so there is no client state, nothing is
@@ -28,7 +29,7 @@ export function IssueFilter({
               <Link
                 href={togglePickHref(raceId, selected, o.id, available)}
                 aria-current={on ? "true" : undefined}
-                className={`inline-block rounded-full px-4 py-2 text-caption transition-colors ${
+                className={`inline-flex items-center gap-1 rounded-full px-4 py-2 text-caption transition-colors ${
                   on
                     ? "bg-primary-muted text-primary-hover"
                     : "bg-surface-muted text-on-surface-muted hover:text-on-surface"
@@ -36,7 +37,7 @@ export function IssueFilter({
               >
                 {on && (
                   <>
-                    <span aria-hidden="true">✓ </span>
+                    <CheckGlyph />
                     <span className="sr-only">(selected, select to remove) </span>
                   </>
                 )}

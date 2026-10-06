@@ -96,6 +96,12 @@
   /* Elevation */
   --shadow-elevation-1: 0 1px 3px rgba(34, 39, 31, 0.06);
   --shadow-elevation-2: 0 4px 12px rgba(34, 39, 31, 0.08);
+
+  /* Motion (design.md motion.fast + easing). Tailwind's defaults are 150ms
+     on its own curve, so every transition-colors ran off-token (interface
+     review 2026-10-05). */
+  --default-transition-duration: 120ms;
+  --default-transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
 }
 
 /* Font families resolve through next/font variables set on <html> */
@@ -135,6 +141,16 @@
      body's min-h- and pb- classes in layout.tsx and the effect that sets
      it, or move the phone banner into the page flow. */
   html {
+    /* A light tint on tap (interface review 2026-10-05): preflight sets the
+       highlight transparent, and Tailwind wraps every hover: in
+       @media (hover: hover), so a phone tap on a row, chip or button showed
+       nothing until the next page arrived. Platform feedback, no JS, so it
+       covers the server-rendered ballot too. */
+    -webkit-tap-highlight-color: color-mix(
+      in srgb,
+      var(--color-primary) 12%,
+      transparent
+    );
     scroll-padding-top: calc(56px + env(safe-area-inset-top));
     scroll-padding-bottom: calc(
       96px + env(safe-area-inset-bottom) + var(--kyv-overlay-bottom, 0px)
@@ -154,11 +170,15 @@
     line-height: var(--text-body--line-height);
   }
 
+  /* Balanced wrapping keeps a short last line from hanging alone under a
+     long heading (the home H1, and the all-caps official amendment titles
+     that run 6–10 lines on a phone; interface review 2026-10-05). */
   h1,
   h2,
   h3,
   h4 {
     font-family: var(--font-heading);
+    text-wrap: balance;
   }
 
   :focus-visible {

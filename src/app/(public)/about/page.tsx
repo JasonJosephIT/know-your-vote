@@ -21,9 +21,9 @@ export default function AboutPage() {
         <p className="text-overline uppercase tracking-[0.08em] text-accent-strong">
           About
         </p>
-        <h1 className="text-h1">Who&apos;s behind Know Your Vote</h1>
+        <h1 className="text-h1">Who&rsquo;s behind Know Your Vote</h1>
         <p className="text-body-lg text-on-surface-muted">
-          A free guide to Florida&apos;s 2026 general election, run by Know
+          A free guide to Florida&rsquo;s 2026 general election, run by Know
           Yours Inc, a nonprofit. No account, no paywall, no side.
         </p>
       </header>
@@ -35,13 +35,13 @@ export default function AboutPage() {
       <section className="flex flex-col gap-2">
         <h2 className="text-h2">What this is</h2>
         <p className="text-body">
-          Know Your Vote lays out Florida&apos;s 2026 general election: the
+          Know Your Vote lays out Florida&rsquo;s 2026 general election: the
           statewide races, the constitutional amendments, and the U.S. House and
           county races in {COUNTY_LIST}. In each race we brief, we quote what
           the candidates say about the issues, word for word from their own
           campaign websites, with a link to the page each quote came from.
           Where we found no position we could quote, we say so, which means we
-          didn&apos;t find one, not that the candidate has none. Some races list
+          didn&rsquo;t find one, not that the candidate has none. Some races list
           only who is on the ballot.
         </p>
         <p className="text-body">
@@ -95,13 +95,13 @@ export default function AboutPage() {
       <section className="flex flex-col gap-2">
         <h2 className="text-h2">The official word</h2>
         <p className="text-body">
-          We&apos;re not a government site. For your registration, your polling
+          We&rsquo;re not a government site. For your registration, your polling
           place, and your sample ballot, your county Supervisor of Elections and
           the{" "}
           <a href="https://dos.fl.gov/elections/" className={link}>
             Florida Division of Elections
           </a>{" "}
-          have the final say. If we ever disagree with them, they&apos;re right.
+          have the final say. If we ever disagree with them, they&rsquo;re right.
         </p>
       </section>
     </main>

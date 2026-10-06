@@ -98,10 +98,10 @@ export function NewsStoryCard({
      fallback, so an opinion column cannot be relabelled "update" by a caller
      that passed one. */
   const shownFlag = flag ?? (publisher ? null : kindFallback);
-  /* The "·" separates the date from a flag or outlet before it, so it is
-     printed only when one is there (a11y-perf-2026-10-04.md fix 14). A row
-     with neither, such as an unsourced story, read "· Sep 9, 2026". */
-  const dateSeparator = shownFlag || publisher ? "· " : "";
+  /* The "·" separators are a CSS rule on the meta line (`*+*`), so they
+     sit only between items that are there: a row with only a date never
+     starts with a dot (a11y-perf-2026-10-04.md fix 14: it read
+     "· Sep 9, 2026"). */
 
   return (
     <article
@@ -146,7 +146,10 @@ export function NewsStoryCard({
       ) : null}
 
       <div className="flex flex-col gap-1 p-4">
-        <p className="flex flex-wrap items-center gap-x-2 font-mono text-mono text-on-surface-muted">
+        {/* Separators come from one CSS rule for every item after the first
+            (as in MeasureResourceRow), not hand-placed dots: the flag used
+            to run straight into the publisher. */}
+        <p className="flex flex-wrap items-center gap-x-2 font-mono text-mono text-on-surface-muted [&>*+*]:before:me-2 [&>*+*]:before:inline-block [&>*+*]:before:content-['·']">
           {shownFlag && (
             <span className={isOpinion ? "text-on-surface" : undefined}>
               {shownFlag}
@@ -161,12 +164,7 @@ export function NewsStoryCard({
             ) : (
               <span>{publisher}</span>
             ))}
-          {dateLabel && (
-            <span>
-              {dateSeparator}
-              {dateLabel}
-            </span>
-          )}
+          {dateLabel && <span>{dateLabel}</span>}
         </p>
 
         <Heading className="text-h3">

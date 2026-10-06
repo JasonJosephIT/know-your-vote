@@ -84,7 +84,7 @@ export function CountyRaces({
       aria-labelledby="county-races-heading"
     >
       <div className="flex flex-col gap-1">
-        <h2 id="county-races-heading" className="text-h3">
+        <h2 id="county-races-heading" className="text-h2">
           {county} County races
         </h2>
         <p className="text-caption text-on-surface-muted">{caption}</p>

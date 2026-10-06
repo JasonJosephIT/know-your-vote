@@ -3,6 +3,7 @@
 import { useSyncExternalStore } from "react";
 import { track } from "@/lib/analytics";
 import { isSaved, onSavedChange, toggleSaved } from "@/lib/saved";
+import { CheckGlyph, PlusGlyph } from "@/components/ui/Glyphs";
 
 /* `name` is the candidate's name, read only by assistive technology.
    a11y-perf-2026-10-04.md fix 6 (WCAG 2.4.6 Headings and Labels): /candidates
@@ -42,7 +43,7 @@ export function SaveToggle({
           : "bg-surface-muted text-on-surface-muted hover:text-on-surface"
       }`}
     >
-      <span aria-hidden>{saved ? "✓" : "+"}</span>
+      {saved ? <CheckGlyph /> : <PlusGlyph />}
       {saved ? "Keeping in mind" : "Keep in mind"}
       {name && <span className="sr-only">: {name}</span>}
     </button>

@@ -87,7 +87,7 @@ export async function HomeNews() {
       className="flex flex-col gap-3 border-t border-border pt-6"
     >
       <div className="flex flex-col gap-1">
-        <h2 id="home-news" className="text-h3">
+        <h2 id="home-news" className="text-h2">
           Latest election news
         </h2>
         <p className="text-caption text-on-surface-muted">

@@ -171,7 +171,7 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
             {row.cells.map(({ candidate, block }) => (
               <article
                 key={candidate.candidate_id}
-                className="flex flex-col gap-2 rounded-md border border-border bg-surface p-4"
+                className="flex flex-col gap-2 rounded-lg border border-border bg-surface p-4"
               >
                 <h3 className="text-label">
                   <Link
@@ -212,8 +212,8 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
                 "quoted for one candidate only" was false (interface review
                 2026-10-05). */}
             <p className="max-w-[680px] text-body-sm text-on-surface-muted">
-              More issues we quoted from each candidate&apos;s own campaign
-              website, listed under that candidate. They aren&apos;t lined up
+              More issues we quoted from each candidate&rsquo;s own campaign
+              website, listed under that candidate. They aren&rsquo;t lined up
               side by side, so the same issue can appear under more than one
               name.
             </p>
@@ -222,7 +222,7 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
             {extras.map(({ candidate, blocks }) => (
               <article
                 key={candidate.candidate_id}
-                className="flex flex-col gap-2 rounded-md border border-border bg-surface p-4"
+                className="flex flex-col gap-2 rounded-lg border border-border bg-surface p-4"
               >
                 <h3 className="text-label">{candidate.legal_name}</h3>
                 {/* About our process, not the candidate: an empty list here

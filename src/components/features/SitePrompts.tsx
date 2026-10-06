@@ -190,8 +190,17 @@ function ConsentBanner({
           Details
         </Link>
       </p>
+      {/* Two peer answers to one question, so the same weight: Accept used
+          to be the filled primary beside an outlined Decline, which tilts
+          the choice the copy above calls equal (interface review
+          2026-10-05). Recommended (pending founder confirmation); to flip,
+          drop variant="secondary" from Accept. */}
       <div className="mt-3 flex gap-2">
-        <Button className="px-4 py-2" onClick={() => onDecide("granted")}>
+        <Button
+          variant="secondary"
+          className="px-4 py-2"
+          onClick={() => onDecide("granted")}
+        >
           Accept
         </Button>
         <Button
@@ -290,7 +299,7 @@ function DonateDialog({ onClose }: { onClose: () => void }) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={onClose}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-[20px] py-3 text-label text-on-primary hover:bg-primary-hover"
+            className="inline-flex items-center justify-center rounded-md bg-primary px-[20px] py-3 text-label text-on-primary transition-colors hover:bg-primary-hover"
           >
             Donate
           </a>

@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "We couldn't match that address to a district — try your ZIP or pick your district.",
+            "We couldn't match that address to a district — try your ZIP or choose your district.",
         },
         { status: 502 }
       );

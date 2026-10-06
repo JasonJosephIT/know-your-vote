@@ -50,8 +50,8 @@ export default function TermsPage() {
       <section className="flex flex-col gap-2">
         <h2 className="text-h2">No endorsements</h2>
         <p className="text-body">
-          Nothing on this site is an endorsement. We don&apos;t tell you who to
-          vote for or how to vote on a ballot question, and we don&apos;t rank
+          Nothing on this site is an endorsement. We don&rsquo;t tell you who to
+          vote for or how to vote on a ballot question, and we don&rsquo;t rank
           candidates. Which candidates appear, and in what order, follows the
           same rules for everyone, described on our{" "}
           <Link href="/methodology" className={linkClass}>
@@ -62,12 +62,12 @@ export default function TermsPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-h2">Candidates&apos; words are their own</h2>
+        <h2 className="text-h2">Candidates&rsquo; words are their own</h2>
         <p className="text-body">
           What a candidate says here is quoted word for word from their own
           campaign website, with a link to the page it came from. The words are
-          the candidate&apos;s, not ours. We don&apos;t check whether they are
-          true, and quoting them doesn&apos;t mean we agree with them.
+          the candidate&rsquo;s, not ours. We don&rsquo;t check whether they are
+          true, and quoting them doesn&rsquo;t mean we agree with them.
         </p>
       </section>
 
@@ -75,8 +75,8 @@ export default function TermsPage() {
         <h2 className="text-h2">Information is provided as is</h2>
         <p className="text-body">
           We work to keep everything here accurate and current, but we
-          can&apos;t promise it is complete or free of errors, and a brief
-          reflects what a candidate&apos;s site said on the day we read it. We
+          can&rsquo;t promise it is complete or free of errors, and a brief
+          reflects what a candidate&rsquo;s site said on the day we read it. We
           provide the site as is, without guarantees of any kind.
         </p>
         <p className="text-body">
@@ -93,9 +93,9 @@ export default function TermsPage() {
       <section className="flex flex-col gap-2">
         <h2 className="text-h2">Links to other sites</h2>
         <p className="text-body">
-          We link to sites we don&apos;t run: candidates&apos; campaign sites,
-          news outlets, official election offices, and others. We don&apos;t
-          control them and aren&apos;t responsible for what they say or do,
+          We link to sites we don&rsquo;t run: candidates&rsquo; campaign sites,
+          news outlets, official election offices, and others. We don&rsquo;t
+          control them and aren&rsquo;t responsible for what they say or do,
           including how they handle your data. A link is not an endorsement.
         </p>
       </section>
@@ -104,7 +104,7 @@ export default function TermsPage() {
         <h2 className="text-h2">Your privacy</h2>
         <p className="text-body">
           You can use the whole site without an account. What we store, and what
-          we don&apos;t, is set out on our{" "}
+          we don&rsquo;t, is set out on our{" "}
           <Link href="/privacy" className={linkClass}>
             privacy
           </Link>{" "}

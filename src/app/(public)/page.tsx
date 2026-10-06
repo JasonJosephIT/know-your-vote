@@ -133,7 +133,7 @@ export default async function Home() {
         {saved ? (
           <>
             <div className="flex flex-col gap-1">
-              <h2 className="text-h3">
+              <h2 className="text-h2">
                 {savedSeat
                   ? "No U.S. House race on your ballot"
                   : "Your U.S. House race"}
@@ -145,7 +145,7 @@ export default async function Home() {
                   (savedSeat) is said plainly as no race at all, never shown
                   as the voter's race. */}
               <p className="text-body-sm text-on-surface-muted">
-                You&apos;re set to {saved.district}.{" "}
+                You&rsquo;re set to {saved.district}.{" "}
                 {savedSeat
                   ? houseRaceNotOnBallot(saved.district, savedSeat)
                   : "Your House race depends on where you live, so it's linked below rather than listed above."}{" "}
@@ -167,7 +167,7 @@ export default async function Home() {
         ) : (
           <>
             <div className="flex flex-col gap-1">
-              <h2 className="text-h3">Add your U.S. House race</h2>
+              <h2 className="text-h2">Add your U.S. House race</h2>
               {/* The storage claim, rewritten for the district cookie. TASK-070
                   removed kyv.location and this line said nothing was saved on
                   the device; that stopped being true when the district became
@@ -177,9 +177,9 @@ export default async function Home() {
                   It asks for a ZIP unless address completion is configured
                   (field.noun): the field takes nothing else in production. */}
               <p className="text-body-sm text-on-surface-muted">
-                Your U.S. House race isn&apos;t in the list above, because it
+                Your U.S. House race isn&rsquo;t in the list above, because it
                 depends on where you live. Give us your {field.noun} and
-                we&apos;ll add it — or skip it and read the rest. We use it to
+                we&rsquo;ll add it — or skip it and read the rest. We use it to
                 find your district and keep only the district itself, never
                 your {field.noun}.
               </p>

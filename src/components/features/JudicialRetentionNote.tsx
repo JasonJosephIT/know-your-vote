@@ -62,8 +62,8 @@ export function JudicialRetentionNote({ county }: { county?: string | null }) {
       <h3 className="text-label">Judges on your ballot</h3>
       <p className="text-body-sm text-on-surface-muted">
         Your ballot also asks whether to keep some judges in office. Know Your
-        Vote doesn&apos;t cover these questions. The links go to the
-        state&apos;s list of who is up and to the courts&apos; own pages.
+        Vote doesn&rsquo;t cover these questions. The links go to the
+        state&rsquo;s list of who is up and to the courts&rsquo; own pages.
       </p>
       <ul className="flex list-disc flex-col gap-1 pl-5 text-body-sm text-on-surface">
         <li>
@@ -99,7 +99,7 @@ export function JudicialRetentionNote({ county }: { county?: string | null }) {
                   rel="noreferrer"
                   className={linkClass}
                 >
-                  about this court&apos;s judges
+                  about this court&rsquo;s judges
                   {/* Three of these sit on one page; a links list must
                       say which court each is (production re-run,
                       2026-10-05). */}
@@ -126,7 +126,7 @@ export function JudicialRetentionNote({ county }: { county?: string | null }) {
           <NewTab />
         </a>
         . Some county ballots also have a circuit judge race, which we
-        don&apos;t cover either.
+        don&rsquo;t cover either.
       </p>
     </aside>
   );

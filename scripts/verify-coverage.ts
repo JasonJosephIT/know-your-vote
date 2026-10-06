@@ -206,7 +206,7 @@ check(
 );
 check(
   "YourRaces says full statewide coverage is not available",
-  yourRaces.includes("Full statewide coverage isn&apos;t available") &&
+  yourRaces.includes("Full statewide coverage isn&rsquo;t available") &&
     /result\.coverage === "statewide"/.test(yourRaces)
 );
 

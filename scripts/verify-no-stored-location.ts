@@ -1006,7 +1006,7 @@ assert(
 );
 assert(
   "privacy page says the address and ZIP are not stored",
-  /address and your ZIP aren&apos;t stored/i.test(privacyText)
+  /address and your ZIP aren(?:&apos;|&rsquo;|'|’)t stored/i.test(privacyText)
 );
 assert("privacy page names the cookie", /kyv\.district/.test(privacyText));
 assert("privacy page shows the stored value", /FL-27\|12086/.test(privacyText));
@@ -1031,7 +1031,7 @@ assert(
 );
 assert(
   "privacy page names the way out of both third parties",
-  /pick your district/i.test(privacyText)
+  /(?:pick|choose) your district/i.test(privacyText)
 );
 /* Every key section 3 found in the code is on the page. This replaces the two
    hand-written checks for the keep-in-mind list and the install flag, and
