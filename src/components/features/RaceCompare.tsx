@@ -55,7 +55,13 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
     notPrintedOnBallot: brief.notPrintedOnBallot,
     count,
   });
-  const legend = partyLegend(brief.candidates.map((c) => c.candidate.party));
+  /* Only where the race is on the November ballot: the legend says "as the
+     ballot prints them", and a seat decided in August or elected without
+     opposition isn't printed (its status line above says so). */
+  const onBallot = branch === "contest" || branch === "single_candidate";
+  const legend = onBallot
+    ? partyLegend(brief.candidates.map((c) => c.candidate.party))
+    : null;
   const rosterHeading =
     branch === "decided_in_primary"
       ? count === 1 ? "The winner" : "The winners"

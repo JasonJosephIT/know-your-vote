@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 
@@ -47,6 +47,12 @@ export function InstallCard() {
     () => null
   );
   const [dismissed, setDismissed] = useState(false);
+  /* Focus the stand-in once, on dismiss: an inline callback ref would re-run
+     on every render and pull focus back to it (review 2026-10-05). */
+  const standInRef = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    if (dismissed) standInRef.current?.focus({ preventScroll: true });
+  }, [dismissed]);
 
   if (!hydrated) return null;
   /* Dismiss removes the focused button with the card. Rather than let focus
@@ -57,7 +63,7 @@ export function InstallCard() {
   if (dismissed) {
     return (
       <span
-        ref={(el) => el?.focus({ preventScroll: true })}
+        ref={standInRef}
         tabIndex={-1}
         className="sr-only"
       >

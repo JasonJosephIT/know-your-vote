@@ -116,16 +116,20 @@ check(
 );
 check(
   "a field error renders under the field with the described-by id",
-  /<p id=\{errorId\} className="mt-2 text-body-sm text-error">/.test(entry)
+  /<p\s+key=\{stage\.seq\}\s+id=\{errorId\}\s+role="alert"\s+className="mt-2 text-body-sm text-error"\s*>/.test(entry)
 );
 check(
-  "focus returns to the field on a field error",
-  /if \(fieldError\) inputRef\.current\?\.focus\(\);/.test(entry)
+  "a field error is still announced when focus is already in the field (Enter)",
+  /<p\s+key=\{stage\.seq\}\s+id=\{errorId\}\s+role="alert"/.test(entry)
 );
 check(
-  "role=alert is only for the error that isn't about the field",
-  /stage\.kind === "error" && stage\.field === false && \(\s*<p role="alert"/.test(entry) &&
-    (entry.match(/field: false/g) ?? []).length === 2
+  "focus moves to the field only when it was lost or on the form's own submit",
+  /if \(!active \|\| active === document\.body \|\| active === submitButton\) \{\s*inputRef\.current\?\.focus\(\);/.test(entry)
+);
+check(
+  "server failures aren't field errors",
+  (entry.match(/fail\("Something went wrong — give it another try\.", false\)/g) ?? []).length === 2 &&
+    /We couldn't look up that address just now\.[^"]*",\s*false\s*\)/.test(entry)
 );
 const voting = code("src/components/features/VotingInfo.tsx");
 check(
@@ -137,8 +141,9 @@ check(
 
 /* ---- 6. focus doesn't fall to <body> when its control goes ---------------- */
 check(
-  "the reminder form's success message takes focus",
-  /ref=\{\(el\) => el\?\.focus\(\)\}\s*tabIndex=\{-1\}/.test(voting)
+  "the reminder form's success message takes focus once, on the change",
+  /if \(stage\.kind === "sent"\) sentRef\.current\?\.focus\(/.test(voting) &&
+    /ref=\{sentRef\}\s*tabIndex=\{-1\}/.test(voting)
 );
 const chip = code("src/components/features/DistrictChip.tsx");
 check(
@@ -150,8 +155,20 @@ check(
 const install = code("src/components/features/InstallCard.tsx");
 check(
   "dismissing Get the app leaves a focused stand-in, not <body>",
-  /if \(dismissed\) \{[\s\S]*?el\?\.focus\(\{ preventScroll: true \}\)[\s\S]*?tabIndex=\{-1\}/.test(install)
+  /if \(dismissed\) standInRef\.current\?\.focus\(\{ preventScroll: true \}\);/.test(install) &&
+    /ref=\{standInRef\}\s*tabIndex=\{-1\}/.test(install)
 );
+{
+  /* An inline callback ref that calls focus() re-runs on every render and
+     steals focus back after any later re-render (review 2026-10-05). */
+  const stealers = [
+    "src/components/features/LocationEntry.tsx",
+    "src/components/features/VotingInfo.tsx",
+    "src/components/features/DistrictChip.tsx",
+    "src/components/features/InstallCard.tsx",
+  ].filter((f) => /ref=\{\(\w+\) => \w+\?\.focus\(/.test(code(f)));
+  check("no focusing inline callback refs", stealers.length === 0, stealers.join(", "));
+}
 
 /* ---- 7. the global focus ring reaches inputs ----------------------------- */
 const input = code("src/components/ui/Input.tsx");
@@ -177,6 +194,13 @@ check(
   ].filter((f) => /className="(?:underline-offset-2 )?hover:underline"/.test(code(f)));
   check("no link is ink with a hover-only underline", inkOnly.length === 0, inkOnly.join(", "));
 }
+
+check(
+  "the race roster's party legend shows only for races on the November ballot",
+  /const onBallot = branch === "contest" \|\| branch === "single_candidate";\s*const legend = onBallot/.test(
+    code("src/components/features/RaceCompare.tsx")
+  )
+);
 
 /* ---- 9. reading width and size on the measure page ------------------------ */
 check(

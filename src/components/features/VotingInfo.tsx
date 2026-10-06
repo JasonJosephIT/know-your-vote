@@ -69,6 +69,16 @@ export function VotingInfo({
     if (consentError) consentRef.current?.focus();
   }, [consentError]);
 
+  /* The "Sent" message takes focus once, when the form turns into it. A
+     stable ref and an effect keyed on the stage, not an inline callback
+     ref: React re-runs a new callback ref on every render, which would pull
+     focus back here (and scroll to it) after any later re-render, such as
+     the router.refresh() of "Forget my district" (review 2026-10-05). */
+  const sentRef = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (stage.kind === "sent") sentRef.current?.focus({ preventScroll: true });
+  }, [stage.kind]);
+
   if (!emailEnabled) {
     return sources ? <OfficialSourcesCard sources={sources} /> : null;
   }
@@ -110,7 +120,7 @@ export function VotingInfo({
        failure SitePrompts fixes for the cookie banner). */
     return (
       <p
-        ref={(el) => el?.focus()}
+        ref={sentRef}
         tabIndex={-1}
         className="rounded-md bg-primary-muted px-4 py-3 text-body-sm text-primary-hover focus:outline-none"
       >
