@@ -38,9 +38,11 @@ export function LinkRow({
 }) {
   const Heading = headingLevel;
   return (
-    <li className="relative flex flex-col gap-1 px-5 py-4 transition-colors first:rounded-t-lg last:rounded-b-lg hover:bg-background">
+    <li className="relative flex flex-col gap-1 px-5 py-4 transition-colors first:rounded-t-lg last:rounded-b-lg hover:bg-background active:bg-background">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <Heading className="text-h3">
+        {/* leading-[1.4]: a row title can be a 3-line all-caps amendment
+            title; one-line race titles gain 2px. */}
+        <Heading className="text-h3 leading-[1.4]">
           <Link
             href={href}
             className="text-primary after:absolute after:inset-0 after:rounded-[inherit] hover:text-primary-hover hover:underline"

@@ -1031,7 +1031,7 @@ assert(
 );
 assert(
   "privacy page names the way out of both third parties",
-  /pick your district/i.test(privacyText)
+  /(?:pick|choose) your district/i.test(privacyText)
 );
 /* Every key section 3 found in the code is on the page. This replaces the two
    hand-written checks for the keep-in-mind list and the install flag, and

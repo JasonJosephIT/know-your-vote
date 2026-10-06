@@ -108,7 +108,7 @@ export function MeasureNeutralBlock({
   if (items.length === 0) return null;
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="text-h3">Understand it first</h2>
+      <h2 className="text-h2">Understand it first</h2>
       <TieredList items={items} kinds={NEUTRAL_KINDS} />
     </section>
   );

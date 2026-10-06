@@ -113,7 +113,12 @@ export function MeasureResourceRow({
       ) : (
         <span className="text-body-sm text-on-surface">{resource.title}</span>
       )}
-      <p className="flex flex-wrap items-center gap-x-2 font-mono text-mono text-on-surface-muted">
+      {/* One separator rule for every item after the first, so the flag
+          ("Official document", "Opinion") is set off from the publisher like
+          everything else (interface review 2026-10-05: it ran straight into
+          it, "Official document Florida Division of Elections"). The dot is
+          inline-block so a link's underline doesn't run under it. */}
+      <p className="flex flex-wrap items-center gap-x-2 font-mono text-mono text-on-surface-muted [&>*+*]:before:me-2 [&>*+*]:before:inline-block [&>*+*]:before:content-['·']">
         {shownFlag && (
           <span className={marked ? "text-on-surface" : undefined}>
             {shownFlag}
@@ -128,7 +133,7 @@ export function MeasureResourceRow({
             <span>{publisher}</span>
           ))}
         {facts.map((f) => (
-          <span key={f}>· {f}</span>
+          <span key={f}>{f}</span>
         ))}
       </p>
       {resource.note && (

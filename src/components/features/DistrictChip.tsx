@@ -12,6 +12,7 @@ import {
 import { useRouter } from "next/navigation";
 import { coveredCounty } from "@/lib/counties";
 import { RETIRED_DISTRICT_PAIRS } from "@/lib/uncovered-zip-parts";
+import { CaretGlyph } from "@/components/ui/Glyphs";
 import {
   clearDistrictCookie,
   districtCookieServerSnapshot,
@@ -30,14 +31,14 @@ import {
    nav would opt every route into dynamic rendering, and the nav is in the root
    layout -- the ISR detail pages would lose their caching for a chip. The cost
    is one frame with nothing there, which is why the empty state renders nothing
-   at all rather than flipping from "Set your district" to a district. */
+   at all rather than flipping from "Choose your district" to a district. */
 
 export function DistrictChip({ className = "" }: { className?: string }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   /* Set by "Forget my district", whose button unmounts with the panel and
      takes focus with it (interface review 2026-10-05). The chip then turns
-     into the "Set your district" link, and focus goes there so it isn't
+     into the "Choose your district" link, and focus goes there so it isn't
      left on <body>; the link says the district is gone while it holds that
      focus. Local to this instance: the nav renders the chip twice (top bar
      and desktop nav), and only the one that was used should take focus. */
@@ -104,9 +105,9 @@ export function DistrictChip({ className = "" }: { className?: string }) {
         ref={setLinkRef}
         href="/candidates?view=races&change=1"
         onBlur={() => setForgot(false)}
-        className={`flex items-center rounded-full border border-border-strong px-3 py-1 text-caption text-on-surface-muted hover:border-primary hover:text-primary ${className}`}
+        className={`flex items-center rounded-full border border-border-strong px-3 py-1 text-caption text-on-surface-muted transition-colors hover:border-primary hover:text-primary ${className}`}
       >
-        Set your district
+        Choose your district
         {/* After the visible words, so the name still starts with them
             (WCAG 2.5.3 Label in Name). */}
         {forgot && <span className="sr-only">: your district was forgotten</span>}
@@ -123,11 +124,11 @@ export function DistrictChip({ className = "" }: { className?: string }) {
         aria-expanded={open}
         aria-controls={open ? panelId : undefined}
         aria-label={`Your district: ${choice.district}, ${county.name} County. Change or forget it.`}
-        className="flex items-center gap-1 rounded-full border border-border-strong bg-surface px-3 py-1 text-caption text-on-surface hover:border-primary hover:text-primary"
+        className="flex items-center gap-1 rounded-full border border-border-strong bg-surface px-3 py-1 text-caption text-on-surface transition-colors hover:border-primary hover:text-primary"
       >
         <span className="font-medium">{choice.district}</span>
         <span className="text-on-surface-muted">· {county.name}</span>
-        <span aria-hidden>▾</span>
+        <CaretGlyph />
       </button>
 
       {open && (

@@ -300,7 +300,7 @@ export async function YourRaces({
           aria-labelledby="not-on-ballot-heading"
           className="flex flex-col gap-2"
         >
-          <h2 id="not-on-ballot-heading" className="text-h3">
+          <h2 id="not-on-ballot-heading" className="text-h2">
             Not on your ballot
           </h2>
           <p className="text-body-sm text-on-surface-muted">

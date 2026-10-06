@@ -96,7 +96,9 @@ export const metadata: Metadata = {
         url: "/brand/site/og-card.png",
         width: 1200,
         height: 630,
-        alt: "Know Your Vote: see who's on your local ballot.",
+        /* The words on the card itself (public/brand/site/og-card.png),
+           which say "Florida", not "local" (interface review 2026-10-05). */
+        alt: "Know Your Vote. See who's on your Florida ballot.",
       },
     ],
   },

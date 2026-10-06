@@ -171,7 +171,7 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
             {row.cells.map(({ candidate, block }) => (
               <article
                 key={candidate.candidate_id}
-                className="flex flex-col gap-2 rounded-md border border-border bg-surface p-4"
+                className="flex flex-col gap-2 rounded-lg border border-border bg-surface p-4"
               >
                 <h3 className="text-label">
                   <Link
@@ -222,7 +222,7 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
             {extras.map(({ candidate, blocks }) => (
               <article
                 key={candidate.candidate_id}
-                className="flex flex-col gap-2 rounded-md border border-border bg-surface p-4"
+                className="flex flex-col gap-2 rounded-lg border border-border bg-surface p-4"
               >
                 <h3 className="text-label">{candidate.legal_name}</h3>
                 {/* About our process, not the candidate: an empty list here

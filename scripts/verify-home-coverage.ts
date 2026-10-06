@@ -363,10 +363,10 @@ check(
 );
 const entry = rendered("src/components/features/LocationEntry.tsx");
 check(
-  "LocationEntry's label and placeholder follow the flag",
+  "LocationEntry's label and placeholder example follow the flag",
   /locationFieldCopy\(addressEnabled\)/.test(entry) &&
     /\{field\.label\}/.test(entry) &&
-    /placeholder=\{placeholder \?\? field\.label\}/.test(entry) &&
+    /placeholder=\{placeholder \?\? field\.example\}/.test(entry) &&
     /autoComplete=\{field\.autoComplete\}/.test(entry) &&
     !/Your address or ZIP code/.test(entry)
 );

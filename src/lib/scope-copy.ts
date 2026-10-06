@@ -52,6 +52,10 @@ export function locationFieldCopy(addressEnabled: boolean): {
   /** What the voter types, mid-sentence: "Give us your ___". */
   noun: string;
   label: string;
+  /** The field's placeholder: an example of what to type, never the label
+      (the label is visible above the field; interface review 2026-10-05).
+      None for an address, where any example would be someone's street. */
+  example?: string;
   autoComplete: "street-address" | "postal-code";
 } {
   return addressEnabled
@@ -63,6 +67,7 @@ export function locationFieldCopy(addressEnabled: boolean): {
     : {
         noun: "ZIP",
         label: "Your ZIP code",
+        example: "33130",
         autoComplete: "postal-code",
       };
 }

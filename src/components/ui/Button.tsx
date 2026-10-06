@@ -4,8 +4,11 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "secondary";
 };
 
+/* A slight press on tap (interface review 2026-10-05): hover styles only
+   apply on devices that hover, so a phone tap otherwise showed nothing until
+   the result arrived. Off under reduced motion; the colour change stays. */
 const base =
-  "inline-flex w-fit items-center justify-center rounded-md px-[20px] py-3 text-label transition-colors disabled:cursor-not-allowed";
+  "inline-flex w-fit items-center justify-center rounded-md px-[20px] py-3 text-label transition-[color,background-color,border-color,scale] active:not-disabled:scale-[0.97] motion-reduce:active:not-disabled:scale-100 disabled:cursor-not-allowed";
 
 const variants = {
   primary:

@@ -102,7 +102,11 @@ export default async function MeasurePage({
               ? "citizen initiative"
               : measure.placed_by.replace("_", " ")}
         </p>
-        <h1 className="text-h1">
+        {/* Official titles are long and all capitals (6–10 lines on a
+            phone), so this h1 gets prose leading and neutral tracking
+            instead of the short-heading 1.15 / −0.02em (interface review
+            2026-10-05). */}
+        <h1 className="text-h1 leading-[1.4] tracking-normal">
           Amendment {measure.number}: {measure.official_title}
         </h1>
       </header>
@@ -113,7 +117,7 @@ export default async function MeasurePage({
       <MeasureVoteMeaning pct={measure.threshold_pct} />
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-h3">What the ballot says</h2>
+        <h2 className="text-h2">What the ballot says</h2>
         {/* The official summary verbatim — this is the wording a voter meets
             in the booth, so it is quoted, never paraphrased. */}
         {/* Body size at a reading width (interface review 2026-10-05): this is

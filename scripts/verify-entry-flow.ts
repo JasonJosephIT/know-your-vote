@@ -147,7 +147,7 @@ check(
 );
 const chip = code("src/components/features/DistrictChip.tsx");
 check(
-  "Forget my district hands focus to the Set your district link",
+  "Forget my district hands focus to the Choose your district link",
   /setForgot\(true\);/.test(chip) &&
     /if \(forgot\) setLinkRef\.current\?\.focus\(/.test(chip) &&
     /ref=\{setLinkRef\}/.test(chip)
@@ -223,6 +223,102 @@ for (const [file, phrase] of [
   const opener = at > 0 ? src.lastIndexOf("<p ", at) : -1;
   const tag = opener >= 0 ? src.slice(opener, src.indexOf(">", opener) + 1) : "";
   check(`${file}: "${phrase}…" is at least body-sm`, tag.includes("text-body-sm") && !tag.includes("text-caption"), tag);
+}
+
+/* ==== LOW findings of the same review ===================================== */
+
+check(
+  "the ZIP field is a combobox only when address completion can show a list",
+  /const combobox = addressEnabled\s*\?/.test(entry) && !/^\s*role="combobox"/m.test(entry)
+);
+check(
+  "the ZIP field's label is visible, with an example as the placeholder",
+  /<label htmlFor="location" className="text-label text-on-surface">/.test(entry) &&
+    /placeholder=\{placeholder \?\? field\.example\}/.test(entry)
+);
+{
+  const verbs = [
+    "src/components/features/LocationEntry.tsx",
+    "src/components/features/DistrictChip.tsx",
+    "src/app/(public)/privacy/page.tsx",
+  ].filter((f) => /\bpick your district|Pick your district|Set your district/.test(code(f)));
+  check("one verb for the district: choose", verbs.length === 0, verbs.join(", "));
+}
+{
+  const glyphs = [
+    "src/components/ui/SaveToggle.tsx",
+    "src/components/features/IssueFilter.tsx",
+    "src/components/features/DistrictChip.tsx",
+  ].filter((f) => /[✓▾]/.test(code(f)));
+  check("state icons are SVG, not ✓/▾ font fallbacks", glyphs.length === 0, glyphs.join(", "));
+}
+const css = read("src/app/globals.css");
+check(
+  "motion uses design.md's 120ms standard curve",
+  /--default-transition-duration: 120ms;/.test(css) &&
+    /--default-transition-timing-function: cubic-bezier\(0\.2, 0, 0, 1\);/.test(css)
+);
+check("a tap shows a tint (tap highlight)", /-webkit-tap-highlight-color: color-mix\(/.test(css));
+check("headings wrap balanced", /h4 \{\s*font-family: var\(--font-heading\);\s*text-wrap: balance;/.test(css));
+check(
+  "buttons press on tap, not under reduced motion",
+  /active:not-disabled:scale-\[0\.97\] motion-reduce:active:not-disabled:scale-100/.test(code("src/components/ui/Button.tsx"))
+);
+{
+  const nav = code("src/components/nav/SectionNav.tsx");
+  check(
+    "nav icons draw at their own 20px grid; Donate and the chip share a 1px edge",
+    /className="size-\[20px\]">\{item\.icon\}/.test(nav) && /rounded-full border border-primary bg-primary/.test(nav)
+  );
+}
+check(
+  "Accept and Decline carry the same weight",
+  (code("src/components/features/SitePrompts.tsx").match(/variant="secondary"/g) ?? []).length >= 3
+);
+{
+  const lost = code("src/app/not-found.tsx") + code("src/app/error.tsx");
+  check(
+    "the 404 and error pages don't promise 'your ballot'",
+    !/your ballot|See my ballot/.test(lost) && /See the races we cover/.test(code("src/app/not-found.tsx")) && /See the races we cover/.test(code("src/app/error.tsx"))
+  );
+}
+check(
+  "the share image's alt says what the card says",
+  /alt: "Know Your Vote\. See who's on your Florida ballot\."/.test(read("src/app/layout.tsx"))
+);
+check(
+  "cards in one grid share one radius",
+  !/rounded-md border border-border bg-surface p-4/.test(code("src/components/features/RaceCompare.tsx")) &&
+    !/rounded-md border border-border p-4/.test(code("src/components/features/IssueRows.tsx"))
+);
+for (const f of ["src/components/features/MeasureResourceRow.tsx", "src/components/features/NewsStoryCard.tsx"]) {
+  const src = code(f);
+  check(
+    `${f}: meta separators come from one rule, not hand-placed dots`,
+    src.includes("[&>*+*]:before:content-['·']") && !/>\s*·\s*\{/.test(src) && !/dateSeparator/.test(src)
+  );
+}
+check(
+  "the race skeleton's bars are one line of the text they stand in for",
+  /h-\[1lh\] w-72 [^"]*text-h1/.test(code("src/app/(public)/races/[raceId]/loading.tsx"))
+);
+for (const [f, h] of [
+  ["src/components/features/SharedBallot.tsx", "Statewide races"],
+  ["src/components/features/BallotQuestions.tsx", "Ballot questions"],
+] as const) {
+  check(`${f}: the section heading is a size above its rows`, new RegExp(`<h2 className="text-h2">${h}</h2>`).test(code(f)));
+}
+{
+  /* Typographic apostrophes in public copy. */
+  const straight = [
+    "src/app/(public)/page.tsx",
+    "src/components/features/SharedBallot.tsx",
+    "src/components/features/RaceCompare.tsx",
+    "src/components/features/LocationEntry.tsx",
+    "src/components/features/ClaimList.tsx",
+    "src/app/not-found.tsx",
+  ].filter((f) => read(f).includes("&apos;"));
+  check("public copy uses ’, not &apos;", straight.length === 0, straight.join(", "));
 }
 
 if (failures > 0) {

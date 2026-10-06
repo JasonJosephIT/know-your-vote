@@ -133,7 +133,7 @@ export default async function Home() {
         {saved ? (
           <>
             <div className="flex flex-col gap-1">
-              <h2 className="text-h3">
+              <h2 className="text-h2">
                 {savedSeat
                   ? "No U.S. House race on your ballot"
                   : "Your U.S. House race"}
@@ -167,7 +167,7 @@ export default async function Home() {
         ) : (
           <>
             <div className="flex flex-col gap-1">
-              <h2 className="text-h3">Add your U.S. House race</h2>
+              <h2 className="text-h2">Add your U.S. House race</h2>
               {/* The storage claim, rewritten for the district cookie. TASK-070
                   removed kyv.location and this line said nothing was saved on
                   the device; that stopped being true when the district became

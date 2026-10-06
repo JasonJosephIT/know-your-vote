@@ -98,6 +98,7 @@ export function LocationEntry({
      is what React 19's set-state-in-effect rule warns about, and deriving is
      simply correct anyway: there is nothing to remember. */
   const visible = addressMode ? suggestions : [];
+  const highlighted = addressMode ? activeIndex : -1;
   const fieldError = stage.kind === "error" && stage.field !== false;
 
   /* Errors that announce (interface review 2026-10-05). An error about what
@@ -121,7 +122,21 @@ export function LocationEntry({
   function fail(message: string, field = true) {
     setStage({ kind: "error", message, field, seq: ++errorSeq });
   }
-  const highlighted = addressMode ? activeIndex : -1;
+
+  /* Combobox semantics only when there can be a list (interface review
+     2026-10-05). With address completion off, which is production, the field
+     is a plain ZIP box; announcing it as an autocomplete promised a list of
+     suggestions that never appears. */
+  const combobox = addressEnabled
+    ? {
+        role: "combobox" as const,
+        "aria-expanded": visible.length > 0,
+        "aria-controls": listId,
+        "aria-autocomplete": "list" as const,
+        "aria-activedescendant":
+          highlighted >= 0 ? `${listId}-${highlighted}` : undefined,
+      }
+    : {};
 
   /* Suggestions, debounced. A keystroke is a billed request, so this waits for a
      pause, needs five characters, and cancels whatever is still in flight. */
@@ -184,7 +199,7 @@ export function LocationEntry({
         /* 400, 429 and 5xx are all ours or the geocoder's, never what the
            voter typed: not a field error. */
         fail(
-          "We couldn't look up that address just now. Try your ZIP, or pick your district below.",
+          "We couldn't look up that address just now. Try your ZIP, or choose your district below.",
           false
         );
         return;
@@ -202,7 +217,7 @@ export function LocationEntry({
         return;
       }
       if (!data.district || !data.countyFips) {
-        fail("We couldn't pin that address — pick your district below.");
+        fail("We couldn't pin that address — choose your district below.");
         return;
       }
       commit(
@@ -280,7 +295,7 @@ export function LocationEntry({
     fail(
       addressEnabled
         ? "Pick your address from the list, or enter your 5-digit ZIP."
-        : "Enter your 5-digit ZIP, or pick your district below."
+        : "Enter your 5-digit ZIP, or choose your district below."
     );
   }
 
@@ -308,12 +323,19 @@ export function LocationEntry({
         onSubmit={submit}
         action="/candidates"
         method="get"
-        className="flex w-full flex-col gap-3 sm:flex-row sm:items-start"
+        className="flex w-full flex-col gap-2"
       >
         <input type="hidden" name="view" value="races" />
-        <label htmlFor="location" className="sr-only">
+        {/* A visible label that stays put once the voter types, with an
+            example as the placeholder, the same pattern as the reminder
+            form (interface review 2026-10-05: the label was sr-only and the
+            placeholder repeated it, so the field lost its name at the first
+            keystroke). Above the row, so the field and button still line
+            up. */}
+        <label htmlFor="location" className="text-label text-on-surface">
           {field.label}
         </label>
+        <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-start">
         <div className="relative flex w-full flex-col sm:max-w-[320px]">
           <Input
             ref={inputRef}
@@ -321,16 +343,10 @@ export function LocationEntry({
             name="zip"
             aria-invalid={fieldError || undefined}
             aria-describedby={fieldError ? errorId : undefined}
-            role="combobox"
-            aria-expanded={visible.length > 0}
-            aria-controls={listId}
-            aria-autocomplete="list"
-            aria-activedescendant={
-              highlighted >= 0 ? `${listId}-${highlighted}` : undefined
-            }
+            {...combobox}
             autoComplete={field.autoComplete}
             inputMode={addressEnabled ? undefined : "numeric"}
-            placeholder={placeholder ?? field.label}
+            placeholder={placeholder ?? field.example}
             value={value}
             onChange={(e) => {
               setValue(e.target.value);
@@ -348,11 +364,14 @@ export function LocationEntry({
               {stage.message}
             </p>
           )}
-          {visible.length > 0 && (
+          {/* In address mode the list is always in the DOM (hidden while
+              empty), so the field's aria-controls always points at it. */}
+          {addressEnabled && (
             <ul
               id={listId}
               role="listbox"
               aria-label="Address matches"
+              hidden={visible.length === 0}
               className="absolute top-full z-20 mt-1 w-full overflow-hidden rounded-md border border-border-strong bg-surface shadow-elevation-2"
             >
               {visible.map((s, i) => (
@@ -382,6 +401,7 @@ export function LocationEntry({
         <Button type="submit" disabled={stage.kind === "loading"}>
           {stage.kind === "loading" ? "Looking up…" : submitLabel}
         </Button>
+        </div>
       </form>
 
       {/* Always visible, not only after a miss: a voter outside the four
@@ -491,7 +511,7 @@ export function LocationEntry({
                 className="w-fit rounded-md border border-border-input bg-surface px-3 py-3 text-body text-on-surface focus:border-primary"
               >
                 <option value="" disabled>
-                  Pick your district…
+                  Choose your district…
                 </option>
                 {districts.map((d) => (
                   <option

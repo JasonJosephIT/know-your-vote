@@ -84,7 +84,7 @@ export async function SharedBallot() {
       {races.length > 0 && (
         <section className="flex flex-col gap-3">
           <div className="flex flex-col gap-1">
-            <h2 className="text-h3">Statewide races</h2>
+            <h2 className="text-h2">Statewide races</h2>
             <p className="text-body-sm text-on-surface-muted">
               Every Florida voter gets these, whatever your ZIP and whatever
               party you&rsquo;re registered with — including no party at all.

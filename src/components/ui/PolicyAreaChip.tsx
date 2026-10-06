@@ -7,7 +7,11 @@ import Link from "next/link";
    style.
 
    With `href` the chip is a link into the browse filter for that area, which
-   is the only reason a voter would tap it. Without one it is plain text. */
+   is the only reason a voter would tap it. Without one it is plain text. The
+   link takes the link colour (interface review 2026-10-05): with the exact
+   classes of the static PartyChip beside it, a voter could not tell the
+   chip that goes somewhere from the label that doesn't. Same colour for
+   every area, so no area is ranked against another. */
 export function PolicyAreaChip({
   label,
   href,
@@ -20,7 +24,10 @@ export function PolicyAreaChip({
 
   if (!href) return <span className={className}>{label}</span>;
   return (
-    <Link href={href} className={`${className} hover:text-on-surface`}>
+    <Link
+      href={href}
+      className={`${className.replace("text-on-surface-muted", "text-primary")} transition-colors hover:text-primary-hover hover:underline`}
+    >
       {label}
     </Link>
   );

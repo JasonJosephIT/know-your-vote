@@ -99,7 +99,7 @@ export default function PrivacyPage() {
           </p>
         )}
         <p className="text-body">
-          Prefer neither? Enter your ZIP, or pick your district from the list —
+          Prefer neither? Enter your ZIP, or choose your district from the list —
           both work with no third party at all.
         </p>
       </section>
