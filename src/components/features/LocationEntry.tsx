@@ -278,8 +278,8 @@ export function LocationEntry({
     <div className="flex w-full flex-col gap-4">
       {/* action/method is the no-JavaScript path, and it is ZIP-only: the browser
           does a plain GET to /candidates?view=races&zip=… and YourRaces resolves
-          it server side. Address completion needs JavaScript; the district
-          picker below does not. */}
+          it server side. Address completion needs JavaScript, and so does the
+          district picker below (its toggle and its submit both run here). */}
       <form
         onSubmit={submit}
         action="/candidates"
@@ -400,36 +400,58 @@ export function LocationEntry({
 
       {stage.kind !== "outOfCoverage" && districts.length > 0 && (
         <div className="flex flex-col gap-2">
+          {/* A disclosure: it shows and hides the picker below, so it says
+              whether it is open (WCAG 4.1.2; same pattern as DistrictChip,
+              a11y-perf-2026-10-04.md fix 12). */}
           <button
             type="button"
+            aria-expanded={showPicker}
+            aria-controls="district-picker-form"
             onClick={() => setShowPicker((v) => !v)}
             className="w-fit text-body-sm text-on-surface-muted underline underline-offset-2 hover:text-on-surface"
           >
             or choose your district
           </button>
           {showPicker && (
-            <>
+            /* Saved on submit, never on change (WCAG 3.2.2 On Input;
+               interface review 2026-10-05). A collapsed <select> fires
+               change on every arrow key on Windows and on type-ahead
+               everywhere, and every option starts "FL-", so committing on
+               change saved the first district and navigated away on the
+               first keystroke: a keyboard or screen-reader user could not
+               browse the list. `required` on the disabled placeholder keeps
+               an empty submit from doing anything. The select takes the
+               same recipe as every other select on the site (16px, so iOS
+               Safari doesn't zoom; border-input, fix 10). */
+            <form
+              id="district-picker-form"
+              className="flex flex-wrap items-center gap-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const value = new FormData(e.currentTarget).get("district");
+                const chosen = districts.find(
+                  (d) => `${d.district}|${d.countyFips}` === value
+                );
+                if (chosen) {
+                  commit(
+                    {
+                      district: chosen.district,
+                      countyFips: chosen.countyFips,
+                    },
+                    "picker"
+                  );
+                }
+              }}
+            >
               <label htmlFor="district-picker" className="sr-only">
                 Your congressional district
               </label>
               <select
                 id="district-picker"
+                name="district"
                 defaultValue=""
-                className="w-fit rounded-md border border-border-strong bg-surface px-3 py-2 text-body-sm text-on-surface"
-                onChange={(e) => {
-                  const chosen = districts.find(
-                    (d) => `${d.district}|${d.countyFips}` === e.target.value
-                  );
-                  if (chosen) {
-                    commit(
-                      {
-                        district: chosen.district,
-                        countyFips: chosen.countyFips,
-                      },
-                      "picker"
-                    );
-                  }
-                }}
+                required
+                className="w-fit rounded-md border border-border-input bg-surface px-3 py-3 text-body text-on-surface focus:border-primary"
               >
                 <option value="" disabled>
                   Pick your district…
@@ -443,7 +465,10 @@ export function LocationEntry({
                   </option>
                 ))}
               </select>
-            </>
+              <Button type="submit" variant="secondary">
+                See my races
+              </Button>
+            </form>
           )}
         </div>
       )}
