@@ -3,7 +3,7 @@ import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 import type { ResolveRaceSummary } from "@/types/app";
 import { LISTED_RACE_LABEL } from "@/lib/listing-copy";
-import { orderCandidates } from "@/lib/briefs";
+import { orderCandidates } from "@/lib/ballot-order";
 import type { Party } from "@/types/schema";
 
 /* Location-free read of the races every Florida voter shares (TASK-067).
@@ -57,7 +57,7 @@ export function raceStatusLabel(status: ResolveRaceSummary["status"]): string {
 
 /* Who is on the ballot, for the landing page's race rows (inspiration pass
    2026-10-05): enough to recognise a race without opening it. Ballot tier
-   only and in ballot order, the same two rules as the race page
+   only and in Florida ballot order (ballot-order.ts), the same two rules as the race page
    (listing.ts), so the row and the page it links to can't disagree about
    who is running or in what order. Name and party code only; the row
    prints the party through partyLabel, so it follows the same neutrality

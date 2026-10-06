@@ -29,8 +29,9 @@
       branch that reaches the note sets a covered county's name, except the
       statewide-only result, which sets none; and the home page passes
       nothing, so it keeps the full note: its caption tells a voter with a
-      saved district that the rest of the page is the same for every Florida
-      voter, and a narrowed judges note would make that false.
+      saved district that the statewide races and amendments on the page are
+      the same for every Florida voter, and a narrowed judges note would sit
+      beside them as if it were too.
 
    The ZIP path's name comes from zip_district.county_name, which this cannot
    read offline. A read-only SELECT on 2026-10-05 found exactly the four

@@ -12,7 +12,9 @@ import {
 import { track } from "@/lib/analytics";
 import { coveredCountyNames } from "@/lib/counties";
 import { STATEWIDE_BALLOT_HREF } from "@/lib/coverage";
+import type { UncoveredPart } from "@/lib/uncovered-zip-parts";
 import { writeDistrictCookie } from "@/lib/district-cookie";
+import { locationFieldCopy } from "@/lib/scope-copy";
 import type { AddressSuggestion } from "@/lib/address-lookup";
 import type { CoveredDistrict } from "@/lib/resolve";
 import type { ResolveResult } from "@/types/app";
@@ -37,15 +39,26 @@ type Stage =
   | { kind: "idle" }
   | { kind: "loading" }
   | { kind: "error"; message: string }
-  | { kind: "split"; zip: string; districts: string[] }
+  | {
+      kind: "split";
+      zip: string;
+      districts: string[];
+      countyFips?: string;
+      uncoveredPart?: UncoveredPart;
+    }
   | { kind: "outOfCoverage" };
 
 const MIN_ADDRESS_CHARS = 5;
 const DEBOUNCE_MS = 250;
 
+/* The field's words follow addressEnabled (locationFieldCopy): without a
+   geocoder it takes a ZIP only, so it must not ask for an address. The
+   default placeholder used to be "Your address or ZIP code" whatever the
+   flag said, and the races view and the home page both rendered it so in
+   production, where /privacy says the field takes a ZIP. */
 export function LocationEntry({
-  submitLabel = "See my ballot",
-  placeholder = "Your address or ZIP code",
+  submitLabel = "See my races",
+  placeholder,
   addressEnabled = false,
   districts = [],
 }: {
@@ -54,6 +67,7 @@ export function LocationEntry({
   addressEnabled?: boolean;
   districts?: CoveredDistrict[];
 } = {}) {
+  const field = locationFieldCopy(addressEnabled);
   const router = useRouter();
   const listId = useId();
   const [value, setValue] = useState("");
@@ -194,7 +208,13 @@ export function LocationEntry({
         return;
       }
       if (data.needsCountyConfirm && data.candidateDistricts) {
-        setStage({ kind: "split", zip, districts: data.candidateDistricts });
+        setStage({
+          kind: "split",
+          zip,
+          districts: data.candidateDistricts,
+          countyFips: data.countyFips,
+          uncoveredPart: data.uncoveredPart,
+        });
         return;
       }
       track("zip_resolved");
@@ -268,7 +288,7 @@ export function LocationEntry({
       >
         <input type="hidden" name="view" value="races" />
         <label htmlFor="location" className="sr-only">
-          Your address or ZIP code
+          {field.label}
         </label>
         <div className="relative flex w-full flex-col sm:max-w-[320px]">
           <Input
@@ -281,8 +301,9 @@ export function LocationEntry({
             aria-activedescendant={
               highlighted >= 0 ? `${listId}-${highlighted}` : undefined
             }
-            autoComplete="street-address"
-            placeholder={placeholder}
+            autoComplete={field.autoComplete}
+            inputMode={addressEnabled ? undefined : "numeric"}
+            placeholder={placeholder ?? field.label}
             value={value}
             onChange={(e) => {
               setValue(e.target.value);
@@ -371,6 +392,8 @@ export function LocationEntry({
       {stage.kind === "split" && (
         <DistrictConfirm
           districts={stage.districts}
+          countyFips={stage.countyFips}
+          uncoveredPart={stage.uncoveredPart}
           onPick={(district) => void resolveZipCode(stage.zip, district)}
         />
       )}

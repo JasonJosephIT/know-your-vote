@@ -11,6 +11,7 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import { coveredCounty } from "@/lib/counties";
+import { RETIRED_DISTRICT_PAIRS } from "@/lib/uncovered-zip-parts";
 import {
   clearDistrictCookie,
   districtCookieServerSnapshot,
@@ -79,8 +80,13 @@ export function DistrictChip({ className = "" }: { className?: string }) {
      chip that cannot produce a ballot. The ballot pages reach the same answer by
      a different route: resolveDistrict returns null for that county. */
   const county = choice ? coveredCounty(choice.countyFips) : undefined;
+  /* A pair no covered ballot carries (FL-7 in Orange, retired by 0045) is no
+     district either: the home page and /candidates already treat it so. */
+  const retired =
+    choice !== null &&
+    RETIRED_DISTRICT_PAIRS.has(`${choice.district}|${choice.countyFips}`);
 
-  if (!choice || !county) {
+  if (!choice || !county || retired) {
     return (
       <Link
         href="/candidates?view=races&change=1"

@@ -50,13 +50,11 @@ type Stage =
    simplest thing that is true: /news requests the statewide scope and shows
    what comes back.
 
-   That costs the metro filter. The route still supports ?metro= and ?zip=,
-   and 7 of the 10 news_item rows carry a metro — but nothing links to /news
-   with parameters (the section nav is the only link, and it has no location
-   to pass), so metro scoping was reachable only through kyv.location. It is
-   unreachable now rather than removed: a link from the races view carrying
-   the location already in that URL would restore it in one line, and that is
-   a deliberate follow-up rather than something to build speculatively here.
+   That cost the metro filter for a while. The route still supports ?metro=
+   and ?zip=, and nothing links to /news with them. The county pick (?county=)
+   now brings in its county's metro rows as well (src/lib/news-scope.ts):
+   the county Supervisor of Elections rows carry a metro and no county, so
+   before 2026-10-05 a county pick showed only the statewide items.
 
    Dropping the store also removes the useSyncExternalStore dance that existed
    only to read device storage after hydration. */
@@ -148,9 +146,12 @@ export function NewsFeed({
   if (stage.items.length === 0) {
     return (
       <p className="text-body text-on-surface-muted">
+        {/* No "check back after the next daily refresh": the daily cron
+            records publication events, it does not fetch news, so the
+            promise was not one the refresh keeps. */}
         {county
           ? "No county news yet — quiet is honest. Statewide items still appear here once there are any."
-          : "No updates yet — quiet is honest. Check back after the next daily refresh."}
+          : "No updates yet — quiet is honest."}
       </p>
     );
   }

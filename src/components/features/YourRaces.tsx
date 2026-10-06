@@ -22,12 +22,26 @@ import {
   officialSources,
   remindersPaused,
 } from "@/lib/notifications/config";
-import type { ResolveResultWithCounty } from "@/lib/resolve";
+import { DECIDED_TAG, NOT_COVERED_SENTENCE } from "@/lib/scope-copy";
+import type {
+  DistrictRaceSummary,
+  ResolveResultWithCounty,
+} from "@/lib/resolve";
+import type { DecidedSeat } from "@/lib/unopposed";
 
 const DISTRICT_RE = /^FL-\d{1,2}$/;
 
-/* The "Your races" view inside the Candidates hub: ZIP/county in, the
-   voter's ballot out. Formerly the standalone /races page. */
+/* A district-list race that will not be printed, with the person who takes
+   the seat. Both fields are set together by resolve.ts (decidedSeatOf), so
+   requiring both here only narrows the type. */
+type DecidedDistrictRace = DistrictRaceSummary & DecidedSeat;
+const isDecided = (r: DistrictRaceSummary): r is DecidedDistrictRace =>
+  Boolean(r.decided && r.holder);
+
+/* The "Your races" view inside the Candidates hub: ZIP/county in, the races
+   this guide covers on the voter's ballot out. Formerly the standalone
+   /races page. Not the whole ballot: the not-covered line under the location
+   says what else the voter's sample ballot has. */
 
 function formatDate(iso?: string) {
   if (!iso) return null;
@@ -84,7 +98,7 @@ export async function YourRaces({
     return (
       <div className="flex flex-col gap-4">
         <p className="text-body text-on-surface-muted">
-          Add your ZIP and we&apos;ll show every race on your ballot.
+          Add your ZIP and we&apos;ll show the races we cover on your ballot.
         </p>
         <LocationEntry
           addressEnabled={geocoderConfigured()}
@@ -122,13 +136,60 @@ export async function YourRaces({
   }
 
   if (result.needsCountyConfirm) {
+    /* A ZIP that crosses into a county we don't cover (uncovered-zip-parts.ts)
+       says so here too, for the visitor who reaches this server-rendered
+       answer without JavaScript or from a shared ?zip= link: each covered
+       district is a plain link (resolveZip accepts it as confirmed), and the
+       other side gets its House race and the statewide ballot, never a
+       district filed under the covered county. */
+    const part = result.uncoveredPart;
     return (
       <div className="flex flex-col gap-4">
-        <p className="text-body text-on-surface-muted">
-          That ZIP spans more than one congressional district (
-          {result.candidateDistricts?.join(", ")}). Re-enter it below and
-          we&apos;ll ask which district is yours:
-        </p>
+        {part ? (
+          <>
+            <p className="text-body text-on-surface-muted">
+              That ZIP is partly in {result.county} County and partly in{" "}
+              {part.county} County. If you live in the {result.county} County
+              part, pick your congressional district:
+            </p>
+            <ul className="flex flex-wrap gap-2">
+              {(result.candidateDistricts ?? []).map((d) => (
+                <li key={d}>
+                  <Link
+                    href={`/candidates?view=races&zip=${zip}&district=${d}`}
+                    className="block rounded-md border border-border-strong bg-surface px-4 py-3 text-label text-primary transition-colors hover:border-primary hover:bg-primary-muted hover:text-primary-hover"
+                  >
+                    {d}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="text-body-sm text-on-surface-muted">
+              In the {part.county} County part? Your U.S. House race is{" "}
+              <Link
+                href={`/races/${part.raceId}`}
+                className="text-primary underline underline-offset-2 hover:text-primary-hover"
+              >
+                {part.district}
+              </Link>
+              . We don&apos;t cover {part.county} County&apos;s local races
+              yet;{" "}
+              <Link
+                href={STATEWIDE_BALLOT_HREF}
+                className="text-primary underline underline-offset-2 hover:text-primary-hover"
+              >
+                see the statewide ballot
+              </Link>
+              .
+            </p>
+          </>
+        ) : (
+          <p className="text-body text-on-surface-muted">
+            That ZIP spans more than one congressional district (
+            {result.candidateDistricts?.join(", ")}). Re-enter it below and
+            we&apos;ll ask which district is yours:
+          </p>
+        )}
         <LocationEntry
           addressEnabled={geocoderConfigured()}
           districts={districts}
@@ -138,6 +199,11 @@ export async function YourRaces({
   }
 
   const dates = await raceDates(result.races.map((r) => r.raceId));
+  /* Printed races get a card; decided ones (FL-10: one candidate,
+     unopposed) get the "Not on your ballot" line below the list instead, so
+     the list never presents a race the voter can't vote in as theirs. */
+  const printed = result.races.filter((r) => !isDecided(r));
+  const decided = result.races.filter(isDecided);
 
   return (
     <div className="flex flex-col gap-5">
@@ -147,7 +213,7 @@ export async function YourRaces({
           : result.county}
         {result.district ? ` · ${result.district}` : ""}
         <Link
-          href="/candidates?view=races"
+          href="/candidates?view=races&change=1"
           className="text-caption text-primary underline underline-offset-2"
         >
           Change location
@@ -170,6 +236,21 @@ export async function YourRaces({
         </p>
       )}
 
+      {/* Also before any race, on every result: what this guide doesn't
+          cover. Without it the list reads as the voter's whole ballot, and
+          Florida House and Senate seats, judges and city races are on real
+          ballots and not here. Kept in step with CoverageSummary's "Not
+          covered" row through NOT_COVERED_SENTENCE (scope-copy.ts). */}
+      <p className="text-caption text-on-surface-muted">
+        {NOT_COVERED_SENTENCE}{" "}
+        <Link
+          href="/methodology#not-covered"
+          className="underline underline-offset-2 hover:text-on-surface"
+        >
+          What we don&apos;t cover
+        </Link>
+      </p>
+
       {/* The truly-empty case only. Since the listed tier (0033) the roster is
           visible before any brief is, so an empty list now means nothing at
           all is visible for this location — and if county races did come
@@ -184,25 +265,69 @@ export async function YourRaces({
           </p>
         )
       ) : (
-        <LinkRowList>
-          {result.races.map((race) => {
-            const extra = dates.get(race.raceId);
-            const general = formatDate(extra?.key_dates?.general_date);
-            return (
-              <LinkRow
-                key={race.raceId}
-                href={`/races/${race.raceId}`}
-                title={race.office}
-                aside={raceStatusLabel(race.status)}
-              >
-                <p className="text-body-sm text-on-surface-muted">
-                  {race.district ?? "Statewide"}
-                  {general ? ` · General election ${general}` : ""}
-                </p>
-              </LinkRow>
-            );
-          })}
-        </LinkRowList>
+        printed.length > 0 && (
+          <LinkRowList>
+            {printed.map((race) => {
+              const extra = dates.get(race.raceId);
+              const general = formatDate(extra?.key_dates?.general_date);
+              return (
+                <LinkRow
+                  key={race.raceId}
+                  href={`/races/${race.raceId}`}
+                  title={race.office}
+                  aside={raceStatusLabel(race.status)}
+                >
+                  <p className="text-body-sm text-on-surface-muted">
+                    {race.district ?? "Statewide"}
+                    {general ? ` · General election ${general}` : ""}
+                  </p>
+                </LinkRow>
+              );
+            })}
+          </LinkRowList>
+        )
+      )}
+
+      {/* Races in the voter's own list that will not be printed: FL-10, whose
+          only candidate is unopposed, is the case today. Rendered the way
+          CountyRaces renders a decided county seat — one line naming the
+          person who takes the office and why — under a plainer heading,
+          because these are district-matched: certainly this voter's race,
+          and certainly not on their ballot. Still linked: the race page says
+          the same and has what we have on the candidate. */}
+      {decided.length > 0 && (
+        <section
+          aria-labelledby="not-on-ballot-heading"
+          className="flex flex-col gap-2"
+        >
+          <h2 id="not-on-ballot-heading" className="text-h3">
+            Not on your ballot
+          </h2>
+          <p className="text-caption text-on-surface-muted">
+            {decided.length === 1
+              ? "This race won't be printed on your November ballot. It was settled before the general election."
+              : "These races won't be printed on your November ballot. Each was settled before the general election."}
+          </p>
+          <ul className="flex flex-col gap-2">
+            {decided.map((race) => (
+              <li key={race.raceId} className="text-body-sm text-on-surface">
+                <Link
+                  href={`/races/${race.raceId}`}
+                  className="text-primary underline underline-offset-2 hover:text-primary-hover"
+                >
+                  {race.office}
+                  {race.district ? ` ${race.district}` : ""}
+                </Link>
+                {" · "}
+                {race.holder.legalName}
+                <span className="text-on-surface-muted">
+                  {" · "}
+                  {DECIDED_TAG[race.decided]}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
 
       {/* The ZIP resolved and the district race is not here. Without this the
@@ -217,16 +342,17 @@ export async function YourRaces({
             className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
           >
             We don&apos;t have the U.S. House race for {result.district} yet.
-            What&apos;s above is the statewide ballot every Florida voter shares
+            The races above are the statewide ones every Florida voter shares
             — your district&apos;s race will appear here once it&apos;s
             published.
           </p>
         )}
 
       {/* County-matched, not district-matched, so its own section rather than
-          part of the list above: every race up there is on this voter's
-          ballot, and these may not be (CountyRaces says why). Below the
-          district list because that list is the certain part. */}
+          part of the list above: every race up there is this voter's (printed,
+          or marked not on the ballot), and these may not be (CountyRaces says
+          why). Below the district list because that list is the certain
+          part. */}
       {result.county && result.countyRaces && result.countyRaces.length > 0 && (
         <CountyRaces county={result.county} races={result.countyRaces} />
       )}
@@ -245,19 +371,23 @@ export async function YourRaces({
           note, as the home page without a saved district does. */}
       <BallotQuestions county={result.county} />
 
+      {/* About party, not geography. It used to open "Every registered
+          Florida voter gets the same ballot", which is false — ballots differ
+          by where you live, as this page shows — when what it meant is that
+          party doesn't limit the general election. */}
       <p className="text-caption text-on-surface-muted">
-        Every registered Florida voter gets the same ballot in the general
-        election, whatever party you&apos;re registered with — including no
-        party at all. If you couldn&apos;t vote in August&apos;s closed primary,
-        you can vote on all of this.
+        Your party doesn&apos;t limit what you can vote on in November.
+        Whatever party you&apos;re registered with — including no party at
+        all — you can vote in every race on your general election ballot, even
+        if you couldn&apos;t vote in August&apos;s closed primary.
       </p>
 
       {!result.district &&
         result.coverage !== "statewide" &&
         result.races.length > 0 && (
         <p className="text-caption text-on-surface-muted">
-          Showing statewide races. Enter your ZIP above to add your
-          congressional district&apos;s races.
+          Showing statewide races. To add your U.S. House race, use Change
+          location above and enter your ZIP.
         </p>
       )}
 

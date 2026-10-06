@@ -22,7 +22,8 @@ import { COVERED_COUNTIES } from "@/lib/counties";
    untrue thing this page could say.
 
    The policy-area filter narrows WHO IS LISTED, never how they are ranked or
-   described: inside a race the ballot-order rule still decides the order, and
+   described: inside a race the ballot-order rule (src/lib/ballot-order.ts,
+   via browseCandidates) still decides the order, and
    a candidate with a stated position in the chosen area is shown the same way
    as any other. Areas come from the issue titles the pipeline wrote (see
    src/lib/policy-areas.ts), so filtering cannot surface a judgment this app
@@ -109,7 +110,9 @@ export async function CandidateBrowser({
 
       {/* "On the ballot" only while it is true: once a decided seat is in the
           set, some of these races are not printed, so the line counts them
-          instead of claiming the whole set is on the ballot. */}
+          instead of claiming the whole set is on the ballot. The tail says
+          ballot order applies WITHIN each race: the races themselves follow
+          directory.ts's neutral office order, not the ballot's. */}
       <p className="text-caption text-on-surface-muted" role="status">
         {results.total} candidate{results.total === 1 ? "" : "s"}
         {/* One string, not across{" "}{n}: a separate {" "} after text is
@@ -124,8 +127,8 @@ export async function CandidateBrowser({
                 results.decidedRaces === 1 ? "a seat" : "seats"
               } already decided`}
         {results.q ? ` matching “${results.q}”` : ""}
-        {areaLabel ? ` with a stated position on ${areaLabel}` : ""} — shown in
-        ballot order, every race, every party.
+        {areaLabel ? ` with a stated position on ${areaLabel}` : ""} — listed in
+        ballot order within each race.
       </p>
 
       {results.total === 0 ? (

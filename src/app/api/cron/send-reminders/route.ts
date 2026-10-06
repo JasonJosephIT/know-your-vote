@@ -120,7 +120,9 @@ async function run(request: NextRequest) {
      re-run that UTC got wrong). At the scheduled 14:00 UTC the two agree. */
   const today = easternToday();
   const events = await verifiedElectionEvents(service);
-  const origin = request.nextUrl.origin;
+  /* Links in the email come from src/lib/site-url.ts (reminderText), never
+     from this request: Vercel Cron can reach the route on the deployment's
+     own *.vercel.app address rather than knowyour.vote. */
 
   /* ---- REHEARSAL (launch handoff §2.2) ---------------------------------
      Only for a POST whose JSON body names an address. Vercel Cron sends a
@@ -132,7 +134,7 @@ async function run(request: NextRequest) {
     return NextResponse.json({ error: rehearsal.invalid }, { status: 400 });
   }
   if (rehearsal) {
-    return rehearse(service, events, today, rehearsal.to, origin);
+    return rehearse(service, events, today, rehearsal.to);
   }
   /* ---- end REHEARSAL --------------------------------------------------- */
 
@@ -246,7 +248,7 @@ async function run(request: NextRequest) {
             from: process.env.EMAIL_FROM!,
             to: sub.email,
             subject: rendered.subject ?? rendered.title,
-            text: reminderText(rendered, origin, sub.unsubscribe_token),
+            text: reminderText(rendered, sub.unsubscribe_token),
           }))
         );
         if (sendError) throw new Error(sendError.message);
@@ -357,8 +359,7 @@ async function rehearse(
   service: SupabaseClient,
   events: ElectionEvent[],
   today: string,
-  to: string,
-  origin: string
+  to: string
 ) {
   /* Signups are stored lower-cased; the exact spelling is tried too, for
      any row saved before that. */
@@ -427,7 +428,7 @@ async function rehearse(
       from: process.env.EMAIL_FROM!,
       to: sub.email,
       subject: `[Rehearsal] ${rendered.subject ?? rendered.title}`,
-      text: reminderText(rendered, origin, sub.unsubscribe_token),
+      text: reminderText(rendered, sub.unsubscribe_token),
     },
   ]);
   if (sendError) {

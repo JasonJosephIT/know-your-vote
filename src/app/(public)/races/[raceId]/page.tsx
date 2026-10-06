@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata, ResolvingMetadata } from "next";
 import { RaceCompare } from "@/components/features/RaceCompare";
 import { TrackView } from "@/components/features/TrackView";
 import { RaceListing } from "@/components/features/RaceListing";
@@ -10,6 +11,7 @@ import {
   type RaceListing as RaceListingData,
 } from "@/lib/listing";
 import { listingCopy, raceStatusLine } from "@/lib/listing-copy";
+import { officeTitle } from "@/lib/office-title";
 import { spineOptions } from "@/lib/issue-pick";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
@@ -31,19 +33,34 @@ export async function generateStaticParams() {
   }
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ raceId: string }>;
-}) {
+/* The title names the district for a House race (officeTitle), and the
+   share card says the same: without an openGraph here the card inherited
+   the site's own title, so all sixteen House races shared as one. Setting
+   openGraph replaces the layout's whole object (metadata merges shallowly),
+   so its description and image are carried over from the parent. */
+export async function generateMetadata(
+  {
+    params,
+  }: {
+    params: Promise<{ raceId: string }>;
+  },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   const { raceId } = await params;
   const brief = await getRaceBrief(raceId);
-  const office =
-    brief?.race.office ?? (await getRaceListing(raceId))?.race.office;
+  const race = brief?.race ?? (await getRaceListing(raceId))?.race;
+  if (!race) return { title: "Race in review — Know Your Vote" };
+  const title = `${officeTitle(race)} — Know Your Vote`;
+  const og = (await parent).openGraph;
   return {
-    title: office
-      ? `${office} — Know Your Vote`
-      : "Race in review — Know Your Vote",
+    title,
+    openGraph: {
+      title,
+      type: "website",
+      ...(og?.siteName ? { siteName: og.siteName } : {}),
+      ...(og?.description ? { description: og.description } : {}),
+      ...(og?.images ? { images: og.images } : {}),
+    },
   };
 }
 
@@ -78,7 +95,9 @@ export default async function RacePage({
 
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-5 px-5 py-8">
-      <RaceHeader race={brief.race}>
+      {/* The heading names the district for a House race (officeTitle);
+          only the header's copy of the row changes. */}
+      <RaceHeader race={{ ...brief.race, office: officeTitle(brief.race) }}>
         {/* "Equal scrutiny" is a claim about a comparison, and with one
             candidate there is no comparison to make — the Balance Audit's
             variance over a single profile is 0.0 and passes trivially
@@ -164,7 +183,7 @@ function ListedRace({ listing }: { listing: RaceListingData }) {
 
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-5 px-5 py-8">
-      <RaceHeader race={listing.race}>
+      <RaceHeader race={{ ...listing.race, office: officeTitle(listing.race) }}>
         <p className="text-body-sm text-on-surface-muted">{copy.status}</p>
       </RaceHeader>
 
