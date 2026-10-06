@@ -55,7 +55,7 @@ export function ListedCandidateCard({
           {linkToDetail ? (
             <Link
               href={`/candidates/${candidate.candidate_id}`}
-              className="hover:underline"
+              className="text-primary hover:text-primary-hover hover:underline"
             >
               {candidate.legal_name}
             </Link>

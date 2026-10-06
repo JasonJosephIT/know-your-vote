@@ -175,7 +175,7 @@ export function NewsStoryCard({
               href={href}
               target="_blank"
               rel="noreferrer"
-              className="underline-offset-2 hover:underline"
+              className="text-primary underline-offset-2 hover:text-primary-hover hover:underline"
             >
               {title}
             </a>

@@ -35,10 +35,16 @@ import type { ResolveResult } from "@/types/app";
    county in a cookie, and a URL carrying those two values -- never the address,
    never the ZIP. */
 
+let errorSeq = 0;
+
 type Stage =
   | { kind: "idle" }
   | { kind: "loading" }
-  | { kind: "error"; message: string }
+  /* `field` (the default) marks an error about what was typed, which sits on
+     the field; false marks one that isn't (the network or the server
+     failed). `seq` is new for every error, so the alert remounts and is
+     read again even when the same message comes back twice. */
+  | { kind: "error"; message: string; field?: boolean; seq: number }
   | {
       kind: "split";
       zip: string;
@@ -70,6 +76,8 @@ export function LocationEntry({
   const field = locationFieldCopy(addressEnabled);
   const router = useRouter();
   const listId = useId();
+  const errorId = useId();
+  const inputRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState("");
   const [stage, setStage] = useState<Stage>({ kind: "idle" });
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
@@ -90,6 +98,29 @@ export function LocationEntry({
      is what React 19's set-state-in-effect rule warns about, and deriving is
      simply correct anyway: there is nothing to remember. */
   const visible = addressMode ? suggestions : [];
+  const fieldError = stage.kind === "error" && stage.field !== false;
+
+  /* Errors that announce (interface review 2026-10-05). An error about what
+     was typed belongs to the field: the field reports itself invalid and
+     names the message as its description, and the message is a role=alert
+     so it is read wherever focus is (pressing Enter in the field leaves
+     focus there, and nothing else would speak it).
+
+     Focus moves to the field only when it was lost or sits on this form's
+     own submit button, which "Looking up…" disables: never away from a
+     control the voter moved to while waiting. */
+  useEffect(() => {
+    if (!fieldError) return;
+    const active = document.activeElement;
+    const submitButton = inputRef.current?.form?.querySelector('[type="submit"]');
+    if (!active || active === document.body || active === submitButton) {
+      inputRef.current?.focus();
+    }
+  }, [fieldError, stage]);
+
+  function fail(message: string, field = true) {
+    setStage({ kind: "error", message, field, seq: ++errorSeq });
+  }
   const highlighted = addressMode ? activeIndex : -1;
 
   /* Suggestions, debounced. A keystroke is a billed request, so this waits for a
@@ -150,11 +181,12 @@ export function LocationEntry({
         body: JSON.stringify({ lat: pick.lat, lon: pick.lon }),
       });
       if (!res.ok) {
-        setStage({
-          kind: "error",
-          message:
-            "We couldn't match that address to a district. Try your ZIP, or pick your district below.",
-        });
+        /* 400, 429 and 5xx are all ours or the geocoder's, never what the
+           voter typed: not a field error. */
+        fail(
+          "We couldn't look up that address just now. Try your ZIP, or pick your district below.",
+          false
+        );
         return;
       }
       const data: ResolveResult = await res.json();
@@ -170,10 +202,7 @@ export function LocationEntry({
         return;
       }
       if (!data.district || !data.countyFips) {
-        setStage({
-          kind: "error",
-          message: "We couldn't pin that address — pick your district below.",
-        });
+        fail("We couldn't pin that address — pick your district below.");
         return;
       }
       commit(
@@ -181,10 +210,7 @@ export function LocationEntry({
         "address"
       );
     } catch {
-      setStage({
-        kind: "error",
-        message: "Something went wrong — give it another try.",
-      });
+      fail("Something went wrong — give it another try.", false);
     }
   }
 
@@ -195,11 +221,16 @@ export function LocationEntry({
       if (district) params.set("district", district);
       const res = await fetch(`/api/resolve?${params}`);
       if (!res.ok) {
-        setStage({
-          kind: "error",
-          message:
-            "We couldn't match that ZIP. Double-check it, or pick your district below.",
-        });
+        /* /api/resolve answers 400 only for a malformed ZIP, which submit()
+           already rules out, and 500 when the lookup fails; an unmatched
+           ZIP comes back 200 and out of coverage. So this is a server
+           failure, not the field's. */
+        fail(
+          res.status === 400
+            ? "ZIP codes are 5 digits — double-check yours."
+            : "Something went wrong — give it another try.",
+          res.status === 400
+        );
         return;
       }
       const data: ResolveResult = await res.json();
@@ -225,10 +256,7 @@ export function LocationEntry({
       /* In coverage but no district -- county only. Keep the existing answer. */
       router.push(`/candidates?view=races&county=${data.countyFips ?? ""}`);
     } catch {
-      setStage({
-        kind: "error",
-        message: "Something went wrong — give it another try.",
-      });
+      fail("Something went wrong — give it another try.", false);
     }
   }
 
@@ -236,10 +264,7 @@ export function LocationEntry({
     event.preventDefault();
     if (looksLikeZip) {
       if (!/^\d{5}$/.test(trimmed)) {
-        setStage({
-          kind: "error",
-          message: "ZIP codes are 5 digits — double-check yours.",
-        });
+        fail("ZIP codes are 5 digits — double-check yours.");
         return;
       }
       void resolveZipCode(trimmed);
@@ -252,12 +277,11 @@ export function LocationEntry({
       void resolveAddress(picked);
       return;
     }
-    setStage({
-      kind: "error",
-      message: addressEnabled
+    fail(
+      addressEnabled
         ? "Pick your address from the list, or enter your 5-digit ZIP."
-        : "Enter your 5-digit ZIP, or pick your district below.",
-    });
+        : "Enter your 5-digit ZIP, or pick your district below."
+    );
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -284,7 +308,7 @@ export function LocationEntry({
         onSubmit={submit}
         action="/candidates"
         method="get"
-        className="flex w-full flex-col gap-3 sm:flex-row"
+        className="flex w-full flex-col gap-3 sm:flex-row sm:items-start"
       >
         <input type="hidden" name="view" value="races" />
         <label htmlFor="location" className="sr-only">
@@ -292,8 +316,11 @@ export function LocationEntry({
         </label>
         <div className="relative flex w-full flex-col sm:max-w-[320px]">
           <Input
+            ref={inputRef}
             id="location"
             name="zip"
+            aria-invalid={fieldError || undefined}
+            aria-describedby={fieldError ? errorId : undefined}
             role="combobox"
             aria-expanded={visible.length > 0}
             aria-controls={listId}
@@ -311,6 +338,16 @@ export function LocationEntry({
             }}
             onKeyDown={onKeyDown}
           />
+          {stage.kind === "error" && stage.field !== false && (
+            <p
+              key={stage.seq}
+              id={errorId}
+              role="alert"
+              className="mt-2 text-body-sm text-error"
+            >
+              {stage.message}
+            </p>
+          )}
           {visible.length > 0 && (
             <ul
               id={listId}
@@ -350,14 +387,14 @@ export function LocationEntry({
       {/* Always visible, not only after a miss: a voter outside the four
           counties should know before typing that their House and county
           races are not here yet. */}
-      <p className="text-caption text-on-surface-muted">
+      <p className="text-body-sm text-on-surface-muted">
         Full statewide coverage isn&apos;t available yet. Every Florida voter
         gets the statewide races and amendments; U.S. House and county races
         are only for {coveredCountyNames()} counties so far.
       </p>
 
-      {stage.kind === "error" && (
-        <p role="alert" className="text-body-sm text-error">
+      {stage.kind === "error" && stage.field === false && (
+        <p key={stage.seq} role="alert" className="text-body-sm text-error">
           {stage.message}
         </p>
       )}

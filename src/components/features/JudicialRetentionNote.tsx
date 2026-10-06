@@ -114,7 +114,7 @@ export function JudicialRetentionNote({ county }: { county?: string | null }) {
           </li>
         ))}
       </ul>
-      <p className="text-caption text-on-surface-muted">
+      <p className="text-body-sm text-on-surface-muted">
         The Florida Division of Elections{" "}
         <a
           href={DOE_JUDICIAL_LIST}

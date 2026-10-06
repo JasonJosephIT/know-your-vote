@@ -3,7 +3,7 @@ import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 import type { ResolveRaceSummary } from "@/types/app";
 import { LISTED_RACE_LABEL } from "@/lib/listing-copy";
-import { orderCandidates } from "@/lib/ballot-order";
+import { orderCandidates, orderRaces } from "@/lib/ballot-order";
 import type { Party } from "@/types/schema";
 
 /* Location-free read of the races every Florida voter shares (TASK-067).
@@ -96,9 +96,10 @@ async function fetchStatewideRaces(): Promise<StatewideRace[]> {
     )
     .eq("election", ACTIVE_ELECTION_KIND)
     .is("district", null)
-    /* Same ordering as the district path in resolve.ts, so the landing page
-       and /candidates?view=races never disagree about what comes first. */
-    .order("level", { ascending: false })
+    /* race_id only to make the read deterministic; the rows are put in
+       ballot order of their offices below (orderRaces), the same as the
+       district path in resolve.ts, so the landing page and
+       /candidates?view=races never disagree about what comes first. */
     .order("race_id");
   /* Degrades rather than throws (§0.7). This read sits on the landing page,
      which is the one surface that must never show an error: an unreachable
@@ -126,7 +127,7 @@ async function fetchStatewideRaces(): Promise<StatewideRace[]> {
     )
   );
 
-  return (data ?? []).map((r) => {
+  return orderRaces((data ?? []).map((r) => {
     const status = raceStatusOf(r.race_publication);
     const ballotOrder: string[] = r.candidate_ids ?? [];
     const candidates = orderCandidates(
@@ -149,7 +150,7 @@ async function fetchStatewideRaces(): Promise<StatewideRace[]> {
         (r.key_dates as Record<string, string> | null)?.general_date ?? null,
       candidates,
     };
-  });
+  }));
 }
 
 export function getStatewideRaces() {
@@ -157,8 +158,8 @@ export function getStatewideRaces() {
     fetchStatewideRaces,
     /* v2: the shape gained `status` (0033). A new key rather than trusting
        old entries to age out, although an old entry would still be read
-       safely — a missing status is `listed`. v3: `candidates`. */
-    ["statewide-races", "v3", ACTIVE_ELECTION_KIND],
+       safely — a missing status is `listed`. v3: `candidates`. v4: office order. */
+    ["statewide-races", "v4", ACTIVE_ELECTION_KIND],
     { revalidate: 3600, tags: ["races"] }
   )();
 }

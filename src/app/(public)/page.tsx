@@ -144,7 +144,7 @@ export default async function Home() {
                   too, and this guide doesn't cover them. A decided seat
                   (savedSeat) is said plainly as no race at all, never shown
                   as the voter's race. */}
-              <p className="text-caption text-on-surface-muted">
+              <p className="text-body-sm text-on-surface-muted">
                 You&apos;re set to {saved.district}.{" "}
                 {savedSeat
                   ? houseRaceNotOnBallot(saved.district, savedSeat)
@@ -152,7 +152,7 @@ export default async function Home() {
                 The statewide races and amendments above are the same for every
                 Florida voter. {NOT_COVERED_SENTENCE}
               </p>
-              <p className="text-caption text-on-surface-muted">
+              <p className="text-body-sm text-on-surface-muted">
                 We remember the district, never your address or ZIP; the chip
                 at the top of the page changes it or forgets it.
               </p>
@@ -176,7 +176,7 @@ export default async function Home() {
 
                   It asks for a ZIP unless address completion is configured
                   (field.noun): the field takes nothing else in production. */}
-              <p className="text-caption text-on-surface-muted">
+              <p className="text-body-sm text-on-surface-muted">
                 Your U.S. House race isn&apos;t in the list above, because it
                 depends on where you live. Give us your {field.noun} and
                 we&apos;ll add it — or skip it and read the rest. We use it to

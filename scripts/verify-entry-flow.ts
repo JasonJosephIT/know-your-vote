@@ -1,4 +1,4 @@
-/* Guardrails for the four HIGH findings of the 2026-10-05 interface review
+/* Guardrails for the HIGH and MEDIUM findings of the 2026-10-05 interface review
    of the voter entry flow (home, race and measure pages).
 
    1. The district picker saves on submit, never on change (WCAG 3.2.2): a
@@ -102,6 +102,127 @@ for (const [file, h1] of [
     `${file}: the way out goes to /, not "your" races or ballot`,
     !/Back to your (races|ballot)/.test(src) && /href="\/" className="text-label text-primary/.test(src)
   );
+}
+
+/* ==== MEDIUM findings of the same review =================================
+   (office order and the party legend are pinned in verify-ballot-order and
+   verify-party-label, next to the functions they test) */
+
+/* ---- 5. field errors sit on their field ---------------------------------- */
+const entryFlat = entry.replace(/\s+/g, " ");
+check(
+  "the ZIP/address field reports itself invalid and names its error",
+  /ref=\{inputRef\} id="location" name="zip" aria-invalid=\{fieldError \|\| undefined\} aria-describedby=\{fieldError \? errorId : undefined\}/.test(entryFlat)
+);
+check(
+  "a field error renders under the field with the described-by id",
+  /<p\s+key=\{stage\.seq\}\s+id=\{errorId\}\s+role="alert"\s+className="mt-2 text-body-sm text-error"\s*>/.test(entry)
+);
+check(
+  "a field error is still announced when focus is already in the field (Enter)",
+  /<p\s+key=\{stage\.seq\}\s+id=\{errorId\}\s+role="alert"/.test(entry)
+);
+check(
+  "focus moves to the field only when it was lost or on the form's own submit",
+  /if \(!active \|\| active === document\.body \|\| active === submitButton\) \{\s*inputRef\.current\?\.focus\(\);/.test(entry)
+);
+check(
+  "server failures aren't field errors",
+  (entry.match(/fail\("Something went wrong — give it another try\.", false\)/g) ?? []).length === 2 &&
+    /We couldn't look up that address just now\.[^"]*",\s*false\s*\)/.test(entry)
+);
+const voting = code("src/components/features/VotingInfo.tsx");
+check(
+  "the consent box reports itself invalid, names its error and takes focus",
+  /aria-invalid=\{consentError \|\| undefined\}/.test(voting) &&
+    /aria-describedby=\{consentError \? consentErrorId : undefined\}/.test(voting) &&
+    /if \(consentError\) consentRef\.current\?\.focus\(\);/.test(voting)
+);
+
+/* ---- 6. focus doesn't fall to <body> when its control goes ---------------- */
+check(
+  "the reminder form's success message takes focus once, on the change",
+  /if \(stage\.kind === "sent"\) sentRef\.current\?\.focus\(/.test(voting) &&
+    /ref=\{sentRef\}\s*tabIndex=\{-1\}/.test(voting)
+);
+const chip = code("src/components/features/DistrictChip.tsx");
+check(
+  "Forget my district hands focus to the Set your district link",
+  /setForgot\(true\);/.test(chip) &&
+    /if \(forgot\) setLinkRef\.current\?\.focus\(/.test(chip) &&
+    /ref=\{setLinkRef\}/.test(chip)
+);
+const install = code("src/components/features/InstallCard.tsx");
+check(
+  "dismissing Get the app leaves a focused stand-in, not <body>",
+  /if \(dismissed\) standInRef\.current\?\.focus\(\{ preventScroll: true \}\);/.test(install) &&
+    /ref=\{standInRef\}\s*tabIndex=\{-1\}/.test(install)
+);
+{
+  /* An inline callback ref that calls focus() re-runs on every render and
+     steals focus back after any later re-render (review 2026-10-05). */
+  const stealers = [
+    "src/components/features/LocationEntry.tsx",
+    "src/components/features/VotingInfo.tsx",
+    "src/components/features/DistrictChip.tsx",
+    "src/components/features/InstallCard.tsx",
+  ].filter((f) => /ref=\{\(\w+\) => \w+\?\.focus\(/.test(code(f)));
+  check("no focusing inline callback refs", stealers.length === 0, stealers.join(", "));
+}
+
+/* ---- 7. the global focus ring reaches inputs ----------------------------- */
+const input = code("src/components/ui/Input.tsx");
+check(
+  "Input doesn't suppress the outline (forced colors keep the ring)",
+  input.length > 0 && !/outline-none|outline-hidden/.test(input)
+);
+
+/* ---- 8. main-path links look like links ----------------------------------- */
+check(
+  "LinkRows titles carry the link colour",
+  /text-primary after:absolute after:inset-0/.test(code("src/components/ui/LinkRows.tsx"))
+);
+{
+  const inkOnly = [
+    "src/components/features/RaceCompare.tsx",
+    "src/components/features/NewsStoryCard.tsx",
+    "src/components/features/IssueRows.tsx",
+    "src/components/features/CandidateBrief.tsx",
+    "src/components/features/CandidateBrowser.tsx",
+    "src/components/features/RaceListing.tsx",
+    "src/components/features/SavedCandidates.tsx",
+  ].filter((f) => /className="(?:underline-offset-2 )?hover:underline"/.test(code(f)));
+  check("no link is ink with a hover-only underline", inkOnly.length === 0, inkOnly.join(", "));
+}
+
+check(
+  "the race roster's party legend shows only for races on the November ballot",
+  /const onBallot = branch === "contest" \|\| branch === "single_candidate";\s*const legend = onBallot/.test(
+    code("src/components/features/RaceCompare.tsx")
+  )
+);
+
+/* ---- 9. reading width and size on the measure page ------------------------ */
+check(
+  "the ballot summary is body size at a reading width",
+  /<blockquote className="max-w-\[680px\] border-l-2 border-border-strong pl-4 text-body text-on-surface">/.test(
+    code("src/app/(public)/measures/[measureId]/page.tsx")
+  )
+);
+
+/* ---- 10. must-read rules aren't set as 13px captions ---------------------- */
+for (const [file, phrase] of [
+  ["src/components/features/BallotQuestions.tsx", "Each needs a"],
+  ["src/components/features/ClaimList.tsx", "No stated position found&rdquo; means"],
+  ["src/components/features/MeasureVoteMeaning.tsx", "Leaving this question blank"],
+  ["src/components/features/LocationEntry.tsx", "Full statewide coverage isn&apos;t available yet"],
+  ["src/components/features/JudicialRetentionNote.tsx", "The Florida Division of Elections"],
+] as const) {
+  const src = code(file);
+  const at = src.indexOf(phrase);
+  const opener = at > 0 ? src.lastIndexOf("<p ", at) : -1;
+  const tag = opener >= 0 ? src.slice(opener, src.indexOf(">", opener) + 1) : "";
+  check(`${file}: "${phrase}…" is at least body-sm`, tag.includes("text-body-sm") && !tag.includes("text-caption"), tag);
 }
 
 if (failures > 0) {

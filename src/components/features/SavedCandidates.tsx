@@ -74,7 +74,7 @@ export function SavedCandidates() {
               <h2 className="text-h3">
                 <Link
                   href={`/candidates/${c.candidate_id}`}
-                  className="hover:underline"
+                  className="text-primary hover:text-primary-hover hover:underline"
                 >
                   {c.legal_name}
                 </Link>

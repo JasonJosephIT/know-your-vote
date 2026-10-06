@@ -10,6 +10,7 @@ import { CONTACT_EMAIL } from "@/lib/contact";
 import { showIncumbentChip } from "@/lib/incumbency";
 import { candidateExtras, raceRows } from "@/lib/race-rows";
 import { statusBranch } from "@/lib/listing-copy";
+import { partyLegend } from "@/lib/party-label";
 
 /* The race page, issue first (inspiration pass 2026-10-05, after CalMatters'
    2026 guide). It used to be one full CandidateBrief column per candidate,
@@ -54,6 +55,13 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
     notPrintedOnBallot: brief.notPrintedOnBallot,
     count,
   });
+  /* Only where the race is on the November ballot: the legend says "as the
+     ballot prints them", and a seat decided in August or elected without
+     opposition isn't printed (its status line above says so). */
+  const onBallot = branch === "contest" || branch === "single_candidate";
+  const legend = onBallot
+    ? partyLegend(brief.candidates.map((c) => c.candidate.party))
+    : null;
   const rosterHeading =
     branch === "decided_in_primary"
       ? count === 1 ? "The winner" : "The winners"
@@ -73,6 +81,11 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
               {count} candidates, in ballot order.
             </p>
           )}
+          {/* What the chips' party codes stand for, the codes in this race
+              only (party-label.ts). Null for a nonpartisan race. */}
+          {legend && (
+            <p className="text-body-sm text-on-surface-muted">{legend}</p>
+          )}
         </div>
         <ul className={grid} style={cols}>
           {brief.candidates.map(({ candidate, socials }) => (
@@ -84,7 +97,7 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
               <h3 className="text-h3">
                 <Link
                   href={`/candidates/${candidate.candidate_id}`}
-                  className="hover:underline"
+                  className="text-primary hover:text-primary-hover hover:underline"
                 >
                   {candidate.legal_name}
                 </Link>
@@ -163,7 +176,7 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
                 <h3 className="text-label">
                   <Link
                     href={`/candidates/${candidate.candidate_id}`}
-                    className="underline-offset-2 hover:underline"
+                    className="text-primary underline-offset-2 hover:text-primary-hover hover:underline"
                   >
                     {candidate.legal_name}
                   </Link>
