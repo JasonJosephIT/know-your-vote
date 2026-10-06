@@ -116,7 +116,11 @@ export default async function MeasurePage({
         <h2 className="text-h3">What the ballot says</h2>
         {/* The official summary verbatim — this is the wording a voter meets
             in the booth, so it is quoted, never paraphrased. */}
-        <blockquote className="border-l-2 border-border-strong pl-4 text-body-sm text-on-surface">
+        {/* Body size at a reading width (interface review 2026-10-05): this is
+            the exact wording on the ballot, the hardest text on the page,
+            and at 14px across the full 1120px column it ran ~154 characters
+            a line. design.md caps prose at ~680px, as the race page does. */}
+        <blockquote className="max-w-[680px] border-l-2 border-border-strong pl-4 text-body text-on-surface">
           {measure.ballot_summary}
         </blockquote>
         <a
@@ -142,17 +146,17 @@ export default async function MeasurePage({
             {note ? (
               <>
                 {note.paragraphs.map((p) => (
-                  <p key={p} className="text-body-sm text-on-surface-muted">
+                  <p key={p} className="max-w-[680px] text-body-sm text-on-surface-muted">
                     {p}
                   </p>
                 ))}
-                <p className="text-caption text-on-surface-muted">
+                <p className="max-w-[680px] text-caption text-on-surface-muted">
                   We look for new statements every week. This note was last
                   updated {formatNoteDate(note.updated)}.
                 </p>
               </>
             ) : (
-              <p className="text-body-sm text-on-surface-muted">
+              <p className="max-w-[680px] text-body-sm text-on-surface-muted">
                 Resources on both sides are being collected. We publish them only
                 when both sides are represented &mdash; until then, this page
                 shows{" "}

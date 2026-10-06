@@ -241,7 +241,7 @@ export async function YourRaces({
           Florida House and Senate seats, judges and city races are on real
           ballots and not here. Kept in step with CoverageSummary's "Not
           covered" row through NOT_COVERED_SENTENCE (scope-copy.ts). */}
-      <p className="text-caption text-on-surface-muted">
+      <p className="text-body-sm text-on-surface-muted">
         {NOT_COVERED_SENTENCE}{" "}
         <Link
           href="/methodology#not-covered"
@@ -303,7 +303,7 @@ export async function YourRaces({
           <h2 id="not-on-ballot-heading" className="text-h3">
             Not on your ballot
           </h2>
-          <p className="text-caption text-on-surface-muted">
+          <p className="text-body-sm text-on-surface-muted">
             {decided.length === 1
               ? "This race won't be printed on your November ballot. It was settled before the general election."
               : "These races won't be printed on your November ballot. Each was settled before the general election."}
@@ -375,7 +375,7 @@ export async function YourRaces({
           Florida voter gets the same ballot", which is false — ballots differ
           by where you live, as this page shows — when what it meant is that
           party doesn't limit the general election. */}
-      <p className="text-caption text-on-surface-muted">
+      <p className="text-body-sm text-on-surface-muted">
         Your party doesn&apos;t limit what you can vote on in November.
         Whatever party you&apos;re registered with — including no party at
         all — you can vote in every race on your general election ballot, even
@@ -385,7 +385,7 @@ export async function YourRaces({
       {!result.district &&
         result.coverage !== "statewide" &&
         result.races.length > 0 && (
-        <p className="text-caption text-on-surface-muted">
+        <p className="text-body-sm text-on-surface-muted">
           Showing statewide races. To add your U.S. House race, use Change
           location above and enter your ZIP.
         </p>

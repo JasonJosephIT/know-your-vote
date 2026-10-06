@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 
@@ -47,8 +47,30 @@ export function InstallCard() {
     () => null
   );
   const [dismissed, setDismissed] = useState(false);
+  /* Focus the stand-in once, on dismiss: an inline callback ref would re-run
+     on every render and pull focus back to it (review 2026-10-05). */
+  const standInRef = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    if (dismissed) standInRef.current?.focus({ preventScroll: true });
+  }, [dismissed]);
 
-  if (!hydrated || dismissed) return null;
+  if (!hydrated) return null;
+  /* Dismiss removes the focused button with the card. Rather than let focus
+     fall to <body>, it lands on this stand-in where the card was, which
+     reads what happened and keeps the Tab order in place (interface review
+     2026-10-05). Only after a dismiss in this visit: a card dismissed on an
+     earlier visit renders nothing at all. */
+  if (dismissed) {
+    return (
+      <span
+        ref={standInRef}
+        tabIndex={-1}
+        className="sr-only"
+      >
+        Get the app card dismissed
+      </span>
+    );
+  }
 
   /* Client-only environment reads — safe after the hydration gate. */
   const standalone =

@@ -14,7 +14,7 @@
 
    Pure and offline. Run: node scripts/verify-party-label.ts */
 
-import { partyLabel } from "../src/lib/party-label.ts";
+import { partyLabel, partyLegend } from "../src/lib/party-label.ts";
 
 let failures = 0;
 function check(name: string, cond: boolean, detail = "") {
@@ -71,6 +71,22 @@ check("surrounding whitespace is trimmed", partyLabel("  LPF  ") === "LPF",
 for (const code of ["REP", "DEM", "NPA", "IND", "LPF", "CPF", "FFP", "MGT", "other", "ZZZ"]) {
   const label = partyLabel(code);
   check(`${code} has a non-empty label`, typeof label === "string" && label.trim().length > 0);
+}
+
+/* The legend (interface review 2026-10-05): one line naming the codes in a
+   list, in ballot order, every party in the same form, nothing for a
+   nonpartisan list, and nothing guessed for a code we have no name for. */
+{
+  const gov = partyLegend(["NPA", "LPF", "DEM", "REP", "NPA", "NPA"]);
+  check(
+    "legend names every code present, in ballot order, once each",
+    gov ===
+      "Party codes, as the ballot prints them: REP, Republican Party of Florida; DEM, Florida Democratic Party; LPF, Libertarian Party of Florida; NPA, no party affiliation.",
+    String(gov)
+  );
+  check("legend: IND is the Independent Party of Florida, a party", partyLegend(["IND"])?.includes("IND, Independent Party of Florida") === true);
+  check("legend: nothing for a nonpartisan list", partyLegend(["", "NOP", null, "WRI"]) === null);
+  check("legend: a code with no known name is left out, not guessed", partyLegend(["ZZZ"]) === null && partyLegend(["REP", "ZZZ"])?.includes("ZZZ") === false);
 }
 
 if (failures > 0) {

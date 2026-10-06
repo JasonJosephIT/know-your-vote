@@ -180,7 +180,8 @@ components:
     typography: "{typography.body}"
     rounded: "{rounded.md}"
     padding: "12px 14px"
-    border: "2px solid {colors.primary}"
+    border: "1px solid {colors.primary}"
+    outline: "2px solid {colors.focus-ring}, offset 2px"
   card:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.on-surface}"
@@ -273,7 +274,7 @@ The shape language is **minimalist and straight-lined with a small, consistent s
 
 ## Components
 
-**Buttons:** `button-primary` (sage fill, white label) is the single strong call-to-action per view — "See my ballot," "Take the quiz." `button-secondary` is an outlined/quiet variant on `surface` with a `border-strong` edge; on hover it fills with `primary-muted`. `button-primary-disabled` drops to `surface-muted` with muted text. **Inputs:** `input-text` carries a `border-input` edge that thickens to a 2px `primary` ring on focus (`input-text-focus`) — focus is always clearly visible for keyboard users. Selects take the same `border-input` edge. **Cards** are the workhorse container: white surface, 1px `border`, `lg` radius, generous `spacing.5` padding. **Navigation:** `nav-bar` is a bordered surface bar; `nav-item` is quiet by default and becomes `nav-item-active` with a `primary-muted` background and `primary-hover` text plus a small accent indicator. **Verdict badges** use the `caption` type in a pill; the background stays neutral `surface-muted` and the **verdict color is applied to a leading dot and the label text**, so meaning survives for colorblind users and never shouts. **Party chips** are intentionally uniform — the *same* neutral `surface-muted` treatment for REP, DEM, NPA, and every other party, carrying only the text label. This is a hard rule: parties are never color-coded. **Chips** (saved filters, issue tags) use the soft `primary-muted` fill.
+**Buttons:** `button-primary` (sage fill, white label) is the single strong call-to-action per view — "See my ballot," "Take the quiz." `button-secondary` is an outlined/quiet variant on `surface` with a `border-strong` edge; on hover it fills with `primary-muted`. `button-primary-disabled` drops to `surface-muted` with muted text. **Inputs:** `input-text` carries a `border-input` edge that turns `primary` on focus, inside the site's standard 2px `focus-ring` outline (`input-text-focus`) — focus is always clearly visible for keyboard users, and the outline survives Windows High Contrast, where a border or shadow change would not. Selects take the same `border-input` edge. **Cards** are the workhorse container: white surface, 1px `border`, `lg` radius, generous `spacing.5` padding. **Navigation:** `nav-bar` is a bordered surface bar; `nav-item` is quiet by default and becomes `nav-item-active` with a `primary-muted` background and `primary-hover` text plus a small accent indicator. **Verdict badges** use the `caption` type in a pill; the background stays neutral `surface-muted` and the **verdict color is applied to a leading dot and the label text**, so meaning survives for colorblind users and never shouts. **Party chips** are intentionally uniform — the *same* neutral `surface-muted` treatment for REP, DEM, NPA, and every other party, carrying only the text label. This is a hard rule: parties are never color-coded. **Chips** (saved filters, issue tags) use the soft `primary-muted` fill.
 
 ## Do's and Don'ts
 

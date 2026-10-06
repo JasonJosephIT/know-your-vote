@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
@@ -11,7 +11,9 @@ type Stage =
   | { kind: "idle" }
   | { kind: "sending" }
   | { kind: "sent" }
-  | { kind: "error"; message: string };
+  /* `consent` marks the one error that belongs to a field (the box), so it
+     can sit on that field; the rest come from the server and aren't. */
+  | { kind: "error"; message: string; consent?: boolean };
 
 /* The voting-info signup (FR-010): one email now with where to vote (the
    county's official precinct lookup) and the key dates, then the deadline
@@ -56,6 +58,26 @@ export function VotingInfo({
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   const [stage, setStage] = useState<Stage>({ kind: "idle" });
+  const consentRef = useRef<HTMLInputElement>(null);
+  const consentErrorId = useId();
+  const consentError = stage.kind === "error" && stage.consent === true;
+
+  /* Errors that announce (interface review 2026-10-05): the consent error is
+     the box's own, so focus goes to the box, which reports itself invalid
+     and reads the message as its description. */
+  useEffect(() => {
+    if (consentError) consentRef.current?.focus();
+  }, [consentError]);
+
+  /* The "Sent" message takes focus once, when the form turns into it. A
+     stable ref and an effect keyed on the stage, not an inline callback
+     ref: React re-runs a new callback ref on every render, which would pull
+     focus back here (and scroll to it) after any later re-render, such as
+     the router.refresh() of "Forget my district" (review 2026-10-05). */
+  const sentRef = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (stage.kind === "sent") sentRef.current?.focus({ preventScroll: true });
+  }, [stage.kind]);
 
   if (!emailEnabled) {
     return sources ? <OfficialSourcesCard sources={sources} /> : null;
@@ -67,6 +89,7 @@ export function VotingInfo({
       setStage({
         kind: "error",
         message: "Check the consent box first — we only email people who ask.",
+        consent: true,
       });
       return;
     }
@@ -90,8 +113,17 @@ export function VotingInfo({
   }
 
   if (stage.kind === "sent") {
+    /* The form, and the focused button with it, is gone, so focus moves to
+       the message that replaced it: that move is the announcement (a status
+       region inserted already holding its text is read inconsistently), and
+       focus doesn't fall to <body> (interface review 2026-10-05; the same
+       failure SitePrompts fixes for the cookie banner). */
     return (
-      <p className="rounded-md bg-primary-muted px-4 py-3 text-body-sm text-primary-hover" role="status">
+      <p
+        ref={sentRef}
+        tabIndex={-1}
+        className="rounded-md bg-primary-muted px-4 py-3 text-body-sm text-primary-hover focus:outline-none"
+      >
         {/* "Sent." stopped being true for every success: the route sends
             the welcome email at most once a day per address and ZIP (three
             a day per address) and answers a repeat with the same status and
@@ -146,9 +178,15 @@ export function VotingInfo({
         </div>
         <label className="flex items-start gap-2 text-body-sm text-on-surface-muted">
           <input
+            ref={consentRef}
             type="checkbox"
             checked={consent}
-            onChange={(e) => setConsent(e.target.checked)}
+            aria-invalid={consentError || undefined}
+            aria-describedby={consentError ? consentErrorId : undefined}
+            onChange={(e) => {
+              setConsent(e.target.checked);
+              if (consentError) setStage({ kind: "idle" });
+            }}
             className="mt-1 size-4 shrink-0 accent-[var(--color-primary)]"
           />
           <span>
@@ -159,7 +197,12 @@ export function VotingInfo({
             browsing, and every email has an unsubscribe link.
           </span>
         </label>
-        {stage.kind === "error" && (
+        {stage.kind === "error" && stage.consent && (
+          <p id={consentErrorId} className="text-body-sm text-error">
+            {stage.message}
+          </p>
+        )}
+        {stage.kind === "error" && !stage.consent && (
           <p role="alert" className="text-body-sm text-error">
             {stage.message}
           </p>

@@ -151,7 +151,7 @@ export async function CandidateBrowser({
                   and the office, and Chromium leaves a whitespace-only text
                   node after a comment out of the accessible name, which read
                   "United States RepresentativeFL-7". */}
-              <Link href={`/races/${race.race_id}`} className="hover:underline">
+              <Link href={`/races/${race.race_id}`} className="text-primary hover:text-primary-hover hover:underline">
                 {race.level !== "county" ? `${race.office} ` : race.office}
                 {/* A county race's office already names its county and seat
                     ("Orange County Commission, District 2"); its district
@@ -171,7 +171,7 @@ export async function CandidateBrowser({
                       <h3 className="text-label">
                         <Link
                           href={`/candidates/${c.candidate_id}`}
-                          className="hover:underline"
+                          className="text-primary hover:text-primary-hover hover:underline"
                         >
                           {c.legal_name}
                         </Link>

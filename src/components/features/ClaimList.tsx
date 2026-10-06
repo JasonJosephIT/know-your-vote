@@ -121,7 +121,7 @@ export function NoStatedPosition({ compact }: { compact?: boolean }) {
    methodology's own terms: our finding, not the candidate's silence. */
 export function NoStatedPositionNote() {
   return (
-    <p className="max-w-[680px] text-caption text-on-surface-muted">
+    <p className="max-w-[680px] text-body-sm text-on-surface-muted">
       &ldquo;No stated position found&rdquo; means we found no position on that
       issue that passed our checks on the candidate&apos;s own campaign
       website, not that they have none. We never fill the gap.{" "}

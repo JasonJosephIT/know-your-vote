@@ -158,3 +158,43 @@ export function orderCandidates<T extends BallotOrderCandidate>(
       lastResort(a, b)
   );
 }
+
+/* The order of OFFICES, for the lists of races (the landing page's statewide
+   rows and the races view): s. 101.151(2)(a), Fla. Stat. (2025), checked
+   2026-10-05:
+     "The ballot must include the following office titles above the names of
+      the candidates for the respective offices in the following order: ...
+      2. The office titles of United States Senator and Representative in
+      Congress. 3. The office titles of Governor and Lieutenant Governor;
+      Attorney General; Chief Financial Officer; Commissioner of
+      Agriculture; ..."
+   Keyed on race.office as stored, which says "United States Representative"
+   for the statute's "Representative in Congress". The lists used to sort by
+   level descending, then race_id, which put Commissioner of Agriculture
+   first and the U.S. Senate last (interface review 2026-10-05). An office
+   not named here (county seats, any future title) sorts after these, in
+   race_id order, so nothing is dropped and nothing jumps the queue. */
+const OFFICE_ORDER = [
+  "United States Senator",
+  "United States Representative",
+  "Governor",
+  "Attorney General",
+  "Chief Financial Officer",
+  "Commissioner of Agriculture",
+];
+
+export function officeRank(office: string): number {
+  const i = OFFICE_ORDER.indexOf(office.trim());
+  return i === -1 ? OFFICE_ORDER.length : i;
+}
+
+/** Races in ballot order of their offices, race_id breaking ties. */
+export function orderRaces<T extends { office: string; raceId: string }>(
+  races: readonly T[]
+): T[] {
+  return [...races].sort(
+    (a, b) =>
+      officeRank(a.office) - officeRank(b.office) ||
+      (a.raceId < b.raceId ? -1 : a.raceId > b.raceId ? 1 : 0)
+  );
+}

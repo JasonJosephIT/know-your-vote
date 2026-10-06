@@ -35,6 +35,14 @@ import {
 export function DistrictChip({ className = "" }: { className?: string }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  /* Set by "Forget my district", whose button unmounts with the panel and
+     takes focus with it (interface review 2026-10-05). The chip then turns
+     into the "Set your district" link, and focus goes there so it isn't
+     left on <body>; the link says the district is gone while it holds that
+     focus. Local to this instance: the nav renders the chip twice (top bar
+     and desktop nav), and only the one that was used should take focus. */
+  const [forgot, setForgot] = useState(false);
+  const setLinkRef = useRef<HTMLAnchorElement>(null);
   const raw = useSyncExternalStore(
     subscribeDistrictCookie,
     districtCookieSnapshot,
@@ -72,6 +80,10 @@ export function DistrictChip({ className = "" }: { className?: string }) {
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
+  useEffect(() => {
+    if (forgot) setLinkRef.current?.focus({ preventScroll: true });
+  }, [forgot]);
+
   /* null is "not hydrated yet", distinct from "" which is "no district set". */
   if (raw === null) return <span className={className} aria-hidden />;
 
@@ -89,10 +101,15 @@ export function DistrictChip({ className = "" }: { className?: string }) {
   if (!choice || !county || retired) {
     return (
       <Link
+        ref={setLinkRef}
         href="/candidates?view=races&change=1"
+        onBlur={() => setForgot(false)}
         className={`flex items-center rounded-full border border-border-strong px-3 py-1 text-caption text-on-surface-muted hover:border-primary hover:text-primary ${className}`}
       >
         Set your district
+        {/* After the visible words, so the name still starts with them
+            (WCAG 2.5.3 Label in Name). */}
+        {forgot && <span className="sr-only">: your district was forgotten</span>}
       </Link>
     );
   }
@@ -132,6 +149,7 @@ export function DistrictChip({ className = "" }: { className?: string }) {
                  itself -- there is no local copy to keep in step. */
               clearDistrictCookie();
               setOpen(false);
+              setForgot(true);
               /* The ballot pages read this server-side, so the page has to be
                  re-fetched for the change to show. */
               router.refresh();

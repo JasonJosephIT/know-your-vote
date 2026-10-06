@@ -8,7 +8,10 @@ import type { ReactNode } from "react";
 
    The row's title is its only link. The link's ::after covers the row, so
    the whole row is clickable while the link's accessible name stays the
-   title alone; everything else in the row is read as its text. Server
+   title alone; everything else in the row is read as its text. The title
+   is primary green, the site's link colour (interface review 2026-10-05):
+   in ink with an underline only on hover, these rows, the page's main
+   links, read as plain text, and touch screens have no hover. Server
    components, no client JavaScript (verify-shared-ballot walks this). */
 
 export function LinkRowList({ children }: { children: ReactNode }) {
@@ -40,7 +43,7 @@ export function LinkRow({
         <Heading className="text-h3">
           <Link
             href={href}
-            className="after:absolute after:inset-0 after:rounded-[inherit] hover:underline"
+            className="text-primary after:absolute after:inset-0 after:rounded-[inherit] hover:text-primary-hover hover:underline"
           >
             {title}
           </Link>
