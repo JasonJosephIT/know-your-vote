@@ -36,6 +36,8 @@ import { matchArticle, type RosterCandidate } from "../src/lib/news-match.ts";
 import { OUTLETS, outletForUrl } from "../src/lib/news-sources.ts";
 import { ManualNewsPayloadSchema } from "../src/types/admin.ts";
 import type { SweptArticle } from "../src/lib/news-sweep.ts";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { enqueueIntake } from "../src/lib/news-intake.ts";
 
 let failures = 0;
 function check(name: string, cond: boolean, detail = "") {
@@ -386,6 +388,53 @@ check("isElectionRelated reads the summary too",
     /status: "pending"/.test(intake) && !/from\("news_item"\)\s*\.insert/.test(intake));
   check("rejected stories aren't re-queued on the next run",
     /\.in\("status", \["pending", "approved", "rejected"\]\)/.test(intake));
+}
+
+/* The queue's dedupe, run for real against an in-memory stand-in for the
+   Supabase calls enqueueIntake makes. An election story whose URL an operator
+   already handled under a candidate is not queued a second time (2026-10-06:
+   matching reads only the capped dek, so a story first matched on a name deep
+   in a whole-article description would otherwise come back as county news). */
+function fakeDb(tables: Record<string, Record<string, unknown>[]>) {
+  const inserted: Record<string, unknown>[] = [];
+  const from = (table: string) => {
+    const filters: ((r: Record<string, unknown>) => boolean)[] = [];
+    const q = {
+      select: () => q,
+      eq: (col: string, v: unknown) => { filters.push((r) => r[col] === v); return q; },
+      in: (col: string, vs: unknown[]) => { filters.push((r) => vs.includes(r[col])); return q; },
+      upsert: async () => ({ error: null }),
+      insert: async (rows: Record<string, unknown>[]) => { inserted.push(...rows); return { error: null }; },
+      then: (resolve: (v: { data: Record<string, unknown>[]; error: null }) => unknown) =>
+        resolve({ data: (tables[table] ?? []).filter((r) => filters.every((f) => f(r))), error: null }),
+    };
+    return q;
+  };
+  return { db: { from } as unknown as SupabaseClient, inserted };
+}
+{
+  const profile = ROSTER.map((r) => ({
+    candidate_id: r.candidateId, race_id: r.raceId, candidate: { legal_name: r.legalName, ballot_status: "ballot" },
+  }));
+  const story = article({ title: "County ballots mailed this week", url: "https://www.wlrn.org/ballots-mailed" });
+  const handledFor = ROSTER[0].candidateId;
+
+  const fresh = fakeDb({ profile });
+  const r1 = await enqueueIntake(fresh.db, [story]);
+  check("an unmatched election story with a new URL is queued, pending",
+    r1.queued === 1 && fresh.inserted.length === 1 && fresh.inserted[0].status === "pending",
+    JSON.stringify({ queued: r1.queued, skipped: r1.skipped }));
+
+  for (const [label, tables] of [
+    ["rejected under a candidate", { review_item: [{ kind: "manual_news", status: "rejected", payload: { url: story.url, candidate_id: handledFor } }] }],
+    ["published under a candidate", { news_item: [{ url: story.url, candidate_id: handledFor }] }],
+  ] as const) {
+    const f = fakeDb({ profile, ...tables });
+    const r = await enqueueIntake(f.db, [story]);
+    check(`an election story whose URL was already ${label} is not queued again`,
+      r.queued === 0 && r.skipped === 1 && f.inserted.length === 0,
+      JSON.stringify({ queued: r.queued, skipped: r.skipped }));
+  }
 }
 
 if (failures > 0) {

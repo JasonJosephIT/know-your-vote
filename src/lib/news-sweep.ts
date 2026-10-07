@@ -11,8 +11,9 @@
    - It does not match candidates. That is §6 (task C8).
    - It does not store article text. Title, dek, link, date, outlet, and the
      feed's own image URL — no more. The cards only ever show a headline and a
-     line; storing the body would create a copyright obligation with no product
-     behind it.
+     short dek (at most DEK_MAX characters; dek() below); storing the body would
+     create a copyright obligation with no product behind it. A feed that sends
+     the body as its description is cut to its opening sentences.
    - It does not FETCH the image, and it does not fetch article pages to find
      one. The URL comes from `<media:content>` / `<media:thumbnail>` / an image
      `<enclosure>`, which the publisher put in the feed for this purpose. That
@@ -60,6 +61,15 @@ export interface SweptArticle {
 const TAG = (name: string) =>
   new RegExp(`<${name}(?:\\s[^>]*)?>([\\s\\S]*?)</${name}>`, "i");
 
+/** A numeric character reference as its character, or the reference left as
+    written when it names no character. String.fromCodePoint throws on those,
+    and one malformed entity in one feed must never abort a whole sweep. */
+function codePoint(n: number, ref: string): string {
+  return Number.isInteger(n) && n > 0 && n <= 0x10ffff && !(n >= 0xd800 && n <= 0xdfff)
+    ? String.fromCodePoint(n)
+    : ref;
+}
+
 /** Decode the five XML entities plus numeric refs, and unwrap CDATA. Feeds
     are well-formed XML, so this is enough — we read four fields, not a DOM. */
 function text(raw: string | undefined): string {
@@ -67,8 +77,8 @@ function text(raw: string | undefined): string {
   return raw
     .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1")
     .replace(/<[^>]+>/g, " ")
-    .replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(Number(d)))
-    .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&#(\d+);/g, (ref, d) => codePoint(Number(d), ref))
+    .replace(/&#x([0-9a-f]+);/gi, (ref, h) => codePoint(parseInt(h, 16), ref))
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"')
@@ -183,6 +193,123 @@ export function parseNewsSitemap(xml: string): FeedEntry[] {
   return out;
 }
 
+/* ---------- the dek ----------------------------------------------------- */
+
+/** The longest dek the sweep keeps. It is what a card shows under the
+    headline, and also what news-match.ts reads for a `named` match ("full
+    name in the title or dek", PRD §6), so it is both the display limit and the
+    matching window, the same for every outlet. Measured on the 2026-10-06
+    sweep (525 articles): at 400, all 46 `named` matches survive and the
+    election-keyword gate loses only two NBC6 stories (a studio merger, a
+    sentencing) that qualified through body text alone. At 300, three real
+    matches were lost. */
+export const DEK_MAX = 400;
+
+/* Named entities that reach us double-encoded (`&amp;nbsp;` in the XML is
+   `&nbsp;` after text()). Unknown names are left as written. */
+const HTML_ENTITIES: Record<string, string> = {
+  nbsp: " ", amp: "&", quot: '"', apos: "'", lt: "<", gt: ">",
+  hellip: "…", mdash: "—", ndash: "–", lsquo: "‘", rsquo: "’", ldquo: "“", rdquo: "”",
+  laquo: "«", raquo: "»", iexcl: "¡", iquest: "¿",
+  aacute: "á", eacute: "é", iacute: "í", oacute: "ó", uacute: "ú", ntilde: "ñ", uuml: "ü",
+  Aacute: "Á", Eacute: "É", Iacute: "Í", Oacute: "Ó", Uacute: "Ú", Ntilde: "Ñ",
+};
+
+/** Feed prose after text(): the second layer some feeds add. A description
+    that is HTML escaped inside XML decodes to literal markup and entities,
+    which text() has already passed (it strips tags before decoding). So this
+    decodes first and strips the markup that decoding revealed. */
+export function prose(s: string): string {
+  return s
+    .replace(/&#(\d+);/g, (ref, d) => codePoint(Number(d), ref))
+    .replace(/&#x([0-9a-f]+);/gi, (ref, h) => codePoint(parseInt(h, 16), ref))
+    .replace(/&([a-z]+);/gi, (ref, name: string) => HTML_ENTITIES[name] ?? ref)
+    .replace(/<\/?[a-z][^>]*>/gi, " ")
+    .replace(/\s+/g, " ")
+    .replace(/\s+([.,;:!?])(?=\s|$)/g, "$1")
+    .trim();
+}
+
+/** WordPress ends a feed description with "The post <title> appeared first on
+    <outlet>." Only that trailer goes: it is found from the END (the last
+    "appeared first on", close to the end), then the "The post " that opens it,
+    preferring one followed by the article's own title. A dek whose own text
+    says "The post office…" keeps it. */
+function dropWordPressTrailer(t: string, title?: string): string {
+  const tail = t.lastIndexOf(" appeared first on ");
+  if (tail === -1 || t.length - tail > 160) return t;
+  if (title) {
+    const named = `The post ${title}`;
+    const at = t.lastIndexOf(named, tail);
+    if (at !== -1 && at + named.length === tail) return t.slice(0, at).trim();
+  }
+  const at = t.lastIndexOf("The post ", tail);
+  return at === -1 ? t : t.slice(0, at).trim();
+}
+
+/* A period after these does not end the text's sentence: "U.S.", "Gov. Ron
+   DeSantis", "7 p.m. on Nov. 3", "e.g.", a middle initial, a street or state
+   abbreviation. Skipping a real sentence end only makes the dek shorter. */
+const NOT_A_SENTENCE_END = new RegExp(
+  "(?:\\b[A-Z]|\\b[a-z]\\.[a-z]|\\bU\\.S|\\bU\\.N|\\b(?:" +
+    [
+      "Gov", "Lt", "Sen", "Rep", "Reps", "Rev", "Mr", "Mrs", "Ms", "Dr", "St", "Jr", "Sr", "No",
+      "Gen", "Col", "Capt", "Sgt", "Det", "Supt", "Prof", "Pres", "Atty", "Hon", "Sra", "Srta", "Dra", "Lic",
+      "Ft", "Mt", "Ave", "Blvd", "Rd", "Fla", "Ga", "Ala", "Calif",
+      "Jan", "Feb", "Mar", "Apr", "Aug", "Sep", "Sept", "Oct", "Nov", "Dec",
+      "Inc", "Co", "Corp", "vs", "etc", "approx",
+    ].join("|") +
+    "))$",
+);
+
+/** The dek the sweep keeps for an article: what a card shows under the
+    headline and what the matcher reads.
+
+    Feeds do not all send a dek. NBC6's sends the whole article (median 1,600
+    characters, up to 7,800 on 2026-10-06), and storing that would put the
+    article on our page, the copyright line this file's header holds. It would
+    also fail the console's 2,000-character payload limit and give one outlet's
+    stories many times the matching text of everyone else's. WordPress feeds
+    append "The post <title> appeared first on <outlet>." and end a cut
+    excerpt with "[…]".
+
+    So: decode the second entity layer, drop the WordPress trailer, and keep
+    the whole sentences that fit in `max`. When those end before character 80
+    (no sentence end in reach, or only a very short first sentence), cut at
+    the last whole word instead and add "…". Never invents text: the result is
+    a prefix of the cleaned feed text, plus at most that ellipsis. */
+export function dek(
+  raw: string,
+  { max = DEK_MAX, title }: { max?: number; title?: string } = {},
+): string {
+  let t = dropWordPressTrailer(prose(raw), title)
+    .replace(/\s*\[(?:…|\.\.\.)\]\s*$/, "…")
+    .trim();
+  if (t.length <= max) return t;
+
+  let end = -1;
+  for (const m of t.matchAll(/[.!?…]["”’)]?(?=\s+["“‘(¿¡]?[A-ZÁÉÍÓÚÑ0-9])/g)) {
+    const at = m.index + m[0].length;
+    if (at > max) break;
+    if (m[0][0] === "." && NOT_A_SENTENCE_END.test(t.slice(0, m.index))) continue;
+    end = at;
+  }
+  if (end >= 80) return t.slice(0, end);
+  t = t.slice(0, max - 1).replace(/\s+\S*$/, "").replace(/[\s,;:—–-]+$/, "");
+  return `${t}…`;
+}
+
+/** The title and dek the sweep stores for a feed entry. sweep() uses it, and
+    so does the characterizer's eval pool (scripts/news-eval-pool.ts), so the
+    eval measures the same text production stores. */
+export function storedText(entry: Pick<FeedEntry, "title" | "summary">): {
+  title: string;
+  summary: string | null;
+} {
+  const title = prose(entry.title);
+  return { title, summary: dek(entry.summary, { title }) || null };
+}
+
 /* ---------- normalisation + windowing ---------------------------------- */
 
 /** Strip the things that make one article look like several: fragments,
@@ -259,10 +386,12 @@ export function sweep(input: SweepInput): SweptArticle[] {
         continue;
       }
 
+      const { title, summary } = storedText(entry);
+      if (!title) continue;
       seen.set(url, {
-        title: entry.title,
+        title,
         url,
-        summary: entry.summary || null,
+        summary,
         publishedAt: at.toISOString(),
         publisher: outlet.publisher,
         type: outlet.type,

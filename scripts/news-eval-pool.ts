@@ -23,7 +23,7 @@
    Run: node scripts/news-eval-pool.ts [--per-outlet 4] [--days 14] > pool.jsonl */
 
 import { OUTLETS } from "../src/lib/news-sources.ts";
-import { parseFeed } from "../src/lib/news-sweep.ts";
+import { parseFeed, storedText } from "../src/lib/news-sweep.ts";
 
 const args = process.argv.slice(2);
 const flag = (n: string, d: number) => {
@@ -58,13 +58,17 @@ for (const outlet of withFeeds) {
       if (taken >= perOutlet) break;
       const when = Date.parse(e.published);
       if (Number.isFinite(when) && when < cutoff) continue;
-      if (!e.title.trim() || !e.link.trim()) continue;
+      /* The title and dek production stores (storedText, news-sweep.ts), not
+         the raw feed text: since 2026-10-06 a whole-article description is
+         cut to its opening sentences, and the eval must measure that. */
+      const { title, summary } = storedText(e);
+      if (!title || !e.link.trim()) continue;
       /* Publisher and outlet are recorded for the report's per-outlet
          breakdown ONLY. They are not passed to the model — the characterizer's
          state carries no outlet identity (spec §4.3). */
       console.log(JSON.stringify({
-        title: e.title,
-        summary: e.summary.trim() || null,
+        title,
+        summary,
         url: e.link,
         outlet: outlet.domain,
         publisher: outlet.publisher,
