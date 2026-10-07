@@ -21,7 +21,9 @@
    Run: node scripts/verify-news-sweep.ts */
 
 import { AI_POLICY_HOLD, OUTLETS, UNRATED, sitemapUrlFor, urlBelongsTo, usableOutlets, type Outlet } from "../src/lib/news-sources.ts";
-import { normalizeUrl, parseFeed, parseNewsSitemap, sweep } from "../src/lib/news-sweep.ts";
+import { DEK_MAX, dek, normalizeUrl, parseFeed, parseNewsSitemap, sweep } from "../src/lib/news-sweep.ts";
+import { electionPayloadFor } from "../src/lib/news-enqueue.ts";
+import { ManualNewsPayloadSchema } from "../src/types/admin.ts";
 
 let failures = 0;
 function check(name: string, cond: boolean, detail = "") {
@@ -309,6 +311,129 @@ check("CDATA unwrapped and tags stripped", parsedAtom[0]?.summary === "A dek wit
 
 check("garbage parses to nothing", parseFeed("<html><body>nope</body></html>").length === 0);
 check("empty string parses to nothing", parseFeed("").length === 0);
+
+/* ---- the dek: a headline and a line, never the article --------------- */
+
+/* 2026-10-06: NBC6's feed sent whole articles as descriptions (up to 7,800
+   characters), WordPress feeds appended "The post … appeared first on …",
+   and an operator had to cut each one by hand before approving. These pin the
+   cut at intake. Fixtures are synthetic, shaped like the real feeds. */
+
+check("a short dek is kept as written", dek("Voters head to the polls Nov. 3.") === "Voters head to the polls Nov. 3.");
+check(
+  "the WordPress trailer is dropped, even when the title in it has periods",
+  dek("Ballots go out this week. The post Ballots go out. Here's what to know. appeared first on Creative Loafing Tampa .") === "Ballots go out this week.",
+  dek("Ballots go out this week. The post Ballots go out. Here's what to know. appeared first on Creative Loafing Tampa ."),
+);
+check("a WordPress cut excerpt ends in an ellipsis, not a bracket", dek("The board met on Monday and voted to […]") === "The board met on Monday and voted to…");
+check(
+  "double-encoded entities and markup are decoded",
+  dek("Monday&nbsp;is the deadline &lt;b&gt;to register&lt;/b&gt; .") === "Monday is the deadline to register.",
+);
+
+const sentence = (i: number) => `Sentence ${i} says the U.S. House race and Gov. Smith's plan matter to voters in District ${i}. `;
+const article = Array.from({ length: 40 }, (_, i) => sentence(i + 1)).join("");
+const cut = dek(article);
+check(`a full article is cut to at most ${DEK_MAX} characters`, cut.length <= DEK_MAX && cut.length >= 80, `${cut.length}`);
+check("the cut keeps whole sentences", cut.endsWith("voters in District " + cut.match(/District (\d+)\.$/)?.[1] + "."), cut.slice(-60));
+check("the cut never stops after an abbreviation", !/\b(?:U\.S|Gov)\.$/.test(cut), cut.slice(-30));
+check("the cut is a prefix of the cleaned text (nothing invented)", article.startsWith(cut), cut.slice(0, 60));
+
+/* "voter " is 6 characters, so the cap falls mid-word and the cut must back
+   off to the last whole one. */
+const runOnCut = dek("voter ".repeat(200).trim());
+check("one sentence longer than the cap is cut at a whole word, with an ellipsis",
+  runOnCut.length <= DEK_MAX && runOnCut.endsWith(" voter…"), runOnCut.slice(-20));
+const commaCut = dek("voters, ".repeat(100).trim());
+check("a word cut drops trailing punctuation before the ellipsis", commaCut.endsWith(" voters…"), commaCut.slice(-20));
+check("the cap length is a parameter for tests", dek(article, { max: 120 }).length <= 120);
+
+/* Abbreviations at the cut: a period after these is not the end of the dek.
+   Each case puts the abbreviation's period as the LAST candidate boundary
+   under the cap, so dropping it from the list changes the output. */
+const lead = "Early voting opens in two weeks at sites across the county, officials said Monday.";
+for (const [label, rest] of [
+  ["Gov.", " The plan was signed by Gov. Ron DeSantis in a ceremony at the Capitol last spring."],
+  ["U.S.", " The measure now goes to the U.S. Senate for a vote that could come as early as November."],
+  ["p.m.", " Polls close at 7 p.m. Tuesday and results are expected later that night from every county."],
+  ["Q.", " The complaint was filed by John Q. Public, a longtime resident of the district, on Monday."],
+] as const) {
+  const text = lead + rest;
+  const max = text.indexOf(label) + label.length + 4;
+  check(`the cut does not end after "${label}"`, dek(text, { max }) === lead, dek(text, { max }).slice(-40));
+}
+
+/* The WordPress trailer is found from the end, so a dek's own "The post
+   office…" survives, and a title that starts "The post" is not split. */
+check("a dek's own 'The post office' sentence is kept",
+  dek("Turnout was high on the first day. The post office on Main Street served as a polling site. The post Turnout high appeared first on WLRN.")
+    === "Turnout was high on the first day. The post office on Main Street served as a polling site.",
+  dek("Turnout was high on the first day. The post office on Main Street served as a polling site. The post Turnout high appeared first on WLRN."));
+for (const prose of [
+  "The post appeared first on Facebook on Monday, and by Tuesday the Broward commissioner had deleted it.",
+  "A mayoral candidate apologized Tuesday for a social media post. The post appeared first on Instagram and was later deleted by her campaign.",
+  "El alcalde borró la publicación. The post appeared first on X before it was removed.",
+]) {
+  check(`prose about a post that "appeared first on" a platform is kept: ${prose.slice(0, 40)}…`,
+    dek(prose, { title: "Commissioner deletes post" }) === prose, dek(prose, { title: "Commissioner deletes post" }));
+}
+check("a sentence saying the post appeared first on a platform, with no title between, is kept",
+  dek("The commissioner deleted the message hours later. The post appeared first on Facebook.")
+    === "The commissioner deleted the message hours later. The post appeared first on Facebook.");
+check("a sentence about a post that appeared first on a platform, then a clause, is kept",
+  dek("Officials corrected the hours. The post about early voting hours appeared first on Instagram and was later deleted by the office.")
+    === "Officials corrected the hours. The post about early voting hours appeared first on Instagram and was later deleted by the office.");
+check("a trailer naming a lowercase-led outlet is still dropped",
+  dek("Votantes acuden a las urnas. The post Votantes acuden appeared first on el Nuevo Herald.") === "Votantes acuden a las urnas.");
+check("a trailer whose title starts 'The post' is dropped whole",
+  dek("Hours were extended for voters. The post The post office extends hours appeared first on WLRN.", { title: "The post office extends hours" })
+    === "Hours were extended for voters.");
+
+check("an entity name that is a built-in object key is left as written",
+  dek("Tax &valueOf; cut and &constructor; on the ballot") === "Tax &valueOf; cut and &constructor; on the ballot");
+
+/* When the whole sentences in reach end before character 80 (a very short
+   first sentence, then one too long to fit), the cut falls back to a word. */
+const floor = dek("Short lead. " + "Voters in the county ".repeat(40).trim() + ".");
+check("a short first sentence alone is not a dek: the cut falls back to whole words",
+  floor.length >= 80 && floor.length <= DEK_MAX && floor.startsWith("Short lead. Voters") && floor.endsWith("…"), floor.slice(0, 40));
+
+/* A malformed numeric entity must never abort a sweep: one bad item would
+   otherwise stop the whole twice-weekly intake run. */
+let entityRows: ReturnType<typeof run> = [];
+let threw = "";
+try {
+  entityRows = run([{ outlet: times, xml: rss(
+    item("Title &amp;#x110000; here", "https://www.tampabay.com/news/e1", 1, "Hello &amp;#99999999; world") +
+      item("Plain &#99999999; title", "https://www.tampabay.com/news/e2", 1) +
+      item("Hex &#x110000; title", "https://www.tampabay.com/news/e3", 1),
+  ) }]);
+} catch (err) {
+  threw = (err as Error).message;
+}
+check("an out-of-range numeric entity, single or double encoded, is left as written instead of throwing",
+  threw === "" && entityRows.length === 3 && entityRows.some((r) => r.summary === "Hello &#99999999; world"),
+  threw || JSON.stringify(entityRows.map((r) => [r.title, r.summary])));
+
+/* End to end: a feed carrying a whole article becomes a swept dek that the
+   console's own payload schema accepts. Before this, anything over 2,000
+   characters was refused on approval ("Stored payload no longer matches its
+   schema"). */
+const longFeed = rss(item("Voter guide", "https://www.tampabay.com/news/guide", 1, article + " The post Voter guide appeared first on Tampa Bay Times."));
+const swept = run([{ outlet: times, xml: longFeed }]);
+check("a swept summary is never longer than the dek cap", swept.length === 1 && (swept[0].summary ?? "").length <= DEK_MAX, String(swept[0]?.summary?.length));
+const titledTrailer = run([{ outlet: times, xml: rss(item("The post office extends hours", "https://www.tampabay.com/news/po", 1, "Hours were extended for voters. The post The post office extends hours appeared first on Tampa Bay Times.")) }]);
+check("the sweep passes the article title to the trailer cut",
+  titledTrailer[0]?.summary === "Hours were extended for voters.", String(titledTrailer[0]?.summary));
+const shortTrailer = run([{ outlet: times, xml: rss(item("Voter guide", "https://www.tampabay.com/news/vg", 1, "Ballots go out this week. The post Voter guide appeared first on Tampa Bay Times.")) }]);
+check("a swept dek carries no WordPress trailer", shortTrailer[0]?.summary === "Ballots go out this week.", String(shortTrailer[0]?.summary));
+check(
+  "a payload from a whole-article feed parses with ManualNewsPayloadSchema",
+  ManualNewsPayloadSchema.safeParse(electionPayloadFor(swept[0], "outlet:tampabay.com")).success,
+  JSON.stringify(ManualNewsPayloadSchema.safeParse(electionPayloadFor(swept[0], "outlet:tampabay.com")).error?.issues),
+);
+check("a title's double-encoded entities are decoded too",
+  run([{ outlet: times, xml: rss(item("Early&amp;nbsp;voting opens", "https://www.tampabay.com/news/ev", 1)) }])[0]?.title === "Early voting opens");
 
 /* ---- host matching: the label-boundary rule -------------------------- */
 

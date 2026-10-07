@@ -200,12 +200,14 @@ export async function enqueueIntake(
     key: dedupeKey(a.article.url, a.candidateId),
     url: a.article.url,
     sourceId: a.sourceId,
+    election: false,
     payload: reviewPayloadFor(a) as Record<string, unknown>,
   }));
   const electionRows = electionsCapped.map((e) => ({
     key: dedupeKey(e.article.url, null),
     url: e.article.url,
     sourceId: e.sourceId,
+    election: true,
     payload: electionPayloadFor(e.article, e.sourceId) as Record<string, unknown>,
   }));
   const all = [...candidateRows, ...electionRows];
@@ -249,9 +251,20 @@ export async function enqueueIntake(
 
   /* Skip anything already queued or published for this (url, candidate), the
      shape of 0005's uq_news_item_url_candidate, so a duplicate never surfaces
-     as a failed approval. Election stories key on (url, ""). */
+     as a failed approval. Election stories key on (url, "").
+
+     An election story is also skipped when its URL is already queued,
+     decided or published under ANY candidate. Matching reads the title and
+     the dek only (news-sweep.ts DEK_MAX), so an article first matched on a
+     name deep in an uncapped description, or one whose feed text changed,
+     could otherwise come back as a second, county or statewide copy of a story
+     an operator already handled. That includes a REJECTED pairing: the
+     operator has seen the article, and most rejections (digests, opinion,
+     duplicates) would be just as wrong as election news. Candidate rows are
+     never skipped on the URL alone; a new (url, candidate) pair is queued. */
   const urls = [...new Set(all.map((r) => r.url))];
   const seen = new Set<string>();
+  const seenUrls = new Set<string>();
   for (let i = 0; i < urls.length; i += 200) {
     const { data } = await db
       .from("news_item")
@@ -259,6 +272,7 @@ export async function enqueueIntake(
       .in("url", urls.slice(i, i + 200));
     for (const r of (data ?? []) as { url: string; candidate_id: string | null }[]) {
       seen.add(dedupeKey(r.url, r.candidate_id));
+      seenUrls.add(r.url);
     }
   }
   const { data: queued } = await db
@@ -267,11 +281,13 @@ export async function enqueueIntake(
     .eq("kind", "manual_news")
     .in("status", ["pending", "approved", "rejected"]);
   for (const r of (queued ?? []) as { payload: { url?: string; candidate_id?: string | null } }[]) {
-    if (r.payload?.url) seen.add(dedupeKey(r.payload.url, r.payload.candidate_id ?? null));
+    if (!r.payload?.url) continue;
+    seen.add(dedupeKey(r.payload.url, r.payload.candidate_id ?? null));
+    seenUrls.add(r.payload.url);
   }
 
   const rows = all
-    .filter((r) => !seen.has(r.key))
+    .filter((r) => !seen.has(r.key) && !(r.election && seenUrls.has(r.url)))
     .map((r) => ({
       kind: "manual_news",
       /* WHO proposed it; the payload shape is the operator form's. */
