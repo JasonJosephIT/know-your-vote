@@ -258,7 +258,10 @@ export async function enqueueIntake(
      the dek only (news-sweep.ts DEK_MAX), so an article first matched on a
      name deep in an uncapped description, or one whose feed text changed,
      could otherwise come back as a second, county or statewide copy of a story
-     an operator already handled. */
+     an operator already handled. That includes a REJECTED pairing: the
+     operator has seen the article, and most rejections (digests, opinion,
+     duplicates) would be just as wrong as election news. Candidate rows are
+     never skipped on the URL alone; a new (url, candidate) pair is queued. */
   const urls = [...new Set(all.map((r) => r.url))];
   const seen = new Set<string>();
   const seenUrls = new Set<string>();

@@ -369,9 +369,34 @@ check("a dek's own 'The post office' sentence is kept",
   dek("Turnout was high on the first day. The post office on Main Street served as a polling site. The post Turnout high appeared first on WLRN.")
     === "Turnout was high on the first day. The post office on Main Street served as a polling site.",
   dek("Turnout was high on the first day. The post office on Main Street served as a polling site. The post Turnout high appeared first on WLRN."));
+for (const prose of [
+  "The post appeared first on Facebook on Monday, and by Tuesday the Broward commissioner had deleted it.",
+  "A mayoral candidate apologized Tuesday for a social media post. The post appeared first on Instagram and was later deleted by her campaign.",
+  "El alcalde borró la publicación. The post appeared first on X before it was removed.",
+]) {
+  check(`prose about a post that "appeared first on" a platform is kept: ${prose.slice(0, 40)}…`,
+    dek(prose, { title: "Commissioner deletes post" }) === prose, dek(prose, { title: "Commissioner deletes post" }));
+}
+check("a sentence saying the post appeared first on a platform, with no title between, is kept",
+  dek("The commissioner deleted the message hours later. The post appeared first on Facebook.")
+    === "The commissioner deleted the message hours later. The post appeared first on Facebook.");
+check("a sentence about a post that appeared first on a platform, then a clause, is kept",
+  dek("Officials corrected the hours. The post about early voting hours appeared first on Instagram and was later deleted by the office.")
+    === "Officials corrected the hours. The post about early voting hours appeared first on Instagram and was later deleted by the office.");
+check("a trailer naming a lowercase-led outlet is still dropped",
+  dek("Votantes acuden a las urnas. The post Votantes acuden appeared first on el Nuevo Herald.") === "Votantes acuden a las urnas.");
 check("a trailer whose title starts 'The post' is dropped whole",
   dek("Hours were extended for voters. The post The post office extends hours appeared first on WLRN.", { title: "The post office extends hours" })
     === "Hours were extended for voters.");
+
+check("an entity name that is a built-in object key is left as written",
+  dek("Tax &valueOf; cut and &constructor; on the ballot") === "Tax &valueOf; cut and &constructor; on the ballot");
+
+/* When the whole sentences in reach end before character 80 (a very short
+   first sentence, then one too long to fit), the cut falls back to a word. */
+const floor = dek("Short lead. " + "Voters in the county ".repeat(40).trim() + ".");
+check("a short first sentence alone is not a dek: the cut falls back to whole words",
+  floor.length >= 80 && floor.length <= DEK_MAX && floor.startsWith("Short lead. Voters") && floor.endsWith("…"), floor.slice(0, 40));
 
 /* A malformed numeric entity must never abort a sweep: one bad item would
    otherwise stop the whole twice-weekly intake run. */
@@ -380,13 +405,14 @@ let threw = "";
 try {
   entityRows = run([{ outlet: times, xml: rss(
     item("Title &amp;#x110000; here", "https://www.tampabay.com/news/e1", 1, "Hello &amp;#99999999; world") +
-      item("Plain &#99999999; title", "https://www.tampabay.com/news/e2", 1),
+      item("Plain &#99999999; title", "https://www.tampabay.com/news/e2", 1) +
+      item("Hex &#x110000; title", "https://www.tampabay.com/news/e3", 1),
   ) }]);
 } catch (err) {
   threw = (err as Error).message;
 }
 check("an out-of-range numeric entity, single or double encoded, is left as written instead of throwing",
-  threw === "" && entityRows.length === 2 && entityRows.some((r) => r.summary === "Hello &#99999999; world"),
+  threw === "" && entityRows.length === 3 && entityRows.some((r) => r.summary === "Hello &#99999999; world"),
   threw || JSON.stringify(entityRows.map((r) => [r.title, r.summary])));
 
 /* End to end: a feed carrying a whole article becomes a swept dek that the
@@ -396,6 +422,9 @@ check("an out-of-range numeric entity, single or double encoded, is left as writ
 const longFeed = rss(item("Voter guide", "https://www.tampabay.com/news/guide", 1, article + " The post Voter guide appeared first on Tampa Bay Times."));
 const swept = run([{ outlet: times, xml: longFeed }]);
 check("a swept summary is never longer than the dek cap", swept.length === 1 && (swept[0].summary ?? "").length <= DEK_MAX, String(swept[0]?.summary?.length));
+const titledTrailer = run([{ outlet: times, xml: rss(item("The post office extends hours", "https://www.tampabay.com/news/po", 1, "Hours were extended for voters. The post The post office extends hours appeared first on Tampa Bay Times.")) }]);
+check("the sweep passes the article title to the trailer cut",
+  titledTrailer[0]?.summary === "Hours were extended for voters.", String(titledTrailer[0]?.summary));
 const shortTrailer = run([{ outlet: times, xml: rss(item("Voter guide", "https://www.tampabay.com/news/vg", 1, "Ballots go out this week. The post Voter guide appeared first on Tampa Bay Times.")) }]);
 check("a swept dek carries no WordPress trailer", shortTrailer[0]?.summary === "Ballots go out this week.", String(shortTrailer[0]?.summary));
 check(

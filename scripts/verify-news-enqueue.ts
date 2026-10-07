@@ -425,6 +425,18 @@ function fakeDb(tables: Record<string, Record<string, unknown>[]>) {
     r1.queued === 1 && fresh.inserted.length === 1 && fresh.inserted[0].status === "pending",
     JSON.stringify({ queued: r1.queued, skipped: r1.skipped }));
 
+  /* The URL-level skip is for election stories only: a story already queued
+     for one candidate still reaches a second candidate it names. */
+  const both = article({
+    title: `${ROSTER[0].legalName} and ${ROSTER[1].legalName} debate`,
+    url: "https://www.wlrn.org/debate",
+  });
+  const queuedFirst = fakeDb({ profile, review_item: [{ kind: "manual_news", status: "pending", payload: { url: both.url, candidate_id: ROSTER[0].candidateId } }] });
+  const rb = await enqueueIntake(queuedFirst.db, [both]);
+  check("a story queued for one candidate is still queued for a second candidate it names",
+    rb.queued === 1 && (queuedFirst.inserted[0]?.payload as { candidate_id?: string })?.candidate_id === ROSTER[1].candidateId,
+    JSON.stringify({ queued: rb.queued, skipped: rb.skipped, inserted: queuedFirst.inserted.map((r) => (r.payload as { candidate_id?: string }).candidate_id) }));
+
   for (const [label, tables] of [
     ["rejected under a candidate", { review_item: [{ kind: "manual_news", status: "rejected", payload: { url: story.url, candidate_id: handledFor } }] }],
     ["published under a candidate", { news_item: [{ url: story.url, candidate_id: handledFor }] }],

@@ -223,7 +223,8 @@ export function prose(s: string): string {
   return s
     .replace(/&#(\d+);/g, (ref, d) => codePoint(Number(d), ref))
     .replace(/&#x([0-9a-f]+);/gi, (ref, h) => codePoint(parseInt(h, 16), ref))
-    .replace(/&([a-z]+);/gi, (ref, name: string) => HTML_ENTITIES[name] ?? ref)
+    .replace(/&([a-z]+);/gi, (ref, name: string) =>
+      Object.hasOwn(HTML_ENTITIES, name) ? HTML_ENTITIES[name] : ref)
     .replace(/<\/?[a-z][^>]*>/gi, " ")
     .replace(/\s+/g, " ")
     .replace(/\s+([.,;:!?])(?=\s|$)/g, "$1")
@@ -231,20 +232,28 @@ export function prose(s: string): string {
 }
 
 /** WordPress ends a feed description with "The post <title> appeared first on
-    <outlet>." Only that trailer goes: it is found from the END (the last
-    "appeared first on", close to the end), then the "The post " that opens it,
-    preferring one followed by the article's own title. A dek whose own text
-    says "The post office…" keeps it. */
+    <outlet>." Only that trailer goes. It is found from the END: the last
+    "appeared first on", followed only by an outlet name, then the "The post "
+    that opens it, preferring one followed by the article's own title. Prose
+    that merely says "The post office…" or "the post appeared first on
+    Instagram and was later deleted" is kept. */
+const TRAILER_MARK = " appeared first on ";
 function dropWordPressTrailer(t: string, title?: string): string {
-  const tail = t.lastIndexOf(" appeared first on ");
-  if (tail === -1 || t.length - tail > 160) return t;
+  const tail = t.lastIndexOf(TRAILER_MARK);
+  if (tail === -1) return t;
+  /* An outlet name, not a clause: short, and no lowercase word of four or
+     more letters ("el Nuevo Herald" passes, "Instagram and was later
+     deleted" does not). */
+  const outlet = t.slice(tail + TRAILER_MARK.length);
+  if (outlet.length > 120 || outlet.split(/\s+/).some((w) => /^[a-z]{4,}/.test(w))) return t;
   if (title) {
     const named = `The post ${title}`;
     const at = t.lastIndexOf(named, tail);
     if (at !== -1 && at + named.length === tail) return t.slice(0, at).trim();
   }
   const at = t.lastIndexOf("The post ", tail);
-  return at === -1 ? t : t.slice(0, at).trim();
+  /* A title has to sit between "The post " and "appeared first on". */
+  return at === -1 || at + "The post ".length >= tail ? t : t.slice(0, at).trim();
 }
 
 /* A period after these does not end the text's sentence: "U.S.", "Gov. Ron
