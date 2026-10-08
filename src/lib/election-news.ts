@@ -61,13 +61,20 @@ function isHttpUrl(value: string): boolean {
   }
 }
 
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}(?:$|T)/;
+
 const SCOPE_FORMS = 'scope must be { "county_fips": "<5 digits>" } or { "statewide": true }';
 
 function scopeProblem(scope: unknown, entryCounty: string | null): string | null {
   if (!isRecord(scope)) return SCOPE_FORMS;
   const keys = Object.keys(scope);
   if (keys.length === 1 && keys[0] === "statewide") {
-    return scope.statewide === true ? null : "scope.statewide must be true";
+    if (scope.statewide !== true) return "scope.statewide must be true";
+    /* A county Supervisor's notice is about that county. Statewide would put
+       it on every county's feed. (A county scope on a statewide body's page is
+       still accepted; the retrofit's PR B sets scope from the publisher.) */
+    if (entryCounty !== null) return `a county body's page is scoped to its county ${entryCounty}, not statewide`;
+    return null;
   }
   if (keys.length === 1 && keys[0] === "county_fips") {
     const fips = scope.county_fips;
@@ -98,7 +105,11 @@ export function batchProblem(raw: unknown): string | null {
     for (const f of TEXT_FIELDS) if (typeof item[f] !== "string") return `item ${i}: ${f} must be a string`;
     const url = item.url as string;
     const published = item.published_at as string;
-    if (Number.isNaN(Date.parse(published))) return `item ${i}: published_at "${published}" is not a date`;
+    /* Written YYYY-MM-DD, optionally with a time: Date.parse alone reads "1"
+       as 2001. The date window is the retrofit's PR B. */
+    if (!ISO_DATE.test(published) || Number.isNaN(Date.parse(published))) {
+      return `item ${i}: published_at "${published}" is not a date written YYYY-MM-DD`;
+    }
     if (!isHttpUrl(url)) return `item ${i}: url must be an http(s) URL`;
     const outlet = outletForUrl(url, OUTLETS);
     if (outlet) return `item ${i}: ${url} is on the outlet list (${outlet.domain}); R3 queues official sources only`;
@@ -161,6 +172,11 @@ export function planElectionQueue(items: readonly ElectionNewsItem[], ctx: Queue
   const skipped: QueueNotice[] = [];
   const dropped: QueueNotice[] = [];
   const inBatch = new Set<string>();
+  /* One page, however it is spelled: urlNorm is the key source.url_norm uses
+     (scheme and trailing slash do not matter; www. and the query do). */
+  const key = (url: string) => urlNorm(url) ?? url;
+  const stored = new Set([...ctx.storedUrls].map(key));
+  const queued = new Set([...ctx.queuedUrls].map(key));
 
   for (const [index, item] of items.entries()) {
     const official = officialForUrl(item.url);
@@ -178,14 +194,15 @@ export function planElectionQueue(items: readonly ElectionNewsItem[], ctx: Queue
     }
     const sourceId = page ? page.source_id : officialSourceIdFor(official.domain);
 
-    const skip = ctx.storedUrls.has(item.url)
+    const k = key(item.url);
+    const skip = stored.has(k)
       ? "already in news_item"
-      : ctx.queuedUrls.has(item.url)
+      : queued.has(k)
         ? "already in a manual_news review item"
-        : inBatch.has(item.url)
+        : inBatch.has(k)
           ? "repeats an earlier item in this batch"
           : null;
-    inBatch.add(item.url);
+    inBatch.add(k);
     if (skip) {
       skipped.push({ index, url: item.url, reason: skip });
       continue;
@@ -211,27 +228,49 @@ export function planElectionQueue(items: readonly ElectionNewsItem[], ctx: Queue
   return { ok: true, rows, skipped, dropped };
 }
 
-const CHUNK = 200;
+/** How many values one filtered read asks for (news-source-integrity §3.7). */
+export const QUEUE_READ_CHUNK = 200;
 
-function chunks<T>(list: readonly T[]): T[][] {
+function chunks<T>(list: readonly T[], size: number): T[][] {
   const out: T[][] = [];
-  for (let i = 0; i < list.length; i += CHUNK) out.push(list.slice(i, i + CHUNK));
+  for (let i = 0; i < list.length; i += size) out.push(list.slice(i, i + size));
   return out;
+}
+
+/** The URL and its common other spellings of the same page: http or https,
+    with or without a trailing slash on the path. The stored URL is matched
+    exactly by the read, so asking for these finds a page stored under another
+    spelling; planElectionQueue then compares by urlNorm. */
+function spellings(url: string): string[] {
+  let u: URL;
+  try {
+    u = new URL(url);
+  } catch {
+    return [url];
+  }
+  const path = u.pathname.replace(/\/+$/, "");
+  const out = new Set([url]);
+  for (const scheme of ["https:", "http:"]) {
+    for (const p of [path, `${path}/`]) out.add(`${scheme}//${u.host}${p}${u.search}`);
+  }
+  return [...out];
 }
 
 /** The three reads, each filtered to this batch's URLs in chunks of 200, so a
     response is bounded by the batch and never by the size of the table
     (news-source-integrity §3.7). Throws on a read error: a partial read would
-    queue a story an operator already decided. */
+    queue a story an operator already decided. `chunkSize` is a parameter
+    only so the guardrail can drive the chunking with a small batch. */
 export async function readQueueContext(
   db: SupabaseClient,
   items: readonly ElectionNewsItem[],
+  chunkSize: number = QUEUE_READ_CHUNK,
 ): Promise<QueueContext> {
-  const urls = [...new Set(items.map((i) => i.url))];
-  const norms = [...new Set(urls.map(urlNorm).filter((n): n is string => n !== null))];
+  const urls = [...new Set(items.flatMap((i) => spellings(i.url)))];
+  const norms = [...new Set(items.map((i) => urlNorm(i.url)).filter((n): n is string => n !== null))];
 
   const pageRows = new Map<string, PageRow>();
-  for (const chunk of chunks(norms)) {
+  for (const chunk of chunks(norms, chunkSize)) {
     const { data, error } = await db
       .from("source")
       .select("source_id, url_norm, type, lean_tag")
@@ -241,14 +280,14 @@ export async function readQueueContext(
   }
 
   const storedUrls = new Set<string>();
-  for (const chunk of chunks(urls)) {
+  for (const chunk of chunks(urls, chunkSize)) {
     const { data, error } = await db.from("news_item").select("url").in("url", chunk);
     if (error) throw new Error(`could not read news_item: ${error.message}`);
     for (const r of (data ?? []) as { url: string }[]) storedUrls.add(r.url);
   }
 
   const queuedUrls = new Set<string>();
-  for (const chunk of chunks(urls)) {
+  for (const chunk of chunks(urls, chunkSize)) {
     const { data, error } = await db
       .from("review_item")
       .select("payload")

@@ -7,11 +7,11 @@
      3. A page row recorded primary_doc / N/A backs its page; one recorded as
         anything else drops the item; any other item carries official:<domain>.
      4. A URL already stored, already queued in any status, or repeated in the
-        batch is skipped.
+        batch is skipped, under any spelling urlNorm treats as one page.
      5. Every queued row parses with ManualNewsPayloadSchema, carries a
         source_id, and is a pending manual_news item from agent:R3.
-     6. --dry-run inserts nothing; the reads are filtered by the batch's URLs;
-        a read or insert error writes nothing and exits 1.
+     6. --dry-run inserts nothing; the reads are filtered by the batch's URLs,
+        in chunks; a read or insert error writes nothing and exits 1.
      7. The CLI writes nothing but review_item rows.
 
    Pure and offline: an in-memory stand-in for the Supabase client, no
@@ -24,12 +24,15 @@ import {
   MAX_ELECTION_BATCH,
   batchProblem,
   planElectionQueue,
+  QUEUE_READ_CHUNK,
+  readQueueContext,
   runElectionQueue,
   type ElectionNewsItem,
   type PageRow,
   type QueueContext,
 } from "../src/lib/election-news.ts";
 import { ManualNewsPayloadSchema } from "../src/types/admin.ts";
+import { urlNorm } from "../src/lib/brief-rows.ts";
 
 let failures = 0;
 function check(name: string, cond: boolean, detail = "") {
@@ -59,6 +62,10 @@ for (const [label, raw, want] of [
   ["a non-string", [item({ title: 7 })], "item 0: title must be a string"],
   ["a null summary", [item({ summary: null })], "item 0: summary must be a string"],
   ["an unparseable date", [item({ published_at: "next Tuesday" })], "item 0: published_at"],
+  /* Date.parse reads "1" as 2001; a date must be written YYYY-MM-DD. */
+  ["a bare number for a date", [item({ published_at: "1" })], "item 0: published_at"],
+  ["a date not written YYYY-MM-DD", [item({ published_at: "October 5, 2026" })], "item 0: published_at"],
+  ["an impossible ISO date", [item({ published_at: "2026-13-45" })], "item 0: published_at"],
   ["a URL that is not http(s)", [item({ url: "ftp://www.browardvotes.gov/x" })], "item 0: url must be an http(s) URL"],
   ["a URL on an outlet", [item({ url: "https://www.wlrn.org/2026/10/05/early-voting" })], "item 0: https://www.wlrn.org/2026/10/05/early-voting is on the outlet list"],
   ["a URL off the official list", [item({ url: "https://www.courtlistener.com/opinion/1/x/" })], "is not on the official-source list"],
@@ -67,6 +74,9 @@ for (const [label, raw, want] of [
   ["statewide: false", [item({ scope: { statewide: false } })], "scope.statewide must be true"],
   ["a county outside the four", [item({ scope: { county_fips: "12099" } })], "12099 is not a covered county"],
   ["a county scope on another county's entry", [item({ scope: { county_fips: "12057" } })], "differs from the publisher's county 12011"],
+  /* A county Supervisor's notice is about that county; it never reaches the
+     statewide feed. */
+  ["a statewide scope on a county body's page", [item({ scope: { statewide: true } })], "item 0: a county body's page is scoped to its county 12011, not statewide"],
   ["a bad item after a good one", [item(), item({ url: "https://www.wlrn.org/x" })], "item 1:"],
 ] as const) {
   const got = batchProblem(raw);
@@ -77,6 +87,8 @@ check("a well-formed batch has no problem", batchProblem([item(), item({ url: "h
 check("a county scope on a statewide body is accepted (PR B tightens it)",
   batchProblem([item({ url: "https://dos.fl.gov/elections/x", scope: { county_fips: "12086" } })]) === null);
 check("an empty batch has no problem", batchProblem([]) === null);
+check("a full ISO timestamp is a date",
+  batchProblem([item({ published_at: "2026-10-05T09:30:00-04:00" })]) === null, String(batchProblem([item({ published_at: "2026-10-05T09:30:00-04:00" })])));
 
 /* ---- 3, 4 and 5. the plan ----------------------------------------------- */
 const EMPTY: QueueContext = { pageRows: new Map(), storedUrls: new Set(), queuedUrls: new Set() };
@@ -103,6 +115,15 @@ const plan = (items: Record<string, unknown>[], c: QueueContext = EMPTY) =>
   check("a page row recorded as opinion drops the item, with the reason",
     advocacy.ok && advocacy.rows.length === 0 && advocacy.dropped.length === 1 &&
       advocacy.dropped[0].index === 0 && advocacy.dropped[0].reason.includes("opinion / N/A"), JSON.stringify(advocacy));
+  /* The lean is checked too: a primary_doc row with any lean but N/A is not
+     an official notice either. */
+  const leaned = plan([item()], ctx({
+    pageRows: new Map([["www.browardvotes.gov/voting-methods/early-voting",
+      pageRow("www.browardvotes.gov/voting-methods/early-voting", "primary_doc", "unrated")]]),
+  }));
+  check("a page row recorded as primary_doc with a lean other than N/A drops the item",
+    leaned.ok && leaned.rows.length === 0 && leaned.dropped.length === 1 &&
+      leaned.dropped[0].reason.includes("primary_doc / unrated"), JSON.stringify(leaned));
 }
 
 {
@@ -118,6 +139,20 @@ const plan = (items: Record<string, unknown>[], c: QueueContext = EMPTY) =>
   const twice = plan([item(), item({ title: "Same page, second time" })]);
   check("a URL earlier in the batch is skipped",
     twice.ok && twice.rows.length === 1 && twice.skipped.length === 1 && twice.skipped[0].index === 1, JSON.stringify(twice));
+  /* Two spellings of one page (scheme, trailing slash) are one page: the
+     dedupe compares urlNorm, the key source.url_norm uses. */
+  const spelled = `http://www.browardvotes.gov/voting-methods/early-voting/`;
+  const respelled = plan([item(), item({ url: spelled })]);
+  check("another spelling of a URL earlier in the batch is skipped",
+    respelled.ok && respelled.rows.length === 1 && respelled.skipped[0]?.index === 1, JSON.stringify(respelled));
+  for (const [label, c] of [
+    ["already in news_item", ctx({ storedUrls: new Set([spelled]) })],
+    ["already in a manual_news review item", ctx({ queuedUrls: new Set([spelled]) })],
+  ] as const) {
+    const p = plan([item()], c);
+    check(`a URL ${label} under another spelling is skipped`,
+      p.ok && p.rows.length === 0 && p.skipped[0]?.reason === label, JSON.stringify(p));
+  }
 }
 
 {
@@ -212,6 +247,43 @@ const good = [item(), item({ url: "https://dos.fl.gov/elections/for-voters/elect
     sourceRead?.filters.some(([op, col]) => op === "in" && col === "url_norm") === true, JSON.stringify(sourceRead));
   check("every read is filtered, in chunks of at most 200",
     f.reads.every((x) => x.filters.some(([op, , v]) => op === "in" && (v as unknown[]).length <= 200)), JSON.stringify(f.reads));
+  check("the read chunk is 200", QUEUE_READ_CHUNK === 200, String(QUEUE_READ_CHUNK));
+}
+{
+  /* A batch of 25 never fills one chunk of 200, so the chunking is driven
+     here with a chunk of 2: every read is split, and a row whose URL falls in
+     the last chunk is still found. */
+  const urls = ["a", "b", "c", "d", "e"].map((x) => `https://www.browardvotes.gov/notices/${x}`);
+  const items = urls.map((url) => item({ url })) as unknown as ElectionNewsItem[];
+  const last = urls[urls.length - 1];
+  const f = fakeDb({
+    source: [{ source_id: "src_last", url_norm: urlNorm(last), type: "primary_doc", lean_tag: "N/A" }],
+    news_item: [{ url: last }],
+    review_item: [{ kind: "manual_news", status: "approved", payload: { url: last } }],
+  });
+  const c = await readQueueContext(f.db, items, 2);
+  for (const table of ["source", "news_item", "review_item"]) {
+    const reads = f.reads.filter((x) => x.table === table);
+    check(`the ${table} read is split into chunks of the given size`,
+      reads.length > 1 && reads.every((x) => x.filters.some(([op, , v]) => op === "in" && (v as unknown[]).length <= 2)),
+      JSON.stringify(reads));
+  }
+  check("a row in the last chunk is still found",
+    c.pageRows.get(urlNorm(last)!)?.source_id === "src_last" && c.storedUrls.has(last) && c.queuedUrls.has(last),
+    JSON.stringify({ pages: [...c.pageRows.keys()], stored: [...c.storedUrls], queued: [...c.queuedUrls] }));
+}
+{
+  /* The news_item and review_item reads ask for the batch's URLs under their
+     common other spellings (scheme, trailing slash), so a stored variant is
+     found and skipped. */
+  const stored = "http://www.browardvotes.gov/voting-methods/early-voting/";
+  const f = fakeDb({
+    news_item: [{ url: stored }],
+    review_item: [{ kind: "manual_news", status: "pending", payload: { url: stored } }],
+  });
+  const r = await runElectionQueue(f.db, [item()], { dryRun: true });
+  check("a URL stored under another spelling is skipped",
+    r.exitCode === 0 && r.output?.rows.length === 0 && r.output?.skipped.length === 1, JSON.stringify(r));
 }
 {
   const f = fakeDb({
