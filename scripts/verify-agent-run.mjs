@@ -70,6 +70,34 @@ check("the literal defaults are the agent worktree, the runs folder and the arm6
     SOURCE.includes('RUNS="${KYV_AGENT_RUNS:-/Users/jsloth/Projects/kyv-agent-runs}"') &&
     SOURCE.includes('NODE="${KYV_AGENT_NODE:-/Users/jsloth/Library/Application Support/Logi/LogiPluginService/PluginHosts/node22/node/bin/node}"'));
 
+/* ---- the prompts run only the wrapper, with steps it has --------------- */
+
+const COMMAND = /^\s*sh \/Users\/jsloth\/Projects\/kyv-agent-worktree\/scripts\/agent-run\.sh (\S+) (\S+)(.*)$/;
+const PROMPTS = {
+  "agents/r5-candidate-leads.prompt.md": "R5",
+};
+for (const [file, agent] of Object.entries(PROMPTS)) {
+  if (!existsSync(path.join(ROOT, file))) {
+    check(`${file} exists`, false);
+    continue;
+  }
+  const text = readFileSync(path.join(ROOT, file), "utf8");
+  const commands = text.split("\n").filter((l) => l.includes("agent-run.sh"));
+  check(`${file} runs the wrapper`, commands.length > 0);
+  for (const line of commands) {
+    const m = line.match(COMMAND);
+    check(`${file}: the wrapper's literal command, alone on its line: ${line.trim()}`, Boolean(m));
+    if (!m) continue;
+    const [, a, step, rest] = m;
+    const known = rows.some(([ra, rs]) => ra === a && rs === step) || (routine.includes(a) && ["start", "budget", "finish"].includes(step));
+    check(`${file}: ${a} ${step} is this agent's step in the wrapper`, a === agent && known, line);
+    const restOk = step === "finish" ? /^ --status STATUS --items N$/.test(rest) : rest.trim() === "";
+    check(`${file}: ${a} ${step} carries no other argument, redirection or pipe`, restOk, rest);
+  }
+  check(`${file} names no dated run folder, date call, cd or node path`,
+    !/kyv-agent-runs\/<|date \+%F|cd \/Users|LogiPluginService/.test(text));
+}
+
 /* ---- a temporary worktree and runs folder ------------------------------ */
 
 const TMP = mkdtempSync(path.join(tmpdir(), "kyv-agent-run-"));
