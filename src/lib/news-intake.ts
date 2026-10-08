@@ -27,6 +27,8 @@ import {
 } from "./news-sources.ts";
 import { parseNewsSitemap, sweep, type SweptArticle } from "./news-sweep.ts";
 import { matchArticle, type RosterCandidate } from "./news-match.ts";
+import { countyForRaceDistrict } from "./counties.ts";
+import { ACTIVE_ELECTION_KIND } from "./election.ts";
 import {
   dedupeKey,
   domainFromSourceId,
@@ -169,6 +171,68 @@ export async function loadRoster(db: SupabaseClient): Promise<RosterCandidate[]>
         : null;
     })
     .filter((r): r is RosterCandidate => r !== null);
+}
+
+/** A ballot-tier candidate a voter can see, with the covered county of a
+    county-level race. */
+export interface BallotRosterCandidate extends RosterCandidate {
+  /** `countyForRaceDistrict(race.district)`: the covered county of a county
+      race ('DAD-CC-2' is 12086); null for statewide, congressional and
+      legislative races. */
+  countyFips: string | null;
+}
+
+/* The statuses a voter can see a race at (0033): `listed`, the roster, and
+   `published`, the brief. */
+const VISIBLE_RACE_STATUSES = ["published", "listed"] as const;
+
+/** Every ballot-tier candidate on the site: the races of the active election
+    whose `race_publication.status` is published or listed, their
+    `race.candidate_ids`, and the candidate rows with `ballot_status =
+    'ballot'` (agent-retrofit spec §3.5). 106 on 2026-10-08, against
+    loadRoster's 82: `profile` rows exist only for published races, so
+    loadRoster has no listed-race candidate. R3's candidate rule matches
+    against this; loadRoster stays as it is for the sweep and R5.
+
+    Three keyed reads rather than embeds, as listing.ts does. The service
+    client bypasses RLS, so the status filter is explicit here. Throws on a
+    read error; an empty roster is returned, and the caller decides. A
+    candidate listed in two races appears once per race. */
+export async function loadBallotRoster(db: SupabaseClient): Promise<BallotRosterCandidate[]> {
+  const races = await db
+    .from("race")
+    .select("race_id, district, candidate_ids")
+    .eq("election", ACTIVE_ELECTION_KIND);
+  if (races.error) throw new Error(`could not read races: ${races.error.message}`);
+  const pubs = await db
+    .from("race_publication")
+    .select("race_id")
+    .in("status", [...VISIBLE_RACE_STATUSES]);
+  if (pubs.error) throw new Error(`could not read race_publication: ${pubs.error.message}`);
+
+  type RaceRow = { race_id: string; district: string | null; candidate_ids: string[] | null };
+  const visible = new Set(((pubs.data ?? []) as { race_id: string }[]).map((p) => p.race_id));
+  const seats = ((races.data ?? []) as RaceRow[])
+    .filter((r) => visible.has(r.race_id))
+    .flatMap((r) => (r.candidate_ids ?? []).map((candidateId) => ({ candidateId, race: r })));
+  const ids = [...new Set(seats.map((s) => s.candidateId))];
+  if (ids.length === 0) return [];
+
+  const candidates = await db
+    .from("candidate")
+    .select("candidate_id, legal_name")
+    .in("candidate_id", ids)
+    .eq("ballot_status", "ballot");
+  if (candidates.error) throw new Error(`could not read candidates: ${candidates.error.message}`);
+  const names = new Map(
+    ((candidates.data ?? []) as { candidate_id: string; legal_name: string }[]).map((c) => [c.candidate_id, c.legal_name]),
+  );
+  return seats.flatMap(({ candidateId, race }) => {
+    const legalName = names.get(candidateId);
+    return legalName === undefined
+      ? []
+      : [{ candidateId, legalName, raceId: race.race_id, countyFips: countyForRaceDistrict(race.district)?.fips ?? null }];
+  });
 }
 
 /** Match, then queue the candidate matches and the unmatched election stories

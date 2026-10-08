@@ -18,6 +18,9 @@
         cannot approve. A page row's id backs only its exact url_norm; a row
         under the other `www.` spelling drops an advocacy page but never lends
         its id.
+     9. The ballot roster (loadBallotRoster) is the ballot-tier candidates of
+        the general election's published and listed races, with their county,
+        and its reads only read.
 
    Pure and offline: an in-memory stand-in for the Supabase client, no
    network. Run: node scripts/verify-election-news.ts */
@@ -48,6 +51,7 @@ import {
 } from "../src/lib/news-enqueue.ts";
 import { OUTLETS, outletForUrl } from "../src/lib/news-sources.ts";
 import { officialForUrl } from "../src/lib/official-sources.ts";
+import { loadBallotRoster, type BallotRosterCandidate } from "../src/lib/news-intake.ts";
 
 let failures = 0;
 function check(name: string, cond: boolean, detail = "") {
@@ -112,6 +116,36 @@ const item = (over: Record<string, unknown> = {}): Record<string, unknown> => ({
   scope: { county_fips: "12011" },
   ...over,
 });
+
+/* The ballot roster as the database holds it, and as loadBallotRoster must
+   return it: one candidate in a published statewide race, one in a listed
+   county race. A write-in, a draft race and a primary race are left out.
+   Synthetic names, so no real candidate is named in a test. */
+const ROSTER_TABLES: Record<string, Record<string, unknown>[]> = {
+  race: [
+    { race_id: "FL-GOV-general", election: "general", district: null, candidate_ids: ["FL-DOE-T1", "FL-DOE-T9"] },
+    { race_id: "FL-DAD-CC2-general", election: "general", district: "DAD-CC-2", candidate_ids: ["FL-VF-T2"] },
+    { race_id: "FL-HIL-SB1-general", election: "general", district: "HIL-SB-1", candidate_ids: ["FL-VF-T3"] },
+    { race_id: "FL-GOV-primary", election: "primary", district: null, candidate_ids: ["FL-DOE-T4"] },
+  ],
+  race_publication: [
+    { race_id: "FL-GOV-general", status: "published" },
+    { race_id: "FL-DAD-CC2-general", status: "listed" },
+    { race_id: "FL-HIL-SB1-general", status: "draft" },
+    { race_id: "FL-GOV-primary", status: "published" },
+  ],
+  candidate: [
+    { candidate_id: "FL-DOE-T1", legal_name: "Maria Elena Vasquez", ballot_status: "ballot" },
+    { candidate_id: "FL-DOE-T9", legal_name: "Pat Writein", ballot_status: "write_in" },
+    { candidate_id: "FL-VF-T2", legal_name: "John Okafor", ballot_status: "ballot" },
+    { candidate_id: "FL-VF-T3", legal_name: "Dana Draftrace", ballot_status: "ballot" },
+    { candidate_id: "FL-DOE-T4", legal_name: "Lee Primaryonly", ballot_status: "ballot" },
+  ],
+};
+const ROSTER: readonly BallotRosterCandidate[] = [
+  { candidateId: "FL-DOE-T1", legalName: "Maria Elena Vasquez", raceId: "FL-GOV-general", countyFips: null },
+  { candidateId: "FL-VF-T2", legalName: "John Okafor", raceId: "FL-DAD-CC2-general", countyFips: "12086" },
+];
 
 /* ---- 1 and 2. refused batches ------------------------------------------- */
 const withoutSummary = item();
@@ -500,6 +534,45 @@ check("the CLI refuses an unknown argument instead of writing",
   /if \(unknown\.length > 0\) fail\(2, `queue: unknown argument/.test(cli));
 check("the CLI passes --dry-run through to runElectionQueue",
   /const dryRun = args\.includes\("--dry-run"\);/.test(cli) && /runElectionQueue\(createClient\(supabaseUrl, serviceKey\), raw, \{ dryRun \}\)/.test(cli));
+
+/* ---- 9. the ballot roster R3's candidate rule matches against ---------- */
+{
+  const f = fakeDb(ROSTER_TABLES);
+  const roster = await loadBallotRoster(f.db);
+  check("the ballot roster is the ballot-tier candidates of the general election's published and listed races, with their county",
+    JSON.stringify(roster) === JSON.stringify(ROSTER), JSON.stringify(roster));
+  check("a listed-race candidate is on the ballot roster", roster.some((c) => c.candidateId === "FL-VF-T2"));
+  check("a write-in, a draft race's candidate and a primary race's candidate are not",
+    !roster.some((c) => ["FL-DOE-T9", "FL-VF-T3", "FL-DOE-T4"].includes(c.candidateId)), JSON.stringify(roster));
+  const raceRead = f.reads.find((x) => x.table === "race");
+  check("the race read is scoped to the general election",
+    raceRead?.filters.some(([op, col, v]) => op === "eq" && col === "election" && v === "general") === true, JSON.stringify(raceRead));
+  const pubRead = f.reads.find((x) => x.table === "race_publication");
+  check("the publication read keeps published and listed races only",
+    pubRead?.filters.some(([op, col, v]) => op === "in" && col === "status" && JSON.stringify(v) === '["published","listed"]') === true,
+    JSON.stringify(pubRead));
+  const candidateRead = f.reads.find((x) => x.table === "candidate");
+  check("the candidate read is ballot-tier only, by id",
+    candidateRead?.filters.some(([op, col, v]) => op === "eq" && col === "ballot_status" && v === "ballot") === true &&
+      candidateRead.filters.some(([op, col]) => op === "in" && col === "candidate_id"),
+    JSON.stringify(candidateRead));
+  check("the roster reads write nothing", f.inserted.length === 0);
+}
+for (const table of ["race", "race_publication", "candidate"]) {
+  let message = "";
+  try {
+    await loadBallotRoster(fakeDb(ROSTER_TABLES, { read: table }).db);
+  } catch (err) {
+    message = (err as Error).message;
+  }
+  check(`a ${table} read error throws, naming it`, message.includes(`${table} unavailable`), message);
+}
+{
+  const intake = strip(readFileSync(resolve(import.meta.dirname, "..", "src/lib/news-intake.ts"), "utf8"));
+  const start = intake.indexOf("export async function loadBallotRoster");
+  const body = intake.slice(start, intake.indexOf("export async function enqueueIntake"));
+  check("loadBallotRoster only reads", start >= 0 && !/\.(insert|update|upsert|delete)\(/.test(body));
+}
 
 /* The round trip ran over the fixtures, not over nothing. */
 check("the queued fixture rows went through the approve path", approvedRows >= 15, `${approvedRows} rows`);
