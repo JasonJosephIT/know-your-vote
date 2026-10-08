@@ -45,7 +45,8 @@ function check(name, cond, detail = "") {
 /* ---- the wrapper's source ---------------------------------------------- */
 
 const rows = SOURCE.match(/^ROWS='([^']*)'$/m)?.[1].split("\n").map((l) => l.split("|")) ?? [];
-check("the table parses into rows of seven fields", rows.length > 0 && rows.every((r) => r.length === 7), JSON.stringify(rows));
+check("the table parses into rows of seven fields, or eight with \"finding\" last",
+  rows.length > 0 && rows.every((r) => r.length === 7 || (r.length === 8 && r[7] === "finding")), JSON.stringify(rows));
 const routine = SOURCE.match(/^ROUTINE="([^"]*)"$/m)?.[1].split(" ") ?? [];
 check("the wrapper's routine agents are ROUTINE_AGENTS", routine.join(",") === ROUTINE_AGENTS.join(","), routine.join(","));
 for (const [agent, step, script, , , , secs] of rows) {
@@ -54,15 +55,20 @@ for (const [agent, step, script, , , , secs] of rows) {
   check(`row ${agent} ${step} belongs to a routine agent or watch`, agent === "watch" || routine.includes(agent), agent);
   check(`row ${agent} ${step} does not shadow start, budget or finish`, !["start", "budget", "finish"].includes(step), step);
 }
+for (const [agent, step, , , , output, , mode] of rows) {
+  if (mode === "finding") check(`finding row ${agent} ${step} saves its output, where the exit code goes`, output !== "-", output);
+}
 const want = [
   "R5|prep|scripts/candidate-leads.ts|prep --days 14|-|stories.json|540",
   "R5|check|scripts/candidate-leads.ts|check --stories {dir}/stories.json|mentions.json|leads.json|300",
   "R5|queue-dry|scripts/candidate-leads.ts|queue --dry-run|verified.json|queue-dry.txt|300",
   "R5|queue|scripts/candidate-leads.ts|queue|verified.json|queue.txt|300",
+  "R4|digest|scripts/ops-digest.ts||task-runs.json|digest.json|300",
+  "R4|lint|scripts/verify-news-neutrality.ts||-|lint.txt|300|finding",
   "watch|stale|scripts/agent-run-log.ts|stale|-|-|120",
   "watch|check|scripts/agent-run-log.ts|watch --runs {dir}/runs.json --notified {dir}/notified.txt|-|-|120",
 ];
-check("the table is PR A's rows exactly (spec §3.1)", rows.map((r) => r.join("|")).join("\n") === want.join("\n"),
+check("the table is PR A's and PR C's rows exactly (spec §3.1)", rows.map((r) => r.join("|")).join("\n") === want.join("\n"),
   rows.map((r) => r.join("|")).join("\n"));
 /* Claude Code's Bash tool stops a command at 120 s by default and 600 s at
    most; the prompts ask for 600 s. Every wrapper call must end, with its own
@@ -154,9 +160,7 @@ if [ "\${KYV_TEST_REFRESH_SILENT:-}" = 1 ]; then echo "agent-worktree: stub said
 echo "agent worktree ready at $KYV_AGENT_WORKTREE (stub000)"
 `,
 );
-writeFileSync(
-  path.join(WT, "scripts", "candidate-leads.ts"),
-  `import { readFileSync } from "node:fs";
+const STUB = `import { readFileSync } from "node:fs";
 const args = process.argv.slice(2);
 const input = readFileSync(0, "utf8");
 const sleep = Number(process.env.KYV_STUB_SLEEP || 0);
@@ -166,14 +170,16 @@ if (process.env.KYV_STUB_CHILD) {
 }
 if (sleep) await new Promise((r) => setTimeout(r, sleep * 1000));
 if (process.env.KYV_STUB_DONE) (await import("node:fs")).writeFileSync(process.env.KYV_STUB_DONE, "done");
+if (process.env.KYV_STUB_SIGNAL) process.kill(process.pid, process.env.KYV_STUB_SIGNAL);
 if (process.env.KYV_STUB_FAIL) {
   console.error("stub: failing as asked");
   process.exit(1);
 }
 console.log(JSON.stringify({ args, input }));
-console.error("stub " + args[0] + ": summary line");
-`,
-);
+console.error("stub " + (args[0] ?? "(no args)") + ": summary line");
+if (process.env.KYV_STUB_EXIT) process.exitCode = Number(process.env.KYV_STUB_EXIT);
+`;
+for (const f of ["candidate-leads.ts", "ops-digest.ts", "verify-news-neutrality.ts"]) writeFileSync(path.join(WT, "scripts", f), STUB);
 
 /* A second worktree whose run log writes no deadline: start must refuse. */
 const WT_NODEADLINE = path.join(TMP, "worktree-nodeadline");
@@ -462,6 +468,38 @@ try {
   check("a failed refresh exits 1 and leaves no pointer",
     broken.code === 1 && broken.out.includes("agent worktree refresh failed") && !existsSync(path.join(RUNS, "current-R4")),
     `${broken.code}: ${broken.out}`);
+
+  /* ---- the R4 steps: the digest, and the lint whose findings are not failures ---- */
+  const s4 = run(["R4", "start"]);
+  const dir4 = s4.out.match(/^run dir: (.+)$/m)?.[1] ?? "";
+  check("R4 starts", s4.code === 0 && dir4 !== "", `${s4.code}: ${s4.out}`);
+  check("R4's start prints R4's budget", /^budget: 20 min, until \S+; web calls: 0 none \(plus 5 list_task_runs calls\)$/m.test(s4.out), s4.out);
+  const noTasks = run(["R4", "digest"]);
+  check("digest without task-runs.json exits 1 naming the file",
+    noTasks.code === 1 && noTasks.out.includes(`missing input ${dir4}/task-runs.json`), `${noTasks.code}: ${noTasks.out}`);
+  writeFileSync(path.join(dir4, "task-runs.json"), "[]\n");
+  const dg = run(["R4", "digest"]);
+  const dgOut = existsSync(path.join(dir4, "digest.json")) ? JSON.parse(readFileSync(path.join(dir4, "digest.json"), "utf8")) : null;
+  check("digest runs ops-digest.ts with no arguments, task-runs.json on stdin, into digest.json",
+    dg.code === 0 && JSON.stringify(dgOut?.args) === "[]" && dgOut?.input === "[]\n" && dg.out.includes(`output: ${dir4}/digest.json`),
+    `${dg.code}: ${dg.out}`);
+  check("a failing digest exits 1", run(["R4", "digest"], { KYV_STUB_FAIL: "1" }).code === 1);
+  const lintText = () => (existsSync(path.join(dir4, "lint.txt")) ? readFileSync(path.join(dir4, "lint.txt"), "utf8") : "");
+  const clean4 = run(["R4", "lint"], { KYV_STUB_EXIT: "0" });
+  check("a passing lint exits 0 and lint.txt ends with exit: 0",
+    clean4.code === 0 && lintText().endsWith("exit: 0\n") && !clean4.out.includes("finding:") && clean4.out.includes(`output: ${dir4}/lint.txt`),
+    `${clean4.code}: ${clean4.out} | ${lintText()}`);
+  check("the lint runs verify-news-neutrality.ts in live mode (no arguments)", JSON.parse(lintText().split("\n")[0] || "{}").args?.length === 0, lintText());
+  const found = run(["R4", "lint"], { KYV_STUB_EXIT: "1" });
+  check("a lint that finds violations exits 0, says finding, and lint.txt ends with exit: 1",
+    found.code === 0 && found.out.includes("finding: R4 lint exited 1") && found.out.includes("stub (no args): summary line") && lintText().endsWith("exit: 1\n"),
+    `${found.code}: ${found.out} | ${lintText()}`);
+  const slowLint = run(["R4", "lint"], { KYV_AGENT_STEP_TIMEOUT: "1", KYV_STUB_SLEEP: "20" });
+  check("a lint that times out still exits 4", slowLint.code === 4, `${slowLint.code}: ${slowLint.out}`);
+  const crashed = run(["R4", "lint"], { KYV_STUB_SIGNAL: "SIGKILL" });
+  check("a lint that crashes is a failure, not a finding: exit 1", crashed.code === 1 && !crashed.out.includes("finding:"), `${crashed.code}: ${crashed.out}`);
+  check("a digest that exits 1 is a failure: only a finding row records its exit code", run(["R4", "digest"], { KYV_STUB_EXIT: "1" }).code === 1);
+  check("finish R4", run(["R4", "finish", "--status", "ok", "--items", "0"]).code === 0);
 
   /* ---- watch: no pointer, never a refresh ------------------------------ */
   const marks = refreshes();
