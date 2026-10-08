@@ -416,3 +416,73 @@ export function sweep(input: SweepInput): SweptArticle[] {
     (a, b) => b.publishedAt.localeCompare(a.publishedAt) || a.url.localeCompare(b.url),
   );
 }
+
+/* ---------- feed depth (news-source-integrity §3.5, D9) ----------------- */
+
+/** The sweep's cadence in hours: daily at 11:00 UTC (vercel.json; founder D9,
+    recommended and pending confirmation). A feed whose oldest item is younger
+    than this drops stories between two runs, whatever the window says. */
+export const CADENCE_HOURS = 24;
+
+/** How far back one fetched RSS/Atom feed reached at sweep time. */
+export interface FeedDepth {
+  /** The outlet's list domain, e.g. "wlrn.org" or "cbsnews.com/miami". */
+  domain: string;
+  /** Items with a parseable date. Undated items are not counted. */
+  items: number;
+  /** Age of the oldest dated item in hours, rounded DOWN to one decimal, so
+      `hours < CADENCE_HOURS` is true exactly when the real age is. 0 when
+      `items` is 0. */
+  hours: number;
+}
+
+/** A feed exposes only its last N items, so its depth, not the sweep's
+    window, sets what a run can see (news-corpus-verification-2026-09-17.md).
+    Pure: the caller passes the parsed entries and the sweep's `now`. Undated
+    or unparseable items are skipped; an empty feed reports 0 items and 0
+    hours. A future-dated oldest item counts as 0 hours old. */
+export function feedDepthHours(
+  entries: readonly Pick<FeedEntry, "published">[],
+  now: Date,
+): { items: number; hours: number } {
+  let items = 0;
+  let oldest = Infinity;
+  for (const entry of entries) {
+    const t = new Date(entry.published).getTime();
+    if (Number.isNaN(t)) continue;
+    items++;
+    if (t < oldest) oldest = t;
+  }
+  if (items === 0) return { items: 0, hours: 0 };
+  const hours = Math.max(0, (now.getTime() - oldest) / 3_600_000);
+  return { items, hours: Math.floor(hours * 10) / 10 };
+}
+
+/** The feeds still losing stories at this cadence: oldest item younger than
+    `cadenceHours`, shallowest first. An empty feed (0 items, 0 hours) is
+    listed too: it showed nothing to measure, and that is worth a look. */
+export function shallowFeeds(
+  depth: readonly FeedDepth[],
+  cadenceHours: number = CADENCE_HOURS,
+): FeedDepth[] {
+  return depth
+    .filter((d) => d.hours < cadenceHours)
+    .sort((a, b) => a.hours - b.hours || a.domain.localeCompare(b.domain));
+}
+
+/** The one log line a run prints:
+      news-sweep depth: <n> feeds; shallow (<24h): <domain> <hours>h, …
+    "none" when no feed is shallow; an empty feed reads "<domain> 0h (0 items)". */
+export function depthLine(
+  depth: readonly FeedDepth[],
+  cadenceHours: number = CADENCE_HOURS,
+): string {
+  const shallow = shallowFeeds(depth, cadenceHours);
+  const list =
+    shallow.length === 0
+      ? "none"
+      : shallow
+          .map((d) => (d.items === 0 ? `${d.domain} 0h (0 items)` : `${d.domain} ${d.hours}h`))
+          .join(", ");
+  return `news-sweep depth: ${depth.length} feeds; shallow (<${cadenceHours}h): ${list}`;
+}

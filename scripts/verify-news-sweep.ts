@@ -21,7 +21,18 @@
    Run: node scripts/verify-news-sweep.ts */
 
 import { AI_POLICY_HOLD, OUTLETS, UNRATED, sitemapUrlFor, urlBelongsTo, usableOutlets, type Outlet } from "../src/lib/news-sources.ts";
-import { DEK_MAX, dek, normalizeUrl, parseFeed, parseNewsSitemap, sweep } from "../src/lib/news-sweep.ts";
+import {
+  CADENCE_HOURS,
+  DEK_MAX,
+  dek,
+  depthLine,
+  feedDepthHours,
+  normalizeUrl,
+  parseFeed,
+  parseNewsSitemap,
+  shallowFeeds,
+  sweep,
+} from "../src/lib/news-sweep.ts";
 import { electionPayloadFor } from "../src/lib/news-enqueue.ts";
 import { ManualNewsPayloadSchema } from "../src/types/admin.ts";
 
@@ -664,6 +675,68 @@ check(
   "a flagged row is not usable even when designated unrated",
   usableOutlets(flagged.map((o) => ({ ...o, leanTag: "unrated" as const }))).length === 0,
 );
+
+/* ---- feed depth (news-source-integrity §3.5, D9) ------------------------
+   A feed shows only its last N items, so its depth decides what a daily run
+   can see. feedDepthHours measures it; shallowFeeds names the feeds still
+   losing stories at CADENCE_HOURS; depthLine is the one log line. */
+
+const at = (hoursAgo: number) => new Date(NOW.getTime() - hoursAgo * 3_600_000).toUTCString();
+const entry = (published: string) => ({ published });
+
+check("CADENCE_HOURS is daily", CADENCE_HOURS === 24, String(CADENCE_HOURS));
+
+const deep = feedDepthHours([entry(at(2)), entry(at(70.25)), entry(at(5))], NOW);
+check("depth counts dated items and ages the oldest",
+  deep.items === 3 && deep.hours === 70.2, JSON.stringify(deep));
+
+const emptyDepth = feedDepthHours([], NOW);
+check("an empty feed reports 0 items and 0 hours",
+  emptyDepth.items === 0 && emptyDepth.hours === 0, JSON.stringify(emptyDepth));
+
+const undated = feedDepthHours([entry(""), entry("not a date"), entry(at(30)), entry(at(1))], NOW);
+check("undated and unparseable items are skipped, not counted and not aged",
+  undated.items === 2 && undated.hours === 30, JSON.stringify(undated));
+
+const allUndated = feedDepthHours([entry(""), entry("garbage")], NOW);
+check("a feed with only undated items reads as empty",
+  allUndated.items === 0 && allUndated.hours === 0, JSON.stringify(allUndated));
+
+const future = feedDepthHours([entry(new Date(NOW.getTime() + 3_600_000).toUTCString())], NOW);
+check("a future-dated oldest item is 0 hours old, never negative",
+  future.items === 1 && future.hours === 0, JSON.stringify(future));
+
+/* The parsed fixture, end to end: parseFeed's output is what runSweep passes. */
+const parsedDepth = feedDepthHours(parseFeed(rss(
+  item("Newest", "https://www.tampabay.com/news/n", 0.5) + item("Oldest", "https://www.tampabay.com/news/o", 3),
+)), NOW);
+check("depth reads parseFeed's entries", parsedDepth.items === 2 && parsedDepth.hours === 72, JSON.stringify(parsedDepth));
+
+/* The 24-hour edge. Rounding DOWN keeps `hours < 24` exact: 23h59m is
+   shallow, exactly 24h is not. */
+const justUnder = feedDepthHours([entry(new Date(NOW.getTime() - (24 * 3_600_000 - 60_000)).toISOString())], NOW);
+const exactly = feedDepthHours([entry(at(24))], NOW);
+check("23h59m rounds down to 23.9, not up to 24", justUnder.hours === 23.9, String(justUnder.hours));
+const depthRows = [
+  { domain: "wusf.org", items: 20, hours: 16.8 },
+  { domain: "a-edge.example", ...justUnder },
+  { domain: "b-edge.example", ...exactly },
+  { domain: "wlrn.org", items: 40, hours: 200 },
+  { domain: "empty.example", items: 0, hours: 0 },
+];
+const shallow = shallowFeeds(depthRows);
+check("shallowFeeds: younger than 24h, shallowest first; exactly 24h and deeper are not shallow",
+  shallow.map((d) => d.domain).join(",") === "empty.example,wusf.org,a-edge.example",
+  shallow.map((d) => `${d.domain}:${d.hours}`).join(","));
+check("shallowFeeds takes another cadence",
+  shallowFeeds(depthRows, 100).map((d) => d.domain).join(",") === "empty.example,wusf.org,a-edge.example,b-edge.example");
+
+check("depthLine names the count and each shallow feed with its hours",
+  depthLine(depthRows) === "news-sweep depth: 5 feeds; shallow (<24h): empty.example 0h (0 items), wusf.org 16.8h, a-edge.example 23.9h",
+  depthLine(depthRows));
+check("depthLine says none when no feed is shallow",
+  depthLine([{ domain: "wlrn.org", items: 40, hours: 200 }]) === "news-sweep depth: 1 feeds; shallow (<24h): none",
+  depthLine([{ domain: "wlrn.org", items: 40, hours: 200 }]));
 
 if (failures > 0) {
   console.error(`\nverify-news-sweep: ${failures} failure(s)`);
