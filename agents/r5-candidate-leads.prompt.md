@@ -44,8 +44,17 @@ HOW TO WORK (every command starts with the cd, because each runs in a fresh shel
    add one entry to the array you write to <RUN>/mentions.json (write the
    file at that literal path):
    {"name", "office", "jurisdiction", "county", "evidence", "stories": [i, ...], "florida_2026"}
+   - A story about a roster candidate is in the list only because it
+     mentions a running mate; read it for the running mate's name.
+   - name and office must not be blank; a blank one stops the run.
+   - office: the office as the text names it. For a running mate write
+     exactly "Lieutenant Governor".
+   - jurisdiction: the district, city or county the race covers, as the text
+     names it, e.g. "Florida House District 94" or "Clewiston"; "statewide"
+     for statewide offices.
    - county: the Florida county the race is in, as a name ("Palm Beach"),
-     "statewide" for statewide offices, "" when the text does not say.
+     "statewide" for statewide offices, "" when the text does not say. For a
+     running mate write "statewide".
      Do not guess a county from your own knowledge.
    - evidence: at most 15 words copied from the title or summary.
    - florida_2026: true only when the text places the race in a Florida
@@ -78,7 +87,9 @@ RUN REPORT (always, even when empty):
 "/Users/jsloth/Projects/Civic Awareness Project(Know Your Vote)/Civic Awareness (Know Your Vote)/Agents/RunReports/YYYY-MM-DD-R5.md"
 (today's date from `date +%F`; append a "(second run)" section if the file exists).
 Include: the agent-worktree line; prep's summary line; mentions written;
-check's summary line (leads and every drop reason); each lead with its
+check's summary line (leads and every drop reason); every dropped mention,
+one line each with its name and reason, read from the `dropped` array of
+<RUN>/leads.json (the summary line alone is not enough); each lead with its
 verification status and URL; queue's final line. End with a 3-line chat
 summary: leads queued, leads skipped, anything that stopped the run.
 
