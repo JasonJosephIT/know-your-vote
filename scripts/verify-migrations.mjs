@@ -97,8 +97,10 @@
         the freshness stamps, key_dates, an UPDATE that changes nothing and
         a new or uncited source row go through without it; a DELETE or
         INSERT of a publication row, candidate, race or cited source, and a
-        whitespace-only setting, are refused. Outside the window everything
-        goes through.
+        whitespace-only setting, are refused. starts_at is inclusive and
+        ends_at exclusive. Outside the window everything goes through. A
+        re-run of 0050 keeps a moved window and revokes EXECUTE by name
+        again.
 
 
    Supabase provides the anon/authenticated/service_role roles out of the box;
@@ -1973,8 +1975,16 @@ await expectFrozen(
   "UPDATE race SET office = 'Governor (changed)' WHERE race_id='r-pub';"
 );
 await expectThrough(
-  "0050 an UPDATE that sets a column to its current value goes through",
+  "0050 a race UPDATE that sets office to its current value goes through",
   "UPDATE race SET office = office WHERE race_id='r-pub';"
+);
+/* A published race_publication row is one no exception covers (only an
+   UPDATE to 'listed' does), so this case passes only through the guard's
+   "changes nothing" branch. */
+await expectThrough(
+  "0050 an UPDATE that changes nothing goes through where no exception would (published race_publication, status = status)",
+  "UPDATE race_publication SET status = status WHERE race_id='r-pub';",
+  { setup: "DO $$ BEGIN IF (SELECT status FROM race_publication WHERE race_id='r-pub') <> 'published' THEN RAISE EXCEPTION 'fixture: r-pub is not published'; END IF; END $$;" }
 );
 await expectFrozen(
   "0050 a new race row is refused",
@@ -2056,6 +2066,16 @@ await expectThrough(
   "UPDATE election_event SET verified_by = 'probe@example.com' WHERE county_fips = '12099';"
 );
 
+/* The bounds, each inside one transaction, where now() is fixed: starts_at
+   is inclusive and ends_at exclusive, as inWindow() in
+   scripts/freeze-manifest.ts. */
+await expectFrozen("0050 a window that starts exactly at now() is open", CLAIM_INSERT, {
+  setup: "UPDATE content_freeze SET (starts_at, ends_at) = (now(), now() + interval '1 hour') WHERE id = 1;",
+});
+await expectThrough("0050 a window that ends exactly at now() is closed", CLAIM_INSERT, {
+  setup: "UPDATE content_freeze SET (starts_at, ends_at) = (now() - interval '1 hour', now()) WHERE id = 1;",
+});
+
 /* Outside the window. */
 await setFreezeWindow("future");
 await expectThrough(
@@ -2074,6 +2094,42 @@ for (const [what, sql] of [
 ]) {
   await expectThrough(`0050 after the window, ${what} goes through`, sql);
 }
+
+/* Re-running 0050 (it is idempotent) keeps a window that was moved and
+   takes back an EXECUTE granted by name since. A fresh replay cannot show
+   the second: this harness grants functions by default only to anon,
+   authenticated and service_role, so cap_tool_wrapper and cap_readonly have
+   nothing to lose there. Rolled back. */
+await check("0050 a re-run keeps an existing content_freeze row and revokes EXECUTE by name again", async () => {
+  const sql = await readFile(path.join(migrationsDir, "0050_content_freeze.sql"), "utf8");
+  await db.exec("BEGIN;");
+  try {
+    await db.exec(`
+      UPDATE content_freeze
+         SET (starts_at, ends_at, note) = ('2030-01-01 00:00+00', '2030-01-02 00:00+00', 'moved by the re-run probe')
+       WHERE id = 1;
+      GRANT EXECUTE ON FUNCTION public.refuse_during_content_freeze()
+        TO PUBLIC, anon, authenticated, cap_tool_wrapper, cap_readonly;`);
+    await db.exec(sql);
+    const r = await db.query(
+      `SELECT (SELECT count(*)::int FROM content_freeze) AS n,
+              (SELECT starts_at = '2030-01-01 00:00+00' AND ends_at = '2030-01-02 00:00+00'
+                      AND note = 'moved by the re-run probe'
+                 FROM content_freeze WHERE id = 1) AS kept,
+              (SELECT coalesce(array_agg(CASE WHEN a.grantee = 0 THEN 'PUBLIC' ELSE pg_get_userbyid(a.grantee) END), '{}')
+                 FROM pg_proc p, aclexplode(p.proacl) a
+                WHERE p.proname = 'refuse_during_content_freeze'
+                  AND a.privilege_type = 'EXECUTE'
+                  AND (a.grantee = 0 OR pg_get_userbyid(a.grantee) IN
+                       ('anon', 'authenticated', 'cap_tool_wrapper', 'cap_readonly'))) AS leaked;`
+    );
+    const g = r.rows[0];
+    if (g.n !== 1 || g.kept !== true) throw new Error(`window not kept: ${JSON.stringify(g)}`);
+    if (g.leaked.length !== 0) throw new Error(`EXECUTE still granted to ${g.leaked.join(", ")}`);
+  } finally {
+    await db.exec("ROLLBACK;");
+  }
+});
 
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed`);
