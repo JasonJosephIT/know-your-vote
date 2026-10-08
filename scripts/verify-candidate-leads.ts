@@ -13,6 +13,7 @@ import {
   isRunningMateOffice,
   leadDedupeKey,
   normalizeName,
+  planQueue,
   type Mention,
   type StoryRef,
 } from "../src/lib/candidate-leads.ts";
@@ -183,8 +184,44 @@ const again = buildLeads(mentions, stories, roster, new Set(["bryan avila|runnin
 check("a key already queued or decided is skipped as already_queued",
   !again.leads.some((l) => l.kind === "running_mate") && again.dropped.some((d) => d.reason === "already_queued"));
 
+/* ---- the queue batch ---------------------------------------------------- */
+
+const verified = built.leads.map((l) => ({
+  ...l,
+  verification: { status: "unchecked" as const, url: null, note: "fixture" },
+}));
+const q = planQueue(verified, new Set());
+check("a valid batch plans one pending candidate_lead row per lead",
+  q.ok && q.rows.length === 2 && q.rows.every((r) => r.kind === "candidate_lead" && r.source === "agent:R5" && r.status === "pending"),
+  JSON.stringify(q));
+
+const tampered = planQueue([{ ...verified[0], dedupe_key: "someone else|other_county|12099" }], new Set());
+check("a dedupe_key that does not match the lead is refused", !tampered.ok);
+
+const oneBad = planQueue([verified[0], { ...verified[1], stories: [] }], new Set());
+check("one invalid lead refuses the whole batch (no partial queue)", !oneBad.ok);
+
+const queuedAlready = planQueue(verified, new Set([verified[0].dedupe_key]));
+check("a lead queued since check ran is skipped, not re-queued",
+  queuedAlready.ok && queuedAlready.rows.length === 1 && queuedAlready.skipped.length === 1);
+
+const dupInBatch = planQueue([verified[0], verified[0]], new Set());
+check("the same lead twice in one batch is queued once",
+  dupInBatch.ok && dupInBatch.rows.length === 1 && dupInBatch.skipped.length === 1);
+
+check("a batch that is not an array is refused", !planQueue({ leads: verified }, new Set()).ok);
+
+/* The schema takes any 12xxx code; the plan also requires a real Florida county. */
+const otherCounty = verified.find((l) => l.kind === "other_county")!;
+const notACounty = planQueue(
+  [{ ...otherCounty, county_fips: "12002", dedupe_key: leadDedupeKey(otherCounty.name, "other_county", "12002") }],
+  new Set());
+check("a county_fips that is not a Florida county is refused, even with a matching dedupe_key",
+  !notACounty.ok && notACounty.errors.some((e) => e.includes("12002") && e.includes("not a Florida county")),
+  JSON.stringify(notACounty));
+
 if (failures > 0) {
   console.error(`\nverify-candidate-leads: ${failures} failure(s)`);
   process.exit(1);
 }
-console.log("verify-candidate-leads: OK — counties, names, kinds, merge, roster and dedupe hold");
+console.log("verify-candidate-leads: OK — counties, names, kinds, merge, roster, dedupe and the queue batch hold");

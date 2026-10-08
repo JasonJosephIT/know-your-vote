@@ -10,7 +10,8 @@
    Leads are for the operator only. No rule reads party, and leads are never
    ranked. Relative imports with the extension: plain-Node scripts import this. */
 
-import { countyFipsFor } from "./fl-counties.ts";
+import { countyFipsFor, countyName } from "./fl-counties.ts";
+import { CandidateLeadPayloadSchema, type CandidateLeadPayload } from "../types/admin.ts";
 
 /** The four counties the guide covers. A race there is not a lead. */
 export const COVERED_FIPS: ReadonlySet<string> = new Set(["12011", "12057", "12086", "12095"]);
@@ -164,4 +165,58 @@ export function buildLeads(
 
   const leads = [...byKey.values()].sort((a, b) => (a.dedupe_key < b.dedupe_key ? -1 : a.dedupe_key > b.dedupe_key ? 1 : 0));
   return { leads, dropped };
+}
+
+export interface QueueRow {
+  kind: "candidate_lead";
+  source: "agent:R5";
+  status: "pending";
+  payload: CandidateLeadPayload;
+}
+
+/** The rows `candidate-leads.ts queue` would insert. Every item must parse
+    with the console's own schema, carry the dedupe key its own name, kind and
+    county produce, and name a real Florida county when it has one (the schema
+    takes any 12xxx code); one bad item refuses the whole batch, so a run never
+    leaves a partial queue. Keys queued or decided since `check` ran, and
+    repeats inside the batch, are skipped. */
+export function planQueue(
+  items: unknown,
+  existingKeys: ReadonlySet<string>,
+): { ok: true; rows: QueueRow[]; skipped: string[] } | { ok: false; errors: string[] } {
+  if (!Array.isArray(items)) return { ok: false, errors: ["the batch is not an array of leads"] };
+  const errors: string[] = [];
+  const payloads: CandidateLeadPayload[] = [];
+  items.forEach((item, n) => {
+    const parsed = CandidateLeadPayloadSchema.safeParse(item);
+    if (!parsed.success) {
+      errors.push(`lead ${n + 1}: ${parsed.error.issues.map((i) => `${i.path.join(".")} ${i.message}`).join("; ")}`);
+      return;
+    }
+    const p = parsed.data;
+    const want = leadDedupeKey(p.name, p.kind, p.county_fips);
+    if (p.dedupe_key !== want) {
+      errors.push(`lead ${n + 1}: dedupe_key "${p.dedupe_key}" should be "${want}"`);
+      return;
+    }
+    if (p.county_fips !== null && countyName(p.county_fips) === null) {
+      errors.push(`lead ${n + 1}: county_fips "${p.county_fips}" is not a Florida county`);
+      return;
+    }
+    payloads.push(p);
+  });
+  if (errors.length > 0) return { ok: false, errors };
+
+  const seen = new Set(existingKeys);
+  const rows: QueueRow[] = [];
+  const skipped: string[] = [];
+  for (const p of payloads) {
+    if (seen.has(p.dedupe_key)) {
+      skipped.push(p.dedupe_key);
+      continue;
+    }
+    seen.add(p.dedupe_key);
+    rows.push({ kind: "candidate_lead", source: "agent:R5", status: "pending", payload: p });
+  }
+  return { ok: true, rows, skipped };
 }
