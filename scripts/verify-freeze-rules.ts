@@ -10,7 +10,8 @@
       includes its start and excludes its end; a malformed manifest is
       refused with a reason.
    2. The constants: the window is 0050's content_freeze window to the
-      minute, and every frozen file exists, once.
+      minute, 0050's refusal message points to the corrections README and
+      that file exists, and every frozen file exists, once.
    3. The command, in a scratch tree: with no manifest it prints its note and
       exits 0; --write then check passes; a changed file fails inside the
       window and passes after it; --write is refused inside the window and
@@ -173,6 +174,12 @@ check(
     Date.parse(`${seeded[1]}T${seeded[2]}:00Z`) === Date.parse(FREEZE_WINDOW.starts_at) &&
     Date.parse(`${seeded[3]}T${seeded[4]}:00Z`) === Date.parse(FREEZE_WINDOW.ends_at),
   seeded ? seeded.slice(1).join(" ") : "no INSERT INTO public.content_freeze found"
+);
+const pointedTo = migration.match(/Corrections only: (\S+\.md)'/)?.[1];
+check(
+  "0050's refusal message points to a corrections README that exists",
+  pointedTo === `${CORRECTIONS_DIR}README.md` && existsSync(join(ROOT, pointedTo)),
+  String(pointedTo)
 );
 check(
   "the window is Sun 2026-10-18 04:00 UTC to Wed 2026-11-04 05:00 UTC",
