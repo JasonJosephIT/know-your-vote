@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/Card";
 import { safeHttpUrl } from "@/lib/format";
 import { coveredCounty } from "@/lib/counties";
+import { countyName } from "@/lib/fl-counties";
 import { relativeTime } from "@/lib/admin/format";
 import { DecisionControls } from "@/components/admin/DecisionControls";
 import {
@@ -21,6 +22,7 @@ const KIND_CHIP: Record<ReviewKind, string> = {
   fact_flag: "bg-info/15 text-info",
   unclear_statement: "bg-info/15 text-info",
   unverified_fact: "bg-info/15 text-info",
+  candidate_lead: "bg-surface-muted text-on-surface",
 };
 
 const KIND_LABEL: Record<ReviewKind, string> = {
@@ -30,6 +32,7 @@ const KIND_LABEL: Record<ReviewKind, string> = {
   fact_flag: "fact flag",
   unclear_statement: "unclear",
   unverified_fact: "unverified",
+  candidate_lead: "candidate lead",
 };
 
 function Chip({ className, children }: { className: string; children: React.ReactNode }) {
@@ -197,6 +200,52 @@ function Body({ item }: { item: ReviewItemRow }) {
           newValue={p.official_value}
         />
         <SourceLink url={p.source_url} />
+      </div>
+    );
+  }
+
+  if (content.kind === "candidate_lead") {
+    const p = content.payload;
+    const where =
+      p.kind === "running_mate"
+        ? "running mate (statewide ticket)"
+        : `${countyName(p.county_fips ?? "") ?? p.county_fips} County`;
+    const checked =
+      p.verification.status === "found"
+        ? "On the official candidate list"
+        : p.verification.status === "not_found"
+          ? "Not found on the official candidate list"
+          : "Not checked against an official list";
+    return (
+      <div className="flex flex-col gap-2">
+        <p className="text-label">{p.name}</p>
+        <p className="text-body-sm">
+          {p.office}
+          {p.jurisdiction ? ` · ${p.jurisdiction}` : ""}
+        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <Chip className="bg-surface-muted text-on-surface-muted">{where}</Chip>
+          <Chip className="bg-surface-muted text-on-surface-muted">{checked}</Chip>
+        </div>
+        {p.verification.note ? (
+          <p className="text-caption text-on-surface-muted">{p.verification.note}</p>
+        ) : null}
+        <SourceLink url={p.verification.url} />
+        {p.evidence ? (
+          <blockquote className="border-l-2 border-border-strong pl-3 text-body-sm">
+            {p.evidence}
+          </blockquote>
+        ) : null}
+        <ul className="flex flex-col gap-1">
+          {p.stories.map((s) => (
+            <li key={s.url} className="flex flex-col">
+              <span className="text-caption text-on-surface-muted">
+                {s.outlet} · {s.published_at.slice(0, 10)} · {s.title}
+              </span>
+              <SourceLink url={s.url} />
+            </li>
+          ))}
+        </ul>
       </div>
     );
   }
