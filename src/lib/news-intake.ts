@@ -201,6 +201,101 @@ export async function loadRoster(db: SupabaseClient): Promise<RosterCandidate[]>
     .filter((r): r is RosterCandidate => r !== null);
 }
 
+/** The most URLs one `.in()` dedupe read carries (news-source-integrity
+    §3.7). */
+export const DEDUPE_CHUNK = 200;
+
+/** The most form-encoded URL characters one `.in()` read carries. The filter
+    travels in the GET query string, and 200 real article URLs (median 109
+    characters, longest 170, in the 2026-09-18 gold set) build a request URL
+    of about 25.6 KB with supabase-js 2.110. Cloudflare documents a 16 KB URL
+    limit, and nginx's default request-line buffer is 8 KB. 6,000 keeps a
+    request under 8 KB with room for the path and the other filters, so a
+    chunk is about 40 typical URLs. The live gateway's limit was not probed. */
+export const DEDUPE_CHUNK_CHARS = 6_000;
+
+/** What one URL adds to an `.in()` filter's query string. postgrest-js
+    appends the list with URLSearchParams (form encoding), wraps a value that
+    holds , ( or ) in double quotes, and joins values with commas; the 9
+    covers an encoded comma and two encoded quotes. */
+function inFilterChars(url: string): number {
+  return new URLSearchParams([["", url]]).toString().length - 1 + 9;
+}
+
+/** Split URLs into the chunks the dedupe reads send: at most `max` URLs and
+    `maxChars` encoded characters each, order kept. A URL too long for any
+    chunk still gets one of its own; it is never dropped. Pure. */
+export function chunkUrls(
+  urls: readonly string[],
+  { max = DEDUPE_CHUNK, maxChars = DEDUPE_CHUNK_CHARS }: { max?: number; maxChars?: number } = {}
+): string[][] {
+  const chunks: string[][] = [];
+  let chunk: string[] = [];
+  let chars = 0;
+  for (const url of urls) {
+    const n = inFilterChars(url);
+    if (chunk.length > 0 && (chunk.length >= max || chars + n > maxChars)) {
+      chunks.push(chunk);
+      chunk = [];
+      chars = 0;
+    }
+    chunk.push(url);
+    chars += n;
+  }
+  if (chunk.length > 0) chunks.push(chunk);
+  return chunks;
+}
+
+export interface Handled {
+  /** `dedupeKey(url, candidate)` of every `news_item` row, and of every
+      `manual_news` review item in any status, at the URLs asked about. */
+  keys: Set<string>;
+  /** The same URLs, under any candidate or none. */
+  urls: Set<string>;
+}
+
+/** What is already queued, decided or published at these URLs. Both reads
+    are filtered by URL, in the same chunks, so each response is bounded by
+    its chunk and never by the size of the table: Supabase caps a response at
+    its "Max rows" setting (1000 by default) and drops the rest without an
+    error, and past that cap a story an operator already decided would be
+    queued again. Any status counts (pending, approved, rejected: 0006's
+    CHECK). Either read failing throws, so the cron answers 502 instead of
+    queueing on a partial read. */
+export async function readHandled(
+  db: SupabaseClient,
+  urls: readonly string[]
+): Promise<Handled> {
+  const keys = new Set<string>();
+  const seenUrls = new Set<string>();
+  for (const chunk of chunkUrls([...new Set(urls)])) {
+    const published = await db.from("news_item").select("url, candidate_id").in("url", chunk);
+    if (published.error) {
+      throw new Error(`could not read news_item to dedupe: ${published.error.message}`);
+    }
+    for (const r of (published.data ?? []) as { url: string; candidate_id: string | null }[]) {
+      keys.add(dedupeKey(r.url, r.candidate_id));
+      seenUrls.add(r.url);
+    }
+    const queued = await db
+      .from("review_item")
+      .select("payload")
+      .eq("kind", "manual_news")
+      .in("payload->>url", chunk);
+    if (queued.error) {
+      throw new Error(`could not read review_item to dedupe: ${queued.error.message}`);
+    }
+    for (const r of (queued.data ?? []) as {
+      payload: { url?: string; candidate_id?: string | null } | null;
+    }[]) {
+      if (!r.payload?.url) continue;
+      keys.add(dedupeKey(r.payload.url, r.payload.candidate_id ?? null));
+      seenUrls.add(r.payload.url);
+    }
+  }
+  return { keys, urls: seenUrls };
+}
+
 /** Match, then queue the candidate matches and the unmatched election stories
     as pending review items, skipping anything already queued or published.
     Throws on an empty roster or a failed write: a silent empty success would
@@ -292,32 +387,12 @@ export async function enqueueIntake(
      operator has seen the article, and most rejections (digests, opinion,
      duplicates) would be just as wrong as election news. Candidate rows are
      never skipped on the URL alone; a new (url, candidate) pair is queued. */
-  const urls = [...new Set(all.map((r) => r.url))];
-  const seen = new Set<string>();
-  const seenUrls = new Set<string>();
-  for (let i = 0; i < urls.length; i += 200) {
-    const { data } = await db
-      .from("news_item")
-      .select("url, candidate_id")
-      .in("url", urls.slice(i, i + 200));
-    for (const r of (data ?? []) as { url: string; candidate_id: string | null }[]) {
-      seen.add(dedupeKey(r.url, r.candidate_id));
-      seenUrls.add(r.url);
-    }
-  }
-  const { data: queued } = await db
-    .from("review_item")
-    .select("payload, status")
-    .eq("kind", "manual_news")
-    .in("status", ["pending", "approved", "rejected"]);
-  for (const r of (queued ?? []) as { payload: { url?: string; candidate_id?: string | null } }[]) {
-    if (!r.payload?.url) continue;
-    seen.add(dedupeKey(r.payload.url, r.payload.candidate_id ?? null));
-    seenUrls.add(r.payload.url);
-  }
-
+  const handled = await readHandled(
+    db,
+    all.map((r) => r.url)
+  );
   const rows = all
-    .filter((r) => !seen.has(r.key) && !(r.election && seenUrls.has(r.url)))
+    .filter((r) => !handled.keys.has(r.key) && !(r.election && handled.urls.has(r.url)))
     .map((r) => ({
       kind: "manual_news",
       /* WHO proposed it; the payload shape is the operator form's. */

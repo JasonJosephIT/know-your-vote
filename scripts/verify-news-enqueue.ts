@@ -36,8 +36,8 @@ import { matchArticle, type RosterCandidate } from "../src/lib/news-match.ts";
 import { OUTLETS, outletForUrl } from "../src/lib/news-sources.ts";
 import { ManualNewsPayloadSchema } from "../src/types/admin.ts";
 import type { SweptArticle } from "../src/lib/news-sweep.ts";
-import type { SupabaseClient } from "@supabase/supabase-js";
-import { enqueueIntake } from "../src/lib/news-intake.ts";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { chunkUrls, DEDUPE_CHUNK, DEDUPE_CHUNK_CHARS, enqueueIntake, readHandled } from "../src/lib/news-intake.ts";
 
 let failures = 0;
 function check(name: string, cond: boolean, detail = "") {
@@ -386,8 +386,14 @@ check("isElectionRelated reads the summary too",
   const intake = readFileSync(resolve(import.meta.dirname, "..", "src/lib/news-intake.ts"), "utf8");
   check("the intake only ever writes pending review items",
     /status: "pending"/.test(intake) && !/from\("news_item"\)\s*\.insert/.test(intake));
-  check("rejected stories aren't re-queued on the next run",
-    /\.in\("status", \["pending", "approved", "rejected"\]\)/.test(intake));
+  /* news-source-integrity §3.7: the review_item read is filtered by the
+     sweep's URLs, never the whole table, and it has no status filter (any
+     status counts; the behaviour is tested below). */
+  const intakeCode = intake.replace(/\/\*[\s\S]*?\*\//g, "");
+  check("the dedupe reads review_item by URL, any status",
+    /\.eq\("kind", "manual_news"\)\s*\.in\("payload->>url", chunk\)/.test(intakeCode) &&
+      !/\.in\("status"/.test(intakeCode),
+    "expected .eq(\"kind\", \"manual_news\").in(\"payload->>url\", chunk) and no status filter");
 }
 
 /* The queue's dedupe, run for real against an in-memory stand-in for the
@@ -395,22 +401,39 @@ check("isElectionRelated reads the summary too",
    already handled under a candidate is not queued a second time (2026-10-06:
    matching reads only the capped dek, so a story first matched on a name deep
    in a whole-article description would otherwise come back as county news). */
-function fakeDb(tables: Record<string, Record<string, unknown>[]>) {
-  const inserted: Record<string, unknown>[] = [];
+type Row = Record<string, unknown>;
+interface FakeRead { table: string; eq: [string, unknown][]; in: [string, readonly unknown[]][] }
+/* Like PostgREST: `payload->>url` reads a JSON field as text, and a response
+   holds at most `maxRows` rows (Supabase's "Max rows", 1000 by default), the
+   rest dropped without an error. `failOn` makes every read of a table fail. */
+function fakeDb(
+  tables: Record<string, readonly Row[]>,
+  { maxRows = 1000, failOn = {} }: { maxRows?: number; failOn?: Record<string, string> } = {},
+) {
+  const inserted: Row[] = [];
+  const reads: FakeRead[] = [];
+  const field = (r: Row, col: string): unknown => {
+    const [column, key] = col.split("->>");
+    return key === undefined ? r[column] : (r[column] as Row | null | undefined)?.[key];
+  };
   const from = (table: string) => {
-    const filters: ((r: Record<string, unknown>) => boolean)[] = [];
+    const read: FakeRead = { table, eq: [], in: [] };
     const q = {
-      select: () => q,
-      eq: (col: string, v: unknown) => { filters.push((r) => r[col] === v); return q; },
-      in: (col: string, vs: unknown[]) => { filters.push((r) => vs.includes(r[col])); return q; },
+      select: () => { reads.push(read); return q; },
+      eq: (col: string, v: unknown) => { read.eq.push([col, v]); return q; },
+      in: (col: string, vs: readonly unknown[]) => { read.in.push([col, vs]); return q; },
       upsert: async () => ({ error: null }),
-      insert: async (rows: Record<string, unknown>[]) => { inserted.push(...rows); return { error: null }; },
-      then: (resolve: (v: { data: Record<string, unknown>[]; error: null }) => unknown) =>
-        resolve({ data: (tables[table] ?? []).filter((r) => filters.every((f) => f(r))), error: null }),
+      insert: async (rows: Row[]) => { inserted.push(...rows); return { error: null }; },
+      then: (resolve: (v: { data: Row[] | null; error: { message: string } | null }) => unknown) => {
+        if (failOn[table]) return resolve({ data: null, error: { message: failOn[table] } });
+        const rows = (tables[table] ?? []).filter((r) =>
+          read.eq.every(([c, v]) => field(r, c) === v) && read.in.every(([c, vs]) => vs.includes(field(r, c))));
+        return resolve({ data: rows.slice(0, maxRows), error: null });
+      },
     };
     return q;
   };
-  return { db: { from } as unknown as SupabaseClient, inserted };
+  return { db: { from } as unknown as SupabaseClient, inserted, reads };
 }
 {
   const profile = ROSTER.map((r) => ({
@@ -447,6 +470,128 @@ function fakeDb(tables: Record<string, Record<string, unknown>[]>) {
       r.queued === 0 && r.skipped === 1 && f.inserted.length === 0,
       JSON.stringify({ queued: r.queued, skipped: r.skipped }));
   }
+}
+
+/* ---- the dedupe reads, chunked by URL (news-source-integrity §3.7) ------ */
+{
+  const profile = ROSTER.map((r) => ({
+    candidate_id: r.candidateId, race_id: r.raceId, candidate: { legal_name: r.legalName, ballot_status: "ballot" },
+  }));
+  const story = article({ title: "County ballots mailed this week", url: "https://www.wlrn.org/ballots-mailed" });
+
+  /* Any status counts: approved and pending are skipped like rejected. */
+  for (const status of ["approved", "pending"] as const) {
+    const f = fakeDb({ profile, review_item: [{ kind: "manual_news", status, payload: { url: story.url, candidate_id: null } }] });
+    const r = await enqueueIntake(f.db, [story]);
+    check(`an election story already ${status} is not queued again`,
+      r.queued === 0 && r.skipped === 1 && f.inserted.length === 0, JSON.stringify({ queued: r.queued, skipped: r.skipped }));
+  }
+
+  /* Past the response cap: 1,500 decided items, the match last. The old
+     unfiltered read got the first 1,000 and queued the story a second time. */
+  const decided: Row[] = Array.from({ length: 1500 }, (_, i) => ({
+    kind: "manual_news",
+    status: i % 2 === 0 ? "approved" : "rejected",
+    payload: { url: `https://www.wlrn.org/older-${i}`, candidate_id: null },
+  }));
+  decided[1499] = { kind: "manual_news", status: "rejected", payload: { url: story.url, candidate_id: null } };
+  const big = fakeDb({ profile, review_item: decided });
+  const rBig = await enqueueIntake(big.db, [story]);
+  check("with 1,500 decided items and the match last, the story is still skipped",
+    rBig.queued === 0 && rBig.skipped === 1 && big.inserted.length === 0,
+    JSON.stringify({ queued: rBig.queued, skipped: rBig.skipped }));
+
+  /* 450 election stories: every read is filtered by URL, chunked, and the
+     chunks cover exactly the stories' URLs. */
+  const many = Array.from({ length: 450 }, (_, i) =>
+    article({ title: `County ballots mailed this week, part ${i}`, url: `https://www.wlrn.org/2026/10/08/ballots-mailed-${i}` }));
+  const wide = fakeDb({ profile });
+  const rWide = await enqueueIntake(wide.db, many);
+  const reviewReads = wide.reads.filter((r) => r.table === "review_item");
+  const newsReads = wide.reads.filter((r) => r.table === "news_item");
+  const urlsOf = (reads: FakeRead[], col: string) =>
+    reads.flatMap((r) => r.in.filter(([c]) => c === col).flatMap(([, vs]) => vs as string[]));
+  const wanted = many.map((a) => a.url).sort().join("\n");
+  check("all 450 new election stories are queued", rWide.queued === 450, String(rWide.queued));
+  check("every review_item read is manual_news filtered by payload->>url, with no status filter",
+    reviewReads.length > 1 && reviewReads.every((r) =>
+      r.eq.length === 1 && r.eq[0][0] === "kind" && r.eq[0][1] === "manual_news" &&
+      r.in.length === 1 && r.in[0][0] === "payload->>url"),
+    JSON.stringify(reviewReads.map((r) => ({ eq: r.eq, in: r.in.map(([c, vs]) => [c, vs.length]) }))));
+  check("every read carries at most DEDUPE_CHUNK URLs",
+    [...reviewReads, ...newsReads].every((r) => r.in.every(([, vs]) => vs.length <= DEDUPE_CHUNK)));
+  check("the review_item chunks cover exactly the stories' URLs",
+    urlsOf(reviewReads, "payload->>url").sort().join("\n") === wanted);
+  check("the news_item reads use the same chunks",
+    newsReads.length === reviewReads.length && urlsOf(newsReads, "url").sort().join("\n") === wanted);
+
+  /* A read error throws, and nothing is queued. */
+  for (const table of ["news_item", "review_item"]) {
+    const f = fakeDb({ profile }, { failOn: { [table]: "simulated outage" } });
+    let message = "";
+    try {
+      await enqueueIntake(f.db, [story]);
+    } catch (err) {
+      message = (err as Error).message;
+    }
+    check(`a failed ${table} read throws instead of queueing`,
+      message.includes(table) && message.includes("simulated outage") && f.inserted.length === 0,
+      JSON.stringify({ message, inserted: f.inserted.length }));
+  }
+}
+
+/* chunkUrls on its own: the count bound, the size bound, order, and a URL too
+   long for any chunk still gets one. */
+{
+  const short = Array.from({ length: 450 }, (_, i) => `https://a.b/${i}`);
+  const byCount = chunkUrls(short, { maxChars: Infinity });
+  check("chunkUrls: 450 URLs with no size bound make chunks of 200, 200, 50",
+    byCount.map((c) => c.length).join(",") === "200,200,50", byCount.map((c) => c.length).join(","));
+  check("chunkUrls keeps every URL in order", byCount.flat().join(",") === short.join(","));
+  const longUrls = Array.from({ length: 400 }, (_, i) => `https://www.example-news-outlet.com/news/politics/elections/2026/10/08/a-long-headline-slug-that-goes-on-for-a-while-to-reach-one-seventy-${i}`);
+  const bySize = chunkUrls(longUrls);
+  /* What each URL adds to the query string: form-encoded, plus a comma and
+     two quotes (the same allowance chunkUrls makes). */
+  const encoded = (c: string[]) =>
+    c.reduce((n, u) => n + new URLSearchParams([["", u]]).toString().length - 1 + 9, 0);
+  check("chunkUrls: long URLs make chunks of at most DEDUPE_CHUNK_CHARS encoded characters",
+    bySize.length > 2 && bySize.every((c) => c.length < DEDUPE_CHUNK && encoded(c) <= DEDUPE_CHUNK_CHARS) &&
+      bySize.flat().join(",") === longUrls.join(","),
+    bySize.map((c) => `${c.length}:${encoded(c)}`).join(","));
+  const huge = `https://www.wlrn.org/${"x".repeat(7_000)}`;
+  const alone = chunkUrls(["https://www.wlrn.org/a", huge, "https://www.wlrn.org/b"], { maxChars: 6_000 });
+  check("chunkUrls: a URL longer than the size bound gets a chunk of its own",
+    alone.length === 3 && alone[1].length === 1 && alone[1][0] === huge, alone.map((c) => c.length).join(","));
+  const first = chunkUrls([huge, "https://www.wlrn.org/a"], { maxChars: 6_000 });
+  check("chunkUrls: an oversized first URL makes no empty chunk ahead of it",
+    first.length === 2 && first[0].length === 1 && first[0][0] === huge, first.map((c) => c.length).join(","));
+  check("chunkUrls: nothing in, nothing out", chunkUrls([]).length === 0);
+}
+
+/* The size bound against the real client: supabase-js builds each read's
+   GET URL, captured here before it would leave the machine. Every request
+   stays under 8 KB, including URLs that postgrest-js must quote. */
+{
+  const requested: string[] = [];
+  const client = createClient("https://example.supabase.co", "offline-test-key", {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: {
+      fetch: (async (input: string | URL | Request) => {
+        requested.push(typeof input === "string" ? input : input instanceof URL ? input.href : input.url);
+        return new Response("[]", { status: 200, headers: { "content-type": "application/json" } });
+      }) as typeof fetch,
+    },
+  });
+  const urls = Array.from({ length: 400 }, (_, i) =>
+    `https://www.example-news-outlet.com/news/politics/elections/2026/10/08/headline-with-commas,and(parens)-${i}-${"y".repeat(90)}`);
+  const handled = await readHandled(client, urls);
+  const longest = Math.max(...requested.map((u) => u.length));
+  check("readHandled through supabase-js sends two reads per chunk", requested.length === chunkUrls(urls).length * 2,
+    `${requested.length} requests for ${chunkUrls(urls).length} chunks`);
+  check("every dedupe request URL stays under 8 KB", longest <= 8192, `longest ${longest} characters`);
+  check("the review_item request filters payload->>url",
+    requested.some((u) => u.includes("/rest/v1/review_item?") && u.includes("payload-%3E%3Eurl=in.")));
+  check("an empty answer is nothing handled", handled.keys.size === 0 && handled.urls.size === 0);
 }
 
 if (failures > 0) {
