@@ -183,6 +183,16 @@ function Body({ item }: { item: ReviewItemRow }) {
             seen {relativeTime(p.seen_at)}
           </span>
         </div>
+        {/* R2's status change (agent-retrofit §3.6): say what approving does
+            and does not do, and why it may fail during the freeze. */}
+        {p.table === "candidate" && p.field === "qualifying_status" ? (
+          <p className="text-caption text-on-surface-muted">
+            Approving changes qualifying_status only. It does not change ballot_status or the
+            race&apos;s candidate list: taking a candidate off a race stays a reviewed migration.
+            During the content freeze (2026-10-18 to Election Day) the database refuses this
+            change, and the message it gives names the correction path.
+          </p>
+        ) : null}
       </div>
     );
   }
@@ -323,6 +333,16 @@ function Outcome({ item }: { item: ReviewItemRow }) {
   );
 }
 
+/* The confirm line for an approval that writes nothing: R2's election_event
+   date_mismatch. Every other gated kind keeps DecisionControls' default. */
+function confirmTextFor(item: ReviewItemRow): string | undefined {
+  if (item.kind !== "date_mismatch") return undefined;
+  const parsed = ReviewItemContentSchema.safeParse({ kind: item.kind, payload: item.payload });
+  return parsed.success && parsed.data.kind === "date_mismatch" && "target" in parsed.data.payload
+    ? "Approving records this finding and writes no date. Confirm?"
+    : undefined;
+}
+
 export function ReviewItemCard({ item }: { item: ReviewItemRow }) {
   return (
     <Card className="flex flex-col gap-3">
@@ -345,7 +365,7 @@ export function ReviewItemCard({ item }: { item: ReviewItemRow }) {
               Fail-closed — still pending: {item.apply_error}
             </p>
           ) : null}
-          <DecisionControls id={item.id} kind={item.kind} />
+          <DecisionControls id={item.id} kind={item.kind} confirmText={confirmTextFor(item)} />
         </>
       ) : (
         <Outcome item={item} />
