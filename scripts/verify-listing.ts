@@ -18,9 +18,16 @@
    5. The listing path feeds the predicates with no write-in (the belt
       without the brace, see src/lib/listing.ts): a carried UNO / primary
       code alone decides it, and a `qualified` survivor never does.
+   6. The card line is chosen by the race, never by the candidate: a listed
+      race in UNFINISHED_BRIEF_RACES gets UNFINISHED_BRIEF_LINE on every
+      card, every other listed race keeps NO_BRIEF_CARD_LINE (unchanged,
+      founder decision BC6), and the unfinished line names no candidate
+      and promises nothing (ballot-content-completion §3.3, BC15).
 
    Run: node scripts/verify-listing.ts */
 
+import { readFileSync } from "node:fs";
+import { join, resolve } from "node:path";
 import {
   BRIEF_IN_REVIEW_LINE,
   COUNTY_NOTE,
@@ -29,6 +36,8 @@ import {
   LISTING_INTRO_NOT_PRINTED,
   LISTING_INTRO_PRINTED,
   NO_BRIEF_CARD_LINE,
+  UNFINISHED_BRIEF_LINE,
+  UNFINISHED_BRIEF_RACES,
   WRITE_IN_NOTE,
   listingCardLine,
   listingCopy,
@@ -148,13 +157,17 @@ check(
    brief that is briefly unreadable (audit re-check, rebuild), so its cards
    keep the in-review line either way. The no-brief line says so first,
    never says published, and promises neither a review nor a later brief. */
+/* An empty set as the third argument keeps these about the switch alone,
+   whatever the freeze-copy PR puts in UNFINISHED_BRIEF_RACES. */
+const NONE_UNFINISHED: ReadonlySet<string> = new Set<string>();
 check(
   "card line: a published race's roster always says in review",
-  listingCardLine("published") === BRIEF_IN_REVIEW_LINE
+  listingCardLine("published", "FL-TEST-general", NONE_UNFINISHED) ===
+    BRIEF_IN_REVIEW_LINE
 );
 check(
   "card line: a listed race follows LISTED_IS_FINAL",
-  listingCardLine("listed") ===
+  listingCardLine("listed", "FL-TEST-general", NONE_UNFINISHED) ===
     (LISTED_IS_FINAL ? NO_BRIEF_CARD_LINE : BRIEF_IN_REVIEW_LINE)
 );
 check(
@@ -168,7 +181,7 @@ check(
   "switch on: no listed-race copy promises a review",
   !LISTED_IS_FINAL ||
     ![
-      listingCardLine("listed"),
+      listingCardLine("listed", "FL-TEST-general", NONE_UNFINISHED),
       LISTING_INTRO_PRINTED,
       LISTING_INTRO_NOT_PRINTED,
       LISTED_RACE_LABEL,
@@ -182,6 +195,121 @@ check(
         "The full brief is still in review."
       ) &&
       LISTED_RACE_LABEL === "Names on the ballot · brief in review")
+);
+
+/* 3c. BC15: the unfinished-brief line. */
+check(
+  "no-brief line unchanged (founder decision BC6)",
+  NO_BRIEF_CARD_LINE ===
+    "No brief for this race. We write a brief only when a candidate's own campaign website states a position we can quote on an issue we cover, and we have not found one here. That is about our sources, not a judgment of the candidates."
+);
+check(
+  "unfinished line: says \"No brief for this race.\" first, as the caption \"Names on the ballot · no brief\" does",
+  UNFINISHED_BRIEF_LINE.startsWith("No brief for this race.")
+);
+check(
+  "unfinished line: says what happened and when, and ends on the same disclaimer",
+  UNFINISHED_BRIEF_LINE.includes("before October 18") &&
+    UNFINISHED_BRIEF_LINE.endsWith("not a judgment of the candidates.")
+);
+check(
+  "unfinished line: names no candidate (every capitalized word is ordinary)",
+  (UNFINISHED_BRIEF_LINE.match(/\b[A-Z][A-Za-z]*\b/g) ?? []).every((w) =>
+    ["No", "We", "October", "That"].includes(w)
+  ),
+  JSON.stringify(UNFINISHED_BRIEF_LINE.match(/\b[A-Z][A-Za-z]*\b/g))
+);
+check(
+  "unfinished line: never says published or in review, promises nothing",
+  !/\bpublished\b|in review|\bonce\b|\bsoon\b|\byet\b/i.test(
+    UNFINISHED_BRIEF_LINE
+  )
+);
+check(
+  "UNFINISHED_BRIEF_RACES holds only general-race ids",
+  [...UNFINISHED_BRIEF_RACES].every((id) => /^FL-[A-Z0-9-]+-general$/.test(id)),
+  JSON.stringify([...UNFINISHED_BRIEF_RACES])
+);
+
+/* Two listed races and one published race, two cards each. The line is a
+   function of the race alone, so every card in a race must carry the same
+   sentence: the unfinished line in the race in the set, the no-brief line
+   (or, with the switch off, the in-review line) in the other listed race,
+   and the in-review line on the published race even though it is in the
+   set too. */
+const UNFINISHED_FIXTURE: ReadonlySet<string> = new Set([
+  "FL-AAA-general",
+  "FL-CCC-general",
+]);
+const ROSTER: Array<{
+  raceId: string;
+  status: "listed" | "published";
+  cards: string[];
+  want: string;
+}> = [
+  {
+    raceId: "FL-AAA-general",
+    status: "listed",
+    cards: ["cand-a1", "cand-a2"],
+    want: UNFINISHED_BRIEF_LINE,
+  },
+  {
+    raceId: "FL-BBB-general",
+    status: "listed",
+    cards: ["cand-b1", "cand-b2"],
+    want: LISTED_IS_FINAL ? NO_BRIEF_CARD_LINE : BRIEF_IN_REVIEW_LINE,
+  },
+  {
+    raceId: "FL-CCC-general",
+    status: "published",
+    cards: ["cand-c1", "cand-c2"],
+    want: BRIEF_IN_REVIEW_LINE,
+  },
+];
+for (const race of ROSTER) {
+  const lines = race.cards.map(() =>
+    listingCardLine(race.status, race.raceId, UNFINISHED_FIXTURE)
+  );
+  check(
+    `card line: every card in ${race.raceId} (${race.status}) carries the same, right sentence`,
+    lines.every((l) => l === race.want),
+    JSON.stringify(lines)
+  );
+}
+check(
+  "card line: by default, a listed race outside UNFINISHED_BRIEF_RACES keeps the switch's line",
+  listingCardLine("listed", "FL-NOT-IN-THE-SET-general") ===
+    (LISTED_IS_FINAL ? NO_BRIEF_CARD_LINE : BRIEF_IN_REVIEW_LINE)
+);
+check(
+  "card line: by default, every race in UNFINISHED_BRIEF_RACES gets the unfinished line",
+  [...UNFINISHED_BRIEF_RACES].every(
+    (id) => listingCardLine("listed", id) === UNFINISHED_BRIEF_LINE
+  )
+);
+
+/* Both rosters hand the card the race's id, never anything about the
+   candidate, so the line cannot differ between two cards in one race. */
+const ROOT = resolve(import.meta.dirname, "..");
+const raceListingSrc = readFileSync(
+  join(ROOT, "src/components/features/RaceListing.tsx"),
+  "utf8"
+);
+const candidateListingSrc = readFileSync(
+  join(ROOT, "src/components/features/CandidateListing.tsx"),
+  "utf8"
+);
+check(
+  "RaceListing.tsx: the card line is listingCardLine(status, raceId)",
+  /\{listingCardLine\(status, raceId\)\}/.test(raceListingSrc)
+);
+check(
+  "RaceListing.tsx: the roster passes the race's id to every card",
+  /raceId=\{listing\.race\.race_id\}/.test(raceListingSrc)
+);
+check(
+  "CandidateListing.tsx: the candidate page passes the race's id",
+  /raceId=\{listing\.raceId\}/.test(candidateListingSrc)
 );
 
 /* 4. Captions only where the contest is printed. */

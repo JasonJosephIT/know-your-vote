@@ -189,17 +189,41 @@ export const BRIEF_IN_REVIEW_LINE =
 export const NO_BRIEF_CARD_LINE =
   "No brief for this race. We write a brief only when a candidate's own campaign website states a position we can quote on an issue we cover, and we have not found one here. That is about our sources, not a judgment of the candidates.";
 
+/* The card line for a listed race whose brief was found but not finished
+   before the freeze (ballot-content-completion §3.3 case 2, founder
+   decision BC15, recommended pending founder confirmation): a candidate's
+   own site gave us a position we can quote, but the race's brief did not
+   pass its audit or finish its apply by Sat 2026-10-17 18:00. There,
+   NO_BRIEF_CARD_LINE's "we have not found one here" would be false. Like
+   that line it names no candidate, is the same on every card in the race,
+   and promises no brief later: nothing changes until the freeze ends. */
+export const UNFINISHED_BRIEF_LINE =
+  "No brief for this race. We found a position we can quote on a candidate's own campaign website, but we did not finish this race's brief before October 18, when we stopped changing briefs for this election. That is about our process, not a judgment of the candidates.";
+
+/* The race_ids (for example "FL-CFO-general") whose cards carry
+   UNFINISHED_BRIEF_LINE. Empty until the freeze-copy PR fills it from
+   docs/general-election/brief-runs/refresh-2026-10.md; in the expected case
+   it stays empty. A frozen file from 2026-10-18 (§3.6.3). */
+export const UNFINISHED_BRIEF_RACES: ReadonlySet<string> = new Set<string>([]);
+
 /* The line every candidate card on a roster carries, identical for everyone
    in the race. `status` is RaceListing["status"]: a published race is on
-   the roster only while its brief is unreadable, so it keeps the "in
-   review" line whatever LISTED_IS_FINAL says. RaceListing.tsx and
-   CandidateListing.tsx pass listing.status here, src/lib/races.ts takes
-   LISTED_RACE_LABEL below, and scripts/verify-listing.ts pins the switch
-   (listed-races-2026-10-04.md §2). */
-export function listingCardLine(status: "listed" | "published"): string {
-  return LISTED_IS_FINAL && status === "listed"
-    ? NO_BRIEF_CARD_LINE
-    : BRIEF_IN_REVIEW_LINE;
+   the roster only while its brief is unreadable (a Path B1 rebuild, or a
+   correction hold, BC16), so it keeps the "in review" line whatever
+   LISTED_IS_FINAL says. A listed race in UNFINISHED_BRIEF_RACES gets
+   UNFINISHED_BRIEF_LINE; every other listed race follows LISTED_IS_FINAL.
+   RaceListing.tsx and CandidateListing.tsx pass listing.status and the
+   race's id here, src/lib/races.ts takes LISTED_RACE_LABEL below, and
+   scripts/verify-listing.ts pins every branch (listed-races-2026-10-04.md
+   §2). `unfinished` is there for that script; callers leave it out. */
+export function listingCardLine(
+  status: "listed" | "published",
+  raceId: string,
+  unfinished: ReadonlySet<string> = UNFINISHED_BRIEF_RACES
+): string {
+  if (status === "published") return BRIEF_IN_REVIEW_LINE;
+  if (unfinished.has(raceId)) return UNFINISHED_BRIEF_LINE;
+  return LISTED_IS_FINAL ? NO_BRIEF_CARD_LINE : BRIEF_IN_REVIEW_LINE;
 }
 
 /* The caption a race card carries on the landing page, Your races and the
