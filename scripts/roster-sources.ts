@@ -72,4 +72,47 @@ export const SOURCES: readonly Source[] = [
 
   /* Orange County Clerk of the Courts. */
   page("ora-clerk", "https://www.myorangeclerk.com/", "reports 'the departure of Clerk Tiffany Moore Russell' on 2026-10-08"),
+
+  /* Added during round 1 (plan Task 4). Member lists the first pages did
+     not give, and the second official page for each candidate round 1 found
+     serving. Every URL appears as a link in a page already read, except
+     ocps.net/district-1-angie-gallo, recorded as her board page in
+     docs/general-election/candidate-sites-2026-09-24.md (the OCPS list links
+     the same page on its CMS host, ocps.smartsiteshost.com). */
+  page("dad-sb-members", "https://www.dadeschools.net/SchoolBoard/members", "linked from dad-sb-list, which answered 404 Not Found"),
+  page("hil-sb-members", "https://www.hillsboroughschools.org/o/hcps/page/board-members", "linked 'School Board Members' from hil-sb-list"),
+  page("hil-sb-map", "https://www.hillsboroughschools.org/o/hcps/page/board-member-district-map", "linked 'Map of Districts' from hil-sb-members; a table of the seven members by district"),
+  page("bro-soe-officials", "https://browardvotes.gov/candidates/elected-officials", "the Broward Supervisor of Elections' list of CURRENT elected officials (not its candidate list), linked from its home page; second page for the Broward school board members, whose district site has no per-member page"),
+  page("dad-sb-d2", "https://district2.dadeschools.net/", "the District 2 member's site, linked from dad-sb-members"),
+  page("dad-sb-d8", "https://district8.dadeschools.net/", "the District 8 member's site, linked from dad-sb-members"),
+  page("bro-cc-d2-about", "https://www.broward.org/district2/about"),
+  page("bro-cc-d4-about", "https://www.broward.org/district4/about"),
+  page("bro-cc-d8-about", "https://www.broward.org/district8/about"),
+  page("dad-cc-d2", "https://www.miamidade.gov/global/government/commission/district02/home.page"),
+  page("dad-cc-d5", "https://www.miamidade.gov/global/government/commission/district05/home.page"),
+  page("hil-cc-cohen", "https://hcfl.gov/commissioners/harry-cohen"),
+  page("hil-cc-myers", "https://hcfl.gov/commissioners/gwen-myers"),
+  page("hil-cc-wostal", "https://hcfl.gov/commissioners/joshua-wostal"),
+  page("ora-cc-d2", "https://www.orangecountyfl.net/BoardofCommissioners/District2Commissioner.aspx"),
+  page("ora-cc-d6", "https://www.orangecountyfl.net/BoardofCommissioners/District6Commissioner.aspx"),
+  page("ora-sb-gallo", "https://www.ocps.net/district-1-angie-gallo"),
+  page("atg-bio", "https://www.myfloridalegal.com/ag-bio", "linked 'Meet the Attorney General' from atg-home; read in the browser pane, as atg-home"),
+  page("cfo-meet", "https://www.myfloridacfo.com/about/meet-the-cfo"),
+  page("agr-meet", "https://www.fdacs.gov/About-Us/Meet-Commissioner-Simpson"),
+  page("sen-moody", "https://www.moody.senate.gov/"),
+  ...["haridopolos", "soto", "frost", "bilirakis", "castor", "laurellee", "wassermanschultz", "moskowitz", "mariodiazbalart", "salazar", "gimenez"].map(
+    (m) => page(`house-${m}`, `https://${m}.house.gov/`),
+  ),
+
+  /* No-site re-checks (spec §3.7, plan Task 4 Step 5): each domain recorded
+     for the candidate in docs/general-election/candidate-sites-2026-09-24.md.
+     A web search on 2026-10-08 found no new lead for any of the nine.
+     damhforcongress.com (Hosey) has no A record, so there is no page to read;
+     Bogen, McKinzie and Bendross-Mindingall have no campaign domain at all. */
+  page("site-FL-DOE-92357", "https://jassenoff.com/"),
+  page("site-FL-DOE-89630", "https://www.drjeffdatto.com/", "the apex timed out on 2026-10-08; its http redirect lands here"),
+  page("site-FL-VF-BRO-1178-a", "https://fisherfordistrict4.com/"),
+  page("site-FL-VF-BRO-1178-b", "https://lamarfisher.com/"),
+  page("site-FL-VF-DAD-2953", "https://monicacolucci.com/", "genuine site, compromised with injected casino spam on 2026-09-25"),
+  page("site-FL-VF-ORA-1245", "https://voteangiegallo.com/"),
 ];
