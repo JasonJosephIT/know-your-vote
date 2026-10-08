@@ -61,7 +61,24 @@ function isHttpUrl(value: string): boolean {
   }
 }
 
-const ISO_DATE = /^\d{4}-\d{2}-\d{2}(?:$|T)/;
+/* YYYY-MM-DD, or that with a time and a Z or an offset. A date-time with
+   neither would be read in the machine's own zone. */
+const ISO_DATE = /^(\d{4}-\d{2}-\d{2})(?:T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:\d{2}))?$/;
+
+/** A date as R3 must write it, on a real calendar day. Date.parse alone reads
+    "1" as 2001 and rolls "2026-02-30" over to 2 March, so the written day is
+    round-tripped through toISOString. */
+function isIsoDate(value: string): boolean {
+  const m = ISO_DATE.exec(value);
+  if (!m || Number.isNaN(Date.parse(value))) return false;
+  const day = new Date(`${m[1]}T00:00:00Z`);
+  return !Number.isNaN(day.getTime()) && day.toISOString().slice(0, 10) === m[1];
+}
+
+/** One page with or without `www.`: the dedupe key and the other host
+    spelling of a url_norm (urlNorm keeps `www.`, as source.url_norm does). */
+const withoutWww = (norm: string) => norm.replace(/^www\./, "");
+const otherWww = (norm: string) => (norm.startsWith("www.") ? norm.slice(4) : `www.${norm}`);
 
 const SCOPE_FORMS = 'scope must be { "county_fips": "<5 digits>" } or { "statewide": true }';
 
@@ -105,10 +122,9 @@ export function batchProblem(raw: unknown): string | null {
     for (const f of TEXT_FIELDS) if (typeof item[f] !== "string") return `item ${i}: ${f} must be a string`;
     const url = item.url as string;
     const published = item.published_at as string;
-    /* Written YYYY-MM-DD, optionally with a time: Date.parse alone reads "1"
-       as 2001. The date window is the retrofit's PR B. */
-    if (!ISO_DATE.test(published) || Number.isNaN(Date.parse(published))) {
-      return `item ${i}: published_at "${published}" is not a date written YYYY-MM-DD`;
+    /* The date window is the retrofit's PR B. */
+    if (!isIsoDate(published)) {
+      return `item ${i}: published_at "${published}" is not a date written YYYY-MM-DD, or YYYY-MM-DDThh:mm with Z or an offset`;
     }
     if (!isHttpUrl(url)) return `item ${i}: url must be an http(s) URL`;
     const outlet = outletForUrl(url, OUTLETS);
@@ -172,9 +188,9 @@ export function planElectionQueue(items: readonly ElectionNewsItem[], ctx: Queue
   const skipped: QueueNotice[] = [];
   const dropped: QueueNotice[] = [];
   const inBatch = new Set<string>();
-  /* One page, however it is spelled: urlNorm is the key source.url_norm uses
-     (scheme and trailing slash do not matter; www. and the query do). */
-  const key = (url: string) => urlNorm(url) ?? url;
+  /* One page, however it is spelled: urlNorm (the key source.url_norm uses:
+     scheme and trailing slash do not matter, the query does) without `www.`. */
+  const key = (url: string) => withoutWww(urlNorm(url) ?? url);
   const stored = new Set([...ctx.storedUrls].map(key));
   const queued = new Set([...ctx.queuedUrls].map(key));
 
@@ -183,7 +199,7 @@ export function planElectionQueue(items: readonly ElectionNewsItem[], ctx: Queue
     if (!official) return { ok: false, error: `item ${index}: ${item.url} is not on the official-source list` };
 
     const norm = urlNorm(item.url);
-    const page = norm === null ? undefined : ctx.pageRows.get(norm);
+    const page = norm === null ? undefined : (ctx.pageRows.get(norm) ?? ctx.pageRows.get(otherWww(norm)));
     if (page && (page.type !== "primary_doc" || page.lean_tag !== "N/A")) {
       dropped.push({
         index,
@@ -238,9 +254,11 @@ function chunks<T>(list: readonly T[], size: number): T[][] {
 }
 
 /** The URL and its common other spellings of the same page: http or https,
-    with or without a trailing slash on the path. The stored URL is matched
-    exactly by the read, so asking for these finds a page stored under another
-    spelling; planElectionQueue then compares by urlNorm. */
+    with or without `www.`, with or without a trailing slash on the path
+    (eight in all, so a 25-item batch still fits one 200-value read). The
+    stored URL is matched exactly by the read, so asking for these finds a
+    page stored under another spelling; planElectionQueue then compares by
+    urlNorm without `www.`. */
 function spellings(url: string): string[] {
   let u: URL;
   try {
@@ -251,7 +269,9 @@ function spellings(url: string): string[] {
   const path = u.pathname.replace(/\/+$/, "");
   const out = new Set([url]);
   for (const scheme of ["https:", "http:"]) {
-    for (const p of [path, `${path}/`]) out.add(`${scheme}//${u.host}${p}${u.search}`);
+    for (const host of [u.host, otherWww(u.host)]) {
+      for (const p of [path, `${path}/`]) out.add(`${scheme}//${host}${p}${u.search}`);
+    }
   }
   return [...out];
 }
@@ -267,7 +287,12 @@ export async function readQueueContext(
   chunkSize: number = QUEUE_READ_CHUNK,
 ): Promise<QueueContext> {
   const urls = [...new Set(items.flatMap((i) => spellings(i.url)))];
-  const norms = [...new Set(items.map((i) => urlNorm(i.url)).filter((n): n is string => n !== null))];
+  const norms = [
+    ...new Set(items.flatMap((i) => {
+      const n = urlNorm(i.url);
+      return n === null ? [] : [n, otherWww(n)];
+    })),
+  ];
 
   const pageRows = new Map<string, PageRow>();
   for (const chunk of chunks(norms, chunkSize)) {

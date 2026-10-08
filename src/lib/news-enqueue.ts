@@ -169,7 +169,7 @@ export type OutletSourceRow = NonNullable<ReturnType<typeof outletSourceRow>>;
            - `outlet:<domain>` only when the URL belongs to that outlet. A
              swept article always carries its own outlet's id, so it passes;
            - `official:<domain>` only on an election_news item with no
-             candidate and no race, only when the URL is on that entry of
+             candidate, no race and no metro, only when the URL is on that entry of
              the official list, and, for a county body, only when the item is
              scoped to that county. The route also refuses it when the
              story's own page already has a source row with another type or
@@ -233,6 +233,8 @@ export interface AttributionRow {
   race_id?: string | null;
   /** Null for statewide (and for a metro- or race-scoped row). */
   county_fips?: string | null;
+  /** A legacy metro scope. An official source never backs one. */
+  metro?: string | null;
 }
 
 export interface AttributionDeps {
@@ -292,7 +294,7 @@ function planGiven(row: AttributionRow, given: string, deps: AttributionDeps): S
 }
 
 const OFFICIAL_RULE =
-  "An official source backs only an election notice that names no candidate and no race, on that body's own site, scoped to that body's county when it serves one.";
+  "An official source backs only an election notice that names no candidate, no race and no metro, on that body's own site, scoped to that body's county when it serves one.";
 
 /** The checks an `official:<domain>` id must pass on this row: the entry, or
     why not (the first check that fails). */
@@ -303,6 +305,9 @@ function officialCheck(
 ): { entry: OfficialSource } | { why: string } {
   if (row.item_type !== "election_news") return { why: `it is ${row.item_type}, not election_news` };
   if (row.candidate_id || row.race_id) return { why: "it names a candidate or a race" };
+  /* No metro form: R3's queue writes county or statewide, and a metro row's
+     null county_fips would otherwise pass a statewide body's check. */
+  if (row.metro) return { why: `it is scoped to metro ${row.metro}, and an official item is county or statewide` };
   const entry = deps.officialFor(row.url);
   if (!entry || entry.domain !== domain) {
     return { why: `its URL belongs to ${entry ? entry.domain : "no listed official source"}` };

@@ -25,6 +25,16 @@
    two entries match one URL the longest `domain` wins, so the more specific
    entry decides.
 
+   Two consequences, both by design:
+     - A path-scoped entry's host matches its subdomains too, as every
+       entry's does: `dos.fl.gov/elections` takes
+       https://files.dos.fl.gov/elections/x. Longest-domain-wins still gives
+       constitutionalinitiatives.dos.fl.gov its own entry.
+     - The path is matched in any letter case (officialForUrl lowercases it
+       first): dos.fl.gov and miamidade.gov serve /Elections and /elections
+       alike (checked 2026-10-08), so a capitalised link is not refused.
+       Outlet matching (outletForUrl) is unchanged.
+
    Relative imports with the extension: plain-Node scripts import this. */
 
 import type { LeanTag, SourceType } from "./news-labels.ts";
@@ -95,11 +105,24 @@ export function officialForUrl(
   url: string,
   sources: readonly OfficialSource[] = OFFICIAL_SOURCES,
 ): OfficialSource | null {
+  const lowered = lowerPath(url);
   let best: OfficialSource | null = null;
   for (const s of sources) {
-    if (urlBelongsTo(url, s) && (best === null || s.domain.length > best.domain.length)) best = s;
+    if (urlBelongsTo(lowered, s) && (best === null || s.domain.length > best.domain.length)) best = s;
   }
   return best;
+}
+
+/** `url` with its path lowercased, for matching only (every entry's domain
+    is lowercase). An unparseable URL is returned as is, and matches nothing. */
+function lowerPath(url: string): string {
+  try {
+    const u = new URL(url);
+    u.pathname = u.pathname.toLowerCase();
+    return u.href;
+  } catch {
+    return url;
+  }
 }
 
 export const OFFICIAL_ID_PREFIX = "official:";

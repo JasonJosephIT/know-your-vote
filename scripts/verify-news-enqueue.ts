@@ -404,6 +404,16 @@ for (const [label, url, over, wants] of [
 }
 check("an official: id that names no listed body is refused",
   attribute("https://www.browardvotes.gov/x", "official:example.gov").kind === "refused");
+/* There is no metro form of an official item (R3's queue never writes one).
+   An operator-edited metro scope would otherwise pass a statewide body's
+   check, since a metro row has no county_fips. */
+for (const [label, url, given, over] of [
+  ["a statewide body's id on a metro item", "https://dos.fl.gov/elections/x", "official:dos.fl.gov/elections", { metro: "miami", county_fips: null }],
+  ["a county body's id on a metro item in its county", "https://www.browardvotes.gov/x", "official:browardvotes.gov", { metro: "fort_lauderdale", county_fips: "12011" }],
+] as const) {
+  const a = attribute(url, given, over);
+  check(`an official: id is refused for ${label}`, a.kind === "refused" && reasonOf(a).includes("metro"), JSON.stringify(a));
+}
 
 /* The home-page hole in D7: an official row's url_norm is its entry's bare
    domain, so a story whose URL is exactly a body's home page finds that row
@@ -420,6 +430,7 @@ for (const [label, over, wants] of [
   ["candidate_news", { item_type: "candidate_news", candidate_id: "c", race_id: "r" }, "candidate_news"],
   ["election_news with a race", { race_id: "r" }, "candidate or a race"],
   ["election_news in another county", { county_fips: "12057" }, "county 12057"],
+  ["a metro election notice", { metro: "fort_lauderdale" }, "metro"],
 ] as const) {
   const p = pageRowProblem(homeRow(over), "official:browardvotes.gov", deps);
   check(`an official row found by url_norm is refused for ${label}`,

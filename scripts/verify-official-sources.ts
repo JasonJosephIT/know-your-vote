@@ -147,6 +147,27 @@ for (const [url, domain] of [
   check(`${url} resolves to ${domain ?? "no entry"}`, (officialForUrl(url)?.domain ?? null) === domain,
     officialForUrl(url)?.domain);
 }
+/* A path-scoped entry's path matches in any letter case: these servers
+   serve /Elections and /elections alike, and an R3 link must not be refused
+   for its capitals. The host part is already case-free. */
+for (const [url, domain] of [
+  ["https://www.miamidade.gov/Elections/x", "miamidade.gov/elections"],
+  ["https://www.miamidade.gov/ELECTIONS", "miamidade.gov/elections"],
+  ["https://dos.fl.gov/Elections/for-voters/election-dates/", "dos.fl.gov/elections"],
+  ["https://DOS.FL.GOV/elections/x", "dos.fl.gov/elections"],
+  ["https://www.miamidade.gov/ElectionsX/x", null],
+  ["https://www.miamidade.gov/Global/elections/home.page", null],
+] as const) {
+  check(`${url} resolves to ${domain ?? "no entry"} (path case)`, (officialForUrl(url)?.domain ?? null) === domain,
+    officialForUrl(url)?.domain);
+}
+check("every entry's domain is lowercase (officialForUrl lowercases the path it matches)",
+  OFFICIAL_SOURCES.every((s) => s.domain === s.domain.toLowerCase()));
+/* By design, a path-scoped entry's host matches its subdomains too, as every
+   entry's does (the list header says so). */
+check("a subdomain of dos.fl.gov under /elections is the Division's",
+  officialForUrl("https://files.dos.fl.gov/elections/x")?.domain === "dos.fl.gov/elections",
+  officialForUrl("https://files.dos.fl.gov/elections/x")?.domain);
 check("the longest domain wins whatever the list order",
   officialForUrl("https://constitutionalinitiatives.dos.fl.gov/elections/x", [...OFFICIAL_SOURCES].reverse())?.domain ===
     "constitutionalinitiatives.dos.fl.gov");

@@ -66,6 +66,16 @@ for (const [label, raw, want] of [
   ["a bare number for a date", [item({ published_at: "1" })], "item 0: published_at"],
   ["a date not written YYYY-MM-DD", [item({ published_at: "October 5, 2026" })], "item 0: published_at"],
   ["an impossible ISO date", [item({ published_at: "2026-13-45" })], "item 0: published_at"],
+  /* Date.parse rolls an impossible day over ("2026-02-30" is 2 March), so the
+     day is checked against the calendar. */
+  ["February 30", [item({ published_at: "2026-02-30" })], "item 0: published_at"],
+  ["February 31", [item({ published_at: "2026-02-31T09:30:00Z" })], "item 0: published_at"],
+  ["29 February in a common year", [item({ published_at: "2026-02-29" })], "item 0: published_at"],
+  ["31 September", [item({ published_at: "2026-09-31" })], "item 0: published_at"],
+  /* A date-time with no Z or offset is read in the machine's own zone. */
+  ["a date-time with no offset", [item({ published_at: "2026-10-05T09:30" })], "item 0: published_at"],
+  ["a date-time with seconds and no offset", [item({ published_at: "2026-10-05T09:30:00" })], "item 0: published_at"],
+  ["a date-time with an hour of 25", [item({ published_at: "2026-10-05T25:00:00Z" })], "item 0: published_at"],
   ["a URL that is not http(s)", [item({ url: "ftp://www.browardvotes.gov/x" })], "item 0: url must be an http(s) URL"],
   ["a URL on an outlet", [item({ url: "https://www.wlrn.org/2026/10/05/early-voting" })], "item 0: https://www.wlrn.org/2026/10/05/early-voting is on the outlet list"],
   ["a URL off the official list", [item({ url: "https://www.courtlistener.com/opinion/1/x/" })], "is not on the official-source list"],
@@ -89,6 +99,9 @@ check("a county scope on a statewide body is accepted (PR B tightens it)",
 check("an empty batch has no problem", batchProblem([]) === null);
 check("a full ISO timestamp is a date",
   batchProblem([item({ published_at: "2026-10-05T09:30:00-04:00" })]) === null, String(batchProblem([item({ published_at: "2026-10-05T09:30:00-04:00" })])));
+for (const date of ["2028-02-29", "2026-12-31", "2026-10-05T09:30:00Z", "2026-10-05T13:30:00.000Z", "2026-10-05T09:30+05:30"]) {
+  check(`${date} is a date`, batchProblem([item({ published_at: date })]) === null, String(batchProblem([item({ published_at: date })])));
+}
 
 /* ---- 3, 4 and 5. the plan ----------------------------------------------- */
 const EMPTY: QueueContext = { pageRows: new Map(), storedUrls: new Set(), queuedUrls: new Set() };
@@ -153,6 +166,27 @@ const plan = (items: Record<string, unknown>[], c: QueueContext = EMPTY) =>
     check(`a URL ${label} under another spelling is skipped`,
       p.ok && p.rows.length === 0 && p.skipped[0]?.reason === label, JSON.stringify(p));
   }
+  /* With or without www. is one page on these hosts, so it is one item. */
+  const bare = "https://browardvotes.gov/voting-methods/early-voting";
+  const wwwTwice = plan([item(), item({ url: bare })]);
+  check("the same page without www. earlier in the batch is skipped",
+    wwwTwice.ok && wwwTwice.rows.length === 1 && wwwTwice.skipped[0]?.index === 1, JSON.stringify(wwwTwice));
+  for (const [label, c] of [
+    ["already in news_item", ctx({ storedUrls: new Set([bare]) })],
+    ["already in a manual_news review item", ctx({ queuedUrls: new Set([bare]) })],
+  ] as const) {
+    const p = plan([item()], c);
+    check(`a URL ${label} without www. is skipped`,
+      p.ok && p.rows.length === 0 && p.skipped[0]?.reason === label, JSON.stringify(p));
+  }
+  /* A page row recorded without www. is still this page's row: an advocacy
+     page keeps its type whichever spelling R3 found. */
+  const bareAdvocacy = plan([item()], ctx({
+    pageRows: new Map([["browardvotes.gov/voting-methods/early-voting",
+      pageRow("browardvotes.gov/voting-methods/early-voting", "opinion", "N/A")]]),
+  }));
+  check("a page row recorded without www. drops the www. item",
+    bareAdvocacy.ok && bareAdvocacy.rows.length === 0 && bareAdvocacy.dropped.length === 1, JSON.stringify(bareAdvocacy));
 }
 
 {
@@ -284,6 +318,22 @@ const good = [item(), item({ url: "https://dos.fl.gov/elections/for-voters/elect
   const r = await runElectionQueue(f.db, [item()], { dryRun: true });
   check("a URL stored under another spelling is skipped",
     r.exitCode === 0 && r.output?.rows.length === 0 && r.output?.skipped.length === 1, JSON.stringify(r));
+}
+{
+  /* The reads also ask for the URL with and without www., so a page stored
+     or recorded under the other host spelling is found. */
+  const bare = "https://browardvotes.gov/voting-methods/early-voting";
+  const f = fakeDb({
+    news_item: [{ url: bare }],
+    review_item: [{ kind: "manual_news", status: "pending", payload: { url: `${bare}/` } }],
+  });
+  const r = await runElectionQueue(f.db, [item()], { dryRun: true });
+  check("a URL stored without www. is skipped",
+    r.exitCode === 0 && r.output?.rows.length === 0 && r.output?.skipped.length === 1, JSON.stringify(r));
+  const g = fakeDb({ source: [{ source_id: "src_adv", url_norm: urlNorm(bare), type: "opinion", lean_tag: "N/A" }] });
+  const d = await runElectionQueue(g.db, [item()], { dryRun: true });
+  check("a page row recorded without www. is read and drops the item",
+    d.exitCode === 0 && d.output?.rows.length === 0 && d.output?.dropped.length === 1, JSON.stringify(d));
 }
 {
   const f = fakeDb({

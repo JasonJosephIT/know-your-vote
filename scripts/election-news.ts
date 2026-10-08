@@ -9,8 +9,15 @@
                          review item (source 'agent:R3') per new item.
                          --dry-run writes nothing.
 
-   stdout: one JSON object, { rows, skipped, dropped }. stderr: one line,
-   "queued N, skipped S, dropped D" ("would queue ..." under --dry-run).
+   stdout: one JSON object, { rows, skipped, dropped }. stderr: the run's
+   one line, "queued N, skipped S, dropped D" ("would queue ..." under
+   --dry-run), always LAST. Spec §3.2.3 says stderr is one line; two kinds of
+   line can come before it, and neither is the run's: Node's own warnings
+   (the plain-Node type-stripping run prints one), and, from a
+   .claude/worktrees checkout with no .env.local, env-local.ts's note naming
+   the credentials file it read. That note stays: env-local prints it so a
+   script never reads credentials from a directory nobody named. A caller
+   reads the last stderr line.
    Exit 0: a complete run, 0 queued included. 1: the batch was refused, or a
    read or the insert failed; nothing was written. 2: a configuration error.
 
