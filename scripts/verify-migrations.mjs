@@ -909,6 +909,10 @@ await expectConstraintViolation(
   "INSERT INTO review_item (kind, source, payload) VALUES ('bogus','operator','{}');",
   /violates check constraint "review_item_kind_check"/
 );
+await check("0047 review_item.kind accepts candidate_lead", async () => {
+  await db.exec("INSERT INTO review_item (kind, source, payload) VALUES ('candidate_lead','agent:R5','{}');");
+  await db.exec("DELETE FROM review_item WHERE kind = 'candidate_lead';");
+});
 await expectConstraintViolation(
   "review_item.status CHECK rejects an unknown status",
   "INSERT INTO review_item (kind, source, payload, status) VALUES ('manual_news','operator','{}','bogus');",

@@ -136,5 +136,13 @@ export function planEffect(content: ReviewItemContent): EffectPlan {
         type: "record_disposition",
         note: "Recorded — routed to the Fact-Checker backlog. No content write.",
       };
+
+    case "candidate_lead":
+      /* An operator-only lead (R5). Approving means "worth researching";
+         adding a race or candidate stays a reviewed migration. */
+      return {
+        type: "record_disposition",
+        note: "Lead noted for research. No content write: adding a race or candidate stays a reviewed migration.",
+      };
   }
 }
