@@ -85,6 +85,9 @@ export type DropReason =
   | "already_queued";
 
 const MAX_STORIES = 20;
+/** The most leads one `queue` batch may carry. Twice a week the research pass
+    finds about 8; a batch far past that is a runaway or an injected list. */
+export const MAX_BATCH = 50;
 /** CandidateLeadPayloadSchema limits (src/types/admin.ts) for a story's title and outlet. */
 const MAX_TITLE = 240;
 const MAX_OUTLET = 120;
@@ -236,15 +239,19 @@ export interface QueueRow {
 
 /** The rows `candidate-leads.ts queue` would insert. Every item must parse
     with the console's own schema, carry the dedupe key its own name, kind and
-    county produce, and name a real Florida county when it has one (the schema
-    takes any 12xxx code); one bad item refuses the whole batch, so a run never
-    leaves a partial queue. Keys queued or decided since `check` ran, and
-    repeats inside the batch, are skipped. */
+    county produce, and name a real Florida county outside the covered four when
+    it has one (the schema takes any 12xxx code); one bad item, or a batch over
+    MAX_BATCH, refuses the whole batch, so a run never leaves a partial queue.
+    Keys queued or decided since `check` ran, and repeats inside the batch, are
+    skipped. */
 export function planQueue(
   items: unknown,
   existingKeys: ReadonlySet<string>,
 ): { ok: true; rows: QueueRow[]; skipped: string[] } | { ok: false; errors: string[] } {
   if (!Array.isArray(items)) return { ok: false, errors: ["the batch is not an array of leads"] };
+  if (items.length > MAX_BATCH) {
+    return { ok: false, errors: [`batch of ${items.length} leads is over the ${MAX_BATCH}-lead cap`] };
+  }
   const errors: string[] = [];
   const payloads: CandidateLeadPayload[] = [];
   items.forEach((item, n) => {
@@ -261,6 +268,10 @@ export function planQueue(
     }
     if (p.county_fips !== null && countyName(p.county_fips) === null) {
       errors.push(`lead ${n + 1}: county_fips "${p.county_fips}" is not a Florida county`);
+      return;
+    }
+    if (p.county_fips !== null && COVERED_FIPS.has(p.county_fips)) {
+      errors.push(`lead ${n + 1}: county_fips "${p.county_fips}" is a covered county; covered counties are never leads`);
       return;
     }
     payloads.push(p);

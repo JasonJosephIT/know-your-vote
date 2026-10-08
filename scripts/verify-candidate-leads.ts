@@ -8,6 +8,7 @@
 import { FL_COUNTIES, countyFipsFor, countyName } from "../src/lib/fl-counties.ts";
 import {
   COVERED_FIPS,
+  MAX_BATCH,
   buildLeads,
   classifyMention,
   RUNNING_MATE_PATTERN,
@@ -268,6 +269,28 @@ const emojiStory = new Map<number, StoryRef>([[1, { ...story(1), title: "x".repe
 const emojiTitle = buildLeads([m({ name: "Emo Ji", stories: [1] })], emojiStory, [], new Set()).leads[0]?.stories[0].title ?? "";
 check("a cut never leaves a lone surrogate", emojiTitle.length <= 240 && !/[\uD800-\uDBFF]$/.test(emojiTitle), JSON.stringify(emojiTitle.slice(-3)));
 
+/* A lead keeps at most 20 stories (the payload schema's limit), by first
+   mention and by merge alike. */
+const manyStories = new Map<number, StoryRef>(Array.from({ length: 25 }, (_, k) => [k + 1, story(k + 1)] as const));
+const capped = buildLeads(
+  [m({ name: "Many Stories", stories: Array.from({ length: 21 }, (_, k) => k + 1) })],
+  manyStories, [], new Set());
+check("one mention citing 21 distinct stories keeps exactly 20",
+  capped.leads.length === 1 && capped.leads[0].stories.length === 20,
+  String(capped.leads[0]?.stories.length));
+check("the 20 kept are the first 20 cited",
+  capped.leads[0]?.stories[0].url === story(1).url && capped.leads[0]?.stories[19].url === story(20).url);
+const mergedCap = buildLeads(
+  [
+    m({ name: "Many Stories", stories: Array.from({ length: 18 }, (_, k) => k + 1) }),
+    m({ name: "Many Stories", stories: [17, 19, 20, 21, 22, 23] }),
+  ],
+  manyStories, [], new Set());
+check("merged mentions stop at 20 stories and never repeat one",
+  mergedCap.leads.length === 1 && mergedCap.leads[0].stories.length === 20
+    && new Set(mergedCap.leads[0].stories.map((s) => s.url)).size === 20,
+  String(mergedCap.leads[0]?.stories.length));
+
 const again = buildLeads(mentions, stories, roster, new Set(["bryan avila|running_mate|statewide"]));
 check("a key already queued or decided is skipped as already_queued",
   !again.leads.some((l) => l.kind === "running_mate") && again.dropped.some((d) => d.reason === "already_queued"));
@@ -283,6 +306,10 @@ check("a valid batch plans one pending candidate_lead row per lead",
   q.ok && q.rows.length === 2 && q.rows.every((r) => r.kind === "candidate_lead" && r.source === "agent:R5" && r.status === "pending"),
   JSON.stringify(q));
 
+function otherCountyLead() {
+  return verified.find((l) => l.kind === "other_county")!;
+}
+
 const tampered = planQueue([{ ...verified[0], dedupe_key: "someone else|other_county|12099" }], new Set());
 check("a dedupe_key that does not match the lead is refused", !tampered.ok);
 
@@ -297,10 +324,40 @@ const dupInBatch = planQueue([verified[0], verified[0]], new Set());
 check("the same lead twice in one batch is queued once",
   dupInBatch.ok && dupInBatch.rows.length === 1 && dupInBatch.skipped.length === 1);
 
+/* Covered counties are never leads, whatever the dedupe_key says. */
+const covered = planQueue(
+  [{ ...otherCountyLead(), county_fips: "12086", dedupe_key: leadDedupeKey("Elizabeth Holmes", "other_county", "12086") }],
+  new Set());
+check("a lead in a covered county is refused",
+  !covered.ok && covered.errors.some((e) => e === 'lead 1: county_fips "12086" is a covered county; covered counties are never leads'),
+  JSON.stringify(covered));
+const coveredSecond = planQueue(
+  [verified[0], { ...otherCountyLead(), county_fips: "12095", dedupe_key: leadDedupeKey("Elizabeth Holmes", "other_county", "12095") }],
+  new Set());
+check("a covered-county lead refuses the whole batch and is numbered",
+  !coveredSecond.ok && coveredSecond.errors.length === 1 && coveredSecond.errors[0].startsWith("lead 2: county_fips"),
+  JSON.stringify(coveredSecond));
+
+/* A batch is at most 50 leads. */
+const lead = (n: number) => {
+  const name = `Cap Lead ${n}`;
+  return { ...otherCountyLead(), name, dedupe_key: leadDedupeKey(name, "other_county", "12099") };
+};
+check("the batch cap is 50", MAX_BATCH === 50, String(MAX_BATCH));
+const fifty = planQueue(Array.from({ length: 50 }, (_, n) => lead(n)), new Set());
+check("a batch of exactly 50 distinct leads is accepted", fifty.ok && fifty.rows.length === 50, JSON.stringify(!fifty.ok && fifty.errors));
+const fiftyOne = planQueue(Array.from({ length: 51 }, (_, n) => lead(n)), new Set());
+check("a batch of 51 leads is refused as over the cap",
+  !fiftyOne.ok && fiftyOne.errors.length === 1 && fiftyOne.errors[0] === "batch of 51 leads is over the 50-lead cap",
+  JSON.stringify(fiftyOne));
+const fiftyOneRepeats = planQueue(Array.from({ length: 51 }, () => lead(0)), new Set());
+check("51 copies of one lead are still over the cap",
+  !fiftyOneRepeats.ok && fiftyOneRepeats.errors[0] === "batch of 51 leads is over the 50-lead cap");
+
 check("a batch that is not an array is refused", !planQueue({ leads: verified }, new Set()).ok);
 
 /* The schema takes any 12xxx code; the plan also requires a real Florida county. */
-const otherCounty = verified.find((l) => l.kind === "other_county")!;
+const otherCounty = otherCountyLead();
 const notACounty = planQueue(
   [{ ...otherCounty, county_fips: "12002", dedupe_key: leadDedupeKey(otherCounty.name, "other_county", "12002") }],
   new Set());
