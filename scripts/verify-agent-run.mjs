@@ -98,6 +98,7 @@ check("the literal defaults are the agent worktree, the runs folder and the arm6
 const COMMAND = /^\s*sh \/Users\/jsloth\/Projects\/kyv-agent-worktree\/scripts\/agent-run\.sh (\S+) (\S+)(.*)$/;
 const PROMPTS = {
   "agents/r5-candidate-leads.prompt.md": "R5",
+  "agents/r4-ops-digest.prompt.md": "R4",
   "agents/rw-watchdog.prompt.md": "watch",
 };
 for (const [file, agent] of Object.entries(PROMPTS)) {
@@ -124,20 +125,36 @@ for (const [file, agent] of Object.entries(PROMPTS)) {
     !/kyv-agent-runs\/<|date \+%F|cd \/Users|LogiPluginService/.test(text));
 }
 
-/* R5's exit-code list says what the wrapper's own messages say. */
-{
-  const r5 = readFileSync(path.join(ROOT, "agents/r5-candidate-leads.prompt.md"), "utf8").replace(/\s+/g, " ");
-  const exitLine = (n) => r5.match(new RegExp(`- ${n}: (.*?)(?= - \\d: | BUDGET:)`))?.[1] ?? "";
+/* R5's and R4's exit-code lists say what the wrapper's own messages say. */
+const exitLineOf = (file) => {
+  const text = existsSync(path.join(ROOT, file)) ? readFileSync(path.join(ROOT, file), "utf8").replace(/\s+/g, " ") : "";
+  return (n) => text.match(new RegExp(`- ${n}: (.*?)(?= - \\d: | BUDGET:)`))?.[1] ?? "";
+};
+for (const [file, agent] of [["agents/r5-candidate-leads.prompt.md", "R5"], ["agents/r4-ops-digest.prompt.md", "R4"]]) {
+  const exitLine = exitLineOf(file);
   for (const n of [3, 4]) {
-    check(`R5's prompt says exit ${n} means finish with --status failed, as the wrapper prints`,
+    check(`${agent}'s prompt says exit ${n} means finish with --status failed, as the wrapper prints`,
       exitLine(n).includes("finish with --status failed"), exitLine(n));
   }
+  check(`${agent}'s prompt says exit 6 also covers a previous run past its budget that has not finished`,
+    exitLine(6).includes("has not called finish"), exitLine(6));
+}
+{
+  const r5 = readFileSync(path.join(ROOT, "agents/r5-candidate-leads.prompt.md"), "utf8").replace(/\s+/g, " ");
+  const exitLine = exitLineOf("agents/r5-candidate-leads.prompt.md");
   check("R5's prompt names the queue-dry retry and the failed start beside exit 1's fail closed",
     exitLine(1).includes("queue-dry") && exitLine(1).includes("start"), exitLine(1));
   check("R5's prompt keeps 5 minutes back for queue-dry and queue while verifying",
     r5.includes("5 min or less left") && r5.includes('"time budget reached"'));
-  check("R5's prompt says exit 6 also covers a previous run past its budget that has not finished",
-    exitLine(6).includes("has not called finish"), exitLine(6));
+}
+{
+  const r4 = existsSync(path.join(ROOT, "agents/r4-ops-digest.prompt.md"))
+    ? readFileSync(path.join(ROOT, "agents/r4-ops-digest.prompt.md"), "utf8").replace(/\s+/g, " ")
+    : "";
+  check("R4's prompt says a lint finding is exit 0, read from lint.txt's exit line", r4.includes('"exit: 0"') && r4.includes("a finding, not a failure"));
+  check("R4's prompt asks list_task_runs for the five tasks the digest reads",
+    ["cap-r2-contact-refresher", "cap-r3-election-news", "cap-r4-ops-digest", "cap-r5-candidate-leads", "cap-rw-watchdog"].every((t) => r4.includes(t)));
+  check("R4's prompt never uses execute_sql or the web", !/WebFetch\(|WebSearch\(/.test(r4) && r4.includes("never use execute_sql"));
 }
 
 /* ---- a temporary worktree and runs folder ------------------------------ */
