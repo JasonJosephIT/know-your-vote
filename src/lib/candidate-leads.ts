@@ -39,7 +39,7 @@ const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "obj
     buildLeads coerce it (a string "false" is truthy). A name and an office must
     say something: the console card shows both, and the payload schema requires
     both. */
-export function mentionProblem(raw: unknown[]): string | null {
+export function mentionProblem(raw: readonly unknown[]): string | null {
   const text = ["name", "office", "jurisdiction", "county", "evidence"] as const;
   for (const [i, m] of raw.entries()) {
     if (!isRecord(m)) return `mention ${i} is not an object`;

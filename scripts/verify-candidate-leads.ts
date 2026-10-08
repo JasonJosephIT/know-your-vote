@@ -181,7 +181,7 @@ for (const [label, list, want] of [
   ["stories that are not integers", [m({ stories: [1, "2" as unknown as number] })], "mention 0: stories must be an array of integers"],
   ["florida_2026 as a string", [m({ florida_2026: "false" as unknown as boolean })], "mention 0: florida_2026 must be true or false (a boolean)"],
 ] as const) {
-  const got = mentionProblem(list as unknown[]);
+  const got = mentionProblem(list);
   check(`${label} is refused, naming the index and field`, got === want, String(got));
 }
 
