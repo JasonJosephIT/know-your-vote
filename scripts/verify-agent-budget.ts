@@ -179,6 +179,31 @@ check("the summary is capped", cronRunRow({ ...base, sweepLine: "x".repeat(5000)
     src.indexOf("const startedAt = new Date();") > 0 && src.indexOf("const startedAt = new Date();") < unauthorized);
 }
 
+/* ---- the console lists every agent that records a run (spec §3.10, PR A) */
+
+{
+  const read = (f: string) => readFileSync(resolve(import.meta.dirname, "..", f), "utf8");
+  const monitor = read("src/lib/admin/monitor.ts");
+  const listed = [...(monitor.match(/export const AGENTS: readonly AgentName\[\] = \[([\s\S]*?)\];/)?.[1].matchAll(/"([^"]+)"/g) ?? [])].map((m) => m[1]);
+  check("monitor.ts AGENTS lists R1 (the cron), every routine agent and the dispatcher",
+    ["R1", ...ROUTINE_AGENTS, "dispatcher"].every((a) => listed.includes(a)), listed.join(","));
+  check("the runs route's agent filter takes R5",
+    read("src/app/api/admin/agents/runs/route.ts").includes('agent: z.enum(["R1", "R2", "R3", "R4", "R5", "dispatcher"]).optional(),'));
+  const consoleSrc = read("src/components/admin/AgentsConsole.tsx");
+  for (const [id, role] of [
+    ["R1", "News sweep (cron)"],
+    ["R2", "Logistics checks"],
+    ["R3", "Election notices"],
+    ["R4", "Ops digest"],
+    ["R5", "Candidate leads"],
+  ]) {
+    check(`the console labels ${id} "${role}"`, consoleSrc.includes(`{ id: "${id}", role: "${role}", requestable: `));
+  }
+  check("R5 gets no Run-now card: the run-request queue admits R1 to R4 only",
+    consoleSrc.includes('{ id: "R5", role: "Candidate leads", requestable: false }') &&
+      consoleSrc.includes("AGENTS.filter((agent) => agent.requestable).map((agent) => ("));
+}
+
 if (failures > 0) {
   console.error(`\nverify-agent-budget: ${failures} failure(s)`);
   process.exit(1);

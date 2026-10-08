@@ -40,11 +40,18 @@ export type AgentRun = {
   runRequestId: string | null;
 };
 
+/* The scheduled agents, named as the 2026-10-08 retrofit names them
+   (docs/superpowers/specs/2026-10-08-agent-retrofit-design.md §3.10). R1 is
+   the news-sweep cron now. Only `requestable` agents get a Run-now card: the
+   run-request queue (agent_run_request's CHECK and the run-requests route)
+   admits R1-R4, and the dispatcher is out of that spec's scope (§7), so R5
+   appears in the run filter and has no card. */
 const AGENTS = [
-  { id: "R1", role: "Fact-check" },
-  { id: "R2", role: "Candidate contact & gated fields" },
-  { id: "R3", role: "Key dates" },
-  { id: "R4", role: "Ops digest" },
+  { id: "R1", role: "News sweep (cron)", requestable: true },
+  { id: "R2", role: "Logistics checks", requestable: true },
+  { id: "R3", role: "Election notices", requestable: true },
+  { id: "R4", role: "Ops digest", requestable: true },
+  { id: "R5", role: "Candidate leads", requestable: false },
 ] as const;
 
 type AgentId = (typeof AGENTS)[number]["id"];
@@ -143,7 +150,7 @@ export function AgentsConsole({
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {AGENTS.map((agent) => (
+        {AGENTS.filter((agent) => agent.requestable).map((agent) => (
           <TriggerCard
             key={agent.id}
             agent={agent}
