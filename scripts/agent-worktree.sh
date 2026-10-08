@@ -16,6 +16,7 @@ NODE_DIR="/Users/jsloth/Library/Application Support/Logi/LogiPluginService/Plugi
 WT="${KYV_AGENT_WORKTREE:-/Users/jsloth/Projects/kyv-agent-worktree}"
 HERE=$(cd "$(dirname "$0")" && pwd)
 MAIN=$(git -C "$HERE" worktree list --porcelain | sed -n '1s/^worktree //p')
+[ -n "$MAIN" ] || { echo "agent-worktree: could not find the main checkout" >&2; exit 1; }
 
 [ -x "$NODE_DIR/node" ] || { echo "agent-worktree: arm64 node missing at $NODE_DIR" >&2; exit 1; }
 [ "$("$NODE_DIR/node" -p process.arch)" = "arm64" ] || { echo "agent-worktree: $NODE_DIR/node is not arm64" >&2; exit 1; }
@@ -27,9 +28,16 @@ NPM_CLI="$NODE_DIR/../lib/node_modules/npm/bin/npm-cli.js"
 
 git -C "$MAIN" fetch --quiet origin main
 if [ -e "$WT/.git" ]; then
-  # Refuses (and stops this script) if someone left changes in the worktree.
+  # checkout --detach carries local edits across, so refuse them explicitly
+  # (the .env.local symlink is gitignored and does not count).
+  if [ -n "$(git -C "$WT" status --porcelain)" ]; then
+    echo "agent-worktree: $WT has local changes; refusing to run agents on edited code" >&2
+    exit 1
+  fi
   git -C "$WT" checkout --quiet --detach origin/main
 else
+  # Drop registrations whose directory was deleted, or add would refuse.
+  git -C "$MAIN" worktree prune
   git -C "$MAIN" worktree add --quiet --detach "$WT" origin/main
 fi
 
