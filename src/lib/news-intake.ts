@@ -224,7 +224,11 @@ function inFilterChars(url: string): number {
 
 /** Split URLs into the chunks the dedupe reads send: at most `max` URLs and
     `maxChars` encoded characters each, order kept. A URL too long for any
-    chunk still gets one of its own; it is never dropped. Pure. */
+    chunk still gets one of its own; it is never dropped. If that one URL is
+    still longer than the gateway allows (a 414), its read fails and
+    readHandled throws, naming the URL: the cron answers 502 and queues
+    nothing until the story leaves the window. That fails closed, and
+    normalizeUrl strips only tracking parameters, so it is unlikely. Pure. */
 export function chunkUrls(
   urls: readonly string[],
   { max = DEDUPE_CHUNK, maxChars = DEDUPE_CHUNK_CHARS }: { max?: number; maxChars?: number } = {}
@@ -269,9 +273,12 @@ export async function readHandled(
   const keys = new Set<string>();
   const seenUrls = new Set<string>();
   for (const chunk of chunkUrls([...new Set(urls)])) {
+    /* Named in a read error, so a request the gateway refused is quick to find. */
+    const longest = chunk.reduce((a, b) => (b.length > a.length ? b : a));
+    const where = `${chunk.length} URL${chunk.length === 1 ? "" : "s"}, longest ${longest.length} chars: ${longest}`;
     const published = await db.from("news_item").select("url, candidate_id").in("url", chunk);
     if (published.error) {
-      throw new Error(`could not read news_item to dedupe: ${published.error.message}`);
+      throw new Error(`could not read news_item to dedupe (${where}): ${published.error.message}`);
     }
     for (const r of (published.data ?? []) as { url: string; candidate_id: string | null }[]) {
       keys.add(dedupeKey(r.url, r.candidate_id));
@@ -283,7 +290,7 @@ export async function readHandled(
       .eq("kind", "manual_news")
       .in("payload->>url", chunk);
     if (queued.error) {
-      throw new Error(`could not read review_item to dedupe: ${queued.error.message}`);
+      throw new Error(`could not read review_item to dedupe (${where}): ${queued.error.message}`);
     }
     for (const r of (queued.data ?? []) as {
       payload: { url?: string; candidate_id?: string | null } | null;

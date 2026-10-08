@@ -557,6 +557,12 @@ function fakeDb(
     check(`a failed ${table} read throws instead of queueing`,
       message.includes(table) && message.includes("simulated outage") && f.inserted.length === 0,
       JSON.stringify({ message, inserted: f.inserted.length }));
+    /* The message names the failing chunk: its size and its longest URL, so
+       a request too long for the gateway (a 414 from one oversized URL in a
+       chunk of its own) is quick to find in the cron's 502. */
+    check(`a failed ${table} read names the chunk's size and longest URL`,
+      message.includes("1 URL") && message.includes(story.url) && message.includes(`${story.url.length} chars`),
+      message);
   }
 }
 
