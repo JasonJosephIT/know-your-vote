@@ -56,6 +56,7 @@ if (args.includes("--probe")) {
 try {
   const result = await runSweep({ days, log: (line) => console.error(line) });
   console.error(result.summary);
+  console.error(result.depthLine);
   console.log(JSON.stringify(result.articles, null, 2));
 } catch (err) {
   console.error((err as Error).message + "\nFill those in (see the header of src/lib/news-sources.ts) — run --probe to find the feeds.");
