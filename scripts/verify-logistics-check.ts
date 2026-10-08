@@ -8,6 +8,7 @@
 
    Run: node scripts/verify-logistics-check.ts */
 
+import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -465,6 +466,27 @@ check("a differing running mate is a report line, never a diff",
   mates.diffs.length === 0 && mates.report.some((l) => l.includes("Byron Donalds") && l.includes("Jay Collins")), mates.report.join(" | "));
 const matesSame = ok(base({ runningMates: { column: true, stored: { "FL-DOE-89042": "Bryan Avila" }, pages: { "FL-DOE-89042": "Bryan Avila" } } }));
 check("a matching running mate adds no line", !matesSame.report.some((l) => l.startsWith("running mate")));
+/* ---- the CLI refuses before any database read ------------------------------ */
+
+const NODE = process.execPath;
+const cli = (argv: string[], stdin = "") =>
+  spawnSync(NODE, ["--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", path.join(ROOT, "scripts", "logistics-check.ts"), ...argv], {
+    input: stdin,
+    encoding: "utf8",
+    env: { PATH: process.env.PATH ?? "/usr/bin:/bin", NEXT_PUBLIC_SUPABASE_URL: "", SUPABASE_SERVICE_ROLE_KEY: "" },
+    timeout: 60_000,
+  });
+const usage = cli(["bogus"]);
+check("an unknown command exits 1 with the usage", usage.status === 1 && usage.stderr.includes("usage:"), usage.stderr);
+const typo = cli(["queue", "--dryrun"], JSON.stringify(observeAll()));
+check("a mistyped --dry-run stops before anything else", typo.status === 1 && typo.stderr.includes("unknown argument(s) --dryrun"), typo.stderr);
+const badObs = cli(["check"], JSON.stringify({ dates: [{ ...observeAll().dates[0], official_date: "soon" }], unreadable: [] }));
+check("a bad observations.json is refused before the database is read",
+  badObs.status === 1 && badObs.stderr.includes("run refused, nothing read or written") && !badObs.stderr.includes("SUPABASE"), badObs.stderr);
+const noStdin = cli(["check"]);
+check("check with nothing on stdin is refused", noStdin.status === 1 && noStdin.stderr.includes("nothing on stdin"), noStdin.stderr);
+const noDb = cli(["context"]);
+check("context without database variables stops, naming them", noDb.status === 1 && noDb.stderr.includes("SUPABASE_SERVICE_ROLE_KEY are required"), noDb.stderr);
 if (failures > 0) {
   console.error(`\n${failures} logistics-check check(s) failed`);
   process.exit(1);
