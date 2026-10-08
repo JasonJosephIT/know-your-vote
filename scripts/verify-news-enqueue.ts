@@ -470,6 +470,16 @@ function fakeDb(
     rb.queued === 1 && (queuedFirst.inserted[0]?.payload as { candidate_id?: string })?.candidate_id === ROSTER[1].candidateId,
     JSON.stringify({ queued: rb.queued, skipped: rb.skipped, inserted: queuedFirst.inserted.map((r) => (r.payload as { candidate_id?: string }).candidate_id) }));
 
+  /* A candidate story already published in news_item under that candidate is
+     skipped: the news_item read feeds the (url, candidate) keys, not only the
+     URL set the election check uses. */
+  const solo = article({ title: `${ROSTER[0].legalName} tours the county`, url: "https://www.wlrn.org/tour" });
+  const publishedFor = fakeDb({ profile, news_item: [{ url: solo.url, candidate_id: ROSTER[0].candidateId }] });
+  const rp = await enqueueIntake(publishedFor.db, [solo]);
+  check("a candidate story already published under that candidate is not queued again",
+    rp.queued === 0 && rp.skipped === 1 && publishedFor.inserted.length === 0,
+    JSON.stringify({ queued: rp.queued, skipped: rp.skipped }));
+
   for (const [label, tables] of [
     ["rejected under a candidate", { review_item: [{ kind: "manual_news", status: "rejected", payload: { url: story.url, candidate_id: handledFor } }] }],
     ["published under a candidate", { news_item: [{ url: story.url, candidate_id: handledFor }] }],
