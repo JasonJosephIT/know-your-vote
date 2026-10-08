@@ -421,7 +421,9 @@ export function sweep(input: SweepInput): SweptArticle[] {
 
 /** The sweep's cadence in hours: daily at 11:00 UTC (vercel.json; founder D9,
     recommended and pending confirmation). A feed whose oldest item is younger
-    than this drops stories between two runs, whatever the window says. */
+    than this drops stories between two runs, whatever the window says. It is
+    the LONGEST gap between two runs, and verify-news-sweep checks it against
+    vercel.json: D9's TO FLIP back to Mondays and Thursdays makes it 96. */
 export const CADENCE_HOURS = 24;
 
 /** How far back one fetched RSS/Atom feed reached at sweep time. */
@@ -471,11 +473,14 @@ export function shallowFeeds(
 }
 
 /** The one log line a run prints:
-      news-sweep depth: <n> feeds; shallow (<24h): <domain> <hours>h, …
-    "none" when no feed is shallow; an empty feed reads "<domain> 0h (0 items)". */
+      news-sweep depth: <n> feeds, <k> failed; shallow (<24h): <domain> <hours>h, …
+    "none" when no feed is shallow; an empty feed reads "<domain> 0h (0 items)".
+    `failed` counts the RSS feeds whose fetch failed: they have no depth row,
+    and the line is the run's lasting record (the response's fetchFailures is
+    not kept), so a feed that failed today must not read as one not listed. */
 export function depthLine(
   depth: readonly FeedDepth[],
-  cadenceHours: number = CADENCE_HOURS,
+  { cadenceHours = CADENCE_HOURS, failed = 0 }: { cadenceHours?: number; failed?: number } = {},
 ): string {
   const shallow = shallowFeeds(depth, cadenceHours);
   const list =
@@ -484,5 +489,5 @@ export function depthLine(
       : shallow
           .map((d) => (d.items === 0 ? `${d.domain} 0h (0 items)` : `${d.domain} ${d.hours}h`))
           .join(", ");
-  return `news-sweep depth: ${depth.length} feeds; shallow (<${cadenceHours}h): ${list}`;
+  return `news-sweep depth: ${depth.length} feeds, ${failed} failed; shallow (<${cadenceHours}h): ${list}`;
 }

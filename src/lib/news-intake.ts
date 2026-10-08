@@ -89,7 +89,8 @@ export interface SweepResult {
   depth: FeedDepth[];
   /** The rows of `depth` younger than CADENCE_HOURS, shallowest first. */
   shallowFeeds: FeedDepth[];
-  /** `news-sweep depth: <n> feeds; shallow (<24h): …`, for the logs. */
+  /** `news-sweep depth: <n> feeds, <k> failed; shallow (<24h): …`, for the
+      logs; `<k>` is the RSS feeds whose fetch failed (no depth row). */
   depthLine: string;
 }
 
@@ -156,7 +157,7 @@ export async function runSweep({
     summary,
     depth,
     shallowFeeds: shallowFeeds(depth),
-    depthLine: depthLine(depth),
+    depthLine: depthLine(depth, { failed: feedOutlets - feedsOk }),
   };
 }
 

@@ -687,7 +687,32 @@ check(
 const at = (hoursAgo: number) => new Date(NOW.getTime() - hoursAgo * 3_600_000).toUTCString();
 const entry = (published: string) => ({ published });
 
-check("CADENCE_HOURS is daily", CADENCE_HOURS === 24, String(CADENCE_HOURS));
+/* CADENCE_HOURS must be the longest gap between two runs of the news-sweep
+   cron in vercel.json: daily is 24, the old Mondays and Thursdays (D9's TO
+   FLIP) is 96, the Thursday-to-Monday gap. A flip of the schedule that forgets
+   CADENCE_HOURS would call a feed deep that loses stories between runs, so it
+   fails here. Reads "M H * * <days>" with <days> "*" or a comma list of 0-6. */
+function longestGapHours(schedule: string): number | null {
+  const parts = schedule.trim().split(/\s+/);
+  if (parts.length !== 5 || !/^\d+$/.test(parts[0]) || !/^\d+$/.test(parts[1]) || parts[2] !== "*" || parts[3] !== "*") return null;
+  if (parts[4] === "*") return 24;
+  if (!/^[0-6](,[0-6])*$/.test(parts[4])) return null;
+  const days = [...new Set(parts[4].split(",").map(Number))].sort((a, b) => a - b);
+  const gaps = days.map((d, i) => (i + 1 < days.length ? days[i + 1] - d : 7 - d + days[0]));
+  return Math.max(...gaps) * 24;
+}
+check("the gap reader: daily is 24h, Mondays and Thursdays is 96h, anything else is unread",
+  longestGapHours("0 11 * * *") === 24 && longestGapHours("0 11 * * 1,4") === 96 &&
+    longestGapHours("0 11 * * 3") === 168 && longestGapHours("*/5 * * * *") === null,
+  [longestGapHours("0 11 * * *"), longestGapHours("0 11 * * 1,4"), longestGapHours("0 11 * * 3"), longestGapHours("*/5 * * * *")].join(","));
+{
+  const vercel = JSON.parse(readFileSync(resolve(import.meta.dirname, "..", "vercel.json"), "utf8"));
+  const schedule: string | undefined = (vercel.crons ?? []).find((c: { path: string }) => c.path === "/api/cron/news-sweep")?.schedule;
+  const gap = schedule === undefined ? null : longestGapHours(schedule);
+  check("CADENCE_HOURS is the longest gap between news-sweep runs in vercel.json (set it with the schedule)",
+    gap !== null && CADENCE_HOURS === gap,
+    `schedule ${JSON.stringify(schedule)} -> ${gap === null ? "unread: set CADENCE_HOURS by hand and teach longestGapHours" : `${gap}h`}; CADENCE_HOURS ${CADENCE_HOURS}`);
+}
 
 const deep = feedDepthHours([entry(at(2)), entry(at(70.25)), entry(at(5))], NOW);
 check("depth counts dated items and ages the oldest",
@@ -727,55 +752,67 @@ const depthRows = [
   { domain: "wlrn.org", items: 40, hours: 200 },
   { domain: "empty.example", items: 0, hours: 0 },
 ];
-const shallow = shallowFeeds(depthRows);
+const shallow = shallowFeeds(depthRows, 24);
 check("shallowFeeds: younger than 24h, shallowest first; exactly 24h and deeper are not shallow",
   shallow.map((d) => d.domain).join(",") === "empty.example,wusf.org,a-edge.example",
   shallow.map((d) => `${d.domain}:${d.hours}`).join(","));
 check("shallowFeeds takes another cadence",
   shallowFeeds(depthRows, 100).map((d) => d.domain).join(",") === "empty.example,wusf.org,a-edge.example,b-edge.example");
 
-check("depthLine names the count and each shallow feed with its hours",
-  depthLine(depthRows) === "news-sweep depth: 5 feeds; shallow (<24h): empty.example 0h (0 items), wusf.org 16.8h, a-edge.example 23.9h",
+check("depthLine names the count, the failed fetches and each shallow feed with its hours",
+  depthLine(depthRows, { cadenceHours: 24, failed: 2 }) === "news-sweep depth: 5 feeds, 2 failed; shallow (<24h): empty.example 0h (0 items), wusf.org 16.8h, a-edge.example 23.9h",
+  depthLine(depthRows, { cadenceHours: 24, failed: 2 }));
+check("depthLine says none when no feed is shallow, and 0 failed by default",
+  depthLine([{ domain: "wlrn.org", items: 40, hours: 200 }], { cadenceHours: 24 }) === "news-sweep depth: 1 feeds, 0 failed; shallow (<24h): none",
+  depthLine([{ domain: "wlrn.org", items: 40, hours: 200 }], { cadenceHours: 24 }));
+check("shallowFeeds and depthLine default to CADENCE_HOURS",
+  JSON.stringify(shallowFeeds(depthRows)) === JSON.stringify(shallowFeeds(depthRows, CADENCE_HOURS)) &&
+    depthLine(depthRows) === depthLine(depthRows, { cadenceHours: CADENCE_HOURS }) &&
+    depthLine(depthRows).includes(`shallow (<${CADENCE_HOURS}h)`),
   depthLine(depthRows));
-check("depthLine says none when no feed is shallow",
-  depthLine([{ domain: "wlrn.org", items: 40, hours: 200 }]) === "news-sweep depth: 1 feeds; shallow (<24h): none",
-  depthLine([{ domain: "wlrn.org", items: 40, hours: 200 }]));
 
 /* ---- runSweep carries the depth (news-source-integrity §3.5) ------------
    runSweep fetches, so the network is stubbed: every usable feed URL gets a
-   fixture, nothing leaves the machine, and the real loop runs. One feed is
-   shallow, one is empty, one fails, the rest are three days deep. */
+   fixture, every other URL (a sitemap day) an empty news sitemap, nothing
+   leaves the machine, and the real loop runs. One feed is shallow, one is
+   empty, one fails, the rest are deeper than any cadence. The window is one
+   day: depth does not depend on it, and the real loop pauses 1 s per sitemap
+   day, so a usable sitemap outlet (both Sentinels once D3/D4 flip) costs 2 s
+   here, not 15. */
 {
   const sweepNow = new Date("2026-10-08T11:00:00Z");
   const ago = (h: number) => new Date(sweepNow.getTime() - h * 3_600_000).toUTCString();
   const dated = (title: string, link: string, hoursAgo: number) =>
     `<item><title>${title}</title><link>${link}</link><description>A dek.</description><pubDate>${ago(hoursAgo)}</pubDate></item>`;
   const rssFeeds = usableOutlets().filter((o) => o.feed !== null);
+  const sitemapOutlets = usableOutlets().filter((o) => o.feed === null && o.sitemap !== undefined);
+  const feedUrls = new Set(rssFeeds.map((o) => o.feed));
+  const emptySitemap =
+    `<?xml version="1.0" encoding="utf-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"></urlset>`;
   check("at least three usable RSS feeds to stub", rssFeeds.length >= 3, String(rssFeeds.length));
-  /* The stub serves RSS only. A usable sitemap outlet would make the real
-     loop sleep 1 s for each of the window's 15 days and parse RSS as a
-     sitemap, so say so here instead of running slow and wrong. */
-  check("every usable outlet is RSS (stub sitemap days before adding a sitemap outlet to this test)",
-    rssFeeds.length === usableOutlets().length,
-    usableOutlets().filter((o) => o.feed === null).map((o) => o.domain).join(","));
-  if (rssFeeds.length === usableOutlets().length) {
+  if (rssFeeds.length >= 3) {
     const [shallowOne, emptyOne, failingOne] = rssFeeds;
     const realFetch = globalThis.fetch;
     globalThis.fetch = (async (input: string | URL | Request) => {
       const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
       const host = `https://www.${shallowOne.domain.split("/")[0]}`;
+      if (!feedUrls.has(url)) return new Response(emptySitemap, { status: 200 });
       if (url === failingOne.feed) return new Response("gone", { status: 404 });
       if (url === emptyOne.feed) return new Response(rss(""), { status: 200 });
       if (url === shallowOne.feed) {
         return new Response(rss(dated("New", `${host}/a`, 2) + dated("Older", `${host}/b`, 10.5)), { status: 200 });
       }
-      return new Response(rss(dated("Deep", "https://elsewhere.example/x", 72)), { status: 200 });
+      return new Response(rss(dated("Deep", "https://elsewhere.example/x", 200)), { status: 200 });
     }) as typeof fetch;
     try {
-      const result = await runSweep({ days: 14, now: sweepNow });
+      const result = await runSweep({ days: 1, now: sweepNow });
       check("runSweep measures every fetched RSS feed, and only those",
         result.depth.length === rssFeeds.length - 1 && !result.depth.some((d) => d.domain === failingOne.domain),
         `${result.depth.length} rows for ${rssFeeds.length} feeds`);
+      check("runSweep fetches each usable sitemap outlet's days and gives it no depth row",
+        result.sitemapDays === sitemapOutlets.length * 2 && result.sitemapDaysOk === result.sitemapDays &&
+          !result.depth.some((d) => sitemapOutlets.some((o) => o.domain === d.domain)),
+        `${result.sitemapDaysOk}/${result.sitemapDays} days for ${sitemapOutlets.length} sitemap outlets`);
       check("runSweep's depth row is feedDepthHours of that feed",
         JSON.stringify(result.depth.find((d) => d.domain === shallowOne.domain)) ===
           JSON.stringify({ domain: shallowOne.domain, items: 2, hours: 10.5 }),
@@ -783,9 +820,9 @@ check("depthLine says none when no feed is shallow",
       check("runSweep's shallowFeeds are the empty and the shallow feed, shallowest first",
         result.shallowFeeds.map((d) => d.domain).join(",") === `${emptyOne.domain},${shallowOne.domain}`,
         JSON.stringify(result.shallowFeeds));
-      check("runSweep's depthLine is depthLine(depth)",
-        result.depthLine === depthLine(result.depth) &&
-          result.depthLine.startsWith(`news-sweep depth: ${rssFeeds.length - 1} feeds; shallow (<24h): ${emptyOne.domain} 0h (0 items), ${shallowOne.domain} 10.5h`),
+      check("runSweep's depthLine is depthLine(depth) with the failed feed counted",
+        result.depthLine === depthLine(result.depth, { failed: 1 }) &&
+          result.depthLine.startsWith(`news-sweep depth: ${rssFeeds.length - 1} feeds, 1 failed; shallow (<${CADENCE_HOURS}h): ${emptyOne.domain} 0h (0 items), ${shallowOne.domain} 10.5h`),
         result.depthLine);
     } finally {
       globalThis.fetch = realFetch;

@@ -376,7 +376,10 @@ check("isElectionRelated reads the summary too",
 
 /* The daily cron (news-source-integrity §3.5, D9: recommended, pending the
    founder; it was Mondays and Thursdays from 2026-10-06). TO FLIP: restore
-   "0 11 * * 1,4" in vercel.json and here. */
+   "0 11 * * 1,4" in vercel.json and here, and set CADENCE_HOURS to 96 in
+   src/lib/news-sweep.ts (the Thursday-to-Monday gap), or the depth line keeps
+   calling a feed deep that loses stories between runs. verify-news-sweep
+   fails until the two agree. */
 {
   const vercel = JSON.parse(readFileSync(resolve(import.meta.dirname, "..", "vercel.json"), "utf8"));
   const cron = (vercel.crons ?? []).find((c: { path: string }) => c.path === "/api/cron/news-sweep");
