@@ -139,10 +139,17 @@ for (const [url, domain] of [
   ["https://www.flhouse.gov/Sections/Bills/billsdetail.aspx?BillId=1", "flhouse.gov"],
   ["https://www.miamidade.gov/elections/early-voting.asp", "miamidade.gov/elections"],
   ["https://www.votemiamidade.gov/", "votemiamidade.gov"],
+  /* Matches two entries: dos.fl.gov/elections (a subdomain of dos.fl.gov,
+     under /elections) and constitutionalinitiatives.dos.fl.gov. The longest
+     domain wins, so the more specific entry decides. */
+  ["https://constitutionalinitiatives.dos.fl.gov/elections/x", "constitutionalinitiatives.dos.fl.gov"],
 ] as const) {
   check(`${url} resolves to ${domain ?? "no entry"}`, (officialForUrl(url)?.domain ?? null) === domain,
     officialForUrl(url)?.domain);
 }
+check("the longest domain wins whatever the list order",
+  officialForUrl("https://constitutionalinitiatives.dos.fl.gov/elections/x", [...OFFICIAL_SOURCES].reverse())?.domain ===
+    "constitutionalinitiatives.dos.fl.gov");
 
 /* ---- 5. publisher strings match 0014 and 0042 --------------------------- */
 const MIGRATIONS = resolve(import.meta.dirname, "..", "supabase", "migrations");
