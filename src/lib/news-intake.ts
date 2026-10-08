@@ -148,7 +148,7 @@ export interface EnqueueResult {
 }
 
 /** Load the ballot-tier roster: `profile` links a candidate to a race. */
-async function loadRoster(db: SupabaseClient): Promise<RosterCandidate[]> {
+export async function loadRoster(db: SupabaseClient): Promise<RosterCandidate[]> {
   const { data, error } = await db
     .from("profile")
     .select("candidate_id, race_id, candidate!inner(legal_name, ballot_status)");
