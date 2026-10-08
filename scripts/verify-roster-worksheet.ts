@@ -26,6 +26,18 @@ import {
   snippet,
   surname,
 } from "./roster-reads-lib.ts";
+import {
+  applyBlocks,
+  checkWorksheet,
+  fillTimes,
+  generatedBlocks,
+  labelFor,
+  loadRoster,
+  officialHost,
+  ruleOf,
+  timesFromRounds,
+  type RosterRow,
+} from "./roster-worksheet.ts";
 
 let failures = 0;
 function check(name: string, ok: boolean, detail = "") {
@@ -173,6 +185,262 @@ check(
     "Gwen Myers",
     "Mario Diaz-Balart",
   ]).join("|") === "Harry Cohen|Gwen Myers|Mario Diaz-Balart",
+);
+
+/* ---- 2. worksheet rules and the generator, on made-up rows ------------------ */
+
+const fullRoster = loadRoster();
+const raceIds = [...new Set(fullRoster.map((r) => r.race_id))];
+check(
+  "the roster fixture is the 2026-10-08 ballot: 106 candidates, 53 races, 9 without a site",
+  fullRoster.length === 106 && raceIds.length === 53 && fullRoster.filter((r) => !r.has_site).length === 9,
+);
+check("every one of the 53 races has a label (§3.5)", raceIds.every((id) => labelFor(id) !== null));
+check(
+  "labels by race (§3.5), and none for an unknown id",
+  labelFor("FL-20-general") === "Member of the U.S. House now" &&
+    labelFor("FL-SEN-general") === "Member of the U.S. Senate now" &&
+    labelFor("FL-GOV-general") === "Holds this office now" &&
+    labelFor("FL-ORA-CLERK-general") === "Holds this office now" &&
+    labelFor("FL-ORA-MAYOR-general") === "Holds this office now" &&
+    labelFor("FL-DAD-CC5-general") === "Member of the Miami-Dade County Commission now" &&
+    labelFor("FL-BRO-SBAL8-general") === "Member of the Broward County School Board now" &&
+    labelFor("FL-ORA-SBCHAIR-general") === "Member of the Orange County School Board now" &&
+    labelFor("FL-XYZ-general") === null,
+);
+check(
+  "official hosts: the body's own site and house.gov count; Ballotpedia, the FEC and http do not",
+  officialHost("https://clerk.house.gov/xml/lists/MemberData.xml") &&
+    officialHost("https://soto.house.gov/") &&
+    officialHost("https://www.ocps.net/school-board") &&
+    !officialHost("https://ballotpedia.org/Florida") &&
+    !officialHost("https://api.open.fec.gov/v1/candidates/") &&
+    !officialHost("http://www.ocps.net/school-board"),
+);
+
+const MINI: RosterRow[] = [
+  { candidate_id: "FL-DOE-1", legal_name: "Ann Member", race_id: "FL-20-general", level: "federal", race_status: "published", has_site: true },
+  { candidate_id: "FL-DOE-2", legal_name: "Bo O'Neal", race_id: "FL-20-general", level: "federal", race_status: "published", has_site: true },
+  { candidate_id: "FL-DOE-3", legal_name: "Cy Governor", race_id: "FL-GOV-general", level: "state", race_status: "published", has_site: false },
+  { candidate_id: "FL-VF-ORA-4", legal_name: "Di Board", race_id: "FL-ORA-SBCHAIR-general", level: "county", race_status: "listed", has_site: false },
+  { candidate_id: "FL-VF-HIL-5", legal_name: "Ed One", race_id: "FL-HIL-SB6-general", level: "county", race_status: "listed", has_site: true },
+  { candidate_id: "FL-VF-HIL-6", legal_name: "Flo Two", race_id: "FL-HIL-SB6-general", level: "county", race_status: "listed", has_site: true },
+];
+const T1 = "2026-10-09T13:00Z";
+const T2 = "2026-10-09T14:30Z";
+const CLERK = "https://clerk.house.gov/xml/lists/MemberData.xml";
+const HIL = "https://www.hillsboroughschools.org/page/school-board";
+const MINI_MD = `# test worksheet
+
+<!-- table:candidates -->
+| candidate_id | legal_name | race_id | label | incumbent | holds_this_seat | source_url | read_1 | read_2 | second_page | evidence |
+|---|---|---|---|---|---|---|---|---|---|---|
+| FL-DOE-1 | Ann Member | FL-20-general | Member of the U.S. House now | Yes | No | ${CLERK} | ${T1} | ${T2} | https://member.house.gov/ | "FL25 Ann Member" |
+| FL-DOE-2 | Bo O'Neal | FL-20-general | Member of the U.S. House now | No | No | ${CLERK} | ${T1} | ${T2} | — | "FL20 Vacancy due to the resignation" |
+| FL-DOE-3 | Cy Governor | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ | ${T1} | ${T2} | — | "Governor Example Holder" |
+| FL-VF-ORA-4 | Di Board | FL-ORA-SBCHAIR-general | Member of the Orange County School Board now | Yes | No | https://www.ocps.net/school-board | ${T1} | ${T2} | https://www.ocps.net/district-1 | "Di Board District 1" |
+| FL-VF-HIL-5 | Ed One | FL-HIL-SB6-general | Member of the Hillsborough County School Board now | Yes | Yes | ${HIL} | ${T1} | ${T2} | https://www.hillsboroughschools.org/page/district-6 | "Ed One District 6" |
+| FL-VF-HIL-6 | Flo Two | FL-HIL-SB6-general | Member of the Hillsborough County School Board now | Yes | No | ${HIL} | ${T1} | ${T2} | https://www.hillsboroughschools.org/page/district-2 | "Flo Two District 2" |
+
+<!-- table:races -->
+| race_id | incumbent_id | is_open_seat | own_seat_holder_today | note |
+|---|---|---|---|---|
+| FL-20-general | FL-DOE-1 | false | vacant |  |
+| FL-GOV-general | NULL | true | Governor Example Holder |  |
+| FL-ORA-SBCHAIR-general | FL-VF-ORA-4 | false | Chair Example |  |
+| FL-HIL-SB6-general | FL-VF-HIL-5 | false | Ed One | two members run; Ed One holds District 6 |
+
+<!-- table:fec -->
+| candidate_id | race_id | fec_candidate_id | incumbent_challenge | election_districts | read_1 | read_2 |
+|---|---|---|---|---|---|---|
+| FL-DOE-1 | FL-20-general | H0FL00000 | I | 25, 25, 20 | ${T1} | ${T2} |
+| FL-DOE-2 | FL-20-general | no match | — | — | ${T1} | ${T2} |
+
+<!-- table:tickets -->
+| candidate_id | governor | can_detail_url | raw_json | stored | read_1 | read_2 | reread_2026-10-17 | reread_2026-10-26 | reread_2026-11-02 |
+|---|---|---|---|---|---|---|---|---|---|
+| FL-DOE-3 | Cy Governor | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=3 | \`${JSON.stringify(RAW_90630)}\` | Ruben A. Coto | ${T1} | ${T2} | — | — | — |
+
+<!-- table:sites -->
+| candidate_id | race_id | race_status | result | read_1 | read_2 | action | evidence |
+|---|---|---|---|---|---|---|---|
+| FL-DOE-3 | FL-GOV-general | published | none found | ${T1} | ${T2} | none | "domain parked" |
+| FL-VF-ORA-4 | FL-ORA-SBCHAIR-general | listed | https://diboard.example/ | ${T1} | ${T2} | write now | "Di Board for School Board Chair" |
+`;
+
+const miniProblems = checkWorksheet(MINI_MD, MINI);
+check("a complete made-up worksheet passes every rule", miniProblems.length === 0, miniProblems.join("; "));
+
+/** Replace one exact line fragment and expect a problem mentioning `want`. */
+function mutation(name: string, from: string, to: string, want: string) {
+  if (!MINI_MD.includes(from)) {
+    check(`mutation fixture: ${name}`, false, `fragment not found: ${from}`);
+    return;
+  }
+  const problems = checkWorksheet(MINI_MD.replace(from, to), MINI);
+  check(`caught: ${name}`, problems.some((p) => p.includes(want)), problems.join("; ") || "no problem raised");
+}
+mutation("a Yes with no second page", "| https://member.house.gov/ |", "| — |", "a Yes needs a second, different official page");
+mutation(
+  "a source that is not official (Ballotpedia)",
+  `| FL-DOE-2 | Bo O'Neal | FL-20-general | Member of the U.S. House now | No | No | ${CLERK} |`,
+  `| FL-DOE-2 | Bo O'Neal | FL-20-general | Member of the U.S. House now | No | No | https://ballotpedia.org/x |`,
+  "is not an official https page",
+);
+mutation(
+  "two reads less than an hour apart",
+  `| ${CLERK} | ${T1} | ${T2} | https://member.house.gov/ |`,
+  `| ${CLERK} | ${T1} | 2026-10-09T13:30Z | https://member.house.gov/ |`,
+  "at least an hour apart",
+);
+mutation(
+  "evidence longer than 15 words",
+  '"FL25 Ann Member"',
+  '"one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen"',
+  "evidence must be",
+);
+mutation("is_open_seat that disagrees with incumbent_id", "| FL-20-general | FL-DOE-1 | false |", "| FL-20-general | FL-DOE-1 | true |", "is_open_seat must be true exactly");
+mutation(
+  "two members in one race: incumbent_id must be the one holding this seat",
+  "| FL-HIL-SB6-general | FL-VF-HIL-5 | false |",
+  "| FL-HIL-SB6-general | FL-VF-HIL-6 | false |",
+  "incumbent_id must be FL-VF-HIL-5",
+);
+mutation(
+  "holds this seat without being an incumbent",
+  `| Member of the Hillsborough County School Board now | Yes | Yes |`,
+  `| Member of the Hillsborough County School Board now | No | Yes |`,
+  "holds this seat but is not an incumbent",
+);
+mutation(
+  "a site found in a published race is not written now (D11)",
+  "| published | none found | " + T1 + " | " + T2 + " | none |",
+  "| published | https://cygov.example/ | " + T1 + " | " + T2 + " | write now |",
+  "held until after Nov 3",
+);
+mutation(
+  "a site result that is neither a find, 'none found' nor 'withheld'",
+  "| published | none found |",
+  "| published | maybe later |",
+  "result must be 'none found', 'withheld'",
+);
+mutation("a stored running mate that is not D6 of the raw string", "| Ruben A. Coto |", "| Ruben  A. Coto |", "stored must be normalizeDoeText");
+mutation("a missing candidate row", "| FL-VF-HIL-6 | Flo Two |", "| FL-VF-HIL-7 | Flo Two |", "candidates: missing FL-VF-HIL-6");
+mutation("the Governor race is not open (spec §3.4)", "| FL-GOV-general | NULL | true |", "| FL-GOV-general | FL-DOE-3 | false |", "FL-GOV-general");
+{
+  /* The same contradiction with the candidate row agreeing, so only the
+     spec-assertion rule can catch it. */
+  const govRow = `| Holds this office now | No | No | https://www.flgov.com/eog/ | ${T1} | ${T2} | — |`;
+  const md = MINI_MD.replace(
+    govRow,
+    `| Holds this office now | Yes | Yes | https://www.flgov.com/eog/ | ${T1} | ${T2} | https://www.flgov.com/governor/ |`,
+  ).replace("| FL-GOV-general | NULL | true |", "| FL-GOV-general | FL-DOE-3 | false |");
+  const problems = checkWorksheet(md, MINI);
+  check(
+    "caught: reads that contradict the spec's assertions (§3.4) go to the founder",
+    MINI_MD.includes(govRow) && problems.length === 1 && problems[0].includes("the spec's assertion"),
+    problems.join("; "),
+  );
+}
+
+const blocks = generatedBlocks(MINI_MD, MINI, "membership");
+check(
+  "generated candidates: every row, names escaped, the first read's date, fec_id only where matched",
+  blocks.candidates.length === 6 &&
+    blocks.candidates[0] === "    ('FL-DOE-1', 'Ann Member', true, 'https://clerk.house.gov/xml/lists/MemberData.xml', '2026-10-09T00:00:00Z', 'H0FL00000')," &&
+    blocks.candidates[1] === "    ('FL-DOE-2', 'Bo O''Neal', false, 'https://clerk.house.gov/xml/lists/MemberData.xml', '2026-10-09T00:00:00Z', NULL)," &&
+    blocks.candidates[5].endsWith("NULL)"),
+  blocks.candidates.join("\n"),
+);
+check(
+  "generated race overrides: only a race with two or more incumbents, naming the seat holder",
+  blocks.race_overrides.join("\n") === "    ,('FL-HIL-SB6-general', 'FL-VF-HIL-5')",
+  blocks.race_overrides.join("\n"),
+);
+check(
+  "generated tickets and listed-race sites",
+  blocks.tickets.join("\n") ===
+    "    ('FL-DOE-3', 'Cy Governor', 'Ruben A. Coto', 'https://dos.elections.myflorida.com/candidates/canDetail.asp?account=3', '2026-10-09T00:00:00Z')" &&
+    blocks.sites.join("\n") === "    ,('FL-VF-ORA-4', 'Di Board', 'https://diboard.example/', '2026-10-09T00:00:00Z')",
+);
+check(
+  "generated totals: incumbents counted, sited = 97 + listed-race finds, the D1 rule named",
+  blocks.totals.join("\n").includes("D1 rule: membership (Recommended)") &&
+    blocks.totals.includes("  n_incumbents_expected CONSTANT int := 4;") &&
+    blocks.totals.includes("  n_sited_expected      CONSTANT int := 98;"),
+  blocks.totals.join("\n"),
+);
+const seatBlocks = generatedBlocks(MINI_MD, MINI, "seat");
+check(
+  "D1 TO FLIP (--d1 seat): only seat holders are incumbents, so no race needs an override",
+  seatBlocks.candidates.filter((l) => l.includes(", true, ")).length === 1 &&
+    seatBlocks.race_overrides.length === 0 &&
+    seatBlocks.totals.includes("  n_incumbents_expected CONSTANT int := 1;"),
+);
+
+const TEMPLATE = [
+  "x",
+  "    -- BEGIN generated: candidates",
+  "    stale",
+  "    -- END generated: candidates",
+  "    ('__none__', NULL::text)",
+  "    -- BEGIN generated: race_overrides",
+  "    -- END generated: race_overrides",
+  "    -- BEGIN generated: tickets",
+  "    -- END generated: tickets",
+  "    -- BEGIN generated: sites",
+  "    -- END generated: sites",
+  "  -- BEGIN generated: totals",
+  "  -- END generated: totals",
+  "",
+].join("\n");
+const once = applyBlocks(TEMPLATE, blocks);
+check(
+  "applyBlocks replaces each block between its markers and is idempotent",
+  !once.includes("stale") && once.includes("'Bo O''Neal'") && applyBlocks(once, blocks) === once,
+);
+check("ruleOf reads the D1 rule back from the SQL", ruleOf(once) === "membership" && ruleOf(applyBlocks(TEMPLATE, seatBlocks)) === "seat");
+check("applyBlocks refuses SQL without the markers", throws(() => applyBlocks("SELECT 1;", blocks)));
+
+const roundA = {
+  "house-clerk": { key: "house-clerk", url: CLERK, readAt: "2026-10-09T13:00:41.123Z", ok: true },
+  "fec-h-08": { key: "fec-h-08", url: "https://api.open.fec.gov/v1/candidates/?district=08", readAt: "2026-10-09T13:02:05.000Z", ok: true },
+  "fec-s": { key: "fec-s", url: "https://api.open.fec.gov/v1/candidates/?office=S", readAt: "2026-10-09T13:03:00.000Z", ok: true },
+  "atg-home": { key: "atg-home", url: "https://www.myfloridalegal.com/", readAt: "2026-10-09T13:04:00.000Z", ok: false },
+};
+const roundB = {
+  "house-clerk": { key: "house-clerk", url: CLERK, readAt: "2026-10-09T14:31:09.000Z", ok: true },
+  "fec-h-08": { key: "fec-h-08", url: "https://api.open.fec.gov/v1/candidates/?district=08", readAt: "2026-10-09T14:32:00.000Z", ok: true },
+  "fec-s": { key: "fec-s", url: "https://api.open.fec.gov/v1/candidates/?office=S", readAt: "2026-10-09T14:33:00.000Z", ok: true },
+  "atg-home": { key: "atg-home", url: "https://www.myfloridalegal.com/", readAt: "2026-10-09T14:34:00.000Z", ok: true },
+};
+const tm = timesFromRounds(roundA, roundB);
+check(
+  "read times: by URL, FEC keys by race, minutes in UTC, a key missed in either round left out",
+  tm.get(CLERK)?.join(" ") === "2026-10-09T13:00Z 2026-10-09T14:31Z" &&
+    tm.get("fec:FL-8-general")?.join(" ") === "2026-10-09T13:02Z 2026-10-09T14:32Z" &&
+    tm.get("fec:FL-SEN-general")?.join(" ") === "2026-10-09T13:03Z 2026-10-09T14:33Z" &&
+    !tm.has("https://www.myfloridalegal.com/"),
+  JSON.stringify([...tm]),
+);
+const blankTimes = MINI_MD.split(T1).join("").split(T2).join("");
+const filled = fillTimes(
+  blankTimes,
+  new Map<string, readonly [string, string]>([
+    [CLERK, [T1, T2]],
+    ["https://www.flgov.com/eog/", [T1, T2]],
+    ["https://www.ocps.net/school-board", [T1, T2]],
+    [HIL, [T1, T2]],
+    ["https://dos.elections.myflorida.com/candidates/canDetail.asp?account=3", [T1, T2]],
+    ["https://diboard.example/", [T1, T2]],
+    ["fec:FL-20-general", [T1, T2]],
+  ]),
+);
+const afterFill = checkWorksheet(filled, MINI);
+check(
+  "fillTimes fills every row whose page was read in both rounds, and leaves a row with no URL alone",
+  afterFill.length === 1 && afterFill[0].startsWith("sites FL-DOE-3: read_1/read_2"),
+  afterFill.join("; "),
 );
 
 if (failures) {
