@@ -21,6 +21,13 @@
      9. The ballot roster (loadBallotRoster) is the ballot-tier candidates of
         the general election's published and listed races, with their county,
         and its reads only read.
+    10. Scope comes from the publisher (agent-retrofit D2), and the content
+        rules drop an item, with a rule and a reason: the date window, a
+        candidate on the ballot roster, a case for or against an amendment,
+        the neutrality lint (agent-retrofit spec §3.5).
+    11. R3's own four items of 2026-09-09: the Hillsborough and Division
+        pages queue with their scopes; the Miami-Dade County release and the
+        Ballotpedia story refuse their batch as not official.
 
    Pure and offline: an in-memory stand-in for the Supabase client, no
    network. Run: node scripts/verify-election-news.ts */
@@ -29,12 +36,18 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
+  ELECTION_WINDOW_DAYS,
+  FUTURE_DAYS,
   MAX_ELECTION_BATCH,
+  SIDE_TAKING_WORDS,
   batchProblem,
+  contentDrop,
+  electionWindow,
   planElectionQueue,
   QUEUE_READ_CHUNK,
   readQueueContext,
   runElectionQueue,
+  scopeFor,
   type ElectionNewsItem,
   type PageRow,
   type QueueContext,
@@ -191,8 +204,14 @@ for (const [label, raw, want] of [
 }
 check("a well-formed batch has no problem", batchProblem([item(), item({ url: "https://dos.fl.gov/elections/x", scope: { statewide: true } })]) === null,
   String(batchProblem([item()])));
-check("a county scope on a statewide body is accepted (PR B tightens it)",
-  batchProblem([item({ url: "https://dos.fl.gov/elections/x", scope: { county_fips: "12086" } })]) === null);
+{
+  /* D2: scope comes from the publisher, so a statewide body's notice is
+     statewide. News PR A accepted a county here. */
+  const got = batchProblem([item({ url: "https://dos.fl.gov/elections/x", scope: { county_fips: "12086" } })]);
+  check("a county scope on a statewide body's page refuses the batch",
+    got !== null && got.includes('item 0: dos.fl.gov/elections is a statewide body\'s page: its scope is { "statewide": true }, not county 12086'),
+    String(got));
+}
 check("an empty batch has no problem", batchProblem([]) === null);
 check("a full ISO timestamp is a date",
   batchProblem([item({ published_at: "2026-10-05T09:30:00-04:00" })]) === null, String(batchProblem([item({ published_at: "2026-10-05T09:30:00-04:00" })])));
@@ -201,12 +220,14 @@ for (const date of ["2028-02-29", "2026-12-31", "2026-10-05T09:30:00Z", "2026-10
 }
 
 /* ---- 3, 4 and 5. the plan ----------------------------------------------- */
-const EMPTY: QueueContext = { pageRows: new Map(), storedUrls: new Set(), queuedUrls: new Set() };
+/* The clock for the queue tests: the item() fixture is dated 2026-10-05. */
+const NOW = new Date("2026-10-08T12:00:00Z");
+const EMPTY: QueueContext = { pageRows: new Map(), storedUrls: new Set(), queuedUrls: new Set(), roster: ROSTER };
 const ctx = (over: Partial<QueueContext> = {}): QueueContext => ({ ...EMPTY, ...over });
 const pageRow = (url_norm: string, type: string, lean_tag: string, source_id = `src_${type}`): PageRow =>
   ({ source_id, url_norm, type, lean_tag });
-const plan = (items: Record<string, unknown>[], c: QueueContext = EMPTY) => {
-  const p = planElectionQueue(items as unknown as ElectionNewsItem[], c);
+const plan = (items: Record<string, unknown>[], c: QueueContext = EMPTY, now: Date = NOW) => {
+  const p = planElectionQueue(items as unknown as ElectionNewsItem[], c, now);
   if (p.ok) approvable(p.rows, [...c.pageRows.values()]);
   return p;
 };
@@ -225,9 +246,10 @@ const plan = (items: Record<string, unknown>[], c: QueueContext = EMPTY) => {
     pageRows: new Map([["www.browardvotes.gov/voting-methods/early-voting",
       pageRow("www.browardvotes.gov/voting-methods/early-voting", "opinion", "N/A")]]),
   }));
-  check("a page row recorded as opinion drops the item, with the reason",
+  check("a page row recorded as opinion drops the item, with the reason and the rule page_type",
     advocacy.ok && advocacy.rows.length === 0 && advocacy.dropped.length === 1 &&
-      advocacy.dropped[0].index === 0 && advocacy.dropped[0].reason.includes("opinion / N/A"), JSON.stringify(advocacy));
+      advocacy.dropped[0].index === 0 && advocacy.dropped[0].reason.includes("opinion / N/A") &&
+      advocacy.dropped[0].rule === "page_type", JSON.stringify(advocacy));
   /* The lean is checked too: a primary_doc row with any lean but N/A is not
      an official notice either. */
   const leaned = plan([item()], ctx({
@@ -366,7 +388,10 @@ function get(row: Row, col: string): unknown {
   const v = row[head];
   return key === undefined ? v : (v as Row | null)?.[key];
 }
-function fakeDb(tables: Record<string, Row[]>, fail: { read?: string; insert?: boolean } = {}) {
+function fakeDb(given: Record<string, Row[]>, fail: { read?: string; insert?: boolean } = {}) {
+  /* Every run reads the ballot roster; a test overrides a roster table by
+     naming it. */
+  const tables: Record<string, Row[]> = { ...ROSTER_TABLES, ...given };
   const reads: Read[] = [];
   const inserted: Row[] = [];
   const from = (table: string) => {
@@ -393,8 +418,8 @@ function fakeDb(tables: Record<string, Row[]>, fail: { read?: string; insert?: b
 }
 /* A run whose queued rows then go through the approve path against the same
    `source` table. */
-async function run(f: ReturnType<typeof fakeDb>, raw: unknown, opts: { dryRun: boolean }) {
-  const r = await runElectionQueue(f.db, raw, opts);
+async function run(f: ReturnType<typeof fakeDb>, raw: unknown, opts: { dryRun: boolean; now?: Date }) {
+  const r = await runElectionQueue(f.db, raw, { now: NOW, ...opts });
   approvable(r.output?.rows ?? [], f.sources);
   return r;
 }
@@ -424,8 +449,10 @@ const good = [item(), item({ url: "https://dos.fl.gov/elections/for-voters/elect
   const sourceRead = f.reads.find((x) => x.table === "source");
   check("the source read is filtered by url_norm",
     sourceRead?.filters.some(([op, col]) => op === "in" && col === "url_norm") === true, JSON.stringify(sourceRead));
-  check("every read is filtered, in chunks of at most 200",
-    f.reads.every((x) => x.filters.some(([op, , v]) => op === "in" && (v as unknown[]).length <= 200)), JSON.stringify(f.reads));
+  const batchReads = f.reads.filter((x) => ["source", "news_item", "review_item"].includes(x.table));
+  check("every read of the batch's URLs is filtered, in chunks of at most 200",
+    batchReads.length >= 3 && batchReads.every((x) => x.filters.some(([op, , v]) => op === "in" && (v as unknown[]).length <= 200)),
+    JSON.stringify(batchReads));
   check("the read chunk is 200", QUEUE_READ_CHUNK === 200, String(QUEUE_READ_CHUNK));
 }
 {
@@ -512,12 +539,192 @@ for (const table of ["source", "news_item", "review_item"]) {
   const r = await run(f, good, { dryRun: false });
   check("an insert error exits 1", r.exitCode === 1 && r.output === null && r.line.includes("insert refused"), JSON.stringify(r));
 }
+for (const table of ["race", "race_publication", "candidate"]) {
+  const f = fakeDb({}, { read: table });
+  const r = await run(f, good, { dryRun: false });
+  check(`a ${table} read error (the ballot roster) exits 1 and writes nothing`,
+    r.exitCode === 1 && r.output === null && f.inserted.length === 0 && r.line.includes(`${table} unavailable`), JSON.stringify(r));
+}
+{
+  const f = fakeDb({ race: [] });
+  const r = await run(f, good, { dryRun: false });
+  check("an empty ballot roster exits 1 and writes nothing",
+    r.exitCode === 1 && r.output === null && f.inserted.length === 0 && r.line.includes("the ballot roster is empty"), JSON.stringify(r));
+}
+{
+  /* The listed-race candidate reaches the rule through the real roster read. */
+  const f = fakeDb({});
+  const r = await run(f, [item({ title: "John Okafor to hold a voter registration drive" })], { dryRun: false });
+  check("a real run drops an item naming a listed-race candidate and inserts nothing",
+    r.exitCode === 0 && r.output?.dropped[0]?.rule === "candidate" && f.inserted.length === 0 && r.line === "queued 0, skipped 0, dropped 1",
+    JSON.stringify(r));
+}
 {
   const f = fakeDb({});
   const r = await run(f, [item({ scope: { metro: "miami" } })], { dryRun: false });
   check("a refused batch exits 1 before any read",
     r.exitCode === 1 && f.reads.length === 0 && f.inserted.length === 0 && r.line.startsWith("election-news: batch refused"),
     JSON.stringify(r));
+}
+
+/* ---- 10. scope from the publisher, and the content drops ---------------- */
+{
+  for (const [label, url, scope] of [
+    ["a votemiamidade.gov page", "https://www.votemiamidade.gov/news/ev", { county_fips: "12086" }],
+    ["a miamidade.gov/elections page", "https://www.miamidade.gov/elections/library/early-voting/x.pdf", { county_fips: "12086" }],
+    ["an ocfelections.gov page", "https://www.ocfelections.gov/x", { county_fips: "12095" }],
+    ["a flcourts.gov page", "https://www.flcourts.gov/x", { statewide: true }],
+  ] as const) {
+    const entry = officialForUrl(url);
+    check(`${label} takes its publisher's scope`, entry !== null && JSON.stringify(scopeFor(entry)) === JSON.stringify(scope),
+      JSON.stringify(entry));
+    const got = batchProblem([item({ url, scope })]);
+    check(`${label} with its publisher's scope is a well-formed batch`, got === null, String(got));
+  }
+  const vmd = plan([item({ url: "https://www.votemiamidade.gov/news/ev", scope: { county_fips: "12086" } })]);
+  check("a votemiamidade.gov item queues scoped to 12086",
+    vmd.ok && vmd.rows.length === 1 && vmd.rows[0].payload.county_fips === "12086", JSON.stringify(vmd));
+  check("a votemiamidade.gov item scoped statewide refuses the batch",
+    (batchProblem([item({ url: "https://www.votemiamidade.gov/news/ev", scope: { statewide: true } })]) ?? "")
+      .includes("scoped to its county 12086, not statewide"));
+  check("a votemiamidade.gov item scoped to Broward refuses the batch",
+    (batchProblem([item({ url: "https://www.votemiamidade.gov/news/ev", scope: { county_fips: "12011" } })]) ?? "")
+      .includes("differs from the publisher's county 12086"));
+}
+{
+  check("the item() fixture breaks no content rule", contentDrop(item() as unknown as ElectionNewsItem, ROSTER, NOW) === null);
+  /* The one drop a one-item batch gives, or null. */
+  const drop = (over: Record<string, unknown>, now: Date = NOW) => {
+    const p = plan([item(over)], EMPTY, now);
+    return p.ok && p.rows.length === 0 && p.dropped.length === 1 ? p.dropped[0] : null;
+  };
+
+  /* Never a candidate story: matchArticle over the whole ballot roster. */
+  const named = drop({ summary: "Maria Vasquez will open the first early voting site on Oct. 19." });
+  check("an item naming a published-race candidate drops, naming the candidate id",
+    named?.rule === "candidate" && named.reason.includes("FL-DOE-T1"), JSON.stringify(named));
+  const listed = drop({ title: "Commissioner Okafor opens an early voting site" });
+  check("an item naming a listed-race candidate by title and surname drops",
+    listed?.rule === "candidate" && listed.reason.includes("FL-VF-T2"), JSON.stringify(listed));
+  const street = plan([item({ summary: "Early voting runs at the Vasquez Street library from Oct. 19." })]);
+  check("a bare surname with no title is not a mention (matchArticle's own rule)",
+    street.ok && street.rows.length === 1, JSON.stringify(street));
+
+  /* Never a case for or against a measure. */
+  const amendment = { url: "https://dos.fl.gov/elections/amendments", scope: { statewide: true }, title: "Amendment 3 on the November ballot" };
+  const yes = drop({ ...amendment, summary: "Supporters urge voters to vote yes on Amendment 3." });
+  check('an amendment item saying "vote yes" drops', yes?.rule === "measure_case", JSON.stringify(yes));
+  for (const word of SIDE_TAKING_WORDS) {
+    const d = drop({ ...amendment, summary: `The notice says voters ${word} the change.` });
+    check(`an amendment item using "${word}" drops`, d?.rule === "measure_case", JSON.stringify(d));
+  }
+  for (const phrase of ["opposition to", "is harmful to", "benefits for", 'vote "no" on']) {
+    const d = drop({ ...amendment, summary: `A group cites ${phrase} the change.` });
+    check(`an amendment item using "${phrase}" drops`, d?.rule === "measure_case", JSON.stringify(d));
+  }
+  const plain = plan([item({ ...amendment, summary: "Three constitutional amendments are on the November 3 ballot." })]);
+  check("an amendment item that takes no side queues", plain.ok && plain.rows.length === 1, JSON.stringify(plain));
+  const noMeasure = plan([item({ summary: "The office will support voters with disabilities at every early voting site." })]);
+  check("a side-taking word with no amendment named queues", noMeasure.ok && noMeasure.rows.length === 1, JSON.stringify(noMeasure));
+  /* Whole words only: a word that merely contains one is not taking a side. */
+  const partWords = plan([item({ ...amendment, summary: "Amendment 3 is on the ballot. Park on the shoulder; the site was unharmed by the storm and runs in harmony with county rules." })]);
+  check('an amendment item with "shoulder", "unharmed" and "harmony" queues (whole words only)',
+    partWords.ok && partWords.rows.length === 1, JSON.stringify(partWords));
+
+  /* The lint drops instead of advising. */
+  const lint = drop({ summary: "The Supervisor touts 33 early voting sites, open Oct. 19 to Nov. 1." });
+  check("a banned term drops, with the rule lint", lint?.rule === "lint" && lint.reason.includes("touts"), JSON.stringify(lint));
+  const both = drop({ summary: "Maria Vasquez touts the early voting sites." });
+  check("a candidate item with a banned term is a candidate drop, which R3 may not reword",
+    both?.rule === "candidate", JSON.stringify(both));
+
+  /* A dropped item is not "earlier in the batch": R3's reworded copy of the
+     same page queues. */
+  const reworded = plan([
+    item({ summary: "The Supervisor touts 33 early voting sites." }),
+    item({ summary: "The Supervisor lists 33 early voting sites." }),
+  ]);
+  check("a page dropped by the lint and repeated with new wording queues once",
+    reworded.ok && reworded.rows.length === 1 && reworded.dropped.length === 1 && reworded.skipped.length === 0,
+    JSON.stringify(reworded));
+}
+
+/* The date window, against R3's 2026-09-10 clock (spec §6). */
+const SEPT10 = new Date("2026-09-10T00:00:00Z");
+check("the window runs from 60 days before the run's day to 1 day after it, in UTC days",
+  JSON.stringify(electionWindow(SEPT10)) === '{"from":"2026-07-12","to":"2026-09-11"}' &&
+    ELECTION_WINDOW_DAYS === 60 && FUTURE_DAYS === 1,
+  JSON.stringify(electionWindow(SEPT10)));
+for (const [date, want] of [
+  ["2026-07-11", "date_window"],
+  ["2026-07-12", null],
+  ["2026-09-11", null],
+  ["2026-09-12", "date_window"],
+  ["2026-09-11T23:30:00-04:00", "date_window"],
+] as const) {
+  const p = plan([item({ published_at: date })], EMPTY, SEPT10);
+  const got = p.ok ? (p.dropped[0]?.rule ?? null) : "refused";
+  check(`an item dated ${date} against the 2026-09-10 clock is ${want ? "dropped" : "kept"}`, got === want, JSON.stringify(p));
+}
+
+/* ---- 11. R3's own items of 2026-09-09 --------------------------------- */
+/* news_item 1ae20884, 4c787ba7, ce038b86 and 8d12a9b1 (2026-09-09-R3.md), as
+   R3 wrote them, each given the scope its publisher would give. */
+const R3_0909 = {
+  miamiDadeRelease: {
+    title: "Miami-Dade sets voting options and deadlines for November 3 General Election",
+    summary: "The Miami-Dade Supervisor of Elections announced on September 1, 2026 that early voting for the General Election will run October 19 through November 1, 7 a.m. to 7 p.m. daily, at 28 locations. The office lists October 5, 2026 as the voter registration deadline and 5 p.m. on October 22 as the deadline to request a vote-by-mail ballot; Election Day polls are open 7 a.m. to 7 p.m. on November 3.",
+    url: "https://www.miamidade.gov/global/release.page?Mduid_release=rel1788204670102232",
+    published_at: "2026-09-01",
+    scope: { county_fips: "12086" },
+  },
+  hillsborough: {
+    title: "Hillsborough plans 27 early-voting sites for November 3 General Election",
+    summary: "The Hillsborough County Supervisor of Elections says it plans to open 27 early voting sites for the 2026 General Election, running October 19 through November 1 from 7 a.m. to 7 p.m. Vote-by-mail ballots are mailed to military and overseas voters beginning September 18 and to other requesting voters beginning October 1; because 2024 requests have expired, voters must submit a new request by 5 p.m. on October 22.",
+    url: "https://www.votehillsborough.gov/291/2026-General-Election",
+    published_at: "2026-09-09",
+    scope: { county_fips: "12057" },
+  },
+  ballotpedia: {
+    title: "Three constitutional amendments certified for Florida's November 3 ballot",
+    summary: "Ballotpedia reports that Florida voters will decide three legislatively referred constitutional amendments on November 3, 2026: one on homestead tax exemptions, property assessments and local spending restrictions; one exempting tangible personal property used for agriculture or agritourism from property taxes; and one changing the state Budget Stabilization Fund. Each requires 60% voter approval to pass, and no citizen-initiated measures qualified for the 2026 ballot.",
+    url: "https://news.ballotpedia.org/2026/06/03/florida-voters-to-decide-expanded-homestead-tax-exemption-amendment-in-november/",
+    published_at: "2026-06-03",
+    scope: { statewide: true },
+  },
+  doeDates: {
+    title: "Florida's statewide deadlines for the November 3 General Election",
+    summary: "The Florida Division of Elections lists October 5, 2026 as the voter registration deadline for the General Election and 5 p.m. on October 22 as the deadline to request a vote-by-mail ballot, with domestic vote-by-mail ballots mailed between September 24 and October 1. The state's mandatory early voting period runs October 24 through October 31; individual counties may offer additional early voting days.",
+    url: "https://dos.fl.gov/elections/for-voters/election-dates/",
+    published_at: "2026-09-09",
+    scope: { statewide: true },
+  },
+};
+{
+  const p = plan([R3_0909.hillsborough, R3_0909.doeDates], EMPTY, SEPT10);
+  check("R3's Hillsborough page queues scoped to 12057, under official:votehillsborough.gov",
+    p.ok && p.rows[0]?.payload.county_fips === "12057" && p.rows[0].payload.source_id === "official:votehillsborough.gov",
+    JSON.stringify(p));
+  check("R3's Division dates page queues statewide, under official:dos.fl.gov/elections",
+    p.ok && p.rows[1]?.payload.statewide === true && p.rows[1].payload.source_id === "official:dos.fl.gov/elections",
+    JSON.stringify(p));
+  for (const [n, r] of (p.ok ? p.rows : []).entries()) {
+    check(`R3's 2026-09-09 row ${n} parses with ManualNewsPayloadSchema`, ManualNewsPayloadSchema.safeParse(r.payload).success);
+  }
+  const release = batchProblem([R3_0909.hillsborough, R3_0909.miamiDadeRelease]);
+  check("the Miami-Dade County release refuses its batch as not official, naming its index",
+    release !== null && release.startsWith("item 1: https://www.miamidade.gov/global/release.page") &&
+      release.includes("is not on the official-source list"),
+    String(release));
+  const ballotpedia = batchProblem([R3_0909.ballotpedia]);
+  check("the Ballotpedia story refuses its batch as not official, naming its index",
+    ballotpedia !== null && ballotpedia.startsWith("item 0: https://news.ballotpedia.org/") &&
+      ballotpedia.includes("is not on the official-source list"),
+    String(ballotpedia));
+  const f = fakeDb({});
+  const r = await run(f, [R3_0909.hillsborough, R3_0909.doeDates], { dryRun: true, now: SEPT10 });
+  check("a dry run of R3's two official 2026-09-09 items would queue both",
+    r.exitCode === 0 && r.line === "would queue 2, skipped 0, dropped 0", JSON.stringify(r));
 }
 
 /* ---- 7. the CLI writes nothing but review_item -------------------------- */
