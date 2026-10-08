@@ -12,23 +12,24 @@
 
    Run: node scripts/verify-agent-run.mjs */
 
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import {
   copyFileSync,
   existsSync,
+  lstatSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
   readdirSync,
   rmSync,
-  statSync,
+  symlinkSync,
   utimesSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { ROUTINE_AGENTS } from "../src/lib/agent-budget.ts";
+import { ROUTINE_AGENTS, STALE_SUMMARY } from "../src/lib/agent-budget.ts";
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const WRAPPER = path.join(ROOT, "scripts", "agent-run.sh");
@@ -54,7 +55,7 @@ for (const [agent, step, script, , , , secs] of rows) {
   check(`row ${agent} ${step} does not shadow start, budget or finish`, !["start", "budget", "finish"].includes(step), step);
 }
 const want = [
-  "R5|prep|scripts/candidate-leads.ts|prep --days 14|-|stories.json|720",
+  "R5|prep|scripts/candidate-leads.ts|prep --days 14|-|stories.json|540",
   "R5|check|scripts/candidate-leads.ts|check --stories {dir}/stories.json|mentions.json|leads.json|300",
   "R5|queue-dry|scripts/candidate-leads.ts|queue --dry-run|verified.json|queue-dry.txt|300",
   "R5|queue|scripts/candidate-leads.ts|queue|verified.json|queue.txt|300",
@@ -63,6 +64,22 @@ const want = [
 ];
 check("the table is PR A's rows exactly (spec §3.1)", rows.map((r) => r.join("|")).join("\n") === want.join("\n"),
   rows.map((r) => r.join("|")).join("\n"));
+/* Claude Code's Bash tool stops a command at 120 s by default and 600 s at
+   most; the prompts ask for 600 s. Every wrapper call must end, with its own
+   exit code, a minute inside that, or the harness kills it first and the
+   agent never sees exit 4. */
+const BASH_CEILING_S = 600;
+const WRAPPER_MAX_S = BASH_CEILING_S - 60;
+for (const [agent, step, , , , , secs] of rows) {
+  check(`row ${agent} ${step}'s timeout leaves a minute under the Bash tool's ${BASH_CEILING_S} s`, Number(secs) <= WRAPPER_MAX_S, secs);
+}
+const refreshSecs = Number(SOURCE.match(/run_timed (\d+) sh "\$WT\/scripts\/agent-worktree\.sh"/)?.[1] ?? NaN);
+const logStartSecs = Number(SOURCE.match(/node_script (\d+) "\$WT\/scripts\/agent-run-log\.ts" start /)?.[1] ?? NaN);
+const logFinishSecs = Number(SOURCE.match(/node_script (\d+) "\$WT\/scripts\/agent-run-log\.ts" "\$@"/)?.[1] ?? NaN);
+check(`start's refresh and run-log timeouts together leave a minute under ${BASH_CEILING_S} s`,
+  refreshSecs + logStartSecs <= WRAPPER_MAX_S, `${refreshSecs} + ${logStartSecs}`);
+check(`finish's run-log timeout leaves a minute under ${BASH_CEILING_S} s`, logFinishSecs <= WRAPPER_MAX_S, String(logFinishSecs));
+
 const lastLine = SOURCE.trimEnd().split("\n").at(-1);
 check('the last line is `main "$@"; exit $?`, so a refresh cannot feed the shell new lines', lastLine === 'main "$@"; exit $?', lastLine);
 check("the literal defaults are the agent worktree, the runs folder and the arm64 node",
@@ -95,6 +112,8 @@ for (const [file, agent] of Object.entries(PROMPTS)) {
     const restOk = step === "finish" ? /^ --status STATUS --items N$/.test(rest) : rest.trim() === "";
     check(`${file}: ${a} ${step} carries no other argument, redirection or pipe`, restOk, rest);
   }
+  check(`${file} says to run every wrapper command with the Bash tool's timeout at 600000 ms`,
+    /Bash tool's timeout set to 600000/.test(text.replace(/\s+/g, " ")));
   check(`${file} names no dated run folder, date call, cd or node path`,
     !/kyv-agent-runs\/<|date \+%F|cd \/Users|LogiPluginService/.test(text));
 }
@@ -109,6 +128,8 @@ for (const [file, agent] of Object.entries(PROMPTS)) {
   }
   check("R5's prompt names the queue-dry retry and the failed start beside exit 1's fail closed",
     exitLine(1).includes("queue-dry") && exitLine(1).includes("start"), exitLine(1));
+  check("R5's prompt keeps 5 minutes back for queue-dry and queue while verifying",
+    r5.includes("5 min or less left") && r5.includes('"time budget reached"'));
   check("R5's prompt says exit 6 also covers a previous run past its budget that has not finished",
     exitLine(6).includes("has not called finish"), exitLine(6));
 }
@@ -129,6 +150,7 @@ writeFileSync(
   `#!/bin/sh
 echo refresh >> "$KYV_TEST_MARK"
 if [ "\${KYV_TEST_REFRESH_FAIL:-}" = 1 ]; then echo "agent-worktree: stub failure" >&2; exit 1; fi
+if [ "\${KYV_TEST_REFRESH_SILENT:-}" = 1 ]; then echo "agent-worktree: stub said nothing"; exit 0; fi
 echo "agent worktree ready at $KYV_AGENT_WORKTREE (stub000)"
 `,
 );
@@ -143,6 +165,7 @@ if (process.env.KYV_STUB_CHILD) {
   spawn(process.execPath, ["-e", "setTimeout(() => require('node:fs').writeFileSync(process.env.KYV_STUB_CHILD, 'x'), 2000)"], { stdio: "ignore" });
 }
 if (sleep) await new Promise((r) => setTimeout(r, sleep * 1000));
+if (process.env.KYV_STUB_DONE) (await import("node:fs")).writeFileSync(process.env.KYV_STUB_DONE, "done");
 if (process.env.KYV_STUB_FAIL) {
   console.error("stub: failing as asked");
   process.exit(1);
@@ -151,6 +174,56 @@ console.log(JSON.stringify({ args, input }));
 console.error("stub " + args[0] + ": summary line");
 `,
 );
+
+/* A second worktree whose run log writes no deadline: start must refuse. */
+const WT_NODEADLINE = path.join(TMP, "worktree-nodeadline");
+mkdirSync(path.join(WT_NODEADLINE, "scripts"), { recursive: true });
+copyFileSync(path.join(WT, "scripts", "agent-worktree.sh"), path.join(WT_NODEADLINE, "scripts", "agent-worktree.sh"));
+writeFileSync(path.join(WT_NODEADLINE, "scripts", "agent-run-log.ts"), 'console.log("budget: stub, no deadline written");\n');
+
+/* The run log's database code runs against a fake PostgREST server (a child
+   process, since spawnSync blocks this one), so its filters are checked
+   without a database. The worktree links the repo's node_modules for the
+   client; with the database variables empty it is never imported. */
+symlinkSync(path.join(ROOT, "node_modules"), path.join(WT, "node_modules"));
+const FAKE_ID = "11111111-2222-4333-8444-555555555555";
+const FAKE_DB = path.join(TMP, "fake-db.mjs");
+const FAKE_LOG = path.join(TMP, "fake-db.log");
+const FAKE_PORT = path.join(TMP, "fake-db.port");
+writeFileSync(
+  FAKE_DB,
+  `import { createServer } from "node:http";
+import { appendFileSync, writeFileSync } from "node:fs";
+const [log, portFile] = process.argv.slice(2);
+const server = createServer((req, res) => {
+  let body = "";
+  req.on("data", (c) => (body += c));
+  req.on("end", () => {
+    appendFileSync(log, JSON.stringify({ method: req.method, url: req.url, body }) + "\\n");
+    res.setHeader("content-type", "application/json");
+    if (req.method === "POST") {
+      res.statusCode = 201;
+      const one = String(req.headers.accept ?? "").includes("vnd.pgrst.object");
+      res.end(JSON.stringify(one ? { id: "${FAKE_ID}" } : [{ id: "${FAKE_ID}" }]));
+    } else {
+      res.statusCode = 200;
+      res.end("[]");
+    }
+  });
+});
+server.listen(0, "127.0.0.1", () => writeFileSync(portFile, String(server.address().port)));
+`,
+);
+const sleepMs = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+function fakeRequests() {
+  if (!existsSync(FAKE_LOG)) return [];
+  const reqs = readFileSync(FAKE_LOG, "utf8").trim().split("\n").filter(Boolean).map((l) => JSON.parse(l));
+  rmSync(FAKE_LOG);
+  return reqs.map((r) => {
+    const u = new URL(r.url, "http://x");
+    return { method: r.method, path: u.pathname, params: Object.fromEntries(u.searchParams), body: r.body ? JSON.parse(r.body) : null };
+  });
+}
 
 /* No inherited environment: the run log must find no database. */
 const ENV = {
@@ -179,7 +252,7 @@ function snapshot(dir) {
       const p = path.join(d, e.name);
       if (e.isDirectory()) walk(p);
       else {
-        const s = statSync(p);
+        const s = lstatSync(p);
         out.push(`${path.relative(dir, p)} ${s.size} ${s.mtimeMs}`);
       }
     }
@@ -195,6 +268,7 @@ try {
     ["no step", ["R5"]],
     ["an unknown agent", ["R9", "start"]],
     ["an agent name with shell characters", ["R5;rm", "start"]],
+    ["an agent name with a space that spans two routine agents", ["R2 R3", "start"]],
     ["an unknown step", ["R5", "bogus"]],
     ["a step from another agent's rows", ["R5", "stale"]],
     ["start for watch", ["watch", "start"]],
@@ -207,6 +281,7 @@ try {
   ]) {
     const r = run(args);
     check(`${name} exits 2`, r.code === 2, `${r.code}: ${r.out}`);
+    check(`${name} never refreshes the worktree`, refreshes() === 0, String(refreshes()));
   }
 
   /* ---- before start: exit 5 -------------------------------------------- */
@@ -238,7 +313,8 @@ try {
   check("start holds the run until twice its budget, when the watchdog calls it stuck", held === deadline + 45 * 60, String(held - deadline));
 
   const again = run(["R5", "start"]);
-  check("a second R5 start inside the budget exits 6 before refreshing", again.code === 6 && refreshes() === 1, `${again.code}: ${again.out}`);
+  check("a second R5 start inside the budget exits 6 before refreshing, saying the run is inside its budget",
+    again.code === 6 && again.out.includes("still inside its budget") && refreshes() === 1, `${again.code}: ${again.out}`);
 
   /* ---- the R5 steps ---------------------------------------------------- */
   const prep = run(["R5", "prep"]);
@@ -276,8 +352,26 @@ try {
   check("a step that outlives its timeout exits 4, promptly, and says to finish failed",
     slow.code === 4 && slow.ms < 10_000 && slow.out.includes("timed out after 1 s: write the run report and finish with --status failed"),
     `${slow.code} after ${slow.ms} ms: ${slow.out}`);
-  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 3000);
+  sleepMs(3000);
   check("the timeout also stops the processes the step started", !existsSync(orphan));
+
+  /* The harness may kill the wrapper's process group when its Bash call
+     times out. The step it was running must die with it, or a queue the
+     agent was told failed could still write rows after its report. */
+  const done = path.join(TMP, "killed-step-done.txt");
+  const killed = spawn("sh", [WRAPPER, "R5", "prep"], {
+    env: { ...ENV, KYV_STUB_SLEEP: "3", KYV_STUB_DONE: done },
+    detached: true,
+    stdio: "ignore",
+  });
+  sleepMs(1500);
+  try {
+    process.kill(-killed.pid, "SIGTERM");
+  } catch {
+    /* already gone */
+  }
+  sleepMs(4500);
+  check("a step whose wrapper is killed by process group does not run on", !existsSync(done));
 
   const budget = run(["R5", "budget"]);
   check("budget prints the minutes left", budget.code === 0 && /^budget: 4[45] min left$/m.test(budget.out), budget.out);
@@ -310,7 +404,7 @@ try {
   check("and refreshes again", refreshes() === 2, String(refreshes()));
   const r3 = run(["R3", "start"]);
   check("another agent's start skips the refresh while R5 is inside its budget",
-    r3.code === 0 && r3.out.includes("worktree: refresh skipped while R5 is running inside its budget") && refreshes() === 2,
+    r3.code === 0 && r3.out.includes("worktree: refresh skipped while an R5 run may still be running") && refreshes() === 2,
     `${r3.code}: ${r3.out}`);
   check("R3's start prints R3's budget", /^budget: 40 min, until \S+; web calls: 30 WebSearch \+ WebFetch$/m.test(r3.out), r3.out);
   check("R3 has no rows yet in PR A", run(["R3", "context"]).code === 2);
@@ -332,6 +426,37 @@ try {
   const noHold = run(["R2", "start"]);
   check("a run folder with no held-until is held only to its deadline", noHold.code === 0, `${noHold.code}: ${noHold.out}`);
   check("finish R2 again", run(["R2", "finish", "--status", "ok_empty"]).code === 0);
+
+  /* Past its deadline a step that started just before it can still run, so
+     the refresh waits for the other agent's hold, not its deadline. */
+  writeFileSync(path.join(RUNS, "current-R2"), `${path.join(RUNS, "late", "R2")}\n`);
+  mkdirSync(path.join(RUNS, "late", "R2"), { recursive: true });
+  writeFileSync(path.join(RUNS, "late", "R2", "deadline"), `${Math.floor(Date.now() / 1000) - 60}\n`);
+  writeFileSync(path.join(RUNS, "late", "R2", "held-until"), `${Math.floor(Date.now() / 1000) + 3600}\n`);
+  const marksBeforeLate = refreshes();
+  const r4late = run(["R4", "start"]);
+  check("another agent's start skips the refresh while an R2 run is past its deadline but inside its hold",
+    r4late.code === 0 && r4late.out.includes("refresh skipped while an R2 run may still be running") && refreshes() === marksBeforeLate,
+    `${r4late.code}: ${r4late.out}`);
+  check("finish R4", run(["R4", "finish", "--status", "ok_empty"]).code === 0);
+  rmSync(path.join(RUNS, "current-R2"));
+
+  const silent = run(["R4", "start"], { KYV_TEST_REFRESH_SILENT: "1" });
+  check("a refresh that exits 0 without its ready line exits 1 and leaves no pointer",
+    silent.code === 1 && silent.out.includes("agent worktree refresh failed") && !existsSync(path.join(RUNS, "current-R4")),
+    `${silent.code}: ${silent.out}`);
+
+  const noDeadline = run(["R4", "start"], { KYV_AGENT_WORKTREE: WT_NODEADLINE });
+  check("a start whose run log wrote no deadline exits 1 and leaves no pointer",
+    noDeadline.code === 1 && noDeadline.out.includes("could not set this run's deadline") && !existsSync(path.join(RUNS, "current-R4")),
+    `${noDeadline.code}: ${noDeadline.out}`);
+
+  mkdirSync(path.join(RUNS, "bare", "R5"), { recursive: true });
+  writeFileSync(path.join(RUNS, "current-R5"), `${path.join(RUNS, "bare", "R5")}\n`);
+  const bare = run(["R5", "prep"]);
+  check("a step in a run folder with no deadline exits 3 and runs nothing",
+    bare.code === 3 && !existsSync(path.join(RUNS, "bare", "R5", "stories.json")), `${bare.code}: ${bare.out}`);
+  rmSync(path.join(RUNS, "current-R5"));
 
   const broken = run(["R4", "start"], { KYV_TEST_REFRESH_FAIL: "1" });
   check("a failed refresh exits 1 and leaves no pointer",
@@ -390,6 +515,57 @@ try {
   const staleFile = run(["watch", "check"]);
   check("a runs.json older than 15 minutes exits 1", staleFile.code === 1 && staleFile.out.includes("min old"), staleFile.out);
   check("watch steps never refresh the worktree", refreshes() === marks, `${marks} -> ${refreshes()}`);
+
+  /* ---- the run log's database writes, against a fake server ------------ */
+  const fake = spawn(process.execPath, [FAKE_DB, FAKE_LOG, FAKE_PORT], { stdio: "ignore" });
+  try {
+    for (let i = 0; i < 50 && !existsSync(FAKE_PORT); i++) sleepMs(100);
+    const port = existsSync(FAKE_PORT) ? readFileSync(FAKE_PORT, "utf8").trim() : "";
+    check("the fake database server started", port !== "");
+    const DB = { NEXT_PUBLIC_SUPABASE_URL: `http://127.0.0.1:${port}`, SUPABASE_SERVICE_ROLE_KEY: "test-key-not-real" };
+
+    const before4 = Date.now();
+    const dbStart = run(["R4", "start"], DB);
+    const reqs = fakeRequests();
+    check("start with a database exits 0 without a warning", dbStart.code === 0 && !dbStart.out.includes("warning"), `${dbStart.code}: ${dbStart.out}`);
+    const stale4 = reqs.find((r) => r.method === "PATCH");
+    const cutoff = Date.parse(String(stale4?.params.started_at ?? "").replace(/^lt\./, ""));
+    check("start marks only R4's running rows older than R4's 20 min failed",
+      stale4?.path === "/rest/v1/agent_run" && stale4.params.agent === "eq.R4" && stale4.params.status === "eq.running" &&
+        Math.abs(cutoff - (before4 - 20 * 60_000)) < 60_000 &&
+        JSON.stringify(stale4.body) === JSON.stringify({ status: "failed", summary: STALE_SUMMARY }),
+      JSON.stringify(stale4));
+    const insert = reqs.find((r) => r.method === "POST");
+    check("start inserts one running R4 row",
+      insert?.path === "/rest/v1/agent_run" && insert.body?.agent === "R4" && insert.body?.status === "running" &&
+        Math.abs(Date.parse(insert.body?.started_at) - before4) < 60_000,
+      JSON.stringify(insert));
+    check("start makes exactly those two requests", reqs.length === 2, JSON.stringify(reqs));
+    const dir4 = readFileSync(path.join(RUNS, "current-R4"), "utf8").trim();
+    check("start keeps the inserted row's id in run-id", readFileSync(path.join(dir4, "run-id"), "utf8").trim() === FAKE_ID);
+
+    const dbFinish = run(["R4", "finish", "--status", "ok", "--items", "3"], DB);
+    const fin4 = fakeRequests();
+    check("finish with a database exits 0 without a warning", dbFinish.code === 0 && !dbFinish.out.includes("warning"), `${dbFinish.code}: ${dbFinish.out}`);
+    check("finish updates this run's row only, by its id",
+      fin4.length === 1 && fin4[0].method === "PATCH" && fin4[0].path === "/rest/v1/agent_run" &&
+        JSON.stringify(Object.keys(fin4[0].params)) === '["id"]' && fin4[0].params.id === `eq.${FAKE_ID}`,
+      JSON.stringify(fin4));
+    check("finish writes the status, the items and the report path",
+      fin4[0]?.body?.status === "ok" && fin4[0]?.body?.items_written === 3 && String(fin4[0]?.body?.report_path).endsWith("-R4.md") &&
+        typeof fin4[0]?.body?.finished_at === "string",
+      JSON.stringify(fin4[0]?.body));
+
+    const dbStale = run(["watch", "stale"], DB);
+    const staleReqs = fakeRequests();
+    check("watch stale marks each routine agent's own running rows, one request each",
+      dbStale.code === 0 && staleReqs.length === ROUTINE_AGENTS.length &&
+        ROUTINE_AGENTS.every((a) => staleReqs.some((r) => r.method === "PATCH" && r.params.agent === `eq.${a}` && r.params.status === "eq.running" &&
+          String(r.params.started_at).startsWith("lt."))),
+      JSON.stringify(staleReqs));
+  } finally {
+    fake.kill("SIGKILL");
+  }
 
   /* ---- the worktree is never written ----------------------------------- */
   check("nothing was written inside the worktree", snapshot(WT) === before, snapshot(WT));

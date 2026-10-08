@@ -11,7 +11,7 @@
 # Steps for R2 to R5 (the routine agents):
 #   start    refuse (exit 6) while this agent's previous run has not called
 #            finish and is inside twice its budget; refresh the agent worktree
-#            (skipped while another agent's run is inside its budget), create
+#            (skipped while another agent's run is inside that hold), create
 #            $RUNS/<YYYY-MM-DD>/<AGENT>[-n], set the deadline and the hold,
 #            point $RUNS/current-<AGENT> at it, record the run, and print
 #            date:, report:, worktree:, budget: and run dir:
@@ -37,6 +37,11 @@
 # on the last line, so `start`'s refresh can replace this file on disk
 # without the running shell reading new lines halfway.
 #
+# Every timeout stays a minute inside the Bash tool's 600 s ceiling (prep
+# 540 s; start's refresh 420 s plus its run-log call 120 s), and the prompts
+# set that ceiling on every call, so the wrapper always exits with its own
+# code (4 on a timeout) before the harness stops the call.
+#
 # KYV_AGENT_WORKTREE, KYV_AGENT_RUNS, KYV_AGENT_NODE and
 # KYV_AGENT_STEP_TIMEOUT are for scripts/verify-agent-run.mjs only.
 set -u
@@ -51,7 +56,7 @@ ROUTINE="R2 R3 R4 R5"
 # agent|step|script (in $WT)|arguments ({dir} = the run directory)|stdin file|stdout file|timeout (s)
 # "-" is none: no stdin file, or stdout printed instead of saved. Each PR adds
 # its own agent's rows; scripts/verify-agent-run.mjs checks every script exists.
-ROWS='R5|prep|scripts/candidate-leads.ts|prep --days 14|-|stories.json|720
+ROWS='R5|prep|scripts/candidate-leads.ts|prep --days 14|-|stories.json|540
 R5|check|scripts/candidate-leads.ts|check --stories {dir}/stories.json|mentions.json|leads.json|300
 R5|queue-dry|scripts/candidate-leads.ts|queue --dry-run|verified.json|queue-dry.txt|300
 R5|queue|scripts/candidate-leads.ts|queue|verified.json|queue.txt|300
@@ -60,8 +65,12 @@ watch|check|scripts/agent-run-log.ts|watch --runs {dir}/runs.json --notified {di
 
 # Run "$@" for at most $1 seconds. The command gets its own process group and
 # the whole group is killed on expiry, so a child it started (npm, git) does
-# not outlive it. Exit 124 on expiry, else the command's own status.
-TIMED='my $t = shift; my $pid = fork(); exit 125 unless defined $pid; if (!$pid) { setpgrp(0, 0); exec { $ARGV[0] } @ARGV; exit 127 } $SIG{ALRM} = sub { kill "KILL", -$pid; waitpid($pid, 0); exit 124 }; alarm $t; waitpid($pid, 0); exit($? & 127 ? 128 + ($? & 127) : $? >> 8)'
+# not outlive it. Exit 124 on expiry, else the command's own status. The group
+# is also killed when this perl gets TERM, INT or HUP (the harness ending the
+# Bash call, by process group or by tree), so a step the agent was told
+# failed cannot finish behind it; exit 128 + the signal. A KILL cannot be
+# caught: that one leaves the step running.
+TIMED='my $t = shift; my $pid; for my $s (qw(TERM INT HUP)) { $SIG{$s} = sub { kill "KILL", -$pid if $pid; exit 128 + ($s eq "TERM" ? 15 : $s eq "INT" ? 2 : 1) } } $pid = fork(); exit 125 unless defined $pid; if (!$pid) { setpgrp(0, 0); exec { $ARGV[0] } @ARGV; exit 127 } $SIG{ALRM} = sub { kill "KILL", -$pid; waitpid($pid, 0); exit 124 }; alarm $t; waitpid($pid, 0); exit($? & 127 ? 128 + ($? & 127) : $? >> 8)'
 
 die() {
   code=$1
@@ -148,18 +157,23 @@ cmd_start() {
   echo "date: $DAY"
   echo "report: $REPORT"
 
+  # Another agent's run holds the worktree until its held-until, not just its
+  # deadline: a step that started just before the deadline runs on past it,
+  # and a refresh (git checkout, npm ci) would swap code under that step.
   busy=""
+  now=$(date +%s)
   for p in "$RUNS"/current-*; do
     [ -f "$p" ] && [ "$p" != "$PTR" ] || continue
-    if inside_budget "$(cat "$p")"; then
+    h=$(held_until_of "$(cat "$p")")
+    if [ -n "$h" ] && [ "$h" -gt "$now" ]; then
       busy=${p##*/current-}
       break
     fi
   done
   if [ -n "$busy" ]; then
-    echo "worktree: refresh skipped while $busy is running inside its budget; using $WT as it is"
+    echo "worktree: refresh skipped while an $busy run may still be running; using $WT as it is"
   else
-    out=$(run_timed 600 sh "$WT/scripts/agent-worktree.sh" < /dev/null 2>&1)
+    out=$(run_timed 420 sh "$WT/scripts/agent-worktree.sh" < /dev/null 2>&1)
     rc=$?
     line=$(printf '%s\n' "$out" | grep '^agent worktree ready at ' | tail -n 1)
     if [ "$rc" -ne 0 ] || [ -z "$line" ]; then

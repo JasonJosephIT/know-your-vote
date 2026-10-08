@@ -7,6 +7,8 @@ YOUR ONLY SHELL COMMANDS, typed exactly as shown, with nothing before or
 after them (no cd, no redirection, no pipe, no second command):
   sh /Users/jsloth/Projects/kyv-agent-worktree/scripts/agent-run.sh watch stale
   sh /Users/jsloth/Projects/kyv-agent-worktree/scripts/agent-run.sh watch check
+Run both with the Bash tool's timeout set to 600000 (10 minutes), so the
+wrapper always ends a step itself and you get its exit code.
 Never run any other shell command.
 
 BUDGET: 5 minutes, 4 list_task_runs calls, no web calls.

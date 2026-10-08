@@ -30,6 +30,9 @@ variable, no second command):
   sh /Users/jsloth/Projects/kyv-agent-worktree/scripts/agent-run.sh R5 queue-dry
   sh /Users/jsloth/Projects/kyv-agent-worktree/scripts/agent-run.sh R5 queue
   sh /Users/jsloth/Projects/kyv-agent-worktree/scripts/agent-run.sh R5 finish --status STATUS --items N
+Run every one of them with the Bash tool's timeout set to 600000 (10
+minutes). The default of 2 minutes stops prep before it ends, and you
+would get no exit code to act on.
 In the finish line, STATUS is ok (at least one lead queued), ok_empty (the
 run worked and queued none) or failed (the run stopped on an error or on
 its budget), and N is the number queued (0 when none).
@@ -56,7 +59,10 @@ BUDGET: 45 minutes from start and 25 WebFetch calls. start prints both.
 Count your WebFetch calls. When you reach 25, stop verifying: record every
 lead not yet checked as "unchecked" with the note "web cap reached", and go
 on to queue. Call budget before you start verifying; if it says 0 min left,
-write the report and finish with --status failed.
+write the report and finish with --status failed. While verifying, call
+budget again after every few leads; at 5 min or less left, stop verifying:
+record every lead not yet checked as "unchecked" with the note "time budget
+reached", and go on to queue, so the leads you did verify are not lost.
 
 HOW TO WORK:
 1. START. Run:
