@@ -23,17 +23,21 @@ import {
   dedupeKey,
   domainFromSourceId,
   electionPayloadFor,
+  givenPageRowProblem,
   isElectionRelated,
+  listedRowProblem,
   outletSourceRow,
   planAttachments,
   planSourceAttribution,
   reviewPayloadFor,
   sourceIdFor,
   UNMATCHED_ARTICLE_POLICY,
+  type AttributionRow,
 } from "../src/lib/news-enqueue.ts";
 import { urlNorm } from "../src/lib/brief-rows.ts";
 import { matchArticle, type RosterCandidate } from "../src/lib/news-match.ts";
-import { OUTLETS, outletForUrl } from "../src/lib/news-sources.ts";
+import { OUTLETS, outletForUrl, usableOutlets } from "../src/lib/news-sources.ts";
+import { OFFICIAL_SOURCES, officialForUrl, officialSourceRow } from "../src/lib/official-sources.ts";
 import { ManualNewsPayloadSchema } from "../src/types/admin.ts";
 import type { SweptArticle } from "../src/lib/news-sweep.ts";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -249,12 +253,18 @@ check("planning is deterministic",
    the CHECK is never what refuses an approval. planSourceAttribution is that
    decision; the route below only does the reads. */
 
-const signed = OUTLETS.find((o) => o.leanTag !== null)!;
+const signed = OUTLETS.find((o) => o.leanTag !== null && !o.domain.includes("/"))!;
+const otherSigned = OUTLETS.find((o) => o.leanTag !== null && !o.domain.includes("/") && o.domain !== signed.domain)!;
 const unsigned = OUTLETS.find((o) => o.leanTag === null);
 /* The canonical normalisation the route passes — source.url_norm is UNIQUE,
-   so a stand-in here could pass while the real one split a page in two. */
-const attribute = (url: string, given: string | null = null) =>
-  planSourceAttribution(url, given, outletFor, urlNorm, OUTLETS);
+   so a stand-in here could pass while the real one split a page in two. The
+   row defaults to an election notice that names no candidate and no race. */
+const attribute = (url: string, given: string | null = null, over: Partial<AttributionRow> = {}) =>
+  planSourceAttribution(
+    { url, source_id: given, item_type: "election_news", candidate_id: null, race_id: null, ...over },
+    { outletFor, officialFor: (u) => officialForUrl(u), norm: urlNorm },
+  );
+const reasonOf = (a: ReturnType<typeof attribute>) => (a.kind === "refused" ? a.reason : "");
 
 check("outletSourceRow writes the outlet's own signed-off lean, type and publisher",
   JSON.stringify(outletSourceRow(signed)) === JSON.stringify({
@@ -265,16 +275,123 @@ if (unsigned) {
   check("an outlet with no signed-off lean has no source row", outletSourceRow(unsigned) === null);
 }
 
-const givenOutlet = attribute("https://example.org/anything", sourceIdFor(signed.domain));
-check("a payload that names a source keeps it",
+/* -- a given outlet: id is checked against the URL (§3.2.2) -- */
+const givenOutlet = attribute(`https://www.${signed.domain}/2026/10/04/story`, sourceIdFor(signed.domain));
+check("a payload that names its own outlet keeps it",
   givenOutlet.kind === "given" && givenOutlet.sourceId === sourceIdFor(signed.domain), JSON.stringify(givenOutlet));
 check("a named outlet source carries the row to write if it is missing",
-  givenOutlet.kind === "given" && givenOutlet.outletRow?.source_id === sourceIdFor(signed.domain));
+  givenOutlet.kind === "given" && givenOutlet.listedRow?.source_id === sourceIdFor(signed.domain));
+const crossed = attribute(`https://www.${otherSigned.domain}/2026/10/04/story`, sourceIdFor(signed.domain));
+check("an outlet: id on another outlet's URL is refused, naming both",
+  crossed.kind === "refused" && reasonOf(crossed).includes(signed.domain) && reasonOf(crossed).includes(otherSigned.domain),
+  JSON.stringify(crossed));
+const offOutletList = attribute("https://example.org/anything", sourceIdFor(signed.domain));
+check("an outlet: id on a URL off the outlet list is refused",
+  offOutletList.kind === "refused" && reasonOf(offOutletList).includes("no listed outlet"), JSON.stringify(offOutletList));
+check("an outlet: id that names no listed outlet is refused",
+  attribute(`https://www.${signed.domain}/x`, "outlet:not-listed.example").kind === "refused");
+if (unsigned) {
+  const own = attribute(`https://${unsigned.domain}/2026/10/04/story`, sourceIdFor(unsigned.domain));
+  check("an unsigned outlet's own id is looked up by id, never written",
+    own.kind === "given" && own.listedRow === null && own.pageUrlNorm === null, JSON.stringify(own));
+}
+
+/* Swept payloads are unchanged: the sweep sets outlet:<domain> from the URL's
+   own outlet, path-scoped outlets included, so every one passes. */
+for (const o of usableOutlets()) {
+  const url = `https://www.${o.domain}/2026/10/04/ballots-mailed`;
+  const election = plan([article({ title: "County ballots mailed this week", url })]).elections[0];
+  const a = election ? attribute(url, election.sourceId) : null;
+  check(`a swept election story from ${o.domain} resolves to its own outlet`,
+    a?.kind === "given" && a.listedRow?.source_id === sourceIdFor(o.domain), JSON.stringify(a));
+  const attachment = plan([article({ title: "Maria Elena Vasquez files", url })]).attachments[0];
+  const p = attachment ? reviewPayloadFor(attachment) : null;
+  const c = p ? attribute(p.url, p.source_id, { item_type: p.item_type, candidate_id: p.candidate_id, race_id: p.race_id }) : null;
+  check(`a swept candidate story from ${o.domain} resolves to its own outlet`,
+    c?.kind === "given" && c.listedRow?.source_id === sourceIdFor(o.domain), JSON.stringify(c));
+}
+
+/* -- a given page-row id must be this story's page -- */
 const givenOther = attribute("https://www.wlrn.org/x", "src_gov_broward_early_voting_2026");
-check("a named non-outlet source is looked up, never written",
-  givenOther.kind === "given" && givenOther.outletRow === null, JSON.stringify(givenOther));
+check("a named page source is looked up by id, never written",
+  givenOther.kind === "given" && givenOther.listedRow === null && givenOther.pageUrlNorm === "www.wlrn.org/x",
+  JSON.stringify(givenOther));
+const misattributed = givenOther.kind === "given"
+  ? givenPageRowProblem(givenOther, "browardvotes.gov/voting-methods/early-voting-dates-hours-and-sites")
+  : null;
+check("a src_* id whose row has a different url_norm is refused, naming both pages",
+  misattributed !== null && misattributed.includes("www.wlrn.org/x") && misattributed.includes("browardvotes.gov/voting-methods"),
+  String(misattributed));
 check("a blank source id counts as none",
   attribute(`https://${signed.domain}/2026/10/04/story`, "   ").kind === "outlet");
+
+/* The eight R3 rows that news_agent_rows_to_review (0054) moves into review:
+   Q2's live URLs (read-only SELECT, 2026-10-08) with the src_* ids 0014 and
+   0042 give them. Each must resolve `given` and pass the page check against
+   the url_norm the migration writes for it. */
+const MIGRATION_URL_NORM = new Map<string, string>();
+for (const file of ["0014_news_fairness.sql", "0042_news_source_backfill.sql"]) {
+  const sql = readFileSync(resolve(import.meta.dirname, "..", "supabase", "migrations", file), "utf8");
+  for (const [, id, , norm] of sql.matchAll(/\('(src_[^']+)',\s*'([^']+)',\s*'([^']+)'/g)) MIGRATION_URL_NORM.set(id, norm);
+}
+const EIGHT: [url: string, sourceId: string][] = [
+  ["https://www.miamidade.gov/global/release.page?Mduid_release=rel1780088950968276", "src_gov_miamidade_early_voting_2026"],
+  ["https://www.miamidade.gov/global/release.page?Mduid_release=rel1788204670102232", "src_gov_miamidade_general_voting_2026"],
+  ["https://www.votehillsborough.gov/291/2026-General-Election", "src_gov_hillsborough_general_2026"],
+  ["https://www.flsenate.gov/Session/Bill/2026/991", "src_gov_flsenate_hb991_2026"],
+  ["https://dos.fl.gov/elections/for-voters/election-dates/", "src_gov_dos_election_dates_2026"],
+  ["https://browardvotes.gov/voting-methods/early-voting-dates-hours-and-sites", "src_gov_broward_early_voting_2026"],
+  ["https://www.votehillsborough.gov/281/2026-Primary-Election", "src_gov_hillsborough_early_voting_2026"],
+  ["https://news.ballotpedia.org/2026/06/03/florida-voters-to-decide-expanded-homestead-tax-exemption-amendment-in-november/", "src_ballotpedia_news_amendments_2026"],
+];
+check("0014 and 0042 write a url_norm for each of the eight ids",
+  EIGHT.every(([, id]) => MIGRATION_URL_NORM.has(id)), JSON.stringify([...MIGRATION_URL_NORM.keys()]));
+for (const [url, id] of EIGHT) {
+  const a = attribute(url, id);
+  const rowNorm = MIGRATION_URL_NORM.get(id) ?? "";
+  check(`moved R3 row ${id} resolves given, and its page check passes`,
+    a.kind === "given" && a.sourceId === id && a.listedRow === null && givenPageRowProblem(a, rowNorm) === null,
+    JSON.stringify({ a, rowNorm }));
+}
+
+/* -- a given official: id (D7) -- */
+const broward = OFFICIAL_SOURCES.find((s) => s.domain === "browardvotes.gov")!;
+const okOfficial = attribute("https://www.browardvotes.gov/voting-methods/early-voting", "official:browardvotes.gov");
+check("an official: id on its own host, on an election notice with no candidate or race, is accepted",
+  okOfficial.kind === "given" && JSON.stringify(okOfficial.listedRow) === JSON.stringify(officialSourceRow(broward)),
+  JSON.stringify(okOfficial));
+for (const [label, url, over, wants] of [
+  ["on candidate_news", "https://www.browardvotes.gov/x", { item_type: "candidate_news" }, "candidate_news"],
+  ["on election_news with a race_id", "https://www.browardvotes.gov/x", { race_id: "race-1" }, "candidate or a race"],
+  ["on election_news with a candidate_id", "https://www.browardvotes.gov/x", { candidate_id: "cand-1" }, "candidate or a race"],
+  ["on an outlet's URL", `https://www.${signed.domain}/x`, {}, "no listed official source"],
+  ["on another official host's URL", "https://www.votehillsborough.gov/x", {}, "votehillsborough.gov"],
+] as const) {
+  const a = attribute(url, "official:browardvotes.gov", over);
+  check(`an official: id is refused ${label}`, a.kind === "refused" && reasonOf(a).includes(wants), JSON.stringify(a));
+}
+check("an official: id that names no listed body is refused",
+  attribute("https://www.browardvotes.gov/x", "official:example.gov").kind === "refused");
+
+/* There is no official fall-through: a government URL with no given id is a
+   page lookup, whatever the item, never an official row. */
+for (const s of OFFICIAL_SOURCES) {
+  for (const over of [{}, { item_type: "candidate_news", candidate_id: "cand-1", race_id: "race-1" }]) {
+    const a = attribute(`https://${s.domain}/notice`, null, over);
+    check(`a URL on ${s.domain} with no source id resolves to its page row (${JSON.stringify(over)})`,
+      a.kind === "page", JSON.stringify(a));
+  }
+}
+
+/* The read-back check on a listed row. */
+const officialRow = officialSourceRow(broward);
+check("an official row read back as primary_doc / N/A passes",
+  listedRowProblem(officialRow, { type: "primary_doc", lean_tag: "N/A" }) === null);
+check("an official row read back with another type or lean is refused",
+  listedRowProblem(officialRow, { type: "opinion", lean_tag: "N/A" })?.includes("browardvotes.gov") === true &&
+    listedRowProblem(officialRow, { type: "primary_doc", lean_tag: "unrated" }) !== null);
+check("an outlet row is not held to the official shape",
+  listedRowProblem(outletSourceRow(signed)!, { type: "factual_reporting", lean_tag: "unrated" }) === null);
 
 const fromOutlet = attribute(`https://www.${signed.domain}/2026/10/04/story`);
 check("a URL on a signed-off outlet is attributed to that outlet",
@@ -308,8 +425,18 @@ check("the news insert writes the resolved source_id",
   /\.insert\(\{\s*\.\.\.plan\.row,\s*source_id:\s*source\.sourceId\s*\}\)/.test(route));
 check("an unresolved source fails closed before any insert",
   /if \(!source\.ok\)\s*\{\s*return failClosed\(/.test(route));
-check("the route uses planSourceAttribution with the canonical urlNorm",
-  /planSourceAttribution\(\s*row\.url,\s*row\.source_id,[\s\S]*?urlNorm,\s*OUTLETS\s*\)/.test(route));
+check("the route uses planSourceAttribution with the outlet list, the official list and the canonical urlNorm",
+  /planSourceAttribution\(row, \{\s*outletFor: \(u\) => outletForUrl\(u, OUTLETS\),\s*officialFor: \(u\) => officialForUrl\(u\),\s*norm: urlNorm,\s*\}\)/.test(route));
+check("a refused attribution fails closed with its reason",
+  /case "refused":\s*return \{ ok: false, reason: plan\.reason \};/.test(route));
+check("a given listed id writes its row through ensureListedRow",
+  /if \(plan\.listedRow\) return ensureListedRow\(plan\.listedRow, "given"\);/.test(route) &&
+    /case "outlet":\s*return ensureListedRow\(plan\.listedRow, "outlet"\);/.test(route));
+check("ensureListedRow refuses an official row read back with another type or lean",
+  /const problem = listedRowProblem\(listed, found\.row\);\s*if \(problem\) return \{ ok: false, reason: problem \};/.test(route));
+check("a given page-row id is checked against the story's url_norm",
+  /const problem = givenPageRowProblem\(plan, found\.row\.url_norm\);\s*if \(problem\) return \{ ok: false, reason: problem \};/.test(route));
+check("the outlet-only writer is gone", !route.includes("ensureOutletRow"));
 check("describeNewsInsertError names 0014's constraint instead of blaming 0005",
   route.includes("news_item_agent_source_check") && route.includes("news_item_item_type_check"));
 
@@ -395,7 +522,7 @@ check("isElectionRelated reads the summary too",
    already handled under a candidate is not queued a second time (2026-10-06:
    matching reads only the capped dek, so a story first matched on a name deep
    in a whole-article description would otherwise come back as county news). */
-function fakeDb(tables: Record<string, Record<string, unknown>[]>) {
+function fakeDb(tables: Record<string, readonly Record<string, unknown>[]>) {
   const inserted: Record<string, unknown>[] = [];
   const from = (table: string) => {
     const filters: ((r: Record<string, unknown>) => boolean)[] = [];

@@ -4,8 +4,14 @@ import { adminApiGuard } from "@/lib/admin/api";
 import { MISSING_0006, MISSING_SERVICE } from "@/lib/admin/monitor";
 import { planEffect, type NewsInsertRow } from "@/lib/admin/effects";
 import { urlNorm } from "@/lib/brief-rows";
-import { planSourceAttribution, type OutletSourceRow } from "@/lib/news-enqueue";
+import {
+  givenPageRowProblem,
+  listedRowProblem,
+  planSourceAttribution,
+  type ListedSourceRow,
+} from "@/lib/news-enqueue";
 import { OUTLETS, outletForUrl } from "@/lib/news-sources";
+import { officialForUrl } from "@/lib/official-sources";
 import { createServiceClient } from "@/lib/supabase/service";
 import { findAllBannedTermMatches } from "@/lib/neutrality";
 import {
@@ -262,15 +268,16 @@ async function audit(
   });
 }
 
-/* Find the source a news row is attributed to, writing an outlet's source row
-   if the outlet is listed and signed off but has no row yet. The order and its
+/* Find the source a news row is attributed to, writing a listed body's source
+   row if it has none yet. The order, the checks on a given id and their
    reasons live in planSourceAttribution (src/lib/news-enqueue.ts, pure, pinned
    by scripts/verify-news-enqueue.ts); this function only does the I/O.
 
-   The one write here is to `source`, and only a row built from the outlet list
-   in code (outletSourceRow). The payload picks nothing but which listed
-   outlet, by its URL host, so the effects-map boundary holds: a review_item
-   still cannot name a table or a field to write.
+   The one write here is to `source`, and only a row built from a list in code
+   (outletSourceRow, or officialSourceRow for a checked `official:` id). The
+   payload picks nothing but which listed body, and its URL must be on that
+   body's host, so the effects-map boundary holds: a review_item still cannot
+   name a table or a field to write.
 
    Insert-if-absent, then read back by url_norm. The id used is whichever row
    owns that url_norm, never the id we hoped to write, so a pre-existing row
@@ -279,6 +286,8 @@ type SourceResolution =
   | { ok: true; sourceId: string; via: "given" | "outlet" | "page" }
   | { ok: false; reason: string };
 
+type SourceRowRead = { source_id: string; url_norm: string; type: string; lean_tag: string };
+
 const NO_SOURCE_RULE =
   "Migration 0014 requires a source on every candidate_news and election_news row (\"no source, no card\").";
 
@@ -286,69 +295,75 @@ async function resolveSource(
   service: SupabaseClient,
   row: NewsInsertRow
 ): Promise<SourceResolution> {
-  const plan = planSourceAttribution(
-    row.url,
-    row.source_id,
-    (u) => outletForUrl(u, OUTLETS),
-    urlNorm,
-    OUTLETS
-  );
+  const plan = planSourceAttribution(row, {
+    outletFor: (u) => outletForUrl(u, OUTLETS),
+    officialFor: (u) => officialForUrl(u),
+    norm: urlNorm,
+  });
 
-  const sourceIdWhere = async (column: "source_id" | "url_norm", value: string) => {
+  const sourceRowWhere = async (column: "source_id" | "url_norm", value: string) => {
     const { data, error } = await service
       .from("source")
-      .select("source_id")
+      .select("source_id, url_norm, type, lean_tag")
       .eq(column, value)
       .maybeSingle();
-    return { id: (data?.source_id as string | undefined) ?? null, error };
+    return { row: (data as SourceRowRead | null) ?? null, error };
   };
 
-  const ensureOutletRow = async (
-    outletRow: OutletSourceRow,
+  const ensureListedRow = async (
+    listed: ListedSourceRow,
     via: "given" | "outlet"
   ): Promise<SourceResolution> => {
     const { error } = await service
       .from("source")
-      .upsert(outletRow, { onConflict: "url_norm", ignoreDuplicates: true });
+      .upsert(listed, { onConflict: "url_norm", ignoreDuplicates: true });
     if (error) {
-      return { ok: false, reason: `Could not write the source row for ${outletRow.url_norm}: ${error.message}` };
+      return { ok: false, reason: `Could not write the source row for ${listed.url_norm}: ${error.message}` };
     }
-    const found = await sourceIdWhere("url_norm", outletRow.url_norm);
-    if (found.error || !found.id) {
+    const found = await sourceRowWhere("url_norm", listed.url_norm);
+    if (found.error || !found.row) {
       return {
         ok: false,
-        reason: `The source row for ${outletRow.url_norm} could not be read back${found.error ? `: ${found.error.message}` : ""}.`,
+        reason: `The source row for ${listed.url_norm} could not be read back${found.error ? `: ${found.error.message}` : ""}.`,
       };
     }
-    return { ok: true, sourceId: found.id, via };
+    const problem = listedRowProblem(listed, found.row);
+    if (problem) return { ok: false, reason: problem };
+    return { ok: true, sourceId: found.row.source_id, via };
   };
 
   switch (plan.kind) {
+    case "refused":
+      return { ok: false, reason: plan.reason };
     case "given": {
-      const found = await sourceIdWhere("source_id", plan.sourceId);
+      if (plan.listedRow) return ensureListedRow(plan.listedRow, "given");
+      const found = await sourceRowWhere("source_id", plan.sourceId);
       if (found.error) {
         return { ok: false, reason: `Could not check source ${plan.sourceId}: ${found.error.message}` };
       }
-      if (found.id) return { ok: true, sourceId: found.id, via: "given" };
-      if (plan.outletRow) return ensureOutletRow(plan.outletRow, "given");
-      return {
-        ok: false,
-        reason: `This story names source "${plan.sourceId}", and no source row has that id. Add the source row, or reject the story. ${NO_SOURCE_RULE}`,
-      };
+      if (!found.row) {
+        return {
+          ok: false,
+          reason: `This story names source "${plan.sourceId}", and no source row has that id. Add the source row, or reject the story. ${NO_SOURCE_RULE}`,
+        };
+      }
+      const problem = givenPageRowProblem(plan, found.row.url_norm);
+      if (problem) return { ok: false, reason: problem };
+      return { ok: true, sourceId: found.row.source_id, via: "given" };
     }
     case "outlet":
-      return ensureOutletRow(plan.outletRow, "outlet");
+      return ensureListedRow(plan.listedRow, "outlet");
     case "unsigned":
       return {
         ok: false,
         reason: `${plan.domain} is on the outlet list, but its lean has not been signed off in src/lib/news-sources.ts, so it has no source row yet. Sign the lean off first. ${NO_SOURCE_RULE}`,
       };
     case "page": {
-      const found = await sourceIdWhere("url_norm", plan.urlNorm);
+      const found = await sourceRowWhere("url_norm", plan.urlNorm);
       if (found.error) {
         return { ok: false, reason: `Could not look up a source for ${plan.urlNorm}: ${found.error.message}` };
       }
-      if (found.id) return { ok: true, sourceId: found.id, via: "page" };
+      if (found.row) return { ok: true, sourceId: found.row.source_id, via: "page" };
       return {
         ok: false,
         reason: `No source found for this story. Its site is not on the outlet list, and no source row has url_norm "${plan.urlNorm}". Add a source row for this page (publisher, type, lean), then approve again. ${NO_SOURCE_RULE}`,
