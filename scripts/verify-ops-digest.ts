@@ -16,7 +16,10 @@
 
    Run: node scripts/verify-ops-digest.ts */
 
-import { readFileSync } from "node:fs";
+import { spawn } from "node:child_process";
+import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { createServer } from "node:http";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { BUDGETS, TASK_AGENTS, type TaskRun } from "../src/lib/agent-budget.ts";
@@ -486,6 +489,147 @@ const base = (over: Partial<DigestInput> = {}): DigestInput => ({
   check("an unreadable sweep schedule is a risk line", badCron.open_risks.some((r) => r.startsWith("News sweep: unsupported schedule")), j(badCron.open_risks));
 }
 
+/* ---- scripts/ops-digest.ts: its source --------------------------------- */
+
+{
+  const src = read("scripts/ops-digest.ts");
+  for (const call of [".insert(", ".update(", ".upsert(", ".delete(", ".rpc(", "writeFileSync", "appendFileSync", "mkdirSync", "renameSync", "rmSync", "unlinkSync"]) {
+    check(`ops-digest.ts never calls ${call}`, !src.includes(call));
+  }
+  check("ops-digest.ts never names an email column", !/email/i.test(src));
+  check("ops-digest.ts uses verified_by only as a filter, never selects it",
+    (src.match(/verified_by/g) ?? []).length === 1 && src.includes('.not("verified_by", "is", null)'));
+  check("ops-digest.ts uses unsubscribe_token only to order the pages",
+    (src.match(/unsubscribe_token/g) ?? []).length === 1 && src.includes('.order("unsubscribe_token")'));
+}
+
+/* ---- scripts/ops-digest.ts against a fake PostgREST server ------------- */
+
+const TMP = mkdtempSync(path.join(tmpdir(), "kyv-ops-digest-"));
+const REPORTS = path.join(TMP, "project", "Agents", "RunReports");
+mkdirSync(REPORTS, { recursive: true });
+writeFileSync(path.join(REPORTS, "2026-09-14-R2.md"), "# R2\n");
+writeFileSync(path.join(TMP, "project", "CAP_Ops_Digest_latest.html"), "<html></html>\n");
+const live = (ms: number) => new Date(Date.now() - ms).toISOString();
+const TABLES: Record<string, unknown[]> = {
+  agent_run: [{ agent: "R1", started_at: live(2 * HOUR), finished_at: live(2 * HOUR), status: "ok", items_written: 2, summary: "swept" }],
+  review_item: [
+    { id: "r1", kind: "manual_news", source: "agent:R1", status: "pending", created_at: live(HOUR), decided_at: null, apply_error: null },
+    { id: "r2", kind: "candidate_lead", source: "agent:R5", status: "approved", created_at: live(3 * DAY), decided_at: live(DAY), apply_error: null },
+  ],
+  race: RACES,
+  race_publication: PUBS,
+  candidate: CANDIDATES,
+  profile: [{ candidate_id: "c-gov-r", race_id: "FL-GOV-general", audit: { balance_check_passed: true } }],
+  news_recent: [{ ...news("n1", { candidate_id: "c-gov-r", relation: "named" }), published_at: live(DAY) }],
+  news_sourceless: [news("n2", { item_type: "election_news", source_id: null })],
+  news_pipeline: [{ race_id: "FL-GOV-general", published_at: live(5 * DAY) }],
+  events_all: EVENTS,
+  events_verified: EVENTS.filter((e) => e.id !== "e-ev-bro"),
+  notification_send_log: [],
+  voting_info_subscription: [{ zip5: "33101", consent_at: live(DAY) }],
+  zip_district: [{ zip5: "33101", county_fips: "12086" }],
+};
+const requests: { method: string; table: string; query: string }[] = [];
+let failTable = "";
+const server = createServer((req, res) => {
+  const u = new URL(req.url ?? "/", "http://x");
+  const table = u.pathname.replace(/^\/rest\/v1\//, "");
+  requests.push({ method: req.method ?? "", table, query: u.search });
+  res.setHeader("content-type", "application/json");
+  if (table === failTable) {
+    res.statusCode = 400;
+    res.end(j({ code: "XX000", message: "boom", details: null, hint: null }));
+    return;
+  }
+  if (req.method === "HEAD") {
+    res.setHeader("content-range", "*/0");
+    res.end();
+    return;
+  }
+  const p = u.searchParams;
+  const key =
+    table === "news_item"
+      ? p.get("item_type") === "eq.pipeline_event" ? "news_pipeline" : p.get("source_id") === "is.null" ? "news_sourceless" : "news_recent"
+      : table === "election_event"
+        ? p.get("verified_by") === "not.is.null" ? "events_verified" : "events_all"
+        : table;
+  res.end(j(TABLES[key] ?? []));
+});
+await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+const port = (server.address() as { port: number }).port;
+
+function runDigest(args: string[], input: string): Promise<{ code: number | null; stdout: string; stderr: string }> {
+  return new Promise((resolve) => {
+    const child = spawn(process.execPath, ["--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", path.join(ROOT, "scripts", "ops-digest.ts"), ...args], {
+      env: {
+        PATH: process.env.PATH ?? "/usr/bin:/bin",
+        HOME: TMP,
+        NEXT_PUBLIC_SUPABASE_URL: `http://127.0.0.1:${port}`,
+        SUPABASE_SERVICE_ROLE_KEY: "test-key-not-real",
+        KYV_RUN_REPORTS: REPORTS,
+      },
+    });
+    let stdout = "";
+    let stderr = "";
+    child.stdout.on("data", (c) => (stdout += c));
+    child.stderr.on("data", (c) => (stderr += c));
+    const timer = setTimeout(() => child.kill("SIGKILL"), 60_000);
+    child.on("close", (code) => {
+      clearTimeout(timer);
+      resolve({ code, stdout, stderr });
+    });
+    child.stdin.end(input);
+  });
+}
+
+const listing = (dir: string) => readdirSync(dir, { recursive: true }).map(String).sort().join("\n");
+try {
+  const before = listing(TMP);
+  const taskRuns = j([{ task_id: "cap-r4-ops-digest", session_id: "self", status: "running", started_at: live(MIN), last_activity_at: null }]);
+  const ok = await runDigest([], taskRuns);
+  let d: ReturnType<typeof buildDigest> | null = null;
+  try {
+    d = JSON.parse(ok.stdout) as ReturnType<typeof buildDigest>;
+  } catch {
+    d = null;
+  }
+  check("the digest exits 0 and prints digest.json", ok.code === 0 && d !== null, `${ok.code}: ${ok.stderr}`);
+  check("and its summary line on stderr", /^digest: 1 pending review item\(s\); news sweep: /m.test(ok.stderr), ok.stderr);
+  check("the digest sends only GET and HEAD", requests.length > 0 && requests.every((r) => r.method === "GET" || r.method === "HEAD"),
+    j(requests.filter((r) => r.method !== "GET" && r.method !== "HEAD")));
+  const tables = [...new Set(requests.map((r) => r.table))].sort();
+  check("the digest reads exactly these tables", j(tables) === j(["agent_run", "candidate", "candidate_contact", "election_event", "news_item",
+    "notification_send_log", "profile", "race", "race_publication", "review_item", "voting_info_subscription", "zip_district"]), j(tables));
+  check("subscriptions are read as zip5 and consent_at, active only",
+    requests.some((r) => r.table === "voting_info_subscription" && r.query.includes("select=zip5%2Cconsent_at") && r.query.includes("active=eq.true")),
+    j(requests.filter((r) => r.table === "voting_info_subscription")));
+  check("races are read for the guide's election only", requests.some((r) => r.table === "race" && r.query.includes(`election=eq.${ELECTION_KIND}`)));
+  check("the digest writes no file", listing(TMP) === before, listing(TMP));
+  if (d) {
+    check("digest.json: the review backlog", d.review_queue.pending_total === 1 && d.r5.by_status.approved === 1, j(d.review_queue));
+    check("digest.json: the ballot tier from race, publication and candidate rows", d.logistics.tier_candidates === 8, String(d.logistics.tier_candidates));
+    check("digest.json: candidate_contact counted with a HEAD", d.logistics.candidate_contact_rows === 0);
+    check("digest.json: R2's newest report from the reports folder", d.runs.find((r) => r.agent === "R2")?.newest_report?.name === "2026-09-14-R2.md");
+    check("digest.json: R4's own run from stdin, not stuck", j(d.runs.find((r) => r.agent === "R4")?.task_runs.map((t) => [t.status, t.stuck])) === j([["running", false]]));
+    check("digest.json: the page paths beside RunReports",
+      d.outputs.latest === path.join(TMP, "project", "CAP_Ops_Digest_latest.html") && d.outputs.latest_exists &&
+        d.outputs.monthly.endsWith(`CAP_Ops_Digest_${d.date.slice(0, 7)}.html`) && !d.outputs.monthly_exists, j(d.outputs));
+    check("digest.json: sourceless rows", d.feed.sourceless.count === 1);
+    check("digest.json: the reminder check ran over the verified rows", d.crons.reminders.active_subscriptions === 1);
+  }
+
+  const arg = await runDigest(["--dry-run"], "[]");
+  check("an unknown argument exits 2 and prints nothing", arg.code === 2 && arg.stdout === "", `${arg.code}: ${arg.stderr}`);
+
+  failTable = "review_item";
+  const failed = await runDigest([], "[]");
+  check("a read error exits 1, names the table and prints nothing",
+    failed.code === 1 && failed.stdout === "" && failed.stderr.includes("could not read review_item: boom"), `${failed.code}: ${failed.stderr}`);
+} finally {
+  server.close();
+  rmSync(TMP, { recursive: true, force: true });
+}
 if (failures > 0) {
   console.error(`\nverify-ops-digest: ${failures} failure(s)`);
   process.exit(1);
