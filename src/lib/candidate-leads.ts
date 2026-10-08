@@ -31,6 +31,30 @@ export interface Mention {
   florida_2026: boolean;
 }
 
+const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
+
+/** The agent's mentions are untrusted input. The first problem, as a message
+    naming the mention's index and the field, or null when every mention is
+    well formed. The caller refuses the whole batch on a problem rather than let
+    buildLeads coerce it (a string "false" is truthy). A name and an office must
+    say something: the console card shows both, and the payload schema requires
+    both. */
+export function mentionProblem(raw: unknown[]): string | null {
+  const text = ["name", "office", "jurisdiction", "county", "evidence"] as const;
+  for (const [i, m] of raw.entries()) {
+    if (!isRecord(m)) return `mention ${i} is not an object`;
+    for (const f of text) if (typeof m[f] !== "string") return `mention ${i}: ${f} must be a string`;
+    for (const f of ["name", "office"] as const) {
+      if ((m[f] as string).trim() === "") return `mention ${i}: ${f} must not be blank`;
+    }
+    if (!Array.isArray(m.stories) || !m.stories.every((n) => Number.isInteger(n))) {
+      return `mention ${i}: stories must be an array of integers`;
+    }
+    if (typeof m.florida_2026 !== "boolean") return `mention ${i}: florida_2026 must be true or false (a boolean)`;
+  }
+  return null;
+}
+
 export interface StoryRef {
   url: string;
   title: string;
@@ -61,6 +85,22 @@ export type DropReason =
   | "already_queued";
 
 const MAX_STORIES = 20;
+/** CandidateLeadPayloadSchema limits (src/types/admin.ts) for a story's title and outlet. */
+const MAX_TITLE = 240;
+const MAX_OUTLET = 120;
+
+/** `text` cut to `max` UTF-16 units, never ending on half of a surrogate pair. */
+function clip(text: string, max: number): string {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  return /[\uD800-\uDBFF]$/.test(cut) ? cut.slice(0, -1) : cut;
+}
+
+/** A story as the payload will carry it: title and outlet inside the schema's
+    limits, so one long headline cannot refuse a whole batch. */
+function storyRef(ref: StoryRef): StoryRef {
+  return { ...ref, title: clip(ref.title, MAX_TITLE), outlet: clip(ref.outlet, MAX_OUTLET) };
+}
 
 /** One comparable form of a person's name: no accents, no quoted nickname or
     parenthetical, no suffix (Jr., Sr., II to IV), no single-letter initial,
@@ -151,8 +191,8 @@ export function buildLeads(
     }
     const refs: StoryRef[] = [];
     for (const i of m.stories) {
-      const ref = stories.get(i);
-      if (ref && !refs.some((r) => r.url === ref.url)) refs.push(ref);
+      const found = stories.get(i);
+      if (found && !refs.some((r) => r.url === found.url)) refs.push(storyRef(found));
     }
     if (refs.length === 0) {
       dropped.push({ name: m.name, reason: "no_story" });

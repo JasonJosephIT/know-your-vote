@@ -19,7 +19,7 @@ import { loadRoster, runSweep } from "../src/lib/news-intake.ts";
 import { planAttachments } from "../src/lib/news-enqueue.ts";
 import { matchArticle } from "../src/lib/news-match.ts";
 import { OUTLETS, outletForUrl } from "../src/lib/news-sources.ts";
-import { buildLeads, keepForReading, planQueue, type Mention, type StoryRef } from "../src/lib/candidate-leads.ts";
+import { buildLeads, keepForReading, mentionProblem, planQueue, type Mention, type StoryRef } from "../src/lib/candidate-leads.ts";
 
 loadEnvLocal(import.meta.url);
 
@@ -54,20 +54,11 @@ function options(valued: string[], bare: string[]): Map<string, string | true> {
   return found;
 }
 
-const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
-
 /** The agent's mentions are untrusted input: refuse the whole batch at the first
-    malformed one rather than let buildLeads coerce it (a string "false" is truthy). */
+    malformed one (rules in mentionProblem). */
 function validMentions(raw: unknown[]): Mention[] {
-  const text = ["name", "office", "jurisdiction", "county", "evidence"] as const;
-  raw.forEach((m, i) => {
-    if (!isRecord(m)) die(`mention ${i} is not an object`);
-    for (const f of text) if (typeof m[f] !== "string") die(`mention ${i}: ${f} must be a string`);
-    if (!Array.isArray(m.stories) || !m.stories.every((n) => Number.isInteger(n))) {
-      die(`mention ${i}: stories must be an array of integers`);
-    }
-    if (typeof m.florida_2026 !== "boolean") die(`mention ${i}: florida_2026 must be true or false (a boolean)`);
-  });
+  const problem = mentionProblem(raw);
+  if (problem) die(problem);
   return raw as Mention[];
 }
 

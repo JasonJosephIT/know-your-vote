@@ -14,6 +14,7 @@ import {
   isRunningMateOffice,
   keepForReading,
   leadDedupeKey,
+  mentionProblem,
   mentionsRunningMate,
   normalizeName,
   planQueue,
@@ -164,6 +165,25 @@ check("dedupe key: normalized name, kind, county",
   leadDedupeKey("Bryan Ávila", "running_mate", null) === "bryan avila|running_mate|statewide"
     && leadDedupeKey("Elizabeth Holmes", "other_county", "12099") === "elizabeth holmes|other_county|12099");
 
+/* ---- the agent's mentions are untrusted input ----------------------------- */
+
+check("a well-formed mention has no problem", mentionProblem([m({}), m({ county: "", evidence: "", jurisdiction: "" })]) === null,
+  String(mentionProblem([m({}), m({ county: "", evidence: "", jurisdiction: "" })])));
+for (const [label, list, want] of [
+  ["a non-object", [m({}), "Bryan Avila"], "mention 1 is not an object"],
+  ["an array", [[]], "mention 0 is not an object"],
+  ["a missing field", [{ ...m({}), county: undefined }], "mention 0: county must be a string"],
+  ["a blank name", [m({}), m({ name: "   " })], "mention 1: name must not be blank"],
+  ["an empty name", [m({ name: "" })], "mention 0: name must not be blank"],
+  ["a blank office", [m({}), m({}), m({ office: " \t " })], "mention 2: office must not be blank"],
+  ["an empty office", [m({ office: "" })], "mention 0: office must not be blank"],
+  ["stories that are not integers", [m({ stories: [1, "2" as unknown as number] })], "mention 0: stories must be an array of integers"],
+  ["florida_2026 as a string", [m({ florida_2026: "false" as unknown as boolean })], "mention 0: florida_2026 must be true or false (a boolean)"],
+] as const) {
+  const got = mentionProblem(list as unknown[]);
+  check(`${label} is refused, naming the index and field`, got === want, String(got));
+}
+
 /* ---- building leads -------------------------------------------------------- */
 
 const story = (i: number): StoryRef => ({
@@ -225,6 +245,28 @@ check("a blank or whitespace-only name never becomes a lead", blank.leads.length
 check("each blank name is dropped as no_name, even when it would also fail classification",
   blank.dropped.length === 4 && blank.dropped.every((d) => d.reason === "no_name"),
   JSON.stringify(blank.dropped));
+
+/* A story's title and outlet are cut to the payload schema's limits (240, 120)
+   so one long headline cannot refuse the whole batch. */
+const longStory = new Map<number, StoryRef>([[1, {
+  url: "https://flvoicenews.com/long",
+  title: "T".repeat(300),
+  outlet: "O".repeat(200),
+  published_at: "2026-10-05T12:00:00.000Z",
+}]]);
+const longBuilt = buildLeads([m({ name: "Lon Gtitle", stories: [1] })], longStory, [], new Set());
+check("a 300-character title is cut to 240 and a 200-character outlet to 120",
+  longBuilt.leads[0]?.stories[0].title.length === 240 && longBuilt.leads[0]?.stories[0].outlet.length === 120,
+  JSON.stringify(longBuilt.leads[0]?.stories.map((s) => [s.title.length, s.outlet.length])));
+check("the source story map is not modified by the cut", longStory.get(1)?.title.length === 300);
+const longPlan = planQueue(
+  longBuilt.leads.map((l) => ({ ...l, verification: { status: "unchecked" as const, url: null, note: null } })),
+  new Set());
+check("a lead built from a long headline passes planQueue", longPlan.ok && longPlan.rows.length === 1, JSON.stringify(longPlan));
+/* A cut must not leave half of a surrogate pair: that is not valid JSON text for Postgres. */
+const emojiStory = new Map<number, StoryRef>([[1, { ...story(1), title: "x".repeat(239) + "\u{1F5F3}\uFE0F tail" }]]);
+const emojiTitle = buildLeads([m({ name: "Emo Ji", stories: [1] })], emojiStory, [], new Set()).leads[0]?.stories[0].title ?? "";
+check("a cut never leaves a lone surrogate", emojiTitle.length <= 240 && !/[\uD800-\uDBFF]$/.test(emojiTitle), JSON.stringify(emojiTitle.slice(-3)));
 
 const again = buildLeads(mentions, stories, roster, new Set(["bryan avila|running_mate|statewide"]));
 check("a key already queued or decided is skipped as already_queued",
