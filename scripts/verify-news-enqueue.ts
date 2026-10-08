@@ -374,12 +374,22 @@ check("isElectionRelated reads the summary too",
     !ManualNewsPayloadSchema.safeParse({ ...state, county_fips: "12086" }).success);
 }
 
-/* The twice-weekly cron (founder 2026-10-06). */
+/* The daily cron (news-source-integrity §3.5, D9: recommended, pending the
+   founder; it was Mondays and Thursdays from 2026-10-06). TO FLIP: restore
+   "0 11 * * 1,4" in vercel.json and here. */
 {
   const vercel = JSON.parse(readFileSync(resolve(import.meta.dirname, "..", "vercel.json"), "utf8"));
   const cron = (vercel.crons ?? []).find((c: { path: string }) => c.path === "/api/cron/news-sweep");
-  check("vercel.json runs /api/cron/news-sweep Mondays and Thursdays", cron?.schedule === "0 11 * * 1,4", JSON.stringify(cron));
+  check("vercel.json runs /api/cron/news-sweep daily at 11:00 UTC", cron?.schedule === "0 11 * * *", JSON.stringify(cron));
   const routeSrc = readFileSync(resolve(import.meta.dirname, "..", "src/app/api/cron/news-sweep/route.ts"), "utf8");
+  const routeCode = routeSrc.replace(/\/\*[\s\S]*?\*\//g, "");
+  check("the window stays 14 days, so overlap and dedupe are unchanged", /const WINDOW_DAYS = 14;/.test(routeCode));
+  const logAt = routeCode.indexOf("console.log(sweep.depthLine)");
+  const queueAt = routeCode.indexOf("enqueueIntake(service, sweep.articles)");
+  check("the cron logs the depth line once the sweep returns, before queueing can fail",
+    logAt !== -1 && queueAt !== -1 && logAt < queueAt, `log@${logAt} queue@${queueAt}`);
+  check("both the 200 and the queue-failure 502 carry shallowFeeds",
+    (routeCode.match(/shallowFeeds: sweep\.shallowFeeds/g) ?? []).length === 2);
   check("the cron is CRON_SECRET-gated and runs the shared intake",
     /secretEquals\(request\.headers\.get\("authorization"\), `Bearer \$\{secret\}`\)/.test(routeSrc) &&
       /runSweep\(/.test(routeSrc) && /enqueueIntake\(service, sweep\.articles\)/.test(routeSrc));

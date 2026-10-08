@@ -3,8 +3,12 @@ import { secretEquals } from "@/lib/secret-compare";
 import { createServiceClient } from "@/lib/supabase/service";
 import { enqueueIntake, runSweep } from "@/lib/news-intake";
 
-/* The news intake, twice a week (founder 2026-10-06; vercel.json, Mondays and
-   Thursdays). It sweeps every usable outlet for the last 14 days and queues
+/* The news intake, daily at 11:00 UTC (vercel.json; news-source-integrity
+   §3.5, founder decision D9, recommended and pending confirmation; it ran
+   Mondays and Thursdays from 2026-10-06). Most feeds hold under three days of
+   stories, so a twice-weekly run missed what fell off between runs; daily
+   leaves only the feeds the depth line below names as shallow. It sweeps
+   every usable outlet for the last 14 days and queues
    what it finds as PENDING review items: stories naming a candidate on the
    ballot, and election stories that name no one (statewide or county-scoped).
    Nothing here is voter-facing. A row reaches the site only once an operator
@@ -65,10 +69,16 @@ async function run(request: NextRequest) {
     return NextResponse.json({ error: (err as Error).message }, { status: 502 });
   }
 
+  /* Feed depth, one line per run, logged before queueing so a run that fails
+     to queue still records it. Vercel's runtime logs keep it for a while;
+     the response carries the shallow feeds for a manual POST. */
+  console.log(sweep.depthLine);
+
   try {
     const result = await enqueueIntake(service, sweep.articles);
     return NextResponse.json({
       sweep: sweep.summary,
+      shallowFeeds: sweep.shallowFeeds,
       fetchFailures: failures,
       queue: result.summary,
       queued: result.queued,
@@ -78,7 +88,7 @@ async function run(request: NextRequest) {
     });
   } catch (err) {
     return NextResponse.json(
-      { sweep: sweep.summary, error: (err as Error).message },
+      { sweep: sweep.summary, shallowFeeds: sweep.shallowFeeds, error: (err as Error).message },
       { status: 502 }
     );
   }

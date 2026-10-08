@@ -43,7 +43,7 @@
    value to squeeze it through would put a story in the wrong county's feed.
 
    SINCE 2026-10-06 the matching and writing live in src/lib/news-intake.ts
-   (enqueueIntake), shared with the twice-weekly cron, and an article that
+   (enqueueIntake), shared with the daily cron, and an article that
    names no candidate is still queued when it is about the election
    (UNMATCHED_ARTICLE_POLICY = "election_keywords", src/lib/news-enqueue.ts).
    This script keeps stdin, the env and the exit codes.

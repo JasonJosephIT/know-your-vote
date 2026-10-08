@@ -411,7 +411,7 @@ check("a short first sentence alone is not a dek: the cut falls back to whole wo
   floor.length >= 80 && floor.length <= DEK_MAX && floor.startsWith("Short lead. Voters") && floor.endsWith("…"), floor.slice(0, 40));
 
 /* A malformed numeric entity must never abort a sweep: one bad item would
-   otherwise stop the whole twice-weekly intake run. */
+   otherwise stop the whole daily intake run. */
 let entityRows: ReturnType<typeof run> = [];
 let threw = "";
 try {

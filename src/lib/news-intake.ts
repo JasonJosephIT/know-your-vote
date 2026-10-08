@@ -1,5 +1,5 @@
 /* The news intake run, shared by the scripts (scripts/news-sweep.ts,
-   scripts/news-enqueue.ts) and the twice-weekly cron
+   scripts/news-enqueue.ts) and the daily cron
    (src/app/api/cron/news-sweep/route.ts; founder 2026-10-06).
 
    Two halves, the same two the scripts always had:
