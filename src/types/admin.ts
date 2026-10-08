@@ -171,7 +171,7 @@ export const CandidateLeadPayloadSchema = z
 
 /* ---- review_item discriminated union (per review_item.kind) -------------- */
 
-/* The full content shape of any review_item row: the six kinds, each pairing
+/* The full content shape of any review_item row: the seven kinds, each pairing
    its `kind` literal with its validated `payload`. Used to parse rows read back
    from the DB before the queue renders them, and by the effects map before it
    applies anything. */

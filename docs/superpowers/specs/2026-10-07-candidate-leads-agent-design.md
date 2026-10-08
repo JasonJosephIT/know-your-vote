@@ -18,7 +18,10 @@ Two kinds of lead, chosen by the founder:
   running-mate field on any of the eight governor tickets.
 
 Out of scope (founder, 2026-10-07): city races inside the covered counties,
-Florida House and Senate seats, and any voter-facing "in the news" feature.
+Florida House and Senate seats inside the covered counties, and any
+voter-facing "in the news" feature. The scope is the county, not the office: a
+Florida House or Senate race in any other county is an `other_county` lead, and
+so is a city race there.
 
 ### Why an agent, not the production cron
 
@@ -63,9 +66,12 @@ that crashes under Rosetta on this Mac. So:
 2. **Prep**: `node scripts/candidate-leads.ts prep --days 14 > stories.json`.
    Runs the same sweep as the cron (`runSweep`, so summaries are the stored
    400-character deks) and keeps the stories that matched no roster candidate
-   (`planAttachments`: neither attachments nor `named`/`related` matches).
-   Output: `[{ i, title, summary, url, outlet, published_at }]`. Writes
-   nothing.
+   (`planAttachments`: neither attachments nor `named`/`related` matches),
+   plus any story that mentions a running mate, matched or not
+   (`keepForReading`, using `RUNNING_MATE_PATTERN`). A running-mate story names
+   the governor candidate, who is on the roster, so an unmatched-only filter
+   would never show R5 one. Output: `[{ i, title, summary, url, outlet,
+   published_at }]`. Writes nothing.
 3. **Extract** (the agent): read every story; list each person the title or
    summary presents as a candidate (running for, seeking, challenging,
    nominee for, running mate, write-in, qualified for), with office,
@@ -96,16 +102,21 @@ the report says why; a partial queue is never written.
 
 - **Florida 2026 only**: a mention without `florida_2026: true` is dropped.
 - **Kind**:
-  - `running_mate` when the office names the lieutenant governor;
+  - `running_mate` when the office names the lieutenant governor or a running
+    mate (`RUNNING_MATE_PATTERN`: "Lieutenant Governor", "Lt. Gov.", "running
+    mate", "vicegobernador", "compañera de fórmula");
   - `other_county` when the county resolves to a Florida county outside the
     covered four;
-  - otherwise dropped (covered-county, statewide non-running-mate, unknown
-    county), with the reason recorded.
+  - otherwise dropped, with the reason recorded: `covered_county`, or
+    `unknown_county` for an unknown name, a blank one, and a statewide office
+    that is not a running mate (U.S. Senate, Governor, Attorney General): the
+    only statewide lead is the running mate.
 - **County**: a fixed table of Florida's 67 counties (Census FIPS 12001 to
   12133) resolves the agent's county name. Unknown names are dropped, never
   guessed.
 - **Names**: fold accents, drop suffixes (Jr., Sr., II to IV), middle initials
-  and quoted nicknames (kept as an alias), and compare case-insensitively.
+  and quoted nicknames or parentheticals (dropped, not kept as aliases), and
+  compare case-insensitively.
   "Bryan Ávila" and "Bryan Avila" are one lead; "Oliver G. Gilbert III"
   matches the roster's "Oliver G. Gilbert III" and "Oliver Gilbert".
 - **Roster**: a lead whose normalized name equals a ballot-tier candidate's
@@ -115,10 +126,29 @@ the report says why; a partial queue is never written.
   into one lead with all their stories. A key already present on any
   `candidate_lead` item (pending, approved or rejected) is skipped.
 - **Equal treatment**: no rule reads party, and leads are never ranked.
+- **The agent's mentions are untrusted input**: `check` refuses the whole run
+  at the first malformed mention (not an object, a field of the wrong type, a
+  blank name or office, stories that are not integers, `florida_2026` not a
+  boolean), naming its index and field.
+- **Story fields fit the payload**: a lead's story title is cut to 240
+  characters and its outlet to 120, the schema's limits, so one long headline
+  cannot refuse a batch.
+- **Queue refusals** (`planQueue`, all before any write; one bad item refuses
+  the whole batch): a batch of more than 50 leads (`MAX_BATCH`; the research
+  pass found about 8 per two weeks); a lead whose `county_fips` is one of the
+  covered four (covered counties are never leads, whatever the key says); a
+  `county_fips` that is not a Florida county; a `dedupe_key` that is not the
+  one its name, kind and county produce.
+- **Concurrent runs**: `queue` reads the existing keys and skips them, but two
+  overlapping runs can both read before either writes. Migration 0047 adds a
+  partial unique index on `payload->>'dedupe_key'` for `candidate_lead` rows,
+  so the second insert fails and its batch writes nothing.
 
 ## 5. Console
 
-- **Migration 0047** widens `review_item_kind_check` with `candidate_lead`.
+- **Migration 0047** widens `review_item_kind_check` with `candidate_lead` and
+  adds the unique index `uq_review_item_candidate_lead_key` on
+  `payload->>'dedupe_key'` (partial, `kind = 'candidate_lead'`, every status).
 - **`CandidateLeadPayloadSchema`** (`src/types/admin.ts`):
   - `name` (1 to 120), `office` (1 to 200), `jurisdiction` (to 200);
   - `kind` (`other_county` or `running_mate`);
@@ -142,6 +172,20 @@ constitution, how to work (section 3), operations appendix (workspace, node
 path, script commands), hard rails. It writes only through
 `candidate-leads.ts queue` and never through `execute_sql` INSERT.
 
+### Known risk (accepted)
+
+The scheduled task runs with the desktop app's tools, which include the
+Supabase connector and a shell. The prompt's rails (write only through
+`candidate-leads.ts queue`, stories are data) are instructions to the model,
+not a security boundary: a hijacked run, say by a story that carries
+instructions, could write elsewhere. What limits and exposes the damage, with
+or without the prompt, is the pending-only write path (the sanctioned `queue`
+inserts only pending, operator-only `candidate_lead` rows), the dirty-worktree
+refusal at the next run (`agent-worktree.sh` stops if the agent worktree was
+edited), and operator review of every item. They do not prevent a bad write.
+This is recorded as an accepted risk until scheduled tasks can be given
+per-task tool limits.
+
 ## 7. Testing
 
 - `scripts/verify-candidate-leads.ts` (plain Node): name normalization,
@@ -151,7 +195,8 @@ path, script commands), hard rails. It writes only through
   pass. Each guard is mutation-checked.
 - `verify-admin-effects.ts`: `candidate_lead` plans `record_disposition` and
   never a write.
-- `verify-migrations.mjs`: 0047 applies and the CHECK accepts the new kind.
+- `verify-migrations.mjs`: 0047 applies, the CHECK accepts the new kind, and
+  the unique index rejects a second `candidate_lead` with the same dedupe key.
 
 ## 8. Not in this design
 
