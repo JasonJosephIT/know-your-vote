@@ -15,11 +15,15 @@ import { buildBallotRoster } from "../src/lib/news-intake.ts";
 import {
   DOE_STATUS,
   VOTERFOCUS_STATUS,
+  classifySite,
   doeOfficeGroup,
   doeRaceId,
+  looksParked,
   matchVoterFocus,
   parseDoeExtract,
   parseVoterFocus,
+  robotsText,
+  runningMateOnPage,
 } from "../src/lib/logistics-check.ts";
 
 let failures = 0;
@@ -138,6 +142,33 @@ const twin = matchVoterFocus({ candidateId: "FL-VF-ORA-2", legalName: "Pat Lee" 
 check("two rows with one name: the ca= id picks the row", twin.kind === "match" && twin.row.ca === "2", JSON.stringify(twin));
 check("two rows with one name and no ca= match: ambiguous",
   matchVoterFocus({ candidateId: "FL-VF-ORA-9", legalName: "Pat Lee" }, twins).kind === "ambiguous");
+/* ---- sites ----------------------------------------------------------------- */
+
+const site = "https://www.example-campaign.com/";
+check("a 200 on the same site is live", classifySite(site, { status: 200, finalUrl: "https://example-campaign.com/", body: "<html><title>Vote</title></html>" }).outcome === "live");
+check("a Cloudflare interstitial is a challenge, even on 403",
+  classifySite(site, { status: 403, finalUrl: site, body: "<html><head><title>Just a moment...</title></head></html>" }).outcome === "challenge");
+check("SiteGround's robot challenge is a challenge",
+  classifySite(site, { status: 202, finalUrl: site, body: '<meta http-equiv="refresh" content="0;/.well-known/sgcaptcha/?r=%2F">' }).outcome === "challenge");
+check("a for-sale page is parked, even on another host",
+  classifySite(site, { status: 200, finalUrl: "https://www.hugedomains.com/domain_profile.cfm?d=example-campaign.com", body: "<title>example-campaign.com is for sale</title>" }).outcome === "parked");
+check("GoDaddy's lander is parked", looksParked("<p>This domain is registered, but may still be available.</p>"));
+check("a campaign page that says 'sale' in passing is not parked", !looksParked("<title>Smith for Mayor</title><p>Yard signs are for sale at the office</p>"));
+check("a redirect to another site is moved",
+  classifySite(site, { status: 200, finalUrl: "https://unrelated-casino.example/", body: "<title>Win big</title>" }).outcome === "moved");
+check("a 404 or no response is dead",
+  classifySite(site, { status: 404, finalUrl: site, body: "Not found" }).outcome === "dead" && classifySite(site, null).outcome === "dead");
+check("robots.txt: a 404 is no rules and no note", JSON.stringify(robotsText({ status: 404, finalUrl: "", body: "" })) === JSON.stringify({ text: "", note: null }));
+check("robots.txt: a 500 or an HTML page is no rules, noted",
+  robotsText({ status: 500, finalUrl: "", body: "" }).note !== null && robotsText({ status: 200, finalUrl: "", body: "<html></html>" }).note !== null);
+check("robots.txt: a text file is read", robotsText({ status: 200, finalUrl: "", body: "User-agent: *\nDisallow: /x" }).text.includes("Disallow"));
+
+/* ---- running mates: the DoE page reader ------------------------------------ */
+
+const canDetail = '<br>\n                    Running Mate: Bryan&nbsp;\n\t\t    Avila                     </td>';
+check("the DoE page's running mate reads as the roster worksheet reads it", runningMateOnPage(canDetail) === "Bryan Avila", String(runningMateOnPage(canDetail)));
+check("no Running Mate field is null; markup in it is unreadable",
+  runningMateOnPage("<td>Status: Qualified</td>") === null && runningMateOnPage("Running Mate: <b>X</b></td>") === undefined);
 if (failures > 0) {
   console.error(`\n${failures} logistics-check check(s) failed`);
   process.exit(1);

@@ -16,7 +16,7 @@
    plain-Node scripts import this. */
 
 import { normalizeName } from "./candidate-leads.ts";
-import { decodeEntities } from "./candidate-site.ts";
+import { decodeEntities, isSameSite, looksLikeBotChallenge } from "./candidate-site.ts";
 export type QualifyingStatus = "qualified" | "unopposed" | "elected_in_primary" | "withdrawn" | "other";
 
 /** Who R2's review items say proposed them. */
@@ -207,4 +207,97 @@ export function matchVoterFocus(
   const ca = candidate.candidateId.split("-").at(-1);
   const byId = hits.filter((r) => r.ca === ca);
   return byId.length === 1 ? { kind: "match", row: byId[0] } : { kind: "ambiguous", count: hits.length };
+}
+
+/* ---- running mates (report lines only) --------------------------------- */
+
+/** The running mate a DoE canDetail page names, read as the roster worksheet
+    reads it (parseRunningMate and normalizeDoeText in scripts/roster-reads-lib.ts
+    on claude/roster-completeness): the text after "Running Mate:" up to the
+    cell's end, entities decoded, non-breaking spaces as spaces, whitespace
+    collapsed. null when the page has no such field; undefined when the field
+    holds markup or an entity the decoder does not know (unreadable). */
+export function runningMateOnPage(html: string): string | null | undefined {
+  const m = /Running Mate:([\s\S]*?)<\/td>/i.exec(html);
+  if (!m) return null;
+  if (/<[a-z/!]/i.test(m[1])) return undefined;
+  const decoded = decodeEntities(m[1]).replace(/\xa0/g, " ");
+  if (/&(?:#\d+|#x[0-9a-f]+|[a-z][a-z0-9]*);/i.test(decoded)) return undefined;
+  return decoded.replace(/\s+/g, " ").trim();
+}
+
+/* ---- candidate sites --------------------------------------------------- */
+
+export type SiteOutcome = "live" | "challenge" | "moved" | "parked" | "dead" | "robots" | "unchecked";
+
+export interface SiteResponse {
+  status: number;
+  /** After redirects. */
+  finalUrl: string;
+  body: string;
+}
+
+/** The host, lowercase, without a leading `www.`; null for a bad URL. */
+export function siteHost(url: string): string | null {
+  try {
+    return new URL(url).hostname.toLowerCase().replace(/^www\./, "");
+  } catch {
+    return null;
+  }
+}
+
+/* Registrar and marketplace parking pages. Matched in the head of the body
+   only, like looksLikeBotChallenge. */
+const PARKED_MARKERS: readonly RegExp[] = [
+  /this domain (name )?(is|may be) for sale/i,
+  /\bbuy this domain\b/i,
+  /this domain is registered,? but may still be available/i,
+  /\bdomain (has been |is )?parked\b/i,
+  /\bparked (free|domain|page)\b/i,
+  /sedoparking\.com|parkingcrew\.net|bodis\.com|hugedomains\.com|afternic\.com|dan\.com\/(buy-domain|lander)/i,
+  /<title>[^<]*\bfor sale\b[^<]*<\/title>/i,
+];
+
+/** True when `body` is a parked or for-sale domain page. */
+export function looksParked(body: string): boolean {
+  const head = body.slice(0, 50_000);
+  return PARKED_MARKERS.some((re) => re.test(head));
+}
+
+/** robots.txt as `sites` reads it. A 4xx means the site published none (RFC
+    9309). Anything else unreadable (no answer, a 5xx, a challenge or HTML
+    page in its place) is read as no rules and noted, as
+    scripts/candidate-site-ingest.ts does (founder decision 2026-09-25). */
+export function robotsText(response: SiteResponse | null): { text: string; note: string | null } {
+  if (!response) return { text: "", note: "robots.txt unreadable (no response)" };
+  if (response.status >= 400 && response.status < 500) return { text: "", note: null };
+  if (response.status < 200 || response.status >= 300) {
+    return { text: "", note: `robots.txt unreadable (HTTP ${response.status})` };
+  }
+  if (looksLikeBotChallenge(response.body) || /^\s*</.test(response.body)) {
+    return { text: "", note: "robots.txt unreadable (not a text file)" };
+  }
+  return { text: response.body, note: null };
+}
+
+/** One homepage fetch's outcome (spec §3.6). `response` null is a failed
+    fetch (DNS, TLS, timeout). Order matters: a 403 or 503 interstitial is a
+    challenge, not dead; a parking page often sits on another host, so parked
+    is decided before moved. Only `live` stamps site_last_verified_at. */
+export function classifySite(
+  officialSite: string,
+  response: SiteResponse | null,
+): { outcome: SiteOutcome; detail: string } {
+  if (!response) return { outcome: "dead", detail: "no response" };
+  if (looksLikeBotChallenge(response.body)) {
+    return { outcome: "challenge", detail: `bot challenge, HTTP ${response.status}` };
+  }
+  if (response.status < 200 || response.status >= 300) {
+    return { outcome: "dead", detail: `HTTP ${response.status}` };
+  }
+  if (looksParked(response.body)) return { outcome: "parked", detail: `parked page at ${response.finalUrl}` };
+  if (!isSameSite(officialSite, response.finalUrl)) {
+    return { outcome: "moved", detail: `now lands on ${response.finalUrl}` };
+  }
+  return { outcome: "live", detail: `HTTP ${response.status}` };
 }
