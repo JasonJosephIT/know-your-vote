@@ -263,6 +263,24 @@ assert(
     GATED_FIELDS.candidate.fields.has("qualifying_status")
 );
 
+/* ---- candidate_lead → record_disposition (R5) -------------------------- */
+const leadPlan = planEffect({
+  kind: "candidate_lead",
+  payload: {
+    name: "Bryan Avila",
+    office: "Lieutenant Governor",
+    jurisdiction: "statewide",
+    kind: "running_mate",
+    county_fips: null,
+    evidence: "Donalds' running mate, Bryan Avila, for lieutenant governor",
+    stories: [{ url: "https://flvoicenews.com/x", title: "Coalition for Donalds", outlet: "Florida's Voice", published_at: "2026-10-05T00:00:00Z" }],
+    verification: { status: "unchecked", url: null, note: null },
+    dedupe_key: "bryan avila|running_mate|statewide",
+  },
+});
+assert("candidate_lead → record_disposition, never a write",
+  leadPlan.type === "record_disposition", JSON.stringify(leadPlan));
+
 if (failures) {
   console.error(`\n${failures} admin-effects self-test check(s) failed`);
   process.exit(1);

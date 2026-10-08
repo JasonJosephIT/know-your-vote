@@ -909,6 +909,31 @@ await expectConstraintViolation(
   "INSERT INTO review_item (kind, source, payload) VALUES ('bogus','operator','{}');",
   /violates check constraint "review_item_kind_check"/
 );
+await check("0047 review_item.kind accepts candidate_lead", async () => {
+  await db.exec("INSERT INTO review_item (kind, source, payload) VALUES ('candidate_lead','agent:R5','{}');");
+  await db.exec("DELETE FROM review_item WHERE kind = 'candidate_lead';");
+});
+/* The unique index backstops two R5 runs queuing the same lead at once: the
+   dedupe-key read in `candidate-leads.ts queue` cannot see a row another run
+   inserts a moment later, so the database refuses the second one. */
+await db.exec(
+  `INSERT INTO review_item (kind, source, payload)
+   VALUES ('candidate_lead','agent:R5','{"dedupe_key":"probe lead|other_county|12099"}');`
+);
+await expectConstraintViolation(
+  "0047 unique index rejects a second candidate_lead with the same dedupe_key",
+  `INSERT INTO review_item (kind, source, payload, status)
+   VALUES ('candidate_lead','agent:R5','{"dedupe_key":"probe lead|other_county|12099"}','rejected');`,
+  /duplicate key value violates unique constraint "uq_review_item_candidate_lead_key"/
+);
+await check("0047 unique index allows a different dedupe_key and other kinds sharing one", async () => {
+  await db.exec(
+    `INSERT INTO review_item (kind, source, payload)
+     VALUES ('candidate_lead','agent:R5','{"dedupe_key":"another lead|other_county|12099"}'),
+            ('manual_news','operator','{"dedupe_key":"probe lead|other_county|12099"}');`
+  );
+});
+await db.exec("DELETE FROM review_item WHERE payload->>'dedupe_key' IN ('probe lead|other_county|12099','another lead|other_county|12099');");
 await expectConstraintViolation(
   "review_item.status CHECK rejects an unknown status",
   "INSERT INTO review_item (kind, source, payload, status) VALUES ('manual_news','operator','{}','bogus');",

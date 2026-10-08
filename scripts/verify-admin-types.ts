@@ -8,6 +8,7 @@
    .ts extension, same as verify-news-neutrality.ts.) */
 
 import {
+  CandidateLeadPayloadSchema,
   DecisionBodySchema,
   IngestBodySchema,
   ManualNewsPayloadSchema,
@@ -206,6 +207,34 @@ assert(
   "review content: an unknown kind is rejected by the union",
   !ReviewItemContentSchema.safeParse({ kind: "made_up", payload: {} }).success
 );
+
+/* ---- candidate_lead (R5, spec 2026-10-07) ------------------------------ */
+const lead = {
+  name: "Elizabeth Holmes",
+  office: "Florida House, District 94",
+  jurisdiction: "District 94",
+  kind: "other_county",
+  county_fips: "12099",
+  evidence: "State House Candidate Elizabeth Holmes",
+  stories: [{ url: "https://floridianpress.com/x", title: "Holmes canvass", outlet: "The Floridian", published_at: "2026-10-04T00:00:00Z" }],
+  verification: { status: "found", url: "https://dos.elections.myflorida.com/candidates/", note: null },
+  dedupe_key: "elizabeth holmes|other_county|12099",
+};
+assert("candidate_lead: a valid lead parses", CandidateLeadPayloadSchema.safeParse(lead).success);
+assert("candidate_lead: the union accepts the kind",
+  ReviewItemContentSchema.safeParse({ kind: "candidate_lead", payload: lead }).success);
+assert("candidate_lead: other_county needs a county",
+  !CandidateLeadPayloadSchema.safeParse({ ...lead, county_fips: null }).success);
+assert("candidate_lead: a running mate carries no county",
+  !CandidateLeadPayloadSchema.safeParse({ ...lead, kind: "running_mate" }).success);
+assert("candidate_lead: found or not_found needs the URL that was read",
+  !CandidateLeadPayloadSchema.safeParse({ ...lead, verification: { status: "found", url: null, note: null } }).success);
+assert("candidate_lead: unchecked may have no URL",
+  CandidateLeadPayloadSchema.safeParse({ ...lead, verification: { status: "unchecked", url: null, note: "official list unreachable" } }).success);
+assert("candidate_lead: a lead needs at least one story",
+  !CandidateLeadPayloadSchema.safeParse({ ...lead, stories: [] }).success);
+assert("candidate_lead: a non-Florida county code is refused",
+  !CandidateLeadPayloadSchema.safeParse({ ...lead, county_fips: "13121" }).success);
 
 if (failures) {
   console.error(`\n${failures} admin-types self-test check(s) failed`);

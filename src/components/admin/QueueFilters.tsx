@@ -19,8 +19,9 @@ const KINDS = [
   "fact_flag",
   "unclear_statement",
   "unverified_fact",
+  "candidate_lead",
 ];
-const SOURCES = ["all", "operator", "agent:R1", "agent:R2", "agent:R3"];
+const SOURCES = ["all", "operator", "agent:R1", "agent:R2", "agent:R3", "agent:R5"];
 
 export function QueueFilters({
   status,

@@ -127,9 +127,51 @@ export const DateMismatchPayloadSchema = z.object({
   source_url: httpUrl,
 });
 
+/* candidate_lead: a person the news names as a 2026 Florida candidate whom
+   the guide does not cover, queued by R5 (spec
+   docs/superpowers/specs/2026-10-07-candidate-leads-agent-design.md §5).
+   Operator-only. Approving records "noted for research"; it never writes a
+   candidate or race row. */
+export const CANDIDATE_LEAD_KINDS = ["other_county", "running_mate"] as const;
+
+export const CandidateLeadPayloadSchema = z
+  .object({
+    name: z.string().trim().min(1).max(120),
+    office: z.string().trim().min(1).max(200),
+    jurisdiction: z.string().trim().max(200),
+    kind: z.enum(CANDIDATE_LEAD_KINDS),
+    county_fips: z.string().regex(/^12\d{3}$/, "a Florida county FIPS code").nullable(),
+    evidence: z.string().trim().max(300),
+    stories: z
+      .array(
+        z.object({
+          url: httpUrl,
+          title: z.string().trim().min(1).max(240),
+          outlet: z.string().trim().min(1).max(120),
+          published_at: z.string().min(1),
+        }),
+      )
+      .min(1)
+      .max(20),
+    verification: z.object({
+      status: z.enum(["found", "not_found", "unchecked"]),
+      url: httpUrl.nullable(),
+      note: z.string().trim().max(300).nullable(),
+    }),
+    dedupe_key: z.string().min(3).max(300),
+  })
+  .refine((p) => (p.kind === "running_mate" ? p.county_fips === null : p.county_fips !== null), {
+    message: "other_county needs a county_fips; running_mate has none",
+    path: ["county_fips"],
+  })
+  .refine((p) => p.verification.status === "unchecked" || p.verification.url !== null, {
+    message: "a found or not_found check must name the URL that was read",
+    path: ["verification", "url"],
+  });
+
 /* ---- review_item discriminated union (per review_item.kind) -------------- */
 
-/* The full content shape of any review_item row: the six kinds, each pairing
+/* The full content shape of any review_item row: the seven kinds, each pairing
    its `kind` literal with its validated `payload`. Used to parse rows read back
    from the DB before the queue renders them, and by the effects map before it
    applies anything. */
@@ -140,6 +182,7 @@ export const ReviewItemContentSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("unclear_statement"), payload: FactLikePayloadSchema }),
   z.object({ kind: z.literal("unverified_fact"), payload: FactLikePayloadSchema }),
   z.object({ kind: z.literal("date_mismatch"), payload: DateMismatchPayloadSchema }),
+  z.object({ kind: z.literal("candidate_lead"), payload: CandidateLeadPayloadSchema }),
 ]);
 
 export const REVIEW_KINDS = [
@@ -149,6 +192,7 @@ export const REVIEW_KINDS = [
   "unclear_statement",
   "unverified_fact",
   "date_mismatch",
+  "candidate_lead",
 ] as const;
 export type ReviewKind = (typeof REVIEW_KINDS)[number];
 
@@ -182,6 +226,7 @@ export type ManualNewsPayload = z.infer<typeof ManualNewsPayloadSchema>;
 export type GatedDiffPayload = z.infer<typeof GatedDiffPayloadSchema>;
 export type FactLikePayload = z.infer<typeof FactLikePayloadSchema>;
 export type DateMismatchPayload = z.infer<typeof DateMismatchPayloadSchema>;
+export type CandidateLeadPayload = z.infer<typeof CandidateLeadPayloadSchema>;
 export type ReviewItemContent = z.infer<typeof ReviewItemContentSchema>;
 
 /* A review_item row as read from the ops plane (design.md § 3). `payload` is
