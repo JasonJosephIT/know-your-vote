@@ -61,8 +61,11 @@ const want = [
   "R5|queue|scripts/candidate-leads.ts|queue|verified.json|queue.txt|300",
   "watch|stale|scripts/agent-run-log.ts|stale|-|-|120",
   "watch|check|scripts/agent-run-log.ts|watch --runs {dir}/runs.json --notified {dir}/notified.txt|-|-|120",
+  "R3|context|scripts/election-news.ts|context|-|context.json|300",
+  "R3|queue-dry|scripts/election-news.ts|queue --dry-run|items.json|queue-dry.json|300",
+  "R3|queue|scripts/election-news.ts|queue|items.json|queue.json|300",
 ];
-check("the table is PR A's rows exactly (spec §3.1)", rows.map((r) => r.join("|")).join("\n") === want.join("\n"),
+check("the table is PR A's and PR B's rows exactly (spec §3.1)", rows.map((r) => r.join("|")).join("\n") === want.join("\n"),
   rows.map((r) => r.join("|")).join("\n"));
 /* Claude Code's Bash tool stops a command at 120 s by default and 600 s at
    most; the prompts ask for 600 s. Every wrapper call must end, with its own
@@ -174,6 +177,9 @@ console.log(JSON.stringify({ args, input }));
 console.error("stub " + args[0] + ": summary line");
 `,
 );
+/* R3's rows run scripts/election-news.ts. The same stub, which echoes its
+   arguments and stdin, stands in for it. */
+copyFileSync(path.join(WT, "scripts", "candidate-leads.ts"), path.join(WT, "scripts", "election-news.ts"));
 
 /* A second worktree whose run log writes no deadline: start must refuse. */
 const WT_NODEADLINE = path.join(TMP, "worktree-nodeadline");
@@ -407,7 +413,30 @@ try {
     r3.code === 0 && r3.out.includes("worktree: refresh skipped while an R5 run may still be running") && refreshes() === 2,
     `${r3.code}: ${r3.out}`);
   check("R3's start prints R3's budget", /^budget: 40 min, until \S+; web calls: 30 WebSearch \+ WebFetch$/m.test(r3.out), r3.out);
-  check("R3 has no rows yet in PR A", run(["R3", "context"]).code === 2);
+
+  /* ---- the R3 steps (PR B) --------------------------------------------- */
+  const dir3 = path.join(RUNS, day ?? "?", "R3");
+  check("R3's start prints its own run dir", r3.out.includes(`run dir: ${dir3}\n`), r3.out);
+  const ctx3 = run(["R3", "context"]);
+  const ctxOut = existsSync(path.join(dir3, "context.json")) ? JSON.parse(readFileSync(path.join(dir3, "context.json"), "utf8")) : null;
+  check("R3 context runs election-news.ts context into context.json, with nothing on stdin",
+    ctx3.code === 0 && JSON.stringify(ctxOut?.args) === '["context"]' && ctxOut?.input === "" &&
+      ctx3.out.includes(`output: ${dir3}/context.json`),
+    `${ctx3.code}: ${ctx3.out}`);
+  const noItems = run(["R3", "queue-dry"]);
+  check("R3 queue-dry without items.json exits 1 naming the file",
+    noItems.code === 1 && noItems.out.includes(`missing input ${dir3}/items.json`), `${noItems.code}: ${noItems.out}`);
+  writeFileSync(path.join(dir3, "items.json"), '[{"title":"x"}]\n');
+  const dry3 = run(["R3", "queue-dry"]);
+  const dry3Out = existsSync(path.join(dir3, "queue-dry.json")) ? JSON.parse(readFileSync(path.join(dir3, "queue-dry.json"), "utf8")) : null;
+  check("R3 queue-dry runs queue --dry-run on items.json into queue-dry.json",
+    dry3.code === 0 && JSON.stringify(dry3Out?.args) === '["queue","--dry-run"]' && dry3Out?.input === '[{"title":"x"}]\n',
+    `${dry3.code}: ${dry3.out}`);
+  const q3 = run(["R3", "queue"]);
+  const q3Out = existsSync(path.join(dir3, "queue.json")) ? JSON.parse(readFileSync(path.join(dir3, "queue.json"), "utf8")) : null;
+  check("R3 queue runs queue on items.json into queue.json",
+    q3.code === 0 && JSON.stringify(q3Out?.args) === '["queue"]' && q3Out?.input === '[{"title":"x"}]\n', `${q3.code}: ${q3.out}`);
+  check("R3 has no step of R5's", run(["R3", "prep"]).code === 2);
   check("finish R3", run(["R3", "finish", "--status", "ok_empty"]).code === 0);
   check("finish R5", run(["R5", "finish", "--status", "ok", "--items", "2"]).code === 0);
 
