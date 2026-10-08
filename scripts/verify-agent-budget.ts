@@ -5,6 +5,8 @@
 
    Run: node scripts/verify-agent-budget.ts */
 
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import {
   BUDGETS,
   MAX_TASK_RUNS,
@@ -159,6 +161,23 @@ check("nothing queued is ok_empty", empty.status === "ok_empty" && empty.items_w
 const ok = cronRunRow({ ...base, sweepLine: "24 feeds", queueLine: "queued 7 as pending", queued: 7, error: null });
 check("something queued is ok with the count", ok.status === "ok" && ok.items_written === 7, JSON.stringify(ok));
 check("the summary is capped", cronRunRow({ ...base, sweepLine: "x".repeat(5000), queueLine: null, queued: 1, error: null }).summary.length === 2000);
+
+/* ---- the cron route writes that row (spec §3.1 table) ------------------ */
+
+{
+  const src = readFileSync(resolve(import.meta.dirname, "..", "src/app/api/cron/news-sweep/route.ts"), "utf8");
+  const calls = [...src.matchAll(/await recordRun\(service, /g)].map((m) => m.index);
+  check("the cron records a run on the sweep error, the queue error and success (three calls)", calls.length === 3, String(calls.length));
+  const unauthorized = src.indexOf('{ error: "Unauthorized" }');
+  const noService = src.indexOf("{ status: 503 }");
+  check("no run is recorded before the 401 and 503 returns",
+    unauthorized > 0 && noService > unauthorized && calls.every((i) => i > noService), JSON.stringify({ unauthorized, noService, calls }));
+  check("the row is built by cronRunRow and inserted into agent_run",
+    /from\("agent_run"\)\.insert\(cronRunRow\(outcome\)\)/.test(src));
+  check("a failed log write is caught, never thrown", /async function recordRun[\s\S]*try \{[\s\S]*\} catch \(err\) \{/.test(src));
+  check("started_at is taken before the secret check",
+    src.indexOf("const startedAt = new Date();") > 0 && src.indexOf("const startedAt = new Date();") < unauthorized);
+}
 
 if (failures > 0) {
   console.error(`\nverify-agent-budget: ${failures} failure(s)`);
