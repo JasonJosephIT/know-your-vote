@@ -78,3 +78,7 @@ docs/general-election/ballots/doe_*.tsv
 # graphify: built per session by .claude/hooks/session-start.sh, never committed
 # (every rebuild re-clusters the graph, so a committed copy is always dirty)
 graphify-out/
+
+# Roster-completeness reads (scripts/roster-reads.ts). Raw pages, never
+# committed: the DoE candidate pages carry campaign addresses and phones.
+.roster-reads/
