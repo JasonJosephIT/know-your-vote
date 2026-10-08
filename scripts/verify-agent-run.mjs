@@ -99,6 +99,20 @@ for (const [file, agent] of Object.entries(PROMPTS)) {
     !/kyv-agent-runs\/<|date \+%F|cd \/Users|LogiPluginService/.test(text));
 }
 
+/* R5's exit-code list says what the wrapper's own messages say. */
+{
+  const r5 = readFileSync(path.join(ROOT, "agents/r5-candidate-leads.prompt.md"), "utf8").replace(/\s+/g, " ");
+  const exitLine = (n) => r5.match(new RegExp(`- ${n}: (.*?)(?= - \\d: | BUDGET:)`))?.[1] ?? "";
+  for (const n of [3, 4]) {
+    check(`R5's prompt says exit ${n} means finish with --status failed, as the wrapper prints`,
+      exitLine(n).includes("finish with --status failed"), exitLine(n));
+  }
+  check("R5's prompt names the queue-dry retry and the failed start beside exit 1's fail closed",
+    exitLine(1).includes("queue-dry") && exitLine(1).includes("start"), exitLine(1));
+  check("R5's prompt says exit 6 also covers a previous run past its budget that has not finished",
+    exitLine(6).includes("has not called finish"), exitLine(6));
+}
+
 /* ---- a temporary worktree and runs folder ------------------------------ */
 
 const TMP = mkdtempSync(path.join(tmpdir(), "kyv-agent-run-"));
@@ -220,6 +234,8 @@ try {
   const deadline = Number(readFileSync(path.join(dir1, "deadline"), "utf8").trim());
   check("the deadline is 45 minutes out", deadline >= t0 + 45 * 60 - 1 && deadline <= t0 + 45 * 60 + 60, String(deadline - t0));
   check("start writes no run-id when the log could not be written", !existsSync(path.join(dir1, "run-id")));
+  const held = existsSync(path.join(dir1, "held-until")) ? Number(readFileSync(path.join(dir1, "held-until"), "utf8").trim()) : NaN;
+  check("start holds the run until twice its budget, when the watchdog calls it stuck", held === deadline + 45 * 60, String(held - deadline));
 
   const again = run(["R5", "start"]);
   check("a second R5 start inside the budget exits 6 before refreshing", again.code === 6 && refreshes() === 1, `${again.code}: ${again.out}`);
@@ -257,7 +273,8 @@ try {
 
   const orphan = path.join(TMP, "orphan.txt");
   const slow = run(["R5", "prep"], { KYV_AGENT_STEP_TIMEOUT: "1", KYV_STUB_SLEEP: "20", KYV_STUB_CHILD: orphan });
-  check("a step that outlives its timeout exits 4, promptly", slow.code === 4 && slow.ms < 10_000 && slow.out.includes("timed out"),
+  check("a step that outlives its timeout exits 4, promptly, and says to finish failed",
+    slow.code === 4 && slow.ms < 10_000 && slow.out.includes("timed out after 1 s: write the run report and finish with --status failed"),
     `${slow.code} after ${slow.ms} ms: ${slow.out}`);
   Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 3000);
   check("the timeout also stops the processes the step started", !existsSync(orphan));
@@ -268,10 +285,18 @@ try {
   /* ---- the deadline ---------------------------------------------------- */
   writeFileSync(path.join(dir1, "deadline"), `${Math.floor(Date.now() / 1000) - 10}\n`);
   const late = run(["R5", "prep"]);
-  check("a step after the deadline exits 3", late.code === 3 && late.out.includes("budget exhausted: write the run report and stop"),
-    `${late.code}: ${late.out}`);
+  check("a step after the deadline exits 3 and says to finish failed, as the prompt does",
+    late.code === 3 && late.out.includes("budget exhausted: write the run report and finish with --status failed"), `${late.code}: ${late.out}`);
   const lateBudget = run(["R5", "budget"]);
-  check("budget after the deadline prints 0 min left", lateBudget.code === 0 && lateBudget.out.includes("budget: 0 min left"), lateBudget.out);
+  check("budget after the deadline prints 0 min left and says to finish failed", lateBudget.code === 0 &&
+    lateBudget.out.includes("budget: 0 min left: budget exhausted: write the run report and finish with --status failed"), lateBudget.out);
+  /* The old session may still be writing its report before its finish; a new
+     run taking the pointer now would be ended by that late finish. */
+  const lateStart = run(["R5", "start"]);
+  check("a start while the previous run is past its deadline but unfinished exits 6, before refreshing",
+    lateStart.code === 6 && lateStart.out.includes("has not called finish") && refreshes() === 1, `${lateStart.code}: ${lateStart.out}`);
+  check("and leaves the previous run's pointer alone",
+    readFileSync(path.join(RUNS, "current-R5"), "utf8").trim() === dir1);
   const fin = run(["R5", "finish", "--status", "failed", "--items", "0"]);
   check("finish after the deadline still records and exits 0", fin.code === 0 && fin.out.includes("finished: R5 failed, 0 item(s)"),
     `${fin.code}: ${fin.out}`);
@@ -294,11 +319,19 @@ try {
 
   writeFileSync(path.join(RUNS, "current-R2"), `${path.join(RUNS, "old", "R2")}\n`);
   mkdirSync(path.join(RUNS, "old", "R2"), { recursive: true });
-  writeFileSync(path.join(RUNS, "old", "R2", "deadline"), `${Math.floor(Date.now() / 1000) - 60}\n`);
+  writeFileSync(path.join(RUNS, "old", "R2", "deadline"), `${Math.floor(Date.now() / 1000) - 120}\n`);
+  writeFileSync(path.join(RUNS, "old", "R2", "held-until"), `${Math.floor(Date.now() / 1000) - 60}\n`);
   const r2 = run(["R2", "start"]);
-  check("a pointer past its deadline neither blocks a new start nor the refresh",
+  check("a pointer past its hold neither blocks a new start nor the refresh",
     r2.code === 0 && refreshes() === 3 && r2.out.includes("worktree: agent worktree ready at"), `${r2.code}: ${r2.out}`);
   check("finish R2", run(["R2", "finish", "--status", "ok_empty"]).code === 0);
+
+  writeFileSync(path.join(RUNS, "current-R2"), `${path.join(RUNS, "older", "R2")}\n`);
+  mkdirSync(path.join(RUNS, "older", "R2"), { recursive: true });
+  writeFileSync(path.join(RUNS, "older", "R2", "deadline"), `${Math.floor(Date.now() / 1000) - 60}\n`);
+  const noHold = run(["R2", "start"]);
+  check("a run folder with no held-until is held only to its deadline", noHold.code === 0, `${noHold.code}: ${noHold.out}`);
+  check("finish R2 again", run(["R2", "finish", "--status", "ok_empty"]).code === 0);
 
   const broken = run(["R4", "start"], { KYV_TEST_REFRESH_FAIL: "1" });
   check("a failed refresh exits 1 and leaves no pointer",
@@ -337,9 +370,19 @@ try {
   const repeat = run(["watch", "check"]);
   check("the same stuck run is not pushed twice", repeat.code === 0 && !repeat.stdout.includes("NOTIFY"), repeat.out);
 
-  writeFileSync(runsFile, '[{"task_id":"cap-r3-election-news","session_id":"a\\nb","status":"running","started_at":"2026-10-08T00:00:00Z"}]');
+  writeFileSync(runsFile, JSON.stringify([
+    { task_id: "cap-r3-election-news", session_id: "a\nb", status: "running", started_at: hoursAgo(3) },
+    { task_id: "cap-r2-contact-refresher", status: "running", started_at: hoursAgo(5) },
+    { task_id: "cap-r5-candidate-leads", session_id: "local_stuck2", status: "running", started_at: hoursAgo(4), last_activity_at: null },
+  ]));
   const forged = run(["watch", "check"]);
-  check("a session id that would forge a line refuses the file", forged.code === 1 && forged.out.includes("session_id"), forged.out);
+  const forgedLines = forged.stdout.split("\n").filter((l) => l.startsWith("NOTIFY: "));
+  check("bad rows are skipped and named, and the good stuck row is still pushed",
+    forged.code === 0 && forgedLines.length === 1 && forgedLines[0].includes("local_stuck2") &&
+      forged.out.includes("skipped run 0: session_id") && forged.out.includes("skipped run 1: session_id") && forged.out.includes("2 skipped"),
+    forged.out);
+  check("a skipped row's session id never reaches notified.txt",
+    !readFileSync(path.join(RUNS, "watch", "notified.txt"), "utf8").includes("a\nb"));
 
   writeFileSync(runsFile, "[]\n");
   const old = new Date(Date.now() - 20 * 60_000);

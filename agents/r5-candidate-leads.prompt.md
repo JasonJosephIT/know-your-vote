@@ -40,13 +40,17 @@ the wrapper prints.
 What the wrapper's exit code means:
 - 0: the step worked. It prints the script's summary lines, then
   "output: <file>" for the file it wrote.
-- 1: the step failed; the lines above the exit say why. Fail closed.
+- 1: the step failed; the lines above the exit say why. Fail closed (rule
+  5), except in two cases: a refused queue-dry is fixed and run once more
+  (step 6), and a failed start ends the run without finish (step 1).
 - 2: the command was not one of the lines above. Fix it to match exactly.
 - 3: "budget exhausted": write the run report and finish with --status failed.
-- 4: the step timed out. Fail closed.
+- 4: the step timed out: write the run report and finish with --status
+  failed (a timed-out start: step 1).
 - 5: "no active run": start was not run or did not work. Stop.
-- 6: another R5 run is in progress. Stop at once: do NOT call finish (it
-  would end the other run), write no report, and say so in chat.
+- 6: another R5 run is in progress, or an earlier one is past its budget
+  but has not called finish. Stop at once: do NOT call finish (it would end
+  the other run), write no report, and say so in chat.
 
 BUDGET: 45 minutes from start and 25 WebFetch calls. start prints both.
 Count your WebFetch calls. When you reach 25, stop verifying: record every

@@ -19,6 +19,7 @@ import {
   deadlineFor,
   finishRow,
   formatDuration,
+  heldUntil,
   isFinishStatus,
   isRoutineAgent,
   isStuck,
@@ -78,6 +79,9 @@ for (const agent of ROUTINE_AGENTS) {
   const twice = 2 * BUDGETS[agent].wallClockMin * MIN;
   check(`${agent} is not stuck one second before twice its budget`, !isStuck(run(agent), at(twice - 1000)));
   check(`${agent} is stuck at twice its budget`, isStuck(run(agent), at(twice)));
+  check(`${agent}'s start hold ends where the watchdog calls its run stuck`,
+    heldUntil(agent, T0).getTime() === T0.getTime() + twice && isStuck(run(agent), heldUntil(agent, T0)) &&
+      !isStuck(run(agent), new Date(heldUntil(agent, T0).getTime() - 1000)));
   check(`${agent} is not stuck when its run is no longer running`, !isStuck(run(agent, { status: "succeeded" }), at(10 * twice)));
 }
 check("a task with no budget is never stuck",
@@ -111,24 +115,37 @@ check("a session id already in notified.txt is not printed again", third.lines.l
 const dup = watchLines([stuckR3, stuckR3], "", now);
 check("the same session twice in runs.json is one line", dup.lines.length === 1 && dup.newIds.length === 1, JSON.stringify(dup));
 
-/* ---- runs.json is agent-written: refuse the whole file at the first bad row */
+/* ---- runs.json is agent-written: a bad row is skipped, never read ------ */
 
 check("parseTaskRuns accepts the prompt's shape, null last activity included",
-  parseTaskRuns([stuckR3, { ...freshR5, last_activity_at: at(80 * MIN).toISOString() }]).ok);
+  (() => {
+    const r = parseTaskRuns([stuckR3, { ...freshR5, last_activity_at: at(80 * MIN).toISOString() }]);
+    return r.ok && r.runs.length === 2 && r.skipped.length === 0;
+  })());
 check("parseTaskRuns accepts an empty array", parseTaskRuns([]).ok);
 for (const [name, bad] of [
   ["not an array", { runs: [] }],
   ["over the cap", Array.from({ length: MAX_TASK_RUNS + 1 }, () => stuckR3)],
-  ["a row that is not an object", ["x"]],
-  ["a missing task_id", [{ ...stuckR3, task_id: undefined }]],
-  ["a blank status", [{ ...stuckR3, status: " " }]],
-  ["a session id with a newline", [{ ...stuckR3, session_id: "a\nb" }]],
-  ["an empty session id", [{ ...stuckR3, session_id: "" }]],
-  ["a started_at that is not a date", [{ ...stuckR3, started_at: "yesterday-ish" }]],
-  ["a last_activity_at that is not a date", [{ ...stuckR3, last_activity_at: "soon" }]],
 ] as const) {
   const r = parseTaskRuns(bad);
   check(`parseTaskRuns refuses ${name}`, !r.ok && r.error.length > 0, JSON.stringify(r));
+}
+for (const [name, bad] of [
+  ["a row that is not an object", "x"],
+  ["a missing task_id", { ...stuckR3, task_id: undefined }],
+  ["a blank status", { ...stuckR3, status: " " }],
+  ["a session id with a newline", { ...stuckR3, session_id: "a\nb" }],
+  ["an empty session id", { ...stuckR3, session_id: "" }],
+  ["no session id (a run not yet given a session)", { ...stuckR3, session_id: undefined }],
+  ["a started_at that is not a date", { ...stuckR3, started_at: "yesterday-ish" }],
+  ["a last_activity_at that is not a date", { ...stuckR3, last_activity_at: "soon" }],
+] as const) {
+  const r = parseTaskRuns([bad, freshR5]);
+  check(`parseTaskRuns skips ${name} and keeps the good row`,
+    r.ok && r.runs.length === 1 && r.runs[0].session_id === "local_bbb" && r.skipped.length === 1 && r.skipped[0].startsWith("run 0: "),
+    JSON.stringify(r));
+  check(`the skip reason for ${name} never echoes the row's text`,
+    r.ok && !r.skipped[0].includes("a\nb") && !r.skipped[0].includes("yesterday-ish") && !r.skipped[0].includes("soon"), JSON.stringify(r));
 }
 
 /* ---- finish ------------------------------------------------------------ */
@@ -202,6 +219,8 @@ check("the summary is capped", cronRunRow({ ...base, sweepLine: "x".repeat(5000)
   check("R5 gets no Run-now card: the run-request queue admits R1 to R4 only",
     consoleSrc.includes('{ id: "R5", role: "Candidate leads", requestable: false }') &&
       consoleSrc.includes("AGENTS.filter((agent) => agent.requestable).map((agent) => ("));
+  check("R1 gets no Run-now card: it is the Vercel cron, which a run request never triggers",
+    consoleSrc.includes('{ id: "R1", role: "News sweep (cron)", requestable: false }'));
 }
 
 if (failures > 0) {

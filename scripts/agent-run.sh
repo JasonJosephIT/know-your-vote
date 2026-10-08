@@ -9,10 +9,12 @@
 # and outputs live in the run directory `start` prints.
 #
 # Steps for R2 to R5 (the routine agents):
-#   start    refresh the agent worktree (skipped while another agent's run is
-#            inside its budget), create $RUNS/<YYYY-MM-DD>/<AGENT>[-n], set the
-#            deadline, point $RUNS/current-<AGENT> at it, record the run, and
-#            print date:, report:, worktree:, budget: and run dir:
+#   start    refuse (exit 6) while this agent's previous run has not called
+#            finish and is inside twice its budget; refresh the agent worktree
+#            (skipped while another agent's run is inside its budget), create
+#            $RUNS/<YYYY-MM-DD>/<AGENT>[-n], set the deadline and the hold,
+#            point $RUNS/current-<AGENT> at it, record the run, and print
+#            date:, report:, worktree:, budget: and run dir:
 #   budget   print the minutes left
 #   finish   record the outcome (--status, --items) and remove the pointer
 #   other    a row of the table below: needs a pointer (else exit 5), refuses
@@ -23,8 +25,12 @@
 # `watch` has only its table rows: no start, no pointer, never a refresh.
 #
 # Exit codes: 0 ok; 1 the step failed; 2 unknown agent, step or argument;
-# 3 budget exhausted; 4 timed out; 5 no active run; 6 this agent already
-# has a run inside its budget.
+# 3 budget exhausted; 4 timed out; 5 no active run; 6 this agent's previous
+# run has not called finish and is still held (see cmd_start).
+#
+# After exit 3 or 4 a routine agent writes its report and finishes with
+# --status failed, as its prompt says; the messages say the same. `start`'s
+# own failures leave no pointer, so they say "stop" (finish would exit 5).
 #
 # Never writes inside $WT, so agent-worktree.sh's dirty-tree refusal keeps
 # meaning "someone edited the agent's code". The body is in main(), called
@@ -89,6 +95,17 @@ inside_budget() {
   [ -n "$d" ] && [ "$d" -gt "$(date +%s)" ]
 }
 
+# The epoch-seconds end of run directory $1's hold (held-until, which
+# agent-run-log.ts writes at twice the wall clock), else its deadline, else
+# nothing.
+held_until_of() {
+  if [ -f "$1/held-until" ]; then
+    h=$(cat "$1/held-until")
+    case $h in '' | *[!0-9]*) ;; *) echo "$h"; return 0 ;; esac
+  fi
+  deadline_of "$1"
+}
+
 # Sets DIR to this agent's active run directory, or exits 5.
 active_dir() {
   PTR="$RUNS/current-$AGENT"
@@ -106,8 +123,23 @@ node_script() {
 cmd_start() {
   mkdir -p "$RUNS" || die 1 "cannot create $RUNS"
   PTR="$RUNS/current-$AGENT"
-  if [ -f "$PTR" ] && inside_budget "$(cat "$PTR")"; then
-    die 6 "another $AGENT run is still inside its budget ($(cat "$PTR")). Stop now and do not call finish. To start over at once, stop that run in the app and delete $PTR"
+  # A pointer exists until its run calls finish. Past its deadline that run
+  # may still be writing its report before its finish; if this start took the
+  # pointer, that late finish would end this run instead. So the pointer
+  # holds new starts until twice the budget, when the watchdog calls the old
+  # run stuck. A finish that comes even later than that still lands on the
+  # newer run: stop a stuck run in the app rather than let it go on.
+  if [ -f "$PTR" ]; then
+    prev=$(cat "$PTR")
+    if inside_budget "$prev"; then
+      die 6 "another $AGENT run is still inside its budget ($prev). Stop now and do not call finish. To start over at once, stop that run in the app and delete $PTR"
+    fi
+    h=$(held_until_of "$prev")
+    now=$(date +%s)
+    if [ -n "$h" ] && [ "$h" -gt "$now" ]; then
+      die 6 "the previous $AGENT run ($prev) is past its budget but has not called finish; it may still be writing its report. Stop now and do not call finish. New starts are refused for $(((h - now + 59) / 60)) more min. To start over at once, stop that run in the app and delete $PTR"
+    fi
+    echo "previous run: $prev never called finish; starting a new run"
   fi
   [ -f "$WT/scripts/agent-run-log.ts" ] || die 1 "agent worktree missing or stale at $WT: run scripts/agent-worktree.sh once from a checkout of main"
 
@@ -157,10 +189,10 @@ cmd_start() {
 cmd_budget() {
   active_dir
   d=$(deadline_of "$DIR")
-  [ -n "$d" ] || die 1 "this run has no deadline: write the run report and finish"
+  [ -n "$d" ] || die 1 "this run has no deadline: write the run report and finish with --status failed"
   left=$((d - $(date +%s)))
   if [ "$left" -le 0 ]; then
-    echo "budget: 0 min left: budget exhausted: write the run report and finish"
+    echo "budget: 0 min left: budget exhausted: write the run report and finish with --status failed"
   else
     echo "budget: $(((left + 59) / 60)) min left"
   fi
@@ -198,7 +230,7 @@ EOF
     active_dir
     d=$(deadline_of "$DIR")
     if [ -z "$d" ] || [ "$d" -le "$(date +%s)" ]; then
-      die 3 "budget exhausted: write the run report and stop"
+      die 3 "budget exhausted: write the run report and finish with --status failed"
     fi
   fi
   [ -f "$WT/$script" ] || die 1 "missing $WT/$script: the agent worktree is older than this step"
@@ -228,7 +260,12 @@ EOF
   cat "$log"
   case $rc in
     0) ;;
-    124) die 4 "$AGENT $STEP timed out after ${KYV_AGENT_STEP_TIMEOUT:-$secs} s: write the run report and stop" ;;
+    124)
+      if [ "$AGENT" = watch ]; then
+        die 4 "$AGENT $STEP timed out after ${KYV_AGENT_STEP_TIMEOUT:-$secs} s: send nothing and stop"
+      fi
+      die 4 "$AGENT $STEP timed out after ${KYV_AGENT_STEP_TIMEOUT:-$secs} s: write the run report and finish with --status failed"
+      ;;
     *) die 1 "$AGENT $STEP failed (exit $rc): its message is above" ;;
   esac
   if [ "$output" != - ]; then echo "output: $DIR/$output"; fi

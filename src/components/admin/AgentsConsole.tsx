@@ -42,12 +42,15 @@ export type AgentRun = {
 
 /* The scheduled agents, named as the 2026-10-08 retrofit names them
    (docs/superpowers/specs/2026-10-08-agent-retrofit-design.md §3.10). R1 is
-   the news-sweep cron now. Only `requestable` agents get a Run-now card: the
-   run-request queue (agent_run_request's CHECK and the run-requests route)
-   admits R1-R4, and the dispatcher is out of that spec's scope (§7), so R5
-   appears in the run filter and has no card. */
+   the news-sweep cron now. Only `requestable` agents get a Run-now card. R1
+   has none: a run request goes to agent_run_request and the dispatcher,
+   which never triggers a Vercel cron, so a card labelled "News sweep" would
+   promise a sweep it cannot start. R5 has none: the run-request queue
+   (agent_run_request's CHECK and the run-requests route) admits R1-R4, and
+   the dispatcher is out of that spec's scope (§7). Both still appear in the
+   run filter. */
 const AGENTS = [
-  { id: "R1", role: "News sweep (cron)", requestable: true },
+  { id: "R1", role: "News sweep (cron)", requestable: false },
   { id: "R2", role: "Logistics checks", requestable: true },
   { id: "R3", role: "Election notices", requestable: true },
   { id: "R4", role: "Ops digest", requestable: true },

@@ -2,7 +2,8 @@
    scripts/agent-run.sh (spec
    docs/superpowers/specs/2026-10-08-agent-retrofit-design.md §3.1, §3.2).
 
-     start  --agent A --run-dir DIR           write DIR/deadline and print the
+     start  --agent A --run-dir DIR           write DIR/deadline and
+                                              DIR/held-until and print the
                                               budget line (always, before any
                                               database call); then mark A's own
                                               stale `running` rows failed and
@@ -13,15 +14,17 @@
                                               `running` rows failed
      watch  --runs FILE --notified FILE       print one "NOTIFY: " line per
                                               stuck run not yet notified, then
-                                              append those session ids
+                                              append those session ids; a bad
+                                              row is skipped and named
 
    THE LOG NEVER STOPS A RUN. A failed database write prints a warning and
    exits 0: the queue and the report are the run's real output. Until
    0048_agent_run_r5.sql is applied, R5's insert fails that way. The client
    is imported lazily, so even a missing package is a warning here.
 
-   Arguments the wrapper or the agent passed that are malformed exit 2; a bad
-   runs.json exits 1. */
+   Arguments the wrapper or the agent passed that are malformed exit 2; a
+   runs.json that is missing, old, not JSON, not an array or over the cap
+   exits 1. */
 
 import { appendFileSync, existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -33,6 +36,7 @@ import {
   budgetLine,
   deadlineFor,
   finishRow,
+  heldUntil,
   isFinishStatus,
   isRoutineAgent,
   parseTaskRuns,
@@ -131,6 +135,8 @@ if (command === "start") {
   const deadline = deadlineFor(agent, now);
   // The deadline first: everything after this line may fail without stopping the run.
   writeFileSync(path.join(dir, "deadline"), `${Math.floor(deadline.getTime() / 1000)}\n`);
+  // Until then agent-run.sh refuses a new start while this run has not called finish.
+  writeFileSync(path.join(dir, "held-until"), `${Math.floor(heldUntil(agent, now).getTime() / 1000)}\n`);
   console.log(budgetLine(agent, deadline));
   const db = await database();
   if (db) {
@@ -220,13 +226,14 @@ if (command === "start") {
   }
   const parsed = parseTaskRuns(raw);
   if (!parsed.ok) die(1, `watch: ${parsed.error}`);
+  for (const reason of parsed.skipped) console.error(`watch: skipped ${reason}`);
   const notifiedText = existsSync(notifiedFile) ? readFileSync(notifiedFile, "utf8") : null;
   const { lines, newIds } = watchLines(parsed.runs, notifiedText, new Date());
   for (const line of lines) console.log(`NOTIFY: ${line}`);
   const append = newIds.map((id) => `${id}\n`).join("");
   if (notifiedText === null) writeFileSync(notifiedFile, append);
   else if (append) appendFileSync(notifiedFile, append);
-  console.error(`watch: ${parsed.runs.length} run(s) read, ${newIds.length} newly stuck`);
+  console.error(`watch: ${parsed.runs.length} run(s) read, ${parsed.skipped.length} skipped, ${newIds.length} newly stuck`);
 } else {
   die(
     2,

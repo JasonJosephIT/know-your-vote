@@ -101,47 +101,62 @@ export const MAX_TASK_RUNS = 20;
    carry a newline or anything else that could split or forge a line. */
 const SESSION_ID = /^[A-Za-z0-9_.:-]{1,200}$/;
 
-/** The agent wrote runs.json, so it is untrusted input: refuse the whole file at the first bad row. */
-export function parseTaskRuns(raw: unknown): { ok: true; runs: TaskRun[] } | { ok: false; error: string } {
+/** The agent wrote runs.json, so it is untrusted input. A file that is not
+    an array, or is over the cap, is refused whole. A row that fails a check is
+    skipped and named by its index only (never its text), so one odd row that
+    list_task_runs keeps returning cannot switch off every other task's
+    notifications. A skipped row is never notified and never reaches
+    notified.txt. */
+export function parseTaskRuns(
+  raw: unknown,
+): { ok: true; runs: TaskRun[]; skipped: string[] } | { ok: false; error: string } {
   if (!Array.isArray(raw)) return { ok: false, error: "runs.json must be a JSON array" };
   if (raw.length > MAX_TASK_RUNS) {
     return { ok: false, error: `runs.json holds ${raw.length} runs, over the ${MAX_TASK_RUNS}-run cap` };
   }
   const runs: TaskRun[] = [];
+  const skipped: string[] = [];
   for (let i = 0; i < raw.length; i++) {
-    const r = raw[i] as Record<string, unknown> | null;
-    if (typeof r !== "object" || r === null || Array.isArray(r)) return { ok: false, error: `run ${i} is not an object` };
-    for (const key of ["task_id", "status", "started_at"] as const) {
-      if (typeof r[key] !== "string" || (r[key] as string).trim() === "") {
-        return { ok: false, error: `run ${i}: ${key} must be a non-empty string` };
-      }
+    const problem = taskRunProblem(raw[i]);
+    if (problem !== null) {
+      skipped.push(`run ${i}: ${problem}`);
+      continue;
     }
-    if (typeof r.session_id !== "string" || !SESSION_ID.test(r.session_id)) {
-      return { ok: false, error: `run ${i}: session_id must be 1-200 letters, digits, _ . : or -` };
-    }
-    if (Number.isNaN(Date.parse(r.started_at as string))) {
-      return { ok: false, error: `run ${i}: started_at is not a date` };
-    }
-    const last = r.last_activity_at ?? null;
-    if (last !== null && (typeof last !== "string" || Number.isNaN(Date.parse(last)))) {
-      return { ok: false, error: `run ${i}: last_activity_at must be a date or null` };
-    }
+    const r = raw[i] as Record<string, unknown>;
     runs.push({
       task_id: r.task_id as string,
-      session_id: r.session_id,
+      session_id: r.session_id as string,
       status: r.status as string,
       started_at: r.started_at as string,
-      last_activity_at: last as string | null,
+      last_activity_at: (r.last_activity_at ?? null) as string | null,
     });
   }
-  return { ok: true, runs };
+  return { ok: true, runs, skipped };
+}
+
+/** Why one runs.json row cannot be read, or null when it can. */
+function taskRunProblem(row: unknown): string | null {
+  if (typeof row !== "object" || row === null || Array.isArray(row)) return "not an object";
+  const r = row as Record<string, unknown>;
+  for (const key of ["task_id", "status", "started_at"] as const) {
+    if (typeof r[key] !== "string" || (r[key] as string).trim() === "") return `${key} must be a non-empty string`;
+  }
+  if (typeof r.session_id !== "string" || !SESSION_ID.test(r.session_id)) {
+    return "session_id must be 1-200 letters, digits, _ . : or -";
+  }
+  if (Number.isNaN(Date.parse(r.started_at as string))) return "started_at is not a date";
+  const last = r.last_activity_at ?? null;
+  if (last !== null && (typeof last !== "string" || Number.isNaN(Date.parse(last)))) {
+    return "last_activity_at must be a date or null";
+  }
+  return null;
 }
 
 /** Running, and started at least twice its agent's wall clock ago. A task with no budget is never stuck. */
 export function isStuck(run: TaskRun, now: Date): boolean {
   const agent = TASK_AGENTS[run.task_id];
   if (!agent || run.status !== "running") return false;
-  return now.getTime() - Date.parse(run.started_at) >= 2 * wallClockMs(agent);
+  return now.getTime() >= heldUntil(agent, new Date(Date.parse(run.started_at))).getTime();
 }
 
 /** The lines to push, and the session ids to append to notified.txt.
@@ -166,6 +181,15 @@ export function watchLines(
     );
   }
   return { lines, newIds };
+}
+
+/** Until when `start` refuses a new run while this agent's previous run,
+    started at `startedAt`, has not called finish: twice its wall clock, the
+    moment the watchdog calls it stuck. Past its deadline that run can still
+    be writing its report before its `finish`, and a new run would take its
+    pointer, so that late `finish` would end the new run instead. */
+export function heldUntil(agent: BudgetAgent, startedAt: Date): Date {
+  return new Date(startedAt.getTime() + 2 * wallClockMs(agent));
 }
 
 /* ---- run rows ---------------------------------------------------------- */
