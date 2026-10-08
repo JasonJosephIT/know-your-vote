@@ -3,7 +3,7 @@
    data (Census Bureau county FIPS list). Dade County became Miami-Dade (12086)
    in 1997, so there is no 12025.
 
-   No aliases, no I/O, relative imports only: plain-Node scripts import this. */
+   No @/ imports, no I/O, relative imports only: plain-Node scripts import this. */
 
 export const FL_COUNTIES: readonly { fips: string; name: string }[] = [
   { fips: "12001", name: "Alachua" },
@@ -81,7 +81,7 @@ export const FL_COUNTIES: readonly { fips: string; name: string }[] = [
 function key(name: string): string {
   return name
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/\bcounty\b/g, "")
     .replace(/\bsaint\b/g, "st")

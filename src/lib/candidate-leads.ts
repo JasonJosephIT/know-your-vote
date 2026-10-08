@@ -51,6 +51,7 @@ export interface Lead {
 }
 
 export type DropReason =
+  | "no_name"
   | "not_florida_2026"
   | "covered_county"
   | "unknown_county"
@@ -66,9 +67,9 @@ const MAX_STORIES = 20;
 export function normalizeName(name: string): string {
   return name
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/['']/g, "'")
-    .replace(/["""][^"""]*["""]/g, " ")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/["\u201C\u201D][^"\u201C\u201D]*["\u201C\u201D]/g, " ")
     .replace(/\([^)]*\)/g, " ")
     .toLowerCase()
     .replace(/,/g, " ")
@@ -99,9 +100,10 @@ export function leadDedupeKey(name: string, kind: LeadKind, countyFips: string |
   return `${normalizeName(name)}|${kind}|${countyFips ?? "statewide"}`;
 }
 
-/** Mentions in, leads out. Classification first, then the roster, then the
-    stories, then what is already queued or decided; one person's mentions
-    merge on the dedupe key. Deterministic: leads are sorted by key. */
+/** Mentions in, leads out. A name first (a blank one has no dedupe key), then
+    classification, then the roster, then the stories, then what is already
+    queued or decided; one person's mentions merge on the dedupe key.
+    Deterministic: leads are sorted by key, by code unit and not by locale. */
 export function buildLeads(
   mentions: readonly Mention[],
   stories: ReadonlyMap<number, StoryRef>,
@@ -113,6 +115,10 @@ export function buildLeads(
   const dropped: { name: string; reason: DropReason }[] = [];
 
   for (const m of mentions) {
+    if (!normalizeName(m.name)) {
+      dropped.push({ name: m.name, reason: "no_name" });
+      continue;
+    }
     const c = classifyMention(m);
     if ("drop" in c) {
       dropped.push({ name: m.name, reason: c.drop });
@@ -122,7 +128,11 @@ export function buildLeads(
       dropped.push({ name: m.name, reason: "on_roster" });
       continue;
     }
-    const refs = m.stories.map((i) => stories.get(i)).filter((s): s is StoryRef => Boolean(s));
+    const refs: StoryRef[] = [];
+    for (const i of m.stories) {
+      const ref = stories.get(i);
+      if (ref && !refs.some((r) => r.url === ref.url)) refs.push(ref);
+    }
     if (refs.length === 0) {
       dropped.push({ name: m.name, reason: "no_story" });
       continue;
@@ -152,6 +162,6 @@ export function buildLeads(
     }
   }
 
-  const leads = [...byKey.values()].sort((a, b) => a.dedupe_key.localeCompare(b.dedupe_key));
+  const leads = [...byKey.values()].sort((a, b) => (a.dedupe_key < b.dedupe_key ? -1 : a.dedupe_key > b.dedupe_key ? 1 : 0));
   return { leads, dropped };
 }

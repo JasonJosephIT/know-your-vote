@@ -7,6 +7,7 @@
 
 import { FL_COUNTIES, countyFipsFor, countyName } from "../src/lib/fl-counties.ts";
 import {
+  COVERED_FIPS,
   buildLeads,
   classifyMention,
   isRunningMateOffice,
@@ -47,6 +48,9 @@ for (const [name, want] of [
   check(`countyFipsFor(${JSON.stringify(name)})`, countyFipsFor(name) === want, String(countyFipsFor(name)));
 }
 check("countyName round-trips", countyName("12099") === "Palm Beach" && countyName("12999") === null);
+for (const c of FL_COUNTIES) {
+  check(`countyFipsFor(${JSON.stringify(c.name)}) is its own fips`, countyFipsFor(c.name) === c.fips, String(countyFipsFor(c.name)));
+}
 
 /* ---- names -------------------------------------------------------------- */
 
@@ -55,10 +59,13 @@ for (const [raw, want] of [
   ["Bryan Avila", "bryan avila"],
   ["Oliver G. Gilbert III", "oliver gilbert"],
   ['Patricia "Patti" Rendon', "patricia rendon"],
-  ['Moliere "Moe" Dimanche', "moliere dimanche"],
+  ["Patricia \u201CPatti\u201D Rendon", "patricia rendon"],
+  ["Moliere \u201CMoe\u201D Dimanche", "moliere dimanche"],
   ["José Javier Rodríguez", "jose javier rodriguez"],
   ["Victor M. Torres Jr.", "victor torres"],
   ["Gloria Reina O'Neal", "gloria reina o'neal"],
+  ["Gloria Reina O\u2019Neal", "gloria reina o'neal"],
+  ["Gloria Reina O\u2018Neal", "gloria reina o'neal"],
   ["  Mario   Diaz-Balart ", "mario diaz-balart"],
 ] as const) {
   check(`normalizeName(${JSON.stringify(raw)})`, normalizeName(raw) === want, normalizeName(raw));
@@ -95,6 +102,16 @@ check("a non-Florida or non-2026 race is dropped",
 check("an unknown or statewide county (not a running mate) is dropped",
   JSON.stringify(classifyMention(m({ name: "James Byrd", office: "U.S. Senate", county: "statewide" })))
     === JSON.stringify({ drop: "unknown_county" }));
+
+check("the covered counties are exactly four", COVERED_FIPS.size === 4, String(COVERED_FIPS.size));
+for (const fips of COVERED_FIPS) {
+  check(`covered fips ${fips} is a Florida county`, FL_COUNTIES.some((c) => c.fips === fips), fips);
+}
+for (const county of ["Broward", "Hillsborough", "Miami-Dade", "Orange"]) {
+  check(`a ${county} race classifies as covered_county`,
+    JSON.stringify(classifyMention(m({ county }))) === JSON.stringify({ drop: "covered_county" }),
+    JSON.stringify(classifyMention(m({ county }))));
+}
 
 check("dedupe key: normalized name, kind, county",
   leadDedupeKey("Bryan Ávila", "running_mate", null) === "bryan avila|running_mate|statewide"
@@ -133,6 +150,34 @@ check("a mention whose stories are unknown is dropped as no_story",
 check("exactly two leads", built.leads.length === 2, JSON.stringify(built.leads.map((l) => l.dedupe_key)));
 check("leads come out sorted by key (deterministic)",
   JSON.stringify(built.leads.map((l) => l.dedupe_key)) === JSON.stringify([...built.leads.map((l) => l.dedupe_key)].sort()));
+
+/* Order is by code unit, not locale: "ann leeds|..." sorts before "ann lee|..."
+   because "d" (0x64) is below "|" (0x7C); localeCompare ranks them the other way. */
+const sorted = buildLeads(
+  [m({ name: "Ann Lee", stories: [1] }), m({ name: "Ann Leeds", stories: [2] })],
+  stories, [], new Set());
+check("leads sort by code unit, not by locale",
+  JSON.stringify(sorted.leads.map((l) => l.dedupe_key))
+    === JSON.stringify(["ann leeds|other_county|12099", "ann lee|other_county|12099"]),
+  JSON.stringify(sorted.leads.map((l) => l.dedupe_key)));
+
+const twice = buildLeads([m({ name: "Dee Dup", stories: [1, 1] })], stories, [], new Set());
+check("a story listed twice on a first mention appears once",
+  twice.leads.length === 1 && twice.leads[0].stories.length === 1,
+  JSON.stringify(twice.leads[0]?.stories.map((s) => s.url)));
+
+const blank = buildLeads(
+  [
+    m({ name: "", stories: [1] }),
+    m({ name: "   ", stories: [1] }),
+    m({ name: "Jr.", stories: [1] }),
+    m({ name: " ", florida_2026: false, stories: [1] }),
+  ],
+  stories, [], new Set());
+check("a blank or whitespace-only name never becomes a lead", blank.leads.length === 0, JSON.stringify(blank.leads));
+check("each blank name is dropped as no_name, even when it would also fail classification",
+  blank.dropped.length === 4 && blank.dropped.every((d) => d.reason === "no_name"),
+  JSON.stringify(blank.dropped));
 
 const again = buildLeads(mentions, stories, roster, new Set(["bryan avila|running_mate|statewide"]));
 check("a key already queued or decided is skipped as already_queued",
