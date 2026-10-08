@@ -15,6 +15,8 @@
 
    Run: node scripts/verify-roster-worksheet.ts */
 
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import {
   namesOnPage,
   normalizeDoeText,
@@ -27,6 +29,9 @@ import {
   surname,
 } from "./roster-reads-lib.ts";
 import {
+  MIGRATION_PATH,
+  ROOT,
+  WORKSHEET_PATH,
   applyBlocks,
   checkWorksheet,
   fillTimes,
@@ -442,6 +447,26 @@ check(
   afterFill.length === 1 && afterFill[0].startsWith("sites FL-DOE-3: read_1/read_2"),
   afterFill.join("; "),
 );
+
+/* ---- 3. the real worksheet and migration ----------------------------------- */
+
+const wsFile = join(ROOT, WORKSHEET_PATH);
+const sqlFile = join(ROOT, MIGRATION_PATH);
+check(`${WORKSHEET_PATH} exists`, existsSync(wsFile));
+check(`${MIGRATION_PATH} exists`, existsSync(sqlFile));
+if (existsSync(wsFile) && existsSync(sqlFile)) {
+  const md = readFileSync(wsFile, "utf8");
+  const sql = readFileSync(sqlFile, "utf8");
+  const problems = checkWorksheet(md, fullRoster);
+  check("the worksheet passes every rule", problems.length === 0, `${problems.length} problem(s): ${problems.slice(0, 8).join("; ")}`);
+  if (problems.length === 0) {
+    check(
+      "the migration's generated blocks are exactly what the worksheet produces",
+      applyBlocks(sql, generatedBlocks(md, fullRoster, ruleOf(sql))) === sql,
+      "run: node scripts/roster-worksheet.ts --write-migration",
+    );
+  }
+}
 
 if (failures) {
   console.error(`\n${failures} check(s) failed`);
