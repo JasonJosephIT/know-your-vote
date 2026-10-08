@@ -15,7 +15,8 @@
      watch  --runs FILE --notified FILE       print one "NOTIFY: " line per
                                               stuck run not yet notified, then
                                               append those session ids; a bad
-                                              row is skipped and named
+                                              row is skipped and named; FILE
+                                              is moved to runs.last.json
 
    THE LOG NEVER STOPS A RUN. A failed database write prints a warning and
    exits 0: the queue and the report are the run's real output. Until
@@ -26,7 +27,7 @@
    runs.json that is missing, old, not JSON, not an array or over the cap
    exits 1. */
 
-import { appendFileSync, existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, readFileSync, renameSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { loadEnvLocal } from "./env-local.ts";
@@ -48,7 +49,11 @@ import {
 loadEnvLocal(import.meta.url);
 
 /* The watchdog writes runs.json just before `watch check`. An older file
-   means this run's list_task_runs answers never reached it. */
+   means this run's list_task_runs answers never reached it.
+   Check moves the file to runs.last.json once it has read it, whatever it
+   holds: Claude Code's Write tool refuses to overwrite a file the session
+   has not Read, and the watchdog is approved to Write under watch/, not to
+   Read there, so each hourly Write must create a new file. */
 const RUNS_FILE_MAX_AGE_MS = 15 * 60_000;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -215,12 +220,14 @@ if (command === "start") {
   const notifiedFile = required(opts, "--notified");
   if (!existsSync(runsFile)) die(1, `watch: no ${runsFile}: write it from list_task_runs first`);
   const ageMs = Date.now() - statSync(runsFile).mtimeMs;
+  const runsText = readFileSync(runsFile, "utf8");
+  renameSync(runsFile, path.join(path.dirname(runsFile), "runs.last.json"));
   if (ageMs > RUNS_FILE_MAX_AGE_MS) {
     die(1, `watch: ${runsFile} is ${Math.round(ageMs / 60_000)} min old: write it again from this run's list_task_runs calls`);
   }
   let raw: unknown;
   try {
-    raw = JSON.parse(readFileSync(runsFile, "utf8"));
+    raw = JSON.parse(runsText);
   } catch (err) {
     die(1, `watch: ${runsFile} is not valid JSON (${String(err)})`);
   }

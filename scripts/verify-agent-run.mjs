@@ -477,6 +477,13 @@ try {
   check("the first watch check prints the install line", firstWatch.code === 0 &&
     firstWatch.stdout.includes("NOTIFY: watchdog installed: notifications work"), `${firstWatch.code}: ${firstWatch.out}`);
   check("and creates notified.txt", existsSync(path.join(RUNS, "watch", "notified.txt")));
+  /* Claude Code's Write tool will not overwrite a file the session has not
+     Read, and the watchdog may not Read. So check moves runs.json aside and
+     every hourly Write creates a new file. */
+  const lastRuns = path.join(RUNS, "watch", "runs.last.json");
+  check("check moves runs.json aside, so the next run's Write creates a new file",
+    !existsSync(runsFile) && existsSync(lastRuns) && readFileSync(lastRuns, "utf8") === "[]\n");
+  writeFileSync(runsFile, "[]\n");
   const quiet = run(["watch", "check"]);
   check("a second check with nothing stuck prints no NOTIFY line", quiet.code === 0 && !quiet.stdout.includes("NOTIFY"), quiet.out);
 
@@ -486,12 +493,14 @@ try {
     { task_id: "cap-r5-candidate-leads", session_id: "local_fresh1", status: "running", started_at: hoursAgo(0.2), last_activity_at: null },
     { task_id: "cap-r2-contact-refresher", session_id: "local_done1", status: "succeeded", started_at: hoursAgo(9), last_activity_at: hoursAgo(8.9) },
   ]));
+  const stuckRuns = readFileSync(runsFile, "utf8");
   const stuck = run(["watch", "check"]);
   const notifyLines = stuck.stdout.split("\n").filter((l) => l.startsWith("NOTIFY: "));
   check("a stuck R3 run prints exactly one NOTIFY line naming it",
     stuck.code === 0 && notifyLines.length === 1 && notifyLines[0].includes("R3 (cap-r3-election-news)") && notifyLines[0].includes("local_stuck1"),
     stuck.out);
   check("its session is recorded in notified.txt", readFileSync(path.join(RUNS, "watch", "notified.txt"), "utf8").includes("local_stuck1\n"));
+  writeFileSync(runsFile, stuckRuns);
   const repeat = run(["watch", "check"]);
   check("the same stuck run is not pushed twice", repeat.code === 0 && !repeat.stdout.includes("NOTIFY"), repeat.out);
 
@@ -514,6 +523,15 @@ try {
   utimesSync(runsFile, old, old);
   const staleFile = run(["watch", "check"]);
   check("a runs.json older than 15 minutes exits 1", staleFile.code === 1 && staleFile.out.includes("min old"), staleFile.out);
+  check("and is moved aside too, so the next hour's Write is not refused", !existsSync(runsFile));
+  writeFileSync(runsFile, "not json");
+  const badJson = run(["watch", "check"]);
+  check("a runs.json that is not JSON exits 1 and is moved aside",
+    badJson.code === 1 && badJson.out.includes("not valid JSON") && !existsSync(runsFile), badJson.out);
+  writeFileSync(runsFile, "[]\n");
+  const leftover = run(["watch", "stale"]);
+  check("watch stale moves aside a runs.json an earlier run wrote but never checked",
+    leftover.code === 0 && !existsSync(runsFile) && readFileSync(lastRuns, "utf8") === "[]\n", leftover.out);
   check("watch steps never refresh the worktree", refreshes() === marks, `${marks} -> ${refreshes()}`);
 
   /* ---- the run log's database writes, against a fake server ------------ */

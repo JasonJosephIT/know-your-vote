@@ -17,13 +17,16 @@ STEPS:
 1. Run:
    sh /Users/jsloth/Projects/kyv-agent-worktree/scripts/agent-run.sh watch stale
    This marks every agent's `running` run record older than its budget as
-   failed, so /admin shows it, and creates the watch folder. A "warning:"
-   line is not an error; go on.
+   failed, so /admin shows it, creates the watch folder and moves any
+   runs.json an earlier run left there aside. A "warning:" line is not an
+   error; go on.
 2. Call list_task_runs with limit 2 once for each of these four task ids:
    cap-r2-contact-refresher, cap-r3-election-news, cap-r4-ops-digest,
    cap-r5-candidate-leads.
    Write every run returned, as one JSON array, with the Write tool, to
    /Users/jsloth/Projects/kyv-agent-runs/watch/runs.json
+   This is always a new file: steps 1 and 3 move the old one aside. Never
+   Read it or any other file there.
    Each element is exactly:
    {"task_id": "<the task id you asked for>", "session_id": "<the run's session id>",
     "status": "<the run's status, as given>", "started_at": "<ISO 8601 start time>",

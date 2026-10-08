@@ -240,6 +240,12 @@ EOF
   if [ "$AGENT" = watch ]; then
     DIR="$RUNS/watch"
     mkdir -p "$DIR" || die 1 "cannot create $DIR"
+    # A runs.json left by a run that wrote it but never reached `watch check`
+    # would make this run's Write an overwrite, which Claude Code refuses
+    # without a Read the watchdog is not approved for. Move it aside first.
+    if [ "$STEP" = stale ] && [ -f "$DIR/runs.json" ]; then
+      mv -f "$DIR/runs.json" "$DIR/runs.last.json" || die 1 "cannot move aside $DIR/runs.json"
+    fi
   else
     active_dir
     d=$(deadline_of "$DIR")
