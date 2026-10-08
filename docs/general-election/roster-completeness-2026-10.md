@@ -41,7 +41,7 @@ fails if the two differ. To change a value, change it here and regenerate.
 
 ## Method
 
-- **Rounds.** Round 1: 2026-10-08 20:21Z to 21:20Z. Round 2: R2_WINDOW. Every key compared with
+- **Rounds.** Round 1: 2026-10-08 20:21Z to 21:20Z. Round 2: 2026-10-08 22:22Z to 22:32Z, every key at least an hour after its round 1 read. Every key compared with
   `node scripts/roster-reads.ts --compare r1 r2`; the read times below are filled from both rounds'
   `index.json` (`node scripts/roster-worksheet.ts --fill-times r1 r2`), except the browser-pane
   reads, typed by hand.
@@ -59,6 +59,12 @@ fails if the two differ. To change a value, change it here and regenerate.
     district map page, whose table names the seven members by district, is the member list, and
     the board-members page (each district's panel opened to read the member's name) is the
     second page.
+  - The four pane pages were read at 2026-10-08 21:51Z and again at 22:54Z, and read the same
+    both times (the Attorney General named on both of his pages; the same seven Hillsborough
+    board members by district). An earlier pane read made during round 1 left no recorded time,
+    so it was repeated; the 21:51Z read is the round 1 read for these rows. The Hillsborough
+    table and panels render after load, so their text was read from the rendered page once it
+    had loaded, and each board-members panel was opened by clicking its district heading.
 - **Member lists, body by body.**
   - U.S. House: the Clerk's `MemberData.xml`. Second pages: each member's house.gov site, as
     linked from `https://www.house.gov/representatives`.
@@ -97,10 +103,16 @@ fails if the two differ. To change a value, change it here and regenerate.
   the DoE GOV ballot rows are context only; the source is the Executive Office of the Governor's
   page naming Ron DeSantis.
 - **Page changes between rounds** that do not touch a member list (news items, banners) are noted
-  here: R2_PAGE_NOTES
+  here: the Orange County Board of County Commissioners page (`ora-cc-list`) carried a newsroom
+  item, "Reception: “Color, Form, and Space” by Dorothy Gillespie", in round 1 and not in round 2,
+  so the surname Gillespie (a FL-SEN candidate) matched only the first read; the Mayor and the six
+  district commissioners read the same in both rounds. `drjeffdatto.com` showed different
+  domain-auction listings in each round; both say the domain "has been recently registered with
+  namecheap.com".
 - **No-site re-checks.** Each domain recorded in `candidate-sites-2026-09-24.md` was read in both
   rounds where it serves a page; a web search on 2026-10-08 found no new lead for any of the
-  nine. `damhforcongress.com` (Hosey) still has no A record, so there is no page to read; Bogen,
+  nine. `damhforcongress.com` (Hosey) still has no A record (a DNS lookup at 21:53Z and at 22:54Z
+  returned only its mail record), so there is no page to read; Bogen,
   McKinzie and Bendross-Mindingall have no campaign domain, so their evidence quotes the
   government page that is all there is. For a "none found" row the read times are the two
   passes that looked. `drjeffdatto.com` timed out over https; its http redirect lands on
@@ -148,112 +160,112 @@ fails if the two differ. To change a value, change it here and regenerate.
 <!-- table:candidates -->
 | candidate_id | legal_name | race_id | label | incumbent | holds_this_seat | source_url | read_1 | read_2 | second_page | evidence |
 |---|---|---|---|---|---|---|---|---|---|---|
-| FL-DOE-90560 | Wilton Simpson | FL-AGR-general | Holds this office now | Yes | Yes | https://www.fdacs.gov/ |  |  | https://www.fdacs.gov/About-Us/Meet-Commissioner-Simpson | "Learn More About Commissioner Wilton Simpson What" |
-| FL-DOE-92013 | Joey Mendoza Atkins | FL-AGR-general | Holds this office now | No | No | https://www.fdacs.gov/ |  |  | — | "Learn More About Commissioner Wilton Simpson What" |
-| FL-DOE-89041 | James Uthmeier | FL-ATG-general | Holds this office now | Yes | Yes | https://www.myfloridalegal.com/ |  |  | https://www.myfloridalegal.com/ag-bio | "Attorney General James Uthmeier Announces Arrest of 21 Child Predators in Osceola County Sting" |
-| FL-DOE-89231 | Jose Javier Rodriguez | FL-ATG-general | Holds this office now | No | No | https://www.myfloridalegal.com/ |  |  | — | "Attorney General James Uthmeier Announces Arrest of 21 Child Predators in Osceola County Sting" |
-| FL-DOE-89394 | Blaise Ingoglia | FL-CFO-general | Holds this office now | Yes | Yes | https://www.myfloridacfo.com/ |  |  | https://www.myfloridacfo.com/about/meet-the-cfo | "Meet Your Chief Financial Officer Blaise Ingoglia" |
-| FL-DOE-91310 | Annette Taddeo | FL-CFO-general | Holds this office now | No | No | https://www.myfloridacfo.com/ |  |  | — | "Meet Your Chief Financial Officer Blaise Ingoglia" |
-| FL-DOE-89042 | Byron Donalds | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ |  |  | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
-| FL-DOE-89243 | David Jolly | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ |  |  | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
-| FL-DOE-84076 | Scott Eckhard Jewett | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ |  |  | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
-| FL-DOE-90630 | Charles Burkett | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ |  |  | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
-| FL-DOE-89571 | Frank J. Russo | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ |  |  | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
-| FL-DOE-88529 | Moliere "Moe" Dimanche | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ |  |  | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
-| FL-DOE-90433 | Dean Ocean Abrams | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ |  |  | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
-| FL-DOE-89630 | Jeffrey Peter "Dr. Jeff" Datto | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ |  |  | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
-| FL-DOE-89909 | Maxwell Alejandro Frost | FL-10-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | https://frost.house.gov/ | "FL10 Maxwell Frost" |
-| FL-DOE-91717 | Joe Strada | FL-11-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL11 Daniel Webster" |
-| FL-DOE-91715 | James Pericola | FL-11-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL11 Daniel Webster" |
-| FL-DOE-88517 | Ralph Groves | FL-11-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL11 Daniel Webster" |
-| FL-DOE-88868 | Gus Michael Bilirakis | FL-12-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | https://bilirakis.house.gov/ | "FL12 Gus M. Bilirakis" |
-| FL-DOE-89453 | Kimberly Overman | FL-12-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL12 Gus M. Bilirakis" |
-| FL-DOE-89778 | Branden Scrivener | FL-12-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL12 Gus M. Bilirakis" |
-| FL-DOE-91313 | Mike Beltran | FL-14-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL14 Kathy Castor" |
-| FL-DOE-88870 | Kathy Castor | FL-14-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | https://castor.house.gov/ | "FL14 Kathy Castor" |
-| FL-DOE-92395 | Brian Lambert | FL-14-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL14 Kathy Castor" |
-| FL-DOE-89121 | Laurel Lee | FL-15-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | https://laurellee.house.gov/ | "FL15 Laurel M. Lee" |
-| FL-DOE-89116 | Robert People | FL-15-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL15 Laurel M. Lee" |
-| FL-DOE-90251 | Sydney Gruters | FL-16-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL16 Vern Buchanan" |
-| FL-DOE-90779 | Kelly Kirschner | FL-16-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL16 Vern Buchanan" |
-| FL-DOE-89623 | Mark Davis | FL-16-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL16 Vern Buchanan" |
-| FL-DOE-91278 | Brent Andersen | FL-20-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL20 Vacancy due to the resignation of Sheila Cherfilus-McCormick, April 21, 2026." |
-| FL-DOE-91577 | Debbie Wasserman Schultz | FL-20-general | Member of the U.S. House now | Yes | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | https://wassermanschultz.house.gov/ | "FL25 Debbie Wasserman Schultz" |
-| FL-DOE-90814 | Kedner Maxime | FL-20-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL20 Vacancy due to the resignation of Sheila Cherfilus-McCormick, April 21, 2026." |
-| FL-DOE-92109 | Casey Askar | FL-22-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL22 Lois Frankel" |
-| FL-DOE-89301 | Pia Dandiya | FL-22-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL22 Lois Frankel" |
-| FL-DOE-90703 | Te Mayonna Brown | FL-24-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL24 Frederica S. Wilson" |
-| FL-DOE-91544 | Oliver G. Gilbert III | FL-24-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL24 Frederica S. Wilson" |
-| FL-DOE-89801 | Scott Singer | FL-25-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL25 Debbie Wasserman Schultz" |
-| FL-DOE-88911 | Jared Moskowitz | FL-25-general | Member of the U.S. House now | Yes | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | https://moskowitz.house.gov/ | "FL23 Jared Moskowitz" |
-| FL-DOE-92357 | Peter Jassenoff | FL-25-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL25 Debbie Wasserman Schultz" |
-| FL-DOE-90330 | Mario Diaz-Balart | FL-26-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | https://mariodiazbalart.house.gov/ | "FL26 Mario Diaz-Balart" |
-| FL-DOE-89980 | Nicole Locklin | FL-26-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL26 Mario Diaz-Balart" |
-| FL-DOE-92137 | Deborah Ann Meidinger Hosey | FL-26-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL26 Mario Diaz-Balart" |
-| FL-DOE-90721 | Maria Elvira Salazar | FL-27-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | https://salazar.house.gov/ | "FL27 Maria Elvira Salazar" |
-| FL-DOE-89933 | Eliott Rodriguez | FL-27-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL27 Maria Elvira Salazar" |
-| FL-DOE-91226 | Carlos A. Gimenez | FL-28-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | https://gimenez.house.gov/ | "FL28 Carlos A. Gimenez" |
-| FL-DOE-91699 | Phil "Felipe" Ehr | FL-28-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL28 Carlos A. Gimenez" |
-| FL-DOE-90340 | Eddy Rojas | FL-28-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL28 Carlos A. Gimenez" |
-| FL-DOE-90696 | Ryan Elijah | FL-7-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL07 Cory Mills" |
-| FL-DOE-90631 | Bale Dalton | FL-7-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL07 Cory Mills" |
-| FL-DOE-92377 | Christopher Dennison | FL-7-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL07 Cory Mills" |
-| FL-DOE-89522 | Mike Haridopolos | FL-8-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | https://haridopolos.house.gov/ | "FL08 Mike Haridopolos" |
-| FL-DOE-90831 | Jennifer Jenkins | FL-8-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL08 Mike Haridopolos" |
-| FL-DOE-91337 | Dan Green | FL-9-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | — | "FL09 Darren Soto" |
-| FL-DOE-89339 | Darren Soto | FL-9-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml |  |  | https://soto.house.gov/ | "FL09 Darren Soto" |
-| FL-DOE-89119 | Ashley Moody | FL-SEN-general | Member of the U.S. Senate now | Yes | Yes | https://www.senate.gov/general/contact_information/senators_cfm.xml |  |  | https://www.moody.senate.gov/ | "Moody (R-FL)" |
-| FL-DOE-90009 | Angie Nixon | FL-SEN-general | Member of the U.S. Senate now | No | No | https://www.senate.gov/general/contact_information/senators_cfm.xml |  |  | — | "Moody (R-FL)" |
-| FL-DOE-89955 | Neil J. Gillespie | FL-SEN-general | Member of the U.S. Senate now | No | No | https://www.senate.gov/general/contact_information/senators_cfm.xml |  |  | — | "Moody (R-FL)" |
-| FL-VF-BRO-1179 | Mark D. Bogen | FL-BRO-CC2-general | Member of the Broward County Commission now | Yes | Yes | https://www.broward.org/district2 |  |  | https://www.broward.org/district2/about | "District 2 - Mayor Mark D. Bogen" |
-| FL-VF-BRO-1178 | Lamar Fisher | FL-BRO-CC4-general | Member of the Broward County Commission now | Yes | Yes | https://www.broward.org/district4 |  |  | https://www.broward.org/district4/about | "Commissioner Lamar P. Fisher About E-Mail" |
-| FL-VF-BRO-1041 | Caryl Sandler Shuham | FL-BRO-CC6-general | Member of the Broward County Commission now | No | No | https://www.broward.org/district6 |  |  | — | "District 6 - Commissioner Beam Furr" |
-| FL-VF-BRO-1182 | Robert McKinzie | FL-BRO-CC8-general | Member of the Broward County Commission now | Yes | Yes | https://www.broward.org/district8 |  |  | https://www.broward.org/district8/about | "District 8 - Vice Mayor Robert McKinzie" |
-| FL-VF-BRO-1194 | Maura McCarthy Bulman | FL-BRO-SB1-general | Member of the Broward County School Board now | Yes | Yes | https://www.browardschools.com/school-board |  |  | https://browardvotes.gov/candidates/elected-officials | "Maura McCarthy Bulman (District 1)." |
-| FL-VF-BRO-1191 | Nicole Morst | FL-BRO-SB4-general | Member of the Broward County School Board now | No | No | https://www.browardschools.com/school-board |  |  | — | "Lori Alhadeff (District 4)," |
-| FL-VF-BRO-1184 | Adam Cervera | FL-BRO-SB6-general | Member of the Broward County School Board now | Yes | Yes | https://www.browardschools.com/school-board |  |  | https://browardvotes.gov/candidates/elected-officials | "Adam Cervera, Esq. (District 6)," |
-| FL-VF-BRO-1172 | Roberto Fernandez III | FL-BRO-SB6-general | Member of the Broward County School Board now | No | No | https://www.browardschools.com/school-board |  |  | — | "Adam Cervera, Esq. (District 6)," |
-| FL-VF-BRO-1254 | Cynthia Alceus Dominique | FL-BRO-SB7-general | Member of the Broward County School Board now | No | No | https://www.browardschools.com/school-board |  |  | — | "Nora Rupert (District 7)," |
-| FL-VF-BRO-1195 | Allen Zeman | FL-BRO-SBAL8-general | Member of the Broward County School Board now | Yes | Yes | https://www.browardschools.com/school-board |  |  | https://browardvotes.gov/candidates/elected-officials | "Dr. Allen Zeman Countywide At-Large Seat 8" |
-| FL-VF-DAD-2964 | Marleine Bastien | FL-DAD-CC2-general | Member of the Miami-Dade County Commission now | Yes | Yes | https://www.miamidade.gov/global/government/commission/home.page |  |  | https://www.miamidade.gov/global/government/commission/district02/home.page | "Marleine Bastien District 2" |
-| FL-VF-DAD-2949 | Vicki L. Lopez | FL-DAD-CC5-general | Member of the Miami-Dade County Commission now | Yes | Yes | https://www.miamidade.gov/global/government/commission/home.page |  |  | https://www.miamidade.gov/global/government/commission/district05/home.page | "Vicki L. Lopez District 5" |
-| FL-VF-DAD-2998 | Rob Piper | FL-DAD-CC5-general | Member of the Miami-Dade County Commission now | No | No | https://www.miamidade.gov/global/government/commission/home.page |  |  | — | "Vicki L. Lopez District 5" |
-| FL-VF-DAD-3076 | Linda Cothiere | FL-DAD-SB1-general | Member of the Miami-Dade County School Board now | No | No | https://www.dadeschools.net/SchoolBoard/members |  |  | — | "Vacant District 1 Present Term: TBD" |
-| FL-VF-DAD-3070 | Katrina Wilson | FL-DAD-SB1-general | Member of the Miami-Dade County School Board now | No | No | https://www.dadeschools.net/SchoolBoard/members |  |  | — | "Vacant District 1 Present Term: TBD" |
-| FL-VF-DAD-2926 | Dorothy Bendross-Mindingall | FL-DAD-SB2-general | Member of the Miami-Dade County School Board now | Yes | Yes | https://www.dadeschools.net/SchoolBoard/members |  |  | https://district2.dadeschools.net/ | "Dr. Dorothy Bendross-Mindingall District 2" |
-| FL-VF-DAD-2953 | Monica Colucci | FL-DAD-SB8-general | Member of the Miami-Dade County School Board now | Yes | Yes | https://www.dadeschools.net/SchoolBoard/members |  |  | https://district8.dadeschools.net/ | "Ms. Monica Colucci Vice Chair District 8" |
-| FL-VF-HIL-2880 | Jackie Toledo | FL-HIL-CC1-general | Member of the Hillsborough County Commission now | No | No | https://hcfl.gov/government/board-of-county-commissioners |  |  | — | "Harry Cohen District 1" |
-| FL-VF-HIL-2640 | Harry Cohen | FL-HIL-CC1-general | Member of the Hillsborough County Commission now | Yes | Yes | https://hcfl.gov/government/board-of-county-commissioners |  |  | https://hcfl.gov/commissioners/harry-cohen | "Harry Cohen District 1" |
-| FL-VF-HIL-2646 | Luiz F. F. Garcia | FL-HIL-CC3-general | Member of the Hillsborough County Commission now | No | No | https://hcfl.gov/government/board-of-county-commissioners |  |  | — | "Gwen Myers District 3," |
-| FL-VF-HIL-2621 | Gwen Myers | FL-HIL-CC3-general | Member of the Hillsborough County Commission now | Yes | Yes | https://hcfl.gov/government/board-of-county-commissioners |  |  | https://hcfl.gov/commissioners/gwen-myers | "Gwen Myers District 3," |
-| FL-VF-HIL-2661 | Stacy Hahn | FL-HIL-CC5-general | Member of the Hillsborough County Commission now | No | No | https://hcfl.gov/government/board-of-county-commissioners |  |  | — | "Donna Cameron Cepeda District 5," |
-| FL-VF-HIL-2636 | Neil Manimala | FL-HIL-CC5-general | Member of the Hillsborough County Commission now | No | No | https://hcfl.gov/government/board-of-county-commissioners |  |  | — | "Donna Cameron Cepeda District 5," |
-| FL-VF-HIL-2620 | Joshua Wostal | FL-HIL-CC7-general | Member of the Hillsborough County Commission now | Yes | Yes | https://hcfl.gov/government/board-of-county-commissioners |  |  | https://hcfl.gov/commissioners/joshua-wostal | "Joshua Wostal District 7," |
-| FL-VF-HIL-2660 | Aileen Rodriguez | FL-HIL-CC7-general | Member of the Hillsborough County Commission now | No | No | https://hcfl.gov/government/board-of-county-commissioners |  |  | — | "Joshua Wostal District 7," |
-| FL-VF-HIL-2677 | Brittany Lyssy | FL-HIL-SB2-general | Member of the Hillsborough County School Board now | No | No | https://www.hillsboroughschools.org/o/hcps/page/board-member-district-map |  |  | — | "2 Stacy Hahn" |
-| FL-VF-HIL-2675 | Daniela Simic | FL-HIL-SB2-general | Member of the Hillsborough County School Board now | No | No | https://www.hillsboroughschools.org/o/hcps/page/board-member-district-map |  |  | — | "2 Stacy Hahn" |
-| FL-VF-HIL-2672 | Patricia "Patti" Rendon | FL-HIL-SB4-general | Member of the Hillsborough County School Board now | Yes | Yes | https://www.hillsboroughschools.org/o/hcps/page/board-member-district-map |  |  | https://www.hillsboroughschools.org/o/hcps/page/board-members | "4 Patricia “Patti” Rendon" |
-| FL-VF-HIL-2610 | Kenneth "Ken" Gay | FL-HIL-SB6-general | Member of the Hillsborough County School Board now | No | No | https://www.hillsboroughschools.org/o/hcps/page/board-member-district-map |  |  | — | "6 Karen Perez" |
-| FL-VF-HIL-2645 | Karen Perez | FL-HIL-SB6-general | Member of the Hillsborough County School Board now | Yes | Yes | https://www.hillsboroughschools.org/o/hcps/page/board-member-district-map |  |  | https://www.hillsboroughschools.org/o/hcps/page/board-members | "6 Karen Perez" |
-| FL-VF-ORA-1290 | Kamia Brown | FL-ORA-CC2-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx |  |  | — | "Mike Crabb Commissioner, District 2" |
-| FL-VF-ORA-1384 | Mike Crabb | FL-ORA-CC2-general | Member of the Orange County Commission now | Yes | Yes | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx |  |  | https://www.orangecountyfl.net/BoardofCommissioners/District2Commissioner.aspx | "Mike Crabb Commissioner, District 2" |
-| FL-VF-ORA-1260 | Brian Jones | FL-ORA-CC4-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx |  |  | — | "Maribel Gomez Cordero Commissioner, District 4" |
-| FL-VF-ORA-1279 | Johanna Lopez | FL-ORA-CC4-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx |  |  | — | "Maribel Gomez Cordero Commissioner, District 4" |
-| FL-VF-ORA-1295 | Lawanna Gelzer | FL-ORA-CC6-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx |  |  | — | "Michael “Mike” Scott Commissioner, District 6" |
-| FL-VF-ORA-1265 | Michael "Mike" Scott | FL-ORA-CC6-general | Member of the Orange County Commission now | Yes | Yes | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx |  |  | https://www.orangecountyfl.net/BoardofCommissioners/District6Commissioner.aspx | "Michael “Mike” Scott Commissioner, District 6" |
-| FL-VF-ORA-1283 | Patricia Rumph | FL-ORA-CC7-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx |  |  | — | "Michael “Mike” Scott Commissioner, District 6" |
-| FL-VF-ORA-1271 | Vicki Vargo | FL-ORA-CC7-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx |  |  | — | "Michael “Mike” Scott Commissioner, District 6" |
-| FL-VF-ORA-1275 | Jeannette Quinones Hernandez | FL-ORA-CC8-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx |  |  | — | "Michael “Mike” Scott Commissioner, District 6" |
-| FL-VF-ORA-1272 | Victor M. Torres Jr. | FL-ORA-CC8-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx |  |  | — | "Michael “Mike” Scott Commissioner, District 6" |
-| FL-VF-ORA-1401 | Roberta Walton Johnson | FL-ORA-CLERK-general | Holds this office now | No | No | https://www.myorangeclerk.com/ |  |  | — | "Joyce Boudoin has been appointed Clerk Ad Interim" |
-| FL-VF-ORA-1364 | Terrell Thomas | FL-ORA-CLERK-general | Holds this office now | No | No | https://www.myorangeclerk.com/ |  |  | — | "Joyce Boudoin has been appointed Clerk Ad Interim" |
-| FL-VF-ORA-1239 | Chris Messina | FL-ORA-MAYOR-general | Holds this office now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx |  |  | — | "Jerry L. Demings Orange County Mayor" |
-| FL-VF-ORA-1236 | Tiffany Moore Russell | FL-ORA-MAYOR-general | Holds this office now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx |  |  | — | "Jerry L. Demings Orange County Mayor" |
-| FL-VF-ORA-1270 | Melissa Lopez Marantes | FL-ORA-SB1-general | Member of the Orange County School Board now | No | No | https://www.ocps.net/school-board |  |  | — | "Angie Gallo District 1" |
-| FL-VF-ORA-1318 | Gloria Reina O'Neal | FL-ORA-SB2-general | Member of the Orange County School Board now | No | No | https://www.ocps.net/school-board |  |  | — | "Maria Salamanca Vice-chair, District 2" |
-| FL-VF-ORA-1314 | Diana Moore | FL-ORA-SB3-general | Member of the Orange County School Board now | No | No | https://www.ocps.net/school-board |  |  | — | "Alicia Farrant District 3" |
-| FL-VF-ORA-1242 | Susanne Peña | FL-ORA-SB3-general | Member of the Orange County School Board now | No | No | https://www.ocps.net/school-board |  |  | — | "Alicia Farrant District 3" |
-| FL-VF-ORA-1245 | Angie Gallo | FL-ORA-SBCHAIR-general | Member of the Orange County School Board now | Yes | No | https://www.ocps.net/school-board |  |  | https://www.ocps.net/district-1-angie-gallo | "Angie Gallo is the School Board Member for District 1" |
+| FL-DOE-90560 | Wilton Simpson | FL-AGR-general | Holds this office now | Yes | Yes | https://www.fdacs.gov/ | 2026-10-08T20:22Z | 2026-10-08T22:23Z | https://www.fdacs.gov/About-Us/Meet-Commissioner-Simpson | "Learn More About Commissioner Wilton Simpson What" |
+| FL-DOE-92013 | Joey Mendoza Atkins | FL-AGR-general | Holds this office now | No | No | https://www.fdacs.gov/ | 2026-10-08T20:22Z | 2026-10-08T22:23Z | — | "Learn More About Commissioner Wilton Simpson What" |
+| FL-DOE-89041 | James Uthmeier | FL-ATG-general | Holds this office now | Yes | Yes | https://www.myfloridalegal.com/ | 2026-10-08T21:51Z | 2026-10-08T22:54Z | https://www.myfloridalegal.com/ag-bio | "Attorney General James Uthmeier Announces Arrest of 21 Child Predators in Osceola County Sting" |
+| FL-DOE-89231 | Jose Javier Rodriguez | FL-ATG-general | Holds this office now | No | No | https://www.myfloridalegal.com/ | 2026-10-08T21:51Z | 2026-10-08T22:54Z | — | "Attorney General James Uthmeier Announces Arrest of 21 Child Predators in Osceola County Sting" |
+| FL-DOE-89394 | Blaise Ingoglia | FL-CFO-general | Holds this office now | Yes | Yes | https://www.myfloridacfo.com/ | 2026-10-08T20:22Z | 2026-10-08T22:22Z | https://www.myfloridacfo.com/about/meet-the-cfo | "Meet Your Chief Financial Officer Blaise Ingoglia" |
+| FL-DOE-91310 | Annette Taddeo | FL-CFO-general | Holds this office now | No | No | https://www.myfloridacfo.com/ | 2026-10-08T20:22Z | 2026-10-08T22:22Z | — | "Meet Your Chief Financial Officer Blaise Ingoglia" |
+| FL-DOE-89042 | Byron Donalds | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ | 2026-10-08T20:22Z | 2026-10-08T22:22Z | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
+| FL-DOE-89243 | David Jolly | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ | 2026-10-08T20:22Z | 2026-10-08T22:22Z | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
+| FL-DOE-84076 | Scott Eckhard Jewett | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ | 2026-10-08T20:22Z | 2026-10-08T22:22Z | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
+| FL-DOE-90630 | Charles Burkett | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ | 2026-10-08T20:22Z | 2026-10-08T22:22Z | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
+| FL-DOE-89571 | Frank J. Russo | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ | 2026-10-08T20:22Z | 2026-10-08T22:22Z | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
+| FL-DOE-88529 | Moliere "Moe" Dimanche | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ | 2026-10-08T20:22Z | 2026-10-08T22:22Z | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
+| FL-DOE-90433 | Dean Ocean Abrams | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ | 2026-10-08T20:22Z | 2026-10-08T22:22Z | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
+| FL-DOE-89630 | Jeffrey Peter "Dr. Jeff" Datto | FL-GOV-general | Holds this office now | No | No | https://www.flgov.com/eog/ | 2026-10-08T20:22Z | 2026-10-08T22:22Z | — | "of the Governor Ron DeSantis 46ᵀᴴ Governor of Florida" |
+| FL-DOE-89909 | Maxwell Alejandro Frost | FL-10-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | https://frost.house.gov/ | "FL10 Maxwell Frost" |
+| FL-DOE-91717 | Joe Strada | FL-11-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL11 Daniel Webster" |
+| FL-DOE-91715 | James Pericola | FL-11-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL11 Daniel Webster" |
+| FL-DOE-88517 | Ralph Groves | FL-11-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL11 Daniel Webster" |
+| FL-DOE-88868 | Gus Michael Bilirakis | FL-12-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | https://bilirakis.house.gov/ | "FL12 Gus M. Bilirakis" |
+| FL-DOE-89453 | Kimberly Overman | FL-12-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL12 Gus M. Bilirakis" |
+| FL-DOE-89778 | Branden Scrivener | FL-12-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL12 Gus M. Bilirakis" |
+| FL-DOE-91313 | Mike Beltran | FL-14-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL14 Kathy Castor" |
+| FL-DOE-88870 | Kathy Castor | FL-14-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | https://castor.house.gov/ | "FL14 Kathy Castor" |
+| FL-DOE-92395 | Brian Lambert | FL-14-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL14 Kathy Castor" |
+| FL-DOE-89121 | Laurel Lee | FL-15-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | https://laurellee.house.gov/ | "FL15 Laurel M. Lee" |
+| FL-DOE-89116 | Robert People | FL-15-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL15 Laurel M. Lee" |
+| FL-DOE-90251 | Sydney Gruters | FL-16-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL16 Vern Buchanan" |
+| FL-DOE-90779 | Kelly Kirschner | FL-16-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL16 Vern Buchanan" |
+| FL-DOE-89623 | Mark Davis | FL-16-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL16 Vern Buchanan" |
+| FL-DOE-91278 | Brent Andersen | FL-20-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL20 Vacancy due to the resignation of Sheila Cherfilus-McCormick, April 21, 2026." |
+| FL-DOE-91577 | Debbie Wasserman Schultz | FL-20-general | Member of the U.S. House now | Yes | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | https://wassermanschultz.house.gov/ | "FL25 Debbie Wasserman Schultz" |
+| FL-DOE-90814 | Kedner Maxime | FL-20-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL20 Vacancy due to the resignation of Sheila Cherfilus-McCormick, April 21, 2026." |
+| FL-DOE-92109 | Casey Askar | FL-22-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL22 Lois Frankel" |
+| FL-DOE-89301 | Pia Dandiya | FL-22-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL22 Lois Frankel" |
+| FL-DOE-90703 | Te Mayonna Brown | FL-24-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL24 Frederica S. Wilson" |
+| FL-DOE-91544 | Oliver G. Gilbert III | FL-24-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL24 Frederica S. Wilson" |
+| FL-DOE-89801 | Scott Singer | FL-25-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL25 Debbie Wasserman Schultz" |
+| FL-DOE-88911 | Jared Moskowitz | FL-25-general | Member of the U.S. House now | Yes | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | https://moskowitz.house.gov/ | "FL23 Jared Moskowitz" |
+| FL-DOE-92357 | Peter Jassenoff | FL-25-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL25 Debbie Wasserman Schultz" |
+| FL-DOE-90330 | Mario Diaz-Balart | FL-26-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | https://mariodiazbalart.house.gov/ | "FL26 Mario Diaz-Balart" |
+| FL-DOE-89980 | Nicole Locklin | FL-26-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL26 Mario Diaz-Balart" |
+| FL-DOE-92137 | Deborah Ann Meidinger Hosey | FL-26-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL26 Mario Diaz-Balart" |
+| FL-DOE-90721 | Maria Elvira Salazar | FL-27-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | https://salazar.house.gov/ | "FL27 Maria Elvira Salazar" |
+| FL-DOE-89933 | Eliott Rodriguez | FL-27-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL27 Maria Elvira Salazar" |
+| FL-DOE-91226 | Carlos A. Gimenez | FL-28-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | https://gimenez.house.gov/ | "FL28 Carlos A. Gimenez" |
+| FL-DOE-91699 | Phil "Felipe" Ehr | FL-28-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL28 Carlos A. Gimenez" |
+| FL-DOE-90340 | Eddy Rojas | FL-28-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL28 Carlos A. Gimenez" |
+| FL-DOE-90696 | Ryan Elijah | FL-7-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL07 Cory Mills" |
+| FL-DOE-90631 | Bale Dalton | FL-7-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL07 Cory Mills" |
+| FL-DOE-92377 | Christopher Dennison | FL-7-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL07 Cory Mills" |
+| FL-DOE-89522 | Mike Haridopolos | FL-8-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | https://haridopolos.house.gov/ | "FL08 Mike Haridopolos" |
+| FL-DOE-90831 | Jennifer Jenkins | FL-8-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL08 Mike Haridopolos" |
+| FL-DOE-91337 | Dan Green | FL-9-general | Member of the U.S. House now | No | No | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "FL09 Darren Soto" |
+| FL-DOE-89339 | Darren Soto | FL-9-general | Member of the U.S. House now | Yes | Yes | https://clerk.house.gov/xml/lists/MemberData.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | https://soto.house.gov/ | "FL09 Darren Soto" |
+| FL-DOE-89119 | Ashley Moody | FL-SEN-general | Member of the U.S. Senate now | Yes | Yes | https://www.senate.gov/general/contact_information/senators_cfm.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | https://www.moody.senate.gov/ | "Moody (R-FL)" |
+| FL-DOE-90009 | Angie Nixon | FL-SEN-general | Member of the U.S. Senate now | No | No | https://www.senate.gov/general/contact_information/senators_cfm.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "Moody (R-FL)" |
+| FL-DOE-89955 | Neil J. Gillespie | FL-SEN-general | Member of the U.S. Senate now | No | No | https://www.senate.gov/general/contact_information/senators_cfm.xml | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | "Moody (R-FL)" |
+| FL-VF-BRO-1179 | Mark D. Bogen | FL-BRO-CC2-general | Member of the Broward County Commission now | Yes | Yes | https://www.broward.org/district2 | 2026-10-08T20:22Z | 2026-10-08T22:23Z | https://www.broward.org/district2/about | "District 2 - Mayor Mark D. Bogen" |
+| FL-VF-BRO-1178 | Lamar Fisher | FL-BRO-CC4-general | Member of the Broward County Commission now | Yes | Yes | https://www.broward.org/district4 | 2026-10-08T20:22Z | 2026-10-08T22:23Z | https://www.broward.org/district4/about | "Commissioner Lamar P. Fisher About E-Mail" |
+| FL-VF-BRO-1041 | Caryl Sandler Shuham | FL-BRO-CC6-general | Member of the Broward County Commission now | No | No | https://www.broward.org/district6 | 2026-10-08T20:23Z | 2026-10-08T22:23Z | — | "District 6 - Commissioner Beam Furr" |
+| FL-VF-BRO-1182 | Robert McKinzie | FL-BRO-CC8-general | Member of the Broward County Commission now | Yes | Yes | https://www.broward.org/district8 | 2026-10-08T20:23Z | 2026-10-08T22:23Z | https://www.broward.org/district8/about | "District 8 - Vice Mayor Robert McKinzie" |
+| FL-VF-BRO-1194 | Maura McCarthy Bulman | FL-BRO-SB1-general | Member of the Broward County School Board now | Yes | Yes | https://www.browardschools.com/school-board | 2026-10-08T20:23Z | 2026-10-08T22:24Z | https://browardvotes.gov/candidates/elected-officials | "Maura McCarthy Bulman (District 1)." |
+| FL-VF-BRO-1191 | Nicole Morst | FL-BRO-SB4-general | Member of the Broward County School Board now | No | No | https://www.browardschools.com/school-board | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Lori Alhadeff (District 4)," |
+| FL-VF-BRO-1184 | Adam Cervera | FL-BRO-SB6-general | Member of the Broward County School Board now | Yes | Yes | https://www.browardschools.com/school-board | 2026-10-08T20:23Z | 2026-10-08T22:24Z | https://browardvotes.gov/candidates/elected-officials | "Adam Cervera, Esq. (District 6)," |
+| FL-VF-BRO-1172 | Roberto Fernandez III | FL-BRO-SB6-general | Member of the Broward County School Board now | No | No | https://www.browardschools.com/school-board | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Adam Cervera, Esq. (District 6)," |
+| FL-VF-BRO-1254 | Cynthia Alceus Dominique | FL-BRO-SB7-general | Member of the Broward County School Board now | No | No | https://www.browardschools.com/school-board | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Nora Rupert (District 7)," |
+| FL-VF-BRO-1195 | Allen Zeman | FL-BRO-SBAL8-general | Member of the Broward County School Board now | Yes | Yes | https://www.browardschools.com/school-board | 2026-10-08T20:23Z | 2026-10-08T22:24Z | https://browardvotes.gov/candidates/elected-officials | "Dr. Allen Zeman Countywide At-Large Seat 8" |
+| FL-VF-DAD-2964 | Marleine Bastien | FL-DAD-CC2-general | Member of the Miami-Dade County Commission now | Yes | Yes | https://www.miamidade.gov/global/government/commission/home.page | 2026-10-08T20:23Z | 2026-10-08T22:24Z | https://www.miamidade.gov/global/government/commission/district02/home.page | "Marleine Bastien District 2" |
+| FL-VF-DAD-2949 | Vicki L. Lopez | FL-DAD-CC5-general | Member of the Miami-Dade County Commission now | Yes | Yes | https://www.miamidade.gov/global/government/commission/home.page | 2026-10-08T20:23Z | 2026-10-08T22:24Z | https://www.miamidade.gov/global/government/commission/district05/home.page | "Vicki L. Lopez District 5" |
+| FL-VF-DAD-2998 | Rob Piper | FL-DAD-CC5-general | Member of the Miami-Dade County Commission now | No | No | https://www.miamidade.gov/global/government/commission/home.page | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Vicki L. Lopez District 5" |
+| FL-VF-DAD-3076 | Linda Cothiere | FL-DAD-SB1-general | Member of the Miami-Dade County School Board now | No | No | https://www.dadeschools.net/SchoolBoard/members | 2026-10-08T21:08Z | 2026-10-08T22:26Z | — | "Vacant District 1 Present Term: TBD" |
+| FL-VF-DAD-3070 | Katrina Wilson | FL-DAD-SB1-general | Member of the Miami-Dade County School Board now | No | No | https://www.dadeschools.net/SchoolBoard/members | 2026-10-08T21:08Z | 2026-10-08T22:26Z | — | "Vacant District 1 Present Term: TBD" |
+| FL-VF-DAD-2926 | Dorothy Bendross-Mindingall | FL-DAD-SB2-general | Member of the Miami-Dade County School Board now | Yes | Yes | https://www.dadeschools.net/SchoolBoard/members | 2026-10-08T21:08Z | 2026-10-08T22:26Z | https://district2.dadeschools.net/ | "Dr. Dorothy Bendross-Mindingall District 2" |
+| FL-VF-DAD-2953 | Monica Colucci | FL-DAD-SB8-general | Member of the Miami-Dade County School Board now | Yes | Yes | https://www.dadeschools.net/SchoolBoard/members | 2026-10-08T21:08Z | 2026-10-08T22:26Z | https://district8.dadeschools.net/ | "Ms. Monica Colucci Vice Chair District 8" |
+| FL-VF-HIL-2880 | Jackie Toledo | FL-HIL-CC1-general | Member of the Hillsborough County Commission now | No | No | https://hcfl.gov/government/board-of-county-commissioners | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Harry Cohen District 1" |
+| FL-VF-HIL-2640 | Harry Cohen | FL-HIL-CC1-general | Member of the Hillsborough County Commission now | Yes | Yes | https://hcfl.gov/government/board-of-county-commissioners | 2026-10-08T20:23Z | 2026-10-08T22:24Z | https://hcfl.gov/commissioners/harry-cohen | "Harry Cohen District 1" |
+| FL-VF-HIL-2646 | Luiz F. F. Garcia | FL-HIL-CC3-general | Member of the Hillsborough County Commission now | No | No | https://hcfl.gov/government/board-of-county-commissioners | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Gwen Myers District 3," |
+| FL-VF-HIL-2621 | Gwen Myers | FL-HIL-CC3-general | Member of the Hillsborough County Commission now | Yes | Yes | https://hcfl.gov/government/board-of-county-commissioners | 2026-10-08T20:23Z | 2026-10-08T22:24Z | https://hcfl.gov/commissioners/gwen-myers | "Gwen Myers District 3," |
+| FL-VF-HIL-2661 | Stacy Hahn | FL-HIL-CC5-general | Member of the Hillsborough County Commission now | No | No | https://hcfl.gov/government/board-of-county-commissioners | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Donna Cameron Cepeda District 5," |
+| FL-VF-HIL-2636 | Neil Manimala | FL-HIL-CC5-general | Member of the Hillsborough County Commission now | No | No | https://hcfl.gov/government/board-of-county-commissioners | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Donna Cameron Cepeda District 5," |
+| FL-VF-HIL-2620 | Joshua Wostal | FL-HIL-CC7-general | Member of the Hillsborough County Commission now | Yes | Yes | https://hcfl.gov/government/board-of-county-commissioners | 2026-10-08T20:23Z | 2026-10-08T22:24Z | https://hcfl.gov/commissioners/joshua-wostal | "Joshua Wostal District 7," |
+| FL-VF-HIL-2660 | Aileen Rodriguez | FL-HIL-CC7-general | Member of the Hillsborough County Commission now | No | No | https://hcfl.gov/government/board-of-county-commissioners | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Joshua Wostal District 7," |
+| FL-VF-HIL-2677 | Brittany Lyssy | FL-HIL-SB2-general | Member of the Hillsborough County School Board now | No | No | https://www.hillsboroughschools.org/o/hcps/page/board-member-district-map | 2026-10-08T21:51Z | 2026-10-08T22:54Z | — | "2 Stacy Hahn" |
+| FL-VF-HIL-2675 | Daniela Simic | FL-HIL-SB2-general | Member of the Hillsborough County School Board now | No | No | https://www.hillsboroughschools.org/o/hcps/page/board-member-district-map | 2026-10-08T21:51Z | 2026-10-08T22:54Z | — | "2 Stacy Hahn" |
+| FL-VF-HIL-2672 | Patricia "Patti" Rendon | FL-HIL-SB4-general | Member of the Hillsborough County School Board now | Yes | Yes | https://www.hillsboroughschools.org/o/hcps/page/board-member-district-map | 2026-10-08T21:51Z | 2026-10-08T22:54Z | https://www.hillsboroughschools.org/o/hcps/page/board-members | "4 Patricia “Patti” Rendon" |
+| FL-VF-HIL-2610 | Kenneth "Ken" Gay | FL-HIL-SB6-general | Member of the Hillsborough County School Board now | No | No | https://www.hillsboroughschools.org/o/hcps/page/board-member-district-map | 2026-10-08T21:51Z | 2026-10-08T22:54Z | — | "6 Karen Perez" |
+| FL-VF-HIL-2645 | Karen Perez | FL-HIL-SB6-general | Member of the Hillsborough County School Board now | Yes | Yes | https://www.hillsboroughschools.org/o/hcps/page/board-member-district-map | 2026-10-08T21:51Z | 2026-10-08T22:54Z | https://www.hillsboroughschools.org/o/hcps/page/board-members | "6 Karen Perez" |
+| FL-VF-ORA-1290 | Kamia Brown | FL-ORA-CC2-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Mike Crabb Commissioner, District 2" |
+| FL-VF-ORA-1384 | Mike Crabb | FL-ORA-CC2-general | Member of the Orange County Commission now | Yes | Yes | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx | 2026-10-08T20:23Z | 2026-10-08T22:24Z | https://www.orangecountyfl.net/BoardofCommissioners/District2Commissioner.aspx | "Mike Crabb Commissioner, District 2" |
+| FL-VF-ORA-1260 | Brian Jones | FL-ORA-CC4-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Maribel Gomez Cordero Commissioner, District 4" |
+| FL-VF-ORA-1279 | Johanna Lopez | FL-ORA-CC4-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Maribel Gomez Cordero Commissioner, District 4" |
+| FL-VF-ORA-1295 | Lawanna Gelzer | FL-ORA-CC6-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Michael “Mike” Scott Commissioner, District 6" |
+| FL-VF-ORA-1265 | Michael "Mike" Scott | FL-ORA-CC6-general | Member of the Orange County Commission now | Yes | Yes | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx | 2026-10-08T20:23Z | 2026-10-08T22:24Z | https://www.orangecountyfl.net/BoardofCommissioners/District6Commissioner.aspx | "Michael “Mike” Scott Commissioner, District 6" |
+| FL-VF-ORA-1283 | Patricia Rumph | FL-ORA-CC7-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Michael “Mike” Scott Commissioner, District 6" |
+| FL-VF-ORA-1271 | Vicki Vargo | FL-ORA-CC7-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Michael “Mike” Scott Commissioner, District 6" |
+| FL-VF-ORA-1275 | Jeannette Quinones Hernandez | FL-ORA-CC8-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Michael “Mike” Scott Commissioner, District 6" |
+| FL-VF-ORA-1272 | Victor M. Torres Jr. | FL-ORA-CC8-general | Member of the Orange County Commission now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Michael “Mike” Scott Commissioner, District 6" |
+| FL-VF-ORA-1401 | Roberta Walton Johnson | FL-ORA-CLERK-general | Holds this office now | No | No | https://www.myorangeclerk.com/ | 2026-10-08T20:39Z | 2026-10-08T22:26Z | — | "Joyce Boudoin has been appointed Clerk Ad Interim" |
+| FL-VF-ORA-1364 | Terrell Thomas | FL-ORA-CLERK-general | Holds this office now | No | No | https://www.myorangeclerk.com/ | 2026-10-08T20:39Z | 2026-10-08T22:26Z | — | "Joyce Boudoin has been appointed Clerk Ad Interim" |
+| FL-VF-ORA-1239 | Chris Messina | FL-ORA-MAYOR-general | Holds this office now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Jerry L. Demings Orange County Mayor" |
+| FL-VF-ORA-1236 | Tiffany Moore Russell | FL-ORA-MAYOR-general | Holds this office now | No | No | https://www.orangecountyfl.net/OpenGovernment/BoardofCountyCommissioners.aspx | 2026-10-08T20:23Z | 2026-10-08T22:24Z | — | "Jerry L. Demings Orange County Mayor" |
+| FL-VF-ORA-1270 | Melissa Lopez Marantes | FL-ORA-SB1-general | Member of the Orange County School Board now | No | No | https://www.ocps.net/school-board | 2026-10-08T20:39Z | 2026-10-08T22:26Z | — | "Angie Gallo District 1" |
+| FL-VF-ORA-1318 | Gloria Reina O'Neal | FL-ORA-SB2-general | Member of the Orange County School Board now | No | No | https://www.ocps.net/school-board | 2026-10-08T20:39Z | 2026-10-08T22:26Z | — | "Maria Salamanca Vice-chair, District 2" |
+| FL-VF-ORA-1314 | Diana Moore | FL-ORA-SB3-general | Member of the Orange County School Board now | No | No | https://www.ocps.net/school-board | 2026-10-08T20:39Z | 2026-10-08T22:26Z | — | "Alicia Farrant District 3" |
+| FL-VF-ORA-1242 | Susanne Peña | FL-ORA-SB3-general | Member of the Orange County School Board now | No | No | https://www.ocps.net/school-board | 2026-10-08T20:39Z | 2026-10-08T22:26Z | — | "Alicia Farrant District 3" |
+| FL-VF-ORA-1245 | Angie Gallo | FL-ORA-SBCHAIR-general | Member of the Orange County School Board now | Yes | No | https://www.ocps.net/school-board | 2026-10-08T20:39Z | 2026-10-08T22:26Z | https://www.ocps.net/district-1-angie-gallo | "Angie Gallo is the School Board Member for District 1" |
 
 ## Races
 
@@ -319,75 +331,75 @@ fails if the two differ. To change a value, change it here and regenerate.
 <!-- table:fec -->
 | candidate_id | race_id | fec_candidate_id | incumbent_challenge | election_districts | read_1 | read_2 |
 |---|---|---|---|---|---|---|
-| FL-DOE-89909 | FL-10-general | H2FL10259 | I | 10, 10, 10 |  |  |
-| FL-DOE-91717 | FL-11-general | H6FL11332 | O | 11 |  |  |
-| FL-DOE-91715 | FL-11-general | H6FL11357 | O | 11 |  |  |
-| FL-DOE-88517 | FL-11-general | H4FL11089 | O | 11, 11 |  |  |
-| FL-DOE-88868 | FL-12-general | H6FL09070 | I | 09, 09, 09, 12, 12, 12, 12, 12, 12, 12, 12 |  |  |
-| FL-DOE-89453 | FL-12-general | H6FL15200 | C | 12 |  |  |
-| FL-DOE-89778 | FL-12-general | H6FL12231 | C | 12 |  |  |
-| FL-DOE-91313 | FL-14-general | H6FL14237 | C | 14 |  |  |
-| FL-DOE-88870 | FL-14-general | H6FL11126 | I | 11, 11, 11, 14, 14, 14, 14, 14, 14, 14, 14 |  |  |
-| FL-DOE-92395 | FL-14-general | H6FL14245 | C | 14 |  |  |
-| FL-DOE-89121 | FL-15-general | H2FL15241 | I | 15, 15, 15 |  |  |
-| FL-DOE-89116 | FL-15-general | H6FL15168 | C | 15 |  |  |
-| FL-DOE-90251 | FL-16-general | H6FL16141 | O | 16 |  |  |
-| FL-DOE-90779 | FL-16-general | H6FL16158 | O | 16 |  |  |
-| FL-DOE-89623 | FL-16-general | H6FL06365 | O | 16 |  |  |
-| FL-DOE-91278 | FL-20-general | H6FL20143 | C | 20 |  |  |
-| FL-DOE-91577 | FL-20-general | H4FL20023 | I | 20, 20, 20, 20, 23, 23, 23, 23, 23, 25, 25, 20 |  |  |
-| FL-DOE-90814 | FL-20-general | H6FL20119 | C | 20 |  |  |
-| FL-DOE-92109 | FL-22-general | H6FL22248 | C | 22 |  |  |
-| FL-DOE-89301 | FL-22-general | H6FL21059 | C | 22 |  |  |
-| FL-DOE-90703 | FL-24-general | H6FL14203 | C | 24 |  |  |
-| FL-DOE-91544 | FL-24-general | H6FL24095 | O | 24 |  |  |
-| FL-DOE-89801 | FL-25-general | H6FL23188 | C | 25 |  |  |
-| FL-DOE-88911 | FL-25-general | H2FL22171 | I | 23, 23, 25 |  |  |
-| FL-DOE-92357 | FL-25-general | H6FL25068 | C | 25 |  |  |
-| FL-DOE-90330 | FL-26-general | H2FL25018 | I | 25, 25, 25, 25, 21, 25, 25, 25, 25, 25, 26, 26, 26 |  |  |
-| FL-DOE-89980 | FL-26-general | H6FL26058 | C | 26 |  |  |
-| FL-DOE-92137 | FL-26-general | H6FL26074 | C | 26 |  |  |
-| FL-DOE-90721 | FL-27-general | H8FL27185 | I | 27, 27, 27, 27, 27 |  |  |
-| FL-DOE-89933 | FL-27-general | H6FL27098 | C | 27 |  |  |
-| FL-DOE-91226 | FL-28-general | H0FL26036 | I | 26, 28, 28, 28 |  |  |
-| FL-DOE-91699 | FL-28-general | H4FL28042 | C | 28, 28 |  |  |
-| FL-DOE-90340 | FL-28-general | H6FL28021 | C | 28 |  |  |
-| FL-DOE-90696 | FL-7-general | H6FL07231 | C | 07 |  |  |
-| FL-DOE-90631 | FL-7-general | H6FL07215 | C | 07 |  |  |
-| FL-DOE-92377 | FL-7-general | H6FL07249 | C | 07 |  |  |
-| FL-DOE-89522 | FL-8-general | H4FL08168 | I | 08, 08 |  |  |
-| FL-DOE-90831 | FL-8-general | H6FL06399 | C | 08 |  |  |
-| FL-DOE-91337 | FL-9-general | H6FL09294 | C | 09 |  |  |
-| FL-DOE-89339 | FL-9-general | H6FL09179 | I | 09, 09, 09, 09, 09, 09 |  |  |
-| FL-DOE-89119 | FL-SEN-general | S6FL00640 | I | 00 |  |  |
-| FL-DOE-90009 | FL-SEN-general | S6FL00830 | C | 00 |  |  |
-| FL-DOE-89955 | FL-SEN-general | S6FL00863 | C | 00 |  |  |
+| FL-DOE-89909 | FL-10-general | H2FL10259 | I | 10, 10, 10 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-91717 | FL-11-general | H6FL11332 | O | 11 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-91715 | FL-11-general | H6FL11357 | O | 11 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-88517 | FL-11-general | H4FL11089 | O | 11, 11 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-88868 | FL-12-general | H6FL09070 | I | 09, 09, 09, 12, 12, 12, 12, 12, 12, 12, 12 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-89453 | FL-12-general | H6FL15200 | C | 12 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-89778 | FL-12-general | H6FL12231 | C | 12 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-91313 | FL-14-general | H6FL14237 | C | 14 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-88870 | FL-14-general | H6FL11126 | I | 11, 11, 11, 14, 14, 14, 14, 14, 14, 14, 14 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-92395 | FL-14-general | H6FL14245 | C | 14 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-89121 | FL-15-general | H2FL15241 | I | 15, 15, 15 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-89116 | FL-15-general | H6FL15168 | C | 15 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-90251 | FL-16-general | H6FL16141 | O | 16 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-90779 | FL-16-general | H6FL16158 | O | 16 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-89623 | FL-16-general | H6FL06365 | O | 16 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-91278 | FL-20-general | H6FL20143 | C | 20 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-91577 | FL-20-general | H4FL20023 | I | 20, 20, 20, 20, 23, 23, 23, 23, 23, 25, 25, 20 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-90814 | FL-20-general | H6FL20119 | C | 20 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-92109 | FL-22-general | H6FL22248 | C | 22 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-89301 | FL-22-general | H6FL21059 | C | 22 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-90703 | FL-24-general | H6FL14203 | C | 24 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-91544 | FL-24-general | H6FL24095 | O | 24 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-89801 | FL-25-general | H6FL23188 | C | 25 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-88911 | FL-25-general | H2FL22171 | I | 23, 23, 25 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-92357 | FL-25-general | H6FL25068 | C | 25 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-90330 | FL-26-general | H2FL25018 | I | 25, 25, 25, 25, 21, 25, 25, 25, 25, 25, 26, 26, 26 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-89980 | FL-26-general | H6FL26058 | C | 26 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-92137 | FL-26-general | H6FL26074 | C | 26 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-90721 | FL-27-general | H8FL27185 | I | 27, 27, 27, 27, 27 | 2026-10-08T21:00Z | 2026-10-08T22:32Z |
+| FL-DOE-89933 | FL-27-general | H6FL27098 | C | 27 | 2026-10-08T21:00Z | 2026-10-08T22:32Z |
+| FL-DOE-91226 | FL-28-general | H0FL26036 | I | 26, 28, 28, 28 | 2026-10-08T20:54Z | 2026-10-08T22:32Z |
+| FL-DOE-91699 | FL-28-general | H4FL28042 | C | 28, 28 | 2026-10-08T20:54Z | 2026-10-08T22:32Z |
+| FL-DOE-90340 | FL-28-general | H6FL28021 | C | 28 | 2026-10-08T20:54Z | 2026-10-08T22:32Z |
+| FL-DOE-90696 | FL-7-general | H6FL07231 | C | 07 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-90631 | FL-7-general | H6FL07215 | C | 07 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-92377 | FL-7-general | H6FL07249 | C | 07 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-89522 | FL-8-general | H4FL08168 | I | 08, 08 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-90831 | FL-8-general | H6FL06399 | C | 08 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-91337 | FL-9-general | H6FL09294 | C | 09 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-89339 | FL-9-general | H6FL09179 | I | 09, 09, 09, 09, 09, 09 | 2026-10-08T20:39Z | 2026-10-08T22:32Z |
+| FL-DOE-89119 | FL-SEN-general | S6FL00640 | I | 00 | 2026-10-08T20:54Z | 2026-10-08T22:32Z |
+| FL-DOE-90009 | FL-SEN-general | S6FL00830 | C | 00 | 2026-10-08T20:54Z | 2026-10-08T22:32Z |
+| FL-DOE-89955 | FL-SEN-general | S6FL00863 | C | 00 | 2026-10-08T20:54Z | 2026-10-08T22:32Z |
 
 ## Running mates
 
 <!-- table:tickets -->
 | candidate_id | governor | can_detail_url | raw_json | stored | read_1 | read_2 | reread_2026-10-17 | reread_2026-10-26 | reread_2026-11-02 |
 |---|---|---|---|---|---|---|---|---|---|
-| FL-DOE-89042 | Byron Donalds | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=89042 | `" Bryan&nbsp;\n\t\t    Avila                     "` | Bryan Avila |  |  | — | — | — |
-| FL-DOE-89243 | David Jolly | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=89243 | `" Gwen&nbsp;\n\t\t    Graham                     "` | Gwen Graham |  |  | — | — | — |
-| FL-DOE-84076 | Scott Eckhard Jewett | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=84076 | `" Nicole&nbsp;\n\t\t    Skelly                     "` | Nicole Skelly |  |  | — | — | — |
-| FL-DOE-90630 | Charles Burkett | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=90630 | `" Ruben&nbsp;\n\t\t    A.&nbsp;\n\t\t    Coto                     "` | Ruben A. Coto |  |  | — | — | — |
-| FL-DOE-89571 | Frank J. Russo | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=89571 | `" Rachel&nbsp;\n\t\t    Rodriguez                     "` | Rachel Rodriguez |  |  | — | — | — |
-| FL-DOE-88529 | Moliere "Moe" Dimanche | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=88529 | `" Benjiman&nbsp;\n\t\t    Rojas                     "` | Benjiman Rojas |  |  | — | — | — |
-| FL-DOE-90433 | Dean Ocean Abrams | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=90433 | `" Joe&nbsp;\n\t\t    Van Vactor                     "` | Joe Van Vactor |  |  | — | — | — |
-| FL-DOE-89630 | Jeffrey Peter "Dr. Jeff" Datto | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=89630 | `" Juan&nbsp;\n\t\t    Santana                     "` | Juan Santana |  |  | — | — | — |
+| FL-DOE-89042 | Byron Donalds | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=89042 | `" Bryan&nbsp;\n\t\t    Avila                     "` | Bryan Avila | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | — | — |
+| FL-DOE-89243 | David Jolly | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=89243 | `" Gwen&nbsp;\n\t\t    Graham                     "` | Gwen Graham | 2026-10-08T21:00Z | 2026-10-08T22:22Z | — | — | — |
+| FL-DOE-84076 | Scott Eckhard Jewett | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=84076 | `" Nicole&nbsp;\n\t\t    Skelly                     "` | Nicole Skelly | 2026-10-08T20:21Z | 2026-10-08T22:22Z | — | — | — |
+| FL-DOE-90630 | Charles Burkett | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=90630 | `" Ruben&nbsp;\n\t\t    A.&nbsp;\n\t\t    Coto                     "` | Ruben A. Coto | 2026-10-08T20:22Z | 2026-10-08T22:22Z | — | — | — |
+| FL-DOE-89571 | Frank J. Russo | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=89571 | `" Rachel&nbsp;\n\t\t    Rodriguez                     "` | Rachel Rodriguez | 2026-10-08T20:22Z | 2026-10-08T22:22Z | — | — | — |
+| FL-DOE-88529 | Moliere "Moe" Dimanche | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=88529 | `" Benjiman&nbsp;\n\t\t    Rojas                     "` | Benjiman Rojas | 2026-10-08T20:22Z | 2026-10-08T22:22Z | — | — | — |
+| FL-DOE-90433 | Dean Ocean Abrams | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=90433 | `" Joe&nbsp;\n\t\t    Van Vactor                     "` | Joe Van Vactor | 2026-10-08T20:22Z | 2026-10-08T22:22Z | — | — | — |
+| FL-DOE-89630 | Jeffrey Peter "Dr. Jeff" Datto | https://dos.elections.myflorida.com/candidates/canDetail.asp?account=89630 | `" Juan&nbsp;\n\t\t    Santana                     "` | Juan Santana | 2026-10-08T20:22Z | 2026-10-08T22:22Z | — | — | — |
 
 ## No-site re-checks
 
 <!-- table:sites -->
 | candidate_id | race_id | race_status | result | read_1 | read_2 | action | evidence |
 |---|---|---|---|---|---|---|---|
-| FL-DOE-89630 | FL-GOV-general | published | none found |  |  | none | "drjeffdatto.com has been recently registered with namecheap.com" |
-| FL-DOE-92357 | FL-25-general | published | none found |  |  | none | "Do Not Sell or Share My Personal Information" |
-| FL-DOE-92137 | FL-26-general | published | none found |  |  | none | "damhforcongress.com has no A record: no website is served" |
-| FL-VF-BRO-1179 | FL-BRO-CC2-general | listed | none found |  |  | none | "About - Mayor Mark D. Bogen" |
-| FL-VF-BRO-1178 | FL-BRO-CC4-general | listed | none found |  |  | none | "This domain isn't connected to a site" |
-| FL-VF-BRO-1182 | FL-BRO-CC8-general | listed | none found |  |  | none | "About - Vice Mayor Robert McKinzie" |
-| FL-VF-DAD-2926 | FL-DAD-SB2-general | listed | none found |  |  | none | "Dr. Dorothy Bendross-Mindingall Miami-Dade School Board Member, District 2" |
-| FL-VF-DAD-2953 | FL-DAD-SB8-general | listed | withheld |  |  | none | "Encontrar un casino online seguro exige calma, porque las reglas importan mas que las promesas" |
-| FL-VF-ORA-1245 | FL-ORA-SBCHAIR-general | listed | none found |  |  | none | "Squarespace - Website Expired" |
+| FL-DOE-89630 | FL-GOV-general | published | none found | 2026-10-08T21:20Z | 2026-10-08T22:32Z | none | "drjeffdatto.com has been recently registered with namecheap.com" |
+| FL-DOE-92357 | FL-25-general | published | none found | 2026-10-08T21:17Z | 2026-10-08T22:31Z | none | "Do Not Sell or Share My Personal Information" |
+| FL-DOE-92137 | FL-26-general | published | none found | 2026-10-08T21:53Z | 2026-10-08T22:54Z | none | "damhforcongress.com has no A record: no website is served" |
+| FL-VF-BRO-1179 | FL-BRO-CC2-general | listed | none found | 2026-10-08T21:10Z | 2026-10-08T22:29Z | none | "About - Mayor Mark D. Bogen" |
+| FL-VF-BRO-1178 | FL-BRO-CC4-general | listed | none found | 2026-10-08T21:19Z | 2026-10-08T22:32Z | none | "This domain isn't connected to a site" |
+| FL-VF-BRO-1182 | FL-BRO-CC8-general | listed | none found | 2026-10-08T21:10Z | 2026-10-08T22:29Z | none | "About - Vice Mayor Robert McKinzie" |
+| FL-VF-DAD-2926 | FL-DAD-SB2-general | listed | none found | 2026-10-08T21:16Z | 2026-10-08T22:29Z | none | "Dr. Dorothy Bendross-Mindingall Miami-Dade School Board Member, District 2" |
+| FL-VF-DAD-2953 | FL-DAD-SB8-general | listed | withheld | 2026-10-08T21:19Z | 2026-10-08T22:32Z | none | "Encontrar un casino online seguro exige calma, porque las reglas importan mas que las promesas" |
+| FL-VF-ORA-1245 | FL-ORA-SBCHAIR-general | listed | none found | 2026-10-08T21:19Z | 2026-10-08T22:32Z | none | "Squarespace - Website Expired" |
