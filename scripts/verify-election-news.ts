@@ -28,6 +28,10 @@
     11. R3's own four items of 2026-09-09: the Hillsborough and Division
         pages queue with their scopes; the Miami-Dade County release and the
         Ballotpedia story refuse their batch as not official.
+    12. `context` lists every official entry with the scope its items carry,
+        the hosts R3 may fetch, the official pages already stored or queued
+        in the window (read in pages, filtered by kind and date), and the
+        election's dates without the verifier's name; it writes nothing.
 
    Pure and offline: an in-memory stand-in for the Supabase client, no
    network. Run: node scripts/verify-election-news.ts */
@@ -36,16 +40,20 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
+  CONTEXT_PAGE,
   ELECTION_WINDOW_DAYS,
   FUTURE_DAYS,
   MAX_ELECTION_BATCH,
   SIDE_TAKING_WORDS,
   batchProblem,
+  buildElectionContext,
   contentDrop,
   electionWindow,
   planElectionQueue,
   QUEUE_READ_CHUNK,
+  readContextRows,
   readQueueContext,
+  runElectionContext,
   runElectionQueue,
   scopeFor,
   type ElectionNewsItem,
@@ -63,7 +71,8 @@ import {
   type AttributionDeps,
 } from "../src/lib/news-enqueue.ts";
 import { OUTLETS, outletForUrl } from "../src/lib/news-sources.ts";
-import { officialForUrl } from "../src/lib/official-sources.ts";
+import { OFFICIAL_SOURCES, officialForUrl } from "../src/lib/official-sources.ts";
+import { supervisorSite } from "../src/lib/supervisors.ts";
 import { loadBallotRoster, type BallotRosterCandidate } from "../src/lib/news-intake.ts";
 
 let failures = 0;
@@ -382,7 +391,13 @@ const plan = (items: Record<string, unknown>[], c: QueueContext = EMPTY, now: Da
 
 /* ---- 6. the run, against an in-memory client ---------------------------- */
 type Row = Record<string, unknown>;
-interface Read { table: string; columns: string; filters: [op: string, col: string, value: unknown][] }
+interface Read {
+  table: string;
+  columns: string;
+  filters: [op: string, col: string, value: unknown][];
+  order?: string;
+  range?: [number, number];
+}
 function get(row: Row, col: string): unknown {
   const [head, key] = col.split("->>");
   const v = row[head];
@@ -400,6 +415,9 @@ function fakeDb(given: Record<string, Row[]>, fail: { read?: string; insert?: bo
       select: (columns: string) => { read.columns = columns; reads.push(read); return q; },
       eq: (col: string, v: unknown) => { read.filters.push(["eq", col, v]); return q; },
       in: (col: string, vs: unknown[]) => { read.filters.push(["in", col, vs]); return q; },
+      gte: (col: string, v: unknown) => { read.filters.push(["gte", col, v]); return q; },
+      order: (col: string) => { read.order = col; return q; },
+      range: (from: number, to: number) => { read.range = [from, to]; return q; },
       insert: async (rows: Row[]) => {
         if (fail.insert) return { error: { message: "insert refused" } };
         inserted.push(...rows);
@@ -408,8 +426,16 @@ function fakeDb(given: Record<string, Row[]>, fail: { read?: string; insert?: bo
       then: (done: (v: { data: Row[] | null; error: { message: string } | null }) => unknown) => {
         if (fail.read === table) return done({ data: null, error: { message: `${table} unavailable` } });
         const keep = (r: Row) => read.filters.every(([op, col, v]) =>
-          op === "eq" ? get(r, col) === v : (v as unknown[]).includes(get(r, col)));
-        return done({ data: (tables[table] ?? []).filter(keep), error: null });
+          op === "eq" ? get(r, col) === v
+            : op === "gte" ? String(get(r, col)) >= String(v)
+              : (v as unknown[]).includes(get(r, col)));
+        let rows = (tables[table] ?? []).filter(keep);
+        if (read.order) {
+          const col = read.order;
+          rows = [...rows].sort((a, b) => String(get(a, col)).localeCompare(String(get(b, col))));
+        }
+        if (read.range) rows = rows.slice(read.range[0], read.range[1] + 1);
+        return done({ data: rows, error: null });
       },
     };
     return q;
@@ -727,6 +753,112 @@ const R3_0909 = {
     r.exitCode === 0 && r.line === "would queue 2, skipped 0, dropped 0", JSON.stringify(r));
 }
 
+/* ---- 12. context -------------------------------------------------------- */
+{
+  const rows = {
+    news: [
+      { url: "https://www.browardvotes.gov/notices/ev-sites", published_at: "2026-10-01T00:00:00+00:00" },
+      { url: "https://www.wlrn.org/2026/10/01/early-voting", published_at: "2026-10-01T12:00:00+00:00" },
+    ],
+    reviews: [
+      { payload: { url: "https://dos.fl.gov/elections/notice-1", published_at: "2026-10-03T00:00:00.000Z" }, status: "rejected", created_at: "2026-10-04T10:00:00Z" },
+      { payload: { url: "https://browardvotes.gov/notices/ev-sites/" }, status: "approved", created_at: "2026-10-02T10:00:00Z" },
+      { payload: { url: "https://www.local10.com/x" }, status: "pending", created_at: "2026-10-05T10:00:00Z" },
+      { payload: null, status: "pending", created_at: "2026-10-05T10:00:00Z" },
+    ],
+    events: [
+      { event_type: "early_voting_start", county_fips: "12011", event_date: "2026-10-19", details_url: "https://browardvotes.gov/voters/early-voting-ballot-return", verified_by: "verifier@example.org" },
+      { event_type: "election_day", county_fips: null, event_date: "2026-11-03", details_url: "https://dos.fl.gov/elections/for-voters/election-dates/", verified_by: null },
+    ],
+  };
+  const c = buildElectionContext(rows, NOW);
+  check("context's window is the queue's window", JSON.stringify(c.window) === JSON.stringify(electionWindow(NOW)), JSON.stringify(c.window));
+  check("context lists the four covered counties in order, each with its Supervisor's site",
+    c.counties.map((x) => x.county).join(",") === "Miami-Dade,Broward,Hillsborough,Orange" &&
+      c.counties.every((x) => x.supervisor_site === supervisorSite(x.county_fips)),
+    JSON.stringify(c.counties.map((x) => [x.county, x.supervisor_site])));
+  check("every official entry appears once, with the scope its items carry",
+    c.counties.flatMap((x) => x.entries).length + c.statewide.length === OFFICIAL_SOURCES.length &&
+      c.counties.every((x) => x.entries.every((e) => JSON.stringify(e.scope) === JSON.stringify({ county_fips: x.county_fips }))) &&
+      c.statewide.every((e) => JSON.stringify(e.scope) === '{"statewide":true}'),
+    JSON.stringify({ counties: c.counties, statewide: c.statewide }));
+  check("Miami-Dade's entries are votemiamidade.gov and miamidade.gov/elections",
+    c.counties[0].entries.map((e) => e.domain).join(",") === "votemiamidade.gov,miamidade.gov/elections",
+    JSON.stringify(c.counties[0].entries));
+  check("fetch_hosts is every entry's host with and without www., and holds each Supervisor's site",
+    c.fetch_hosts.length === 34 && c.fetch_hosts.includes("dos.fl.gov") && c.fetch_hosts.includes("www.flsenate.gov") &&
+      !c.fetch_hosts.includes("www.courtlistener.com") &&
+      c.counties.every((x) => c.fetch_hosts.includes(new URL(x.supervisor_site).hostname)),
+    JSON.stringify(c.fetch_hosts));
+  check("known_urls holds the official pages only, one per page, newest first, with review status",
+    JSON.stringify(c.known_urls) === JSON.stringify([
+      { url: "https://dos.fl.gov/elections/notice-1", in: "review_item", status: "rejected", date: "2026-10-03" },
+      { url: "https://www.browardvotes.gov/notices/ev-sites", in: "news_item", status: null, date: "2026-10-01" },
+    ]),
+    JSON.stringify(c.known_urls));
+  check("election_events says whether a date is verified and never copies who verified it",
+    c.election_events.length === 2 && c.election_events[0].county_fips === null && c.election_events[0].verified === false &&
+      c.election_events[1].verified === true && !JSON.stringify(c).includes("verifier@example.org"),
+    JSON.stringify(c.election_events));
+}
+{
+  /* The reads, against the in-memory client, with pages of 2. */
+  const news = ["a", "b", "c", "d", "e"].map((x, i) => ({
+    id: `n${i}`, url: `https://www.votehillsborough.gov/news/${x}`, published_at: "2026-10-01T00:00:00+00:00",
+  }));
+  const f = fakeDb({
+    news_item: [...news, { id: "n9", url: "https://www.votehillsborough.gov/news/old", published_at: "2026-01-01T00:00:00+00:00" }],
+    review_item: [
+      { id: "r1", kind: "manual_news", status: "pending", created_at: "2026-10-02T00:00:00Z", payload: { url: "https://voteorangefl.gov/x" } },
+      { id: "r2", kind: "candidate_lead", status: "pending", created_at: "2026-10-02T00:00:00Z", payload: { url: "https://voteorangefl.gov/y" } },
+    ],
+    election_event: [
+      { election: "general_2026", event_type: "election_day", county_fips: null, event_date: "2026-11-03", details_url: null, verified_by: "x" },
+      { election: "primary_2026", event_type: "election_day", county_fips: null, event_date: "2026-08-18", details_url: null, verified_by: "x" },
+    ],
+  });
+  const r = await readContextRows(f.db, NOW, 2);
+  const since = `${electionWindow(NOW).from}T00:00:00Z`;
+  const newsReads = f.reads.filter((x) => x.table === "news_item");
+  check("news_item is read in pages ordered by id, from the window's first day, until a short page",
+    newsReads.length === 3 && newsReads.every((x) => x.order === "id" && x.filters.some(([op, col, v]) => op === "gte" && col === "published_at" && v === since)),
+    JSON.stringify(newsReads));
+  check("a row on the last page is still read, and a row before the window is not",
+    r.news.length === 5 && r.news.some((n) => n.url?.endsWith("/news/e")) && !r.news.some((n) => n.url?.endsWith("/old")),
+    JSON.stringify(r.news));
+  const reviewRead = f.reads.find((x) => x.table === "review_item");
+  check("review_item is read for manual_news items created in the window",
+    reviewRead !== undefined && reviewRead.filters.some(([op, col, v]) => op === "eq" && col === "kind" && v === "manual_news") &&
+      reviewRead.filters.some(([op, col, v]) => op === "gte" && col === "created_at" && v === since) && r.reviews.length === 1,
+    JSON.stringify(reviewRead));
+  check("election_event is read for the active election only",
+    r.events.length === 1 && f.reads.some((x) => x.table === "election_event" &&
+      x.filters.some(([op, col, v]) => op === "eq" && col === "election" && v === "general_2026")),
+    JSON.stringify(r.events));
+  check("context writes nothing", f.inserted.length === 0);
+  check("a context page is 1000 rows, PostgREST's default cap", CONTEXT_PAGE === 1000, String(CONTEXT_PAGE));
+  let tooMany = "";
+  try {
+    await readContextRows(f.db, NOW, 2, 4);
+  } catch (err) {
+    tooMany = (err as Error).message;
+  }
+  check("more rows than the cap throws instead of returning a partial list", tooMany.includes("more than 4 news_item rows"), tooMany);
+}
+for (const table of ["news_item", "review_item", "election_event"]) {
+  const f = fakeDb({}, { read: table });
+  const out = await runElectionContext(f.db, NOW);
+  check(`a ${table} read error fails the context step and prints nothing`,
+    out.exitCode === 1 && out.output === null && out.line.includes(`${table} unavailable`), JSON.stringify(out));
+}
+{
+  const f = fakeDb({});
+  const out = await runElectionContext(f.db, NOW);
+  check("a context run with an empty database still lists the counties, the hosts and the window",
+    out.exitCode === 0 && out.output?.counties.length === 4 && out.line.startsWith(`context: window ${electionWindow(NOW).from} to `),
+    JSON.stringify(out));
+}
+
 /* ---- 7. the CLI writes nothing but review_item -------------------------- */
 const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, "");
 const lib = strip(readFileSync(resolve(import.meta.dirname, "..", "src/lib/election-news.ts"), "utf8"));
@@ -741,6 +873,9 @@ check("the CLI refuses an unknown argument instead of writing",
   /if \(unknown\.length > 0\) fail\(2, `queue: unknown argument/.test(cli));
 check("the CLI passes --dry-run through to runElectionQueue",
   /const dryRun = args\.includes\("--dry-run"\);/.test(cli) && /runElectionQueue\(createClient\(supabaseUrl, serviceKey\), raw, \{ dryRun \}\)/.test(cli));
+check("the CLI's context step goes through runElectionContext and refuses any argument",
+  /runElectionContext\(createClient\(supabaseUrl, serviceKey\)\)/.test(cli) &&
+    /if \(command === "context" && args\.length > 0\) fail\(2, /.test(cli));
 
 /* ---- 9. the ballot roster R3's candidate rule matches against ---------- */
 {
@@ -789,5 +924,5 @@ if (failures > 0) {
   process.exit(1);
 }
 console.log(
-  `verify-election-news: OK — malformed batches are refused whole, every queued row is a pending agent:R3 manual_news item with a checked source, all ${approvedRows} queued rows pass the approve path's source checks, skips and drops are reported, and --dry-run writes nothing`,
+  `verify-election-news: OK — malformed batches are refused whole, scope comes from the publisher, the date window, candidate, measure and lint rules drop items with their reasons, every queued row is a pending agent:R3 manual_news item with a checked source, all ${approvedRows} queued rows pass the approve path's source checks, context only reads, and --dry-run writes nothing`,
 );

@@ -13,6 +13,11 @@
    through an injected client, so scripts/verify-election-news.ts proves the
    whole contract offline.
 
+   Two steps. `context` reads only: the window, the official hosts by county
+   and statewide, the official pages already stored or queued, and the
+   general election's dates, so R3 knows where to look and what is done.
+   `queue` applies the rules below and makes the one insert.
+
    Refusals stop the whole batch (exit 1, nothing written): a malformed item,
    a URL off the official list or on an outlet, a scope that is not the
    publisher's (D2). Drops remove one item, keep the rest, and are reported
@@ -30,11 +35,19 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { urlNorm } from "./brief-rows.ts";
 import { COVERED_FIPS } from "./candidate-leads.ts";
+import { COVERED_COUNTIES } from "./counties.ts";
+import { ACTIVE_ELECTION } from "./election.ts";
 import { loadBallotRoster } from "./news-intake.ts";
 import { matchArticle, type RosterCandidate } from "./news-match.ts";
 import { OUTLETS, outletForUrl } from "./news-sources.ts";
 import { findAllBannedTermMatches } from "./neutrality.ts";
-import { officialForUrl, officialSourceIdFor, type OfficialSource } from "./official-sources.ts";
+import {
+  OFFICIAL_SOURCES,
+  officialForUrl,
+  officialSourceIdFor,
+  type OfficialSource,
+} from "./official-sources.ts";
+import { supervisorSite } from "./supervisors.ts";
 import { ManualNewsPayloadSchema, type ManualNewsPayload } from "../types/admin.ts";
 
 /** The most items one `queue` batch may carry. A weekly read of four
@@ -523,4 +536,243 @@ export async function runElectionQueue(
     if (error) return { exitCode: 1, output: null, line: `election-news: could not queue: ${error.message}; nothing written` };
   }
   return { exitCode: 0, output, line: `queued ${counts}` };
+}
+
+/* ---- context: what R3 reads before it looks (agent-retrofit spec §3.5) -- */
+
+/** One official entry as R3 reads it: the body, and the scope its items
+    carry. */
+export interface ContextEntry {
+  domain: string;
+  publisher: string;
+  scope: ElectionScope;
+}
+
+export interface ContextCounty {
+  county_fips: string;
+  county: string;
+  /** The Supervisor's home page (supervisors.ts): where R3 starts. */
+  supervisor_site: string;
+  entries: ContextEntry[];
+}
+
+/** An official page already stored or queued inside the window. */
+export interface KnownUrl {
+  url: string;
+  in: "news_item" | "review_item";
+  /** The review item's status; null for a news_item row. */
+  status: string | null;
+  /** YYYY-MM-DD: the published_at the row or payload carries, else the
+      review item's created_at. */
+  date: string;
+}
+
+export interface ContextEvent {
+  event_type: string;
+  county_fips: string | null;
+  event_date: string;
+  details_url: string | null;
+  /** verified_by is set. The verifier's name is not copied. */
+  verified: boolean;
+}
+
+/** context.json. */
+export interface ElectionContext {
+  generated_at: string;
+  window: { from: string; to: string };
+  counties: ContextCounty[];
+  statewide: ContextEntry[];
+  fetch_hosts: string[];
+  known_urls: KnownUrl[];
+  election_events: ContextEvent[];
+}
+
+/** The rows the context reads, as the database returns them. */
+export interface ContextRows {
+  news: readonly { url: string | null; published_at: string | null }[];
+  reviews: readonly {
+    payload: { url?: unknown; published_at?: unknown } | null;
+    status: string;
+    created_at: string;
+  }[];
+  events: readonly {
+    event_type: string;
+    county_fips: string | null;
+    event_date: string;
+    details_url: string | null;
+    verified_by: string | null;
+  }[];
+}
+
+const contextEntry = (s: OfficialSource): ContextEntry => ({ domain: s.domain, publisher: s.publisher, scope: scopeFor(s) });
+
+/** The only hosts R3 may fetch: each official entry's host, with and
+    without `www.`. A path-scoped entry gives its host (dos.fl.gov); the
+    item's URL must still be under the path, which batchProblem checks.
+    Any other host, a court's own subdomain included, is reported by R3 and
+    never fetched, so an unattended run never waits on a permission prompt
+    for a host nobody approved (spec §3.3). */
+export function fetchHosts(sources: readonly OfficialSource[] = OFFICIAL_SOURCES): string[] {
+  const hosts = new Set<string>();
+  for (const s of sources) {
+    const host = s.domain.split("/")[0];
+    hosts.add(host);
+    hosts.add(host.startsWith("www.") ? host.slice(4) : `www.${host}`);
+  }
+  return [...hosts].sort();
+}
+
+/** context.json from the rows read. Pure.
+    - counties: the four covered counties in COVERED_COUNTIES order, each
+      with its Supervisor's site and its entries; statewide: the rest.
+    - known_urls: the rows' URLs that are on an official entry, one per page
+      (urlNorm without `www.`, as the queue's dedupe compares), newest first.
+      A review item of any status counts: a rejected notice is not proposed
+      again.
+    - election_events: the active election's dates, for reference. */
+export function buildElectionContext(rows: ContextRows, now: Date): ElectionContext {
+  const counties = COVERED_COUNTIES.map((c) => {
+    const site = supervisorSite(c.fips);
+    if (!site) throw new Error(`election-news: no Supervisor site for covered county ${c.fips}`);
+    return {
+      county_fips: c.fips,
+      county: c.name,
+      supervisor_site: site,
+      entries: OFFICIAL_SOURCES.filter((s) => s.countyFips === c.fips).map(contextEntry),
+    };
+  });
+  const statewide = OFFICIAL_SOURCES.filter((s) => s.countyFips === null).map(contextEntry);
+
+  const seen = new Set<string>();
+  const known: KnownUrl[] = [];
+  const add = (url: unknown, rest: Omit<KnownUrl, "url">) => {
+    if (typeof url !== "string" || officialForUrl(url) === null) return;
+    const k = withoutWww(urlNorm(url) ?? url);
+    if (seen.has(k)) return;
+    seen.add(k);
+    known.push({ url, ...rest });
+  };
+  for (const r of rows.news) add(r.url, { in: "news_item", status: null, date: (r.published_at ?? "").slice(0, 10) });
+  for (const r of rows.reviews) {
+    const published = typeof r.payload?.published_at === "string" ? r.payload.published_at : r.created_at;
+    add(r.payload?.url, { in: "review_item", status: r.status, date: published.slice(0, 10) });
+  }
+  known.sort((a, b) => (a.date === b.date ? a.url.localeCompare(b.url) : a.date < b.date ? 1 : -1));
+
+  const events = rows.events
+    .map((e) => ({
+      event_type: e.event_type,
+      county_fips: e.county_fips?.trim() || null,
+      event_date: e.event_date,
+      details_url: e.details_url,
+      verified: typeof e.verified_by === "string" && e.verified_by.trim() !== "",
+    }))
+    .sort((a, b) =>
+      (a.county_fips ?? "").localeCompare(b.county_fips ?? "") ||
+      a.event_date.localeCompare(b.event_date) ||
+      a.event_type.localeCompare(b.event_type));
+
+  return {
+    generated_at: now.toISOString(),
+    window: electionWindow(now),
+    counties,
+    statewide,
+    fetch_hosts: fetchHosts(),
+    known_urls: known,
+    election_events: events,
+  };
+}
+
+/** The most rows one context page asks for: PostgREST caps a response at
+    1000 rows by default, so a bigger page would come back silently short. */
+export const CONTEXT_PAGE = 1000;
+
+/** Past this many rows in the window something is wrong; the step fails
+    rather than print a partial list. */
+export const CONTEXT_MAX_ROWS = 10_000;
+
+type Page<T> = PromiseLike<{ data: T[] | null; error: { message: string } | null }>;
+
+async function readPages<T>(
+  what: string,
+  page: (from: number, to: number) => Page<T>,
+  size: number,
+  maxRows: number,
+): Promise<T[]> {
+  const out: T[] = [];
+  for (let from = 0; ; from += size) {
+    if (from >= maxRows) throw new Error(`more than ${maxRows} ${what} rows in the window`);
+    const { data, error } = await page(from, from + size - 1);
+    if (error) throw new Error(`could not read ${what}: ${error.message}`);
+    const rows = data ?? [];
+    out.push(...rows);
+    if (rows.length < size) return out;
+  }
+}
+
+/** The context's reads, and nothing else. news_item rows by published_at
+    and manual_news review items by created_at, both since the window's
+    first day and read in pages ordered by id, so no row is read twice or
+    skipped; the active election's election_event rows. Throws on a read
+    error. `pageSize` and `maxRows` are parameters only so the guardrail can
+    drive the paging. */
+export async function readContextRows(
+  db: SupabaseClient,
+  now: Date,
+  pageSize: number = CONTEXT_PAGE,
+  maxRows: number = CONTEXT_MAX_ROWS,
+): Promise<ContextRows> {
+  const since = `${electionWindow(now).from}T00:00:00Z`;
+  const news = await readPages<ContextRows["news"][number]>(
+    "news_item",
+    (from, to) => db.from("news_item").select("url, published_at").gte("published_at", since).order("id").range(from, to),
+    pageSize,
+    maxRows,
+  );
+  const reviews = await readPages<ContextRows["reviews"][number]>(
+    "review_item",
+    (from, to) =>
+      db
+        .from("review_item")
+        .select("payload, status, created_at")
+        .eq("kind", "manual_news")
+        .gte("created_at", since)
+        .order("id")
+        .range(from, to),
+    pageSize,
+    maxRows,
+  );
+  const { data, error } = await db
+    .from("election_event")
+    .select("event_type, county_fips, event_date, details_url, verified_by")
+    .eq("election", ACTIVE_ELECTION);
+  if (error) throw new Error(`could not read election_event: ${error.message}`);
+  return { news, reviews, events: (data ?? []) as ContextRows["events"][number][] };
+}
+
+export interface ContextOutcome {
+  /** 0 when context.json was built; 1 when a read failed. */
+  exitCode: 0 | 1;
+  output: ElectionContext | null;
+  /** The one stderr line. */
+  line: string;
+}
+
+/** The whole `context` run against an injected client. It writes nothing. */
+export async function runElectionContext(db: SupabaseClient, now: Date = new Date()): Promise<ContextOutcome> {
+  let rows: ContextRows;
+  try {
+    rows = await readContextRows(db, now);
+  } catch (err) {
+    return { exitCode: 1, output: null, line: `election-news: context: ${(err as Error).message}` };
+  }
+  const output = buildElectionContext(rows, now);
+  return {
+    exitCode: 0,
+    output,
+    line:
+      `context: window ${output.window.from} to ${output.window.to}; ${output.counties.length} counties, ` +
+      `${output.statewide.length} statewide bodies, ${output.fetch_hosts.length} fetch hosts; ` +
+      `${output.known_urls.length} known URLs; ${output.election_events.length} election dates`,
+  };
 }
