@@ -119,13 +119,46 @@ export const FactLikePayloadSchema = z.object({
   source_url: httpUrl.nullish(),
 });
 
-export const DateMismatchPayloadSchema = z.object({
-  race_id: z.string().min(1),
-  field: z.string().min(1),
-  db_value: z.unknown().optional(),
-  official_value: z.unknown(),
-  source_url: httpUrl,
-});
+/* date_mismatch has two forms (agent-retrofit spec §3.6, D3). Both are
+   .strict(): zod strips unknown keys by default, so without it an
+   election_event payload carrying a stray race_id would parse as the race
+   form and plan a race write.
+
+   The race form is the original one: a race logistics field, whose approval
+   writes it through the gated-field whitelist. No row of it exists
+   (2026-10-08), so making it strict refuses nothing stored. */
+export const DateMismatchRaceSchema = z
+  .object({
+    race_id: z.string().min(1),
+    field: z.string().min(1),
+    db_value: z.unknown().optional(),
+    official_value: z.unknown(),
+    source_url: httpUrl,
+  })
+  .strict();
+
+/* The election_event form: R2 read an official date that differs from the
+   row reminders and the calendar send from. Approving records the finding and
+   writes nothing (D3); the fix is a reviewed migration. county_fips null is a
+   statewide row. */
+const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "a YYYY-MM-DD date");
+export const DateMismatchElectionEventSchema = z
+  .object({
+    target: z.literal("election_event"),
+    election: z.string().min(1),
+    event_type: z.string().min(1),
+    county_fips: z.string().regex(/^\d{5}$/, "A county FIPS is 5 digits").nullable(),
+    db_value: isoDate,
+    official_value: isoDate,
+    source_url: httpUrl,
+    seen_at: z.string().min(1),
+  })
+  .strict();
+
+export const DateMismatchPayloadSchema = z.union([
+  DateMismatchRaceSchema,
+  DateMismatchElectionEventSchema,
+]);
 
 /* candidate_lead: a person the news names as a 2026 Florida candidate whom
    the guide does not cover, queued by R5 (spec
@@ -226,6 +259,7 @@ export type ManualNewsPayload = z.infer<typeof ManualNewsPayloadSchema>;
 export type GatedDiffPayload = z.infer<typeof GatedDiffPayloadSchema>;
 export type FactLikePayload = z.infer<typeof FactLikePayloadSchema>;
 export type DateMismatchPayload = z.infer<typeof DateMismatchPayloadSchema>;
+export type DateMismatchElectionEventPayload = z.infer<typeof DateMismatchElectionEventSchema>;
 export type CandidateLeadPayload = z.infer<typeof CandidateLeadPayloadSchema>;
 export type ReviewItemContent = z.infer<typeof ReviewItemContentSchema>;
 

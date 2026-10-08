@@ -189,6 +189,37 @@ function Body({ item }: { item: ReviewItemRow }) {
 
   if (content.kind === "date_mismatch") {
     const p = content.payload;
+    /* R2's election_event form (agent-retrofit D3): approving records the
+       finding and writes nothing. */
+    if ("target" in p) {
+      const where = p.county_fips
+        ? `${coveredCounty(p.county_fips)?.name ?? countyName(p.county_fips) ?? p.county_fips} County`
+        : "statewide";
+      return (
+        <div className="flex flex-col gap-2">
+          <span className="text-caption text-on-surface-muted">
+            election_event · {p.election} · {p.event_type} · {where}
+          </span>
+          <DiffBlock
+            field="event_date"
+            oldLabel="DB"
+            oldValue={p.db_value}
+            newLabel="Official"
+            newValue={p.official_value}
+          />
+          <div className="flex flex-wrap items-center gap-2">
+            <SourceLink url={p.source_url} />
+            <span className="text-caption text-on-surface-muted">
+              seen {relativeTime(p.seen_at)}
+            </span>
+          </div>
+          <p className="text-caption text-on-surface-muted">
+            Approving records this finding and changes no date. Reminders and the calendar read
+            election_event, so a date is corrected through a reviewed migration.
+          </p>
+        </div>
+      );
+    }
     return (
       <div className="flex flex-col gap-2">
         <span className="text-caption text-on-surface-muted">race · {p.race_id}</span>
