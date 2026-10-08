@@ -75,6 +75,7 @@ check("the literal defaults are the agent worktree, the runs folder and the arm6
 const COMMAND = /^\s*sh \/Users\/jsloth\/Projects\/kyv-agent-worktree\/scripts\/agent-run\.sh (\S+) (\S+)(.*)$/;
 const PROMPTS = {
   "agents/r5-candidate-leads.prompt.md": "R5",
+  "agents/rw-watchdog.prompt.md": "watch",
 };
 for (const [file, agent] of Object.entries(PROMPTS)) {
   if (!existsSync(path.join(ROOT, file))) {
