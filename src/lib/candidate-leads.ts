@@ -81,9 +81,29 @@ export function normalizeName(name: string): string {
     .trim();
 }
 
+/** How English and Spanish text names the lieutenant governor slot: the office
+    ("Lieutenant Governor", "Lt. Gov.", "vicegobernador") or the role ("running
+    mate", "compañera de fórmula"). No g or y flag: `test` keeps no state. */
+export const RUNNING_MATE_PATTERN =
+  /lieutenant[\s-]+gov|\blt\.?\s?gov|running mate|vicegobernador|compa[nñ]er[oa] de f[oó]rmula/i;
+
+/** True when the text names a running mate. Composed accents (ñ) and decomposed
+    ones (n + U+0303) read the same. */
+export function mentionsRunningMate(text: string): boolean {
+  return RUNNING_MATE_PATTERN.test(text.normalize("NFC"));
+}
+
+/** Whether prep hands a story to R5. A story that matched no roster candidate
+    is kept. One that matched is dropped unless it mentions a running mate: such
+    a story names the governor candidate, who is on the roster, so a plain
+    "unmatched" filter would hide every running-mate story. */
+export function keepForReading(matchedRoster: boolean, title: string, summary: string | null): boolean {
+  return !matchedRoster || mentionsRunningMate(`${title} ${summary ?? ""}`);
+}
+
 /** Florida's governor and lieutenant governor run as one ticket. */
 export function isRunningMateOffice(office: string): boolean {
-  return /lieutenant governor|\blt\.? ?gov|vicegobernador/i.test(office);
+  return mentionsRunningMate(office);
 }
 
 export function classifyMention(

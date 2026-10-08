@@ -19,7 +19,7 @@ import { loadRoster, runSweep } from "../src/lib/news-intake.ts";
 import { planAttachments } from "../src/lib/news-enqueue.ts";
 import { matchArticle } from "../src/lib/news-match.ts";
 import { OUTLETS, outletForUrl } from "../src/lib/news-sources.ts";
-import { buildLeads, planQueue, type Mention, type StoryRef } from "../src/lib/candidate-leads.ts";
+import { buildLeads, keepForReading, planQueue, type Mention, type StoryRef } from "../src/lib/candidate-leads.ts";
 
 loadEnvLocal(import.meta.url);
 
@@ -123,7 +123,7 @@ if (command === "prep") {
   const plan = planAttachments(sweep.articles, roster, matchArticle, outletFor);
   const matched = new Set(plan.attachments.map((a) => a.article.url));
   const stories = sweep.articles
-    .filter((a) => outletFor(a.url) && !matched.has(a.url))
+    .filter((a) => outletFor(a.url) && keepForReading(matched.has(a.url), a.title, a.summary))
     .map((a, n) => ({
       i: n + 1,
       title: a.title,
@@ -132,7 +132,7 @@ if (command === "prep") {
       outlet: a.publisher,
       published_at: a.publishedAt,
     }));
-  console.error(`${sweep.summary}; ${stories.length} matched no roster candidate`);
+  console.error(`${sweep.summary}; ${stories.length} to read (matched no roster candidate, or mention a running mate)`);
   console.log(JSON.stringify(stories, null, 1));
 } else if (command === "check") {
   const file = options(["--stories"], []).get("--stories");

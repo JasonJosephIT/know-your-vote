@@ -10,8 +10,11 @@ import {
   COVERED_FIPS,
   buildLeads,
   classifyMention,
+  RUNNING_MATE_PATTERN,
   isRunningMateOffice,
+  keepForReading,
   leadDedupeKey,
+  mentionsRunningMate,
   normalizeName,
   planQueue,
   type Mention,
@@ -88,6 +91,49 @@ const m = (over: Partial<Mention>): Mention => ({
 check("lieutenant governor reads as a running mate",
   isRunningMateOffice("Lieutenant Governor") && isRunningMateOffice("Lt. Gov.") && isRunningMateOffice("aspirante a vicegobernador"));
 check("governor alone is not a running mate", !isRunningMateOffice("Governor"));
+for (const office of [
+  "Running mate",
+  "running mate to Byron Donalds",
+  "Lieutenant Gov.",
+  "lieutenant-governor",
+  "Lieutenant  Governor",
+  "compañera de fórmula",
+  "compan\u0303ero de formula",
+]) {
+  check(`office ${JSON.stringify(office)} reads as a running mate`, isRunningMateOffice(office));
+}
+for (const office of ["Governor", "Florida House, District 94", "Mayor of Clewiston", "Lieutenant Colonel"]) {
+  check(`office ${JSON.stringify(office)} is not a running mate`, !isRunningMateOffice(office));
+}
+
+/* prep keeps a story that matched a roster candidate when it mentions a
+   running mate: such a story names the governor candidate, who is on the roster. */
+for (const text of [
+  "Donalds picks Bryan Avila as running mate",
+  "compañera de fórmula",
+  "compan\u0303era de formula",
+  "Jolly names his Lt. Gov. pick",
+  "The lieutenant governor slot is still open",
+  "Candidato a vicegobernador anunciado",
+]) {
+  check(`a story reading ${JSON.stringify(text)} mentions a running mate`, mentionsRunningMate(text));
+}
+for (const text of ["Governor race heats up", "", "Lieutenant Colonel retires", "Mate in two: chess club meets"]) {
+  check(`a story reading ${JSON.stringify(text)} does not mention a running mate`, !mentionsRunningMate(text));
+}
+check("prep keeps an unmatched story",
+  keepForReading(false, "Mayor race in Clewiston", "Two qualify"));
+check("prep drops a story that matched a roster candidate",
+  !keepForReading(true, "Donalds leads in new poll", "The governor race tightens"));
+check("prep keeps a matched story whose title names a running mate",
+  keepForReading(true, "Donalds picks Bryan Avila as running mate", "A Miami senator joins the ticket"));
+check("prep keeps a matched story whose summary names a running mate",
+  keepForReading(true, "Donalds names his ticket", "Compañera de fórmula anunciada"));
+check("prep reads a missing summary as empty",
+  !keepForReading(true, "Donalds leads in new poll", null) && keepForReading(true, "Lt. Gov. pick due", null));
+check("the running-mate pattern keeps no match state between calls (no g or y flag)",
+  !RUNNING_MATE_PATTERN.global && !RUNNING_MATE_PATTERN.sticky
+    && mentionsRunningMate("running mate") && mentionsRunningMate("running mate"));
 
 check("Palm Beach race is an other-county lead",
   JSON.stringify(classifyMention(m({}))) === JSON.stringify({ kind: "other_county", county_fips: "12099" }));
