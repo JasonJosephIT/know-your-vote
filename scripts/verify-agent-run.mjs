@@ -29,7 +29,7 @@ import {
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { ROUTINE_AGENTS, STALE_SUMMARY } from "../src/lib/agent-budget.ts";
+import { BUDGETS, ROUTINE_AGENTS, STALE_SUMMARY } from "../src/lib/agent-budget.ts";
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const WRAPPER = path.join(ROOT, "scripts", "agent-run.sh");
@@ -95,6 +95,7 @@ check("the literal defaults are the agent worktree, the runs folder and the arm6
 const COMMAND = /^\s*sh \/Users\/jsloth\/Projects\/kyv-agent-worktree\/scripts\/agent-run\.sh (\S+) (\S+)(.*)$/;
 const PROMPTS = {
   "agents/r5-candidate-leads.prompt.md": "R5",
+  "agents/r3-election-news.prompt.md": "R3",
   "agents/rw-watchdog.prompt.md": "watch",
 };
 for (const [file, agent] of Object.entries(PROMPTS)) {
@@ -135,6 +136,24 @@ for (const [file, agent] of Object.entries(PROMPTS)) {
     r5.includes("5 min or less left") && r5.includes('"time budget reached"'));
   check("R5's prompt says exit 6 also covers a previous run past its budget that has not finished",
     exitLine(6).includes("has not called finish"), exitLine(6));
+}
+
+/* R3's exit-code list and budget say what the wrapper and agent-budget.ts say. */
+{
+  const r3 = readFileSync(path.join(ROOT, "agents/r3-election-news.prompt.md"), "utf8").replace(/\s+/g, " ");
+  const exitLine = (n) => r3.match(new RegExp(`- ${n}: (.*?)(?= - \\d: | BUDGET:)`))?.[1] ?? "";
+  for (const n of [3, 4]) {
+    check(`R3's prompt says exit ${n} means finish with --status failed, as the wrapper prints`,
+      exitLine(n).includes("finish with --status failed"), exitLine(n));
+  }
+  check("R3's prompt names the queue-dry retry and the failed start beside exit 1's fail closed",
+    exitLine(1).includes("queue-dry") && exitLine(1).includes("start"), exitLine(1));
+  check("R3's prompt says exit 6 also covers a previous run past its budget that has not finished",
+    exitLine(6).includes("has not called finish"), exitLine(6));
+  check("R3's prompt states R3's budget from agent-budget.ts",
+    r3.includes(`BUDGET: ${BUDGETS.R3.wallClockMin} minutes from start and ${BUDGETS.R3.webCalls} web calls (WebSearch and WebFetch together)`),
+    r3.match(/BUDGET: [^.]*/)?.[0] ?? "");
+  check("R3's prompt keeps 5 minutes back for writing items and queueing", r3.includes("5 min or less left"));
 }
 
 /* ---- a temporary worktree and runs folder ------------------------------ */

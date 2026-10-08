@@ -32,6 +32,10 @@
         the hosts R3 may fetch, the official pages already stored or queued
         in the window (read in pages, filtered by kind and date), and the
         election's dates without the verifier's name; it writes nothing.
+    13. R3's prompt (agents/r3-election-news.prompt.md) lists every
+        side-taking word and lint term the queue drops on, counts every
+        covered county by name, lets only a lint drop be reworded, and
+        mentions INSERT and execute_sql only to forbid them.
 
    Pure and offline: an in-memory stand-in for the Supabase client, no
    network. Run: node scripts/verify-election-news.ts */
@@ -61,6 +65,8 @@ import {
   type QueueContext,
 } from "../src/lib/election-news.ts";
 import { ManualNewsPayloadSchema, ReviewItemContentSchema } from "../src/types/admin.ts";
+import { COVERED_COUNTIES } from "../src/lib/counties.ts";
+import { BANNED_TERMS } from "../src/lib/neutrality.ts";
 import { urlNorm } from "../src/lib/brief-rows.ts";
 import { planEffect } from "../src/lib/admin/effects.ts";
 import {
@@ -914,6 +920,35 @@ for (const table of ["race", "race_publication", "candidate"]) {
   const start = intake.indexOf("export async function loadBallotRoster");
   const body = intake.slice(start, intake.indexOf("export async function enqueueIntake"));
   check("loadBallotRoster only reads", start >= 0 && !/\.(insert|update|upsert|delete)\(/.test(body));
+}
+
+/* ---- 13. R3's prompt ----------------------------------------------------- */
+{
+  const prompt = readFileSync(resolve(import.meta.dirname, "..", "agents/r3-election-news.prompt.md"), "utf8").replace(/\s+/g, " ");
+  for (const word of SIDE_TAKING_WORDS) {
+    check(`R3's prompt tells it never to write "${word}" about an amendment`, prompt.includes(word));
+  }
+  for (const term of BANNED_TERMS) check(`R3's prompt lists the lint term "${term}"`, prompt.includes(term));
+  /* The report section itself, not the job description above it. */
+  const report = prompt.slice(prompt.indexOf("RUN REPORT"), prompt.indexOf("FINISH (last"));
+  check("R3's prompt has a RUN REPORT section before FINISH", report.length > 0);
+  for (const c of COVERED_COUNTIES) {
+    check(`R3's report counts ${c.name} by name, zero included`, report.includes(c.name) && report.includes("writing 0 where there were none"));
+  }
+  check("R3's prompt lets only a lint drop be reworded, and only once",
+    prompt.includes('A drop whose rule is "lint" may be reworded once') &&
+      prompt.includes("Never reword an item dropped for any other rule"));
+  for (const rule of ["candidate", "measure_case", "date_window", "page_type"]) {
+    check(`R3's prompt names the final drop rule "${rule}"`, prompt.includes(`"${rule}"`));
+  }
+  /* Every mention has a "never" before it in its own sentence. */
+  const forbidding = prompt.split(/(?<=\.) /).filter((s) => /INSERT|execute_sql/.test(s));
+  check("R3's prompt mentions INSERT and execute_sql only to forbid them",
+    forbidding.length > 0 &&
+      forbidding.every((s) => [...s.matchAll(/INSERT|execute_sql/g)].every((m) => /\bnever\b/i.test(s.slice(0, m.index)))),
+    JSON.stringify(forbidding));
+  check("R3's prompt fetches only fetch_hosts and copies each item's scope from context.json",
+    prompt.includes("the only hosts you may WebFetch") && prompt.includes("copied exactly from context.json"));
 }
 
 /* The round trip ran over the fixtures, not over nothing. */
