@@ -1,0 +1,157 @@
+/* The candidate-leads rules: what a mention an agent extracted from a story
+   becomes (spec docs/superpowers/specs/2026-10-07-candidate-leads-agent-design.md §4).
+
+   R5, a scheduled Claude agent, reads stories that matched no roster
+   candidate and lists the people they present as candidates. Everything after
+   that reading is decided here, in pure code, so it can be proven offline
+   (scripts/verify-candidate-leads.ts): which mentions count, how one person's
+   mentions merge, and what has already been queued.
+
+   Leads are for the operator only. No rule reads party, and leads are never
+   ranked. Relative imports with the extension: plain-Node scripts import this. */
+
+import { countyFipsFor } from "./fl-counties.ts";
+
+/** The four counties the guide covers. A race there is not a lead. */
+export const COVERED_FIPS: ReadonlySet<string> = new Set(["12011", "12057", "12086", "12095"]);
+
+/** One person the agent read as a candidate in one or more stories. */
+export interface Mention {
+  name: string;
+  office: string;
+  jurisdiction: string;
+  /** County name as written ("Palm Beach"), "statewide", or "". */
+  county: string;
+  /** At most 15 words from the title or summary. */
+  evidence: string;
+  /** Story numbers (`i`) from `candidate-leads.ts prep`. */
+  stories: number[];
+  /** True only when the text places the race in a Florida election in 2026. */
+  florida_2026: boolean;
+}
+
+export interface StoryRef {
+  url: string;
+  title: string;
+  outlet: string;
+  published_at: string;
+}
+
+export type LeadKind = "other_county" | "running_mate";
+
+export interface Lead {
+  name: string;
+  office: string;
+  jurisdiction: string;
+  kind: LeadKind;
+  county_fips: string | null;
+  evidence: string;
+  stories: StoryRef[];
+  dedupe_key: string;
+}
+
+export type DropReason =
+  | "not_florida_2026"
+  | "covered_county"
+  | "unknown_county"
+  | "on_roster"
+  | "no_story"
+  | "already_queued";
+
+const MAX_STORIES = 20;
+
+/** One comparable form of a person's name: no accents, no quoted nickname or
+    parenthetical, no suffix (Jr., Sr., II to IV), no single-letter initial,
+    lower case. "Oliver G. Gilbert III" and "Oliver Gilbert" are one person. */
+export function normalizeName(name: string): string {
+  return name
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/['']/g, "'")
+    .replace(/["""][^"""]*["""]/g, " ")
+    .replace(/\([^)]*\)/g, " ")
+    .toLowerCase()
+    .replace(/,/g, " ")
+    .split(/\s+/)
+    .filter((w) => w && !/^(jr|sr|ii|iii|iv)\.?$/.test(w) && !/^[a-z]\.?$/.test(w))
+    .join(" ")
+    .replace(/[^a-z0-9' -]/g, "")
+    .trim();
+}
+
+/** Florida's governor and lieutenant governor run as one ticket. */
+export function isRunningMateOffice(office: string): boolean {
+  return /lieutenant governor|\blt\.? ?gov|vicegobernador/i.test(office);
+}
+
+export function classifyMention(
+  m: Mention,
+): { kind: LeadKind; county_fips: string | null } | { drop: DropReason } {
+  if (!m.florida_2026) return { drop: "not_florida_2026" };
+  if (isRunningMateOffice(m.office)) return { kind: "running_mate", county_fips: null };
+  const fips = countyFipsFor(m.county);
+  if (!fips) return { drop: "unknown_county" };
+  if (COVERED_FIPS.has(fips)) return { drop: "covered_county" };
+  return { kind: "other_county", county_fips: fips };
+}
+
+export function leadDedupeKey(name: string, kind: LeadKind, countyFips: string | null): string {
+  return `${normalizeName(name)}|${kind}|${countyFips ?? "statewide"}`;
+}
+
+/** Mentions in, leads out. Classification first, then the roster, then the
+    stories, then what is already queued or decided; one person's mentions
+    merge on the dedupe key. Deterministic: leads are sorted by key. */
+export function buildLeads(
+  mentions: readonly Mention[],
+  stories: ReadonlyMap<number, StoryRef>,
+  rosterNames: readonly string[],
+  existingKeys: ReadonlySet<string>,
+): { leads: Lead[]; dropped: { name: string; reason: DropReason }[] } {
+  const roster = new Set(rosterNames.map(normalizeName));
+  const byKey = new Map<string, Lead>();
+  const dropped: { name: string; reason: DropReason }[] = [];
+
+  for (const m of mentions) {
+    const c = classifyMention(m);
+    if ("drop" in c) {
+      dropped.push({ name: m.name, reason: c.drop });
+      continue;
+    }
+    if (roster.has(normalizeName(m.name))) {
+      dropped.push({ name: m.name, reason: "on_roster" });
+      continue;
+    }
+    const refs = m.stories.map((i) => stories.get(i)).filter((s): s is StoryRef => Boolean(s));
+    if (refs.length === 0) {
+      dropped.push({ name: m.name, reason: "no_story" });
+      continue;
+    }
+    const key = leadDedupeKey(m.name, c.kind, c.county_fips);
+    if (existingKeys.has(key)) {
+      dropped.push({ name: m.name, reason: "already_queued" });
+      continue;
+    }
+    const lead = byKey.get(key);
+    if (!lead) {
+      byKey.set(key, {
+        name: m.name.trim(),
+        office: m.office.trim(),
+        jurisdiction: m.jurisdiction.trim(),
+        kind: c.kind,
+        county_fips: c.county_fips,
+        evidence: m.evidence.trim(),
+        stories: refs.slice(0, MAX_STORIES),
+        dedupe_key: key,
+      });
+      continue;
+    }
+    for (const ref of refs) {
+      if (lead.stories.length >= MAX_STORIES) break;
+      if (!lead.stories.some((s) => s.url === ref.url)) lead.stories.push(ref);
+    }
+  }
+
+  const leads = [...byKey.values()].sort((a, b) => a.dedupe_key.localeCompare(b.dedupe_key));
+  return { leads, dropped };
+}
