@@ -13,6 +13,11 @@
      6. --dry-run inserts nothing; the reads are filtered by the batch's URLs,
         in chunks; a read or insert error writes nothing and exits 1.
      7. The CLI writes nothing but review_item rows.
+     8. Every row the queue plans passes the approve path's source checks
+        against the same source rows, so R3 never queues an item an operator
+        cannot approve. A page row's id backs only its exact url_norm; a row
+        under the other `www.` spelling drops an advocacy page but never lends
+        its id.
 
    Pure and offline: an in-memory stand-in for the Supabase client, no
    network. Run: node scripts/verify-election-news.ts */
@@ -31,14 +36,72 @@ import {
   type PageRow,
   type QueueContext,
 } from "../src/lib/election-news.ts";
-import { ManualNewsPayloadSchema } from "../src/types/admin.ts";
+import { ManualNewsPayloadSchema, ReviewItemContentSchema } from "../src/types/admin.ts";
 import { urlNorm } from "../src/lib/brief-rows.ts";
+import { planEffect } from "../src/lib/admin/effects.ts";
+import {
+  givenPageRowProblem,
+  listedRowProblem,
+  planSourceAttribution,
+  storyPageProblem,
+  type AttributionDeps,
+} from "../src/lib/news-enqueue.ts";
+import { OUTLETS, outletForUrl } from "../src/lib/news-sources.ts";
+import { officialForUrl } from "../src/lib/official-sources.ts";
 
 let failures = 0;
 function check(name: string, cond: boolean, detail = "") {
   if (cond) return;
   failures++;
   console.error(`  FAIL ${name}${detail ? ` — ${detail}` : ""}`);
+}
+
+/* ---- 8. the approve path, as the route runs it --------------------------- */
+/* resolveSource in src/app/api/admin/review/[id]/decision/route.ts, with its
+   `source` reads served from `sources` instead of the database. The checks are
+   the route's own pure functions, with the route's deps;
+   scripts/verify-news-enqueue.ts pins that the route calls them in this order.
+   The reason the approve path would refuse the payload, or null. */
+const APPROVE_DEPS: AttributionDeps = {
+  outletFor: (u) => outletForUrl(u, OUTLETS),
+  officialFor: (u) => officialForUrl(u),
+  norm: urlNorm,
+};
+function approveProblem(payload: unknown, sources: readonly PageRow[]): string | null {
+  const content = ReviewItemContentSchema.safeParse({ kind: "manual_news", payload });
+  if (!content.success) return "the stored payload no longer matches its schema";
+  const effect = planEffect(content.data);
+  if (effect.type !== "insert_news") return `planEffect gave ${effect.type}, not insert_news`;
+  const where = (column: "source_id" | "url_norm", value: string) =>
+    sources.find((s) => s[column] === value) ?? null;
+  const plan = planSourceAttribution(effect.row, APPROVE_DEPS);
+  if (plan.kind === "refused") return plan.reason;
+  if (plan.kind !== "given") return `a queued item resolves as ${plan.kind}, not by the source it carries`;
+  if (plan.listedRow) {
+    if (plan.storyPageNorm) {
+      const problem = storyPageProblem(where("url_norm", plan.storyPageNorm), plan.storyPageNorm);
+      if (problem) return problem;
+    }
+    /* Insert-if-absent, then read back by url_norm: with no row there, the
+       listed row itself is what the route reads back. */
+    const readBack = where("url_norm", plan.listedRow.url_norm);
+    return readBack ? listedRowProblem(plan.listedRow, readBack) : null;
+  }
+  const found = where("source_id", plan.sourceId);
+  if (!found) return `no source row has id ${plan.sourceId}`;
+  return givenPageRowProblem(plan, found.url_norm);
+}
+
+/* Every row the queue plans goes through the approve path with the source
+   rows the queue saw. */
+let approvedRows = 0;
+function approvable(rows: readonly { payload: { url: string; source_id?: string | null } }[], sources: readonly PageRow[]) {
+  for (const r of rows) {
+    const problem = approveProblem(r.payload, sources);
+    check(`queued ${r.payload.url} (${r.payload.source_id}) passes the approve path's source checks`, problem === null,
+      String(problem));
+    approvedRows++;
+  }
 }
 
 const item = (over: Record<string, unknown> = {}): Record<string, unknown> => ({
@@ -108,8 +171,11 @@ const EMPTY: QueueContext = { pageRows: new Map(), storedUrls: new Set(), queued
 const ctx = (over: Partial<QueueContext> = {}): QueueContext => ({ ...EMPTY, ...over });
 const pageRow = (url_norm: string, type: string, lean_tag: string, source_id = `src_${type}`): PageRow =>
   ({ source_id, url_norm, type, lean_tag });
-const plan = (items: Record<string, unknown>[], c: QueueContext = EMPTY) =>
-  planElectionQueue(items as unknown as ElectionNewsItem[], c);
+const plan = (items: Record<string, unknown>[], c: QueueContext = EMPTY) => {
+  const p = planElectionQueue(items as unknown as ElectionNewsItem[], c);
+  if (p.ok) approvable(p.rows, [...c.pageRows.values()]);
+  return p;
+};
 
 {
   const p = plan([item()]);
@@ -190,6 +256,44 @@ const plan = (items: Record<string, unknown>[], c: QueueContext = EMPTY) =>
 }
 
 {
+  /* Queue, then approve. The approve path backs a story with a page row's id
+     only when that row's url_norm is the story's exactly (givenPageRowProblem),
+     so a row under the other `www.` spelling never lends the item its id: the
+     item carries official:<domain>, which the approve path accepts. Live
+     `source` has www. page rows on flsenate.gov and flhouse.gov. */
+  const statewide = { scope: { statewide: true } };
+  for (const [label, rowNorm, url] of [
+    ["recorded with www., found without", "www.flhouse.gov/sections/bills/x", "https://flhouse.gov/sections/bills/x"],
+    ["recorded without www., found with", "flhouse.gov/sections/bills/x", "https://www.flhouse.gov/sections/bills/x"],
+  ] as const) {
+    const row = pageRow(rowNorm, "primary_doc", "N/A", "src_house_x");
+    const p = plan([item({ url, ...statewide })], ctx({ pageRows: new Map([[row.url_norm, row]]) }));
+    check(`a primary_doc page row ${label} does not lend its id; the item carries official:flhouse.gov`,
+      p.ok && p.rows.length === 1 && p.rows[0].payload.source_id === "official:flhouse.gov", JSON.stringify(p));
+    /* The harness bites: the id the queue used to give is refused. */
+    const misattributed = approveProblem({
+      item_type: "election_news", title: "Bill x", summary: null, url,
+      published_at: "2026-10-05T00:00:00.000Z", statewide: true, source_id: "src_house_x",
+    }, [row]);
+    check(`the approve path refuses src_house_x on the page ${label}`,
+      misattributed !== null && misattributed.includes(rowNorm), String(misattributed));
+  }
+  /* Both spellings recorded: the exact row backs the item only when no
+     spelling of the page is recorded as anything but an official notice. */
+  const exact = pageRow("flhouse.gov/sections/bills/x", "primary_doc", "N/A", "src_house_x");
+  const other = pageRow("www.flhouse.gov/sections/bills/x", "opinion", "N/A", "src_house_x_www");
+  const both = plan([item({ url: "https://flhouse.gov/sections/bills/x", ...statewide })],
+    ctx({ pageRows: new Map([[exact.url_norm, exact], [other.url_norm, other]]) }));
+  check("an advocacy row under the other www. spelling drops the item even beside an exact primary_doc row",
+    both.ok && both.rows.length === 0 && both.dropped.length === 1 && both.dropped[0].reason.includes("opinion / N/A"),
+    JSON.stringify(both));
+  const exactOnly = plan([item({ url: "https://flhouse.gov/sections/bills/x", ...statewide })],
+    ctx({ pageRows: new Map([[exact.url_norm, exact], [other.url_norm, { ...other, type: "primary_doc" }]]) }));
+  check("with both spellings recorded as official notices, the exact row backs the item",
+    exactOnly.ok && exactOnly.rows[0]?.payload.source_id === "src_house_x", JSON.stringify(exactOnly));
+}
+
+{
   const p = plan([
     item(),
     item({ url: "https://dos.fl.gov/elections/for-voters/election-dates/", scope: { statewide: true }, summary: "  " }),
@@ -251,20 +355,27 @@ function fakeDb(tables: Record<string, Row[]>, fail: { read?: string; insert?: b
     };
     return q;
   };
-  return { db: { from } as unknown as SupabaseClient, reads, inserted };
+  return { db: { from } as unknown as SupabaseClient, reads, inserted, sources: (tables.source ?? []) as unknown as PageRow[] };
+}
+/* A run whose queued rows then go through the approve path against the same
+   `source` table. */
+async function run(f: ReturnType<typeof fakeDb>, raw: unknown, opts: { dryRun: boolean }) {
+  const r = await runElectionQueue(f.db, raw, opts);
+  approvable(r.output?.rows ?? [], f.sources);
+  return r;
 }
 
 const good = [item(), item({ url: "https://dos.fl.gov/elections/for-voters/election-dates/", scope: { statewide: true } })];
 {
   const f = fakeDb({});
-  const r = await runElectionQueue(f.db, good, { dryRun: true });
+  const r = await run(f, good, { dryRun: true });
   check("--dry-run inserts nothing", f.inserted.length === 0, JSON.stringify(f.inserted));
   check("--dry-run still reports what it would queue",
     r.exitCode === 0 && r.output?.rows.length === 2 && r.line === "would queue 2, skipped 0, dropped 0", JSON.stringify(r));
 }
 {
   const f = fakeDb({});
-  const r = await runElectionQueue(f.db, good, { dryRun: false });
+  const r = await run(f, good, { dryRun: false });
   check("a real run inserts exactly the planned rows into review_item",
     r.exitCode === 0 && f.inserted.length === 2 && r.line === "queued 2, skipped 0, dropped 0", JSON.stringify(r));
   const reviewRead = f.reads.find((x) => x.table === "review_item");
@@ -315,7 +426,7 @@ const good = [item(), item({ url: "https://dos.fl.gov/elections/for-voters/elect
     news_item: [{ url: stored }],
     review_item: [{ kind: "manual_news", status: "pending", payload: { url: stored } }],
   });
-  const r = await runElectionQueue(f.db, [item()], { dryRun: true });
+  const r = await run(f, [item()], { dryRun: true });
   check("a URL stored under another spelling is skipped",
     r.exitCode === 0 && r.output?.rows.length === 0 && r.output?.skipped.length === 1, JSON.stringify(r));
 }
@@ -327,42 +438,49 @@ const good = [item(), item({ url: "https://dos.fl.gov/elections/for-voters/elect
     news_item: [{ url: bare }],
     review_item: [{ kind: "manual_news", status: "pending", payload: { url: `${bare}/` } }],
   });
-  const r = await runElectionQueue(f.db, [item()], { dryRun: true });
+  const r = await run(f, [item()], { dryRun: true });
   check("a URL stored without www. is skipped",
     r.exitCode === 0 && r.output?.rows.length === 0 && r.output?.skipped.length === 1, JSON.stringify(r));
   const g = fakeDb({ source: [{ source_id: "src_adv", url_norm: urlNorm(bare), type: "opinion", lean_tag: "N/A" }] });
-  const d = await runElectionQueue(g.db, [item()], { dryRun: true });
+  const d = await run(g, [item()], { dryRun: true });
   check("a page row recorded without www. is read and drops the item",
     d.exitCode === 0 && d.output?.rows.length === 0 && d.output?.dropped.length === 1, JSON.stringify(d));
+  /* A www. page row read for a bare URL queues an item the approve path
+     accepts (run() sends every queued row through it). */
+  const h = fakeDb({ source: [{ source_id: "src_senate_x", url_norm: "www.flsenate.gov/session/bill/2026/1", type: "primary_doc", lean_tag: "N/A" }] });
+  const s = await run(h, [item({ url: "https://flsenate.gov/session/bill/2026/1", scope: { statewide: true } })], { dryRun: true });
+  check("a www. page row read for a bare URL lends no id; the run queues official:flsenate.gov",
+    s.exitCode === 0 && s.output?.rows.length === 1 && s.output.rows[0].payload.source_id === "official:flsenate.gov",
+    JSON.stringify(s));
 }
 {
   const f = fakeDb({
     news_item: [{ url: good[0].url }],
     review_item: [{ kind: "manual_news", status: "rejected", payload: { url: good[1].url } }],
   });
-  const r = await runElectionQueue(f.db, good, { dryRun: false });
+  const r = await run(f, good, { dryRun: false });
   check("a run where everything is already handled exits 0 and queues nothing",
     r.exitCode === 0 && f.inserted.length === 0 && r.line === "queued 0, skipped 2, dropped 0", JSON.stringify(r));
 }
 {
   const f = fakeDb({ review_item: [{ kind: "candidate_lead", status: "pending", payload: { url: good[0].url } }] });
-  const r = await runElectionQueue(f.db, good, { dryRun: false });
+  const r = await run(f, good, { dryRun: false });
   check("only manual_news items count as already queued", r.exitCode === 0 && f.inserted.length === 2, JSON.stringify(r));
 }
 for (const table of ["source", "news_item", "review_item"]) {
   const f = fakeDb({}, { read: table });
-  const r = await runElectionQueue(f.db, good, { dryRun: false });
+  const r = await run(f, good, { dryRun: false });
   check(`a ${table} read error exits 1 and writes nothing`,
     r.exitCode === 1 && r.output === null && f.inserted.length === 0 && r.line.includes(`${table} unavailable`), JSON.stringify(r));
 }
 {
   const f = fakeDb({}, { insert: true });
-  const r = await runElectionQueue(f.db, good, { dryRun: false });
+  const r = await run(f, good, { dryRun: false });
   check("an insert error exits 1", r.exitCode === 1 && r.output === null && r.line.includes("insert refused"), JSON.stringify(r));
 }
 {
   const f = fakeDb({});
-  const r = await runElectionQueue(f.db, [item({ scope: { metro: "miami" } })], { dryRun: false });
+  const r = await run(f, [item({ scope: { metro: "miami" } })], { dryRun: false });
   check("a refused batch exits 1 before any read",
     r.exitCode === 1 && f.reads.length === 0 && f.inserted.length === 0 && r.line.startsWith("election-news: batch refused"),
     JSON.stringify(r));
@@ -383,10 +501,13 @@ check("the CLI refuses an unknown argument instead of writing",
 check("the CLI passes --dry-run through to runElectionQueue",
   /const dryRun = args\.includes\("--dry-run"\);/.test(cli) && /runElectionQueue\(createClient\(supabaseUrl, serviceKey\), raw, \{ dryRun \}\)/.test(cli));
 
+/* The round trip ran over the fixtures, not over nothing. */
+check("the queued fixture rows went through the approve path", approvedRows >= 15, `${approvedRows} rows`);
+
 if (failures > 0) {
   console.error(`\nverify-election-news: ${failures} failure(s)`);
   process.exit(1);
 }
 console.log(
-  "verify-election-news: OK — malformed batches are refused whole, every queued row is a pending agent:R3 manual_news item with a checked source, skips and drops are reported, and --dry-run writes nothing",
+  `verify-election-news: OK — malformed batches are refused whole, every queued row is a pending agent:R3 manual_news item with a checked source, all ${approvedRows} queued rows pass the approve path's source checks, skips and drops are reported, and --dry-run writes nothing`,
 );

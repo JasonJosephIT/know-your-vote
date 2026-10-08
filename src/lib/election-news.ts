@@ -175,10 +175,11 @@ export type ElectionQueuePlan =
 
 /** The rows `election-news.ts queue` would insert, from a batch that passed
     batchProblem. Per item, in order:
-      1. Source. A page row already recorded for this URL backs it when it is
-         `primary_doc` / `N/A`; one recorded as anything else is DROPPED (an
-         agency's advocacy page keeps its true type, D7). With no page row,
-         the item carries `official:<domain>`.
+      1. Source. A page row recorded for this URL, with or without `www.`, as
+         anything but `primary_doc` / `N/A` DROPS the item (an agency's
+         advocacy page keeps its true type, D7). Otherwise a page row at this
+         URL's exact url_norm backs it, as the approve path requires; with
+         none, the item carries `official:<domain>`.
       2. Skip (not an error): a URL already in news_item, in a manual_news
          item of any status, or earlier in this batch.
       3. Build the payload and parse it with the console's own schema. One
@@ -198,17 +199,24 @@ export function planElectionQueue(items: readonly ElectionNewsItem[], ctx: Queue
     const official = officialForUrl(item.url);
     if (!official) return { ok: false, error: `item ${index}: ${item.url} is not on the official-source list` };
 
+    /* The drop is www-blind: an advocacy page keeps its type under either
+       host spelling. The id is not: the approve path backs a story with a
+       page row only when the row's url_norm is the story's exactly
+       (givenPageRowProblem), so a row under the other spelling lends no id
+       and the item carries official:<domain>. */
     const norm = urlNorm(item.url);
-    const page = norm === null ? undefined : (ctx.pageRows.get(norm) ?? ctx.pageRows.get(otherWww(norm)));
-    if (page && (page.type !== "primary_doc" || page.lean_tag !== "N/A")) {
+    const exact = norm === null ? undefined : ctx.pageRows.get(norm);
+    const recorded = [exact, norm === null ? undefined : ctx.pageRows.get(otherWww(norm))];
+    const advocacy = recorded.find((r) => r && (r.type !== "primary_doc" || r.lean_tag !== "N/A"));
+    if (advocacy) {
       dropped.push({
         index,
         url: item.url,
-        reason: `this page is recorded as ${page.type} / ${page.lean_tag}, not an official notice`,
+        reason: `this page is recorded as ${advocacy.type} / ${advocacy.lean_tag}, not an official notice`,
       });
       continue;
     }
-    const sourceId = page ? page.source_id : officialSourceIdFor(official.domain);
+    const sourceId = exact && exact.url_norm === norm ? exact.source_id : officialSourceIdFor(official.domain);
 
     const k = key(item.url);
     const skip = stored.has(k)
