@@ -21,6 +21,7 @@
 
    Relative imports with the extension: plain-Node scripts import this. */
 
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { urlNorm } from "./brief-rows.ts";
 import { COVERED_FIPS } from "./candidate-leads.ts";
 import { OUTLETS, outletForUrl } from "./news-sources.ts";
@@ -208,4 +209,101 @@ export function planElectionQueue(items: readonly ElectionNewsItem[], ctx: Queue
     rows.push({ kind: "manual_news", source: "agent:R3", status: "pending", payload: parsed.data });
   }
   return { ok: true, rows, skipped, dropped };
+}
+
+const CHUNK = 200;
+
+function chunks<T>(list: readonly T[]): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < list.length; i += CHUNK) out.push(list.slice(i, i + CHUNK));
+  return out;
+}
+
+/** The three reads, each filtered to this batch's URLs in chunks of 200, so a
+    response is bounded by the batch and never by the size of the table
+    (news-source-integrity §3.7). Throws on a read error: a partial read would
+    queue a story an operator already decided. */
+export async function readQueueContext(
+  db: SupabaseClient,
+  items: readonly ElectionNewsItem[],
+): Promise<QueueContext> {
+  const urls = [...new Set(items.map((i) => i.url))];
+  const norms = [...new Set(urls.map(urlNorm).filter((n): n is string => n !== null))];
+
+  const pageRows = new Map<string, PageRow>();
+  for (const chunk of chunks(norms)) {
+    const { data, error } = await db
+      .from("source")
+      .select("source_id, url_norm, type, lean_tag")
+      .in("url_norm", chunk);
+    if (error) throw new Error(`could not read source rows: ${error.message}`);
+    for (const r of (data ?? []) as PageRow[]) pageRows.set(r.url_norm, r);
+  }
+
+  const storedUrls = new Set<string>();
+  for (const chunk of chunks(urls)) {
+    const { data, error } = await db.from("news_item").select("url").in("url", chunk);
+    if (error) throw new Error(`could not read news_item: ${error.message}`);
+    for (const r of (data ?? []) as { url: string }[]) storedUrls.add(r.url);
+  }
+
+  const queuedUrls = new Set<string>();
+  for (const chunk of chunks(urls)) {
+    const { data, error } = await db
+      .from("review_item")
+      .select("payload")
+      .eq("kind", "manual_news")
+      .in("payload->>url", chunk);
+    if (error) throw new Error(`could not read review_item: ${error.message}`);
+    for (const r of (data ?? []) as { payload: { url?: string } | null }[]) {
+      if (r.payload?.url) queuedUrls.add(r.payload.url);
+    }
+  }
+  return { pageRows, storedUrls, queuedUrls };
+}
+
+export interface QueueOutcome {
+  /** 0 for a complete run, 0 queued included; 1 when nothing was written. */
+  exitCode: 0 | 1;
+  /** The stdout object, or null when the batch was refused or a read or the
+      insert failed. */
+  output: { rows: ElectionQueueRow[]; skipped: QueueNotice[]; dropped: QueueNotice[] } | null;
+  /** The one stderr line. */
+  line: string;
+}
+
+/** The whole `queue` run against an injected client. With `dryRun` it still
+    reads (to report skips) and writes nothing; otherwise the only write is one
+    insert of pending manual_news review items, source 'agent:R3'. */
+export async function runElectionQueue(
+  db: SupabaseClient,
+  raw: unknown,
+  opts: { dryRun: boolean },
+): Promise<QueueOutcome> {
+  const refused = (why: string): QueueOutcome => ({
+    exitCode: 1,
+    output: null,
+    line: `election-news: batch refused, nothing written: ${why}`,
+  });
+  const problem = batchProblem(raw);
+  if (problem) return refused(problem);
+  const items = raw as ElectionNewsItem[];
+
+  let ctx: QueueContext;
+  try {
+    ctx = await readQueueContext(db, items);
+  } catch (err) {
+    return { exitCode: 1, output: null, line: `election-news: ${(err as Error).message}; nothing written` };
+  }
+  const plan = planElectionQueue(items, ctx);
+  if (!plan.ok) return refused(plan.error);
+
+  const output = { rows: plan.rows, skipped: plan.skipped, dropped: plan.dropped };
+  const counts = `${plan.rows.length}, skipped ${plan.skipped.length}, dropped ${plan.dropped.length}`;
+  if (opts.dryRun) return { exitCode: 0, output, line: `would queue ${counts}` };
+  if (plan.rows.length > 0) {
+    const { error } = await db.from("review_item").insert(plan.rows);
+    if (error) return { exitCode: 1, output: null, line: `election-news: could not queue: ${error.message}; nothing written` };
+  }
+  return { exitCode: 0, output, line: `queued ${counts}` };
 }

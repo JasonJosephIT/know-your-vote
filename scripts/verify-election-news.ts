@@ -17,10 +17,14 @@
    Pure and offline: an in-memory stand-in for the Supabase client, no
    network. Run: node scripts/verify-election-news.ts */
 
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   MAX_ELECTION_BATCH,
   batchProblem,
   planElectionQueue,
+  runElectionQueue,
   type ElectionNewsItem,
   type PageRow,
   type QueueContext,
@@ -146,6 +150,116 @@ const plan = (items: Record<string, unknown>[], c: QueueContext = EMPTY) =>
   const blank = plan([item({ title: "   " })]);
   check("an item the schema refuses refuses the batch", !blank.ok && blank.error.startsWith("item 0:"), JSON.stringify(blank));
 }
+
+/* ---- 6. the run, against an in-memory client ---------------------------- */
+type Row = Record<string, unknown>;
+interface Read { table: string; columns: string; filters: [op: string, col: string, value: unknown][] }
+function get(row: Row, col: string): unknown {
+  const [head, key] = col.split("->>");
+  const v = row[head];
+  return key === undefined ? v : (v as Row | null)?.[key];
+}
+function fakeDb(tables: Record<string, Row[]>, fail: { read?: string; insert?: boolean } = {}) {
+  const reads: Read[] = [];
+  const inserted: Row[] = [];
+  const from = (table: string) => {
+    const read: Read = { table, columns: "", filters: [] };
+    const q = {
+      select: (columns: string) => { read.columns = columns; reads.push(read); return q; },
+      eq: (col: string, v: unknown) => { read.filters.push(["eq", col, v]); return q; },
+      in: (col: string, vs: unknown[]) => { read.filters.push(["in", col, vs]); return q; },
+      insert: async (rows: Row[]) => {
+        if (fail.insert) return { error: { message: "insert refused" } };
+        inserted.push(...rows);
+        return { error: null };
+      },
+      then: (done: (v: { data: Row[] | null; error: { message: string } | null }) => unknown) => {
+        if (fail.read === table) return done({ data: null, error: { message: `${table} unavailable` } });
+        const keep = (r: Row) => read.filters.every(([op, col, v]) =>
+          op === "eq" ? get(r, col) === v : (v as unknown[]).includes(get(r, col)));
+        return done({ data: (tables[table] ?? []).filter(keep), error: null });
+      },
+    };
+    return q;
+  };
+  return { db: { from } as unknown as SupabaseClient, reads, inserted };
+}
+
+const good = [item(), item({ url: "https://dos.fl.gov/elections/for-voters/election-dates/", scope: { statewide: true } })];
+{
+  const f = fakeDb({});
+  const r = await runElectionQueue(f.db, good, { dryRun: true });
+  check("--dry-run inserts nothing", f.inserted.length === 0, JSON.stringify(f.inserted));
+  check("--dry-run still reports what it would queue",
+    r.exitCode === 0 && r.output?.rows.length === 2 && r.line === "would queue 2, skipped 0, dropped 0", JSON.stringify(r));
+}
+{
+  const f = fakeDb({});
+  const r = await runElectionQueue(f.db, good, { dryRun: false });
+  check("a real run inserts exactly the planned rows into review_item",
+    r.exitCode === 0 && f.inserted.length === 2 && r.line === "queued 2, skipped 0, dropped 0", JSON.stringify(r));
+  const reviewRead = f.reads.find((x) => x.table === "review_item");
+  check("the review_item read is filtered to manual_news and the batch's URLs",
+    reviewRead !== undefined &&
+      reviewRead.filters.some(([op, col, v]) => op === "eq" && col === "kind" && v === "manual_news") &&
+      reviewRead.filters.some(([op, col]) => op === "in" && col === "payload->>url"),
+    JSON.stringify(reviewRead));
+  const newsRead = f.reads.find((x) => x.table === "news_item");
+  check("the news_item read is filtered by URL", newsRead?.filters.some(([op, col]) => op === "in" && col === "url") === true,
+    JSON.stringify(newsRead));
+  const sourceRead = f.reads.find((x) => x.table === "source");
+  check("the source read is filtered by url_norm",
+    sourceRead?.filters.some(([op, col]) => op === "in" && col === "url_norm") === true, JSON.stringify(sourceRead));
+  check("every read is filtered, in chunks of at most 200",
+    f.reads.every((x) => x.filters.some(([op, , v]) => op === "in" && (v as unknown[]).length <= 200)), JSON.stringify(f.reads));
+}
+{
+  const f = fakeDb({
+    news_item: [{ url: good[0].url }],
+    review_item: [{ kind: "manual_news", status: "rejected", payload: { url: good[1].url } }],
+  });
+  const r = await runElectionQueue(f.db, good, { dryRun: false });
+  check("a run where everything is already handled exits 0 and queues nothing",
+    r.exitCode === 0 && f.inserted.length === 0 && r.line === "queued 0, skipped 2, dropped 0", JSON.stringify(r));
+}
+{
+  const f = fakeDb({ review_item: [{ kind: "candidate_lead", status: "pending", payload: { url: good[0].url } }] });
+  const r = await runElectionQueue(f.db, good, { dryRun: false });
+  check("only manual_news items count as already queued", r.exitCode === 0 && f.inserted.length === 2, JSON.stringify(r));
+}
+for (const table of ["source", "news_item", "review_item"]) {
+  const f = fakeDb({}, { read: table });
+  const r = await runElectionQueue(f.db, good, { dryRun: false });
+  check(`a ${table} read error exits 1 and writes nothing`,
+    r.exitCode === 1 && r.output === null && f.inserted.length === 0 && r.line.includes(`${table} unavailable`), JSON.stringify(r));
+}
+{
+  const f = fakeDb({}, { insert: true });
+  const r = await runElectionQueue(f.db, good, { dryRun: false });
+  check("an insert error exits 1", r.exitCode === 1 && r.output === null && r.line.includes("insert refused"), JSON.stringify(r));
+}
+{
+  const f = fakeDb({});
+  const r = await runElectionQueue(f.db, [item({ scope: { metro: "miami" } })], { dryRun: false });
+  check("a refused batch exits 1 before any read",
+    r.exitCode === 1 && f.reads.length === 0 && f.inserted.length === 0 && r.line.startsWith("election-news: batch refused"),
+    JSON.stringify(r));
+}
+
+/* ---- 7. the CLI writes nothing but review_item -------------------------- */
+const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, "");
+const lib = strip(readFileSync(resolve(import.meta.dirname, "..", "src/lib/election-news.ts"), "utf8"));
+const cli = strip(readFileSync(resolve(import.meta.dirname, "election-news.ts"), "utf8"));
+check("the library's one write is an insert into review_item",
+  (lib.match(/\.insert\(/g) ?? []).length === 1 && /from\("review_item"\)\.insert\(plan\.rows\)/.test(lib));
+check("the library never updates, upserts or deletes",
+  !/\.(update|upsert|delete)\(/.test(lib));
+check("the CLI writes nothing itself and goes through runElectionQueue",
+  !/\.(insert|update|upsert|delete)\(/.test(cli) && /runElectionQueue\(/.test(cli));
+check("the CLI refuses an unknown argument instead of writing",
+  /if \(unknown\.length > 0\) fail\(2, `queue: unknown argument/.test(cli));
+check("the CLI passes --dry-run through to runElectionQueue",
+  /const dryRun = args\.includes\("--dry-run"\);/.test(cli) && /runElectionQueue\(createClient\(supabaseUrl, serviceKey\), raw, \{ dryRun \}\)/.test(cli));
 
 if (failures > 0) {
   console.error(`\nverify-election-news: ${failures} failure(s)`);
