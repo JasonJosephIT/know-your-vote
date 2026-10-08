@@ -169,8 +169,11 @@ export type OutletSourceRow = NonNullable<ReturnType<typeof outletSourceRow>>;
            - `outlet:<domain>` only when the URL belongs to that outlet. A
              swept article always carries its own outlet's id, so it passes;
            - `official:<domain>` only on an election_news item with no
-             candidate and no race, and only when the URL is on that entry of
-             the official list. Only R3's queue writes these ids;
+             candidate and no race, only when the URL is on that entry of
+             the official list, and, for a county body, only when the item is
+             scoped to that county. The route also refuses it when the
+             story's own page already has a source row with another type or
+             lean (storyPageProblem). Only R3's queue writes these ids;
            - any other id (a `src_*` page row) only when that row's url_norm
              is this URL's. The route reads the row; givenPageRowProblem
              decides.
@@ -180,7 +183,10 @@ export type OutletSourceRow = NonNullable<ReturnType<typeof outletSourceRow>>;
       3. `page`: anything else is looked up as a source row for this exact page,
          by `url_norm`. That is how migration 0014 attributed the government
          notices, and it is the operator's remedy for a page off the outlet
-         list: add the page's source row, then approve again.
+         list: add the page's source row, then approve again. An official
+         row's url_norm is its entry's bare domain, so a story at a body's
+         home page finds that row here; the route then refuses it unless the
+         item passes every check a given official id must (pageRowProblem).
     An outlet on the list whose lean is not signed off stops at `unsigned`.
     It is never resolved to a page row, because that would put a lean on the
     card that nobody signed off for that outlet.
@@ -208,6 +214,9 @@ export type SourceAttribution =
       listedRow: ListedSourceRow | null;
       /** For a page-row id: this URL's url_norm, which the row must have. */
       pageUrlNorm: string | null;
+      /** For an official id: this URL's url_norm. A source row there, if
+          any, must be primary_doc / N/A (storyPageProblem). */
+      storyPageNorm: string | null;
     }
   | { kind: "refused"; reason: string }
   | { kind: "outlet"; sourceId: string; listedRow: OutletSourceRow }
@@ -222,6 +231,8 @@ export interface AttributionRow {
   item_type: string;
   candidate_id?: string | null;
   race_id?: string | null;
+  /** Null for statewide (and for a metro- or race-scoped row). */
+  county_fips?: string | null;
 }
 
 export interface AttributionDeps {
@@ -254,21 +265,21 @@ function planGiven(row: AttributionRow, given: string, deps: AttributionDeps): S
         reason: `This story names outlet ${domain}, but its URL belongs to ${outlet ? outlet.domain : "no listed outlet"}. Fix the story's source or reject it.`,
       };
     }
-    return { kind: "given", sourceId: given, listedRow: outletSourceRow(outlet), pageUrlNorm: null };
+    return { kind: "given", sourceId: given, listedRow: outletSourceRow(outlet), pageUrlNorm: null, storyPageNorm: null };
   }
   if (given.startsWith(OFFICIAL_ID_PREFIX)) {
     const domain = given.slice(OFFICIAL_ID_PREFIX.length);
-    const refuse = (why: string): SourceAttribution => ({
-      kind: "refused",
-      reason: `This story names official source ${domain}, but ${why}. An official source backs only an election notice that names no candidate and no race, on that body's own site.`,
-    });
-    if (row.item_type !== "election_news") return refuse(`it is ${row.item_type}, not election_news`);
-    if (row.candidate_id || row.race_id) return refuse("it names a candidate or a race");
-    const entry = deps.officialFor(row.url);
-    if (!entry || entry.domain !== domain) {
-      return refuse(`its URL belongs to ${entry ? entry.domain : "no listed official source"}`);
+    const checked = officialCheck(row, domain, deps);
+    if ("why" in checked) {
+      return { kind: "refused", reason: `This story names official source ${domain}, but ${checked.why}. ${OFFICIAL_RULE}` };
     }
-    return { kind: "given", sourceId: given, listedRow: officialSourceRow(entry), pageUrlNorm: null };
+    return {
+      kind: "given",
+      sourceId: given,
+      listedRow: officialSourceRow(checked.entry),
+      pageUrlNorm: null,
+      storyPageNorm: deps.norm(row.url),
+    };
   }
   const pageUrlNorm = deps.norm(row.url);
   if (!pageUrlNorm) {
@@ -277,7 +288,58 @@ function planGiven(row: AttributionRow, given: string, deps: AttributionDeps): S
       reason: `This story names source "${given}", and its URL could not be normalised to check that the source is this page's.`,
     };
   }
-  return { kind: "given", sourceId: given, listedRow: null, pageUrlNorm };
+  return { kind: "given", sourceId: given, listedRow: null, pageUrlNorm, storyPageNorm: null };
+}
+
+const OFFICIAL_RULE =
+  "An official source backs only an election notice that names no candidate and no race, on that body's own site, scoped to that body's county when it serves one.";
+
+/** The checks an `official:<domain>` id must pass on this row: the entry, or
+    why not (the first check that fails). */
+function officialCheck(
+  row: AttributionRow,
+  domain: string,
+  deps: AttributionDeps,
+): { entry: OfficialSource } | { why: string } {
+  if (row.item_type !== "election_news") return { why: `it is ${row.item_type}, not election_news` };
+  if (row.candidate_id || row.race_id) return { why: "it names a candidate or a race" };
+  const entry = deps.officialFor(row.url);
+  if (!entry || entry.domain !== domain) {
+    return { why: `its URL belongs to ${entry ? entry.domain : "no listed official source"}` };
+  }
+  const county = row.county_fips ?? null;
+  if (entry.countyFips !== null && county !== entry.countyFips) {
+    return {
+      why: `it is scoped to ${county ? `county ${county}` : "no county"}, not the body's county ${entry.countyFips}`,
+    };
+  }
+  return { entry };
+}
+
+/** A source row the `page` step found by url_norm, checked before it backs
+    the story. A page row backs its own page whatever the item. An official
+    row (`official:<domain>`, whose url_norm is the entry's bare domain, so a
+    story at a body's home page finds it) backs the story only when the item
+    passes every check a given official id must; otherwise a candidate story
+    at a .gov home page would print "Official document" (D7). Null when it
+    may back the story. */
+export function pageRowProblem(row: AttributionRow, foundSourceId: string, deps: AttributionDeps): string | null {
+  if (!foundSourceId.startsWith(OFFICIAL_ID_PREFIX)) return null;
+  const checked = officialCheck(row, foundSourceId.slice(OFFICIAL_ID_PREFIX.length), deps);
+  if (!("why" in checked)) return null;
+  return `This story's page is the home page of official source ${foundSourceId}, but ${checked.why}. ${OFFICIAL_RULE} Reject the story.`;
+}
+
+/** For a given official id: the source row already recorded for the story's
+    own page, if any, must be `primary_doc` / `N/A`. An agency's advocacy
+    page keeps its true type (D7), as R3's queue drops it at queue time. Null
+    when there is no such row or it is an official notice's. */
+export function storyPageProblem(
+  pageRow: { source_id: string; type: string; lean_tag: string } | null,
+  storyPageNorm: string,
+): string | null {
+  if (!pageRow || (pageRow.type === "primary_doc" && pageRow.lean_tag === "N/A")) return null;
+  return `This story's page, ${storyPageNorm}, is recorded as source ${pageRow.source_id} (${pageRow.type} / ${pageRow.lean_tag}), not an official notice, so an official source cannot back it. Reject the story, or fix that page's source row.`;
 }
 
 /** A given page-row id must be this story's own page: the row the route read

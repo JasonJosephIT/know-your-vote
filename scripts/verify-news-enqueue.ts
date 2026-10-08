@@ -27,6 +27,8 @@ import {
   isElectionRelated,
   listedRowProblem,
   outletSourceRow,
+  pageRowProblem,
+  storyPageProblem,
   planAttachments,
   planSourceAttribution,
   reviewPayloadFor,
@@ -356,10 +358,40 @@ for (const [url, id] of EIGHT) {
 
 /* -- a given official: id (D7) -- */
 const broward = OFFICIAL_SOURCES.find((s) => s.domain === "browardvotes.gov")!;
-const okOfficial = attribute("https://www.browardvotes.gov/voting-methods/early-voting", "official:browardvotes.gov");
-check("an official: id on its own host, on an election notice with no candidate or race, is accepted",
+const okOfficial = attribute("https://www.browardvotes.gov/voting-methods/early-voting", "official:browardvotes.gov",
+  { county_fips: "12011" });
+check("an official: id on its own host, on an election notice with no candidate or race, in its county, is accepted",
   okOfficial.kind === "given" && JSON.stringify(okOfficial.listedRow) === JSON.stringify(officialSourceRow(broward)),
   JSON.stringify(okOfficial));
+check("an accepted official: id carries the story's own url_norm for the page-row check",
+  okOfficial.kind === "given" && okOfficial.storyPageNorm === "www.browardvotes.gov/voting-methods/early-voting",
+  JSON.stringify(okOfficial));
+/* A county body's id is re-checked against the item's county at approval,
+   not only at queue time: an operator may have edited the scope. */
+for (const [label, over, wants] of [
+  ["scoped to another county", { county_fips: "12057" }, "county 12057"],
+  ["with no county", { county_fips: null }, "no county"],
+] as const) {
+  const a = attribute("https://www.browardvotes.gov/x", "official:browardvotes.gov", over);
+  check(`a county body's official: id is refused ${label}`,
+    a.kind === "refused" && reasonOf(a).includes(wants) && reasonOf(a).includes("12011"), JSON.stringify(a));
+}
+for (const county of [null, "12086"]) {
+  const a = attribute("https://dos.fl.gov/elections/x", "official:dos.fl.gov/elections", { county_fips: county });
+  check(`a statewide body's official: id is accepted with county ${county} (PR B sets scope from the publisher)`,
+    a.kind === "given", JSON.stringify(a));
+}
+/* The story's own page may already have a row with its true type: an
+   agency's advocacy page keeps it (D7), as R3's queue does at queue time. */
+check("no page row for the story's own page is no problem", storyPageProblem(null, "x.gov/a") === null);
+check("a primary_doc / N/A page row for the story's own page is no problem",
+  storyPageProblem({ source_id: "src_a", type: "primary_doc", lean_tag: "N/A" }, "x.gov/a") === null);
+const advocacyPage = storyPageProblem({ source_id: "src_fdacs", type: "opinion", lean_tag: "N/A" }, "x.gov/a");
+check("a page row recorded as opinion for the story's own page refuses the official id, naming it",
+  advocacyPage !== null && advocacyPage.includes("x.gov/a") && advocacyPage.includes("opinion / N/A") &&
+    advocacyPage.includes("src_fdacs"), String(advocacyPage));
+check("a page row recorded primary_doc with a lean for the story's own page refuses the official id",
+  storyPageProblem({ source_id: "src_a", type: "primary_doc", lean_tag: "unrated" }, "x.gov/a") !== null);
 for (const [label, url, over, wants] of [
   ["on candidate_news", "https://www.browardvotes.gov/x", { item_type: "candidate_news" }, "candidate_news"],
   ["on election_news with a race_id", "https://www.browardvotes.gov/x", { race_id: "race-1" }, "candidate or a race"],
@@ -372,6 +404,33 @@ for (const [label, url, over, wants] of [
 }
 check("an official: id that names no listed body is refused",
   attribute("https://www.browardvotes.gov/x", "official:example.gov").kind === "refused");
+
+/* The home-page hole in D7: an official row's url_norm is its entry's bare
+   domain, so a story whose URL is exactly a body's home page finds that row
+   by url_norm in the `page` step. The row backs it only when the item would
+   pass every check a given official: id must pass. */
+const deps = { outletFor, officialFor: (u: string) => officialForUrl(u), norm: urlNorm };
+const homeRow = (over: Partial<AttributionRow>): AttributionRow =>
+  ({ url: "https://browardvotes.gov/", source_id: null, item_type: "election_news", candidate_id: null, race_id: null,
+    county_fips: "12011", ...over });
+const homeLookup = attribute("https://browardvotes.gov/", null, { item_type: "candidate_news", candidate_id: "c", race_id: "r" });
+check("a story at a body's home page is a page lookup on the official row's url_norm (the case pageRowProblem closes)",
+  homeLookup.kind === "page" && homeLookup.urlNorm === officialSourceRow(broward).url_norm, JSON.stringify(homeLookup));
+for (const [label, over, wants] of [
+  ["candidate_news", { item_type: "candidate_news", candidate_id: "c", race_id: "r" }, "candidate_news"],
+  ["election_news with a race", { race_id: "r" }, "candidate or a race"],
+  ["election_news in another county", { county_fips: "12057" }, "county 12057"],
+] as const) {
+  const p = pageRowProblem(homeRow(over), "official:browardvotes.gov", deps);
+  check(`an official row found by url_norm is refused for ${label}`,
+    p !== null && p.includes("official:browardvotes.gov") && p.includes(wants), String(p));
+}
+check("an official row found by url_norm backs a county election notice with no candidate or race",
+  pageRowProblem(homeRow({}), "official:browardvotes.gov", deps) === null);
+check("a statewide official row found by url_norm backs an unscoped election notice",
+  pageRowProblem(homeRow({ url: "https://dos.fl.gov/elections/", county_fips: null }), "official:dos.fl.gov/elections", deps) === null);
+check("a page row that is not an official row is never refused here",
+  pageRowProblem(homeRow({ item_type: "candidate_news", candidate_id: "c", race_id: "r" }), "src_gov_broward", deps) === null);
 
 /* There is no official fall-through: a government URL with no given id is a
    page lookup, whatever the item, never an official row. */
@@ -426,11 +485,15 @@ check("the news insert writes the resolved source_id",
 check("an unresolved source fails closed before any insert",
   /if \(!source\.ok\)\s*\{\s*return failClosed\(/.test(route));
 check("the route uses planSourceAttribution with the outlet list, the official list and the canonical urlNorm",
-  /planSourceAttribution\(row, \{\s*outletFor: \(u\) => outletForUrl\(u, OUTLETS\),\s*officialFor: \(u\) => officialForUrl\(u\),\s*norm: urlNorm,\s*\}\)/.test(route));
+  /const deps: AttributionDeps = \{\s*outletFor: \(u\) => outletForUrl\(u, OUTLETS\),\s*officialFor: \(u\) => officialForUrl\(u\),\s*norm: urlNorm,\s*\};\s*const plan = planSourceAttribution\(row, deps\);/.test(route));
 check("a refused attribution fails closed with its reason",
   /case "refused":\s*return \{ ok: false, reason: plan\.reason \};/.test(route));
+check("a given official id checks the story's own page row before writing its row",
+  /if \(plan\.storyPageNorm\) \{\s*const page = await sourceRowWhere\("url_norm", plan\.storyPageNorm\);[\s\S]*?const problem = storyPageProblem\(page\.row, plan\.storyPageNorm\);\s*if \(problem\) return \{ ok: false, reason: problem \};\s*\}\s*return ensureListedRow\(plan\.listedRow, "given"\);/.test(route));
+check("the page step refuses an official row the item could not be given",
+  /if \(found\.row\) \{\s*const problem = pageRowProblem\(row, found\.row\.source_id, deps\);\s*if \(problem\) return \{ ok: false, reason: problem \};\s*return \{ ok: true, sourceId: found\.row\.source_id, via: "page" \};/.test(route));
 check("a given listed id writes its row through ensureListedRow",
-  /if \(plan\.listedRow\) return ensureListedRow\(plan\.listedRow, "given"\);/.test(route) &&
+  /return ensureListedRow\(plan\.listedRow, "given"\);/.test(route) &&
     /case "outlet":\s*return ensureListedRow\(plan\.listedRow, "outlet"\);/.test(route));
 check("ensureListedRow refuses an official row read back with another type or lean",
   /const problem = listedRowProblem\(listed, found\.row\);\s*if \(problem\) return \{ ok: false, reason: problem \};/.test(route));

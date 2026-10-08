@@ -240,7 +240,9 @@ Run from the repo root with `.env.local` holding the §1 keys.
      the story's URL (below), then the URL's listed outlet, then an existing
      source row for that exact page. There is no official fall-through: a
      government URL with no source id resolves only to its own page row
-     (news-source-integrity spec §3.2.2, D7);
+     (news-source-integrity spec §3.2.2, D7). A story whose URL is exactly a
+     listed body's home page finds that body's `official:` row here, and it
+     is refused unless it passes every check an `official:` id must (below);
    - inserts.
 
    **A source id in the payload is checked against the story's URL** before
@@ -248,9 +250,12 @@ Run from the repo root with `.env.local` holding the §1 keys.
    - `outlet:<domain>` only when the URL belongs to that outlet. Every swept
      story carries its own outlet's id, so the sweep's items pass.
    - `official:<domain>` only on an `election_news` item that names no
-     candidate and no race, and only when the URL is on that entry of
+     candidate and no race, only when the URL is on that entry of
      `src/lib/official-sources.ts` (17 bodies: the Division of Elections, the
-     four covered Supervisors, the Legislature, the courts). The route writes
+     four covered Supervisors, the Legislature, the courts), and, for a
+     county Supervisor, only when the item is scoped to that county. It is
+     refused when the story's own page already has a `source` row with a
+     type or lean other than `primary_doc` / `N/A`. The route writes
      that body's source row from the list (`primary_doc` / `N/A`, publisher as
      listed) if it is missing, and refuses if a row for that host already
      exists with another type or lean. R3's queue,

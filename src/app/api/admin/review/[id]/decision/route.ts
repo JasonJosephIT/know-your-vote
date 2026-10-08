@@ -7,7 +7,10 @@ import { urlNorm } from "@/lib/brief-rows";
 import {
   givenPageRowProblem,
   listedRowProblem,
+  pageRowProblem,
   planSourceAttribution,
+  storyPageProblem,
+  type AttributionDeps,
   type ListedSourceRow,
 } from "@/lib/news-enqueue";
 import { OUTLETS, outletForUrl } from "@/lib/news-sources";
@@ -295,11 +298,12 @@ async function resolveSource(
   service: SupabaseClient,
   row: NewsInsertRow
 ): Promise<SourceResolution> {
-  const plan = planSourceAttribution(row, {
+  const deps: AttributionDeps = {
     outletFor: (u) => outletForUrl(u, OUTLETS),
     officialFor: (u) => officialForUrl(u),
     norm: urlNorm,
-  });
+  };
+  const plan = planSourceAttribution(row, deps);
 
   const sourceRowWhere = async (column: "source_id" | "url_norm", value: string) => {
     const { data, error } = await service
@@ -336,7 +340,17 @@ async function resolveSource(
     case "refused":
       return { ok: false, reason: plan.reason };
     case "given": {
-      if (plan.listedRow) return ensureListedRow(plan.listedRow, "given");
+      if (plan.listedRow) {
+        if (plan.storyPageNorm) {
+          const page = await sourceRowWhere("url_norm", plan.storyPageNorm);
+          if (page.error) {
+            return { ok: false, reason: `Could not check the source row for ${plan.storyPageNorm}: ${page.error.message}` };
+          }
+          const problem = storyPageProblem(page.row, plan.storyPageNorm);
+          if (problem) return { ok: false, reason: problem };
+        }
+        return ensureListedRow(plan.listedRow, "given");
+      }
       const found = await sourceRowWhere("source_id", plan.sourceId);
       if (found.error) {
         return { ok: false, reason: `Could not check source ${plan.sourceId}: ${found.error.message}` };
@@ -363,7 +377,11 @@ async function resolveSource(
       if (found.error) {
         return { ok: false, reason: `Could not look up a source for ${plan.urlNorm}: ${found.error.message}` };
       }
-      if (found.row) return { ok: true, sourceId: found.row.source_id, via: "page" };
+      if (found.row) {
+        const problem = pageRowProblem(row, found.row.source_id, deps);
+        if (problem) return { ok: false, reason: problem };
+        return { ok: true, sourceId: found.row.source_id, via: "page" };
+      }
       return {
         ok: false,
         reason: `No source found for this story. Its site is not on the outlet list, and no source row has url_norm "${plan.urlNorm}". Add a source row for this page (publisher, type, lean), then approve again. ${NO_SOURCE_RULE}`,

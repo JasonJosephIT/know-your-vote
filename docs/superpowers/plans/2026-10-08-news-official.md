@@ -56,9 +56,10 @@ Each is the spec's "Recommended (pending founder confirmation)" option or an imp
 6. **Most specific entry wins (implementation choice):** when two official entries match one URL, `officialForUrl` returns the one with the longest `domain`, so list order never decides.
 7. **Listed ids always go through `ensureListedRow` (implementation choice):** a given `outlet:` or `official:` id whose row can be built from a list is upserted-if-absent and read back by `url_norm`, instead of first looking the id up. The id used is whichever row owns that `url_norm`.
 8. **A given `outlet:` id for an outlet whose lean is not signed off (implementation choice):** after the URL check it is looked up by id as today, never written, and refused when no row has that id. (No such row exists; behaviour unchanged.)
-9. **R3 queue scope, PR A level:** a county scope on a statewide body's page is accepted, and a statewide scope on a county body's page is accepted; the retrofit's PR B tightens both (its D2). Only a county scope that differs from a county entry's county is refused.
-10. **R3 queue details (implementation choices):** `published_at` is stored as an ISO timestamp (`new Date(x).toISOString()`); a blank summary is stored as `null`; a failed read exits 1 with nothing written (the spec names exit 1 for a failed insert; a failed read is treated the same); the skip check runs after the source check, as the spec orders them, so a page recorded as `opinion` is reported as dropped even if it is also already stored.
+9. **R3 queue scope, PR A level:** a county scope that differs from a county entry's county is refused, and so is a statewide scope on a county entry's page (review fix: a Broward Supervisor notice must not reach the statewide feed). A county scope on a statewide body's page is still accepted; the retrofit's PR B sets scope from the publisher (its D2). The approve path re-checks the county for an `official:` id (decision 12).
+10. **R3 queue details (implementation choices):** `published_at` must be written YYYY-MM-DD (optionally with a time) and is stored as an ISO timestamp (`new Date(x).toISOString()`); the date window is the retrofit's PR B; the dedupe compares `urlNorm` (scheme and trailing slash do not matter, `www.` and the query do), and the news_item / review_item reads ask for the http/https and trailing-slash spellings of each URL; a blank summary is stored as `null`; a failed read exits 1 with nothing written (the spec names exit 1 for a failed insert; a failed read is treated the same); the skip check runs after the source check, as the spec orders them, so a page recorded as `opinion` is reported as dropped even if it is also already stored.
 11. **Strict-mode fix:** `fakeDb` in `scripts/verify-news-enqueue.ts` takes `readonly` row arrays, the one error a strict standalone type-check of that file reports today.
+12. **Approve-path checks beyond §3.2.2 (review fixes):** a given `official:` id for a county entry is refused unless the item's `county_fips` is that county; it is refused when a page row for the story's own URL exists with a type or lean other than `primary_doc` / `N/A`; and the `page` case refuses a read-back row whose id is `official:` unless the item passes every check a given `official:` id must pass (so a candidate story at a body's home page never prints "Official document"). **TO FLIP:** drop the county check in `planGiven`, the `storyPageNorm` read in the route, or the `pageRowProblem` call in the route's `page` case.
 
 ## File Map
 
@@ -2246,9 +2247,10 @@ News-source-integrity spec, rollout step 1 (PR A, §3.2.1 to §3.2.3). No migrat
 6. When two official entries match a URL, the longest `domain` wins.
 7. A given `outlet:` / `official:` id always goes through `ensureListedRow` (upsert-if-absent, read back by `url_norm`).
 8. A given `outlet:` id for an outlet with no signed-off lean is looked up by id as before, never written.
-9. R3 scope at PR A level: only a county scope that differs from a county body's county is refused; the retrofit's PR B tightens the rest.
-10. R3 queue: `published_at` stored as ISO, a blank summary as null, a failed read exits 1 with nothing written, the source check runs before the skip check.
+9. R3 scope at PR A level: a county scope that differs from a county body's county, or a statewide scope on a county body's page, is refused; a county scope on a statewide body's page is accepted until the retrofit's PR B sets scope from the publisher.
+10. R3 queue: `published_at` written YYYY-MM-DD and stored as ISO, the dedupe compares `urlNorm`, a blank summary as null, a failed read exits 1 with nothing written, the source check runs before the skip check.
 11. `fakeDb` in `verify-news-enqueue.ts` takes readonly rows (strict standalone type-check).
+12. Approve path, beyond §3.2.2: an `official:` id for a county body needs the item scoped to that county; it is refused when the story's own page row has another type or lean; the `page` case refuses an `official:` row unless the item passes the given-id checks. TO FLIP: remove the check in `planGiven`, the route's page-row read, or the `pageRowProblem` call.
 
 ## Verification
 
