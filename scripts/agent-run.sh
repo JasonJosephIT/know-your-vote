@@ -61,7 +61,12 @@ R5|check|scripts/candidate-leads.ts|check --stories {dir}/stories.json|mentions.
 R5|queue-dry|scripts/candidate-leads.ts|queue --dry-run|verified.json|queue-dry.txt|300
 R5|queue|scripts/candidate-leads.ts|queue|verified.json|queue.txt|300
 watch|stale|scripts/agent-run-log.ts|stale|-|-|120
-watch|check|scripts/agent-run-log.ts|watch --runs {dir}/runs.json --notified {dir}/notified.txt|-|-|120'
+watch|check|scripts/agent-run-log.ts|watch --runs {dir}/runs.json --notified {dir}/notified.txt|-|-|120
+R2|context|scripts/logistics-check.ts|context|-|context.json|300
+R2|sites|scripts/logistics-check.ts|sites|-|sites.json|540
+R2|check|scripts/logistics-check.ts|check|observations.json|check.json|300
+R2|queue-dry|scripts/logistics-check.ts|queue --dry-run|observations.json|queue-dry.json|300
+R2|queue|scripts/logistics-check.ts|queue|observations.json|queue.json|300'
 
 # Run "$@" for at most $1 seconds. The command gets its own process group and
 # the whole group is killed on expiry, so a child it started (npm, git) does
