@@ -166,7 +166,9 @@ COMMIT;
   that file's `sha256` in `docs/general-election/freeze-2026-10-18.json` to
   the new hash (the failing `verify-freeze.ts` line prints it), and adds
   `"correction": "docs/general-election/corrections/<file>.md"` to that
-  entry. `node scripts/verify-freeze.ts --write` is refused inside the window.
+  entry (the note from step 1, directly in this folder: `verify-freeze.ts`
+  fails a path with `..` or a subfolder, and the README). `node
+  scripts/verify-freeze.ts --write` is refused inside the window.
 - **A correction migration** applied in the window starts with
   `SELECT set_config('kyv.freeze_correction', 'docs/general-election/corrections/<file>.md', true);`,
   which lasts for that migration's transaction.

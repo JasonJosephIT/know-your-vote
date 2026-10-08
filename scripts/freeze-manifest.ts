@@ -165,6 +165,16 @@ export function parseManifest(text: string): FreezeManifest {
   };
 }
 
+/* A correction note is one file directly in CORRECTIONS_DIR, named like
+   2026-10-25-<slug>.md: no "..", no subfolder, no backslash, and not the
+   README. So a named path cannot resolve to some other existing file. */
+const CORRECTION_NAME = /^[A-Za-z0-9][A-Za-z0-9._-]*\.md$/;
+export function isCorrectionPath(named: string): boolean {
+  if (!named.startsWith(CORRECTIONS_DIR)) return false;
+  const name = named.slice(CORRECTIONS_DIR.length);
+  return CORRECTION_NAME.test(name) && name.toLowerCase() !== "readme.md";
+}
+
 /* The check. Inside the manifest's window a hash difference, a missing
    file or a frozen-file list that no longer matches the manifest fails;
    outside it they are printed and pass. A named correction file that does
@@ -196,7 +206,7 @@ export function checkManifest(
     }
     if (entry.correction !== undefined) {
       const named = entry.correction;
-      if (!named.startsWith(CORRECTIONS_DIR) || !named.endsWith(".md")) {
+      if (!isCorrectionPath(named)) {
         failures.push(`${entry.path} names "${named}", which is not a ${CORRECTIONS_DIR}*.md file`);
       } else if (!opts.exists(named)) {
         failures.push(`${entry.path} names correction ${named}, which does not exist`);

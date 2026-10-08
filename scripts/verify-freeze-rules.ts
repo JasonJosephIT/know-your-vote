@@ -5,8 +5,9 @@
       changed or missing file, or a frozen list that no longer matches the
       manifest, fails; outside it they print and pass; an entry whose hash
       was updated and that names an existing correction file passes; a named
-      correction file that is missing, or is not under
-      docs/general-election/corrections/, fails at any time; the window
+      correction file that is missing, or is not one file directly in
+      docs/general-election/corrections/ (no "..", no subfolder, not the
+      README), fails at any time; the window
       includes its start and excludes its end; a malformed manifest is
       refused with a reason.
    2. The constants: the window is 0050's content_freeze window to the
@@ -120,6 +121,23 @@ for (const [label, now] of [["inside", INSIDE], ["after", AFTER]] as const) {
     ...fixture(changedA, ["notes/fix.md"]),
   });
   check("a correction outside docs/general-election/corrections/ fails", !r.ok, r.lines.join(" | "));
+}
+/* The named path must be one file directly in the corrections folder, so
+   a ".." or a subfolder cannot point the check at some other existing file,
+   and the README is not a correction. */
+for (const named of [
+  `${CORRECTIONS_DIR}../../../README.md`,
+  `${CORRECTIONS_DIR}../corrections/2026-10-25-fix-a.md`,
+  `${CORRECTIONS_DIR}sub/2026-10-25-fix-a.md`,
+  `${CORRECTIONS_DIR}..\\..\\README.md`,
+  `${CORRECTIONS_DIR}README.md`,
+  `${CORRECTIONS_DIR}.md`,
+]) {
+  const r = checkManifest(withEntry("src/lib/a.ts", { sha256: "hash-CHANGED", correction: named }), {
+    now: INSIDE,
+    ...fixture(changedA, [named]),
+  });
+  check(`a correction named "${named}" fails, even when the path exists`, !r.ok && fails(r.lines).some((l) => l.includes(named)), r.lines.join(" | "));
 }
 {
   const r = checkManifest(base, {
