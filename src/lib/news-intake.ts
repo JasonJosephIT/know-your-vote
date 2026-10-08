@@ -25,7 +25,16 @@ import {
   usableOutlets,
   type Outlet,
 } from "./news-sources.ts";
-import { parseNewsSitemap, sweep, type SweptArticle } from "./news-sweep.ts";
+import {
+  depthLine,
+  feedDepthHours,
+  parseFeed,
+  parseNewsSitemap,
+  shallowFeeds,
+  sweep,
+  type FeedDepth,
+  type SweptArticle,
+} from "./news-sweep.ts";
 import { matchArticle, type RosterCandidate } from "./news-match.ts";
 import {
   dedupeKey,
@@ -74,6 +83,14 @@ export interface SweepResult {
   sitemapDays: number;
   sitemapDaysOk: number;
   summary: string;
+  /** One row per RSS/Atom feed fetched: its dated items and the age of its
+      oldest (news-sweep.ts feedDepthHours). Sitemap outlets have no row:
+      each day of their window is its own request, so they have no depth. */
+  depth: FeedDepth[];
+  /** The rows of `depth` younger than CADENCE_HOURS, shallowest first. */
+  shallowFeeds: FeedDepth[];
+  /** `news-sweep depth: <n> feeds; shallow (<24h): …`, for the logs. */
+  depthLine: string;
 }
 
 /** Sweep every usable outlet for the last `days` days. Throws when no outlet
@@ -91,6 +108,7 @@ export async function runSweep({
   }
 
   const feeds: { outlet: Outlet; xml: string; format?: "feed" | "news-sitemap" }[] = [];
+  const depth: FeedDepth[] = [];
   let feedsOk = 0;
   let sitemapDays = 0;
   let sitemapDaysOk = 0;
@@ -100,6 +118,7 @@ export async function runSweep({
       const xml = await fetchText(outlet.feed, log);
       if (xml) {
         feeds.push({ outlet, xml });
+        depth.push({ domain: outlet.domain, ...feedDepthHours(parseFeed(xml), now) });
         feedsOk++;
       }
       continue;
@@ -127,7 +146,18 @@ export async function runSweep({
   const summary =
     `swept ${feedsOk}/${feedOutlets} feeds + ${sitemapDaysOk}/${sitemapDays} sitemap days ` +
     `(${sitemapOutlets} outlet${sitemapOutlets === 1 ? "" : "s"}) -> ${articles.length} articles in the last ${days} days`;
-  return { articles, usable: usable.length, feedsOk, feedOutlets, sitemapDays, sitemapDaysOk, summary };
+  return {
+    articles,
+    usable: usable.length,
+    feedsOk,
+    feedOutlets,
+    sitemapDays,
+    sitemapDaysOk,
+    summary,
+    depth,
+    shallowFeeds: shallowFeeds(depth),
+    depthLine: depthLine(depth),
+  };
 }
 
 export interface EnqueueResult {

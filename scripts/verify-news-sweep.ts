@@ -34,6 +34,7 @@ import {
   sweep,
 } from "../src/lib/news-sweep.ts";
 import { electionPayloadFor } from "../src/lib/news-enqueue.ts";
+import { runSweep } from "../src/lib/news-intake.ts";
 import { ManualNewsPayloadSchema } from "../src/types/admin.ts";
 
 let failures = 0;
@@ -737,6 +738,50 @@ check("depthLine names the count and each shallow feed with its hours",
 check("depthLine says none when no feed is shallow",
   depthLine([{ domain: "wlrn.org", items: 40, hours: 200 }]) === "news-sweep depth: 1 feeds; shallow (<24h): none",
   depthLine([{ domain: "wlrn.org", items: 40, hours: 200 }]));
+
+/* ---- runSweep carries the depth (news-source-integrity §3.5) ------------
+   runSweep fetches, so the network is stubbed: every usable feed URL gets a
+   fixture, nothing leaves the machine, and the real loop runs. One feed is
+   shallow, one is empty, one fails, the rest are three days deep. */
+{
+  const sweepNow = new Date("2026-10-08T11:00:00Z");
+  const ago = (h: number) => new Date(sweepNow.getTime() - h * 3_600_000).toUTCString();
+  const dated = (title: string, link: string, hoursAgo: number) =>
+    `<item><title>${title}</title><link>${link}</link><description>A dek.</description><pubDate>${ago(hoursAgo)}</pubDate></item>`;
+  const rssFeeds = usableOutlets().filter((o) => o.feed !== null);
+  check("at least three usable RSS feeds to stub", rssFeeds.length >= 3, String(rssFeeds.length));
+  const [shallowOne, emptyOne, failingOne] = rssFeeds;
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = (async (input: string | URL | Request) => {
+    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+    const host = `https://www.${shallowOne.domain.split("/")[0]}`;
+    if (url === failingOne.feed) return new Response("gone", { status: 404 });
+    if (url === emptyOne.feed) return new Response(rss(""), { status: 200 });
+    if (url === shallowOne.feed) {
+      return new Response(rss(dated("New", `${host}/a`, 2) + dated("Older", `${host}/b`, 10.5)), { status: 200 });
+    }
+    return new Response(rss(dated("Deep", "https://elsewhere.example/x", 72)), { status: 200 });
+  }) as typeof fetch;
+  try {
+    const result = await runSweep({ days: 14, now: sweepNow });
+    check("runSweep measures every fetched RSS feed, and only those",
+      result.depth.length === rssFeeds.length - 1 && !result.depth.some((d) => d.domain === failingOne.domain),
+      `${result.depth.length} rows for ${rssFeeds.length} feeds`);
+    check("runSweep's depth row is feedDepthHours of that feed",
+      JSON.stringify(result.depth.find((d) => d.domain === shallowOne.domain)) ===
+        JSON.stringify({ domain: shallowOne.domain, items: 2, hours: 10.5 }),
+      JSON.stringify(result.depth.find((d) => d.domain === shallowOne.domain)));
+    check("runSweep's shallowFeeds are the empty and the shallow feed, shallowest first",
+      result.shallowFeeds.map((d) => d.domain).join(",") === `${emptyOne.domain},${shallowOne.domain}`,
+      JSON.stringify(result.shallowFeeds));
+    check("runSweep's depthLine is depthLine(depth)",
+      result.depthLine === depthLine(result.depth) &&
+        result.depthLine.startsWith(`news-sweep depth: ${rssFeeds.length - 1} feeds; shallow (<24h): ${emptyOne.domain} 0h (0 items), ${shallowOne.domain} 10.5h`),
+      result.depthLine);
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+}
 
 if (failures > 0) {
   console.error(`\nverify-news-sweep: ${failures} failure(s)`);
