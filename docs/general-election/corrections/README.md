@@ -144,7 +144,8 @@ COMMIT;
 
 - **A brief fix** then runs `docs/general-election/brief-runs/refresh-plan-2026-10.md`
   Step 4 checks 2 to 4 for that race: fingerprints against a reference
-  rebuilt with the fix (the reference builder runs
+  rebuilt with the fix (the reference builder, which the brief-refresh work
+  adds per spec §3.4 item 4 and is not in the repo yet, must run
   `SET kyv.freeze_correction = 'pglite reference'` first), the audit at
   `word_count_pct = 150`, and the read as `anon`.
 - **A measure resource that no longer loads (BC17).** Replace the row, in one

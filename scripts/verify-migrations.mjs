@@ -95,8 +95,10 @@
         (for cap_tool_wrapper too, not a permission error) and goes through
         under kyv.freeze_correction with a NOTICE; a takedown to listed,
         the freshness stamps, key_dates, an UPDATE that changes nothing and
-        a new or uncited source row go through without it. Outside the
-        window everything goes through.
+        a new or uncited source row go through without it; a DELETE or
+        INSERT of a publication row, candidate, race or cited source, and a
+        whitespace-only setting, are refused. Outside the window everything
+        goes through.
 
 
    Supabase provides the anon/authenticated/service_role roles out of the box;
@@ -1919,6 +1921,11 @@ await check("0050 a correction write raises a NOTICE naming the correction file"
     throw new Error(`notices: ${JSON.stringify(notices)}`);
 });
 await expectFrozen(
+  "0050 a kyv.freeze_correction of only whitespace is not a correction",
+  CLAIM_INSERT,
+  { correction: "   " }
+);
+await expectFrozen(
   "0050 as cap_tool_wrapper, an INSERT into claim is refused by the freeze, not by a permission error",
   CLAIM_INSERT,
   { role: "cap_tool_wrapper" }
@@ -1995,6 +2002,49 @@ await expectFrozen(
 await expectThrough(
   "0050 an UPDATE of a source nothing cites goes through",
   "UPDATE source SET publisher = 'Changed' WHERE source_id = 'src-early-test';"
+);
+/* DELETE and INSERT on the row-guarded tables. Each target row is one
+   nothing references (made in setup where needed), so the freeze is the only
+   thing that can refuse it. */
+const FREEZE_RACE = "INSERT INTO race (race_id, office, level, election, candidate_ids) VALUES ('r-freeze-row','X','state','general','{}');";
+await expectFrozen(
+  "0050 a DELETE of a race_publication row is refused",
+  "DELETE FROM race_publication WHERE race_id = 'r-pub';"
+);
+await expectFrozen(
+  "0050 a DELETE of a measure_publication row is refused",
+  "DELETE FROM measure_publication WHERE measure_id = 'm-skew';"
+);
+await expectFrozen(
+  "0050 an INSERT of a race_publication row with status 'listed' is refused",
+  "INSERT INTO race_publication (race_id, status) VALUES ('r-freeze-row', 'listed');",
+  { setup: FREEZE_RACE }
+);
+await expectFrozen(
+  "0050 a DELETE of a candidate is refused",
+  "DELETE FROM candidate WHERE candidate_id = 'c-freeze-row';",
+  {
+    setup: `INSERT INTO candidate (candidate_id, legal_name, party, office_sought, qualifying_status)
+            VALUES ('c-freeze-row','Freeze Probe','NPA','Governor','qualified');`,
+  }
+);
+await expectFrozen(
+  "0050 an INSERT of a candidate is refused",
+  `INSERT INTO candidate (candidate_id, legal_name, party, office_sought, qualifying_status)
+   VALUES ('c-freeze-row','Freeze Probe','NPA','Governor','qualified');`
+);
+await expectFrozen(
+  "0050 a DELETE of a race is refused",
+  "DELETE FROM race WHERE race_id = 'r-freeze-row';",
+  { setup: FREEZE_RACE }
+);
+await expectFrozen(
+  "0050 a DELETE of a source cited by claim_source is refused",
+  "DELETE FROM source WHERE source_id = 's1';"
+);
+await expectFrozen(
+  "0050 a DELETE of a source cited by measure_resource is refused",
+  "DELETE FROM source WHERE source_id = 's-gov';"
 );
 await expectFrozen("0050 TRUNCATE zip_district is refused", "TRUNCATE zip_district;");
 await expectFrozen("0050 TRUNCATE race_publication is refused", "TRUNCATE race_publication;");

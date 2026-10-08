@@ -74,7 +74,9 @@ Each is the spec's "Recommended (pending founder confirmation)" option unless ma
 6. **(implementation)** An `UPDATE` that changes nothing passes on all five row-level tables (the spec states it inside "changes only X"; applied uniformly). This is what lets the BC18 re-approve close and lets news intake's no-op outlet upsert through on a cited source.
 7. **(implementation)** The refusal keeps the spec's message verbatim and adds `DETAIL: <OP> on public.<table>`.
 8. **(implementation)** Re-running 0050 keeps an existing `content_freeze` row (`ON CONFLICT (id) DO NOTHING`).
-9. **(implementation)** `content_freeze` revokes from `anon` and `authenticated` only, as the spec says; `service_role` keeps Supabase's default grants. Cheap flip: `REVOKE INSERT, UPDATE, DELETE, TRUNCATE ON public.content_freeze FROM service_role;`.
+9. **(implementation)** `content_freeze` revokes from `anon` and `authenticated` only, as the spec says; `service_role` keeps Supabase's default grants, so any service-role path could move or close the window (the spec says the guard is not a security boundary). Cheap flip: `REVOKE INSERT, UPDATE, DELETE, TRUNCATE ON public.content_freeze FROM service_role;`.
+15. **(implementation)** The guard fails closed: a pass decision that is ever NULL refuses (`NOT COALESCE(v_pass, false)`), and a `kyv.freeze_correction` of only whitespace is not a correction (`btrim` before the empty check), so every write let through names a real string.
+16. **(implementation, spec gap)** On `race_publication` and `measure_publication` only an `UPDATE` to `listed` passes; a takedown to `draft`, a `DELETE` and an `INSERT` (even one with status `listed`) are refused and need the setting. A `DELETE` of a candidate, a race or a cited source is refused too. All are tested.
 10. **(implementation)** Trigger names: `trg_content_freeze` (statement-level), `trg_content_freeze_row`, `trg_content_freeze_truncate`. Each `BEFORE` row trigger on `measure_publication` fires before `trg_measure_balance` (name order), so a frozen publish fails with the freeze message.
 11. **(implementation)** `listingCardLine` takes an optional third argument (the set, default `UNFINISHED_BRIEF_RACES`) so tests can exercise a non-empty set; callers pass two. Precedence: `published` → in-review line; listed and in the set → unfinished line; otherwise the `LISTED_IS_FINAL` switch.
 12. **(implementation)** `verify-freeze.ts --write` is refused inside the window (a correction edits its own entry by hand; the failing line prints the new hash). Inside the window a frozen-file list that disagrees with the manifest fails too (re-run `--write` before 10-18). A named correction file that is missing, or is not `docs/general-election/corrections/*.md`, fails at any time.
@@ -2503,7 +2505,7 @@ Rollout step 5 of `docs/superpowers/specs/2026-10-08-ballot-content-completion-d
 3. BC15: the unfinished-brief line, set shipped empty. TO FLIP: keep the set empty.
 4. BC6 kept: `NO_BRIEF_CARD_LINE` and `LISTED_IS_FINAL = true` unchanged, now pinned by a test.
 5. BC16, BC17, BC18: documented in the README; the guard passes `race.key_dates` and `info_last_verified_at` and refuses `office`, `district`, `qualifying_status`.
-6. Implementation choices: a no-op UPDATE passes on all five row-level tables; the refusal adds `DETAIL: <OP> on public.<table>`; re-running 0050 keeps an existing window row; `service_role` keeps its default grants on `content_freeze` (flip: one REVOKE); `verify-freeze --write` is refused inside the window; a stale frozen-file list fails inside the window; a missing named correction file fails at any time; the exact window is pinned in `verify-freeze-rules.ts`; ledger row 0050 is "written, not applied".
+6. Implementation choices: a no-op UPDATE passes on all five row-level tables; the refusal adds `DETAIL: <OP> on public.<table>`; re-running 0050 keeps an existing window row; `service_role` keeps its default grants on `content_freeze`, so a service-role path could move the window (flip: one REVOKE); the guard fails closed on a NULL pass decision and treats a whitespace-only setting as no correction; on the publication tables only an UPDATE to `listed` passes (takedown to `draft`, DELETE and INSERT need the setting); `verify-freeze --write` is refused inside the window; a stale frozen-file list fails inside the window; a missing named correction file fails at any time; the exact window is pinned in `verify-freeze-rules.ts`; ledger row 0050 is "written, not applied".
 
 ## Founder steps (not done here)
 
@@ -2512,8 +2514,8 @@ Rollout step 5 of `docs/superpowers/specs/2026-10-08-ballot-content-completion-d
 
 ## Test plan
 
-- [x] `verify-migrations.mjs`: 277 ok (226 before), including the 0050 cases
-- [x] With a scratch migration opening the window and making one frozen write, all five PGlite scripts pass with the bypass line and fail with the freeze message without it (scratch file not committed)
+- [x] `verify-migrations.mjs`: 286 ok (226 before), including the 0050 cases (DELETE and INSERT on the row-guarded tables among them)
+- [x] With a scratch migration opening the window and making one frozen write, all five PGlite scripts pass with the bypass line and fail with the freeze message without it (scratch file not committed; with only the window moved, `verify-election-seed.mjs` passes without the line because nothing after 0050 in it writes a frozen table yet, and 0051 will)
 - [x] `verify-freeze-rules.ts` 24 ok; `verify-freeze.ts` prints its note and exits 0
 - [x] `verify-listing.ts` 54 ok (40 before); `verify-incumbent-chip.ts` passes
 - [x] `verify-all`: 70 passed, 1 failed (`verify-news-neutrality`, known live data), 2 skipped (env)

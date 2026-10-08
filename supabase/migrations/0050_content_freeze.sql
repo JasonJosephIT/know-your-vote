@@ -12,7 +12,7 @@
 -- WHAT IT REFUSES. Inside the window, a write to a frozen table raises
 -- P0001 "Ballot content is frozen until Election Day (content_freeze).
 -- Corrections only: docs/general-election/corrections/README.md", unless
--- current_setting('kyv.freeze_correction', true) is non-empty. Then it
+-- current_setting('kyv.freeze_correction', true) is non-blank. Then it
 -- raises a NOTICE carrying that value and lets the write through. A
 -- correction is one transaction:
 --   BEGIN; SET LOCAL kyv.freeze_correction = '<correction file>'; ...; COMMIT;
@@ -138,8 +138,11 @@ BEGIN
     END IF;
   END IF;
 
-  IF v_frozen AND NOT v_pass THEN
-    v_correction := COALESCE(pg_catalog.current_setting('kyv.freeze_correction', true), '');
+  -- COALESCE: a branch that ever yields NULL refuses (fails closed).
+  IF v_frozen AND NOT COALESCE(v_pass, false) THEN
+    -- btrim: a setting of only whitespace names no correction file.
+    v_correction := pg_catalog.btrim(
+      COALESCE(pg_catalog.current_setting('kyv.freeze_correction', true), ''));
     IF v_correction = '' THEN
       RAISE EXCEPTION 'Ballot content is frozen until Election Day (content_freeze). Corrections only: docs/general-election/corrections/README.md'
         USING ERRCODE = 'P0001',
