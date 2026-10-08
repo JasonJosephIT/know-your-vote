@@ -236,13 +236,34 @@ Run from the repo root with `.env.local` holding the §1 keys.
    approval, the route:
    - re-runs the neutrality lint (a banned term refuses the row, and it stays
      pending);
-   - resolves the source: the payload's own `outlet:<domain>` first, then the
-     URL's listed outlet, then an existing source row for that exact page;
+   - resolves the source: the payload's own source id first, checked against
+     the story's URL (below), then the URL's listed outlet, then an existing
+     source row for that exact page. There is no official fall-through: a
+     government URL with no source id resolves only to its own page row
+     (news-source-integrity spec §3.2.2, D7);
    - inserts.
 
-   Anything it refuses stays pending with the reason in `apply_error`. An
-   operator hand-add from a page off the outlet list needs a `source` row for
-   that page first. That is the same pattern 0014 and 0042 use.
+   **A source id in the payload is checked against the story's URL** before
+   it is used, so a payload cannot attribute one publisher's story to another:
+   - `outlet:<domain>` only when the URL belongs to that outlet. Every swept
+     story carries its own outlet's id, so the sweep's items pass.
+   - `official:<domain>` only on an `election_news` item that names no
+     candidate and no race, and only when the URL is on that entry of
+     `src/lib/official-sources.ts` (17 bodies: the Division of Elections, the
+     four covered Supervisors, the Legislature, the courts). The route writes
+     that body's source row from the list (`primary_doc` / `N/A`, publisher as
+     listed) if it is missing, and refuses if a row for that host already
+     exists with another type or lean. R3's queue,
+     `scripts/election-news.ts queue`, is what writes these ids.
+   - any other id (a `src_*` page row) only when that row's `url_norm` is
+     this story's (`urlNorm` of its URL).
+
+   A failed check names the mismatch. Anything it refuses stays pending with
+   the reason in `apply_error`. An operator hand-add from a page off the
+   outlet list, a government page included, needs a `source` row for that
+   page first, with the page's true type (an agency's advocacy page is
+   `opinion`, as 0040 typed FDACS's statement). That is the same pattern 0014,
+   0040 and 0042 use.
 
    **Five outlets are refused outright, and a page source row does not help.**
    Stories from `apnews.com`, `miamiherald.com`, `tampabay.com`,
