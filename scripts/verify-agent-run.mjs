@@ -67,8 +67,16 @@ const want = [
   "R4|lint|scripts/verify-news-neutrality.ts||-|lint.txt|300|finding",
   "watch|stale|scripts/agent-run-log.ts|stale|-|-|120",
   "watch|check|scripts/agent-run-log.ts|watch --runs {dir}/runs.json --notified {dir}/notified.txt|-|-|120",
+  /* PR D (R2): `sites` and `context` read the database themselves, so no
+     agent-written file chooses what they fetch or stamp; `sites` is 9 min,
+     not the spec's 20, to fit the Bash ceiling. */
+  "R2|context|scripts/logistics-check.ts|context|-|context.json|300",
+  "R2|sites|scripts/logistics-check.ts|sites|-|sites.json|540",
+  "R2|check|scripts/logistics-check.ts|check|observations.json|check.json|300",
+  "R2|queue-dry|scripts/logistics-check.ts|queue --dry-run|observations.json|queue-dry.json|300",
+  "R2|queue|scripts/logistics-check.ts|queue|observations.json|queue.json|300",
 ];
-check("the table is PR A's and PR C's rows exactly (spec §3.1)", rows.map((r) => r.join("|")).join("\n") === want.join("\n"),
+check("the table is PR A's, PR C's and PR D's rows exactly (spec §3.1)", rows.map((r) => r.join("|")).join("\n") === want.join("\n"),
   rows.map((r) => r.join("|")).join("\n"));
 /* Claude Code's Bash tool stops a command at 120 s by default and 600 s at
    most; the prompts ask for 600 s. Every wrapper call must end, with its own
@@ -97,6 +105,7 @@ check("the literal defaults are the agent worktree, the runs folder and the arm6
 
 const COMMAND = /^\s*sh \/Users\/jsloth\/Projects\/kyv-agent-worktree\/scripts\/agent-run\.sh (\S+) (\S+)(.*)$/;
 const PROMPTS = {
+  "agents/r2-logistics.prompt.md": "R2",
   "agents/r5-candidate-leads.prompt.md": "R5",
   "agents/r4-ops-digest.prompt.md": "R4",
   "agents/rw-watchdog.prompt.md": "watch",
@@ -155,6 +164,27 @@ for (const [file, agent] of [["agents/r5-candidate-leads.prompt.md", "R5"], ["ag
   check("R4's prompt asks list_task_runs for the five tasks the digest reads",
     ["cap-r2-contact-refresher", "cap-r3-election-news", "cap-r4-ops-digest", "cap-r5-candidate-leads", "cap-rw-watchdog"].every((t) => r4.includes(t)));
   check("R4's prompt never uses execute_sql or the web", !/WebFetch\(|WebSearch\(/.test(r4) && r4.includes("never use execute_sql"));
+}
+
+/* R2's prompt: the same exit-code contract, its eight-fetch cap, its hosts
+   (spec §3.3), and no contact collection (spec §3.6: after Nov 3, PR E). */
+{
+  const r2 = readFileSync(path.join(ROOT, "agents/r2-logistics.prompt.md"), "utf8").replace(/\s+/g, " ");
+  const exitLine = (n) => r2.match(new RegExp(`- ${n}: (.*?)(?= - \\d: | BUDGET:)`))?.[1] ?? "";
+  for (const n of [3, 4]) {
+    check(`R2's prompt says exit ${n} means finish with --status failed, as the wrapper prints`,
+      exitLine(n).includes("finish with --status failed"), exitLine(n));
+  }
+  check("R2's prompt names the check retry and the failed start beside exit 1's fail closed",
+    exitLine(1).includes("check") && exitLine(1).includes("start"), exitLine(1));
+  check("R2's prompt says exit 6 also covers a previous run past its budget that has not finished",
+    exitLine(6).includes("has not called finish"), exitLine(6));
+  check("R2's prompt caps WebFetch at 8", r2.includes("8 WebFetch calls"));
+  for (const host of ["dos.fl.gov", "browardvotes.gov", "www.votehillsborough.gov", "www.miamidade.gov", "voteorangefl.gov", "www.votemiamidade.gov", "www.browardvotes.gov"]) {
+    check(`R2's prompt lists ${host} among the hosts it may fetch`, r2.includes(host));
+  }
+  check("R2's prompt forbids contact collection and never asks for a phone, email or address",
+    r2.includes("Never collect contact details") && !/phone|e-?mail|mailto|tel:|mailing address/i.test(r2));
 }
 
 /* ---- a temporary worktree and runs folder ------------------------------ */
