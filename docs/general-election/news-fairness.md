@@ -135,6 +135,21 @@ Halting a race because the media covered it unevenly would hide a real ballot
 from real voters over something no one can remediate. **So on the news plane,
 fairness is enforced by selection and disclosure, not by a publication gate.**
 
+### Neutrality governs our conduct, not the world's (founder, 2026-10-09)
+
+> We never introduce bias through framing, selection, padding, or trimming.
+> When coverage, opinion, or attention is uneven *in the world*, we show it
+> accurately, with its sources. An imbalance is something to diagnose, not
+> something to correct. Every symmetric-coverage check asks one question:
+> **did our pipeline miss something (fix it), or is the skew real (show it)?**
+
+1. Fix pipeline gaps only: missing feeds, name aliases, unequal search effort.
+   Never pad a thin candidate or trim a heavy one to even out counts.
+2. A real skew is shown with context, not hidden and not editorialised.
+3. Lean is still disclosed, never scored (§1).
+
+The same rule lives in the repo's `AGENTS.md` so every coding agent loads it.
+
 ### Equal slots
 
 The original principle survives intact, applied to the surface we do control —
@@ -152,6 +167,49 @@ opinion columns while another's are all reporting.
 Shortfall is stated, not padded: *"Only 2 sourced stories found for this
 candidate in the last 30 days."* Silence is data the voter should see.
 
+### Surplus is shown, behind an expander (founder decision C, 2026-10-09)
+
+Equal slots keep the *first view* even; they must not hide a real surplus.
+When a candidate has more sourced stories in the window than `N`, their slot
+group ends with an expander: *"Show all 14 stories"*. Opening it lists every
+sourced story for that candidate in the window, most recent first, with the
+same card labels as the slots. The expander is collapsed by default for every
+candidate, and the count in its label is the real count, never rounded or
+capped. A candidate with `N` or fewer stories has no expander, and keeps the
+shortfall line above.
+
+The expander shows only what the pipeline actually found. It is offered only
+for a race whose skew has passed the source check below; while a race is
+labelled *pipeline gap* or *unclear*, fix the gap first, and do not present
+the counts as the world's.
+
+### Before calling a skew real: the source check
+
+A count of 0 in our DB means only that our pipeline found nothing. Before any
+race's imbalance is shown to voters as real-world coverage, run this check. It
+is also the standing procedure for every ≥3× flag R4 raises.
+
+1. **Include the review queue.** Count each candidate's `review_item` rows
+   (`status = 'pending'`, `payload->>'item_type' = 'candidate_news'`) alongside
+   the live `news_item` rows.
+2. **Search outside our feeds.** For each low/zero-count candidate, run the
+   same query pattern (full legal name, ballot name, nickname/aliases) over the
+   same window against at least one broad index outside our feeds (Google
+   News, GDELT, AP/Ballotpedia news pages). Run the same search for the
+   high-count candidate as a baseline.
+3. **Classify.** One label per candidate:
+   - **pipeline gap**: the outside search finds in-window stories from an
+     outlet we'd accept, and our feeds missed them. Fix the gap (feed, alias,
+     sitemap, matching threshold). Never hand-add items to even out counts.
+   - **real-world skew**: the outside search finds about the same. Show the
+     imbalance as a fact.
+   - **unclear**: say so, and do not present the skew as real yet.
+4. **Write it down.** The label, the queries used, and the outside-search hit
+   counts go in the R1 run report, and in the R4 digest next time the race is
+   flagged.
+
+First instance: `source-check-2026-10-09.md`.
+
 ### The one number worth auditing
 
 Reuse `balance_audit_core` — it is a pure variance function over per-candidate
@@ -160,7 +218,8 @@ counts and does not care whether it is counting claims or articles. Compute
 
 It reports; it does not halt. Its purpose is the methodology page and the admin
 console: *"we found 14 stories for one candidate and 3 for another, and here is
-how we allotted slots anyway."* **Do not edit `balance_audit_core.py`** — call
+how we allotted slots anyway."* A high variance is a prompt to run the source
+check, not a target to bring down. **Do not edit `balance_audit_core.py`** — call
 it, as `data-architecture.md` §3 already requires.
 
 ---
