@@ -414,3 +414,23 @@ New from this widened pass: **tier 4 `argument` is no longer empty on either sid
 - Oppose: Florida Education Association's own voter toolkit (row 2) and League of Women Voters of Florida's own Vote411 page (row 3) — both bare "opposed" listings with no stated reasoning, but both are the organization's own words about this specific amendment, matching the precedent already accepted for Amendment 2's FEA/LWV rows.
 
 Updated tier-4 count: support = 1 (RPOF), oppose = 2 (FEA, LWV) — within the ≤2× symmetry rule. Combined with the pre-existing tier-2/tier-5 rows, both YES and NO now clear at least one non-neutral tier on top of tier-4. Still-open gaps: no primary-source statement was found from DeSantis, Rich Templin/Florida AFL-CIO, or Fentrice Driskell themselves (all three remain reporting-only), and no Florida Channel hearing-testimony video was located.
+
+## Weekly re-check, 2026-10-09
+
+Covers material published since 2026-09-26. Every row below was opened with `curl -sL -A 'Mozilla/5.0'` and its body text read. The 2026-10-05 run reported no change; it missed row 1 (published 2026-10-02).
+
+| # | URL | Loads | Publisher / author | Date | Format | kind | stance | Gives reasons? | Evidence |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | https://www.chronicleonline.com/opinion/letters_to_editor/a-bigger-rainy-day-fund-makes-sense/article_0b78ca85-1655-582d-bf77-7a05b48d85d0.html | Yes (curl, body text confirmed) | Citrus County Chronicle, Letters to the Editor; signed George Wilson, Homosassa | 2026-10-02 | article | commentary | support | Yes (reserve against storms and economic shortfalls) | "Increasing the rainy day fund — the Budget Stabilization Fund — makes perfect sense." |
+| 2 | https://floridapolitics.com/archives/823095-a1-jolly-floridagop-desantis/ | Yes (curl HTTP 200, body text confirmed) | Florida Politics / A.G. Gancarski | 2026-10-03 | article | reporting | neutral | n/a | Reports Democratic gubernatorial candidate David Jolly's support from a press availability: "I support raising that cap." |
+| 3 | https://www.wptv.com/news/political/elections-local/amendments-1-2-lesser-known-florida-ballot-amendments-focus-on-state-reserves-farm-tax-breaks | Yes (curl, body text confirmed) | WPTV / Scott Sutton | 2026-10-08 | article (with embedded video) | reporting | neutral | n/a | Explainer covering AM1 and AM2; gives supporters' and opponents' views without naming any of them. |
+
+Notes:
+- Row 1 is a private citizen's letter, so it is filed as `commentary`, not `argument`. The founder should confirm how letters to the editor are filed.
+- David Jolly's position (row 2) is known only through news coverage. No video of the press availability and no statement from his campaign was found, so it stays `reporting`/neutral.
+- An Albritton quote ("makes Florida's balance sheet more durable") showed up only in a search-engine summary. No source page was found, so it is not opened and not a row.
+- Checked, nothing new: flgov.com press releases through 2026-10-08 (no Amendment 1 release), flaflcio.org press listing (newest post 2026-06-16), Florida Policy Institute site search (Amendment 3 only), FEA and LWV Florida (lwvfl.org blocked by Cloudflare, so not opened). No newspaper editorial-board piece on either amendment was found.
+- Amendment 2: no new organisation statement on either side. The florida.gop post "Republican Party of Florida Endorses Proposed Agricultural Tax Cut Amendment" is dated 2025-05-19 and doesn't name Amendment 2, so it is outside this re-check's window and not a row.
+
+**Gate picture, AM1:** support adds one `commentary` row (row 1). Oppose still has no case with reasons in the opponent's own words, only the FEA and LWV bare listings.
+**Gate picture, AM2:** unchanged from the 2026-09-26 state; no new rows.
