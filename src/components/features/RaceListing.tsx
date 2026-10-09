@@ -3,9 +3,11 @@ import { PartyChip } from "@/components/ui/PartyChip";
 import { Chip } from "@/components/ui/Chip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
 import { CampaignWebsite } from "@/components/features/CampaignWebsite";
+import { RunningMateLine } from "@/components/features/RosterLines";
 import { safeHttpUrl } from "@/lib/format";
 import { showIncumbentChip } from "@/lib/incumbency";
 import { listingCardLine } from "@/lib/listing-copy";
+import type { RunningMates } from "@/lib/running-mate";
 import type {
   ListedCandidate,
   RaceListing as RaceListingData,
@@ -40,11 +42,14 @@ export function ListedCandidateCard({
   status,
   headingLevel = "h2",
   linkToDetail = true,
+  runningMates,
 }: {
   data: ListedCandidate;
   status: RaceListingData["status"];
   headingLevel?: "h1" | "h2" | "h3";
   linkToDetail?: boolean;
+  /** The race's running mates (runningMatesFor), computed once per race. */
+  runningMates: RunningMates | null;
 }) {
   const { candidate, socials } = data;
   const Heading = headingLevel;
@@ -64,6 +69,7 @@ export function ListedCandidateCard({
             candidate.legal_name
           )}
         </Heading>
+        <RunningMateLine runningMates={runningMates} candidateId={candidate.candidate_id} />
         <div className="flex flex-wrap items-center gap-2">
           <PartyChip party={candidate.party} />
           {showIncumbentChip(candidate) && <Chip>Incumbent</Chip>}
@@ -119,7 +125,13 @@ export function ListedCandidateCard({
    layout cannot shift under a change made for the listing: equal-width
    columns on desktop, an equal-treatment stack on mobile, ballot order,
    reading order matching visual order. */
-export function RaceListing({ listing }: { listing: RaceListingData }) {
+export function RaceListing({
+  listing,
+  runningMates,
+}: {
+  listing: RaceListingData;
+  runningMates: RunningMates | null;
+}) {
   const count = listing.candidates.length;
   return (
     <div
@@ -131,6 +143,7 @@ export function RaceListing({ listing }: { listing: RaceListingData }) {
           key={c.candidate.candidate_id}
           data={c}
           status={listing.status}
+          runningMates={runningMates}
         />
       ))}
     </div>

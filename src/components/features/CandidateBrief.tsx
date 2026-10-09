@@ -4,9 +4,11 @@ import { Chip } from "@/components/ui/Chip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
 import { CampaignWebsite } from "@/components/features/CampaignWebsite";
 import { IssueSection } from "@/components/features/IssueSection";
+import { RunningMateLine } from "@/components/features/RosterLines";
 import type { CandidateBriefData } from "@/lib/briefs";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { showIncumbentChip } from "@/lib/incumbency";
+import type { RunningMates } from "@/lib/running-mate";
 
 /* One candidate's full brief. Structure is identical for every candidate in
    a race — equal space and equal scrutiny are layout invariants, not
@@ -36,10 +38,14 @@ export function CandidateBrief({
   data,
   headingLevel = "h2",
   linkToDetail = true,
+  runningMates,
 }: {
   data: CandidateBriefData;
   headingLevel?: "h2" | "h3";
   linkToDetail?: boolean;
+  /** The race's running mates, computed once per race by the page
+      (runningMatesFor): every Governor card shows its line, or none does. */
+  runningMates: RunningMates | null;
 }) {
   const { candidate, socials, issues } = data;
   const Heading = headingLevel;
@@ -62,6 +68,7 @@ export function CandidateBrief({
             candidate.legal_name
           )}
         </Heading>
+        <RunningMateLine runningMates={runningMates} candidateId={candidate.candidate_id} />
         <div className="flex flex-wrap items-center gap-2">
           <PartyChip party={candidate.party} />
           {showIncumbentChip(candidate) && <Chip>Incumbent</Chip>}

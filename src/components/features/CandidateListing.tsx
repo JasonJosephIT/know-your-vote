@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ListedCandidateCard } from "@/components/features/RaceListing";
 import { raceStatusLine, statusBranch } from "@/lib/listing-copy";
 import type { CandidateListing as CandidateListingData } from "@/lib/listing";
+import type { RunningMates } from "@/lib/running-mate";
 
 /* The candidate page for a race that is listed but not yet briefed. Same card
    as the race page's roster (one component, so the candidate page and the
@@ -16,8 +17,11 @@ import type { CandidateListing as CandidateListingData } from "@/lib/listing";
    is not on this page. */
 export function CandidateListing({
   listing,
+  runningMates,
 }: {
   listing: CandidateListingData;
+  /** The race's running mates, from the same rows the race page uses. */
+  runningMates: RunningMates | null;
 }) {
   const facts = {
     decidedInPrimary: listing.decidedInPrimary,
@@ -48,6 +52,7 @@ export function CandidateListing({
       <ListedCandidateCard
         data={{ candidate: listing.candidate, socials: listing.socials }}
         status={listing.status}
+        runningMates={runningMates}
         headingLevel="h1"
         linkToDetail={false}
       />
