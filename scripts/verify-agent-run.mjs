@@ -29,7 +29,7 @@ import {
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { ROUTINE_AGENTS, STALE_SUMMARY } from "../src/lib/agent-budget.ts";
+import { BUDGETS, ROUTINE_AGENTS, STALE_SUMMARY } from "../src/lib/agent-budget.ts";
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const WRAPPER = path.join(ROOT, "scripts", "agent-run.sh");
@@ -75,8 +75,11 @@ const want = [
   "R2|check|scripts/logistics-check.ts|check|observations.json|check.json|300",
   "R2|queue-dry|scripts/logistics-check.ts|queue --dry-run|observations.json|queue-dry.json|300",
   "R2|queue|scripts/logistics-check.ts|queue|observations.json|queue.json|300",
+  "R3|context|scripts/election-news.ts|context|-|context.json|300",
+  "R3|queue-dry|scripts/election-news.ts|queue --dry-run|items.json|queue-dry.json|300",
+  "R3|queue|scripts/election-news.ts|queue|items.json|queue.json|300",
 ];
-check("the table is PR A's, PR C's and PR D's rows exactly (spec §3.1)", rows.map((r) => r.join("|")).join("\n") === want.join("\n"),
+check("the table is PR A's, PR B's, PR C's and PR D's rows exactly (spec §3.1)", rows.map((r) => r.join("|")).join("\n") === want.join("\n"),
   rows.map((r) => r.join("|")).join("\n"));
 /* Claude Code's Bash tool stops a command at 120 s by default and 600 s at
    most; the prompts ask for 600 s. Every wrapper call must end, with its own
@@ -108,6 +111,7 @@ const PROMPTS = {
   "agents/r2-logistics.prompt.md": "R2",
   "agents/r5-candidate-leads.prompt.md": "R5",
   "agents/r4-ops-digest.prompt.md": "R4",
+  "agents/r3-election-news.prompt.md": "R3",
   "agents/rw-watchdog.prompt.md": "watch",
 };
 for (const [file, agent] of Object.entries(PROMPTS)) {
@@ -164,6 +168,24 @@ for (const [file, agent] of [["agents/r5-candidate-leads.prompt.md", "R5"], ["ag
   check("R4's prompt asks list_task_runs for the five tasks the digest reads",
     ["cap-r2-contact-refresher", "cap-r3-election-news", "cap-r4-ops-digest", "cap-r5-candidate-leads", "cap-rw-watchdog"].every((t) => r4.includes(t)));
   check("R4's prompt never uses execute_sql or the web", !/WebFetch\(|WebSearch\(/.test(r4) && r4.includes("never use execute_sql"));
+}
+
+/* R3's exit-code list and budget say what the wrapper and agent-budget.ts say. */
+{
+  const r3 = readFileSync(path.join(ROOT, "agents/r3-election-news.prompt.md"), "utf8").replace(/\s+/g, " ");
+  const exitLine = (n) => r3.match(new RegExp(`- ${n}: (.*?)(?= - \\d: | BUDGET:)`))?.[1] ?? "";
+  for (const n of [3, 4]) {
+    check(`R3's prompt says exit ${n} means finish with --status failed, as the wrapper prints`,
+      exitLine(n).includes("finish with --status failed"), exitLine(n));
+  }
+  check("R3's prompt names the queue-dry retry and the failed start beside exit 1's fail closed",
+    exitLine(1).includes("queue-dry") && exitLine(1).includes("start"), exitLine(1));
+  check("R3's prompt says exit 6 also covers a previous run past its budget that has not finished",
+    exitLine(6).includes("has not called finish"), exitLine(6));
+  check("R3's prompt states R3's budget from agent-budget.ts",
+    r3.includes(`BUDGET: ${BUDGETS.R3.wallClockMin} minutes from start and ${BUDGETS.R3.webCalls} web calls (WebSearch and WebFetch together)`),
+    r3.match(/BUDGET: [^.]*/)?.[0] ?? "");
+  check("R3's prompt keeps 5 minutes back for writing items and queueing", r3.includes("5 min or less left"));
 }
 
 /* R2's prompt: the same exit-code contract, its eight-fetch cap, its hosts
@@ -226,7 +248,9 @@ console.log(JSON.stringify({ args, input }));
 console.error("stub " + (args[0] ?? "(no args)") + ": summary line");
 if (process.env.KYV_STUB_EXIT) process.exitCode = Number(process.env.KYV_STUB_EXIT);
 `;
-for (const f of ["candidate-leads.ts", "ops-digest.ts", "verify-news-neutrality.ts"]) writeFileSync(path.join(WT, "scripts", f), STUB);
+/* R3's rows run scripts/election-news.ts. The same stub, which echoes its
+   arguments and stdin, stands in for it. */
+for (const f of ["candidate-leads.ts", "ops-digest.ts", "verify-news-neutrality.ts", "election-news.ts"]) writeFileSync(path.join(WT, "scripts", f), STUB);
 
 /* A second worktree whose run log writes no deadline: start must refuse. */
 const WT_NODEADLINE = path.join(TMP, "worktree-nodeadline");
@@ -460,7 +484,30 @@ try {
     r3.code === 0 && r3.out.includes("worktree: refresh skipped while an R5 run may still be running") && refreshes() === 2,
     `${r3.code}: ${r3.out}`);
   check("R3's start prints R3's budget", /^budget: 40 min, until \S+; web calls: 30 WebSearch \+ WebFetch$/m.test(r3.out), r3.out);
-  check("R3 has no rows yet in PR A", run(["R3", "context"]).code === 2);
+
+  /* ---- the R3 steps (PR B) --------------------------------------------- */
+  const dir3 = path.join(RUNS, day ?? "?", "R3");
+  check("R3's start prints its own run dir", r3.out.includes(`run dir: ${dir3}\n`), r3.out);
+  const ctx3 = run(["R3", "context"]);
+  const ctxOut = existsSync(path.join(dir3, "context.json")) ? JSON.parse(readFileSync(path.join(dir3, "context.json"), "utf8")) : null;
+  check("R3 context runs election-news.ts context into context.json, with nothing on stdin",
+    ctx3.code === 0 && JSON.stringify(ctxOut?.args) === '["context"]' && ctxOut?.input === "" &&
+      ctx3.out.includes(`output: ${dir3}/context.json`),
+    `${ctx3.code}: ${ctx3.out}`);
+  const noItems = run(["R3", "queue-dry"]);
+  check("R3 queue-dry without items.json exits 1 naming the file",
+    noItems.code === 1 && noItems.out.includes(`missing input ${dir3}/items.json`), `${noItems.code}: ${noItems.out}`);
+  writeFileSync(path.join(dir3, "items.json"), '[{"title":"x"}]\n');
+  const dry3 = run(["R3", "queue-dry"]);
+  const dry3Out = existsSync(path.join(dir3, "queue-dry.json")) ? JSON.parse(readFileSync(path.join(dir3, "queue-dry.json"), "utf8")) : null;
+  check("R3 queue-dry runs queue --dry-run on items.json into queue-dry.json",
+    dry3.code === 0 && JSON.stringify(dry3Out?.args) === '["queue","--dry-run"]' && dry3Out?.input === '[{"title":"x"}]\n',
+    `${dry3.code}: ${dry3.out}`);
+  const q3 = run(["R3", "queue"]);
+  const q3Out = existsSync(path.join(dir3, "queue.json")) ? JSON.parse(readFileSync(path.join(dir3, "queue.json"), "utf8")) : null;
+  check("R3 queue runs queue on items.json into queue.json",
+    q3.code === 0 && JSON.stringify(q3Out?.args) === '["queue"]' && q3Out?.input === '[{"title":"x"}]\n', `${q3.code}: ${q3.out}`);
+  check("R3 has no step of R5's", run(["R3", "prep"]).code === 2);
   check("finish R3", run(["R3", "finish", "--status", "ok_empty"]).code === 0);
   check("finish R5", run(["R5", "finish", "--status", "ok", "--items", "2"]).code === 0);
 

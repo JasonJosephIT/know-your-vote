@@ -1,37 +1,67 @@
 /* R3's queue: election notices from official sources become PENDING review
    items, and nothing else (spec
    docs/superpowers/specs/2026-10-08-news-source-integrity-design.md §3.2.3,
-   decisions D5, D6, D7).
+   decisions D5, D6, D7; the agent-retrofit spec's PR B,
+   docs/superpowers/specs/2026-10-08-agent-retrofit-design.md §3.5 and D2).
 
    R3, a scheduled Claude agent, reads the government bodies' own pages
    (src/lib/official-sources.ts) and hands scripts/election-news.ts what it
-   found. Everything after that reading is decided here: what a well-formed
-   batch is, which source each item carries, what is already stored or queued,
-   and what the payload is. The I/O is three filtered reads and one insert
+   found, through scripts/agent-run.sh. Everything after that reading is
+   decided here: what a well-formed batch is, which scope and source each
+   item carries, which items are dropped and why, what is already stored or
+   queued, and what the payload is. The I/O is filtered reads and one insert
    through an injected client, so scripts/verify-election-news.ts proves the
    whole contract offline.
 
+   Two steps. `context` reads only: the window, the official hosts by county
+   and statewide, the official pages already stored or queued, and the
+   general election's dates, so R3 knows where to look and what is done.
+   `queue` applies the rules below and makes the one insert.
+
+   Refusals stop the whole batch (exit 1, nothing written): a malformed item,
+   a URL off the official list or on an outlet, a scope that is not the
+   publisher's (D2). Drops remove one item, keep the rest, and are reported
+   with a rule and a reason: a page recorded as anything but an official
+   notice, a date outside the window, a candidate on the ballot, a case for
+   or against an amendment, the neutrality lint (§3.5). R3's prompt lets it
+   reword a `lint` drop once and no other.
+
    Nothing here publishes. A queued item reaches a voter only once a person
    approves it in /admin, and the approve path checks its source against its
-   URL again (planSourceAttribution in news-enqueue.ts).
-
-   Not here (the agent-retrofit spec's PR B extends this file): the `context`
-   step, scope from the publisher, the candidate-name drop, the
-   case-for-or-against drop, the date window and the lint drop.
+   URL again (planSourceAttribution in news-enqueue.ts) and re-runs the lint.
 
    Relative imports with the extension: plain-Node scripts import this. */
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { urlNorm } from "./brief-rows.ts";
 import { COVERED_FIPS } from "./candidate-leads.ts";
+import { COVERED_COUNTIES } from "./counties.ts";
+import { ACTIVE_ELECTION } from "./election.ts";
+import { loadBallotRoster } from "./news-intake.ts";
+import { matchArticle, type RosterCandidate } from "./news-match.ts";
 import { OUTLETS, outletForUrl } from "./news-sources.ts";
-import { officialForUrl, officialSourceIdFor } from "./official-sources.ts";
+import { findAllBannedTermMatches } from "./neutrality.ts";
+import {
+  OFFICIAL_SOURCES,
+  officialForUrl,
+  officialSourceIdFor,
+  type OfficialSource,
+} from "./official-sources.ts";
+import { supervisorSite } from "./supervisors.ts";
 import { ManualNewsPayloadSchema, type ManualNewsPayload } from "../types/admin.ts";
 
 /** The most items one `queue` batch may carry. A weekly read of four
     Supervisors and the statewide bodies finds a handful; far past that is a
     runaway or an injected list. */
 export const MAX_ELECTION_BATCH = 25;
+
+/** An item may be dated at most this many UTC days before the run's day
+    (D2's date window, spec §3.5). */
+export const ELECTION_WINDOW_DAYS = 60;
+
+/** An item may be dated at most this many UTC days after the run's day: an
+    evening notice in Florida is already the next day in UTC. */
+export const FUTURE_DAYS = 1;
 
 const FIELDS = ["title", "summary", "url", "published_at", "scope"] as const;
 const TEXT_FIELDS = ["title", "summary", "url", "published_at"] as const;
@@ -80,25 +110,36 @@ function isIsoDate(value: string): boolean {
 const withoutWww = (norm: string) => norm.replace(/^www\./, "");
 const otherWww = (norm: string) => (norm.startsWith("www.") ? norm.slice(4) : `www.${norm}`);
 
+/** The scope an official entry's items carry (D2, Recommended pending
+    founder confirmation): a county Supervisor's page is that county's; every
+    other listed body's page is statewide. `context` prints it beside each
+    entry, and batchProblem refuses any other scope. */
+export function scopeFor(entry: OfficialSource): ElectionScope {
+  return entry.countyFips === null ? { statewide: true } : { county_fips: entry.countyFips };
+}
+
 const SCOPE_FORMS = 'scope must be { "county_fips": "<5 digits>" } or { "statewide": true }';
 
-function scopeProblem(scope: unknown, entryCounty: string | null): string | null {
+function scopeProblem(scope: unknown, entry: OfficialSource): string | null {
   if (!isRecord(scope)) return SCOPE_FORMS;
   const keys = Object.keys(scope);
   if (keys.length === 1 && keys[0] === "statewide") {
     if (scope.statewide !== true) return "scope.statewide must be true";
     /* A county Supervisor's notice is about that county. Statewide would put
-       it on every county's feed. (A county scope on a statewide body's page is
-       still accepted; the retrofit's PR B sets scope from the publisher.) */
-    if (entryCounty !== null) return `a county body's page is scoped to its county ${entryCounty}, not statewide`;
+       it on every county's feed. */
+    if (entry.countyFips !== null) return `a county body's page is scoped to its county ${entry.countyFips}, not statewide`;
     return null;
   }
   if (keys.length === 1 && keys[0] === "county_fips") {
     const fips = scope.county_fips;
     if (typeof fips !== "string" || !/^\d{5}$/.test(fips)) return "scope.county_fips must be 5 digits";
     if (!COVERED_FIPS.has(fips)) return `scope.county_fips ${fips} is not a covered county`;
-    if (entryCounty !== null && entryCounty !== fips) {
-      return `scope.county_fips ${fips} differs from the publisher's county ${entryCounty}`;
+    /* D2: a statewide body's notice goes on the statewide feed, never on one
+       county's. TO FLIP (accept the agent's county on a statewide body's
+       page, as news PR A did): delete the next line. */
+    if (entry.countyFips === null) return `${entry.domain} is a statewide body's page: its scope is { "statewide": true }, not county ${fips}`;
+    if (entry.countyFips !== null && entry.countyFips !== fips) {
+      return `scope.county_fips ${fips} differs from the publisher's county ${entry.countyFips}`;
     }
     return null;
   }
@@ -122,7 +163,8 @@ export function batchProblem(raw: unknown): string | null {
     for (const f of TEXT_FIELDS) if (typeof item[f] !== "string") return `item ${i}: ${f} must be a string`;
     const url = item.url as string;
     const published = item.published_at as string;
-    /* The date window is the retrofit's PR B. */
+    /* The date window is a drop, not a refusal (contentDrop): one stale
+       notice must not stop the rest of the batch. */
     if (!isIsoDate(published)) {
       return `item ${i}: published_at "${published}" is not a date written YYYY-MM-DD, or YYYY-MM-DDThh:mm with Z or an offset`;
     }
@@ -131,11 +173,95 @@ export function batchProblem(raw: unknown): string | null {
     if (outlet) return `item ${i}: ${url} is on the outlet list (${outlet.domain}); R3 queues official sources only`;
     const official = officialForUrl(url);
     if (!official) return `item ${i}: ${url} is not on the official-source list (src/lib/official-sources.ts)`;
-    const scope = scopeProblem(item.scope, official.countyFips);
+    const scope = scopeProblem(item.scope, official);
     if (scope) return `item ${i}: ${scope}`;
   }
   return null;
 }
+
+/* ---- The content rules: each one drops an item (spec §3.5) ------------- */
+
+/** Why an item was dropped. Only a `lint` drop may be reworded, once
+    (agents/r3-election-news.prompt.md); every other drop is final. */
+export type DropRule = "page_type" | "date_window" | "candidate" | "measure_case" | "lint";
+
+/** The words that, beside an amendment's name, make an item a case for or
+    against it (spec §3.5). R3's prompt lists the same words, and
+    scripts/verify-election-news.ts keeps the two in step and checks that
+    TAKES_A_SIDE matches each one. */
+export const SIDE_TAKING_WORDS: readonly string[] = [
+  "should",
+  "vote yes",
+  "vote no",
+  "support",
+  "oppose",
+  "benefit",
+  "harm",
+];
+
+const NAMES_AMENDMENT = /\bamendments?\b/i;
+
+/* SIDE_TAKING_WORDS and their common inflections, as whole words, so
+   "shoulder" and "harmony" pass. A quote mark before yes or no still
+   counts. */
+const TAKES_A_SIDE =
+  /\b(?:should|vote\s+["'‘’“”]?(?:yes|no)|support(?:s|ed|ing|ers?)?|oppos(?:e|es|ed|ing|ition)|benefit(?:s|ed|ing|ted|ting)?|harm(?:s|ed|ful|ing)?)\b/i;
+
+const DAY_MS = 86_400_000;
+const utcDay = (ms: number) => Math.floor(ms / DAY_MS);
+const isoDay = (day: number) => new Date(day * DAY_MS).toISOString().slice(0, 10);
+
+/** The first and last day an item may be dated, inclusive, as UTC
+    YYYY-MM-DD: ELECTION_WINDOW_DAYS before the run's day to FUTURE_DAYS
+    after it. `context` prints it, so R3 looks inside the same window the
+    queue applies. */
+export function electionWindow(now: Date): { from: string; to: string } {
+  const today = utcDay(now.getTime());
+  return { from: isoDay(today - ELECTION_WINDOW_DAYS), to: isoDay(today + FUTURE_DAYS) };
+}
+
+/** The first content rule an item breaks, in this order, or null: the date
+    window, a candidate on the ballot, a case for or against an amendment,
+    the neutrality lint. Pure: the roster and the clock are arguments.
+
+    - Date: the item's UTC day outside electionWindow(now).
+    - Candidate: matchArticle (news-match.ts) over the title and summary
+      finds anyone on the ballot roster, by full name or by a title before
+      a surname. No race id is passed, so its race-only case never applies.
+    - Measure: the text names an amendment and uses a side-taking word.
+    - Lint: findAllBannedTermMatches over `${title} ${summary}`, the text
+      the approve route re-lints. */
+export function contentDrop(
+  item: Pick<ElectionNewsItem, "title" | "summary" | "published_at">,
+  roster: readonly RosterCandidate[],
+  now: Date,
+): { rule: DropRule; reason: string } | null {
+  const window = electionWindow(now);
+  const day = isoDay(utcDay(Date.parse(item.published_at)));
+  if (day > window.to) {
+    return { rule: "date_window", reason: `dated ${day}, more than ${FUTURE_DAYS} day after this run (window ${window.from} to ${window.to})` };
+  }
+  if (day < window.from) {
+    return { rule: "date_window", reason: `dated ${day}, older than ${ELECTION_WINDOW_DAYS} days (window ${window.from} to ${window.to})` };
+  }
+  const named = matchArticle({ title: item.title, summary: item.summary }, roster);
+  if (named.length > 0) {
+    const ids = [...new Set(named.map((m) => m.candidateId))].sort();
+    return { rule: "candidate", reason: `names a candidate on the ballot (${ids.join(", ")}); an election notice never covers a candidate` };
+  }
+  const text = `${item.title} ${item.summary}`;
+  if (NAMES_AMENDMENT.test(text)) {
+    const side = TAKES_A_SIDE.exec(text);
+    if (side) {
+      return { rule: "measure_case", reason: `names an amendment and says "${side[0]}"; the guide never makes a case for or against a measure` };
+    }
+  }
+  const lint = findAllBannedTermMatches(text);
+  if (lint.length > 0) return { rule: "lint", reason: `neutrality lint: ${lint.join(", ")}` };
+  return null;
+}
+
+/* ---- The plan ----------------------------------------------------------- */
 
 /** A `source` row already recorded for one of the batch's pages. */
 export interface PageRow {
@@ -145,7 +271,7 @@ export interface PageRow {
   lean_tag: string;
 }
 
-/** What the database already holds for this batch's URLs. */
+/** What the database already holds for this batch. */
 export interface QueueContext {
   /** `source` rows keyed by url_norm. */
   pageRows: ReadonlyMap<string, PageRow>;
@@ -153,6 +279,8 @@ export interface QueueContext {
   storedUrls: ReadonlySet<string>;
   /** URLs in a manual_news review item of any status. */
   queuedUrls: ReadonlySet<string>;
+  /** Every ballot-tier candidate on the site (loadBallotRoster). */
+  roster: readonly RosterCandidate[];
 }
 
 export interface ElectionQueueRow {
@@ -162,32 +290,46 @@ export interface ElectionQueueRow {
   payload: ManualNewsPayload;
 }
 
-/** A skipped or dropped item: its index in the batch and why. */
+/** A skipped item: its index in the batch and why. */
 export interface QueueNotice {
   index: number;
   url: string;
   reason: string;
 }
 
+/** A dropped item: also the rule it broke. */
+export interface QueueDrop extends QueueNotice {
+  rule: DropRule;
+}
+
 export type ElectionQueuePlan =
-  | { ok: true; rows: ElectionQueueRow[]; skipped: QueueNotice[]; dropped: QueueNotice[] }
+  | { ok: true; rows: ElectionQueueRow[]; skipped: QueueNotice[]; dropped: QueueDrop[] }
   | { ok: false; error: string };
 
 /** The rows `election-news.ts queue` would insert, from a batch that passed
     batchProblem. Per item, in order:
       1. Source. A page row recorded for this URL, with or without `www.`, as
-         anything but `primary_doc` / `N/A` DROPS the item (an agency's
-         advocacy page keeps its true type, D7). Otherwise a page row at this
-         URL's exact url_norm backs it, as the approve path requires; with
-         none, the item carries `official:<domain>`.
+         anything but `primary_doc` / `N/A` DROPS the item (rule
+         `page_type`: an agency's advocacy page keeps its true type, D7).
+         Otherwise a page row at this URL's exact url_norm backs it, as the
+         approve path requires; with none, the item carries
+         `official:<domain>`.
       2. Skip (not an error): a URL already in news_item, in a manual_news
-         item of any status, or earlier in this batch.
-      3. Build the payload and parse it with the console's own schema. One
-         failure refuses the batch. */
-export function planElectionQueue(items: readonly ElectionNewsItem[], ctx: QueueContext): ElectionQueuePlan {
+         item of any status, or queued earlier in this batch.
+      3. Content (contentDrop): the date window, a candidate, a case for or
+         against an amendment, the lint. Each DROPS the item.
+      4. Build the payload and parse it with the console's own schema. One
+         failure refuses the batch.
+    A dropped item does not count as earlier in the batch, so R3's reworded
+    copy of a page is not skipped as a repeat. */
+export function planElectionQueue(
+  items: readonly ElectionNewsItem[],
+  ctx: QueueContext,
+  now: Date,
+): ElectionQueuePlan {
   const rows: ElectionQueueRow[] = [];
   const skipped: QueueNotice[] = [];
-  const dropped: QueueNotice[] = [];
+  const dropped: QueueDrop[] = [];
   const inBatch = new Set<string>();
   /* One page, however it is spelled: urlNorm (the key source.url_norm uses:
      scheme and trailing slash do not matter, the query does) without `www.`. */
@@ -212,6 +354,7 @@ export function planElectionQueue(items: readonly ElectionNewsItem[], ctx: Queue
       dropped.push({
         index,
         url: item.url,
+        rule: "page_type",
         reason: `this page is recorded as ${advocacy.type} / ${advocacy.lean_tag}, not an official notice`,
       });
       continue;
@@ -226,11 +369,17 @@ export function planElectionQueue(items: readonly ElectionNewsItem[], ctx: Queue
         : inBatch.has(k)
           ? "repeats an earlier item in this batch"
           : null;
-    inBatch.add(k);
     if (skip) {
       skipped.push({ index, url: item.url, reason: skip });
       continue;
     }
+
+    const drop = contentDrop(item, ctx.roster, now);
+    if (drop) {
+      dropped.push({ index, url: item.url, ...drop });
+      continue;
+    }
+    inBatch.add(k);
 
     const parsed = ManualNewsPayloadSchema.safeParse({
       item_type: "election_news",
@@ -284,11 +433,13 @@ function spellings(url: string): string[] {
   return [...out];
 }
 
-/** The three reads, each filtered to this batch's URLs in chunks of 200, so a
-    response is bounded by the batch and never by the size of the table
-    (news-source-integrity §3.7). Throws on a read error: a partial read would
-    queue a story an operator already decided. `chunkSize` is a parameter
-    only so the guardrail can drive the chunking with a small batch. */
+/** The reads: the three filtered by this batch's URLs, each in chunks of
+    200, so a response is bounded by the batch and never by the size of the
+    table (news-source-integrity §3.7), then the ballot roster. Throws on a
+    read error, or on an empty roster: a partial read would queue a story an
+    operator already decided, and a roster of nobody would pass every
+    candidate story. `chunkSize` is a parameter only so the guardrail can
+    drive the chunking with a small batch. */
 export async function readQueueContext(
   db: SupabaseClient,
   items: readonly ElectionNewsItem[],
@@ -331,7 +482,12 @@ export async function readQueueContext(
       if (r.payload?.url) queuedUrls.add(r.payload.url);
     }
   }
-  return { pageRows, storedUrls, queuedUrls };
+
+  const roster = await loadBallotRoster(db);
+  if (roster.length === 0) {
+    throw new Error("the ballot roster is empty: with no one to match, a candidate story would pass the candidate rule");
+  }
+  return { pageRows, storedUrls, queuedUrls, roster };
 }
 
 export interface QueueOutcome {
@@ -339,18 +495,20 @@ export interface QueueOutcome {
   exitCode: 0 | 1;
   /** The stdout object, or null when the batch was refused or a read or the
       insert failed. */
-  output: { rows: ElectionQueueRow[]; skipped: QueueNotice[]; dropped: QueueNotice[] } | null;
+  output: { rows: ElectionQueueRow[]; skipped: QueueNotice[]; dropped: QueueDrop[] } | null;
   /** The one stderr line. */
   line: string;
 }
 
 /** The whole `queue` run against an injected client. With `dryRun` it still
-    reads (to report skips) and writes nothing; otherwise the only write is one
-    insert of pending manual_news review items, source 'agent:R3'. */
+    reads (to report skips and drops) and writes nothing; otherwise the only
+    write is one insert of pending manual_news review items, source
+    'agent:R3'. `now` is the run's clock for the date window; the CLI passes
+    none, so it is the real time. */
 export async function runElectionQueue(
   db: SupabaseClient,
   raw: unknown,
-  opts: { dryRun: boolean },
+  opts: { dryRun: boolean; now?: Date },
 ): Promise<QueueOutcome> {
   const refused = (why: string): QueueOutcome => ({
     exitCode: 1,
@@ -367,7 +525,7 @@ export async function runElectionQueue(
   } catch (err) {
     return { exitCode: 1, output: null, line: `election-news: ${(err as Error).message}; nothing written` };
   }
-  const plan = planElectionQueue(items, ctx);
+  const plan = planElectionQueue(items, ctx, opts.now ?? new Date());
   if (!plan.ok) return refused(plan.error);
 
   const output = { rows: plan.rows, skipped: plan.skipped, dropped: plan.dropped };
@@ -378,4 +536,243 @@ export async function runElectionQueue(
     if (error) return { exitCode: 1, output: null, line: `election-news: could not queue: ${error.message}; nothing written` };
   }
   return { exitCode: 0, output, line: `queued ${counts}` };
+}
+
+/* ---- context: what R3 reads before it looks (agent-retrofit spec §3.5) -- */
+
+/** One official entry as R3 reads it: the body, and the scope its items
+    carry. */
+export interface ContextEntry {
+  domain: string;
+  publisher: string;
+  scope: ElectionScope;
+}
+
+export interface ContextCounty {
+  county_fips: string;
+  county: string;
+  /** The Supervisor's home page (supervisors.ts): where R3 starts. */
+  supervisor_site: string;
+  entries: ContextEntry[];
+}
+
+/** An official page already stored or queued inside the window. */
+export interface KnownUrl {
+  url: string;
+  in: "news_item" | "review_item";
+  /** The review item's status; null for a news_item row. */
+  status: string | null;
+  /** YYYY-MM-DD: the published_at the row or payload carries, else the
+      review item's created_at. */
+  date: string;
+}
+
+export interface ContextEvent {
+  event_type: string;
+  county_fips: string | null;
+  event_date: string;
+  details_url: string | null;
+  /** verified_by is set. The verifier's name is not copied. */
+  verified: boolean;
+}
+
+/** context.json. */
+export interface ElectionContext {
+  generated_at: string;
+  window: { from: string; to: string };
+  counties: ContextCounty[];
+  statewide: ContextEntry[];
+  fetch_hosts: string[];
+  known_urls: KnownUrl[];
+  election_events: ContextEvent[];
+}
+
+/** The rows the context reads, as the database returns them. */
+export interface ContextRows {
+  news: readonly { url: string | null; published_at: string | null }[];
+  reviews: readonly {
+    payload: { url?: unknown; published_at?: unknown } | null;
+    status: string;
+    created_at: string;
+  }[];
+  events: readonly {
+    event_type: string;
+    county_fips: string | null;
+    event_date: string;
+    details_url: string | null;
+    verified_by: string | null;
+  }[];
+}
+
+const contextEntry = (s: OfficialSource): ContextEntry => ({ domain: s.domain, publisher: s.publisher, scope: scopeFor(s) });
+
+/** The only hosts R3 may fetch: each official entry's host, with and
+    without `www.`. A path-scoped entry gives its host (dos.fl.gov); the
+    item's URL must still be under the path, which batchProblem checks.
+    Any other host, a court's own subdomain included, is reported by R3 and
+    never fetched, so an unattended run never waits on a permission prompt
+    for a host nobody approved (spec §3.3). */
+export function fetchHosts(sources: readonly OfficialSource[] = OFFICIAL_SOURCES): string[] {
+  const hosts = new Set<string>();
+  for (const s of sources) {
+    const host = s.domain.split("/")[0];
+    hosts.add(host);
+    hosts.add(host.startsWith("www.") ? host.slice(4) : `www.${host}`);
+  }
+  return [...hosts].sort();
+}
+
+/** context.json from the rows read. Pure.
+    - counties: the four covered counties in COVERED_COUNTIES order, each
+      with its Supervisor's site and its entries; statewide: the rest.
+    - known_urls: the rows' URLs that are on an official entry, one per page
+      (urlNorm without `www.`, as the queue's dedupe compares), newest first.
+      A review item of any status counts: a rejected notice is not proposed
+      again.
+    - election_events: the active election's dates, for reference. */
+export function buildElectionContext(rows: ContextRows, now: Date): ElectionContext {
+  const counties = COVERED_COUNTIES.map((c) => {
+    const site = supervisorSite(c.fips);
+    if (!site) throw new Error(`election-news: no Supervisor site for covered county ${c.fips}`);
+    return {
+      county_fips: c.fips,
+      county: c.name,
+      supervisor_site: site,
+      entries: OFFICIAL_SOURCES.filter((s) => s.countyFips === c.fips).map(contextEntry),
+    };
+  });
+  const statewide = OFFICIAL_SOURCES.filter((s) => s.countyFips === null).map(contextEntry);
+
+  const seen = new Set<string>();
+  const known: KnownUrl[] = [];
+  const add = (url: unknown, rest: Omit<KnownUrl, "url">) => {
+    if (typeof url !== "string" || officialForUrl(url) === null) return;
+    const k = withoutWww(urlNorm(url) ?? url);
+    if (seen.has(k)) return;
+    seen.add(k);
+    known.push({ url, ...rest });
+  };
+  for (const r of rows.news) add(r.url, { in: "news_item", status: null, date: (r.published_at ?? "").slice(0, 10) });
+  for (const r of rows.reviews) {
+    const published = typeof r.payload?.published_at === "string" ? r.payload.published_at : r.created_at;
+    add(r.payload?.url, { in: "review_item", status: r.status, date: published.slice(0, 10) });
+  }
+  known.sort((a, b) => (a.date === b.date ? a.url.localeCompare(b.url) : a.date < b.date ? 1 : -1));
+
+  const events = rows.events
+    .map((e) => ({
+      event_type: e.event_type,
+      county_fips: e.county_fips?.trim() || null,
+      event_date: e.event_date,
+      details_url: e.details_url,
+      verified: typeof e.verified_by === "string" && e.verified_by.trim() !== "",
+    }))
+    .sort((a, b) =>
+      (a.county_fips ?? "").localeCompare(b.county_fips ?? "") ||
+      a.event_date.localeCompare(b.event_date) ||
+      a.event_type.localeCompare(b.event_type));
+
+  return {
+    generated_at: now.toISOString(),
+    window: electionWindow(now),
+    counties,
+    statewide,
+    fetch_hosts: fetchHosts(),
+    known_urls: known,
+    election_events: events,
+  };
+}
+
+/** The most rows one context page asks for: PostgREST caps a response at
+    1000 rows by default, so a bigger page would come back silently short. */
+export const CONTEXT_PAGE = 1000;
+
+/** Past this many rows in the window something is wrong; the step fails
+    rather than print a partial list. */
+export const CONTEXT_MAX_ROWS = 10_000;
+
+type Page<T> = PromiseLike<{ data: T[] | null; error: { message: string } | null }>;
+
+async function readPages<T>(
+  what: string,
+  page: (from: number, to: number) => Page<T>,
+  size: number,
+  maxRows: number,
+): Promise<T[]> {
+  const out: T[] = [];
+  for (let from = 0; ; from += size) {
+    if (from >= maxRows) throw new Error(`more than ${maxRows} ${what} rows in the window`);
+    const { data, error } = await page(from, from + size - 1);
+    if (error) throw new Error(`could not read ${what}: ${error.message}`);
+    const rows = data ?? [];
+    out.push(...rows);
+    if (rows.length < size) return out;
+  }
+}
+
+/** The context's reads, and nothing else. news_item rows by published_at
+    and manual_news review items by created_at, both since the window's
+    first day and read in pages ordered by id, so no row is read twice or
+    skipped; the active election's election_event rows. Throws on a read
+    error. `pageSize` and `maxRows` are parameters only so the guardrail can
+    drive the paging. */
+export async function readContextRows(
+  db: SupabaseClient,
+  now: Date,
+  pageSize: number = CONTEXT_PAGE,
+  maxRows: number = CONTEXT_MAX_ROWS,
+): Promise<ContextRows> {
+  const since = `${electionWindow(now).from}T00:00:00Z`;
+  const news = await readPages<ContextRows["news"][number]>(
+    "news_item",
+    (from, to) => db.from("news_item").select("url, published_at").gte("published_at", since).order("id").range(from, to),
+    pageSize,
+    maxRows,
+  );
+  const reviews = await readPages<ContextRows["reviews"][number]>(
+    "review_item",
+    (from, to) =>
+      db
+        .from("review_item")
+        .select("payload, status, created_at")
+        .eq("kind", "manual_news")
+        .gte("created_at", since)
+        .order("id")
+        .range(from, to),
+    pageSize,
+    maxRows,
+  );
+  const { data, error } = await db
+    .from("election_event")
+    .select("event_type, county_fips, event_date, details_url, verified_by")
+    .eq("election", ACTIVE_ELECTION);
+  if (error) throw new Error(`could not read election_event: ${error.message}`);
+  return { news, reviews, events: (data ?? []) as ContextRows["events"][number][] };
+}
+
+export interface ContextOutcome {
+  /** 0 when context.json was built; 1 when a read failed. */
+  exitCode: 0 | 1;
+  output: ElectionContext | null;
+  /** The one stderr line. */
+  line: string;
+}
+
+/** The whole `context` run against an injected client. It writes nothing. */
+export async function runElectionContext(db: SupabaseClient, now: Date = new Date()): Promise<ContextOutcome> {
+  let rows: ContextRows;
+  try {
+    rows = await readContextRows(db, now);
+  } catch (err) {
+    return { exitCode: 1, output: null, line: `election-news: context: ${(err as Error).message}` };
+  }
+  const output = buildElectionContext(rows, now);
+  return {
+    exitCode: 0,
+    output,
+    line:
+      `context: window ${output.window.from} to ${output.window.to}; ${output.counties.length} counties, ` +
+      `${output.statewide.length} statewide bodies, ${output.fetch_hosts.length} fetch hosts; ` +
+      `${output.known_urls.length} known URLs; ${output.election_events.length} election dates`,
+  };
 }
