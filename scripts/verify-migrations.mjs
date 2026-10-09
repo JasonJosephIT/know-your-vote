@@ -95,6 +95,16 @@
         an agent_run table, the file's guard rebuilds the exact pre-state, is
         a no-op on its own post-state, and raises on any other agent list
         rather than drop a value.
+    21. 0049_roster_completeness (roster-completeness spec §3.2, §6): the five
+        candidate columns; all 49 seeded county ballot candidates sourced; the
+        five CHECKs; the trigger refuses B4's exact UPDATE on a sourced row as
+        cap_tool_wrapper (which holds no EXECUTE) and lets through an unchanged
+        value, a change with a new source and date, and the running-mate
+        takedown; anon reads the new columns only on a listed race; the file
+        re-applies with its DoE-absent notice; it sorts before any
+        *_content_freeze.sql; its whole-ballot assertions pass on a
+        replica of the 2026-10-08 ballot; and its site UPDATE writes a
+        listed-race find but never a published-race one (D11).
 
 
    Supabase provides the anon/authenticated/service_role roles out of the box;
@@ -1832,6 +1842,301 @@ await probe0048(
   `${agentRunWith(["R1", "R2", "R3", "R4", "dispatcher"])} ALTER TABLE agent_run ADD CONSTRAINT agent_short CHECK (length(agent) < 20);`,
   "raise"
 );
+/* 21. 0049_roster_completeness (docs/superpowers/specs/2026-10-08-roster-
+   completeness-design.md §3.2, §6). Runs last and builds its own fixtures, so
+   the earlier blocks' changes to r-pub and r-draft cannot move it. */
+const rosterFile = files.find((f) => f.endsWith("_roster_completeness.sql"));
+await check("0049 roster_completeness exists and sorts after 0047", async () => {
+  if (!rosterFile) throw new Error("no *_roster_completeness.sql in supabase/migrations");
+  if (!(rosterFile > "0047_candidate_lead_kind.sql")) throw new Error(`${rosterFile} sorts before 0047`);
+});
+/* §3.2: a replay inside the freeze window must apply these UPDATEs before the
+   content-freeze guard exists, or every CI run in the freeze fails. */
+await check("0049 sorts before any *_content_freeze.sql", async () => {
+  const freeze = files.find((f) => f.endsWith("_content_freeze.sql"));
+  if (freeze && rosterFile && !(rosterFile < freeze)) {
+    throw new Error(`${rosterFile} sorts after ${freeze}`);
+  }
+});
+await check("0049 adds the five candidate columns with their types", async () => {
+  const r = await db.query(
+    `SELECT column_name, data_type FROM information_schema.columns
+      WHERE table_name = 'candidate'
+        AND column_name IN ('incumbency_source','incumbency_verified_at','running_mate',
+                            'running_mate_source','running_mate_verified_at')
+      ORDER BY column_name;`
+  );
+  const got = r.rows.map((x) => `${x.column_name}:${x.data_type}`).join(",");
+  const want =
+    "incumbency_source:text,incumbency_verified_at:timestamp with time zone," +
+    "running_mate:text,running_mate_source:text,running_mate_verified_at:timestamp with time zone";
+  if (got !== want) throw new Error(`saw ${got}`);
+});
+await check("0049 gives all 49 seeded county ballot candidates an incumbency source and date", async () => {
+  const r = await db.query(
+    `SELECT count(*)::int AS n,
+            count(*) FILTER (WHERE c.incumbency_source IS NOT NULL
+                               AND c.incumbency_verified_at IS NOT NULL)::int AS sourced
+       FROM race r, unnest(r.candidate_ids) cid
+       JOIN candidate c ON c.candidate_id = cid
+      WHERE r.level = 'county' AND c.ballot_status = 'ballot';`
+  );
+  const { n, sourced } = r.rows[0];
+  if (n !== 49 || sourced !== 49) throw new Error(`${sourced} of ${n} county ballot candidates sourced, expected 49 of 49`);
+});
+await check("0049 county races: is_open_seat = (incumbent_id IS NULL), and FL-HIL-SB4-general names Rendon", async () => {
+  const r = await db.query(
+    `SELECT count(*) FILTER (WHERE is_open_seat <> (incumbent_id IS NULL))::int AS bad,
+            max(incumbent_id) FILTER (WHERE race_id = 'FL-HIL-SB4-general') AS sb4
+       FROM race WHERE level = 'county';`
+  );
+  if (r.rows[0].bad !== 0) throw new Error(`${r.rows[0].bad} county race(s) disagree`);
+  if (r.rows[0].sb4 !== "FL-VF-HIL-2672") throw new Error(`FL-HIL-SB4-general names ${r.rows[0].sb4}`);
+});
+/* The DoE roster (state and federal rows) is not seeded offline, so the DO
+   block must stop at its notice rather than fail. Re-applying the whole file
+   also proves it idempotent: the trigger lets an unchanged value through. */
+await check("0049 re-applies cleanly and notes that the DoE roster is absent offline", async () => {
+  const notices = [];
+  const sql = await readFile(path.join(migrationsDir, rosterFile), "utf8");
+  await db.exec(sql, { onNotice: (n) => notices.push(n.message) });
+  if (!notices.some((m) => /DoE roster absent/.test(m))) {
+    throw new Error(`no DoE-absent notice; saw ${JSON.stringify(notices)}`);
+  }
+});
+
+/* Own fixtures: a listed Governor race and a draft race, one candidate each. */
+await db.exec(`
+  INSERT INTO race (race_id, office, level, election, candidate_ids) VALUES
+    ('r-roster-listed', 'Governor',  'state',   'general', ARRAY['c-roster-gov']),
+    ('r-roster-draft',  'US Senate', 'federal', 'general', ARRAY['c-roster-draft']);
+  INSERT INTO race_publication (race_id, status, published_at) VALUES
+    ('r-roster-listed', 'listed', NULL),
+    ('r-roster-draft',  'draft',  NULL);
+  INSERT INTO candidate (candidate_id, legal_name, party, office_sought, qualifying_status) VALUES
+    ('c-roster-gov',   'Roster Governor', 'NPA', 'Governor',  'qualified'),
+    ('c-roster-draft', 'Roster Draft',    'NPA', 'US Senate', 'qualified');
+`);
+
+await expectConstraintViolation(
+  "0049 CHECK rejects an incumbency source without a date",
+  "UPDATE candidate SET incumbency_source = 'https://example.gov/members' WHERE candidate_id = 'c-roster-gov';",
+  /candidate_incumbency_sourced/
+);
+await expectConstraintViolation(
+  "0049 CHECK rejects a true is_incumbent with no source",
+  "UPDATE candidate SET is_incumbent = true WHERE candidate_id = 'c-roster-gov';",
+  /candidate_incumbent_needs_source/
+);
+await expectConstraintViolation(
+  "0049 CHECK rejects a running mate on a non-Governor row",
+  `UPDATE candidate SET running_mate = 'Test Mate', running_mate_source = 'https://example.gov/c',
+          running_mate_verified_at = '2026-10-09T00:00:00Z' WHERE candidate_id = 'c-roster-draft';`,
+  /candidate_running_mate_governor/
+);
+await expectConstraintViolation(
+  "0049 CHECK rejects two of the three running-mate columns",
+  "UPDATE candidate SET running_mate = 'Test Mate', running_mate_source = 'https://example.gov/c' WHERE candidate_id = 'c-roster-gov';",
+  /candidate_running_mate_sourced/
+);
+await expectConstraintViolation(
+  "0049 CHECK rejects a running mate with a doubled space",
+  `UPDATE candidate SET running_mate = 'Test  Mate', running_mate_source = 'https://example.gov/c',
+          running_mate_verified_at = '2026-10-09T00:00:00Z' WHERE candidate_id = 'c-roster-gov';`,
+  /candidate_running_mate_clean/
+);
+
+await check("0049: no API role holds EXECUTE on candidate_sourced_fact_guard", async () => {
+  const r = await db.query(
+    `SELECT has_function_privilege('cap_tool_wrapper', 'public.candidate_sourced_fact_guard()', 'EXECUTE') AS capw,
+            has_function_privilege('cap_readonly',     'public.candidate_sourced_fact_guard()', 'EXECUTE') AS capr,
+            has_function_privilege('anon',             'public.candidate_sourced_fact_guard()', 'EXECUTE') AS anon,
+            has_function_privilege('authenticated',    'public.candidate_sourced_fact_guard()', 'EXECUTE') AS auth;`
+  );
+  const g = r.rows[0];
+  if (g.capw || g.capr || g.anon || g.auth) throw new Error(`EXECUTE held: ${JSON.stringify(g)}`);
+});
+
+/* B4's write, word for word (Civic Awareness (Know Your Vote)/toollayer/
+   cap_toollayer/store.py:245-247, %s as $n), as the role B4 connects as. The
+   subject is any county row 0049 sourced, so the check does not depend on
+   whom the worksheet found to be an incumbent. */
+const B4_UPDATE = "UPDATE candidate SET is_incumbent = $1, fec_id = COALESCE($2, fec_id) WHERE candidate_id = $3";
+const subject = await db
+  .query(
+    `SELECT candidate_id, is_incumbent, incumbency_source, incumbency_verified_at
+       FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND incumbency_verified_at IS NOT NULL
+      ORDER BY candidate_id LIMIT 1;`
+  )
+  .then((r) => r.rows[0], () => undefined);
+await db.exec("SET ROLE cap_tool_wrapper;");
+await check("0049 trigger: B4's UPDATE cannot flip a sourced is_incumbent, though cap_tool_wrapper has no EXECUTE", async () => {
+  if (!subject) throw new Error("no county candidate carries a 0049 source");
+  try {
+    await db.query(B4_UPDATE, [!subject.is_incumbent, null, subject.candidate_id]);
+  } catch (err) {
+    if (/is_incumbent changed without a new incumbency_source/.test(err.message)) return;
+    throw new Error(`unexpected error: ${err.message}`);
+  }
+  throw new Error(`B4's UPDATE flipped ${subject.candidate_id}`);
+});
+await check("0049 trigger: B4's UPDATE with the unchanged value passes", async () => {
+  if (!subject) throw new Error("no county candidate carries a 0049 source");
+  await db.query(B4_UPDATE, [subject.is_incumbent, null, subject.candidate_id]);
+});
+await check("0049 trigger: a changed is_incumbent with a new source and date passes (a tripwire, not a lock)", async () => {
+  if (!subject) throw new Error("no county candidate carries a 0049 source");
+  await db.query(
+    `UPDATE candidate SET is_incumbent = NOT is_incumbent,
+            incumbency_source = 'https://example.gov/correction',
+            incumbency_verified_at = '2026-10-20T00:00:00Z'
+      WHERE candidate_id = $1`,
+    [subject.candidate_id]
+  );
+  await db.query(
+    `UPDATE candidate SET is_incumbent = $2, incumbency_source = $3, incumbency_verified_at = $4
+      WHERE candidate_id = $1`,
+    [subject.candidate_id, subject.is_incumbent, subject.incumbency_source, subject.incumbency_verified_at]
+  );
+});
+await db.exec("RESET ROLE;");
+
+await check("0049: a Governor row takes a sourced running mate", async () => {
+  await db.exec(`
+    UPDATE candidate SET running_mate = 'First Mate', running_mate_source = 'https://example.gov/can?account=1',
+           running_mate_verified_at = '2026-10-09T00:00:00Z'
+     WHERE candidate_id = 'c-roster-gov';
+  `);
+});
+await check("0049 trigger: a changed running_mate without a new source or date is refused", async () => {
+  try {
+    await db.exec("UPDATE candidate SET running_mate = 'Second Mate' WHERE candidate_id = 'c-roster-gov';");
+  } catch (err) {
+    if (/running_mate changed without a new running_mate_source/.test(err.message)) return;
+    throw new Error(`unexpected error: ${err.message}`);
+  }
+  throw new Error("running_mate changed with no new source");
+});
+await check("0049 trigger: clearing all three running-mate columns passes (the takedown, spec §3.10)", async () => {
+  await db.exec(
+    `UPDATE candidate SET running_mate = NULL, running_mate_source = NULL, running_mate_verified_at = NULL
+      WHERE candidate_id = 'c-roster-gov';`
+  );
+});
+
+await check("0049: both fixture candidates take an incumbency source and date", async () => {
+  await db.exec(`
+    UPDATE candidate SET incumbency_source = 'https://example.gov/members',
+           incumbency_verified_at = '2026-10-09T00:00:00Z'
+     WHERE candidate_id IN ('c-roster-gov', 'c-roster-draft');
+  `);
+});
+await db.exec("SET ROLE anon;");
+await check("0049: anon reads the new columns on a listed race's candidate, not on a draft race's", async () => {
+  const r = await db.query(
+    `SELECT candidate_id, incumbency_source, incumbency_verified_at, running_mate
+       FROM candidate WHERE candidate_id IN ('c-roster-gov', 'c-roster-draft') ORDER BY candidate_id;`
+  );
+  const got = r.rows.map((x) => `${x.candidate_id}:${x.incumbency_source}`).join(",");
+  if (got !== "c-roster-gov:https://example.gov/members") throw new Error(`saw [${got}]`);
+});
+await db.exec("RESET ROLE;");
+
+/* The whole-ballot half of 0049's DO block runs only where the DoE roster
+   exists, which offline is nowhere. Rehearse it on a replica of the
+   2026-10-08 ballot built from the roster fixture: the 57 state and federal
+   candidates and their 21 races, every race's publication status as it was
+   that day, the harness's own r-* races moved out of the general election.
+   All inside a transaction that is rolled back, so nothing after this sees it.
+   This is the check that the live apply's assertions agree with the
+   worksheet's totals before the founder runs it. */
+await check("0049 whole-ballot assertions pass on a replica of the 2026-10-08 ballot", async () => {
+  const roster = JSON.parse(
+    await readFile(path.join(root, "scripts/fixtures/roster/ballot-roster-2026-10-08.json"), "utf8")
+  );
+  const notices = [];
+  await db.exec("BEGIN;");
+  try {
+    await db.exec("UPDATE race SET election = 'primary' WHERE race_id NOT LIKE 'FL-%';");
+    const doe = roster.filter((r) => r.level !== "county");
+    for (const r of doe) {
+      await db.query(
+        `INSERT INTO candidate (candidate_id, legal_name, party, office_sought, qualifying_status, official_site)
+         VALUES ($1, $2, 'NPA', $3, 'qualified', $4);`,
+        [r.candidate_id, r.legal_name, r.race_id === "FL-GOV-general" ? "Governor" : "Replica office",
+         r.has_site ? "https://example.org/" : null]
+      );
+    }
+    for (const raceId of [...new Set(doe.map((r) => r.race_id))]) {
+      const inRace = doe.filter((r) => r.race_id === raceId);
+      await db.query(
+        `INSERT INTO race (race_id, office, level, election, candidate_ids) VALUES ($1, 'Replica', $2, 'general', $3);`,
+        [raceId, inRace[0].level, inRace.map((r) => r.candidate_id)]
+      );
+    }
+    for (const raceId of [...new Set(roster.map((r) => r.race_id))]) {
+      const status = roster.find((r) => r.race_id === raceId).race_status;
+      await db.query(
+        `INSERT INTO race_publication (race_id, status, published_at)
+         VALUES ($1, $2, CASE WHEN $2 = 'published' THEN now() END)
+         ON CONFLICT (race_id) DO UPDATE SET status = EXCLUDED.status, published_at = EXCLUDED.published_at;`,
+        [raceId, status]
+      );
+    }
+    const sql = await readFile(path.join(migrationsDir, rosterFile), "utf8");
+    await db.exec(sql, { onNotice: (n) => notices.push(n.message) });
+  } finally {
+    await db.exec("ROLLBACK;");
+  }
+  if (!notices.some((m) => /^0049: 106 ballot candidates sourced/.test(m))) {
+    throw new Error(`the whole-ballot branch did not finish; notices: ${JSON.stringify(notices)}`);
+  }
+});
+
+/* D11 in the SQL itself: the site UPDATE writes a find only for a candidate
+   in a LISTED race. The worksheet already refuses a published-race find; this
+   proves the migration refuses one too, should a row ever reach the block.
+   Two rows are spliced into the generated sites block of a copy of the file
+   (one per status), the copy runs inside a rolled-back transaction, and only
+   the listed-race row may land. */
+await check("0049 site UPDATE writes a listed-race find and refuses a published-race one (D11)", async () => {
+  const sql = await readFile(path.join(migrationsDir, rosterFile), "utf8");
+  const marker = "    -- END generated: sites";
+  if (!sql.includes(marker)) throw new Error("no generated sites block");
+  const spliced = sql.replace(
+    marker,
+    "    ,('FL-VF-BRO-1179', 'Mark D. Bogen', 'https://listed.example/', '2026-10-09T00:00:00Z')\n" +
+      "    ,('FL-VF-HIL-2880', 'Jackie Toledo', 'https://published.example/', '2026-10-09T00:00:00Z')\n" +
+      marker
+  );
+  let got;
+  await db.exec("BEGIN;");
+  try {
+    await db.exec(`
+      INSERT INTO race_publication (race_id, status, published_at) VALUES
+        ('FL-BRO-CC2-general', 'listed', NULL),
+        ('FL-HIL-CC1-general', 'published', now())
+      ON CONFLICT (race_id) DO UPDATE SET status = EXCLUDED.status, published_at = EXCLUDED.published_at;
+    `);
+    await db.exec(spliced);
+    got = (
+      await db.query(
+        `SELECT candidate_id, official_site FROM candidate
+          WHERE candidate_id IN ('FL-VF-BRO-1179', 'FL-VF-HIL-2880') ORDER BY candidate_id;`
+      )
+    ).rows;
+  } finally {
+    await db.exec("ROLLBACK;");
+  }
+  const bogen = got.find((r) => r.candidate_id === "FL-VF-BRO-1179");
+  const toledo = got.find((r) => r.candidate_id === "FL-VF-HIL-2880");
+  if (bogen?.official_site !== "https://listed.example/") {
+    throw new Error(`listed-race find not written: ${JSON.stringify(bogen)}`);
+  }
+  if (toledo?.official_site === "https://published.example/") {
+    throw new Error("a published-race find was written");
+  }
+});
 
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed`);
