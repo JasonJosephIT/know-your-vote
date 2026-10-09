@@ -253,11 +253,17 @@ async function fetchRaceBrief(raceId: string): Promise<RaceBrief | null> {
    v2: candidates are in Florida's ballot order (ballot-order.ts) rather than
    candidate_ids order. Same shape, different content, so a new key: an entry
    cached by an older deploy would otherwise keep the old order for up to an
-   hour after this one ships. */
+   hour after this one ships.
+
+   v3: candidate rows carry 0049's five columns (incumbency and running
+   mate, roster-completeness spec §3.9). An entry cached before 0049 was
+   applied lacks them, and the running-mate line would stay hidden for up
+   to an hour after this deploy. Missing fields read as "not set", so the
+   worst case was a line hidden, never a wrong one. */
 export function getRaceBrief(raceId: string) {
   return unstable_cache(
     () => fetchRaceBrief(raceId),
-    ["race-brief", "v2", raceId],
+    ["race-brief", "v3", raceId],
     { revalidate: 3600, tags: ["races", `race:${raceId}`] }
   )();
 }
@@ -305,10 +311,11 @@ async function fetchCandidateDetail(
   };
 }
 
+/* v2 for the same reason as getRaceBrief's v3 (0049's columns, spec §3.9). */
 export function getCandidateDetail(candidateId: string) {
   return unstable_cache(
     () => fetchCandidateDetail(candidateId),
-    ["candidate-detail", candidateId],
+    ["candidate-detail", "v2", candidateId],
     { revalidate: 3600, tags: ["races", `candidate:${candidateId}`] }
   )();
 }
