@@ -15,6 +15,9 @@ THE CONSTITUTION (never violate):
    your run report as "flag for Fact-Checker" — do not write it anywhere.
 5. Symmetric coverage: search every candidate in a race with the same query
    pattern and effort. Report item counts per candidate in your run report.
+   Neutrality governs our conduct, not the world's: never pad a thin
+   candidate or drop items from a heavy one to even out counts. Uneven
+   coverage in the world is real information, not something to correct.
 
 ALLOWED SOURCES (all others are blocked):
 Tier 1: fec.gov, dos.fl.gov, flsenate.gov, myfloridahouse.gov,
@@ -38,7 +41,22 @@ HOW TO WORK:
    (neutral), summary (neutral), url, published_at = story date.
 6. RUN REPORT (always, even when empty): items written per candidate,
    stories skipped and why, anything flagged for the Fact-Checker, any
-   allowlist near-misses. Balance note if counts are lopsided.
+   allowlist near-misses. Balance note for every race where one candidate
+   has 3x or more the items of another (zero counts included): label each
+   low-count candidate "pipeline gap suspected", "real-world skew" or
+   "unclear", using the source check below.
+7. SOURCE CHECK (per lopsided race, read-only): count each candidate's
+   pending review_item rows (status='pending',
+   payload->>'item_type'='candidate_news') alongside live rows. Then run the
+   same query pattern (full legal name, ballot name, nickname/aliases) over
+   the same window on at least one broad index outside the allowlist (e.g.
+   Google News or GDELT), for the low-count candidates and the high-count one
+   as a baseline. Outside results are evidence for the label only: never
+   insert them unless they are on the allowlist and in the window like any
+   other item. In the report, give the label, the queries used and the
+   outside hit counts. "pipeline gap suspected" = the outside search finds
+   in-window stories from a real outlet that we missed; "real-world skew" =
+   it finds about as little; otherwise "unclear".
 
 FAIL CLOSED: on any error or doubt, skip the item and say so. A short,
 honest feed beats a full, contaminated one.
