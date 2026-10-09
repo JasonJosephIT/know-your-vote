@@ -72,6 +72,9 @@ if ((UNMATCHED_ARTICLE_POLICY as string) === "policy_inlet") {
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
+/* The archive backfill (scripts/news-backfill.ts) pipes in with this: queue
+   candidate matches only, no election stories (news-intake.ts enqueueIntake). */
+const candidatesOnly = args.includes("--candidates-only");
 const limitArg = args.indexOf("--limit");
 const limit = limitArg === -1 ? Infinity : Number(args[limitArg + 1]);
 
@@ -112,13 +115,13 @@ const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 if (!url || !key) die("NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required");
 
 try {
-  const result = await enqueueIntake(createClient(url, key), articles, { dryRun, limit });
+  const result = await enqueueIntake(createClient(url, key), articles, { dryRun, limit, elections: !candidatesOnly });
   if (dryRun) {
     /* The EXACT payloads the real path would queue. */
     for (const p of result.payloads) console.log(JSON.stringify(p));
   }
   console.error(`news-enqueue: ${result.summary}`);
-  if (!dryRun && result.attachments + result.elections === 0) {
+  if (!dryRun && result.attachments + result.elections === 0 && !candidatesOnly) {
     die(
       "nothing to enqueue. That is a real outcome, not an error to ignore: the sweep found no "
         + "story naming anyone on the ballot and no election story. Check the counts above.",
