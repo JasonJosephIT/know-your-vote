@@ -606,12 +606,18 @@ const EXPECTED_CALLERS = [
   "src/lib/briefs.ts",
   "src/lib/directory.ts",
   "src/lib/listing.ts",
+  /* R4's ops digest (scripts/ops-digest.ts), so its per-race coverage table
+     lists candidates in ballot order too. */
+  "src/lib/ops-digest.ts",
   /* The landing page's race rows (getStatewideRaces), so the names on the
      home page read in the same order as the race page they link to. */
   "src/lib/races.ts",
 ];
+/* Files a plain-Node script loads import by relative path with the .ts
+   extension, since Node knows no @/ alias. */
+const PLAIN_NODE_CALLERS = ["src/lib/ops-digest.ts"];
 check(
-  "orderCandidates is called from the five known places",
+  "orderCandidates is called from the six known places",
   same(callers, EXPECTED_CALLERS),
   callers.join(", ")
 );
@@ -619,9 +625,10 @@ for (const file of callers) {
   const code = src(file);
   check(
     `${file}: takes orderCandidates from ballot-order.ts`,
-    /import \{[^}]*\borderCandidates\b[^}]*\} from "@\/lib\/ballot-order"/.test(
-      code
-    )
+    (PLAIN_NODE_CALLERS.includes(file)
+      ? /import \{[^}]*\borderCandidates\b[^}]*\} from "\.\/ballot-order\.ts"/
+      : /import \{[^}]*\borderCandidates\b[^}]*\} from "@\/lib\/ballot-order"/
+    ).test(code)
   );
   check(
     `${file}: no cast on what it hands orderCandidates`,
