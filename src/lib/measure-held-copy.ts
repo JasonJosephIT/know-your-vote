@@ -23,15 +23,24 @@ export interface HeldNote {
    reporting (measure-resources-verified-2026-09-24.md). The note now says
    that, names no one on either side, and points to the reporting for both
    sides' reasons. Keeping AM1 neutral-only is the recommendation pending
-   founder confirmation (ballots-handoff.md §7). */
+   founder confirmation (ballots-handoff.md §7).
+
+   The freeze, 2026-10-17 (ballot-content-completion §3.5, founder decision
+   BC8, recommended pending founder confirmation): a newly found statement is
+   new content, not a correction, so nothing is added to AM1's page after
+   2026-10-17 and the weekly re-check routine is turned off. Both "yet"s
+   go, because nothing more is coming before Nov 3, and `updated` is the
+   last day the page could change. This wording ships only if AM1 is still
+   held when the freeze-copy PR merges; if 0051 publishes AM1 first, its PR
+   deletes this entry instead (§3.5 step 3). */
 export const HELD_NOTES: Record<string, HeldNote> = {
   "FL-AM1-general": {
     paragraphs: [
       "Supporters and opponents of Amendment 1 have both given reasons for their positions, and the news reports above quote them.",
-      "We add for and against columns only from each side's own case, read at its own source: a statement, testimony or page it published itself. We have read the supporters' case that way, but not yet the opponents', so neither column is shown yet.",
+      "We add for and against columns only from each side's own case, read at its own source: a statement, testimony or page it published itself. We have read the supporters' case that way, but not the opponents', so neither column is shown.",
       "The Legislature's journals record how every member voted on this amendment, but no member filed a written explanation of their vote.",
     ],
-    updated: "2026-10-04",
+    updated: "2026-10-17",
   },
 };
 

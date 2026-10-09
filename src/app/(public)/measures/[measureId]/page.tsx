@@ -154,16 +154,24 @@ export default async function MeasurePage({
                     {p}
                   </p>
                 ))}
+                {/* The freeze (ballot-content-completion §3.5, BC8): nothing
+                    is added to a measure page after 2026-10-17, so the
+                    caption no longer promises a weekly look. */}
                 <p className="max-w-[680px] text-caption text-on-surface-muted">
-                  We look for new statements every week. This note was last
-                  updated {formatNoteDate(note.updated)}.
+                  We stopped adding sources to this page on October 17, 2026,
+                  for this election. This note was last updated{" "}
+                  {formatNoteDate(note.updated)}.
                 </p>
               </>
             ) : (
+              /* A listed measure with no held note (§3.6.4, BC11). Through
+                 Nov 3 only a measure taken down for a correction reaches
+                 this branch, where "being collected" would be false; this
+                 wording is true there and for any future listed measure. */
               <p className="max-w-[680px] text-body-sm text-on-surface-muted">
-                Resources on both sides are being collected. We publish them only
-                when both sides are represented &mdash; until then, this page
-                shows{" "}
+                This page shows no for or against columns right now. We show
+                them only when the sources on both sides meet our rules, which
+                the methodology page explains. Until then, this page shows{" "}
                 {neutral.length > 0
                   ? "the official ballot text and the explainers above, and no case for either side."
                   : "the official ballot text and nothing else."}
