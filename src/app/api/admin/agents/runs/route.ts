@@ -10,7 +10,7 @@ import { createServiceClient } from "@/lib/supabase/service";
    500-ing. Ops-plane read: service-role only, allowlist-gated. */
 
 const query = z.object({
-  agent: z.enum(["R1", "R2", "R3", "R4", "dispatcher"]).optional(),
+  agent: z.enum(["R1", "R2", "R3", "R4", "R5", "dispatcher"]).optional(),
   limit: z.coerce.number().int().min(1).max(100).default(20),
 });
 
