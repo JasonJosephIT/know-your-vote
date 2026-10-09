@@ -76,25 +76,55 @@ R1 first ran on 10-06. With feeds hours to days deep, nothing published before a
 09-29 could be seen, for any candidate. This applies equally to everyone, baselines
 included.
 
-## Can 09-09..10-05 be backfilled?
+## The backfill (built 2026-10-09)
 
-**Partly, and only for some outlets. It is not built, and it needs a founder decision.**
+`scripts/news-backfill.ts` (runbook §9) reaches back through each outlet's own
+archive. Its output goes to the same matcher and the same pending queue as the
+cron, via `news-enqueue.ts --candidates-only`. Every usable outlet has an entry in
+`news-backfill.ts` `ARCHIVES`.
 
-- WUSF publishes monthly archive sitemaps (`sitemap-202609.xml`: 1,918 URLs;
-  `sitemap-202610.xml`: 553). The Moody 10-01 URL is in the October one. They carry
-  URL and `lastmod` but **no title**, so a backfill would also need to fetch each
-  candidate page for its title and description (about 90 `/politics-issues/` URLs for
-  the window, fewer after a date filter). That is a new retrieval mode.
-- Under the neutrality rule, a backfill cannot be Moody-only or WUSF-only. It has to run
-  the same matcher over every registered outlet that has a dated archive. Outlets with
-  RSS only have no archive, so a backfill would cover the window **unevenly by outlet**,
-  and the coverage notes would need to say so. How many of the 22 outlets have an
-  archive is not yet measured.
-- Backfilled stories would still enter `review_item` as pending and go through /admin
-  like any other row.
+**Read-only run, 2026-09-09 to 2026-10-09** (GET requests plus a roster read;
+nothing written):
 
-Recommendation: decide whether to build it before the 10-18 content freeze. If yes,
-build it as a general archive-backfill pass and measure archive coverage per outlet first.
+| How the outlet was reached | Outlets | Reach |
+| --- | --- | --- |
+| Paged WordPress feed (titled, with deks) | wsvn, lefloridien, floridabulldog, thewestsidegazette, sfltimes, floridadaily, flvoicenews, floridianpress | back to 09-09/10/11 |
+| URL archive sitemap, page heads read when the slug names a roster surname | wlrn, wusf, cfpublic, wfsu, cbsnews.com/miami, diariolasamericas, local10, fox35orlando, cltampa, orlandoweekly | back to 09-09/10/13/14; orlandoweekly to 09-24 |
+| No archive; current feed only | americateve (feed reaches 09-09), wtsp (10-08), wftv (10-07) | partial |
+| **Skipped**: robots.txt shuts Claude agents out of `/` | nbcmiami, clickorlando, newsserviceflorida | none |
+
+The run produced 2,372 articles. The enqueue dry run against the live roster
+gave 457 candidate attachments (449 named, 8 related). **377 are new**; 80
+were already queued or published. For the statewide races:
+
+| Candidate | New pending rows | Of them published before 09-30 |
+| --- | --- | --- |
+| Ashley Moody | 26 | 17 |
+| Angie Nixon | 39 | 25 |
+| Byron Donalds | 79 | 63 |
+| David Jolly | 74 | 65 |
+
+The minor gubernatorial candidates and Gillespie still have **zero**. That
+confirms the source check's real-skew call for them. The missed WUSF 10-01
+Moody story is among the new rows.
+
+**What the slug pre-filter costs.** This was measured on the titled feeds,
+where every matched story is known. Of 339 named matches, 240 have the
+candidate's surname in the URL.
+- Of stories naming the candidate **in the headline**, 240 of 255 (94%) would
+  pass the pre-filter.
+- Of stories naming them **only in the summary** (mostly roundups), 84 of 99 would not.
+
+So the URL-archive outlets under-reach summary-only mentions. The rule is the
+same for every candidate, so the loss is by outlet, not by candidate.
+
+**Not done: the live enqueue.** It would add 377 pending items to the /admin
+queue before the 10-18 content freeze. It needs a go-ahead.
+
+```bash
+node scripts/news-backfill.ts --from 2026-09-09 --report backfill-report.json > backfill.json
+node scripts/news-enqueue.ts --candidates-only < backfill.json
+```
 
 ## The two side questions
 
@@ -121,4 +151,7 @@ No change, so **no migration and no number claimed.**
   mostly nation-world syndication and needs a local filter; Westside Gazette has only
   Yoast post sitemaps, with no titles. Each needs its own include filter and a check.
 - **NBC Miami robots.txt and the AI-crawler hold.** Founder call, see §2.
-- **Archive backfill.** Founder call, see above.
+- **Archive backfill live enqueue.** Needs a go-ahead, see above.
+- **clickorlando.com and newsserviceflorida.com** also shut Claude agents out
+  in robots.txt (2026-10-09), and neither is on `AI_POLICY_HOLD`. This is the
+  same founder call as NBC.

@@ -63,14 +63,20 @@ const MAX_FEED_PAGES = 60;
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-/** One GET as text (gunzipped when the body is gzip), or null with the reason. */
-async function get(url: string, accept = "*/*"): Promise<{ text: string } | { error: string }> {
+/** One GET as text (gunzipped when the body is gzip), or null with the reason.
+    A 429 is retried twice, after Retry-After (capped at 60s) or 20s. */
+async function get(url: string, accept = "*/*", attempt = 0): Promise<{ text: string } | { error: string }> {
   try {
     const res = await fetch(url, {
       headers: { "user-agent": USER_AGENT, accept },
       redirect: "follow",
       signal: AbortSignal.timeout(30_000),
     });
+    if (res.status === 429 && attempt < 2) {
+      const wait = Math.min(Number(res.headers.get("retry-after")) || 20, 60);
+      await sleep(wait * 1000);
+      return get(url, accept, attempt + 1);
+    }
     if (!res.ok) return { error: `HTTP ${res.status}` };
     let buf = Buffer.from(await res.arrayBuffer());
     if (buf[0] === 0x1f && buf[1] === 0x8b) buf = gunzipSync(buf);
