@@ -118,8 +118,48 @@ candidate's surname in the URL.
 So the URL-archive outlets under-reach summary-only mentions. The rule is the
 same for every candidate, so the loss is by outlet, not by candidate.
 
-**Not done: the live enqueue.** It would add 377 pending items to the /admin
-queue before the 10-18 content freeze. It needs a go-ahead.
+**Live enqueue: done 2026-10-09 16:41:42 UTC, founder-approved.** Scope:
+stories published 09-09 to 10-05 (UTC), queued to `review_item` only, as
+pending. The input was the read-only run above, cut to that window: 1,784
+articles. `news-enqueue.ts --candidates-only` queued **360** and skipped 25
+that were already queued, decided or published.
+
+Checked by SQL afterwards:
+- 360 new rows, all pending, all carrying a candidate, all published before 10-06.
+- `review_item` went from 179 to 539; `news_item` stayed at 97.
+
+| By outlet | Rows |
+| --- | --- |
+| floridianpress | 126 |
+| flvoicenews | 110 |
+| wlrn | 31 |
+| wusf | 21 |
+| cltampa | 18 |
+| floridadaily | 14 |
+| cbsnews.com/miami, local10 | 11 each |
+| diariolasamericas, wfsu | 4 each |
+| lefloridien, cfpublic, thewestsidegazette, wsvn | 2 each |
+| americateve, orlandoweekly | 1 each |
+
+| By race | Rows |
+| --- | --- |
+| Governor | Donalds 74, Jolly 71 |
+| Senate | Nixon 37, Moody 26 |
+| Attorney General | Uthmeier 49, J. J. Rodriguez 5 |
+| FL-27 | Salazar 21, E. Rodriguez 2 |
+| FL-22 | Dandiya 9, Askar 6 |
+| FL-25 | Moskowitz 9, Singer 8 |
+| Agriculture | Simpson 5 |
+| FL-7 | Dalton 5, Elijah 5 |
+| FL-14 | Castor 4, Beltran 1 |
+| FL-9 | Soto 4, Green 3 |
+| FL-20 | Wasserman Schultz 3 |
+| FL-28 | Gimenez 3, Ehr 1 |
+| FL-26 | Diaz-Balart 2, Locklin 1 |
+| FL-8 | Haridopolos 2, Jenkins 1 |
+| FL-10, FL-12, FL-15 | 1 each |
+
+Re-running the same commands is safe: anything already queued is skipped.
 
 ```bash
 node scripts/news-backfill.ts --from 2026-09-09 --report backfill-report.json > backfill.json
@@ -151,7 +191,6 @@ No change, so **no migration and no number claimed.**
   mostly nation-world syndication and needs a local filter; Westside Gazette has only
   Yoast post sitemaps, with no titles. Each needs its own include filter and a check.
 - **NBC Miami robots.txt and the AI-crawler hold.** Founder call, see §2.
-- **Archive backfill live enqueue.** Needs a go-ahead, see above.
 - **clickorlando.com and newsserviceflorida.com** also shut Claude agents out
   in robots.txt (2026-10-09), and neither is on `AI_POLICY_HOLD`. This is the
   same founder call as NBC.
