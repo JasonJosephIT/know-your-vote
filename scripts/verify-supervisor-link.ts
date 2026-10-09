@@ -22,7 +22,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { COVERED_COUNTIES } from "../src/lib/counties.ts";
-import { SUPERVISOR_LIST_URL, supervisorLink } from "../src/lib/supervisors.ts";
+import { SUPERVISOR_LIST_URL, supervisorLink, supervisorSite } from "../src/lib/supervisors.ts";
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 
@@ -81,7 +81,17 @@ check(
   SUPERVISOR_LIST_URL === "https://dos.fl.gov/elections/contacts/supervisor-of-elections/"
 );
 
-console.log("\n3. Source");
+console.log("\n3. supervisorSite (the hosts R2's date sources and R3's notices accept)");
+for (const county of COVERED_COUNTIES) {
+  check(
+    `supervisorSite(${county.fips}) is ${county.name}'s link`,
+    supervisorSite(county.fips) === supervisorLink(county.fips).url,
+    String(supervisorSite(county.fips))
+  );
+}
+check("supervisorSite is null for an uncovered county", supervisorSite("12099") === null);
+
+console.log("\n4. Source");
 const files: string[] = [];
 (function walk(dir: string) {
   for (const name of readdirSync(dir)) {

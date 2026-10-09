@@ -40,6 +40,14 @@ export type SupervisorLink = {
   label: string;
 };
 
+/* The covered county's Supervisor of Elections home page, or null for any
+   other county. src/lib/official-sources.ts builds its four county entries
+   from this, so the Supervisor hosts the approve path and R3's queue accept
+   come from this one map (agent-retrofit spec §3.4). */
+export function supervisorSite(countyFips: string): string | null {
+  return SUPERVISOR_SITES[countyFips] ?? null;
+}
+
 export function supervisorLink(countyFips?: string | null): SupervisorLink {
   const county = countyFips ? coveredCounty(countyFips) : undefined;
   const url = county ? SUPERVISOR_SITES[county.fips] : undefined;

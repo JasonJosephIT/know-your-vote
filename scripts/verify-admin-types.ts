@@ -9,6 +9,7 @@
 
 import {
   CandidateLeadPayloadSchema,
+  DateMismatchPayloadSchema,
   DecisionBodySchema,
   IngestBodySchema,
   ManualNewsPayloadSchema,
@@ -206,6 +207,57 @@ assert(
 assert(
   "review content: an unknown kind is rejected by the union",
   !ReviewItemContentSchema.safeParse({ kind: "made_up", payload: {} }).success
+);
+
+/* ---- date_mismatch: the race form and the election_event form ------------
+   (agent-retrofit spec §3.6, D3). Both strict, so neither can pass as the
+   other by carrying the other's keys. */
+const raceForm = {
+  race_id: "race-1",
+  field: "key_dates",
+  db_value: "2026-08-18",
+  official_value: "2026-08-20",
+  source_url: "https://example.gov/calendar",
+};
+const eventForm = {
+  target: "election_event",
+  election: "general_2026",
+  event_type: "early_voting_start",
+  county_fips: "12011",
+  db_value: "2026-10-19",
+  official_value: "2026-10-20",
+  source_url: "https://browardvotes.gov/voters/early-voting-ballot-return",
+  seen_at: "2026-10-12T12:00:00.000Z",
+};
+assert("date_mismatch: the race form parses", DateMismatchPayloadSchema.safeParse(raceForm).success);
+assert("date_mismatch: the election_event form parses", DateMismatchPayloadSchema.safeParse(eventForm).success);
+assert(
+  "date_mismatch: a statewide election_event row (county_fips null) parses",
+  DateMismatchPayloadSchema.safeParse({ ...eventForm, county_fips: null }).success
+);
+assert(
+  "date_mismatch: the union accepts the election_event form",
+  ReviewItemContentSchema.safeParse({ kind: "date_mismatch", payload: eventForm }).success
+);
+assert(
+  "date_mismatch: an election_event payload carrying a stray race_id is refused",
+  !DateMismatchPayloadSchema.safeParse({ ...eventForm, race_id: "race-1" }).success
+);
+assert(
+  "date_mismatch: a race payload carrying target is refused",
+  !DateMismatchPayloadSchema.safeParse({ ...raceForm, target: "election_event" }).success
+);
+assert(
+  "date_mismatch: an unknown key on the race form is refused",
+  !DateMismatchPayloadSchema.safeParse({ ...raceForm, note: "x" }).success
+);
+assert(
+  "date_mismatch: an election_event date not in YYYY-MM-DD is refused",
+  !DateMismatchPayloadSchema.safeParse({ ...eventForm, official_value: "Oct 20" }).success
+);
+assert(
+  "date_mismatch: an election_event county that is not 5 digits is refused",
+  !DateMismatchPayloadSchema.safeParse({ ...eventForm, county_fips: "Broward" }).success
 );
 
 /* ---- candidate_lead (R5, spec 2026-10-07) ------------------------------ */

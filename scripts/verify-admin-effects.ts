@@ -237,6 +237,29 @@ assert(
   dateMismatch("qualifying_status").type === "refuse"
 );
 
+/* The election_event form (R2, agent-retrofit D3) records the finding and
+   never writes: a date there changes only through a reviewed migration. */
+const eventDate = planEffect({
+  kind: "date_mismatch",
+  payload: {
+    target: "election_event",
+    election: "general_2026",
+    event_type: "early_voting_start",
+    county_fips: null,
+    db_value: "2026-10-24",
+    official_value: "2026-10-23",
+    source_url: "https://dos.fl.gov/elections/for-voters/election-dates/",
+    seen_at: "2026-10-12T12:00:00.000Z",
+  },
+});
+assert(
+  "date_mismatch election_event form → record_disposition, never a write",
+  eventDate.type === "record_disposition" &&
+    eventDate.note ===
+      "Recorded. Change election_event through a reviewed migration: reminders and the calendar read this table.",
+  JSON.stringify(eventDate)
+);
+
 /* ---- disposition kinds (no content write) ------------------------------- */
 for (const kind of ["fact_flag", "unclear_statement", "unverified_fact"]) {
   assert(

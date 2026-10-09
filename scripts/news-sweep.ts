@@ -32,7 +32,7 @@ const args = process.argv.slice(2);
 const days = Number(args[args.indexOf("--days") + 1]) || 14;
 
 /* The fetch, its user agent and its failure logging live in
-   src/lib/news-intake.ts, shared with the twice-weekly cron. */
+   src/lib/news-intake.ts, shared with the daily cron. */
 const get = (url: string) => fetchText(url, (line) => console.error(line));
 
 if (args.includes("--probe")) {
@@ -52,10 +52,11 @@ if (args.includes("--probe")) {
 }
 
 /* The sweep itself is src/lib/news-intake.ts runSweep, the same code the
-   twice-weekly cron runs (src/app/api/cron/news-sweep/route.ts). */
+   daily cron runs (src/app/api/cron/news-sweep/route.ts). */
 try {
   const result = await runSweep({ days, log: (line) => console.error(line) });
   console.error(result.summary);
+  console.error(result.depthLine);
   console.log(JSON.stringify(result.articles, null, 2));
 } catch (err) {
   console.error((err as Error).message + "\nFill those in (see the header of src/lib/news-sources.ts) — run --probe to find the feeds.");
