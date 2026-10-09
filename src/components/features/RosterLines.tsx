@@ -1,3 +1,4 @@
+import { incumbencyLine, type Incumbency } from "@/lib/incumbency";
 import { runningMateLine, type RunningMates } from "@/lib/running-mate";
 
 /* The roster lines a card can carry besides its name and party (spec
@@ -17,5 +18,19 @@ export function RunningMateLine({
   candidateId: string;
 }) {
   const text = runningMateLine(runningMates, candidateId);
+  return text ? <p className="text-caption text-on-surface-muted">{text}</p> : null;
+}
+
+/** "<label>: Yes" or "<label>: No", under the party chip, on every card in a
+    race or none (incumbency.ts). One template for both values, so a Yes and
+    a No differ only in that word. */
+export function IncumbencyLine({
+  incumbency,
+  candidateId,
+}: {
+  incumbency: Incumbency | null;
+  candidateId: string;
+}) {
+  const text = incumbencyLine(incumbency, candidateId);
   return text ? <p className="text-caption text-on-surface-muted">{text}</p> : null;
 }

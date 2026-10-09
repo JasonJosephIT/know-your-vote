@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ListedCandidateCard } from "@/components/features/RaceListing";
 import { raceStatusLine, statusBranch } from "@/lib/listing-copy";
 import type { CandidateListing as CandidateListingData } from "@/lib/listing";
+import type { Incumbency } from "@/lib/incumbency";
 import type { RunningMates } from "@/lib/running-mate";
 
 /* The candidate page for a race that is listed but not yet briefed. Same card
@@ -17,9 +18,12 @@ import type { RunningMates } from "@/lib/running-mate";
    is not on this page. */
 export function CandidateListing({
   listing,
+  incumbency,
   runningMates,
 }: {
   listing: CandidateListingData;
+  /** The race's incumbency line, from the same rows the race page uses. */
+  incumbency: Incumbency | null;
   /** The race's running mates, from the same rows the race page uses. */
   runningMates: RunningMates | null;
 }) {
@@ -52,6 +56,7 @@ export function CandidateListing({
       <ListedCandidateCard
         data={{ candidate: listing.candidate, socials: listing.socials }}
         status={listing.status}
+        incumbency={incumbency}
         runningMates={runningMates}
         headingLevel="h1"
         linkToDetail={false}

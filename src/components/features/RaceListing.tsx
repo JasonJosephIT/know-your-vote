@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { PartyChip } from "@/components/ui/PartyChip";
-import { Chip } from "@/components/ui/Chip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
 import { CampaignWebsite } from "@/components/features/CampaignWebsite";
-import { RunningMateLine } from "@/components/features/RosterLines";
+import { IncumbencyLine, RunningMateLine } from "@/components/features/RosterLines";
 import { safeHttpUrl } from "@/lib/format";
-import { showIncumbentChip } from "@/lib/incumbency";
+import type { Incumbency } from "@/lib/incumbency";
 import { listingCardLine } from "@/lib/listing-copy";
 import type { RunningMates } from "@/lib/running-mate";
 import type {
@@ -27,9 +26,10 @@ import type {
 
    Header markup mirrors CandidateBrief's header so a race moving from listed
    to published changes what is under the name, not the name block itself.
-   That includes the Incumbent chip's gate, showIncumbentChip, which is off
-   for every candidate until incumbency is filled for all of them
-   (src/lib/incumbency.ts), and the accessibility fixes from
+   That includes the two race-level lines (RosterLines: incumbency and
+   running mate), which every card in a race shows or none does
+   (src/lib/incumbency.ts, src/lib/running-mate.ts), and the accessibility
+   fixes from
    a11y-perf-2026-10-04.md: the candidate's name as a visually hidden suffix
    on "Keep in mind" and the campaign-website link (fix 6; WCAG 2.4.4,
    2.4.6, label first for 2.5.3), and a 24 px minimum height on the site
@@ -42,12 +42,15 @@ export function ListedCandidateCard({
   status,
   headingLevel = "h2",
   linkToDetail = true,
+  incumbency,
   runningMates,
 }: {
   data: ListedCandidate;
   status: RaceListingData["status"];
   headingLevel?: "h1" | "h2" | "h3";
   linkToDetail?: boolean;
+  /** The race's incumbency line (incumbencyFor), computed once per race. */
+  incumbency: Incumbency | null;
   /** The race's running mates (runningMatesFor), computed once per race. */
   runningMates: RunningMates | null;
 }) {
@@ -72,12 +75,12 @@ export function ListedCandidateCard({
         <RunningMateLine runningMates={runningMates} candidateId={candidate.candidate_id} />
         <div className="flex flex-wrap items-center gap-2">
           <PartyChip party={candidate.party} />
-          {showIncumbentChip(candidate) && <Chip>Incumbent</Chip>}
           <SaveToggle
             candidateId={candidate.candidate_id}
             name={candidate.legal_name}
           />
         </div>
+        <IncumbencyLine incumbency={incumbency} candidateId={candidate.candidate_id} />
         <p className="flex flex-wrap gap-x-3 gap-y-1 text-caption text-on-surface-muted">
           <CampaignWebsite url={candidate.official_site} name={candidate.legal_name} />
           {socials.map((s) => {
@@ -127,9 +130,11 @@ export function ListedCandidateCard({
    reading order matching visual order. */
 export function RaceListing({
   listing,
+  incumbency,
   runningMates,
 }: {
   listing: RaceListingData;
+  incumbency: Incumbency | null;
   runningMates: RunningMates | null;
 }) {
   const count = listing.candidates.length;
@@ -143,6 +148,7 @@ export function RaceListing({
           key={c.candidate.candidate_id}
           data={c}
           status={listing.status}
+          incumbency={incumbency}
           runningMates={runningMates}
         />
       ))}

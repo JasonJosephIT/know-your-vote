@@ -6,6 +6,7 @@ import { CandidateNews } from "@/components/features/CandidateNews";
 import { TrackView } from "@/components/features/TrackView";
 import { getCandidateDetail, getRaceBrief } from "@/lib/briefs";
 import { getCandidateListing, getRaceListing } from "@/lib/listing";
+import { incumbencyFor, type Incumbency } from "@/lib/incumbency";
 import { officeTitle } from "@/lib/office-title";
 import { runningMatesFor, type RunningMates } from "@/lib/running-mate";
 
@@ -31,6 +32,7 @@ async function runningFor(
 ): Promise<{
   office: string;
   settled: string | null;
+  incumbency: Incumbency | null;
   runningMates: RunningMates | null;
 }> {
   const brief = await getRaceBrief(raceId);
@@ -48,6 +50,7 @@ async function runningFor(
   return {
     office: race ? officeTitle(race) : office,
     settled,
+    incumbency: race ? incumbencyFor(race, raceCandidates) : null,
     runningMates: runningMatesFor(raceCandidates),
   };
 }
@@ -90,11 +93,12 @@ export default async function CandidatePage({
     if (listing) {
       /* CandidateListing prints "Running for {office}"; it gets the
          district-named office (runningFor). */
-      const { office, runningMates } = await runningFor(listing.raceId, listing.office);
+      const { office, incumbency, runningMates } = await runningFor(listing.raceId, listing.office);
       return (
         <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
           <CandidateListing
             listing={{ ...listing, office }}
+            incumbency={incumbency}
             runningMates={runningMates}
           />
           <CandidateNews candidateId={candidateId} />
@@ -119,7 +123,7 @@ export default async function CandidatePage({
     );
   }
 
-  const { office, settled, runningMates } = await runningFor(detail.raceId, detail.office);
+  const { office, settled, incumbency, runningMates } = await runningFor(detail.raceId, detail.office);
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
       <p className="text-body-sm text-on-surface-muted">
@@ -137,6 +141,7 @@ export default async function CandidatePage({
         data={detail.brief}
         headingLevel="h2"
         linkToDetail={false}
+        incumbency={incumbency}
         runningMates={runningMates}
       />
       {/* No `slots` prop on purpose: news-fairness.md §5 says N is picked from

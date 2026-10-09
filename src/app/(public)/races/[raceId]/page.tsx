@@ -15,6 +15,7 @@ import { officeTitle } from "@/lib/office-title";
 import { spineOptions } from "@/lib/issue-pick";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
+import { incumbencyFor } from "@/lib/incumbency";
 import { runningMatesFor } from "@/lib/running-mate";
 
 export const revalidate = 3600;
@@ -163,7 +164,11 @@ export default async function RacePage({
         options={spineOptions(brief.spineIssues)}
         selected={[]}
       />
-      <RaceCompare brief={brief} runningMates={runningMatesFor(raceCandidates)} />
+      <RaceCompare
+        brief={brief}
+        incumbency={incumbencyFor(brief.race, raceCandidates)}
+        runningMates={runningMatesFor(raceCandidates)}
+      />
 
       <footer className="flex flex-wrap gap-4 text-caption text-on-surface-muted">
         <Link href="/methodology" className="underline underline-offset-2">
@@ -206,7 +211,11 @@ function ListedRace({ listing }: { listing: RaceListingData }) {
         {copy.countyNote && <p>{copy.countyNote}</p>}
       </section>
 
-      <RaceListing listing={listing} runningMates={runningMatesFor(raceCandidates)} />
+      <RaceListing
+        listing={listing}
+        incumbency={incumbencyFor(listing.race, raceCandidates)}
+        runningMates={runningMatesFor(raceCandidates)}
+      />
 
       <footer className="flex flex-wrap gap-4 text-caption text-on-surface-muted">
         <Link href="/methodology" className="underline underline-offset-2">
