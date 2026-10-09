@@ -1132,17 +1132,19 @@ await check("unpublishing logs an unpublish and keeps the last-published time", 
   await db.exec(
     "SELECT set_race_publication('r-draft','in_review','op@example.com','pulled back');"
   );
+  /* Pick this call's row by its reason, not by created_at: the publish and
+     unpublish rows can share a timestamp, and on a tie 'publish' sorts first. */
   const r = await db.query(`
     SELECT rp.status, rp.published_at,
            (SELECT action FROM admin_action WHERE subject_ref='r-draft'
-             ORDER BY created_at DESC, action LIMIT 1) AS latest_action,
+             AND detail->>'reason'='pulled back') AS logged_action,
            (SELECT count(*)::int FROM admin_action WHERE subject_ref='r-draft') AS n
       FROM race_publication rp WHERE rp.race_id='r-draft';`);
   const g = r.rows[0];
   if (g.status !== "in_review") throw new Error(`status=${g.status}`);
   if (String(g.published_at) !== String(before.rows[0].published_at))
     throw new Error("published_at must survive an unpublish");
-  if (g.latest_action !== "unpublish") throw new Error(`latest_action=${g.latest_action}`);
+  if (g.logged_action !== "unpublish") throw new Error(`logged_action=${g.logged_action}`);
   if (g.n !== 2) throw new Error(`expected 2 audit rows, saw ${g.n}`);
 });
 
@@ -1217,10 +1219,11 @@ await check("set_race_publication lists a race, logs 'list', and never stamps pu
   await db.exec(
     "SELECT set_race_publication('r-draft','listed','op@example.com','roster is public record');"
   );
+  /* By reason, not created_at, for the same reason as the unpublish check. */
   const r = await db.query(`
     SELECT rp.status, rp.published_at,
            (SELECT action FROM admin_action WHERE subject_ref='r-draft'
-             ORDER BY created_at DESC, action LIMIT 1) AS latest_action,
+             AND detail->>'reason'='roster is public record') AS logged_action,
            (SELECT detail->>'new_status' FROM admin_action WHERE subject_ref='r-draft'
              AND action='list') AS logged_status,
            (SELECT detail->>'prior_status' FROM admin_action WHERE subject_ref='r-draft'
@@ -1230,7 +1233,7 @@ await check("set_race_publication lists a race, logs 'list', and never stamps pu
   if (g.status !== "listed") throw new Error(`status=${g.status}`);
   if (String(g.published_at) !== String(before.rows[0].published_at))
     throw new Error("listing must leave published_at alone");
-  if (g.latest_action !== "list") throw new Error(`latest_action=${g.latest_action}`);
+  if (g.logged_action !== "list") throw new Error(`logged_action=${g.logged_action}`);
   if (g.logged_status !== "listed" || g.logged_prior !== "in_review")
     throw new Error(`logged ${g.logged_prior} -> ${g.logged_status}`);
 });

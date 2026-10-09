@@ -21,7 +21,8 @@
 #            after the deadline (exit 3), runs the script with the arm64 node
 #            under a hard timeout (exit 4 on expiry), prints the script's
 #            stderr summary and the output file's path; a failing script
-#            exits 1
+#            exits 1, except on a "finding" row (R4 lint), which records the
+#            exit code in its output file and exits 0
 # `watch` has only its table rows: no start, no pointer, never a refresh.
 #
 # Exit codes: 0 ok; 1 the step failed; 2 unknown agent, step or argument;
@@ -53,13 +54,20 @@ REPORTS="/Users/jsloth/Projects/Civic Awareness Project(Know Your Vote)/Civic Aw
 
 ROUTINE="R2 R3 R4 R5"
 
-# agent|step|script (in $WT)|arguments ({dir} = the run directory)|stdin file|stdout file|timeout (s)
-# "-" is none: no stdin file, or stdout printed instead of saved. Each PR adds
-# its own agent's rows; scripts/verify-agent-run.mjs checks every script exists.
+# agent|step|script (in $WT)|arguments ({dir} = the run directory)|stdin file|stdout file|timeout (s)[|finding]
+# "-" is none: no stdin file, or stdout printed instead of saved; an empty
+# arguments field passes none. An eighth field "finding" marks a check whose
+# non-zero exit is a finding, not a failure (R4's lint, spec §3.1): the step
+# appends "exit: N" to its output file and exits 0. A timeout still exits 4,
+# and a crash (exit 125 or more: no fork, no exec, a signal) still exits 1.
+# Each PR adds its own agent's rows; scripts/verify-agent-run.mjs checks
+# every script exists.
 ROWS='R5|prep|scripts/candidate-leads.ts|prep --days 14|-|stories.json|540
 R5|check|scripts/candidate-leads.ts|check --stories {dir}/stories.json|mentions.json|leads.json|300
 R5|queue-dry|scripts/candidate-leads.ts|queue --dry-run|verified.json|queue-dry.txt|300
 R5|queue|scripts/candidate-leads.ts|queue|verified.json|queue.txt|300
+R4|digest|scripts/ops-digest.ts||task-runs.json|digest.json|300
+R4|lint|scripts/verify-news-neutrality.ts||-|lint.txt|300|finding
 watch|stale|scripts/agent-run-log.ts|stale|-|-|120
 watch|check|scripts/agent-run-log.ts|watch --runs {dir}/runs.json --notified {dir}/notified.txt|-|-|120
 R3|context|scripts/election-news.ts|context|-|context.json|300
@@ -237,7 +245,7 @@ cmd_finish() {
 cmd_table() {
   row=$(printf '%s\n' "$ROWS" | awk -F'|' -v a="$AGENT" -v s="$STEP" '$1 == a && $2 == s { print; exit }')
   [ -n "$row" ] || die 2 "unknown step for $AGENT: $STEP"
-  IFS='|' read -r _agent _step script argv input output secs <<EOF
+  IFS='|' read -r _agent _step script argv input output secs mode <<EOF
 $row
 EOF
   if [ "$AGENT" = watch ]; then
@@ -281,6 +289,11 @@ EOF
     rc=$?
   fi
   cat "$log"
+  if [ "$mode" = finding ] && [ "$rc" -lt 124 ]; then
+    printf 'exit: %s\n' "$rc" >> "$DIR/$output"
+    [ "$rc" -eq 0 ] || echo "finding: $AGENT $STEP exited $rc: the lines above say why; $DIR/$output ends with the exit code"
+    rc=0
+  fi
   case $rc in
     0) ;;
     124)
