@@ -58,6 +58,7 @@ export function CandidateListing({
         status={listing.status}
         incumbency={incumbency}
         runningMates={runningMates}
+        raceId={listing.raceId}
         headingLevel="h1"
         linkToDetail={false}
       />

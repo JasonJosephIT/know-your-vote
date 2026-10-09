@@ -105,6 +105,19 @@
         *_content_freeze.sql; its whole-ballot assertions pass on a
         replica of the 2026-10-08 ballot; and its site UPDATE writes a
         listed-race find but never a published-race one (D11).
+    22. 0050_content_freeze: one content_freeze row; the guard is SECURITY
+        DEFINER, owned by postgres, with an empty search_path, and nobody but
+        the owner and service_role may EXECUTE it; its 21 triggers exist.
+        Inside the window a frozen write is refused with the freeze message
+        (for cap_tool_wrapper too, not a permission error) and goes through
+        under kyv.freeze_correction with a NOTICE; a takedown to listed,
+        the freshness stamps, key_dates, an UPDATE that changes nothing and
+        a new or uncited source row go through without it; a DELETE or
+        INSERT of a publication row, candidate, race or cited source, and a
+        whitespace-only setting, are refused. starts_at is inclusive and
+        ends_at exclusive. Outside the window everything goes through. A
+        re-run of 0050 keeps a moved window and revokes EXECUTE by name
+        again.
 
 
    Supabase provides the anon/authenticated/service_role roles out of the box;
@@ -122,6 +135,12 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const migrationsDir = path.join(root, "supabase", "migrations");
 
 const db = new PGlite({ extensions: { pgcrypto } });
+/* 0050's content freeze refuses writes to ballot tables from 2026-10-18 04:00
+   UTC to 2026-11-04 05:00 UTC unless this setting is non-empty. Set for the
+   whole session, before the replay, so this check keeps passing inside the
+   window; the 0050 section at the end turns it off per transaction to test
+   the refusals (docs/general-election/corrections/README.md). */
+await db.exec("SET kyv.freeze_correction = 'pglite replay';");
 let failures = 0;
 
 async function check(name, fn) {
@@ -1843,8 +1862,8 @@ await probe0048(
   "raise"
 );
 /* 21. 0049_roster_completeness (docs/superpowers/specs/2026-10-08-roster-
-   completeness-design.md §3.2, §6). Runs last and builds its own fixtures, so
-   the earlier blocks' changes to r-pub and r-draft cannot move it. */
+   completeness-design.md §3.2, §6). Builds its own fixtures, so the earlier
+   blocks' changes to r-pub and r-draft cannot move it; 22 (0050) follows. */
 const rosterFile = files.find((f) => f.endsWith("_roster_completeness.sql"));
 await check("0049 roster_completeness exists and sorts after 0047", async () => {
   if (!rosterFile) throw new Error("no *_roster_completeness.sql in supabase/migrations");
@@ -2135,6 +2154,370 @@ await check("0049 site UPDATE writes a listed-race find and refuses a published-
   }
   if (toledo?.official_site === "https://published.example/") {
     throw new Error("a published-race find was written");
+  }
+});
+
+/* ---------------------------------------------------------------- *
+ * 22. 0050_content_freeze (ballot-content-completion §3.6.2, BC9).
+ *
+ * Everything above ran with kyv.freeze_correction = 'pglite replay' (set at
+ * the top of this file). Each case below opens a transaction, turns that
+ * bypass off for the transaction only (set_config(..., true)), runs one
+ * statement and rolls back, so the fixtures stay as they were. The window
+ * is moved around now(), into the future or into the past explicitly, so no
+ * case depends on today's date.
+ * ---------------------------------------------------------------- */
+
+const FROZEN =
+  /^Ballot content is frozen until Election Day \(content_freeze\)\. Corrections only: docs\/general-election\/corrections\/README\.md$/;
+const CORRECTION = "docs/general-election/corrections/2026-10-20-pglite-probe.md";
+const CLAIM_INSERT = `INSERT INTO claim (claim_id, candidate_id, race_id, issue_id, text, bucket, attributed, verdict, verification)
+  VALUES ('cl-freeze', 'c-pub', 'r-pub', 'i-pub', 'Voted for F on date G.', 'verifiable_fact', false, 'accurate', 'verified');`;
+const PROFILE_HOLD = `UPDATE profile SET audit = audit || '{"balance_check_passed": false}' WHERE race_id='r-pub';`;
+const STATEMENT_GUARDED = [
+  "claim", "claim_source", "position", "issue", "profile", "ballot_measure",
+  "measure_resource", "candidate_contact", "candidate_social_account",
+  "zip_district", "block_district",
+];
+const ROW_GUARDED = ["race_publication", "measure_publication", "candidate", "race", "source"];
+
+const FREEZE_WINDOWS = {
+  open: "now() - interval '1 hour', now() + interval '1 hour'",
+  future: "now() + interval '1 hour', now() + interval '2 hours'",
+  past: "now() - interval '2 hours', now() - interval '1 hour'",
+};
+async function setFreezeWindow(which) {
+  await db.exec(
+    `UPDATE content_freeze SET (starts_at, ends_at) = (${FREEZE_WINDOWS[which]}) WHERE id = 1;`
+  );
+}
+
+/* Runs `sql` in a transaction, as `role` when given, after `setup` (which
+   still runs with the bypass on) and with kyv.freeze_correction set to
+   `correction` (default: off), then rolls back. Resolves to the error, or
+   null when the SQL went through. */
+async function inFreezeTx(sql, { role = null, correction = "", setup = null, onNotice } = {}) {
+  await db.exec("BEGIN;");
+  try {
+    if (role) await db.exec(`SET LOCAL ROLE ${role};`);
+    if (setup) await db.exec(setup);
+    await db.query("SELECT set_config('kyv.freeze_correction', $1, true);", [correction]);
+    await db.exec(sql, onNotice ? { onNotice } : undefined);
+    return null;
+  } catch (err) {
+    return err;
+  } finally {
+    await db.exec("ROLLBACK;");
+  }
+}
+async function expectFrozen(name, sql, opts) {
+  await check(name, async () => {
+    const err = await inFreezeTx(sql, opts);
+    if (!err) throw new Error("statement went through; the freeze should have refused it");
+    if (err.code !== "P0001" || !FROZEN.test(err.message))
+      throw new Error(`unexpected error: ${err.code} ${err.message}`);
+  });
+}
+async function expectThrough(name, sql, opts) {
+  await check(name, async () => {
+    const err = await inFreezeTx(sql, opts);
+    if (err) throw new Error(`refused: ${err.message}`);
+  });
+}
+
+/* The objects, before any window is moved. The exact window is pinned by
+   scripts/verify-freeze-rules.ts against the code tripwire's constants, so
+   a scratch copy of 0050 with a moved window still passes here. */
+await check("0050 content_freeze holds one row, id 1, an ordered window and a note", async () => {
+  const r = await db.query(
+    `SELECT count(*)::int AS n, bool_and(id = 1) AS id1,
+            bool_and(ends_at > starts_at) AS ordered, bool_and(btrim(note) <> '') AS noted
+       FROM content_freeze;`
+  );
+  const g = r.rows[0];
+  if (g.n !== 1 || !g.id1 || !g.ordered || !g.noted) throw new Error(JSON.stringify(g));
+});
+await expectConstraintViolation(
+  "0050 content_freeze takes no second row",
+  "INSERT INTO content_freeze (id, starts_at, ends_at, note) VALUES (2, now(), now() + interval '1 day', 'x');",
+  /content_freeze_id_check/
+);
+await check("0050 the guard is SECURITY DEFINER, owned by postgres, with an empty search_path", async () => {
+  const r = await db.query(
+    `SELECT prosecdef, proconfig, pg_get_userbyid(proowner) AS owner
+       FROM pg_proc WHERE proname = 'refuse_during_content_freeze';`
+  );
+  if (r.rows.length !== 1) throw new Error(`expected one function, found ${r.rows.length}`);
+  const g = r.rows[0];
+  if (g.prosecdef !== true) throw new Error("not SECURITY DEFINER");
+  if (JSON.stringify(g.proconfig) !== JSON.stringify(['search_path=""']))
+    throw new Error(`proconfig=${JSON.stringify(g.proconfig)}`);
+  if (g.owner !== "postgres") throw new Error(`owner=${g.owner}`);
+});
+await check("0050 triggers: statement-level on 11 tables, row-level and TRUNCATE on 5", async () => {
+  const r = await db.query(
+    `SELECT c.relname || ':' || t.tgname AS k
+       FROM pg_trigger t
+       JOIN pg_class c ON c.oid = t.tgrelid
+       JOIN pg_proc p ON p.oid = t.tgfoid
+      WHERE p.proname = 'refuse_during_content_freeze' AND NOT t.tgisinternal
+      ORDER BY 1;`
+  );
+  const want = [
+    ...STATEMENT_GUARDED.map((t) => `${t}:trg_content_freeze`),
+    ...ROW_GUARDED.flatMap((t) => [`${t}:trg_content_freeze_row`, `${t}:trg_content_freeze_truncate`]),
+  ].sort();
+  const got = r.rows.map((x) => x.k);
+  if (JSON.stringify(got) !== JSON.stringify(want)) throw new Error(`got [${got.join(", ")}]`);
+});
+await check("0050 PUBLIC, anon, authenticated, cap_tool_wrapper and cap_readonly cannot EXECUTE the guard (0020)", async () => {
+  const r = await db.query(
+    `SELECT has_function_privilege('anon', 'public.refuse_during_content_freeze()', 'EXECUTE') AS anon,
+            has_function_privilege('authenticated', 'public.refuse_during_content_freeze()', 'EXECUTE') AS authn,
+            has_function_privilege('cap_tool_wrapper', 'public.refuse_during_content_freeze()', 'EXECUTE') AS capw,
+            has_function_privilege('cap_readonly', 'public.refuse_during_content_freeze()', 'EXECUTE') AS capr,
+            (SELECT count(*)::int FROM pg_proc p, aclexplode(p.proacl) a
+              WHERE p.proname = 'refuse_during_content_freeze' AND a.grantee = 0) AS public_grants;`
+  );
+  const g = r.rows[0];
+  if (g.anon || g.authn || g.capw || g.capr || g.public_grants !== 0)
+    throw new Error(`EXECUTE leaked: ${JSON.stringify(g)}`);
+});
+await check("0050 anon and authenticated hold no privilege on content_freeze", async () => {
+  const r = await db.query(
+    `SELECT bool_or(has_table_privilege(r, 'public.content_freeze', p)) AS any
+       FROM unnest(ARRAY['anon','authenticated']) r,
+            unnest(ARRAY['SELECT','INSERT','UPDATE','DELETE','TRUNCATE']) p;`
+  );
+  if (r.rows[0].any) throw new Error("anon or authenticated holds a privilege on content_freeze");
+});
+await db.exec("SET ROLE anon;");
+await expectDenied("0050 anon cannot read content_freeze", "SELECT * FROM content_freeze;");
+await db.exec("RESET ROLE;");
+
+/* Inside the window. */
+await setFreezeWindow("open");
+await expectFrozen("0050 in the window, an INSERT into claim is refused", CLAIM_INSERT);
+await expectThrough(
+  "0050 ... and goes through as a correction (SET LOCAL kyv.freeze_correction)",
+  `SET LOCAL kyv.freeze_correction = '${CORRECTION}'; ${CLAIM_INSERT}`
+);
+await check("0050 a correction write raises a NOTICE naming the correction file", async () => {
+  const notices = [];
+  const err = await inFreezeTx(CLAIM_INSERT, {
+    correction: CORRECTION,
+    onNotice: (n) => notices.push(n.message),
+  });
+  if (err) throw new Error(`refused: ${err.message}`);
+  if (!notices.some((m) => m.includes(CORRECTION)))
+    throw new Error(`notices: ${JSON.stringify(notices)}`);
+});
+await expectFrozen(
+  "0050 a kyv.freeze_correction of only whitespace is not a correction",
+  CLAIM_INSERT,
+  { correction: "   " }
+);
+await expectFrozen(
+  "0050 as cap_tool_wrapper, an INSERT into claim is refused by the freeze, not by a permission error",
+  CLAIM_INSERT,
+  { role: "cap_tool_wrapper" }
+);
+await expectThrough(
+  "0050 set_race_publication(..., 'listed', ...) goes through without the setting",
+  "SELECT set_race_publication('r-pub','listed','op@example.com','freeze takedown probe');",
+  { role: "service_role" }
+);
+await expectFrozen(
+  "0050 set_race_publication(..., 'published', ...) is refused",
+  "SELECT set_race_publication('r-listed','published','op@example.com','freeze publish probe');",
+  { role: "service_role" }
+);
+await expectThrough(
+  "0050 a measure taken to listed goes through without the setting",
+  "UPDATE measure_publication SET status='listed' WHERE measure_id='m-skew';",
+  { role: "service_role" }
+);
+await expectFrozen(
+  "0050 a balanced measure's publish is refused",
+  "UPDATE measure_publication SET status='published' WHERE measure_id='m-skew';",
+  { role: "service_role", setup: "UPDATE measure_publication SET status='listed' WHERE measure_id='m-skew';" }
+);
+await expectFrozen("0050 a profile audit update is refused without the setting", PROFILE_HOLD);
+await expectThrough("0050 ... and goes through with it (the BC16 hold)", PROFILE_HOLD, { correction: CORRECTION });
+await expectThrough(
+  "0050 a candidate UPDATE of only site_last_verified_at goes through",
+  "UPDATE candidate SET site_last_verified_at = now() WHERE candidate_id='c-pub';"
+);
+await expectFrozen(
+  "0050 ... one that also touches official_site is refused",
+  "UPDATE candidate SET site_last_verified_at = now(), official_site = 'https://pub-candidate.example/' WHERE candidate_id='c-pub';"
+);
+await expectFrozen(
+  "0050 a candidate qualifying_status change is refused (it is applied as a correction, BC18)",
+  "UPDATE candidate SET qualifying_status = 'withdrawn' WHERE candidate_id='c-pub';"
+);
+await expectThrough(
+  "0050 a race UPDATE of only key_dates and info_last_verified_at goes through",
+  `UPDATE race SET key_dates = key_dates || '{"general": "2026-11-03"}', info_last_verified_at = now() WHERE race_id='r-pub';`
+);
+await expectFrozen(
+  "0050 a race UPDATE of office is refused",
+  "UPDATE race SET office = 'Governor (changed)' WHERE race_id='r-pub';"
+);
+await expectThrough(
+  "0050 a race UPDATE that sets office to its current value goes through",
+  "UPDATE race SET office = office WHERE race_id='r-pub';"
+);
+/* A published race_publication row is one no exception covers (only an
+   UPDATE to 'listed' does), so this case passes only through the guard's
+   "changes nothing" branch. */
+await expectThrough(
+  "0050 an UPDATE that changes nothing goes through where no exception would (published race_publication, status = status)",
+  "UPDATE race_publication SET status = status WHERE race_id='r-pub';",
+  { setup: "DO $$ BEGIN IF (SELECT status FROM race_publication WHERE race_id='r-pub') <> 'published' THEN RAISE EXCEPTION 'fixture: r-pub is not published'; END IF; END $$;" }
+);
+await expectFrozen(
+  "0050 a new race row is refused",
+  "INSERT INTO race (race_id, office, level, election, candidate_ids) VALUES ('r-freeze','X','state','general','{}');"
+);
+await expectThrough(
+  "0050 a source INSERT goes through (news intake's outlet rows)",
+  `INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag)
+   VALUES ('s-freeze-new', 'https://example.news/freeze', 'example.news/freeze', 'Example News', 'factual_reporting', 'unrated');`
+);
+await expectThrough(
+  "0050 an upsert that changes nothing goes through, even on a cited source",
+  `INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag)
+   VALUES ('s1', 'https://example.gov/a', 'example.gov/a', 'Example Gov', 'primary_doc', 'N/A')
+   ON CONFLICT (url_norm) DO UPDATE SET publisher = EXCLUDED.publisher;`
+);
+await expectFrozen(
+  "0050 an UPDATE of a source cited by claim_source is refused",
+  "UPDATE source SET publisher = 'Changed' WHERE source_id = 's1';"
+);
+await expectFrozen(
+  "0050 an UPDATE of a source cited by measure_resource is refused",
+  "UPDATE source SET publisher = 'Changed' WHERE source_id = 's-gov';"
+);
+await expectThrough(
+  "0050 an UPDATE of a source nothing cites goes through",
+  "UPDATE source SET publisher = 'Changed' WHERE source_id = 'src-early-test';"
+);
+/* DELETE and INSERT on the row-guarded tables. Each target row is one
+   nothing references (made in setup where needed), so the freeze is the only
+   thing that can refuse it. */
+const FREEZE_RACE = "INSERT INTO race (race_id, office, level, election, candidate_ids) VALUES ('r-freeze-row','X','state','general','{}');";
+await expectFrozen(
+  "0050 a DELETE of a race_publication row is refused",
+  "DELETE FROM race_publication WHERE race_id = 'r-pub';"
+);
+await expectFrozen(
+  "0050 a DELETE of a measure_publication row is refused",
+  "DELETE FROM measure_publication WHERE measure_id = 'm-skew';"
+);
+await expectFrozen(
+  "0050 an INSERT of a race_publication row with status 'listed' is refused",
+  "INSERT INTO race_publication (race_id, status) VALUES ('r-freeze-row', 'listed');",
+  { setup: FREEZE_RACE }
+);
+await expectFrozen(
+  "0050 a DELETE of a candidate is refused",
+  "DELETE FROM candidate WHERE candidate_id = 'c-freeze-row';",
+  {
+    setup: `INSERT INTO candidate (candidate_id, legal_name, party, office_sought, qualifying_status)
+            VALUES ('c-freeze-row','Freeze Probe','NPA','Governor','qualified');`,
+  }
+);
+await expectFrozen(
+  "0050 an INSERT of a candidate is refused",
+  `INSERT INTO candidate (candidate_id, legal_name, party, office_sought, qualifying_status)
+   VALUES ('c-freeze-row','Freeze Probe','NPA','Governor','qualified');`
+);
+await expectFrozen(
+  "0050 a DELETE of a race is refused",
+  "DELETE FROM race WHERE race_id = 'r-freeze-row';",
+  { setup: FREEZE_RACE }
+);
+await expectFrozen(
+  "0050 a DELETE of a source cited by claim_source is refused",
+  "DELETE FROM source WHERE source_id = 's1';"
+);
+await expectFrozen(
+  "0050 a DELETE of a source cited by measure_resource is refused",
+  "DELETE FROM source WHERE source_id = 's-gov';"
+);
+await expectFrozen("0050 TRUNCATE zip_district is refused", "TRUNCATE zip_district;");
+await expectFrozen("0050 TRUNCATE race_publication is refused", "TRUNCATE race_publication;");
+for (const t of STATEMENT_GUARDED) {
+  await expectFrozen(`0050 even a zero-row DELETE on ${t} is refused`, `DELETE FROM ${t} WHERE false;`);
+}
+await expectThrough(
+  "0050 election_event is not guarded (a date correction is never slowed)",
+  "UPDATE election_event SET verified_by = 'probe@example.com' WHERE county_fips = '12099';"
+);
+
+/* The bounds, each inside one transaction, where now() is fixed: starts_at
+   is inclusive and ends_at exclusive, as inWindow() in
+   scripts/freeze-manifest.ts. */
+await expectFrozen("0050 a window that starts exactly at now() is open", CLAIM_INSERT, {
+  setup: "UPDATE content_freeze SET (starts_at, ends_at) = (now(), now() + interval '1 hour') WHERE id = 1;",
+});
+await expectThrough("0050 a window that ends exactly at now() is closed", CLAIM_INSERT, {
+  setup: "UPDATE content_freeze SET (starts_at, ends_at) = (now() - interval '1 hour', now()) WHERE id = 1;",
+});
+
+/* Outside the window. */
+await setFreezeWindow("future");
+await expectThrough(
+  "0050 before the window, cap_tool_wrapper's INSERT into claim goes through (no permission error on content_freeze)",
+  CLAIM_INSERT,
+  { role: "cap_tool_wrapper" }
+);
+await setFreezeWindow("past");
+for (const [what, sql] of [
+  ["an INSERT into claim", CLAIM_INSERT],
+  ["a profile audit update", PROFILE_HOLD],
+  ["a race office change", "UPDATE race SET office = 'Governor (changed)' WHERE race_id='r-pub';"],
+  ["a publish", "SELECT set_race_publication('r-listed','published','op@example.com','after the freeze');"],
+  ["an UPDATE of a cited source", "UPDATE source SET publisher = 'Changed' WHERE source_id = 's1';"],
+  ["TRUNCATE zip_district", "TRUNCATE zip_district;"],
+]) {
+  await expectThrough(`0050 after the window, ${what} goes through`, sql);
+}
+
+/* Re-running 0050 (it is idempotent) keeps a window that was moved and
+   takes back an EXECUTE granted by name since. A fresh replay cannot show
+   the second: this harness grants functions by default only to anon,
+   authenticated and service_role, so cap_tool_wrapper and cap_readonly have
+   nothing to lose there. Rolled back. */
+await check("0050 a re-run keeps an existing content_freeze row and revokes EXECUTE by name again", async () => {
+  const sql = await readFile(path.join(migrationsDir, "0050_content_freeze.sql"), "utf8");
+  await db.exec("BEGIN;");
+  try {
+    await db.exec(`
+      UPDATE content_freeze
+         SET (starts_at, ends_at, note) = ('2030-01-01 00:00+00', '2030-01-02 00:00+00', 'moved by the re-run probe')
+       WHERE id = 1;
+      GRANT EXECUTE ON FUNCTION public.refuse_during_content_freeze()
+        TO PUBLIC, anon, authenticated, cap_tool_wrapper, cap_readonly;`);
+    await db.exec(sql);
+    const r = await db.query(
+      `SELECT (SELECT count(*)::int FROM content_freeze) AS n,
+              (SELECT starts_at = '2030-01-01 00:00+00' AND ends_at = '2030-01-02 00:00+00'
+                      AND note = 'moved by the re-run probe'
+                 FROM content_freeze WHERE id = 1) AS kept,
+              (SELECT coalesce(array_agg(CASE WHEN a.grantee = 0 THEN 'PUBLIC' ELSE pg_get_userbyid(a.grantee) END), '{}')
+                 FROM pg_proc p, aclexplode(p.proacl) a
+                WHERE p.proname = 'refuse_during_content_freeze'
+                  AND a.privilege_type = 'EXECUTE'
+                  AND (a.grantee = 0 OR pg_get_userbyid(a.grantee) IN
+                       ('anon', 'authenticated', 'cap_tool_wrapper', 'cap_readonly'))) AS leaked;`
+    );
+    const g = r.rows[0];
+    if (g.n !== 1 || g.kept !== true) throw new Error(`window not kept: ${JSON.stringify(g)}`);
+    if (g.leaked.length !== 0) throw new Error(`EXECUTE still granted to ${g.leaked.join(", ")}`);
+  } finally {
+    await db.exec("ROLLBACK;");
   }
 });
 

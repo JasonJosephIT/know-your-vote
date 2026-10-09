@@ -85,6 +85,10 @@ for (const election of ["primary_2026", "general_2026"]) {
 
 /* (4): the verified gate, against real migrations. */
 const db = new PGlite({ extensions: { pgcrypto } });
+/* 0050's content freeze refuses writes to ballot tables from 2026-10-18 to
+   2026-11-04 unless this is set; set before the replay so this check keeps
+   passing inside that window (docs/general-election/corrections/README.md). */
+await db.exec("SET kyv.freeze_correction = 'pglite replay';");
 await db.exec("CREATE ROLE anon NOLOGIN; CREATE ROLE authenticated NOLOGIN; CREATE ROLE service_role NOLOGIN BYPASSRLS; GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;");
 const migrationsDir = path.join(root, "supabase", "migrations");
 for (const f of (await readdir(migrationsDir)).filter((x) => x.endsWith(".sql")).sort()) {

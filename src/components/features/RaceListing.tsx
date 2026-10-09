@@ -19,10 +19,12 @@ import type {
 
    The structure is identical for every candidate, including the one muted
    line under the name (listingCardLine: "No brief for this race" or "Brief
-   in review", by the race's status and founder decision 4) — which is the
-   same sentence on every card so it can never read as a remark about one
-   person. It exists so an empty card is not mistaken for "this candidate
-   has no positions".
+   in review", by the race's status and founder decision 4, or the
+   unfinished-brief line for a race in UNFINISHED_BRIEF_RACES, BC15) —
+   which is the same sentence on every card, chosen by the race and never
+   by the candidate, so it can never read as a remark about one person. It
+   exists so an empty card is not mistaken for "this candidate has no
+   positions".
 
    Header markup mirrors CandidateBrief's header so a race moving from listed
    to published changes what is under the name, not the name block itself.
@@ -40,6 +42,7 @@ import type {
 export function ListedCandidateCard({
   data,
   status,
+  raceId,
   headingLevel = "h2",
   linkToDetail = true,
   incumbency,
@@ -47,6 +50,7 @@ export function ListedCandidateCard({
 }: {
   data: ListedCandidate;
   status: RaceListingData["status"];
+  raceId: string;
   headingLevel?: "h1" | "h2" | "h3";
   linkToDetail?: boolean;
   /** The race's incumbency line (incumbencyFor), computed once per race. */
@@ -109,7 +113,7 @@ export function ListedCandidateCard({
       </header>
 
       <p className="text-body-sm text-on-surface-muted">
-        {listingCardLine(status)}
+        {listingCardLine(status, raceId)}
       </p>
 
       <footer className="mt-auto flex flex-wrap gap-x-4 gap-y-1 border-t border-border pt-3 text-caption text-on-surface-muted">
@@ -150,6 +154,7 @@ export function RaceListing({
           status={listing.status}
           incumbency={incumbency}
           runningMates={runningMates}
+          raceId={listing.race.race_id}
         />
       ))}
     </div>

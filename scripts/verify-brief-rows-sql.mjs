@@ -26,6 +26,10 @@ import { fileURLToPath } from "node:url";
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const db = new PGlite({ extensions: { pgcrypto } });
+/* 0050's content freeze refuses writes to ballot tables from 2026-10-18 to
+   2026-11-04 unless this is set; set before the replay so this check keeps
+   passing inside that window (docs/general-election/corrections/README.md). */
+await db.exec("SET kyv.freeze_correction = 'pglite replay';");
 let failures = 0;
 
 async function check(name, fn) {
