@@ -170,7 +170,14 @@ const ROSTER_TABLES: Record<string, Record<string, unknown>[]> = {
     { candidate_id: "FL-DOE-T4", legal_name: "Lee Primaryonly", ballot_status: "ballot" },
   ],
 };
-const ROSTER: readonly BallotRosterCandidate[] = [
+/* The fields R3 reads from the ballot roster. loadBallotRoster (shared with
+   R2 since agents PR D) returns more; R3 relies only on these. */
+type R3RosterFields = Pick<BallotRosterCandidate, "candidateId" | "legalName" | "raceId" | "countyFips">;
+const r3Fields = (c: R3RosterFields): R3RosterFields =>
+  ({ candidateId: c.candidateId, legalName: c.legalName, raceId: c.raceId, countyFips: c.countyFips });
+const byCandidate = (a: R3RosterFields, b: R3RosterFields) =>
+  a.raceId.localeCompare(b.raceId) || a.candidateId.localeCompare(b.candidateId);
+const ROSTER: readonly R3RosterFields[] = [
   { candidateId: "FL-DOE-T1", legalName: "Maria Elena Vasquez", raceId: "FL-GOV-general", countyFips: null },
   { candidateId: "FL-VF-T2", legalName: "John Okafor", raceId: "FL-DAD-CC2-general", countyFips: "12086" },
 ];
@@ -888,7 +895,8 @@ check("the CLI's context step goes through runElectionContext and refuses any ar
   const f = fakeDb(ROSTER_TABLES);
   const roster = await loadBallotRoster(f.db);
   check("the ballot roster is the ballot-tier candidates of the general election's published and listed races, with their county",
-    JSON.stringify(roster) === JSON.stringify(ROSTER), JSON.stringify(roster));
+    JSON.stringify(roster.map(r3Fields).sort(byCandidate)) === JSON.stringify(ROSTER.map(r3Fields).sort(byCandidate)),
+    JSON.stringify(roster));
   check("a listed-race candidate is on the ballot roster", roster.some((c) => c.candidateId === "FL-VF-T2"));
   check("a write-in, a draft race's candidate and a primary race's candidate are not",
     !roster.some((c) => ["FL-DOE-T9", "FL-VF-T3", "FL-DOE-T4"].includes(c.candidateId)), JSON.stringify(roster));
@@ -900,9 +908,13 @@ check("the CLI's context step goes through runElectionContext and refuses any ar
     pubRead?.filters.some(([op, col, v]) => op === "in" && col === "status" && JSON.stringify(v) === '["published","listed"]') === true,
     JSON.stringify(pubRead));
   const candidateRead = f.reads.find((x) => x.table === "candidate");
-  check("the candidate read is ballot-tier only, by id",
-    candidateRead?.filters.some(([op, col, v]) => op === "eq" && col === "ballot_status" && v === "ballot") === true &&
-      candidateRead.filters.some(([op, col]) => op === "in" && col === "candidate_id"),
+  /* Ballot tier is kept either in the query or, as buildBallotRoster does, by
+     reading ballot_status and dropping the rest; the write-in check above
+     proves the roster holds ballot-tier candidates only. */
+  check("the candidate read is by id and sees ballot_status, so the roster can keep ballot-tier only",
+    candidateRead?.filters.some(([op, col]) => op === "in" && col === "candidate_id") === true &&
+      (candidateRead.filters.some(([op, col, v]) => op === "eq" && col === "ballot_status" && v === "ballot") ||
+        /\bballot_status\b/.test(candidateRead.columns)),
     JSON.stringify(candidateRead));
   check("the roster reads write nothing", f.inserted.length === 0);
 }

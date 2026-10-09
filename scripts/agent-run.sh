@@ -70,6 +70,11 @@ R4|digest|scripts/ops-digest.ts||task-runs.json|digest.json|300
 R4|lint|scripts/verify-news-neutrality.ts||-|lint.txt|300|finding
 watch|stale|scripts/agent-run-log.ts|stale|-|-|120
 watch|check|scripts/agent-run-log.ts|watch --runs {dir}/runs.json --notified {dir}/notified.txt|-|-|120
+R2|context|scripts/logistics-check.ts|context|-|context.json|300
+R2|sites|scripts/logistics-check.ts|sites|-|sites.json|540
+R2|check|scripts/logistics-check.ts|check|observations.json|check.json|300
+R2|queue-dry|scripts/logistics-check.ts|queue --dry-run|observations.json|queue-dry.json|300
+R2|queue|scripts/logistics-check.ts|queue|observations.json|queue.json|300
 R3|context|scripts/election-news.ts|context|-|context.json|300
 R3|queue-dry|scripts/election-news.ts|queue --dry-run|items.json|queue-dry.json|300
 R3|queue|scripts/election-news.ts|queue|items.json|queue.json|300'
