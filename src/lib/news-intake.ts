@@ -431,7 +431,19 @@ export async function loadBallotRoster(db: SupabaseClient): Promise<BallotRoster
 export async function enqueueIntake(
   db: SupabaseClient,
   articles: readonly SweptArticle[],
-  { dryRun = false, limit = Infinity }: { dryRun?: boolean; limit?: number } = {}
+  {
+    dryRun = false,
+    limit = Infinity,
+    elections = true,
+  }: {
+    dryRun?: boolean;
+    limit?: number;
+    /** False queues candidate matches only. The archive backfill passes false:
+        its URL-only archives are pre-filtered on roster surnames, so the
+        election stories naming no one that it finds are a biased sample,
+        and the daily intake already queues them from the feeds. */
+    elections?: boolean;
+  } = {}
 ): Promise<EnqueueResult> {
   const roster = await loadRoster(db);
   if (roster.length === 0) {
@@ -440,14 +452,15 @@ export async function enqueueIntake(
     );
   }
 
-  const { attachments, elections, counts } = planAttachments(
+  const { attachments, elections: plannedElections, counts } = planAttachments(
     articles,
     roster,
     matchArticle,
     (u) => outletForUrl(u, OUTLETS)
   );
   const capped = Number.isFinite(limit) ? attachments.slice(0, limit) : attachments;
-  const electionsCapped = Number.isFinite(limit) ? elections.slice(0, limit) : elections;
+  const electionPool = elections ? plannedElections : [];
+  const electionsCapped = Number.isFinite(limit) ? electionPool.slice(0, limit) : electionPool;
 
   const candidateRows = capped.map((a) => ({
     key: dedupeKey(a.article.url, a.candidateId),

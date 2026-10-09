@@ -378,3 +378,36 @@ without a decision. The newest `news_item` is dated 2026-09-09.
 | The surname, N and policy measurements | live sweep (GET) through the real `planAttachments` and `matchArticle` with the live roster |
 | The approve path resolves a source before inserting | `verify-news-enqueue.ts` §8, plus mutation checks (insert without the source, resolve after insert) |
 | **Not verified:** any enqueue, approval or characterize run; the admin console end to end; Jev's output on real rows; the 0014 apply itself | keys absent; no production writes allowed from this session |
+
+## 9. The archive backfill (added 2026-10-09)
+
+R1 first ran on 2026-10-06, so nothing published before about 09-29 ever reached
+the queue (`moody-pipeline-gap-2026-10-09.md`). `scripts/news-backfill.ts`
+reaches back through each outlet's own archive and prints articles in the
+sweep's JSON shape. `news-enqueue.ts --candidates-only` then queues the
+candidate matches as **pending** items. This is the same write path and the
+same /admin boundary as the cron. Anything already queued, decided or
+published at that URL is skipped.
+
+```bash
+node scripts/news-backfill.ts --from 2026-09-09 --report backfill-report.json > backfill.json
+node scripts/news-enqueue.ts --candidates-only --dry-run < backfill.json
+node scripts/news-enqueue.ts --candidates-only < backfill.json
+```
+
+- Env: `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`, for the
+  read-only roster read in step 1 and for step 3.
+- **How each outlet is reached** is set in `src/lib/news-backfill.ts`
+  `ARCHIVES`. There are three ways: paged WordPress feeds, URL-only archive
+  sitemaps (where the page head is read), or none. Every usable outlet has an
+  entry (`verify-news-backfill.ts`).
+- **URL-only archives** fetch a page only when its slug names a roster surname.
+  This one rule applies to every outlet and every candidate. Matching is still
+  `matchArticle` on the page's title and description.
+- **AI-crawler policy.** An outlet whose robots.txt shuts a Claude or
+  Anthropic agent out of `/` is skipped whole and named in the report.
+- **Election stories naming no one are not queued.** The pre-filter makes
+  them a biased sample, and the cron already queues them from the feeds.
+- **The report** (`--report`) records, for each outlet, how much of the
+  window it could reach. Coverage is uneven by outlet, never by candidate.
+  Keep it with the run.

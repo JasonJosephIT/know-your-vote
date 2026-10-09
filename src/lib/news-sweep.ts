@@ -38,7 +38,10 @@ export interface FeedEntry {
 }
 
 /** How an article reached the pool — PRD §5 "record which". */
-export type Retrieval = "rss" | "news-sitemap";
+/** How an article reached us. `archive-page`: the backfill read the article's
+    own page head after finding its URL in an archive sitemap
+    (news-backfill.ts). */
+export type Retrieval = "rss" | "news-sitemap" | "archive-page";
 
 export interface SweptArticle {
   title: string;
