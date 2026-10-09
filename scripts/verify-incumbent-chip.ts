@@ -1,146 +1,291 @@
-/* The Incumbent chip shows for nobody until incumbency is filled for
-   everybody (src/lib/incumbency.ts, recommended pending founder
-   confirmation).
+/* The incumbency line (spec
+   docs/superpowers/specs/2026-10-08-roster-completeness-design.md §3.5,
+   §3.11 and §6; D1 to D3, Recommended pending founder confirmation).
 
-   On 2026-10-05 production had is_incumbent = true for one ballot candidate
-   in 106, so the chip marked one incumbent and made every other sitting
-   officeholder read as a challenger. The fix is one constant,
-   SHOW_INCUMBENT_CHIP, read through one helper. What would quietly undo it is
+   Every card in a race shows "<label>: Yes" or "<label>: No", or none does,
+   and nothing shows while SHOW_INCUMBENT_CHIP is false. It replaced an
+   "Incumbent" chip that only an incumbent got. What would quietly undo it is
    a second reader: a new card, an Open seat label, a sort or a meta
-   description that reads the column straight from the row. So this checks:
+   description that reads the column straight from the row, or a line shown
+   only when true. So this checks:
 
-   1. The helper. With the flag false it is false for every candidate,
-      incumbent or not; with the flag true it is exactly is_incumbent, so
-      flipping the constant is all it takes to bring the chip back.
-   2. The two cards. CandidateBrief and ListedCandidateCard each render the
-      chip once, and only behind showIncumbentChip.
-   3. Nothing else in src/ reads the incumbency columns (is_incumbent,
-      incumbent_id, is_open_seat: all three are filled by the B4 run that has
-      not happened) or prints the word, outside the helper and the row types.
-      Comments are stripped first, so a comment explaining the gate is not
-      read as a use of the column.
+   0. SHOW_INCUMBENT_CHIP is false. The flip PR (spec §3.11) changes this one
+      expectation together with the constant.
+   1. The label table maps each of the 53 production race ids (fixture, from
+      SELECT race_id FROM race on 2026-10-08) to its label, an unknown id to
+      none, and agrees with the worksheet's copy (scripts/roster-worksheet.ts).
+   2. incumbencyFor: with the flag false, null for every race; with it true
+      (a copy of the module with only the constant changed), null when any
+      candidate lacks incumbency_verified_at, when the race has no label or no
+      candidates, and the full map otherwise. Yes and No come from one
+      template.
+   3. IncumbencyLine prints incumbencyLine's text in one fixed element.
+   4. The three cards (CandidateBrief, ListedCandidateCard in RaceListing,
+      the RaceCompare roster card) each render <IncumbencyLine> once, never
+      behind a condition, from the race-level value; only the two pages call
+      incumbencyFor.
+   5. Nothing else in src/ reads is_incumbent, incumbent_id, is_open_seat or
+      the incumbency columns, or prints the word "incumbent", outside
+      incumbency.ts and the row types. Comments are stripped first, so a
+      comment explaining the gate is not read as a use of the column.
+   6. Each guard above catches the change it exists for (mutations).
 
    Run: node scripts/verify-incumbent-chip.ts */
 
-import { readFileSync, readdirSync, statSync } from "node:fs";
-import { join, relative, resolve } from "node:path";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import {
   SHOW_INCUMBENT_CHIP,
-  showIncumbentChip,
+  incumbencyFor,
+  incumbencyLabel,
+  incumbencyLine,
+  type IncumbencyRow,
 } from "../src/lib/incumbency.ts";
+import { labelFor } from "./roster-worksheet.ts";
+import { ROOT, checker, edit, importVariant, read, sourceFiles, stripComments } from "./source-checks.ts";
 
-const ROOT = resolve(import.meta.dirname, "..");
-const SRC = join(ROOT, "src");
+const { check, mutation, done } = checker("incumbent-chip");
+type Module = typeof import("../src/lib/incumbency.ts");
+const MODULE = "src/lib/incumbency.ts";
+const FLAG = /export const SHOW_INCUMBENT_CHIP: boolean = (?:true|false);/;
+const flagOn = (edits: ReadonlyArray<readonly [string | RegExp, string]> = []) =>
+  importVariant<Module>(MODULE, [[FLAG, "export const SHOW_INCUMBENT_CHIP: boolean = true;"], ...edits]);
 
-let failures = 0;
-function check(name: string, ok: boolean, detail = "") {
-  if (ok) console.log(`  ok  ${name}`);
-  else {
-    failures++;
-    console.error(`FAIL  ${name}${detail ? ` — ${detail}` : ""}`);
-  }
-}
-
-/* Block comments (JSX ones included, since {/* … *\/} is a block comment
-   inside braces), then line comments that start a line or follow
-   whitespace, so the "//" inside a URL string survives. */
-const stripComments = (src: string) =>
-  src
-    .replace(/\/\*[\s\S]*?\*\//g, "")
-    .replace(/(^|\s)\/\/[^\n]*/g, "$1");
-
-/* 1. The helper. */
-console.log(
-  `SHOW_INCUMBENT_CHIP is ${SHOW_INCUMBENT_CHIP} (recommended: false until every ballot candidate's is_incumbent is verified)`
-);
+/* 0. The flag. */
+const EXPECTED_FLAG = false;
+console.log(`SHOW_INCUMBENT_CHIP is ${SHOW_INCUMBENT_CHIP}`);
 check(
-  "a candidate who is not the incumbent never gets the chip",
-  showIncumbentChip({ is_incumbent: false }) === false
+  `SHOW_INCUMBENT_CHIP is ${EXPECTED_FLAG} (spec §3.11: only the flip PR changes it, with this line)`,
+  SHOW_INCUMBENT_CHIP === EXPECTED_FLAG,
 );
-if (!SHOW_INCUMBENT_CHIP) {
-  check(
-    "with the flag false, an incumbent gets no chip either",
-    showIncumbentChip({ is_incumbent: true }) === false,
-    "the chip must render for nobody while the flag is false"
-  );
-} else {
-  check(
-    "with the flag true, the chip follows is_incumbent",
-    showIncumbentChip({ is_incumbent: true }) === true
-  );
+
+/* 1. The label table. */
+const LABELS = JSON.parse(
+  readFileSync(join(ROOT, "scripts/fixtures/roster/race-labels-2026-10-08.json"), "utf8"),
+) as Record<string, string>;
+const ROSTER = JSON.parse(
+  readFileSync(join(ROOT, "scripts/fixtures/roster/ballot-roster-2026-10-08.json"), "utf8"),
+) as Array<{ race_id: string }>;
+const UNKNOWN = ["FL-PBC-CC1-general", "FL-LTG-general", "FL-GOV-primary", "FL-ORA-SHERIFF-general", "FL-SEN", ""];
+
+function labelProblems(label: Module["incumbencyLabel"]): string[] {
+  const problems: string[] = [];
+  for (const [raceId, want] of Object.entries(LABELS)) {
+    if (label(raceId) !== want) problems.push(`${raceId} is ${JSON.stringify(label(raceId))}, want "${want}"`);
+  }
+  for (const raceId of UNKNOWN) {
+    if (label(raceId) !== null) problems.push(`${JSON.stringify(raceId)} must have no label`);
+  }
+  return problems;
 }
 
-/* 2. The two cards. */
-const GATED_CHIP =
-  /\{\s*showIncumbentChip\(\s*candidate\s*\)\s*&&\s*<Chip>\s*Incumbent\s*<\/Chip>\s*\}/g;
+const fixtureIds = Object.keys(LABELS).sort();
+const rosterIds = [...new Set(ROSTER.map((r) => r.race_id))].sort();
+check(
+  "the label fixture holds the same 53 race ids as the ballot roster fixture",
+  fixtureIds.length === 53 && JSON.stringify(fixtureIds) === JSON.stringify(rosterIds),
+  `${fixtureIds.length} vs ${rosterIds.length}`,
+);
+const labels = labelProblems(incumbencyLabel);
+check("each of the 53 race ids gets its label, an unknown id none (§3.5)", labels.length === 0, labels.join("; "));
+const drift = fixtureIds.filter((id) => labelFor(id) !== incumbencyLabel(id));
+check("the worksheet's label column uses the same labels (scripts/roster-worksheet.ts)", drift.length === 0, drift.join(", "));
+
+/* 2. incumbencyFor and incumbencyLine. */
+const AT = "2026-10-09T00:00:00+00:00";
+const FL20 = { race_id: "FL-20-general" };
+const ROWS: IncumbencyRow[] = [
+  { candidate_id: "FL-DOE-1", is_incumbent: true, incumbency_verified_at: AT },
+  { candidate_id: "FL-DOE-2", is_incumbent: false, incumbency_verified_at: AT },
+  { candidate_id: "FL-DOE-3", is_incumbent: false, incumbency_verified_at: AT },
+];
+const linesFor = (m: Pick<Module, "incumbencyFor" | "incumbencyLine">, race: { race_id: string }, rows: IncumbencyRow[]) => {
+  const inc = m.incumbencyFor(race, rows);
+  return rows.map((r) => m.incumbencyLine(inc, r.candidate_id));
+};
+
+function flagOffProblems(m: Pick<Module, "incumbencyFor" | "incumbencyLine">): string[] {
+  return linesFor(m, FL20, ROWS).some((l) => l !== null) || m.incumbencyFor(FL20, ROWS) !== null
+    ? ["with the flag false, a fully sourced race must still show no line"]
+    : [];
+}
+
+function flagOnProblems(m: Pick<Module, "incumbencyFor" | "incumbencyLine">): string[] {
+  const problems: string[] = [];
+  const full = linesFor(m, FL20, ROWS);
+  const want = [
+    "Member of the U.S. House now: Yes",
+    "Member of the U.S. House now: No",
+    "Member of the U.S. House now: No",
+  ];
+  if (JSON.stringify(full) !== JSON.stringify(want)) {
+    problems.push(`a fully sourced race must give every card its line: ${JSON.stringify(full)}`);
+  }
+  const gap = (g: Partial<IncumbencyRow>) => ROWS.map((r, i) => (i === 2 ? { candidate_id: r.candidate_id, is_incumbent: r.is_incumbent, ...g } : r));
+  for (const [what, rows] of [
+    ["one candidate with a null source date", gap({ incumbency_verified_at: null })],
+    ["one candidate with no source field (a row cached before 0049)", gap({})],
+    ["one candidate with an empty source date", gap({ incumbency_verified_at: "" })],
+  ] as const) {
+    if (linesFor(m, FL20, [...rows]).some((l) => l !== null)) problems.push(`${what} must hide the line on every card`);
+  }
+  if (linesFor(m, { race_id: "FL-PBC-CC1-general" }, ROWS).some((l) => l !== null)) {
+    problems.push("a race with no label shows no line");
+  }
+  if (m.incumbencyFor(FL20, []) !== null) problems.push("a race with no candidates shows no line");
+  const inc = m.incumbencyFor(FL20, ROWS);
+  if (m.incumbencyLine(inc, "FL-DOE-9") !== null || m.incumbencyLine(inc, "toString") !== null) {
+    problems.push("a candidate the race did not compute gets no line");
+  }
+  if (m.incumbencyLine(null, "FL-DOE-1") !== null) problems.push("no race value, no line");
+  const gov = linesFor(m, { race_id: "FL-GOV-general" }, ROWS.map((r) => ({ ...r, is_incumbent: false })));
+  if (gov.some((l) => l !== "Holds this office now: No")) problems.push(`an open office reads No on every card: ${JSON.stringify(gov)}`);
+  return problems;
+}
+
+const real = SHOW_INCUMBENT_CHIP
+  ? flagOnProblems({ incumbencyFor, incumbencyLine })
+  : flagOffProblems({ incumbencyFor, incumbencyLine });
+check(`incumbencyFor with the flag as shipped (${SHOW_INCUMBENT_CHIP})`, real.length === 0, real.join("; "));
+const on = flagOnProblems(await flagOn());
+check("with the flag true: all or none per race, one label, Yes and No from one template", on.length === 0, on.join("; "));
+
+const helper = stripComments(read(MODULE));
+check(
+  "incumbencyFor returns null first thing while the flag is false, and is_incumbent is read once",
+  /export function incumbencyFor\([^)]*\)[^{]*\{\s*if \(!SHOW_INCUMBENT_CHIP\) return null;/.test(helper) &&
+    (helper.match(/\.is_incumbent\b/g) ?? []).length === 1,
+);
+
+/* 3. The line component. */
+const LINES = "src/components/features/RosterLines.tsx";
+function lineComponentProblems(code: string): string[] {
+  const c = stripComments(code);
+  const start = c.indexOf("export function IncumbencyLine");
+  const next = c.indexOf("export function", start + 1);
+  const body = start < 0 ? "" : c.slice(start, next < 0 ? undefined : next);
+  const problems: string[] = [];
+  if (!/const text = incumbencyLine\(incumbency, candidateId\);\s*return text \? <p className="text-caption text-on-surface-muted">\{text\}<\/p> : null;/.test(body)) {
+    problems.push("IncumbencyLine must print incumbencyLine(incumbency, candidateId) in one fixed <p>");
+  }
+  if ((body.match(/<p\b/g) ?? []).length !== 1) problems.push("IncumbencyLine has exactly one element");
+  if (/\b(Yes|No|byCandidate)\b/.test(body)) problems.push("IncumbencyLine must not look at the value: Yes and No get the same markup");
+  return problems;
+}
+const lineComponent = lineComponentProblems(read(LINES));
+check(`${LINES} prints the line in one fixed element, the same for Yes and No`, lineComponent.length === 0, lineComponent.join("; "));
+
+/* 4. The three cards, and who computes the race value. */
 const CARDS = [
   "src/components/features/CandidateBrief.tsx",
   "src/components/features/RaceListing.tsx",
+  "src/components/features/RaceCompare.tsx",
 ];
+const USE = "<IncumbencyLine incumbency={incumbency} candidateId={candidate.candidate_id} />";
+function cardProblems(code: string): string[] {
+  const c = stripComments(code);
+  const problems: string[] = [];
+  const exact = c.split(USE).length - 1;
+  const all = (c.match(/<IncumbencyLine\b/g) ?? []).length;
+  if (exact !== 1 || all !== 1) problems.push(`renders ${USE} ${exact} time(s), <IncumbencyLine> ${all} in all; want exactly once`);
+  if (/(&&|\?|:)\s*\(?\s*<IncumbencyLine\b/.test(c)) problems.push("<IncumbencyLine> sits behind a condition");
+  if (!/import\s*\{[^}]*\bIncumbencyLine\b[^}]*\}\s*from\s*["']@\/components\/features\/RosterLines["']/.test(c)) {
+    problems.push("must import IncumbencyLine from @/components/features/RosterLines");
+  }
+  if (/\bincumbencyFor\s*\(/.test(c)) problems.push("a card must take the race value as a prop, not compute it");
+  return problems;
+}
 for (const file of CARDS) {
-  const code = stripComments(readFileSync(join(ROOT, file), "utf8"));
-  check(
-    `${file} renders the chip once, behind showIncumbentChip`,
-    (code.match(GATED_CHIP) ?? []).length === 1 &&
-      (code.match(/Incumbent\s*<\/Chip>/g) ?? []).length === 1,
-    "every Incumbent chip goes through the helper, so the flag decides it"
-  );
-  check(
-    `${file} imports the helper from src/lib/incumbency`,
-    /import\s*\{[^}]*\bshowIncumbentChip\b[^}]*\}\s*from\s*["']@\/lib\/incumbency["']/.test(
-      code
-    )
-  );
+  const problems = cardProblems(read(file));
+  check(`${file} renders the line once, from the race value`, problems.length === 0, problems.join("; "));
 }
 
-/* 3. No other reader. The helper reads is_incumbent behind the flag, and the
-   row types declare the columns; everything else goes through the helper. */
-const ALLOWED = new Set(["src/lib/incumbency.ts", "src/types/schema.ts"]);
-const COLUMN = /\b(is_incumbent|incumbent_id|is_open_seat)\b/;
+const PAGES = new Set([
+  "src/app/(public)/races/[raceId]/page.tsx",
+  "src/app/(public)/candidates/[candidateId]/page.tsx",
+]);
+const SRC = new Map(sourceFiles("src").map((f) => [f, read(f)] as const));
+function callerProblems(files: ReadonlyMap<string, string>): string[] {
+  const problems: string[] = [];
+  for (const [file, text] of files) {
+    if (file === MODULE) continue;
+    const calls = /\bincumbencyFor\s*\(/.test(stripComments(text));
+    if (calls && !PAGES.has(file)) problems.push(`${file} calls incumbencyFor`);
+    if (!calls && PAGES.has(file)) problems.push(`${file} must compute the race's incumbency line`);
+  }
+  return problems;
+}
+const callers = callerProblems(SRC);
+check("only the race page and the candidate page call incumbencyFor", callers.length === 0, callers.join("; "));
+
+/* 5. No other reader. */
+const ALLOWED = new Set([MODULE, "src/types/schema.ts"]);
+const COLUMN = /\b(is_incumbent|incumbent_id|is_open_seat|incumbency_source|incumbency_verified_at)\b/;
 const WORD = /\bincumbent\b/i;
-
-function walk(dir: string): string[] {
-  return readdirSync(dir).flatMap((name) => {
-    const path = join(dir, name);
-    if (statSync(path).isDirectory()) return walk(path);
-    return /\.(ts|tsx|js|jsx|mjs)$/.test(name) ? [path] : [];
-  });
+function readerProblems(files: ReadonlyMap<string, string>): string[] {
+  const problems: string[] = [];
+  for (const [file, text] of files) {
+    if (ALLOWED.has(file)) continue;
+    const code = stripComments(text);
+    const column = code.match(COLUMN);
+    if (column) problems.push(`${file} reads ${column[1]}`);
+    const word = code.match(WORD);
+    if (word) problems.push(`${file} prints "${word[0]}"`);
+  }
+  return problems;
 }
+const readers = readerProblems(SRC);
+check(`no other file in src/ reads incumbency or prints it (${SRC.size - ALLOWED.size} files)`, readers.length === 0, readers.join("; "));
 
-const offenders: string[] = [];
-let scanned = 0;
-for (const path of walk(SRC)) {
-  const file = relative(ROOT, path);
-  if (ALLOWED.has(file)) continue;
-  scanned++;
-  /* The gated chip itself is the one sanctioned use, checked in part 2. */
-  const code = stripComments(readFileSync(path, "utf8")).replace(
-    GATED_CHIP,
-    ""
-  );
-  const column = code.match(COLUMN);
-  if (column) offenders.push(`${file} reads ${column[1]}`);
-  const word = code.match(WORD);
-  if (word) offenders.push(`${file} prints "${word[0]}"`);
-}
-check(
-  `no other file in src/ reads incumbency or prints it (${scanned} files)`,
-  offenders.length === 0,
-  offenders.join("; ")
+/* 6. Mutations. */
+await mutation("the all-or-none test deleted (an unsourced candidate reads No)", async () =>
+  flagOnProblems(await flagOn([["  if (!candidates.every((c) => Boolean(c.incumbency_verified_at))) return null;\n", ""]])),
 );
+await mutation("the line rendered only when true", async () =>
+  flagOnProblems(
+    await flagOn([
+      [
+        "if (!incumbency || !Object.hasOwn(incumbency.byCandidate, candidateId)) return null;",
+        "if (!incumbency || !incumbency.byCandidate[candidateId]) return null;",
+      ],
+    ]),
+  ),
+);
+await mutation("the flag no longer gates the line", async () =>
+  flagOffProblems(await importVariant<Module>(MODULE, [[FLAG, "export const SHOW_INCUMBENT_CHIP: boolean = false;"], ["  if (!SHOW_INCUMBENT_CHIP) return null;\n", ""]])),
+);
+await mutation('a House race labelled "Holds this seat now"', async () => {
+  const m = await importVariant<Module>(MODULE, [['[/^FL-\\d+-general$/, "Member of the U.S. House now"]', '[/^FL-\\d+-general$/, "Holds this seat now"]']]);
+  return labelProblems(m.incumbencyLabel);
+});
+await mutation("the line component styles Yes differently", () =>
+  lineComponentProblems(
+    edit(
+      read(LINES),
+      'const text = incumbencyLine(incumbency, candidateId);\n  return text ? <p className="text-caption text-on-surface-muted">{text}</p> : null;',
+      'const text = incumbencyLine(incumbency, candidateId);\n  return text ? <p className={text.endsWith("Yes") ? "font-bold" : "text-caption"}>{text}</p> : null;',
+    ),
+  ),
+);
+await mutation("a card shows the line only for the incumbent", () =>
+  cardProblems(edit(read(CARDS[2]), USE, `{candidate.is_incumbent && ${USE}}`)),
+);
+await mutation("a card drops the line", () => cardProblems(edit(read(CARDS[1]), USE, "")));
+await mutation("the old chip comes back", () => {
+  const copy = new Map(SRC);
+  copy.set(CARDS[0], edit(read(CARDS[0]), USE, `${USE}<Chip>Incumbent</Chip>`));
+  return readerProblems(copy);
+});
+await mutation("a loader reads is_open_seat", () => {
+  const copy = new Map(SRC);
+  copy.set("src/lib/listing.ts", `${read("src/lib/listing.ts")}\nexport const open = (r: { is_open_seat: boolean }) => r.is_open_seat;\n`);
+  return readerProblems(copy);
+});
+await mutation("a page stops computing the race value", () => {
+  const copy = new Map(SRC);
+  const page = "src/app/(public)/candidates/[candidateId]/page.tsx";
+  copy.set(page, read(page).split("incumbencyFor(").join("noIncumbency("));
+  return callerProblems(copy);
+});
 
-const helper = stripComments(
-  readFileSync(join(ROOT, "src/lib/incumbency.ts"), "utf8")
-);
-check(
-  "the helper reads is_incumbent only behind SHOW_INCUMBENT_CHIP",
-  /return\s+SHOW_INCUMBENT_CHIP\s*&&\s*candidate\.is_incumbent\s*;/.test(
-    helper
-  ) && (helper.match(/\.is_incumbent\b/g) ?? []).length === 1
-);
-
-if (failures) {
-  console.error(`\n${failures} incumbent-chip check(s) failed`);
-  process.exit(1);
-}
-console.log("\nAll incumbent-chip checks passed.");
+done();

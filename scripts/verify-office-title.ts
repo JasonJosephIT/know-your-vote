@@ -104,9 +104,12 @@ check(
 );
 check(
   '"Running for" uses it in the brief and the listed state',
-  /const \{ office, settled \} = await runningFor\(detail\.raceId, detail\.office\);/.test(candidatePage) &&
-    /const \{ office \} = await runningFor\(listing\.raceId, listing\.office\);/.test(candidatePage) &&
-    /<CandidateListing listing=\{\{ \.\.\.listing, office \}\} \/>/.test(candidatePage) &&
+  /* The destructuring may also take the race-level card lines runningFor
+     returns (roster-completeness spec §3.5, §3.6); `office` is still the one
+     "Running for" prints. */
+  /const \{ office, settled(?:, \w+)* \} = await runningFor\(detail\.raceId, detail\.office\);/.test(candidatePage) &&
+    /const \{ office(?:, \w+)* \} = await runningFor\(listing\.raceId, listing\.office\);/.test(candidatePage) &&
+    /<CandidateListing\s+listing=\{\{ \.\.\.listing, office \}\}/.test(candidatePage) &&
     !/\{detail\.office\}/.test(candidatePage)
 );
 

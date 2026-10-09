@@ -665,14 +665,26 @@ check(
 );
 
 /* Caches that hold candidate order were re-keyed, so production stops
-   serving an older deploy's order the moment this one ships. */
+   serving an older deploy's order the moment this one ships. v2 was the
+   ballot-order bump. v3 for the race loaders, and v2 for the two candidate
+   loaders, is roster-completeness spec §3.9: an entry cached before 0049 was
+   applied lacks its five columns, so a page built by the new deploy would
+   show no running-mate line for up to an hour. */
 check(
-  "getRaceBrief cache key is v2",
-  src("src/lib/briefs.ts").includes('["race-brief", "v2", raceId]')
+  "getRaceBrief cache key is v3",
+  src("src/lib/briefs.ts").includes('["race-brief", "v3", raceId]')
 );
 check(
-  "getRaceListing cache key is v2",
-  src("src/lib/listing.ts").includes('["race-listing", "v2", raceId]')
+  "getRaceListing cache key is v3",
+  src("src/lib/listing.ts").includes('["race-listing", "v3", raceId]')
+);
+check(
+  "getCandidateDetail cache key is v2",
+  src("src/lib/briefs.ts").includes('["candidate-detail", "v2", candidateId]')
+);
+check(
+  "getCandidateListing cache key is v2",
+  src("src/lib/listing.ts").includes('["candidate-listing", "v2", candidateId]')
 );
 check(
   "methodology scrutiny cache key is v4",

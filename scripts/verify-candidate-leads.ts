@@ -17,6 +17,7 @@ import {
   leadDedupeKey,
   mentionProblem,
   mentionsRunningMate,
+  namesToCheck,
   normalizeName,
   planQueue,
   type Mention,
@@ -294,6 +295,27 @@ check("merged mentions stop at 20 stories and never repeat one",
 const again = buildLeads(mentions, stories, roster, new Set(["bryan avila|running_mate|statewide"]));
 check("a key already queued or decided is skipped as already_queued",
   !again.leads.some((l) => l.kind === "running_mate") && again.dropped.some((d) => d.reason === "already_queued"));
+
+/* ---- stored running mates (roster-completeness spec §3.6) ----------------
+   `check` compares mentions against R5's roster plus the running mates 0049
+   stores, so a running mate we already list is dropped, not queued again. */
+
+check("namesToCheck adds the stored running mates and skips blanks",
+  JSON.stringify(namesToCheck(["Byron Donalds"], ["Bryan Avila", null, "", "   ", undefined]))
+    === JSON.stringify(["Byron Donalds", "Bryan Avila"]),
+  JSON.stringify(namesToCheck(["Byron Donalds"], ["Bryan Avila", null, "", "   ", undefined])));
+const withMates = buildLeads(mentions, stories, namesToCheck(roster, ["Bryan Avila"]), new Set());
+check("a running mate already stored is dropped as on_roster, with or without the accent",
+  !withMates.leads.some((l) => l.kind === "running_mate")
+    && JSON.stringify(withMates.dropped.filter((d) => d.reason === "on_roster").map((d) => d.name))
+      === JSON.stringify(["Bryan Avila", "Bryan Ávila", "Byron Donalds"]),
+  JSON.stringify(withMates.dropped));
+check("with no stored running mates, the results are what they were",
+  JSON.stringify(buildLeads(mentions, stories, namesToCheck(roster, []), new Set())) === JSON.stringify(built));
+const replaced = buildLeads(mentions, stories, namesToCheck(roster, ["Someone Else"]), new Set());
+check("a running mate who is not the one stored (a replacement) still becomes a lead",
+  replaced.leads.filter((l) => l.kind === "running_mate").length === 1,
+  JSON.stringify(replaced.leads.map((l) => l.dedupe_key)));
 
 /* ---- the queue batch ---------------------------------------------------- */
 

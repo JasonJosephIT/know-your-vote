@@ -8,12 +8,15 @@
    incumbency.ts and the row types mentions the incumbency columns, and none of
    this is app code.
 
-   normalizeDoeText is the spec's D6 rule. The spec places it in
-   src/lib/running-mate.ts; that file belongs to the display PR (PR 2,
-   claude/roster-display), which moves this function there and points
-   roster-reads.ts at it. Until then this is the one copy. */
+   normalizeDoeText, the spec's D6 rule, lives in src/lib/running-mate.ts
+   (the display PR moved it there). It is re-exported here so the read tool,
+   the worksheet checker and their tests keep one import, and there is still
+   one copy. */
 
 import { decodeEntities } from "../src/lib/candidate-site.ts";
+import { normalizeDoeText } from "../src/lib/running-mate.ts";
+
+export { normalizeDoeText };
 
 /** The Division of Elections page for one candidate: <n> is the number in
     our FL-DOE-<n> id (spec §2.6). */
@@ -23,19 +26,6 @@ export const canDetailUrl = (account: string) =>
 /** The worksheet's time format, minutes in UTC: 2026-10-09T14:05Z. */
 export const worksheetTime = (iso: string) => `${iso.slice(0, 16)}Z`;
 
-/** D6: decode HTML entities, turn non-breaking spaces into spaces, collapse
-    every run of whitespace (spaces, tabs, CR, LF) to one space, trim.
-    Nothing else changes: case, accents and punctuation stay as printed.
-    Fail-closed: an entity the decoder does not know (say `&ntilde;`) throws,
-    so a half-decoded name can never be stored. */
-export function normalizeDoeText(raw: string): string {
-  const decoded = decodeEntities(raw).replace(/\xa0/g, " ");
-  const leftover = decoded.match(/&(?:#\d+|#x[0-9a-f]+|[a-z][a-z0-9]*);/i);
-  if (leftover) {
-    throw new Error(`normalizeDoeText: undecoded entity ${leftover[0]} in ${JSON.stringify(raw)}`);
-  }
-  return decoded.replace(/\s+/g, " ").trim();
-}
 
 export interface RunningMateRead {
   /** "2026 General Election", or null if the heading is missing. */

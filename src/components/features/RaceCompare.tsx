@@ -1,16 +1,18 @@
 import Link from "next/link";
 import { PartyChip } from "@/components/ui/PartyChip";
-import { Chip } from "@/components/ui/Chip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
+import { CampaignWebsite } from "@/components/features/CampaignWebsite";
 import { PolicyAreaChip, policyAreaHref } from "@/components/ui/PolicyAreaChip";
 import { IssueBuckets } from "@/components/features/IssueSection";
 import { NoStatedPositionNote } from "@/components/features/ClaimList";
+import { IncumbencyLine, RunningMateLine } from "@/components/features/RosterLines";
 import type { RaceBrief } from "@/lib/briefs";
 import { CONTACT_EMAIL } from "@/lib/contact";
-import { showIncumbentChip } from "@/lib/incumbency";
+import type { Incumbency } from "@/lib/incumbency";
 import { candidateExtras, raceRows } from "@/lib/race-rows";
 import { statusBranch } from "@/lib/listing-copy";
 import { partyLegend } from "@/lib/party-label";
+import type { RunningMates } from "@/lib/running-mate";
 
 /* The race page, issue first (inspiration pass 2026-10-05, after CalMatters'
    2026 guide). It used to be one full CandidateBrief column per candidate,
@@ -19,7 +21,7 @@ import { partyLegend } from "@/lib/party-label";
    so comparing two candidates on one issue meant hunting. Now:
 
    1. Who's running: one short card per candidate (name, party, Keep in mind,
-      official site, full profile). Socials live on the profile page.
+      campaign website, full profile). Socials live on the profile page.
    2. One row per spine issue, with a cell for every candidate in ballot
       order, so an issue reads across. Claims past the first two sit behind
       "Show N more from <name>" (ClaimList).
@@ -37,9 +39,22 @@ import { partyLegend } from "@/lib/party-label";
    was working around.
 
    Recommended (pending founder confirmation). TO FLIP back to columns:
-   render brief.candidates.map(c => <CandidateBrief data={c} />) in the old
-   grid (git history of this file, before 2026-10-05). */
-export function RaceCompare({ brief }: { brief: RaceBrief }) {
+   render brief.candidates.map(c => <CandidateBrief data={c}
+   incumbency={incumbency} runningMates={runningMates} />) in the old grid
+   (git history of this file, before 2026-10-05). */
+export function RaceCompare({
+  brief,
+  incumbency,
+  runningMates,
+}: {
+  brief: RaceBrief;
+  /** The race's incumbency line (incumbencyFor), computed once per race by
+      the page: every roster card shows it, or none does. */
+  incumbency: Incumbency | null;
+  /** The race's running mates (runningMatesFor), computed once per race by
+      the page: every Governor card shows its line, or none does. */
+  runningMates: RunningMates | null;
+}) {
   const count = brief.candidates.length;
   const cols = { "--cols": Math.min(count, 3) } as React.CSSProperties;
   const grid =
@@ -102,14 +117,15 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
                   {candidate.legal_name}
                 </Link>
               </h3>
+              <RunningMateLine runningMates={runningMates} candidateId={candidate.candidate_id} />
               <div className="flex flex-wrap items-center gap-2">
                 <PartyChip party={candidate.party} />
-                {showIncumbentChip(candidate) && <Chip>Incumbent</Chip>}
                 <SaveToggle
                   candidateId={candidate.candidate_id}
                   name={candidate.legal_name}
                 />
               </div>
+              <IncumbencyLine incumbency={incumbency} candidateId={candidate.candidate_id} />
               <p className="mt-auto flex flex-wrap gap-x-3 gap-y-1 text-caption text-on-surface-muted">
                 <Link
                   href={`/candidates/${candidate.candidate_id}`}
@@ -118,17 +134,7 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
                   {socials.length > 0 ? "Full profile and socials" : "Full profile"}
                   <span className="sr-only">: {candidate.legal_name}</span>
                 </Link>
-                {candidate.official_site && (
-                  <a
-                    href={candidate.official_site}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex min-h-[24px] items-center underline underline-offset-2 hover:text-on-surface"
-                  >
-                    Official site
-                    <span className="sr-only">: {candidate.legal_name}</span>
-                  </a>
-                )}
+                <CampaignWebsite url={candidate.official_site} name={candidate.legal_name} />
                 <a
                   href={`mailto:${CONTACT_EMAIL}?subject=Flag%20brief%3A%20${candidate.candidate_id}`}
                   className="inline-flex min-h-[24px] items-center underline underline-offset-2 hover:text-on-surface"

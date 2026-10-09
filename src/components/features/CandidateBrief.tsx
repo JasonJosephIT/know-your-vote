@@ -1,21 +1,23 @@
 import Link from "next/link";
 import { PartyChip } from "@/components/ui/PartyChip";
-import { Chip } from "@/components/ui/Chip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
+import { CampaignWebsite } from "@/components/features/CampaignWebsite";
 import { IssueSection } from "@/components/features/IssueSection";
+import { IncumbencyLine, RunningMateLine } from "@/components/features/RosterLines";
 import type { CandidateBriefData } from "@/lib/briefs";
 import { CONTACT_EMAIL } from "@/lib/contact";
-import { showIncumbentChip } from "@/lib/incumbency";
+import type { Incumbency } from "@/lib/incumbency";
+import type { RunningMates } from "@/lib/running-mate";
 
 /* One candidate's full brief. Structure is identical for every candidate in
    a race — equal space and equal scrutiny are layout invariants, not
    editorial choices.
 
-   That is why the Incumbent chip goes through showIncumbentChip and is off
-   for everyone for now: is_incumbent is filled for one ballot candidate in
-   106, so the chip marked one incumbent and left the rest looking like
-   challengers (src/lib/incumbency.ts, recommended pending founder
-   confirmation, says what must be true before it comes back).
+   That is why the header has no chip that only some candidates get. The
+   incumbency line and the running-mate line (RosterLines) take one value
+   computed for the whole race, so every card in the race shows the line or
+   none does (src/lib/incumbency.ts and src/lib/running-mate.ts, recommended
+   pending founder confirmation).
 
    Accessibility (a11y-perf-2026-10-04.md):
    - The article's id, candidate-<candidate_id>, is the target of RaceCompare's
@@ -23,21 +25,30 @@ import { showIncumbentChip } from "@/lib/incumbency";
      (FL-DOE-…, FL-VF-…). The fixed bars are cleared by the html
      scroll-padding from fix 1, not by a scroll-margin here, so the two do not
      add up to a double offset.
-   - "Keep in mind", "Official site" and "Flag this brief as biased" repeat
-     once per candidate, so each carries the candidate's name as a visually
-     hidden suffix after its visible label (fix 6; WCAG 2.4.4 and 2.4.6, with
-     the label still first for 2.5.3 Label in Name).
-   - The official-site and social links are 18 px of caption text in a row
-     with a 4 px gap, so each gets a 24 px minimum height (fix 9; WCAG 2.5.8
-     Target Size). min-h-[24px], not min-h-6: this theme's spacing-6 is 32 px. */
+   - "Keep in mind", the campaign-website link and "Flag this brief as
+     biased" repeat once per candidate, so each carries the candidate's name
+     as a visually hidden suffix after its visible label (fix 6; WCAG 2.4.4
+     and 2.4.6, with the label still first for 2.5.3 Label in Name).
+   - The campaign-website and social links are 18 px of caption text in a
+     row with a 4 px gap, so each gets a 24 px minimum height (fix 9; WCAG
+     2.5.8 Target Size). min-h-[24px], not min-h-6: this theme's spacing-6 is
+     32 px. The website slot is CampaignWebsite, the same on every card. */
 export function CandidateBrief({
   data,
   headingLevel = "h2",
   linkToDetail = true,
+  incumbency,
+  runningMates,
 }: {
   data: CandidateBriefData;
   headingLevel?: "h2" | "h3";
   linkToDetail?: boolean;
+  /** The race's incumbency line (incumbencyFor), computed once per race by
+      the page: every card shows it, or none does. */
+  incumbency: Incumbency | null;
+  /** The race's running mates, computed once per race by the page
+      (runningMatesFor): every Governor card shows its line, or none does. */
+  runningMates: RunningMates | null;
 }) {
   const { candidate, socials, issues } = data;
   const Heading = headingLevel;
@@ -60,26 +71,17 @@ export function CandidateBrief({
             candidate.legal_name
           )}
         </Heading>
+        <RunningMateLine runningMates={runningMates} candidateId={candidate.candidate_id} />
         <div className="flex flex-wrap items-center gap-2">
           <PartyChip party={candidate.party} />
-          {showIncumbentChip(candidate) && <Chip>Incumbent</Chip>}
           <SaveToggle
             candidateId={candidate.candidate_id}
             name={candidate.legal_name}
           />
         </div>
+        <IncumbencyLine incumbency={incumbency} candidateId={candidate.candidate_id} />
         <p className="flex flex-wrap gap-x-3 gap-y-1 text-caption text-on-surface-muted">
-          {candidate.official_site && (
-            <a
-              href={candidate.official_site}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex min-h-[24px] items-center underline underline-offset-2 hover:text-on-surface"
-            >
-              Official site
-              <span className="sr-only">: {candidate.legal_name}</span>
-            </a>
-          )}
+          <CampaignWebsite url={candidate.official_site} name={candidate.legal_name} />
           {socials.map((s) => (
             <a
               key={s.id}

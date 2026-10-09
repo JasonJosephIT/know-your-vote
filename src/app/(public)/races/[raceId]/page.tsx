@@ -15,6 +15,8 @@ import { officeTitle } from "@/lib/office-title";
 import { spineOptions } from "@/lib/issue-pick";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
+import { incumbencyFor } from "@/lib/incumbency";
+import { runningMatesFor } from "@/lib/running-mate";
 
 export const revalidate = 3600;
 
@@ -100,6 +102,11 @@ export default async function RacePage({
     );
   }
 
+  /* The race-level card lines (roster-completeness spec §3.5, §3.6) are
+     computed here, at render, on the rows the cached loader returned, so a
+     code change to them takes effect on its deploy (§3.9). */
+  const raceCandidates = brief.candidates.map((c) => c.candidate);
+
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-5 px-5 py-8">
       {/* The heading names the district for a House race (officeTitle);
@@ -157,7 +164,11 @@ export default async function RacePage({
         options={spineOptions(brief.spineIssues)}
         selected={[]}
       />
-      <RaceCompare brief={brief} />
+      <RaceCompare
+        brief={brief}
+        incumbency={incumbencyFor(brief.race, raceCandidates)}
+        runningMates={runningMatesFor(raceCandidates)}
+      />
 
       <footer className="flex flex-wrap gap-4 text-caption text-on-surface-muted">
         <Link href="/methodology" className="underline underline-offset-2">
@@ -187,6 +198,7 @@ function ListedRace({ listing }: { listing: RaceListingData }) {
     count: listing.candidates.length,
     level: listing.race.level,
   });
+  const raceCandidates = listing.candidates.map((c) => c.candidate);
 
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-5 px-5 py-8">
@@ -199,7 +211,11 @@ function ListedRace({ listing }: { listing: RaceListingData }) {
         {copy.countyNote && <p>{copy.countyNote}</p>}
       </section>
 
-      <RaceListing listing={listing} />
+      <RaceListing
+        listing={listing}
+        incumbency={incumbencyFor(listing.race, raceCandidates)}
+        runningMates={runningMatesFor(raceCandidates)}
+      />
 
       <footer className="flex flex-wrap gap-4 text-caption text-on-surface-muted">
         <Link href="/methodology" className="underline underline-offset-2">

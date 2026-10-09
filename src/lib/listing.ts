@@ -11,9 +11,9 @@ import type { Candidate, CandidateSocialAccount, Race } from "@/types/schema";
    and is not touched by any of this.
 
    What a listing is: who is on the ballot for a race — legal name, party,
-   incumbency (read, but not shown while src/lib/incumbency.ts keeps the
-   chip off), official site, verified socials, and the DoE's qualifying
-   status. All of it is public record from the Florida Division of Elections
+   incumbency and running mate (shown only through src/lib/incumbency.ts and
+   src/lib/running-mate.ts), campaign website, verified socials, and the
+   DoE's qualifying status. All of it is public record from the Florida Division of Elections
    and the county Supervisors of Elections, not editorial content, which is
    why it can be shown before the Balance Audit has cleared a brief.
 
@@ -144,11 +144,13 @@ async function fetchRaceListing(raceId: string): Promise<RaceListing | null> {
 /* Same cache shape and tags as getRaceBrief, so a set_race_publication
    revalidation of `race:<id>` refreshes the listing and the brief together.
    v2 for the same reason as getRaceBrief's: the cards are now in Florida's
-   ballot order (ballot-order.ts), and an older deploy's entry is not. */
+   ballot order (ballot-order.ts), and an older deploy's entry is not. v3
+   with getRaceBrief's v3: candidate rows carry 0049's five columns
+   (roster-completeness spec §3.9). */
 export function getRaceListing(raceId: string) {
   return unstable_cache(
     () => fetchRaceListing(raceId),
-    ["race-listing", "v2", raceId],
+    ["race-listing", "v3", raceId],
     { revalidate: 3600, tags: ["races", `race:${raceId}`] }
   )();
 }
@@ -208,10 +210,11 @@ async function fetchCandidateListing(
   };
 }
 
+/* v2 with getRaceListing's v3 (0049's columns, spec §3.9). */
 export function getCandidateListing(candidateId: string) {
   return unstable_cache(
     () => fetchCandidateListing(candidateId),
-    ["candidate-listing", candidateId],
+    ["candidate-listing", "v2", candidateId],
     { revalidate: 3600, tags: ["races", `candidate:${candidateId}`] }
   )();
 }

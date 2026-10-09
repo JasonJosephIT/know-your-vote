@@ -4,8 +4,8 @@ import { Card } from "@/components/ui/Card";
 import { PartyChip } from "@/components/ui/PartyChip";
 import { PolicyAreaChip } from "@/components/ui/PolicyAreaChip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
+import { CampaignWebsite } from "@/components/features/CampaignWebsite";
 import { browseCandidates, type DecidedSeat } from "@/lib/directory";
-import { safeHttpUrl } from "@/lib/format";
 import { policyAreaLabel } from "@/lib/policy-areas";
 import { COVERED_COUNTIES } from "@/lib/counties";
 
@@ -201,15 +201,16 @@ export async function CandidateBrowser({
                         ))}
                       </ul>
                     )}
-                    {/* "Read their brief" / "About this candidate", "Official
-                        site" and "Keep in mind" repeat on every card, so each
-                        carries the candidate's name as a visually hidden
-                        suffix after its visible label (a11y-perf-2026-10-04.md
-                        fix 6; WCAG 2.4.4, 2.4.6, label first for 2.5.3).
-                        Fix 9's 24 px minimum height is not applied here: the
-                        audit found no target-size failure on /candidates,
-                        where these two links sit side by side, not in a
-                        wrapping row of short social handles. */}
+                    {/* "Read their brief" / "About this candidate", the
+                        campaign-website link and "Keep in mind" repeat on
+                        every card, so each carries the candidate's name as a
+                        visually hidden suffix after its visible label
+                        (a11y-perf-2026-10-04.md fix 6; WCAG 2.4.4, 2.4.6,
+                        label first for 2.5.3). Fix 9's 24 px minimum height
+                        is not added to the brief link: the audit found no
+                        target-size failure on /candidates. The website link
+                        has it anyway, because CampaignWebsite is the same
+                        slot on every card. */}
                     <div className="mt-auto flex flex-wrap gap-x-3 gap-y-1 text-caption text-on-surface-muted">
                       <Link
                         href={`/candidates/${c.candidate_id}`}
@@ -220,21 +221,11 @@ export async function CandidateBrowser({
                           : "About this candidate"}
                         <span className="sr-only">: {c.legal_name}</span>
                       </Link>
-                      {/* The campaign's own site — always selected, never
-                          shown until now. Routed through safeHttpUrl like
-                          every other stored URL, so a bad row renders no link
-                          rather than a javascript: one. */}
-                      {safeHttpUrl(c.official_site) && (
-                        <a
-                          href={safeHttpUrl(c.official_site) ?? undefined}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-primary underline underline-offset-2"
-                        >
-                          Official site
-                          <span className="sr-only">: {c.legal_name}</span>
-                        </a>
-                      )}
+                      {/* The same slot as every other card
+                          (CampaignWebsite): the host as a link, or "none
+                          listed". The URL goes through safeHttpUrl there, so
+                          a bad row reads "none listed" rather than linking. */}
+                      <CampaignWebsite url={c.official_site} name={c.legal_name} />
                       <SaveToggle
                         candidateId={c.candidate_id}
                         name={c.legal_name}

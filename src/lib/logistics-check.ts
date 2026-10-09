@@ -682,7 +682,7 @@ export function buildCheck(input: CheckInput): CheckResult {
 
   /* Running mates: report lines only (spec §3.6). */
   if (!input.runningMates.column) {
-    report.push("running mates: not compared; candidate.running_mate does not exist yet (roster-completeness 0049)");
+    report.push("running mates: not compared; the running-mate column does not exist yet (roster-completeness 0049)");
   } else {
     for (const c of input.roster.filter((r) => r.raceId === GOVERNOR_RACE_ID)) {
       const page = input.runningMates.pages[c.candidateId];

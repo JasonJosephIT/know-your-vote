@@ -1,58 +1,130 @@
-/* Whether a candidate card shows the "Incumbent" chip (CandidateBrief on a
-   published race, ListedCandidateCard on a listed one). The only place in
-   src/ that reads candidate.is_incumbent.
+/* The incumbency line on candidate cards (spec
+   docs/superpowers/specs/2026-10-08-roster-completeness-design.md §3.1,
+   §3.5 and §3.11; D1 to D3, each Recommended pending founder confirmation).
+   The only place in src/ that reads candidate.is_incumbent or the
+   incumbency columns 0049 adds.
+
+   What a voter sees once SHOW_INCUMBENT_CHIP is true: one line under the
+   party chip on every card in a race, "<label>: Yes" or "<label>: No", as
+   plain caption text (IncumbencyLine, src/components/features/RosterLines.tsx).
+   The label is the same on every card in the race; only the value differs,
+   as the name does. It replaces the "Incumbent" chip, which only an
+   incumbent got: a label some candidates get and others do not is what the
+   house rule forbids, so a chip shown only when true is not offered (D2).
+
+   Each label states a fact that is true of the person beside it (D1). A
+   member of a body counts whatever seat they hold, so on FL-20, where
+   Wasserman Schultz holds District 25 under the map she was elected on, the
+   line says she is a member of the U.S. House, never that she holds
+   District 20. "Holds this office now" is used only for an office one
+   person holds.
+
+   All or none per race: incumbencyFor returns the line only when every
+   ballot candidate in the race has incumbency_verified_at (0049). A
+   candidate added later without a source hides the line for the whole race
+   instead of reading "No", because before 0049 false only meant "unknown"
+   (0031:41-43, 0038).
+
+   Computed at render, on the rows the cached loaders return (the race page
+   and the candidate page call incumbencyFor), so a change here, the flip
+   included, takes effect on the deploy that ships it (§3.9).
+   race.incumbent_id and race.is_open_seat stay unread in src/: the line
+   carries the fact a voter needs (D4).
 
    ------------------------------------------------------------------------
-   Recommended (pending founder confirmation): show the chip for nobody
-   until every ballot candidate's is_incumbent has been set from a verified
-   source. Until then SHOW_INCUMBENT_CHIP is false and both cards render no
-   chip at all.
-
-   Why. A read-only SELECT on production, 2026-10-05: is_incumbent is true
-   for exactly one of the 106 ballot-tier candidates, Patricia "Patti" Rendon
-   (FL-VF-HIL-2672), unopposed in the listed race FL-HIL-SB4-general. 0038 set
-   that one row by hand, and 0046 (2026-10-07) set a second the same way:
-   James Uthmeier, the sitting Attorney General, with race.incumbent_id beside
-   both. Every other sitting officeholder on the ballot
-   (Moody, Castor, Salazar, Wasserman Schultz, Simpson, and the
-   county commissioners and school board members running for their own
-   seats) is false, because false has only ever meant "unknown": 0031 left it
-   false where the county lists do not state incumbency, 0038 says so again,
-   and the B4 incumbency write (docs/general-election/data-ingest.md §7, B4)
-   has code but has never run against the live database. The same run fills
-   race.incumbent_id (null on all 53 races) and race.is_open_seat (false on
-   all 53), which is why nothing in src/ reads those either.
-
-   So the chip did not mark incumbents. It marked one, and beside her every
-   other incumbent read as a challenger. The card header is identical for
-   every candidate on purpose (equal space and equal scrutiny are layout
-   invariants, CandidateBrief), and a label that one person in 106 gets breaks
-   that as surely as a wider column would.
-
-   Fixed in code, not data. Clearing Rendon's flag would hide the chip today
-   too, but it would delete a true fact and leave the display one hand-set row
-   away from the same problem. Gating the display is what keeps a partly
-   filled column from reaching a voter, whichever rows get filled next.
-
-   TO FLIP (set SHOW_INCUMBENT_CHIP to true) only when all of these hold:
-   - every ballot-tier candidate (ballot_status = 'ballot', the ones any race
-     lists) has is_incumbent set from a verified source: the B4 FEC run for
-     the federal seats, and an official roster (the Division of Elections, the
-     county Supervisor of Elections, the body's own member page) for the
-     state and county ones;
-   - a false on any of them is a checked "not the sitting officeholder", not
-     a default;
-   - race.incumbent_id agrees with it (the incumbent's id where one runs).
-   Nothing else needs editing: both cards call showIncumbentChip, and
-   scripts/verify-incumbent-chip.ts checks that nothing else renders the chip
-   or reads the incumbency columns.
+   TO FLIP (set SHOW_INCUMBENT_CHIP to true) only when every one of these
+   holds, with the query output pasted into the flip PR (spec §3.11):
+   1. 0049_roster_completeness is applied live and its DO block passed.
+   2. Every ballot candidate carries a source. Must return 0:
+        SELECT count(*) FROM candidate c
+         WHERE c.ballot_status = 'ballot'
+           AND EXISTS (SELECT 1 FROM race r WHERE c.candidate_id = ANY (r.candidate_ids))
+           AND c.incumbency_verified_at IS NULL;
+   3. Every race agrees with its candidates. Must return no rows:
+        SELECT r.race_id
+          FROM race r
+          CROSS JOIN LATERAL (
+            SELECT count(*) FILTER (WHERE c.is_incumbent)                         AS n_inc,
+                   max(c.candidate_id) FILTER (WHERE c.is_incumbent)              AS one_inc,
+                   coalesce(bool_or(c.is_incumbent AND c.candidate_id = r.incumbent_id), false) AS named_ok
+              FROM candidate c
+             WHERE c.candidate_id = ANY (r.candidate_ids) AND c.ballot_status = 'ballot') s
+         WHERE r.is_open_seat <> (r.incumbent_id IS NULL)
+            OR (r.incumbent_id IS NOT NULL AND NOT s.named_ok)
+            OR (s.n_inc = 1 AND r.incumbent_id IS DISTINCT FROM s.one_inc);
+   4. node scripts/verify-incumbent-chip.ts passes, including the label
+      check over the 53 production race ids.
+   5. The display is merged and deployed with the flag still false, and its
+      live check is done.
+   6. The founder says yes by Thu 10-15 (D3), and the flip PR is merged and
+      deployed by Fri 10-16 18:00 EDT. If any of these misses, the flag stays
+      false through Nov 3.
+   The flip PR sets the constant, changes the one expectation in
+   scripts/verify-incumbent-chip.ts that pins it, and adds the methodology
+   paragraph (§3.5). A wrong value anywhere is handled the other way round
+   (§3.10): one line setting it back to false hides the line on every race
+   at once and writes nothing; under D3 it then stays off through Nov 3.
    ------------------------------------------------------------------------ */
 export const SHOW_INCUMBENT_CHIP: boolean = false;
 
-/* Pure, and takes only the one field, so verify-incumbent-chip.ts can drive
-   it under plain node with no Candidate row. */
-export function showIncumbentChip(candidate: {
+/* The label table (§3.5), keyed on race_id, first match wins. A race_id no
+   row matches gets no label, and its race shows no line. */
+const LABELS: ReadonlyArray<readonly [RegExp, string]> = [
+  [/^FL-\d+-general$/, "Member of the U.S. House now"],
+  [/^FL-SEN-general$/, "Member of the U.S. Senate now"],
+  [/^FL-(GOV|ATG|CFO|AGR|ORA-MAYOR|ORA-CLERK)-general$/, "Holds this office now"],
+  [/^FL-BRO-CC[A-Z0-9]*-general$/, "Member of the Broward County Commission now"],
+  [/^FL-DAD-CC[A-Z0-9]*-general$/, "Member of the Miami-Dade County Commission now"],
+  [/^FL-HIL-CC[A-Z0-9]*-general$/, "Member of the Hillsborough County Commission now"],
+  [/^FL-ORA-CC[A-Z0-9]*-general$/, "Member of the Orange County Commission now"],
+  [/^FL-BRO-SB[A-Z0-9]*-general$/, "Member of the Broward County School Board now"],
+  [/^FL-DAD-SB[A-Z0-9]*-general$/, "Member of the Miami-Dade County School Board now"],
+  [/^FL-HIL-SB[A-Z0-9]*-general$/, "Member of the Hillsborough County School Board now"],
+  [/^FL-ORA-SB[A-Z0-9]*-general$/, "Member of the Orange County School Board now"],
+];
+
+export function incumbencyLabel(raceId: string): string | null {
+  for (const [pattern, label] of LABELS) if (pattern.test(raceId)) return label;
+  return null;
+}
+
+/** One race's line: the label every card in it shows, and each ballot
+    candidate's value, true for Yes and false for No. */
+export interface Incumbency {
+  label: string;
+  byCandidate: Readonly<Record<string, boolean>>;
+}
+
+/** The fields incumbencyFor reads. incumbency_verified_at is optional
+    because a row read before 0049 was applied has no such field, and
+    missing means "not set". */
+export interface IncumbencyRow {
+  candidate_id: string;
   is_incumbent: boolean;
-}): boolean {
-  return SHOW_INCUMBENT_CHIP && candidate.is_incumbent;
+  incumbency_verified_at?: string | null;
+}
+
+/** The race's line, or null when no card in it shows one: the flag is off,
+    the race has no label or no candidates, or any candidate lacks a source. */
+export function incumbencyFor(
+  race: { race_id: string },
+  candidates: readonly IncumbencyRow[]
+): Incumbency | null {
+  if (!SHOW_INCUMBENT_CHIP) return null;
+  const label = incumbencyLabel(race.race_id);
+  if (!label || candidates.length === 0) return null;
+  if (!candidates.every((c) => Boolean(c.incumbency_verified_at))) return null;
+  const byCandidate: Record<string, boolean> = {};
+  for (const c of candidates) byCandidate[c.candidate_id] = c.is_incumbent === true;
+  return { label, byCandidate };
+}
+
+/** One card's text, "<label>: Yes" or "<label>: No" from one template, or
+    null when its race shows no line. */
+export function incumbencyLine(
+  incumbency: Incumbency | null,
+  candidateId: string
+): string | null {
+  if (!incumbency || !Object.hasOwn(incumbency.byCandidate, candidateId)) return null;
+  return `${incumbency.label}: ${incumbency.byCandidate[candidateId] ? "Yes" : "No"}`;
 }

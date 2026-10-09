@@ -86,6 +86,19 @@ export interface Candidate {
   prior_offices: string[];
   official_site: string | null;
   fec_id: string | null;
+  /* 0049_roster_completeness (spec 2026-10-08-roster-completeness §3.2):
+     the URL that decides is_incumbent and the date it was first read. Both
+     null means "unknown", which is all a false meant before 0049. Read only
+     through src/lib/incumbency.ts. */
+  incumbency_source: string | null;
+  incumbency_verified_at: string | null;
+  /* 0049_roster_completeness (spec 2026-10-08-roster-completeness §3.2):
+     the Governor ticket's running mate as the Division of Elections prints
+     it (D6), the canDetail URL it was read from and the read date. All three
+     null on every other row. Read only through src/lib/running-mate.ts. */
+  running_mate: string | null;
+  running_mate_source: string | null;
+  running_mate_verified_at: string | null;
 }
 
 export interface CandidateSocialAccount {
