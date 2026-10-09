@@ -123,7 +123,17 @@ export function planEffect(content: ReviewItemContent): EffectPlan {
 
     case "date_mismatch": {
       const p = content.payload;
-      // date_mismatch always targets a race logistics field.
+      /* The election_event form (R2, agent-retrofit D3) never writes:
+         reminders and the calendar send from election_event, so a date there
+         changes only through a reviewed migration with a read-back and a
+         verified_by stamp, as 0043 did. The race form has no `target` key
+         (its schema is strict). */
+      if ("target" in p) {
+        return {
+          type: "record_disposition",
+          note: "Recorded. Change election_event through a reviewed migration: reminders and the calendar read this table.",
+        };
+      }
       return planGatedUpdate("race", p.race_id, p.field, p.official_value);
     }
 

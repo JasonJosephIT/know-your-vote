@@ -88,6 +88,13 @@
         with zero arguments is accepted and anon sees its ballot_measure and
         measure_publication rows but none of its arguments; the 32 county
         races 0033 seeds at draft stay invisible.
+    20. 0048_agent_run_r5: after every file has applied in filename order,
+        agent_run accepts R5 and every agent the console lists
+        (src/lib/admin/monitor.ts AGENTS), still refuses an unknown one, and
+        carries exactly one CHECK on agent. On fresh databases holding only
+        an agent_run table, the file's guard rebuilds the exact pre-state, is
+        a no-op on its own post-state, and raises on any other agent list
+        rather than drop a value.
 
 
    Supabase provides the anon/authenticated/service_role roles out of the box;
@@ -934,6 +941,28 @@ await check("0047 unique index allows a different dedupe_key and other kinds sha
   );
 });
 await db.exec("DELETE FROM review_item WHERE payload->>'dedupe_key' IN ('probe lead|other_county|12099','another lead|other_county|12099');");
+/* 0048: the wrapper records R5's runs (scripts/agent-run-log.ts), and the
+   console lists every agent in monitor.ts's AGENTS. Each must be insertable
+   once every file has applied, so a later file that rebuilds the CHECK and
+   drops a value fails here. */
+const consoleAgents = [
+  ...((await readFile(path.join(root, "src", "lib", "admin", "monitor.ts"), "utf8"))
+    .match(/export const AGENTS: readonly AgentName\[\] = \[([\s\S]*?)\];/)?.[1]
+    .matchAll(/"([^"]+)"/g) ?? []),
+].map((m) => m[1]);
+await check("0048 agent_run accepts R5 and every agent the console lists", async () => {
+  if (consoleAgents.length < 5) throw new Error(`could not read AGENTS from monitor.ts (got ${consoleAgents.join(", ")})`);
+  for (const agent of new Set([...consoleAgents, "R5"])) {
+    await db.exec(`INSERT INTO agent_run (agent, summary) VALUES ('${agent}', 'probe-0048');`);
+  }
+  await db.exec("DELETE FROM agent_run WHERE summary = 'probe-0048';");
+});
+await check("0048 leaves exactly one CHECK on agent_run.agent", async () => {
+  const r = await db.query(
+    "SELECT count(*)::int AS n FROM pg_constraint WHERE conrelid = 'agent_run'::regclass AND contype = 'c' AND pg_get_constraintdef(oid) ~ '\\magent\\M';"
+  );
+  if (r.rows[0].n !== 1) throw new Error(`${r.rows[0].n} CHECK constraints mention agent`);
+});
 await expectConstraintViolation(
   "review_item.status CHECK rejects an unknown status",
   "INSERT INTO review_item (kind, source, payload, status) VALUES ('manual_news','operator','{}','bogus');",
@@ -1103,17 +1132,19 @@ await check("unpublishing logs an unpublish and keeps the last-published time", 
   await db.exec(
     "SELECT set_race_publication('r-draft','in_review','op@example.com','pulled back');"
   );
+  /* Pick this call's row by its reason, not by created_at: the publish and
+     unpublish rows can share a timestamp, and on a tie 'publish' sorts first. */
   const r = await db.query(`
     SELECT rp.status, rp.published_at,
            (SELECT action FROM admin_action WHERE subject_ref='r-draft'
-             ORDER BY created_at DESC, action LIMIT 1) AS latest_action,
+             AND detail->>'reason'='pulled back') AS logged_action,
            (SELECT count(*)::int FROM admin_action WHERE subject_ref='r-draft') AS n
       FROM race_publication rp WHERE rp.race_id='r-draft';`);
   const g = r.rows[0];
   if (g.status !== "in_review") throw new Error(`status=${g.status}`);
   if (String(g.published_at) !== String(before.rows[0].published_at))
     throw new Error("published_at must survive an unpublish");
-  if (g.latest_action !== "unpublish") throw new Error(`latest_action=${g.latest_action}`);
+  if (g.logged_action !== "unpublish") throw new Error(`logged_action=${g.logged_action}`);
   if (g.n !== 2) throw new Error(`expected 2 audit rows, saw ${g.n}`);
 });
 
@@ -1188,10 +1219,11 @@ await check("set_race_publication lists a race, logs 'list', and never stamps pu
   await db.exec(
     "SELECT set_race_publication('r-draft','listed','op@example.com','roster is public record');"
   );
+  /* By reason, not created_at, for the same reason as the unpublish check. */
   const r = await db.query(`
     SELECT rp.status, rp.published_at,
            (SELECT action FROM admin_action WHERE subject_ref='r-draft'
-             ORDER BY created_at DESC, action LIMIT 1) AS latest_action,
+             AND detail->>'reason'='roster is public record') AS logged_action,
            (SELECT detail->>'new_status' FROM admin_action WHERE subject_ref='r-draft'
              AND action='list') AS logged_status,
            (SELECT detail->>'prior_status' FROM admin_action WHERE subject_ref='r-draft'
@@ -1201,7 +1233,7 @@ await check("set_race_publication lists a race, logs 'list', and never stamps pu
   if (g.status !== "listed") throw new Error(`status=${g.status}`);
   if (String(g.published_at) !== String(before.rows[0].published_at))
     throw new Error("listing must leave published_at alone");
-  if (g.latest_action !== "list") throw new Error(`latest_action=${g.latest_action}`);
+  if (g.logged_action !== "list") throw new Error(`logged_action=${g.logged_action}`);
   if (g.logged_status !== "listed" || g.logged_prior !== "in_review")
     throw new Error(`logged ${g.logged_prior} -> ${g.logged_status}`);
 });
@@ -1747,6 +1779,59 @@ await expectDenied(
 );
 
 await db.exec("RESET ROLE;");
+
+/* 0048's guard, on fresh databases holding only an agent_run table in a
+   given shape: it rebuilds the exact pre-state, is a no-op on its own
+   post-state, and raises on anything else rather than drop a value. */
+const sql0048 = await readFile(path.join(migrationsDir, "0048_agent_run_r5.sql"), "utf8");
+const agentRunWith = (values) =>
+  `CREATE TABLE agent_run (id SERIAL PRIMARY KEY, agent TEXT NOT NULL CHECK (agent IN (${values.map((v) => `'${v}'`).join(", ")})));`;
+async function probe0048(name, ddl, expect) {
+  await check(name, async () => {
+    const probe = new PGlite();
+    try {
+      await probe.exec(ddl);
+      let raised = null;
+      try {
+        await probe.exec(sql0048);
+      } catch (err) {
+        raised = err;
+      }
+      if (expect === "raise") {
+        if (!raised) throw new Error("0048 applied over an agent list its guard should refuse");
+        if (!/0048:/.test(raised.message)) throw new Error(`raised, but not by the guard: ${raised.message}`);
+        return;
+      }
+      if (raised) throw new Error(`0048 refused: ${raised.message}`);
+      for (const agent of ["R1", "R2", "R3", "R4", "R5", "dispatcher"]) {
+        await probe.exec(`INSERT INTO agent_run (agent) VALUES ('${agent}');`);
+      }
+      let refused = false;
+      try {
+        await probe.exec("INSERT INTO agent_run (agent) VALUES ('R9');");
+      } catch {
+        refused = true;
+      }
+      if (!refused) throw new Error("the rebuilt CHECK admits R9");
+    } finally {
+      await probe.close();
+    }
+  });
+}
+await probe0048("0048 rebuilds the exact pre-state with R5", agentRunWith(["R1", "R2", "R3", "R4", "dispatcher"]), "apply");
+await probe0048("0048 is a no-op on its own post-state", agentRunWith(["R1", "R2", "R3", "R4", "R5", "dispatcher"]), "apply");
+await probe0048("0048 raises when the CHECK holds an extra agent", agentRunWith(["R1", "R2", "R3", "R4", "R6", "dispatcher"]), "raise");
+await probe0048("0048 raises when the CHECK lacks an agent", agentRunWith(["R1", "R2", "R3", "R4"]), "raise");
+await probe0048(
+  "0048 raises when the agent CHECK has another name",
+  "CREATE TABLE agent_run (id SERIAL PRIMARY KEY, agent TEXT NOT NULL CONSTRAINT agent_ok CHECK (agent IN ('R1','R2','R3','R4','dispatcher')));",
+  "raise"
+);
+await probe0048(
+  "0048 raises when a second CHECK on agent exists",
+  `${agentRunWith(["R1", "R2", "R3", "R4", "dispatcher"])} ALTER TABLE agent_run ADD CONSTRAINT agent_short CHECK (length(agent) < 20);`,
+  "raise"
+);
 
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed`);

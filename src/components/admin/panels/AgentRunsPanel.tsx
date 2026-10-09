@@ -2,7 +2,7 @@ import type { AgentRunRow, PanelState } from "@/lib/admin/monitor";
 import { relativeTime } from "@/lib/admin/format";
 import { PanelCard, PanelStates } from "./PanelCard";
 
-/* Panel 1 — Agent runs (AFR-002). Newest run per R1–R4 + dispatcher. An agent
+/* Panel 1 — Agent runs (AFR-002). Newest run per R1–R5 + dispatcher. An agent
    with no run is shown as "has not run yet", never hidden. Status chip color is
    paired with the status word so color is never the only signal. */
 

@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { secretEquals } from "@/lib/secret-compare";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { createServiceClient } from "@/lib/supabase/service";
 import { enqueueIntake, runSweep } from "@/lib/news-intake";
+import { cronRunRow, type CronOutcome } from "@/lib/agent-budget";
 
 /* The news intake, daily at 11:00 UTC (vercel.json; news-source-integrity
    §3.5, founder decision D9, recommended and pending confirmation; it ran
@@ -47,6 +49,7 @@ export async function POST(request: NextRequest) {
 }
 
 async function run(request: NextRequest) {
+  const startedAt = new Date();
   if (!authorized(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -66,30 +69,58 @@ async function run(request: NextRequest) {
   try {
     sweep = await runSweep({ days: WINDOW_DAYS, log: (line) => failures.push(line.trim()) });
   } catch (err) {
-    return NextResponse.json({ error: (err as Error).message }, { status: 502 });
+    const error = (err as Error).message;
+    await recordRun(service, { startedAt, finishedAt: new Date(), sweepLine: null, queueLine: null, queued: 0, error });
+    return NextResponse.json({ error }, { status: 502 });
   }
 
   /* Feed depth, one line per run, logged before queueing so a run that fails
-     to queue still records it. Vercel's runtime logs keep it for a while;
-     the response carries the shallow feeds for a manual POST. */
+     to queue still records it. The line also goes into the run's agent_run
+     summary (news-source-integrity §3.5), which lasts longer than Vercel's
+     runtime logs; the response carries the shallow feeds for a manual POST. */
   console.log(sweep.depthLine);
 
+  let result;
   try {
-    const result = await enqueueIntake(service, sweep.articles);
-    return NextResponse.json({
-      sweep: sweep.summary,
-      shallowFeeds: sweep.shallowFeeds,
-      fetchFailures: failures,
-      queue: result.summary,
-      queued: result.queued,
-      skipped: result.skipped,
-      candidateMatches: result.attachments,
-      electionStories: result.elections,
-    });
+    result = await enqueueIntake(service, sweep.articles);
   } catch (err) {
-    return NextResponse.json(
-      { sweep: sweep.summary, shallowFeeds: sweep.shallowFeeds, error: (err as Error).message },
-      { status: 502 }
-    );
+    const error = (err as Error).message;
+    await recordRun(service, { startedAt, finishedAt: new Date(), sweepLine: sweep.summary, depthLine: sweep.depthLine, queueLine: null, queued: 0, error });
+    return NextResponse.json({ sweep: sweep.summary, shallowFeeds: sweep.shallowFeeds, error }, { status: 502 });
+  }
+
+  await recordRun(service, {
+    startedAt,
+    finishedAt: new Date(),
+    sweepLine: sweep.summary,
+    depthLine: sweep.depthLine,
+    queueLine: result.summary,
+    queued: result.queued,
+    error: null,
+  });
+  return NextResponse.json({
+    sweep: sweep.summary,
+    shallowFeeds: sweep.shallowFeeds,
+    fetchFailures: failures,
+    queue: result.summary,
+    queued: result.queued,
+    skipped: result.skipped,
+    candidateMatches: result.attachments,
+    electionStories: result.elections,
+  });
+}
+
+/* One agent_run row per run, written at the end: the cron is R1 now (spec
+   docs/superpowers/specs/2026-10-08-agent-retrofit-design.md §3.1). The 401
+   and 503 paths write none (no caller to trust, no credentials to write
+   with), and neither does a run the platform kills at maxDuration; R4's
+   missed-run rule catches all three. A failed log write is logged and never
+   fails the cron: the queued items are the run's real output. */
+async function recordRun(service: SupabaseClient, outcome: CronOutcome): Promise<void> {
+  try {
+    const { error } = await service.from("agent_run").insert(cronRunRow(outcome));
+    if (error) console.error(`news-sweep: run log not written: ${error.message}`);
+  } catch (err) {
+    console.error(`news-sweep: run log not written: ${(err as Error).message}`);
   }
 }

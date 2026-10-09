@@ -61,6 +61,14 @@ assert(
   new Set(COVERED_COUNTIES.map((c) => c.raceDistrictPrefix)).size ===
     COVERED_COUNTIES.length
 );
+/* VoterFocus slugs (R2's county status check reads
+   candidate_pr.php?c=<slug>; roster-recalibration-2026-09-21.md §5). A wrong
+   slug reads another county's list, or none. */
+assert(
+  "the expected VoterFocus slugs, per FIPS",
+  COVERED_COUNTIES.map((c) => `${c.fips}=${c.voterFocusSlug}`).join(",") ===
+    "12086=miamidade,12011=broward,12057=hillsborough,12095=orange"
+);
 for (const [district, fips] of [
   ["ORA-CC-2", "12095"],
   ["ORA-MAYOR", "12095"],
