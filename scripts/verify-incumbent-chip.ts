@@ -9,8 +9,8 @@
    description that reads the column straight from the row, or a line shown
    only when true. So this checks:
 
-   0. SHOW_INCUMBENT_CHIP is false. The flip PR (spec §3.11) changes this one
-      expectation together with the constant.
+   0. SHOW_INCUMBENT_CHIP is true since the flip PR (spec §3.11, 2026-10-09),
+      which changed this one expectation together with the constant.
    1. The label table maps each of the 53 production race ids (fixture, from
       SELECT race_id FROM race on 2026-10-08) to its label, an unknown id to
       none, and agrees with the worksheet's copy (scripts/roster-worksheet.ts).
@@ -52,7 +52,7 @@ const flagOn = (edits: ReadonlyArray<readonly [string | RegExp, string]> = []) =
   importVariant<Module>(MODULE, [[FLAG, "export const SHOW_INCUMBENT_CHIP: boolean = true;"], ...edits]);
 
 /* 0. The flag. */
-const EXPECTED_FLAG = false;
+const EXPECTED_FLAG = true;
 console.log(`SHOW_INCUMBENT_CHIP is ${SHOW_INCUMBENT_CHIP}`);
 check(
   `SHOW_INCUMBENT_CHIP is ${EXPECTED_FLAG} (spec §3.11: only the flip PR changes it, with this line)`,

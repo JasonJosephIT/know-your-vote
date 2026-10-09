@@ -64,8 +64,11 @@
    paragraph (§3.5). A wrong value anywhere is handled the other way round
    (§3.10): one line setting it back to false hides the line on every race
    at once and writes nothing; under D3 it then stays off through Nov 3.
+   FLIPPED 2026-10-09 with the founder's yes: 0049 applied live, gate
+   queries 2 and 3 both 0, the display (#144) deployed and checked live.
+   The query output is in the flip PR.
    ------------------------------------------------------------------------ */
-export const SHOW_INCUMBENT_CHIP: boolean = false;
+export const SHOW_INCUMBENT_CHIP: boolean = true;
 
 /* The label table (§3.5), keyed on race_id, first match wins. A race_id no
    row matches gets no label, and its race shows no line. */
