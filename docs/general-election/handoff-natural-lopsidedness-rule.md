@@ -91,15 +91,15 @@ check. It is also the standing procedure for every ≥3× flag R4 raises.
 |---|---|---|---|---|
 | FL-GOV-general | Byron Donalds | REP | 8 | baseline |
 | FL-GOV-general | David Jolly | DEM | 6 | baseline |
-| FL-GOV-general | Charles Burkett | NPA | 0 | ☐ |
-| FL-GOV-general | Dean Ocean Abrams | NPA | 0 | ☐ |
-| FL-GOV-general | Frank J. Russo | NPA | 0 | ☐ |
-| FL-GOV-general | Jeffrey Peter "Dr. Jeff" Datto | NPA | 0 | ☐ |
-| FL-GOV-general | Moliere "Moe" Dimanche | NPA | 0 | ☐ |
-| FL-GOV-general | Scott Eckhard Jewett | LPF | 0 | ☐ |
+| FL-GOV-general | Charles Burkett | NPA | 0 | ☑ real-world skew |
+| FL-GOV-general | Dean Ocean Abrams | NPA | 0 | ☑ real-world skew |
+| FL-GOV-general | Frank J. Russo | NPA | 0 | ☑ real-world skew (press releases only) |
+| FL-GOV-general | Jeffrey Peter "Dr. Jeff" Datto | NPA | 0 | ☑ real-world skew |
+| FL-GOV-general | Moliere "Moe" Dimanche | NPA | 0 | ☑ real-world skew |
+| FL-GOV-general | Scott Eckhard Jewett | LPF | 0 | ☑ real-world skew |
 | FL-SEN-general | Angie Nixon | DEM | 7 | baseline |
-| FL-SEN-general | Ashley Moody | REP | 1 | ☐ **check first** |
-| FL-SEN-general | Neil J. Gillespie | NPA | 0 | ☐ |
+| FL-SEN-general | Ashley Moody | REP | 1 | ☑ **pipeline gap**: WUSF 10-01 and NBC Miami 10-07 stories from registered outlets never entered the pipeline |
+| FL-SEN-general | Neil J. Gillespie | NPA | 0 | ☑ real-world skew (passing mentions only) |
 
 Ashley Moody is the sitting U.S. Senator, so 1 item in 30 days points to a
 likely pipeline gap (name matching, or which outlets cover federal office). It
@@ -107,10 +107,14 @@ probably does not reflect real coverage. Verify it before anything else.
 
 ## Done when
 
-- [ ] Rule text is in `AGENTS.md`
-- [ ] Open decision A/B/C is made, and `news-fairness.md` §2 is updated to match
-- [ ] `refresh-agents-plan.md` and the R1 prompt are reworded as above
-- [ ] R4 task file wording is aligned
-- [ ] Source-check procedure is written into the R1 prompt (run report) and the R4 task (§3)
-- [ ] First instance done: all 9 ☐ rows above labelled, Moody first
-- [ ] Shipped as one PR (main checkout is dirty; branch from a fresh worktree)
+Results: `source-check-2026-10-09.md`. Caveat for every row: R1 began writing
+candidate_news on 2026-10-06 (earliest story 09-30), so our "30-day" counts
+cover about 9 days; the baselines are also missing 09-09 to 09-29.
+
+- [x] Rule text is in `AGENTS.md`
+- [x] Open decision A/B/C is made, and `news-fairness.md` §2 is updated to match
+- [x] `refresh-agents-plan.md` and the R1 prompt are reworded as above
+- [x] R4 task file wording is aligned
+- [x] Source-check procedure is written into the R1 prompt (run report) and the R4 task (§3)
+- [x] First instance done: all 9 ☐ rows above labelled, Moody first
+- [x] Shipped as one PR (main checkout is dirty; branch from a fresh worktree)
