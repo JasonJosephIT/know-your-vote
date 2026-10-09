@@ -48,6 +48,7 @@ export function CandidateListing({
       <ListedCandidateCard
         data={{ candidate: listing.candidate, socials: listing.socials }}
         status={listing.status}
+        raceId={listing.raceId}
         headingLevel="h1"
         linkToDetail={false}
       />
