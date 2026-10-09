@@ -395,6 +395,11 @@ export function sweep(input: SweepInput): SweptArticle[] {
         continue;
       }
 
+      /* A backstop sitemap never replaces the outlet's feed entry for the
+         same story: only the feed carries a dek and an image. The feed's
+         entry replaces a sitemap's, whichever body came first. */
+      if (isSitemap && seen.get(url)?.retrieval === "rss") continue;
+
       const { title, summary } = storedText(entry);
       if (!title) continue;
       seen.set(url, {

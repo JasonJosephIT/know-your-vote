@@ -117,35 +117,52 @@ export async function runSweep({
   let sitemapDaysOk = 0;
 
   for (const outlet of usable) {
+    let feedEntries: ReturnType<typeof parseFeed> | null = null;
     if (outlet.feed !== null) {
       const xml = await fetchText(outlet.feed, log);
       if (xml) {
         feeds.push({ outlet, xml });
-        depth.push({ domain: outlet.domain, ...feedDepthHours(parseFeed(xml), now) });
+        feedEntries = parseFeed(xml);
         feedsOk++;
       }
-      continue;
     }
-    /* Retrieval mode 2: one request per UTC day in the window, oldest first,
-       with a polite gap. A failed day is logged and skipped, never retried. */
+    /* Retrieval mode 2: one request per distinct URL in the window, oldest
+       first, with a polite gap. A daily template gives one URL per UTC day; a
+       rolling one (no placeholders) gives one URL, fetched once. A failed
+       request is logged and skipped, never retried. */
+    let rolling: ReturnType<typeof parseNewsSitemap> = [];
     if (outlet.sitemap) {
+      const urls = new Set<string>();
       for (let back = days; back >= 0; back--) {
-        const url = sitemapUrlFor(outlet.sitemap.daily, new Date(now.getTime() - back * 86_400_000));
+        urls.add(sitemapUrlFor(outlet.sitemap.daily, new Date(now.getTime() - back * 86_400_000)));
+      }
+      for (const url of urls) {
         sitemapDays++;
         const xml = await fetchText(url, log);
         if (xml) {
-          if (parseNewsSitemap(xml).length === 0) log(`  0 entries: ${url}`);
+          const entries = parseNewsSitemap(xml);
+          if (entries.length === 0) log(`  0 entries: ${url}`);
+          if (urls.size === 1) {
+            const include = outlet.sitemap.include;
+            rolling = entries.filter((e) => include.test(e.link.replace(/^https?:\/\/[^/]+/, "")));
+          }
           feeds.push({ outlet, xml, format: "news-sitemap" });
           sitemapDaysOk++;
         }
         await sleep(1000);
       }
     }
+    /* A feed's depth row covers what a run can see from that outlet, so a
+       rolling backstop sitemap counts too. Its fetch failing leaves the
+       feed's own (shallow) depth, which is the honest reading. */
+    if (feedEntries) {
+      depth.push({ domain: outlet.domain, ...feedDepthHours([...feedEntries, ...rolling], now) });
+    }
   }
 
   const articles = sweep({ feeds, now, windowDays: days, belongsTo: urlBelongsTo });
-  const sitemapOutlets = usable.filter((o) => o.feed === null && o.sitemap).length;
-  const feedOutlets = usable.length - sitemapOutlets;
+  const sitemapOutlets = usable.filter((o) => o.sitemap).length;
+  const feedOutlets = usable.filter((o) => o.feed !== null).length;
   const summary =
     `swept ${feedsOk}/${feedOutlets} feeds + ${sitemapDaysOk}/${sitemapDays} sitemap days ` +
     `(${sitemapOutlets} outlet${sitemapOutlets === 1 ? "" : "s"}) -> ${articles.length} articles in the last ${days} days`;
