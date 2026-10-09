@@ -556,13 +556,56 @@ check(
 );
 
 const withSitemap = OUTLETS.filter((o) => o.sitemap !== undefined);
-check("both Tribune dailies carry a sitemap", withSitemap.map((o) => o.domain).sort().join(",") === "orlandosentinel.com,sun-sentinel.com");
+check("the sitemap rows are the two Tribune dailies plus the WUSF backstop",
+  withSitemap.map((o) => o.domain).sort().join(",") === "orlandosentinel.com,sun-sentinel.com,wusf.org",
+  withSitemap.map((o) => o.domain).sort().join(","));
 for (const o of withSitemap) {
   const t = o.sitemap!.daily;
-  check(`sitemap template for ${o.domain} has all placeholders`, t.includes("{yyyy}") && t.includes("{mm}") && t.includes("{dd}"), t);
   check(`sitemap template for ${o.domain} is https on the outlet's own host`, t.startsWith("https://") && urlBelongsTo(sitemapUrlFor(t, NOW), o), t);
-  check(`sitemap outlet ${o.domain} has no feed (no tie-break rule needed)`, o.feed === null);
-  check(`sitemap include for ${o.domain} is the dated-path filter`, o.sitemap!.include.source === "^\\/\\d{4}\\/\\d{2}\\/\\d{2}\\/");
+  if (o.feed === null) {
+    /* The only path: one sitemap per UTC day. */
+    check(`sitemap template for ${o.domain} has all placeholders`, t.includes("{yyyy}") && t.includes("{mm}") && t.includes("{dd}"), t);
+    check(`sitemap include for ${o.domain} is the dated-path filter`, o.sitemap!.include.source === "^\\/\\d{4}\\/\\d{2}\\/\\d{2}\\/");
+  } else {
+    /* A backstop beside a feed: one rolling sitemap, fetched once a run. */
+    check(`backstop sitemap for ${o.domain} is rolling (no placeholders)`, !/\{(yyyy|mm|dd)\}/.test(t), t);
+  }
+}
+
+/* WUSF's include: its own sectioned, dated stories; not the unsectioned
+   (mostly NPR network) paths. */
+{
+  const wusf = OUTLETS.find((o) => o.domain === "wusf.org")!;
+  const inc = wusf.sitemap!.include;
+  const keep = [
+    "/politics-issues/2026-10-01/democrats-slam-ashley-moody-amid-heated-us-senate-race",
+    "/courts-law/2026-10-09/desantis-withdraws-death-warrant-inmate-scheduled-execution",
+  ];
+  const drop = ["/2026-10-08/how-oct-7-reshaped-israeli-politics","/classical/npr-classical-stories/2026-10-08/x", "/tags/david-hockney", "/mike-strobbe-associated-press", "/politics-issues"];
+  check("wusf include keeps dated story paths", keep.every((p) => inc.test(p)));
+  check("wusf include drops unsectioned paths, two-level sections, tags, bylines and section fronts", drop.every((p) => !inc.test(p)));
+}
+
+/* A backstop sitemap beside a feed: the feed's entry wins a shared URL in
+   either order (only the feed has a dek), and a story only the sitemap still
+   carries is kept. */
+{
+  const both: Outlet = { ...sentinel, feed: "https://www.sun-sentinel.com/feed/" };
+  const shared = "https://www.sun-sentinel.com/2026/09/17/council-vote/";
+  const rssShared = rss(
+    `<item><title>Council and mayor vote</title><link>${shared}</link>` +
+      `<description>The dek only the feed has.</description><pubDate>${new Date(dayIso(1)).toUTCString()}</pubDate></item>`,
+  );
+  for (const order of ["sitemap first", "feed first"] as const) {
+    const bodies = [
+      { outlet: both, xml: smFixture, format: "news-sitemap" as const },
+      { outlet: both, xml: rssShared },
+    ];
+    const out = sweep({ feeds: order === "sitemap first" ? bodies : bodies.reverse(), now: NOW, belongsTo: urlBelongsTo });
+    const hit = out.find((x) => x.url === shared.replace(/\/$/, ""));
+    check(`backstop (${order}): the feed's entry wins a shared URL`, hit?.retrieval === "rss" && hit?.summary === "The dek only the feed has.", JSON.stringify(hit));
+    check(`backstop (${order}): a sitemap-only story is kept`, out.some((x) => x.url.endsWith("/second-story") && x.retrieval === "news-sitemap"));
+  }
 }
 /* Hold-free rows only: both Tribune sitemap outlets are on the AI-crawler hold,
    so signing off their lean deliberately does NOT make them usable. Asserting
@@ -809,10 +852,14 @@ check("shallowFeeds and depthLine default to CADENCE_HOURS",
       check("runSweep measures every fetched RSS feed, and only those",
         result.depth.length === rssFeeds.length - 1 && !result.depth.some((d) => d.domain === failingOne.domain),
         `${result.depth.length} rows for ${rssFeeds.length} feeds`);
-      check("runSweep fetches each usable sitemap outlet's days and gives it no depth row",
-        result.sitemapDays === sitemapOutlets.length * 2 && result.sitemapDaysOk === result.sitemapDays &&
+      /* days: 1 is two UTC days for a daily template, one fetch for a
+         rolling backstop (WUSF). Only feed-less sitemap outlets lack a depth
+         row; a backstop outlet keeps its feed's row. */
+      const rollingOutlets = usableOutlets().filter((o) => o.feed !== null && o.sitemap !== undefined);
+      check("runSweep fetches each daily sitemap's days, each rolling backstop once, and gives a feed-less outlet no depth row",
+        result.sitemapDays === sitemapOutlets.length * 2 + rollingOutlets.length && result.sitemapDaysOk === result.sitemapDays &&
           !result.depth.some((d) => sitemapOutlets.some((o) => o.domain === d.domain)),
-        `${result.sitemapDaysOk}/${result.sitemapDays} days for ${sitemapOutlets.length} sitemap outlets`);
+        `${result.sitemapDaysOk}/${result.sitemapDays} fetches for ${sitemapOutlets.length} daily + ${rollingOutlets.length} rolling sitemap outlets`);
       check("runSweep's depth row is feedDepthHours of that feed",
         JSON.stringify(result.depth.find((d) => d.domain === shallowOne.domain)) ===
           JSON.stringify({ domain: shallowOne.domain, items: 2, hours: 10.5 }),

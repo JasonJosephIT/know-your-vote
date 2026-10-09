@@ -78,10 +78,17 @@ export interface OutletRobots {
   note?: string;
 }
 
-/** Retrieval mode 2 (PRD §5): a per-day Google News sitemap, for an outlet
-    whose RSS is blocked but whose sitemap is open. Both Tribune dailies. */
+/** Retrieval mode 2 (PRD §5): a Google News sitemap. Two uses:
+    - the only path, for an outlet whose RSS is blocked but whose sitemap is
+      open (both Tribune dailies, one URL per UTC day);
+    - a BACKSTOP beside a feed too shallow for the daily cadence (WUSF,
+      2026-10-09: news.rss holds ~15h, its news sitemap ~2 days). The sweep
+      reads both; where both carry a story the feed's entry wins, because only
+      the feed has a dek and an image (news-sweep.ts sweep). */
 export interface OutletSitemap {
-  /** URL template; `{yyyy}` `{mm}` `{dd}` are filled in UTC by `sitemapUrlFor`. */
+  /** URL template; `{yyyy}` `{mm}` `{dd}` are filled in UTC by `sitemapUrlFor`.
+      A template with no placeholders is a rolling sitemap: the same URL for
+      every day, so the sweep fetches it once. */
   daily: string;
   /** Tested against each entry's URL path. Non-matching entries never enter
       the pool. This is the editorial line for "what is an article here". */
@@ -112,7 +119,8 @@ export interface Outlet {
   /** See the header. Fail-closed; not lifted by editing this file. */
   syndicated?: boolean;
   robots?: OutletRobots;
-  /** Set only when `feed` is null. See `OutletSitemap`. */
+  /** The only retrieval path when `feed` is null; a backstop beside a
+      shallow feed otherwise. See `OutletSitemap`. */
   sitemap?: OutletSitemap;
 }
 
@@ -396,7 +404,23 @@ export const OUTLETS: readonly Outlet[] = Object.freeze([
       "Corpus proposed center. Founder decides.",
     robots: { aiDisallow: ["GPTBot", "anthropic-ai", "ClaudeBot", "CCBot", "Bytespider"], note: "Google-Extended explicitly allowed." },
   }),
-  o("wusf.org", "WUSF", "12057", "https://www.wusf.org/news.rss"),
+  /* news.rss holds its last 10 items, ~15h on 2026-10-09, so a daily run
+     lost the rest: "Democrats slam Ashley Moody amid heated U.S. Senate race"
+     (2026-10-01) never reached the queue (source-check-2026-10-09.md). The
+     Google News sitemap named in robots.txt (`User-agent: *`, no AI-agent
+     rules) holds ~2 days, ~150 entries, with titles. It is the backstop; the
+     feed still supplies the dek and image where both carry a story. The
+     include keeps WUSF's own sectioned stories (`/politics-issues/2026-10-01/…`).
+     It drops the unsectioned `/2026-10-08/…` paths, which on 2026-10-09 were
+     ~130 of ~160 entries and mostly NPR network stories that would otherwise
+     enter the queue under WUSF's name, and two-level sections such as NPR
+     classical. The feed still carries any unsectioned story it lists. */
+  o("wusf.org", "WUSF", "12057", "https://www.wusf.org/news.rss", {
+    sitemap: {
+      daily: "https://www.wusf.org/news-sitemap-content.xml",
+      include: /^\/[a-z0-9-]+\/\d{4}-\d{2}-\d{2}\/[^/]+$/,
+    },
+  }),
   o("wfla.com", "WFLA News Channel 8", "12057", "https://www.wfla.com/news/florida/feed/", {
     robots: { aiDisallow: ["GPTBot", "anthropic-ai", "ClaudeBot", "CCBot", "Google-Extended", "PerplexityBot", "Applebot-Extended", "Bytespider"] },
   }),
