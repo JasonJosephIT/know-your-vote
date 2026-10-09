@@ -7,6 +7,7 @@ import { CATEGORIES, SUB_ISSUES } from "@/lib/news-issues";
 import { COVERED_COUNTIES } from "@/lib/counties";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { orderCandidates } from "@/lib/ballot-order";
+import { SHOW_INCUMBENT_CHIP } from "@/lib/incumbency";
 
 export const revalidate = 3600;
 export const metadata = { title: "How we stay fair — Know Your Vote" };
@@ -655,20 +656,24 @@ export default async function MethodologyPage() {
         </p>
       </section>
 
-      <section className="flex flex-col gap-2">
-        <h2 className="text-h2">Who serves now</h2>
-        <p className="text-body">
-          Beside each candidate we say whether they serve today in the office
-          or on the body the race elects to: &lsquo;Holds this office now&rsquo;
-          for an office one person holds, &lsquo;Member of &hellip; now&rsquo;
-          for Congress, a county commission or a school board. A member counts
-          whatever district or seat they hold today: a member of Congress
-          running in a district renumbered by Florida&rsquo;s 2026 map, and a
-          commissioner or board member running for a different seat on the
-          same body, both count. We check every candidate against the
-          body&rsquo;s own list of current members.
-        </p>
-      </section>
+      {/* Shown only while the line is on the cards, so a rollback (setting
+          SHOW_INCUMBENT_CHIP back to false, spec §3.10) hides both at once. */}
+      {SHOW_INCUMBENT_CHIP && (
+        <section className="flex flex-col gap-2">
+          <h2 className="text-h2">Who serves now</h2>
+          <p className="text-body">
+            Beside each candidate we say whether they serve today in the office
+            or on the body the race elects to: &lsquo;Holds this office now&rsquo;
+            for an office one person holds, &lsquo;Member of &hellip; now&rsquo;
+            for Congress, a county commission or a school board. A member counts
+            whatever district or seat they hold today: a member of Congress
+            running in a district renumbered by Florida&rsquo;s 2026 map, and a
+            commissioner or board member running for a different seat on the
+            same body, both count. We check every candidate against the
+            body&rsquo;s own list of current members.
+          </p>
+        </section>
+      )}
 
       <section id="limits" className="flex flex-col gap-2">
         <h2 className="text-h2">Known limits</h2>
