@@ -101,7 +101,7 @@ export default async function CandidatePage({
             incumbency={incumbency}
             runningMates={runningMates}
           />
-          <CandidateNews candidateId={candidateId} />
+          <CandidateNews candidateId={candidateId} raceId={listing.raceId} />
           <CandidateContact candidateId={candidateId} />
         </main>
       );
@@ -147,7 +147,7 @@ export default async function CandidatePage({
       {/* No `slots` prop on purpose: news-fairness.md §5 says N is picked from
           real per-candidate counts once N5 reports them, and N5 has no data
           yet. Until then the fairness ordering applies with no cap. */}
-      <CandidateNews candidateId={candidateId} />
+      <CandidateNews candidateId={candidateId} raceId={detail.raceId} />
       <CandidateContact candidateId={candidateId} />
     </main>
   );
