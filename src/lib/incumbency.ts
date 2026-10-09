@@ -63,9 +63,11 @@
    scripts/verify-incumbent-chip.ts that pins it, and adds the methodology
    paragraph (§3.5). A wrong value anywhere is handled the other way round
    (§3.10): one line setting it back to false hides the line on every race
-   at once and writes nothing; under D3 it then stays off through Nov 3.
+   at once, and the /methodology paragraph with it, and writes nothing;
+   under D3 it then stays off through Nov 3.
    FLIPPED 2026-10-09 with the founder's yes: 0049 applied live, gate
-   queries 2 and 3 both 0, the display (#144) deployed and checked live.
+   query 2 returned 0 and query 3 no rows, the display (#144) deployed and
+   checked live.
    The query output is in the flip PR.
    ------------------------------------------------------------------------ */
 export const SHOW_INCUMBENT_CHIP: boolean = true;

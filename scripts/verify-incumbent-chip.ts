@@ -237,6 +237,19 @@ function readerProblems(files: ReadonlyMap<string, string>): string[] {
 const readers = readerProblems(SRC);
 check(`no other file in src/ reads incumbency or prints it (${SRC.size - ALLOWED.size} files)`, readers.length === 0, readers.join("; "));
 
+/* 5b. The /methodology paragraph shows only with the line (spec §3.5, §3.10):
+   a rollback that sets the flag false must hide both at once. */
+const METHODOLOGY = "src/app/(public)/methodology/page.tsx";
+function methodologyProblems(text: string): string[] {
+  const problems: string[] = [];
+  if ((text.match(/Who serves now/g) ?? []).length !== 1) problems.push("the \"Who serves now\" section appears once");
+  if (!/\{SHOW_INCUMBENT_CHIP && \(\s*<section[^>]*>\s*<h2[^>]*>Who serves now<\/h2>/.test(text)) problems.push("the section sits inside {SHOW_INCUMBENT_CHIP && (...)}");
+  if (!/import \{ SHOW_INCUMBENT_CHIP \} from "@\/lib\/incumbency";/.test(text)) problems.push("the page takes the flag from @/lib/incumbency");
+  return problems;
+}
+const methodology = methodologyProblems(read(METHODOLOGY));
+check("the /methodology paragraph is behind SHOW_INCUMBENT_CHIP, so a rollback hides it too", methodology.length === 0, methodology.join("; "));
+
 /* 6. Mutations. */
 await mutation("the all-or-none test deleted (an unsourced candidate reads No)", async () =>
   flagOnProblems(await flagOn([["  if (!candidates.every((c) => Boolean(c.incumbency_verified_at))) return null;\n", ""]])),
@@ -281,6 +294,9 @@ await mutation("a loader reads is_open_seat", () => {
   copy.set("src/lib/listing.ts", `${read("src/lib/listing.ts")}\nexport const open = (r: { is_open_seat: boolean }) => r.is_open_seat;\n`);
   return readerProblems(copy);
 });
+await mutation("the /methodology paragraph shows without the flag", () =>
+  methodologyProblems(edit(read(METHODOLOGY), "{SHOW_INCUMBENT_CHIP && (", "{(")),
+);
 await mutation("a page stops computing the race value", () => {
   const copy = new Map(SRC);
   const page = "src/app/(public)/candidates/[candidateId]/page.tsx";
