@@ -164,6 +164,22 @@ export function leadDedupeKey(name: string, kind: LeadKind, countyFips: string |
   return `${normalizeName(name)}|${kind}|${countyFips ?? "statewide"}`;
 }
 
+/** The names `check` compares mentions against: R5's roster (the
+    published-race candidates, loadRoster) plus every running mate already
+    stored on a Governor ballot row (0049; roster-completeness spec §3.6). A
+    running mate we already list is then dropped as on_roster instead of
+    queued; a different name (a replacement ticket) still becomes a lead.
+    Blank values are skipped. */
+export function namesToCheck(
+  rosterNames: readonly string[],
+  storedRunningMates: readonly (string | null | undefined)[],
+): string[] {
+  return [
+    ...rosterNames,
+    ...storedRunningMates.filter((n): n is string => typeof n === "string" && n.trim() !== ""),
+  ];
+}
+
 /** Mentions in, leads out. A name first (a blank one has no dedupe key), then
     classification, then the roster, then the stories, then what is already
     queued or decided; one person's mentions merge on the dedupe key.

@@ -4,7 +4,9 @@
      prep  [--days 14]           sweep; print the stories that matched no
                                  roster candidate. Writes nothing.
      check --stories FILE        mentions (the agent's reading) on stdin;
-                                 print { leads, dropped }. Writes nothing.
+                                 print { leads, dropped }. Compares against
+                                 the roster and the stored running mates.
+                                 Writes nothing.
      queue [--dry-run]           verified leads on stdin; insert one pending
                                  candidate_lead review item per new lead.
 
@@ -19,7 +21,7 @@ import { loadRoster, runSweep } from "../src/lib/news-intake.ts";
 import { planAttachments } from "../src/lib/news-enqueue.ts";
 import { matchArticle } from "../src/lib/news-match.ts";
 import { OUTLETS, outletForUrl } from "../src/lib/news-sources.ts";
-import { buildLeads, keepForReading, mentionProblem, planQueue, type Mention, type StoryRef } from "../src/lib/candidate-leads.ts";
+import { buildLeads, keepForReading, mentionProblem, namesToCheck, planQueue, type Mention, type StoryRef } from "../src/lib/candidate-leads.ts";
 
 loadEnvLocal(import.meta.url);
 
@@ -100,6 +102,22 @@ async function existingLeadKeys(db: SupabaseClient): Promise<Set<string>> {
   return keys;
 }
 
+/** Running mates already stored on Governor ballot rows (0049). Read here,
+    in the script, because src/lib/running-mate.ts is the only app file that
+    reads the column (scripts/verify-running-mate.ts). Fails closed: before
+    0049 is applied the column does not exist and `check` stops, which is why
+    this change merges only after the migration is live (roster-completeness
+    spec §3.6). */
+async function storedRunningMates(db: SupabaseClient): Promise<string[]> {
+  const { data, error } = await db
+    .from("candidate")
+    .select("running_mate")
+    .eq("ballot_status", "ballot")
+    .not("running_mate", "is", null);
+  if (error) die(`could not read stored running mates: ${error.message}`);
+  return ((data ?? []) as { running_mate: string | null }[]).flatMap((r) => (r.running_mate ? [r.running_mate] : []));
+}
+
 if (command === "prep") {
   const days = Number(options(["--days"], []).get("--days") ?? 14);
   if (!Number.isFinite(days) || days < 1) die("--days must be a positive number");
@@ -148,7 +166,7 @@ if (command === "prep") {
   const result = buildLeads(
     mentions,
     stories,
-    roster.map((r) => r.legalName),
+    namesToCheck(roster.map((r) => r.legalName), await storedRunningMates(db)),
     await existingLeadKeys(db),
   );
   const reasons = new Map<string, number>();
