@@ -153,7 +153,7 @@ Inherited from CAP_Agent_Plan §0, adapted to feed/logistics work. These go at t
 
 - Refresh agents never write claims. claim, position, profile, verdicts, and buckets are off-limits — structurally where possible, by prompt everywhere. If a discovered fact seems brief-worthy, the agent flags it for the generation pipeline (in its run report); it does not write it.
 
-- Balance is symmetric. R1 searches every candidate in a covered race with the same query pattern and the same effort. Per-candidate item counts are reported each run and reviewed in R4; a persistently lopsided feed is a flag, exactly like Symmetric Scrutiny for fact-checks.
+- Balance is symmetric. R1 searches every candidate in a covered race with the same query pattern and the same effort. Per-candidate item counts are reported each run and reviewed in R4. A persistently lopsided feed is a flag that triggers a source check (`news-fairness.md` §2): a pipeline gap is fixed at the source (feed, alias, matching), and a confirmed real-world skew is shown to voters as it is, never padded or trimmed. Neutrality governs our conduct, not the world's.
 
 - Fail closed, leave the feed intact. Any error, ambiguity, or allowlist near-miss → skip the item, note it in the run report. A failed run inserts nothing (mirrors the existing cron's contract).
 

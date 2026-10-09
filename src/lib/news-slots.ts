@@ -176,3 +176,40 @@ export function selectNewsSlots<T extends NewsSlotItem>(
 
   return { slots, shortfall: capped ? Math.max(0, cap - slots.length) : 0 };
 }
+
+/**
+ * The surplus behind the expander — news-fairness.md §2, founder decision C
+ * (2026-10-09): equal slots keep the first view even, and must not hide a real
+ * surplus.
+ *
+ * Counts and lists the candidate's `named` stories only. A `related` story did
+ * not name this candidate (it is from the race-wide pool every candidate
+ * shares), so counting it would hand a candidate the press never covered a
+ * "Show all 9 stories" link made of other people's coverage. Since `named`
+ * fills slots first, "named > n" is exactly "the slots hid some of this
+ * candidate's own coverage".
+ *
+ * `total` is `all.length`: the real count, never rounded, capped or paged.
+ * `all` is every named item, most recent first (ties keep input order), and
+ * includes the ones already in the slots — the expander is the full list, not
+ * the remainder.
+ *
+ * Returns null — no expander — when `n` is not a cap (nothing is hidden), when
+ * the candidate has `n` or fewer named stories (the shortfall line speaks
+ * instead), or when the race's skew has not passed the source check.
+ */
+export function newsSurplus<T extends NewsSlotItem>(
+  items: readonly T[],
+  n: number | undefined,
+  skewPassed: boolean,
+): { total: number; all: T[] } | null {
+  if (!skewPassed) return null;
+  if (!(typeof n === "number" && Number.isInteger(n) && n >= 0)) return null;
+  const named = items.filter((it) => it.relation !== "related");
+  if (named.length <= n) return null;
+  const all = named
+    .map((it, i) => ({ it, i }))
+    .sort((a, b) => timeOf(b.it.published_at) - timeOf(a.it.published_at) || a.i - b.i)
+    .map(({ it }) => it);
+  return { total: all.length, all };
+}

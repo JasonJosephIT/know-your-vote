@@ -2,7 +2,8 @@ import { NewsStoryCard } from "@/components/features/NewsStoryCard";
 import { getCandidateNews, type CandidateNewsItem } from "@/lib/briefs";
 import { formatNewsDate } from "@/lib/format";
 import { issueChips } from "@/lib/news-issues";
-import { selectNewsSlots } from "@/lib/news-slots";
+import { newsSurplus, selectNewsSlots } from "@/lib/news-slots";
+import { skewPassedSourceCheck } from "@/lib/news-skew-check";
 import { outletForUrl } from "@/lib/news-sources";
 
 /* Candidate-scoped news written by the R1 curator: neutral restatements of
@@ -52,12 +53,17 @@ function NewsCard({ item }: { item: CandidateNewsItem }) {
    ballot-tier candidate in a race gets the same one. It is intentionally
    OPTIONAL and has no default: §5 says N comes from real per-candidate counts
    once N5 measures them, and N5 has no data yet. Left unset, the selector
-   still orders the items by the fairness rule and caps nothing. */
+   still orders the items by the fairness rule and caps nothing.
+
+   `raceId` gates the surplus expander (founder decision C): it is offered
+   only for a race whose skew passed the source check (news-skew-check.ts). */
 export async function CandidateNews({
   candidateId,
+  raceId,
   slots,
 }: {
   candidateId: string;
+  raceId: string;
   slots?: number;
 }) {
   const items = await getCandidateNews(candidateId);
@@ -70,6 +76,7 @@ export async function CandidateNews({
   const { slots: selected, shortfall } = selectNewsSlots(items, slots);
   const related = selected.filter((i) => i.relation === "related");
   const named = selected.filter((i) => i.relation !== "related");
+  const surplus = newsSurplus(items, slots, skewPassedSourceCheck(raceId));
 
   return (
     <section className="flex flex-col gap-3">
@@ -94,6 +101,31 @@ export async function CandidateNews({
         <p className="text-body-sm text-on-surface-muted">
           No stories named this candidate in the last 30 days.
         </p>
+      )}
+
+      {/* Surplus is shown, behind an expander (news-fairness.md §2, founder
+          decision C). The slots above keep the first view even; this lets
+          the real surplus show. Collapsed by default for every candidate,
+          and the count is the real count — never rounded or capped. Native
+          <details>, so it needs no client JS and opens without it. */}
+      {surplus && (
+        <details className="group rounded-md border border-border">
+          <summary className="cursor-pointer list-none px-3 py-2 text-label text-primary underline underline-offset-2 [&::-webkit-details-marker]:hidden">
+            <span className="group-open:hidden">Show all {surplus.total} stories</span>
+            <span className="hidden group-open:inline">Hide the full list of {surplus.total} stories</span>
+          </summary>
+          <div className="flex flex-col gap-3 border-t border-border px-3 py-3">
+            <p className="text-body-sm text-on-surface-muted">
+              Every sourced story we found naming this candidate in the last
+              30 days, most recent first.
+            </p>
+            <ul className="flex flex-col gap-4">
+              {surplus.all.map((item) => (
+                <NewsCard key={item.id} item={item} />
+              ))}
+            </ul>
+          </div>
+        </details>
       )}
 
       {related.length > 0 && (
