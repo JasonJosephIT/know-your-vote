@@ -1190,10 +1190,11 @@ await check("set_race_publication lists a race, logs 'list', and never stamps pu
   await db.exec(
     "SELECT set_race_publication('r-draft','listed','op@example.com','roster is public record');"
   );
+  /* By reason, not created_at, for the same reason as the unpublish check. */
   const r = await db.query(`
     SELECT rp.status, rp.published_at,
            (SELECT action FROM admin_action WHERE subject_ref='r-draft'
-             ORDER BY created_at DESC, action LIMIT 1) AS latest_action,
+             AND detail->>'reason'='roster is public record') AS logged_action,
            (SELECT detail->>'new_status' FROM admin_action WHERE subject_ref='r-draft'
              AND action='list') AS logged_status,
            (SELECT detail->>'prior_status' FROM admin_action WHERE subject_ref='r-draft'
@@ -1203,7 +1204,7 @@ await check("set_race_publication lists a race, logs 'list', and never stamps pu
   if (g.status !== "listed") throw new Error(`status=${g.status}`);
   if (String(g.published_at) !== String(before.rows[0].published_at))
     throw new Error("listing must leave published_at alone");
-  if (g.latest_action !== "list") throw new Error(`latest_action=${g.latest_action}`);
+  if (g.logged_action !== "list") throw new Error(`logged_action=${g.logged_action}`);
   if (g.logged_status !== "listed" || g.logged_prior !== "in_review")
     throw new Error(`logged ${g.logged_prior} -> ${g.logged_status}`);
 });
