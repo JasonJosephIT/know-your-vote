@@ -18,9 +18,13 @@ const GATED_KINDS: ReviewKind[] = ["gated_diff", "date_mismatch"];
 export function DecisionControls({
   id,
   kind,
+  confirmText = "Approving writes a gated field on the content plane. Confirm?",
 }: {
   id: string;
   kind: ReviewKind;
+  /* What the confirm step says. R2's election_event date_mismatch writes
+     nothing, so its card passes its own line (ReviewItemCard). */
+  confirmText?: string;
 }) {
   const router = useRouter();
   const [note, setNote] = useState("");
@@ -95,9 +99,7 @@ export function DecisionControls({
 
       {confirming ? (
         <div className="flex flex-col gap-2 rounded-md border border-border-strong bg-surface-muted p-3">
-          <p className="text-caption text-on-surface">
-            Approving writes a gated field on the content plane. Confirm?
-          </p>
+          <p className="text-caption text-on-surface">{confirmText}</p>
           <div className="flex flex-wrap gap-2">
             <Button
               type="button"

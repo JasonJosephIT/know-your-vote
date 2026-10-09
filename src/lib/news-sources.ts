@@ -557,8 +557,12 @@ function hostMatches(host: string, domain: string): boolean {
     argument rather than importing it — the same injectable-dependency shape
     the runtime's `LiveAnthropicBackend` uses for `dispatch`, and here it also
     keeps news-sweep.ts free of value imports so a plain `node` script can run
-    it without a build step. */
-export function urlBelongsTo(url: string, outlet: Outlet): boolean {
+    it without a build step.
+
+    It takes anything with a `domain`, not only an `Outlet`, so the official
+    list (src/lib/official-sources.ts) matches hosts by this same rule and the
+    two lists cannot disagree about what a host is. */
+export function urlBelongsTo(url: string, outlet: { domain: string }): boolean {
   let parsed: URL;
   try {
     parsed = new URL(url);

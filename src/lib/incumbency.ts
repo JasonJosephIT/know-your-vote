@@ -11,8 +11,10 @@
    Why. A read-only SELECT on production, 2026-10-05: is_incumbent is true
    for exactly one of the 106 ballot-tier candidates, Patricia "Patti" Rendon
    (FL-VF-HIL-2672), unopposed in the listed race FL-HIL-SB4-general. 0038 set
-   that one row by hand. Every other sitting officeholder on the ballot
-   (Moody, Castor, Salazar, Wasserman Schultz, Uthmeier, Simpson, and the
+   that one row by hand, and 0046 (2026-10-07) set a second the same way:
+   James Uthmeier, the sitting Attorney General, with race.incumbent_id beside
+   both. Every other sitting officeholder on the ballot
+   (Moody, Castor, Salazar, Wasserman Schultz, Simpson, and the
    county commissioners and school board members running for their own
    seats) is false, because false has only ever meant "unknown": 0031 left it
    false where the county lists do not state incumbency, 0038 says so again,
