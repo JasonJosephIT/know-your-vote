@@ -222,6 +222,9 @@ export interface CronOutcome {
   finishedAt: Date;
   /** The sweep's summary line, or null when the sweep threw. */
   sweepLine: string | null;
+  /** The sweep's feed-depth line (news-sweep.ts depthLine; news-source-integrity
+      §3.5), or null/absent when the sweep threw. */
+  depthLine?: string | null;
   /** The queue's summary line, or null when the sweep or the queue threw. */
   queueLine: string | null;
   /** Items queued; 0 when the run failed. */
@@ -245,7 +248,7 @@ const SUMMARY_MAX = 2000;
 /** The agent_run row the cron writes at the end of each run: the cron is R1 now (spec §3.1). */
 export function cronRunRow(o: CronOutcome): CronRunRow {
   const failed = o.error !== null;
-  const lines = [o.sweepLine, o.queueLine, failed ? `error: ${o.error}` : null].filter(
+  const lines = [o.sweepLine, o.depthLine ?? null, o.queueLine, failed ? `error: ${o.error}` : null].filter(
     (l): l is string => typeof l === "string" && l.length > 0,
   );
   return {

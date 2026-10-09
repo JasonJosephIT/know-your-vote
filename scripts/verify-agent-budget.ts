@@ -177,6 +177,9 @@ check("nothing queued is ok_empty", empty.status === "ok_empty" && empty.items_w
   JSON.stringify(empty));
 const ok = cronRunRow({ ...base, sweepLine: "24 feeds", queueLine: "queued 7 as pending", queued: 7, error: null });
 check("something queued is ok with the count", ok.status === "ok" && ok.items_written === 7, JSON.stringify(ok));
+const deep = cronRunRow({ ...base, sweepLine: "24 feeds", depthLine: "news-sweep depth: 24 feeds, 0 failed; shallow (<24h): none", queueLine: "queued 7 as pending", queued: 7, error: null });
+check("the depth line is on the run row, between the sweep and queue lines (news-source-integrity §3.5)",
+  deep.summary === "24 feeds\nnews-sweep depth: 24 feeds, 0 failed; shallow (<24h): none\nqueued 7 as pending", JSON.stringify(deep));
 check("the summary is capped", cronRunRow({ ...base, sweepLine: "x".repeat(5000), queueLine: null, queued: 1, error: null }).summary.length === 2000);
 
 /* ---- the cron route writes that row (spec §3.1 table) ------------------ */
@@ -189,6 +192,8 @@ check("the summary is capped", cronRunRow({ ...base, sweepLine: "x".repeat(5000)
   const noService = src.indexOf("{ status: 503 }");
   check("no run is recorded before the 401 and 503 returns",
     unauthorized > 0 && noService > unauthorized && calls.every((i) => i > noService), JSON.stringify({ unauthorized, noService, calls }));
+  check("both runs past the sweep record its depth line (news-source-integrity §3.5)",
+    (src.match(/depthLine: sweep\.depthLine/g) ?? []).length === 2);
   check("the row is built by cronRunRow and inserted into agent_run",
     /from\("agent_run"\)\.insert\(cronRunRow\(outcome\)\)/.test(src));
   check("a failed log write is caught, never thrown", /async function recordRun[\s\S]*try \{[\s\S]*\} catch \(err\) \{/.test(src));
