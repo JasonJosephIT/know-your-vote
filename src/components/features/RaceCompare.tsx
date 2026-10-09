@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PartyChip } from "@/components/ui/PartyChip";
 import { Chip } from "@/components/ui/Chip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
+import { CampaignWebsite } from "@/components/features/CampaignWebsite";
 import { PolicyAreaChip, policyAreaHref } from "@/components/ui/PolicyAreaChip";
 import { IssueBuckets } from "@/components/features/IssueSection";
 import { NoStatedPositionNote } from "@/components/features/ClaimList";
@@ -19,7 +20,7 @@ import { partyLegend } from "@/lib/party-label";
    so comparing two candidates on one issue meant hunting. Now:
 
    1. Who's running: one short card per candidate (name, party, Keep in mind,
-      official site, full profile). Socials live on the profile page.
+      campaign website, full profile). Socials live on the profile page.
    2. One row per spine issue, with a cell for every candidate in ballot
       order, so an issue reads across. Claims past the first two sit behind
       "Show N more from <name>" (ClaimList).
@@ -118,17 +119,7 @@ export function RaceCompare({ brief }: { brief: RaceBrief }) {
                   {socials.length > 0 ? "Full profile and socials" : "Full profile"}
                   <span className="sr-only">: {candidate.legal_name}</span>
                 </Link>
-                {candidate.official_site && (
-                  <a
-                    href={candidate.official_site}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex min-h-[24px] items-center underline underline-offset-2 hover:text-on-surface"
-                  >
-                    Official site
-                    <span className="sr-only">: {candidate.legal_name}</span>
-                  </a>
-                )}
+                <CampaignWebsite url={candidate.official_site} name={candidate.legal_name} />
                 <a
                   href={`mailto:${CONTACT_EMAIL}?subject=Flag%20brief%3A%20${candidate.candidate_id}`}
                   className="inline-flex min-h-[24px] items-center underline underline-offset-2 hover:text-on-surface"

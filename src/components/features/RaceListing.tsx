@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PartyChip } from "@/components/ui/PartyChip";
 import { Chip } from "@/components/ui/Chip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
+import { CampaignWebsite } from "@/components/features/CampaignWebsite";
 import { safeHttpUrl } from "@/lib/format";
 import { showIncumbentChip } from "@/lib/incumbency";
 import { listingCardLine } from "@/lib/listing-copy";
@@ -28,8 +29,9 @@ import type {
    for every candidate until incumbency is filled for all of them
    (src/lib/incumbency.ts), and the accessibility fixes from
    a11y-perf-2026-10-04.md: the candidate's name as a visually hidden suffix
-   on "Keep in mind" and "Official site" (fix 6; WCAG 2.4.4, 2.4.6, label
-   first for 2.5.3), and a 24 px minimum height on the site and social links
+   on "Keep in mind" and the campaign-website link (fix 6; WCAG 2.4.4,
+   2.4.6, label first for 2.5.3), and a 24 px minimum height on the site
+   and social links
    (fix 9; WCAG 2.5.8 Target Size; min-h-[24px] because this theme's
    spacing-6 is 32 px). The unlinked handle gets the same box so its text
    lines up with the links beside it. */
@@ -46,7 +48,6 @@ export function ListedCandidateCard({
 }) {
   const { candidate, socials } = data;
   const Heading = headingLevel;
-  const officialSite = safeHttpUrl(candidate.official_site);
 
   return (
     <article className="flex h-full flex-col gap-4 rounded-lg border border-border bg-surface p-5">
@@ -72,17 +73,7 @@ export function ListedCandidateCard({
           />
         </div>
         <p className="flex flex-wrap gap-x-3 gap-y-1 text-caption text-on-surface-muted">
-          {officialSite && (
-            <a
-              href={officialSite}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex min-h-[24px] items-center underline underline-offset-2 hover:text-on-surface"
-            >
-              Official site
-              <span className="sr-only">: {candidate.legal_name}</span>
-            </a>
-          )}
+          <CampaignWebsite url={candidate.official_site} name={candidate.legal_name} />
           {socials.map((s) => {
             const url = safeHttpUrl(s.url);
             const label = `${s.handle} (${s.platform})`;
