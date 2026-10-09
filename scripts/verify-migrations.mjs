@@ -57,9 +57,9 @@
         service_role may execute it (not anon, not cap_tool_wrapper —
         publication never moves through a tool call, 0009).
     16. 0014_news_fairness invariants (news-fairness.md N1): a candidate_news
-        or election_news row with source_id NULL is rejected; an
-        official_link row with source_id NULL still inserts; a candidate_news
-        row with a valid source_id inserts.
+        or election_news row with source_id NULL is rejected; since 0055 an
+        official_link row with source_id NULL is rejected too; a
+        candidate_news row with a valid source_id inserts.
     17b. 0028_source_lean_unrated: source.lean_tag admits 'unrated', still
         admits 'N/A' beside it, still rejects an unknown value, stays NOT NULL,
         and carries exactly one lean_tag CHECK (the half-application 0028's
@@ -118,6 +118,23 @@
         ends_at exclusive. Outside the window everything goes through. A
         re-run of 0050 keeps a moved window and revokes EXECUTE by name
         again.
+    23. 0054_news_agent_rows_to_review (news-source-integrity §3.3, §6): on
+        fixture rows shaped like the eight live R3 rows, attributed as 0042
+        and 0014 leave them, it creates eight pending agent:R3 manual_news
+        items with the expected keys, each parsing with
+        ManualNewsPayloadSchema, and deletes the rows and nothing else; a
+        re-run is a no-op. On fresh databases: seven move under D1's TO
+        FLIP; it raises on a sourceless row, without 0014's CHECK, on a
+        source row that is not the page's own, and on a row whose payload
+        the schema would refuse.
+    24. 0055_official_link_sources (§3.2.4, §6): each of 0004's six seeded
+        links carries the source §3.2.4 names (the five official rows equal
+        officialSourceRow's output for officialForUrl of the link); no
+        official_link row is sourceless; the CHECK text lists official_link;
+        a re-run is a no-op. On fresh databases its guard raises when the
+        source CHECK text differs from 0014's, is missing, or has a second
+        CHECK on source_id beside it, and its assertion raises on an
+        unattributed official_link or an official source of another type.
 
 
    Supabase provides the anon/authenticated/service_role roles out of the box;
@@ -128,7 +145,7 @@
 import { PGlite } from "@electric-sql/pglite";
 import { pgcrypto } from "@electric-sql/pglite/contrib/pgcrypto";
 import { readdir, readFile } from "node:fs/promises";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -503,7 +520,7 @@ await check("0017 relation admits only named/related (plus NULL)", async () => {
     `INSERT INTO news_item (item_type, title, url, relation, source_id)
      VALUES ('candidate_news','named row','https://example.org/rel-a','named','src-early-test'),
             ('candidate_news','related row','https://example.org/rel-b','related','src-early-test'),
-            ('official_link','no relation','https://example.org/rel-c',NULL,NULL);`
+            ('official_link','no relation','https://example.org/rel-c',NULL,'src-early-test');`
   );
   let rejected = false;
   try {
@@ -553,15 +570,23 @@ await expectConstraintViolation(
    VALUES ('election_news', 'no source', 'https://example.org/n1-b');`,
   /violates check constraint "news_item_agent_source_check"/
 );
-await check("0014 an official_link row with source_id NULL still inserts", async () => {
+/* 0014 exempted official_link; 0055 rebuilt the CHECK to cover it (§3.2.4,
+   D8). pipeline_event stays exempt (D11). */
+await expectConstraintViolation(
+  "0055 rejects an official_link row with source_id NULL",
+  `INSERT INTO news_item (item_type, title, url)
+   VALUES ('official_link', 'no source', 'https://example.org/n1-c');`,
+  /violates check constraint "news_item_agent_source_check"/
+);
+await check("0014/0055 a pipeline_event row with source_id NULL still inserts", async () => {
   await db.query(
-    `INSERT INTO news_item (item_type, title, url)
-     VALUES ('official_link', 'still fine', 'https://example.org/n1-c');`
+    `INSERT INTO news_item (item_type, title) VALUES ('pipeline_event', 'probe-0055-pipeline');`
   );
   const r = await db.query(
-    "SELECT count(*)::int AS n FROM news_item WHERE url = 'https://example.org/n1-c';"
+    "SELECT count(*)::int AS n FROM news_item WHERE title = 'probe-0055-pipeline';"
   );
-  if (r.rows[0].n !== 1) throw new Error("official_link row with NULL source_id was not inserted");
+  if (r.rows[0].n !== 1) throw new Error("pipeline_event row with NULL source_id was not inserted");
+  await db.query("DELETE FROM news_item WHERE title = 'probe-0055-pipeline';");
 });
 await check("0014 a candidate_news row with a valid source_id inserts", async () => {
   await db.query(
@@ -2519,6 +2544,393 @@ await check("0050 a re-run keeps an existing content_freeze row and revokes EXEC
   } finally {
     await db.exec("ROLLBACK;");
   }
+});
+
+/* 23. 0054_news_agent_rows_to_review (docs/superpowers/specs/2026-10-08-news-
+   source-integrity-design.md §3.3, §6). Fixtures are shaped like the eight
+   live election_news rows R3 inserted (read 2026-10-09): the same ids, URLs,
+   metros and dates, titles and summaries of the same lengths, attributed to
+   the source rows 0042 and 0014 give them. The full replay has already
+   applied every file (0054 found none of these rows); here the file runs
+   again over the fixtures, as it will on live. */
+const sql0054 = await readFile(path.join(migrationsDir, "0054_news_agent_rows_to_review.sql"), "utf8");
+const { ManualNewsPayloadSchema } = await import(
+  pathToFileURL(path.join(root, "src", "types", "admin.ts")).href
+);
+const pad = (head, len) => (head + " " + "lorem ipsum ".repeat(60)).slice(0, len).trimEnd().padEnd(len, ".");
+const LIVE_R3_ROWS = [
+  { id: "8d12a9b1-bfa8-4501-bb7c-9db0f8536ead", url: "https://dos.fl.gov/elections/for-voters/election-dates/",
+    metro: null, published: "2026-09-09", tl: 65, sl: 406, source: "src_gov_dos_election_dates_2026",
+    norm: "dos.fl.gov/elections/for-voters/election-dates" },
+  { id: "4c787ba7-22cd-4eb9-9b4b-39dbd9c378d5", url: "https://www.votehillsborough.gov/291/2026-General-Election",
+    metro: "tampa", published: "2026-09-09", tl: 72, sl: 415, source: "src_gov_hillsborough_general_2026",
+    norm: "www.votehillsborough.gov/291/2026-General-Election" },
+  { id: "1ae20884-6268-4217-91cd-619c50fa2056", url: "https://www.miamidade.gov/global/release.page?Mduid_release=rel1788204670102232",
+    metro: "miami", published: "2026-09-01", tl: 76, sl: 396, source: "src_gov_miamidade_general_voting_2026",
+    norm: "www.miamidade.gov/global/release.page?Mduid_release=rel1788204670102232" },
+  { id: "bbc7a4c8-3fb6-4199-91c8-99103dcc9617", url: "https://www.votehillsborough.gov/281/2026-Primary-Election",
+    metro: "tampa", published: "2026-07-06", tl: 64, sl: 269, source: "src_gov_hillsborough_early_voting_2026",
+    norm: "www.votehillsborough.gov/281/2026-Primary-Election" },
+  { id: "9b4a9bf0-052d-4d62-88d3-682101e3f511", url: "https://browardvotes.gov/voting-methods/early-voting-dates-hours-and-sites",
+    metro: "fort_lauderdale", published: "2026-07-06", tl: 67, sl: 234, source: "src_gov_broward_early_voting_2026",
+    norm: "browardvotes.gov/voting-methods/early-voting-dates-hours-and-sites" },
+  { id: "ce038b86-a7a8-4c04-84b1-624f50917682", url: "https://news.ballotpedia.org/2026/06/03/florida-voters-to-decide-expanded-homestead-tax-exemption-amendment-in-november/",
+    metro: null, published: "2026-06-03", tl: 73, sl: 473, source: "src_ballotpedia_news_amendments_2026",
+    norm: "news.ballotpedia.org/2026/06/03/florida-voters-to-decide-expanded-homestead-tax-exemption-amendment-in-november" },
+  { id: "126725c6-2ab0-4488-998a-314bf25c2460", url: "https://www.miamidade.gov/global/release.page?Mduid_release=rel1780088950968276",
+    metro: "miami", published: "2026-06-01", tl: 59, sl: 282, source: "src_gov_miamidade_early_voting_2026",
+    norm: "www.miamidade.gov/global/release.page?Mduid_release=rel1780088950968276" },
+  { id: "7d95cfb2-dee3-40a6-895f-9e4d5cb5f18c", url: "https://www.flsenate.gov/Session/Bill/2026/991",
+    metro: null, published: "2026-04-02", tl: 86, sl: 339, source: "src_gov_flsenate_hb991_2026",
+    norm: "www.flsenate.gov/Session/Bill/2026/991" },
+];
+const BALLOTPEDIA_ID = "ce038b86-a7a8-4c04-84b1-624f50917682";
+const sqlText = (v) => (v === null ? "NULL" : `'${String(v).replace(/'/g, "''")}'`);
+const r3RowValues = (row, over = {}) => {
+  const r = { ...row, ...over };
+  const title = r.title ?? pad(`Fixture notice ${r.id.slice(0, 8)}`, r.tl);
+  const summary = pad(`Fixture summary for ${r.id.slice(0, 8)}`, r.sl);
+  return `(${sqlText(r.id)}, 'election_news', ${sqlText(title)}, ${sqlText(summary)}, ${sqlText(r.url)}, `
+    + `${sqlText(r.metro)}, ${sqlText(r.race_id ?? null)}, `
+    + `${r.published === null ? "NULL" : sqlText(`${r.published} 00:00:00+00`)}, ${sqlText(r.source)})`;
+};
+const insertR3Rows = (rows, overrides = {}) =>
+  `INSERT INTO news_item (id, item_type, title, summary, url, metro, race_id, published_at, source_id) VALUES\n`
+  + rows.map((row) => r3RowValues(row, overrides[row.id])).join(",\n") + ";";
+const ids0054 = LIVE_R3_ROWS.map((r) => `'${r.id}'`).join(", ");
+
+await db.exec(`
+  INSERT INTO news_item (item_type, title, url, metro, source_id)
+  VALUES ('election_news', 'control row, not targeted', 'https://example.org/control-0054', 'miami', 'src-early-test');
+  INSERT INTO review_item (kind, source, payload)
+  VALUES ('manual_news', 'operator', '{"probe": "control-0054"}');
+`);
+await check("0054 fixture: the eight rows insert, attributed as 0042 and 0014 leave them", async () => {
+  await db.exec(insertR3Rows(LIVE_R3_ROWS));
+  const r = await db.query(
+    `SELECT count(*)::int AS n FROM news_item n JOIN source s USING (source_id) WHERE n.id IN (${ids0054});`
+  );
+  if (r.rows[0].n !== 8) throw new Error(`expected 8 attributed fixture rows, got ${r.rows[0].n}`);
+});
+await check("0054 moves the eight rows into the review queue", async () => {
+  await db.exec(sql0054);
+});
+const movedItems = async (where = "") =>
+  (await db.query(
+    `SELECT kind, status, payload FROM review_item
+      WHERE source = 'agent:R3' ${where} ORDER BY payload->>'moved_from_news_item';`
+  )).rows;
+await check("0054 none of the eight ids is left in news_item, and the control row is", async () => {
+  const r = await db.query(`SELECT count(*)::int AS n FROM news_item WHERE id IN (${ids0054});`);
+  if (r.rows[0].n !== 0) throw new Error(`${r.rows[0].n} targeted row(s) still in news_item`);
+  const c = await db.query("SELECT count(*)::int AS n FROM news_item WHERE url = 'https://example.org/control-0054';");
+  if (c.rows[0].n !== 1) throw new Error("the untargeted control row was deleted");
+});
+await check("0054 one pending agent:R3 manual_news item per row, with the expected payload", async () => {
+  const items = await movedItems();
+  if (items.length !== 8) throw new Error(`expected 8 agent:R3 items, got ${items.length}`);
+  for (const row of LIVE_R3_ROWS) {
+    const item = items.find((i) => i.payload.moved_from_news_item === row.id);
+    if (!item) throw new Error(`no item for ${row.id}`);
+    if (item.kind !== "manual_news" || item.status !== "pending") {
+      throw new Error(`${row.id}: ${item.kind} / ${item.status}`);
+    }
+    const p = item.payload;
+    const expectedKeys = ["item_type", "moved_from_news_item", "published_at", "source_id", "summary", "title", "url",
+      row.metro ? "metro" : "statewide"].sort();
+    const keys = Object.keys(p).sort();
+    if (JSON.stringify(keys) !== JSON.stringify(expectedKeys)) {
+      throw new Error(`${row.id}: keys ${keys.join(",")}, expected ${expectedKeys.join(",")}`);
+    }
+    if (row.metro ? p.metro !== row.metro : p.statewide !== true) throw new Error(`${row.id}: wrong scope ${JSON.stringify(p)}`);
+    if (p.source_id !== row.source) throw new Error(`${row.id}: source_id ${p.source_id}, expected ${row.source}`);
+    if (p.url !== row.url) throw new Error(`${row.id}: url ${p.url}`);
+    if (p.published_at !== `${row.published}T00:00:00Z`) throw new Error(`${row.id}: published_at ${p.published_at}`);
+    if (p.title.length !== row.tl || p.summary.length !== row.sl) throw new Error(`${row.id}: title/summary lengths changed`);
+  }
+});
+await check("0054 every moved payload parses with ManualNewsPayloadSchema, which drops only moved_from_news_item", async () => {
+  for (const { payload } of await movedItems()) {
+    const parsed = ManualNewsPayloadSchema.safeParse(payload);
+    if (!parsed.success) {
+      throw new Error(`${payload.moved_from_news_item}: ${parsed.error.issues.map((i) => i.message).join("; ")}`);
+    }
+    if ("moved_from_news_item" in parsed.data) throw new Error("the schema kept moved_from_news_item");
+    if (parsed.data.source_id !== payload.source_id) throw new Error("the schema lost source_id");
+  }
+});
+await check("0054 each moved source_id names the page's own source row (the approve route's given-id check)", async () => {
+  for (const row of LIVE_R3_ROWS) {
+    const r = await db.query(`SELECT url_norm FROM source WHERE source_id = '${row.source}';`);
+    if (r.rows[0]?.url_norm !== row.norm) throw new Error(`${row.source}: url_norm ${r.rows[0]?.url_norm}, expected ${row.norm}`);
+  }
+});
+await check("0054 a re-run is a no-op", async () => {
+  await db.exec(sql0054);
+  const items = await movedItems();
+  if (items.length !== 8) throw new Error(`a re-run left ${items.length} agent:R3 items, expected 8`);
+  const c = await db.query("SELECT count(*)::int AS n FROM news_item WHERE url = 'https://example.org/control-0054';");
+  if (c.rows[0].n !== 1) throw new Error("a re-run deleted the control row");
+  const o = await db.query("SELECT count(*)::int AS n FROM review_item WHERE source = 'operator' AND payload->>'probe' = 'control-0054';");
+  if (o.rows[0].n !== 1) throw new Error("a re-run touched an operator item");
+});
+await check("0054 re-inserting a moved id after its item exists deletes it without a second item", async () => {
+  /* The guard on the DELETE is "already copied", not "copied in this run". */
+  const row = LIVE_R3_ROWS[0];
+  await db.exec(insertR3Rows([row]));
+  let raised = null;
+  try {
+    await db.exec(sql0054);
+  } catch (err) {
+    raised = err;
+    await db.exec("ROLLBACK;");
+  }
+  if (raised) throw new Error(`0054 refused: ${raised.message}`);
+  const r = await db.query(`SELECT count(*)::int AS n FROM news_item WHERE id = '${row.id}';`);
+  if (r.rows[0].n !== 0) throw new Error("the re-inserted row was kept");
+  if ((await movedItems()).length !== 8) throw new Error("a second item was queued");
+});
+
+/* 0054 on fresh databases holding only the three tables it touches, in the
+   live column shapes. published_at is nullable here (it is NOT NULL on live)
+   so the guard's NULL clause can be exercised. */
+const MINI_0054_DDL = `
+  CREATE TABLE source (source_id TEXT PRIMARY KEY, url TEXT NOT NULL, url_norm TEXT NOT NULL UNIQUE,
+                       publisher TEXT NOT NULL, type TEXT NOT NULL, lean_tag TEXT NOT NULL);
+  CREATE TABLE news_item (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), race_id TEXT, candidate_id TEXT,
+                          metro TEXT, county_fips CHAR(5), item_type TEXT NOT NULL, title TEXT NOT NULL,
+                          summary TEXT, url TEXT, source_id TEXT REFERENCES source(source_id),
+                          published_at TIMESTAMPTZ);
+  CREATE TABLE review_item (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), kind TEXT NOT NULL, source TEXT NOT NULL,
+                            payload JSONB NOT NULL, status TEXT NOT NULL DEFAULT 'pending');
+  INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag) VALUES
+  ${LIVE_R3_ROWS.map((r) => `(${sqlText(r.source)}, ${sqlText(r.url)}, ${sqlText(r.norm)}, 'Fixture publisher', 'primary_doc', 'N/A')`).join(",\n  ")};
+`;
+const MINI_0014_CHECK = `ALTER TABLE news_item ADD CONSTRAINT news_item_agent_source_check
+  CHECK (item_type NOT IN ('candidate_news','election_news') OR source_id IS NOT NULL)`;
+async function probe0054(name, { rows = LIVE_R3_ROWS, overrides = {}, withCheck = true, expect, pattern, moved }) {
+  await check(name, async () => {
+    const probe = new PGlite();
+    try {
+      await probe.exec(MINI_0054_DDL);
+      await probe.exec(insertR3Rows(rows, overrides));
+      /* NOT VALID, so a sourceless fixture row can sit beside 0014's CHECK. */
+      if (withCheck) await probe.exec(`${MINI_0014_CHECK} NOT VALID;`);
+      let raised = null;
+      try {
+        await probe.exec(sql0054);
+      } catch (err) {
+        raised = err;
+        await probe.exec("ROLLBACK;");
+      }
+      const counts = async () => (await probe.query(
+        `SELECT (SELECT count(*)::int FROM news_item) AS news, (SELECT count(*)::int FROM review_item) AS items;`
+      )).rows[0];
+      if (expect === "raise") {
+        if (!raised) throw new Error("0054 applied where its guard should refuse");
+        if (!pattern.test(raised.message)) throw new Error(`raised, but not by the guard: ${raised.message}`);
+        const c = await counts();
+        if (c.news !== rows.length || c.items !== 0) throw new Error(`the refusal left changes: ${JSON.stringify(c)}`);
+        return;
+      }
+      if (raised) throw new Error(`0054 refused: ${raised.message}`);
+      const c = await counts();
+      if (c.news !== 0 || c.items !== moved) throw new Error(`expected 0 rows and ${moved} items, got ${JSON.stringify(c)}`);
+    } finally {
+      await probe.close();
+    }
+  });
+}
+await probe0054("0054 under D1's TO FLIP (Ballotpedia deleted by 0042) moves seven", {
+  rows: LIVE_R3_ROWS.filter((r) => r.id !== BALLOTPEDIA_ID), expect: "apply", moved: 7,
+});
+await probe0054("0054 raises on a sourceless fixture (0042 not applied)", {
+  overrides: { "8d12a9b1-bfa8-4501-bb7c-9db0f8536ead": { source: null } },
+  expect: "raise", pattern: /0054: no source on 8d12a9b1/,
+});
+await probe0054("0054 raises without 0014's CHECK", {
+  withCheck: false, expect: "raise", pattern: /0054: news_item_agent_source_check is missing/,
+});
+await probe0054("0054 raises when a row's source is another page's row", {
+  overrides: { "9b4a9bf0-052d-4d62-88d3-682101e3f511": { source: "src_gov_hillsborough_early_voting_2026" } },
+  expect: "raise", pattern: /0054: source row is not the page's own on 9b4a9bf0/,
+});
+await probe0054("0054 raises on a row with a race_id (the payload has no place for it)", {
+  overrides: { "7d95cfb2-dee3-40a6-895f-9e4d5cb5f18c": { race_id: "FL-GOV-general" } },
+  expect: "raise", pattern: /0054: would not build a ManualNewsPayloadSchema payload for 7d95cfb2/,
+});
+await probe0054("0054 raises on a title over the schema's 240", {
+  overrides: { "126725c6-2ab0-4488-998a-314bf25c2460": { title: "x".repeat(241) } },
+  expect: "raise", pattern: /0054: would not build a ManualNewsPayloadSchema payload for 126725c6/,
+});
+await probe0054("0054 raises on a NULL published_at", {
+  overrides: { "bbc7a4c8-3fb6-4199-91c8-99103dcc9617": { published: null } },
+  expect: "raise", pattern: /0054: would not build a ManualNewsPayloadSchema payload for bbc7a4c8/,
+});
+
+/* 24. 0055_official_link_sources (§3.2.4, §6). After every file has applied
+   in filename order, 0004's six seeded links each carry the source §3.2.4
+   names. The five official rows must equal what officialSourceRow builds for
+   the entry officialForUrl returns, so the migration and the approve path
+   write the same row whichever runs first. */
+const { officialForUrl, officialSourceRow } = await import(
+  pathToFileURL(path.join(root, "src", "lib", "official-sources.ts")).href
+);
+const OFFICIAL_LINK_URLS = [
+  "https://www.ocfelections.gov",
+  "https://www.browardvotes.gov",
+  "https://www.votehillsborough.gov",
+  "https://registertovoteflorida.gov",
+  "https://dos.fl.gov/elections/",
+];
+const MIAMI_DADE_LINK = "https://www.miamidade.gov/global/elections/home.page";
+const MIAMI_DADE_ROW = {
+  source_id: "src_gov_miamidade_elections_home",
+  url: MIAMI_DADE_LINK,
+  url_norm: "www.miamidade.gov/global/elections/home.page",
+  publisher: "Miami-Dade County Supervisor of Elections",
+  type: "primary_doc",
+  lean_tag: "N/A",
+};
+const POST_0055_CHECK =
+  "CHECK (((item_type <> ALL (ARRAY['candidate_news'::text, 'election_news'::text, 'official_link'::text])) OR (source_id IS NOT NULL)))";
+const linkSource = async (url) =>
+  (await db.query(
+    `SELECT s.source_id, s.url, s.url_norm, s.publisher, s.type, s.lean_tag
+       FROM news_item n JOIN source s USING (source_id)
+      WHERE n.item_type = 'official_link' AND n.url = $1;`,
+    [url]
+  )).rows;
+const sameRow = (a, b) =>
+  ["source_id", "url", "url_norm", "publisher", "type", "lean_tag"].every((k) => a[k] === b[k]);
+await check("0055 each of the five official links carries exactly officialSourceRow(officialForUrl(url))", async () => {
+  for (const url of OFFICIAL_LINK_URLS) {
+    const entry = officialForUrl(url);
+    if (!entry) throw new Error(`${url} matches no official entry`);
+    const rows = await linkSource(url);
+    if (rows.length !== 1) throw new Error(`${url}: ${rows.length} attributed official_link rows, expected 1`);
+    const want = officialSourceRow(entry);
+    if (!sameRow(rows[0], want)) throw new Error(`${url}: ${JSON.stringify(rows[0])} != ${JSON.stringify(want)}`);
+  }
+});
+await check("0055 the Miami-Dade link is off the official list and carries its page row", async () => {
+  if (officialForUrl(MIAMI_DADE_LINK) !== null) throw new Error("officialForUrl now matches the Miami-Dade link; revisit 0055");
+  const rows = await linkSource(MIAMI_DADE_LINK);
+  if (rows.length !== 1 || !sameRow(rows[0], MIAMI_DADE_ROW)) throw new Error(JSON.stringify(rows));
+});
+await check("0055 no official_link row is left without a source", async () => {
+  const r = await db.query(
+    "SELECT count(*)::int AS n, (SELECT count(*)::int FROM news_item WHERE item_type = 'official_link') AS total FROM news_item WHERE item_type = 'official_link' AND source_id IS NULL;"
+  );
+  if (r.rows[0].n !== 0) throw new Error(`${r.rows[0].n} sourceless official_link row(s)`);
+  if (r.rows[0].total < 6) throw new Error(`only ${r.rows[0].total} official_link rows; 0004 seeds six`);
+});
+const sourceCheckDefs = async (conn = db) =>
+  (await conn.query(
+    `SELECT conname, pg_get_constraintdef(oid) AS def FROM pg_constraint
+      WHERE conrelid = 'news_item'::regclass AND contype = 'c'
+        AND pg_get_constraintdef(oid) ~ '\\msource_id\\M';`
+  )).rows;
+await check("0055 the source CHECK lists official_link, and it is the only CHECK on source_id", async () => {
+  const defs = await sourceCheckDefs();
+  if (defs.length !== 1 || defs[0].conname !== "news_item_agent_source_check" || defs[0].def !== POST_0055_CHECK) {
+    throw new Error(JSON.stringify(defs));
+  }
+});
+const sql0055 = await readFile(path.join(migrationsDir, "0055_official_link_sources.sql"), "utf8");
+await check("0055 a re-run is a no-op", async () => {
+  const before = (await db.query("SELECT count(*)::int AS n FROM source;")).rows[0].n;
+  await db.exec(sql0055);
+  const after = (await db.query("SELECT count(*)::int AS n FROM source;")).rows[0].n;
+  if (after !== before) throw new Error(`a re-run changed the source count ${before} -> ${after}`);
+  const defs = await sourceCheckDefs();
+  if (defs.length !== 1 || defs[0].def !== POST_0055_CHECK) throw new Error(JSON.stringify(defs));
+  for (const url of OFFICIAL_LINK_URLS) {
+    if (!sameRow((await linkSource(url))[0] ?? {}, officialSourceRow(officialForUrl(url)))) throw new Error(`${url} changed`);
+  }
+});
+
+/* 0055 on fresh databases holding only source and news_item, with 0004's six
+   links unattributed and the source CHECK in a given shape. */
+const MINI_0055_DDL = `
+  CREATE TABLE source (source_id TEXT PRIMARY KEY, url TEXT NOT NULL, url_norm TEXT NOT NULL UNIQUE,
+                       publisher TEXT NOT NULL, type TEXT NOT NULL, lean_tag TEXT NOT NULL);
+  CREATE TABLE news_item (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), item_type TEXT NOT NULL,
+                          title TEXT NOT NULL, url TEXT, source_id TEXT REFERENCES source(source_id));
+  INSERT INTO news_item (item_type, title, url) VALUES
+  ${[...OFFICIAL_LINK_URLS, MIAMI_DADE_LINK].map((u) => `('official_link', 'fixture link', ${sqlText(u)})`).join(",\n  ")};
+`;
+async function probe0055(name, { setup = "", check: checkSql = `${MINI_0014_CHECK};`, expect, pattern }) {
+  await check(name, async () => {
+    const probe = new PGlite();
+    try {
+      await probe.exec(MINI_0055_DDL);
+      if (setup) await probe.exec(setup);
+      if (checkSql) await probe.exec(checkSql);
+      const sourcesBefore = (await probe.query("SELECT count(*)::int AS n FROM source;")).rows[0].n;
+      let raised = null;
+      try {
+        await probe.exec(sql0055);
+      } catch (err) {
+        raised = err;
+      }
+      if (expect === "raise") {
+        if (!raised) throw new Error("0055 applied where its guard should refuse");
+        if (!pattern.test(raised.message)) throw new Error(`raised, but not by the guard: ${raised.message}`);
+        const r = await probe.query(
+          "SELECT (SELECT count(*)::int FROM source) AS sources, (SELECT count(*)::int FROM news_item WHERE source_id IS NOT NULL) AS attributed;"
+        );
+        if (r.rows[0].sources !== sourcesBefore || r.rows[0].attributed !== 0) {
+          throw new Error(`the refusal left changes: ${JSON.stringify(r.rows[0])}`);
+        }
+        return;
+      }
+      if (raised) throw new Error(`0055 refused: ${raised.message}`);
+      await probe.exec(sql0055); // and again: its own post-state is a no-op
+      const defs = await sourceCheckDefs(probe);
+      if (defs.length !== 1 || defs[0].def !== POST_0055_CHECK) throw new Error(JSON.stringify(defs));
+      const r = await probe.query("SELECT count(*)::int AS n FROM news_item WHERE source_id IS NULL;");
+      if (r.rows[0].n !== 0) throw new Error(`${r.rows[0].n} link(s) left unattributed`);
+      let refused = false;
+      try {
+        await probe.exec("INSERT INTO news_item (item_type, title, url) VALUES ('official_link', 'no source', 'https://example.org/x');");
+      } catch {
+        refused = true;
+      }
+      if (!refused) throw new Error("the rebuilt CHECK admits a sourceless official_link");
+      await probe.exec("INSERT INTO news_item (item_type, title) VALUES ('pipeline_event', 'still exempt');");
+    } finally {
+      await probe.close();
+    }
+  });
+}
+await probe0055("0055 rebuilds 0014's exact CHECK and is a no-op on a re-run", { expect: "apply" });
+await probe0055("0055 keeps an official row the approve path wrote first", {
+  setup: `INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag)
+          VALUES ('official:browardvotes.gov', 'https://browardvotes.gov', 'browardvotes.gov',
+                  'Broward County Supervisor of Elections', 'primary_doc', 'N/A');`,
+  expect: "apply",
+});
+await probe0055("0055 raises when the source CHECK text differs from 0014's", {
+  check: `ALTER TABLE news_item ADD CONSTRAINT news_item_agent_source_check
+            CHECK (item_type NOT IN ('candidate_news') OR source_id IS NOT NULL);`,
+  expect: "raise", pattern: /0055: news_item_agent_source_check is .*not 0014's text/,
+});
+await probe0055("0055 raises without 0014's CHECK", {
+  check: "", expect: "raise", pattern: /0055: news_item_agent_source_check not found/,
+});
+await probe0055("0055 raises when a second CHECK on source_id exists", {
+  check: `${MINI_0014_CHECK}; ALTER TABLE news_item ADD CONSTRAINT source_id_short CHECK (length(source_id) < 200);`,
+  expect: "raise", pattern: /0055: news_item has other CHECK constraint\(s\) on source_id: source_id_short/,
+});
+await probe0055("0055 raises on an official_link it does not attribute", {
+  setup: "INSERT INTO news_item (item_type, title, url) VALUES ('official_link', 'a seventh link', 'https://example.gov/seventh');",
+  expect: "raise", pattern: /0055: official_link row\(s\) still without a source: https:\/\/example.gov\/seventh/,
+});
+await probe0055("0055 raises when an official link's url_norm already holds a row of another type", {
+  setup: `INSERT INTO source (source_id, url, url_norm, publisher, type, lean_tag)
+          VALUES ('src_broward_opinion', 'https://browardvotes.gov', 'browardvotes.gov', 'Somebody', 'opinion', 'N/A');`,
+  expect: "raise", pattern: /0055: a source row for an official link exists with another type or lean/,
 });
 
 if (failures > 0) {
