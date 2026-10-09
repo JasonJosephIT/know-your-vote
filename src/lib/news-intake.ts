@@ -27,6 +27,8 @@ import {
 } from "./news-sources.ts";
 import { parseNewsSitemap, sweep, type SweptArticle } from "./news-sweep.ts";
 import { matchArticle, type RosterCandidate } from "./news-match.ts";
+import { countyForRaceDistrict } from "./counties.ts";
+import { ACTIVE_ELECTION_KIND } from "./election.ts";
 import {
   dedupeKey,
   domainFromSourceId,
@@ -169,6 +171,107 @@ export async function loadRoster(db: SupabaseClient): Promise<RosterCandidate[]>
         : null;
     })
     .filter((r): r is RosterCandidate => r !== null);
+}
+
+/** A ballot-tier candidate in a published or listed race, with the fields
+    R2's logistics checks read (agent-retrofit spec §3.5, §3.6, D8). A
+    RosterCandidate, so R3's name filter can pass it to matchArticle as is.
+    No party: no rule that reads this list may read it. */
+export interface BallotRosterCandidate extends RosterCandidate {
+  /** `race.office`. */
+  office: string;
+  /** `race.level`: federal, state or county. */
+  level: string;
+  /** `race.district`: 'FL-10', 'ORA-CC-2', or null for a statewide race. */
+  district: string | null;
+  /** The covered county of a county race (countyForRaceDistrict), else null. */
+  countyFips: string | null;
+  publication: "published" | "listed";
+  qualifyingStatus: string;
+  officialSite: string | null;
+}
+
+export interface BallotPublicationRow {
+  race_id: string;
+  status: string;
+}
+export interface BallotRaceRow {
+  race_id: string;
+  office: string;
+  level: string;
+  district: string | null;
+  candidate_ids: string[] | null;
+}
+export interface BallotCandidateRow {
+  candidate_id: string;
+  legal_name: string;
+  qualifying_status: string;
+  official_site: string | null;
+  ballot_status: string;
+}
+
+/** Pure: the ballot-tier candidates of every published or listed race, races
+    by race_id and each race's candidates in its stored candidate_ids order.
+    A listed race's names are on the site too (agent-retrofit D8), which is
+    why this reads race.candidate_ids and not `profile` (profiles exist only
+    for published races). */
+export function buildBallotRoster(
+  publication: readonly BallotPublicationRow[],
+  races: readonly BallotRaceRow[],
+  candidates: readonly BallotCandidateRow[],
+): BallotRosterCandidate[] {
+  const status = new Map(publication.map((p) => [p.race_id, p.status]));
+  const byId = new Map(candidates.map((c) => [c.candidate_id, c]));
+  const out: BallotRosterCandidate[] = [];
+  for (const race of [...races].sort((a, b) => a.race_id.localeCompare(b.race_id))) {
+    const pub = status.get(race.race_id);
+    if (pub !== "published" && pub !== "listed") continue;
+    for (const id of race.candidate_ids ?? []) {
+      const c = byId.get(id);
+      if (!c || c.ballot_status !== "ballot") continue;
+      out.push({
+        candidateId: c.candidate_id,
+        legalName: c.legal_name,
+        raceId: race.race_id,
+        office: race.office,
+        level: race.level,
+        district: race.district,
+        countyFips: countyForRaceDistrict(race.district)?.fips ?? null,
+        publication: pub,
+        qualifyingStatus: c.qualifying_status,
+        officialSite: c.official_site,
+      });
+    }
+  }
+  return out;
+}
+
+/** The ballot roster R2 checks and R3 filters names against: the races of
+    ACTIVE_ELECTION_KIND whose race_publication.status is published or
+    listed, and their candidates with ballot_status 'ballot' (106 on
+    2026-10-08: 82 in published races, 24 in listed). Three plain reads, so a
+    service-role client gets exactly what RLS gives the site. `loadRoster`
+    stays as it is for the sweep and R5. Throws on a failed read. */
+export async function loadBallotRoster(db: SupabaseClient): Promise<BallotRosterCandidate[]> {
+  const pubs = await db.from("race_publication").select("race_id, status").in("status", ["published", "listed"]);
+  if (pubs.error) throw new Error(`could not read race_publication: ${pubs.error.message}`);
+  const publication = (pubs.data ?? []) as BallotPublicationRow[];
+  if (publication.length === 0) return [];
+  const raceRead = await db
+    .from("race")
+    .select("race_id, office, level, district, candidate_ids")
+    .eq("election", ACTIVE_ELECTION_KIND)
+    .in("race_id", publication.map((p) => p.race_id));
+  if (raceRead.error) throw new Error(`could not read race: ${raceRead.error.message}`);
+  const races = (raceRead.data ?? []) as BallotRaceRow[];
+  const ids = [...new Set(races.flatMap((r) => r.candidate_ids ?? []))];
+  if (ids.length === 0) return [];
+  const candRead = await db
+    .from("candidate")
+    .select("candidate_id, legal_name, qualifying_status, official_site, ballot_status")
+    .in("candidate_id", ids);
+  if (candRead.error) throw new Error(`could not read candidate: ${candRead.error.message}`);
+  return buildBallotRoster(publication, races, (candRead.data ?? []) as BallotCandidateRow[]);
 }
 
 /** Match, then queue the candidate matches and the unmatched election stories

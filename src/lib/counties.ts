@@ -22,6 +22,12 @@ export interface CoveredCounty {
      candidate lists print them, not FIPS, which is why they need a mapping
      here rather than being derivable from the row. */
   raceDistrictPrefix: string;
+  /* The county's slug in its VoterFocus candidate list,
+     https://www.voterfocus.com/CampaignFinance/candidate_pr.php?c=<slug>
+     (docs/general-election/roster-recalibration-2026-09-21.md §5). R2's
+     status check reads the county candidates' qualifying status there
+     (scripts/logistics-check.ts). */
+  voterFocusSlug: string;
 }
 
 export const COVERED_COUNTIES: readonly CoveredCounty[] = [
@@ -31,6 +37,7 @@ export const COVERED_COUNTIES: readonly CoveredCounty[] = [
     metro: "miami",
     metroLabel: "Miami",
     raceDistrictPrefix: "DAD",
+    voterFocusSlug: "miamidade",
   },
   {
     fips: "12011",
@@ -38,6 +45,7 @@ export const COVERED_COUNTIES: readonly CoveredCounty[] = [
     metro: "fort_lauderdale",
     metroLabel: "Fort Lauderdale",
     raceDistrictPrefix: "BRO",
+    voterFocusSlug: "broward",
   },
   {
     fips: "12057",
@@ -45,6 +53,7 @@ export const COVERED_COUNTIES: readonly CoveredCounty[] = [
     metro: "tampa",
     metroLabel: "Tampa",
     raceDistrictPrefix: "HIL",
+    voterFocusSlug: "hillsborough",
   },
   {
     fips: "12095",
@@ -52,6 +61,7 @@ export const COVERED_COUNTIES: readonly CoveredCounty[] = [
     metro: "orlando",
     metroLabel: "Orlando",
     raceDistrictPrefix: "ORA",
+    voterFocusSlug: "orange",
   },
 ] as const;
 

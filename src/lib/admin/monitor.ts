@@ -24,12 +24,13 @@ import { ACTIVE_ELECTION_KIND } from "@/lib/election";
    why every panel carries a discriminated PanelState rather than a bare
    number. */
 
-export type AgentName = "R1" | "R2" | "R3" | "R4" | "dispatcher";
+export type AgentName = "R1" | "R2" | "R3" | "R4" | "R5" | "dispatcher";
 export const AGENTS: readonly AgentName[] = [
   "R1",
   "R2",
   "R3",
   "R4",
+  "R5",
   "dispatcher",
 ];
 
@@ -154,6 +155,7 @@ function emptyAgentHealth(): Record<AgentName, AgentHealth> {
     R2: { last: null, status: null },
     R3: { last: null, status: null },
     R4: { last: null, status: null },
+    R5: { last: null, status: null },
     dispatcher: { last: null, status: null },
   };
 }
