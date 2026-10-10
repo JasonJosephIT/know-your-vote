@@ -48,14 +48,13 @@
    and `undefined` still means "apply the ordering, cap nothing". Shortfall is
    reported for the caller to STATE, never padded. The recommended value the
    caller should pass is NEWS_SLOTS_PER_CANDIDATE below, which comes from the
-   first measurement and is not yet wired to any caller. */
+   first measurement. The candidate page passes it. */
 
 import type { NewsSource } from "./news-labels";
 
 /* ---- FOUNDER CALL: N, the news slots per candidate -------------------
-   RECOMMENDED (PENDING FOUNDER CONFIRMATION), 2026-10-04: N = 3. Launch
-   handoff §5; the pending decision is recorded in
-   docs/general-election/stream-surface-handoff.md §7.
+   CONFIRMED by the founder 2026-10-09: N = 3 (recommended 2026-10-04,
+   launch handoff §5; docs/general-election/stream-surface-handoff.md §7 D1).
 
    THE MEASUREMENT. news-fairness.md §5 says to pick N from real
    per-candidate counts. The first ones were taken on 2026-10-04 with
@@ -77,13 +76,13 @@ import type { NewsSource } from "./news-labels";
    larger N would add more stories of the same lean, not more spread. And 3
    cards with hero images is a short section on a phone.
 
-   NOT WIRED, ON PURPOSE. The hard gate in news-fairness.md's N4 note still
-   stands: N must be passed to CandidateNews before candidate_news rows go
-   live. The caller is src/app/(public)/candidates/[candidateId]/page.tsx,
-   which renders <CandidateNews candidateId=… /> twice with no `slots`.
-   Wiring is one prop at each call site: slots={NEWS_SLOTS_PER_CANDIDATE}.
-   It must be at least 1, because `slots={0}` with stories present would
-   print the "No stories" line falsely (stream-surface-handoff.md §4).
+   WIRED 2026-10-09, before the 10-09 backfill's approvals, which met the
+   hard gate in news-fairness.md's N4 note (N is passed to CandidateNews
+   before candidate_news rows go live). Both <CandidateNews> call sites in
+   src/app/(public)/candidates/[candidateId]/page.tsx pass
+   slots={NEWS_SLOTS_PER_CANDIDATE}. It must be at least 1, because
+   `slots={0}` with stories present would print the "No stories" line
+   falsely (stream-surface-handoff.md §4). /news is not capped by it.
 
    TO FLIP: change the number. Re-measure once the first batch of
    candidate_news rows has been approved; that is when N5's real

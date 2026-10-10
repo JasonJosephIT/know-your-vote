@@ -7,6 +7,7 @@ import { TrackView } from "@/components/features/TrackView";
 import { getCandidateDetail, getRaceBrief } from "@/lib/briefs";
 import { getCandidateListing, getRaceListing } from "@/lib/listing";
 import { incumbencyFor, type Incumbency } from "@/lib/incumbency";
+import { NEWS_SLOTS_PER_CANDIDATE } from "@/lib/news-slots";
 import { officeTitle } from "@/lib/office-title";
 import { runningMatesFor, type RunningMates } from "@/lib/running-mate";
 
@@ -101,7 +102,11 @@ export default async function CandidatePage({
             incumbency={incumbency}
             runningMates={runningMates}
           />
-          <CandidateNews candidateId={candidateId} raceId={listing.raceId} />
+          <CandidateNews
+            candidateId={candidateId}
+            raceId={listing.raceId}
+            slots={NEWS_SLOTS_PER_CANDIDATE}
+          />
           <CandidateContact candidateId={candidateId} />
         </main>
       );
@@ -144,10 +149,14 @@ export default async function CandidatePage({
         incumbency={incumbency}
         runningMates={runningMates}
       />
-      {/* No `slots` prop on purpose: news-fairness.md §5 says N is picked from
-          real per-candidate counts once N5 reports them, and N5 has no data
-          yet. Until then the fairness ordering applies with no cap. */}
-      <CandidateNews candidateId={candidateId} raceId={detail.raceId} />
+      {/* N equal slots per candidate (news-fairness.md §2), founder-confirmed
+          2026-10-09. The hard gate in the N4 note: N is passed before
+          candidate_news rows go live. */}
+      <CandidateNews
+        candidateId={candidateId}
+        raceId={detail.raceId}
+        slots={NEWS_SLOTS_PER_CANDIDATE}
+      />
       <CandidateContact candidateId={candidateId} />
     </main>
   );

@@ -107,7 +107,7 @@ There is no feature flag. Four things keep it off:
    readable since #109, as `SUPABASE`.) The enqueue and characterize scripts
    run locally and read the service key only as `SUPABASE_SERVICE_ROLE_KEY`,
    so they need it under that name in `.env.local`.
-4. **The N gate (§3 item 1) is open.** The candidate page passes no `slots`.
+4. ~~**The N gate (§3 item 1) is open.** The candidate page passes no `slots`.~~ Closed 2026-10-09: both call sites pass `NEWS_SLOTS_PER_CANDIDATE` (3), founder-confirmed.
 
 Going live therefore means running the runbook and approving rows. It is not
 a code switch. Pre-check P3 in the runbook makes wiring N a condition of the
