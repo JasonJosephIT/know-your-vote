@@ -31,7 +31,7 @@ Nothing here has been written to the database.
 | Same event, several outlets | **Keep one per candidate per event `[DUP]`** (10-06 precedent): keep the earliest-published copy that passes every other rule |
 | Method | **Scripted loop** in the founder's signed-in browser over the route, one POST per item, stopping on any error or `apply_error`. The founder reviews this file first |
 | D10 (approve during the freeze) | **Confirmed** |
-| D4 (keep reading flvoicenews.com) | **Undecided.** Its rows are drafted on merits; the founder decides D4 before approving them |
+| D4 (keep reading flvoicenews.com) | **Keep reading it** (founder, 2026-10-10: "keep Florida's Voice"). Its rows are judged on merits like any other; `INCLUDE_D4` is now `true` in the loop |
 
 Not asked, following the 10-06 precedent: a story where one candidate
 targets an opponent (an attack ad, a rebuttal) is approved for both when both
@@ -105,11 +105,12 @@ roundups, then the syndicated copies, then op-eds and paid content), then the
 subject pass, then lint, then race by race (FL-SEN, FL-GOV, FL-ATG, House
 races by district, FL-AGR), oldest-published first within each race.
 
-**D4 hold (default).** 79 Florida's Voice approvals, plus 19 `[DUP]` rejects
-whose kept copy is a Florida's Voice story, are skipped until the founder
-decides D4. That leaves **263 decisions ready now: 117 approve, 146 reject.**
-If D4 holds flvoicenews.com, 14 of those events have another outlet's copy to
-keep instead (§7). The other 65 have only the Florida's Voice copy.
+**D4 decided: keep reading flvoicenews.com** (founder, 2026-10-10). The 79
+Florida's Voice approvals and the 19 `[DUP]` rejects whose kept copy is a
+Florida's Voice story are no longer held back, so **all 361 drafted decisions
+are ready**. Before D4 the loop skipped those 98 and left 263 ready (117
+approve, 146 reject). §7's fallbacks are kept for the record only; they
+apply only if D4 is ever flipped.
 
 Per candidate, as a diagnostic only. This is not a target, and nothing here
 was tuned:
@@ -200,7 +201,7 @@ You make every decision. The session writes nothing.
 The loop was tested against a mocked route: dry run, full run, the 409 skip,
 and the stop on a fail-closed approve.
 
-## 7. D4 fallbacks (only if flvoicenews.com is held)
+## 7. D4 fallbacks (only if flvoicenews.com is held; not in use, D4 kept it 2026-10-10)
 
 | Candidate | Event kept from Florida's Voice | Fallback if D4 holds flvoicenews |
 |---|---|---|

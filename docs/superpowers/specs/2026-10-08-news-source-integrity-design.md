@@ -1342,6 +1342,9 @@ five `null` through Nov 3. The 2026-09-21 deferral stands.
 
 **D4. The AI-crawler hold.** Recommended (pending founder confirmation):
 keep all seven held through Nov 3, and keep reading `flvoicenews.com`.
+**`flvoicenews.com` half confirmed by the founder, 2026-10-10: "keep
+Florida's Voice".** It stays off `AI_POLICY_HOLD`. The hold on the other
+domains is unchanged by this decision.
 - **Why.**
   - The pipeline's output is read by AI. R5 reads every swept story, and R6
     sends headlines and deks to Jev. That is what these robots.txt files
