@@ -8,7 +8,6 @@ import { COVERED_COUNTIES } from "@/lib/counties";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { orderCandidates } from "@/lib/ballot-order";
 import { SHOW_INCUMBENT_CHIP } from "@/lib/incumbency";
-import { scrutinyAsOf, snapshotBullet } from "@/lib/snapshot-copy";
 
 export const revalidate = 3600;
 export const metadata = { title: "How we stay fair — Know Your Vote" };
@@ -51,12 +50,16 @@ export const metadata = { title: "How we stay fair — Know Your Vote" };
      bot challenges, page cap); "Civic Awareness (Know Your Vote)/
      CAP_Balance_Audit_Spec_v1.md" and balance_audit_core.py. */
 
-/* The day the candidate sites behind every published brief were read, and
-   the "Briefs are a snapshot." bullet built on it, live in
-   src/lib/snapshot-copy.ts: BRIEF_SNAPSHOT_DATE, SNAPSHOT_LABEL, the bullet
-   for each refresh path (ballot-content-completion §3.4 and §3.6.4) and the
-   scrutiny summary's "as of" clause. UPDATE THAT FILE'S SNAPSHOT SETTING ON
-   A REFRESH: it is the one constant behind every "as of" line on this page. */
+/* The day the candidate sites behind every published brief were read: the
+   2026-09-29 Jev-link ingest (brief-runs/ingest-jev-2026-09-29.md), which
+   FL-GOV was re-ingested in too (FL-GOV/decisions.md, 2026-09-29).
+
+   UPDATE THIS ON A REFRESH. A re-ingest and re-apply (launch handoff §3,
+   founder decision 7) leaves every "as of" line on this page wrong until this
+   changes. It is a constant, not a query, because no table records the
+   ingest date: source.retrieved_at keeps the FIRST time a URL was seen
+   (ON CONFLICT DO NOTHING), so it reads 2026-09-27 for FL-GOV's pages. */
+const BRIEF_SNAPSHOT_DATE = "2026-09-29";
 
 /* The Balance Audit's word_count threshold as it is actually run: a per-call
    override of balance_audit_core in brief-runs/audit-2026-10-04.py and in
@@ -139,6 +142,11 @@ const SPINE_BY_OFFICE: readonly { office: string; ids: readonly string[] }[] = [
 
 const issueLabel = (id: string) =>
   SUB_ISSUES.find((s) => s.id === id)?.label ?? id;
+
+const SNAPSHOT_LABEL = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "long",
+  timeZone: "UTC",
+}).format(new Date(`${BRIEF_SNAPSHOT_DATE}T12:00:00Z`));
 
 /* Variance is (max − min) / max, so it can never exceed 100% (CAP Balance
    Audit spec §3). A threshold at or above 100 is a gate that cannot close. */
@@ -247,7 +255,6 @@ const byLabel = (a: ScrutinyRace, b: ScrutinyRace) =>
   a.raceId.localeCompare(b.raceId, "en-US", { numeric: true });
 
 const linkClass = "text-primary underline underline-offset-2";
-const snapshot = snapshotBullet();
 
 export default async function MethodologyPage() {
   const scrutiny = await getScrutinyCounts();
@@ -531,7 +538,8 @@ export default async function MethodologyPage() {
             {briefed.length} published {briefed.length === 1 ? "race" : "races"}
             , {candidateCount}{" "}
             {candidateCount === 1 ? "candidate" : "candidates"},{" "}
-            {quoteCount.toLocaleString("en-US")} quotes, {scrutinyAsOf()}.
+            {quoteCount.toLocaleString("en-US")} quotes, all as of{" "}
+            {SNAPSHOT_LABEL}.
           </p>
         )}
         {briefed.map((race) => (
@@ -698,13 +706,9 @@ export default async function MethodologyPage() {
             position stated only deeper in a site can be missed.
           </li>
           <li>
-            {/* The freeze copy (§3.6.4, BC11): which refresh path's wording
-                shows is set once, in src/lib/snapshot-copy.ts. */}
-            <strong>Briefs are a snapshot.</strong> {snapshot.beforeEmail}{" "}
-            <a href={`mailto:${snapshot.email}`} className={linkClass}>
-              {snapshot.email}
-            </a>
-            .
+            <strong>Briefs are a snapshot.</strong> We read the candidates&rsquo;
+            sites on {SNAPSHOT_LABEL}. Anything added or changed since then
+            isn&rsquo;t here yet.
           </li>
           <li>
             <strong>Some races have no brief.</strong> When no candidate in a

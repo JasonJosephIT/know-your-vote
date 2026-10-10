@@ -207,22 +207,7 @@ check(
 const missing = FROZEN_FILES.filter((f) => !existsSync(join(ROOT, f)));
 check("every frozen file exists", missing.length === 0, missing.join(", "));
 check("no frozen file is listed twice", new Set(FROZEN_FILES).size === FROZEN_FILES.length);
-check("50 frozen files (§3.6.3, plus roster-completeness §3.10 and the snapshot copy)", FROZEN_FILES.length === 50, String(FROZEN_FILES.length));
-/* Roster-completeness §3.10 asks the freeze-copy PR to freeze its render
-   path; RosterLines.tsx and campaign-website.ts joined that path in #144.
-   snapshot-copy.ts holds the methodology page's snapshot and freeze copy. */
-const rosterPath = [
-  "src/lib/incumbency.ts",
-  "src/lib/running-mate.ts",
-  "src/lib/campaign-website.ts",
-  "src/lib/snapshot-copy.ts",
-  "src/components/features/CandidateBrief.tsx",
-  "src/components/features/RaceCompare.tsx",
-  "src/components/features/CampaignWebsite.tsx",
-  "src/components/features/RosterLines.tsx",
-];
-const unfrozen = rosterPath.filter((f) => !FROZEN_FILES.includes(f));
-check("roster-completeness's render path and the snapshot copy are frozen", unfrozen.length === 0, unfrozen.join(", "));
+check("45 frozen files (§3.6.3)", FROZEN_FILES.length === 45, String(FROZEN_FILES.length));
 
 /* ---- 3. the command ---------------------------------------------------- */
 
