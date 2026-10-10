@@ -19,7 +19,7 @@ Nothing here has been written to the database.
 
 | Question | Answer |
 |---|---|
-| Wire N before mass approval | **Yes, N = 3.** PR #157 (`claude/wire-news-slots`) |
+| Wire N before mass approval | **Yes, N = 3.** PR #157, **merged 2026-10-10** (main `129478a`); section wording approved |
 | Sign-in | Not yet. Approvals wait for it; the session cannot sign in or write decisions |
 | Roundups | **Read each first.** Then reject `[A2/P2]` any that is a multi-item digest |
 | Rows past the 30-day window | **Approve for the record** (judge on merits only) |
