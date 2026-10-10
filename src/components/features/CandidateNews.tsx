@@ -50,10 +50,10 @@ function NewsCard({ item }: { item: CandidateNewsItem }) {
 }
 
 /* `slots` is the per-candidate slot count N of news-fairness.md §2 — every
-   ballot-tier candidate in a race gets the same one. It is intentionally
-   OPTIONAL and has no default: §5 says N comes from real per-candidate counts
-   once N5 measures them, and N5 has no data yet. Left unset, the selector
-   still orders the items by the fairness rule and caps nothing.
+   ballot-tier candidate in a race gets the same one. The candidate page
+   passes NEWS_SLOTS_PER_CANDIDATE (news-slots.ts). The prop stays optional
+   with no default: left unset, the selector still orders the items by the
+   fairness rule and caps nothing.
 
    `raceId` gates the surplus expander (founder decision C): it is offered
    only for a race whose skew passed the source check (news-skew-check.ts). */
@@ -83,8 +83,8 @@ export async function CandidateNews({
       <header className="flex flex-col gap-1">
         <h2 className="text-h2">In the news</h2>
         <p className="text-body-sm text-on-surface-muted">
-          On-the-record events, restated neutrally and cited — no polls, no
-          endorsements, no hot takes.
+          On-the-record events, restated neutrally and cited. We don&rsquo;t
+          endorse, run polls or give hot takes.
         </p>
       </header>
 

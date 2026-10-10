@@ -285,6 +285,9 @@ mutation-checked — swapping the greedy pick for plain recency makes it exit 1.
 comes from measured coverage and N5 has not measured it.
 **Hard gate:** `N` must be passed to `CandidateNews` before `candidate_news`
 rows go live — until then the equal-slot promise is an ordering, not a cap.
+**Gate met 2026-10-09:** the founder confirmed `N = 3`
+(`NEWS_SLOTS_PER_CANDIDATE`), and both `<CandidateNews>` call sites on the
+candidate page pass it, ahead of the 10-09 backfill's approvals.
 `.limit(10)` was removed from `fetchCandidateNews` (10 newest can all share one
 lean, which defeats the spread) and a 30-day predicate added in its place, off
 `RECENT_WINDOW_DAYS` in `src/lib/neutrality.ts`.
