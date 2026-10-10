@@ -19,13 +19,15 @@
  *     or an approve that comes back still pending with apply_error (fail-closed).
  *     Fix or decide that one card by hand, then paste again: decided items
  *     answer 409 and are skipped, so a re-run resumes where it stopped.
- *   - INCLUDE_D4 = false skips every Florida's Voice approval, and every [DUP]
- *     whose kept copy is a Florida's Voice story, until you decide D4.
+ *   - INCLUDE_D4 = true: the founder decided D4 on 2026-10-10 ("keep Florida's
+ *     Voice"), so Florida's Voice approvals, and every [DUP] whose kept copy is
+ *     a Florida's Voice story, are sent like any other. Set it to false to skip
+ *     those 98 again.
  *   - The result log is left in window.__backfillLog.
  */
 (async () => {
   const DRY_RUN = true;
-  const INCLUDE_D4 = false;
+  const INCLUDE_D4 = true;
   const PAUSE_MS = 300;
 
   const DECISIONS = [

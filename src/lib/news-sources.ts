@@ -256,7 +256,8 @@ const UNRATED_DESIGNATED: ReadonlySet<string> = new Set([
    flvoicenews.com, whose own robots.txt returns 403, so its policy cannot be
    read at all. "Unknown" is not "disallowed" — the same distinction this file
    draws between `unrated` and `N/A` — so it is not held here. Whether an
-   unreadable policy counts as consent is the founder's call.
+   unreadable policy counts as consent is the founder's call: decided
+   2026-10-10, keep reading it (D4).
 
    THREE MORE, founder 2026-10-09: nbcmiami.com, clickorlando.com and
    newsserviceflorida.com. All three were read daily until then. Their robots
