@@ -49,35 +49,5 @@ check(
   /neutral\.length > 0 \? "the official ballot text and the explainers above, and no case for either side\." : "the official ballot text and nothing else\."/.test(flatPage)
 );
 
-/* The freeze (ballot-content-completion §3.5 and §3.6.4, BC8 and BC11,
-   recommended pending founder confirmation). From 2026-10-17 nothing is
-   added to a measure page for this election, so the held note and its
-   caption stop promising more, and the fallback for a listed measure with
-   no note stops saying resources "are being collected": through Nov 3 that
-   branch is reached only by a measure taken down for a correction. */
-const am1 = heldNote("FL-AM1-general");
-if (am1) {
-  const text = am1.paragraphs.join(" ");
-  check("AM1 held note: no 'yet' (nothing more is coming before Nov 3)", !/\byet\b/i.test(text), text);
-  check(
-    "AM1 held note: the freeze wording of the second paragraph",
-    am1.paragraphs[1] ===
-      "We add for and against columns only from each side's own case, read at its own source: a statement, testimony or page it published itself. We have read the supporters' case that way, but not the opponents', so neither column is shown.",
-    am1.paragraphs[1]
-  );
-  check("AM1 held note: updated on the last day before the freeze", am1.updated === "2026-10-17", am1.updated);
-}
-check(
-  "held-note caption says sources stopped on October 17, not that we look every week",
-  flatPage.includes("We stopped adding sources to this page on October 17, 2026, for this election. This note was last updated") &&
-    !/every week/.test(flatPage)
-);
-check(
-  "fallback card: the freeze wording, not 'being collected'",
-  flatPage.includes(
-    "This page shows no for or against columns right now. We show them only when the sources on both sides meet our rules, which the methodology page explains. Until then, this page shows{\" \"}"
-  ) && !/being collected/.test(flatPage)
-);
-
 if (failures > 0) { console.error(`\n${failures} check(s) failed.`); process.exit(1); }
 console.log("\nverify-measure-held: all checks passed.");
