@@ -258,6 +258,19 @@ const UNRATED_DESIGNATED: ReadonlySet<string> = new Set([
    draws between `unrated` and `N/A` — so it is not held here. Whether an
    unreadable policy counts as consent is the founder's call.
 
+   THREE MORE, founder 2026-10-09: nbcmiami.com, clickorlando.com and
+   newsserviceflorida.com. All three were read daily until then. Their robots
+   files changed after the 2026-09-17 pass: NBC and News Service now name
+   `anthropic-ai`, `ClaudeBot` and `Claude-Web`, and ClickOrlando added
+   `ClaudeBot`. The archive backfill found the change on 2026-10-09
+   (moody-pipeline-gap-2026-10-09.md). Their terms of use also ask for written
+   permission before content is gathered or reused this way. The founder is
+   asking each publisher in writing
+   (docs/general-election/outreach/publisher-feed-permission-2026-10-09.md).
+   A YES TAKES THAT OUTLET OFF THIS LIST THE SAME DAY; record the reply at its
+   row. Stories from them that are already published or queued stay where they
+   are. The hold stops new reading; it does not unpublish.
+
    scripts/verify-news-sweep.ts asserts every outlet whose robots names a
    Claude/Anthropic agent appears here, so this list cannot drift out of step
    with the data it rests on. */
@@ -268,6 +281,8 @@ export const AI_POLICY_HOLD: ReadonlySet<string> = new Set([
   "sun-sentinel.com", "tampabay.com", "orlandosentinel.com",
   /* excluded today only by mixedFeed */
   "floridaphoenix.com",
+  /* read daily until 2026-10-09; written permission requested that day */
+  "nbcmiami.com", "clickorlando.com", "newsserviceflorida.com",
 ]);
 
 interface RowOptions {
@@ -302,7 +317,12 @@ export const OUTLETS: readonly Outlet[] = Object.freeze([
     robots: { aiDisallow: ["GPTBot"] },
   }),
   o("wsvn.com", "WSVN 7News", "12086", "https://wsvn.com/news/feed/"),
-  o("nbcmiami.com", "NBC6 South Florida", "12086", "https://www.nbcmiami.com/?rss=y"),
+  o("nbcmiami.com", "NBC6 South Florida", "12086", "https://www.nbcmiami.com/?rss=y", {
+    robots: {
+      aiDisallow: ["anthropic-ai", "Claude-Web", "ClaudeBot", "GPTBot", "ChatGPT-User", "CCBot", "Google-Extended", "PerplexityBot", "Bytespider", "Amazonbot", "FacebookBot", "Diffbot"],
+      note: "Re-read 2026-10-09; the 2026-09-17 pass recorded none. One Disallow: / group per agent, a few About/standards pages excepted. The list also names news aggregators (NewsNow, AwarioRssBot, news-please). On AI_POLICY_HOLD from 2026-10-09.",
+    },
+  }),
   o("miaminewtimes.com", "Miami New Times", "12086", "https://www.miaminewtimes.com/feed/", {
     robots: {
       aiDisallow: ["GPTBot", "anthropic-ai", "ClaudeBot", "Claude-Web", "Claude-User", "Google-Extended", "PerplexityBot", "CCBot", "cohere-ai"],
@@ -446,7 +466,10 @@ export const OUTLETS: readonly Outlet[] = Object.freeze([
   o("orlandoweekly.com", "Orlando Weekly", "12095", "https://www.orlandoweekly.com/feed/?partner-feed=all"),
   /* Added 2026-09-17 on the corpus's recommendation once the feed verified. */
   o("clickorlando.com", "WKMG News 6", "12095", "https://www.clickorlando.com/arc/outboundfeeds/rss/?outputType=xml", {
-    robots: { aiDisallow: ["GPTBot", "Bytespider"] },
+    robots: {
+      aiDisallow: ["GPTBot", "ClaudeBot", "Bytespider", "Amazonbot"],
+      note: "ClaudeBot added after the 2026-09-17 pass (re-read 2026-10-09). On AI_POLICY_HOLD from 2026-10-09.",
+    },
   }),
   /* Added 2026-09-17. Studios are in Lake Mary (Seminole), like WTSP's are in
      St. Petersburg (Pinellas): placed by market, consistent with those rows.
@@ -489,7 +512,12 @@ export const OUTLETS: readonly Outlet[] = Object.freeze([
   /* BLOX/TownNews search feed. Verified once; the platform rate-limits per IP
      burst (HTTP 429 after two or three quick requests), so fetch it once per
      sweep and never retry inside a run. */
-  o("newsserviceflorida.com", "News Service of Florida", null, "https://www.newsserviceflorida.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc"),
+  o("newsserviceflorida.com", "News Service of Florida", null, "https://www.newsserviceflorida.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc", {
+    robots: {
+      aiDisallow: ["anthropic-ai", "Claude-Web", "ClaudeBot", "GPTBot", "ChatGPT-User", "OAI-SearchBot", "CCBot", "Google-Extended", "Applebot-Extended", "PerplexityBot", "cohere-ai", "Meta-ExternalAgent", "Bytespider", "Diffbot"],
+      note: "Re-read 2026-10-09: ~30 AI agents, each with Disallow: /. A subscription wire, paywalled past the headline. On AI_POLICY_HOLD from 2026-10-09.",
+    },
+  }),
   /* The corpus's podcast path last updated in 2022; the state-news section
      feed is live. */
   o("wfsu.org", "WFSU Public Media", null, "https://news.wfsu.org/state-news.rss"),

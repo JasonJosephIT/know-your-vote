@@ -635,9 +635,13 @@ check(
    floridaphoenix.com joining on 2026-09-21 is the cleanest demonstration of it:
    a brand-new designation that moves `usableOutlets()` by exactly ZERO, because
    `mixedFeed` still holds it out. A lean is necessary for a card, never
-   sufficient. */
-check("usableOutlets is 24 after the designation and the AI-crawler hold",
-  usableOutlets().length === 24, `${usableOutlets().length}`);
+   sufficient.
+
+   21 since 2026-10-09: nbcmiami.com, clickorlando.com and
+   newsserviceflorida.com went onto the AI-crawler hold pending the founder's
+   written permission requests. */
+check("usableOutlets is 21 after the designation and the AI-crawler hold",
+  usableOutlets().length === 21, `${usableOutlets().length}`);
 
 /* ---- the AI-crawler policy hold (founder 2026-09-21) ------------------
    A hold is only worth anything if it cannot quietly fall out of step with the
@@ -686,16 +690,18 @@ check(
 /* Eight now, not five: the AI-crawler hold (2026-09-21) added miaminewtimes.com,
    wfla.com and wesh.com, which are designated and technically fine and are not
    read by choice. The list is spelled out because a change to it is either an
-   editorial or a policy act, never an incidental one. */
+   editorial or a policy act, never an incidental one. Eleven since 2026-10-09:
+   nbcmiami.com, clickorlando.com and newsserviceflorida.com joined the hold
+   while the founder asks each publisher for written permission. */
 check(
-  "the eight designated-but-held-out rows are exactly the flagged, path-less and held ones",
+  "the eleven designated-but-held-out rows are exactly the flagged, path-less and held ones",
   designated
     .filter((o) => !usableOutlets().some((u) => u.domain === o.domain))
     .map((o) => o.domain)
     .sort()
     .join(",")
-    === "elnuevoherald.com,floridaphoenix.com,floridapolitics.com,miaminewtimes.com,"
-      + "miamitimesonline.com,outsfl.com,wesh.com,wfla.com",
+    === "clickorlando.com,elnuevoherald.com,floridaphoenix.com,floridapolitics.com,miaminewtimes.com,"
+      + "miamitimesonline.com,nbcmiami.com,newsserviceflorida.com,outsfl.com,wesh.com,wfla.com",
   designated.filter((o) => !usableOutlets().some((u) => u.domain === o.domain)).map((o) => o.domain).sort().join(","),
 );
 /* Stated as a property rather than a list, so it survives the next

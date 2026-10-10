@@ -152,12 +152,14 @@ export const ARCHIVES: Readonly<Record<string, Archive>> = Object.freeze({
   "wtsp.com": { kind: "none", reason: "sitemap.xml lists section pages only; the Google News sitemap is ~2 days" },
   "wftv.com": { kind: "none", reason: "the Arc sitemap holds the newest ~400 URLs (~2 days); its per-day path is empty" },
 
-  /* Robots name a Claude agent with Disallow: / (2026-10-09). Skipped at run
-     time by claudeDisallowed whatever this says; listed so every usable
-     outlet has an entry. */
-  "nbcmiami.com": { kind: "none", reason: "robots.txt disallows Claude agents" },
-  "clickorlando.com": { kind: "none", reason: "robots.txt disallows Claude agents" },
-  "newsserviceflorida.com": { kind: "none", reason: "robots.txt disallows Claude agents" },
+  /* nbcmiami.com, clickorlando.com and newsserviceflorida.com have no entry:
+     they went onto AI_POLICY_HOLD on 2026-10-09, so they are not usable and the
+     backfill never reaches them. If a publisher says yes, give it an entry when
+     it comes off the hold. NBC has monthly URL sitemaps
+     (https://www.nbcmiami.com/sitemap.xml?yyyy=YYYY&mm=MM, story paths ending
+     /<slug>/<id>/). ClickOrlando's Arc sitemaps hold ~2 days, though its feed
+     reaches back about a month. News Service answered 429 to every request on
+     2026-10-09. */
 });
 
 /* ---- robots.txt ------------------------------------------------------- */

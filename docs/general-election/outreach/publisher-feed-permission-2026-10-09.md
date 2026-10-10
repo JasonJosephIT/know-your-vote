@@ -6,9 +6,12 @@ Three drafts, one per publisher. **Not sent.** The founder sends them from
 **Why these three.** Each one's robots.txt now asks AI crawlers, Anthropic's
 included, not to crawl the site. Each one's terms of use ask for **written
 permission** before content is gathered or shown elsewhere (details below).
-The daily sweep has been reading their public feeds under its own user agent,
-and the archive backfill skipped them on 2026-10-09. These emails ask for that
-written permission instead of assuming it.
+The daily sweep read their public feeds under its own user agent until
+2026-10-09. That day all three went onto `AI_POLICY_HOLD` (`news-sources.ts`),
+so nothing new is read from them until a publisher replies. **A yes takes that
+outlet off the hold the same day.** Stories already published or queued were
+left as they were: 2 published from NBC 6, and 3 pending (2 NBC, 1
+ClickOrlando). The emails say reading is paused and ask to resume.
 
 **Check these before sending.** The drafts rely on them:
 - The sweep identifies itself as `KnowYourVote/1.0 (+https://github.com/JasonJosephIT/know-your-vote)`
@@ -56,10 +59,10 @@ We've been finding NBC 6's election coverage through your public RSS feed,
 which we read once a day under our own user agent (KnowYourVote/1.0). Your
 robots.txt asks AI crawlers, Anthropic's included, not to crawl the site. Your
 Terms ask for written permission before content is gathered this way. Some of
-our tooling uses AI models, including Anthropic's Claude, so we'd rather ask
-than assume:
+our tooling uses AI models, including Anthropic's Claude, so we've paused
+reading your feed until we hear from you:
 
-1. May we keep reading your public RSS feed this way, and show each story's
+1. May we resume reading your public RSS feed this way, and show each story's
    headline and short summary with a link to the article on nbcmiami.com?
 2. If you'd prefer headline and link only, without the summary, we'll do that.
 3. If the answer is no, we'll stop reading the feed and remove the links. Just
@@ -98,9 +101,9 @@ We've been reading your public RSS feed once a day under our own user agent
 not to crawl the site. Your Terms ask that the site be accessed only through
 means you authorize, and that content not be reused without your prior written
 authorization. Some of our tooling uses AI models, including Anthropic's
-Claude, so we'd rather ask than assume:
+Claude, so we've paused reading your feed until we hear from you:
 
-1. May we keep reading your public RSS feed this way, and show each story's
+1. May we resume reading your public RSS feed this way, and show each story's
    headline and short summary with a link to the article on clickorlando.com?
 2. If you'd prefer headline and link only, we'll do that.
 3. If the answer is no, we'll stop and remove the links. Just let us know.
