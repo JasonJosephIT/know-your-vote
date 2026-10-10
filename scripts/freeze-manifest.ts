@@ -33,8 +33,9 @@ export const FREEZE_WINDOW = {
   ends_at: "2026-11-04T05:00:00.000Z",
 } as const;
 
-/* §3.6.3, in its order. Add a file here in the same PR that adds it to the
-   render path (roster-completeness's code PR does this for its files). */
+/* §3.6.3, in its order, then the files the freeze-copy PR added. Add a file
+   here in the same PR that adds it to the render path, and raise the count
+   in scripts/verify-freeze-rules.ts. */
 export const FROZEN_FILES: readonly string[] = [
   "src/app/(public)/races/[raceId]/page.tsx",
   "src/app/(public)/races/[raceId]/issues/page.tsx",
@@ -81,6 +82,18 @@ export const FROZEN_FILES: readonly string[] = [
   "src/lib/contact.ts",
   "src/lib/issue-pick.ts",
   "src/lib/office-title.ts",
+  /* Added by the freeze-copy PR. Roster-completeness §3.10 asks for
+     incumbency.ts, running-mate.ts, CandidateBrief.tsx, RaceCompare.tsx and
+     CampaignWebsite.tsx; the first and the two components were already
+     listed above. RosterLines.tsx (the incumbency and running-mate lines)
+     and campaign-website.ts (the "Official site" link) joined the render
+     path in #144. snapshot-copy.ts holds the methodology page's snapshot
+     and freeze sentences (ballot-content-completion §3.6.4). */
+  "src/lib/running-mate.ts",
+  "src/lib/campaign-website.ts",
+  "src/lib/snapshot-copy.ts",
+  "src/components/features/CampaignWebsite.tsx",
+  "src/components/features/RosterLines.tsx",
 ];
 
 export interface FreezeWindow {

@@ -203,7 +203,20 @@ export const UNFINISHED_BRIEF_LINE =
 /* The race_ids (for example "FL-CFO-general") whose cards carry
    UNFINISHED_BRIEF_LINE. Empty until the freeze-copy PR fills it from
    docs/general-election/brief-runs/refresh-2026-10.md; in the expected case
-   it stays empty. A frozen file from 2026-10-18 (§3.6.3). */
+   it stays empty. A frozen file from 2026-10-18 (§3.6.3).
+
+   How the freeze-copy PR fills it (ballot-content-completion §3.3 case 2,
+   §5 step 8, BC15): after Gate 4 ends on Sat 10-17 at 18:00, read step 8's
+   list of unfinished races in refresh-2026-10.md and apply-2026-10-1x.md.
+   A race goes in only when it is still `listed` and has a reviewed claim
+   (Gate 3 yes) that did not publish: its audit at 150 failed, or its Path A
+   apply did not finish by 18:00. Not a race with no reviewed claim, or whose
+   only claim the founder rejected at Gate 3 (NO_BRIEF_CARD_LINE stays true
+   there), and not a published race on its 09-29 brief or held for a
+   correction (BRIEF_IN_REVIEW_LINE). Write each race_id exactly as in
+   `race.race_id`. scripts/verify-listing.ts checks every id is a general-
+   race id and that every card in such a race gets the line. As of
+   2026-10-09 no race has a reviewed-but-unpublished claim. */
 export const UNFINISHED_BRIEF_RACES: ReadonlySet<string> = new Set<string>([]);
 
 /* The line every candidate card on a roster carries, identical for everyone
