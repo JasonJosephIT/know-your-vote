@@ -1,3 +1,4 @@
+import { Art } from "@/components/brand/Art";
 import { VotingInfo } from "@/components/features/VotingInfo";
 import { coveredCountyNames } from "@/lib/counties";
 
@@ -32,8 +33,43 @@ export function ReminderSignupCta({ countyFips }: { countyFips?: string }) {
     <section
       id={REMINDER_SIGNUP_ID}
       aria-label="Deadline reminders by email"
-      className="flex flex-col gap-2 border-t border-border pt-6"
+      className="relative flex flex-col gap-2 border-t border-border pt-6 lg:pt-10"
     >
+      {/* The site illustration layer (design.md "Site illustration layer").
+         The envelope sticker is the one piece of art that also shows on
+         phones. It sits across the top border, in the strip between the
+         previous block and this heading, and never reaches the heading:
+         tilted 6deg, a 40px sticker spans about -23px to +23px from the
+         border (the grid's gap-6 above, pt-6 below); at lg the 56px one
+         spans about -24px to +40px, so the padding grows to pt-10 there.
+         Two sizes are two Art pieces, since Art takes a fixed px height;
+         the hidden one is display:none, so its lazy image never loads. */}
+      <Art
+        name="sticker-envelope"
+        height={40}
+        className="absolute -top-5 left-0 -rotate-6 lg:hidden"
+      />
+      <Art
+        name="sticker-envelope"
+        height={56}
+        className="absolute -top-5 left-0 hidden -rotate-6 lg:block"
+      />
+      {/* A faint corner sunburst in the opposite corner, lg+ only. The SVG
+         radiates from its own top-left, so it is mirrored to start from the
+         top-right. Its box is the pt-10 strip above the heading and no
+         taller, so it never sits under the heading, the intro or the form,
+         whose fields run the full width from sm up. Decorative: aria-hidden,
+         no pointer events, a CSS background rather than an image. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-0 right-0 hidden h-10 w-60 -scale-x-100 select-none opacity-70 lg:block"
+        style={{
+          backgroundImage: "url(/brand/site/textures/corner-sunburst.svg)",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "left top",
+          backgroundSize: "240px 240px",
+        }}
+      />
       <VotingInfo
         emailEnabled
         remindersOn

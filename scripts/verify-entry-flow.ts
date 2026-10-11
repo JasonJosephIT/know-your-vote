@@ -289,7 +289,8 @@ check(
 }
 check(
   "the share image's alt says what the card says",
-  /alt: "Know Your Vote\. See who's on your Florida ballot\."/.test(read("src/app/layout.tsx"))
+  /alt: "Know Your Vote\. Florida candidates, in their own words\. Every quote linked to its source\. No ZIP needed\."/.test(read("src/app/layout.tsx")) &&
+    /og-card-walkers\.png/.test(read("src/app/layout.tsx"))
 );
 check(
   "cards in one grid share one radius",

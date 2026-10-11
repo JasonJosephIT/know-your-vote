@@ -5,6 +5,7 @@ import {
 } from "@/components/features/MeasureResourceLadder";
 import { MeasureVoteMeaning } from "@/components/features/MeasureVoteMeaning";
 import { Card } from "@/components/ui/Card";
+import { Art } from "@/components/brand/Art";
 import { getActiveMeasures, getMeasureListing } from "@/lib/measures";
 import { heldNote } from "@/lib/measure-held-copy";
 
@@ -92,23 +93,35 @@ export default async function MeasurePage({
 
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-5 px-5 py-8">
-      <header className="flex flex-col gap-2">
-        <p className="text-caption text-on-surface-muted">
-          {measure.jurisdiction === "FL" ? "Statewide" : measure.jurisdiction} ·
-          Placed on the ballot by{" "}
-          {measure.placed_by === "legislature"
-            ? "the Legislature"
-            : measure.placed_by === "citizen_initiative"
-              ? "citizen initiative"
-              : measure.placed_by.replace("_", " ")}
-        </p>
-        {/* Official titles are long and all capitals (6–10 lines on a
-            phone), so this h1 gets prose leading and neutral tracking
-            instead of the short-heading 1.15 / −0.02em (interface review
-            2026-10-05). */}
-        <h1 className="text-h1 leading-[1.4] tracking-normal">
-          Amendment {measure.number}: {measure.official_title}
-        </h1>
+      {/* At lg the header is a row with a small spot illustration on the
+          right (site illustration layer, design.md), in its own column so
+          the long title wraps beside it, never under it. It stays in the
+          header, above the YES/NO boxes and the resource ladder, and is not
+          in the unpublished branch above. Hidden below lg. */}
+      <header className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
+        <div className="flex min-w-0 flex-col gap-2">
+          <p className="text-caption text-on-surface-muted">
+            {measure.jurisdiction === "FL" ? "Statewide" : measure.jurisdiction} ·
+            Placed on the ballot by{" "}
+            {measure.placed_by === "legislature"
+              ? "the Legislature"
+              : measure.placed_by === "citizen_initiative"
+                ? "citizen initiative"
+                : measure.placed_by.replace("_", " ")}
+          </p>
+          {/* Official titles are long and all capitals (6–10 lines on a
+              phone), so this h1 gets prose leading and neutral tracking
+              instead of the short-heading 1.15 / −0.02em (interface review
+              2026-10-05). */}
+          <h1 className="text-h1 leading-[1.4] tracking-normal">
+            Amendment {measure.number}: {measure.official_title}
+          </h1>
+        </div>
+        <Art
+          name="measure-reader"
+          height={160}
+          className="hidden shrink-0 lg:block"
+        />
       </header>
 
       {/* Mechanics only, the same for every amendment; the threshold lives

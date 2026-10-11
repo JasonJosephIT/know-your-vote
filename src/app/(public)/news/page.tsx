@@ -8,6 +8,7 @@ import {
   issueFilterLabel,
 } from "@/lib/news-issues";
 import { COVERED_COUNTIES } from "@/lib/resolve";
+import { Art } from "@/components/brand/Art";
 
 export const metadata = { title: "Electoral news — Know Your Vote" };
 
@@ -41,38 +42,50 @@ export default async function NewsPage({
 
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
-      <header className="flex flex-col gap-1">
-        {/* "Local" came off with the ZIP gate (TASK-069): with no location
+      {/* At lg the header is a row: the text on the left, a small spot
+          illustration on the right (site illustration layer, design.md). It
+          stays in the header, above the filters, so it is never inside or
+          near the story list, and its own column keeps it off every line of
+          text. Below lg it is hidden and the header is the plain column. */}
+      <header className="flex flex-col gap-1 lg:flex-row lg:items-start lg:justify-between lg:gap-6">
+        <div className="flex min-w-0 flex-col gap-1">
+          {/* "Local" came off with the ZIP gate (TASK-069): with no location
             this page is statewide, and calling that local would be the same
             overclaim the landing page dropped in TASK-067. */}
-        <h1 className="text-h1">Electoral news</h1>
-        {/* Only what this feed shows. It used to promise candidate news and
+          <h1 className="text-h1">Electoral news</h1>
+          {/* Only what this feed shows. It used to promise candidate news and
             pipeline updates, but both are scoped to a race and /news asks
             for no race, so neither ever appeared here. The county pick now
             matches the county's rows (newsScopes in src/lib/news-scope.ts),
             so "add its items" is true. */}
-        <p className="text-body-sm text-on-surface-muted">
-          A calm digest of election news and official sources, no hot takes.
-          {selected
-            ? ` Showing ${selected.name} County plus statewide items.`
-            : " Statewide by default — pick a county to add its items."}
-          {/* A category matches any of its sub-issues (issueFilterIds), so
+          <p className="text-body-sm text-on-surface-muted">
+            A calm digest of election news and official sources, no hot takes.
+            {selected
+              ? ` Showing ${selected.name} County plus statewide items.`
+              : " Statewide by default — pick a county to add its items."}
+            {/* A category matches any of its sub-issues (issueFilterIds), so
               the wording says "an issue under", not "tagged". */}
-          {issueLabel &&
-            (issue && CATEGORY_IDS.includes(issue)
-              ? ` Only stories tagged with an issue under “${issueLabel}”.`
-              : ` Only stories tagged “${issueLabel}”.`)}
-        </p>
-        {/* Where the outlets and their lean disclosures live, now that lean is
+            {issueLabel &&
+              (issue && CATEGORY_IDS.includes(issue)
+                ? ` Only stories tagged with an issue under “${issueLabel}”.`
+                : ` Only stories tagged “${issueLabel}”.`)}
+          </p>
+          {/* Where the outlets and their lean disclosures live, now that lean is
             not on the card (news-fairness.md §1, amended 2026-09-19). */}
-        <p className="text-body-sm">
-          <Link
-            href="/news/outlet"
-            className="text-primary underline underline-offset-2"
-          >
-            Where the news comes from
-          </Link>
-        </p>
+          <p className="text-body-sm">
+            <Link
+              href="/news/outlet"
+              className="text-primary underline underline-offset-2"
+            >
+              Where the news comes from
+            </Link>
+          </p>
+        </div>
+        <Art
+          name="news-empty"
+          height={140}
+          className="hidden shrink-0 lg:block"
+        />
       </header>
 
       {/* a11y-perf-2026-10-04.md fix 3 (WCAG 1.4.10 Reflow). A <select> is

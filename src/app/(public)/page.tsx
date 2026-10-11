@@ -14,6 +14,10 @@ import { CoverageSummary } from "@/components/features/CoverageSummary";
 import { HomeNews } from "@/components/features/HomeNews";
 import { HomeMasthead } from "@/components/features/HomeMasthead";
 import { BallotAtAGlance } from "@/components/features/BallotAtAGlance";
+import { Art } from "@/components/brand/Art";
+import { LedgeArt } from "@/components/brand/Ledge";
+import { HeroRotator } from "@/components/brand/HeroRotator";
+import { SectionDivider } from "@/components/brand/SectionDivider";
 import { getActiveMeasures } from "@/lib/measures";
 import { getStatewideRaces } from "@/lib/races";
 import { districtRace, getCoveredDistricts } from "@/lib/resolve";
@@ -129,12 +133,20 @@ export default async function Home() {
           <h1 className="text-display">
             Florida candidates, in their own words.
           </h1>
-          <p className="text-body-lg text-on-surface-muted">
-            See the races we cover and what each candidate says, quoted word for
-            word from their own campaign sites, with a link to every source. The
-            same questions and the same rules for every candidate. No ZIP, no
-            account, no agenda.
-          </p>
+          {/* The lede and the walkers (design.md "Site illustration
+          layer"). From lg up the paragraph takes 58% and the rotator the
+          rest of the row, in its own cell, so it never sits over or under
+          the text. Below lg HeroRotator hides itself (hidden lg:block), the
+          grid is one column and the paragraph is full width, as before. */}
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[58%_minmax(0,1fr)]">
+            <p className="text-body-lg text-on-surface-muted">
+              See the races we cover and what each candidate says, quoted word
+              for word from their own campaign sites, with a link to every
+              source. The same questions and the same rules for every
+              candidate. No ZIP, no account, no agenda.
+            </p>
+            <HeroRotator />
+          </div>
           <DeadlineBanner
             remindersHref={
               promoteReminders ? `#${REMINDER_SIGNUP_ID}` : undefined
@@ -146,10 +158,41 @@ export default async function Home() {
           {ballotRendered && <TrackView event="ballot_viewed" />}
           <SharedBallot />
 
-          <section className="flex flex-col gap-3 border-t border-border pt-6">
+          {/* The zigzag that used to be this section's border-t, with a
+          figure sitting on it at the right end from lg up. The divider is a
+          mask, which would clip a child, so the figure hangs from a
+          zero-height marker at the band's centre line: sit-divider's ledge
+          (0.618 of its height) lands on that line. At 150px that is ~93px
+          of figure above the line and ~57px of legs below it.
+
+          Above: the ballot-question list ends just before this, and art
+          never goes over a list, so lg adds 72px to the 24px gap (96px
+          clear for a 93px head). Below: the legs reach ~57px under the
+          band's centre line, beside the section's h2 and the start of its
+          paragraph. So the text block under each h2 (h2 and paragraphs)
+          carries lg:pr-[112px], which keeps every line out of the figure's
+          99px at the right. The figure and that guard are both px; the
+          spacing above the section is rem, so a rem guard (the old
+          lg:pr-32 on the h2 only) let the paragraph run under the legs at
+          a smaller root font size. The text block runs well past ~57px at
+          any root size, so the link and the form below it start clear of
+          the feet. */}
+          <div className="relative lg:mt-[72px]">
+            <SectionDivider variant="zigzag" />
+            <div className="absolute inset-x-0 top-1/2">
+              <LedgeArt
+                name="sit-divider"
+                height={150}
+                edge="top"
+                className="right-0 hidden lg:block"
+              />
+            </div>
+          </div>
+
+          <section className="flex flex-col gap-3">
             {saved ? (
               <>
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 lg:pr-[112px]">
                   <h2 className="text-h2">
                     {savedSeat
                       ? "No U.S. House race on your ballot"
@@ -183,8 +226,10 @@ export default async function Home() {
               </>
             ) : (
               <>
-                <div className="flex flex-col gap-1">
-                  <h2 className="text-h2">Add your U.S. House race</h2>
+                <div className="flex flex-col gap-1 lg:pr-[112px]">
+                  <h2 className="text-h2">
+                    Add your U.S. House race
+                  </h2>
                   {/* The storage claim, rewritten for the district cookie. TASK-070
                   removed kyv.location and this line said nothing was saved on
                   the device; that stopped being true when the district became
@@ -201,11 +246,28 @@ export default async function Home() {
                     never your {field.noun}.
                   </p>
                 </div>
-                <LocationEntry
-                  submitLabel="Add my House race"
-                  addressEnabled={addressEnabled}
-                  districts={districts}
-                />
+                {/* The tote figure stands beside the form from lg up, in
+                its own flex item, so it can never cover the field, the
+                button or the coverage note. LocationEntry is w-full (field
+                capped at 320px, then the button, then a full-width note),
+                so it gets flex-1 and the figure its own ~85px; the row is
+                ~512px of a ~690px column, which leaves room for both.
+                Bottom-aligned with the form; below lg the figure is hidden
+                and the form is full width, as before. */}
+                <div className="lg:flex lg:items-end lg:gap-8">
+                  <div className="min-w-0 lg:flex-1">
+                    <LocationEntry
+                      submitLabel="Add my House race"
+                      addressEnabled={addressEnabled}
+                      districts={districts}
+                    />
+                  </div>
+                  <Art
+                    name="person-kyv-tote"
+                    height={160}
+                    className="hidden shrink-0 lg:block"
+                  />
+                </div>
               </>
             )}
           </section>
@@ -228,6 +290,10 @@ export default async function Home() {
         </aside>
 
         <div className="flex min-w-0 flex-col gap-6 lg:col-start-1 lg:row-start-2">
+          {/* A wave between the coverage summary above and the reminder and
+          install cards; shows at every width (one of the three pieces that
+          do). Below lg it falls between the news and the cards. */}
+          <SectionDivider variant="wave" />
           {promoteReminders && (
             <ReminderSignupCta countyFips={saved?.countyFips} />
           )}

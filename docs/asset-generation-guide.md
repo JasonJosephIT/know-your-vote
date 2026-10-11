@@ -1,11 +1,11 @@
 ---
 title: KYV Asset Generation Guide (for agents)
-version: 1.0
+version: 1.1
 audience: asset-generating agents
 source-of-truth: docs/design.md
 roadmap: docs/brand-assets-roadmap.md
 theme-css: public/brand/kyv-artifact-theme.css
-last-updated: 2026-07-05
+last-updated: 2026-10-11
 ---
 
 # KYV Asset Generation Guide
@@ -71,6 +71,48 @@ Pull these from `design.md`; do not retype approximate hex from memory.
 - **No baked text or buttons** except the OG card (wordmark + one short standfirst line).
 - Icons: 24px grid, ~1.5px stroke, rounded joins, single-color (`on-surface` or `primary`).
 - Depth is border-led and flat; reserve `elevation.1/2` for genuinely floating elements.
+
+### Site illustration library (funk + calm, 2026-10-11)
+
+The page art in roadmap §1b. Generated with Nano Banana Pro (`google/gemini-3-pro-image` on OpenRouter) from
+`scripts/brand-assets/` — never hand-prompted one-off, so the next asset matches the last.
+
+- **Run it:** add a row to `scripts/brand-assets/assets.json` (slug, style `v2`/`v1`, kind, aspect ratio, slot,
+  subject), then `uv run --python 3.12 --with pillow python scripts/brand-assets/generate.py gen <slug>` and
+  `… post <slug>`. Code-made textures: `textures.py`. Raw generations and prompt sidecars stay outside the repo.
+- **Style anchors:** every call sends three reference images from `public/brand/site/ai/refs/` — funk
+  (`v2-boombox-dancer`, `v2-neighbors-grid`, `hero-90s`) or calm (`main-street`, `kitchen-table-research`,
+  `walking-reader`). The prompt says "match the style, not the subjects"; object stickers also say "no people".
+- **Funk recipe:** flat screen-print ink, grain and speckle inside fills, uneven hand-cut edges, slight
+  off-registration, 70s/90s clothing, zigzag bolts, confetti, checkers, sunbursts. Marketing palette.
+- **Calm recipe:** flat editorial vector, thin warm-black outlines, little texture, small heads and expressive
+  hands, generous empty space. Calm palette.
+- **People:** stylized, never real or recognizable. Name each figure's ethnicity in the subject so the set
+  stays mixed (Black, Latino, white, Asian; young to old; include disability). Groups: equal size and attention.
+- **Banned in every prompt:** text, letters, numbers, logos (signs, screens and papers are blank); neon,
+  purple, pink, bright blue, bright red; flags, campaign signs, political symbols, donkeys, elephants, eagles,
+  seals.
+- **Post-processing is the token check:** `post` snaps every pixel to the style's token palette (no dither), keys
+  the plain background out of spots/stickers/people to transparent, trims, and exports WebP master + `-sm`.
+- **Skin (2026-10-11):** skin is one flat `illustration-skin` token per person (`skin-1` `#F2D3B3` … `skin-6`
+  `#4F2E1D`, design.md). `generate.py skinmask <slug>` makes one edit pass that paints only the skin magenta and
+  saves the mask beside the raw; `post` then fills each person's skin with the token nearest their average
+  colour and keeps the grain off it. Run `skinmask` once for every new image with people. Hair keeps its texture
+  and may be multi-tone.
+- **House grain (2026-10-11):** every illustration gets the same medium-light grain, defined once as `GRAIN` in
+  `generate.py`: the model's own speckle is cleaned out (mode filter), then Ink specks (3.5% of pixels at 22%,
+  0.8% at 40%) and Cream specks (2.5% at 30%) are laid at the *output* size, so specks are the same size on
+  screen in every file. Change the grain only there, then re-run `post` on every slug. Whatever grain the model
+  draws for the screen-print look is cleaned out first, so the prompt never sets the grain.
+- **Lessons from the first run (2026-10-11):** object stickers anchor on approved stickers
+  (`refs/approved-sticker-*`), because scene references leak their subjects into isolated objects; if a
+  subject still leaks, set `"refs": []` on that row and let the text recipe carry the style. People get "no
+  background panel". Aspect ratios the model accepts top out at 21:9, so wide strips are 21:9.
+- **The logo is never generated.** A row with `"logo": "acronym"` asks for a blank cream area (badge centre,
+  tote front); `post` pastes the untouched `kyv-logo-acronym.svg` into it, centred, shrunk until a clearspace
+  margin fits. Official colourway only; the wordmark goes in only where it renders ≥120px wide.
+- **Review each image by eye** before it ships: subject correct, no stray text or partisan cue, people mixed and
+  equal, edges clean after keying. Regenerate by slug; log it in §5.
 
 ### Mobile icons & launch
 - App/adaptive/maskable icons use the **Reversed** colorway (cream monogram on KYV Green).
@@ -214,6 +256,14 @@ append-only.
 | 2026-07-18 | Community-life icon set | `public/brand/site/community-icons.svg` | Site/Web | on-surface/primary (currentColor) | Sibling to `site/icons.svg`; parks/streets/civic-life motifs |
 | 2026-07-19 | AI illustration set (8 candidates, style-matched to user samples) | public/brand/site/ai/higgs-manifest.md | Site/Web + social | Official + marketing accents | Higgsfield Recraft V4.1 vector, palette-locked; pending CDN retrieval; candidates only, do not replace hand-authored SVGs |
 | 2026-10-05 | App Store / Play screenshots: **removed** | `public/brand/mobile/screenshot-1-ballot.{svg,png}`, `screenshot-2-race.{svg,png}` (listed 2026-07-05 above), and `screenshots` in `src/app/manifest.ts` | Mobile | — | The PNGs rendered as empty phone frames (the UI crop never made it in) under "every race" captions, and the SVG sources showed fact-check verdicts, a "verified record" and an uncovered State Senate race, none of which the 2026 site carries. Remake them only as crops of the live UI (`docs/brand-assets-roadmap.md`: real UI crop, no fake data); `scripts/verify-manifest.ts` checks the manifest names only files that exist. |
+| 2026-10-11 | Site illustration kit (20): 11 stickers incl. `sticker-kyv-badge`, 6 people incl. `person-kyv-tote`, `footer-town-strip`, `band-coast` | `public/brand/site/illustrations/*.webp` (+ `-sm`) | Site/Web | Funk (marketing palette) | Layout-independent kit from roadmap §1b; generated with `scripts/brand-assets/generate.py`, every pixel snapped to tokens; transparent cut-outs except the two strips; KYV monogram composited from the SVG, never generated |
+| 2026-10-11 | Textures and dividers (9) | `public/brand/site/textures/` | Site/Web | Tokens | `scripts/brand-assets/textures.py`; seamless tiles; dividers use `currentColor` |
+| 2026-10-11 | Style references | `public/brand/site/ai/*.svg`, `ai/refs/` | — | — | July Higgsfield originals retrieved; `approved-*` refs chosen by the founder (main street, bike-coffee, boombox) |
+| 2026-10-11 | Illustration skin tokens + flat-skin pass | `docs/design.md` `illustration-skin`, `generate.py skinmask` | Site/Web | skin-1…skin-6 | Every person re-processed: one flat token per person, no grain on skin; hair keeps texture |
+| 2026-10-11 | Hero rotator: 8 walkers + blur frames | `public/brand/site/illustrations/walker-*.webp`, `public/brand/site/rotator/` | Site/Web | Funk + skin tokens | Walkers generated against the phone reader as pose/scale reference; `rotator.py` renders sharp / blur-out / blur-in frames at one height and the demo |
+| 2026-10-11 | UI characters (7) + pets (2) | `site/illustrations/{peek-card-edge,sit-divider,hang-masthead,lean-card-side,climb-tiles,lie-footer,point-zip,pet-cat-peek,pet-dog-sit}.webp`, `ledges.json` | Site/Web | Funk + skin tokens | Kind `ledge`: bar drawn for the pose, measured (`generate.py ledge`), edited out; `ledges.json` = where the real UI edge goes ({axis, at} as a fraction of the image) |
+| 2026-10-11 | Page pieces + bands | `about-neighbors`, `method-receipts`, `measure-reader`, `error-404-funk`, `news-empty`, `band-horizon`, `footer-thin-strip` | Site/Web | Funk / calm | Thin strip = bottom 32% of a 21:9 generation (`crop_bottom`) |
+| 2026-10-11 | Composed pieces | `site/textures/{tex-florida-wallpaper.webp,corner-sunburst.svg,edge-halftone.svg}`, `site/og-card-walkers.png`, `email/reminder-hero-walkers.png` | Site/Web, social, email | Tokens | `scripts/brand-assets/compose.py <Figtree.ttf>`: wallpaper from kit silhouettes (seamless), text in Figtree, untouched wordmark SVG |
 | _next…_ | | | | | |
 
 ---

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { COVERED_COUNTIES } from "@/lib/counties";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { DONATE_URL } from "@/components/features/SitePrompts";
+import { Art } from "@/components/brand/Art";
+import { LedgeArt } from "@/components/brand/Ledge";
 
 export const metadata = { title: "About — Know Your Vote" };
 
@@ -16,7 +18,19 @@ const link = "text-primary underline underline-offset-2";
 
 export default function AboutPage() {
   return (
-    <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
+    <main className="relative mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
+      {/* Site illustration layer (design.md), all decorative and all lg+.
+          A figure in the left gutter leans on the column's left edge
+          (ledge x 1.038, so its hand lands on main's edge, outside the
+          px-5 padding and clear of every line of text). The gutter is
+          (viewport - 680) / 2, about 360px at 1400, and the figure is about
+          84px wide, so it only shows from 1400px. */}
+      <LedgeArt
+        name="lean-card-side"
+        height={220}
+        edge="left"
+        className="top-40 hidden min-[1400px]:block"
+      />
       <header className="flex flex-col gap-2">
         <p className="text-overline uppercase tracking-[0.08em] text-accent-strong">
           About
@@ -55,6 +69,18 @@ export default function AboutPage() {
         </p>
       </section>
 
+      {/* A wide spot illustration between the first two sections, on its
+          own row so it sits under no text. At lg the column is always 632px
+          inside the padding (px-5 is 24px in this scale), so a 424px height
+          fills it exactly (1200x805 file); below lg it is hidden. It sits
+          after "What this is" rather than under the header so it is not the
+          lazy-loaded first-viewport LCP image. */}
+      <Art
+        name="about-neighbors"
+        height={424}
+        className="hidden w-fit overflow-hidden rounded-lg lg:block"
+      />
+
       {/* Both claims below were confirmed by the founder on 2026-10-03.
           Change them only on the founder's word: the funding line is a
           trust claim, and the deductibility line is a tax statement. */}
@@ -79,7 +105,16 @@ export default function AboutPage() {
         </p>
       </section>
 
-      <section className="flex flex-col gap-2">
+      {/* relative for the dog: it sits in the right gutter beside this
+          heading (left-full is the column's text edge, plus the 24px padding
+          and a gap), never beside or under the paragraph's text. Gutter
+          pieces show from 1400px only. */}
+      <section className="relative flex flex-col gap-2">
+        <Art
+          name="pet-dog-sit"
+          height={90}
+          className="absolute top-0 left-full ml-10 hidden min-[1400px]:block"
+        />
         <h2 className="text-h2">Get in touch</h2>
         <p className="text-body">
           Spotted a mistake, a missing source, or something that reads as

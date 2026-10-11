@@ -1,3 +1,7 @@
+> **Skin (2026-10-11):** the `*.svg` originals and `hero-90s.webp` in this folder keep their July skin
+> (mottled, sometimes palette-coloured). They are archive only and never ship. The PNGs in `refs/` have brand
+> skin applied (`generate.py fixskin`), so new generations inherit flat `illustration-skin` tokens.
+
 # Higgsfield AI illustration candidates — retrieval manifest
 
 Status: **generated, pending retrieval** (workspace proxy blocks d8j0ntlcm91z4.cloudfront.net;

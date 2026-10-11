@@ -162,6 +162,14 @@
     }
   }
 
+  /* No page-wide texture on the body. The riso speckle tile
+     (tex-riso-speckle.webp) was tried here and taken out in review: a body
+     background lies under every heading, link and verdict that is not in a
+     bg-surface box, and shows on phones, which design.md "Site illustration
+     layer" rules out (art never under text or a control; below lg only the
+     dividers, the footer strip and the reminder envelope). To bring it back
+     it needs a wrapper that holds no text, at lg and up, or a design.md
+     exception for a page-wide texture. */
   body {
     background-color: var(--color-background);
     color: var(--color-on-surface);
