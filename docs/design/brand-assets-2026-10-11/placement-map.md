@@ -1,8 +1,8 @@
 # Where the art goes (placement map, 2026-10-11)
 
-Checked: the live site (`main`, PR #160) at 1440×900 across home, candidates, a race, a measure, news,
-outlets, about, methodology and 404; and the open home layout pass, PR #161 (masthead, key dates rail,
-at-a-glance tiles, news rail; its Vercel preview has an empty database, so its slots were read from code).
+Checked: knowyour.vote at 1440×900 and 375×812 across home, candidates, a race, a measure, news, outlets,
+about, methodology and 404. **Updated after PR #161 merged** (2026-10-11 08:50, live): the home page now has
+the Ink masthead, the key dates rail inside the deadline card, at-a-glance tiles and a sticky 340px news rail.
 Visual version with a wireframe: `placement-map.html`, next to this file.
 
 ## What the site looks like now
@@ -13,7 +13,10 @@ Visual version with a wireframe: `placement-map.html`, next to this file.
   1440px about 400px of empty cream sits on each side. Race and measure pages use 1120px.
 - **Every section has the same shape:** H2, grey paragraph, white card. Section breaks are a 1px border.
 - **404 is a heading and a link in an empty screen.**
-- PR #161 widens home to 1120px with a 340px news rail on the right and adds an Ink masthead strip.
+- **Home after PR #161:** 1120px grid, a 684px main column and a sticky 340px news rail with publisher photos.
+  The H1 now runs as one full-width line, the intro paragraph is full width, and the house-race step is a
+  plain section, not a card. The photo band and three-ways-to-vote panels were not built. On a phone the
+  home page is 6,770px tall, so phone art stays minimal.
 
 ## Hard limits (design.md, site illustration layer)
 
@@ -27,17 +30,17 @@ Kit = already made (step 1). Held = slot-specific art still to make, now sized a
 
 | # | Page · slot | Asset | Status | How it sits |
 |---|---|---|---|---|
-| 1 | Home · masthead strip (PR #161) | `textures/tex-masthead-ink.webp` | Kit | Repeating background on the Ink bar; text stays on top |
-| 2 | Home · lede, right of the H1 | `person-phone-reader` (or `person-kyv-tote`) on `bg-sunburst` | Kit | ~220px tall cut-out bottom-aligned to the lede; sunburst behind at low opacity; hidden under `sm` |
-| 3 | Home · key dates rail stops | `sticker-sun` (Today), `sticker-envelope` (mail ballot) | Kit | 28–32px above the stop dot; only on those two stops |
-| 4 | Home · at-a-glance tiles | `sticker-palm` (statewide), `sticker-magnifier` (amendments) | Kit | 36px in the tile's top-right corner, inside the `primary-muted` fill |
+| 1 | Home · masthead strip (live) | `textures/tex-masthead-ink.webp` | Kit | Repeating background on the Ink bar; text stays on top |
+| 2 | Home · lede, right of the intro paragraph | `person-phone-reader` on `bg-sunburst` | Kit, needs a layout change | The H1 spans the column, so the paragraph narrows to ~58% at ≥1024px and the figure (~190px) sits beside it, sunburst feathered behind; hidden below `lg` |
+| 3 | Home · key dates card | `sticker-sun` | Kit | 56px, peeking from the card's top-right corner. Nothing on the stops: their dots carry the past / today / next state |
+| 4 | Home · at-a-glance tiles (5 races · 17 candidates · 3 questions) | `sticker-palm` (races), `sticker-magnifier` (questions) | Kit | 36px in the tile's top-right corner; the candidates tile stays plain |
 | 5 | Home · section breaks | `divider-zigzag` / `divider-wave` | Kit | Replaces the 1px `border-t` between home sections; `currentColor` = `accent` at 60% |
-| 6 | Home · "Add your U.S. House race" card | `person-kyv-tote` | Kit | Stands on the card's top-right edge (feet overlap the border ~12px, never the input or button), 150px tall; desktop only |
+| 6 | Home · "Add your U.S. House race" section | `person-kyv-tote` | Kit | The section is plain, not a card: the figure (160px) stands to the right of the ZIP row, bottom-aligned with it, never over the input or button; desktop only |
 | 7 | Home · reminder sign-up card | `sticker-envelope` | Kit | 56px, tilted, peeking from the card's top-left corner |
-| 8 | Home · install card (PWA) | `sticker-kyv-badge` | Kit | 72px beside the install text; the badge already carries the monogram |
-| 9 | Home · photo band (PR #161 marker 7) | `band-coast` | Kit | Illustrated alternate to a public-domain photo; full width, 160–220px tall, cropped to the middle |
+| 8 | Home · install card (PWA) | `sticker-kyv-badge` | Kit | 72px beside the install text; the card only renders when the browser offers install |
+| 9 | Home · photo band (not built in PR #161) | `band-coast` | Waits for the band | Illustrated alternate to a public-domain photo; full width, 160–220px tall, cropped to the middle |
 | 10 | All pages · above the footer | `footer-town-strip` | Kit | Full-bleed, sitting on the footer's top border, 220–260px tall, `background-size: cover` at `center 55%` (one crop, never tiled: it is not seamless). A thin (<160px) banner crops it to legs; that needs its own very wide image, added to the held list |
-| 11 | 680px pages at ≥1280px · side gutters | people and stickers (`person-skater`, `person-wheelchair`, `sticker-pelican`, `sticker-daisy`, `sticker-boombox`) | Kit | One figure per gutter per screen, fixed to the page edge, never beside a candidate; hidden below 1280px |
+| 11 | 680px pages (not home, now 1120px) at ≥1280px · side gutters | people and stickers (`person-skater`, `person-wheelchair`, `sticker-pelican`, `sticker-daisy`, `sticker-boombox`) | Kit | One figure per gutter per screen, fixed to the page edge, never beside a candidate; hidden below 1280px |
 | 12 | 404 | `person-elder-reader` + `sticker-palm`, or the July `error-404.svg` | Kit | Centred above the heading, 240px |
 | 13 | About · "Who's behind" | `sticker-raised-hand` beside the H1, `person-student` in the gutter | Kit | Small, decorative |
 | 14 | Methodology · "No source, no quote" | `sticker-magnifier` | Kit | 64px at the section's left gutter |
@@ -55,7 +58,7 @@ Kit = already made (step 1). Held = slot-specific art still to make, now sized a
 
 ## Before wiring
 
-1. Merge PR #161 first; slots 1–4 and 6 exist only there.
+1. PR #161 is merged, so slots 1, 3, 4, 5, 6, 7 and 10 can be wired now; slot 2 needs the paragraph-width change; slot 9 needs the photo band.
 2. The page background is `#F6F3EC` and the cut-outs were keyed on cream `#F5EBD8`; they're transparent, so
    this is fine, but the cream paper tile would show as a slightly different colour. Use the speckle overlay.
 3. Use the `-sm` files (about 46 KB each) everywhere except the strips on wide screens; `loading="lazy"` and
