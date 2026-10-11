@@ -59,6 +59,14 @@ function slug(id: string) {
 }
 
 async function download(url: string, page?: string): Promise<Buffer> {
+  /* A photo some site builders embed in the page itself rather than host
+     (FL-12's Scrivener): decoded here, still only ever read by sharp. */
+  const inline = url.match(/^data:image\/(?:jpeg|png|webp);base64,(.+)$/);
+  if (inline) {
+    const buf = Buffer.from(inline[1], "base64");
+    if (buf.length > MAX_BYTES) throw new Error("over 10 MB");
+    return buf;
+  }
   if (!/^https:\/\//.test(url)) throw new Error("not https");
   const get = (headers: Record<string, string>) =>
     fetch(url, {
@@ -304,7 +312,10 @@ async function publish(
       storage_path: storagePath,
       source_kind: kind,
       source_page_url: item.source_page_url,
-      source_image_url: item.source_image_url ?? null,
+      /* An inline image has no URL of its own; the page is the source. */
+      source_image_url: item.source_image_url?.startsWith("https://")
+        ? item.source_image_url
+        : null,
       credit: item.credit.slice(0, 80),
       verified_by: "founder (contact sheet)",
       verified_at: verifiedAt,
