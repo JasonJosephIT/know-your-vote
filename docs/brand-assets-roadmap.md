@@ -145,6 +145,13 @@ the page people, texture and the brand's retro warmth. Rules (from `design.md` â
 | 51 | section dividers | `site/textures/divider-checker.svg` | Code (tokens) | tile | checker strip |
 | 52 | hero backdrop | `site/textures/bg-sunburst.svg` | Code (tokens) | tile | 70s sunburst rays |
 
+**Status (2026-10-11).** Built: the layout-independent kit, 20 images (all 11 stickers incl. the logo badge, the
+5 people + `person-kyv-tote`, `footer-town-strip`, `band-coast`), and the 9 textures and dividers. Held until the
+homepage sections are built in `src/`: the slot-specific art (heroes, key-date vignettes, at-a-glance spots,
+ways-to-vote panels, neighbors grid, ZIP and map card spots, empty and 404 states, `band-old-capitol`). Each will
+be re-specified against the real section sizes with its anchor (behind the headline, leaning on a card edge,
+sitting on the footer), its clear zone for live text and its size on the page.
+
 **Open decision (from the layout pass):** a serif for display sizes only (Newsreader or Source Serif 4,
 replacing Figtree at `display`/`h1`). The art works with either; it is a type decision for `design.md`.
 

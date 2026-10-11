@@ -26,6 +26,8 @@ STYLE_REFS = {
     "v2": ["approved-main-street-funk.png", "v2-bike-coffee.png", "v2-boombox-dancer.png"],
     "v1": ["main-street.png", "kitchen-table-research.png", "walking-reader.png"],
 }
+# Object stickers anchor on approved stickers: scene refs leak their subjects into isolated objects.
+STICKER_REFS = ["approved-sticker-boombox.png", "approved-sticker-orange.png", "approved-sticker-palm.png"]
 STYLE = {
     "v2": ("Retro 1970s screen-print illustration with 1990s funk energy. All three reference images are approved "
            "benchmarks: match their level of detail and never exceed the first one; match their character proportions. "
@@ -47,8 +49,8 @@ FRAME = {
     "scene": "Full illustrated scene to the edges.",
     "band": "A very wide panoramic strip, composed to read left to right, scene to the edges.",
     "spot": "A single vignette centered on a plain flat {bg} background, generous empty margin, nothing touching the edges.",
-    "sticker": "Only this one object, isolated and centered on a plain flat {bg} background, generous empty margin, nothing touching the edges, no ground shadow. No people, faces or hands unless the subject names them.",
-    "person": "Only this one person, full body, isolated and centered on a plain flat {bg} background, generous empty margin, nothing touching the edges, no ground shadow, no other people.",
+    "sticker": "Only this one object, isolated and centered on a plain flat {bg} background, generous empty margin, nothing touching the edges, no ground shadow. No people, faces or hands unless the subject names them, and nothing taken from the reference images.",
+    "person": "Only this one person, full body, isolated and centered on a plain flat {bg} background, generous empty margin, nothing touching the edges, no ground shadow, no background panel, frame or coloured rectangle behind them, no other people.",
 }
 RULES = ("Match the style of the reference images closely; do not copy their subjects. Absolutely no text, letters, "
          "numbers or logos anywhere: signs, screens, papers and stickers are blank. No neon, purple, pink, bright blue "
@@ -68,7 +70,8 @@ def prompt(a):
 
 def gen(a):
     content = [{"type": "text", "text": prompt(a)}]
-    for r in STYLE_REFS[a["style"]]:
+    refs = a["refs"] if "refs" in a else STICKER_REFS if a["kind"] == "sticker" and a["style"] == "v2" else STYLE_REFS[a["style"]]
+    for r in refs:
         b64 = base64.b64encode((REFS / r).read_bytes()).decode()
         content.append({"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64}"}})
     body = {"model": MODEL, "modalities": ["image", "text"], "messages": [{"role": "user", "content": content}],
@@ -79,7 +82,7 @@ def gen(a):
     url = res["choices"][0]["message"]["images"][0]["image_url"]["url"]
     RAW.mkdir(parents=True, exist_ok=True)
     (RAW / f"{a['slug']}.png").write_bytes(base64.b64decode(url.split(",", 1)[1]))
-    (RAW / f"{a['slug']}.json").write_text(json.dumps({"model": MODEL, "prompt": prompt(a), "refs": STYLE_REFS[a["style"]],
+    (RAW / f"{a['slug']}.json").write_text(json.dumps({"model": MODEL, "prompt": prompt(a), "refs": refs,
                                                        "aspect_ratio": a["ar"], "usage": res.get("usage")}, indent=1))
     return res.get("usage", {}).get("cost")
 
@@ -113,6 +116,8 @@ def post(a):
                 stack += [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
         bbox = rgba.getbbox()
         snapped = rgba.crop(bbox) if bbox else rgba
+    if a.get("logo"):
+        snapped = place_logo(snapped, a["logo"], hexrgb(BG[a["style"]]))
     long = SIZE[a["kind"]]
     snapped.thumbnail((long, long), Image.Resampling.LANCZOS)
     OUT.mkdir(parents=True, exist_ok=True)
@@ -120,6 +125,52 @@ def post(a):
     half = snapped.copy()
     half.thumbnail((long // 2, long // 2), Image.Resampling.LANCZOS)
     half.save(OUT / f"{a['slug']}-sm.webp", "WEBP", quality=85, method=6)
+
+
+def place_logo(im, which, cream):
+    """Paste the untouched brand SVG into the largest enclosed cream area (blank tote, badge centre).
+    The generator never draws the logo; this keeps it exact (design.md: never redraw or recolour)."""
+    import resvg_py
+    im = im.convert("RGBA")
+    w, h = im.size
+    px = im.load()
+    seen, best = set(), []
+    for y0 in range(0, h, 4):
+        for x0 in range(0, w, 4):
+            if (x0, y0) in seen or px[x0, y0][:3] != cream or px[x0, y0][3] == 0:
+                continue
+            comp, stack = [], [(x0, y0)]
+            while stack:
+                x, y = stack.pop()
+                if (x, y) in seen or not (0 <= x < w and 0 <= y < h) or px[x, y][3] == 0 or px[x, y][:3] != cream:
+                    continue
+                seen.add((x, y))
+                comp.append((x, y))
+                stack += [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
+            if len(comp) > len(best):
+                best = comp
+    area = set(best)
+    cx, cy = sum(c[0] for c in best) // len(best), sum(c[1] for c in best) // len(best)  # centroid of the blank area
+    svg = ROOT / f"public/brand/kyv-logo-{'acronym' if which == 'acronym' else 'official'}.svg"
+    import io
+    master = Image.open(io.BytesIO(bytes(resvg_py.svg_to_bytes(svg_path=str(svg), width=2400)))).convert("RGBA")
+    master = master.crop(master.getbbox())
+
+    def fits(lw, lh, m):  # logo box plus clearspace margin m lies wholly inside the blank area
+        x0, y0, x1, y1 = cx - lw // 2 - m, cy - lh // 2 - m, cx + lw // 2 + m, cy + lh // 2 + m
+        return all((x, y) in area for x in range(x0, x1 + 1, 4) for y in (y0, y1)) and \
+               all((x, y) in area for y in range(y0, y1 + 1, 4) for x in (x0, x1))
+
+    lh = int((max(c[1] for c in best) - min(c[1] for c in best)) * 0.7)
+    while lh > 40:
+        lw = lh * master.width // master.height
+        if fits(lw, lh, lh // 8):  # clearspace ~ the height of the monogram's letter O
+            break
+        lh = int(lh * 0.93)
+    logo = master.resize((lw, lh), Image.Resampling.LANCZOS)
+    im.alpha_composite(logo, (cx - lw // 2, cy - lh // 2))
+    print(f"  logo {which} {logo.size} centred at {cx},{cy}")
+    return im
 
 
 if __name__ == "__main__":

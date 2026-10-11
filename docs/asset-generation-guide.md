@@ -94,6 +94,13 @@ The page art in roadmap §1b. Generated with Nano Banana Pro (`google/gemini-3-p
   seals.
 - **Post-processing is the token check:** `post` snaps every pixel to the style's token palette (no dither), keys
   the plain background out of spots/stickers/people to transparent, trims, and exports WebP master + `-sm`.
+- **Lessons from the first run (2026-10-11):** object stickers anchor on approved stickers
+  (`refs/approved-sticker-*`), because scene references leak their subjects into isolated objects; if a
+  subject still leaks, set `"refs": []` on that row and let the text recipe carry the style. People get "no
+  background panel". Aspect ratios the model accepts top out at 21:9, so wide strips are 21:9.
+- **The logo is never generated.** A row with `"logo": "acronym"` asks for a blank cream area (badge centre,
+  tote front); `post` pastes the untouched `kyv-logo-acronym.svg` into it, centred, shrunk until a clearspace
+  margin fits. Official colourway only; the wordmark goes in only where it renders ≥120px wide.
 - **Review each image by eye** before it ships: subject correct, no stray text or partisan cue, people mixed and
   equal, edges clean after keying. Regenerate by slug; log it in §5.
 
@@ -239,6 +246,9 @@ append-only.
 | 2026-07-18 | Community-life icon set | `public/brand/site/community-icons.svg` | Site/Web | on-surface/primary (currentColor) | Sibling to `site/icons.svg`; parks/streets/civic-life motifs |
 | 2026-07-19 | AI illustration set (8 candidates, style-matched to user samples) | public/brand/site/ai/higgs-manifest.md | Site/Web + social | Official + marketing accents | Higgsfield Recraft V4.1 vector, palette-locked; pending CDN retrieval; candidates only, do not replace hand-authored SVGs |
 | 2026-10-05 | App Store / Play screenshots: **removed** | `public/brand/mobile/screenshot-1-ballot.{svg,png}`, `screenshot-2-race.{svg,png}` (listed 2026-07-05 above), and `screenshots` in `src/app/manifest.ts` | Mobile | — | The PNGs rendered as empty phone frames (the UI crop never made it in) under "every race" captions, and the SVG sources showed fact-check verdicts, a "verified record" and an uncovered State Senate race, none of which the 2026 site carries. Remake them only as crops of the live UI (`docs/brand-assets-roadmap.md`: real UI crop, no fake data); `scripts/verify-manifest.ts` checks the manifest names only files that exist. |
+| 2026-10-11 | Site illustration kit (20): 11 stickers incl. `sticker-kyv-badge`, 6 people incl. `person-kyv-tote`, `footer-town-strip`, `band-coast` | `public/brand/site/illustrations/*.webp` (+ `-sm`) | Site/Web | Funk (marketing palette) | Layout-independent kit from roadmap §1b; generated with `scripts/brand-assets/generate.py`, every pixel snapped to tokens; transparent cut-outs except the two strips; KYV monogram composited from the SVG, never generated |
+| 2026-10-11 | Textures and dividers (9) | `public/brand/site/textures/` | Site/Web | Tokens | `scripts/brand-assets/textures.py`; seamless tiles; dividers use `currentColor` |
+| 2026-10-11 | Style references | `public/brand/site/ai/*.svg`, `ai/refs/` | — | — | July Higgsfield originals retrieved; `approved-*` refs chosen by the founder (main street, bike-coffee, boombox) |
 | _next…_ | | | | | |
 
 ---

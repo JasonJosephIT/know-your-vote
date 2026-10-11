@@ -197,7 +197,7 @@
    "slug": "footer-town-strip",
    "style": "v2",
    "kind": "band",
-   "ar": "4:1",
+   "ar": "21:9",
    "section": "footer",
    "subject": "a long panoramic strip of a small Florida town: palms, low storefronts with rounded awnings, a lamppost, a water tower, a pelican on a dock post, a few small people walking and cycling; blank signs; the small people are a mix of ethnicities"
   },
@@ -205,7 +205,7 @@
    "slug": "band-old-capitol",
    "style": "v2",
    "kind": "band",
-   "ar": "4:1",
+   "ar": "21:9",
    "section": "photo band (illustrated alternate)",
    "subject": "a wide panorama of a historic domed capitol building with striped awnings between tall palms, a broad sky with a sunburst and confetti, a few small people on the lawn; the small people are a mix of ethnicities"
   },
@@ -213,7 +213,7 @@
    "slug": "band-coast",
    "style": "v2",
    "kind": "band",
-   "ar": "4:1",
+   "ar": "21:9",
    "section": "photo band (illustrated alternate)",
    "subject": "a wide panorama of a Florida coastline: a wooden fishing pier, pelicans, gentle waves, palms and a low sun with chunky rays, two people walking on the sand; the two people are an Asian couple"
   },
@@ -303,7 +303,8 @@
    "kind": "sticker",
    "ar": "1:1",
    "section": "stickers",
-   "subject": "a plain blank envelope with a big checkmark stamp shape and small motion lines"
+   "subject": "a plain blank paper envelope, slightly tilted, with one bold checkmark printed on its front",
+   "refs": []
   },
   {
    "slug": "person-phone-reader",
@@ -398,6 +399,24 @@
    "kind": "code",
    "section": "hero backdrop",
    "subject": "70s sunburst rays"
+  },
+  {
+   "slug": "sticker-kyv-badge",
+   "style": "v2",
+   "kind": "sticker",
+   "ar": "1:1",
+   "section": "stickers (logo)",
+   "logo": "acronym",
+   "subject": "a round 70s sticker badge: a large flat plain cream disc with a chunky scalloped burnt-orange border and a few small zigzag bolts around it; the cream center is completely empty"
+  },
+  {
+   "slug": "person-kyv-tote",
+   "style": "v2",
+   "kind": "person",
+   "ar": "3:4",
+   "section": "people (logo)",
+   "logo": "acronym",
+   "subject": "full-body young Latino man in a plaid overshirt and wide trousers walking and smiling, carrying a large flat tote bag held facing the viewer; the tote is plain flat cream with a big empty area, nothing printed on it"
   }
  ]
 }
