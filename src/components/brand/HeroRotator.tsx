@@ -40,7 +40,7 @@ import s from "./HeroRotator.module.css";
    time someone could see.
 
    WCAG 2.2.2: the motion lasts more than five seconds, so one native
-   button pauses all of it, a pause is remembered for the next visit, and
+   button pauses all of it, a pause holds for the rest of the visit, and
    the walk also stops by itself after one lap. The button's label changes
    (Pause / Play animation) and it carries no aria-pressed, so a screen
    reader announces one state, not two. The art layer is aria-hidden and
@@ -53,7 +53,6 @@ const MOTION_QUERY = "(prefers-reduced-motion: no-preference)";
 const BELOW_LG = "(width < 64rem)";
 const BLANK =
   "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-const PAUSE_KEY = "kyv:hero-walk-paused";
 
 function subscribeMedia(query: string) {
   return (onChange: () => void) => {
@@ -68,9 +67,12 @@ function subscribeVisibility(onChange: () => void) {
   return () => document.removeEventListener("visibilitychange", onChange);
 }
 
-/* The viewer's pause, remembered across visits. The in-memory value keeps
-   the button working when storage throws (private modes, blocked). */
-let memPaused: boolean | null = null;
+/* The viewer's pause, held in memory for the visit: it survives moving
+   between pages of the site (the module stays loaded), not a fresh load.
+   Not written to device storage, so nothing new needs disclosing on
+   /privacy (scripts/verify-no-stored-location.ts allows only the keys
+   listed there). */
+let memPaused = false;
 const pauseListeners = new Set<() => void>();
 function subscribePause(cb: () => void) {
   pauseListeners.add(cb);
@@ -79,21 +81,10 @@ function subscribePause(cb: () => void) {
   };
 }
 function readPause(): boolean {
-  if (memPaused !== null) return memPaused;
-  try {
-    return window.localStorage.getItem(PAUSE_KEY) === "1";
-  } catch {
-    return false;
-  }
+  return memPaused;
 }
 function writePause(v: boolean) {
   memPaused = v;
-  try {
-    if (v) window.localStorage.setItem(PAUSE_KEY, "1");
-    else window.localStorage.removeItem(PAUSE_KEY);
-  } catch {
-    /* the in-memory value still holds */
-  }
   pauseListeners.forEach((cb) => cb());
 }
 
