@@ -1,45 +1,14 @@
-import { unstable_cache } from "next/cache";
 import { ACTIVE_ELECTION } from "@/lib/election";
-import {
-  verifiedElectionEvents,
-  type ElectionEvent,
-} from "@/lib/notifications/election-events";
+import { homeElectionEvents } from "@/lib/notifications/home-events";
 import { bannerLine, electionDayLine } from "@/lib/notifications/banner";
+import { keyDateStops } from "@/lib/notifications/key-dates";
 import {
   bannerDates,
   countiesWithOwnDates,
   easternToday,
   eventsForCounty,
 } from "@/lib/notifications/schedule";
-import { createServiceClient } from "@/lib/supabase/service";
-
-/* Every verified date for the active election, statewide and county
-   (0043). This used to come from getPublicElectionDates (src/lib/
-   election-dates.ts, removed 2026-10-04 once nothing else read it), which
-   kept only the registration deadline and Election Day — not enough to
-   roll forward to the vote-by-mail and early-voting dates. Same hour-long
-   cache, same "election-dates" tag, so a correction still revalidates it.
-   The key changed with the county rows, so no entry cached before them
-   (statewide rows only) is served after.
-
-   createServiceClient throws without the service-role key (src/lib/
-   server-keys.ts), inside the cache, so a missing key is never cached as
-   "no dates": the banner appears on the first request after the key is
-   readable rather than up to an hour later. */
-const cachedEvents = unstable_cache(
-  async (): Promise<ElectionEvent[]> =>
-    verifiedElectionEvents(createServiceClient(), ACTIVE_ELECTION),
-  ["deadline-banner-events-by-county", ACTIVE_ELECTION],
-  { revalidate: 3600, tags: ["election-dates"] }
-);
-
-async function bannerEvents(): Promise<ElectionEvent[]> {
-  try {
-    return await cachedEvents();
-  } catch {
-    return [];
-  }
-}
+import { KeyDatesRail } from "@/components/features/KeyDatesRail";
 
 /* The one piece of urgency on the landing page (TASK-064).
 
@@ -68,7 +37,7 @@ export async function DeadlineBanner({
   remindersHref?: string;
   countyFips?: string;
 }) {
-  const allEvents = await bannerEvents();
+  const allEvents = await homeElectionEvents();
   const scope =
     countyFips && countiesWithOwnDates(allEvents).includes(countyFips)
       ? countyFips
@@ -83,6 +52,11 @@ export async function DeadlineBanner({
     dates.electionDay && electionDayLine(dates.electionDay.event_date, today),
   ].filter(Boolean) as string[];
 
+  /* The rail under the line (layout pass 2026-10-11, item 2): every date
+     at once, with where the reader stands. Same events, same today, so it
+     rolls forward with the line above it and vanishes with it. */
+  const stops = keyDateStops(events, today);
+
   /* 24 px tall at least (WCAG 2.5.8 Target Size, AA): as plain caption
      text the two links were 18 px and wrapped 4 px apart on a phone, and
      axe and Lighthouse both failed them (production re-run, 2026-10-05).
@@ -94,10 +68,11 @@ export async function DeadlineBanner({
       aria-label="Key dates"
       /* Calm, not alarmed — the design brief's reference librarian, not a
          campaign banner. No red, no siren, no exclamation. */
-      className="flex flex-col gap-1 rounded-md bg-primary-muted px-4 py-3 text-body-sm text-primary-hover"
+      className="flex flex-col gap-3 rounded-lg border border-border bg-surface px-4 py-4 text-body-sm"
     >
-      <p className="font-semibold">{parts.join(" · ")}</p>
-      <p className="flex flex-wrap gap-x-4 gap-y-1">
+      <p className="font-semibold text-primary-hover">{parts.join(" · ")}</p>
+      {stops && <KeyDatesRail stops={stops} />}
+      <p className="flex flex-wrap gap-x-4 gap-y-1 text-primary">
         <a
           href={`/api/calendar/${ACTIVE_ELECTION}.ics${scope ? `?county=${scope}` : ""}`}
           className={link}

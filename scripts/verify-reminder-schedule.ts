@@ -737,7 +737,7 @@ const home = source("src/app/(public)/page.tsx");
 check(
   "home page renders the signup card only behind reminderPromotionLive()",
   /reminderPromotionLive\(\)/.test(home) &&
-    /\{promoteReminders && <ReminderSignupCta countyFips=\{saved\?\.countyFips\} \/>\}/.test(home)
+    /\{promoteReminders &&\s*\(?\s*<ReminderSignupCta countyFips=\{saved\?\.countyFips\} \/>\s*\)?\s*\}/.test(home)
 );
 const votingInfo = source("src/components/features/VotingInfo.tsx");
 check(

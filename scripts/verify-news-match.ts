@@ -14,6 +14,7 @@
    Pure and offline. Run: node scripts/verify-news-match.ts */
 
 import {
+  NAME_VARIANTS,
   SURNAME_ONLY_RULE,
   matchArticle,
   namedCountsByCandidate,
@@ -271,6 +272,35 @@ check(
   "a row for a candidate outside the race is ignored",
   namedCountsByCandidate([{ candidateId: "cand-4", relation: "named" }], race1)["cand-4"] === undefined,
 );
+
+/* ---- press spellings (NAME_VARIANTS) --------------------------------- */
+{
+  const taddeo = c("FL-DOE-91310", "Annette Taddeo", "FL-CFO-general");
+  const other = c("cand-9", "Maria Tadeo", "FL-CFO-general");
+  const roster = [taddeo, other];
+  check(
+    "a recorded misspelling matches its own candidate as named",
+    shape(matchArticle({ title: "Climate Organization genCLEO Endorses Annette Tadeo For CFO" }, roster)) ===
+      "FL-DOE-91310:named",
+    shape(matchArticle({ title: "Climate Organization genCLEO Endorses Annette Tadeo For CFO" }, roster)),
+  );
+  check(
+    "the legal spelling still matches",
+    shape(matchArticle({ title: "Annette Taddeo campaigns in Miami" }, roster)) === "FL-DOE-91310:named",
+  );
+  check(
+    "a variant never attaches to someone else who shares the misspelt surname",
+    !matchArticle({ title: "Maria Tadeo speaks" }, roster).some((m) => m.candidateId === "FL-DOE-91310"),
+  );
+  check(
+    "a variant does nothing for a candidate it isn't keyed to",
+    shape(matchArticle({ title: "Annette Tadeo" }, [c("cand-x", "Annette Taddeo")])) === "",
+  );
+  check(
+    "every variant is a full name, never a bare surname",
+    Object.values(NAME_VARIANTS).flat().every((v) => v.trim().split(/\s+/).length >= 2),
+  );
+}
 
 if (failures > 0) {
   console.error(`\nverify-news-match: ${failures} failure(s)`);

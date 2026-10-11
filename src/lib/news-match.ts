@@ -163,6 +163,29 @@ function fullNameRegex(parts: NonNullable<ReturnType<typeof nameParts>>): RegExp
   return new RegExp(`\\b${esc(parts.first)}\\b${middle}\\s+\\b${esc(parts.last)}\\b`, "g");
 }
 
+/* ---- Spellings the press uses that the ballot doesn't ----------------
+
+   `legal_name` is the only name the schema has, and a story that misspells
+   it never matches: genCLEO's endorsement of Annette Taddeo for CFO ran as
+   "Annette Tadeo" (Floridian Press, 2026-10-07) and reached the queue with no
+   candidate at all. Under AGENTS.md's neutrality rule that is a pipeline gap
+   to fix, not a skew to report.
+
+   Each entry is a FULL name, checked exactly like the legal name (first and
+   last token, the candidate's own middles between), so it only ever produces
+   `named` rows. No bare-surname variants: those go through the title +
+   surname rule above, and a misspelt surname alone is too weak to attach to
+   anyone. Keyed by candidate_id, so a variant can never move to a different
+   person who shares a name.
+
+   Add a spelling only after seeing it in a real story, with the story cited
+   here. A variant list grown from guesses is the kind of alias set the news
+   characterization measured as worse, not better. */
+export const NAME_VARIANTS: Readonly<Record<string, readonly string[]>> = {
+  /* Annette Taddeo (CFO): "Annette Tadeo", floridianpress.com 2026-10-07. */
+  "FL-DOE-91310": ["Annette Tadeo"],
+};
+
 /** Match one article against a roster. Returns one entry per (candidate)
     attachment; the caller writes one news_item row each. */
 export function matchArticle(
@@ -182,12 +205,18 @@ export function matchArticle(
   let residue = haystack;
 
   for (const candidate of roster) {
-    const parts = nameParts(candidate.legalName);
-    if (!parts) continue;
-    const re = fullNameRegex(parts);
-    if (re.test(haystack)) {
-      named.add(candidate.candidateId);
-      residue = residue.replace(fullNameRegex(parts), " ");
+    const spellings = [
+      candidate.legalName,
+      ...(NAME_VARIANTS[candidate.candidateId] ?? []),
+    ];
+    for (const spelling of spellings) {
+      const parts = nameParts(spelling);
+      if (!parts) continue;
+      const re = fullNameRegex(parts);
+      if (re.test(haystack)) {
+        named.add(candidate.candidateId);
+        residue = residue.replace(fullNameRegex(parts), " ");
+      }
     }
   }
 
