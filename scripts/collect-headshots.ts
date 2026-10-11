@@ -155,8 +155,15 @@ function faceDetector(outDir: string): string | null {
       /* An x86_64 Node under Rosetta (this repo's local setup, see the
          README's arm64 note) hands that architecture to its children, and
          xcrun's library is arm64-only, so swiftc fails to start. Ask for
-         the native architecture explicitly. */
-      const rosetta = process.platform === "darwin" && process.arch === "x64";
+         the native architecture explicitly, but only when this really is
+         Rosetta (sysctl.proc_translated = 1): on an Intel Mac x64 is
+         native and arch -arm64 would fail. */
+      const rosetta =
+        process.platform === "darwin" &&
+        process.arch === "x64" &&
+        execFileSync("sysctl", ["-in", "sysctl.proc_translated"], {
+          encoding: "utf8",
+        }).trim() === "1";
       if (rosetta) execFileSync("arch", ["-arm64", "swiftc", ...args]);
       else execFileSync("swiftc", args);
     }
@@ -221,9 +228,12 @@ async function stage(outDir: string, planFiles: string[]) {
       const out = path.join(crops, `${slug(item.candidate_id)}.webp`);
       let img = sharp(buf).rotate();
       const box = item.crop_box;
-      if (box && meta.width && meta.height) {
-        const W = meta.width;
-        const H = meta.height;
+      /* The box is drawn on the photo as a browser shows it, i.e. after its
+         EXIF orientation, and .rotate() applies that orientation before
+         extract, so the box is measured against the oriented size. */
+      const W = meta.autoOrient?.width ?? meta.width;
+      const H = meta.autoOrient?.height ?? meta.height;
+      if (box && W && H) {
         const left = Math.max(0, Math.round(box.x * W));
         const top = Math.max(0, Math.round(box.y * H));
         img = sharp(
@@ -242,10 +252,28 @@ async function stage(outDir: string, planFiles: string[]) {
       const norm = await img.png().toBuffer();
       const bin = faceDetector(outDir);
       let centred = false;
+      let why = bin ? "no face found" : "no face detector";
       if (bin) {
         const normPath = path.join(raw, `${slug(item.candidate_id)}.norm.png`);
         writeFileSync(normPath, norm);
-        const faces = detectFaces(bin, normPath);
+        let faces: Face[] = [];
+        try {
+          faces = detectFaces(bin, normPath);
+        } catch (err) {
+          why = `face detector failed: ${(err as Error).message.split("\n")[0]}`;
+        }
+        /* An explicit face_index exists because face 0 is the wrong person;
+           if that face isn't there any more, falling back to the attention
+           crop could land on exactly that person, so stop instead. */
+        if (
+          item.face_index !== undefined &&
+          faces.length > 0 &&
+          !faces[item.face_index]
+        ) {
+          throw new Error(
+            `face_index ${item.face_index} but only ${faces.length} face(s) found: set face_index or crop_box again`
+          );
+        }
         const face = faces[item.face_index ?? 0];
         const nm = await sharp(norm).metadata();
         if (face && nm.width && nm.height) {
@@ -268,8 +296,7 @@ async function stage(outDir: string, planFiles: string[]) {
           })
           .webp({ quality: 82 })
           .toFile(out);
-        item.notes =
-          `${item.notes ?? ""} [no face found: attention crop]`.trim();
+        item.notes = `${item.notes ?? ""} [${why}: attention crop]`.trim();
       }
       results.push({
         ...item,
@@ -357,7 +384,7 @@ ${races}
 const boxes=[...document.querySelectorAll('input[data-id]')];
 const upd=()=>document.getElementById('count').textContent=boxes.filter(b=>b.checked).length+' confirmed';
 boxes.forEach(b=>b.addEventListener('change',upd));
-document.getElementById('all').onclick=()=>{boxes.forEach(b=>{if(b.closest('.card').querySelector('.conf.high'))b.checked=true});upd()};
+document.getElementById('all').onclick=()=>{boxes.forEach(b=>{const c=b.closest('.card');/* never bulk-tick a crop that needs a look: more than one face, or no face found */if(c.querySelector('.conf.high')&&!/faces found|attention crop/.test(c.textContent))b.checked=true});upd()};
 document.getElementById('copy').onclick=async()=>{const ids=JSON.stringify(boxes.filter(b=>b.checked).map(b=>b.dataset.id));try{await navigator.clipboard.writeText(ids);document.getElementById('msg').textContent='Copied.'}catch{prompt('Copy this:',ids)}};
 </script></body></html>`;
 }
