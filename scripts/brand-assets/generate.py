@@ -2,6 +2,7 @@
 
   uv run --with pillow python scripts/brand-assets/generate.py gen [slug ...]   # call Nano Banana Pro
   uv run --with pillow python scripts/brand-assets/generate.py post [slug ...]  # snap to tokens, export WebP
+  uv run --with pillow python scripts/brand-assets/generate.py edit <slug> "<instruction>"  # fix one detail
 
 Raw generations go to $KYV_RAW (default /tmp/kyv-raw), finals to public/brand/site/illustrations/.
 Needs OPENROUTER_API_KEY. Rules: docs/asset-generation-guide.md §2 "Site illustration library".
@@ -84,6 +85,28 @@ def gen(a):
     (RAW / f"{a['slug']}.png").write_bytes(base64.b64decode(url.split(",", 1)[1]))
     (RAW / f"{a['slug']}.json").write_text(json.dumps({"model": MODEL, "prompt": prompt(a), "refs": refs,
                                                        "aspect_ratio": a["ar"], "usage": res.get("usage")}, indent=1))
+    return res.get("usage", {}).get("cost")
+
+
+def edit(a, instruction):
+    """Edit an existing raw generation in place (keeps the character); the previous raw is kept as <slug>.prev.png."""
+    src = RAW / f"{a['slug']}.png"
+    b64 = base64.b64encode(src.read_bytes()).decode()
+    text = (f"Edit this illustration. {instruction} Keep everything else exactly the same: same person, pose, "
+            "clothing, colours, framing, background and screen-print style. " + RULES.split(". ", 1)[1])
+    body = {"model": MODEL, "modalities": ["image", "text"], "image_config": {"aspect_ratio": a["ar"], "image_size": "2K"},
+            "messages": [{"role": "user", "content": [{"type": "text", "text": text},
+                                                      {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64}"}}]}]}
+    req = urllib.request.Request("https://openrouter.ai/api/v1/chat/completions", json.dumps(body).encode(),
+                                 {"Authorization": "Bearer " + os.environ["OPENROUTER_API_KEY"], "Content-Type": "application/json"})
+    res = json.load(urllib.request.urlopen(req, timeout=300))
+    url = res["choices"][0]["message"]["images"][0]["image_url"]["url"]
+    src.replace(RAW / f"{a['slug']}.prev.png")
+    src.write_bytes(base64.b64decode(url.split(",", 1)[1]))
+    meta = RAW / f"{a['slug']}.json"
+    m = json.loads(meta.read_text()) if meta.exists() else {}
+    m.setdefault("edits", []).append(instruction)
+    meta.write_text(json.dumps(m, indent=1))
     return res.get("usage", {}).get("cost")
 
 
@@ -174,6 +197,9 @@ def place_logo(im, which, cream):
 
 
 if __name__ == "__main__":
+    if sys.argv[1] == "edit":  # edit <slug> "<instruction>"
+        print(f"edit {sys.argv[2]}  ${edit(assets({sys.argv[2]})[0], sys.argv[3]) or 0:.3f}")
+        sys.exit()
     cmd, slugs = sys.argv[1], set(sys.argv[2:])
     total = 0
     for a in assets(slugs):
