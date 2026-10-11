@@ -1,11 +1,11 @@
 ---
 title: KYV Asset Generation Guide (for agents)
-version: 1.0
+version: 1.1
 audience: asset-generating agents
 source-of-truth: docs/design.md
 roadmap: docs/brand-assets-roadmap.md
 theme-css: public/brand/kyv-artifact-theme.css
-last-updated: 2026-07-05
+last-updated: 2026-10-11
 ---
 
 # KYV Asset Generation Guide
@@ -71,6 +71,31 @@ Pull these from `design.md`; do not retype approximate hex from memory.
 - **No baked text or buttons** except the OG card (wordmark + one short standfirst line).
 - Icons: 24px grid, ~1.5px stroke, rounded joins, single-color (`on-surface` or `primary`).
 - Depth is border-led and flat; reserve `elevation.1/2` for genuinely floating elements.
+
+### Site illustration library (funk + calm, 2026-10-11)
+
+The page art in roadmap §1b. Generated with Nano Banana Pro (`google/gemini-3-pro-image` on OpenRouter) from
+`scripts/brand-assets/` — never hand-prompted one-off, so the next asset matches the last.
+
+- **Run it:** add a row to `scripts/brand-assets/assets.json` (slug, style `v2`/`v1`, kind, aspect ratio, slot,
+  subject), then `uv run --python 3.12 --with pillow python scripts/brand-assets/generate.py gen <slug>` and
+  `… post <slug>`. Code-made textures: `textures.py`. Raw generations and prompt sidecars stay outside the repo.
+- **Style anchors:** every call sends three reference images from `public/brand/site/ai/refs/` — funk
+  (`v2-boombox-dancer`, `v2-neighbors-grid`, `hero-90s`) or calm (`main-street`, `kitchen-table-research`,
+  `walking-reader`). The prompt says "match the style, not the subjects"; object stickers also say "no people".
+- **Funk recipe:** flat screen-print ink, grain and speckle inside fills, uneven hand-cut edges, slight
+  off-registration, 70s/90s clothing, zigzag bolts, confetti, checkers, sunbursts. Marketing palette.
+- **Calm recipe:** flat editorial vector, thin warm-black outlines, little texture, small heads and expressive
+  hands, generous empty space. Calm palette.
+- **People:** stylized, never real or recognizable. Name each figure's ethnicity in the subject so the set
+  stays mixed (Black, Latino, white, Asian; young to old; include disability). Groups: equal size and attention.
+- **Banned in every prompt:** text, letters, numbers, logos (signs, screens and papers are blank); neon,
+  purple, pink, bright blue, bright red; flags, campaign signs, political symbols, donkeys, elephants, eagles,
+  seals.
+- **Post-processing is the token check:** `post` snaps every pixel to the style's token palette (no dither), keys
+  the plain background out of spots/stickers/people to transparent, trims, and exports WebP master + `-sm`.
+- **Review each image by eye** before it ships: subject correct, no stray text or partisan cue, people mixed and
+  equal, edges clean after keying. Regenerate by slug; log it in §5.
 
 ### Mobile icons & launch
 - App/adaptive/maskable icons use the **Reversed** colorway (cream monogram on KYV Green).

@@ -1,10 +1,10 @@
 ---
 title: KYV Brand Assets Roadmap
-version: 1.0
-status: planning
+version: 1.1
+status: in progress
 source-of-truth: docs/design.md
 companion: docs/asset-generation-guide.md
-last-updated: 2026-07-05
+last-updated: 2026-10-11
 ---
 
 # KYV Brand Assets Roadmap
@@ -69,6 +69,84 @@ therefore does carry baked text.
 
 **Anti-`.gov` reminder:** no dense cold-gray tables, no hard shadows, no USWDS/Public Sans
 styling in any diagram or illustration.
+
+
+### 1b · Site illustration library (2026-10-11)
+
+The page art for the homepage layout in `docs/design/layout-2026-10-11/` (masthead strip, key-dates rail,
+at-a-glance tiles, statewide races, ZIP + coverage-map cards, three ways to vote, news column, photo band,
+footer). These are **not** widgets or controls: they are images that sit in or behind those sections and give
+the page people, texture and the brand's retro warmth. Rules (from `design.md` → *Site illustration layer*):
+
+- **Two styles, both approved.** *Funk* (70s screen-print × 90s funk, marketing palette) for the homepage and
+  top-of-funnel moments; *Calm* (flat editorial, calm palette) for inner pages. Anchored by the July Higgsfield
+  references in `public/brand/site/ai/` (`v2-*` = funk, the rest = calm).
+- **Image slots only.** No art in news slots (publisher photos or text only), inside a race comparison, beside
+  a candidate or next to a verdict. The photo band (layout marker 7) prefers a public-domain Florida photo;
+  `band-old-capitol` and `band-coast` are the illustrated alternates.
+- **People:** stylized and never real; a mix of ethnicities, ages and abilities across the set; a group gives
+  every person equal size and attention.
+- **No text in any image;** every colour snapped to tokens by the generator. Images only for now; motion later.
+- **Formats:** WebP, master + `-sm` half size; spots, stickers and people have transparent backgrounds.
+  Textures are seamless tiles; dividers use `currentColor` so CSS picks the token.
+
+| # | Slot (layout section) | File (`public/brand/`) | Style | AR | Subject |
+|---|---|---|---|---|---|
+| 1 | hero | `site/illustrations/hero-porch-neighbors.webp` (+ `-sm`) | Funk | 3:2 | three neighbors of different ages sitting together on the front steps of a small Florida bungalow, each reading their own copy of the same plain printed booklet |
+| 2 | hero | `site/illustrations/hero-main-street.webp` (+ `-sm`) | Funk | 3:2 | a lively main-street scene: a small storefront with a rounded awning, a shopkeeper with big curly hair in the doorway, a stylish customer with an afro walking past carrying a tote bag and a boombox, a rounded tree, a lamppost, small zigzag bolts and geometric confetti in the sky |
+| 3 | hero | `site/illustrations/hero-community-park.webp` (+ `-sm`) | Funk | 3:2 | a sunny community park: one person with long curls sitting on a bench with a small dog, another person with a big afro dancing nearby with one arm raised, a rounded tree, a lamppost, bushes, small zigzag bolts and geometric confetti in the air |
+| 4 | hero (phone) | `site/illustrations/hero-mobile-reader.webp` (+ `-sm`) | Funk | 4:5 | one confident person with a big afro and a checkered jacket walking forward while reading a folded plain paper booklet, a huge 70s sunburst of rays behind them, a palm on one side, zigzag bolts around |
+| 5 | hero (calm alternate) | `site/illustrations/hero-porch-neighbors-calm.webp` (+ `-sm`) | Calm | 3:2 | three neighbors of different ages sitting together on the front steps of a small house, each reading their own copy of the same plain booklet, potted plants and a rounded tree |
+| 6 | key dates | `site/illustrations/date-registration.webp` (+ `-sm`) | Funk | 1:1 | a hand holding a pencil next to a clipboard with a single big checkmark and blank lines |
+| 7 | key dates | `site/illustrations/date-today.webp` (+ `-sm`) | Funk | 1:1 | a 70s rising sun with chunky rays over a simple wavy horizon |
+| 8 | key dates | `site/illustrations/date-mail-ballot.webp` (+ `-sm`) | Funk | 1:1 | a hand dropping a plain blank envelope into a rounded curbside mailbox on a post |
+| 9 | key dates | `site/illustrations/date-early-voting.webp` (+ `-sm`) | Funk | 1:1 | three people of different ages standing in a short relaxed line outside a small library doorway with a rounded awning, morning light |
+| 10 | key dates | `site/illustrations/date-election-day.webp` (+ `-sm`) | Funk | 1:1 | a plain blank folded paper ballot sliding into the slot of a simple wooden box |
+| 11 | at a glance | `site/illustrations/glance-statewide.webp` (+ `-sm`) | Funk | 1:1 | a small historic domed capitol building with cream-and-burnt-orange striped window awnings, two palms beside it |
+| 12 | at a glance | `site/illustrations/glance-amendments.webp` (+ `-sm`) | Funk | 1:1 | a short stack of three plain paper documents with blank lines and a big round magnifying glass resting on top |
+| 13 | at a glance | `site/illustrations/glance-house.webp` (+ `-sm`) | Funk | 1:1 | a small rounded house with a big map location pin floating above its roof |
+| 14 | statewide races | `site/illustrations/neighbors-grid.webp` (+ `-sm`) | Funk | 3:2 | a grid of six equal square framed portrait panels, each a different stylized person with no facial features (blank face), different hairstyles (afro, curls, braids, bun, short grey, long waves) and 70s collared clothing |
+| 15 | ZIP card | `site/illustrations/zip-phone.webp` (+ `-sm`) | Funk | 4:5 | one cheerful stylish person with big curly hair standing beside a giant smartphone taller than them, one hand raised, the phone screen showing only blank rounded rectangles, a small rounded tree |
+| 16 | coverage map card | `site/illustrations/map-explorer.webp` (+ `-sm`) | Funk | 1:1 | a person in a bucket hat and wide trousers unfolding a large blank paper road map, a palm behind them |
+| 17 | three ways to vote | `site/illustrations/way-mail.webp` (+ `-sm`) | Funk | 4:3 | a person at a kitchen table filling in a blank paper form with a pen, a plain envelope and a coffee mug beside them, a window with a palm outside |
+| 18 | three ways to vote | `site/illustrations/way-early.webp` (+ `-sm`) | Funk | 4:3 | a person with a tote bag walking toward a small public library building in the morning sun, a bicycle parked out front |
+| 19 | three ways to vote | `site/illustrations/way-election-day.webp` (+ `-sm`) | Funk | 4:3 | a smiling person stepping out of a community center doorway giving a thumbs up, a small blank round sticker on their shirt |
+| 20 | three ways to vote (calm) | `site/illustrations/way-mail-calm.webp` (+ `-sm`) | Calm | 4:3 | a person at a kitchen table filling in a blank paper form with a pen, a plain envelope and a mug beside them |
+| 21 | three ways to vote (calm) | `site/illustrations/way-early-calm.webp` (+ `-sm`) | Calm | 4:3 | a person with a tote bag walking toward a small public library building, a bicycle out front |
+| 22 | three ways to vote (calm) | `site/illustrations/way-election-day-calm.webp` (+ `-sm`) | Calm | 4:3 | a person stepping out of a community center doorway giving a thumbs up, a small blank round sticker on their shirt |
+| 23 | news column empty state | `site/illustrations/news-empty.webp` (+ `-sm`) | Calm | 1:1 | a relaxed person sitting on a park bench reading a blank folded newspaper, a small bird beside them |
+| 24 | 404 page | `site/illustrations/error-404-funk.webp` (+ `-sm`) | Funk | 1:1 | a puzzled person holding a blank paper map upside down, a small dog looking up at them, a signpost with blank arrow signs |
+| 25 | footer | `site/illustrations/footer-town-strip.webp` (+ `-sm`) | Funk | 4:1 | a long panoramic strip of a small Florida town: palms, low storefronts with rounded awnings, a lamppost, a water tower, a pelican on a dock post, a few small people walking and cycling |
+| 26 | photo band (illustrated alternate) | `site/illustrations/band-old-capitol.webp` (+ `-sm`) | Funk | 4:1 | a wide panorama of a historic domed capitol building with striped awnings between tall palms, a broad sky with a sunburst and confetti, a few small people on the lawn |
+| 27 | photo band (illustrated alternate) | `site/illustrations/band-coast.webp` (+ `-sm`) | Funk | 4:1 | a wide panorama of a Florida coastline: a wooden fishing pier, pelicans, gentle waves, palms and a low sun with chunky rays, two people walking on the sand |
+| 28 | stickers | `site/illustrations/sticker-boombox.webp` (+ `-sm`) | Funk | 1:1 | a chunky 90s boombox with two round speakers |
+| 29 | stickers | `site/illustrations/sticker-sun.webp` (+ `-sm`) | Funk | 1:1 | a smiling 70s sun with wavy rays |
+| 30 | stickers | `site/illustrations/sticker-palm.webp` (+ `-sm`) | Funk | 1:1 | a single leaning palm tree on a small mound of sand |
+| 31 | stickers | `site/illustrations/sticker-pelican.webp` (+ `-sm`) | Funk | 1:1 | a brown pelican standing on a wooden post |
+| 32 | stickers | `site/illustrations/sticker-orange.webp` (+ `-sm`) | Funk | 1:1 | a Florida orange with two leaves and a cut half beside it |
+| 33 | stickers | `site/illustrations/sticker-raised-hand.webp` (+ `-sm`) | Funk | 1:1 | a raised open hand with a patterned sleeve cuff |
+| 34 | stickers | `site/illustrations/sticker-magnifier.webp` (+ `-sm`) | Funk | 1:1 | a big magnifying glass over a curled paper receipt with blank lines |
+| 35 | stickers | `site/illustrations/sticker-flamingo.webp` (+ `-sm`) | Funk | 1:1 | a flamingo standing on one leg, coloured burnt orange and clay (not pink) |
+| 36 | stickers | `site/illustrations/sticker-daisy.webp` (+ `-sm`) | Funk | 1:1 | a 70s daisy flower with chunky rounded petals |
+| 37 | stickers | `site/illustrations/sticker-sneaker.webp` (+ `-sm`) | Funk | 1:1 | a chunky 90s high-top sneaker with zigzag details, no brand marks |
+| 38 | stickers | `site/illustrations/sticker-envelope.webp` (+ `-sm`) | Funk | 1:1 | a plain blank envelope with a big checkmark stamp shape and small motion lines |
+| 39 | people | `site/illustrations/person-phone-reader.webp` (+ `-sm`) | Funk | 3:4 | full-body young woman with long box braids and a cropped jacket scrolling on her phone while walking |
+| 40 | people | `site/illustrations/person-elder-reader.webp` (+ `-sm`) | Funk | 3:4 | full-body older man with grey hair, reading glasses and a cardigan, reading a plain booklet |
+| 41 | people | `site/illustrations/person-student.webp` (+ `-sm`) | Funk | 3:4 | full-body college student with a backpack and headphones around the neck, waving |
+| 42 | people | `site/illustrations/person-skater.webp` (+ `-sm`) | Funk | 3:4 | full-body teenager in baggy 90s clothes riding a skateboard, arms out for balance |
+| 43 | people | `site/illustrations/person-wheelchair.webp` (+ `-sm`) | Funk | 3:4 | full-body person using a wheelchair, a tote bag on their lap, smiling and pointing forward |
+| 44 | background textures | `site/textures/tex-paper-grain.webp` | Code (tokens) | tile | cream paper grain tile |
+| 45 | background textures | `site/textures/tex-riso-speckle.webp` | Code (tokens) | tile | transparent ink speckle overlay tile |
+| 46 | background textures | `site/textures/tex-halftone.svg` | Code (tokens) | tile | halftone dot tile |
+| 47 | background textures | `site/textures/tex-checker.svg` | Code (tokens) | tile | olive and burnt-orange checker tile |
+| 48 | masthead strip | `site/textures/tex-masthead-ink.webp` | Code (tokens) | tile | ink strip grain tile |
+| 49 | section dividers | `site/textures/divider-zigzag.svg` | Code (tokens) | tile | zigzag rule |
+| 50 | section dividers | `site/textures/divider-wave.svg` | Code (tokens) | tile | wavy rule |
+| 51 | section dividers | `site/textures/divider-checker.svg` | Code (tokens) | tile | checker strip |
+| 52 | hero backdrop | `site/textures/bg-sunburst.svg` | Code (tokens) | tile | 70s sunburst rays |
+
+**Open decision (from the layout pass):** a serif for display sizes only (Newsreader or Source Serif 4,
+replacing Figtree at `display`/`h1`). The art works with either; it is a type decision for `design.md`.
 
 ---
 
@@ -152,6 +230,9 @@ asset borrows their treatment.
 **Phase 1 — Product surface.** Hero + section illustrations, UI icon set, empty/error states,
 embeddable race card + verdict badge + "how we verify" explainer, splash, PWA icons, email
 reminder hero + dark-mode logo.
+
+**Phase 1b — Site illustration library (2026-10-11).** The 52 images and textures in §1b, then wiring them
+into the homepage sections. Motion (animated stickers, parallax, video loops) is a later phase.
 
 **Phase 2 — Reach & polish.** FL map textures, methodology diagram, store screenshots + Play
 feature graphic, shareable stat cards, interactive ZIP→ballot demo, inline email icon chips.

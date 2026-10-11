@@ -1,0 +1,403 @@
+{
+ "_note": "Site illustration library (2026-10-11). Generated rows go through generate.py; kind 'code' rows are drawn by textures.py. See docs/brand-assets-roadmap.md \u00a71b.",
+ "assets": [
+  {
+   "slug": "hero-porch-neighbors",
+   "style": "v2",
+   "kind": "scene",
+   "ar": "3:2",
+   "section": "hero",
+   "subject": "three neighbors of different ages sitting together on the front steps of a small Florida bungalow, each reading their own copy of the same plain printed booklet; one with a big afro and a collared shirt, one older woman with grey curls and a cardigan, one young man with braids and checkered trousers; potted plants, a palm, a porch light, small zigzag bolts and confetti in the sky; all three get equal size and attention"
+  },
+  {
+   "slug": "hero-main-street",
+   "style": "v2",
+   "kind": "scene",
+   "ar": "3:2",
+   "section": "hero",
+   "subject": "a lively main-street scene: a small storefront with a rounded awning, a shopkeeper with big curly hair in the doorway, a stylish customer with an afro walking past carrying a tote bag and a boombox, a rounded tree, a lamppost, small zigzag bolts and geometric confetti in the sky; blank signs; the shopkeeper is Latina, the customer is Black"
+  },
+  {
+   "slug": "hero-community-park",
+   "style": "v2",
+   "kind": "scene",
+   "ar": "3:2",
+   "section": "hero",
+   "subject": "a sunny community park: one person with long curls sitting on a bench with a small dog, another person with a big afro dancing nearby with one arm raised, a rounded tree, a lamppost, bushes, small zigzag bolts and geometric confetti in the air; both people equal visual weight; the bench sitter is an older white woman, the dancer is a young Black man"
+  },
+  {
+   "slug": "hero-mobile-reader",
+   "style": "v2",
+   "kind": "scene",
+   "ar": "4:5",
+   "section": "hero (phone)",
+   "subject": "one confident person with a big afro and a checkered jacket walking forward while reading a folded plain paper booklet, a huge 70s sunburst of rays behind them, a palm on one side, zigzag bolts around; the person is a Latino man"
+  },
+  {
+   "slug": "hero-porch-neighbors-calm",
+   "style": "v1",
+   "kind": "scene",
+   "ar": "3:2",
+   "section": "hero (calm alternate)",
+   "subject": "three neighbors of different ages sitting together on the front steps of a small house, each reading their own copy of the same plain booklet, potted plants and a rounded tree; all three equal size; one Black woman, one older white man, one young Asian woman"
+  },
+  {
+   "slug": "date-registration",
+   "style": "v2",
+   "kind": "spot",
+   "ar": "1:1",
+   "section": "key dates",
+   "subject": "a hand holding a pencil next to a clipboard with a single big checkmark and blank lines"
+  },
+  {
+   "slug": "date-today",
+   "style": "v2",
+   "kind": "spot",
+   "ar": "1:1",
+   "section": "key dates",
+   "subject": "a 70s rising sun with chunky rays over a simple wavy horizon"
+  },
+  {
+   "slug": "date-mail-ballot",
+   "style": "v2",
+   "kind": "spot",
+   "ar": "1:1",
+   "section": "key dates",
+   "subject": "a hand dropping a plain blank envelope into a rounded curbside mailbox on a post"
+  },
+  {
+   "slug": "date-early-voting",
+   "style": "v2",
+   "kind": "spot",
+   "ar": "1:1",
+   "section": "key dates",
+   "subject": "three people of different ages standing in a short relaxed line outside a small library doorway with a rounded awning, morning light; a Latina grandmother, a white dad with a toddler on his shoulders, a young Black man"
+  },
+  {
+   "slug": "date-election-day",
+   "style": "v2",
+   "kind": "spot",
+   "ar": "1:1",
+   "section": "key dates",
+   "subject": "a plain blank folded paper ballot sliding into the slot of a simple wooden box"
+  },
+  {
+   "slug": "glance-statewide",
+   "style": "v2",
+   "kind": "spot",
+   "ar": "1:1",
+   "section": "at a glance",
+   "subject": "a small historic domed capitol building with cream-and-burnt-orange striped window awnings, two palms beside it"
+  },
+  {
+   "slug": "glance-amendments",
+   "style": "v2",
+   "kind": "spot",
+   "ar": "1:1",
+   "section": "at a glance",
+   "subject": "a short stack of three plain paper documents with blank lines and a big round magnifying glass resting on top"
+  },
+  {
+   "slug": "glance-house",
+   "style": "v2",
+   "kind": "spot",
+   "ar": "1:1",
+   "section": "at a glance",
+   "subject": "a small rounded house with a big map location pin floating above its roof"
+  },
+  {
+   "slug": "neighbors-grid",
+   "style": "v2",
+   "kind": "scene",
+   "ar": "3:2",
+   "section": "statewide races",
+   "subject": "a grid of six equal square framed portrait panels, each a different stylized person with no facial features (blank face), different hairstyles (afro, curls, braids, bun, short grey, long waves) and 70s collared clothing; every panel identical size and framing; a mix of Black, Latino, white and Asian people"
+  },
+  {
+   "slug": "zip-phone",
+   "style": "v2",
+   "kind": "spot",
+   "ar": "4:5",
+   "section": "ZIP card",
+   "subject": "one cheerful stylish person with big curly hair standing beside a giant smartphone taller than them, one hand raised, the phone screen showing only blank rounded rectangles, a small rounded tree; the person is a young Asian woman"
+  },
+  {
+   "slug": "map-explorer",
+   "style": "v2",
+   "kind": "spot",
+   "ar": "1:1",
+   "section": "coverage map card",
+   "subject": "a person in a bucket hat and wide trousers unfolding a large blank paper road map, a palm behind them; the person is an older Black man"
+  },
+  {
+   "slug": "way-mail",
+   "style": "v2",
+   "kind": "spot",
+   "ar": "4:3",
+   "section": "three ways to vote",
+   "subject": "a person at a kitchen table filling in a blank paper form with a pen, a plain envelope and a coffee mug beside them, a window with a palm outside; the person is a middle-aged white woman"
+  },
+  {
+   "slug": "way-early",
+   "style": "v2",
+   "kind": "spot",
+   "ar": "4:3",
+   "section": "three ways to vote",
+   "subject": "a person with a tote bag walking toward a small public library building in the morning sun, a bicycle parked out front; the person is a Latino man"
+  },
+  {
+   "slug": "way-election-day",
+   "style": "v2",
+   "kind": "spot",
+   "ar": "4:3",
+   "section": "three ways to vote",
+   "subject": "a smiling person stepping out of a community center doorway giving a thumbs up, a small blank round sticker on their shirt; the person is an older Black woman"
+  },
+  {
+   "slug": "way-mail-calm",
+   "style": "v1",
+   "kind": "spot",
+   "ar": "4:3",
+   "section": "three ways to vote (calm)",
+   "subject": "a person at a kitchen table filling in a blank paper form with a pen, a plain envelope and a mug beside them; the person is a middle-aged white woman"
+  },
+  {
+   "slug": "way-early-calm",
+   "style": "v1",
+   "kind": "spot",
+   "ar": "4:3",
+   "section": "three ways to vote (calm)",
+   "subject": "a person with a tote bag walking toward a small public library building, a bicycle out front; the person is a Latino man"
+  },
+  {
+   "slug": "way-election-day-calm",
+   "style": "v1",
+   "kind": "spot",
+   "ar": "4:3",
+   "section": "three ways to vote (calm)",
+   "subject": "a person stepping out of a community center doorway giving a thumbs up, a small blank round sticker on their shirt; the person is an older Black woman"
+  },
+  {
+   "slug": "news-empty",
+   "style": "v1",
+   "kind": "spot",
+   "ar": "1:1",
+   "section": "news column empty state",
+   "subject": "a relaxed person sitting on a park bench reading a blank folded newspaper, a small bird beside them; the person is a young white man"
+  },
+  {
+   "slug": "error-404-funk",
+   "style": "v2",
+   "kind": "spot",
+   "ar": "1:1",
+   "section": "404 page",
+   "subject": "a puzzled person holding a blank paper map upside down, a small dog looking up at them, a signpost with blank arrow signs; the person is a young Latina woman"
+  },
+  {
+   "slug": "footer-town-strip",
+   "style": "v2",
+   "kind": "band",
+   "ar": "4:1",
+   "section": "footer",
+   "subject": "a long panoramic strip of a small Florida town: palms, low storefronts with rounded awnings, a lamppost, a water tower, a pelican on a dock post, a few small people walking and cycling; blank signs; the small people are a mix of ethnicities"
+  },
+  {
+   "slug": "band-old-capitol",
+   "style": "v2",
+   "kind": "band",
+   "ar": "4:1",
+   "section": "photo band (illustrated alternate)",
+   "subject": "a wide panorama of a historic domed capitol building with striped awnings between tall palms, a broad sky with a sunburst and confetti, a few small people on the lawn; the small people are a mix of ethnicities"
+  },
+  {
+   "slug": "band-coast",
+   "style": "v2",
+   "kind": "band",
+   "ar": "4:1",
+   "section": "photo band (illustrated alternate)",
+   "subject": "a wide panorama of a Florida coastline: a wooden fishing pier, pelicans, gentle waves, palms and a low sun with chunky rays, two people walking on the sand; the two people are an Asian couple"
+  },
+  {
+   "slug": "sticker-boombox",
+   "style": "v2",
+   "kind": "sticker",
+   "ar": "1:1",
+   "section": "stickers",
+   "subject": "a chunky 90s boombox with two round speakers"
+  },
+  {
+   "slug": "sticker-sun",
+   "style": "v2",
+   "kind": "sticker",
+   "ar": "1:1",
+   "section": "stickers",
+   "subject": "a smiling 70s sun with wavy rays"
+  },
+  {
+   "slug": "sticker-palm",
+   "style": "v2",
+   "kind": "sticker",
+   "ar": "1:1",
+   "section": "stickers",
+   "subject": "a single leaning palm tree on a small mound of sand"
+  },
+  {
+   "slug": "sticker-pelican",
+   "style": "v2",
+   "kind": "sticker",
+   "ar": "1:1",
+   "section": "stickers",
+   "subject": "a brown pelican standing on a wooden post"
+  },
+  {
+   "slug": "sticker-orange",
+   "style": "v2",
+   "kind": "sticker",
+   "ar": "1:1",
+   "section": "stickers",
+   "subject": "a Florida orange with two leaves and a cut half beside it"
+  },
+  {
+   "slug": "sticker-raised-hand",
+   "style": "v2",
+   "kind": "sticker",
+   "ar": "1:1",
+   "section": "stickers",
+   "subject": "a raised open hand with a patterned sleeve cuff"
+  },
+  {
+   "slug": "sticker-magnifier",
+   "style": "v2",
+   "kind": "sticker",
+   "ar": "1:1",
+   "section": "stickers",
+   "subject": "a big magnifying glass over a curled paper receipt with blank lines"
+  },
+  {
+   "slug": "sticker-flamingo",
+   "style": "v2",
+   "kind": "sticker",
+   "ar": "1:1",
+   "section": "stickers",
+   "subject": "a flamingo standing on one leg, coloured burnt orange and clay (not pink)"
+  },
+  {
+   "slug": "sticker-daisy",
+   "style": "v2",
+   "kind": "sticker",
+   "ar": "1:1",
+   "section": "stickers",
+   "subject": "a 70s daisy flower with chunky rounded petals"
+  },
+  {
+   "slug": "sticker-sneaker",
+   "style": "v2",
+   "kind": "sticker",
+   "ar": "1:1",
+   "section": "stickers",
+   "subject": "a chunky 90s high-top sneaker with zigzag details, no brand marks"
+  },
+  {
+   "slug": "sticker-envelope",
+   "style": "v2",
+   "kind": "sticker",
+   "ar": "1:1",
+   "section": "stickers",
+   "subject": "a plain blank envelope with a big checkmark stamp shape and small motion lines"
+  },
+  {
+   "slug": "person-phone-reader",
+   "style": "v2",
+   "kind": "person",
+   "ar": "3:4",
+   "section": "people",
+   "subject": "full-body young woman with long box braids and a cropped jacket scrolling on her phone while walking; she is a young Black woman"
+  },
+  {
+   "slug": "person-elder-reader",
+   "style": "v2",
+   "kind": "person",
+   "ar": "3:4",
+   "section": "people",
+   "subject": "full-body older man with grey hair, reading glasses and a cardigan, reading a plain booklet; he is an older white man"
+  },
+  {
+   "slug": "person-student",
+   "style": "v2",
+   "kind": "person",
+   "ar": "3:4",
+   "section": "people",
+   "subject": "full-body college student with a backpack and headphones around the neck, waving; the student is a Latina woman"
+  },
+  {
+   "slug": "person-skater",
+   "style": "v2",
+   "kind": "person",
+   "ar": "3:4",
+   "section": "people",
+   "subject": "full-body teenager in baggy 90s clothes riding a skateboard, arms out for balance; the teenager is an Asian boy"
+  },
+  {
+   "slug": "person-wheelchair",
+   "style": "v2",
+   "kind": "person",
+   "ar": "3:4",
+   "section": "people",
+   "subject": "full-body person using a wheelchair, a tote bag on their lap, smiling and pointing forward; the person is a middle-aged white man"
+  },
+  {
+   "slug": "tex-paper-grain",
+   "kind": "code",
+   "section": "background textures",
+   "subject": "cream paper grain tile"
+  },
+  {
+   "slug": "tex-riso-speckle",
+   "kind": "code",
+   "section": "background textures",
+   "subject": "transparent ink speckle overlay tile"
+  },
+  {
+   "slug": "tex-halftone",
+   "kind": "code",
+   "section": "background textures",
+   "subject": "halftone dot tile"
+  },
+  {
+   "slug": "tex-checker",
+   "kind": "code",
+   "section": "background textures",
+   "subject": "olive and burnt-orange checker tile"
+  },
+  {
+   "slug": "tex-masthead-ink",
+   "kind": "code",
+   "section": "masthead strip",
+   "subject": "ink strip grain tile"
+  },
+  {
+   "slug": "divider-zigzag",
+   "kind": "code",
+   "section": "section dividers",
+   "subject": "zigzag rule"
+  },
+  {
+   "slug": "divider-wave",
+   "kind": "code",
+   "section": "section dividers",
+   "subject": "wavy rule"
+  },
+  {
+   "slug": "divider-checker",
+   "kind": "code",
+   "section": "section dividers",
+   "subject": "checker strip"
+  },
+  {
+   "slug": "bg-sunburst",
+   "kind": "code",
+   "section": "hero backdrop",
+   "subject": "70s sunburst rays"
+  }
+ ]
+}
