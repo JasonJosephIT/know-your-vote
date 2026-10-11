@@ -70,6 +70,15 @@ export interface NewsStoryCardProps {
       NewsFeed passes h2; h3 there skipped a level (axe heading-order). The
       look is the same either way: the class stays text-h3. */
   headingLevel?: "h2" | "h3";
+  /** "row" is the home page's news column (layout pass 2026-10-11): a list
+      row with a ruled edge instead of a bordered card, and the publisher's
+      photo as a small 4:3 thumbnail on the right instead of a 2:1 banner.
+      Same three things, same rules; only the shape changes. */
+  variant?: "card" | "row";
+  /** Where the story belongs ("Statewide", "Miami-Dade"), printed first on
+      the meta line. The home column mixes regions; elsewhere the page has
+      already said where its stories are from, so callers leave it out. */
+  regionLabel?: string | null;
 }
 
 export function NewsStoryCard({
@@ -84,7 +93,10 @@ export function NewsStoryCard({
   kindFallback = null,
   issues = [],
   headingLevel = "h3",
+  variant = "card",
+  regionLabel = null,
 }: NewsStoryCardProps) {
+  const row = variant === "row";
   const Heading = headingLevel;
   const href = safeHttpUrl(url);
   /* Images are validated https at parse time (news-sweep.ts `feedImage`), but
@@ -105,12 +117,22 @@ export function NewsStoryCard({
 
   return (
     <article
-      className={[
-        "flex flex-col overflow-hidden rounded-lg border bg-surface text-on-surface",
-        /* Opinion gets a distinct container, never a colour — a colour would
-           imply a verdict about the piece (README neutrality rule). */
-        isOpinion ? "border-border-strong bg-surface-muted" : "border-border",
-      ].join(" ")}
+      className={
+        row
+          ? [
+              "flex flex-row-reverse items-start gap-3 border-b border-border py-3 text-on-surface",
+              /* The same distinct container as the card form, inset. */
+              isOpinion ? "rounded-md bg-surface-muted px-3" : "",
+            ].join(" ")
+          : [
+              "flex flex-col overflow-hidden rounded-lg border bg-surface text-on-surface",
+              /* Opinion gets a distinct container, never a colour — a colour would
+                 imply a verdict about the piece (README neutrality rule). */
+              isOpinion
+                ? "border-border-strong bg-surface-muted"
+                : "border-border",
+            ].join(" ")
+      }
     >
       {image ? (
         /* 2:1, cropped. `object-cover` means we show the middle of whatever the
@@ -141,15 +163,30 @@ export function NewsStoryCard({
           loading="lazy"
           decoding="async"
           referrerPolicy="no-referrer"
-          className="aspect-[2/1] w-full object-cover"
+          className={
+            row
+              ? "aspect-[4/3] w-[88px] shrink-0 rounded-sm object-cover"
+              : "aspect-[2/1] w-full object-cover"
+          }
         />
       ) : null}
 
-      <div className="flex flex-col gap-1 p-4">
+      <div
+        className={
+          row ? "flex min-w-0 flex-1 flex-col gap-1" : "flex flex-col gap-1 p-4"
+        }
+      >
         {/* Separators come from one CSS rule for every item after the first
             (as in MeasureResourceRow), not hand-placed dots: the flag used
             to run straight into the publisher. */}
-        <p className="flex flex-wrap items-center gap-x-2 font-mono text-mono text-on-surface-muted [&>*+*]:before:me-2 [&>*+*]:before:inline-block [&>*+*]:before:content-['·']">
+        {/* Its own line, above the outlet and date: beside them, in a
+            340px column with a thumbnail, the three wrapped one per line. */}
+        {regionLabel && (
+          <p className="text-overline uppercase text-primary">{regionLabel}</p>
+        )}
+        <p
+          className={`flex flex-wrap items-center gap-x-2 font-mono text-on-surface-muted ${row ? "text-caption" : "text-mono"} [&>*+*]:before:me-2 [&>*+*]:before:inline-block [&>*+*]:before:content-['·']`}
+        >
           {shownFlag && (
             <span className={isOpinion ? "text-on-surface" : undefined}>
               {shownFlag}
@@ -167,7 +204,7 @@ export function NewsStoryCard({
           {dateLabel && <span>{dateLabel}</span>}
         </p>
 
-        <Heading className="text-h3">
+        <Heading className={row ? "text-label leading-snug" : "text-h3"}>
           {href ? (
             <a
               href={href}

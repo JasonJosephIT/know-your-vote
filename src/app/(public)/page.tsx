@@ -12,6 +12,8 @@ import { TrackView } from "@/components/features/TrackView";
 import { LocationEntry } from "@/components/features/LocationEntry";
 import { CoverageSummary } from "@/components/features/CoverageSummary";
 import { HomeNews } from "@/components/features/HomeNews";
+import { HomeMasthead } from "@/components/features/HomeMasthead";
+import { BallotAtAGlance } from "@/components/features/BallotAtAGlance";
 import { getActiveMeasures } from "@/lib/measures";
 import { getStatewideRaces } from "@/lib/races";
 import { districtRace, getCoveredDistricts } from "@/lib/resolve";
@@ -103,9 +105,19 @@ export default async function Home() {
      top of the page. */
   const promoteReminders = reminderPromotionLive();
 
+  /* Layout pass 2026-10-11 (docs/design/layout-2026-10-11/): a dateline
+     strip, then two columns from lg up: the ballot on the left, the news
+     column on the right, sticky, beside it. Below lg it is the one column
+     it always was, with the news where it used to sit, after the
+     coverage summary. The grid areas do the reordering, so the DOM order
+     is the phone order and a screen reader reads the ballot first at
+     every width. */
   return (
-    <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-6 px-5 py-8">
-      {/* Kept in step with SITE_TITLE in src/app/layout.tsx (founder decision
+    <>
+      <HomeMasthead />
+      <main className="mx-auto grid w-full max-w-[680px] flex-1 grid-cols-1 content-start gap-6 px-5 py-8 lg:max-w-[1120px] lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:gap-x-12">
+        <div className="flex min-w-0 flex-col gap-6 lg:col-start-1 lg:row-start-1">
+          {/* Kept in step with SITE_TITLE in src/app/layout.tsx (founder decision
           1, recommended): the old h1, "Everything on every Florida ballot.",
           and the old promise of records and verified facts overclaimed what
           ships. Flip both together.
@@ -114,61 +126,66 @@ export default async function Home() {
           the share description in layout.tsx: it reads as the whole ballot,
           and Florida House and Senate seats, judges and city races are on
           real ballots and not here. */}
-      <h1 className="text-display">Florida candidates, in their own words.</h1>
-      <p className="text-body-lg text-on-surface-muted">
-        See the races we cover and what each candidate says, quoted word for
-        word from their own campaign sites, with a link to every source. The
-        same questions and the same rules for every candidate. No ZIP, no
-        account, no agenda.
-      </p>
-      <DeadlineBanner
-        remindersHref={promoteReminders ? `#${REMINDER_SIGNUP_ID}` : undefined}
-        countyFips={saved?.countyFips}
-      />
+          <h1 className="text-display">
+            Florida candidates, in their own words.
+          </h1>
+          <p className="text-body-lg text-on-surface-muted">
+            See the races we cover and what each candidate says, quoted word for
+            word from their own campaign sites, with a link to every source. The
+            same questions and the same rules for every candidate. No ZIP, no
+            account, no agenda.
+          </p>
+          <DeadlineBanner
+            remindersHref={
+              promoteReminders ? `#${REMINDER_SIGNUP_ID}` : undefined
+            }
+            countyFips={saved?.countyFips}
+          />
+          <BallotAtAGlance />
 
-      {ballotRendered && <TrackView event="ballot_viewed" />}
-      <SharedBallot />
+          {ballotRendered && <TrackView event="ballot_viewed" />}
+          <SharedBallot />
 
-      <section className="flex flex-col gap-3 border-t border-border pt-6">
-        {saved ? (
-          <>
-            <div className="flex flex-col gap-1">
-              <h2 className="text-h2">
-                {savedSeat
-                  ? "No U.S. House race on your ballot"
-                  : "Your U.S. House race"}
-              </h2>
-              {/* The House race is the race here that depends on where you
+          <section className="flex flex-col gap-3 border-t border-border pt-6">
+            {saved ? (
+              <>
+                <div className="flex flex-col gap-1">
+                  <h2 className="text-h2">
+                    {savedSeat
+                      ? "No U.S. House race on your ballot"
+                      : "Your U.S. House race"}
+                  </h2>
+                  {/* The House race is the race here that depends on where you
                   live, not "the one part of your ballot" that does: Florida
                   House and Senate seats, city races and more depend on it
                   too, and this guide doesn't cover them. A decided seat
                   (savedSeat) is said plainly as no race at all, never shown
                   as the voter's race. */}
-              <p className="text-body-sm text-on-surface-muted">
-                You&rsquo;re set to {saved.district}.{" "}
-                {savedSeat
-                  ? houseRaceNotOnBallot(saved.district, savedSeat)
-                  : "Your House race depends on where you live, so it's linked below rather than listed above."}{" "}
-                The statewide races and amendments above are the same for every
-                Florida voter. {NOT_COVERED_SENTENCE}
-              </p>
-              <p className="text-body-sm text-on-surface-muted">
-                We remember the district, never your address or ZIP; the chip
-                at the top of the page changes it or forgets it.
-              </p>
-            </div>
-            <Link
-              href={`/candidates?view=races&district=${saved.district}&county=${saved.countyFips}`}
-              className="w-fit text-body-sm text-primary underline underline-offset-2 hover:text-primary-hover"
-            >
-              See your races for {saved.district}
-            </Link>
-          </>
-        ) : (
-          <>
-            <div className="flex flex-col gap-1">
-              <h2 className="text-h2">Add your U.S. House race</h2>
-              {/* The storage claim, rewritten for the district cookie. TASK-070
+                  <p className="text-body-sm text-on-surface-muted">
+                    You&rsquo;re set to {saved.district}.{" "}
+                    {savedSeat
+                      ? houseRaceNotOnBallot(saved.district, savedSeat)
+                      : "Your House race depends on where you live, so it's linked below rather than listed above."}{" "}
+                    The statewide races and amendments above are the same for
+                    every Florida voter. {NOT_COVERED_SENTENCE}
+                  </p>
+                  <p className="text-body-sm text-on-surface-muted">
+                    We remember the district, never your address or ZIP; the
+                    chip at the top of the page changes it or forgets it.
+                  </p>
+                </div>
+                <Link
+                  href={`/candidates?view=races&district=${saved.district}&county=${saved.countyFips}`}
+                  className="w-fit text-body-sm text-primary underline underline-offset-2 hover:text-primary-hover"
+                >
+                  See your races for {saved.district}
+                </Link>
+              </>
+            ) : (
+              <>
+                <div className="flex flex-col gap-1">
+                  <h2 className="text-h2">Add your U.S. House race</h2>
+                  {/* The storage claim, rewritten for the district cookie. TASK-070
                   removed kyv.location and this line said nothing was saved on
                   the device; that stopped being true when the district became
                   something we remember. What is still true, and is the sharper
@@ -176,54 +193,65 @@ export default async function Home() {
 
                   It asks for a ZIP unless address completion is configured
                   (field.noun): the field takes nothing else in production. */}
-              <p className="text-body-sm text-on-surface-muted">
-                Your U.S. House race isn&rsquo;t in the list above, because it
-                depends on where you live. Give us your {field.noun} and
-                we&rsquo;ll add it — or skip it and read the rest. We use it to
-                find your district and keep only the district itself, never
-                your {field.noun}.
-              </p>
-            </div>
-            <LocationEntry
-              submitLabel="Add my House race"
-              addressEnabled={addressEnabled}
-              districts={districts}
-            />
-          </>
-        )}
-      </section>
+                  <p className="text-body-sm text-on-surface-muted">
+                    Your U.S. House race isn&rsquo;t in the list above, because
+                    it depends on where you live. Give us your {field.noun} and
+                    we&rsquo;ll add it — or skip it and read the rest. We use it
+                    to find your district and keep only the district itself,
+                    never your {field.noun}.
+                  </p>
+                </div>
+                <LocationEntry
+                  submitLabel="Add my House race"
+                  addressEnabled={addressEnabled}
+                  districts={districts}
+                />
+              </>
+            )}
+          </section>
 
-      {/* Drafts from the inspiration pass (2026-10-05), recommended pending
+          {/* Drafts from the inspiration pass (2026-10-05), recommended pending
           founder confirmation: what the guide covers in one place, then the
           newest statewide news. After the House-race step, so the ballot
           still comes first (TASK-067). Remove either line to flip it. */}
-      <CoverageSummary
-        hasDistrict={Boolean(saved)}
-        addressEnabled={addressEnabled}
-      />
-      <HomeNews />
+          <CoverageSummary
+            hasDistrict={Boolean(saved)}
+            addressEnabled={addressEnabled}
+          />
+        </div>
 
-      {promoteReminders && <ReminderSignupCta countyFips={saved?.countyFips} />}
-
-      <InstallCard />
-
-      <p className="text-caption text-on-surface-muted">
-        We quote what each candidate says, in their own words. You
-        decide.{" "}
-        <Link
-          href="/methodology"
-          className="underline underline-offset-2 hover:text-on-surface"
+        <aside
+          aria-label="Florida election news"
+          className="min-w-0 lg:sticky lg:top-[88px] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:max-h-[calc(100dvh-104px)] lg:overflow-y-auto lg:border-l lg:border-border-strong lg:pl-6"
         >
-          How we stay fair
-        </Link>{" "}
-        ·{" "}
-        <Link
-          href="/privacy"
-          className="underline underline-offset-2 hover:text-on-surface"
-        >
-          Privacy
-        </Link>
-      </p>
-    </main>
+          <HomeNews countyFips={saved?.countyFips} />
+        </aside>
+
+        <div className="flex min-w-0 flex-col gap-6 lg:col-start-1 lg:row-start-2">
+          {promoteReminders && (
+            <ReminderSignupCta countyFips={saved?.countyFips} />
+          )}
+
+          <InstallCard />
+
+          <p className="text-caption text-on-surface-muted">
+            We quote what each candidate says, in their own words. You decide.{" "}
+            <Link
+              href="/methodology"
+              className="underline underline-offset-2 hover:text-on-surface"
+            >
+              How we stay fair
+            </Link>{" "}
+            ·{" "}
+            <Link
+              href="/privacy"
+              className="underline underline-offset-2 hover:text-on-surface"
+            >
+              Privacy
+            </Link>
+          </p>
+        </div>
+      </main>
+    </>
   );
 }

@@ -38,7 +38,7 @@ export async function BallotQuestions({
   if (measures.length === 0) return null;
 
   return (
-    <section className="flex flex-col gap-3">
+    <section id="ballot-questions" className="flex flex-col gap-3">
       <div className="flex flex-col gap-1">
         <h2 className="text-h2">Ballot questions</h2>
         <p className="text-body-sm text-on-surface-muted">

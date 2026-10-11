@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>News Column Sample</title>
+<!--
+  Sample layout for the homepage news column (2026-10-11).
+  Audience: the output engine / brand-assets session. This is the page those
+  assets have to sit inside. Headlines are real rows from news_item (no
+  candidate- or race-scoped rows, as on the live home page). Striped boxes
+  are where publisher photos load; we never make or host those images.
+  Colours are the design.md tokens. Fonts here are fallbacks: production
+  uses Figtree headings / Inter body (a serif display is under discussion).
+-->
+<style>
+:root{--bg:#f6f3ec;--surface:#fff;--muted:#efeae0;--ink:#22271f;--ink2:#585e52;--border:#e4ded2;--border2:#cfc7b6;--primary:#2f6b4f;--phover:#255a41;--pmuted:#e4efe7;--accent:#b26836;--amuted:#f5e7d6;--cream:#f5ebd8}
+*{box-sizing:border-box}body{margin:0;background:#d9d4c8;color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.doc{max-width:1500px;margin:0 auto;padding:28px 16px 60px}
+.doc>h1{font:700 1.8rem/1.1 Georgia,serif;margin:0 0 4px}.doc>p{margin:0 0 18px;color:#3d4238;max-width:900px}
+.stage{display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap}
+.cap{font:600 12px system-ui;letter-spacing:.06em;text-transform:uppercase;color:#3d4238;margin:0 0 6px}
+/* ---------- desktop page ---------- */
+.desk{width:1180px;max-width:100%;background:var(--bg);border-radius:6px;overflow:hidden;box-shadow:0 8px 30px rgba(34,39,31,.15)}
+.nav{display:flex;justify-content:space-between;align-items:center;height:56px;padding:0 28px;background:var(--surface);border-bottom:1px solid var(--border)}
+.logo{font-weight:800;color:var(--primary);letter-spacing:-.01em}.navl{display:flex;gap:22px;font-size:13px;color:var(--ink2)}.navl b{color:var(--ink)}
+.pill{background:var(--primary);color:#fff;border-radius:99px;padding:5px 12px;font-size:12px;font-weight:600}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:48px;padding:36px 28px 48px;align-items:start}
+.lede h2{font:700 38px/1.08 Georgia,serif;letter-spacing:-.02em;margin:0 0 10px}
+.lede p{margin:0 0 18px;color:var(--ink2);font-size:16px;max-width:560px}
+.deadline{background:var(--pmuted);border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:24px}.deadline b{color:var(--ink)}
+.sec{font:600 20px/1.2 system-ui;margin:0 0 4px}.secsub{font-size:12.5px;color:var(--ink2);margin:0 0 10px}
+.race{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px}
+.race b{color:var(--primary);font-size:15px}.race small{display:block;color:var(--ink2);font-size:12px}.race span{font-size:12px;color:var(--ink2)}
+.ghost{height:120px;border:1px dashed var(--border2);border-radius:8px;display:grid;place-items:center;color:var(--ink2);font-size:12px;margin-top:14px}
+/* ---------- the news rail ---------- */
+.rail{position:sticky;top:20px;border-left:1px solid var(--border2);padding-left:24px}
+.rail h3{font:700 19px/1.2 Georgia,serif;margin:0;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+.rail .sub{font-size:11.5px;color:var(--ink2);margin:6px 0 10px}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+.tabs button{font:600 11.5px system-ui;border:1px solid var(--border2);background:var(--surface);color:var(--ink);padding:5px 9px;border-radius:99px;cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.item{display:grid;grid-template-columns:minmax(0,1fr) 88px;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.item.noimg{grid-template-columns:1fr}
+.meta{font:500 10.5px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink2);margin-bottom:3px}
+.meta .where{color:var(--primary);font-weight:700}
+.hd{font-weight:600;font-size:14px;line-height:1.3;color:var(--primary);text-decoration:none}.hd:hover{text-decoration:underline}
+.thumb{width:88px;height:66px;border-radius:4px;background:repeating-linear-gradient(135deg,var(--muted) 0 6px,var(--border) 6px 12px);display:grid;place-items:center;font-size:8.5px;color:var(--ink2);text-align:center;line-height:1.1}
+.more{display:flex;gap:14px;margin-top:12px;font-size:12px}.more a{color:var(--primary)}.more a+a{color:var(--ink2)}
+/* ---------- phone ---------- */
+.phone{width:375px;background:var(--bg);border-radius:28px;border:10px solid #22271f;overflow:hidden;box-shadow:0 8px 30px rgba(34,39,31,.15)}
+.phone .nav{height:48px;padding:0 14px}.ph{padding:18px 16px 24px}
+.ph .lede h2{font-size:28px}.ph .lede p{font-size:14px}
+.ph .rail{position:static;border:0;padding:20px 0 0;margin-top:20px;border-top:1px solid var(--border)}
+.ph .tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.ph .item{grid-template-columns:minmax(0,1fr) 76px}.ph .thumb{width:76px;height:57px}.ph .item.noimg{grid-template-columns:1fr}
+.bottomnav{display:flex;justify-content:space-around;padding:8px 0 12px;background:var(--surface);border-top:1px solid var(--border);font-size:10.5px;color:var(--ink2)}.bottomnav b{color:var(--primary)}
+/* ---------- notes ---------- */
+.notes{margin-top:30px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.note{background:var(--surface);border-radius:8px;padding:14px 16px;border-top:3px solid var(--primary)}.note h4{margin:0 0 6px;font-size:14px}.note ul{margin:0;padding-left:18px;font-size:13px;color:#3d4238}.note.no{border-top-color:var(--accent)}
+code{font-size:12px;background:var(--muted);padding:1px 4px;border-radius:3px}
+</style></head><body><div class="doc">
+<h1>Homepage news column: sample layout</h1>
+<p>The ballot stays on the left. The news column sits on the right on desktop and drops below the ballot on phones. Headlines are real rows from our feed (newest Oct 6). The striped boxes are where publisher photos load. The tabs filter the column; try them.</p>
+
+<div class="stage">
+<div><p class="cap">Desktop · 1180px+</p>
+<div class="desk">
+  <div class="nav"><span class="logo">Know Your Vote</span><span class="navl"><b>Ballot</b><span>Candidates</span><span>News</span></span><span style="display:flex;gap:8px;align-items:center"><span class="pill">Donate</span><span style="font-size:12px;border:1px solid var(--border2);border-radius:99px;padding:4px 10px">Choose your district</span></span></div>
+  <div class="cols">
+    <div>
+      <div class="lede"><h2>Florida candidates,<br>in their own words.</h2><p>Every quote links to its source. The same questions and rules for every candidate.</p></div>
+      <div class="deadline">Request a vote-by-mail ballot by <b>5 p.m. on October 22</b> · Election Day is <b>November 3</b></div>
+      <p class="sec">Statewide races</p><p class="secsub">On every Florida ballot, whatever your ZIP or party.</p>
+      <div class="race"><div><b>United States Senator</b><small>3 candidates</small></div><span>Full brief →</span></div>
+      <div class="race"><div><b>Governor</b><small>8 candidates</small></div><span>Full brief →</span></div>
+      <div class="race"><div><b>Attorney General</b><small>Candidates listed</small></div><span>Full brief →</span></div>
+      <div class="ghost">…rest of the ballot, ballot questions, House-race step (unchanged)</div>
+    </div>
+    <aside class="rail" data-rail></aside>
+  </div>
+</div></div>
+
+<div><p class="cap">Phone · 375px</p>
+<div class="phone">
+  <div class="nav"><span class="logo">Know Your Vote</span><span style="font-size:11px;border:1px solid var(--border2);border-radius:99px;padding:3px 8px">District</span></div>
+  <div class="ph">
+    <div class="lede"><h2>Florida candidates, in their own words.</h2><p>Every quote links to its source.</p></div>
+    <div class="race"><div><b>Governor</b><small>8 candidates</small></div><span>→</span></div>
+    <div class="ghost" style="height:70px">ballot continues…</div>
+    <aside class="rail" data-rail data-max="4"></aside>
+  </div>
+  <div class="bottomnav"><b>Ballot</b><span>Candidates</span><span>News</span></div>
+</div></div>
+</div>
+
+<div class="notes">
+ <div class="note"><h4>Measurements</h4><ul>
+  <li>Ballot column fluid, up to about 760px; news column fixed at 340px; 48px gutter. Below 1024px it goes to one column.</li>
+  <li>Thumbnails are <b>4:3</b>: 88×66 on desktop, 76×57 on phone. Radius 4px, always on the right.</li>
+  <li>Column heading in display type with a 2px ink rule under it, like a newspaper section rule.</li>
+  <li>Region filters are pills: ink fill when selected, white with a border otherwise.</li></ul></div>
+ <div class="note"><h4>What brand assets must fit</h4><ul>
+  <li>A no-image fallback state. About 2 in 3 rows have no photo, so the text-only row is the common case and needs to look intentional.</li>
+  <li>Optional: a small outlet-neutral glyph for official notices (Supervisor of Elections), in sage, not a logo.</li>
+  <li>The section rule and pill style should match the rest of the brand kit.</li></ul></div>
+ <div class="note no"><h4>Never</h4><ul>
+  <li>No red or blue, no party colour, no lean colour anywhere in this column. Lean is disclosed only on each outlet's page.</li>
+  <li>No generated or stock images in the news slots. Only the publisher's own photo, or nothing.</li>
+  <li>No hand-picked "top story". The order is newest first, always.</li></ul></div>
+</div>
+</div>
+<script>
+/* Real rows (news_item, 2026-10-11): candidate- and race-scoped rows excluded. */
+const R=[
+["Florida's Voice","Oct 6","statewide",0,"Palm Beach GOP drops suspended clerk Mike Caruso from voter guide after backlash"],
+["CBS News Miami","Oct 6","miami",1,"Nearly 150,000 ballots cast in Florida with more than 2 million more awaiting action, state officials say"],
+["Diario Las Américas","Oct 6","miami",1,"Demócratas recortan ligeramente ventaja republicana en registro electoral de Florida"],
+["WPLG Local 10","Oct 5","miami",0,"North Miami voters face mayoral election in November"],
+["WSVN 7News","Oct 5","miami",1,"Miami-Dade supervisor of elections says ICE will not be at the polls, amid voter intimidation arrest"],
+["Florida's Voice","Oct 5","statewide",0,"Nationwide election crackdown leads to 2 Florida illegal voting charges"],
+["WLRN","Oct 5","miami",1,"Tax relief or ‘fake relief’? Florida sheriff warns of cuts, new fees"],
+["WFSU Public Media","Oct 5","statewide",1,"Local teachers share concerns with union leaders and Democratic candidate for lieutenant governor"],
+["Creative Loafing Tampa Bay","Oct 5","tampa",0,"DeSantis railed against ‘Defund the police.’ Amendment 3 could do just that"],
+["WFSU Public Media","Oct 1","statewide",1,"The Florida Policy Institute has an Amendment 3 calculator for local governments"],
+["Central Florida Public Media","Oct 1","orlando",1,"Under a new map, Kissimmee and new bedfellows reflect on representation"],
+["Orlando Weekly","Sep 30","orlando",0,"The pro-Amendment 3 campaign is outspending the opposition by a 33-1 ratio"],
+["Official update","Sep 9","tampa",0,"Hillsborough plans 27 early-voting sites for November 3 General Election"],
+["Official update","Jul 6","fort_lauderdale",0,"Broward sets early-voting windows for Primary and General elections"]];
+const L={statewide:"Statewide",miami:"Miami-Dade",fort_lauderdale:"Broward",tampa:"Hillsborough",orlando:"Orange"};
+const T=[["all","All Florida"],["statewide","Statewide"],["miami","Miami-Dade"],["fort_lauderdale","Broward"],["tampa","Hillsborough"],["orlando","Orange"]];
+document.querySelectorAll('[data-rail]').forEach(el=>{
+ const max=+el.dataset.max||8;let cur="all";
+ el.innerHTML=`<h3>Florida election news</h3><p class="sub">Statewide and county stories, newest first.</p><div class="tabs">${T.map(([k,v])=>`<button aria-pressed="${k==='all'}" data-k="${k}">${v}</button>`).join('')}</div><div data-list></div><div class="more"><a href="#">All election news</a><a href="#">Where the news comes from</a></div>`;
+ const list=el.querySelector('[data-list]');
+ const draw=()=>{const rows=R.filter(r=>cur==='all'||r[2]===cur).slice(0,max);
+  list.innerHTML=rows.length?rows.map(r=>`<div class="item${r[3]?'':' noimg'}"><div><div class="meta"><span class="where">${L[r[2]]}</span> · ${r[0]} · ${r[1]}</div><a class="hd" href="#">${r[4]}</a></div>${r[3]?'<div class="thumb">publisher<br>photo</div>':''}</div>`).join(''):`<p class="sub" style="padding:12px 0">No ${L[cur]} stories in the last few weeks. <a href="#" style="color:var(--primary)">See all of Florida</a></p>`;};
+ el.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{cur=b.dataset.k;el.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-pressed',x===b));draw();});
+ draw();});
+</script></body></html>

@@ -82,7 +82,7 @@ export async function SharedBallot() {
   return (
     <div className="flex flex-col gap-6">
       {races.length > 0 && (
-        <section className="flex flex-col gap-3">
+        <section id="statewide-races" className="flex flex-col gap-3">
           <div className="flex flex-col gap-1">
             <h2 className="text-h2">Statewide races</h2>
             <p className="text-body-sm text-on-surface-muted">
