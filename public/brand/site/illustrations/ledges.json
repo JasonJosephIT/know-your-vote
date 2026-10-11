@@ -1,5 +1,30 @@
 {
- "hang-masthead": 0.029,
- "peek-card-edge": 0.93,
- "sit-divider": 0.618
+ "climb-tiles": {
+  "at": 0.368,
+  "axis": "y"
+ },
+ "hang-masthead": {
+  "at": 0.029,
+  "axis": "y"
+ },
+ "lean-card-side": {
+  "at": 1.038,
+  "axis": "x"
+ },
+ "lie-footer": {
+  "at": 1.006,
+  "axis": "y"
+ },
+ "peek-card-edge": {
+  "at": 0.93,
+  "axis": "y"
+ },
+ "pet-cat-peek": {
+  "at": 0.882,
+  "axis": "y"
+ },
+ "sit-divider": {
+  "at": 0.618,
+  "axis": "y"
+ }
 }

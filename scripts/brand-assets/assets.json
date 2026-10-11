@@ -547,6 +547,121 @@
     "v2-bike-coffee.png"
    ],
    "subject": "a teenage Asian girl in a checkered shirt hanging from a straight horizontal bar at the very top of the image by both hands, feet dangling, grinning; the bar is a plain thick ink line along the top edge"
+  },
+  {
+   "slug": "lean-card-side",
+   "style": "v2",
+   "kind": "ledge",
+   "ar": "3:4",
+   "ledge_axis": "x",
+   "section": "UI characters",
+   "refs": [
+    "approved-walker-phone-reader.png",
+    "approved-main-street-funk.png",
+    "v2-bike-coffee.png"
+   ],
+   "subject": "a middle-aged Latina woman in a denim jacket leaning her back and one shoulder against a straight vertical bar on the RIGHT side of the image, arms crossed, one foot crossed over the other, relaxed smile; the vertical bar is a plain thick ink line running the full height near the right edge"
+  },
+  {
+   "slug": "climb-tiles",
+   "style": "v2",
+   "kind": "ledge",
+   "ar": "3:4",
+   "section": "UI characters",
+   "refs": [
+    "approved-walker-phone-reader.png",
+    "approved-main-street-funk.png",
+    "v2-bike-coffee.png"
+   ],
+   "subject": "a white man in his 30s in overalls climbing a short wooden ladder, his hands gripping a straight horizontal ledge near the top of the image and his head just above it, looking over with a grin; the ledge is a plain thick ink line across the full width at about 25% height, the ladder leans against it"
+  },
+  {
+   "slug": "lie-footer",
+   "style": "v2",
+   "kind": "ledge",
+   "ar": "21:9",
+   "section": "UI characters",
+   "refs": [
+    "approved-walker-phone-reader.png",
+    "approved-main-street-funk.png",
+    "v2-bike-coffee.png"
+   ],
+   "subject": "a young Black man lying on his side on top of a straight horizontal ledge, propped on one elbow, reading a plain paperback, and a small dog asleep curled up beside him on the same ledge; the ledge is a plain thick ink line across the full width near the bottom"
+  },
+  {
+   "slug": "point-zip",
+   "style": "v2",
+   "kind": "person",
+   "ar": "3:4",
+   "section": "UI characters",
+   "refs": [
+    "approved-walker-phone-reader.png",
+    "approved-main-street-funk.png",
+    "v2-bike-coffee.png"
+   ],
+   "subject": "full-body older South Asian man in a cardigan and flat cap standing and pointing to the LEFT with one arm out, friendly helpful expression, the other hand in his pocket"
+  },
+  {
+   "slug": "pet-cat-peek",
+   "style": "v2",
+   "kind": "ledge",
+   "ar": "4:3",
+   "section": "UI characters (pets)",
+   "refs": [
+    "approved-walker-phone-reader.png",
+    "approved-main-street-funk.png",
+    "v2-bike-coffee.png"
+   ],
+   "subject": "a ginger tabby cat peeking over a straight horizontal edge: only its head and two front paws over the edge are visible, curious wide eyes; the edge is a plain thick ink line at the very bottom of the image"
+  },
+  {
+   "slug": "pet-dog-sit",
+   "style": "v2",
+   "kind": "sticker",
+   "ar": "1:1",
+   "section": "UI characters (pets)",
+   "subject": "a scruffy brown-and-cream mutt sitting upright, head tilted, tongue out, a bandana with a checker pattern"
+  },
+  {
+   "slug": "band-horizon",
+   "style": "v2",
+   "kind": "band",
+   "ar": "21:9",
+   "section": "backgrounds",
+   "subject": "a calm sea horizon in the lower third with gentle wavy screen-print waves and a big half sun with chunky rays rising from the horizon; the upper two thirds are plain flat cream sky with only a few small birds; no people, no land"
+  },
+  {
+   "slug": "footer-thin-strip",
+   "style": "v2",
+   "kind": "band",
+   "ar": "21:9",
+   "section": "footer (thin)",
+   "subject": "the whole scene sits in the bottom 30% of the image: a long low row of small Florida storefronts with rounded awnings, palms, a lamppost, a pelican on a post and a few tiny people walking and cycling, all along one ground line; everything above that bottom 30% is plain flat cream with nothing in it; blank signs",
+   "crop_bottom": 0.32
+  },
+  {
+   "slug": "about-neighbors",
+   "style": "v2",
+   "kind": "scene",
+   "ar": "3:2",
+   "section": "about page",
+   "subject": "a grid of six equal square framed portrait panels on a sage green ground, each a different smiling neighbor shown from the chest up with simple faces: an older Black woman with a grey afro, a young Latino man with curly hair, a white woman in her 40s with a bob, a South Asian man with a beard, a young East Asian woman with long hair, a white grandfather with a cap; every panel the same size and framing"
+  },
+  {
+   "slug": "method-receipts",
+   "style": "v1",
+   "kind": "spot",
+   "ar": "4:3",
+   "section": "methodology page",
+   "subject": "a person at a kitchen table checking printed web pages against a laptop, holding a big magnifying glass over one page, a mug beside them, calm focus; the person is a young Black woman; pages and screen are blank lines only"
+  },
+  {
+   "slug": "measure-reader",
+   "style": "v1",
+   "kind": "spot",
+   "ar": "4:3",
+   "section": "measure page header",
+   "subject": "a person standing and reading a long plain paper sheet with blank lines that unfolds down to the floor, thoughtful expression; the person is a middle-aged white man in a sweater"
   }
  ]
 }

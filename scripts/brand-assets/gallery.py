@@ -17,6 +17,7 @@ wide = "".join(f'<figure class="wide"><img src="{img(k)}" alt=""><figcaption><b>
 tex = "".join(f'<figure><div class="tile" style="background-image:url({uri(p, "image/svg+xml" if p.suffix == ".svg" else "image/webp")});'
               f'{"color:#C1541C;" if p.name.startswith("divider") else ""}"></div><figcaption><b>{p.name}</b></figcaption></figure>'
               for p in sorted(TEX.iterdir()))
+composed = "".join(f'<figure class="wide"><img src="{uri(ROOT / p, "image/png")}" alt=""><figcaption><b>{p.split("/")[-1]}</b></figcaption></figure>' for p in ("public/brand/site/og-card-walkers.png", "public/brand/email/reminder-hero-walkers.png"))
 html = f'''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KYV illustration kit</title>
 <style>:root{{--bg:#F6F3EC;--ink:#22271F;--ink2:#585E52;--green:#2F6B4F;--border:#E4DED2;--cream:#F5EBD8}}
 *{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}}main{{max-width:1200px;margin:0 auto;padding:28px 16px 60px}}
@@ -30,6 +31,7 @@ figcaption{{font-size:12.5px;color:var(--ink2);margin-top:6px;line-height:1.35}}
 <h2>Stickers and people (transparent cut-outs)</h2><div class="g">{cards}</div>
 <h2>Same stickers on KYV Green</h2><p>Checks the transparent edges against a dark field.</p><div class="on-green">{green}</div>
 <h2>Wide strips</h2><div class="g" style="grid-template-columns:1fr 1fr">{wide}</div>
+<h2>Share card and email hero (composed: real wordmark and text)</h2><div class="g" style="grid-template-columns:1fr 1fr">{composed}</div>
 <h2>Textures and dividers (code-made)</h2><div class="g">{tex}</div></main></html>'''
 (ROOT / "docs/design/brand-assets-2026-10-11/kit.html").write_text(html)
 print(len(html) // 1024, "KB")

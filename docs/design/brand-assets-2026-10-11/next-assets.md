@@ -1,5 +1,9 @@
 # What to make next (2026-10-11)
 
+**Status: all made (2026-10-11).** Files: `site/illustrations/` (UI characters, pets, page pieces, bands),
+`site/textures/` (wallpaper, corner sunburst, halftone edge), `site/og-card-walkers.png`,
+`email/reminder-hero-walkers.png`. Edge positions for every UI character: `site/illustrations/ledges.json`.
+
 Proposal after the skin pass. Visual version with the three UI-character samples placed on real edges:
 `next-assets.html`, next to this file. Rules still apply: no art in news items, race lists, comparisons, beside
 a candidate (candidate headshots landed in PR #162), or over a control.
@@ -21,14 +25,14 @@ The generator draws a bar for the pose, measures it, edits it out, and writes wh
 
 | # | Asset | Sits on | Status |
 |---|---|---|---|
-| A1 | `peek-card-edge` | Top edge of the reminder card or the "What this guide covers" card; fingers over the border | Sample made |
-| A2 | `sit-divider` | A zigzag divider or a card's top-right corner, legs in front; the card keeps its right ~40% free of text, or she sits where her legs hang past the card's edge | Sample made |
-| A3 | `hang-masthead` | Under the Ink masthead strip, in the right gutter (≥1280px only) | Sample made |
-| A4 | `lean-card-side` | Leaning on a card's right edge, arms crossed (vertical ledge) | Proposed |
-| A5 | `climb-tiles` | Short ladder up to the at-a-glance tiles' top edge | Proposed |
-| A6 | `lie-footer` | Lying on top of the footer strip, reading, a dog asleep beside | Proposed |
-| A7 | `point-zip` | Standing right of the ZIP row, pointing at the field (never covering it) | Proposed |
-| A8 | `pets` | A cat peeking and a dog sitting, for 404 and empty states (no skin) | Proposed |
+| A1 | `peek-card-edge` | Top edge of the reminder card or the "What this guide covers" card; fingers over the border | Made |
+| A2 | `sit-divider` | A zigzag divider or a card's top-right corner, legs in front; the card keeps its right ~40% free of text, or she sits where her legs hang past the card's edge | Made |
+| A3 | `hang-masthead` | Under the Ink masthead strip, in the right gutter (≥1280px only) | Made |
+| A4 | `lean-card-side` | Leaning on a card's right edge, arms crossed (vertical ledge) | Made |
+| A5 | `climb-tiles` | Short ladder up to the at-a-glance tiles' top edge | Made |
+| A6 | `lie-footer` | Lying on top of the footer strip, reading, a dog asleep beside | Made |
+| A7 | `point-zip` | Standing right of the ZIP row, pointing at the field (never covering it) | Made |
+| A8 | `pets` | A cat peeking and a dog sitting, for 404 and empty states (no skin) | Made |
 
 ## B · Backgrounds
 

@@ -261,6 +261,9 @@ append-only.
 | 2026-10-11 | Style references | `public/brand/site/ai/*.svg`, `ai/refs/` | — | — | July Higgsfield originals retrieved; `approved-*` refs chosen by the founder (main street, bike-coffee, boombox) |
 | 2026-10-11 | Illustration skin tokens + flat-skin pass | `docs/design.md` `illustration-skin`, `generate.py skinmask` | Site/Web | skin-1…skin-6 | Every person re-processed: one flat token per person, no grain on skin; hair keeps texture |
 | 2026-10-11 | Hero rotator: 8 walkers + blur frames | `public/brand/site/illustrations/walker-*.webp`, `public/brand/site/rotator/` | Site/Web | Funk + skin tokens | Walkers generated against the phone reader as pose/scale reference; `rotator.py` renders sharp / blur-out / blur-in frames at one height and the demo |
+| 2026-10-11 | UI characters (7) + pets (2) | `site/illustrations/{peek-card-edge,sit-divider,hang-masthead,lean-card-side,climb-tiles,lie-footer,point-zip,pet-cat-peek,pet-dog-sit}.webp`, `ledges.json` | Site/Web | Funk + skin tokens | Kind `ledge`: bar drawn for the pose, measured (`generate.py ledge`), edited out; `ledges.json` = where the real UI edge goes ({axis, at} as a fraction of the image) |
+| 2026-10-11 | Page pieces + bands | `about-neighbors`, `method-receipts`, `measure-reader`, `error-404-funk`, `news-empty`, `band-horizon`, `footer-thin-strip` | Site/Web | Funk / calm | Thin strip = bottom 32% of a 21:9 generation (`crop_bottom`) |
+| 2026-10-11 | Composed pieces | `site/textures/{tex-florida-wallpaper.webp,corner-sunburst.svg,edge-halftone.svg}`, `site/og-card-walkers.png`, `email/reminder-hero-walkers.png` | Site/Web, social, email | Tokens | `scripts/brand-assets/compose.py <Figtree.ttf>`: wallpaper from kit silhouettes (seamless), text in Figtree, untouched wordmark SVG |
 | _next…_ | | | | | |
 
 ---

@@ -249,6 +249,28 @@ def snap_lab(im, pal):
     return Image.fromarray(P[idx].astype(np.uint8), "RGB")
 
 
+def measure_ledge(a):
+    """Find the drawn bar in the raw (rows, or columns for axis x, that are mostly dark) and save
+    <slug>.ledge = {"axis": "y"|"x", "at": fraction}. Run before editing the bar out."""
+    im = Image.open(RAW / f"{a['slug']}.png").convert("RGB")
+    w, h = im.size
+    px = im.load()
+    axis = a.get("ledge_axis", "y")
+    bg = px[2, 2]  # the plain background the prompt asks for
+
+    def solid(c):  # part of a drawn bar: clearly not background
+        return sum(abs(c[i] - bg[i]) for i in range(3)) > 120
+
+    if axis == "y":
+        hits = [y for y in range(h) if sum(1 for x in range(0, w, 4) if solid(px[x, y])) > 0.6 * (w / 4)]
+        at = (min(hits) + max(hits)) / 2 / h
+    else:
+        hits = [x for x in range(w) if sum(1 for y in range(0, h, 4) if solid(px[x, y])) > 0.6 * (h / 4)]
+        at = (min(hits) + max(hits)) / 2 / w
+    (RAW / f"{a['slug']}.ledge").write_text(json.dumps({"axis": axis, "at": round(at, 4)}))
+    return axis, at
+
+
 def hexrgb(h):
     return tuple(int(h[i:i + 2], 16) for i in (1, 3, 5))
 
@@ -262,14 +284,15 @@ def post(a):
         snapped, skin = flatten_skin(snapped, Image.open(RAW / f"{a['slug']}.skin.png").convert("L"), im)
     ledge = None
     if a["kind"] == "ledge" and (RAW / f"{a['slug']}.ledge").exists():
-        # the bar was measured (<slug>.ledge, fraction of height) and then edited out of the raw
-        ledge = float((RAW / f"{a['slug']}.ledge").read_text()) * snapped.size[1]
+        # the bar was measured (<slug>.ledge) and then edited out of the raw
+        lj = json.loads((RAW / f"{a['slug']}.ledge").read_text())
+        ledge = (lj["axis"], lj["at"] * (snapped.size[1] if lj["axis"] == "y" else snapped.size[0]))
     elif a["kind"] == "ledge":  # the drawn bar is a stand-in for the real UI edge: erase it, remember where it was
         px0, (w0, h0) = snapped.load(), snapped.size
         ink = hexrgb("#22271F")
         rows = [y for y in range(h0) if sum(px0[x, y] == ink for x in range(0, w0, 4)) > 0.6 * (w0 / 4)]
         if rows:
-            ledge = (min(rows) + max(rows)) / 2
+            ledge = ("y", (min(rows) + max(rows)) / 2)
             bg = hexrgb(BG[a["style"]])
             y0, y1 = max(0, min(rows) - 3), min(h0 - 1, max(rows) + 3)
             above, below = max(0, y0 - 6), min(h0 - 1, y1 + 6)
@@ -281,7 +304,7 @@ def post(a):
     if a["kind"] in ("spot", "sticker", "person", "ledge"):
         bg = hexrgb(BG[a["style"]])
         # the model's "plain background" snaps to the lightest token; key it out from the edges
-        light = max(pal, key=sum)
+        lights = {c for c in pal if sum(c) > 690} | {max(pal, key=sum)}  # cream, paper and muted all read as background
         rgba = snapped.convert("RGBA")
         w, h = rgba.size
         px = rgba.load()
@@ -292,7 +315,7 @@ def post(a):
             if (x, y) in seen or not (0 <= x < w and 0 <= y < h):
                 continue
             seen.add((x, y))
-            if px[x, y][:3] in (light, bg):
+            if px[x, y][:3] in lights or px[x, y][:3] == bg:
                 px[x, y] = (0, 0, 0, 0)
                 stack += [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
         bbox = rgba.getbbox()
@@ -302,8 +325,15 @@ def post(a):
         if ledge is not None and bbox:  # where the real UI edge goes, as a fraction of the final height
             meta = OUT / "ledges.json"
             data = json.loads(meta.read_text()) if meta.exists() else {}
-            data[a["slug"]] = round((ledge - bbox[1]) / (bbox[3] - bbox[1]), 3)
+            axis, pos = ledge
+            lo, hi = (bbox[1], bbox[3]) if axis == "y" else (bbox[0], bbox[2])
+            data[a["slug"]] = {"axis": axis, "at": round((pos - lo) / (hi - lo), 3)}
             meta.write_text(json.dumps(data, indent=1, sort_keys=True) + "\n")
+    if a.get("crop_bottom"):  # keep only the bottom share of a band (a thin strip from a 21:9 generation)
+        bw, bh = snapped.size
+        snapped = snapped.crop((0, round(bh * (1 - a["crop_bottom"])), bw, bh))
+        if skin:  # the skin mask must keep matching the pixels it covers
+            skin = skin.resize((bw, bh), Image.Resampling.NEAREST).crop((0, round(bh * (1 - a["crop_bottom"])), bw, bh))
     if a.get("logo"):
         snapped = place_logo(snapped, a["logo"], hexrgb(BG[a["style"]]))
     long = SIZE[a["kind"]]
@@ -369,6 +399,13 @@ if __name__ == "__main__":
     if sys.argv[1] == "fixskin":  # fixskin <image path ...>
         for fp in sys.argv[2:]:
             print(f"fixskin {fp}  ${fix_skin_file(fp) or 0:.3f}", flush=True)
+        sys.exit()
+    if sys.argv[1] == "ledge":  # ledge <slug ...>: measure the bar, then edit it out of the raw
+        for sl in sys.argv[2:]:
+            a = assets({sl})[0]
+            print("ledge", sl, measure_ledge(a), flush=True)
+            edit(a, "Remove the straight bar or ledge line completely, so the background shows where it was. "
+                    "The person or animal, their hands, legs and pose stay exactly where they are.")
         sys.exit()
     if sys.argv[1] == "edit":  # edit <slug> "<instruction>"
         print(f"edit {sys.argv[2]}  ${edit(assets({sys.argv[2]})[0], sys.argv[3]) or 0:.3f}")
