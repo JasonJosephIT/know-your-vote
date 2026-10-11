@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   useSyncExternalStore,
@@ -154,13 +155,25 @@ export function HeroRotator({
   const playing = !lapDone && !userPaused;
   const walkers = walkSchedule(lead).slice(0, cast ? 8 : 1);
 
+  /* Apply a pause now, not at the next frame. A hidden Chrome tab renders no
+     frames, so the data-paused rule would never be matched while the tab is
+     away and the lap would keep running unseen; reading the computed play
+     state forces the style recalc that freezes it. Resuming needs no help:
+     the tab is visible again, so the next frame applies it. */
+  useLayoutEffect(() => {
+    if (!paused || !run || !leadRef.current) return;
+    void getComputedStyle(leadRef.current).animationPlayState;
+  }, [paused, run]);
+
   // At least a quarter on screen counts as on screen; display:none (below
   // lg) never intersects.
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
     const io = new IntersectionObserver(
-      ([entry]) => {
+      (entries) => {
+        // Batched entries arrive oldest first; the newest is the truth.
+        const entry = entries[entries.length - 1];
         const seen = entry.intersectionRatio >= 0.25;
         /* After a narrow first load the lead's <picture> should switch from
            the blank to its WebP when the window widens; browsers re-pick on
@@ -264,10 +277,11 @@ export function HeroRotator({
                   alt=""
                   width={width}
                   height={height}
-                  /* The lead is lazy and blank below lg (its <source>);
-                     the rest mount only when they're about to be needed
-                     and fetch at low priority. */
-                  loading={w.j === 0 ? "lazy" : "eager"}
+                  /* The lead loads with the page at lg and is a blank
+                     below it (its <source>), so phones fetch nothing; the
+                     rest mount only when they're about to be needed and
+                     fetch at low priority. */
+                  loading="eager"
                   fetchPriority={w.j === 0 ? undefined : "low"}
                   decoding="async"
                   draggable={false}
