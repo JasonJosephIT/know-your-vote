@@ -1,3 +1,4 @@
+import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { DISTRICT_COOKIE, parseDistrictCookie } from "@/lib/district-cookie";
@@ -42,6 +43,35 @@ import {
    says what it adds, and CoverageSummary says what is not here at all
    (Florida House and Senate, judges, city races, special districts), rather
    than the copy overclaiming what is already there. */
+
+/* The home page's share card: the walkers card (site illustration layer,
+   2026-10-11), on this page only. Every other page inherits the layout's
+   text-only card, so illustrated people never sit under a race's or a
+   candidate's link (src/app/layout.tsx). Title and words are the layout's;
+   only the image changes. Recommended (pending founder confirmation). To
+   flip: delete this function and the home page shares the text card too. */
+export async function generateMetadata(
+  _props: unknown,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const og = (await parent).openGraph;
+  return {
+    openGraph: {
+      type: "website",
+      ...(og?.title ? { title: og.title } : {}),
+      ...(og?.siteName ? { siteName: og.siteName } : {}),
+      ...(og?.description ? { description: og.description } : {}),
+      images: [
+        {
+          url: "/brand/site/og-card-walkers.png",
+          width: 1200,
+          height: 630,
+          alt: "Know Your Vote. Florida candidates, in their own words. Every quote linked to its source. No ZIP needed.",
+        },
+      ],
+    },
+  };
+}
 
 export default async function Home() {
   /* The saved district. Reading cookies opts this route into dynamic rendering,

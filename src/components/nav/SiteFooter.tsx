@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LedgeArt } from "@/components/brand/Ledge";
 
 /* The site-wide footer (launch handoff §1). Until now nothing on the site
    said in one place that it is independent and endorses no one; the
@@ -40,36 +39,49 @@ export function SiteFooter() {
      it at the bottom on a page shorter than the screen. */
   return (
     <footer className="mt-auto">
-      {/* The footer strip (design.md "Site illustration layer"): a full-bleed
-          band of town art directly above the border, on every public page and
-          at every width (one of the three pieces allowed on a phone). A CSS
-          background, not an <img>, so it can crop: cover, anchored at the
-          bottom so the ground line meets the border, never tiled. The -sm
-          file is 1200x163 (about 7.4:1); the band's height follows the window
-          width at that ratio (13.5vw, 56px to 200px), so the whole street
-          shows instead of a crop of legs on a wide screen. From xl it uses
-          the full 2400px file, which stays sharp at that size. The height
-          comes from the width alone, so nothing shifts when the image
-          arrives. Decoration only: aria-hidden, nothing to click. */}
+      {/* The footer strip (design.md "Site illustration layer"): town art
+          directly above the border, on every public page and at every width
+          (one of the three pieces allowed on a phone).
+
+          Street level of footer-town-strip, never a crop that cuts people
+          (review of #164, 2026-10-11). The earlier footer-thin-strip was the
+          bottom 32% of a generation, so its top edge sliced through the
+          walkers' heads, and cover-cropping it on wide screens took more.
+          Here the box shows exactly the bottom 49.5% of the town strip
+          (2400x1018 -> its bottom 504px, ratio 2400/504): every head clears
+          the top edge with room to spare, and only the roofs, sky and the
+          pelican above the post are left out. The ratio is fixed, so the
+          crop is the same at every width and nothing shifts on load.
+
+          Held to the content width (1120px, about 235px tall there), not
+          full-bleed: a full-bleed band at this ratio would be over 400px
+          tall on a wide screen. An <img>, lazy, so pages that never scroll
+          to the footer don't fetch it; the -sm file below lg and the full
+          file from lg for sharp edges on wide screens. Decoration only:
+          aria-hidden, alt="", nothing to click. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none h-[clamp(56px,13.5vw,200px)] w-full select-none bg-[url(/brand/site/illustrations/footer-thin-strip-sm.webp)] bg-cover bg-bottom bg-no-repeat xl:bg-[url(/brand/site/illustrations/footer-thin-strip.webp)]"
-      />
+        className="pointer-events-none mx-auto aspect-[2400/504] w-full max-w-[1120px] select-none overflow-hidden"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element -- a pre-sized
+            WebP from public/; next/image's resizing adds nothing here. */}
+        <img
+          src="/brand/site/illustrations/footer-town-strip-sm.webp"
+          srcSet="/brand/site/illustrations/footer-town-strip-sm.webp 1200w, /brand/site/illustrations/footer-town-strip.webp 2400w"
+          sizes="(min-width: 1120px) 1120px, 100vw"
+          alt=""
+          width={1200}
+          height={509}
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-cover object-bottom"
+        />
+      </div>
       <div className="border-t border-border">
-        {/* relative: the lying figure below measures its ledge from this
-            box's top edge, just under the border. */}
-        <div className="relative mx-auto flex w-full max-w-[1120px] flex-col gap-2 px-5 py-5 md:flex-row md:items-center md:justify-between md:gap-6">
-          {/* lie-footer lies on the footer's top edge at the right end of the
-              content width (its recorded ledge is 1.006 of its height, so the
-              figure's bottom rests on the border). It sits entirely above the
-              edge, over the strip, so it never covers the disclaimer or the
-              links below. 110px tall is about 283px wide. lg and up only. */}
-          <LedgeArt
-            name="lie-footer"
-            height={110}
-            edge="top"
-            className="right-5 hidden lg:block"
-          />
+        <div className="mx-auto flex w-full max-w-[1120px] flex-col gap-2 px-5 py-5 md:flex-row md:items-center md:justify-between md:gap-6">
+          {/* No figure lying on this edge any more (lie-footer, #164): over
+              the town strip it lands on the cyclist and the man with the
+              cane, and the strip is already a street of people. */}
           <p className="text-caption text-on-surface-muted">
             {FOOTER_DISCLAIMER}
           </p>
