@@ -10,6 +10,7 @@ import { incumbencyFor, type Incumbency } from "@/lib/incumbency";
 import { NEWS_SLOTS_PER_CANDIDATE } from "@/lib/news-slots";
 import { officeTitle } from "@/lib/office-title";
 import { runningMatesFor, type RunningMates } from "@/lib/running-mate";
+import { racePhotosFor, type RacePhotos } from "@/lib/headshots";
 
 export const revalidate = 3600;
 
@@ -35,6 +36,7 @@ async function runningFor(
   settled: string | null;
   incumbency: Incumbency | null;
   runningMates: RunningMates | null;
+  photos: RacePhotos | null;
 }> {
   const brief = await getRaceBrief(raceId);
   const listing = brief ? null : await getRaceListing(raceId);
@@ -53,6 +55,9 @@ async function runningFor(
     settled,
     incumbency: race ? incumbencyFor(race, raceCandidates) : null,
     runningMates: runningMatesFor(raceCandidates),
+    /* The whole race's photos, so this page shows a face only when the
+       race page does (all or none, src/lib/headshots.ts). */
+    photos: await racePhotosFor(raceCandidates),
   };
 }
 
@@ -94,13 +99,14 @@ export default async function CandidatePage({
     if (listing) {
       /* CandidateListing prints "Running for {office}"; it gets the
          district-named office (runningFor). */
-      const { office, incumbency, runningMates } = await runningFor(listing.raceId, listing.office);
+      const { office, incumbency, runningMates, photos } = await runningFor(listing.raceId, listing.office);
       return (
         <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
           <CandidateListing
             listing={{ ...listing, office }}
             incumbency={incumbency}
             runningMates={runningMates}
+            photos={photos}
           />
           <CandidateNews
             candidateId={candidateId}
@@ -128,7 +134,7 @@ export default async function CandidatePage({
     );
   }
 
-  const { office, settled, incumbency, runningMates } = await runningFor(detail.raceId, detail.office);
+  const { office, settled, incumbency, runningMates, photos } = await runningFor(detail.raceId, detail.office);
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
       <p className="text-body-sm text-on-surface-muted">
@@ -148,6 +154,7 @@ export default async function CandidatePage({
         linkToDetail={false}
         incumbency={incumbency}
         runningMates={runningMates}
+        photos={photos}
       />
       {/* N equal slots per candidate (news-fairness.md §2), founder-confirmed
           2026-10-09. The hard gate in the N4 note: N is passed before

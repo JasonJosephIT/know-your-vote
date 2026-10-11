@@ -17,6 +17,7 @@ import { createAnonServerClient } from "@/lib/supabase/server";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 import { incumbencyFor } from "@/lib/incumbency";
 import { runningMatesFor } from "@/lib/running-mate";
+import { racePhotosFor } from "@/lib/headshots";
 
 export const revalidate = 3600;
 
@@ -168,6 +169,7 @@ export default async function RacePage({
         brief={brief}
         incumbency={incumbencyFor(brief.race, raceCandidates)}
         runningMates={runningMatesFor(raceCandidates)}
+        photos={await racePhotosFor(raceCandidates)}
       />
 
       <footer className="flex flex-wrap gap-4 text-caption text-on-surface-muted">
@@ -191,7 +193,7 @@ export default async function RacePage({
    candidates have no positions", and the honest statement is that nobody's
    brief is written yet. No TrackView: this is not a brief view, and counting
    it as one would inflate the funnel metric the brief exists to move. */
-function ListedRace({ listing }: { listing: RaceListingData }) {
+async function ListedRace({ listing }: { listing: RaceListingData }) {
   const copy = listingCopy({
     decidedInPrimary: listing.decidedInPrimary,
     notPrintedOnBallot: listing.notPrintedOnBallot,
@@ -215,6 +217,7 @@ function ListedRace({ listing }: { listing: RaceListingData }) {
         listing={listing}
         incumbency={incumbencyFor(listing.race, raceCandidates)}
         runningMates={runningMatesFor(raceCandidates)}
+        photos={await racePhotosFor(raceCandidates)}
       />
 
       <footer className="flex flex-wrap gap-4 text-caption text-on-surface-muted">
