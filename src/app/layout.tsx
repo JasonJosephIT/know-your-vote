@@ -91,18 +91,22 @@ export const metadata: Metadata = {
     description: SHARE_DESCRIPTION,
     type: "website",
     siteName: "Know Your Vote",
-    /* The walkers share card (site illustration layer, 2026-10-11). Its
-       words match SITE_TITLE and SHARE_DESCRIPTION, where the old card's
-       "See who's on your Florida ballot" reads as a complete ballot (see
-       above). The alt text is the words on the card, word for word.
-
-       Recommended (pending founder confirmation). To flip back: set url to
-       "/brand/site/og-card.png" and alt to "Know Your Vote. See who's on
-       your Florida ballot."; the old file is still in public/brand/site/
-       and is the same 1200x630. */
+    /* The default share card, inherited by every page that doesn't set its
+       own: the wordmark and the landing page's words, with no people
+       (og-card-text.png). Race, candidate and measure pages inherit it,
+       and a card of illustrated people under "<Office> — Know Your Vote"
+       or beside a candidate's link could be read as the race's candidates
+       (review of #164, 2026-10-11; brand-assets-roadmap: the share card
+       carries no candidate imagery). The walkers card
+       (og-card-walkers.png) is the home page's own, set in
+       src/app/(public)/page.tsx. og-card-text.png is og-card-walkers.png
+       with the walkers and sunburst painted out, so the words, type and
+       wordmark are identical. The alt text is the words on the card, word
+       for word. The pre-2026-10-11 card (og-card.png, "See who's on your
+       Florida ballot") stays retired: it reads as a complete ballot. */
     images: [
       {
-        url: "/brand/site/og-card-walkers.png",
+        url: "/brand/site/og-card-text.png",
         width: 1200,
         height: 630,
         alt: "Know Your Vote. Florida candidates, in their own words. Every quote linked to its source. No ZIP needed.",

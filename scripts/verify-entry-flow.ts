@@ -287,11 +287,23 @@ check(
     !/your ballot|See my ballot/.test(lost) && /See the races we cover/.test(code("src/app/not-found.tsx")) && /See the races we cover/.test(code("src/app/error.tsx"))
   );
 }
-check(
-  "the share image's alt says what the card says",
-  /alt: "Know Your Vote\. Florida candidates, in their own words\. Every quote linked to its source\. No ZIP needed\."/.test(read("src/app/layout.tsx")) &&
-    /og-card-walkers\.png/.test(read("src/app/layout.tsx"))
-);
+{
+  /* The default card has no people (inherited by race, candidate and
+     measure pages); the walkers card is the home page's alone. */
+  const alt = /alt: "Know Your Vote\. Florida candidates, in their own words\. Every quote linked to its source\. No ZIP needed\."/;
+  const layout = read("src/app/layout.tsx");
+  const home = read("src/app/(public)/page.tsx");
+  check(
+    "the share image's alt says what the card says",
+    alt.test(layout) && alt.test(home)
+  );
+  check(
+    "pages inherit the text-only share card; only home uses the walkers card",
+    /url: "\/brand\/site\/og-card-text\.png"/.test(layout) &&
+      !/url: "\/brand\/site\/og-card-walkers\.png"/.test(layout) &&
+      /url: "\/brand\/site\/og-card-walkers\.png"/.test(home)
+  );
+}
 check(
   "cards in one grid share one radius",
   !/rounded-md border border-border bg-surface p-4/.test(code("src/components/features/RaceCompare.tsx")) &&
