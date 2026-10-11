@@ -37,6 +37,9 @@ type PlanItem = {
   credit?: string;
   confidence?: "high" | "medium" | "low";
   notes?: string;
+  /** Optional manual crop as fractions of the image (0-1), for a group or
+      wide photo where the attention crop could pick the wrong face. */
+  crop_box?: { x: number; y: number; w: number; h: number };
   race_id?: string;
   office?: string;
 };
@@ -55,15 +58,27 @@ function slug(id: string) {
   return id.replace(/[^A-Za-z0-9-]/g, "_");
 }
 
-async function download(url: string): Promise<Buffer> {
+async function download(url: string, page?: string): Promise<Buffer> {
   if (!/^https:\/\//.test(url)) throw new Error("not https");
-  const res = await fetch(url, {
-    redirect: "follow",
-    signal: AbortSignal.timeout(20_000),
-    headers: {
-      "user-agent": "KnowYourVote-headshots/1.0 (+https://knowyour.vote)",
-    },
+  const get = (headers: Record<string, string>) =>
+    fetch(url, {
+      redirect: "follow",
+      signal: AbortSignal.timeout(20_000),
+      headers,
+    });
+  let res = await get({
+    "user-agent": "KnowYourVote-headshots/1.0 (+https://knowyour.vote)",
   });
+  /* Some official sites refuse an image unless the page it sits on is the
+     referrer (hotlink protection). Ask once more the way a reader's browser
+     viewing that page would. */
+  if (res.status === 403 && page) {
+    res = await get({
+      "user-agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36",
+      referer: page,
+    });
+  }
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const type = res.headers.get("content-type") ?? "";
   if (!type.startsWith("image/"))
@@ -75,8 +90,32 @@ async function download(url: string): Promise<Buffer> {
   return buf;
 }
 
+/* Race and office for each candidate, for the sheet's grouping: the same
+   listed/published races the site shows, read with the anon key. */
+async function annotate(plan: PlanItem[]): Promise<PlanItem[]> {
+  loadEnvLocal(import.meta.url);
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return plan;
+  const { data } = await createClient(url, key)
+    .from("race")
+    .select("race_id, office, candidate_ids");
+  const race = new Map<string, { race_id: string; office: string }>();
+  for (const r of (data ?? []) as {
+    race_id: string;
+    office: string;
+    candidate_ids: string[] | null;
+  }[]) {
+    for (const id of r.candidate_ids ?? [])
+      race.set(id, { race_id: r.race_id, office: r.office });
+  }
+  return plan
+    .map((p) => ({ ...p, ...race.get(p.candidate_id) }))
+    .sort((a, b) => (a.race_id ?? "").localeCompare(b.race_id ?? ""));
+}
+
 async function stage(outDir: string, planFiles: string[]) {
-  const plan = readPlan(planFiles);
+  const plan = await annotate(readPlan(planFiles));
   const raw = path.join(outDir, "raw");
   const crops = path.join(outDir, "crops");
   mkdirSync(raw, { recursive: true });
@@ -95,12 +134,29 @@ async function stage(outDir: string, planFiles: string[]) {
       continue;
     }
     try {
-      const buf = await download(item.source_image_url);
+      const buf = await download(item.source_image_url, item.source_page_url);
       writeFileSync(path.join(raw, slug(item.candidate_id)), buf);
       const meta = await sharp(buf).metadata();
       const out = path.join(crops, `${slug(item.candidate_id)}.webp`);
-      await sharp(buf)
-        .rotate()
+      let img = sharp(buf).rotate();
+      const box = item.crop_box;
+      if (box && meta.width && meta.height) {
+        const W = meta.width;
+        const H = meta.height;
+        const left = Math.max(0, Math.round(box.x * W));
+        const top = Math.max(0, Math.round(box.y * H));
+        img = sharp(
+          await img
+            .extract({
+              left,
+              top,
+              width: Math.min(W - left, Math.round(box.w * W)),
+              height: Math.min(H - top, Math.round(box.h * H)),
+            })
+            .toBuffer()
+        );
+      }
+      await img
         .resize(SIZE, SIZE, {
           fit: "cover",
           position: sharp.strategy.attention,
