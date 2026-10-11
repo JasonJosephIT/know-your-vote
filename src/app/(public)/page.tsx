@@ -18,6 +18,7 @@ import { BallotAtAGlance } from "@/components/features/BallotAtAGlance";
 import { Art } from "@/components/brand/Art";
 import { LedgeArt } from "@/components/brand/Ledge";
 import { HeroRotator } from "@/components/brand/HeroRotator";
+import { pickLead } from "@/components/brand/hero-walk";
 import { SectionDivider } from "@/components/brand/SectionDivider";
 import { getActiveMeasures } from "@/lib/measures";
 import { getStatewideRaces } from "@/lib/races";
@@ -175,7 +176,12 @@ export default async function Home() {
               source. The same questions and the same rules for every
               candidate. No ZIP, no account, no agenda.
             </p>
-            <HeroRotator />
+            {/* The walker in the still is drawn per page view, so across
+                visitors every one of the eight leads equally often
+                (design.md: equal attention). The page is already dynamic
+                (cookies()), and passing it as a prop keeps the server
+                render and hydration identical. */}
+            <HeroRotator lead={pickLead()} />
           </div>
           <DeadlineBanner
             remindersHref={

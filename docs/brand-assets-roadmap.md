@@ -152,12 +152,17 @@ ways-to-vote panels, neighbors grid, ZIP and map card spots, empty and 404 state
 be re-specified against the real section sizes with its anchor (behind the headline, leaning on a card edge,
 sitting on the footer), its clear zone for live text and its size on the page.
 
-**Hero rotator (2026-10-11).** The home lede figure cycles through eight walkers over the still sunburst: the
-phone reader, a nurse, a lineworker, a boat captain, a teacher, a student, a chef and a runner with a blade
-prosthetic, all mid-stride to the right at one scale. Each swap is sharp → forward motion streak → the next
-walker's trailing streak → sharp (pre-rendered frames in `public/brand/site/rotator/`, built by
-`scripts/brand-assets/rotator.py`; demo `docs/design/brand-assets-2026-10-11/hero-rotator.html`). Reduced motion
-shows the first walker, still. Images only for now; the swap timing is a starting point.
+**Hero walk (2026-10-11).** The home lede figure is eight walkers over the still sunburst: the phone reader, a
+nurse, a lineworker, a boat captain, a teacher, a student, a chef and a runner with a blade prosthetic, all
+mid-stride to the right at one scale. They stroll left to right in one slow procession, each walking from its
+single still pose (a 4px step bob with a 1px dip, a ±0.6° sway about the feet, a ground ellipse that narrows as
+the body rises); every 5.12s the next one passes the sun. After one lap (40.96s of visible time) every walker
+has crossed once for the same time and the line rests on its opening still; a Play button runs another lap.
+The walker in the still is drawn at random per page view, so each leads equally often. Reduced motion shows the
+still only; below lg nothing loads. Sharp frames in `public/brand/site/rotator/` (`scripts/brand-assets/rotator.py`);
+the motion is CSS (`src/components/brand/HeroRotator.module.css`, numbers in `hero-walk.ts`, checked by
+`scripts/verify-hero-walk.ts`). The earlier blur-swap version is archived in
+`docs/design/brand-assets-2026-10-11/hero-rotator.html`.
 
 **Open decision (from the layout pass):** a serif for display sizes only (Newsreader or Source Serif 4,
 replacing Figtree at `display`/`h1`). The art works with either; it is a type decision for `design.md`.

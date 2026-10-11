@@ -58,6 +58,6 @@ The generator draws a bar for the pose, measures it, edits it out, and writes wh
 
 ## D · Motion (later)
 
-Hero rotator (built, images only), sticker pop on each swap, peeker that ducks on scroll, hanger that swings.
+Hero walk (built: one procession, CSS only). Sticker pop parked: there are no swaps any more, and a pop would break the no-bounce rule (raise with the founder if wanted back); peeker that ducks on scroll, hanger that swings.
 
 Rough cost to make A4–A8, B1–B2, B4 and C1–C7: ~20 generations plus skin masks, about $5.
