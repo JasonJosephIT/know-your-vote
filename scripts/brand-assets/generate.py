@@ -52,13 +52,14 @@ FRAME = {
     "band": "A very wide panoramic strip, composed to read left to right, scene to the edges.",
     "spot": "A single vignette centered on a plain flat {bg} background, generous empty margin, nothing touching the edges.",
     "sticker": "Only this one object, isolated and centered on a plain flat {bg} background, generous empty margin, nothing touching the edges, no ground shadow. No people, faces or hands unless the subject names them, and nothing taken from the reference images.",
+    "ledge": "Only this one person and the thin straight horizontal ledge they use, isolated on a plain flat {bg} background, generous empty margin above and to the sides, nothing else, no ground, no shadow. The ledge is a plain straight ink line or bar running the full width of the image.",
     "person": "Only this one person, full body, isolated and centered on a plain flat {bg} background, generous empty margin, nothing touching the edges, no ground shadow, no background panel, frame or coloured rectangle behind them, no other people.",
 }
 RULES = ("Match the style of the reference images closely; do not copy their subjects. Absolutely no text, letters, "
          "numbers or logos anywhere: signs, screens, papers and stickers are blank. No neon, purple, pink, bright blue "
          "or bright red. No flags, campaign signs, political symbols, donkeys, elephants, eagles or seals. No real or "
          "recognizable people.")
-SIZE = {"scene": 2400, "band": 2400, "spot": 1200, "sticker": 1000, "person": 1200}
+SIZE = {"scene": 2400, "band": 2400, "spot": 1200, "sticker": 1000, "person": 1200, "ledge": 1200}
 
 
 def assets(slugs):
@@ -141,14 +142,37 @@ def add_grain(im, seed, skin=None):
 
 def skinmask(a):
     """One edit pass that paints only the skin magenta; the diff becomes <slug>.skin.png, used by post to keep skin flat."""
-    src = RAW / f"{a['slug']}.png"
+    mask, cost = make_skin_mask(RAW / f"{a['slug']}.png", a["ar"])
+    mask.save(RAW / f"{a['slug']}.skin.png")
+    return cost
+
+
+def fix_skin_file(path):
+    """Brand skin on a standalone image (e.g. a style reference): mask the skin, fill each person with the nearest
+    skin token, keep everything else as it was. Overwrites the file; the original stays in git history."""
+    path = Path(path)
+    w, h = Image.open(path).size
+    ratios = {"1:1": 1, "3:4": .75, "4:3": 4 / 3, "2:3": 2 / 3, "3:2": 1.5, "4:5": .8, "5:4": 1.25, "16:9": 16 / 9, "9:16": 9 / 16, "21:9": 21 / 9}
+    ar = min(ratios, key=lambda k: abs(ratios[k] - w / h))
+    mask, cost = make_skin_mask(path, ar)
+    src = Image.open(path)
+    alpha = src.getchannel("A") if src.mode == "RGBA" else None
+    im, _ = flatten_skin(src.convert("RGB"), mask, src.convert("RGB"))
+    if alpha:
+        im = im.convert("RGBA")
+        im.putalpha(alpha)
+    im.save(path)
+    return cost
+
+
+def make_skin_mask(src, ar):
     b64 = base64.b64encode(src.read_bytes()).decode()
     text = ("Return this exact illustration with one change: fill every area of visible human skin (faces, necks, ears, "
             "arms, hands, legs, feet), including any blush, freckles or shading on the cheeks and skin, with pure flat "
             "magenta #FF00FF. Leave eyes, eyebrows, lips, teeth, nostrils and every "
             "dark outline or line exactly as they are, on top of the magenta. Change nothing else: same composition, same "
             "positions, same colours everywhere that is not skin.")
-    body = {"model": MODEL, "modalities": ["image", "text"], "image_config": {"aspect_ratio": a["ar"], "image_size": "2K"},
+    body = {"model": MODEL, "modalities": ["image", "text"], "image_config": {"aspect_ratio": ar, "image_size": "2K"},
             "messages": [{"role": "user", "content": [{"type": "text", "text": text},
                                                       {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64}"}}]}]}
     req = urllib.request.Request("https://openrouter.ai/api/v1/chat/completions", json.dumps(body).encode(),
@@ -166,8 +190,7 @@ def skinmask(a):
             r, g, b = ep[x, y]
             if r > 170 and b > 170 and g < 110:
                 mp[x, y] = 255
-    mask.save(RAW / f"{a['slug']}.skin.png")
-    return res.get("usage", {}).get("cost")
+    return mask, res.get("usage", {}).get("cost")
 
 
 # design.md illustration skin tokens skin-1 (lightest) .. skin-6 (deepest). Skin is always exactly one of these, flat.
@@ -237,7 +260,25 @@ def post(a):
     skin = None
     if (RAW / f"{a['slug']}.skin.png").exists():  # flat, grain-free skin (see skinmask)
         snapped, skin = flatten_skin(snapped, Image.open(RAW / f"{a['slug']}.skin.png").convert("L"), im)
-    if a["kind"] in ("spot", "sticker", "person"):
+    ledge = None
+    if a["kind"] == "ledge" and (RAW / f"{a['slug']}.ledge").exists():
+        # the bar was measured (<slug>.ledge, fraction of height) and then edited out of the raw
+        ledge = float((RAW / f"{a['slug']}.ledge").read_text()) * snapped.size[1]
+    elif a["kind"] == "ledge":  # the drawn bar is a stand-in for the real UI edge: erase it, remember where it was
+        px0, (w0, h0) = snapped.load(), snapped.size
+        ink = hexrgb("#22271F")
+        rows = [y for y in range(h0) if sum(px0[x, y] == ink for x in range(0, w0, 4)) > 0.6 * (w0 / 4)]
+        if rows:
+            ledge = (min(rows) + max(rows)) / 2
+            bg = hexrgb(BG[a["style"]])
+            y0, y1 = max(0, min(rows) - 3), min(h0 - 1, max(rows) + 3)
+            above, below = max(0, y0 - 6), min(h0 - 1, y1 + 6)
+            for x in range(w0):
+                figure = px0[x, above] != bg or px0[x, below] != bg  # hands, legs, arms cross the bar here
+                for y in range(y0, y1 + 1):
+                    if not figure or px0[x, y] == ink:
+                        px0[x, y] = bg
+    if a["kind"] in ("spot", "sticker", "person", "ledge"):
         bg = hexrgb(BG[a["style"]])
         # the model's "plain background" snaps to the lightest token; key it out from the edges
         light = max(pal, key=sum)
@@ -258,6 +299,11 @@ def post(a):
         snapped = rgba.crop(bbox) if bbox else rgba
         if skin and bbox:
             skin = skin.crop(bbox)
+        if ledge is not None and bbox:  # where the real UI edge goes, as a fraction of the final height
+            meta = OUT / "ledges.json"
+            data = json.loads(meta.read_text()) if meta.exists() else {}
+            data[a["slug"]] = round((ledge - bbox[1]) / (bbox[3] - bbox[1]), 3)
+            meta.write_text(json.dumps(data, indent=1, sort_keys=True) + "\n")
     if a.get("logo"):
         snapped = place_logo(snapped, a["logo"], hexrgb(BG[a["style"]]))
     long = SIZE[a["kind"]]
@@ -319,6 +365,10 @@ if __name__ == "__main__":
     if sys.argv[1] == "skinmask":  # skinmask <slug ...>
         for sl in sys.argv[2:]:
             print(f"skin {sl}  ${skinmask(assets({sl})[0]) or 0:.3f}", flush=True)
+        sys.exit()
+    if sys.argv[1] == "fixskin":  # fixskin <image path ...>
+        for fp in sys.argv[2:]:
+            print(f"fixskin {fp}  ${fix_skin_file(fp) or 0:.3f}", flush=True)
         sys.exit()
     if sys.argv[1] == "edit":  # edit <slug> "<instruction>"
         print(f"edit {sys.argv[2]}  ${edit(assets({sys.argv[2]})[0], sys.argv[3]) or 0:.3f}")

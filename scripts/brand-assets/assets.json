@@ -508,6 +508,45 @@
     "v2-bike-coffee.png"
    ],
    "subject": "same scale, framing and walking pose as the FIRST reference image: full body, mid-stride, stepping to the right and facing right, one foot about to land, relaxed and confident; a young Black woman runner with a running-blade prosthetic leg, athletic top and joggers, a water bottle in hand, mid-stride"
+  },
+  {
+   "slug": "peek-card-edge",
+   "style": "v2",
+   "kind": "ledge",
+   "ar": "4:3",
+   "section": "UI characters (samples)",
+   "refs": [
+    "approved-walker-phone-reader.png",
+    "approved-main-street-funk.png",
+    "v2-bike-coffee.png"
+   ],
+   "subject": "a young Latino man peeking over a straight horizontal edge: only his head, shoulders and both hands gripping the edge are visible above it, curious friendly face; the edge is at the very bottom of the image and nothing below it is drawn"
+  },
+  {
+   "slug": "sit-divider",
+   "style": "v2",
+   "kind": "ledge",
+   "ar": "4:3",
+   "section": "UI characters (samples)",
+   "refs": [
+    "approved-walker-phone-reader.png",
+    "approved-main-street-funk.png",
+    "v2-bike-coffee.png"
+   ],
+   "subject": "an older Black woman with a grey afro and big earrings sitting on a straight horizontal ledge, legs dangling down in front of it, reading a plain booklet, relaxed; the ledge runs across the image at about 60% height"
+  },
+  {
+   "slug": "hang-masthead",
+   "style": "v2",
+   "kind": "ledge",
+   "ar": "3:4",
+   "section": "UI characters (samples)",
+   "refs": [
+    "approved-walker-phone-reader.png",
+    "approved-main-street-funk.png",
+    "v2-bike-coffee.png"
+   ],
+   "subject": "a teenage Asian girl in a checkered shirt hanging from a straight horizontal bar at the very top of the image by both hands, feet dangling, grinning; the bar is a plain thick ink line along the top edge"
   }
  ]
 }
