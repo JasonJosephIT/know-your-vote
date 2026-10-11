@@ -152,6 +152,13 @@ ways-to-vote panels, neighbors grid, ZIP and map card spots, empty and 404 state
 be re-specified against the real section sizes with its anchor (behind the headline, leaning on a card edge,
 sitting on the footer), its clear zone for live text and its size on the page.
 
+**Hero rotator (2026-10-11).** The home lede figure cycles through eight walkers over the still sunburst: the
+phone reader, a nurse, a lineworker, a boat captain, a teacher, a student, a chef and a runner with a blade
+prosthetic, all mid-stride to the right at one scale. Each swap is sharp → forward motion streak → the next
+walker's trailing streak → sharp (pre-rendered frames in `public/brand/site/rotator/`, built by
+`scripts/brand-assets/rotator.py`; demo `docs/design/brand-assets-2026-10-11/hero-rotator.html`). Reduced motion
+shows the first walker, still. Images only for now; the swap timing is a starting point.
+
 **Open decision (from the layout pass):** a serif for display sizes only (Newsreader or Source Serif 4,
 replacing Figtree at `display`/`h1`). The art works with either; it is a type decision for `design.md`.
 

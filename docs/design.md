@@ -41,6 +41,13 @@ colors:
   verdict-mostly-inaccurate: "#B4692E"
   verdict-inaccurate: "#B4402E"
   verdict-unverifiable: "#6B6F66"
+illustration-skin:
+  skin-1: "#F2D3B3"
+  skin-2: "#E3B48A"
+  skin-3: "#C98E5F"
+  skin-4: "#A86A42"
+  skin-5: "#7E4A2C"
+  skin-6: "#4F2E1D"
 marketing-colors:
   harvest-gold: "#E3A72E"
   burnt-orange: "#C1541C"
@@ -250,7 +257,7 @@ The **official KYV logo** (`public/brand/kyv-logo-official.svg`) is a hand-drawn
 
 Marketing assets (social posts, flyers, stickers, event banners) may turn the warmth up beyond what the app allows. The **marketing palette** extends the brand with retro-harvest tones pulled from the approved logo explorations: `harvest-gold` `#E3A72E`, `burnt-orange` `#C1541C`, `brick` `#7A2E1E`, `olive` `#6B7A3A`, on `cream` `#F5EBD8`. Rules: KYV Green and Cream must still anchor every piece (the marketing tones are supporting, never the identity); text always sits at WCAG AA (use `ink` or `brick` on cream, cream on green/brick); and the palette is **never used to code parties, candidates, or positions** — the non-partisan rule follows the brand everywhere, including a sticker. The retro display styling (groovy shapes, wavy type) is a **marketing-only** voice; product UI never uses novelty display faces.
 
-**Site illustration layer (2026-10-11).** Public pages may carry the marketing voice in their *image slots* only: the homepage hero, section spot illustrations, key-date vignettes, the three-ways-to-vote panels, the footer strip, stickers and background textures. Two illustration styles exist and both are approved: **funk** (1970s screen-print × 1990s funk: grain inside flat fills, off-registration, boomboxes, zigzag bolts, checkers, marketing palette) for the homepage and other top-of-funnel moments, and **calm** (flat editorial vector, thin warm-black outlines, little texture, calm palette) for inner pages such as race, candidate, measure and news. Everything that is not an image (type, components, chips, buttons, verdicts) stays product UI and follows the rules above. Illustrations never appear in news slots, beside a candidate, inside a race comparison, or next to a verdict; people in them are stylized, never real or recognizable, and a group always gives each person equal size and attention. The library, its slots and its rules live in `docs/brand-assets-roadmap.md` §1b and `docs/asset-generation-guide.md` §2.
+**Site illustration layer (2026-10-11).** Public pages may carry the marketing voice in their *image slots* only: the homepage hero, section spot illustrations, key-date vignettes, the three-ways-to-vote panels, the footer strip, stickers and background textures. Two illustration styles exist and both are approved: **funk** (1970s screen-print × 1990s funk: grain inside flat fills, off-registration, boomboxes, zigzag bolts, checkers, marketing palette) for the homepage and other top-of-funnel moments, and **calm** (flat editorial vector, thin warm-black outlines, little texture, calm palette) for inner pages such as race, candidate, measure and news. Everything that is not an image (type, components, chips, buttons, verdicts) stays product UI and follows the rules above. Illustrations never appear in news slots, beside a candidate, inside a race comparison, or next to a verdict; people in them are stylized, never real or recognizable, and a group always gives each person equal size and attention. **Skin is fixed.** Every person in an illustration has skin in exactly one of the six `illustration-skin` tokens, `skin-1` (lightest, `#F2D3B3`) to `skin-6` (deepest, `#4F2E1D`): one flat colour per person, never grain, speckle, mottling or shading, and never a palette colour (no green, gold or clay skin). A set of people spans the range. Hair is the opposite: it may be mottled, grainy or carry two or three tones from the illustration palette, and an occasional multi-coloured head is welcome. These tokens exist for illustration only; product UI never uses them. The library, its slots and its rules live in `docs/brand-assets-roadmap.md` §1b and `docs/asset-generation-guide.md` §2.
 
 ## Colors
 

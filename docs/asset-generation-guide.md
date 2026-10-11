@@ -94,6 +94,11 @@ The page art in roadmap §1b. Generated with Nano Banana Pro (`google/gemini-3-p
   seals.
 - **Post-processing is the token check:** `post` snaps every pixel to the style's token palette (no dither), keys
   the plain background out of spots/stickers/people to transparent, trims, and exports WebP master + `-sm`.
+- **Skin (2026-10-11):** skin is one flat `illustration-skin` token per person (`skin-1` `#F2D3B3` … `skin-6`
+  `#4F2E1D`, design.md). `generate.py skinmask <slug>` makes one edit pass that paints only the skin magenta and
+  saves the mask beside the raw; `post` then fills each person's skin with the token nearest their average
+  colour and keeps the grain off it. Run `skinmask` once for every new image with people. Hair keeps its texture
+  and may be multi-tone.
 - **House grain (2026-10-11):** every illustration gets the same medium-light grain, defined once as `GRAIN` in
   `generate.py`: the model's own speckle is cleaned out (mode filter), then Ink specks (3.5% of pixels at 22%,
   0.8% at 40%) and Cream specks (2.5% at 30%) are laid at the *output* size, so specks are the same size on
@@ -254,6 +259,8 @@ append-only.
 | 2026-10-11 | Site illustration kit (20): 11 stickers incl. `sticker-kyv-badge`, 6 people incl. `person-kyv-tote`, `footer-town-strip`, `band-coast` | `public/brand/site/illustrations/*.webp` (+ `-sm`) | Site/Web | Funk (marketing palette) | Layout-independent kit from roadmap §1b; generated with `scripts/brand-assets/generate.py`, every pixel snapped to tokens; transparent cut-outs except the two strips; KYV monogram composited from the SVG, never generated |
 | 2026-10-11 | Textures and dividers (9) | `public/brand/site/textures/` | Site/Web | Tokens | `scripts/brand-assets/textures.py`; seamless tiles; dividers use `currentColor` |
 | 2026-10-11 | Style references | `public/brand/site/ai/*.svg`, `ai/refs/` | — | — | July Higgsfield originals retrieved; `approved-*` refs chosen by the founder (main street, bike-coffee, boombox) |
+| 2026-10-11 | Illustration skin tokens + flat-skin pass | `docs/design.md` `illustration-skin`, `generate.py skinmask` | Site/Web | skin-1…skin-6 | Every person re-processed: one flat token per person, no grain on skin; hair keeps texture |
+| 2026-10-11 | Hero rotator: 8 walkers + blur frames | `public/brand/site/illustrations/walker-*.webp`, `public/brand/site/rotator/` | Site/Web | Funk + skin tokens | Walkers generated against the phone reader as pose/scale reference; `rotator.py` renders sharp / blur-out / blur-in frames at one height and the demo |
 | _next…_ | | | | | |
 
 ---

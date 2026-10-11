@@ -1,8 +1,8 @@
 """Generate and post-process the KYV site illustration library.
 
-  uv run --with pillow python scripts/brand-assets/generate.py gen [slug ...]   # call Nano Banana Pro
-  uv run --with pillow python scripts/brand-assets/generate.py post [slug ...]  # snap to tokens, export WebP
-  uv run --with pillow python scripts/brand-assets/generate.py edit <slug> "<instruction>"  # fix one detail
+  uv run --with pillow --with numpy python scripts/brand-assets/generate.py gen [slug ...]   # call Nano Banana Pro
+  uv run --with pillow --with numpy python scripts/brand-assets/generate.py post [slug ...]  # snap to tokens, export WebP
+  uv run --with pillow --with numpy python scripts/brand-assets/generate.py edit <slug> "<instruction>"  # fix one detail
 
 Raw generations go to $KYV_RAW (default /tmp/kyv-raw), finals to public/brand/site/illustrations/.
 Needs OPENROUTER_API_KEY. Rules: docs/asset-generation-guide.md §2 "Site illustration library".
@@ -35,14 +35,15 @@ STYLE = {
            "Flat muted screen-print ink, bold simple shapes, light grain and speckle inside the colour fills, slightly "
            "uneven hand-cut edges. CHARACTERS: natural, lightly stylized proportions like the benchmark (normal head "
            "size, normal limbs and hands, nothing exaggerated or rubbery); simple faces: small dark eyes, a simple "
-           "smile, a hint of nose, no shading, wrinkles, eyelashes or detailed features; hair as bold solid shapes "
-           "(afros, curls, braids, waves); skin as flat warm tones. A mix of ethnicities, ages and body types as each "
+           "smile, a hint of nose, no shading, wrinkles, eyelashes or detailed features; hair as bold shapes "
+           "(afros, curls, braids, waves), and hair may be mottled or carry two or three tones; SKIN is one perfectly "
+           "flat, clean colour per person: no grain, speckle, mottling, blotches or texture on skin at all. A mix of ethnicities, ages and body types as each "
            "subject says. 70s/90s clothing (checkers, plaids, big collars, wide trousers). Strict palette: deep sage "
            "green, cream, warm near-black ink, burnt orange, brick brown, olive, harvest gold, clay."),
     "v1": ("Calm flat editorial vector illustration in the style of the reference images. Clean flat colour blocks, "
            "thin even warm-black outlines, no texture or grain, generous empty space, detail kept low. CHARACTERS: "
            "natural, lightly stylized proportions (nothing exaggerated); simple faces: two small dot eyes and a small "
-           "smile, no shading, wrinkles or detailed features; hair as one flat shape; skin as flat warm tones. A mix "
+           "smile, no shading, wrinkles or detailed features; hair as one flat shape, sometimes two-toned; skin is one perfectly flat, clean colour with no texture. A mix "
            "of ethnicities, ages and body types as each subject says. Strict palette: sage green, deep green, cream, "
            "warm near-black, clay, harvest gold, olive, warm sand."),
 }
@@ -115,7 +116,7 @@ def edit(a, instruction):
 GRAIN = [("#22271F", 0.035, 0.22), ("#22271F", 0.008, 0.40), ("#F5EBD8", 0.025, 0.30)]
 
 
-def add_grain(im, seed):
+def add_grain(im, seed, skin=None):
     """Clean the model's own speckle out first (mode filter on the token-snapped image), then lay the house grain."""
     import random
     from PIL import ImageFilter
@@ -126,15 +127,103 @@ def add_grain(im, seed):
     im.putalpha(alpha)
     w, h = im.size
     px = im.load()
+    sk = skin.resize((w, h), Image.Resampling.NEAREST).load() if skin else None
     for colour, share, opacity in GRAIN:
         c = hexrgb(colour)
         for _ in range(int(w * h * share)):
             x, y = rnd.randrange(w), rnd.randrange(h)
             r, g, b, a = px[x, y]
-            if a < 255:
+            if a < 255 or (sk and sk[x, y]):
                 continue
             px[x, y] = (round(r + (c[0] - r) * opacity), round(g + (c[1] - g) * opacity), round(b + (c[2] - b) * opacity), a)
     return im
+
+
+def skinmask(a):
+    """One edit pass that paints only the skin magenta; the diff becomes <slug>.skin.png, used by post to keep skin flat."""
+    src = RAW / f"{a['slug']}.png"
+    b64 = base64.b64encode(src.read_bytes()).decode()
+    text = ("Return this exact illustration with one change: fill every area of visible human skin (faces, necks, ears, "
+            "arms, hands, legs, feet), including any blush, freckles or shading on the cheeks and skin, with pure flat "
+            "magenta #FF00FF. Leave eyes, eyebrows, lips, teeth, nostrils and every "
+            "dark outline or line exactly as they are, on top of the magenta. Change nothing else: same composition, same "
+            "positions, same colours everywhere that is not skin.")
+    body = {"model": MODEL, "modalities": ["image", "text"], "image_config": {"aspect_ratio": a["ar"], "image_size": "2K"},
+            "messages": [{"role": "user", "content": [{"type": "text", "text": text},
+                                                      {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64}"}}]}]}
+    req = urllib.request.Request("https://openrouter.ai/api/v1/chat/completions", json.dumps(body).encode(),
+                                 {"Authorization": "Bearer " + os.environ["OPENROUTER_API_KEY"], "Content-Type": "application/json"})
+    res = json.load(urllib.request.urlopen(req, timeout=300))
+    url = res["choices"][0]["message"]["images"][0]["image_url"]["url"]
+    import io
+    edited = Image.open(io.BytesIO(base64.b64decode(url.split(",", 1)[1]))).convert("RGB")
+    orig = Image.open(src).convert("RGB")
+    edited = edited.resize(orig.size)
+    mask = Image.new("L", orig.size, 0)
+    ep, mp = edited.load(), mask.load()
+    for y in range(orig.size[1]):
+        for x in range(orig.size[0]):
+            r, g, b = ep[x, y]
+            if r > 170 and b > 170 and g < 110:
+                mp[x, y] = 255
+    mask.save(RAW / f"{a['slug']}.skin.png")
+    return res.get("usage", {}).get("cost")
+
+
+# design.md illustration skin tokens skin-1 (lightest) .. skin-6 (deepest). Skin is always exactly one of these, flat.
+SKIN_TONES = ["#F2D3B3", "#E3B48A", "#C98E5F", "#A86A42", "#7E4A2C", "#4F2E1D"]
+
+
+def flatten_skin(im, mask, raw):
+    """Inside the skin mask, every pixel that is not Ink becomes one flat skin token: the nearest of SKIN_TONES to the
+    region's average raw colour, so each person keeps the depth the model gave them but in an exact brand tone."""
+    from PIL import ImageFilter
+    mask = mask.resize(im.size, Image.Resampling.NEAREST).filter(ImageFilter.MinFilter(3))  # stay off the outlines
+    ink = hexrgb("#22271F")
+    px, mp, rp = im.load(), mask.load(), raw.load()
+    tones = [hexrgb(t) for t in SKIN_TONES]
+    w, h = im.size
+    seen = set()
+    for y0 in range(0, h, 3):
+        for x0 in range(0, w, 3):
+            if mp[x0, y0] == 0 or (x0, y0) in seen:
+                continue
+            comp, stack = [], [(x0, y0)]
+            while stack:
+                x, y = stack.pop()
+                if (x, y) in seen or not (0 <= x < w and 0 <= y < h) or mp[x, y] == 0:
+                    continue
+                seen.add((x, y))
+                comp.append((x, y))
+                stack += [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
+            body = [rp[x, y] for x, y in comp if px[x, y][:3] != ink]
+            if not body:
+                continue
+            avg = [sum(c[i] for c in body) / len(body) for i in range(3)]
+            tone = min(tones, key=lambda t: sum((t[i] - avg[i]) ** 2 for i in range(3)))
+            for x, y in comp:
+                if px[x, y][:3] != ink:
+                    px[x, y] = (*tone, px[x, y][3]) if len(px[x, y]) == 4 else tone
+    return im, mask
+
+
+def snap_lab(im, pal):
+    """Nearest token by perceptual (CIELAB) distance. Plain RGB distance sent mid-dark browns (skin) to olive."""
+    import numpy as np
+
+    def lab(rgb):
+        c = rgb / 255.0
+        c = np.where(c > 0.04045, ((c + 0.055) / 1.055) ** 2.4, c / 12.92)
+        xyz = c @ np.array([[0.4124, 0.2126, 0.0193], [0.3576, 0.7152, 0.1192], [0.1805, 0.0722, 0.9505]])
+        xyz /= np.array([0.95047, 1.0, 1.08883])
+        f = np.where(xyz > 0.008856, np.cbrt(xyz), 7.787 * xyz + 16 / 116)
+        return np.stack([116 * f[..., 1] - 16, 500 * (f[..., 0] - f[..., 1]), 200 * (f[..., 1] - f[..., 2])], -1)
+
+    a = np.asarray(im, dtype=np.float64)
+    P = np.array(pal, dtype=np.float64)
+    L, PL = lab(a), lab(P)
+    idx = np.argmin(((L[..., None, :] - PL[None, None, :, :]) ** 2).sum(-1), axis=-1)
+    return Image.fromarray(P[idx].astype(np.uint8), "RGB")
 
 
 def hexrgb(h):
@@ -144,9 +233,10 @@ def hexrgb(h):
 def post(a):
     im = Image.open(RAW / f"{a['slug']}.png").convert("RGB")
     pal = [hexrgb(h) for h in PALETTE[a["style"]]]
-    p = Image.new("P", (1, 1))
-    p.putpalette(sum(pal, ()) + (0, 0, 0) * (256 - len(pal)))
-    snapped = im.quantize(palette=p, dither=Image.Dither.NONE).convert("RGB")  # every pixel is a token
+    snapped = snap_lab(im, pal)  # every pixel is a token
+    skin = None
+    if (RAW / f"{a['slug']}.skin.png").exists():  # flat, grain-free skin (see skinmask)
+        snapped, skin = flatten_skin(snapped, Image.open(RAW / f"{a['slug']}.skin.png").convert("L"), im)
     if a["kind"] in ("spot", "sticker", "person"):
         bg = hexrgb(BG[a["style"]])
         # the model's "plain background" snaps to the lightest token; key it out from the edges
@@ -166,6 +256,8 @@ def post(a):
                 stack += [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
         bbox = rgba.getbbox()
         snapped = rgba.crop(bbox) if bbox else rgba
+        if skin and bbox:
+            skin = skin.crop(bbox)
     if a.get("logo"):
         snapped = place_logo(snapped, a["logo"], hexrgb(BG[a["style"]]))
     long = SIZE[a["kind"]]
@@ -173,8 +265,8 @@ def post(a):
     OUT.mkdir(parents=True, exist_ok=True)
     half = snapped.copy()
     half.thumbnail((long // 2, long // 2), Image.Resampling.LANCZOS)
-    add_grain(snapped, a["slug"]).save(OUT / f"{a['slug']}.webp", "WEBP", quality=80, method=6)
-    add_grain(half, a["slug"] + "-sm").save(OUT / f"{a['slug']}-sm.webp", "WEBP", quality=78, method=6)
+    add_grain(snapped, a["slug"], skin).save(OUT / f"{a['slug']}.webp", "WEBP", quality=80, method=6)
+    add_grain(half, a["slug"] + "-sm", skin).save(OUT / f"{a['slug']}-sm.webp", "WEBP", quality=78, method=6)
 
 
 def place_logo(im, which, cream):
@@ -224,6 +316,10 @@ def place_logo(im, which, cream):
 
 
 if __name__ == "__main__":
+    if sys.argv[1] == "skinmask":  # skinmask <slug ...>
+        for sl in sys.argv[2:]:
+            print(f"skin {sl}  ${skinmask(assets({sl})[0]) or 0:.3f}", flush=True)
+        sys.exit()
     if sys.argv[1] == "edit":  # edit <slug> "<instruction>"
         print(f"edit {sys.argv[2]}  ${edit(assets({sys.argv[2]})[0], sys.argv[3]) or 0:.3f}")
         sys.exit()

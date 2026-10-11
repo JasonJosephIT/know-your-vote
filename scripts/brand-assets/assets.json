@@ -417,6 +417,97 @@
    "section": "people (logo)",
    "logo": "acronym",
    "subject": "full-body young Latino man in a plaid overshirt and wide trousers walking and smiling, carrying a large flat tote bag held facing the viewer; the tote is plain flat cream with a big empty area, nothing printed on it"
+  },
+  {
+   "slug": "walker-nurse",
+   "style": "v2",
+   "kind": "person",
+   "ar": "3:4",
+   "section": "hero rotator",
+   "refs": [
+    "approved-walker-phone-reader.png",
+    "approved-main-street-funk.png",
+    "v2-bike-coffee.png"
+   ],
+   "subject": "same scale, framing and walking pose as the FIRST reference image: full body, mid-stride, stepping to the right and facing right, one foot about to land, relaxed and confident; a Latina nurse in her 40s in scrubs and comfortable sneakers, a lanyard badge (blank) and a travel coffee cup, heading to a shift"
+  },
+  {
+   "slug": "walker-lineworker",
+   "style": "v2",
+   "kind": "person",
+   "ar": "3:4",
+   "section": "hero rotator",
+   "refs": [
+    "approved-walker-phone-reader.png",
+    "approved-main-street-funk.png",
+    "v2-bike-coffee.png"
+   ],
+   "subject": "same scale, framing and walking pose as the FIRST reference image: full body, mid-stride, stepping to the right and facing right, one foot about to land, relaxed and confident; a white utility lineworker in his 40s in a hard hat, work vest over a plaid shirt, boots, carrying a lunch cooler"
+  },
+  {
+   "slug": "walker-fisherman",
+   "style": "v2",
+   "kind": "person",
+   "ar": "3:4",
+   "section": "hero rotator",
+   "refs": [
+    "approved-walker-phone-reader.png",
+    "approved-main-street-funk.png",
+    "v2-bike-coffee.png"
+   ],
+   "subject": "same scale, framing and walking pose as the FIRST reference image: full body, mid-stride, stepping to the right and facing right, one foot about to land, relaxed and confident; an older Black fishing-boat captain with a grey beard, a cap, rolled sleeves and rubber boots, carrying a tackle box"
+  },
+  {
+   "slug": "walker-teacher",
+   "style": "v2",
+   "kind": "person",
+   "ar": "3:4",
+   "section": "hero rotator",
+   "refs": [
+    "approved-walker-phone-reader.png",
+    "approved-main-street-funk.png",
+    "v2-bike-coffee.png"
+   ],
+   "subject": "same scale, framing and walking pose as the FIRST reference image: full body, mid-stride, stepping to the right and facing right, one foot about to land, relaxed and confident; an older white woman schoolteacher with short grey hair, a cardigan over a collared blouse, a midi skirt and sensible shoes, glasses on a beaded chain, carrying a canvas tote of books and a stack of plain folders (blank, no writing)"
+  },
+  {
+   "slug": "walker-student",
+   "style": "v2",
+   "kind": "person",
+   "ar": "3:4",
+   "section": "hero rotator",
+   "refs": [
+    "approved-walker-phone-reader.png",
+    "approved-main-street-funk.png",
+    "v2-bike-coffee.png"
+   ],
+   "subject": "same scale, framing and walking pose as the FIRST reference image: full body, mid-stride, stepping to the right and facing right, one foot about to land, relaxed and confident; a young Asian woman college student with a backpack, wide trousers and chunky sneakers, a skateboard tucked under one arm"
+  },
+  {
+   "slug": "walker-chef",
+   "style": "v2",
+   "kind": "person",
+   "ar": "3:4",
+   "section": "hero rotator",
+   "refs": [
+    "approved-walker-phone-reader.png",
+    "approved-main-street-funk.png",
+    "v2-bike-coffee.png"
+   ],
+   "subject": "same scale, framing and walking pose as the FIRST reference image: full body, mid-stride, stepping to the right and facing right, one foot about to land, relaxed and confident; a Haitian-American chef in his 30s in kitchen whites and an apron, carrying a paper bag of vegetables with greens sticking out"
+  },
+  {
+   "slug": "walker-prosthetic",
+   "style": "v2",
+   "kind": "person",
+   "ar": "3:4",
+   "section": "hero rotator",
+   "refs": [
+    "approved-walker-phone-reader.png",
+    "approved-main-street-funk.png",
+    "v2-bike-coffee.png"
+   ],
+   "subject": "same scale, framing and walking pose as the FIRST reference image: full body, mid-stride, stepping to the right and facing right, one foot about to land, relaxed and confident; a young Black woman runner with a running-blade prosthetic leg, athletic top and joggers, a water bottle in hand, mid-stride"
   }
  ]
 }
