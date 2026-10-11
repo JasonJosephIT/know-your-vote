@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { CandidatePhoto } from "@/components/features/CandidatePhoto";
+import type { RacePhotos } from "@/lib/headshots";
 import { PartyChip } from "@/components/ui/PartyChip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
 import { CampaignWebsite } from "@/components/features/CampaignWebsite";
@@ -46,6 +48,7 @@ export function RaceCompare({
   brief,
   incumbency,
   runningMates,
+  photos = null,
 }: {
   brief: RaceBrief;
   /** The race's incumbency line (incumbencyFor), computed once per race by
@@ -54,6 +57,9 @@ export function RaceCompare({
   /** The race's running mates (runningMatesFor), computed once per race by
       the page: every Governor card shows its line, or none does. */
   runningMates: RunningMates | null;
+  /** The race's headshots (racePhotosFor), computed once per race by the
+      page: every card shows a photo, or none does. */
+  photos?: RacePhotos | null;
 }) {
   const count = brief.candidates.length;
   const cols = { "--cols": Math.min(count, 3) } as React.CSSProperties;
@@ -109,6 +115,7 @@ export function RaceCompare({
               id={`candidate-${candidate.candidate_id}`}
               className="flex flex-col gap-2 rounded-lg border border-border bg-surface p-4"
             >
+              <CandidatePhoto photos={photos} candidateId={candidate.candidate_id} />
               <h3 className="text-h3">
                 <Link
                   href={`/candidates/${candidate.candidate_id}`}

@@ -4,6 +4,7 @@ import { raceStatusLine, statusBranch } from "@/lib/listing-copy";
 import type { CandidateListing as CandidateListingData } from "@/lib/listing";
 import type { Incumbency } from "@/lib/incumbency";
 import type { RunningMates } from "@/lib/running-mate";
+import type { RacePhotos } from "@/lib/headshots";
 
 /* The candidate page for a race that is listed but not yet briefed. Same card
    as the race page's roster (one component, so the candidate page and the
@@ -20,12 +21,16 @@ export function CandidateListing({
   listing,
   incumbency,
   runningMates,
+  photos = null,
 }: {
   listing: CandidateListingData;
   /** The race's incumbency line, from the same rows the race page uses. */
   incumbency: Incumbency | null;
   /** The race's running mates, from the same rows the race page uses. */
   runningMates: RunningMates | null;
+  /** The race's headshots (racePhotosFor), computed once per race by the
+      page: every card shows a photo, or none does. */
+  photos?: RacePhotos | null;
 }) {
   const facts = {
     decidedInPrimary: listing.decidedInPrimary,
@@ -58,6 +63,7 @@ export function CandidateListing({
         status={listing.status}
         incumbency={incumbency}
         runningMates={runningMates}
+        photos={photos}
         raceId={listing.raceId}
         headingLevel="h1"
         linkToDetail={false}

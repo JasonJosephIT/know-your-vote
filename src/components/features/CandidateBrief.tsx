@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { CandidatePhoto } from "@/components/features/CandidatePhoto";
+import type { RacePhotos } from "@/lib/headshots";
 import { PartyChip } from "@/components/ui/PartyChip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
 import { CampaignWebsite } from "@/components/features/CampaignWebsite";
@@ -39,6 +41,7 @@ export function CandidateBrief({
   linkToDetail = true,
   incumbency,
   runningMates,
+  photos = null,
 }: {
   data: CandidateBriefData;
   headingLevel?: "h2" | "h3";
@@ -49,6 +52,9 @@ export function CandidateBrief({
   /** The race's running mates, computed once per race by the page
       (runningMatesFor): every Governor card shows its line, or none does. */
   runningMates: RunningMates | null;
+  /** The race's headshots (racePhotosFor), computed once per race by the
+      page: every card shows a photo, or none does. */
+  photos?: RacePhotos | null;
 }) {
   const { candidate, socials, issues } = data;
   const Heading = headingLevel;
@@ -59,6 +65,12 @@ export function CandidateBrief({
       className="flex h-full flex-col gap-4 rounded-lg border border-border bg-surface p-5"
     >
       <header className="flex flex-col gap-2">
+        <CandidatePhoto
+          photos={photos}
+          candidateId={candidate.candidate_id}
+          size={linkToDetail ? "md" : "lg"}
+          showCredit={!linkToDetail}
+        />
         <Heading className="text-h2">
           {linkToDetail ? (
             <Link

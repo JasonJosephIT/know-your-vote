@@ -207,7 +207,9 @@ check(
 const missing = FROZEN_FILES.filter((f) => !existsSync(join(ROOT, f)));
 check("every frozen file exists", missing.length === 0, missing.join(", "));
 check("no frozen file is listed twice", new Set(FROZEN_FILES).size === FROZEN_FILES.length);
-check("45 frozen files (§3.6.3)", FROZEN_FILES.length === 45, String(FROZEN_FILES.length));
+/* §3.6.3's 45, plus the three headshot files 0056's PR added to the render
+   path (headshots.ts, race-photos.ts, CandidatePhoto.tsx). */
+check("48 frozen files (§3.6.3 + headshots)", FROZEN_FILES.length === 48, String(FROZEN_FILES.length));
 
 /* ---- 3. the command ---------------------------------------------------- */
 

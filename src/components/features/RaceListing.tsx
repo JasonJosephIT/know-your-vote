@@ -2,9 +2,11 @@ import Link from "next/link";
 import { PartyChip } from "@/components/ui/PartyChip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
 import { CampaignWebsite } from "@/components/features/CampaignWebsite";
+import { CandidatePhoto } from "@/components/features/CandidatePhoto";
 import { IncumbencyLine, RunningMateLine } from "@/components/features/RosterLines";
 import { safeHttpUrl } from "@/lib/format";
 import type { Incumbency } from "@/lib/incumbency";
+import type { RacePhotos } from "@/lib/headshots";
 import { listingCardLine } from "@/lib/listing-copy";
 import type { RunningMates } from "@/lib/running-mate";
 import type {
@@ -47,6 +49,7 @@ export function ListedCandidateCard({
   linkToDetail = true,
   incumbency,
   runningMates,
+  photos = null,
 }: {
   data: ListedCandidate;
   status: RaceListingData["status"];
@@ -57,6 +60,9 @@ export function ListedCandidateCard({
   incumbency: Incumbency | null;
   /** The race's running mates (runningMatesFor), computed once per race. */
   runningMates: RunningMates | null;
+  /** The race's headshots (racePhotosFor), computed once per race by the
+      page: every card shows a photo, or none does. */
+  photos?: RacePhotos | null;
 }) {
   const { candidate, socials } = data;
   const Heading = headingLevel;
@@ -64,6 +70,12 @@ export function ListedCandidateCard({
   return (
     <article className="flex h-full flex-col gap-4 rounded-lg border border-border bg-surface p-5">
       <header className="flex flex-col gap-2">
+        <CandidatePhoto
+          photos={photos}
+          candidateId={candidate.candidate_id}
+          size={headingLevel === "h1" ? "lg" : "md"}
+          showCredit={headingLevel === "h1"}
+        />
         <Heading className={headingLevel === "h1" ? "text-h1" : "text-h2"}>
           {linkToDetail ? (
             <Link
@@ -136,10 +148,14 @@ export function RaceListing({
   listing,
   incumbency,
   runningMates,
+  photos = null,
 }: {
   listing: RaceListingData;
   incumbency: Incumbency | null;
   runningMates: RunningMates | null;
+  /** The race's headshots (racePhotosFor), computed once per race by the
+      page: every card shows a photo, or none does. */
+  photos?: RacePhotos | null;
 }) {
   const count = listing.candidates.length;
   return (
@@ -154,6 +170,7 @@ export function RaceListing({
           status={listing.status}
           incumbency={incumbency}
           runningMates={runningMates}
+          photos={photos}
           raceId={listing.race.race_id}
         />
       ))}
