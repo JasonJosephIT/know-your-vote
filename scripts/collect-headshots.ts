@@ -22,6 +22,7 @@
    sharp, must say they are images, and stop at 10 MB. */
 
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import path from "node:path";
 import sharp from "sharp";
 import { createClient } from "@supabase/supabase-js";
@@ -40,6 +41,12 @@ type PlanItem = {
   /** Optional manual crop as fractions of the image (0-1), for a group or
       wide photo where the attention crop could pick the wrong face. */
   crop_box?: { x: number; y: number; w: number; h: number };
+  /** Which detected face is the candidate, largest first (0). Set it when
+      someone else's face is bigger: Gruters beside Trump, Datto's selfie. */
+  face_index?: number;
+  /** Square side as a multiple of the face's height (default 2.6). Lower it
+      where another person stands close. */
+  tightness?: number;
   race_id?: string;
   office?: string;
 };
@@ -122,6 +129,79 @@ async function annotate(plan: PlanItem[]): Promise<PlanItem[]> {
     .sort((a, b) => (a.race_id ?? "").localeCompare(b.race_id ?? ""));
 }
 
+/* ---- Face-centred crops (founder, 2026-10-11) ---------------------------
+
+   "Center on the candidate": the face sits in the middle left to right, its
+   centre 42% from the top, and the square is 2.6x the face's height, so
+   every photo shows a head and shoulders at the same scale with some
+   background around it. Faces come from macOS's Vision framework
+   (scripts/headshot-faces.swift, compiled on first use with swiftc). Where
+   it is unavailable or finds no face, the crop falls back to sharp's
+   attention crop, and the sheet says so. */
+
+let detector: string | null | undefined;
+function faceDetector(outDir: string): string | null {
+  if (detector !== undefined) return detector;
+  const bin = path.join(outDir, ".bin", "headshot-faces");
+  try {
+    if (!existsSync(bin)) {
+      mkdirSync(path.dirname(bin), { recursive: true });
+      const args = [
+        "-O",
+        path.join(import.meta.dirname, "headshot-faces.swift"),
+        "-o",
+        bin,
+      ];
+      /* An x86_64 Node under Rosetta (this repo's local setup, see the
+         README's arm64 note) hands that architecture to its children, and
+         xcrun's library is arm64-only, so swiftc fails to start. Ask for
+         the native architecture explicitly, but only when this really is
+         Rosetta (sysctl.proc_translated = 1): on an Intel Mac x64 is
+         native and arch -arm64 would fail. */
+      const rosetta =
+        process.platform === "darwin" &&
+        process.arch === "x64" &&
+        execFileSync("sysctl", ["-in", "sysctl.proc_translated"], {
+          encoding: "utf8",
+        }).trim() === "1";
+      if (rosetta) execFileSync("arch", ["-arm64", "swiftc", ...args]);
+      else execFileSync("swiftc", args);
+    }
+    detector = bin;
+  } catch (err) {
+    console.error(
+      `note: no face detector (${(err as Error).message.split("\n")[0]}); using the attention crop`
+    );
+    detector = null;
+  }
+  return detector;
+}
+
+type Face = { x: number; y: number; w: number; h: number };
+function detectFaces(bin: string, png: string): Face[] {
+  const line = execFileSync(bin, [png], { encoding: "utf8" }).trim();
+  return line
+    .split("\t")
+    .slice(1)
+    .filter((c) => c !== "ERROR")
+    .map((c) => {
+      const [x, y, w, h] = c.split(" ").map(Number);
+      return { x, y, w, h };
+    });
+}
+
+/** The square around one face, in pixels, kept inside the image. */
+export function faceSquare(face: Face, W: number, H: number, k = 2.6) {
+  const cx = (face.x + face.w / 2) * W;
+  const cy = (face.y + face.h / 2) * H;
+  const want =
+    k === 2.6 ? Math.max(k * face.h * H, 2.1 * face.w * W) : k * face.h * H;
+  const side = Math.floor(Math.min(want, W, H));
+  const left = Math.round(Math.max(0, Math.min(W - side, cx - side / 2)));
+  const top = Math.round(Math.max(0, Math.min(H - side, cy - 0.42 * side)));
+  return { left, top, width: side, height: side };
+}
+
 async function stage(outDir: string, planFiles: string[]) {
   const plan = await annotate(readPlan(planFiles));
   const raw = path.join(outDir, "raw");
@@ -148,9 +228,12 @@ async function stage(outDir: string, planFiles: string[]) {
       const out = path.join(crops, `${slug(item.candidate_id)}.webp`);
       let img = sharp(buf).rotate();
       const box = item.crop_box;
-      if (box && meta.width && meta.height) {
-        const W = meta.width;
-        const H = meta.height;
+      /* The box is drawn on the photo as a browser shows it, i.e. after its
+         EXIF orientation, and .rotate() applies that orientation before
+         extract, so the box is measured against the oriented size. */
+      const W = meta.autoOrient?.width ?? meta.width;
+      const H = meta.autoOrient?.height ?? meta.height;
+      if (box && W && H) {
         const left = Math.max(0, Math.round(box.x * W));
         const top = Math.max(0, Math.round(box.y * H));
         img = sharp(
@@ -164,13 +247,57 @@ async function stage(outDir: string, planFiles: string[]) {
             .toBuffer()
         );
       }
-      await img
-        .resize(SIZE, SIZE, {
-          fit: "cover",
-          position: sharp.strategy.attention,
-        })
-        .webp({ quality: 82 })
-        .toFile(out);
+      /* Normalised (rotated, crop_box applied) before detection, so the
+         face boxes are in the same frame as the crop. */
+      const norm = await img.png().toBuffer();
+      const bin = faceDetector(outDir);
+      let centred = false;
+      let why = bin ? "no face found" : "no face detector";
+      if (bin) {
+        const normPath = path.join(raw, `${slug(item.candidate_id)}.norm.png`);
+        writeFileSync(normPath, norm);
+        let faces: Face[] = [];
+        try {
+          faces = detectFaces(bin, normPath);
+        } catch (err) {
+          why = `face detector failed: ${(err as Error).message.split("\n")[0]}`;
+        }
+        /* An explicit face_index exists because face 0 is the wrong person;
+           if that face isn't there any more, falling back to the attention
+           crop could land on exactly that person, so stop instead. */
+        if (
+          item.face_index !== undefined &&
+          faces.length > 0 &&
+          !faces[item.face_index]
+        ) {
+          throw new Error(
+            `face_index ${item.face_index} but only ${faces.length} face(s) found: set face_index or crop_box again`
+          );
+        }
+        const face = faces[item.face_index ?? 0];
+        const nm = await sharp(norm).metadata();
+        if (face && nm.width && nm.height) {
+          await sharp(norm)
+            .extract(faceSquare(face, nm.width, nm.height, item.tightness))
+            .resize(SIZE, SIZE)
+            .webp({ quality: 82 })
+            .toFile(out);
+          centred = true;
+          if (faces.length > 1)
+            item.notes =
+              `${item.notes ?? ""} [${faces.length} faces found: check the crop is the candidate]`.trim();
+        }
+      }
+      if (!centred) {
+        await sharp(norm)
+          .resize(SIZE, SIZE, {
+            fit: "cover",
+            position: sharp.strategy.attention,
+          })
+          .webp({ quality: 82 })
+          .toFile(out);
+        item.notes = `${item.notes ?? ""} [${why}: attention crop]`.trim();
+      }
       results.push({
         ...item,
         crop: `crops/${slug(item.candidate_id)}.webp`,
@@ -257,7 +384,7 @@ ${races}
 const boxes=[...document.querySelectorAll('input[data-id]')];
 const upd=()=>document.getElementById('count').textContent=boxes.filter(b=>b.checked).length+' confirmed';
 boxes.forEach(b=>b.addEventListener('change',upd));
-document.getElementById('all').onclick=()=>{boxes.forEach(b=>{if(b.closest('.card').querySelector('.conf.high'))b.checked=true});upd()};
+document.getElementById('all').onclick=()=>{boxes.forEach(b=>{const c=b.closest('.card');/* never bulk-tick a crop that needs a look: more than one face, or no face found */if(c.querySelector('.conf.high')&&!/faces found|attention crop/.test(c.textContent))b.checked=true});upd()};
 document.getElementById('copy').onclick=async()=>{const ids=JSON.stringify(boxes.filter(b=>b.checked).map(b=>b.dataset.id));try{await navigator.clipboard.writeText(ids);document.getElementById('msg').textContent='Copied.'}catch{prompt('Copy this:',ids)}};
 </script></body></html>`;
 }
