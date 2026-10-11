@@ -31,7 +31,7 @@ Kit = already made (step 1). Held = slot-specific art still to make, now sized a
 | # | Page · slot | Asset | Status | How it sits |
 |---|---|---|---|---|
 | 1 | Home · masthead strip (live) | `textures/tex-masthead-ink.webp` | Kit | Repeating background on the Ink bar; text stays on top |
-| 2 | Home · lede, right of the intro paragraph | hero rotator: 8 walkers over `bg-sunburst` (`site/rotator/`, demo `hero-rotator.html`) | Kit, needs a layout change | The H1 spans the column, so the paragraph narrows to ~58% at ≥1024px and the figure (~190px) sits beside it, sunburst feathered behind; hidden below `lg` |
+| 2 | Home · lede, right of the intro paragraph | hero walk: 8 walkers stroll past in one procession over `bg-sunburst` (`site/rotator/`, sharp frames; `HeroRotator.tsx`; the swap demo `hero-rotator.html` is archived) | Built | The H1 spans the column, so the paragraph narrows to ~58% at ≥1024px and the figure (~190px) sits beside it, sunburst feathered behind; hidden below `lg` |
 | 3 | Home · key dates card | `sticker-sun` | Kit | 56px, peeking from the card's top-right corner. Nothing on the stops: their dots carry the past / today / next state |
 | 4 | Home · at-a-glance tiles (5 races · 17 candidates · 3 questions) | `sticker-palm` (races), `sticker-magnifier` (questions) | Kit | 36px in the tile's top-right corner; the candidates tile stays plain |
 | 5 | Home · section breaks | `divider-zigzag` / `divider-wave` | Kit | Replaces the 1px `border-t` between home sections; `currentColor` = `accent` at 60% |
