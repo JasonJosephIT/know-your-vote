@@ -33,7 +33,7 @@ def speckle(size, base, specks, alpha_base=255):
 
 
 speckle(512, "#F5EBD8", [("#E4DED2", 0.06, 255), ("#CFC7B6", 0.015, 255), ("#22271F", 0.002, 255)]).save(OUT / "tex-paper-grain.webp", "WEBP", lossless=True)
-speckle(512, None, [("#22271F", 0.004, 90), ("#22271F", 0.0015, 160)]).save(OUT / "tex-riso-speckle.webp", "WEBP", lossless=True)
+speckle(512, None, [("#22271F", 0.0018, 60), ("#22271F", 0.0006, 110)]).save(OUT / "tex-riso-speckle.webp", "WEBP", lossless=True)
 speckle(256, "#22271F", [("#2F6B4F", 0.03, 255), ("#585E52", 0.02, 255)]).save(OUT / "tex-masthead-ink.webp", "WEBP", lossless=True)
 
 svgs = {
@@ -49,7 +49,6 @@ for i in range(0, n, 2):
     a0, a1 = math.pi * i / n, math.pi * (i + 1) / n
     rays.append(f"M600 600L{600 - 900 * math.cos(a0):.1f} {600 - 900 * math.sin(a0):.1f}L{600 - 900 * math.cos(a1):.1f} {600 - 900 * math.sin(a1):.1f}Z")
 svgs["bg-sunburst.svg"] = ('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMax slice">'
-                           '<rect width="1200" height="600" fill="#F5EBD8"/>'
                            f'<path d="{"".join(rays)}" fill="#E3A72E" fill-opacity=".22"/>'
                            '<circle cx="600" cy="600" r="150" fill="#E3A72E" fill-opacity=".35"/></svg>')
 for name, body in svgs.items():
