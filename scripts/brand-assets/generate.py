@@ -110,6 +110,33 @@ def edit(a, instruction):
     return res.get("usage", {}).get("cost")
 
 
+# The house grain (2026-10-11): one medium-light grain on every illustration, applied at the output size so the
+# specks are the same size on screen in every file. Each tuple: (token colour, share of pixels, opacity).
+GRAIN = [("#22271F", 0.035, 0.22), ("#22271F", 0.008, 0.40), ("#F5EBD8", 0.025, 0.30)]
+
+
+def add_grain(im, seed):
+    """Clean the model's own speckle out first (mode filter on the token-snapped image), then lay the house grain."""
+    import random
+    from PIL import ImageFilter
+    rnd = random.Random(seed)
+    im = im.convert("RGBA")
+    alpha = im.getchannel("A")
+    im = im.convert("RGB").filter(ImageFilter.ModeFilter(3)).convert("RGBA")
+    im.putalpha(alpha)
+    w, h = im.size
+    px = im.load()
+    for colour, share, opacity in GRAIN:
+        c = hexrgb(colour)
+        for _ in range(int(w * h * share)):
+            x, y = rnd.randrange(w), rnd.randrange(h)
+            r, g, b, a = px[x, y]
+            if a < 255:
+                continue
+            px[x, y] = (round(r + (c[0] - r) * opacity), round(g + (c[1] - g) * opacity), round(b + (c[2] - b) * opacity), a)
+    return im
+
+
 def hexrgb(h):
     return tuple(int(h[i:i + 2], 16) for i in (1, 3, 5))
 
@@ -144,10 +171,10 @@ def post(a):
     long = SIZE[a["kind"]]
     snapped.thumbnail((long, long), Image.Resampling.LANCZOS)
     OUT.mkdir(parents=True, exist_ok=True)
-    snapped.save(OUT / f"{a['slug']}.webp", "WEBP", quality=88, method=6)
     half = snapped.copy()
     half.thumbnail((long // 2, long // 2), Image.Resampling.LANCZOS)
-    half.save(OUT / f"{a['slug']}-sm.webp", "WEBP", quality=85, method=6)
+    add_grain(snapped, a["slug"]).save(OUT / f"{a['slug']}.webp", "WEBP", quality=80, method=6)
+    add_grain(half, a["slug"] + "-sm").save(OUT / f"{a['slug']}-sm.webp", "WEBP", quality=78, method=6)
 
 
 def place_logo(im, which, cream):

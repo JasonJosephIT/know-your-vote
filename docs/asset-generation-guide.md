@@ -94,6 +94,11 @@ The page art in roadmap §1b. Generated with Nano Banana Pro (`google/gemini-3-p
   seals.
 - **Post-processing is the token check:** `post` snaps every pixel to the style's token palette (no dither), keys
   the plain background out of spots/stickers/people to transparent, trims, and exports WebP master + `-sm`.
+- **House grain (2026-10-11):** every illustration gets the same medium-light grain, defined once as `GRAIN` in
+  `generate.py`: the model's own speckle is cleaned out (mode filter), then Ink specks (3.5% of pixels at 22%,
+  0.8% at 40%) and Cream specks (2.5% at 30%) are laid at the *output* size, so specks are the same size on
+  screen in every file. Change the grain only there, then re-run `post` on every slug. Do not ask the model for
+  grain in a prompt.
 - **Lessons from the first run (2026-10-11):** object stickers anchor on approved stickers
   (`refs/approved-sticker-*`), because scene references leak their subjects into isolated objects; if a
   subject still leaks, set `"refs": []` on that row and let the text recipe carry the style. People get "no
