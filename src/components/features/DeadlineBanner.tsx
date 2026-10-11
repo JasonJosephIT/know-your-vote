@@ -9,6 +9,7 @@ import {
   eventsForCounty,
 } from "@/lib/notifications/schedule";
 import { KeyDatesRail } from "@/components/features/KeyDatesRail";
+import { Art } from "@/components/brand/Art";
 
 /* The one piece of urgency on the landing page (TASK-064).
 
@@ -68,9 +69,26 @@ export async function DeadlineBanner({
       aria-label="Key dates"
       /* Calm, not alarmed — the design brief's reference librarian, not a
          campaign banner. No red, no siren, no exclamation. */
-      className="flex flex-col gap-3 rounded-lg border border-border bg-surface px-4 py-4 text-body-sm"
+      className="relative flex flex-col gap-3 rounded-lg border border-border bg-surface px-4 py-4 text-body-sm"
     >
-      <p className="font-semibold text-primary-hover">{parts.join(" · ")}</p>
+      {/* The sun sticker (site illustration layer, design.md), lg+ only.
+         56 px, hung off the top-right corner: 26 px above the card and
+         22 px past it, so it reaches 30 px down and 34 px in, which is
+         14 px into the 16 px padding's content box at the top and 18 px
+         at the right. The first line gets 28 px of right padding from lg
+         up, so the date line never runs under it; the rail starts below
+         the line, lower than the sticker reaches. Above the card it sits
+         in the 32 px gap under the intro paragraph, and past the card in
+         the 48 px column gap, so it touches no text and no link. The key
+         dates themselves stay plain. */}
+      <Art
+        name="sticker-sun"
+        height={56}
+        className="absolute -top-[26px] -right-[22px] hidden lg:block"
+      />
+      <p className="font-semibold text-primary-hover lg:pr-[28px]">
+        {parts.join(" · ")}
+      </p>
       {stops && <KeyDatesRail stops={stops} />}
       <p className="flex flex-wrap gap-x-4 gap-y-1 text-primary">
         <a

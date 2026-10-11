@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { Art } from "@/components/brand/Art";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 
@@ -62,11 +63,7 @@ export function InstallCard() {
      earlier visit renders nothing at all. */
   if (dismissed) {
     return (
-      <span
-        ref={standInRef}
-        tabIndex={-1}
-        className="sr-only"
-      >
+      <span ref={standInRef} tabIndex={-1} className="sr-only">
         Get the app card dismissed
       </span>
     );
@@ -113,27 +110,48 @@ export function InstallCard() {
         onClick={dismiss}
         className="absolute top-3 right-3 rounded-sm p-1 text-on-surface-muted hover:text-on-surface"
       >
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" className="size-4" aria-hidden>
+        <svg
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          className="size-4"
+          aria-hidden
+        >
           <path d="M5 5l10 10M15 5L5 15" strokeLinecap="round" />
         </svg>
       </button>
-      <p className="text-label">Get the app</p>
-      {installPrompt ? (
-        <>
-          <p className="mt-1 text-body-sm text-on-surface-muted">
-            Install Know Your Vote on your home screen — same site, one tap
-            away.
-          </p>
-          <Button variant="secondary" className="mt-3" onClick={install}>
-            Install
-          </Button>
-        </>
-      ) : (
-        <p className="mt-1 text-body-sm text-on-surface-muted">
-          Add Know Your Vote to your home screen: tap the Share button, then
-          &ldquo;Add to Home Screen&rdquo;.
-        </p>
-      )}
+      {/* The KYV badge sticker beside the copy (design.md "Site illustration
+         layer"), lg+ only: on phones the card keeps its single column. It
+         sits on the left, so the dismiss button at top-right stays clear,
+         and it is the only mark here (the badge already holds the
+         monogram). Decorative: Art wraps it aria-hidden, no pointer events. */}
+      <div className="flex items-start gap-4">
+        <Art
+          name="sticker-kyv-badge"
+          height={72}
+          className="hidden shrink-0 lg:block"
+        />
+        <div className="min-w-0 flex-1">
+          <p className="text-label">Get the app</p>
+          {installPrompt ? (
+            <>
+              <p className="mt-1 text-body-sm text-on-surface-muted">
+                Install Know Your Vote on your home screen — same site, one tap
+                away.
+              </p>
+              <Button variant="secondary" className="mt-3" onClick={install}>
+                Install
+              </Button>
+            </>
+          ) : (
+            <p className="mt-1 text-body-sm text-on-surface-muted">
+              Add Know Your Vote to your home screen: tap the Share button, then
+              &ldquo;Add to Home Screen&rdquo;.
+            </p>
+          )}
+        </div>
+      </div>
     </Card>
   );
 }

@@ -91,14 +91,21 @@ export const metadata: Metadata = {
     description: SHARE_DESCRIPTION,
     type: "website",
     siteName: "Know Your Vote",
+    /* The walkers share card (site illustration layer, 2026-10-11). Its
+       words match SITE_TITLE and SHARE_DESCRIPTION, where the old card's
+       "See who's on your Florida ballot" reads as a complete ballot (see
+       above). The alt text is the words on the card, word for word.
+
+       Recommended (pending founder confirmation). To flip back: set url to
+       "/brand/site/og-card.png" and alt to "Know Your Vote. See who's on
+       your Florida ballot."; the old file is still in public/brand/site/
+       and is the same 1200x630. */
     images: [
       {
-        url: "/brand/site/og-card.png",
+        url: "/brand/site/og-card-walkers.png",
         width: 1200,
         height: 630,
-        /* The words on the card itself (public/brand/site/og-card.png),
-           which say "Florida", not "local" (interface review 2026-10-05). */
-        alt: "Know Your Vote. See who's on your Florida ballot.",
+        alt: "Know Your Vote. Florida candidates, in their own words. Every quote linked to its source. No ZIP needed.",
       },
     ],
   },

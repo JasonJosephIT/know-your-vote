@@ -1,0 +1,294 @@
+{
+ "about-neighbors": [
+  1200,
+  805
+ ],
+ "band-coast": [
+  1200,
+  509
+ ],
+ "band-horizon": [
+  1200,
+  509
+ ],
+ "climb-tiles": [
+  306,
+  600
+ ],
+ "error-404-funk": [
+  472,
+  600
+ ],
+ "footer-thin-strip": [
+  1200,
+  163
+ ],
+ "footer-town-strip": [
+  1200,
+  509
+ ],
+ "hang-masthead": [
+  195,
+  600
+ ],
+ "lean-card-side": [
+  228,
+  600
+ ],
+ "lie-footer": [
+  600,
+  233
+ ],
+ "measure-reader": [
+  600,
+  581
+ ],
+ "method-receipts": [
+  600,
+  519
+ ],
+ "news-empty": [
+  600,
+  431
+ ],
+ "peek-card-edge": [
+  600,
+  488
+ ],
+ "person-elder-reader": [
+  246,
+  600
+ ],
+ "person-kyv-tote": [
+  317,
+  600
+ ],
+ "person-phone-reader": [
+  343,
+  600
+ ],
+ "person-skater": [
+  459,
+  600
+ ],
+ "person-student": [
+  319,
+  600
+ ],
+ "person-wheelchair": [
+  406,
+  600
+ ],
+ "pet-cat-peek": [
+  600,
+  435
+ ],
+ "pet-dog-sit": [
+  266,
+  500
+ ],
+ "point-zip": [
+  322,
+  600
+ ],
+ "rotator/person-phone-reader": [
+  450,
+  600
+ ],
+ "rotator/person-phone-reader-blur-in": [
+  450,
+  600
+ ],
+ "rotator/person-phone-reader-blur-out": [
+  450,
+  600
+ ],
+ "rotator/walker-chef": [
+  450,
+  600
+ ],
+ "rotator/walker-chef-blur-in": [
+  450,
+  600
+ ],
+ "rotator/walker-chef-blur-out": [
+  450,
+  600
+ ],
+ "rotator/walker-fisherman": [
+  450,
+  600
+ ],
+ "rotator/walker-fisherman-blur-in": [
+  450,
+  600
+ ],
+ "rotator/walker-fisherman-blur-out": [
+  450,
+  600
+ ],
+ "rotator/walker-lineworker": [
+  450,
+  600
+ ],
+ "rotator/walker-lineworker-blur-in": [
+  450,
+  600
+ ],
+ "rotator/walker-lineworker-blur-out": [
+  450,
+  600
+ ],
+ "rotator/walker-nurse": [
+  450,
+  600
+ ],
+ "rotator/walker-nurse-blur-in": [
+  450,
+  600
+ ],
+ "rotator/walker-nurse-blur-out": [
+  450,
+  600
+ ],
+ "rotator/walker-prosthetic": [
+  450,
+  600
+ ],
+ "rotator/walker-prosthetic-blur-in": [
+  450,
+  600
+ ],
+ "rotator/walker-prosthetic-blur-out": [
+  450,
+  600
+ ],
+ "rotator/walker-student": [
+  450,
+  600
+ ],
+ "rotator/walker-student-blur-in": [
+  450,
+  600
+ ],
+ "rotator/walker-student-blur-out": [
+  450,
+  600
+ ],
+ "rotator/walker-teacher": [
+  450,
+  600
+ ],
+ "rotator/walker-teacher-blur-in": [
+  450,
+  600
+ ],
+ "rotator/walker-teacher-blur-out": [
+  450,
+  600
+ ],
+ "sit-divider": [
+  395,
+  600
+ ],
+ "sticker-boombox": [
+  500,
+  334
+ ],
+ "sticker-daisy": [
+  357,
+  500
+ ],
+ "sticker-envelope": [
+  500,
+  392
+ ],
+ "sticker-flamingo": [
+  271,
+  500
+ ],
+ "sticker-kyv-badge": [
+  492,
+  500
+ ],
+ "sticker-magnifier": [
+  500,
+  457
+ ],
+ "sticker-orange": [
+  500,
+  481
+ ],
+ "sticker-palm": [
+  434,
+  500
+ ],
+ "sticker-pelican": [
+  314,
+  500
+ ],
+ "sticker-raised-hand": [
+  281,
+  500
+ ],
+ "sticker-sneaker": [
+  500,
+  371
+ ],
+ "sticker-sun": [
+  499,
+  500
+ ],
+ "walker-chef": [
+  320,
+  600
+ ],
+ "walker-fisherman": [
+  388,
+  600
+ ],
+ "walker-lineworker": [
+  344,
+  600
+ ],
+ "walker-nurse": [
+  342,
+  600
+ ],
+ "walker-prosthetic": [
+  344,
+  600
+ ],
+ "walker-student": [
+  322,
+  600
+ ],
+ "walker-teacher": [
+  301,
+  600
+ ],
+ "xs/pet-dog-sit": [
+  102,
+  192
+ ],
+ "xs/sticker-envelope": [
+  245,
+  192
+ ],
+ "xs/sticker-kyv-badge": [
+  189,
+  192
+ ],
+ "xs/sticker-magnifier": [
+  210,
+  192
+ ],
+ "xs/sticker-palm": [
+  167,
+  192
+ ],
+ "xs/sticker-sun": [
+  192,
+  192
+ ]
+}

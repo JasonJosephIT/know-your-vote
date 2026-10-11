@@ -3,6 +3,8 @@ import { getActiveMeasures } from "@/lib/measures";
 import { getStatewideRaces } from "@/lib/races";
 import { COVERED_COUNTIES } from "@/lib/counties";
 import { locationFieldCopy } from "@/lib/scope-copy";
+import { LedgeArt } from "@/components/brand/Ledge";
+import { SectionDivider } from "@/components/brand/SectionDivider";
 
 /* "What this guide covers": the home page's one statement of scope
    (inspiration pass 2026-10-05, draft; GOV.UK summary list). Before it, what
@@ -32,7 +34,21 @@ import { locationFieldCopy } from "@/lib/scope-copy";
    print; change them together.
 
    Recommended (pending founder confirmation). TO FLIP: remove
-   <CoverageSummary /> from src/app/(public)/page.tsx. */
+   <CoverageSummary /> from src/app/(public)/page.tsx.
+
+   Art (design.md "Site illustration layer"): a wave divider replaces the
+   old border-t (gap-3 + mb-3 keeps the old pt-6), and at lg+ a figure peeks
+   over the card's top edge at its right end (peek-card-edge, ledge 0.93).
+   At 120px tall it is about 148px wide and rises about 112px above the card,
+   so the h2 gets lg:mt-12 to keep the figure below the divider. The figure
+   is fixed px but the heading and the lg breakpoint scale with rem, so at
+   enlarged text sizes (WCAG 1.4.4; e.g. a 32px root makes the heading about
+   560px in a 604px column) the heading would run under it. lg:pr-44 (11rem,
+   never less than the figure's 164px from the column's right edge, right-4
+   plus about 148px) makes a long or enlarged heading wrap before it reaches
+   the figure, as page.tsx does for its House-race h2. Its fingers dip about 8px into the card, inside the first row's 12px
+   top padding, clear of the row text. band-horizon behind the heading was
+   left out: a band under heading text risks the 4.5:1 contrast floor. */
 export async function CoverageSummary({
   hasDistrict,
   addressEnabled,
@@ -54,52 +70,61 @@ export async function CoverageSummary({
   const statewide = [
     races.length > 0 &&
       `${races.length} statewide ${races.length === 1 ? "race" : "races"}` +
-        (briefs === races.length ? "" : ` (${briefs} with a full brief so far)`),
+        (briefs === races.length
+          ? ""
+          : ` (${briefs} with a full brief so far)`),
     measures.length > 0 &&
       `${measures.length} ${measures.length === 1 ? "amendment" : "amendments"}`,
   ].filter(Boolean) as string[];
 
   return (
-    <section
-      aria-labelledby="coverage"
-      className="flex flex-col gap-3 border-t border-border pt-6"
-    >
-      <h2 id="coverage" className="text-h2">
+    <section aria-labelledby="coverage" className="flex flex-col gap-3">
+      <SectionDivider variant="wave" className="mb-3" />
+      <h2 id="coverage" className="text-h2 lg:mt-12 lg:pr-44">
         What this guide covers
       </h2>
-      <dl className="flex flex-col divide-y divide-border rounded-lg border border-border bg-surface">
-        <Row term="Every Florida voter">
-          {statewide.length > 0
-            ? `${statewide.join(" and ")}, the same for everyone, whatever your ZIP or party.`
-            : "The statewide races and amendments, once they're published."}
-        </Row>
-        <Row term={`${countyList} ${counties.length === 1 ? "County" : "counties"}`}>
-          The U.S. House races, and the county commission, school board,
-          Orange County mayor and Orange County clerk races.{" "}
-          {hasDistrict
-            ? "Your district's races are linked above."
-            : `Add your ${locationFieldCopy(addressEnabled).noun} above for your House race.`}{" "}
-          Your county&rsquo;s sample ballot says which commission and school
-          board seats are yours.
-        </Row>
-        <Row term="Not covered">
-          Florida House and Florida Senate seats, judges (retention questions
-          and other judicial races), county and city ballot questions, city
-          races, special districts such as soil and water conservation and
-          community development districts, and local races in other counties.
-          Your county Supervisor of Elections has your official sample
-          ballot.{" "}
-          <Link
-            href="/methodology#not-covered"
-            className="underline underline-offset-2 hover:text-on-surface"
+      <div className="relative">
+        <LedgeArt
+          name="peek-card-edge"
+          height={120}
+          edge="top"
+          className="right-4 hidden lg:block"
+        />
+        <dl className="flex flex-col divide-y divide-border rounded-lg border border-border bg-surface">
+          <Row term="Every Florida voter">
+            {statewide.length > 0
+              ? `${statewide.join(" and ")}, the same for everyone, whatever your ZIP or party.`
+              : "The statewide races and amendments, once they're published."}
+          </Row>
+          <Row
+            term={`${countyList} ${counties.length === 1 ? "County" : "counties"}`}
           >
-            What we don&rsquo;t cover
-          </Link>
-        </Row>
-      </dl>
+            The U.S. House races, and the county commission, school board,
+            Orange County mayor and Orange County clerk races.{" "}
+            {hasDistrict
+              ? "Your district's races are linked above."
+              : `Add your ${locationFieldCopy(addressEnabled).noun} above for your House race.`}{" "}
+            Your county&rsquo;s sample ballot says which commission and school
+            board seats are yours.
+          </Row>
+          <Row term="Not covered">
+            Florida House and Florida Senate seats, judges (retention questions
+            and other judicial races), county and city ballot questions, city
+            races, special districts such as soil and water conservation and
+            community development districts, and local races in other counties.
+            Your county Supervisor of Elections has your official sample ballot.{" "}
+            <Link
+              href="/methodology#not-covered"
+              className="underline underline-offset-2 hover:text-on-surface"
+            >
+              What we don&rsquo;t cover
+            </Link>
+          </Row>
+        </dl>
+      </div>
       <p className="text-caption text-on-surface-muted">
-        Every candidate in a race we cover gets the same questions and the
-        same rules.{" "}
+        Every candidate in a race we cover gets the same questions and the same
+        rules.{" "}
         <Link
           href="/methodology"
           className="underline underline-offset-2 hover:text-on-surface"

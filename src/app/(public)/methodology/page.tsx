@@ -8,6 +8,7 @@ import { COVERED_COUNTIES } from "@/lib/counties";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { orderCandidates } from "@/lib/ballot-order";
 import { SHOW_INCUMBENT_CHIP } from "@/lib/incumbency";
+import { Art } from "@/components/brand/Art";
 
 export const revalidate = 3600;
 export const metadata = { title: "How we stay fair — Know Your Vote" };
@@ -301,6 +302,15 @@ export default async function MethodologyPage() {
           .
         </p>
       </header>
+
+      {/* A spot illustration under the page header, on its own row: above
+          the first numbered or sourced section, never inside one, and under
+          no text. lg+ only. */}
+      <Art
+        name="method-receipts"
+        height={220}
+        className="hidden self-center lg:block"
+      />
 
       <section className="flex flex-col gap-2">
         <h2 className="text-h2">Candidates in their own words</h2>
