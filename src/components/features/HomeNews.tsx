@@ -1,41 +1,51 @@
-import Link from "next/link";
 import { unstable_cache } from "next/cache";
-import { NewsStoryCard } from "@/components/features/NewsStoryCard";
+import { NewsRail, type RailItem } from "@/components/features/NewsRail";
 import { createAnonServerClient } from "@/lib/supabase/server";
 import { dedupeByUrl } from "@/lib/news-feed";
 import { outletForUrl } from "@/lib/news-sources";
+import { newsRegion, regionOrder } from "@/lib/news-region";
+import { coveredCounty } from "@/lib/counties";
 import type { NewsSource } from "@/lib/news-labels";
 import type { NewsItemType } from "@/types/app";
 
-/* The home page's news block (inspiration pass 2026-10-05, draft): the
-   newest few STATEWIDE items, so a first-time visitor sees the feed exists
-   without leaving the ballot.
+/* The home page's news column (layout pass 2026-10-11, item 6; it began as
+   a three-story block in the inspiration pass of 2026-10-05).
 
-   Statewide only, the same scope /api/news gives with no county (race,
-   metro and county all null), and no candidate either: /admin can write a
-   candidate_news row with only a candidate set, and one candidate's story on
-   the home page would skip news-fairness.md §2's equal slots. The query
-   enforces that, rather than this comment assuming it.
+   Statewide AND county stories now (founder, 2026-10-11), newest first,
+   with a filter by region. Still no candidate and no race: /admin can
+   write a candidate_news row with only a candidate set, and one
+   candidate's story on the home page would skip news-fairness.md §2's
+   equal slots; a race-scoped row is about that race's candidates for the
+   same reason. The query enforces both, rather than this comment assuming
+   them.
+
+   Order is time and nothing else. No story is picked as "top"; when one
+   county has more coverage than another, the column shows that, as the
+   world made it (AGENTS.md, Neutrality).
+
+   Only the last 45 days: the oldest county rows are notices about the
+   August primary, and a column that leads a region with a primary notice
+   in October is wrong in a way a shorter list is not.
 
    Dates are formatted in Florida's time zone. This renders on the server
    (UTC on Vercel), and a story from 9 p.m. Eastern would otherwise show
    tomorrow's date here and today's on /news, which formats in the reader's
    own zone.
 
-   No lean on these cards, for the same reason as everywhere else
-   (news-fairness.md §1, amended 2026-09-19): NewsStoryCard has no lean field,
-   and lean is disclosed on each outlet's page, linked below as "Where the
-   news comes from". Server component, cached for 15 minutes, and silent on
-   failure: the ballot is the page, this is a pointer. */
+   No lean on these rows, for the same reason as everywhere else
+   (news-fairness.md §1, amended 2026-09-19): NewsStoryCard has no lean
+   field, and lean is disclosed on each outlet's page, linked below as
+   "Where the news comes from". Server-rendered and cached for 15 minutes;
+   silent on failure: the ballot is the page, this is a pointer. */
 
-const SHOW = 3;
+const FETCH = 60;
+const MAX_AGE_DAYS = 45;
 
 /* formatNewsDate's format, pinned to Florida's zone (see above). */
 function floridaDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
-    year: "numeric",
     timeZone: "America/New_York",
   });
 }
@@ -47,91 +57,82 @@ type Row = {
   url: string | null;
   published_at: string;
   image_url: string | null;
+  metro: string | null;
+  county_fips: string | null;
   source: NewsSource | NewsSource[] | null;
 };
 
-const latestStatewide = unstable_cache(
+const latestRegional = unstable_cache(
   async (): Promise<Row[]> => {
     const supabase = await createAnonServerClient();
+    const since = new Date(
+      Date.now() - MAX_AGE_DAYS * 86_400_000
+    ).toISOString();
     const { data, error } = await supabase
       .from("news_item")
-      .select("id, item_type, title, url, published_at, image_url, source(publisher, type, lean_tag)")
+      .select(
+        "id, item_type, title, url, published_at, image_url, metro, county_fips, source(publisher, type, lean_tag)"
+      )
       .is("race_id", null)
-      .is("metro", null)
-      .is("county_fips", null)
       .is("candidate_id", null)
+      .gte("published_at", since)
       .order("published_at", { ascending: false })
-      .limit(12);
+      .limit(FETCH);
     if (error) throw error;
     return (data ?? []) as unknown as Row[];
   },
-  ["home-news-statewide"],
+  ["home-news-regional"],
   { revalidate: 900, tags: ["news"] }
 );
 
-export async function HomeNews() {
+export async function HomeNews({
+  countyFips,
+}: {
+  /** The saved district's county: the filter opens on it when it has stories. */
+  countyFips?: string | null;
+}) {
   let rows: Row[];
   try {
-    rows = await latestStatewide();
+    rows = await latestRegional();
   } catch {
     return null;
   }
-  const items = dedupeByUrl(
+
+  const items: RailItem[] = [];
+  for (const r of dedupeByUrl(
     rows.map((r) => ({ ...r, candidateId: null, publishedAt: r.published_at }))
-  ).slice(0, SHOW);
+  )) {
+    const region = newsRegion(r);
+    if (!region) continue;
+    const source = Array.isArray(r.source) ? (r.source[0] ?? null) : r.source;
+    items.push({
+      id: r.id,
+      region,
+      title: r.title,
+      url: r.url,
+      imageUrl: r.image_url,
+      source,
+      outletDomain: r.url ? (outletForUrl(r.url)?.domain ?? null) : null,
+      dateLabel: floridaDate(r.published_at),
+      kindFallback:
+        r.item_type === "official_link"
+          ? "Official resource"
+          : r.item_type === "pipeline_event"
+            ? "Update"
+            : null,
+    });
+  }
   if (items.length === 0) return null;
 
-  return (
-    <section
-      aria-labelledby="home-news"
-      className="flex flex-col gap-3 border-t border-border pt-6"
-    >
-      <div className="flex flex-col gap-1">
-        <h2 id="home-news" className="text-h2">
-          Latest election news
-        </h2>
-        <p className="text-caption text-on-surface-muted">
-          Statewide stories and official notices, newest first.
-        </p>
-      </div>
-      <ul className="flex flex-col gap-3">
-        {items.map((i) => {
-          const source = Array.isArray(i.source) ? (i.source[0] ?? null) : i.source;
-          return (
-            <li key={i.id}>
-              <NewsStoryCard
-                title={i.title}
-                url={i.url}
-                imageUrl={i.image_url}
-                source={source}
-                outletDomain={i.url ? (outletForUrl(i.url)?.domain ?? null) : null}
-                dateLabel={floridaDate(i.published_at)}
-                kindFallback={
-                  i.item_type === "official_link"
-                    ? "Official resource"
-                    : i.item_type === "pipeline_event"
-                      ? "Update"
-                      : null
-                }
-              />
-            </li>
-          );
-        })}
-      </ul>
-      <p className="flex flex-wrap gap-x-4 gap-y-1 text-body-sm">
-        <Link
-          href="/news"
-          className="inline-flex min-h-[24px] items-center text-primary underline underline-offset-2 hover:text-primary-hover"
-        >
-          All election news
-        </Link>
-        <Link
-          href="/news/outlet"
-          className="inline-flex min-h-[24px] items-center text-on-surface-muted underline underline-offset-2 hover:text-on-surface"
-        >
-          Where the news comes from
-        </Link>
-      </p>
-    </section>
-  );
+  const regions = regionOrder(items.map((i) => i.region));
+  /* Open on the reader's own county only when it is one we cover and it
+     has a story; otherwise all of Florida. */
+  const initial =
+    countyFips &&
+    coveredCounty(countyFips) &&
+    regions.some((r) => r.key === countyFips)
+      ? countyFips
+      : "all";
+
+  return <NewsRail items={items} regions={regions} initial={initial} />;
 }

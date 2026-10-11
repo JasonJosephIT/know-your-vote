@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Homepage Layout Pass</title>
+<style>
+:root{--bg:#f6f3ec;--surface:#fff;--muted:#efeae0;--ink:#22271f;--ink2:#585e52;--border:#e4ded2;--border2:#cfc7b6;--primary:#2f6b4f;--pmuted:#e4efe7;--accent:#b26836;--amuted:#f5e7d6;--cream:#f5ebd8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 16px 80px}
+h1{font:700 2.2rem/1.1 Georgia,serif;margin:0 0 6px}h2{font:700 1.4rem/1.2 Georgia,serif;margin:48px 0 12px;padding-top:20px;border-top:2px solid var(--ink)}
+.sub{color:var(--ink2);margin:0 0 20px}
+table{width:100%;border-collapse:collapse;background:var(--surface);font-size:.92rem}td,th{padding:9px 10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}th{background:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+.sev{font-size:.72rem;font-weight:700;padding:2px 7px;border-radius:99px;white-space:nowrap}.c{background:#f3d6cf;color:#7a2e1e}.M{background:var(--amuted);color:#8a4e24}.m{background:var(--muted);color:var(--ink2)}
+.tabs{display:flex;gap:6px;margin:12px 0}.tabs button{border:1px solid var(--border2);background:var(--surface);padding:6px 12px;border-radius:6px;cursor:pointer;font:inherit;font-size:.9rem}.tabs button[aria-selected=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.frame{background:#d9d4c8;border-radius:10px;padding:14px;overflow:auto}
+.page{background:var(--bg);min-width:900px;border-radius:4px;overflow:hidden;font-size:12px}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:10px 24px;background:var(--surface);border-bottom:1px solid var(--border);font-weight:600}
+.mast{display:flex;gap:18px;padding:6px 24px;background:var(--ink);color:var(--cream);font-size:11px;letter-spacing:.02em}.mast b{color:#fff}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:28px;padding:22px 24px}
+.hero h3{font:700 26px/1.1 Georgia,serif;margin:0 0 6px}.hero p{margin:0;color:var(--ink2)}
+.blk{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-top:12px}
+.lbl{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink2);margin-bottom:6px}
+.row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)}.row:last-child{border:0}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.tile{background:var(--pmuted);border-radius:6px;padding:8px}.tile b{font:700 22px Georgia,serif;display:block;color:var(--primary)}
+.rail{display:flex;align-items:center;gap:0;margin:8px 0 2px}.dot{width:10px;height:10px;border-radius:50%;background:var(--border2);flex:none}.dot.p{background:var(--ink2)}.dot.t{background:var(--accent);box-shadow:0 0 0 4px var(--amuted)}.ln{height:2px;background:var(--border2);flex:1}.ln.p{background:var(--ink2)}
+.rl{display:flex;justify-content:space-between;font-size:9.5px;color:var(--ink2)}
+.news{border-left:1px solid var(--border2);padding-left:20px}
+.news h4{font:700 16px Georgia,serif;margin:0 0 4px;border-bottom:2px solid var(--ink);padding-bottom:4px}
+.nt{display:flex;gap:4px;margin:6px 0;font-size:10px}.nt span{padding:2px 6px;border-radius:4px;background:var(--muted)}.nt span.on{background:var(--ink);color:#fff}
+.ni{display:grid;grid-template-columns:1fr 54px;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}.ni .src{font-size:9.5px;color:var(--ink2);text-transform:uppercase;letter-spacing:.05em}.ni .hd{font-weight:600;line-height:1.3}.th{width:54px;height:40px;background:repeating-linear-gradient(45deg,var(--muted),var(--muted) 4px,var(--border) 4px,var(--border) 8px);border-radius:3px}
+.ni.noimg{grid-template-columns:1fr}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.three div{border-top:3px solid var(--primary);background:var(--surface);padding:8px;border-radius:0 0 6px 6px}
+.band{height:70px;background:linear-gradient(0deg,rgba(34,39,31,.5),rgba(34,39,31,.1)),repeating-linear-gradient(90deg,#c9bfa8 0 30px,#bfb59c 30px 60px);display:flex;align-items:end;padding:8px 24px;color:#fff;font-size:10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px}.card h3{margin:0 0 4px;font-size:1rem}.card p{margin:0;font-size:.9rem;color:var(--ink2)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 7px;border-radius:4px;margin-bottom:6px}.ok{background:var(--pmuted);color:var(--primary)}.need{background:var(--amuted);color:#8a4e24}
+.decide{background:var(--ink);color:var(--cream);border-radius:10px;padding:18px 22px}.decide h2{border:0;color:#fff;margin:0 0 8px;padding:0}.decide ol{margin:0;padding-left:20px}
+img.shot{width:100%;border:1px solid var(--border2);border-radius:6px}
+@media (max-width:700px){.cards{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<h1>Homepage layout pass</h1>
+<p class="sub">knowyour.vote, checked at 1440×900 on 2026-10-11. This is a proposal: no code was changed. The markdown version is <code>README.md</code> in the same folder.</p>
+
+<div class="decide"><h2>Three decisions for you</h2><ol>
+<li><b>The news rail's scope.</b> There are only 9 statewide items right now, so the rail needs metro and county items too, or more statewide feeds.</li>
+<li><b>Outlet thumbnails:</b> show them (hotlinked <code>og:image</code>, a copyright grey area), or text only.</li>
+<li><b>A serif display font:</b> agree it with the brand-assets session before anyone builds it.</li></ol></div>
+
+<h2>1 · Why it reads as AI-made</h2>
+<div class="tabs" role="tablist"><button role="tab" aria-selected="true" data-t="now">Live today</button><button role="tab" aria-selected="false" data-t="find">Findings</button></div>
+<div data-p="now"><img class="shot" src="current-desktop.jpg" alt="Live homepage at desktop width: a narrow text column with empty space on both sides"></div>
+<div data-p="find" hidden><table><tr><th>Sev</th><th>Finding</th><th>Fix</th></tr>
+<tr><td><span class="sev c">critical</span></td><td>680px column on a 1440px screen. More than half the width is empty.</td><td>8 + 4 column grid at ≥1024px: ballot on the left, news on the right.</td></tr>
+<tr><td><span class="sev M">major</span></td><td>4,310px tall with 1 image (the logo). All text.</td><td>Map, dates rail and tiles, built from our own data.</td></tr>
+<tr><td><span class="sev M">major</span></td><td>Every section is H2, grey paragraph, card list. The hero subhead is 50 words.</td><td>Vary section shapes; one-line subhead; explanations go into captions.</td></tr>
+<tr><td><span class="sev M">major</span></td><td>No masthead or dateline, so nothing says "today".</td><td>A dark strip with the date, days left and the next deadline.</td></tr>
+<tr><td><span class="sev m">minor</span></td><td>Inter body text is the default in AI-built UIs.</td><td>A serif for display text only (Newsreader or Source Serif 4).</td></tr></table></div>
+
+<h2>2 · Proposed desktop layout</h2>
+<p class="sub">This is a wireframe in our own tokens. On phones, everything stacks into one column and the news rail comes after the ballot.</p>
+<div class="frame"><div class="page">
+ <div class="nav"><span>Know Your Vote</span><span style="font-weight:400;color:var(--ink2)">Ballot · Candidates · News · <b style="color:var(--primary)">Choose your district</b></span></div>
+ <div class="mast"><span><b>Sunday, Oct 11, 2026</b></span><span>23 days to Election Day</span><span>Mail ballot requests close <b>Oct 22</b></span></div>
+ <div class="grid">
+  <div>
+   <div class="hero"><h3>Florida candidates, in their own words.</h3><p>Every quote links to its source. No ZIP, no account.</p></div>
+   <div class="blk"><div class="lbl">Key dates</div><div class="rail"><span class="dot p"></span><span class="ln p"></span><span class="dot p"></span><span class="ln"></span><span class="dot t"></span><span class="ln"></span><span class="dot"></span><span class="ln"></span><span class="dot"></span></div><div class="rl"><span>Reg. closed Oct 5</span><span>Today</span><span>Mail req. Oct 22</span><span>Early vote Oct 24</span><span>Nov 3</span></div></div>
+   <div class="blk"><div class="lbl">On every Florida ballot</div><div class="tiles"><div class="tile"><b>5</b>statewide races</div><div class="tile"><b>3</b>amendments</div><div class="tile"><b>—</b>candidates (live count)</div></div></div>
+   <div class="blk"><div class="lbl">Statewide races</div><div class="row"><span><b>U.S. Senator</b> · 3 candidates</span><span>Full brief →</span></div><div class="row"><span><b>Governor</b> · 8 candidates</span><span>Full brief →</span></div><div class="row"><span><b>Attorney General</b></span><span>Full brief →</span></div></div>
+   <div class="blk" style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><div class="lbl">Add your House race</div>[ ZIP field ] [ Add ]</div><div><div class="lbl">Where we cover county races</div><svg viewBox="0 0 120 70" width="100%" height="60" aria-label="Florida county coverage map placeholder"><path d="M5 8 L60 8 L70 14 L78 30 L92 50 L100 64 L90 66 L80 55 L70 40 L62 20 L40 16 L5 16Z" fill="var(--muted)" stroke="var(--border2)"/><path d="M78 30 L92 50 L86 52 L74 36Z" fill="var(--primary)"/><path d="M92 50 L100 64 L94 65 L88 54Z" fill="var(--primary)" opacity=".7"/></svg></div></div>
+   <div class="blk"><div class="lbl">Three ways to vote</div><div class="three"><div><b>By mail</b><br>Request by Oct 22</div><div><b>Early</b><br>Oct 24 – Nov 1 (county)</div><div><b>Election Day</b><br>Nov 3, 7am–7pm</div></div></div>
+  </div>
+  <aside class="news"><h4>Florida election news</h4><div class="nt"><span class="on">Statewide</span><span>South FL</span><span>Tampa Bay</span><span>Central</span><span>North</span></div>
+   <div class="ni"><div><div class="src">Outlet · 2h ago</div><div class="hd">Headline from the feed, two lines at most…</div></div><div class="th"></div></div>
+   <div class="ni noimg"><div><div class="src">Outlet · 5h ago</div><div class="hd">An item with no image stays text only; nothing is padded in</div></div></div>
+   <div class="ni"><div><div class="src">Outlet · Yesterday</div><div class="hd">Headline…</div></div><div class="th"></div></div>
+   <div class="ni noimg"><div><div class="src">Outlet · Oct 9</div><div class="hd">Headline…</div></div></div>
+   <div style="margin-top:8px;font-size:10px;color:var(--primary)">All news → · Where the news comes from →</div></aside>
+ </div>
+ <div class="band">Optional photography band: public-domain Florida civic photo (Florida Memory / Openverse CC0)</div>
+</div></div>
+
+<h2>3 · Section menu</h2>
+<div class="cards">
+<div class="card"><span class="tag ok">data on hand</span><h3>Masthead strip</h3><p>Date, days left and the next deadline, from the dates DeadlineBanner already reads.</p></div>
+<div class="card"><span class="tag need">needs a scope decision</span><h3>News rail</h3><p>Newest first, no hand-picking, region tabs on <code>metro</code>. 97 items in total, 66 from the last 7 days, but only 9 statewide.</p></div>
+<div class="card"><span class="tag ok">data on hand</span><h3>Key dates rail</h3><p>Past, today and upcoming states. This also closes Tier 1 #3 from the Oct 5 inspiration pass.</p></div>
+<div class="card"><span class="tag ok">data on hand</span><h3>Ballot at a glance</h3><p>Counts from the live roster. Real numbers only, nothing estimated.</p></div>
+<div class="card"><span class="tag ok">data on hand</span><h3>Coverage map</h3><p>A Florida county SVG from our GeoJSON. The shading means "covered by this guide", never party.</p></div>
+<div class="card"><span class="tag ok">data on hand</span><h3>Three ways to vote</h3><p>Mail / early / Election Day. The early-voting dates come from the county office directory.</p></div>
+<div class="card"><span class="tag need">optional</span><h3>Photography band</h3><p>Openverse CC0 needs no key. Florida Memory is public domain. Never candidates, never partisan imagery.</p></div>
+<div class="card"><span class="tag need">needs a policy</span><h3>Candidate headshots</h3><p>0 of 299 have one today. The rule would be all or none per race. Federal official portraits are public domain; campaign photos need permission.</p></div>
+</div>
+
+<h2>4 · Resources</h2>
+<table><tr><th>Resource</th><th>Status</th><th>Use</th></tr>
+<tr><td>Openverse (CC0 photos)</td><td><span class="tag ok">ready, no key</span></td><td>Photography band, About page</td></tr>
+<tr><td>Iconify icon sets</td><td><span class="tag ok">ready</span></td><td>One consistent icon set across the site</td></tr>
+<tr><td>Our county GeoJSON + district data</td><td><span class="tag ok">in repo</span></td><td>Coverage map</td></tr>
+<tr><td>Firecrawl gov search</td><td><span class="tag ok">connected</span></td><td>Official dates, county pages, federal portraits</td></tr>
+<tr><td>Image generation (Gemini/OpenAI), Higgsfield</td><td><span class="tag ok">connected</span></td><td>Textures and illustrations only; never people or candidates</td></tr>
+<tr><td>Canva, Figma connectors</td><td><span class="tag need">you authorize</span></td><td>Hand-off with the brand session (claude.ai connector settings)</td></tr>
+<tr><td>Pixabay API key</td><td><span class="tag need">optional</span></td><td>More polished stock photos</td></tr>
+<tr><td>Florida Memory (State Archives)</td><td><span class="tag ok">public</span></td><td>Historic Florida civic photos</td></tr>
+</table>
+</div>
+<script>
+document.querySelectorAll('[role=tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[role=tab]').forEach(x=>x.setAttribute('aria-selected',x===b));document.querySelectorAll('[data-p]').forEach(p=>p.hidden=p.dataset.p!==b.dataset.t)});
+</script></body></html>

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Homepage Sample</title>
+<!--
+  Combined homepage sample (2026-10-11): the desktop edits from
+  homepage-layout.html plus the news column from news-column-sample.html.
+  For the founder and the output engine / brand-assets session.
+  Data: headlines are real news_item rows (no candidate- or race-scoped
+  rows). Dates are Florida's 2026 general-election dates. Candidate counts
+  are only the two the live site shows (Senate 3, Governor 8). Striped
+  boxes = where a publisher's photo loads. Map is a schematic, not geography.
+  Colours are design.md tokens; Georgia stands in for the proposed serif
+  display face; body is system sans standing in for Inter.
+-->
+<style>
+:root{--bg:#f6f3ec;--surface:#fff;--muted:#efeae0;--ink:#22271f;--ink2:#585e52;--border:#e4ded2;--border2:#cfc7b6;--primary:#2f6b4f;--pmuted:#e4efe7;--accent:#b26836;--amuted:#f5e7d6;--cream:#f5ebd8;--serif:Georgia,"Times New Roman",serif}
+*{box-sizing:border-box}body{margin:0;background:#d9d4c8;color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.doc{max-width:1520px;margin:0 auto;padding:28px 16px 60px}
+.doc>h1{font:700 1.8rem/1.1 var(--serif);margin:0 0 4px}.doc>p{margin:0 0 18px;color:#3d4238;max-width:920px}
+.stage{display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap}
+.cap{font:600 12px system-ui;letter-spacing:.06em;text-transform:uppercase;color:#3d4238;margin:0 0 6px}
+.lbl{font:700 10.5px system-ui;letter-spacing:.09em;text-transform:uppercase;color:var(--ink2);margin:0 0 8px}
+.n{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--accent);color:#fff;font:700 10px system-ui;margin-right:6px;vertical-align:1px}
+
+.desk{width:1200px;max-width:100%;background:var(--bg);border-radius:6px;overflow:hidden;box-shadow:0 8px 30px rgba(34,39,31,.15)}
+.nav{display:flex;justify-content:space-between;align-items:center;height:56px;padding:0 28px;background:var(--surface);border-bottom:1px solid var(--border)}
+.logo{font-weight:800;color:var(--primary);letter-spacing:-.01em}.navl{display:flex;gap:22px;font-size:13px;color:var(--ink2)}.navl b{color:var(--ink)}
+.pill{background:var(--primary);color:#fff;border-radius:99px;padding:5px 12px;font-size:12px;font-weight:600}.chip{font-size:12px;border:1px solid var(--border2);border-radius:99px;padding:4px 10px}
+
+/* 1 masthead */
+.mast{display:flex;gap:22px;align-items:center;padding:7px 28px;background:var(--ink);color:var(--cream);font-size:12px}.mast b{color:#fff}.mast .sep{opacity:.35}
+
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:48px;padding:34px 28px 48px;align-items:start}
+.lede h2{font:700 40px/1.06 var(--serif);letter-spacing:-.02em;margin:0 0 10px}
+.lede p{margin:0 0 22px;color:var(--ink2);font-size:16px}
+
+/* 2 key dates rail */
+.dates{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px 12px;margin-bottom:22px}
+.track{display:grid;grid-template-columns:repeat(5,1fr);position:relative;margin-top:4px}
+.track:before{content:"";position:absolute;left:10%;right:10%;top:7px;height:2px;background:linear-gradient(90deg,var(--ink2) 0 25%,var(--border2) 25%)}
+.stop{text-align:center;position:relative;font-size:12px;line-height:1.3}
+.stop i{display:block;width:16px;height:16px;margin:0 auto 6px;border-radius:50%;background:var(--surface);border:2px solid var(--border2)}
+.stop.past{color:var(--ink2)}.stop.past i{background:var(--ink2);border-color:var(--ink2)}.stop.past b{text-decoration:line-through;text-decoration-color:var(--border2)}
+.stop.today i{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 5px var(--amuted)}.stop.today b{color:var(--accent)}
+.stop.next i{border-color:var(--primary)}.stop.next b{color:var(--primary)}
+.stop small{display:block;color:var(--ink2)}
+
+/* 3 at a glance */
+.glance{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:26px}
+.tile{background:var(--pmuted);border-radius:10px;padding:12px 14px}.tile b{font:700 34px/1 var(--serif);color:var(--primary);display:block;margin-bottom:4px}.tile span{font-size:13px}
+
+.sec{font:700 22px/1.2 var(--serif);margin:0 0 4px}.secsub{font-size:13px;color:var(--ink2);margin:0 0 12px}
+.race{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px}
+.race b{color:var(--primary);font-size:15px}.race small{display:block;color:var(--ink2);font-size:12px}.race span{font-size:12px;color:var(--ink2)}
+.ghost{border:1px dashed var(--border2);border-radius:8px;display:grid;place-items:center;color:var(--ink2);font-size:12px;padding:16px;margin:10px 0 26px}
+
+/* 4 house race + map */
+.split{display:grid;grid-template-columns:1.1fr 1fr;gap:14px;margin-bottom:26px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.zip{display:flex;gap:8px;margin-top:10px}.zip input{flex:1;border:1px solid #857e6e;border-radius:6px;padding:8px 10px;font:inherit}.zip button{background:var(--primary);color:#fff;border:0;border-radius:6px;padding:8px 14px;font-weight:600}
+.legend{display:flex;gap:14px;font-size:11.5px;color:var(--ink2);margin-top:6px}.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+
+/* 5 ways to vote */
+.ways{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+.way{background:var(--surface);border-radius:0 0 10px 10px;border:1px solid var(--border);border-top:3px solid var(--primary);padding:12px 14px}
+.way h4{margin:0 0 4px;font:700 16px var(--serif)}.way p{margin:0;font-size:12.5px;color:var(--ink2)}.way b{color:var(--ink)}
+
+/* 6 news rail */
+.rail{position:sticky;top:20px;border-left:1px solid var(--border2);padding-left:24px}
+.rail h3{font:700 20px/1.2 var(--serif);margin:0;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+.rail .sub{font-size:11.5px;color:var(--ink2);margin:6px 0 10px}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+.tabs button{font:600 11.5px system-ui;border:1px solid var(--border2);background:var(--surface);color:var(--ink);padding:5px 9px;border-radius:99px;cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.item{display:grid;grid-template-columns:minmax(0,1fr) 88px;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}.item.noimg{grid-template-columns:1fr}
+.meta{font:500 10.5px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink2);margin-bottom:3px}.meta .where{color:var(--primary);font-weight:700}
+.hd{font-weight:600;font-size:14px;line-height:1.3;color:var(--primary);text-decoration:none}.hd:hover{text-decoration:underline}
+.thumb{width:88px;height:66px;border-radius:4px;background:repeating-linear-gradient(135deg,var(--muted) 0 6px,var(--border) 6px 12px);display:grid;place-items:center;font-size:8.5px;color:var(--ink2);text-align:center;line-height:1.1}
+.more{display:flex;gap:14px;margin-top:12px;font-size:12px}.more a{color:var(--primary)}.more a+a{color:var(--ink2)}
+
+/* 7 photo band */
+.band{height:120px;display:flex;align-items:flex-end;padding:14px 28px;color:#fff;font-size:12px;background:linear-gradient(0deg,rgba(34,39,31,.65),rgba(34,39,31,.05)),repeating-linear-gradient(90deg,#c9bfa8 0 40px,#bdb399 40px 80px)}
+.foot{display:flex;justify-content:space-between;padding:16px 28px;font-size:12px;color:var(--ink2);background:var(--surface)}
+
+/* phone */
+.phone{width:375px;background:var(--bg);border-radius:28px;border:10px solid #22271f;overflow:hidden;box-shadow:0 8px 30px rgba(34,39,31,.15)}
+.phone .nav{height:48px;padding:0 14px}.phone .mast{padding:6px 14px;font-size:10.5px;gap:10px;flex-wrap:wrap}.ph{padding:18px 16px 24px}
+.ph .lede h2{font-size:28px}.ph .lede p{font-size:14px;margin-bottom:16px}
+.ph .dates{padding:12px 6px 10px}.ph .stop{font-size:10px}.ph .stop i{width:12px;height:12px}.ph .track:before{top:5px}
+.ph .glance{gap:6px}.ph .tile{padding:9px}.ph .tile b{font-size:24px}.ph .tile span{font-size:11px}
+.ph .split,.ph .ways{grid-template-columns:1fr}
+.ph .rail{position:static;border:0;padding:20px 0 0;margin-top:20px;border-top:1px solid var(--border)}
+.ph .tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.ph .tabs button{flex:none}
+.ph .item{grid-template-columns:minmax(0,1fr) 76px}.ph .thumb{width:76px;height:57px}.ph .item.noimg{grid-template-columns:1fr}
+.bottomnav{display:flex;justify-content:space-around;padding:8px 0 12px;background:var(--surface);border-top:1px solid var(--border);font-size:10.5px;color:var(--ink2)}.bottomnav b{color:var(--primary)}
+
+.key{margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px}
+.k{background:var(--surface);border-radius:8px;padding:12px 14px;font-size:13px;color:#3d4238}.k h4{margin:0 0 4px;font-size:14px;color:var(--ink)}.k.no{border-top:3px solid var(--accent)}
+</style></head><body><div class="doc">
+<h1>Homepage sample: desktop edits and news column</h1>
+<p>The proposed edits combined on one page. Each numbered marker matches the key at the bottom. Headlines are real rows from our feed; dates are Florida's 2026 general-election dates. Try the region filters in the news column.</p>
+
+<div class="stage">
+<div><p class="cap">Desktop · 1200px</p>
+<div class="desk">
+ <div class="nav"><span class="logo">Know Your Vote</span><span class="navl"><b>Ballot</b><span>Candidates</span><span>News</span></span><span style="display:flex;gap:8px;align-items:center"><span class="pill">Donate</span><span class="chip">Choose your district</span></span></div>
+ <div class="mast"><span class="n">1</span><b>Sunday, October 11, 2026</b><span class="sep">|</span><span><b>23 days</b> to Election Day</span><span class="sep">|</span><span>Mail-ballot requests close <b>Oct 22, 5 p.m.</b></span></div>
+ <div class="cols">
+  <div>
+   <div class="lede"><h2>Florida candidates,<br>in their own words.</h2><p>Every quote links to its source. Same questions, same rules, every candidate.</p></div>
+
+   <div class="dates"><p class="lbl"><span class="n">2</span>Key dates</p><div class="track">
+    <div class="stop past"><i></i><b>Oct 5</b><small>Registration closed</small></div>
+    <div class="stop today"><i></i><b>Today</b><small>Oct 11</small></div>
+    <div class="stop next"><i></i><b>Oct 22</b><small>Request mail ballot</small></div>
+    <div class="stop"><i></i><b>Oct 24–31</b><small>Early voting*</small></div>
+    <div class="stop"><i></i><b>Nov 3</b><small>Election Day</small></div></div></div>
+
+   <p class="lbl"><span class="n">3</span>On every Florida ballot</p>
+   <div class="glance"><div class="tile"><b>5</b><span>statewide races</span></div><div class="tile"><b>3</b><span>amendments</span></div><div class="tile"><b>+1</b><span>U.S. House race, with your ZIP</span></div></div>
+
+   <p class="sec">Statewide races</p><p class="secsub">The same for every Florida voter, whatever your ZIP or party.</p>
+   <div class="race"><div><b>United States Senator</b><small>3 candidates</small></div><span>Full brief →</span></div>
+   <div class="race"><div><b>Governor</b><small>8 candidates</small></div><span>Full brief →</span></div>
+   <div class="race"><div><b>Attorney General</b></div><span>Full brief →</span></div>
+   <div class="ghost">CFO · Agriculture Commissioner · Ballot questions (unchanged)</div>
+
+   <div class="split">
+    <div class="card"><p class="lbl"><span class="n">4</span>Add your U.S. House race</p><p style="margin:0;font-size:13px;color:var(--ink2)">We keep only the district, never your ZIP.</p><div class="zip"><input placeholder="ZIP code" aria-label="ZIP code"><button>Add</button></div></div>
+    <div class="card"><p class="lbl">Where we list county races</p>
+     <svg viewBox="0 0 220 120" width="100%" height="110" role="img" aria-label="Schematic Florida map: Miami-Dade, Broward, Hillsborough and Orange highlighted">
+      <path d="M8 14 H120 L132 22 L146 46 L160 74 L176 102 L170 112 L156 108 L146 92 L134 70 L124 46 L112 30 L60 26 L8 26Z" fill="var(--muted)" stroke="var(--border2)"/>
+      <rect x="128" y="50" width="12" height="11" rx="2" fill="var(--primary)"/>
+      <rect x="114" y="62" width="11" height="11" rx="2" fill="var(--primary)"/>
+      <rect x="158" y="88" width="11" height="8" rx="2" fill="var(--primary)"/>
+      <rect x="162" y="97" width="11" height="10" rx="2" fill="var(--primary)"/>
+      <g font-size="7" fill="var(--ink2)" font-family="system-ui"><text x="143" y="58">Orange</text><text x="74" y="70">Hillsborough</text><text x="174" y="94">Broward</text><text x="176" y="106">Miami-Dade</text></g>
+     </svg>
+     <div class="legend"><span><i style="background:var(--primary)"></i>County races listed</span><span><i style="background:var(--muted);border:1px solid var(--border2)"></i>Statewide &amp; House only</span></div></div>
+   </div>
+
+   <p class="lbl"><span class="n">5</span>Three ways to vote</p>
+   <div class="ways">
+    <div class="way"><h4>By mail</h4><p>Request by <b>Oct 22, 5 p.m.</b> Your county must receive it by <b>7 p.m. Nov 3</b>.</p></div>
+    <div class="way"><h4>Early, in person</h4><p><b>Oct 24–31</b> in every county. *Some counties add days.</p></div>
+    <div class="way"><h4>Election Day</h4><p><b>Nov 3, 7 a.m.–7 p.m.</b> at your assigned polling place.</p></div>
+   </div>
+  </div>
+  <aside class="rail" data-rail><span class="n" style="position:absolute;left:-10px;top:-6px">6</span></aside>
+ </div>
+ <div class="band"><span class="n">7</span>Optional: a public-domain Florida civic photo (Old Capitol, a polling place) from Florida Memory or Openverse CC0</div>
+ <div class="foot"><span>We quote what each candidate says. You decide.</span><span>How we stay fair · Privacy · About</span></div>
+</div></div>
+
+<div><p class="cap">Phone · 375px</p>
+<div class="phone">
+ <div class="nav"><span class="logo">Know Your Vote</span><span class="chip" style="font-size:11px">District</span></div>
+ <div class="mast"><b>Sun, Oct 11</b><span><b>23 days</b> to Election Day</span></div>
+ <div class="ph">
+  <div class="lede"><h2>Florida candidates, in their own words.</h2><p>Every quote links to its source.</p></div>
+  <div class="dates"><div class="track">
+   <div class="stop past"><i></i><b>Oct 5</b><small>Reg.</small></div><div class="stop today"><i></i><b>Today</b></div><div class="stop next"><i></i><b>Oct 22</b><small>Mail req.</small></div><div class="stop"><i></i><b>Oct 24</b><small>Early</small></div><div class="stop"><i></i><b>Nov 3</b></div></div></div>
+  <div class="glance"><div class="tile"><b>5</b><span>races</span></div><div class="tile"><b>3</b><span>amendments</span></div><div class="tile"><b>+1</b><span>House</span></div></div>
+  <div class="race"><div><b>Governor</b><small>8 candidates</small></div><span>→</span></div>
+  <div class="ghost" style="margin-bottom:0">ballot, House step, map, ways to vote…</div>
+  <aside class="rail" data-rail data-max="4"></aside>
+ </div>
+ <div class="bottomnav"><b>Ballot</b><span>Candidates</span><span>News</span></div>
+</div></div>
+</div>
+
+<div class="key">
+ <div class="k"><h4><span class="n">1</span>Masthead strip</h4>Today's date, days to Election Day and the next deadline. Updates daily with no editing.</div>
+ <div class="k"><h4><span class="n">2</span>Key dates rail</h4>Past dates greyed and struck through, today in terracotta, the next deadline in sage.</div>
+ <div class="k"><h4><span class="n">3</span>At a glance</h4>Real counts only. Serif numerals on sage tint.</div>
+ <div class="k"><h4><span class="n">4</span>House race + coverage map</h4>The ZIP step sits beside a county map. Shading means "covered", never party.</div>
+ <div class="k"><h4><span class="n">5</span>Three ways to vote</h4>Three panels in place of paragraphs, each with its own dates.</div>
+ <div class="k"><h4><span class="n">6</span>News column</h4>Statewide + county stories, newest first. Region filters. Publisher photo (4:3) or text only. Fixed 340px, sticky on desktop; on phones it sits after the ballot.</div>
+ <div class="k"><h4><span class="n">7</span>Photo band</h4>Optional. Public-domain Florida civic scenes only.</div>
+ <div class="k no"><h4>Never</h4>No red or blue, no party or lean colours, no stock or generated images in news slots, no "top story" pick, no candidate photos unless every candidate in the race has one.</div>
+</div>
+</div>
+<script>
+/* Real rows from news_item (2026-10-11); candidate- and race-scoped rows excluded. */
+const R=[
+["Florida's Voice","Oct 6","statewide",0,"Palm Beach GOP drops suspended clerk Mike Caruso from voter guide after backlash"],
+["CBS News Miami","Oct 6","miami",1,"Nearly 150,000 ballots cast in Florida with more than 2 million more awaiting action, state officials say"],
+["Diario Las Américas","Oct 6","miami",1,"Demócratas recortan ligeramente ventaja republicana en registro electoral de Florida"],
+["WPLG Local 10","Oct 5","miami",0,"North Miami voters face mayoral election in November"],
+["WSVN 7News","Oct 5","miami",1,"Miami-Dade supervisor of elections says ICE will not be at the polls, amid voter intimidation arrest"],
+["Florida's Voice","Oct 5","statewide",0,"Nationwide election crackdown leads to 2 Florida illegal voting charges"],
+["WFSU Public Media","Oct 5","statewide",1,"Local teachers share concerns with union leaders and Democratic candidate for lieutenant governor"],
+["Creative Loafing Tampa Bay","Oct 5","tampa",0,"DeSantis railed against ‘Defund the police.’ Amendment 3 could do just that"],
+["WFSU Public Media","Oct 1","statewide",1,"The Florida Policy Institute has an Amendment 3 calculator for local governments"],
+["Central Florida Public Media","Oct 1","orlando",1,"Under a new map, Kissimmee and new bedfellows reflect on representation"],
+["Orlando Weekly","Sep 30","orlando",0,"The pro-Amendment 3 campaign is outspending the opposition by a 33-1 ratio"],
+["Official update","Sep 9","tampa",0,"Hillsborough plans 27 early-voting sites for November 3 General Election"],
+["Official update","Jul 6","fort_lauderdale",0,"Broward sets early-voting windows for Primary and General elections"]];
+const L={statewide:"Statewide",miami:"Miami-Dade",fort_lauderdale:"Broward",tampa:"Hillsborough",orlando:"Orange"};
+const T=[["all","All Florida"],["statewide","Statewide"],["miami","Miami-Dade"],["fort_lauderdale","Broward"],["tampa","Hillsborough"],["orlando","Orange"]];
+document.querySelectorAll('[data-rail]').forEach(el=>{
+ const max=+el.dataset.max||8;let cur="all";
+ el.insertAdjacentHTML('beforeend',`<h3>Florida election news</h3><p class="sub">Statewide and county stories, newest first.</p><div class="tabs">${T.map(([k,v])=>`<button aria-pressed="${k==='all'}" data-k="${k}">${v}</button>`).join('')}</div><div data-list></div><div class="more"><a href="#">All election news</a><a href="#">Where the news comes from</a></div>`);
+ const list=el.querySelector('[data-list]');
+ const draw=()=>{const rows=R.filter(r=>cur==='all'||r[2]===cur).slice(0,max);
+  list.innerHTML=rows.map(r=>`<div class="item${r[3]?'':' noimg'}"><div><div class="meta"><span class="where">${L[r[2]]}</span> · ${r[0]} · ${r[1]}</div><a class="hd" href="#">${r[4]}</a></div>${r[3]?'<div class="thumb">publisher<br>photo</div>':''}</div>`).join('');};
+ el.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{cur=b.dataset.k;el.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-pressed',x===b));draw();});
+ draw();});
+</script></body></html>
