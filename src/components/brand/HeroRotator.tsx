@@ -19,10 +19,11 @@ import s from "./HeroRotator.module.css";
    still, feathered sunburst. Each walks from a single still pose: a 4px
    step bob with a 1px dip at contact (640ms), a ±0.6deg sway about the feet
    (1280ms), and a ground ellipse that narrows as the body rises. Every
-   5.12s the next one passes the centre. After one lap (40.96s of visible
-   running time) every walker has crossed exactly once and the line rests
-   in exactly its first-paint pose. All motion is CSS keyframes in
-   HeroRotator.module.css: no timers, no per-frame React state.
+   5.12s the next one passes the centre. The line loops for as long as the
+   page is open (founder, 2026-10-11): each 40.96s lap every walker crosses
+   exactly once and the lap ends in its first-paint pose, so there is no
+   seam. All motion is CSS keyframes in HeroRotator.module.css: no timers,
+   no per-frame React state.
 
    Neutrality: the eight share one size, speed, keyframe set and play state
    (phase offsets only), each is on screen for the same time per lap, none
@@ -37,12 +38,12 @@ import s from "./HeroRotator.module.css";
    allowed, load at low priority, and the walk starts only after all eight
    have loaded and decoded, so a walker never appears half-drawn. Under
    prefers-reduced-motion the still is all there is: one image, no button.
-   Offscreen or in a hidden tab, everything freezes, so the lap counts only
-   time someone could see.
+   Offscreen or in a hidden tab, everything freezes and picks up where it
+   left off.
 
-   WCAG 2.2.2: the motion lasts more than five seconds, so one native
-   button pauses all of it, a pause holds for the rest of the visit, and
-   the walk also stops by itself after one lap. The button's label changes
+   WCAG 2.2.2: the motion starts by itself and never ends, so one native
+   button pauses all of it, and a pause holds for the rest of the visit.
+   The button's label changes
    (Pause / Play animation) and it carries no aria-pressed, so a screen
    reader announces one state, not two. The art layer is aria-hidden and
    holds nothing focusable. */
@@ -127,7 +128,6 @@ export function HeroRotator({
   const imgs = useRef(new Map<string, HTMLImageElement>());
   const [onScreen, setOnScreen] = useState(false);
   const [ready, setReady] = useState(false);
-  const [lapDone, setLapDone] = useState(false);
 
   // The server renders the still: no motion, tab "hidden", not paused.
   const motionOk = useSyncExternalStore(
@@ -149,10 +149,10 @@ export function HeroRotator({
   // Walkers 1-7 mount once the hero has been seen with motion allowed, and
   // stay mounted once decoded.
   const cast = ready || (motionOk && onScreen);
-  const run = motionOk && ready && !lapDone;
+  const run = motionOk && ready;
   const paused = userPaused || !onScreen || !tabVisible;
   const showButton = motionOk && ready;
-  const playing = !lapDone && !userPaused;
+  const playing = !userPaused;
   const walkers = walkSchedule(lead).slice(0, cast ? 8 : 1);
 
   /* Apply a pause now, not at the next frame. A hidden Chrome tab renders no
@@ -207,10 +207,7 @@ export function HeroRotator({
   }, [cast, ready, lead]);
 
   function toggle() {
-    if (lapDone) {
-      writePause(false);
-      setLapDone(false);
-    } else writePause(!userPaused);
+    writePause(!userPaused);
   }
 
   return (
@@ -219,11 +216,6 @@ export function HeroRotator({
       className={`${s.root} relative hidden h-full min-h-[300px] w-full lg:block ${className}`}
       data-run={run ? "" : undefined}
       data-paused={paused ? "" : undefined}
-      onAnimationEnd={(e) => {
-        // Only the travel animation runs on a walker box, and only it ends
-        // (bob, shadow and sway are infinite): this is the lap's end.
-        if (e.target === leadRef.current) setLapDone(true);
-      }}
     >
       <div
         aria-hidden="true"
@@ -256,7 +248,6 @@ export function HeroRotator({
                 {
                   "--x0": `${w.x0}px`,
                   "--belt-delay": `${w.beltDelayMs}ms`,
-                  "--belt-count": String(w.beltCount),
                   "--gait-delay": `${w.gaitDelayMs}ms`,
                 } as CSSProperties
               }

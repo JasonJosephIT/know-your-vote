@@ -8,9 +8,10 @@
 
    One procession: the eight walkers cross the cell left to right in a
    fixed order at one speed and size, spaced SPACING_PX apart, so every
-   SLOT_MS the next one passes the centre (the sun). After one lap every
-   walker has crossed exactly once, for the same visible time, and the
-   line rests in exactly the pose it started from. */
+   SLOT_MS the next one passes the centre (the sun). The line loops for as
+   long as the page is open (founder, 2026-10-11): every lap each walker
+   crosses exactly once, for the same visible time, and the lap ends in
+   exactly the pose it started from, so the loop has no seam. */
 
 export const WALKERS = [
   "person-phone-reader",
@@ -28,9 +29,8 @@ export type WalkerName = (typeof WALKERS)[number];
 export const STEP_MS = 640;
 /** Time between walkers passing the centre: eight steps. */
 export const SLOT_MS = 8 * STEP_MS; // 5120
-/** One lap: every walker crosses once. */
+/** One lap: every walker crosses once. The walk repeats it forever. */
 export const LAP_MS = WALKERS.length * SLOT_MS; // 40960
-export const LAPS = 1;
 
 export const SPACING_PX = 200;
 /** The path, as a translateX from the cell's centre. It starts two slots
@@ -58,8 +58,6 @@ export type WalkerSlot = {
   x0: number;
   /** Negative delay that puts the travel animation at p. */
   beltDelayMs: number;
-  /** Laps of travel left from p, so every walker ends at the lap's end. */
-  beltCount: number;
   /** Half a step for every other walker, so neighbours never march in step. */
   gaitDelayMs: number;
 };
@@ -78,7 +76,6 @@ export function walkSchedule(lead: number): WalkerSlot[] {
       p,
       x0: PATH_FROM_PX + p * n * SPACING_PX,
       beltDelayMs: -p * LAP_MS,
-      beltCount: LAPS + p,
       gaitDelayMs: j % 2 ? -STEP_MS / 2 : 0,
     };
   });

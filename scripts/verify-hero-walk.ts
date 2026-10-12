@@ -4,7 +4,8 @@
    The neutrality promise is arithmetic, so it is checked as arithmetic:
    every walker is on screen for the same time per lap at every cell width
    the layout can produce, passes the centre once, never overlaps another,
-   and the lap ends exactly on the opening still. Then source checks that
+   and each lap ends exactly where it began, so the endless loop has no
+   seam. Then source checks that
    the CSS literals agree with the module's constants and that the retired
    swap rotator (blur frames, timers, aria-pressed) is gone.
 
@@ -20,7 +21,6 @@ import {
   FRAME_H,
   FRAME_W,
   LAP_MS,
-  LAPS,
   PATH_FROM_PX,
   PATH_TO_PX,
   SLOT_MS,
@@ -43,7 +43,7 @@ function check(name: string, cond: boolean, extra = "") {
   }
 }
 
-const RUN_MS = LAPS * LAP_MS;
+const RUN_MS = LAP_MS; // one lap; the walk repeats it forever
 const close = (a: number, b: number) => Math.abs(a - b) < 1e-6;
 
 /* ---- 1. The schedule ---------------------------------------------------- */
@@ -64,15 +64,15 @@ for (let lead = 0; lead < WALKERS.length; lead++) {
     sched.every((w) => close(positionAt(w.p, w.j * SLOT_MS), 0))
   );
   check(
-    "the lap starts and ends on the same still",
+    "each lap ends where it began, so the loop has no seam",
     sched.every(
       (w) =>
         close(positionAt(w.p, 0), w.x0) && close(positionAt(w.p, RUN_MS), w.x0)
     ) && sched[0].x0 === 0
   );
   check(
-    "every travel animation ends at the lap's end",
-    sched.every((w) => close(-w.beltDelayMs + RUN_MS, w.beltCount * LAP_MS))
+    "each walker's travel starts at its place on the path (delay = -p x lap)",
+    sched.every((w) => close(-w.beltDelayMs, w.p * LAP_MS))
   );
   /* Circular gaps between neighbours on the path. */
   const xs = sched.map((w) => w.x0).sort((a, b) => a - b);
@@ -181,6 +181,13 @@ for (const gone of [
 check(
   "below lg the lead's <source> is the same rem breakpoint as Tailwind's lg",
   tsx.includes('"(width < 64rem)"') && /<source media=\{BELOW_LG\}/.test(tsx)
+);
+check(
+  "the walk loops forever (founder, 2026-10-11)",
+  /walk-belt 40\.96s linear infinite/.test(css) &&
+    !/iteration-count/.test(css) &&
+    !tsx.includes("lapDone") &&
+    !tsx.includes("onAnimationEnd")
 );
 check(
   "HeroRotator gates motion on prefers-reduced-motion in JS too",

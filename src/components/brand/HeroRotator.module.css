@@ -2,7 +2,7 @@
    src/components/brand/hero-walk.ts, and scripts/verify-hero-walk.ts
    checks that the literals below agree with it: 180x240 frames, a 200px
    line spacing over a -400px..1200px path, 640ms steps, 1280ms strides,
-   one 40.96s lap.
+   a 40.96s lap, repeated forever.
 
    Everything that moves is transform or opacity: translateX travel,
    translateY step bob, a rotate sway about the feet, and the ground
@@ -142,9 +142,8 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .root[data-run] .walker {
-    animation: walk-belt 40.96s linear both;
+    animation: walk-belt 40.96s linear infinite both;
     animation-delay: var(--belt-delay);
-    animation-iteration-count: var(--belt-count);
   }
   .root[data-run] .bob {
     animation: walk-step 640ms infinite;
