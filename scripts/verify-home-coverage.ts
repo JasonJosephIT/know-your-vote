@@ -25,11 +25,12 @@
       /methodology#not-covered, an anchor that exists; and CoverageSummary's
       "Not covered" row lists city races and special districts.
 
-   3. ZIP only. Address completion is off in production (geocoderConfigured()
-      is false; /privacy says the field takes a ZIP), but the home page asked
-      for an "address or ZIP" and the field's placeholder and label said
-      "Your address or ZIP code" whatever the flag. Pinned: the field copy
-      follows the flag, and no surface hard-codes the address wording.
+   3. The field's words follow what it takes. When address completion was
+      off in production (2026-10-04 to 10-12), the home page still asked for
+      an "address or ZIP" and the field's placeholder and label said "Your
+      address or ZIP code" whatever the flag. Pinned: the field copy follows
+      addressEntryEnabled() (ADDRESS_LOOKUP_OFF switches it to ZIP only), and
+      no surface hard-codes the address wording.
 
    Source checks read the files with comments stripped, so a comment quoting
    the old copy (several do, to say why it went) cannot pass or fail them.
@@ -332,10 +333,13 @@ check(
   JSON.stringify(zipOnly)
 );
 check(
-  "with a geocoder the field keeps the address wording",
+  "with address lookup on, the field asks for an address and says what it needs",
   /address/i.test(withAddress.noun) &&
     /address/i.test(withAddress.label) &&
-    withAddress.autoComplete === "street-address",
+    /city or ZIP/.test(withAddress.hint ?? "") &&
+    /* street-address autofills the street lines alone, which can't be
+       placed without a city or ZIP (review 2026-10-12). */
+    withAddress.autoComplete === "postal-code",
   JSON.stringify(withAddress)
 );
 
@@ -346,8 +350,8 @@ check(
     !/placeholder="Your address or ZIP code"/.test(home)
 );
 check(
-  "home page derives the field copy from geocoderConfigured()",
-  /addressEnabled = geocoderConfigured\(\)/.test(home) &&
+  "home page derives the field copy from addressEntryEnabled()",
+  /addressEnabled = addressEntryEnabled\(\)/.test(home) &&
     /locationFieldCopy\(addressEnabled\)/.test(home)
 );
 check(
@@ -363,8 +367,9 @@ check(
 );
 const entry = rendered("src/components/features/LocationEntry.tsx");
 check(
-  "LocationEntry's label and placeholder example follow the flag",
-  /locationFieldCopy\(addressEnabled\)/.test(entry) &&
+  "LocationEntry's label and placeholder example follow the flag (ZIP only until hydrated)",
+  /const takesAddress = addressEnabled && hydrated;/.test(entry) &&
+    /locationFieldCopy\(takesAddress\)/.test(entry) &&
     /\{field\.label\}/.test(entry) &&
     /placeholder=\{placeholder \?\? field\.example\}/.test(entry) &&
     /autoComplete=\{field\.autoComplete\}/.test(entry) &&

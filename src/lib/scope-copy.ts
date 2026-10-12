@@ -44,25 +44,35 @@ export function houseRaceNotOnBallot(
     : `There's no U.S. House race on your ballot this year. The ${district} race was decided in the August primary, and ${name} takes the seat.`;
 }
 
-/** The location field's words. Address completion exists only when a
-    geocoder is configured (geocoderConfigured(), off in production since
-    2026-10-04, and /privacy says the field takes a ZIP), so without one
-    the field asks for a ZIP and nothing on the page asks for an address. */
+/** The location field's words. The field takes a street address while
+    address lookup is on (addressEntryEnabled(), on in production since
+    2026-10-12); with ADDRESS_LOOKUP_OFF set it asks for a ZIP and nothing
+    on the page asks for an address. */
 export function locationFieldCopy(addressEnabled: boolean): {
   /** What the voter types, mid-sentence: "Give us your ___". */
   noun: string;
   label: string;
   /** The field's placeholder: an example of what to type, never the label
       (the label is visible above the field; interface review 2026-10-05).
-      None for an address, where any example would be someone's street. */
+      For an address it is the shape, not a street: any real example would
+      be someone's street, and Census needs the city or ZIP with it. */
   example?: string;
-  autoComplete: "street-address" | "postal-code";
+  /** A line under the label saying what the field needs, so the rule is
+      visible after the placeholder goes. */
+  hint?: string;
+  /** postal-code in both modes. The field takes a whole one-line address,
+      and no autocomplete token means that: street-address autofills the
+      street lines alone, which then fails for want of a city or ZIP
+      (review 2026-10-12), while an autofilled ZIP resolves. */
+  autoComplete: "postal-code";
 } {
   return addressEnabled
     ? {
         noun: "address or ZIP",
         label: "Your address or ZIP code",
-        autoComplete: "street-address",
+        example: "Street and city, or ZIP",
+        hint: "Your street address with its city or ZIP finds your exact district. A ZIP works too.",
+        autoComplete: "postal-code",
       }
     : {
         noun: "ZIP",

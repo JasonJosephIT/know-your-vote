@@ -111,8 +111,8 @@ for (const [file, h1] of [
 /* ---- 5. field errors sit on their field ---------------------------------- */
 const entryFlat = entry.replace(/\s+/g, " ");
 check(
-  "the ZIP/address field reports itself invalid and names its error",
-  /ref=\{inputRef\} id="location" name="zip" aria-invalid=\{fieldError \|\| undefined\} aria-describedby=\{fieldError \? errorId : undefined\}/.test(entryFlat)
+  "the ZIP/address field reports itself invalid and names its error (and its hint)",
+  /ref=\{inputRef\} id="location" name="zip" aria-invalid=\{fieldError \|\| undefined\} aria-describedby=\{ \[field\.hint \? hintId : "", fieldError \? errorId : ""\] \.filter\(Boolean\) \.join\(" "\) \|\| undefined \}/.test(entryFlat)
 );
 check(
   "a field error renders under the field with the described-by id",
@@ -228,8 +228,8 @@ for (const [file, phrase] of [
 /* ==== LOW findings of the same review ===================================== */
 
 check(
-  "the ZIP field is a combobox only when address completion can show a list",
-  /const combobox = addressEnabled\s*\?/.test(entry) && !/^\s*role="combobox"/m.test(entry)
+  "the location field is a combobox only when address completion can show a list",
+  /const combobox = suggestEnabled\s*\?/.test(entry) && !/^\s*role="combobox"/m.test(entry)
 );
 check(
   "the ZIP field's label is visible, with an example as the placeholder",

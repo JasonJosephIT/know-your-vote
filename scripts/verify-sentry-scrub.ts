@@ -81,6 +81,23 @@ assert(
   resolveFlat
 );
 
+/* And the typed address itself, the resolve body when no Pelias is
+   configured: prose, which no PII regex would catch. */
+const typedFlat = JSON.stringify(
+  scrubEvent({
+    request: {
+      url: "https://example.org/api/address/resolve",
+      method: "POST",
+      data: { address: "601 E Kennedy Blvd, Tampa" },
+    },
+  })
+);
+assert(
+  "resolve body (a typed address) is dropped",
+  !typedFlat.includes("Kennedy") && typedFlat.includes("[dropped]"),
+  typedFlat
+);
+
 /* A non-address route keeps its body, minus the usual PII. */
 const otherEvent = scrubEvent({
   request: {
@@ -144,6 +161,16 @@ const serverEvent = scrubEvent({
         method: "GET",
       },
     },
+    {
+      /* The typed-address path (no Pelias, production since 2026-10-12):
+         the address rides in the outbound Census URL's query. */
+      category: "fetch",
+      data: {
+        url: "https://geocoding.geo.census.gov/geocoder/geographies/onelineaddress?address=601+E+Kennedy+Blvd%2C+Tampa%2C+FL&format=json",
+        "http.query": "address=601+E+Kennedy+Blvd%2C+Tampa%2C+FL&format=json",
+        method: "GET",
+      },
+    },
   ],
 });
 const serverFlat = JSON.stringify(serverEvent);
@@ -157,6 +184,7 @@ for (const [name, secret] of [
   ["URL-encoded email", "voter%40example.com"],
   ["address in a query string", "2nd+Ave"],
   ["PELIAS_API_KEY in a breadcrumb", "pelias-secret"],
+  ["typed address in the Census geocoder's URL", "Kennedy"],
 ]) {
   assert(`server event drops the ${name}`, !serverFlat.includes(secret), serverFlat);
 }

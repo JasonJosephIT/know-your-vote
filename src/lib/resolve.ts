@@ -493,16 +493,46 @@ export async function resolveStatewideOnly(): Promise<ResolveResultWithCounty> {
 export async function resolveBlock(
   blockGeoid: string
 ): Promise<{ district: string; countyFips: string } | null> {
-  const supabase = await createAnonServerClient();
-  const { data, error } = await supabase
-    .from("block_district")
-    .select("block_start, block_end, county_fips, congressional_district")
-    .lte("block_start", blockGeoid)
-    .gte("block_end", blockGeoid)
-    .limit(1);
-  if (error) throw new Error(`block lookup failed: ${error.message}`);
-  return districtFromBlockRows(data ?? [], blockGeoid);
+  return districtFromBlockRows(await blockRanges(), blockGeoid);
 }
+
+/* Every block range, read whole and cached, and searched here. A filter
+   (block_start=lte.<block>) would put the voter's census block in the
+   request URL, and Supabase's API gateway logs keep request URLs: a block
+   is a few dozen homes (review 2026-10-12). The table is small (982 ranges
+   for the four counties on 2026-10-12), so reading all of it is cheap; it is
+   read in pages so PostgREST's row cap can't cut it short as it grows. */
+type BlockRange = {
+  block_start: string;
+  block_end: string;
+  county_fips: string;
+  congressional_district: string;
+};
+const BLOCK_PAGE = 1000;
+
+async function fetchBlockRanges(): Promise<BlockRange[]> {
+  const supabase = await createAnonServerClient();
+  const rows: BlockRange[] = [];
+  for (let from = 0; ; from += BLOCK_PAGE) {
+    const { data, error } = await supabase
+      .from("block_district")
+      .select("block_start, block_end, county_fips, congressional_district")
+      .order("block_start")
+      .range(from, from + BLOCK_PAGE - 1);
+    if (error) throw new Error(`block ranges read failed: ${error.message}`);
+    rows.push(...(data ?? []));
+    if (!data || data.length < BLOCK_PAGE) break;
+  }
+  /* An empty table is a failed read, not a Florida with no districts:
+     caching it would send every address to the statewide ballot. */
+  if (rows.length === 0) throw new Error("block ranges read returned no rows");
+  return rows;
+}
+
+const blockRanges = unstable_cache(fetchBlockRanges, ["block-ranges"], {
+  revalidate: 3600,
+  tags: ["districts"],
+});
 
 /* A district the voter has already established -- from an address, a confirmed
    ZIP, or the picker -- plus the county it sits in.

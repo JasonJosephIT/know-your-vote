@@ -35,8 +35,20 @@ function baseUrl(): string | null {
   return raw ? raw.replace(/\/+$/, "") : null;
 }
 
+/* Whether the location field takes a street address at all. On by default
+   since 2026-10-12: with no Pelias, a typed address goes to the Census
+   Bureau's free one-line geocoder (census-block.ts blockForAddress), which
+   needs no account or key. ADDRESS_LOOKUP_OFF (any value) is the switch
+   back: the field takes a ZIP only, both address routes refuse, and
+   /privacy says nothing typed leaves the site. */
+export function addressEntryEnabled(): boolean {
+  return !process.env.ADDRESS_LOOKUP_OFF?.trim();
+}
+
+/* Whether the field suggests addresses as the voter types: Pelias is
+   configured, and address entry is on. */
 export function geocoderConfigured(): boolean {
-  return baseUrl() !== null;
+  return addressEntryEnabled() && baseUrl() !== null;
 }
 
 /* The privacy page states who sees an address, and that is a deployment fact,

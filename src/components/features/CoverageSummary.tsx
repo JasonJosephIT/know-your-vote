@@ -26,8 +26,8 @@ import { SectionDivider } from "@/components/brand/SectionDivider";
    hasDistrict: the home page shows the location field above only when no
    district is saved, so the county row points to it only then.
    addressEnabled: whether that field takes an address at all
-   (geocoderConfigured(), read by the page). Without a geocoder it takes a
-   ZIP only, so the row asks for a ZIP (locationFieldCopy).
+   (addressEntryEnabled(), read by the page). With ADDRESS_LOOKUP_OFF set it
+   takes a ZIP only, so the row asks for a ZIP (locationFieldCopy).
 
    The "Not covered" row is the long form of NOT_COVERED_SENTENCE
    (src/lib/scope-copy.ts), which the House-race step and the races view

@@ -1,12 +1,14 @@
 import Link from "next/link";
-import { geocoderHost } from "@/lib/geocode";
+import { addressEntryEnabled, geocoderHost } from "@/lib/geocode";
 import { ResetAdsConsent } from "@/components/features/SitePrompts";
 import { ADS_TAG_ENABLED } from "@/lib/ads";
 
 export const metadata = { title: "Privacy — Know Your Vote" };
 
 export default function PrivacyPage() {
-  const geocoder = geocoderHost();
+  const addressOn = addressEntryEnabled();
+  /* Pelias only matters while the field takes an address. */
+  const geocoder = addressOn ? geocoderHost() : null;
   const analyticsOn = Boolean(process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN);
   /* The same variables that start the two Sentry SDKs
      (src/instrumentation.ts, src/instrumentation-client.ts). */
@@ -64,11 +66,17 @@ export default function PrivacyPage() {
       <section className="flex flex-col gap-2">
         <h2 className="text-h2">When you type an address</h2>
         {/* This section states who sees an address, and that is a deployment
-            fact rather than a constant: PELIAS_BASE_URL points either at an
-            instance we run or at a hosted one. Prose cannot know which, and a
-            paragraph that is wrong on half of the deployments is worse than no
-            paragraph — so the host is read from the configuration. */}
-        {geocoder ? (
+            fact rather than a constant: ADDRESS_LOOKUP_OFF turns the address
+            path off, and PELIAS_BASE_URL adds suggestions from an instance we
+            run or a hosted one. Prose cannot know which, and a paragraph that
+            is wrong on some deployments is worse than no paragraph — so the
+            section is read from the configuration (src/lib/geocode.ts). */}
+        {!addressOn ? (
+          <p className="text-body">
+            Address lookup is switched off on this deployment — the field
+            takes a ZIP only, and nothing you type reaches anyone else.
+          </p>
+        ) : geocoder ? (
           <>
             <p className="text-body">
               Address completion is{" "}
@@ -93,15 +101,28 @@ export default function PrivacyPage() {
             </p>
           </>
         ) : (
+          <>
+            <p className="text-body">
+              When you type a street address and press Enter, we send what
+              you typed to the U.S. Census Bureau&rsquo;s public geocoder,
+              which finds the census block the address sits in. The block
+              tells us your district, using Florida&rsquo;s enacted 2026 map,
+              and the district is the only thing that is kept. We don&rsquo;t
+              log the address and we don&rsquo;t store it.
+            </p>
+            <p className="text-body">
+              The request goes from our server, not your browser, so the
+              Census Bureau receives the address and nothing else: not your IP
+              address, not your name, not anything that says who typed it.
+            </p>
+          </>
+        )}
+        {addressOn && (
           <p className="text-body">
-            Address completion is switched off on this deployment — the field
-            takes a ZIP only, and nothing you type reaches anyone else.
+            Rather not share your address? Enter your ZIP, or choose your
+            district from the list — both work with no third party at all.
           </p>
         )}
-        <p className="text-body">
-          Prefer neither? Enter your ZIP, or choose your district from the list —
-          both work with no third party at all.
-        </p>
       </section>
 
       <section className="flex flex-col gap-2">
