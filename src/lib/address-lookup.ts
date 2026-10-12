@@ -3,6 +3,7 @@ import {
   namesOtherState,
   sameStreet,
   streetIfPlaceNamed,
+  typedZip,
   type MatchedStreet,
 } from "./address-text.ts";
 
@@ -118,8 +119,12 @@ export function parseSuggestions(json: unknown): AddressSuggestion[] {
      answers anyway when every block gives the same district.
    - checkStreet: Census found the place but a different street: another
      direction (SW for NW), type (Ave for St) or house number.
-   - needsPlace: Census found the street, but not in the city or ZIP the
-     voter named, or they named none. "115 S Andrews Ave, FL" matches Fort
+   - placeConflict: the voter typed a ZIP, and no match is in that ZIP
+     and their city. Census prefers the city when the two disagree, which
+     in Broward's repeated street grids is another city's street (review
+     2026-10-12), so the answer is to check both, never the city's match.
+   - needsPlace: Census found the street, but not in the city the voter
+     named, or they named none. "115 S Andrews Ave, FL" matches Fort
      Lauderdale, and if the voter's own address is missing from Census's
      address ranges, the same street in another city would be matched
      instead and look just as sure.
@@ -129,6 +134,7 @@ export type AddressMatch =
   | { kind: "match"; block: CensusBlock }
   | { kind: "ambiguous"; blocks: CensusBlock[] }
   | { kind: "checkStreet" }
+  | { kind: "placeConflict" }
   | { kind: "needsPlace" }
   | { kind: "outOfState" }
   | { kind: "none" };
@@ -198,7 +204,11 @@ export function parseAddressMatches(
     const street = streetIfPlaceNamed(typed, m.street);
     return street ? [{ ...m, typedStreet: street }] : [];
   });
-  if (placed.length === 0) return { kind: "needsPlace" };
+  if (placed.length === 0) {
+    return typedZip(typed) !== null
+      ? { kind: "placeConflict" }
+      : { kind: "needsPlace" };
+  }
 
   const same = placed.filter((m) => sameStreet(m.typedStreet, m.street));
   if (same.length === 0) return { kind: "checkStreet" };

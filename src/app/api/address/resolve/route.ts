@@ -46,7 +46,7 @@ const OUT_OF_COVERAGE: ResolveResult = {
 /* 422 is "Census answered, and the answer is about what was typed": the
    field says what to fix. `reason` picks the words (LocationEntry). */
 function unmatched(
-  reason: "none" | "needsPlace" | "checkStreet" | "ambiguous"
+  reason: "none" | "needsPlace" | "placeConflict" | "checkStreet" | "ambiguous"
 ) {
   return NextResponse.json({ error: "No single match", reason }, { status: 422 });
 }
