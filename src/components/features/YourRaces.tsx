@@ -16,13 +16,17 @@ import {
   ZIP_RE,
 } from "@/lib/resolve";
 import { raceStatusLabel } from "@/lib/races";
-import { geocoderConfigured } from "@/lib/geocode";
+import { addressEntryEnabled, geocoderConfigured } from "@/lib/geocode";
 import {
   emailDeliveryConfigured,
   officialSources,
   remindersPaused,
 } from "@/lib/notifications/config";
-import { DECIDED_TAG, NOT_COVERED_SENTENCE } from "@/lib/scope-copy";
+import {
+  DECIDED_TAG,
+  locationFieldCopy,
+  NOT_COVERED_SENTENCE,
+} from "@/lib/scope-copy";
 import type {
   DistrictRaceSummary,
   ResolveResultWithCounty,
@@ -98,10 +102,12 @@ export async function YourRaces({
     return (
       <div className="flex flex-col gap-4">
         <p className="text-body text-on-surface-muted">
-          Add your ZIP and we&rsquo;ll show the races we cover on your ballot.
+          Add your {locationFieldCopy(addressEntryEnabled()).noun} and
+          we&rsquo;ll show the races we cover on your ballot.
         </p>
         <LocationEntry
-          addressEnabled={geocoderConfigured()}
+          addressEnabled={addressEntryEnabled()}
+          suggestEnabled={geocoderConfigured()}
           districts={districts}
         />
       </div>
@@ -115,10 +121,10 @@ export async function YourRaces({
           We can&rsquo;t place that ZIP on a ballot yet. Full statewide coverage
           isn&rsquo;t available: U.S. House and county races are only for{" "}
           {coveredCountyNames()} counties so far. If you live in Florida,{" "}
-          {/* The address field only exists when a geocoder is configured
-              (PELIAS_BASE_URL, unset in production on 2026-10-04), so the
-              hint follows it rather than pointing at a field that isn't there. */}
-          {geocoderConfigured() ? "try your street address, or " : ""}
+          {/* The field takes an address unless ADDRESS_LOOKUP_OFF is set,
+              so the hint follows it rather than pointing at a field that
+              can't take one. */}
+          {addressEntryEnabled() ? "try your street address, or " : ""}
           <Link
             href={STATEWIDE_BALLOT_HREF}
             className="text-primary underline underline-offset-2"
@@ -128,7 +134,8 @@ export async function YourRaces({
           .
         </p>
         <LocationEntry
-          addressEnabled={geocoderConfigured()}
+          addressEnabled={addressEntryEnabled()}
+          suggestEnabled={geocoderConfigured()}
           districts={districts}
         />
       </div>
@@ -187,11 +194,16 @@ export async function YourRaces({
           <p className="text-body text-on-surface-muted">
             That ZIP spans more than one congressional district (
             {result.candidateDistricts?.join(", ")}). Re-enter it below and
-            we&rsquo;ll ask which district is yours:
+            we&rsquo;ll ask which district is yours
+            {addressEntryEnabled()
+              ? ", or type your street address for your exact district"
+              : ""}
+            :
           </p>
         )}
         <LocationEntry
-          addressEnabled={geocoderConfigured()}
+          addressEnabled={addressEntryEnabled()}
+          suggestEnabled={geocoderConfigured()}
           districts={districts}
         />
       </div>

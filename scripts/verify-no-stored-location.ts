@@ -985,7 +985,7 @@ assert(
   "expected the FL-nn|ccccc regex to guard both parse and format"
 );
 
-/* 4. The privacy page must describe exactly this, including both third parties
+/* 4. The privacy page must describe exactly this, including every third party
       on the address path. A page whose whole value is being checkable cannot
       carry a claim that fails the check.
 
@@ -1024,15 +1024,27 @@ assert(
   "privacy page names the Census Bureau",
   /Census Bureau/.test(privacyText)
 );
-assert(
-  "privacy page says only coordinates go to Census",
-  /coordinates/i.test(privacyText) &&
-    /never receives your address/i.test(privacyText)
-);
-assert(
-  "privacy page names the way out of both third parties",
-  /(?:pick|choose) your district/i.test(privacyText)
-);
+/* What Census receives depends on the path (since 2026-10-12): a picked
+   Pelias suggestion sends only its coordinates; a typed address, which is
+   production, sends the text, from our server and with nothing else. The
+   page says both, each under the configuration it describes. */
+{
+  const flat = privacyText.replace(/\s+/g, " ");
+  assert(
+    "privacy page says a picked suggestion sends Census only coordinates",
+    /we send just those coordinates to the U\.S\. Census Bureau/.test(flat)
+  );
+  assert(
+    "privacy page says a typed address goes to Census from our server, alone",
+    /we send what you typed to the U\.S\. Census Bureau(?:&rsquo;|’|')s public geocoder/.test(flat) &&
+      /goes from our server, not your browser/.test(flat) &&
+      /receives the address and nothing else/.test(flat)
+  );
+  assert(
+    "privacy page names the way out of the address path",
+    /(?:pick|choose) your district/i.test(flat)
+  );
+}
 /* Every key section 3 found in the code is on the page. This replaces the two
    hand-written checks for the keep-in-mind list and the install flag, and
    covers the two SitePrompts keys the same way: a key the code stores and the

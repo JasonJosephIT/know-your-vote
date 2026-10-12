@@ -44,17 +44,18 @@ export function houseRaceNotOnBallot(
     : `There's no U.S. House race on your ballot this year. The ${district} race was decided in the August primary, and ${name} takes the seat.`;
 }
 
-/** The location field's words. Address completion exists only when a
-    geocoder is configured (geocoderConfigured(), off in production since
-    2026-10-04, and /privacy says the field takes a ZIP), so without one
-    the field asks for a ZIP and nothing on the page asks for an address. */
+/** The location field's words. The field takes a street address while
+    address lookup is on (addressEntryEnabled(), on in production since
+    2026-10-12); with ADDRESS_LOOKUP_OFF set it asks for a ZIP and nothing
+    on the page asks for an address. */
 export function locationFieldCopy(addressEnabled: boolean): {
   /** What the voter types, mid-sentence: "Give us your ___". */
   noun: string;
   label: string;
   /** The field's placeholder: an example of what to type, never the label
       (the label is visible above the field; interface review 2026-10-05).
-      None for an address, where any example would be someone's street. */
+      For an address it is the shape, not a street: any real example would
+      be someone's street, and Census needs the city or ZIP with it. */
   example?: string;
   autoComplete: "street-address" | "postal-code";
 } {
@@ -62,6 +63,7 @@ export function locationFieldCopy(addressEnabled: boolean): {
     ? {
         noun: "address or ZIP",
         label: "Your address or ZIP code",
+        example: "Street and city, or ZIP",
         autoComplete: "street-address",
       }
     : {

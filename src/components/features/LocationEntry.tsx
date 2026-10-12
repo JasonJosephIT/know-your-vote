@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useId, useRef, useState } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import {
@@ -15,19 +21,29 @@ import { STATEWIDE_BALLOT_HREF } from "@/lib/coverage";
 import type { UncoveredPart } from "@/lib/uncovered-zip-parts";
 import { writeDistrictCookie } from "@/lib/district-cookie";
 import { locationFieldCopy } from "@/lib/scope-copy";
-import type { AddressSuggestion } from "@/lib/address-lookup";
+import {
+  looksLikeStreetAddress,
+  type AddressSuggestion,
+} from "@/lib/address-lookup";
 import type { CoveredDistrict } from "@/lib/resolve";
 import type { ResolveResult } from "@/types/app";
 
 /* One field, two kinds of answer.
 
-   Digits are a ZIP and never leave for Google -- five of them go to the existing
-   /api/resolve, split-district confirmation included. Anything with a letter is
-   an address: it completes as you type through our own proxy, and the one you
-   pick resolves to a census block and therefore to exactly one district, with
-   nothing to confirm. That difference is the point. A ZIP can only ever answer
-   "one of these two districts"; 29 of the covered non-split ZIPs even contain a
-   sliver the ZIP answers wrongly without saying so.
+   Digits are a ZIP and never leave the site -- five of them go to the
+   existing /api/resolve, split-district confirmation included. Anything with
+   a letter is an address, and an address resolves to a census block and
+   therefore to exactly one district, with nothing to confirm. That difference
+   is the point. A ZIP can only ever answer "one of these two districts"; 29 of
+   the covered non-split ZIPs even contain a sliver the ZIP answers wrongly
+   without saying so.
+
+   An address gets there one of two ways (src/app/api/address/resolve):
+   - suggestEnabled (Pelias configured): it completes as you type through our
+     own proxy, and the suggestion you pick posts only its coordinate.
+   - otherwise, which is production: you type the whole address and press
+     Enter, and the text goes to our server and on to the Census Bureau's
+     geocoder. No list, so the field is a plain text box, not a combobox.
 
    Underneath is the district picker, which needs no third party at all.
 
@@ -57,20 +73,47 @@ type Stage =
 const MIN_ADDRESS_CHARS = 5;
 const DEBOUNCE_MS = 250;
 
-/* The field's words follow addressEnabled (locationFieldCopy): without a
-   geocoder it takes a ZIP only, so it must not ask for an address. The
-   default placeholder used to be "Your address or ZIP code" whatever the
-   flag said, and the races view and the home page both rendered it so in
-   production, where /privacy says the field takes a ZIP. */
+/* The address answers that are about what was typed (a 422 from the resolve
+   route), each with the fix it needs. */
+const UNMATCHED: Record<string, string> = {
+  none: "We couldn't find that address. Check the house number and street, and include your city or ZIP — or enter just your 5-digit ZIP.",
+  needsPlace:
+    "Add your city or ZIP to that address, so we find the right one.",
+  ambiguous:
+    "That address matches more than one place. Add your ZIP to it.",
+};
+
+/* false while the server renders and the page hydrates, true after. Until
+   then the form can only submit natively (a GET to /candidates?zip=…), and
+   an address typed then would land in that URL: the access log, the
+   history, the next page's Referer. So until hydration the field accepts a
+   ZIP only (pattern), and after it the address path runs here, by POST. */
+const subscribeNothing = () => () => {};
+function useHydrated(): boolean {
+  return useSyncExternalStore(
+    subscribeNothing,
+    () => true,
+    () => false
+  );
+}
+
+/* The field's words follow addressEnabled (locationFieldCopy): with address
+   lookup switched off (ADDRESS_LOOKUP_OFF) it takes a ZIP only, so it must
+   not ask for an address. */
 export function LocationEntry({
   submitLabel = "See my races",
   placeholder,
   addressEnabled = false,
+  suggestEnabled = false,
   districts = [],
 }: {
   submitLabel?: string;
   placeholder?: string;
+  /* The field takes a street address (addressEntryEnabled()). */
   addressEnabled?: boolean;
+  /* It also suggests addresses as the voter types (geocoderConfigured():
+     Pelias). Never true without addressEnabled. */
+  suggestEnabled?: boolean;
   districts?: CoveredDistrict[];
 } = {}) {
   const field = locationFieldCopy(addressEnabled);
@@ -83,22 +126,25 @@ export function LocationEntry({
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [showPicker, setShowPicker] = useState(false);
+  const hydrated = useHydrated();
 
-  /* One session token per autocomplete session, spent on the resolve call and
-     then replaced. This is what makes the paired calls bill as one session. */
+  /* The suggestion request still in flight, cancelled by the next one. */
   const abort = useRef<AbortController | null>(null);
 
   const trimmed = value.trim();
   const looksLikeZip = /^\d+$/.test(trimmed);
-  const addressMode =
-    addressEnabled && trimmed.length >= MIN_ADDRESS_CHARS && !looksLikeZip;
+  const suggesting =
+    suggestEnabled &&
+    addressEnabled &&
+    trimmed.length >= MIN_ADDRESS_CHARS &&
+    !looksLikeZip;
 
   /* Derived, not cleared in an effect. Typing a digit turns off address mode and
      the dropdown has to go with it -- doing that with setState inside the effect
      is what React 19's set-state-in-effect rule warns about, and deriving is
      simply correct anyway: there is nothing to remember. */
-  const visible = addressMode ? suggestions : [];
-  const highlighted = addressMode ? activeIndex : -1;
+  const visible = suggesting ? suggestions : [];
+  const highlighted = suggesting ? activeIndex : -1;
   const fieldError = stage.kind === "error" && stage.field !== false;
 
   /* Errors that announce (interface review 2026-10-05). An error about what
@@ -124,10 +170,10 @@ export function LocationEntry({
   }
 
   /* Combobox semantics only when there can be a list (interface review
-     2026-10-05). With address completion off, which is production, the field
-     is a plain ZIP box; announcing it as an autocomplete promised a list of
+     2026-10-05). Without suggestions, which is production, the field is a
+     plain text box; announcing it as an autocomplete promised a list of
      suggestions that never appears. */
-  const combobox = addressEnabled
+  const combobox = suggestEnabled
     ? {
         role: "combobox" as const,
         "aria-expanded": visible.length > 0,
@@ -141,7 +187,7 @@ export function LocationEntry({
   /* Suggestions, debounced. A keystroke is a billed request, so this waits for a
      pause, needs five characters, and cancels whatever is still in flight. */
   useEffect(() => {
-    if (!addressMode) return;
+    if (!suggesting) return;
     const timer = setTimeout(async () => {
       abort.current?.abort();
       const controller = new AbortController();
@@ -167,7 +213,7 @@ export function LocationEntry({
       }
     }, DEBOUNCE_MS);
     return () => clearTimeout(timer);
-  }, [addressMode, trimmed]);
+  }, [suggesting, trimmed]);
 
   /* The one place a district is committed, whatever produced it. */
   function commit(
@@ -184,17 +230,31 @@ export function LocationEntry({
     router.push(`/candidates?${q}`);
   }
 
-  /* The suggestion already carries its coordinate, so this posts the point and
-     nothing else -- the address itself never leaves the browser on this call. */
-  async function resolveAddress(pick: { lat: number; lon: number }) {
+  /* A picked suggestion already carries its coordinate, so it posts the point
+     and nothing else -- the address itself never leaves the browser on that
+     call. A typed address (no suggestions) posts the text, in the body. */
+  async function resolveAddress(
+    pick: { lat: number; lon: number } | { address: string }
+  ) {
     setStage({ kind: "loading" });
     setSuggestions([]);
     try {
       const res = await fetch("/api/address/resolve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lat: pick.lat, lon: pick.lon }),
+        body: JSON.stringify(
+          "address" in pick
+            ? { address: pick.address }
+            : { lat: pick.lat, lon: pick.lon }
+        ),
       });
+      if (res.status === 422) {
+        /* Census answered, about what was typed: the field says what to
+           fix. */
+        const data: { reason?: string } = await res.json().catch(() => ({}));
+        fail(UNMATCHED[data.reason ?? ""] ?? UNMATCHED.none);
+        return;
+      }
       if (!res.ok) {
         /* 400, 429 and 5xx are all ours or the geocoder's, never what the
            voter typed: not a field error. */
@@ -289,14 +349,22 @@ export function LocationEntry({
        first if none is highlighted. */
     const picked = visible[highlighted] ?? visible[0];
     if (picked) {
-      void resolveAddress(picked);
+      void resolveAddress({ lat: picked.lat, lon: picked.lon });
       return;
     }
-    fail(
-      addressEnabled
-        ? "Pick your address from the list, or enter your 5-digit ZIP."
-        : "Enter your 5-digit ZIP, or choose your district below."
-    );
+    if (!addressEnabled) {
+      fail("Enter your 5-digit ZIP, or choose your district below.");
+      return;
+    }
+    /* No suggestion to take (none configured, or none came back): the typed
+       address itself, if it has a house number and a street. */
+    if (!looksLikeStreetAddress(trimmed)) {
+      fail(
+        "Enter your house number and street with your city or ZIP — or just your 5-digit ZIP."
+      );
+      return;
+    }
+    void resolveAddress({ address: trimmed });
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -346,6 +414,10 @@ export function LocationEntry({
             {...combobox}
             autoComplete={field.autoComplete}
             inputMode={addressEnabled ? undefined : "numeric"}
+            /* ZIP only until hydrated (useHydrated): without JavaScript the
+               form is a GET, and an address must never ride in its URL. */
+            pattern={hydrated ? undefined : "\\d{5}"}
+            title={hydrated ? undefined : "A 5-digit ZIP code"}
             placeholder={placeholder ?? field.example}
             value={value}
             onChange={(e) => {
@@ -364,9 +436,10 @@ export function LocationEntry({
               {stage.message}
             </p>
           )}
-          {/* In address mode the list is always in the DOM (hidden while
-              empty), so the field's aria-controls always points at it. */}
-          {addressEnabled && (
+          {/* With suggestions on, the list is always in the DOM (hidden
+              while empty), so the field's aria-controls always points at
+              it. */}
+          {suggestEnabled && (
             <ul
               id={listId}
               role="listbox"
@@ -389,7 +462,7 @@ export function LocationEntry({
                   onMouseDown={(e) => {
                     /* mousedown, not click: blur would close the list first. */
                     e.preventDefault();
-                    void resolveAddress(s);
+                    void resolveAddress({ lat: s.lat, lon: s.lon });
                   }}
                 >
                   {s.text}
@@ -447,12 +520,22 @@ export function LocationEntry({
       )}
 
       {stage.kind === "split" && (
-        <DistrictConfirm
-          districts={stage.districts}
-          countyFips={stage.countyFips}
-          uncoveredPart={stage.uncoveredPart}
-          onPick={(district) => void resolveZipCode(stage.zip, district)}
-        />
+        <>
+          <DistrictConfirm
+            districts={stage.districts}
+            countyFips={stage.countyFips}
+            uncoveredPart={stage.uncoveredPart}
+            onPick={(district) => void resolveZipCode(stage.zip, district)}
+          />
+          {/* The address answers a split ZIP outright: one block, one
+              district, nothing to choose. */}
+          {addressEnabled && (
+            <p className="text-body-sm text-on-surface-muted">
+              Or type your street address above, with your city or ZIP, and
+              we&rsquo;ll find your exact district.
+            </p>
+          )}
+        </>
       )}
 
       {stage.kind !== "outOfCoverage" && districts.length > 0 && (

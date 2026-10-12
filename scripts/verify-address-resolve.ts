@@ -13,6 +13,9 @@ import {
   parseBlockResponse,
   districtFromBlockRows,
   parseSuggestions,
+  parseAddressMatches,
+  censusAddressQuery,
+  looksLikeStreetAddress,
 } from "../src/lib/address-lookup.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -134,6 +137,114 @@ assert(
 assert(
   "the coordinate is not rounded on the way through",
   String(suggestions[0].lat).length > 8 && String(suggestions[0].lon).length > 8
+);
+
+/* ---- Census: typed address -> block (no Pelias: production) ---- */
+const typed = fixture("census-address.json");
+const kind = (json: unknown, text: string) =>
+  JSON.stringify(parseAddressMatches(json, text));
+assert(
+  "a typed address naming its city resolves to its block",
+  kind(typed, "444 SW 2nd Ave, Miami, FL") ===
+    JSON.stringify({
+      kind: "match",
+      block: { geoid: "120860036061055", state: "12" },
+    }),
+  kind(typed, "444 SW 2nd Ave, Miami, FL")
+);
+assert(
+  "naming the ZIP instead of the city is enough",
+  parseAddressMatches(typed, "444 sw 2nd ave 33130")?.kind === "match"
+);
+assert(
+  "case and punctuation don't matter",
+  parseAddressMatches(typed, "444 sw 2nd ave., MIAMI fl")?.kind === "match"
+);
+/* The street alone matched with ", FL" added: if the voter's own address
+   were missing from Census, the same street elsewhere would answer just as
+   surely. So a place the voter didn't name is not trusted. */
+assert(
+  "a match the voter named no place for asks for the city or ZIP",
+  parseAddressMatches(typed, "444 SW 2nd Ave")?.kind === "needsPlace"
+);
+assert(
+  "a different city typed does not confirm this one",
+  parseAddressMatches(typed, "444 SW 2nd Ave, Tampa")?.kind === "needsPlace"
+);
+assert(
+  "Census's other-state answers to a Florida street are no match",
+  parseAddressMatches(
+    fixture("census-address-elsewhere.json"),
+    "1 Main St, Springfield, FL"
+  )?.kind === "none"
+);
+assert(
+  "no matches at all is no match",
+  parseAddressMatches({ result: { addressMatches: [] } }, "1 Nowhere Rd, Miami")
+    ?.kind === "none"
+);
+assert(
+  "a malformed payload is null (a failure, not an answer)",
+  parseAddressMatches({ nope: true }, "x") === null
+);
+{
+  const two = structuredClone(typed);
+  const other = structuredClone(two.result.addressMatches[0]);
+  other.geographies["Census Blocks"][0].GEOID = "120860036061099";
+  two.result.addressMatches.push(other);
+  assert(
+    "two Florida blocks for the place named is ambiguous",
+    parseAddressMatches(two, "444 SW 2nd Ave, Miami")?.kind === "ambiguous"
+  );
+  const same = structuredClone(typed);
+  same.result.addressMatches.push(structuredClone(same.result.addressMatches[0]));
+  assert(
+    "two matches in the same block are one answer",
+    parseAddressMatches(same, "444 SW 2nd Ave, Miami")?.kind === "match"
+  );
+}
+{
+  const shortBlock = structuredClone(typed);
+  shortBlock.result.addressMatches[0].geographies["Census Blocks"][0].GEOID =
+    "1208600";
+  assert(
+    "a short GEOID is not a Florida match",
+    parseAddressMatches(shortBlock, "444 SW 2nd Ave, Miami")?.kind === "none"
+  );
+  const ft = structuredClone(typed);
+  ft.result.addressMatches[0].addressComponents.city = "FORT LAUDERDALE";
+  assert(
+    "'Ft Lauderdale' names FORT LAUDERDALE",
+    parseAddressMatches(ft, "444 SW 2nd Ave, Ft. Lauderdale")?.kind === "match"
+  );
+}
+assert(
+  "', FL' is added when no state or ZIP is given",
+  censusAddressQuery(" 601 E  Kennedy Blvd, Tampa ") ===
+    "601 E Kennedy Blvd, Tampa, FL"
+);
+assert(
+  "a named state is left alone",
+  censusAddressQuery("601 E Kennedy Blvd, Tampa, Florida") ===
+    "601 E Kennedy Blvd, Tampa, Florida" &&
+    censusAddressQuery("601 E Kennedy Blvd Tampa fl") ===
+      "601 E Kennedy Blvd Tampa fl"
+);
+assert(
+  "a trailing ZIP is left alone",
+  censusAddressQuery("115 S Andrews Ave, 33301") === "115 S Andrews Ave, 33301" &&
+    censusAddressQuery("444 SW 2nd Ave 33130-1910") === "444 SW 2nd Ave 33130-1910"
+);
+assert(
+  "a five-digit house number is not a ZIP",
+  censusAddressQuery("12345 SW 88th St, Miami") === "12345 SW 88th St, Miami, FL"
+);
+assert(
+  "an address needs a house number and a street",
+  looksLikeStreetAddress("444 SW 2nd Ave") &&
+    !looksLikeStreetAddress("Kennedy Blvd, Tampa") &&
+    !looksLikeStreetAddress("33130") &&
+    !looksLikeStreetAddress("1 a")
 );
 
 /* ---- The routes' privacy contract, asserted structurally ---- */

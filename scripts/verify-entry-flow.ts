@@ -228,8 +228,8 @@ for (const [file, phrase] of [
 /* ==== LOW findings of the same review ===================================== */
 
 check(
-  "the ZIP field is a combobox only when address completion can show a list",
-  /const combobox = addressEnabled\s*\?/.test(entry) && !/^\s*role="combobox"/m.test(entry)
+  "the location field is a combobox only when address completion can show a list",
+  /const combobox = suggestEnabled\s*\?/.test(entry) && !/^\s*role="combobox"/m.test(entry)
 );
 check(
   "the ZIP field's label is visible, with an example as the placeholder",

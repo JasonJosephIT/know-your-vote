@@ -23,7 +23,7 @@ import { SectionDivider } from "@/components/brand/SectionDivider";
 import { getActiveMeasures } from "@/lib/measures";
 import { getStatewideRaces } from "@/lib/races";
 import { districtRace, getCoveredDistricts } from "@/lib/resolve";
-import { geocoderConfigured } from "@/lib/geocode";
+import { addressEntryEnabled, geocoderConfigured } from "@/lib/geocode";
 import { reminderPromotionLive } from "@/lib/notifications/config";
 import {
   houseRaceNotOnBallot,
@@ -124,9 +124,11 @@ export default async function Home() {
       : null;
   const ballotRendered = races.length > 0 || measures.length > 0;
 
-  /* ZIP only unless address completion is configured (it is off in
-     production; /privacy says the field takes a ZIP). */
-  const addressEnabled = geocoderConfigured();
+  /* The field takes a street address unless ADDRESS_LOOKUP_OFF is set, and
+     suggests addresses only when Pelias is configured (off in production:
+     a typed address goes to the Census Bureau instead; /privacy says so). */
+  const addressEnabled = addressEntryEnabled();
+  const suggestEnabled = geocoderConfigured();
   const field = locationFieldCopy(addressEnabled);
 
   /* FOUNDER DECISION 3 — promote the reminder signup. Recommended (pending
@@ -286,8 +288,8 @@ export default async function Home() {
                   something we remember. What is still true, and is the sharper
                   claim, is that the address and the ZIP are never kept.
 
-                  It asks for a ZIP unless address completion is configured
-                  (field.noun): the field takes nothing else in production. */}
+                  It asks for what the field takes (field.noun): an address
+                  or a ZIP, or a ZIP only with ADDRESS_LOOKUP_OFF set. */}
                   <p className="text-body-sm text-on-surface-muted">
                     Your U.S. House race isn&rsquo;t in the list above, because
                     it depends on where you live. Give us your {field.noun} and
@@ -309,6 +311,7 @@ export default async function Home() {
                     <LocationEntry
                       submitLabel="Add my House race"
                       addressEnabled={addressEnabled}
+                      suggestEnabled={suggestEnabled}
                       districts={districts}
                     />
                   </div>
