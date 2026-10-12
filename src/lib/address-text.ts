@@ -87,7 +87,86 @@ const STREET_TYPES: Record<string, string> = {
   walk: "walk",
   way: "way",
   xing: "crossing", crossing: "crossing",
+  /* Alternates USPS Publication 28 accepts, and the types Census returns
+     for Florida's subdivision streets (review 2026-10-12: "N America Wy",
+     "George J Bean Pky" were refused). */
+  wy: "way",
+  pky: "parkway", pkway: "parkway", parkwy: "parkway",
+  ctr: "center", center: "center",
+  crk: "creek", creek: "creek",
+  gln: "glen", glen: "glen",
+  grv: "grove", grove: "grove",
+  hl: "hill", hill: "hill",
+  holw: "hollow", hollow: "hollow",
+  hts: "heights", heights: "heights",
+  isle: "isle",
+  lndg: "landing", landing: "landing",
+  mnr: "manor", manor: "manor",
+  park: "park",
+  rdg: "ridge", ridge: "ridge",
+  vw: "view", view: "view",
+  vis: "vista", vista: "vista",
 };
+
+/* "Tr" is TRL to some voters and TER to others, so it counts as either
+   only when Census's own type is one of the two. */
+const TRAIL_OR_TERRACE = new Set(["trail", "terrace"]);
+
+/* Spelled ordinals ("Eighth Street South" in Naples, "SW Eighth St" for
+   Calle Ocho) are the number Census writes (8TH). "Twenty-First" is 21,
+   never 1: an ordinal after another number word that isn't a tens word
+   ("One Hundred First") is left as typed, so it matches nothing and is
+   asked about. */
+const ORDINAL_WORDS: Record<string, number> = {
+  first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7,
+  eighth: 8, ninth: 9, tenth: 10, eleventh: 11, twelfth: 12, thirteenth: 13,
+  fourteenth: 14, fifteenth: 15, sixteenth: 16, seventeenth: 17,
+  eighteenth: 18, nineteenth: 19, twentieth: 20, thirtieth: 30,
+  fortieth: 40, fiftieth: 50, sixtieth: 60, seventieth: 70, eightieth: 80,
+  ninetieth: 90,
+};
+const TENS: Record<string, number> = {
+  twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70,
+  eighty: 80, ninety: 90,
+};
+const NUMBER_WORDS = new Set([
+  "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+  "ten", "hundred", "thousand", ...Object.keys(TENS),
+]);
+
+function spelledOrdinals(ws: string[]): string[] {
+  const out: string[] = [];
+  for (let i = 0; i < ws.length; i++) {
+    const w = ws[i];
+    const next = ORDINAL_WORDS[ws[i + 1]];
+    if (w in TENS && next !== undefined && next < 10) {
+      out.push(String(TENS[w] + next));
+      i++;
+    } else if (w in ORDINAL_WORDS && !NUMBER_WORDS.has(ws[i - 1] ?? "")) {
+      out.push(String(ORDINAL_WORDS[w]));
+    } else {
+      out.push(w);
+    }
+  }
+  return out;
+}
+
+/* "N W" and "North West" typed as two words are the quadrant NW. Joined on
+   the typed side only, as a second way to agree: Census's own parts are
+   never joined, so its S WEST SHORE stays south plus a name. */
+const QUADRANTS: Record<string, string> = {
+  "north east": "northeast",
+  "north west": "northwest",
+  "south east": "southeast",
+  "south west": "southwest",
+};
+const joinQuadrants = (ws: string[]): string[] =>
+  ws.reduce<string[]>((out, w) => {
+    const q = QUADRANTS[`${out[out.length - 1]} ${w}`];
+    if (q) out[out.length - 1] = q;
+    else out.push(w);
+    return out;
+  }, []);
 
 /* Where an apartment or suite starts: nothing after it is street. */
 const UNIT_WORDS = new Set([
@@ -110,10 +189,14 @@ const PLACE_WORDS: Record<string, string> = {
   w: "west",
 };
 
+/* Dotted single letters are one word: "N.W." is NW, "U.S." is US (which
+   split apart would read as north-west and south). "N. W." with a space
+   stays two words, which joinQuadrants handles on the typed side. */
 const words = (text: string): string[] =>
   text
     .toLowerCase()
     .replace(/#/g, " unit ")
+    .replace(/\b([a-z])\.(?=[a-z]\b)/g, "$1")
     .replace(/[^a-z0-9]+/g, " ")
     .trim()
     .split(" ")
@@ -139,26 +222,48 @@ interface Typed {
   zip: string | null;
 }
 
+/* Trailing words that are never the place: a country ("…, USA", what map
+   apps add when an address is copied), a state, a ZIP or ZIP+4, and a ZIP
+   run into the state ("FL33128"). */
+function stripTail(last: string[]): { zip: string | null } | null {
+  const tail = last[last.length - 1];
+  const joined = /^(?:fl|fla|florida)(\d{5})$/.exec(tail);
+  if (/^\d{4}$/.test(tail) && /^\d{5}$/.test(last[last.length - 2] ?? "")) {
+    last.pop();
+  } else if (/^\d{5}$/.test(tail) || joined) {
+    last.pop();
+    return { zip: joined ? joined[1] : tail };
+  } else if (tail === "usa" || tail === "us") {
+    last.pop();
+  } else if (last.slice(-4).join(" ") === "united states of america") {
+    last.splice(-4);
+  } else if (last.slice(-2).join(" ") === "united states") {
+    last.splice(-2);
+  } else if (STATE_WORDS.has(tail)) {
+    last.pop();
+  } else {
+    return null;
+  }
+  return { zip: null };
+}
+
 function splitTyped(typed: string): Typed {
   const segments = typed.split(",").map(words).filter((s) => s.length > 0);
+  /* A unit typed after the ZIP ("…, FL 33128, Suite 2220") is not the
+     place. */
+  while (segments.length > 1 && UNIT_WORDS.has(segments[segments.length - 1][0])) {
+    segments.pop();
+  }
   let zip: string | null = null;
   for (;;) {
     const last = segments[segments.length - 1];
     if (!last) break;
-    const tail = last[last.length - 1];
     /* The first token of the first segment is the house number, never a
        ZIP or a state. */
     if (segments.length === 1 && last.length === 1) break;
-    if (/^\d{4}$/.test(tail) && /^\d{5}$/.test(last[last.length - 2] ?? "")) {
-      last.pop();
-    } else if (/^\d{5}$/.test(tail)) {
-      zip ??= tail;
-      last.pop();
-    } else if (STATE_WORDS.has(tail)) {
-      last.pop();
-    } else {
-      break;
-    }
+    const stripped = stripTail(last);
+    if (!stripped) break;
+    zip ??= stripped.zip;
     if (last.length === 0) segments.pop();
   }
   /* The place is the last segment: one between it and the street is an
@@ -194,8 +299,16 @@ export function streetIfPlaceNamed(
   const { street, place, zip } = splitTyped(typed);
   const city = placeWords(words(match.city));
   const zipNamed = zip !== null && zip === match.zip;
+  /* The ZIP is the voter's word too. When they typed one and it is not
+     Census's, the city alone does not place the match (review 2026-10-12):
+     Broward's beach cities restart the street grid, so "600 NE 13th Ave,
+     Fort Lauderdale, FL 33060" matched Fort Lauderdale's copy of the
+     street (33304, FL-20) while 33060 is Pompano Beach's (FL-25), and
+     "1611 SW 12th Ave, Miami, FL 33136" matched the SW street in 33129. */
+  const zipDisagrees = zip !== null && match.zip !== "" && !zipNamed;
   if (place !== null) {
-    return zipNamed || (city !== "" && placeWords(place) === city)
+    return zipNamed ||
+      (!zipDisagrees && city !== "" && placeWords(place) === city)
       ? street
       : null;
   }
@@ -209,8 +322,15 @@ export function streetIfPlaceNamed(
     street.length > n + 1 &&
     tail === city &&
     !(before !== undefined && isDirection(before) && !/^(?:ne|nw|se|sw)$/.test(before));
-  if (endsWithCity) return street.slice(0, street.length - n);
+  if (endsWithCity && !zipDisagrees) return street.slice(0, street.length - n);
   return zipNamed ? street : null;
+}
+
+/* The ZIP the voter typed, if any: when no match names their place and
+   they gave one, their own city and ZIP disagree with what Census found,
+   which needs different words than "add your ZIP". */
+export function typedZip(typed: string): string | null {
+  return splitTyped(typed).zip;
 }
 
 /* Is the typed street this match's street? The house number, the set of
@@ -225,24 +345,41 @@ export function sameStreet(street: string[], match: MatchedStreet): boolean {
   if (!number || !/^\d+[a-z]?$/.test(number) || number !== matchedNumber) {
     return false;
   }
-  const typedWords = rest.map(streetWord);
+  /* "Westshore" is Census's WEST SHORE: a typed word that is the whole
+     street name run together reads as the name's own words, exactly as if
+     the voter had typed the space. An exact match of the whole name, never
+     a part of one. */
+  const nameWords = spelledOrdinals(words(match.streetName)).map(streetWord);
+  const joinedName = nameWords.join("");
+  const typedWords = spelledOrdinals(rest)
+    .map(streetWord)
+    .flatMap((w) => (nameWords.length > 1 && w === joinedName ? nameWords : [w]));
 
   const matchedParts = [match.preDirection, match.streetName, match.suffixDirection]
     .flatMap(words)
     .map(streetWord);
   const directions = (ws: string[]) =>
     [...new Set(ws.filter((w) => Object.values(DIRECTIONS).includes(w)))].sort().join(" ");
-  if (directions(typedWords) !== directions(matchedParts)) return false;
+  const matchedDirections = directions(matchedParts);
+  if (
+    directions(typedWords) !== matchedDirections &&
+    directions(joinQuadrants(typedWords)) !== matchedDirections
+  ) {
+    return false;
+  }
 
   const type = words(match.suffixType).map(streetWord)[0];
   if (type) {
-    const typedTypes = typedWords.filter((w) => Object.values(STREET_TYPES).includes(w));
+    /* A typed word counts as a type when it is one we know, or Census's
+       own type; the last one typed must be Census's. "Tr" is either TRL
+       or TER, so it is Census's when Census's is one of those. */
+    const typedTypes = typedWords
+      .map((w) => (w === "tr" && TRAIL_OR_TERRACE.has(type) ? type : w))
+      .filter((w) => w === type || Object.values(STREET_TYPES).includes(w));
     if (typedTypes[typedTypes.length - 1] !== type) return false;
   }
 
-  const name = words(match.streetName)
-    .map(streetWord)
-    .filter((w) => !Object.values(DIRECTIONS).includes(w));
+  const name = nameWords.filter((w) => !Object.values(DIRECTIONS).includes(w));
   return name.length === 0 || name.some((w) => typedWords.includes(w));
 }
 
@@ -252,7 +389,12 @@ export function sameStreet(street: string[], match: MatchedStreet): boolean {
    word that happens to spell a state code doesn't. */
 export function namesOtherState(typed: string, matchedStates: string[]): boolean {
   const tokens = words(typed);
-  while (/^\d{4,5}$/.test(tokens[tokens.length - 1] ?? "")) tokens.pop();
+  for (;;) {
+    const tail = tokens[tokens.length - 1] ?? "";
+    if (/^\d{4,5}$/.test(tail) || tail === "usa") tokens.pop();
+    else if (tokens.slice(-2).join(" ") === "united states") tokens.splice(-2);
+    else break;
+  }
   const last = tokens[tokens.length - 1];
   return (
     last !== undefined &&

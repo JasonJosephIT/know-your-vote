@@ -377,6 +377,199 @@ for (const text of [
   );
 }
 
+/* Second review (2026-10-12), against the shapes Census returned for these
+   public buildings. */
+{
+  /* A typed ZIP that disagrees with Census's never lets the city alone
+     place the match: Broward's beach cities restart the street grid. */
+  const ftlCopy = census(
+    censusMatch({
+      matchedAddress: "600 NE 13TH AVE, FORT LAUDERDALE, FL, 33304",
+      preDirection: "NE",
+      streetName: "13TH",
+      suffixType: "AVE",
+      city: "FORT LAUDERDALE",
+      zip: "33304",
+      geoid: "120110418012010",
+    })
+  );
+  assert(
+    "a city that matches with a ZIP that doesn't: check both (Pompano's 33060 typed as Fort Lauderdale)",
+    kind(ftlCopy, "600 NE 13th Ave, Fort Lauderdale, FL 33060") === "placeConflict"
+  );
+  assert(
+    "the same without commas",
+    kind(ftlCopy, "600 NE 13th Ave Fort Lauderdale 33060") === "placeConflict"
+  );
+  assert(
+    "the city and its own ZIP still match",
+    kind(ftlCopy, "600 NE 13th Ave, Fort Lauderdale, FL 33304") === "match"
+  );
+  assert(
+    "the city alone still matches",
+    kind(ftlCopy, "600 NE 13th Ave, Fort Lauderdale") === "match"
+  );
+  const jackson = census(
+    censusMatch({
+      matchedAddress: "1611 SW 12TH AVE, MIAMI, FL, 33129",
+      preDirection: "SW",
+      streetName: "12TH",
+      suffixType: "AVE",
+      city: "MIAMI",
+      zip: "33129",
+      geoid: "120860066011000",
+    })
+  );
+  assert(
+    "a direction typo with the right ZIP is asked about, not answered on the other street",
+    kind(jackson, "1611 SW 12th Ave, Miami, FL 33136") === "placeConflict"
+  );
+  assert(
+    "no match with a typed ZIP is a conflict, not 'add your ZIP'",
+    kind(typed, "444 SW 2nd Ave, Tampa 33602") === "placeConflict"
+  );
+
+  /* Dotted and spaced quadrants, and "U.S.". */
+  const clark = census(
+    censusMatch({
+      matchedAddress: "111 NW 1ST ST, MIAMI, FL, 33128",
+      preDirection: "NW",
+      streetName: "1ST",
+      suffixType: "ST",
+      city: "MIAMI",
+      zip: "33128",
+      geoid: "120860036061023",
+    })
+  );
+  for (const text of [
+    "111 N.W. 1st Street, Miami, FL 33128",
+    "111 N W 1st St, Miami",
+    "111 North West 1st Street, Miami",
+    "111 N. W. 1st St, Miami",
+    "111 NW First St, Miami",
+    "111 nw 1st st miami fl 33128",
+  ]) {
+    assert(`"${text}" matches NW 1ST ST`, kind(clark, text) === "match", String(kind(clark, text)));
+  }
+  for (const text of [
+    "111 S.W. 1st St, Miami",
+    "111 S W 1st St, Miami",
+    "111 1st St, Miami",
+    "111 NW Twenty-First St, Miami",
+  ]) {
+    assert(`"${text}" is not NW 1ST ST`, kind(clark, text) === "checkStreet", String(kind(clark, text)));
+  }
+  const usOne = census(
+    censusMatch({
+      matchedAddress: "501 US HWY 1, NORTH PALM BEACH, FL, 33408",
+      streetName: "1",
+      city: "NORTH PALM BEACH",
+      zip: "33408",
+      geoid: "120990007022007",
+    })
+  );
+  assert(
+    "'U.S. Highway 1' is not 'u' and south",
+    kind(usOne, "501 U.S. Highway 1, North Palm Beach, FL 33408") === "match"
+  );
+
+  /* A name Census splits ("Westshore" is WEST SHORE). */
+  const westshore = census(
+    censusMatch({
+      matchedAddress: "250 N WEST SHORE BLVD, TAMPA, FL, 33609",
+      preDirection: "N",
+      streetName: "WEST SHORE",
+      suffixType: "BLVD",
+      city: "TAMPA",
+      zip: "33609",
+      geoid: "120570047001003",
+    })
+  );
+  assert(
+    "'N Westshore Blvd' is N WEST SHORE BLVD",
+    kind(westshore, "250 N Westshore Blvd, Tampa, FL 33609") === "match"
+  );
+  assert(
+    "'Westshore' without its N is still asked about",
+    kind(westshore, "250 Westshore Blvd, Tampa") === "checkStreet"
+  );
+  assert(
+    "'SW Shore Blvd' is not S WEST SHORE",
+    kind(westshore, "250 SW Shore Blvd, Tampa") === "checkStreet"
+  );
+
+  /* What follows the ZIP. */
+  for (const text of [
+    "444 SW 2nd Ave, Miami, FL 33130, USA",
+    "444 SW 2nd Ave, Miami, FL 33130, United States",
+    "444 SW 2nd Ave, Miami FL33130",
+    "444 SW 2nd Ave, Miami, FL 33130, Suite 2",
+  ]) {
+    assert(`"${text}" matches`, kind(typed, text) === "match", String(kind(typed, text)));
+  }
+  assert("'444 SW 2nd Ave, USA' still asks for the ZIP", kind(typed, "444 SW 2nd Ave, USA") === "needsPlace");
+
+  /* Spelled ordinals. */
+  const naples = census(
+    censusMatch({
+      matchedAddress: "735 8TH ST S, NAPLES, FL, 34102",
+      streetName: "8TH",
+      suffixType: "ST",
+      suffixDirection: "S",
+      city: "NAPLES",
+      zip: "34102",
+      geoid: "120210001011030",
+    })
+  );
+  assert(
+    "'Eighth Street South' is 8TH ST S",
+    kind(naples, "735 Eighth Street South, Naples, FL 34102") === "match"
+  );
+  assert(
+    "'Eighth Street North' is not",
+    kind(naples, "735 Eighth Street North, Naples") === "checkStreet"
+  );
+
+  /* Street types: USPS alternates, and Census's own type. */
+  const america = census(
+    censusMatch({
+      matchedAddress: "1015 N AMERICA WAY, MIAMI, FL, 33132",
+      preDirection: "N",
+      streetName: "AMERICA",
+      suffixType: "WAY",
+      city: "MIAMI",
+      zip: "33132",
+      geoid: "120869810001014",
+    })
+  );
+  assert("'Wy' is WAY", kind(america, "1015 N America Wy, Miami, FL 33132") === "match");
+  const blossom = census(
+    censusMatch({
+      matchedAddress: "8001 S ORANGE BLOSSOM TRL, ORLANDO, FL, 32809",
+      preDirection: "S",
+      streetName: "ORANGE BLOSSOM",
+      suffixType: "TRL",
+      city: "ORLANDO",
+      zip: "32809",
+      geoid: "120950145052000",
+    })
+  );
+  assert("'Tr' is TRL when Census says TRL", kind(blossom, "8001 S Orange Blossom Tr, Orlando") === "match");
+  assert("'St' is still not TRL", kind(blossom, "8001 S Orange Blossom St, Orlando") === "checkStreet");
+  const estates = census(
+    censusMatch({
+      matchedAddress: "120 PALM ESTS, TAMPA, FL, 33602",
+      streetName: "PALM",
+      suffixType: "ESTS",
+      city: "TAMPA",
+      zip: "33602",
+      geoid: "120570051012000",
+    })
+  );
+  assert("Census's own type counts though it isn't listed", kind(estates, "120 Palm Ests, Tampa") === "match");
+  assert("…and another type before it doesn't", kind(estates, "120 Palm Ests Ave, Tampa") === "checkStreet");
+}
+
 /* Outside Florida. */
 assert(
   "Census's other-state answers to a Florida street are no match",

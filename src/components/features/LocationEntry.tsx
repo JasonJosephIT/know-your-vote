@@ -82,6 +82,11 @@ const UNMATCHED: Record<string, string> = {
      whatever the voter calls the place. */
   needsPlace:
     "Add your 5-digit ZIP to that address, so we're sure which one you mean.",
+  /* A city and a ZIP that point to different places. Not "leave the ZIP
+     off": in Broward the city alone can find another city's copy of the
+     same street. */
+  placeConflict:
+    "Your city and ZIP point to different places. Check the street, city and ZIP against your mail — or enter just your 5-digit ZIP.",
   checkStreet:
     "We found a similar address, but not that exact street. Check the house number, the direction (like N or SW) and the street type (like St or Ave) as they appear on your mail — or enter just your 5-digit ZIP.",
   ambiguous:
