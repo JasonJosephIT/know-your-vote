@@ -7,7 +7,7 @@ export default function NotFound() {
       {/* Site illustration layer (design.md). A spot illustration on its
           own row above the heading, under no text: 220px from lg up, 120px
           on a phone (one of the inner-page spots on design.md's closed list
-          of phone art, 2026-10-11), so the heading stays the largest thing
+          of phone art, 2026-10-11), so the heading stays the largest text
           on the screen and the link stays in the first screen at 375x812.
           No page-wide wallpaper here: a background lies under the heading
           and the link, which the illustration rules forbid (see globals.css

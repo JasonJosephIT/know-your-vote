@@ -58,8 +58,11 @@ export function SiteFooter() {
           Below sm the whole town shows, uncropped (2026-10-11): at phone
           width it is small enough that the full strip cuts no heads and
           stays short, 159px at 375px. max-h-[184px] caps it from about
-          434px to sm, where object-bottom crops only sky. Each ratio is
-          fixed, so nothing shifts on load.
+          434px (wider than any portrait phone) to sm, where object-bottom
+          crops the top of the scene: sky first, then the palm crown, water
+          tower and sun from about 470px, and the lamp and the pelican's
+          head near 640px. Never a person: the heads sit in the bottom
+          half. Each ratio is fixed, so nothing shifts on load.
 
           An <img>, lazy, so pages that never scroll to the footer don't
           fetch it; the -sm file on phones and narrow windows, the full file

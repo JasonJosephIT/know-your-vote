@@ -19,7 +19,9 @@ const link = "text-primary underline underline-offset-2";
 export default function AboutPage() {
   return (
     <main className="relative mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
-      {/* Site illustration layer (design.md), all decorative and all lg+.
+      {/* Site illustration layer (design.md), all decorative. The gutter
+          pieces show from 1400px; below lg only the 56px dog beside "Get in
+          touch" shows (design.md's closed list of phone art).
           A figure in the left gutter leans on the column's left edge
           (ledge x 1.038, so its hand lands on main's edge, outside the
           px-5 padding and clear of every line of text). The gutter is

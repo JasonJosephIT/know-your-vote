@@ -65,7 +65,7 @@ twin; all are static and lazy. The plan, measurements and budget are in
 | Home · coverage card | `pet-cat-peek` | 64px | Peeks over the card's top edge at the right; the h2 carries `pr-[108px]` |
 | Home · install card | `sticker-kyv-badge` (-xs) | 48px | In flow, left of "Get the app", untilted |
 | Home · reminder card | `sticker-envelope` | 40px | Unchanged |
-| All pages · footer | `footer-town-strip-sm` | full width, max 184px | Uncropped below sm |
+| All pages · footer | `footer-town-strip-sm` | full width, max 184px | Whole town up to about 434px; from there to sm, capped at 184px and cropped from the top (sky, then roofs, never a person) |
 | 404 | `error-404-funk` | 120px | Own row above the h1 |
 | Methodology | `method-receipts` | 112px | Own row under the header (first to drop) |
 | About · "Get in touch" | `pet-dog-sit` (-xs) | 56px | In the heading's row, after the words |

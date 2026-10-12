@@ -203,8 +203,8 @@ export default async function Home() {
           of figure above the line and ~57px of legs below it.
 
           Above: the ballot-question list ends just before this, and art
-          never goes over a list, so lg adds 72px to the 24px gap (96px
-          clear for a 93px head). Below: the legs reach ~57px under the
+          never goes over a list, so lg adds 72px to the column's 32px gap
+          (104px clear for a 93px head). Below: the legs reach ~57px under the
           band's centre line, beside the section's h2 and the start of its
           paragraph. So the text block under each h2 (h2 and paragraphs)
           carries lg:pr-[112px], which keeps every line out of the figure's
@@ -341,8 +341,9 @@ export default async function Home() {
 
         <div className="flex min-w-0 flex-col gap-6 lg:col-start-1 lg:row-start-2">
           {/* A wave between the coverage summary above and the reminder and
-          install cards; shows at every width (one of the three pieces that
-          do). Below lg it falls between the news and the cards. */}
+          install cards; shows at every width (the section dividers are on
+          design.md's closed list of phone art). Below lg it falls between
+          the news and the cards. */}
           <SectionDivider variant="wave" />
           {promoteReminders && (
             <ReminderSignupCta countyFips={saved?.countyFips} />

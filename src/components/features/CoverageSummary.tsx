@@ -60,7 +60,8 @@ import { SectionDivider } from "@/components/brand/SectionDivider";
    beside the heading, so the h2 carries pr-[108px] on a phone (88 + 12 +
    8px of air; px, like the figure). Below about 402px the heading wraps to
    two lines and the cat's head stays at least 8px under the wave either
-   way. Its paws dip about 8px into the first row's 12px top padding. */
+   way at the default 16px root (decoration against decoration; the text
+   guard is the px padding). Its paws dip about 8px into the first row's 12px top padding. */
 export async function CoverageSummary({
   hasDistrict,
   addressEnabled,
