@@ -16,7 +16,8 @@ Visual version with a wireframe: `placement-map.html`, next to this file.
 - **Home after PR #161:** 1120px grid, a 684px main column and a sticky 340px news rail with publisher photos.
   The H1 now runs as one full-width line, the intro paragraph is full width, and the house-race step is a
   plain section, not a card. The photo band and three-ways-to-vote panels were not built. On a phone the
-  home page is 6,770px tall, so phone art stays minimal.
+  home page is 6,129px tall (measured 2026-10-11), so phone art stays minimal: one small still piece
+  per section break, from the closed list in design.md (see `docs/design/mobile-visuals-2026-10-11/`).
 
 ## Hard limits (design.md, site illustration layer)
 
@@ -50,6 +51,24 @@ Kit = already made (step 1). Held = slot-specific art still to make, now sized a
 | 18 | Home · three ways to vote | `way-*` panels | Held | Not built yet (not in PR #161) |
 | 19 | Home · coverage map card | `map-explorer` | Held | Waits for the map card |
 | 20 | Inner pages (race, measure, candidate, news) | calm-style spots | Held | Only page headers and empty states; needs calm versions of the kit |
+
+### Phone slots (below lg, built 2026-10-11)
+
+The closed list in design.md ("Art on phones"). Each is a second, `lg:hidden` piece beside its desktop
+twin; all are static and lazy. The plan, measurements and budget are in
+`docs/design/mobile-visuals-2026-10-11/`.
+
+| Page · slot | Asset | Size | How it sits |
+|---|---|---|---|
+| Home · key dates card | `sticker-sun` (-xs) | 36px | Inside the card's top-right corner, rising 24px into the gap above; nothing above the card moves |
+| Home · zigzag after the ballot list | `sit-divider` | 88px | Seated on the band at the right; px margins keep it 12px clear of the list and 16px clear of the House h2 |
+| Home · coverage card | `pet-cat-peek` | 64px | Peeks over the card's top edge at the right; the h2 carries `pr-[108px]` |
+| Home · install card | `sticker-kyv-badge` (-xs) | 48px | In flow, left of "Get the app", untilted |
+| Home · reminder card | `sticker-envelope` | 40px | Unchanged |
+| All pages · footer | `footer-town-strip-sm` | full width, max 184px | Whole town up to about 434px; from there to sm, capped at 184px and cropped from the top (sky, then roofs, never a person) |
+| 404 | `error-404-funk` | 120px | Own row above the h1 |
+| Methodology | `method-receipts` | 112px | Own row under the header (first to drop) |
+| About · "Get in touch" | `pet-dog-sit` (-xs) | 56px | In the heading's row, after the words |
 
 ## Not used
 

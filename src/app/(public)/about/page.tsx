@@ -19,7 +19,9 @@ const link = "text-primary underline underline-offset-2";
 export default function AboutPage() {
   return (
     <main className="relative mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
-      {/* Site illustration layer (design.md), all decorative and all lg+.
+      {/* Site illustration layer (design.md), all decorative. The gutter
+          pieces show from 1400px; below lg only the 56px dog beside "Get in
+          touch" shows (design.md's closed list of phone art).
           A figure in the left gutter leans on the column's left edge
           (ledge x 1.038, so its hand lands on main's edge, outside the
           px-5 padding and clear of every line of text). The gutter is
@@ -105,17 +107,27 @@ export default function AboutPage() {
         </p>
       </section>
 
-      {/* relative for the dog: it sits in the right gutter beside this
-          heading (left-full is the column's text edge, plus the 24px padding
-          and a gap), never beside or under the paragraph's text. Gutter
-          pieces show from 1400px only. */}
+      {/* relative for the dog: from 1400px it sits in the right gutter
+          beside this heading (left-full is the column's text edge, plus the
+          24px padding and a gap), never beside or under the paragraph's
+          text. Gutter pieces show from 1400px only. On a phone a 56px dog
+          sits in the heading's row instead, after the words, never beside
+          the paragraph or the email link (design.md's closed list of phone
+          art, 2026-10-11). */}
       <section className="relative flex flex-col gap-2">
         <Art
           name="pet-dog-sit"
           height={90}
           className="absolute top-0 left-full ml-10 hidden min-[1400px]:block"
         />
-        <h2 className="text-h2">Get in touch</h2>
+        <div className="flex items-end gap-3">
+          <h2 className="text-h2">Get in touch</h2>
+          <Art
+            name="pet-dog-sit"
+            height={56}
+            className="shrink-0 lg:hidden"
+          />
+        </div>
         <p className="text-body">
           Spotted a mistake, a missing source, or something that reads as
           slanted? Tell us. Corrections are the point. The same address works

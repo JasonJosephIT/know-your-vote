@@ -195,15 +195,16 @@ export default async function Home() {
           <SharedBallot />
 
           {/* The zigzag that used to be this section's border-t, with a
-          figure sitting on it at the right end from lg up. The divider is a
+          figure sitting on it at the right end: 150px from lg up, 88px on a
+          phone (design.md's closed list of phone art). The divider is a
           mask, which would clip a child, so the figure hangs from a
           zero-height marker at the band's centre line: sit-divider's ledge
           (0.618 of its height) lands on that line. At 150px that is ~93px
           of figure above the line and ~57px of legs below it.
 
           Above: the ballot-question list ends just before this, and art
-          never goes over a list, so lg adds 72px to the 24px gap (96px
-          clear for a 93px head). Below: the legs reach ~57px under the
+          never goes over a list, so lg adds 72px to the column's 32px gap
+          (104px clear for a 93px head). Below: the legs reach ~57px under the
           band's centre line, beside the section's h2 and the start of its
           paragraph. So the text block under each h2 (h2 and paragraphs)
           carries lg:pr-[112px], which keeps every line out of the figure's
@@ -212,8 +213,15 @@ export default async function Home() {
           lg:pr-32 on the h2 only) let the paragraph run under the legs at
           a smaller root font size. The text block runs well past ~57px at
           any root size, so the link and the form below it start clear of
-          the feet. */}
-          <div className="relative lg:mt-[72px]">
+          the feet.
+
+          Below lg the 88px sitter has ~54px of figure above the line and
+          ~34px below, so the band takes 28px above and 12px below on top of
+          the column's 32px gap: the head clears the end of the list by
+          ~12px and the feet clear the h2 by ~16px, whichever h2 renders (no
+          district, or a saved one). The clearances are vertical and px, so
+          no text needs a right guard on a phone. */}
+          <div className="relative mt-[28px] mb-[12px] lg:mt-[72px] lg:mb-0">
             <SectionDivider variant="zigzag" />
             <div className="absolute inset-x-0 top-1/2">
               <LedgeArt
@@ -221,6 +229,12 @@ export default async function Home() {
                 height={150}
                 edge="top"
                 className="right-0 hidden lg:block"
+              />
+              <LedgeArt
+                name="sit-divider"
+                height={88}
+                edge="top"
+                className="right-0 lg:hidden"
               />
             </div>
           </div>
@@ -327,8 +341,9 @@ export default async function Home() {
 
         <div className="flex min-w-0 flex-col gap-6 lg:col-start-1 lg:row-start-2">
           {/* A wave between the coverage summary above and the reminder and
-          install cards; shows at every width (one of the three pieces that
-          do). Below lg it falls between the news and the cards. */}
+          install cards; shows at every width (the section dividers are on
+          design.md's closed list of phone art). Below lg it falls between
+          the news and the cards. */}
           <SectionDivider variant="wave" />
           {promoteReminders && (
             <ReminderSignupCta countyFips={saved?.countyFips} />

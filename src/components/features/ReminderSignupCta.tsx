@@ -36,8 +36,8 @@ export function ReminderSignupCta({ countyFips }: { countyFips?: string }) {
       className="relative flex flex-col gap-2 border-t border-border pt-6 lg:pt-10"
     >
       {/* The site illustration layer (design.md "Site illustration layer").
-         The envelope sticker is the one piece of art that also shows on
-         phones. It sits across the top border, in the strip between the
+         The envelope sticker also shows on phones (it is on design.md's
+         closed list of phone art). It sits across the top border, in the strip between the
          previous block and this heading, and never reaches the heading:
          tilted 6deg, a 40px sticker spans about -23px to +23px from the
          border (the grid's gap-6 above, pt-6 below); at lg the 56px one

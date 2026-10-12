@@ -71,7 +71,20 @@ export async function DeadlineBanner({
          campaign banner. No red, no siren, no exclamation. */
       className="relative flex flex-col gap-3 rounded-lg border border-border bg-surface px-4 py-4 text-body-sm"
     >
-      {/* The sun sticker (site illustration layer, design.md), lg+ only.
+      {/* The sun sticker on a phone (design.md's closed list of phone art,
+         2026-10-11): 36 px, static, inside the card's right edge so nothing
+         overhangs at 320 px. It rises 24 px into the 32 px gap under the
+         intro paragraph and reaches 12 px down, into the 16 px top padding,
+         so the date line clears it vertically at any width, line length or
+         root font size; no right padding is needed. Nothing above the card
+         moves. Its lg:hidden twin never loads at lg (lazy under
+         display:none). */}
+      <Art
+        name="sticker-sun"
+        height={36}
+        className="absolute -top-[24px] right-[12px] lg:hidden"
+      />
+      {/* The sun sticker from lg up (site illustration layer, design.md).
          56 px, hung off the top-right corner: 26 px above the card and
          22 px past it, so it reaches 30 px down and 34 px in, which is
          14 px into the 16 px padding's content box at the top and 18 px
