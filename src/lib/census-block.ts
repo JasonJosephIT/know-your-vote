@@ -1,6 +1,6 @@
 import "server-only";
+import { censusAddressQuery } from "@/lib/address-text";
 import {
-  censusAddressQuery,
   parseAddressMatches,
   parseBlockResponse,
   type AddressMatch,

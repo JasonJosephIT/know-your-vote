@@ -14,15 +14,20 @@ import {
   districtFromBlockRows,
   parseSuggestions,
   parseAddressMatches,
+} from "../src/lib/address-lookup.ts";
+import {
   censusAddressQuery,
   looksLikeStreetAddress,
-} from "../src/lib/address-lookup.ts";
+} from "../src/lib/address-text.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const fixture = (name: string) =>
   JSON.parse(
     readFileSync(join(ROOT, "scripts", "fixtures", "address", name), "utf8")
   );
+
+const stripCommentsEarly = (src: string) =>
+  src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
 
 let failures = 0;
 function assert(name: string, cond: boolean, extra = "") {
@@ -141,83 +146,269 @@ assert(
 
 /* ---- Census: typed address -> block (no Pelias: production) ---- */
 const typed = fixture("census-address.json");
-const kind = (json: unknown, text: string) =>
-  JSON.stringify(parseAddressMatches(json, text));
+const kind = (json: unknown, text: string) => parseAddressMatches(json, text)?.kind;
+
+/* One Census match, shaped like the real response (census-address.json is
+   the real one for 444 SW 2nd Ave). Built rather than recorded so that no
+   fixture holds an address that might be someone's home. */
+function censusMatch(m: {
+  matchedAddress: string;
+  preDirection?: string;
+  streetName: string;
+  suffixType?: string;
+  suffixDirection?: string;
+  city: string;
+  zip: string;
+  state?: string;
+  geoid: string;
+}) {
+  return {
+    matchedAddress: m.matchedAddress,
+    addressComponents: {
+      preDirection: m.preDirection ?? "",
+      streetName: m.streetName,
+      suffixType: m.suffixType ?? "",
+      suffixDirection: m.suffixDirection ?? "",
+      city: m.city,
+      zip: m.zip,
+      state: m.state ?? "FL",
+    },
+    geographies: {
+      "Census Blocks": [{ GEOID: m.geoid, STATE: m.geoid.slice(0, 2) }],
+    },
+  };
+}
+const census = (...ms: ReturnType<typeof censusMatch>[]) => ({
+  result: { addressMatches: ms },
+});
+
 assert(
   "a typed address naming its city resolves to its block",
-  kind(typed, "444 SW 2nd Ave, Miami, FL") ===
+  JSON.stringify(parseAddressMatches(typed, "444 SW 2nd Ave, Miami, FL")) ===
     JSON.stringify({
       kind: "match",
       block: { geoid: "120860036061055", state: "12" },
     }),
-  kind(typed, "444 SW 2nd Ave, Miami, FL")
+  JSON.stringify(parseAddressMatches(typed, "444 SW 2nd Ave, Miami, FL"))
 );
-assert(
-  "naming the ZIP instead of the city is enough",
-  parseAddressMatches(typed, "444 sw 2nd ave 33130")?.kind === "match"
-);
-assert(
-  "case and punctuation don't matter",
-  parseAddressMatches(typed, "444 sw 2nd ave., MIAMI fl")?.kind === "match"
-);
-/* The street alone matched with ", FL" added: if the voter's own address
-   were missing from Census, the same street elsewhere would answer just as
-   surely. So a place the voter didn't name is not trusted. */
-assert(
-  "a match the voter named no place for asks for the city or ZIP",
-  parseAddressMatches(typed, "444 SW 2nd Ave")?.kind === "needsPlace"
-);
-assert(
-  "a different city typed does not confirm this one",
-  parseAddressMatches(typed, "444 SW 2nd Ave, Tampa")?.kind === "needsPlace"
-);
-assert(
-  "Census's other-state answers to a Florida street are no match",
-  parseAddressMatches(
-    fixture("census-address-elsewhere.json"),
-    "1 Main St, Springfield, FL"
-  )?.kind === "none"
-);
-assert(
-  "no matches at all is no match",
-  parseAddressMatches({ result: { addressMatches: [] } }, "1 Nowhere Rd, Miami")
-    ?.kind === "none"
-);
-assert(
-  "a malformed payload is null (a failure, not an answer)",
-  parseAddressMatches({ nope: true }, "x") === null
-);
+for (const text of [
+  "444 sw 2nd ave 33130",
+  "444 SW 2nd Ave, Miami FL 33130-1910",
+  "444 sw 2nd ave., MIAMI fl",
+  "444 Southwest 2nd Avenue, Miami",
+  "444 SW 2 Ave, Miami",
+  "444 SW 2nd Ave Miami",
+  "444 SW 2nd Ave Apt 4B, Miami",
+  "444 SW 2nd Ave #4B, Miami",
+  "444 SW 2nd Ave, Unit 12, Miami, FL",
+]) {
+  assert(`"${text}" matches`, kind(typed, text) === "match", String(kind(typed, text)));
+}
+
+/* The place must be the voter's: named, and named whole. */
+for (const text of [
+  "444 SW 2nd Ave",
+  "444 SW 2nd Ave, FL",
+  "444 SW 2nd Ave, Tampa",
+  "444 SW 2nd Ave, North Miami",
+  "444 SW 2nd Ave North Miami",
+  "444 SW 2nd Ave, Miami Gardens",
+  "444 SW 2nd Ave, Apt 4",
+]) {
+  assert(`"${text}" asks for the ZIP`, kind(typed, text) === "needsPlace", String(kind(typed, text)));
+}
+{
+  const beach = census(
+    censusMatch({
+      matchedAddress: "1700 CONVENTION CENTER DR, MIAMI BEACH, FL, 33139",
+      streetName: "CONVENTION CENTER",
+      suffixType: "DR",
+      city: "MIAMI BEACH",
+      zip: "33139",
+      geoid: "120860042061010",
+    })
+  );
+  assert(
+    "North Miami Beach does not name MIAMI BEACH",
+    kind(beach, "1700 Convention Center Dr, North Miami Beach") === "needsPlace"
+  );
+  assert(
+    "Miami Beach names MIAMI BEACH",
+    kind(beach, "1700 Convention Center Dr, Miami Beach, FL") === "match"
+  );
+  const ftl = census(
+    censusMatch({
+      matchedAddress: "115 S ANDREWS AVE, FORT LAUDERDALE, FL, 33301",
+      preDirection: "S",
+      streetName: "ANDREWS",
+      suffixType: "AVE",
+      city: "FORT LAUDERDALE",
+      zip: "33301",
+      geoid: "120110425022004",
+    })
+  );
+  assert(
+    "'Ft. Lauderdale' names FORT LAUDERDALE",
+    kind(ftl, "115 S Andrews Ave, Ft. Lauderdale") === "match"
+  );
+  assert(
+    "a ZIP names the place whatever the city is called",
+    kind(ftl, "115 S Andrews Ave, Ft Laud 33301") === "match"
+  );
+}
+
+/* Census corrects the street and still answers once, confidently. Each of
+   these came back from the live geocoder on 2026-10-12 as a single match
+   on another street, in another district for the first. */
+{
+  const swapped = census(
+    censusMatch({
+      matchedAddress: "6000 NW 7TH AVE, MIAMI, FL, 33127",
+      streetName: "NW 7TH",
+      suffixType: "AVE",
+      city: "MIAMI",
+      zip: "33127",
+      geoid: "120860019013006",
+    })
+  );
+  assert(
+    "SW typed, NW matched (Miami-Dade puts the quadrant in streetName): check the street",
+    kind(swapped, "6000 SW 7th Ave, Miami") === "checkStreet"
+  );
+  assert(
+    "NW typed, NW matched: a match",
+    kind(swapped, "6000 NW 7th Ave, Miami") === "match"
+  );
+  assert(
+    "St typed, Ave matched: check the street",
+    kind(swapped, "6000 NW 7th St, Miami") === "checkStreet"
+  );
+  assert(
+    "no direction typed for a street that has one: check the street",
+    kind(swapped, "6000 7th Ave, Miami") === "checkStreet"
+  );
+  assert(
+    "another house number: check the street",
+    kind(swapped, "6002 NW 7th Ave, Miami") === "checkStreet"
+  );
+  const north = census(
+    censusMatch({
+      matchedAddress: "1000 N FLORIDA AVE, TAMPA, FL, 33602",
+      preDirection: "N",
+      streetName: "FLORIDA",
+      suffixType: "AVE",
+      city: "TAMPA",
+      zip: "33602",
+      geoid: "120570051011000",
+    })
+  );
+  assert(
+    "E typed, N matched: check the street",
+    kind(north, "1000 E Florida Ave, Tampa") === "checkStreet"
+  );
+  const after = census(
+    censusMatch({
+      matchedAddress: "100 TAMPA ST N, TAMPA, FL, 33602",
+      streetName: "TAMPA",
+      suffixType: "ST",
+      suffixDirection: "N",
+      city: "TAMPA",
+      zip: "33602",
+      geoid: "120570051012098",
+    })
+  );
+  assert(
+    "N before the name matches Census's N after the type",
+    kind(after, "100 N Tampa St, Tampa, FL") === "match"
+  );
+  const orange = census(
+    censusMatch({
+      matchedAddress: "400 S ORANGE AVE, ORLANDO, FL, 32801",
+      preDirection: "S",
+      streetName: "ORANGE",
+      suffixType: "AVE",
+      city: "ORLANDO",
+      zip: "32801",
+      geoid: "120950189021048",
+    }),
+    censusMatch({
+      matchedAddress: "400 N ORANGE AVE, ORLANDO, FL, 32801",
+      preDirection: "N",
+      streetName: "ORANGE",
+      suffixType: "AVE",
+      city: "ORLANDO",
+      zip: "32801",
+      geoid: "120950189021009",
+    })
+  );
+  assert(
+    "N and S both found, no direction typed: check the street (a ZIP can't tell them apart)",
+    kind(orange, "400 Orange Ave, Orlando 32801") === "checkStreet"
+  );
+  assert(
+    "the direction typed picks one",
+    JSON.stringify(parseAddressMatches(orange, "400 S Orange Ave, Orlando")) ===
+      JSON.stringify({ kind: "match", block: { geoid: "120950189021048", state: "12" } })
+  );
+}
 {
   const two = structuredClone(typed);
   const other = structuredClone(two.result.addressMatches[0]);
   other.geographies["Census Blocks"][0].GEOID = "120860036061099";
   two.result.addressMatches.push(other);
+  const both = parseAddressMatches(two, "444 SW 2nd Ave, Miami");
   assert(
-    "two Florida blocks for the place named is ambiguous",
-    parseAddressMatches(two, "444 SW 2nd Ave, Miami")?.kind === "ambiguous"
+    "the same street in two blocks is ambiguous, with both blocks for the route",
+    both?.kind === "ambiguous" && both.blocks.length === 2,
+    JSON.stringify(both)
   );
   const same = structuredClone(typed);
   same.result.addressMatches.push(structuredClone(same.result.addressMatches[0]));
   assert(
     "two matches in the same block are one answer",
-    parseAddressMatches(same, "444 SW 2nd Ave, Miami")?.kind === "match"
+    kind(same, "444 SW 2nd Ave, Miami") === "match"
   );
-}
-{
   const shortBlock = structuredClone(typed);
   shortBlock.result.addressMatches[0].geographies["Census Blocks"][0].GEOID =
     "1208600";
   assert(
     "a short GEOID is not a Florida match",
-    parseAddressMatches(shortBlock, "444 SW 2nd Ave, Miami")?.kind === "none"
-  );
-  const ft = structuredClone(typed);
-  ft.result.addressMatches[0].addressComponents.city = "FORT LAUDERDALE";
-  assert(
-    "'Ft Lauderdale' names FORT LAUDERDALE",
-    parseAddressMatches(ft, "444 SW 2nd Ave, Ft. Lauderdale")?.kind === "match"
+    kind(shortBlock, "444 SW 2nd Ave, Miami") === "none"
   );
 }
+
+/* Outside Florida. */
+assert(
+  "Census's other-state answers to a Florida street are no match",
+  kind(fixture("census-address-elsewhere.json"), "1 Main St, Springfield, FL") === "none"
+);
+assert(
+  "an address the voter put in another state is out of state, not 'not found'",
+  kind(
+    census(
+      censusMatch({
+        matchedAddress: "1600 PENNSYLVANIA AVE NW, WASHINGTON, DC, 20500",
+        streetName: "PENNSYLVANIA",
+        suffixType: "AVE",
+        suffixDirection: "NW",
+        city: "WASHINGTON",
+        zip: "20500",
+        state: "DC",
+        geoid: "110019800001034",
+      })
+    ),
+    "1600 Pennsylvania Ave NW, Washington, DC 20500"
+  ) === "outOfState"
+);
+assert(
+  "no matches at all is no match",
+  kind({ result: { addressMatches: [] } }, "1 Nowhere Rd, Miami") === "none"
+);
+assert(
+  "a malformed payload is null (a failure, not an answer)",
+  parseAddressMatches({ nope: true }, "x") === null
+);
+
 assert(
   "', FL' is added when no state or ZIP is given",
   censusAddressQuery(" 601 E  Kennedy Blvd, Tampa ") ===
@@ -246,6 +437,40 @@ assert(
     !looksLikeStreetAddress("33130") &&
     !looksLikeStreetAddress("1 a")
 );
+
+/* The block never leaves the server: resolveBlock searches a cached copy of
+   the whole table. A filter on the block would put it in a request URL, and
+   Supabase's gateway logs keep URLs (review 2026-10-12). */
+{
+  const resolveSrc = stripCommentsEarly(
+    readFileSync(join(ROOT, "src/lib/resolve.ts"), "utf8")
+  );
+  const body = resolveSrc.slice(
+    resolveSrc.indexOf("export async function resolveBlock("),
+    resolveSrc.indexOf("export async function resolveDistrict(")
+  );
+  assert(
+    "resolveBlock sends no block to the database",
+    /districtFromBlockRows\(await blockRanges\(\), blockGeoid\)/.test(body) &&
+      !/\.(?:lte|gte|eq|filter|match|rpc)\(/.test(body),
+    body.slice(0, 400)
+  );
+}
+/* And zod stays out of the browser: LocationEntry takes only types from
+   address-lookup.ts (zod) and its text rule from address-text.ts. */
+{
+  const entrySrc = readFileSync(
+    join(ROOT, "src/components/features/LocationEntry.tsx"),
+    "utf8"
+  );
+  const text = readFileSync(join(ROOT, "src/lib/address-text.ts"), "utf8");
+  assert(
+    "LocationEntry imports address-lookup.ts for types only",
+    /import type \{[^}]*\} from "@\/lib\/address-lookup";/.test(entrySrc) &&
+      !/^import \{[^}]*\} from "@\/lib\/address-lookup";/m.test(entrySrc)
+  );
+  assert("address-text.ts imports nothing", !/^import /m.test(text));
+}
 
 /* ---- The routes' privacy contract, asserted structurally ---- */
 const stripComments = (src: string) =>

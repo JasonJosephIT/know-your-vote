@@ -91,12 +91,11 @@ export default function PrivacyPage() {
               address. We don&rsquo;t log it and we don&rsquo;t store it.
             </p>
             <p className="text-body">
-              Pick a suggestion and turning it into a district takes no second
-              lookup: Pelias returns the map coordinates with it, and we send
-              just those coordinates to the U.S. Census Bureau to find which
-              census block they fall in. If you press Enter without picking
-              one, what you typed goes to the Census Bureau&rsquo;s geocoder
-              instead, from our server. The block tells us your district,
+              Turning that address into a district takes no second lookup:
+              Pelias returns the map coordinates along with the suggestion you
+              picked, and we send just those coordinates to the U.S. Census
+              Bureau to find which census block they fall in. The Census Bureau
+              never receives your address. The block tells us your district,
               using Florida&rsquo;s enacted 2026 map, and the district is the
               only thing that is kept.
             </p>

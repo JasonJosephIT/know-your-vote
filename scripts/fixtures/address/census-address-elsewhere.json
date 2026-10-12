@@ -13,6 +13,10 @@
           "y": 45.375797578731
         },
         "addressComponents": {
+          "preDirection": "",
+          "streetName": "MAIN",
+          "suffixType": "ST",
+          "suffixDirection": "",
           "city": "SPRINGFIELD",
           "state": "ME",
           "zip": "04487"
@@ -34,6 +38,10 @@
           "y": 42.160347858354
         },
         "addressComponents": {
+          "preDirection": "",
+          "streetName": "MAIN",
+          "suffixType": "ST",
+          "suffixDirection": "",
           "city": "SPRINGFIELD",
           "state": "MA",
           "zip": "01151"

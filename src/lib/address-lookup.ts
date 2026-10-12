@@ -1,4 +1,10 @@
 import { z } from "zod";
+import {
+  namesOtherState,
+  sameStreet,
+  streetIfPlaceNamed,
+  type MatchedStreet,
+} from "./address-text.ts";
 
 /* The address -> district path, minus the I/O.
 
@@ -103,34 +109,46 @@ export function parseSuggestions(json: unknown): AddressSuggestion[] {
    Pelias is configured, which is production: the voter types the whole
    address and presses Enter, with no suggestions.
 
-   Four answers, because three of them need different words to the voter:
+   Census corrects what it is given and still answers with one confident
+   match (address-text.ts has the cases), so every match is checked against
+   the voter's own words before it counts. The answers, each needing
+   different words to the voter:
    - match: one census block, so exactly one district.
-   - none: nothing in Florida matches. Census matches nationwide, so a
-     Florida voter's "1 Main St, Springfield, FL" comes back as six other
-     states' Springfields; those are not answers.
-   - needsPlace: Florida matches exist, but the typed text names neither
-     the matched city nor its ZIP. "115 S Andrews Ave, FL" matches Fort
+   - ambiguous: the voter's words fit more than one block. The route
+     answers anyway when every block gives the same district.
+   - checkStreet: Census found the place but a different street: another
+     direction (SW for NW), type (Ave for St) or house number.
+   - needsPlace: Census found the street, but not in the city or ZIP the
+     voter named, or they named none. "115 S Andrews Ave, FL" matches Fort
      Lauderdale, and if the voter's own address is missing from Census's
      address ranges, the same street in another city would be matched
-     instead and look just as sure. So a match counts only when the voter
-     said which place they meant.
-   - ambiguous: the voter named a place and it still matches more than one
-     block. */
+     instead and look just as sure.
+   - outOfState: Census found it, in the other state the voter named.
+   - none: nothing matches in Florida. */
 export type AddressMatch =
   | { kind: "match"; block: CensusBlock }
-  | { kind: "none" }
+  | { kind: "ambiguous"; blocks: CensusBlock[] }
+  | { kind: "checkStreet" }
   | { kind: "needsPlace" }
-  | { kind: "ambiguous" };
+  | { kind: "outOfState" }
+  | { kind: "none" };
 
+const component = z.string().optional().default("");
 const addressSchema = z.object({
   result: z.object({
     addressMatches: z
       .array(
         z.object({
+          matchedAddress: component,
           addressComponents: z
             .object({
-              city: z.string().optional(),
-              zip: z.string().optional(),
+              preDirection: component,
+              streetName: component,
+              suffixType: component,
+              suffixDirection: component,
+              city: component,
+              zip: component,
+              state: component,
             })
             .optional(),
           geographies: z.object({
@@ -144,84 +162,53 @@ const addressSchema = z.object({
   }),
 });
 
-/* Abbreviations a voter writes and the Census city spells out: "Ft
-   Lauderdale" is FORT LAUDERDALE, "St Petersburg" SAINT PETERSBURG. Both
-   sides go through the same mapping, so "Main St" becoming "main saint"
-   changes nothing: only the city phrase is looked for. */
-const PLACE_WORDS: Record<string, string> = {
-  ft: "fort",
-  st: "saint",
-  pt: "port",
-  mt: "mount",
-  n: "north",
-  s: "south",
-  e: "east",
-  w: "west",
-};
-
-function placeWords(text: string): string {
-  const words = text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim()
-    .split(" ")
-    .map((w) => PLACE_WORDS[w] ?? w);
-  return ` ${words.join(" ")} `;
-}
-
 export function parseAddressMatches(
   json: unknown,
   typed: string
 ): AddressMatch | null {
   const parsed = addressSchema.safeParse(json);
   if (!parsed.success) return null;
-  const florida = parsed.data.result.addressMatches.flatMap((m) => {
+  const matches = parsed.data.result.addressMatches;
+  const florida = matches.flatMap((m) => {
     const block = m.geographies["Census Blocks"][0];
     /* The same 15-digit rule as parseBlockResponse, and Florida only. */
     if (!block || !/^\d{15}$/.test(block.GEOID) || block.STATE !== "12") {
       return [];
     }
-    return [
-      {
-        block: { geoid: block.GEOID, state: block.STATE },
-        city: m.addressComponents?.city ?? "",
-        zip: m.addressComponents?.zip ?? "",
-      },
-    ];
+    const c = m.addressComponents;
+    const street: MatchedStreet = {
+      matchedAddress: m.matchedAddress,
+      preDirection: c?.preDirection ?? "",
+      streetName: c?.streetName ?? "",
+      suffixType: c?.suffixType ?? "",
+      suffixDirection: c?.suffixDirection ?? "",
+      city: c?.city ?? "",
+      zip: c?.zip ?? "",
+    };
+    return [{ block: { geoid: block.GEOID, state: block.STATE }, street }];
   });
-  if (florida.length === 0) return { kind: "none" };
-
-  const said = placeWords(typed);
-  const named = florida.filter(
-    (m) =>
-      (/^\d{5}$/.test(m.zip) && said.includes(` ${m.zip} `)) ||
-      (m.city.trim() !== "" && said.includes(placeWords(m.city)))
-  );
-  if (named.length === 0) return { kind: "needsPlace" };
-  if (new Set(named.map((m) => m.block.geoid)).size > 1) {
-    return { kind: "ambiguous" };
+  if (florida.length === 0) {
+    const states = matches.map((m) => m.addressComponents?.state ?? "");
+    return matches.length > 0 && namesOtherState(typed, states)
+      ? { kind: "outOfState" }
+      : { kind: "none" };
   }
-  return { kind: "match", block: named[0].block };
-}
 
-/* What goes to Census. ", FL" is added unless the voter already named the
-   state or ended with a ZIP, so a Florida street is looked for in Florida
-   first ("601 E Kennedy Blvd, Tampa" has a Tampa elsewhere too). A
-   leading five-digit number is a house number, not a ZIP, which is why
-   only a trailing one counts. */
-export function censusAddressQuery(typed: string): string {
-  const text = typed.trim().replace(/\s+/g, " ");
-  if (/\b(?:fl|fla|florida)\b/i.test(text) || /\b\d{5}(?:-\d{4})?$/.test(text)) {
-    return text;
-  }
-  return `${text}, FL`;
-}
+  const placed = florida.flatMap((m) => {
+    const street = streetIfPlaceNamed(typed, m.street);
+    return street ? [{ ...m, typedStreet: street }] : [];
+  });
+  if (placed.length === 0) return { kind: "needsPlace" };
 
-/* The client and the route both ask this before anything is sent: an
-   address Census can place has a house number and a street name. */
-export function looksLikeStreetAddress(typed: string): boolean {
-  const text = typed.trim();
-  return text.length >= 5 && /\d/.test(text) && /[a-z]/i.test(text);
+  const same = placed.filter((m) => sameStreet(m.typedStreet, m.street));
+  if (same.length === 0) return { kind: "checkStreet" };
+
+  const blocks = [
+    ...new Map(same.map((m) => [m.block.geoid, m.block])).values(),
+  ];
+  return blocks.length === 1
+    ? { kind: "match", block: blocks[0] }
+    : { kind: "ambiguous", blocks };
 }
 
 /* The range lookup's own logic, so it can be tested without a database.

@@ -194,11 +194,7 @@ export async function YourRaces({
           <p className="text-body text-on-surface-muted">
             That ZIP spans more than one congressional district (
             {result.candidateDistricts?.join(", ")}). Re-enter it below and
-            we&rsquo;ll ask which district is yours
-            {addressEntryEnabled()
-              ? ", or type your street address for your exact district"
-              : ""}
-            :
+            we&rsquo;ll ask which district is yours:
           </p>
         )}
         <LocationEntry

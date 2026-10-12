@@ -1032,7 +1032,8 @@ assert(
   const flat = privacyText.replace(/\s+/g, " ");
   assert(
     "privacy page says a picked suggestion sends Census only coordinates",
-    /we send just those coordinates to the U\.S\. Census Bureau/.test(flat)
+    /we send just those coordinates to the U\.S\. Census Bureau/.test(flat) &&
+      /The Census Bureau never receives your address/.test(flat)
   );
   assert(
     "privacy page says a typed address goes to Census from our server, alone",

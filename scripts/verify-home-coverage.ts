@@ -333,10 +333,13 @@ check(
   JSON.stringify(zipOnly)
 );
 check(
-  "with a geocoder the field keeps the address wording",
+  "with address lookup on, the field asks for an address and says what it needs",
   /address/i.test(withAddress.noun) &&
     /address/i.test(withAddress.label) &&
-    withAddress.autoComplete === "street-address",
+    /city or ZIP/.test(withAddress.hint ?? "") &&
+    /* street-address autofills the street lines alone, which can't be
+       placed without a city or ZIP (review 2026-10-12). */
+    withAddress.autoComplete === "postal-code",
   JSON.stringify(withAddress)
 );
 
@@ -364,8 +367,9 @@ check(
 );
 const entry = rendered("src/components/features/LocationEntry.tsx");
 check(
-  "LocationEntry's label and placeholder example follow the flag",
-  /locationFieldCopy\(addressEnabled\)/.test(entry) &&
+  "LocationEntry's label and placeholder example follow the flag (ZIP only until hydrated)",
+  /const takesAddress = addressEnabled && hydrated;/.test(entry) &&
+    /locationFieldCopy\(takesAddress\)/.test(entry) &&
     /\{field\.label\}/.test(entry) &&
     /placeholder=\{placeholder \?\? field\.example\}/.test(entry) &&
     /autoComplete=\{field\.autoComplete\}/.test(entry) &&

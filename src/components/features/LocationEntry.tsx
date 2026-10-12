@@ -21,10 +21,10 @@ import { STATEWIDE_BALLOT_HREF } from "@/lib/coverage";
 import type { UncoveredPart } from "@/lib/uncovered-zip-parts";
 import { writeDistrictCookie } from "@/lib/district-cookie";
 import { locationFieldCopy } from "@/lib/scope-copy";
-import {
-  looksLikeStreetAddress,
-  type AddressSuggestion,
-} from "@/lib/address-lookup";
+/* Type-only from address-lookup.ts: a value import would ship zod to every
+   page with this field. The text rule comes from the zod-free module. */
+import type { AddressSuggestion } from "@/lib/address-lookup";
+import { looksLikeStreetAddress } from "@/lib/address-text";
 import type { CoveredDistrict } from "@/lib/resolve";
 import type { ResolveResult } from "@/types/app";
 
@@ -77,10 +77,15 @@ const DEBOUNCE_MS = 250;
    route), each with the fix it needs. */
 const UNMATCHED: Record<string, string> = {
   none: "We couldn't find that address. Check the house number and street, and include your city or ZIP — or enter just your 5-digit ZIP.",
+  /* The ZIP, not "city or ZIP": Census also answers with its own spelling
+     of the city ("Sunny Isles" is SUNNY ISLES BEACH), and a ZIP settles it
+     whatever the voter calls the place. */
   needsPlace:
-    "Add your city or ZIP to that address, so we find the right one.",
+    "Add your 5-digit ZIP to that address, so we're sure which one you mean.",
+  checkStreet:
+    "We found a similar address, but not that exact street. Check the house number, the direction (like N or SW) and the street type (like St or Ave) as they appear on your mail — or enter just your 5-digit ZIP.",
   ambiguous:
-    "That address matches more than one place. Add your ZIP to it.",
+    "That address matches more than one place. Add your ZIP, and the street's direction (like N or SW) if it has one.",
 };
 
 /* false while the server renders and the page hydrates, true after. Until
@@ -116,7 +121,7 @@ export function LocationEntry({
   suggestEnabled?: boolean;
   districts?: CoveredDistrict[];
 } = {}) {
-  const field = locationFieldCopy(addressEnabled);
+  const hintId = useId();
   const router = useRouter();
   const listId = useId();
   const errorId = useId();
@@ -127,6 +132,11 @@ export function LocationEntry({
   const [activeIndex, setActiveIndex] = useState(-1);
   const [showPicker, setShowPicker] = useState(false);
   const hydrated = useHydrated();
+  /* Until hydrated the field takes a ZIP only (the pattern below), so until
+     then its words say so too: a page without JavaScript never offers an
+     address it would refuse. */
+  const takesAddress = addressEnabled && hydrated;
+  const field = locationFieldCopy(takesAddress);
 
   /* The suggestion request still in flight, cancelled by the next one. */
   const abort = useRef<AbortController | null>(null);
@@ -356,8 +366,16 @@ export function LocationEntry({
       fail("Enter your 5-digit ZIP, or choose your district below.");
       return;
     }
-    /* No suggestion to take (none configured, or none came back): the typed
-       address itself, if it has a house number and a street. */
+    /* With Pelias configured, an address resolves only from a picked
+       suggestion, as before: the typed text never goes on to the Census
+       Bureau, so a self-hosted Pelias still keeps every address in house
+       (deploy/pelias/README.md). */
+    if (suggestEnabled) {
+      fail("Pick your address from the list, or enter your 5-digit ZIP.");
+      return;
+    }
+    /* No suggestions (production): the typed address itself, if it has a
+       house number and a street. */
     if (!looksLikeStreetAddress(trimmed)) {
       fail(
         "Enter your house number and street with your city or ZIP — or just your 5-digit ZIP."
@@ -403,6 +421,11 @@ export function LocationEntry({
         <label htmlFor="location" className="text-label text-on-surface">
           {field.label}
         </label>
+        {field.hint && (
+          <p id={hintId} className="-mt-1 text-body-sm text-on-surface-muted">
+            {field.hint}
+          </p>
+        )}
         <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-start">
         <div className="relative flex w-full flex-col sm:max-w-[320px]">
           <Input
@@ -410,7 +433,11 @@ export function LocationEntry({
             id="location"
             name="zip"
             aria-invalid={fieldError || undefined}
-            aria-describedby={fieldError ? errorId : undefined}
+            aria-describedby={
+              [field.hint ? hintId : "", fieldError ? errorId : ""]
+                .filter(Boolean)
+                .join(" ") || undefined
+            }
             {...combobox}
             autoComplete={field.autoComplete}
             inputMode={addressEnabled ? undefined : "numeric"}

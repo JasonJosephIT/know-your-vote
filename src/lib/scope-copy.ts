@@ -57,14 +57,22 @@ export function locationFieldCopy(addressEnabled: boolean): {
       For an address it is the shape, not a street: any real example would
       be someone's street, and Census needs the city or ZIP with it. */
   example?: string;
-  autoComplete: "street-address" | "postal-code";
+  /** A line under the label saying what the field needs, so the rule is
+      visible after the placeholder goes. */
+  hint?: string;
+  /** postal-code in both modes. The field takes a whole one-line address,
+      and no autocomplete token means that: street-address autofills the
+      street lines alone, which then fails for want of a city or ZIP
+      (review 2026-10-12), while an autofilled ZIP resolves. */
+  autoComplete: "postal-code";
 } {
   return addressEnabled
     ? {
         noun: "address or ZIP",
         label: "Your address or ZIP code",
         example: "Street and city, or ZIP",
-        autoComplete: "street-address",
+        hint: "Your street address with its city or ZIP finds your exact district. A ZIP works too.",
+        autoComplete: "postal-code",
       }
     : {
         noun: "ZIP",

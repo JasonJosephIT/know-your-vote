@@ -13,6 +13,10 @@
           "y": 25.769463455874
         },
         "addressComponents": {
+          "preDirection": "SW",
+          "streetName": "2ND",
+          "suffixType": "AVE",
+          "suffixDirection": "",
           "city": "MIAMI",
           "state": "FL",
           "zip": "33130"

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
-import { looksLikeStreetAddress, type CensusBlock } from "@/lib/address-lookup";
+import type { CensusBlock } from "@/lib/address-lookup";
+import { looksLikeStreetAddress } from "@/lib/address-text";
 import { blockForAddress, blockForCoordinates } from "@/lib/census-block";
 import { addressCoverage } from "@/lib/coverage";
 import { addressEntryEnabled } from "@/lib/geocode";
@@ -44,7 +45,9 @@ const OUT_OF_COVERAGE: ResolveResult = {
 
 /* 422 is "Census answered, and the answer is about what was typed": the
    field says what to fix. `reason` picks the words (LocationEntry). */
-function unmatched(reason: "none" | "needsPlace" | "ambiguous") {
+function unmatched(
+  reason: "none" | "needsPlace" | "checkStreet" | "ambiguous"
+) {
   return NextResponse.json({ error: "No single match", reason }, { status: 422 });
 }
 
@@ -83,8 +86,25 @@ export async function POST(request: NextRequest) {
          sent. The field said so before submitting; this is the same rule. */
       if (!looksLikeStreetAddress(parsed.data.address)) return unmatched("none");
       const match = await blockForAddress(parsed.data.address);
-      if (match && match.kind !== "match") return unmatched(match.kind);
-      block = match?.block ?? null;
+      if (match?.kind === "outOfState") return NextResponse.json(OUT_OF_COVERAGE);
+      if (match?.kind === "ambiguous") {
+        /* The voter's words fit more than one block. When every one of them
+           sits in the same district and county, that is still one answer;
+           otherwise ask. resolveBlock reads a cached table, not the
+           network, so this costs nothing per block. */
+        const places = await Promise.all(
+          match.blocks.map((b) => resolveBlock(b.geoid))
+        );
+        const answers = new Set(
+          places.map((p) => (p ? `${p.district}|${p.countyFips}` : "statewide"))
+        );
+        if (answers.size !== 1) return unmatched("ambiguous");
+        block = match.blocks[0];
+      } else if (match && match.kind !== "match") {
+        return unmatched(match.kind);
+      } else {
+        block = match?.block ?? null;
+      }
     } else {
       block = await blockForCoordinates(parsed.data.lat, parsed.data.lon);
     }
