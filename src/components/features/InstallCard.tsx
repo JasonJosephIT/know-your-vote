@@ -122,11 +122,18 @@ export function InstallCard() {
         </svg>
       </button>
       {/* The KYV badge sticker beside the copy (design.md "Site illustration
-         layer"), lg+ only: on phones the card keeps its single column. It
-         sits on the left, so the dismiss button at top-right stays clear,
-         and it is the only mark here (the badge already holds the
-         monogram). Decorative: Art wraps it aria-hidden, no pointer events. */}
+         layer"): 72px from lg up, 48px on a phone (design.md's closed list
+         of phone art), in flow and untilted, like a familiar app-icon
+         install row. It sits on the left, so the dismiss button at
+         top-right stays clear, and it is the only mark here (the badge
+         already holds the monogram). Decorative: Art wraps it aria-hidden,
+         no pointer events. */}
       <div className="flex items-start gap-4">
+        <Art
+          name="sticker-kyv-badge"
+          height={48}
+          className="shrink-0 lg:hidden"
+        />
         <Art
           name="sticker-kyv-badge"
           height={72}

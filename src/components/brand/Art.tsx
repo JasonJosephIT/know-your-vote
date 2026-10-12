@@ -11,8 +11,10 @@ import artSizes from "./art-sizes.json";
 
    Placement is the caller's job: className and style go on the wrapper, so
    "absolute -top-4 right-6 hidden lg:block" positions and gates the piece
-   without touching the image. Below lg most art must be hidden; see the
-   rules in design.md before placing anything near text or a control. */
+   without touching the image. Below lg only the pieces on design.md's
+   closed list of phone art show (each a second, lg:hidden Art beside its
+   hidden lg:block twin); see the rules in design.md before placing
+   anything near text or a control. */
 
 export type ArtName = keyof typeof artSizes;
 

@@ -1,0 +1,1277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phone Art Plan</title>
+<meta name="description" content="Know Your Vote: reconciled plan for art on the phone site, with before and after mockups at 375px using the real art files.">
+<style>
+/* House tokens (src/app/globals.css). The page is light-only, like the site. */
+:root {
+  --bg: #F6F3EC;
+  --surface: #FFFFFF;
+  --surface-muted: #EFEAE0;
+  --ink: #22271F;
+  --muted: #585E52;
+  --border: #E4DED2;
+  --border-strong: #CFC7B6;
+  --border-input: #857E6E;
+  --primary: #2F6B4F;
+  --primary-hover: #255A41;
+  --primary-muted: #E4EFE7;
+  --accent: #B26836;
+  --accent-strong: #8A4E24;
+  --accent-muted: #F5E7D6;
+  --fh: "Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fb: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fm: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --w: 375px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.6 var(--fb);
+}
+a { color: var(--primary); }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* ---------- Document chrome ---------- */
+.wrap { max-width: 1280px; margin: 0 auto; padding: 40px 24px 96px; }
+.over {
+  font: 700 12px/1.3 var(--fb); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--accent-strong); margin: 0;
+}
+h1.doc {
+  font: 700 40px/1.1 var(--fh); letter-spacing: -0.02em; margin: 8px 0 12px;
+  text-wrap: balance;
+}
+.lede { font-size: 18px; color: var(--muted); max-width: 72ch; margin: 0; }
+.toc { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 20px 0 0; padding: 0; list-style: none; font-size: 14px; }
+.toc a { color: var(--primary); text-underline-offset: 2px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; font: 500 13px/1.4 var(--fb);
+  border: 1px solid var(--border-strong); background: var(--surface); border-radius: 999px; padding: 3px 10px;
+}
+.chip.warn { border-color: var(--accent); color: var(--accent-strong); background: var(--accent-muted); }
+section.block { margin-top: 56px; scroll-margin-top: 72px; }
+h2.sec { font: 600 26px/1.2 var(--fh); letter-spacing: -0.01em; margin: 0 0 6px; }
+h3 { font-family: var(--fh); }
+.sub { color: var(--muted); font-size: 15px; max-width: 80ch; margin: 0 0 20px; }
+code { font: 12.5px/1.5 var(--fm); background: var(--surface-muted); padding: 1px 5px; border-radius: 4px; }
+pre {
+  font: 12px/1.55 var(--fm); background: var(--ink); color: var(--bg);
+  padding: 10px 12px; border-radius: 8px; margin: 8px 0 0; white-space: pre-wrap; word-break: break-word;
+}
+pre code { background: none; padding: 0; font: inherit; color: inherit; }
+
+/* Stats */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 28px; }
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.stat b { display: block; font: 700 30px/1.1 var(--fh); letter-spacing: -0.02em; color: var(--primary-hover); }
+.stat span { display: block; font-size: 14px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
+
+/* Decisions */
+.dgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+fieldset.dcard {
+  margin: 0; min-width: 0; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 16px 14px;
+}
+fieldset.dcard legend {
+  float: left; width: 100%; padding: 0; margin: 0 0 6px;
+  font: 600 17px/1.3 var(--fh); display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap;
+}
+fieldset.dcard legend + * { clear: both; }
+.dn {
+  display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--ink); color: var(--bg); font: 700 12px/1 var(--fb); flex: none; transform: translateY(-2px);
+}
+.gate { font: 600 11px/1.3 var(--fb); letter-spacing: .06em; text-transform: uppercase; color: var(--accent-strong); font-style: normal; }
+.why { font-size: 14px; color: var(--muted); margin: 0 0 10px; line-height: 1.5; }
+.opt {
+  display: grid; grid-template-columns: 20px 1fr; gap: 8px; align-items: start; font-size: 14px; line-height: 1.5;
+  padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; margin-top: 6px; cursor: pointer;
+}
+.opt:has(input:checked) { border-color: var(--primary); background: var(--primary-muted); }
+.opt input { margin: 3px 0 0; accent-color: var(--primary); }
+.rec {
+  font: 600 11px/1.3 var(--fb); font-style: normal; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--primary-hover); background: var(--primary-muted); border: 1px solid #b9d3c1;
+  border-radius: 999px; padding: 1px 7px; margin-left: 4px; white-space: nowrap;
+}
+.drives { font-size: 12px; color: var(--primary-hover); margin: 8px 0 0; }
+textarea {
+  width: 100%; font: 13px/1.5 var(--fb); color: var(--ink); background: var(--surface);
+  border: 1px solid var(--border-input); border-radius: 8px; padding: 8px 10px; margin-top: 6px; resize: vertical;
+}
+.dfoot { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; margin-top: 16px; }
+.dfoot label { flex: 1 1 360px; font: 600 14px/1.3 var(--fb); }
+button.primary {
+  font: 600 15px/1.2 var(--fb); background: var(--primary); color: #fff; border: 0; border-radius: 8px;
+  padding: 12px 16px; cursor: pointer;
+}
+button.primary:hover { background: var(--primary-hover); }
+#copied { font-size: 14px; color: var(--primary-hover); min-height: 1.4em; }
+
+/* Mockup controls */
+.controls {
+  position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center;
+  padding: 10px 0; margin: 0 0 20px; background: rgba(246, 243, 236, .95); border-bottom: 1px solid var(--border);
+  font-size: 14px; backdrop-filter: blur(6px);
+}
+.segctl { display: inline-flex; border: 1px solid var(--border-strong); border-radius: 999px; overflow: hidden; background: var(--surface); }
+.segctl label { position: relative; cursor: pointer; }
+.segctl input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.segctl span { display: block; padding: 4px 12px; font: 500 13px/1.5 var(--fb); }
+.segctl input:checked + span { background: var(--primary); color: #fff; }
+.segctl input:focus-visible + span { outline: 2px solid var(--primary); outline-offset: -3px; }
+.controls .tick { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.controls .tick input { accent-color: var(--primary); }
+.controls .hint { color: var(--muted); font-size: 13px; }
+
+/* Before / after pairs */
+.screen { margin-top: 40px; }
+.screen h3 { font: 600 20px/1.3 var(--fh); margin: 0 0 4px; }
+.screen > p { color: var(--muted); font-size: 15px; margin: 0 0 14px; max-width: 80ch; }
+.pair { display: grid; grid-template-columns: max-content max-content minmax(260px, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 1180px) { .pair { grid-template-columns: max-content max-content; } .notes { grid-column: 1 / -1; } }
+@media (max-width: 880px) { .pair { grid-template-columns: minmax(0, 1fr); } }
+figure.col { margin: 0; min-width: 0; overflow-x: auto; }
+figure.col > figcaption { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; font: 600 13px/1.4 var(--fb); color: var(--muted); }
+.tag { border-radius: 999px; padding: 1px 9px; font: 600 12px/1.6 var(--fb); }
+.tag.b { background: var(--surface-muted); color: var(--muted); border: 1px solid var(--border-strong); }
+.tag.a { background: var(--primary-muted); color: var(--primary-hover); border: 1px solid #b9d3c1; }
+.notes { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; font-size: 14px; line-height: 1.5; }
+.notes h4 { font: 600 14px/1.3 var(--fb); margin: 0 0 8px; }
+.notes ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.notes li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; }
+.notes li .k { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: #fff; font: 700 11px/1 var(--fb); }
+.notes li .k.n { background: var(--surface-muted); color: var(--muted); border: 1px solid var(--border-strong); }
+.notes .same { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; }
+
+/* ---------- Phone frames (all sizes are the site's CSS px) ---------- */
+.phone {
+  box-sizing: content-box; width: var(--w); position: relative; overflow: hidden;
+  border: 6px solid var(--ink); border-radius: 30px; background: var(--bg);
+  color: var(--ink); font: 16px/1.6 var(--fb);
+}
+.phone *, .phone *::before, .phone *::after { box-sizing: border-box; }
+.phone.vp { height: 812px; }
+.phone.full { min-height: 812px; }
+.phone.seg { border-width: 4px; border-radius: 16px; }
+.phone p, .phone h1, .phone h2, .phone ul, .phone ol, .phone dl, .phone dd, .phone dt { margin: 0; padding: 0; }
+.phone ul, .phone ol { list-style: none; }
+.phone h1, .phone h2 { font-family: var(--fh); text-wrap: balance; }
+.t-display { font: 700 40px/1.1 var(--fh); letter-spacing: -0.02em; }
+.t-h1 { font: 700 32px/1.15 var(--fh); letter-spacing: -0.02em; }
+.t-h2 { font: 600 24px/1.2 var(--fh); letter-spacing: -0.01em; }
+.t-blg { font-size: 18px; line-height: 1.6; }
+.t-body { font-size: 16px; line-height: 1.6; }
+.t-bsm { font-size: 14px; line-height: 1.5; }
+.t-label { font: 600 15px/1.2 var(--fb); }
+.t-cap { font: 500 13px/1.4 var(--fb); letter-spacing: .01em; }
+.muted { color: var(--muted); }
+.ul { color: var(--primary); text-decoration: underline; text-underline-offset: 2px; }
+.ul.m { color: var(--muted); }
+
+.p-top {
+  position: absolute; top: 0; left: 0; right: 0; height: 45px; z-index: 8;
+  display: flex; align-items: center; justify-content: space-between; padding: 0 12px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+}
+.p-donate { background: var(--primary); color: #fff; border-radius: 999px; font: 500 14px/1 var(--fb); padding: 7px 12px; }
+.p-district { border: 1px solid var(--border-strong); border-radius: 999px; font: 500 14px/1 var(--fb); padding: 6px 12px; background: var(--surface); }
+.p-nav {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 73px; z-index: 8;
+  display: grid; grid-template-columns: repeat(3, 1fr); align-items: center;
+  background: var(--surface); border-top: 1px solid var(--border); box-shadow: 0 -4px 12px rgba(34, 39, 31, .08);
+}
+.p-nav span {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  width: 76px; margin: 0 auto; padding: 8px 0 10px; border-radius: 8px; font: 14px/1.2 var(--fb); color: var(--muted);
+}
+.p-nav span.on { background: var(--primary-muted); color: var(--primary-hover); }
+.p-nav span.on::after { content: ""; position: absolute; bottom: 3px; width: 18px; height: 3px; border-radius: 2px; background: var(--accent); }
+.p-nav svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.p-page { padding-top: 40px; }
+
+.p-mast {
+  background: var(--ink) url(../../../public/brand/site/textures/tex-masthead-ink.webp) repeat;
+  color: #fff; padding: 8px 24px; font: 500 13px/1.4 var(--fb); letter-spacing: .01em;
+}
+.p-mast span { display: block; }
+.p-mast span:first-child { font-weight: 600; margin-bottom: 2px; }
+.p-halftone { height: 12px; background: url(../../../public/brand/site/textures/edge-halftone.svg) repeat-x; background-size: auto 12px; }
+.p-main { display: flex; flex-direction: column; gap: 32px; padding: 64px 24px; }
+
+/* Art: a decorative wrapper, like src/components/brand/Art.tsx */
+.art { position: relative; display: block; width: max-content; line-height: 0; pointer-events: none; user-select: none; }
+.art img { display: block; max-width: none; width: auto; }
+body.boxes .art { outline: 1.5px dashed var(--primary); outline-offset: 0; }
+body.boxes .art::after {
+  content: attr(data-size); position: absolute; left: 0; top: calc(100% + 2px); z-index: 9;
+  font: 600 10px/1 var(--fm); color: #fff; background: var(--primary); padding: 2px 4px; border-radius: 3px; white-space: nowrap;
+}
+.pin {
+  position: absolute; z-index: 9; width: 20px; height: 20px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--accent); color: #fff; font: 700 11px/1 var(--fb);
+  box-shadow: 0 0 0 2px #fff; line-height: 1;
+}
+body.nopins .pin { display: none; }
+
+/* Key dates card */
+.p-kd {
+  position: relative; display: flex; flex-direction: column; gap: 12px; padding: 16px;
+  border: 1px solid var(--border); border-radius: 12px; background: var(--surface); font-size: 14px; line-height: 1.5;
+}
+.p-kd .line { font-weight: 600; color: var(--primary-hover); }
+.rail { display: grid; gap: 12px; }
+.rail li { position: relative; display: flex; gap: 12px; align-items: flex-start; }
+.rail li + li::before { content: ""; position: absolute; top: -12px; left: 7px; width: 2px; height: 12px; background: var(--border-strong); }
+.rail li:nth-child(2)::before { background: var(--muted); }
+.dot { position: relative; z-index: 1; flex: none; width: 16px; height: 16px; margin-top: 2px; border-radius: 50%; border: 2px solid; }
+.past .dot { border-color: var(--muted); background: var(--muted); }
+.today .dot { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 0 4px var(--accent-muted); }
+.next .dot { border-color: var(--primary); background: var(--surface); }
+.later .dot { border-color: var(--border-strong); background: var(--surface); }
+.rail b { display: block; font: 600 13px/1.4 var(--fb); }
+.rail small { display: block; font: 500 13px/1.4 var(--fb); color: var(--muted); }
+.past b { color: var(--muted); } .today b { color: var(--accent-strong); } .next b { color: var(--primary); } .later b { color: var(--ink); }
+
+/* Section dividers: the site's SVG masks, inlined so they work from file:// */
+.band { height: 12px; background: rgba(178, 104, 54, .6); }
+.band.zigzag {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'%3E%3Cpath d='M0 9 6 3l6 6 6-6 6 6' fill='none' stroke='black' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E") left center / auto 12px repeat-x;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'%3E%3Cpath d='M0 9 6 3l6 6 6-6 6 6' fill='none' stroke='black' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E") left center / auto 12px repeat-x;
+}
+.band.wave {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='12' viewBox='0 0 32 12'%3E%3Cpath d='M0 6c4 0 4-4 8-4s4 4 8 4 4 4 8 4 4-4 8-4' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E") left center / auto 12px repeat-x;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='12' viewBox='0 0 32 12'%3E%3Cpath d='M0 6c4 0 4-4 8-4s4 4 8 4 4 4 8 4 4-4 8-4' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E") left center / auto 12px repeat-x;
+}
+.zz { position: relative; }
+.zz.after { margin-top: 28px; margin-bottom: 12px; }
+.ledge { position: absolute; left: 0; right: 0; top: 50%; }
+
+/* Home lower sections */
+.p-note {
+  display: flex; flex-direction: column; gap: 8px; padding: 40px 16px 12px; font-size: 14px; line-height: 1.5;
+  border: 1px solid var(--border); border-radius: 8px; background: var(--surface-muted);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 44px); mask-image: linear-gradient(to bottom, transparent 0, #000 44px);
+}
+.p-note ul { list-style: disc; padding-left: 22px; display: grid; gap: 6px; }
+.p-sec { display: flex; flex-direction: column; gap: 12px; }
+.p-sec .txt { display: flex; flex-direction: column; gap: 4px; }
+.p-field { display: flex; flex-direction: column; gap: 6px; }
+.p-input {
+  height: 44px; max-width: 320px; display: flex; align-items: center; padding: 0 12px; color: #8b8f86;
+  border: 1px solid var(--border-input); border-radius: 8px; background: var(--surface);
+}
+.p-btn { width: fit-content; background: var(--primary); color: #fff; border-radius: 8px; font: 600 15px/1.2 var(--fb); padding: 12px 16px; }
+.p-btn2 { width: fit-content; background: var(--surface); color: var(--ink); border: 1px solid var(--border-strong); border-radius: 8px; font: 500 16px/1.2 var(--fb); padding: 14px 16px; }
+.wave-gap { margin-bottom: 12px; }
+.cov-h2.after { padding-right: 108px; }
+body.cov-man .cov-h2.after { padding-right: 76px; }
+.rel { position: relative; }
+.cov-man-art { display: none; }
+body.cov-man .cov-man-art { display: block; }
+body.cov-man .cov-cat-art { display: none; }
+.p-dl { border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+.p-dl > div { display: flex; flex-direction: column; gap: 4px; padding: 12px 16px; }
+.p-dl > div + div { border-top: 1px solid var(--border); }
+.p-dl dt { font: 600 15px/1.4 var(--fb); }
+.p-dl dd { font-size: 14px; line-height: 1.5; color: var(--muted); }
+.p-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.p-chips span { border: 1px solid var(--border-strong); border-radius: 999px; padding: 3px 10px; font: 500 13px/1.4 var(--fb); background: var(--surface); }
+.p-chips span.on { background: var(--primary-muted); border-color: var(--primary); color: var(--primary-hover); }
+.sk { position: relative; display: grid; gap: 7px; padding: 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+.sk i { display: block; height: 9px; border-radius: 4px; background: var(--surface-muted); }
+.sk i.t { height: 13px; background: #D7E5DB; }
+.ph-label {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); white-space: nowrap;
+  font: 600 12px/1.3 var(--fb); color: var(--muted); background: var(--bg); border: 1px dashed var(--border-strong); border-radius: 999px; padding: 4px 10px;
+}
+.p-card { position: relative; padding: 24px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+.p-card .x { position: absolute; top: 12px; right: 12px; width: 24px; height: 24px; padding: 4px; color: var(--muted); }
+.p-card .x svg { width: 16px; height: 16px; display: block; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; }
+.p-card .row { display: flex; align-items: flex-start; gap: 16px; }
+.p-card .row > div { min-width: 0; flex: 1; }
+
+/* Footer */
+.p-strip { position: relative; width: 100%; aspect-ratio: 2400 / 504; overflow: hidden; }
+.p-strip.after { aspect-ratio: 1200 / 509; max-height: 184px; }
+.p-strip img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: bottom; }
+.p-foot { border-top: 1px solid var(--border); padding: 24px; display: flex; flex-direction: column; gap: 8px; }
+.p-foot ul { display: flex; flex-wrap: wrap; gap: 0 16px; }
+.p-foot li span { display: inline-block; padding: 4px 0; }
+
+/* 404 */
+.p-404 { display: flex; flex-direction: column; min-height: 812px; padding: 40px 0 87px; }
+.p-404 main { flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 16px; padding: 64px 24px; }
+.fold { position: absolute; left: 0; right: 0; top: 812px; z-index: 9; border-top: 2px dashed var(--accent); }
+.fold span { position: absolute; right: 6px; top: 2px; font: 600 10px/1.3 var(--fb); color: #fff; background: var(--accent); border-radius: 3px; padding: 1px 4px; }
+body.inner-b .inner-spot { display: none; }
+
+/* News page form */
+.p-form { display: flex; flex-direction: column; gap: 14px; }
+.p-form .grp { display: flex; flex-direction: column; gap: 4px; }
+.p-select {
+  height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; font-size: 17px;
+  border: 1px solid var(--border-input); border-radius: 8px; background: var(--surface);
+}
+.p-select::after { content: "\25BE"; font-size: 13px; color: var(--muted); margin-left: 12px; }
+.ribbon {
+  position: absolute; left: 12px; right: 12px; top: 540px; z-index: 9; text-align: center;
+  font: 600 12px/1.4 var(--fb); color: var(--primary-hover); background: rgba(228, 239, 231, .95);
+  border: 1px solid #b9d3c1; border-radius: 8px; padding: 6px 10px;
+}
+
+/* ---------- Placements, tables, lists ---------- */
+.pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+.pc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.pc header { display: flex; gap: 10px; align-items: center; }
+.pc header .num { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff; font: 700 12px/1 var(--fb); flex: none; }
+.pc h3 { font: 600 16px/1.3 var(--fh); margin: 0; }
+.pc .low { font: 600 11px/1.3 var(--fb); text-transform: uppercase; letter-spacing: .05em; color: var(--accent-strong); margin-left: auto; white-space: nowrap; }
+.pc .body { display: grid; grid-template-columns: 136px 1fr; gap: 12px; align-items: start; }
+.thumb {
+  display: grid; place-items: center; min-height: 120px; padding: 8px; border-radius: 8px; overflow: hidden;
+  background: var(--bg); border: 1px dashed var(--border-strong);
+}
+.thumb img { display: block; max-width: none; }
+.thumb.strip { grid-column: 1 / -1; min-height: 0; }
+.facts { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; margin: 0; font-size: 13px; line-height: 1.45; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; }
+.file { font: 12px/1.4 var(--fm); color: var(--muted); margin: 0; word-break: break-all; }
+details { font-size: 13.5px; line-height: 1.5; }
+details summary { cursor: pointer; color: var(--primary); font-weight: 600; }
+details ul { margin: 6px 0 0; padding-left: 18px; }
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; line-height: 1.45; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { background: var(--surface-muted); font: 600 13px/1.3 var(--fb); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td .call { font-weight: 600; color: var(--primary-hover); }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+.panel h3 { font: 600 17px/1.3 var(--fh); margin: 0 0 8px; }
+.panel ul { margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.5; display: grid; gap: 6px; }
+.dont li::marker { content: "\2715  "; color: var(--accent-strong); font-weight: 700; }
+.checks { list-style: none; padding: 0 !important; }
+.checks label { display: grid; grid-template-columns: 18px 1fr; gap: 8px; cursor: pointer; }
+.checks input { accent-color: var(--primary); margin-top: 3px; }
+.foot-note { margin-top: 48px; font-size: 13px; color: var(--muted); }
+@media (max-width: 520px) {
+  h1.doc { font-size: 32px; }
+  .pc .body { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="over">Know Your Vote · design · 2026-10-11</p>
+  <h1 class="doc">Visuals for the phone site</h1>
+  <p class="lede">Phones get no motion and no person in the first screen. A static 36px sun sits on the key-dates card. After that, one small static piece sits at each section break the voter scrolls past, and the town shows in full at the bottom of every page. The home page's first load gains 17.8&nbsp;KB of art and 0&nbsp;px above the deadline card.</p>
+  <div class="meta">
+    <span class="chip">Spec: <code>mobile-visuals.md</code> (same folder)</span>
+    <span class="chip">Proposal only: nothing in <code>src/</code> or <code>public/</code> changed</span>
+    <span class="chip warn">Decision 1 gates the build</span>
+  </div>
+  <ul class="toc">
+    <li><a href="#decide">Decide</a></li>
+    <li><a href="#mockups">Before and after</a></li>
+    <li><a href="#placements">Placements</a></li>
+    <li><a href="#budget">Budget</a></li>
+    <li><a href="#rules">Motion and limits</a></li>
+    <li><a href="#reconcile">How the two specs were merged</a></li>
+    <li><a href="#verify">Verify</a></li>
+  </ul>
+  <div class="stats">
+    <div class="stat"><b>+17.8 KB</b><span>New art in the home page's first screen (the sun). 0&nbsp;px added above the key-dates card, which stays at y&nbsp;568.</span></div>
+    <div class="stat"><b>97.4 KB</b><span>New art on a full home scroll (sun, reader, cat), plus 12.7&nbsp;KB when the install card shows. The footer adds 0 new bytes.</span></div>
+    <div class="stat"><b>+149 px</b><span>Home page height at 375px (6,129 to about 6,278): zigzag 40, heading wrap 29, footer 80.</span></div>
+    <div class="stat"><b>0</b><span>Animations below 64rem. The hero walk stays desktop only, and reduced-motion users see the same phone page as everyone else.</span></div>
+  </div>
+</header>
+
+<!-- ======================= DECISIONS ======================= -->
+<section class="block" id="decide">
+  <h2 class="sec">Decide</h2>
+  <p class="sub">The recommended answers are pre-selected. Change any of them, add a note, then copy the result as markdown. Decisions 3 and 4 also switch the mockups below.</p>
+  <div class="dgrid">
+    <fieldset class="dcard" data-title="Phone rule in design.md">
+      <legend><span class="dn">1</span> Write the phone rule into design.md <em class="gate">gates the build</em></legend>
+      <p class="why">Today the phone rule lives only in code comments and commit 9cdf49c: below lg, only the dividers, the footer strip and the envelope. Without a line in design.md, a later reviewer will take the phone art out again.</p>
+      <label class="opt"><input type="radio" name="d1" value="A" checked data-md="Approve the line below"><span><b>Approve this line</b> <i class="rec">Recommended</i> (edit it here if needed)</span></label>
+      <textarea id="d1text" rows="8" aria-label="Proposed design.md line">Below lg, art is a closed list: the key-dates sun (36px), one seated reader on the zigzag after the ballot list (88px), the cat over the coverage card (64px), the install-card badge (48px), the reminder envelope (40px), the section dividers, the footer town strip shown uncropped below sm (max 184px), and one spot each on the 404 (120px), /methodology (112px) and /about (a 56px dog beside "Get in touch"). Each is static, lazy and fixed in px, sits on an edge or its own row, and never sits under text. None go in lists, news, or race, candidate or measure pages. No motion below lg. Anything else on a phone needs a change to this line.</textarea>
+      <label class="opt"><input type="radio" name="d1" value="B" data-md="Not yet: phones keep today's dividers, footer strip and envelope"><span><b>Not yet.</b> Phones keep today's dividers, cropped footer strip and envelope. Nothing below gets built.</span></label>
+    </fieldset>
+
+    <fieldset class="dcard" data-title="Phone first screen">
+      <legend><span class="dn">2</span> What goes in the phone's first screen</legend>
+      <label class="opt"><input type="radio" name="d2" value="A" checked data-md="A. Sun on the key-dates card only, no person above the fold"><span><b>A. The 36px sun on the key-dates card only</b> <i class="rec">Recommended</i><br>No person above the fold, 0&nbsp;px added, 17.8&nbsp;KB. The deadline stays put, in the slot desktop already uses.</span></label>
+      <label class="opt"><input type="radio" name="d2" value="B" data-md="B. One random walker beside 'Florida' (+44px, deadline card moves down)"><span><b>B. One random walker beside "Florida"</b><br>+44&nbsp;px, which pushes the deadline card down on the 390&ndash;440px iPhones most voters carry. It needs a headline restyle, and a lone figure next to the word "candidates" can read as a candidate.</span></label>
+      <label class="opt"><input type="radio" name="d2" value="C" data-md="C. Later: static equal-size row of all eight walkers from new -xs crops"><span><b>C. Later: a static row of all eight walkers</b><br>Equal size, from new ~8&nbsp;KB <code>-xs</code> crops (~45&nbsp;KB, ~+60&nbsp;px, the deadline card moves down). It needs new files, so it would be a follow-up.</span></label>
+    </fieldset>
+
+    <fieldset class="dcard" data-title="Coverage-card figure">
+      <legend><span class="dn">3</span> The figure over the coverage card</legend>
+      <label class="opt"><input type="radio" name="d3" value="A" checked data-md="A. The cat (64px, 46.7KB)"><span><b>A. The cat, 64px</b> <i class="rec">Recommended</i><br>46.7&nbsp;KB. No lone person on the phone home page. The heading wraps to two lines below 402px (+29&nbsp;px).</span></label>
+      <label class="opt"><input type="radio" name="d3" value="B" data-md="B. The peeking man (56px, 31.6KB)"><span><b>B. The peeking man, 56px</b><br>31.6&nbsp;KB, the piece desktop already uses, and a one-line heading from 375px. But his face becomes the largest on the phone home page, at a different size from the seated reader.</span></label>
+      <p class="drives">Switches the "Home, further down" mockup.</p>
+    </fieldset>
+
+    <fieldset class="dcard" data-title="Inner pages on phones">
+      <legend><span class="dn">4</span> Inner pages on phones</legend>
+      <label class="opt"><input type="radio" name="d4" value="A" checked data-md="A. 404 spot, /about dog and /methodology receipts"><span><b>A. 404 spot, /about dog and /methodology receipts</b> <i class="rec">Recommended</i><br>55.7, 9.4 and 63.9&nbsp;KB. Methodology is the first to drop.</span></label>
+      <label class="opt"><input type="radio" name="d4" value="A-" data-md="A-. 404 spot and /about dog; no /methodology piece"><span><b>A&minus;. The same without /methodology</b><br>404 and /about only. In these mockups it looks the same as A.</span></label>
+      <label class="opt"><input type="radio" name="d4" value="B" data-md="B. Footer strip only on inner pages"><span><b>B. Footer strip only</b><br>No spots on inner pages. Every option keeps <code>about-neighbors</code> off phones (167.7&nbsp;KB, loads with the page) and keeps news empty states art-free.</span></label>
+      <p class="drives">Switches the About and 404 mockups.</p>
+    </fieldset>
+  </div>
+  <div class="dfoot">
+    <label for="notes">Notes for the build
+      <textarea id="notes" rows="2" placeholder="Anything else the build should know"></textarea>
+    </label>
+    <button type="button" class="primary" id="copy">Copy decisions as markdown</button>
+    <span id="copied" role="status" aria-live="polite"></span>
+  </div>
+  <pre id="mdout" hidden></pre>
+</section>
+
+<!-- ======================= MOCKUPS ======================= -->
+<section class="block" id="mockups">
+  <h2 class="sec">Before and after, on a phone</h2>
+  <p class="sub">These frames use the real art files from <code>public/brand/site/</code>, the site's colours and type sizes, and real page text, measured at 375&times;812 on 2026-10-11. The fonts fall back to your system's sans serif, so line breaks can differ by a word. Numbered dots match the placements list.</p>
+
+  <div class="controls" role="group" aria-label="Mockup options">
+    <span>Phone width</span>
+    <span class="segctl">
+      <label><input type="radio" name="w" value="320"><span>320</span></label>
+      <label><input type="radio" name="w" value="375" checked><span>375</span></label>
+      <label><input type="radio" name="w" value="430"><span>430</span></label>
+    </span>
+    <label class="tick"><input type="checkbox" id="boxes"> Art boxes and sizes</label>
+    <label class="tick"><input type="checkbox" id="pins" checked> Numbered dots</label>
+    <span class="hint">Coverage figure and inner pages follow decisions 3 and 4.</span>
+  </div>
+
+  <!-- 1. HOME FIRST SCREEN -->
+  <div class="screen" id="m-home-top">
+    <h3>Home, first screen</h3>
+    <p>The first 812px a voter sees. Today it has no art apart from the speckled masthead.</p>
+    <div class="pair">
+      <figure class="col">
+        <figcaption><span class="tag b">Before</span> today</figcaption>
+        <div class="phone vp">
+          <div class="p-top"><span class="p-donate">Donate</span><span class="p-district">Choose your district</span></div>
+          <div class="p-page">
+            <div class="p-mast"><span>Sunday, October 11, 2026</span><span>Election Day: Tuesday, November 3</span></div>
+            <div class="p-halftone"></div>
+            <div class="p-main">
+              <h1 class="t-display">Florida candidates, in their own words.</h1>
+              <p class="t-blg muted">See the races we cover and what each candidate says, quoted word for word from their own campaign sites, with a link to every source. The same questions and the same rules for every candidate. No ZIP, no account, no agenda.</p>
+              <aside class="p-kd">
+                <p class="line">Request a vote-by-mail ballot by 5 p.m. on October 22 · Election Day is November 3</p>
+                <ol class="rail">
+                  <li class="past"><span class="dot"></span><span><b>Registration deadline</b><small>October 5</small></span></li>
+                  <li class="today"><span class="dot"></span><span><b>Today</b><small>October 11</small></span></li>
+                  <li class="next"><span class="dot"></span><span><b>Mail-ballot request deadline</b><small>October 22</small></span></li>
+                  <li class="later"><span class="dot"></span><span><b>Early voting</b><small>October 24 to October 31</small></span></li>
+                  <li class="later"><span class="dot"></span><span><b>Election Day; mail ballots due</b><small>November 3</small></span></li>
+                </ol>
+                <p class="t-cap"><span class="ul">Add these dates to your calendar</span></p>
+              </aside>
+            </div>
+          </div>
+          <div class="p-nav">
+            <span class="on"><svg viewBox="0 0 20 20"><rect x="4" y="3" width="12" height="14" rx="2"/><path d="M7 7h6M7 10h6M7 13h4"/></svg>Ballot</span>
+            <span><svg viewBox="0 0 20 20"><circle cx="10" cy="7" r="3"/><path d="M4 17c1-3.5 3.5-5 6-5s5 1.5 6 5"/></svg>Candidates</span>
+            <span><svg viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="12" rx="1.5"/><path d="M6 7h8M6 10h8M6 13h5"/></svg>News</span>
+          </div>
+        </div>
+      </figure>
+
+      <figure class="col">
+        <figcaption><span class="tag a">After</span> this plan</figcaption>
+        <div class="phone vp">
+          <div class="p-top"><span class="p-donate">Donate</span><span class="p-district">Choose your district</span></div>
+          <div class="p-page">
+            <div class="p-mast"><span>Sunday, October 11, 2026</span><span>Election Day: Tuesday, November 3</span></div>
+            <div class="p-halftone"></div>
+            <div class="p-main">
+              <h1 class="t-display">Florida candidates, in their own words.</h1>
+              <p class="t-blg muted">See the races we cover and what each candidate says, quoted word for word from their own campaign sites, with a link to every source. The same questions and the same rules for every candidate. No ZIP, no account, no agenda.</p>
+              <aside class="p-kd">
+                <span class="art" data-size="36×36" style="position:absolute; top:-24px; right:12px;" aria-hidden="true">
+                  <img src="../../../public/brand/site/illustrations/sticker-sun-xs.webp" alt="" width="192" height="192" style="height:36px">
+                  <span class="pin" style="left:-26px; top:8px;">1</span>
+                </span>
+                <p class="line">Request a vote-by-mail ballot by 5 p.m. on October 22 · Election Day is November 3</p>
+                <ol class="rail">
+                  <li class="past"><span class="dot"></span><span><b>Registration deadline</b><small>October 5</small></span></li>
+                  <li class="today"><span class="dot"></span><span><b>Today</b><small>October 11</small></span></li>
+                  <li class="next"><span class="dot"></span><span><b>Mail-ballot request deadline</b><small>October 22</small></span></li>
+                  <li class="later"><span class="dot"></span><span><b>Early voting</b><small>October 24 to October 31</small></span></li>
+                  <li class="later"><span class="dot"></span><span><b>Election Day; mail ballots due</b><small>November 3</small></span></li>
+                </ol>
+                <p class="t-cap"><span class="ul">Add these dates to your calendar</span></p>
+              </aside>
+            </div>
+          </div>
+          <div class="p-nav">
+            <span class="on"><svg viewBox="0 0 20 20"><rect x="4" y="3" width="12" height="14" rx="2"/><path d="M7 7h6M7 10h6M7 13h4"/></svg>Ballot</span>
+            <span><svg viewBox="0 0 20 20"><circle cx="10" cy="7" r="3"/><path d="M4 17c1-3.5 3.5-5 6-5s5 1.5 6 5"/></svg>Candidates</span>
+            <span><svg viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="12" rx="1.5"/><path d="M6 7h8M6 10h8M6 13h5"/></svg>News</span>
+          </div>
+        </div>
+      </figure>
+
+      <div class="notes">
+        <h4>What changes</h4>
+        <ul>
+          <li><span class="k">1</span><span><b>Sun, 36&times;36,</b> on the key-dates card's top-right corner (<code>sticker-sun-xs.webp</code>, 17.8&nbsp;KB, lazy). At 375px it sits at x&nbsp;303&ndash;339, y&nbsp;544&ndash;580. It rises 24px into the 32px gap under the lede (8px clear of it) and comes 12px into the card's 16px padding (4&ndash;7px clear of the first line).</span></li>
+          <li><span class="k n">&ndash;</span><span><b>0&nbsp;px added.</b> The card stays at y&nbsp;568 (375), 495 (430) and 641 (320). Its 1,296&nbsp;px² against the lede's ~66k&nbsp;px² keeps the LCP element text.</span></li>
+          <li><span class="k n">&ndash;</span><span><b>No person above the fold</b> (decision 2). The hero walk stays <code>lg</code> only, and nothing goes on the masthead (no second sun).</span></li>
+        </ul>
+        <p class="same">Same as today: the H1, the lede, the masthead and the key dates. No motion.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. HOME FURTHER DOWN -->
+  <div class="screen" id="m-home-down">
+    <h3>Home, further down</h3>
+    <p>From the end of the ballot list (y&nbsp;&asymp;&nbsp;3,196) to the footer. The news rail is collapsed to a placeholder here. It is unchanged and gets no art.</p>
+    <div class="pair">
+      <figure class="col">
+        <figcaption><span class="tag b">Before</span> today</figcaption>
+        <div class="phone seg">
+          <div class="p-main" style="padding-top:24px">
+            <div class="p-note">
+              <ul>
+                <li>Hillsborough ballots: <span class="ul">4 judges of the 2nd District Court of Appeal</span> (<span class="ul">about this court’s judges</span>)</li>
+                <li>Orange ballots: no appeals court judges this year</li>
+              </ul>
+              <p>The Florida Division of Elections <span class="ul">lists every judge on the 2026 ballot</span>. Some county ballots also have a circuit judge race, which we don’t cover either.</p>
+            </div>
+            <div class="zz"><div class="band zigzag"></div></div>
+            <section class="p-sec">
+              <div class="txt">
+                <h2 class="t-h2">Add your U.S. House race</h2>
+                <p class="t-bsm muted">Your U.S. House race isn’t in the list above, because it depends on where you live. Give us your ZIP and we’ll add it — or skip it and read the rest. We use it to find your district and keep only the district itself, never your ZIP.</p>
+              </div>
+              <div class="p-field"><span class="t-label">Your ZIP code</span><span class="p-input">33130</span></div>
+              <span class="p-btn">Add my House race</span>
+              <p class="t-bsm muted">Full statewide coverage isn’t available yet. Every Florida voter gets the statewide races and amendments; U.S. House and county races are only for Miami-Dade, Broward, Hillsborough and Orange counties so far.</p>
+              <p class="t-bsm"><span class="ul">or choose your district</span></p>
+            </section>
+            <section class="p-sec">
+              <div class="band wave wave-gap"></div>
+              <h2 class="t-h2 cov-h2">What this guide covers</h2>
+              <div class="rel">
+                <dl class="p-dl">
+                  <div><dt>Every Florida voter</dt><dd>5 statewide races (4 with a full brief so far) and 3 amendments, the same for everyone, whatever your ZIP or party.</dd></div>
+                  <div><dt>Miami-Dade, Broward, Hillsborough and Orange counties</dt><dd>The U.S. House races, and the county commission, school board, Orange County mayor and Orange County clerk races. Add your ZIP above for your House race. Your county’s sample ballot says which commission and school board seats are yours.</dd></div>
+                  <div><dt>Not covered</dt><dd>Florida House and Florida Senate seats, judges (retention questions and other judicial races), county and city ballot questions, city races, special districts such as soil and water conservation and community development districts, and local races in other counties. Your county Supervisor of Elections has your official sample ballot. <span class="ul m">What we don’t cover</span></dd></div>
+                </dl>
+              </div>
+              <p class="t-cap muted">Every candidate in a race we cover gets the same questions and the same rules. <span class="ul m">How we stay fair</span></p>
+            </section>
+            <section class="p-sec">
+              <h2 class="t-h2">Florida election news</h2>
+              <p class="t-bsm muted">Statewide and county stories and official notices, newest first.</p>
+              <div class="p-chips"><span class="on">All Florida</span><span>Statewide</span><span>Miami-Dade</span><span>Hillsborough</span><span>Orange</span></div>
+              <div class="sk" style="height:150px"><i style="width:30%"></i><i class="t" style="width:92%"></i><i class="t" style="width:70%"></i><i style="width:40%"></i><span class="ph-label">news items: unchanged, no art</span></div>
+            </section>
+            <div class="band wave"></div>
+            <div class="p-card">
+              <span class="x"><svg viewBox="0 0 20 20"><path d="M5 5l10 10M15 5L5 15"/></svg></span>
+              <div class="row"><div>
+                <p class="t-label">Get the app</p>
+                <p class="t-bsm muted" style="margin-top:4px">Add Know Your Vote to your home screen: tap the Share button, then “Add to Home Screen”.</p>
+              </div></div>
+            </div>
+            <p class="t-cap muted">We quote what each candidate says, in their own words. You decide. <span class="ul m">How we stay fair</span> · <span class="ul m">Privacy</span></p>
+          </div>
+          <footer>
+            <div class="p-strip"><img src="../../../public/brand/site/illustrations/footer-town-strip-sm.webp" alt="" width="1200" height="509"></div>
+            <div class="p-foot">
+              <p class="t-cap muted">Independent and nonpartisan. Not affiliated with any candidate, party or government agency. No endorsements.</p>
+              <ul class="t-cap muted"><li><span class="ul m">About</span></li><li><span class="ul m">Methodology</span></li><li><span class="ul m">Privacy</span></li><li><span class="ul m">Terms of use</span></li></ul>
+            </div>
+          </footer>
+        </div>
+      </figure>
+
+      <figure class="col">
+        <figcaption><span class="tag a">After</span> this plan</figcaption>
+        <div class="phone seg">
+          <div class="p-main" style="padding-top:24px">
+            <div class="p-note">
+              <ul>
+                <li>Hillsborough ballots: <span class="ul">4 judges of the 2nd District Court of Appeal</span> (<span class="ul">about this court’s judges</span>)</li>
+                <li>Orange ballots: no appeals court judges this year</li>
+              </ul>
+              <p>The Florida Division of Elections <span class="ul">lists every judge on the 2026 ballot</span>. Some county ballots also have a circuit judge race, which we don’t cover either.</p>
+            </div>
+            <div class="zz after">
+              <div class="band zigzag"></div>
+              <div class="ledge">
+                <span class="art" data-size="58×88" style="position:absolute; right:0; top:-54.38px;" aria-hidden="true">
+                  <img src="../../../public/brand/site/illustrations/sit-divider-sm.webp" alt="" width="395" height="600" style="height:88px">
+                  <span class="pin" style="left:-26px; top:10px;">2</span>
+                </span>
+              </div>
+            </div>
+            <section class="p-sec">
+              <div class="txt">
+                <h2 class="t-h2">Add your U.S. House race</h2>
+                <p class="t-bsm muted">Your U.S. House race isn’t in the list above, because it depends on where you live. Give us your ZIP and we’ll add it — or skip it and read the rest. We use it to find your district and keep only the district itself, never your ZIP.</p>
+              </div>
+              <div class="p-field"><span class="t-label">Your ZIP code</span><span class="p-input">33130</span></div>
+              <span class="p-btn">Add my House race</span>
+              <p class="t-bsm muted">Full statewide coverage isn’t available yet. Every Florida voter gets the statewide races and amendments; U.S. House and county races are only for Miami-Dade, Broward, Hillsborough and Orange counties so far.</p>
+              <p class="t-bsm"><span class="ul">or choose your district</span></p>
+            </section>
+            <section class="p-sec">
+              <div class="band wave wave-gap"></div>
+              <h2 class="t-h2 cov-h2 after">What this guide covers</h2>
+              <div class="rel">
+                <span class="art cov-cat-art" data-size="88×64" style="position:absolute; right:12px; top:-56.45px;" aria-hidden="true">
+                  <img src="../../../public/brand/site/illustrations/pet-cat-peek-sm.webp" alt="" width="600" height="435" style="height:64px">
+                  <span class="pin" style="left:-26px; top:12px;">3</span>
+                </span>
+                <span class="art cov-man-art" data-size="69×56" style="position:absolute; right:0; top:-52.08px;" aria-hidden="true">
+                  <img src="../../../public/brand/site/illustrations/peek-card-edge-sm.webp" alt="" width="600" height="488" style="height:56px">
+                  <span class="pin" style="left:-26px; top:12px;">3</span>
+                </span>
+                <dl class="p-dl">
+                  <div><dt>Every Florida voter</dt><dd>5 statewide races (4 with a full brief so far) and 3 amendments, the same for everyone, whatever your ZIP or party.</dd></div>
+                  <div><dt>Miami-Dade, Broward, Hillsborough and Orange counties</dt><dd>The U.S. House races, and the county commission, school board, Orange County mayor and Orange County clerk races. Add your ZIP above for your House race. Your county’s sample ballot says which commission and school board seats are yours.</dd></div>
+                  <div><dt>Not covered</dt><dd>Florida House and Florida Senate seats, judges (retention questions and other judicial races), county and city ballot questions, city races, special districts such as soil and water conservation and community development districts, and local races in other counties. Your county Supervisor of Elections has your official sample ballot. <span class="ul m">What we don’t cover</span></dd></div>
+                </dl>
+              </div>
+              <p class="t-cap muted">Every candidate in a race we cover gets the same questions and the same rules. <span class="ul m">How we stay fair</span></p>
+            </section>
+            <section class="p-sec">
+              <h2 class="t-h2">Florida election news</h2>
+              <p class="t-bsm muted">Statewide and county stories and official notices, newest first.</p>
+              <div class="p-chips"><span class="on">All Florida</span><span>Statewide</span><span>Miami-Dade</span><span>Hillsborough</span><span>Orange</span></div>
+              <div class="sk" style="height:150px"><i style="width:30%"></i><i class="t" style="width:92%"></i><i class="t" style="width:70%"></i><i style="width:40%"></i><span class="ph-label">news items: unchanged, no art</span></div>
+            </section>
+            <div class="band wave"></div>
+            <div class="p-card">
+              <span class="x"><svg viewBox="0 0 20 20"><path d="M5 5l10 10M15 5L5 15"/></svg></span>
+              <div class="row">
+                <span class="art" data-size="47×48" style="flex:none" aria-hidden="true">
+                  <img src="../../../public/brand/site/illustrations/sticker-kyv-badge-xs.webp" alt="" width="189" height="192" style="height:48px">
+                  <span class="pin" style="left:-14px; top:-14px;">4</span>
+                </span>
+                <div>
+                  <p class="t-label">Get the app</p>
+                  <p class="t-bsm muted" style="margin-top:4px">Add Know Your Vote to your home screen: tap the Share button, then “Add to Home Screen”.</p>
+                </div>
+              </div>
+            </div>
+            <p class="t-cap muted">We quote what each candidate says, in their own words. You decide. <span class="ul m">How we stay fair</span> · <span class="ul m">Privacy</span></p>
+          </div>
+          <footer>
+            <div class="p-strip after">
+              <img src="../../../public/brand/site/illustrations/footer-town-strip-sm.webp" alt="" width="1200" height="509">
+              <span class="pin" style="left:8px; top:8px;">5</span>
+            </div>
+            <div class="p-foot">
+              <p class="t-cap muted">Independent and nonpartisan. Not affiliated with any candidate, party or government agency. No endorsements.</p>
+              <ul class="t-cap muted"><li><span class="ul m">About</span></li><li><span class="ul m">Methodology</span></li><li><span class="ul m">Privacy</span></li><li><span class="ul m">Terms of use</span></li></ul>
+            </div>
+          </footer>
+        </div>
+      </figure>
+
+      <div class="notes">
+        <h4>What changes</h4>
+        <ul>
+          <li><span class="k">2</span><span><b>Seated reader, 58&times;88,</b> on the zigzag (<code>sit-divider-sm.webp</code>, 32.9&nbsp;KB). The wrapper gets <code>mt-[28px] mb-[12px]</code>, which adds 40px. The reader sits about 12px below the end of the list (art never goes over it) and about 16px above the House heading.</span></li>
+          <li><span class="k">3</span><span><b>Cat, 88&times;64,</b> over the coverage card (<code>pet-cat-peek-sm.webp</code>, 46.7&nbsp;KB). Its head rises 56px and its paws dip 8px into row 1's padding. The heading gets <code>pr-[108px]</code> and wraps below 402px (+29px). Decision 3 can swap in the peeking man.</span></li>
+          <li><span class="k">4</span><span><b>Install badge, 47&times;48,</b> in the card's flow, left of "Get the app" (<code>sticker-kyv-badge-xs.webp</code>, 12.7&nbsp;KB). The card only renders on iOS Safari, or on Android Chrome when it offers install. Adds 0 to 20px.</span></li>
+          <li><span class="k">5</span><span><b>The whole town,</b> 375&times;159 instead of 79 (<code>footer-town-strip-sm.webp</code>, already fetched, so 0 new bytes). Capped at 184px from about 434px wide; from <code>sm</code> up the crop is today's.</span></li>
+        </ul>
+        <p class="same">Untouched: the ballot list, at-a-glance tiles, news rail, House form and the reminder envelope (40px, shown when reminders are live; not live today, so it isn't in these frames).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ABOUT -->
+  <div class="screen" id="m-about">
+    <h3>About</h3>
+    <p>Scrolled to "Who pays for it" (y&nbsp;&asymp;&nbsp;900). The first screen of /about does not change.</p>
+    <div class="pair">
+      <figure class="col">
+        <figcaption><span class="tag b">Before</span> today</figcaption>
+        <div class="phone seg">
+          <div class="p-main" style="padding-top:24px; gap:24px">
+            <section class="p-sec" style="gap:8px">
+              <h2 class="t-h2">Who pays for it</h2>
+              <p class="t-body">Readers, through donations. No candidate, party, or campaign funds Know Your Vote or reviews what we publish.</p>
+              <p class="t-body">Donations go through <span class="ul">Zeffy</span>, which charges us no fees. Know Yours Inc is a nonprofit but not a 501(c)(3), so donations are not tax-deductible.</p>
+            </section>
+            <section class="p-sec" style="gap:8px">
+              <h2 class="t-h2">Get in touch</h2>
+              <p class="t-body">Spotted a mistake, a missing source, or something that reads as slanted? Tell us. Corrections are the point. The same address works for press and everything else: <span class="ul">info@knowyour.vote</span>.</p>
+            </section>
+            <section class="p-sec" style="gap:8px">
+              <h2 class="t-h2">The official word</h2>
+              <p class="t-body">We’re not a government site. For your registration, your polling place, and your sample ballot, your county Supervisor of Elections and the <span class="ul">Florida Division of Elections</span> have the final say. If we ever disagree with them, they’re right.</p>
+            </section>
+          </div>
+          <footer>
+            <div class="p-strip"><img src="../../../public/brand/site/illustrations/footer-town-strip-sm.webp" alt="" width="1200" height="509"></div>
+            <div class="p-foot">
+              <p class="t-cap muted">Independent and nonpartisan. Not affiliated with any candidate, party or government agency. No endorsements.</p>
+              <ul class="t-cap muted"><li><span class="ul m">About</span></li><li><span class="ul m">Methodology</span></li><li><span class="ul m">Privacy</span></li><li><span class="ul m">Terms of use</span></li></ul>
+            </div>
+          </footer>
+        </div>
+      </figure>
+
+      <figure class="col">
+        <figcaption><span class="tag a">After</span> this plan</figcaption>
+        <div class="phone seg">
+          <div class="p-main" style="padding-top:24px; gap:24px">
+            <section class="p-sec" style="gap:8px">
+              <h2 class="t-h2">Who pays for it</h2>
+              <p class="t-body">Readers, through donations. No candidate, party, or campaign funds Know Your Vote or reviews what we publish.</p>
+              <p class="t-body">Donations go through <span class="ul">Zeffy</span>, which charges us no fees. Know Yours Inc is a nonprofit but not a 501(c)(3), so donations are not tax-deductible.</p>
+            </section>
+            <section class="p-sec" style="gap:8px">
+              <div style="display:flex; align-items:flex-end; gap:12px">
+                <h2 class="t-h2">Get in touch</h2>
+                <span class="art inner-spot" data-size="30×56" style="flex:none" aria-hidden="true">
+                  <img src="../../../public/brand/site/illustrations/pet-dog-sit-xs.webp" alt="" width="102" height="192" style="height:56px">
+                  <span class="pin" style="left:38px; top:4px;">8</span>
+                </span>
+              </div>
+              <p class="t-body">Spotted a mistake, a missing source, or something that reads as slanted? Tell us. Corrections are the point. The same address works for press and everything else: <span class="ul">info@knowyour.vote</span>.</p>
+            </section>
+            <section class="p-sec" style="gap:8px">
+              <h2 class="t-h2">The official word</h2>
+              <p class="t-body">We’re not a government site. For your registration, your polling place, and your sample ballot, your county Supervisor of Elections and the <span class="ul">Florida Division of Elections</span> have the final say. If we ever disagree with them, they’re right.</p>
+            </section>
+          </div>
+          <footer>
+            <div class="p-strip after">
+              <img src="../../../public/brand/site/illustrations/footer-town-strip-sm.webp" alt="" width="1200" height="509">
+              <span class="pin" style="left:8px; top:8px;">5</span>
+            </div>
+            <div class="p-foot">
+              <p class="t-cap muted">Independent and nonpartisan. Not affiliated with any candidate, party or government agency. No endorsements.</p>
+              <ul class="t-cap muted"><li><span class="ul m">About</span></li><li><span class="ul m">Methodology</span></li><li><span class="ul m">Privacy</span></li><li><span class="ul m">Terms of use</span></li></ul>
+            </div>
+          </footer>
+        </div>
+      </figure>
+
+      <div class="notes">
+        <h4>What changes</h4>
+        <ul>
+          <li><span class="k">8</span><span><b>Dog, 30&times;56,</b> beside "Get in touch" (<code>pet-dog-sit-xs.webp</code>, 9.4&nbsp;KB, +27px). It sits beside the heading only, never beside the paragraph or the email link. The 90px gutter dog from 1400px stays as it is.</span></li>
+          <li><span class="k">5</span><span><b>The whole town</b> in the footer (+80px at 375, 0 new bytes).</span></li>
+          <li><span class="k n">&ndash;</span><span><b>No <code>about-neighbors</code> on phones.</b> At full width it would be 327&times;219 and 167.7&nbsp;KB, loading with the page. A ~750w resize could come later.</span></li>
+        </ul>
+        <p class="same">Decision 4B removes the dog. The footer change applies either way.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. NEWS HEADER -->
+  <div class="screen" id="m-news">
+    <h3>News, header</h3>
+    <p>The /news first screen. It stays exactly as it is: news items, the /news header and NewsFeed's empty states carry no art.</p>
+    <div class="pair">
+      <figure class="col">
+        <figcaption><span class="tag b">Before</span> today</figcaption>
+        <div class="phone vp">
+          <div class="p-top"><span class="p-donate">Donate</span><span class="p-district">Choose your district</span></div>
+          <div class="p-page">
+            <div class="p-main" style="gap:24px">
+              <header style="display:flex; flex-direction:column; gap:4px">
+                <h1 class="t-h1">Electoral news</h1>
+                <p class="t-bsm muted">A calm digest of election news and official sources, no hot takes. Statewide by default — pick a county to add its items.</p>
+                <p class="t-bsm"><span class="ul">Where the news comes from</span></p>
+              </header>
+              <div class="p-form">
+                <div class="grp"><span class="t-label">County</span><span class="p-select" style="width:158px">Statewide only</span></div>
+                <div class="grp"><span class="t-label">Issue</span><span class="p-select">All issues</span></div>
+                <span class="p-btn2">Show news</span>
+              </div>
+              <div class="sk" style="height:300px"><i style="width:45%"></i><i class="t" style="width:95%"></i><i class="t" style="width:88%"></i><i class="t" style="width:60%"></i><i style="width:96%"></i><i style="width:92%"></i><i style="width:94%"></i><i style="width:70%"></i><span class="ph-label" style="top:62%">news item</span></div>
+            </div>
+          </div>
+          <div class="p-nav">
+            <span><svg viewBox="0 0 20 20"><rect x="4" y="3" width="12" height="14" rx="2"/><path d="M7 7h6M7 10h6M7 13h4"/></svg>Ballot</span>
+            <span><svg viewBox="0 0 20 20"><circle cx="10" cy="7" r="3"/><path d="M4 17c1-3.5 3.5-5 6-5s5 1.5 6 5"/></svg>Candidates</span>
+            <span class="on"><svg viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="12" rx="1.5"/><path d="M6 7h8M6 10h8M6 13h5"/></svg>News</span>
+          </div>
+        </div>
+      </figure>
+
+      <figure class="col">
+        <figcaption><span class="tag a">After</span> this plan (identical)</figcaption>
+        <div class="phone vp">
+          <div class="p-top"><span class="p-donate">Donate</span><span class="p-district">Choose your district</span></div>
+          <div class="p-page">
+            <div class="p-main" style="gap:24px">
+              <header style="display:flex; flex-direction:column; gap:4px">
+                <h1 class="t-h1">Electoral news</h1>
+                <p class="t-bsm muted">A calm digest of election news and official sources, no hot takes. Statewide by default — pick a county to add its items.</p>
+                <p class="t-bsm"><span class="ul">Where the news comes from</span></p>
+              </header>
+              <div class="p-form">
+                <div class="grp"><span class="t-label">County</span><span class="p-select" style="width:158px">Statewide only</span></div>
+                <div class="grp"><span class="t-label">Issue</span><span class="p-select">All issues</span></div>
+                <span class="p-btn2">Show news</span>
+              </div>
+              <div class="sk" style="height:300px"><i style="width:45%"></i><i class="t" style="width:95%"></i><i class="t" style="width:88%"></i><i class="t" style="width:60%"></i><i style="width:96%"></i><i style="width:92%"></i><i style="width:94%"></i><i style="width:70%"></i><span class="ph-label" style="top:62%">news item</span></div>
+            </div>
+          </div>
+          <div class="ribbon">No change by rule: no art in the /news header, news items or empty states</div>
+          <div class="p-nav">
+            <span><svg viewBox="0 0 20 20"><rect x="4" y="3" width="12" height="14" rx="2"/><path d="M7 7h6M7 10h6M7 13h4"/></svg>Ballot</span>
+            <span><svg viewBox="0 0 20 20"><circle cx="10" cy="7" r="3"/><path d="M4 17c1-3.5 3.5-5 6-5s5 1.5 6 5"/></svg>Candidates</span>
+            <span class="on"><svg viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="12" rx="1.5"/><path d="M6 7h8M6 10h8M6 13h5"/></svg>News</span>
+          </div>
+        </div>
+      </figure>
+
+      <div class="notes">
+        <h4>What changes</h4>
+        <ul>
+          <li><span class="k n">&ndash;</span><span><b>Nothing in the header.</b> design.md keeps art out of news slots. A drawing beside a filtered empty state ("nothing for this county") could also read as a finding.</span></li>
+          <li><span class="k">5</span><span><b>Only the footer changes,</b> at the bottom of the page (y&nbsp;&asymp;&nbsp;3,644): the whole town, +80px at 375, 0 new bytes.</span></li>
+        </ul>
+        <p class="same">Race, candidates, candidate, measure, privacy and terms pages work the same way: footer only, 0 new bytes.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. 404 -->
+  <div class="screen" id="m-404">
+    <h3>404</h3>
+    <p>The whole page at 375&times;812. Today it is a heading and a link in an empty screen.</p>
+    <div class="pair">
+      <figure class="col">
+        <figcaption><span class="tag b">Before</span> today</figcaption>
+        <div class="phone full">
+          <div class="p-top"><span class="p-donate">Donate</span><span class="p-district">Choose your district</span></div>
+          <div class="p-404">
+            <main>
+              <h1 class="t-h1">We couldn’t find that page</h1>
+              <p class="t-body muted">Check the address, or start from the races we cover.</p>
+              <span class="t-label ul">See the races we cover</span>
+            </main>
+            <footer>
+              <div class="p-strip"><img src="../../../public/brand/site/illustrations/footer-town-strip-sm.webp" alt="" width="1200" height="509"></div>
+              <div class="p-foot">
+                <p class="t-cap muted">Independent and nonpartisan. Not affiliated with any candidate, party or government agency. No endorsements.</p>
+                <ul class="t-cap muted"><li><span class="ul m">About</span></li><li><span class="ul m">Methodology</span></li><li><span class="ul m">Privacy</span></li><li><span class="ul m">Terms of use</span></li></ul>
+              </div>
+            </footer>
+          </div>
+          <div class="p-nav" style="top:739px; bottom:auto">
+            <span><svg viewBox="0 0 20 20"><rect x="4" y="3" width="12" height="14" rx="2"/><path d="M7 7h6M7 10h6M7 13h4"/></svg>Ballot</span>
+            <span><svg viewBox="0 0 20 20"><circle cx="10" cy="7" r="3"/><path d="M4 17c1-3.5 3.5-5 6-5s5 1.5 6 5"/></svg>Candidates</span>
+            <span><svg viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="12" rx="1.5"/><path d="M6 7h8M6 10h8M6 13h5"/></svg>News</span>
+          </div>
+        </div>
+      </figure>
+
+      <figure class="col">
+        <figcaption><span class="tag a">After</span> this plan</figcaption>
+        <div class="phone full">
+          <div class="p-top"><span class="p-donate">Donate</span><span class="p-district">Choose your district</span></div>
+          <div class="p-404">
+            <main>
+              <span class="art inner-spot" data-size="94×120" aria-hidden="true">
+                <img src="../../../public/brand/site/illustrations/error-404-funk-sm.webp" alt="" width="472" height="600" style="height:120px">
+                <span class="pin" style="left:102px; top:8px;">6</span>
+              </span>
+              <h1 class="t-h1">We couldn’t find that page</h1>
+              <p class="t-body muted">Check the address, or start from the races we cover.</p>
+              <span class="t-label ul">See the races we cover</span>
+            </main>
+            <footer>
+              <div class="p-strip after">
+                <img src="../../../public/brand/site/illustrations/footer-town-strip-sm.webp" alt="" width="1200" height="509">
+                <span class="pin" style="left:8px; top:8px;">5</span>
+              </div>
+              <div class="p-foot">
+                <p class="t-cap muted">Independent and nonpartisan. Not affiliated with any candidate, party or government agency. No endorsements.</p>
+                <ul class="t-cap muted"><li><span class="ul m">About</span></li><li><span class="ul m">Methodology</span></li><li><span class="ul m">Privacy</span></li><li><span class="ul m">Terms of use</span></li></ul>
+              </div>
+            </footer>
+          </div>
+          <div class="p-nav" style="top:739px; bottom:auto">
+            <span><svg viewBox="0 0 20 20"><rect x="4" y="3" width="12" height="14" rx="2"/><path d="M7 7h6M7 10h6M7 13h4"/></svg>Ballot</span>
+            <span><svg viewBox="0 0 20 20"><circle cx="10" cy="7" r="3"/><path d="M4 17c1-3.5 3.5-5 6-5s5 1.5 6 5"/></svg>Candidates</span>
+            <span><svg viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="12" rx="1.5"/><path d="M6 7h8M6 10h8M6 13h5"/></svg>News</span>
+          </div>
+          <div class="fold"><span>812px: end of the first screen</span></div>
+        </div>
+      </figure>
+
+      <div class="notes">
+        <h4>What changes</h4>
+        <ul>
+          <li><span class="k">6</span><span><b>Spot, 94&times;120,</b> on its own row above the heading (<code>error-404-funk-sm.webp</code>, 55.7&nbsp;KB, lazy, in view). The heading stays the largest text.</span></li>
+          <li><span class="k">5</span><span><b>The whole town</b> in the footer.</span></li>
+          <li><span class="k n">&ndash;</span><span><b>Height:</b> together they take the page from 812 to about 864px at 375&times;812, and add 0 at 430&times;932. "See the races we cover" stays in the first screen.</span></li>
+          <li><span class="k n">&ndash;</span><span><b>LCP:</b> the taller footer strip may become the 404's LCP element. It may already be today (29.6k&nbsp;px² against the heading's ~24k). The 404 is not a landing page, so this is accepted.</span></li>
+        </ul>
+        <p class="same">Decision 4B removes the spot. The footer change applies either way.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= PLACEMENTS ======================= -->
+<section class="block" id="placements">
+  <h2 class="sec">Placements</h2>
+  <p class="sub">Each phone piece is a second <code>&lt;Art&gt;</code> or <code>&lt;LedgeArt&gt;</code> with <code>lg:hidden</code>, next to the existing <code>hidden lg:block</code> desktop piece. Art takes a fixed px height, so one element cannot be responsive, and the hidden twin's lazy image never loads. Thumbnails below are at their phone size.</p>
+  <div class="pgrid">
+
+    <article class="pc">
+      <header><span class="num">1</span><h3>Home · key-dates card corner</h3></header>
+      <div class="body">
+        <div class="thumb"><img src="../../../public/brand/site/illustrations/sticker-sun-xs.webp" alt="" style="height:36px"></div>
+        <dl class="facts"><dt>File</dt><dd><code>sticker-sun-xs.webp</code> 192&times;192, 17.8&nbsp;KB</dd><dt>Size</dt><dd>36&times;36</dd><dt>Height</dt><dd>0px at every width</dd><dt>Loads</dt><dd>Lazy, first screen, right after layout</dd></dl>
+      </div>
+      <p class="file">src/components/features/DeadlineBanner.tsx</p>
+      <pre><code>&lt;Art name="sticker-sun" height={36}
+  className="absolute -top-[24px] right-[12px] lg:hidden" /&gt;</code></pre>
+      <details><summary>Clearances and comment</summary><ul>
+        <li>Inside <code>&lt;aside aria-label="Key dates"&gt;</code> (already <code>relative</code>), directly before the 56px lg sun.</li>
+        <li>The lede box ends about 8px above it. The card's first line clears it by about 4&ndash;7px. That clearance is vertical and in px, so the first <code>&lt;p&gt;</code> gets no phone right padding.</li>
+        <li>Rewrite the "lg+ only" comment to describe the phone twin.</li>
+      </ul></details>
+    </article>
+
+    <article class="pc">
+      <header><span class="num">2</span><h3>Home · zigzag after the ballot list</h3></header>
+      <div class="body">
+        <div class="thumb"><img src="../../../public/brand/site/illustrations/sit-divider-sm.webp" alt="" style="height:88px"></div>
+        <dl class="facts"><dt>File</dt><dd><code>sit-divider-sm.webp</code> 395&times;600, 32.9&nbsp;KB (no <code>-xs</code>)</dd><dt>Size</dt><dd>58&times;88</dd><dt>Height</dt><dd>+40px</dd><dt>Loads</dt><dd>Lazy, y&nbsp;&asymp;&nbsp;3,210 (inside the 3G lazy margin)</dd></dl>
+      </div>
+      <p class="file">src/app/(public)/page.tsx</p>
+      <pre><code>// wrapper
+className="relative mt-[28px] mb-[12px] lg:mt-[72px] lg:mb-0"
+// inside &lt;div className="absolute inset-x-0 top-1/2"&gt;
+&lt;LedgeArt name="sit-divider" height={88} edge="top"
+  className="right-0 lg:hidden" /&gt;</code></pre>
+      <details><summary>Clearances and comment</summary><ul>
+        <li>Ledge 0.618: 54px of figure above the band's centre line, 34px below it.</li>
+        <li>About 12px below the end of the list, about 16px above the House heading. Check both district states.</li>
+        <li>Rewrite the comment block: the phone sitter, the px margins and why they are px.</li>
+      </ul></details>
+    </article>
+
+    <article class="pc">
+      <header><span class="num">3</span><h3>Home · over the coverage card</h3></header>
+      <div class="body">
+        <div class="thumb"><img src="../../../public/brand/site/illustrations/pet-cat-peek-sm.webp" alt="" style="height:64px"></div>
+        <dl class="facts"><dt>File</dt><dd><code>pet-cat-peek-sm.webp</code> 600&times;435, 46.7&nbsp;KB (no <code>-xs</code>)</dd><dt>Size</dt><dd>88&times;64</dd><dt>Height</dt><dd>+29px at 320&ndash;401px, 0 from 402px</dd><dt>Loads</dt><dd>Lazy, y&nbsp;&asymp;&nbsp;3,830</dd></dl>
+      </div>
+      <p class="file">src/components/features/CoverageSummary.tsx</p>
+      <pre><code>&lt;LedgeArt name="pet-cat-peek" height={64} edge="top"
+  className="right-[12px] lg:hidden" /&gt;
+// h2#coverage
+className="text-h2 pr-[108px] lg:mt-12 lg:pr-44"</code></pre>
+      <details><summary>Clearances and comment</summary><ul>
+        <li>Ledge 0.882: the head rises 56px above the card. The paws dip about 8px into row 1's 12px padding, clear of "Every Florida voter".</li>
+        <li><code>pr-[108px]</code> = the figure's 88px + the 12px inset + 8px of air. From 402px the heading is one line, and the cat's top stays at least 8px under the wave.</li>
+        <li>Rewrite the art comment, including why it is the cat (decision 3).</li>
+      </ul></details>
+    </article>
+
+    <article class="pc">
+      <header><span class="num">4</span><h3>Home · install card badge</h3></header>
+      <div class="body">
+        <div class="thumb"><img src="../../../public/brand/site/illustrations/sticker-kyv-badge-xs.webp" alt="" style="height:48px"></div>
+        <dl class="facts"><dt>File</dt><dd><code>sticker-kyv-badge-xs.webp</code> 189&times;192, 12.7&nbsp;KB</dd><dt>Size</dt><dd>47&times;48, in flow</dd><dt>Height</dt><dd>0 to +20px, only with the card</dd><dt>Loads</dt><dd>Only when the card renders (iOS Safari, or Android Chrome offering install)</dd></dl>
+      </div>
+      <p class="file">src/components/features/InstallCard.tsx</p>
+      <pre><code>// first child of &lt;div className="flex items-start gap-4"&gt;
+&lt;Art name="sticker-kyv-badge" height={48}
+  className="shrink-0 lg:hidden" /&gt;</code></pre>
+      <details><summary>Clearances and comment</summary><ul>
+        <li>Left of "Get the app", like an app-icon install row. The dismiss X (<code>absolute top-3 right-3</code>) is untouched.</li>
+        <li>The text column narrows from 277 to 214px at 375.</li>
+        <li>Replace "lg+ only: on phones the card keeps its single column". Leave the reminder envelope exactly as it is.</li>
+      </ul></details>
+    </article>
+
+    <article class="pc">
+      <header><span class="num">5</span><h3>Every page · footer town below sm</h3></header>
+      <div class="body">
+        <div class="thumb strip"><img src="../../../public/brand/site/illustrations/footer-town-strip-sm.webp" alt="" style="width:100%; height:auto; max-width:320px"></div>
+        <dl class="facts" style="grid-column:1 / -1"><dt>File</dt><dd><code>footer-town-strip-sm.webp</code> 1200&times;509, 129.8&nbsp;KB, already fetched</dd><dt>Size</dt><dd>320&times;136 · 375&times;159 (was 79) · 430&times;182 · capped at 184 from ~434 to 639px</dd><dt>Height</dt><dd>+68 to +92px at the bottom of every page</dd><dt>Bytes</dt><dd>0 new. The <code>&lt;source&gt;</code> should also stop 402&ndash;440px @3x iPhones fetching the 445.8&nbsp;KB master (~316&nbsp;KB saved; confirm in Safari)</dd></dl>
+      </div>
+      <p class="file">src/components/nav/SiteFooter.tsx</p>
+      <pre><code>// strip wrapper
+aspect-[1200/509] max-h-[184px] sm:aspect-[2400/504] sm:max-h-none
+// wrap the existing &lt;img&gt;, unchanged
+&lt;picture className="block h-full w-full"&gt;
+  &lt;source media="(width &lt; 40rem)"
+    srcSet="/brand/site/illustrations/footer-town-strip-sm.webp"
+    width={1200} height={509} /&gt;
+  &lt;img … /&gt;
+&lt;/picture&gt;</code></pre>
+      <details><summary>Notes</summary><ul>
+        <li><code>object-bottom</code> means the cap crops only sky. From <code>sm</code> up, the crop is today's exactly.</li>
+        <li>The range syntax needs Safari 16.4+. Older iOS skips the <code>&lt;source&gt;</code> and gets today's behaviour, so nothing regresses.</li>
+        <li>Rewrite the crop comment: the crop exists for wide screens, and the uncropped strip cuts no heads at phone width.</li>
+      </ul></details>
+    </article>
+
+    <article class="pc">
+      <header><span class="num">6</span><h3>404 · above the heading</h3></header>
+      <div class="body">
+        <div class="thumb"><img src="../../../public/brand/site/illustrations/error-404-funk-sm.webp" alt="" style="height:120px"></div>
+        <dl class="facts"><dt>File</dt><dd><code>error-404-funk-sm.webp</code> 472&times;600, 55.7&nbsp;KB</dd><dt>Size</dt><dd>94&times;120, own row, 16px gap below</dd><dt>Height</dt><dd>+52px at 375&times;812 (with the footer), 0 at 430&times;932</dd><dt>Loads</dt><dd>Lazy, in view</dd></dl>
+      </div>
+      <p class="file">src/app/not-found.tsx</p>
+      <pre><code>&lt;Art name="error-404-funk" height={120} className="lg:hidden" /&gt;</code></pre>
+      <details><summary>Comment</summary><ul><li>Replace "rule 4 has no 404 exception".</li></ul></details>
+    </article>
+
+    <article class="pc">
+      <header><span class="num">7</span><h3>/methodology · under the header</h3><span class="low">First to drop</span></header>
+      <div class="body">
+        <div class="thumb"><img src="../../../public/brand/site/illustrations/method-receipts-sm.webp" alt="" style="height:112px"></div>
+        <dl class="facts"><dt>File</dt><dd><code>method-receipts-sm.webp</code> 600&times;519, 63.9&nbsp;KB</dd><dt>Size</dt><dd>129&times;112, own row, centred</dd><dt>Height</dt><dd>+144px on a 24,389px page</dd><dt>Loads</dt><dd>Lazy, in view (y&nbsp;&asymp;&nbsp;464&ndash;576)</dd></dl>
+      </div>
+      <p class="file">src/app/(public)/methodology/page.tsx</p>
+      <pre><code>// between &lt;/header&gt; and the first &lt;section&gt;
+&lt;Art name="method-receipts" height={112}
+  className="self-center lg:hidden" /&gt;</code></pre>
+      <details><summary>Notes</summary><ul><li>Under no text and above every numbered or sourced section. 14k&nbsp;px² against a 327&times;328 header, so the LCP element stays text. Not mocked above.</li></ul></details>
+    </article>
+
+    <article class="pc">
+      <header><span class="num">8</span><h3>/about · beside "Get in touch"</h3></header>
+      <div class="body">
+        <div class="thumb"><img src="../../../public/brand/site/illustrations/pet-dog-sit-xs.webp" alt="" style="height:56px"></div>
+        <dl class="facts"><dt>File</dt><dd><code>pet-dog-sit-xs.webp</code> 102&times;192, 9.4&nbsp;KB</dd><dt>Size</dt><dd>30&times;56</dd><dt>Height</dt><dd>+27px</dd><dt>Loads</dt><dd>Lazy</dd></dl>
+      </div>
+      <p class="file">src/app/(public)/about/page.tsx</p>
+      <pre><code>&lt;div className="flex items-end gap-3"&gt;
+  &lt;h2 className="text-h2"&gt;Get in touch&lt;/h2&gt;
+  &lt;Art name="pet-dog-sit" height={56}
+    className="shrink-0 lg:hidden" /&gt;
+&lt;/div&gt;</code></pre>
+      <details><summary>Notes</summary><ul><li>Beside the heading only, never beside the paragraph or the email link. The 1400px+ gutter dog stays.</li></ul></details>
+    </article>
+  </div>
+
+  <div class="panel" style="margin-top:16px">
+    <h3>Docs and comments in the same PR</h3>
+    <ul>
+      <li><code>docs/design.md</code> "Site illustration layer": add the approved phone line (decision 1).</li>
+      <li>Rewrite the comments that encode the old phone rule: <code>Art.tsx</code> header, <code>SectionDivider.tsx</code> line 4, <code>SiteFooter.tsx</code>, <code>ReminderSignupCta.tsx</code> ("the one piece of art that also shows on phones"), <code>not-found.tsx</code>, <code>globals.css</code> lines 165&ndash;172 (the speckle texture stays off phones; only the reason text changes), and the <code>InstallCard</code>, <code>CoverageSummary</code>, <code>DeadlineBanner</code> and zigzag comments.</li>
+      <li><code>placement-map.md</code>: replace "6,770px" with 6,129px (measured 2026-10-11) and list the phone slots.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ======================= BUDGET ======================= -->
+<section class="block" id="budget">
+  <h2 class="sec">Budget</h2>
+  <p class="sub">KB means KiB, measured from the files in <code>public/</code>. Chrome's lazy-load margin is about 1,250px on 4G and 2,500px on slower links.</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Page</th><th class="num">New art</th><th>What loads</th><th>Height change</th></tr></thead>
+      <tbody>
+        <tr><td>Home, first load (4G)</td><td class="num">17.8 KB</td><td>Sun only, plus ~6&nbsp;KB of existing textures and masks</td><td>0px above the key-dates card</td></tr>
+        <tr><td>Home, first load (3G or slower)</td><td class="num">50.7 KB</td><td>Sun + seated reader</td><td></td></tr>
+        <tr><td>Home, full scroll</td><td class="num">97.4 KB</td><td>Sun 17.8 + reader 32.9 + cat 46.7</td><td>+149px at 375 (40 + 29 + 80), +132px at 430</td></tr>
+        <tr><td>Home, full scroll with the install card</td><td class="num">110.1 KB</td><td>+ badge 12.7</td><td>up to +20px more</td></tr>
+        <tr><td>404</td><td class="num">55.7 KB</td><td>Spot</td><td>+52px at 375&times;812</td></tr>
+        <tr><td>/methodology</td><td class="num">63.9 KB</td><td>Receipts</td><td>+144px, plus the footer</td></tr>
+        <tr><td>/about</td><td class="num">9.4 KB</td><td>Dog</td><td>+27px, plus the footer</td></tr>
+        <tr><td>News, race, candidates, candidate, measure, privacy, terms</td><td class="num">0 KB</td><td>Footer only</td><td>+80px (375), +92px (430)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="two" style="margin-top:16px">
+    <div class="panel"><h3>Against desktop</h3><ul>
+      <li>All art on the phone home page, counting the existing strip (129.8), envelope (10.7, when reminders are live) and masthead (~6), comes to about 256&nbsp;KB at most. The desktop hero walk alone is 252&nbsp;KB.</li>
+      <li>The footer adds 0 new bytes, and on 402&ndash;440px @3x iPhones it may save about 316&nbsp;KB per view (confirm in Safari Web Inspector before claiming it).</li>
+    </ul></div>
+    <div class="panel"><h3>Layout and paint</h3><ul>
+      <li>CLS 0: Art reserves width and height, and the footer box is sized by aspect ratio.</li>
+      <li>LCP stays text on every page, except possibly the 404.</li>
+      <li>No first-screen art is larger in area than the lede or the H1.</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- ======================= MOTION + LIMITS ======================= -->
+<section class="block" id="rules">
+  <h2 class="sec">Motion and limits</h2>
+  <div class="two">
+    <div class="panel">
+      <h3>Motion: none below lg</h3>
+      <ul>
+        <li>Every phone piece is a still image with no animation, transition, hover effect or tilt.</li>
+        <li>HeroRotator, its CSS module, <code>hero-walk.ts</code> and <code>scripts/verify-hero-walk.ts</code> stay untouched, along with the 1x1 blank <code>&lt;source&gt;</code> below 64rem.</li>
+        <li>With no phone motion, <code>prefers-reduced-motion</code> needs no new branch.</li>
+        <li>All art scrolls with the page, so nothing sits in the fixed bottom nav's thumb zone, and nothing new takes a tap or a tab stop.</li>
+      </ul>
+      <h3 style="margin-top:16px">Ground rules</h3>
+      <ul>
+        <li>Art's defaults only: <code>loading="lazy" decoding="async"</code>. Never <code>eager</code> or <code>fetchPriority</code>.</li>
+        <li>Every clearance is bracketed px. On this scale <code>mt-7</code> is 48px, <code>-top-5</code> is &minus;24px and <code>h-8</code> is 64px.</li>
+        <li>No negative left or right offsets, so there is no sideways scroll at 320px.</li>
+        <li>No new client component, no new image files, and no <code>sm</code>/<code>md</code> gates except the footer's.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Do not</h3>
+      <ul class="dont">
+        <li>Put the hero walk, any walker or any rotator frame on phones.</li>
+        <li>Put a person in the phone first screen (unless decision 2 is B), or add a second sun on the masthead.</li>
+        <li>Put art above the key-dates card, or anything that moves it off y&nbsp;568 at 375px.</li>
+        <li>Put art in, over or beside the ballot list (y&nbsp;1106&ndash;3196), the at-a-glance tiles, the news rail, NewsFeed or its empty states, the /news header, or race, candidates, candidate and measure pages. No art beside a candidate, a verdict or a comparison.</li>
+        <li>Use <code>band-coast</code> or <code>band-horizon</code> on phones (they would become the LCP element), or <code>about-neighbors</code> below lg.</li>
+        <li>Use <code>hang-masthead</code> or <code>lean-card-side</code> on phones.</li>
+        <li>Use rem clearances, or change the footer crop at sm and up.</li>
+        <li>Touch the reminder envelope.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= RECONCILE ======================= -->
+<section class="block" id="reconcile">
+  <h2 class="sec">How the two specs were merged</h2>
+  <p class="sub">Both judges chose Design 2 (section rhythm on edges). They agree on six of the eight placements, down to the pixel. Where they differed, the call went to neutrality first, then performance, then the stricter layout rule.</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Point</th><th>Judge 1</th><th>Judge 2</th><th>Call</th></tr></thead>
+      <tbody>
+        <tr><td>Coverage-card figure</td><td>Cat, 64px (46.7&nbsp;KB, heading wraps below 402px)</td><td>Peeking man, 56px (31.6&nbsp;KB, one-line heading from 375px)</td><td><span class="call">Cat.</span> Neutrality outranks performance. On a phone, the man's face would be the largest on the home page, and a second person at a different size from the seated reader. The cost is +15.1&nbsp;KB and +29px at 320&ndash;401px. The man is option 3B.</td></tr>
+        <tr><td>Install badge</td><td>48px in flow, left of "Get the app"</td><td>40px absolute across the top border, <code>rotate-6</code></td><td><span class="call">48px in flow, no tilt.</span> It never overlaps the block above or the card's own text, and it reads as an app icon. The cost is 0&ndash;20px, only when the card renders.</td></tr>
+        <tr><td>Sun classes</td><td><code>-top-[24px] right-[12px]</code></td><td><code>-top-5 right-3</code></td><td><span class="call">Bracketed px.</span> Same values, written so nobody reads the custom scale as Tailwind's.</td></tr>
+        <tr><td>Footer ratio below sm</td><td><code>aspect-[1200/509]</code></td><td><code>aspect-[2400/1018]</code></td><td><span class="call"><code>aspect-[1200/509]</code>.</span> The ratios are the same; this one matches the served file.</td></tr>
+        <tr><td>design.md phone line</td><td>A closed list of pieces</td><td>A general rule with size ranges</td><td><span class="call">A closed list, plus the general clauses.</span> A closed list is stricter, so any new phone piece needs a design.md change.</td></tr>
+        <tr><td>/methodology</td><td>Lowest priority</td><td>First to drop</td><td><span class="call">Include it, flagged first to drop.</span> Decision 4 lets you drop it.</td></tr>
+        <tr><td>Verify widths</td><td>Adds 402 and 1024</td><td>Adds 360 and 390</td><td><span class="call">Use both lists.</span> 402px is where the cat's heading stops wrapping, and 1023/1024 is the lg edge.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ======================= VERIFY ======================= -->
+<section class="block" id="verify">
+  <h2 class="sec">Verify</h2>
+  <div class="two">
+    <div class="panel">
+      <h3>Layout</h3>
+      <ul class="checks">
+        <li><label><input type="checkbox"> <span>At 320, 360, 375, 390, 402, 430, 768, 1023, 1024 and 1280: <code>scrollWidth === innerWidth</code>.</span></label></li>
+        <li><label><input type="checkbox"> <span>The key-dates card top stays at 568 (375&times;812), 495 (430&times;932) and 641 (320).</span></label></li>
+        <li><label><input type="checkbox"> <span>Clearances with <code>getBoundingClientRect</code>: the sun against the lede and first line; the reader against the list end and the House heading, with no district and with a saved one; the cat against the wave and the heading (8px or more), at 375 and at 402+.</span></label></li>
+        <li><label><input type="checkbox"> <span>Force the install card with <code>window.dispatchEvent(new Event('beforeinstallprompt'))</code>, with the reminder card on and off.</span></label></li>
+        <li><label><input type="checkbox"> <span>axe reflow at 320px, 200% text zoom, a 20px root font, and 400% zoom.</span></label></li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Loading</h3>
+      <ul class="checks">
+        <li><label><input type="checkbox"> <span>Network panel at 375: none of the lg twins load. At 1280: no phone twin loads, and neither does the 1x1 hero source.</span></label></li>
+        <li><label><input type="checkbox"> <span>Lighthouse mobile: the LCP element is still text on home, about, news and methodology.</span></label></li>
+        <li><label><input type="checkbox"> <span>Safari Web Inspector on a 430px @3x iPhone: the footer's <code>currentSrc</code> is the <code>-sm</code> file.</span></label></li>
+        <li><label><input type="checkbox"> <span><code>npm run verify-all</code>, lint and <code>tsc</code> pass; <code>verify-hero-walk</code> stays green.</span></label></li>
+      </ul>
+      <h3 style="margin-top:16px">Follow-ups (not this PR)</h3>
+      <ul>
+        <li>192px <code>-xs</code> files for <code>sit-divider</code>, <code>pet-cat-peek</code> and <code>error-404-funk</code>: about 45&ndash;60&nbsp;KB saved.</li>
+        <li>A ~750w phone file for the footer strip.</li>
+        <li>Decision 2C: a static row of eight equal-size walkers from ~8&nbsp;KB crops.</li>
+        <li>A ~750w <code>about-neighbors</code> (about 60&ndash;70&nbsp;KB), if a wide /about piece is wanted on phones.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<p class="foot-note">Measured on the local dev server at 375&times;812 on 2026-10-11: home 6,129px tall, key-dates card at y&nbsp;568, ballot list y&nbsp;1106&ndash;3196, coverage heading y&nbsp;3779, footer strip 375&times;79. The art loads from <code>../../../public/brand/site/</code>, so keep this file in <code>docs/design/mobile-visuals-2026-10-11/</code>.</p>
+</div>
+
+<script>
+(function () {
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+  var body = document.body;
+
+  $$('input[name="w"]').forEach(function (r) {
+    r.addEventListener('change', function () { body.style.setProperty('--w', r.value + 'px'); });
+  });
+  $('#boxes').addEventListener('change', function (e) { body.classList.toggle('boxes', e.target.checked); });
+  $('#pins').addEventListener('change', function (e) { body.classList.toggle('nopins', !e.target.checked); });
+
+  function checked(name) { return document.querySelector('input[name="' + name + '"]:checked'); }
+  function sync() {
+    body.classList.toggle('cov-man', checked('d3').value === 'B');
+    body.classList.toggle('inner-b', checked('d4').value === 'B');
+  }
+  $$('input[name="d3"], input[name="d4"]').forEach(function (r) { r.addEventListener('change', sync); });
+  sync();
+
+  function buildMd() {
+    var lines = ['## Phone art: founder decisions (2026-10-11)', ''];
+    $$('fieldset.dcard').forEach(function (fs, i) {
+      var input = fs.querySelector('input[type="radio"]:checked');
+      lines.push((i + 1) + '. ' + fs.getAttribute('data-title') + ': ' + (input ? input.getAttribute('data-md') : '(no answer)'));
+      if (i === 0 && input && input.value === 'A') {
+        $('#d1text').value.trim().split(/\n+/).forEach(function (l) { lines.push('   > ' + l); });
+      }
+    });
+    var notes = $('#notes').value.trim();
+    if (notes) { lines.push('', 'Notes: ' + notes); }
+    lines.push('', 'Source: docs/design/mobile-visuals-2026-10-11/mobile-visuals.md');
+    return lines.join('\n');
+  }
+
+  $('#copy').addEventListener('click', function () {
+    var md = buildMd();
+    var out = $('#mdout');
+    out.textContent = md;
+    out.hidden = false;
+    function done(msg) { $('#copied').textContent = msg; }
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(out);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      done(ok ? 'Copied.' : 'Selected below: press Cmd+C to copy.');
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(md).then(function () { done('Copied.'); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+</body>
+</html>

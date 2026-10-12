@@ -1,7 +1,7 @@
 /* A decorative band between page sections: one of the divider SVGs tiled
    across the full width as a mask, filled with currentColor, so the colour
    comes from a text-* class (accent at 60% by default) and never a hex.
-   One of the three pieces of art that also shows on phones. */
+   On design.md's closed list of art that also shows on phones. */
 
 const MASKS = {
   zigzag: "/brand/site/textures/divider-zigzag.svg",

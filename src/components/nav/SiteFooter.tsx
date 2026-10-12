@@ -41,41 +41,59 @@ export function SiteFooter() {
     <footer className="mt-auto">
       {/* The footer strip (design.md "Site illustration layer"): town art
           directly above the border, on every public page and at every width
-          (one of the three pieces allowed on a phone).
+          (on design.md's closed list of phone art).
 
-          Street level of footer-town-strip, never a crop that cuts people
-          (review of #164, 2026-10-11). The earlier footer-thin-strip was the
-          bottom 32% of a generation, so its top edge sliced through the
-          walkers' heads, and cover-cropping it on wide screens took more.
-          Here the box shows exactly the bottom 49.5% of the town strip
-          (2400x1018 -> its bottom 504px, ratio 2400/504): every head clears
-          the top edge with room to spare, and only the roofs, sky and the
-          pelican above the post are left out. The ratio is fixed, so the
-          crop is the same at every width and nothing shifts on load.
+          From sm up: street level of footer-town-strip, never a crop that
+          cuts people (review of #164, 2026-10-11). The earlier
+          footer-thin-strip was the bottom 32% of a generation, so its top
+          edge sliced through the walkers' heads, and cover-cropping it on
+          wide screens took more. Here the box shows exactly the bottom
+          49.5% of the town strip (2400x1018 -> its bottom 504px, ratio
+          2400/504): every head clears the top edge with room to spare, and
+          only the roofs, sky and the pelican above the post are left out.
+          The crop exists for wide screens: held to the content width
+          (1120px, about 235px tall there), not full-bleed, since a
+          full-bleed band at this ratio would be over 400px tall.
 
-          Held to the content width (1120px, about 235px tall there), not
-          full-bleed: a full-bleed band at this ratio would be over 400px
-          tall on a wide screen. An <img>, lazy, so pages that never scroll
-          to the footer don't fetch it; the -sm file below lg and the full
-          file from lg for sharp edges on wide screens. Decoration only:
-          aria-hidden, alt="", nothing to click. */}
+          Below sm the whole town shows, uncropped (2026-10-11): at phone
+          width it is small enough that the full strip cuts no heads and
+          stays short, 159px at 375px. max-h-[184px] caps it from about
+          434px to sm, where object-bottom crops only sky. Each ratio is
+          fixed, so nothing shifts on load.
+
+          An <img>, lazy, so pages that never scroll to the footer don't
+          fetch it; the -sm file on phones and narrow windows, the full file
+          for sharp edges on wide screens. The <source> pins phones to the
+          -sm file: with sizes alone, WebKit picked the 2400w file on 402px+
+          @3x iPhones. Browsers without range media queries skip it and use
+          the <img> as before. Decoration only: aria-hidden, alt="", nothing
+          to click. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none mx-auto aspect-[2400/504] w-full max-w-[1120px] select-none overflow-hidden"
+        className="pointer-events-none mx-auto aspect-[1200/509] max-h-[184px] w-full max-w-[1120px] select-none overflow-hidden sm:aspect-[2400/504] sm:max-h-none"
       >
-        {/* eslint-disable-next-line @next/next/no-img-element -- a pre-sized
-            WebP from public/; next/image's resizing adds nothing here. */}
-        <img
-          src="/brand/site/illustrations/footer-town-strip-sm.webp"
-          srcSet="/brand/site/illustrations/footer-town-strip-sm.webp 1200w, /brand/site/illustrations/footer-town-strip.webp 2400w"
-          sizes="(min-width: 1120px) 1120px, 100vw"
-          alt=""
-          width={1200}
-          height={509}
-          loading="lazy"
-          decoding="async"
-          className="h-full w-full object-cover object-bottom"
-        />
+        <picture className="block h-full w-full">
+          <source
+            media="(width < 40rem)"
+            srcSet="/brand/site/illustrations/footer-town-strip-sm.webp"
+            width={1200}
+            height={509}
+          />
+          {/* Plain <img> in a <picture> (the lint rule allows it): a
+              pre-sized WebP from public/; next/image's resizing adds nothing
+              here. */}
+          <img
+            src="/brand/site/illustrations/footer-town-strip-sm.webp"
+            srcSet="/brand/site/illustrations/footer-town-strip-sm.webp 1200w, /brand/site/illustrations/footer-town-strip.webp 2400w"
+            sizes="(min-width: 1120px) 1120px, 100vw"
+            alt=""
+            width={1200}
+            height={509}
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover object-bottom"
+          />
+        </picture>
       </div>
       <div className="border-t border-border">
         <div className="mx-auto flex w-full max-w-[1120px] flex-col gap-2 px-5 py-5 md:flex-row md:items-center md:justify-between md:gap-6">

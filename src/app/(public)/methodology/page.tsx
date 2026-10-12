@@ -305,7 +305,14 @@ export default async function MethodologyPage() {
 
       {/* A spot illustration under the page header, on its own row: above
           the first numbered or sourced section, never inside one, and under
-          no text. lg+ only. */}
+          no text. 220px from lg up, 112px on a phone (one of the inner-page
+          spots on design.md's closed list of phone art, 2026-10-11; the
+          first to drop if the phone budget tightens). */}
+      <Art
+        name="method-receipts"
+        height={112}
+        className="self-center lg:hidden"
+      />
       <Art
         name="method-receipts"
         height={220}

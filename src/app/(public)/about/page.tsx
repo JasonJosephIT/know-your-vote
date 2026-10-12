@@ -105,17 +105,27 @@ export default function AboutPage() {
         </p>
       </section>
 
-      {/* relative for the dog: it sits in the right gutter beside this
-          heading (left-full is the column's text edge, plus the 24px padding
-          and a gap), never beside or under the paragraph's text. Gutter
-          pieces show from 1400px only. */}
+      {/* relative for the dog: from 1400px it sits in the right gutter
+          beside this heading (left-full is the column's text edge, plus the
+          24px padding and a gap), never beside or under the paragraph's
+          text. Gutter pieces show from 1400px only. On a phone a 56px dog
+          sits in the heading's row instead, after the words, never beside
+          the paragraph or the email link (design.md's closed list of phone
+          art, 2026-10-11). */}
       <section className="relative flex flex-col gap-2">
         <Art
           name="pet-dog-sit"
           height={90}
           className="absolute top-0 left-full ml-10 hidden min-[1400px]:block"
         />
-        <h2 className="text-h2">Get in touch</h2>
+        <div className="flex items-end gap-3">
+          <h2 className="text-h2">Get in touch</h2>
+          <Art
+            name="pet-dog-sit"
+            height={56}
+            className="shrink-0 lg:hidden"
+          />
+        </div>
         <p className="text-body">
           Spotted a mistake, a missing source, or something that reads as
           slanted? Tell us. Corrections are the point. The same address works

@@ -167,7 +167,7 @@
      background lies under every heading, link and verdict that is not in a
      bg-surface box, and shows on phones, which design.md "Site illustration
      layer" rules out (art never under text or a control; below lg only the
-     dividers, the footer strip and the reminder envelope). To bring it back
+     closed list of phone art there, which has no page-wide texture). To bring it back
      it needs a wrapper that holds no text, at lg and up, or a design.md
      exception for a page-wide texture. */
   body {

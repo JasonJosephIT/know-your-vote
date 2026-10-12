@@ -48,7 +48,19 @@ import { SectionDivider } from "@/components/brand/SectionDivider";
    plus about 148px) makes a long or enlarged heading wrap before it reaches
    the figure, as page.tsx does for its House-race h2. Its fingers dip about 8px into the card, inside the first row's 12px
    top padding, clear of the row text. band-horizon behind the heading was
-   left out: a band under heading text risks the 4.5:1 contrast floor. */
+   left out: a band under heading text risks the 4.5:1 contrast floor.
+
+   Below lg a cat peeks over the same edge instead (pet-cat-peek, ledge
+   0.882; design.md's closed list of phone art, founder decision 3,
+   2026-10-11). The cat, not a smaller copy of the figure: on a phone his
+   face would be the largest on the home page and a second lone person at a
+   different size from the seated reader on the zigzag, and design.md asks
+   for equal size and attention. At 64px it is 88px wide at right-[12px],
+   and its head rises about 56px above the card, past the 12px gap and
+   beside the heading, so the h2 carries pr-[108px] on a phone (88 + 12 +
+   8px of air; px, like the figure). Below about 402px the heading wraps to
+   two lines and the cat's head stays at least 8px under the wave either
+   way. Its paws dip about 8px into the first row's 12px top padding. */
 export async function CoverageSummary({
   hasDistrict,
   addressEnabled,
@@ -80,7 +92,7 @@ export async function CoverageSummary({
   return (
     <section aria-labelledby="coverage" className="flex flex-col gap-3">
       <SectionDivider variant="wave" className="mb-3" />
-      <h2 id="coverage" className="text-h2 lg:mt-12 lg:pr-44">
+      <h2 id="coverage" className="text-h2 pr-[108px] lg:mt-12 lg:pr-44">
         What this guide covers
       </h2>
       <div className="relative">
@@ -89,6 +101,12 @@ export async function CoverageSummary({
           height={120}
           edge="top"
           className="right-4 hidden lg:block"
+        />
+        <LedgeArt
+          name="pet-cat-peek"
+          height={64}
+          edge="top"
+          className="right-[12px] lg:hidden"
         />
         <dl className="flex flex-col divide-y divide-border rounded-lg border border-border bg-surface">
           <Row term="Every Florida voter">
