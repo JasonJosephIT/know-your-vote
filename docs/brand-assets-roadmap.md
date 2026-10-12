@@ -156,8 +156,8 @@ sitting on the footer), its clear zone for live text and its size on the page.
 nurse, a lineworker, a boat captain, a teacher, a student, a chef and a runner with a blade prosthetic, all
 mid-stride to the right at one scale. They stroll left to right in one slow procession, each walking from its
 single still pose (a 4px step bob with a 1px dip, a ±0.6° sway about the feet, a ground ellipse that narrows as
-the body rises); every 5.12s the next one passes the sun. After one lap (40.96s of visible time) every walker
-has crossed once for the same time and the line rests on its opening still; a Play button runs another lap.
+the body rises); every 5.12s the next one passes the sun. It loops for as long as the page is open (founder,
+2026-10-11): each 40.96s lap every walker crosses once for the same time, and a Pause button stops it.
 The walker in the still is drawn at random per page view, so each leads equally often. Reduced motion shows the
 still only; below lg nothing loads. Sharp frames in `public/brand/site/rotator/` (`scripts/brand-assets/rotator.py`);
 the motion is CSS (`src/components/brand/HeroRotator.module.css`, numbers in `hero-walk.ts`, checked by
