@@ -21,6 +21,7 @@ Files:
 | Empty account-data fields for a reproducible demand export | [volume-export-template.csv](volume-export-template.csv) |
 | Thirty individual social/comedy video drafts with a recurring cast | [individual-video-sketches.md](individual-video-sketches.md) |
 | Current first-layer inventory: original 29 + five selected story executions, with format evaluation and links | [34-piece review](first-layer-34.md), [inventory CSV](first-layer-34.csv) |
+| Four-region public listening: Reddit, surveys, forums, voter-awareness gaps and implications for the 34 pieces | [Regional findings](regional-listening/README.md), [60-source ledger](regional-listening/sources.csv), [public platforms](regional-listening/platforms.md) |
 
 ## Google policy findings
 

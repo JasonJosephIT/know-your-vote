@@ -2,6 +2,8 @@
 
 Creative inventory and evaluation, 2026-10-13. This is the current 34-piece planning list. It preserves the original 29 and adds the selected five sketches as separate companion assets. It supersedes using the [30-sketch exploration](individual-video-sketches.md) as the final asset count; that exploration remains the script source for the selected five. No videos are yet rendered and no campaign settings have been changed.
 
+[Four-region public listening](regional-listening/README.md) now supplies evidence for regional situations and voter-awareness needs. It recommends stronger housing/growth and spending examples within existing pieces, without changing this inventory's IDs, count or creative decisions.
+
 ## The user's format direction
 
 Mixed media can mean footage plus animation/screen recordings/graphics, or multiple content forms inside a piece. Either can work. Neither is mandatory. A single reported explainer, direct product demonstration or skit can remain in one form when that best serves the idea. Continuity comes from the cast, visual identity, narrative viewpoint and repeated questions; it does not require the same editing format every time.
