@@ -32,8 +32,10 @@
         database error throws rather than reading as "no such token".
      7. ROUTE SOURCE. GET and POST only, both delegating, neither reading
         a body, redirecting or touching the database itself.
-     8. THE PRIVACY PAGE no longer says the link "works immediately" or is
-        "instant": one click, then the button, or the mail app's own.
+     8. THE PRIVACY PAGES no longer say the link "works immediately" or is
+        "instant": one click, then the button, or the mail app's own
+        (/privacy/how-it-works says so; /privacy that every email has the
+        link).
 
    What it cannot cover: the deployed route and the live table. That is
    docs/general-election/reminders-e2e-runbook.md, step 4e.
@@ -387,14 +389,24 @@ check(
 
 /* ---- 8. privacy page ---------------------------------------------------- */
 
-console.log("\n8. Privacy page");
-/* Comments stripped: the page's own note quotes the old wording. */
+console.log("\n8. Privacy pages");
+/* Comments stripped: the pages' own notes quote the old wording. Since
+   2026-10-13 /privacy says only that every email has an unsubscribe link,
+   and /privacy/how-it-works says how it works, so the old wording is barred
+   from both and the confirm step is pinned where it is explained. */
 const privacy = code("src/app/(public)/privacy/page.tsx").replace(/\s+/g, " ");
-check("no longer says the link \"works immediately\"", !/works immediately/.test(privacy));
-check("no longer calls it \"instant\"", !/instant unsubscribe/i.test(privacy));
+const howItWorks = code("src/app/(public)/privacy/how-it-works/page.tsx").replace(/\s+/g, " ");
+for (const [page, text] of [
+  ["/privacy", privacy],
+  ["/privacy/how-it-works", howItWorks],
+] as const) {
+  check(`${page} no longer says the link "works immediately"`, !/works immediately/.test(text));
+  check(`${page} no longer calls it "instant"`, !/instant unsubscribe/i.test(text));
+}
+check("/privacy says every email has an unsubscribe link", /every email has an unsubscribe link/.test(privacy));
 check(
-  "says it is one click on the link, one on the confirm button, or the mail app's own button",
-  /confirm button/.test(privacy) && /mail app(&apos;|')s own/.test(privacy)
+  "/privacy/how-it-works says it is one click on the link, one on the confirm button, or the mail app's own button",
+  /press the confirm button/.test(howItWorks) && /mail app(&apos;|&rsquo;|'|’)s own Unsubscribe/.test(howItWorks)
 );
 
 if (failures > 0) {

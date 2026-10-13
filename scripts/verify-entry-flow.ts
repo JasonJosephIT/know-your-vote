@@ -252,6 +252,7 @@ check(
     "src/components/features/LocationEntry.tsx",
     "src/components/features/DistrictChip.tsx",
     "src/app/(public)/privacy/page.tsx",
+    "src/app/(public)/privacy/how-it-works/page.tsx",
   ].filter((f) => /\bpick your district|Pick your district|Set your district/.test(code(f)));
   check("one verb for the district: choose", verbs.length === 0, verbs.join(", "));
 }
