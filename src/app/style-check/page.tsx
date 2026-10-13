@@ -42,7 +42,7 @@ export default function StyleCheck() {
       <section className="flex flex-col gap-3">
         <h2 className="text-h2">Text input</h2>
         <div className="max-w-[260px]">
-          <Input placeholder="Enter your ZIP code" />
+          <Input placeholder="Street and city, or street and ZIP" />
         </div>
       </section>
 

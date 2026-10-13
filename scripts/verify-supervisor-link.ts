@@ -1,20 +1,21 @@
-/* The split-ZIP prompt's "your county Supervisor of Elections" link
-   (DistrictConfirm in src/components/features/CountyPicker.tsx).
+/* The "Not sure? … your county Supervisor of Elections" link.
 
-   It went to https://www.fldoe.org, the Department of Education, for every
-   one of the 75 ZIPs that span more than one district. It now comes from
-   supervisorLink() (src/lib/supervisors.ts):
+   It began in the split-ZIP prompt (DistrictConfirm in CountyPicker.tsx),
+   where it went to https://www.fldoe.org, the Department of Education, for
+   every one of the 75 ZIPs that span more than one district. The prompt
+   went with the ZIP option (2026-10-12) and the line now sits under the
+   district picker in LocationEntry. It comes from supervisorLink()
+   (src/lib/supervisors.ts):
 
      1. Each covered county links its own Supervisor of Elections' site,
         named in the link text, and no two counties share one.
      2. An unknown, uncovered or missing county links the Division of
-        Elections' list of all 67 Supervisors, with the generic text.
-     3. No link anywhere in src points at fldoe.org, and DistrictConfirm
+        Elections' list of all 67 Supervisors, with the generic text. The
+        picker knows no county yet, so that is the link it shows.
+     3. No link anywhere in src points at fldoe.org, and the picker's line
         takes its href and text from supervisorLink(), not a literal.
 
-   What it cannot cover: that LocationEntry passes the split ZIP's county
-   in (it then falls back to the statewide list, which is still right), and
-   that the four sites stay up.
+   What it cannot cover: that the four sites stay up.
 
    Run: node scripts/verify-supervisor-link.ts */
 
@@ -109,15 +110,19 @@ check(
   fldoe.length === 0,
   fldoe.map((f) => path.relative(root, f)).join(", ")
 );
-const picker = readFileSync(path.join(root, "src/components/features/CountyPicker.tsx"), "utf8");
-const confirm = picker.slice(picker.indexOf("export function DistrictConfirm"));
+const entry = code(
+  readFileSync(path.join(root, "src/components/features/LocationEntry.tsx"), "utf8")
+);
+const at = entry.indexOf('id="district-picker-form"');
+const pickerPart = at >= 0 ? entry.slice(at) : "";
 check(
-  "DistrictConfirm takes the href and text from supervisorLink(countyFips)",
-  /const supervisor = supervisorLink\(countyFips\);/.test(confirm) &&
-    /href=\{supervisor\.url\}/.test(confirm) &&
-    /\{supervisor\.label\}/.test(confirm) &&
-    !/href="https?:/.test(confirm),
-  confirm.slice(0, 400)
+  "the picker's Not sure? line takes the href and text from supervisorLink()",
+  /const supervisor = supervisorLink\(\);/.test(entry) &&
+    /Not sure\?/.test(pickerPart) &&
+    /href=\{supervisor\.url\}/.test(pickerPart) &&
+    /\{supervisor\.label\}/.test(pickerPart) &&
+    !/href="https?:/.test(pickerPart),
+  pickerPart.slice(0, 400)
 );
 
 if (failures > 0) {

@@ -54,7 +54,7 @@ function unmatched(
 export async function POST(request: NextRequest) {
   if (!addressEntryEnabled()) {
     return NextResponse.json(
-      { error: "Address lookup is off — use your ZIP or choose your district." },
+      { error: "Address lookup is off — choose your district." },
       { status: 503 }
     );
   }
@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "We couldn't match that address to a district — try your ZIP or choose your district.",
+            "We couldn't match that address to a district — choose your district.",
         },
         { status: 502 }
       );

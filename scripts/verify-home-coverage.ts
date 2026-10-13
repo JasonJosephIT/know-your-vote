@@ -28,9 +28,12 @@
    3. The field's words follow what it takes. When address completion was
       off in production (2026-10-04 to 10-12), the home page still asked for
       an "address or ZIP" and the field's placeholder and label said "Your
-      address or ZIP code" whatever the flag. Pinned: the field copy follows
-      addressEntryEnabled() (ADDRESS_LOOKUP_OFF switches it to ZIP only), and
-      no surface hard-codes the address wording.
+      address or ZIP code" whatever the flag. Since 2026-10-12 (founder) the
+      field takes a street address and never a ZIP, and ADDRESS_LOOKUP_OFF
+      means no field at all, just the district picker. Pinned: the field
+      copy asks for an address (with its city or ZIP) and never for a ZIP
+      alone, the off copy names no ZIP, the home page has a picker-only
+      branch, and no surface hard-codes the address wording.
 
    Source checks read the files with comments stripped, so a comment quoting
    the old copy (several do, to say why it went) cannot pass or fail them.
@@ -42,7 +45,7 @@
 
    Run: node scripts/verify-home-coverage.ts */
 
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { decidedSeatOf } from "../src/lib/unopposed.ts";
 import {
@@ -321,25 +324,34 @@ for (const needle of [
   );
 }
 
-/* ---- 3. The field asks for a ZIP unless an address works -------------- */
+/* ---- 3. The field asks for an address, never a ZIP alone --------------- */
 
-const zipOnly = locationFieldCopy(false);
+const off = locationFieldCopy(false);
 const withAddress = locationFieldCopy(true);
 check(
-  "without a geocoder the field asks for a ZIP and nothing else",
-  zipOnly.noun === "ZIP" &&
-    !/address/i.test(zipOnly.label) &&
-    zipOnly.autoComplete === "postal-code",
-  JSON.stringify(zipOnly)
+  "with the switch off there is no field: the words are about the district and name no ZIP",
+  off.noun === "district" &&
+    !/zip|address/i.test(JSON.stringify(off)) &&
+    off.autoComplete === undefined,
+  JSON.stringify(off)
 );
 check(
   "with address lookup on, the field asks for an address and says what it needs",
-  /address/i.test(withAddress.noun) &&
-    /address/i.test(withAddress.label) &&
-    /city or ZIP/.test(withAddress.hint ?? "") &&
-    /* street-address autofills the street lines alone, which can't be
-       placed without a city or ZIP (review 2026-10-12). */
-    withAddress.autoComplete === "postal-code",
+  withAddress.noun === "address" &&
+    withAddress.label === "Your address" &&
+    /city or ZIP code/.test(withAddress.hint ?? "") &&
+    /* street-address: postal-code would autofill a bare ZIP, the one
+       answer the field refuses. */
+    withAddress.autoComplete === "street-address",
+  JSON.stringify(withAddress)
+);
+/* "city or ZIP code" in the hint is part of the address; "or ZIP" in the
+   noun, label or example offered a ZIP instead of one. */
+check(
+  "nothing in the field's words offers a ZIP alone",
+  ![withAddress.noun, withAddress.label, withAddress.example ?? ""].some((s) =>
+    /\bor ZIP\b/i.test(s)
+  ) && !/A ZIP works|just your|ZIP only|5-digit/i.test(JSON.stringify(withAddress)),
   JSON.stringify(withAddress)
 );
 
@@ -348,6 +360,16 @@ check(
   /Give us your \{field\.noun\}/.test(home) &&
     !/Give us your address/i.test(home) &&
     !/placeholder="Your address or ZIP code"/.test(home)
+);
+check(
+  "home page never asks for a ZIP",
+  !/Give us your ZIP|enter your ZIP|your 5-digit ZIP/i.test(home)
+);
+check(
+  "home page's House step has a picker-only branch for the kill switch",
+  /\{addressEnabled \? \( <p [^>]*> Your U\.S\. House race isn't in the list above[^<]*Give us your \{field\.noun\}[\s\S]*?\) : \( <p [^>]*> Your U\.S\. House race isn't in the list above, because it depends on where you live\. Choose your district below/.test(
+    home
+  )
 );
 check(
   "home page derives the field copy from addressEntryEnabled()",
@@ -367,14 +389,66 @@ check(
 );
 const entry = rendered("src/components/features/LocationEntry.tsx");
 check(
-  "LocationEntry's label and placeholder example follow the flag (ZIP only until hydrated)",
-  /const takesAddress = addressEnabled && hydrated;/.test(entry) &&
-    /locationFieldCopy\(takesAddress\)/.test(entry) &&
+  "LocationEntry's label and placeholder example follow the flag, the same words before and after hydration",
+  /const field = locationFieldCopy\(addressEnabled\);/.test(entry) &&
+    !/takesAddress/.test(entry) &&
     /\{field\.label\}/.test(entry) &&
     /placeholder=\{placeholder \?\? field\.example\}/.test(entry) &&
     /autoComplete=\{field\.autoComplete\}/.test(entry) &&
     !/Your address or ZIP code/.test(entry)
 );
+check(
+  "LocationEntry takes no ZIP: no ZIP name, keypad, pattern or /api/resolve call",
+  !/name="zip"/.test(entry) &&
+    !/inputMode=/.test(entry) &&
+    !/pattern=/.test(entry) &&
+    !/\/api\/resolve[?"`]/.test(entry) &&
+    !/resolveZipCode|zip_resolved|DistrictConfirm/.test(entry)
+);
+check(
+  "with the switch off there is no field, and the picker shows open with no toggle",
+  /\{addressEnabled && \( <form id="location-form"/.test(entry) &&
+    /useState\(!addressEnabled\)/.test(entry) &&
+    /\{addressEnabled && \( <button id="district-picker-toggle"/.test(entry)
+);
+check(
+  "LocationEntry's copy never offers a ZIP in place of an address",
+  !/enter just your|your 5-digit ZIP|Try your ZIP|or enter your ZIP|use your ZIP/i.test(entry)
+);
+
+/* Site-wide: no page, component or route asks for a ZIP to find a
+   location. "city or ZIP code" (part of an address) and the old-link and
+   storage sentences ("We can't place that ZIP", "never your address or
+   ZIP") don't ask for one. The reminder signup's ZIP field is out of scope
+   by founder decision (2026-10-12): it picks the county's dates for the
+   email, not a district, and the founder decides its future. */
+{
+  const REMINDER_SIGNUP = new Set([
+    "src/components/features/VotingInfo.tsx",
+    "src/components/features/ReminderSignupCta.tsx",
+    "src/app/api/voting-info/route.ts",
+  ]);
+  /* "Add your ZIP code to that address" asks for a ZIP inside the
+     address, so "add" is not one of the verbs. */
+  const ASKS_FOR_ZIP =
+    /\b(?:enter|type|give us|use|try)\s+(?:just\s+)?your\s+(?:5-digit\s+)?ZIP\b|Your address or ZIP code|"address or ZIP"|\bby ZIP\b|"Your ZIP code"|placeholder="(?:Enter\s+)?(?:your\s+)?ZIP|name="zip"|ZIP only/i;
+  const files: string[] = [];
+  (function walk(dir: string) {
+    for (const name of readdirSync(dir)) {
+      const p = join(dir, name);
+      if (statSync(p).isDirectory()) walk(p);
+      else if (/\.tsx?$/.test(name)) files.push(p);
+    }
+  })(join(ROOT, "src"));
+  const asking = files
+    .map((f) => f.slice(ROOT.length + 1))
+    .filter((f) => !REMINDER_SIGNUP.has(f) && ASKS_FOR_ZIP.test(rendered(f)));
+  check(
+    "no surface asks for a ZIP to find a location (reminder signup excepted)",
+    asking.length === 0,
+    asking.join(", ")
+  );
+}
 
 if (failures) {
   console.error(`\n${failures} home-coverage check(s) failed`);

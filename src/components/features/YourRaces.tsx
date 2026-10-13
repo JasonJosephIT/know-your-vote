@@ -143,13 +143,29 @@ export async function YourRaces({
   }
 
   if (result.needsCountyConfirm) {
-    /* A ZIP that crosses into a county we don't cover (uncovered-zip-parts.ts)
-       says so here too, for the visitor who reaches this server-rendered
-       answer without JavaScript or from a shared ?zip= link: each covered
-       district is a plain link (resolveZip accepts it as confirmed), and the
-       other side gets its House race and the statewide ballot, never a
-       district filed under the covered county. */
+    /* Only an old shared ?zip= link reaches this now: the field takes an
+       address, which lands in one district (2026-10-12). Each covered
+       district is a plain link carrying the district and county, never the
+       ZIP again: every split ZIP sits in one county, so resolveDistrict
+       gives the races resolveZip would. A ZIP that crosses into a county we
+       don't cover (uncovered-zip-parts.ts) says so, and the other side gets
+       its House race and the statewide ballot, never a district filed under
+       the covered county. */
     const part = result.uncoveredPart;
+    const districtLinks = result.countyFips && (
+      <ul className="flex flex-wrap gap-2">
+        {(result.candidateDistricts ?? []).map((d) => (
+          <li key={d}>
+            <Link
+              href={`/candidates?view=races&district=${d}&county=${result.countyFips}`}
+              className="block rounded-md border border-border-strong bg-surface px-4 py-3 text-label text-primary transition-colors hover:border-primary hover:bg-primary-muted hover:text-primary-hover"
+            >
+              {d}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    );
     return (
       <div className="flex flex-col gap-4">
         {part ? (
@@ -157,20 +173,9 @@ export async function YourRaces({
             <p className="text-body text-on-surface-muted">
               That ZIP is partly in {result.county} County and partly in{" "}
               {part.county} County. If you live in the {result.county} County
-              part, pick your congressional district:
+              part, choose your congressional district:
             </p>
-            <ul className="flex flex-wrap gap-2">
-              {(result.candidateDistricts ?? []).map((d) => (
-                <li key={d}>
-                  <Link
-                    href={`/candidates?view=races&zip=${zip}&district=${d}`}
-                    className="block rounded-md border border-border-strong bg-surface px-4 py-3 text-label text-primary transition-colors hover:border-primary hover:bg-primary-muted hover:text-primary-hover"
-                  >
-                    {d}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {districtLinks}
             <p className="text-body-sm text-on-surface-muted">
               In the {part.county} County part? Your U.S. House race is{" "}
               <Link
@@ -191,11 +196,16 @@ export async function YourRaces({
             </p>
           </>
         ) : (
-          <p className="text-body text-on-surface-muted">
-            That ZIP spans more than one congressional district (
-            {result.candidateDistricts?.join(", ")}). Re-enter it below and
-            we&rsquo;ll ask which district is yours:
-          </p>
+          <>
+            <p className="text-body text-on-surface-muted">
+              That ZIP spans more than one congressional district (
+              {result.candidateDistricts?.join(", ")}).{" "}
+              {addressEntryEnabled()
+                ? "Choose yours, or enter your street address below and we'll find it:"
+                : "Choose yours:"}
+            </p>
+            {districtLinks}
+          </>
         )}
         <LocationEntry
           addressEnabled={addressEntryEnabled()}
@@ -395,7 +405,11 @@ export async function YourRaces({
         result.races.length > 0 && (
         <p className="text-body-sm text-on-surface-muted">
           Showing statewide races. To add your U.S. House race, use Change
-          location above and enter your ZIP.
+          location above and{" "}
+          {addressEntryEnabled()
+            ? "enter your address or choose your district"
+            : "choose your district"}
+          .
         </p>
       )}
 
