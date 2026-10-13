@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Empty Race States</title>
+<style>
+:root {
+  --bg: #fbfaf7; --surface: #ffffff; --muted-bg: #f2f0ea; --text: #1d1b16; --muted: #5f5a4f;
+  --border: #dedad0; --accent: #1f5f8b; --gap: #a3361f; --gap-bg: #fbe9e4; --real: #3d6b35; --real-bg: #e7f1e3;
+  --warn-bg: #fff4d6; --warn: #7a5a00; --code-bg: #f4f2ec;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15140f; --surface: #1d1c17; --muted-bg: #26241d; --text: #ece8de; --muted: #a9a293;
+    --border: #3a372e; --accent: #7cb7e0; --gap: #f08a72; --gap-bg: #3a1f18; --real: #9fd18f; --real-bg: #1f2e1b;
+    --warn-bg: #3a3014; --warn: #e8c766; --code-bg: #24221c;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15140f; --surface: #1d1c17; --muted-bg: #26241d; --text: #ece8de; --muted: #a9a293;
+  --border: #3a372e; --accent: #7cb7e0; --gap: #f08a72; --gap-bg: #3a1f18; --real: #9fd18f; --real-bg: #1f2e1b;
+  --warn-bg: #3a3014; --warn: #e8c766; --code-bg: #24221c;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 1120px; margin: 0 auto; padding: 32px 16px 64px; }
+h1 { font-size: 30px; line-height: 1.2; margin: 0 0 6px; }
+h2 { font-size: 21px; margin: 40px 0 10px; padding-top: 8px; border-top: 1px solid var(--border); }
+h3 { font-size: 17px; margin: 22px 0 8px; }
+p, li { max-width: 78ch; }
+.sub { color: var(--muted); margin: 0 0 20px; }
+.quote { border-left: 3px solid var(--accent); padding: 4px 12px; color: var(--muted); font-style: italic; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 16px 0; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.card .n { font-size: 28px; font-weight: 700; line-height: 1.1; }
+.card .l { color: var(--muted); font-size: 14px; }
+.card.gap { border-color: var(--gap); background: var(--gap-bg); }
+.card.gap .n { color: var(--gap); }
+.card.ok .n { color: var(--real); }
+.scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { background: var(--muted-bg); font-weight: 600; position: sticky; top: 0; }
+tr:last-child td { border-bottom: 0; }
+td.z { color: var(--muted); }
+td.zero-real { background: var(--real-bg); color: var(--real); font-weight: 600; }
+td.zero-gap { background: var(--gap-bg); color: var(--gap); font-weight: 600; }
+tr.county td { font-weight: 600; background: var(--muted-bg); }
+.tag { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; }
+.tag.gap { background: var(--gap-bg); color: var(--gap); }
+.tag.real { background: var(--real-bg); color: var(--real); }
+.tag.warn { background: var(--warn-bg); color: var(--warn); }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px; color: var(--muted); margin: 8px 0; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font-size: 0.92em; }
+pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; overflow-x: auto; font-size: 13px; }
+.copy { display: grid; gap: 10px; }
+.copy blockquote { margin: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+.copy blockquote .old { text-decoration: line-through; color: var(--muted); display: block; margin-bottom: 6px; }
+.copy blockquote .new a { color: var(--accent); }
+details { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin: 10px 0; }
+summary { cursor: pointer; font-weight: 600; }
+.decide { background: var(--warn-bg); border: 1px solid var(--warn); border-radius: 10px; padding: 12px 16px; }
+.decide li { margin: 6px 0; }
+.diff { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 700px) { .diff { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Empty race states</h1>
+<p class="sub">Every covered location against the live database, 2026-10-12 (read 2026-10-13 01:30 UTC). Markdown twin: <code>docs/general-election/empty-races-2026-10-12.md</code></p>
+<p class="quote">"none of the races should be empty. There should be no 'No race yet'." (founder rule, 2026-10-12)</p>
+
+<div class="cards">
+  <div class="card ok"><div class="n">0</div><div class="l">covered locations that render an empty race state, live or in production</div></div>
+  <div class="card ok"><div class="n">22</div><div class="l">locations checked: 4 counties + 18 county×district pairs (+ FL-7/Orange fallback, statewide-only)</div></div>
+  <div class="card gap"><div class="n">8</div><div class="l">Miami-Dade settled seats missing (6 commission, 2 school board). Fixed in <code>0057</code>, not applied</div></div>
+  <div class="card"><div class="n">3</div><div class="l">"not yet / check back soon" messages replaced with what's true</div></div>
+</div>
+
+<h2>1. Location × race type</h2>
+<p>Read as <b>anon</b> (what a voter's browser sees: <code>listed</code> or <code>published</code>), replaying <code>resolve.ts</code>'s reads. Generated by <code>scripts/verify-no-empty-races.ts</code>. "Decided" means not printed in November and shown under "Already decided" / "Not on your ballot".</p>
+<div class="legend">
+  <span><span class="tag gap">gap</span> pipeline gap, fixed in 0057</span>
+  <span><span class="tag real">real</span> real absence, stated on the page</span>
+  <span>— not applicable (county-only view has no district)</span>
+</div>
+<div class="scroll">
+<table>
+<thead><tr><th>Location</th><th>Statewide</th><th>U.S. House</th><th>County commission</th><th>School board</th><th>Mayor</th><th>Clerk</th><th>Candidates</th></tr></thead>
+<tbody>
+<tr class="county"><td>Miami-Dade (county only)</td><td>5</td><td class="z">—</td><td class="zero-gap">2 (1 contested, 1 decided) → 8 after 0057</td><td class="zero-gap">3 (1 contested, 2 decided) → 5 after 0057</td><td class="z">0</td><td class="z">0</td><td>24 → 32</td></tr>
+<tr><td>Miami-Dade FL-24</td><td>5</td><td>1 (contested)</td><td class="zero-gap">2 → 8</td><td class="zero-gap">3 → 5</td><td class="z">0</td><td class="z">0</td><td>26 → 34</td></tr>
+<tr><td>Miami-Dade FL-25</td><td>5</td><td>1 (contested)</td><td class="zero-gap">2 → 8</td><td class="zero-gap">3 → 5</td><td class="z">0</td><td class="z">0</td><td>27 → 35</td></tr>
+<tr><td>Miami-Dade FL-26</td><td>5</td><td>1 (contested)</td><td class="zero-gap">2 → 8</td><td class="zero-gap">3 → 5</td><td class="z">0</td><td class="z">0</td><td>27 → 35</td></tr>
+<tr><td>Miami-Dade FL-27</td><td>5</td><td>1 (contested)</td><td class="zero-gap">2 → 8</td><td class="zero-gap">3 → 5</td><td class="z">0</td><td class="z">0</td><td>26 → 34</td></tr>
+<tr><td>Miami-Dade FL-28</td><td>5</td><td>1 (contested)</td><td class="zero-gap">2 → 8</td><td class="zero-gap">3 → 5</td><td class="z">0</td><td class="z">0</td><td>27 → 35</td></tr>
+<tr class="county"><td>Broward (county only)</td><td>5</td><td class="z">—</td><td class="zero-real">4 (0 contested, 4 decided)</td><td>5 (1 contested, 4 decided)</td><td class="z">0</td><td class="z">0</td><td>27</td></tr>
+<tr><td>Broward FL-20</td><td>5</td><td>1 (contested)</td><td class="zero-real">4 (0 contested)</td><td>5 (1 contested)</td><td class="z">0</td><td class="z">0</td><td>30</td></tr>
+<tr><td>Broward FL-22</td><td>5</td><td>1 (contested)</td><td class="zero-real">4 (0 contested)</td><td>5 (1 contested)</td><td class="z">0</td><td class="z">0</td><td>29</td></tr>
+<tr><td>Broward FL-24</td><td>5</td><td>1 (contested)</td><td class="zero-real">4 (0 contested)</td><td>5 (1 contested)</td><td class="z">0</td><td class="z">0</td><td>29</td></tr>
+<tr><td>Broward FL-25</td><td>5</td><td>1 (contested)</td><td class="zero-real">4 (0 contested)</td><td>5 (1 contested)</td><td class="z">0</td><td class="z">0</td><td>30</td></tr>
+<tr><td>Broward FL-26</td><td>5</td><td>1 (contested)</td><td class="zero-real">4 (0 contested)</td><td>5 (1 contested)</td><td class="z">0</td><td class="z">0</td><td>30</td></tr>
+<tr class="county"><td>Hillsborough (county only)</td><td>5</td><td class="z">—</td><td>4 (4 contested)</td><td>3 (2 contested, 1 decided)</td><td class="z">0</td><td class="z">0</td><td>30</td></tr>
+<tr><td>Hillsborough FL-12</td><td>5</td><td>1 (contested)</td><td>4 (4 contested)</td><td>3 (2 contested)</td><td class="z">0</td><td class="z">0</td><td>33</td></tr>
+<tr><td>Hillsborough FL-14</td><td>5</td><td>1 (contested)</td><td>4 (4 contested)</td><td>3 (2 contested)</td><td class="z">0</td><td class="z">0</td><td>33</td></tr>
+<tr><td>Hillsborough FL-15</td><td>5</td><td>1 (contested)</td><td>4 (4 contested)</td><td>3 (2 contested)</td><td class="z">0</td><td class="z">0</td><td>32</td></tr>
+<tr><td>Hillsborough FL-16</td><td>5</td><td>1 (contested)</td><td>4 (4 contested)</td><td>3 (2 contested)</td><td class="z">0</td><td class="z">0</td><td>33</td></tr>
+<tr class="county"><td>Orange (county only)</td><td>5</td><td class="z">—</td><td>5 (5 contested)</td><td>4 (1 contested, 3 decided)</td><td>1 (contested)</td><td>1 (contested)</td><td>36</td></tr>
+<tr><td>Orange FL-8</td><td>5</td><td>1 (contested)</td><td>5 (5 contested)</td><td>4 (1 contested)</td><td>1</td><td>1</td><td>38</td></tr>
+<tr><td>Orange FL-9</td><td>5</td><td>1 (contested)</td><td>5 (5 contested)</td><td>4 (1 contested)</td><td>1</td><td>1</td><td>38</td></tr>
+<tr><td>Orange FL-10</td><td>5</td><td class="zero-real">1 (0 contested, 1 decided)</td><td>5 (5 contested)</td><td>4 (1 contested)</td><td>1</td><td>1</td><td>37</td></tr>
+<tr><td>Orange FL-11</td><td>5</td><td>1 (contested)</td><td>5 (5 contested)</td><td>4 (1 contested)</td><td>1</td><td>1</td><td>39</td></tr>
+</tbody>
+</table>
+</div>
+<p>Also no zero: all <b>235 covered ZIPs</b> are in coverage and land on one of these pairs; the <b>statewide-only</b> answer (Florida address outside the 4 counties) shows the 5 statewide races; production pages for every pair, Orange FL-7, the 4 counties and <code>scope=statewide</code> render these counts with no "Check back soon".</p>
+
+<h2>2. Every zero, diagnosed</h2>
+<p>Gap or real (AGENTS.md; <code>news-fairness.md</code> §2)? Source check: each county's own 2026 candidate list on VoterFocus, read 2026-10-13 01:29 UTC, office by office against our rows.</p>
+<div class="scroll">
+<table>
+<thead><tr><th>Zero</th><th>Verdict</th><th>Source</th><th>What the voter sees</th></tr></thead>
+<tbody>
+<tr><td><b>Miami-Dade</b>: Commission 1, 4, 6, 8, 10, 12 and School Board 4, 6 absent</td><td><span class="tag gap">gap → 0057</span></td><td>VoterFocus: Gallon (CC1), Steinberg (CC4), Milian Orbis (CC6), Rodriguez (CC10), Bermudez (CC12), Alonso (SB4), Rojas (SB6) <i>Unopposed</i>; Cohen Higgins (CC8) <i>Elected</i>. School Board's member page: Districts 2, 4, 6, 8 terms end Nov. 2026</td><td>Today nothing for their seat; after 0057, each under "Already decided" with who and why</td></tr>
+<tr><td>Broward: 0 contested commission seats</td><td><span class="tag real">real</span></td><td>Bogen (2), Fisher (4), McKinzie (8) Unopposed; Sandler Shuham (6) Elected</td><td>"Already decided", one line per seat. Live</td></tr>
+<tr><td>Orange FL-10: 0 contested House races</td><td><span class="tag real">real</span></td><td>One candidate, unopposed; F.S. 101.151(7); not on Orange's composite sample ballot</td><td>"Not on your ballot"; home page <code>houseRaceNotOnBallot</code>. Live</td></tr>
+<tr><td>No mayor or clerk race outside Orange</td><td><span class="tag real">real</span></td><td>No such office on the other three counties' 2026 lists</td><td>No page has that slot, so nothing renders empty</td></tr>
+<tr><td>Orange FL-7 (address path only)</td><td><span class="tag real">real</span></td><td>0045: 4 unpopulated Orange blocks; no FL-7 contest on Orange's composite ballot</td><td>Orange county view (5 statewide + 11 county). Pinned by the new check</td></tr>
+</tbody>
+</table>
+</div>
+<details open>
+<summary>Root cause of the Miami-Dade gap</summary>
+<p><code>0032</code> loaded seats VoterFocus printed as <code>(Active-Unopposed)</code> / <code>(Active-Elected)</code>. These eight print as <code>(Inactive - Unopposed)</code> / <code>(Inactive - Elected)</code>: the winner closed the campaign account, which says nothing about the seat. Miami-Dade's three that 0032 did load (Bastien, Bendross-Mindingall, Colucci) were still Active; the other three counties had no Inactive winner in a covered office. <code>parseVoterFocus</code> (R2) reads the last status span, so the same read can't drop them again. Every other covered office on all four lists matches our rows.</p>
+</details>
+
+<h2>3. Every empty state in the code</h2>
+<div class="scroll">
+<table>
+<thead><tr><th>Surface</th><th>Branch</th><th>Reachable for a covered location?</th><th>Now</th></tr></thead>
+<tbody>
+<tr><td><code>YourRaces.tsx</code> ❄</td><td>nothing came back</td><td><span class="tag warn">failed read only</span> (county and statewide-only paths degrade to <code>[]</code>)</td><td><code>RACES_NOT_LOADED</code> + Supervisor link</td></tr>
+<tr><td><code>YourRaces.tsx</code> ❄</td><td>district's House race absent</td><td><span class="tag real">no</span> all 16 districts have one</td><td><code>houseRaceNotLoaded</code> + Supervisor link</td></tr>
+<tr><td><code>SharedBallot.tsx</code> ❄</td><td>no race, no measure</td><td><span class="tag warn">failed read only</span></td><td><code>BALLOT_NOT_LOADED</code> + state Supervisor list</td></tr>
+<tr><td><code>CountyRaces.tsx</code> ❄</td><td>no county race → renders nothing</td><td><span class="tag real">no</span> every county has county races</td><td>unchanged</td></tr>
+<tr><td><code>CountyRaces.tsx</code> ❄</td><td>no contested seat → stated caption</td><td>not today; a stated fact if it happens</td><td>unchanged</td></tr>
+<tr><td><code>BallotAtAGlance.tsx</code></td><td>all counts 0 → renders nothing</td><td><span class="tag warn">failed read only</span></td><td>unchanged</td></tr>
+<tr><td><code>CandidateBrowser.tsx</code> ❄</td><td>search matches nobody</td><td>typed search / area filter only</td><td>unchanged</td></tr>
+<tr><td><code>YourRaces.tsx</code> ❄</td><td>uncovered ZIP / other side of a split ZIP / FL address outside the 4 counties</td><td>not covered locations; the last two still show the statewide ballot</td><td>unchanged</td></tr>
+</tbody>
+</table>
+</div>
+<p style="font-size:13px;color:var(--muted)">❄ = in <code>FROZEN_FILES</code> (scripts/freeze-manifest.ts): code changes must merge by Fri 2026-10-16.</p>
+
+<h3>The copy, before and after</h3>
+<div class="copy">
+<blockquote><span class="old">Your races aren't published yet — we publish a race only after every candidate in it has been through the same checks. Check back soon.</span><span class="new">We couldn't load your races just now. That's a fault on our side, not an empty ballot: every Florida voter has statewide races on theirs. Try again in a minute, or get your sample ballot from <a href="https://www.votemiamidade.gov/">the Miami-Dade County Supervisor of Elections</a>.</span></blockquote>
+<blockquote><span class="old">We don't have the U.S. House race for FL-27 yet. The races above are the statewide ones every Florida voter shares — your district's race will appear here once it's published.</span><span class="new">The U.S. House race for FL-27 is missing from this list. That's a fault on our side, not your ballot. Get your full sample ballot from <a href="https://www.votemiamidade.gov/">the Miami-Dade County Supervisor of Elections</a>.</span></blockquote>
+<blockquote><span class="old">The ballot isn't published yet — we publish a race only after every candidate in it has been through the same checks. Check back soon.</span><span class="new">We couldn't load the statewide ballot just now. That's a fault on our side: every Florida ballot has statewide races and constitutional amendments. Try again in a minute, or get your sample ballot from <a href="https://dos.fl.gov/elections/contacts/supervisor-of-elections/">your county Supervisor of Elections</a>.</span></blockquote>
+</div>
+
+<h2>4. What changed</h2>
+<div class="diff">
+<div class="card">
+<h3 style="margin-top:0">Data: <code>0057_miami_dade_decided_seats.sql</code></h3>
+<p><span class="tag warn">not applied</span></p>
+<ul>
+<li>8 candidates (<code>NOP</code>, ids from VoterFocus <code>ca=</code>), 8 county races, a <code>draft</code> publication row each</li>
+<li>Incumbency the way 0049 read it: 7 sit on the body today; Gallon is a checked false (Gilbert holds District 1), so CC1 is open</li>
+<li>Asserts all 8 landed decided, and 0049's <code>incumbent_id</code>/<code>is_open_seat</code> rule holds for every Miami-Dade race</li>
+<li>Listing is a separate door call (no migration lists a race)</li>
+</ul>
+</div>
+<div class="card">
+<h3 style="margin-top:0">Code + checks</h3>
+<ul>
+<li><code>YourRaces.tsx</code>, <code>SharedBallot.tsx</code>: fault copy + Supervisor link</li>
+<li><code>coverage.ts</code>: the three sentences, <code>nothingLoaded</code></li>
+<li>New <code>verify-no-empty-races.ts</code>: offline copy/branch checks; live anon replay of every location (prints the table above)</li>
+<li><code>verify-ballot-seeds</code>, <code>verify-migrations</code>, <code>verify-coverage</code> follow 0057 and the new copy; <code>verify-all</code> labels a read-only partial run correctly</li>
+<li>Untouched: <code>LocationEntry.tsx</code>, <code>scope-copy.ts</code>, home components, <code>resolve.ts</code></li>
+</ul>
+</div>
+</div>
+
+<details>
+<summary>The listing call (after 0057, with the founder's yes)</summary>
+<pre>SELECT set_race_publication(race_id, 'listed', 'founder',
+  'Listed tier: decided Miami-Dade county seat from the VoterFocus list '
+  || '(read 2026-10-13), missed by 0032; roster only, no brief (0057)')
+  FROM race_publication
+ WHERE status = 'draft'
+   AND race_id IN ('FL-DAD-CC1-general', 'FL-DAD-CC4-general',
+                   'FL-DAD-CC6-general', 'FL-DAD-CC8-general',
+                   'FL-DAD-CC10-general', 'FL-DAD-CC12-general',
+                   'FL-DAD-SB4-general', 'FL-DAD-SB6-general');</pre>
+</details>
+
+<h2>5. Founder decisions</h2>
+<div class="decide">
+<ol>
+<li><b>Approve 0057 and apply it before Sun 2026-10-18 04:00 UTC</b>, then run the listing call. Inside the freeze it can only go in as a correction; the listing call passes either way.</li>
+<li><b>Merge the PR by Fri 2026-10-16</b>: it changes two frozen files.</li>
+<li>The fault copy names our side as the cause. To name no cause, edit the three sentences in <code>coverage.ts</code>.</li>
+</ol>
+</div>
+
+<h2>6. Follow-ups</h2>
+<ul>
+<li><b>Catch a missing office, not just a changed candidate.</b> R2 matches our roster against VoterFocus but never asks whether VoterFocus has a covered office with a live winner and no race row of ours. That question found this gap.</li>
+<li>The 0049 worksheet (<code>roster-completeness-2026-10.md</code>) doesn't carry the eight; their incumbency sources are in 0057.</li>
+<li>Hillsborough FL-16 (ZIP 33598) is still unconfirmed against an official Hillsborough ballot (0045's note); check it when the composite sample ballot is out.</li>
+</ul>
+</main>
+</body>
+</html>

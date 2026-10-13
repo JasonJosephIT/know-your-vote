@@ -15,8 +15,8 @@
         must not accuse itself of a gap.
      4. Empty string is not a district, and is not a district race.
      5. An empty race set reports missing on its own; the caller composes it
-        with `races.length > 0` so the "not published yet" copy keeps that
-        case. This pins the composition too, since dropping it is the silent
+        with `races.length > 0` so the nothing-loaded copy (RACES_NOT_LOADED)
+        keeps that case. This pins the composition too, since dropping it is the silent
         way to show two messages for one absence.
      6. County races (0031/0032, listed per county since 0033) stay out of
         `races`: their district is non-null, so one inside the list would
@@ -96,7 +96,7 @@ check(
 );
 
 // (5) An empty race set reports missing; the call site must compose it with a
-//     non-empty list so the "not published yet" copy is not doubled up.
+//     non-empty list so the nothing-loaded copy is not doubled up.
 check(
   "empty race set with a district reports missing on its own",
   districtRaceMissing("FL-9", []) === true
@@ -115,7 +115,7 @@ check(
 );
 check(
   "YourRaces names the district it is missing",
-  yourRaces.includes("{result.district}"),
+  yourRaces.includes("houseRaceNotLoaded(result.district"),
   "a gap notice that does not say which district is not actionable"
 );
 

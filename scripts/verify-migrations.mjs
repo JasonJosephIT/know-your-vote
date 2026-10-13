@@ -1890,6 +1890,26 @@ await probe0048(
    completeness-design.md §3.2, §6). Builds its own fixtures, so the earlier
    blocks' changes to r-pub and r-draft cannot move it; 22 (0050) follows. */
 const rosterFile = files.find((f) => f.endsWith("_roster_completeness.sql"));
+/* 0049's closing assertions describe the ballot as it stood on 2026-10-08
+   (49 county ballot candidates, 53 general races). A later migration that
+   grows the roster makes a RE-apply of 0049 count rows it never described,
+   so the checks below that re-apply it set those rows aside first, inside
+   their own transaction, and roll back. The forward replay above already
+   proved 0049 applies in order, before them. 0057 adds the eight Miami-Dade
+   seats 0032 missed (docs/general-election/empty-races-2026-10-12.md). */
+const LATER_ROSTER_RACES = [
+  "FL-DAD-CC1-general", "FL-DAD-CC4-general", "FL-DAD-CC6-general", "FL-DAD-CC8-general",
+  "FL-DAD-CC10-general", "FL-DAD-CC12-general", "FL-DAD-SB4-general", "FL-DAD-SB6-general",
+];
+const LATER_ROSTER_CANDIDATES = [
+  "FL-VF-DAD-2981", "FL-VF-DAD-2954", "FL-VF-DAD-2922", "FL-VF-DAD-2962",
+  "FL-VF-DAD-2972", "FL-VF-DAD-2955", "FL-VF-DAD-2956", "FL-VF-DAD-2914",
+];
+const setAsideLaterRoster = async () => {
+  await db.query("DELETE FROM race_publication WHERE race_id = ANY ($1);", [LATER_ROSTER_RACES]);
+  await db.query("DELETE FROM race WHERE race_id = ANY ($1);", [LATER_ROSTER_RACES]);
+  await db.query("DELETE FROM candidate WHERE candidate_id = ANY ($1);", [LATER_ROSTER_CANDIDATES]);
+};
 await check("0049 roster_completeness exists and sorts after 0047", async () => {
   if (!rosterFile) throw new Error("no *_roster_completeness.sql in supabase/migrations");
   if (!(rosterFile > "0047_candidate_lead_kind.sql")) throw new Error(`${rosterFile} sorts before 0047`);
@@ -1916,7 +1936,7 @@ await check("0049 adds the five candidate columns with their types", async () =>
     "running_mate:text,running_mate_source:text,running_mate_verified_at:timestamp with time zone";
   if (got !== want) throw new Error(`saw ${got}`);
 });
-await check("0049 gives all 49 seeded county ballot candidates an incumbency source and date", async () => {
+await check("every seeded county ballot candidate (0049's 49, 0057's 8) has an incumbency source and date", async () => {
   const r = await db.query(
     `SELECT count(*)::int AS n,
             count(*) FILTER (WHERE c.incumbency_source IS NOT NULL
@@ -1926,7 +1946,7 @@ await check("0049 gives all 49 seeded county ballot candidates an incumbency sou
       WHERE r.level = 'county' AND c.ballot_status = 'ballot';`
   );
   const { n, sourced } = r.rows[0];
-  if (n !== 49 || sourced !== 49) throw new Error(`${sourced} of ${n} county ballot candidates sourced, expected 49 of 49`);
+  if (n !== 57 || sourced !== 57) throw new Error(`${sourced} of ${n} county ballot candidates sourced, expected 57 of 57`);
 });
 await check("0049 county races: is_open_seat = (incumbent_id IS NULL), and FL-HIL-SB4-general names Rendon", async () => {
   const r = await db.query(
@@ -1943,7 +1963,13 @@ await check("0049 county races: is_open_seat = (incumbent_id IS NULL), and FL-HI
 await check("0049 re-applies cleanly and notes that the DoE roster is absent offline", async () => {
   const notices = [];
   const sql = await readFile(path.join(migrationsDir, rosterFile), "utf8");
-  await db.exec(sql, { onNotice: (n) => notices.push(n.message) });
+  await db.exec("BEGIN;");
+  try {
+    await setAsideLaterRoster();
+    await db.exec(sql, { onNotice: (n) => notices.push(n.message) });
+  } finally {
+    await db.exec("ROLLBACK;");
+  }
   if (!notices.some((m) => /DoE roster absent/.test(m))) {
     throw new Error(`no DoE-absent notice; saw ${JSON.stringify(notices)}`);
   }
@@ -2101,6 +2127,7 @@ await check("0049 whole-ballot assertions pass on a replica of the 2026-10-08 ba
   const notices = [];
   await db.exec("BEGIN;");
   try {
+    await setAsideLaterRoster();
     await db.exec("UPDATE race SET election = 'primary' WHERE race_id NOT LIKE 'FL-%';");
     const doe = roster.filter((r) => r.level !== "county");
     for (const r of doe) {
@@ -2156,6 +2183,7 @@ await check("0049 site UPDATE writes a listed-race find and refuses a published-
   let got;
   await db.exec("BEGIN;");
   try {
+    await setAsideLaterRoster();
     await db.exec(`
       INSERT INTO race_publication (race_id, status, published_at) VALUES
         ('FL-BRO-CC2-general', 'listed', NULL),

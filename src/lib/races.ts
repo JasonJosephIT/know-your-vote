@@ -104,9 +104,9 @@ async function fetchStatewideRaces(): Promise<StatewideRace[]> {
   /* Degrades rather than throws (§0.7). This read sits on the landing page,
      which is the one surface that must never show an error: an unreachable
      database costs a voter the shared ballot, and throwing would cost them
-     the page. The empty result renders the "not published yet" copy, which is
-     indistinguishable from an outage here — an honest limit of degrading, and
-     the better of the two failures. */
+     the page. The empty result renders SharedBallot's "couldn't load" copy
+     (BALLOT_NOT_LOADED, coverage.ts): with the whole roster listed, nothing
+     at all can only be an outage. */
   if (error) return [];
 
   /* One query for every race's candidates rather than one per race. A

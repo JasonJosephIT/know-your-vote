@@ -343,9 +343,13 @@ function verifyScripts() {
     if (flag("--live") && !source.includes("NEXT_PUBLIC_SUPABASE_URL"))
       continue;
     const heavy = source.includes("@electric-sql/pglite");
-    tasks.push({ name, args: [], heavy });
+    /* Only a script that names the key can be one whose live probes write;
+       a read-only one (verify-no-empty-races.ts) skipped its live half
+       because the anon env is missing, and the summary must say that. */
+    const writes = source.includes(WRITE_KEY);
+    tasks.push({ name, args: [], heavy, writes });
     if (flag("--live")) continue;
-    for (const args of VARIANTS[name] ?? []) tasks.push({ name, args, heavy });
+    for (const args of VARIANTS[name] ?? []) tasks.push({ name, args, heavy, writes });
   }
   return tasks;
 }
@@ -368,7 +372,7 @@ function classify(task, result) {
       ? {
           ...base,
           status: "PASS",
-          partial: allowWrites
+          partial: allowWrites || !task.writes
             ? "offline checks only; live probes need env"
             : `offline checks only; its live probes write and need ${WRITE_KEY}, which verify-all withholds`,
         }
