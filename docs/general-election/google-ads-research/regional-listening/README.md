@@ -104,7 +104,7 @@ Some threads explicitly advocate candidates or yes/no outcomes. Preserve that co
 
 [Florida's indexed price-gouging FAQ](https://www.myfloridalegal.com/price-gouging-hotline/price-gouging-frequently-asked-questions) distinguishes covered emergency circumstances from ordinary high prices. Fuel-measurement inspections are a different question again. Neither a complaint nor an expensive purchase proves fraud or unlawful gouging.
 
-The celebrity-politician angle remains in **26 and 30**. Scams remain in **29**, with narrower factual framing. Housing, growth, spending accountability and public-service delivery deserve more prominence within 17/18/23. The 34-piece inventory and its Keep/Rework/Hold decisions remain unchanged pending storyboards.
+The celebrity-politician angle remains in **26 and 30**. Scams remain in **29**, with narrower factual framing. The user subsequently authorized these recommendations: housing/growth and spending now have concrete scenes in 17/18/23, with further revisions to 06/28/29. See the [re-ranked 34 and top 10](../ranked-34.md) and updated inventory; revised treatments replace the earlier Rework labels. This research memo records the evidence, not performance validation.
 
 Continuity can run from “I know the famous name” → “who handles this?” → “show the source” → “check my county.” Each video still needs its own complete payoff. Switch between skit, news-style explanation, reel and screen capture when it clarifies the task or joke. No retention benefit or guaranteed paid-ad sequence is established by this research.
 
