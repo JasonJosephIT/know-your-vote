@@ -658,9 +658,17 @@ check(
   !/nextUrl\.origin|request\.url|\borigin\b/.test(routeCode) &&
     /unsubscribeUrl\(unsubscribeToken\)/.test(stripComments(cohort))
 );
+/* The rehearsal's lookup moved to src/lib/notifications/rehearsal.ts,
+   shared with send-reminders, so the address travels in a request body
+   (scripts/verify-request-urls.ts checks its calls); the active-only
+   condition is pinned there, in both its paths. */
+const rehearsalCode = stripComments(source("src/lib/notifications/rehearsal.ts"));
 check(
   'the rehearsal: an active subscription only, "[Rehearsal]" subject, synthetic rehearsal: key, released on failure',
-  /\.eq\("active", true\)[\s\S]{0,40}\.limit\(1\)/.test(routeCode) &&
+  /sub = await rehearsalSubscription\(service, to\);/.test(routeCode) &&
+    !/\.from\("voting_info_subscription"\)/.test(routeCode.slice(at(/async function rehearse\(/))) &&
+    /\.eq\("active", true\)[\s\S]{0,60}\.limit\(1\)/.test(rehearsalCode) &&
+    /AND s\.active\s+ORDER BY s\.unsubscribe_token\s+LIMIT 1;/.test(source("supabase/migrations/0058_subscription_lookups.sql")) &&
     /`\[Rehearsal\] \$\{/.test(routeCode) &&
     /`rehearsal:\$\{dedupeKey\}:/.test(routeCode) &&
     /\.delete\(\)\.eq\("dedupe_key", rehearsalKey\)/.test(routeCode)

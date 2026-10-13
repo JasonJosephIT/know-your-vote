@@ -152,14 +152,15 @@ const sendLog = await all<SendLogRow>("notification_send_log", (f, t) =>
 const subscriptions = await all<SubscriptionRow>("voting_info_subscription", (f, t) =>
   db.from("voting_info_subscription").select("zip5, consent_at").eq("active", true).order("unsubscribe_token").range(f, t),
 );
+/* zip_district whole, not just the subscribers' ZIPs: .in("zip5", ...)
+   put every subscriber's ZIP in a Supabase request URL, and the API
+   gateway logs those (src/lib/resolve.ts zipDistrictRows, which the site
+   reads the same way). It is a few hundred rows. */
 const zipCounty = new Map<string, string>();
-const zips = [...new Set(subscriptions.map((s) => s.zip5))];
-for (let i = 0; i < zips.length; i += 200) {
-  const rows = await all<{ zip5: string; county_fips: string }>("zip_district", (f, t) =>
-    db.from("zip_district").select("zip5, county_fips").in("zip5", zips.slice(i, i + 200)).order("zip5").range(f, t),
-  );
-  for (const r of rows) zipCounty.set(r.zip5, r.county_fips);
-}
+const zipRows = await all<{ zip5: string; county_fips: string }>("zip_district", (f, t) =>
+  db.from("zip_district").select("zip5, county_fips").order("zip5").order("congressional_district").range(f, t),
+);
+for (const r of zipRows) zipCounty.set(r.zip5, r.county_fips);
 const contact = await db.from("candidate_contact").select("candidate_id", { count: "exact", head: true });
 if (contact.error || contact.count === null) die(1, `could not read candidate_contact: ${contact.error?.message ?? "no count"}`);
 

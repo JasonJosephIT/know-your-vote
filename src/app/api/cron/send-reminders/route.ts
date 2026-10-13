@@ -23,6 +23,10 @@ import {
   eventsForCounty,
   nextReminder,
 } from "@/lib/notifications/schedule";
+import {
+  rehearsalSubscription,
+  type RehearsalSubscription,
+} from "@/lib/notifications/rehearsal";
 import { reminderParams, renderTemplate } from "@/lib/notifications/templates";
 import { secretEquals } from "@/lib/secret-compare";
 import { resendApiKey } from "@/lib/server-keys";
@@ -129,7 +133,8 @@ async function run(request: NextRequest) {
      Only for a POST whose JSON body names an address. Vercel Cron sends a
      bare GET, so the scheduled run cannot enter this branch. To remove the
      mode, delete this block and the rehearsalRequest() and rehearse()
-     functions below. */
+     functions below (src/lib/notifications/rehearsal.ts, which looks the
+     address up, is shared with send-correction's rehearsal). */
   const rehearsal = await rehearsalRequest(request);
   if (rehearsal && "invalid" in rehearsal) {
     return NextResponse.json({ error: rehearsal.invalid }, { status: 400 });
@@ -366,21 +371,18 @@ async function rehearse(
   today: string,
   to: string
 ) {
-  /* Signups are stored lower-cased; the exact spelling is tried too, for
-     any row saved before that. */
-  const { data: subs, error: subError } = await service
-    .from("voting_info_subscription")
-    .select("email, unsubscribe_token, zip5")
-    .in("email", [...new Set([to, to.toLowerCase()])])
-    .eq("active", true)
-    .limit(1);
-  if (subError) {
+  /* The address goes to the database in a request body, never a URL
+     (rehearsalSubscription; it also tries the exact spelling, for rows
+     saved before signups were lower-cased). */
+  let sub: RehearsalSubscription | null;
+  try {
+    sub = await rehearsalSubscription(service, to);
+  } catch {
     return NextResponse.json(
       { error: "Subscription lookup failed — nothing was sent." },
       { status: 502 }
     );
   }
-  const sub = subs?.[0];
   if (!sub) {
     return NextResponse.json(
       {
@@ -396,7 +398,7 @@ async function rehearse(
      the scheduled run gives them. */
   let county: string | null;
   try {
-    county = (await zipCounties(service, [sub.zip5])).get(sub.zip5) ?? null;
+    county = (await zipCounties()).get(sub.zip5) ?? null;
   } catch {
     return NextResponse.json(
       { error: "ZIP lookup failed — nothing was sent." },
