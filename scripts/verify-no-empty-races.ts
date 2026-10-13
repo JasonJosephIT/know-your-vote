@@ -9,11 +9,14 @@
         "aren't published yet", "isn't published yet", "no race(s) yet",
         "We don't have the U.S. House race". Comments are stripped first, so
         a comment may still quote the old copy to explain why it went.
-     2. The two empty branches render the fault copy from coverage.ts:
-        YourRaces's nothing-loaded branch RACES_NOT_LOADED, its House-race
-        notice houseRaceNotLoaded, SharedBallot's BALLOT_NOT_LOADED. Each
-        sentence names no wait and ends on "from", where the page links the
-        voter's Supervisor of Elections.
+     2. The empty branches render the fault copy from coverage.ts:
+        YourRaces's no-statewide-race branch RACES_NOT_LOADED (nothing
+        loaded) or STATEWIDE_NOT_LOADED (county races did), its House-race
+        notice houseRaceNotLoaded, SharedBallot's BALLOT_NOT_LOADED (nothing)
+        or STATEWIDE_NOT_LOADED (questions only). Each sentence names no
+        wait, never says "try again" (a failed statewide read is cached for
+        up to an hour), and ends on "from", where the page links the voter's
+        Supervisor of Elections.
      3. nothingLoaded, the predicate for YourRaces's empty branch, on
         fixtures: county races alone keep the page from being empty.
 
@@ -49,6 +52,7 @@ import {
   houseRaceNotLoaded,
   nothingLoaded,
   RACES_NOT_LOADED,
+  STATEWIDE_NOT_LOADED,
 } from "../src/lib/coverage.ts";
 import { COVERED_COUNTIES } from "../src/lib/counties.ts";
 import { ACTIVE_ELECTION_KIND } from "../src/lib/election.ts";
@@ -108,9 +112,15 @@ const sentences = [
   ["RACES_NOT_LOADED", RACES_NOT_LOADED],
   ["houseRaceNotLoaded", houseRaceNotLoaded("FL-27")],
   ["BALLOT_NOT_LOADED", BALLOT_NOT_LOADED],
+  ["STATEWIDE_NOT_LOADED", STATEWIDE_NOT_LOADED],
 ] as const;
 for (const [name, s] of sentences) {
   check(`${name} promises no wait (no "yet", no "check back")`, !/\byet\b|check back/i.test(s), s);
+  check(
+    `${name} never says "try again" (getStatewideRaces caches a failed read for up to an hour)`,
+    !/try again|reload|refresh/i.test(s),
+    s
+  );
   check(`${name} says the fault is ours`, /fault on our side/.test(s), s);
   check(`${name} ends on "from", where the Supervisor link goes`, / from$/.test(s), s);
 }
@@ -122,12 +132,8 @@ check(
 console.log("offline: the branches");
 const yourRaces = code("src/components/features/YourRaces.tsx").replace(/\s+/g, " ");
 check(
-  "YourRaces's empty branch is nothingLoaded(result.races, result.countyRaces)",
-  /nothingLoaded\(result\.races, result\.countyRaces\)/.test(yourRaces)
-);
-check(
-  "YourRaces's empty branch renders RACES_NOT_LOADED and a Supervisor link",
-  /nothingLoaded\([^)]*\) && \( <p[^>]*> \{RACES_NOT_LOADED\}\{" "\} <a href=\{supervisor\.url\}/.test(
+  "YourRaces's no-statewide-race branch renders RACES_NOT_LOADED or STATEWIDE_NOT_LOADED, by nothingLoaded, and a Supervisor link",
+  /\{result\.races\.length === 0 \? \( <p[^>]*> \{nothingLoaded\(result\.races, result\.countyRaces\) \? RACES_NOT_LOADED : STATEWIDE_NOT_LOADED\}\{" "\} <a href=\{supervisor\.url\}/.test(
     yourRaces
   )
 );
@@ -143,8 +149,18 @@ check(
 );
 const shared = code("src/components/features/SharedBallot.tsx").replace(/\s+/g, " ");
 check(
+  "SharedBallot links the state's list of Supervisors",
+  /const supervisor = supervisorLink\(\);/.test(shared)
+);
+check(
   "SharedBallot's empty branch renders BALLOT_NOT_LOADED and a Supervisor link",
-  /races\.length === 0 && measures\.length === 0\) \{ const supervisor = supervisorLink\(\); return \( <p[^>]*> \{BALLOT_NOT_LOADED\}\{" "\} <a href=\{supervisor\.url\}/.test(
+  /races\.length === 0 && measures\.length === 0\) \{ return \( <p[^>]*> \{BALLOT_NOT_LOADED\}\{" "\} <a href=\{supervisor\.url\}/.test(
+    shared
+  )
+);
+check(
+  "SharedBallot says the statewide races are missing when only the questions loaded",
+  /\{races\.length === 0 && \( <p[^>]*> \{STATEWIDE_NOT_LOADED\}\{" "\} <a href=\{supervisor\.url\}/.test(
     shared
   )
 );

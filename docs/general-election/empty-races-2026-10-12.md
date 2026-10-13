@@ -23,9 +23,9 @@ full sample ballot is.
 
 | Surface | Branch | Old copy | Reachable for a covered location? | Now |
 |---|---|---|---|---|
-| `YourRaces.tsx` | nothing came back (`races` and `countyRaces` both empty) | "Your races aren't published yet — we publish a race only after every candidate in it has been through the same checks. Check back soon." | **Only on a failed read.** `resolveCounty` and the statewide-only path read through `getStatewideRaces` and `racesForCounty`, which return `[]` on error rather than throw | `RACES_NOT_LOADED` + a link to the county Supervisor of Elections |
+| `YourRaces.tsx` | no statewide race came back | "Your races aren't published yet — we publish a race only after every candidate in it has been through the same checks. Check back soon." (shown only when county races were empty too; with county races, nothing was said) | **Only on a failed read.** `resolveCounty` and the statewide-only path read through `getStatewideRaces` and `racesForCounty`, which return `[]` on error rather than throw | `RACES_NOT_LOADED` (nothing loaded) or `STATEWIDE_NOT_LOADED` (county races did) + a link to the county Supervisor of Elections |
 | `YourRaces.tsx` | district resolved, its House race absent | "We don't have the U.S. House race for FL-X yet … will appear here once it's published." | **No.** All 16 covered districts have a readable House race (FL-10 as decided) | `houseRaceNotLoaded(district)` + Supervisor link |
-| `SharedBallot.tsx` (home) | no statewide race and no measure | "The ballot isn't published yet — … Check back soon." | **Only on a failed read** (both reads degrade to `[]`) | `BALLOT_NOT_LOADED` + the state's list of Supervisors |
+| `SharedBallot.tsx` (home) | no statewide race (and no measure) | "The ballot isn't published yet — … Check back soon." (with measures, nothing was said) | **Only on a failed read** (both reads degrade to `[]`) | `BALLOT_NOT_LOADED` (nothing loaded) or `STATEWIDE_NOT_LOADED` (questions did) + the state's list of Supervisors |
 | `CountyRaces.tsx` | `races.length === 0` | renders nothing | **No.** Every covered county has county races | unchanged |
 | `CountyRaces.tsx` | no contested seat in the county | "None of X County's seats this year are contested …" | Not today (each county has at least one contested seat); a stated fact if it happens | unchanged |
 | `BallotAtAGlance.tsx` | every count is 0 | renders nothing | Only on a failed read | unchanged |
@@ -38,15 +38,24 @@ and script imports):
 
 - `RACES_NOT_LOADED`: "We couldn't load your races just now. That's a fault on
   our side, not an empty ballot: every Florida voter has statewide races on
-  theirs. Try again in a minute, or get your sample ballot from *the
-  Miami-Dade County Supervisor of Elections*."
+  theirs. Get your sample ballot from *the Miami-Dade County Supervisor of
+  Elections*."
 - `houseRaceNotLoaded("FL-27")`: "The U.S. House race for FL-27 is missing
   from this list. That's a fault on our side, not your ballot. Get your full
   sample ballot from *the Miami-Dade County Supervisor of Elections*."
 - `BALLOT_NOT_LOADED`: "We couldn't load the statewide ballot just now.
   That's a fault on our side: every Florida ballot has statewide races and
-  constitutional amendments. Try again in a minute, or get your sample ballot
-  from *your county Supervisor of Elections*."
+  constitutional amendments. Get your sample ballot from *your county
+  Supervisor of Elections*."
+- `STATEWIDE_NOT_LOADED`, when the county races (races view) or the ballot
+  questions (home page) loaded and the statewide races did not: "We couldn't
+  load the statewide races just now. That's a fault on our side, not your
+  ballot: every Florida voter has statewide races on theirs. Get your full
+  sample ballot from *…*."
+
+None says "try again in a minute": `getStatewideRaces` caches a failed read
+as `[]` for up to an hour (`races.ts`), so a reload would not bring the races
+back. The Supervisor link is the way out.
 
 ## 2. Every covered location × race type (live, 2026-10-13 01:30 UTC)
 
@@ -109,7 +118,7 @@ all four counties, compared office by office with our rows.
 | Zero | Gap or real | Source | What the voter sees |
 |---|---|---|---|
 | **Miami-Dade: 6 commission seats (Districts 1, 4, 6, 8, 10, 12) and 2 school board seats (Districts 4, 6) absent** | **Pipeline gap — fixed in `0057`** | VoterFocus lists all eight as settled: Gallon (CC1), Steinberg (CC4), Milian Orbis (CC6), Rodriguez (CC10), Bermudez (CC12), Alonso (SB4) and Rojas (SB6) Unopposed; Cohen Higgins (CC8) Elected. The School Board's member page shows Districts 2, 4, 6 and 8 with terms ending Nov. 2026, which is exactly this year's regular seats | Today: nothing for their seat. After `0057`: each seat under "Already decided", naming who takes it and why |
-| Broward: 0 contested commission seats | Real | VoterFocus: District 2 Bogen, 4 Fisher, 8 McKinzie Unopposed; 6 Sandler Shuham Elected (beat five filers) | "Already decided", one line per seat, with the reason. Already live |
+| Broward: 0 contested commission seats | Real | VoterFocus: District 2 Bogen, 4 Fisher, 8 McKinzie Unopposed; 6 Sandler Shuham Elected (beat three opponents in the August primary; two other filers withdrew) | "Already decided", one line per seat, with the reason. Already live |
 | Orange FL-10: 0 contested House races | Real | One qualified candidate, unopposed; F.S. 101.151(7) keeps it off the ballot (Orange's composite sample ballot has no FL-10 contest) | "Not on your ballot" in the races view; `houseRaceNotOnBallot` on the home page. Already live |
 | No county mayor or clerk race in Miami-Dade, Broward or Hillsborough | Real | No mayor or clerk office on any of the three counties' 2026 VoterFocus lists | Nothing to state: no page has a mayor or clerk slot outside Orange, so nothing renders empty |
 | Orange FL-7 (address path only) | Real | 0045: the plan puts 4 Orange blocks (about 2.5 ha) in FL-7 and Orange's composite sample ballot has no FL-7 contest, so no Orange voter votes in it | `resolveDistrict` shows the Orange county view (5 statewide + 11 county races). Pinned by the verify script: a pair the block table places voters in but the ZIP table does not offer must be a retired pair |
@@ -164,18 +173,21 @@ only go in as a correction. The listing call passes inside the window too
 
 **Code** (frozen files, so the PR must merge by **Fri 2026-10-16**):
 
-- `YourRaces.tsx` (frozen): the nothing-loaded branch and the missing-House
-  notice say what is true, with a link to the voter's Supervisor of Elections.
-- `SharedBallot.tsx` (frozen): the same for the home page's shared ballot.
+- `YourRaces.tsx` (frozen): the no-statewide-race branch and the
+  missing-House notice say what is true, with a link to the voter's
+  Supervisor of Elections. Only those branches and their imports changed,
+  so it merges cleanly with the address-only work (#175).
+- `SharedBallot.tsx` (frozen): the same for the home page's shared ballot,
+  including when only the ballot questions loaded.
 - `races.ts` (frozen): a comment that described the old copy.
-- `coverage.ts` (not frozen): the three sentences and `nothingLoaded`.
+- `coverage.ts` (not frozen): the four sentences and `nothingLoaded`.
 - Not touched: `LocationEntry.tsx`, `scope-copy.ts`, the home page components,
   `resolve.ts`, `CountyRaces.tsx`, `RaceListing.tsx`.
 
 **Checks.**
 
 - New `scripts/verify-no-empty-races.ts`. Offline: no races surface says a
-  race is still coming; both empty branches render the fault copy with the
+  race is still coming; the empty branches render the fault copy with the
   Supervisor link; `nothingLoaded` on fixtures. Live (anon key only, read
   only; skipped without the env): every covered county and county+district
   pair has statewide races, its House race and county races, every readable
@@ -197,7 +209,7 @@ only go in as a correction. The listing call passes inside the window too
    renders empty; the seats just aren't there).
 2. **Merge the PR by Fri 2026-10-16**: it changes two frozen files.
 3. The fault copy names our side as the cause. If you'd rather it name no
-   cause at all, the three sentences are in one place (`coverage.ts`).
+   cause at all, the four sentences are in one place (`coverage.ts`).
 
 ## 6. Follow-ups (not done here)
 

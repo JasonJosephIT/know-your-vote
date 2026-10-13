@@ -11,6 +11,7 @@ import {
   nothingLoaded,
   RACES_NOT_LOADED,
   STATEWIDE_BALLOT_HREF,
+  STATEWIDE_NOT_LOADED,
 } from "@/lib/coverage";
 import { supervisorLink } from "@/lib/supervisors";
 import { coveredCountyNames } from "@/lib/counties";
@@ -280,30 +281,31 @@ export async function YourRaces({
         </Link>
       </p>
 
-      {/* Nothing came back at all. Every covered location has races
+      {/* No statewide race came back. Every covered location has races
           (scripts/verify-no-empty-races.ts checks the live roster for each
           one), so this is a failed read, never a fact about the voter's
           ballot, and it says so instead of "not published yet ... check
-          back soon" (founder rule 2026-10-12; coverage.ts). If county races
-          did come back, the list below is what the voter gets. */}
+          back soon" (founder rule 2026-10-12; coverage.ts): RACES_NOT_LOADED
+          when nothing loaded at all, STATEWIDE_NOT_LOADED when the county
+          races below did. */}
       {result.races.length === 0 ? (
-        nothingLoaded(result.races, result.countyRaces) && (
-          <p
-            role="status"
-            className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
+        <p
+          role="status"
+          className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
+        >
+          {nothingLoaded(result.races, result.countyRaces)
+            ? RACES_NOT_LOADED
+            : STATEWIDE_NOT_LOADED}{" "}
+          <a
+            href={supervisor.url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-primary underline underline-offset-2 hover:text-primary-hover"
           >
-            {RACES_NOT_LOADED}{" "}
-            <a
-              href={supervisor.url}
-              target="_blank"
-              rel="noreferrer"
-              className="text-primary underline underline-offset-2 hover:text-primary-hover"
-            >
-              {supervisor.label}
-            </a>
-            .
-          </p>
-        )
+            {supervisor.label}
+          </a>
+          .
+        </p>
       ) : (
         printed.length > 0 && (
           <LinkRowList>

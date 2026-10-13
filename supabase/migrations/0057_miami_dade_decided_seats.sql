@@ -90,6 +90,13 @@
 -- TO REVERSE: if listed, back to draft through the door
 --   (set_race_publication(race_id, 'draft', '<actor>', '<why>')), then DELETE
 --   the eight race_publication, race and candidate rows, in that order.
+--   Before those DELETEs, remove or re-point every row that references one
+--   of the eight candidates or races (news_item, candidate_contact, claim,
+--   position, profile, issue), or the foreign keys refuse them. Between
+--   2026-10-18 04:00 UTC and 2026-11-04 05:00 UTC (0050's window) the whole
+--   reversal is a freeze correction: one transaction that starts with
+--   SET LOCAL kyv.freeze_correction = '<correction file>', with the note in
+--   docs/general-election/corrections/.
 
 INSERT INTO candidate
   (candidate_id, legal_name, party, office_sought, is_incumbent,

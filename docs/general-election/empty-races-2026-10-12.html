@@ -76,7 +76,7 @@ summary { cursor: pointer; font-weight: 600; }
   <div class="card ok"><div class="n">0</div><div class="l">covered locations that render an empty race state, live or in production</div></div>
   <div class="card ok"><div class="n">22</div><div class="l">locations checked: 4 counties + 18 county×district pairs (+ FL-7/Orange fallback, statewide-only)</div></div>
   <div class="card gap"><div class="n">8</div><div class="l">Miami-Dade settled seats missing (6 commission, 2 school board). Fixed in <code>0057</code>, not applied</div></div>
-  <div class="card"><div class="n">3</div><div class="l">"not yet / check back soon" messages replaced with what's true</div></div>
+  <div class="card"><div class="n">3</div><div class="l">"not yet / check back soon" messages replaced with what's true, plus one for a partial load</div></div>
 </div>
 
 <h2>1. Location × race type</h2>
@@ -124,7 +124,7 @@ summary { cursor: pointer; font-weight: 600; }
 <thead><tr><th>Zero</th><th>Verdict</th><th>Source</th><th>What the voter sees</th></tr></thead>
 <tbody>
 <tr><td><b>Miami-Dade</b>: Commission 1, 4, 6, 8, 10, 12 and School Board 4, 6 absent</td><td><span class="tag gap">gap → 0057</span></td><td>VoterFocus: Gallon (CC1), Steinberg (CC4), Milian Orbis (CC6), Rodriguez (CC10), Bermudez (CC12), Alonso (SB4), Rojas (SB6) <i>Unopposed</i>; Cohen Higgins (CC8) <i>Elected</i>. School Board's member page: Districts 2, 4, 6, 8 terms end Nov. 2026</td><td>Today nothing for their seat; after 0057, each under "Already decided" with who and why</td></tr>
-<tr><td>Broward: 0 contested commission seats</td><td><span class="tag real">real</span></td><td>Bogen (2), Fisher (4), McKinzie (8) Unopposed; Sandler Shuham (6) Elected</td><td>"Already decided", one line per seat. Live</td></tr>
+<tr><td>Broward: 0 contested commission seats</td><td><span class="tag real">real</span></td><td>Bogen (2), Fisher (4), McKinzie (8) Unopposed; Sandler Shuham (6) Elected (beat three opponents in the August primary; two other filers withdrew)</td><td>"Already decided", one line per seat. Live</td></tr>
 <tr><td>Orange FL-10: 0 contested House races</td><td><span class="tag real">real</span></td><td>One candidate, unopposed; F.S. 101.151(7); not on Orange's composite sample ballot</td><td>"Not on your ballot"; home page <code>houseRaceNotOnBallot</code>. Live</td></tr>
 <tr><td>No mayor or clerk race outside Orange</td><td><span class="tag real">real</span></td><td>No such office on the other three counties' 2026 lists</td><td>No page has that slot, so nothing renders empty</td></tr>
 <tr><td>Orange FL-7 (address path only)</td><td><span class="tag real">real</span></td><td>0045: 4 unpopulated Orange blocks; no FL-7 contest on Orange's composite ballot</td><td>Orange county view (5 statewide + 11 county). Pinned by the new check</td></tr>
@@ -141,9 +141,9 @@ summary { cursor: pointer; font-weight: 600; }
 <table>
 <thead><tr><th>Surface</th><th>Branch</th><th>Reachable for a covered location?</th><th>Now</th></tr></thead>
 <tbody>
-<tr><td><code>YourRaces.tsx</code> ❄</td><td>nothing came back</td><td><span class="tag warn">failed read only</span> (county and statewide-only paths degrade to <code>[]</code>)</td><td><code>RACES_NOT_LOADED</code> + Supervisor link</td></tr>
+<tr><td><code>YourRaces.tsx</code> ❄</td><td>no statewide race came back</td><td><span class="tag warn">failed read only</span> (county and statewide-only paths degrade to <code>[]</code>)</td><td><code>RACES_NOT_LOADED</code>, or <code>STATEWIDE_NOT_LOADED</code> when county races loaded, + Supervisor link</td></tr>
 <tr><td><code>YourRaces.tsx</code> ❄</td><td>district's House race absent</td><td><span class="tag real">no</span> all 16 districts have one</td><td><code>houseRaceNotLoaded</code> + Supervisor link</td></tr>
-<tr><td><code>SharedBallot.tsx</code> ❄</td><td>no race, no measure</td><td><span class="tag warn">failed read only</span></td><td><code>BALLOT_NOT_LOADED</code> + state Supervisor list</td></tr>
+<tr><td><code>SharedBallot.tsx</code> ❄</td><td>no statewide race</td><td><span class="tag warn">failed read only</span></td><td><code>BALLOT_NOT_LOADED</code>, or <code>STATEWIDE_NOT_LOADED</code> when the questions loaded, + state Supervisor list</td></tr>
 <tr><td><code>CountyRaces.tsx</code> ❄</td><td>no county race → renders nothing</td><td><span class="tag real">no</span> every county has county races</td><td>unchanged</td></tr>
 <tr><td><code>CountyRaces.tsx</code> ❄</td><td>no contested seat → stated caption</td><td>not today; a stated fact if it happens</td><td>unchanged</td></tr>
 <tr><td><code>BallotAtAGlance.tsx</code></td><td>all counts 0 → renders nothing</td><td><span class="tag warn">failed read only</span></td><td>unchanged</td></tr>
@@ -156,10 +156,12 @@ summary { cursor: pointer; font-weight: 600; }
 
 <h3>The copy, before and after</h3>
 <div class="copy">
-<blockquote><span class="old">Your races aren't published yet — we publish a race only after every candidate in it has been through the same checks. Check back soon.</span><span class="new">We couldn't load your races just now. That's a fault on our side, not an empty ballot: every Florida voter has statewide races on theirs. Try again in a minute, or get your sample ballot from <a href="https://www.votemiamidade.gov/">the Miami-Dade County Supervisor of Elections</a>.</span></blockquote>
+<blockquote><span class="old">Your races aren't published yet — we publish a race only after every candidate in it has been through the same checks. Check back soon.</span><span class="new">We couldn't load your races just now. That's a fault on our side, not an empty ballot: every Florida voter has statewide races on theirs. Get your sample ballot from <a href="https://www.votemiamidade.gov/">the Miami-Dade County Supervisor of Elections</a>.</span></blockquote>
 <blockquote><span class="old">We don't have the U.S. House race for FL-27 yet. The races above are the statewide ones every Florida voter shares — your district's race will appear here once it's published.</span><span class="new">The U.S. House race for FL-27 is missing from this list. That's a fault on our side, not your ballot. Get your full sample ballot from <a href="https://www.votemiamidade.gov/">the Miami-Dade County Supervisor of Elections</a>.</span></blockquote>
-<blockquote><span class="old">The ballot isn't published yet — we publish a race only after every candidate in it has been through the same checks. Check back soon.</span><span class="new">We couldn't load the statewide ballot just now. That's a fault on our side: every Florida ballot has statewide races and constitutional amendments. Try again in a minute, or get your sample ballot from <a href="https://dos.fl.gov/elections/contacts/supervisor-of-elections/">your county Supervisor of Elections</a>.</span></blockquote>
+<blockquote><span class="old">The ballot isn't published yet — we publish a race only after every candidate in it has been through the same checks. Check back soon.</span><span class="new">We couldn't load the statewide ballot just now. That's a fault on our side: every Florida ballot has statewide races and constitutional amendments. Get your sample ballot from <a href="https://dos.fl.gov/elections/contacts/supervisor-of-elections/">your county Supervisor of Elections</a>.</span></blockquote>
+<blockquote><span class="old">(nothing said when county races or ballot questions loaded but the statewide races didn't)</span><span class="new">We couldn't load the statewide races just now. That's a fault on our side, not your ballot: every Florida voter has statewide races on theirs. Get your full sample ballot from <a href="https://www.votemiamidade.gov/">the Miami-Dade County Supervisor of Elections</a>.</span></blockquote>
 </div>
+<p style="font-size:13px;color:var(--muted)">No message says "try again in a minute": <code>getStatewideRaces</code> caches a failed read for up to an hour, so a reload wouldn't help. The Supervisor link is the way out.</p>
 
 <h2>4. What changed</h2>
 <div class="diff">
@@ -177,7 +179,7 @@ summary { cursor: pointer; font-weight: 600; }
 <h3 style="margin-top:0">Code + checks</h3>
 <ul>
 <li><code>YourRaces.tsx</code>, <code>SharedBallot.tsx</code>: fault copy + Supervisor link</li>
-<li><code>coverage.ts</code>: the three sentences, <code>nothingLoaded</code></li>
+<li><code>coverage.ts</code>: the four sentences, <code>nothingLoaded</code></li>
 <li>New <code>verify-no-empty-races.ts</code>: offline copy/branch checks; live anon replay of every location (prints the table above)</li>
 <li><code>verify-ballot-seeds</code>, <code>verify-migrations</code>, <code>verify-coverage</code> follow 0057 and the new copy; <code>verify-all</code> labels a read-only partial run correctly</li>
 <li>Untouched: <code>LocationEntry.tsx</code>, <code>scope-copy.ts</code>, home components, <code>resolve.ts</code></li>
@@ -203,7 +205,7 @@ summary { cursor: pointer; font-weight: 600; }
 <ol>
 <li><b>Approve 0057 and apply it before Sun 2026-10-18 04:00 UTC</b>, then run the listing call. Inside the freeze it can only go in as a correction; the listing call passes either way.</li>
 <li><b>Merge the PR by Fri 2026-10-16</b>: it changes two frozen files.</li>
-<li>The fault copy names our side as the cause. To name no cause, edit the three sentences in <code>coverage.ts</code>.</li>
+<li>The fault copy names our side as the cause. To name no cause, edit the four sentences in <code>coverage.ts</code>.</li>
 </ol>
 </div>
 

@@ -93,11 +93,13 @@ export const STATEWIDE_BALLOT_HREF = "/candidates?view=races&scope=statewide";
 
    Each one ends on "from", where the page puts its link to the voter's
    Supervisor of Elections (supervisorLink, src/lib/supervisors.ts), whose
-   sample ballot lists every contest, then a full stop. */
+   sample ballot lists every contest, then a full stop. None says "try
+   again in a minute": getStatewideRaces caches a failed read as [] for up
+   to an hour (races.ts), so a reload would not bring the races back. */
 
 /** Nothing came back for a covered location: no race and no county race. */
 export const RACES_NOT_LOADED =
-  "We couldn't load your races just now. That's a fault on our side, not an empty ballot: every Florida voter has statewide races on theirs. Try again in a minute, or get your sample ballot from";
+  "We couldn't load your races just now. That's a fault on our side, not an empty ballot: every Florida voter has statewide races on theirs. Get your sample ballot from";
 
 /** Races came back, but not the House race of the district the voter is in.
     Not "we don't have it yet": every covered district's race is on file. */
@@ -108,7 +110,12 @@ export function houseRaceNotLoaded(district: string): string {
 /** The landing page's shared ballot came back with no race and no
     question at all. */
 export const BALLOT_NOT_LOADED =
-  "We couldn't load the statewide ballot just now. That's a fault on our side: every Florida ballot has statewide races and constitutional amendments. Try again in a minute, or get your sample ballot from";
+  "We couldn't load the statewide ballot just now. That's a fault on our side: every Florida ballot has statewide races and constitutional amendments. Get your sample ballot from";
+
+/** The statewide races came back empty while something else loaded: a
+    county path's county races, or the landing page's ballot questions. */
+export const STATEWIDE_NOT_LOADED =
+  "We couldn't load the statewide races just now. That's a fault on our side, not your ballot: every Florida voter has statewide races on theirs. Get your full sample ballot from";
 
 /** True when a covered location's answer has nothing at all in it: the
     case RACES_NOT_LOADED speaks for. County races count, since a county

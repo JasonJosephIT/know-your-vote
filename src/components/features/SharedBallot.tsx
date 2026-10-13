@@ -7,7 +7,7 @@ import {
   type StatewideRaceCandidate,
 } from "@/lib/races";
 import { partyLabel, partyLegend } from "@/lib/party-label";
-import { BALLOT_NOT_LOADED } from "@/lib/coverage";
+import { BALLOT_NOT_LOADED, STATEWIDE_NOT_LOADED } from "@/lib/coverage";
 import { supervisorLink } from "@/lib/supervisors";
 
 /* The ballot every Florida voter shares, rendered with no input at all
@@ -68,9 +68,9 @@ export async function SharedBallot() {
     getActiveMeasures(),
   ]);
 
+  /* No county here: the state's list of all 67 Supervisors. */
+  const supervisor = supervisorLink();
   if (races.length === 0 && measures.length === 0) {
-    /* No county here: the state's list of all 67 Supervisors. */
-    const supervisor = supervisorLink();
     return (
       <p
         role="status"
@@ -98,6 +98,25 @@ export async function SharedBallot() {
 
   return (
     <div className="flex flex-col gap-6">
+      {/* The questions loaded and the races did not: say which half is
+          missing rather than present the questions as the whole ballot. */}
+      {races.length === 0 && (
+        <p
+          role="status"
+          className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
+        >
+          {STATEWIDE_NOT_LOADED}{" "}
+          <a
+            href={supervisor.url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-primary underline underline-offset-2 hover:text-primary-hover"
+          >
+            {supervisor.label}
+          </a>
+          .
+        </p>
+      )}
       {races.length > 0 && (
         <section id="statewide-races" className="flex flex-col gap-3">
           <div className="flex flex-col gap-1">
