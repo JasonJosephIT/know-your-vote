@@ -12,6 +12,7 @@ import {
   RACES_NOT_LOADED,
   STATEWIDE_BALLOT_HREF,
 } from "@/lib/coverage";
+import { supervisorLink } from "@/lib/supervisors";
 import { coveredCountyNames } from "@/lib/counties";
 import {
   getCoveredDistricts,
@@ -22,7 +23,6 @@ import {
   ZIP_RE,
 } from "@/lib/resolve";
 import { raceStatusLabel } from "@/lib/races";
-import { supervisorLink } from "@/lib/supervisors";
 import { addressEntryEnabled, geocoderConfigured } from "@/lib/geocode";
 import {
   emailDeliveryConfigured,
