@@ -197,9 +197,10 @@ check(
 );
 check("its hidden fields start with view=races", /const pickerHidden: Record<string, string> = \{ view: "races" \};/.test(cand));
 check(
-  "carries the URL's district and county, never a ZIP or an address",
-  /if \(sp\.district\) pickerHidden\.district = sp\.district;/.test(cand) &&
-    /if \(sp\.county\) pickerHidden\.county = sp\.county;/.test(cand) &&
+  "carries a district only with its county (worked out from an old ZIP or a one-county district), never a ZIP or an address",
+  /if \(sp\.district && pickerCounty\) pickerHidden\.district = sp\.district;/.test(cand) &&
+    /if \(pickerCounty\) pickerHidden\.county = pickerCounty;/.test(cand) &&
+    /pickerCounty = \(await resolveZip\(zip\)\)\.countyFips;/.test(cand) &&
     !/pickerHidden\.(zip|address)|pickerHidden\[/.test(cand)
 );
 check(

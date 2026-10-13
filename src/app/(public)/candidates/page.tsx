@@ -8,7 +8,7 @@ import { ScopedRaces, ScopeNote } from "@/components/features/ScopedRaces";
 import { SharedBallot } from "@/components/features/SharedBallot";
 import { SavedCandidates } from "@/components/features/SavedCandidates";
 import { YourRaces } from "@/components/features/YourRaces";
-import { getCoveredDistricts } from "@/lib/resolve";
+import { getCoveredDistricts, resolveZip } from "@/lib/resolve";
 import { districtOptions, parseRaceScope } from "@/lib/race-scope";
 
 export const metadata = { title: "Candidates — Know Your Vote" };
@@ -105,10 +105,28 @@ export default async function CandidatesPage({
     sp.show,
     districts.map((d) => d.district)
   );
+  /* A district needs its county to come back as a ballot: without one
+     YourRaces shows the empty address prompt (review 2026-10-13). An old
+     ?zip= link brings a district but no county, so the county is worked
+     out here, never by carrying the ZIP: from the ZIP on the server
+     (resolveZip reads the cached table, nothing goes in a request URL),
+     else from the district when it lies in one covered county. */
+  let pickerCounty = sp.county;
+  if (sp.district && !pickerCounty && zip) {
+    try {
+      pickerCounty = (await resolveZip(zip)).countyFips;
+    } catch {
+      /* The district-only answer below still applies. */
+    }
+  }
+  if (sp.district && !pickerCounty) {
+    const homes = districts.filter((d) => d.district === sp.district);
+    if (homes.length === 1) pickerCounty = homes[0].countyFips;
+  }
   const pickerHidden: Record<string, string> = { view: "races" };
-  if (sp.district) pickerHidden.district = sp.district;
-  if (sp.county) pickerHidden.county = sp.county;
-  if (scope && !sp.district && !sp.county) pickerHidden.scope = scope;
+  if (sp.district && pickerCounty) pickerHidden.district = sp.district;
+  if (pickerCounty) pickerHidden.county = pickerCounty;
+  if (scope && !sp.district && !pickerCounty) pickerHidden.scope = scope;
   const allRacesHref = `/candidates?${new URLSearchParams(pickerHidden)}`;
 
   return (
