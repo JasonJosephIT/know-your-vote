@@ -19,6 +19,7 @@ Files:
 | Sourced issue → office table and four-county election applicability | [issue-office.md](issue-office.md) |
 | Conversion definitions, consent behavior and verification | [measurement.md](measurement.md) |
 | Empty account-data fields for a reproducible demand export | [volume-export-template.csv](volume-export-template.csv) |
+| Thirty individual social/comedy video drafts with a recurring cast | [individual-video-sketches.md](individual-video-sketches.md) |
 
 ## Google policy findings
 
