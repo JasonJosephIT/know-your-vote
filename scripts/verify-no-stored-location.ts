@@ -1068,33 +1068,49 @@ assert(
   /keep only the district|remember the district/i.test(landing)
 );
 
-/* 5. ballot_viewed exists and precedes zip_resolved: the funnel's entry event is
-      the ballot, not the ZIP. district_set carries a method label and never a
-      value -- LocationEntry passes the shorthand { via }, so the check accepts a
-      bare identifier as well as a literal, and rejects anything else. */
+/* 5. ballot_viewed exists and comes first: the funnel's entry event is the
+      ballot. zip_resolved went with the ZIP option (2026-10-12), so the
+      district event is district_set alone. It carries a method label and
+      never a value -- LocationEntry passes the shorthand { via }, so the
+      check accepts a bare identifier as well as a literal, and rejects
+      anything else. */
 assert(
   "ballot_viewed is a declared analytics event",
   /"ballot_viewed"/.test(analytics)
 );
 assert(
-  "ballot_viewed precedes zip_resolved in the funnel",
-  analytics.indexOf('"ballot_viewed"') < analytics.indexOf('"zip_resolved"')
+  "zip_resolved is gone: nothing takes a ZIP for location",
+  !/"zip_resolved"/.test(analytics) &&
+    files.every((f) => !/track\(\s*"zip_resolved"/.test(f.code))
 );
 assert(
   "district_set is a declared analytics event",
   /"district_set"/.test(analytics)
+);
+assert(
+  "ballot_viewed precedes district_set in the funnel",
+  analytics.indexOf('"ballot_viewed"') < analytics.indexOf('"district_set"')
 );
 const districtSetCalls = files.flatMap((f) => [
   ...f.code.matchAll(/track\(\s*"district_set"\s*,\s*\{([^}]*)\}/g),
 ]);
 assert("district_set is tracked somewhere", districtSetCalls.length > 0);
 assert(
-  "district_set only ever carries via: address | zip | picker",
+  "district_set only ever carries via: address | picker",
   districtSetCalls.every((m) =>
-    /^\s*via\s*(:\s*(via|"address"|"zip"|"picker"))?\s*,?\s*$/.test(m[1])
+    /^\s*via\s*(:\s*(via|"address"|"picker"))?\s*,?\s*$/.test(m[1])
   ),
   districtSetCalls.map((m) => m[1]).join(" | ")
 );
+{
+  /* The shorthand { via } is only as narrow as its type. */
+  const entry = files.find((f) => /LocationEntry\.tsx$/.test(f.path));
+  assert(
+    "LocationEntry's via is address | picker, never zip",
+    Boolean(entry) && /via: "address" \| "picker"/.test(entry?.code ?? ""),
+    entry ? "" : "LocationEntry.tsx not scanned"
+  );
+}
 assert(
   "landing page fires ballot_viewed only when a ballot rendered",
   /ballotRendered && <TrackView event="ballot_viewed" \/>/.test(landing)

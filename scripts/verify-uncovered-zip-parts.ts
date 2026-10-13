@@ -11,10 +11,14 @@
      1. uncoveredPartOf names Seminole / FL-7 for exactly those two ZIPs.
      2. resolveZip asks (needsCountyConfirm) when a ZIP has an uncovered
         part, even with one covered district left, and returns the part.
-     3. DistrictConfirm shows that part's House race as a link to its race
-        page and the statewide ballot, never as a district button (a button
-        would save the voter under the covered county).
-     4. LocationEntry carries the part from /api/resolve to DistrictConfirm.
+     3. YourRaces, for an old shared ?zip= link (the field stopped taking a
+        ZIP on 2026-10-12, and DistrictConfirm went with it), shows that
+        part's House race as a link to its race page and the statewide
+        ballot, never as a district link (one would file the voter under
+        the covered county). Its covered-district links carry the district
+        and county, never the ZIP again.
+     4. LocationEntry never resolves a ZIP: no /api/resolve call and no
+        split-ZIP step.
      5. A (county, district) pair coverage no longer holds is no district:
         resolveDistrict falls back to the county, and the home page treats
         the cookie as unset; an empty coverage list (a failed read) changes
@@ -85,25 +89,44 @@ check(
   /needsCountyConfirm: true,\s*\.\.\.\(uncoveredPart \? \{ uncoveredPart \} : \{\}\),/.test(resolve)
 );
 
-console.log("\n3. DistrictConfirm");
-const picker = code("src/components/features/CountyPicker.tsx");
+console.log("\n3. YourRaces (old ?zip= links)");
+const yourRaces = code("src/components/features/YourRaces.tsx");
 check(
   "links the part's race page and the statewide ballot",
-  /href=\{`\/races\/\$\{uncoveredPart\.raceId\}`\}/.test(picker) &&
-    /href=\{STATEWIDE_BALLOT_HREF\}/.test(picker)
+  /const part = result\.uncoveredPart;/.test(yourRaces) &&
+    /href=\{`\/races\/\$\{part\.raceId\}`\}/.test(yourRaces) &&
+    /href=\{STATEWIDE_BALLOT_HREF\}/.test(yourRaces)
 );
 check(
-  "the part is never a district button (onPick is only for covered districts)",
-  /\{districts\.map\(\(d\) => \(/.test(picker) &&
-    !/onPick\(uncoveredPart/.test(picker)
+  "the part is never a district link: the links map the covered districts only",
+  /\(result\.candidateDistricts \?\? \[\]\)\.map\(\(d\) => \(/.test(yourRaces) &&
+    !/district=\$\{part\./.test(yourRaces)
+);
+check(
+  "each covered district links by district and county, never the ZIP again",
+  /href=\{`\/candidates\?view=races&district=\$\{d\}&county=\$\{result\.countyFips\}`\}/.test(yourRaces) &&
+    !/zip=\$\{zip\}/.test(yourRaces)
+);
+check(
+  "both split cases (with and without an uncovered part) render the links",
+  (yourRaces.match(/\{districtLinks\}/g) ?? []).length === 2
 );
 
 console.log("\n4. LocationEntry");
-const entry = code("src/components/features/LocationEntry.tsx");
+const entry = code("src/components/features/LocationEntry.tsx").replace(
+  /\/\*[\s\S]*?\*\//g,
+  ""
+);
 check(
-  "carries uncoveredPart from the resolve answer to DistrictConfirm",
-  /uncoveredPart: data\.uncoveredPart,/.test(entry) &&
-    /uncoveredPart=\{stage\.uncoveredPart\}/.test(entry)
+  "never resolves a ZIP and has no split-ZIP step",
+  !/\/api\/resolve[?"`]/.test(entry) &&
+    !/DistrictConfirm|uncoveredPart|kind: "split"/.test(entry)
+);
+check(
+  "DistrictConfirm is gone from CountyPicker",
+  !/DistrictConfirm/.test(
+    code("src/components/features/CountyPicker.tsx").replace(/\/\*[\s\S]*?\*\//g, "")
+  )
 );
 
 console.log("\n5. A pair coverage no longer holds");
@@ -124,12 +147,11 @@ check(
   /RETIRED_DISTRICT_PAIRS\.has\(`\$\{choice\.district\}\|\$\{choice\.countyFips\}`\)/.test(chip) &&
     /if \(!choice \|\| !county \|\| retired\)/.test(chip)
 );
-const yourRaces = code("src/components/features/YourRaces.tsx");
 check(
-  "the server-rendered prompt names the other county and links its House race",
-  /const part = result\.uncoveredPart;/.test(yourRaces) &&
-    /href=\{`\/races\/\$\{part\.raceId\}`\}/.test(yourRaces) &&
-    /href=\{`\/candidates\?view=races&zip=\$\{zip\}&district=\$\{d\}`\}/.test(yourRaces)
+  "the server-rendered prompt names the other county",
+  /That ZIP is partly in \{result\.county\} County and partly in\{" "\}\s*\{part\.county\} County/.test(
+    yourRaces
+  )
 );
 
 console.log("\n6. racesForDistrict");

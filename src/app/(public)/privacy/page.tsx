@@ -73,8 +73,9 @@ export default function PrivacyPage() {
             section is read from the configuration (src/lib/geocode.ts). */}
         {!addressOn ? (
           <p className="text-body">
-            Address lookup is switched off on this deployment — the field
-            takes a ZIP only, and nothing you type reaches anyone else.
+            Address lookup is switched off on this deployment — there&rsquo;s
+            no address field. You choose your district from a list, and
+            nothing you choose reaches anyone else.
           </p>
         ) : geocoder ? (
           <>
@@ -119,8 +120,8 @@ export default function PrivacyPage() {
         )}
         {addressOn && (
           <p className="text-body">
-            Rather not share your address? Enter your ZIP, or choose your
-            district from the list — both work with no third party at all.
+            Rather not share your address? Choose your district from the
+            list instead — it works with no third party at all.
           </p>
         )}
       </section>

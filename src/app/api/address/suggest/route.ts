@@ -28,9 +28,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  /* Address completion is optional. With no geocoder configured the field still
-     takes a ZIP and the district picker still works, so this is a degraded
-     feature rather than a broken page. */
+  /* Address completion is optional. With no geocoder configured the field
+     still takes a typed address (Census) and the district picker still
+     works; with ADDRESS_LOOKUP_OFF set there is only the picker. Either way
+     this is a degraded feature rather than a broken page. */
   if (!geocoderConfigured()) {
     return NextResponse.json(
       { suggestions: [], unavailable: true },
@@ -50,7 +51,7 @@ export async function POST(request: NextRequest) {
 
   /* suggestAddresses swallows its own failures and returns []; an empty dropdown
      is the right answer for "we could not complete that", and the voter still
-     has ZIP and the picker. */
+     has the picker. */
   const suggestions = await suggestAddresses(parsed.data.q);
   return NextResponse.json({ suggestions });
 }

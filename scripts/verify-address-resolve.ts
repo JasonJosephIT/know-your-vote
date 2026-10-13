@@ -628,6 +628,7 @@ assert(
   looksLikeStreetAddress("444 SW 2nd Ave") &&
     !looksLikeStreetAddress("Kennedy Blvd, Tampa") &&
     !looksLikeStreetAddress("33130") &&
+    !looksLikeStreetAddress("33130-1234") &&
     !looksLikeStreetAddress("1 a")
 );
 
