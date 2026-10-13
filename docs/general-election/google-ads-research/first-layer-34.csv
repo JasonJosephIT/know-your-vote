@@ -1,0 +1,35 @@
+asset_id,family,title,preferred_format,decision,linked_asset_ids,source_sketch_id
+01,Original,Your ballot. Your questions.,Direct demonstration,Keep,19;03,
+02,Original,Show me the source.,Footage and source close-up,Keep,32;15,
+03,Original,Translate the amendment.,Single visual explainer,Keep,01,
+04,Original,Who sets the school calendar?,Service explainer with optional diagram,Keep,31;05,
+05,Original,Give election dates a place.,Direct calendar demonstration,Keep,11;16,
+06,Original,Who helps decide your commute?,Local field explainer,Keep,26;30;18,
+07,Original,There's more below the headline.,Screen-led demonstration,Keep,04,
+08,Original,Your county. Your voting details.,Single official-information tutorial,Keep,34;20,
+09,Original,One tax bill. Different jobs.,Bill footage and role graphics,Keep,28,
+10,Original,Before you forward it.,Chat screen recording,Keep,02;15;34,
+11,Original,Make a plan before the day.,Single lifestyle spot,Keep,05;08;16,
+12,Original,Same county. Different ballot.,Split-screen comparison,Keep,08;21,
+13,Original,First vote. Start with questions.,Creator Q-and-A,Keep,11,
+14,Original,Who checks the gas pump?,Single short field report,Keep,06,
+15,Original,What they say-with the source.,Source demonstration or interview,Rework,02;19;32,
+16,Original,Requesting and returning are different.,Two-checkpoint animation,Keep,05;08;11,
+17,Original,New address. New government map.,Moving vlog with optional map,Keep,18,
+18,Original,City? County? Authority?,Single local explanatory report,Keep,06;27;28,
+19,Original,Put the comparison on one screen.,Direct screen recording,Keep,32;01,
+20,Original,When you need your voting details.,Concrete-need tutorial,Rework,08;34,
+21,Original,Which information is here-and where's the rest?,Coverage demonstration,Rework,01;12;19,
+22,Original,The election ends. Local decisions continue.,Post-election continuation,Hold,23,
+23,Original,This decision has a paper trail.,Single verified local report,Rework,02;27,
+24,Original,Read it before you decide.,Single source-check direct spot,Rework,19,
+25,Original,Clear in the language you read.,Single-language reviewed explanation,Hold,,
+26,Original,You know the headline names. Who handles your neighborhood?,Direct spot or factual visual pullback,Keep,30;04;06;18,
+27,Original,"When this street floods, who handles it?",Field explainer with optional drainage diagram,Keep,33;18;23,
+28,Original,Who approves your electricity rates?,Provider-specific bill explainer,Keep,09;18,
+29,Original,Who handles these consumer complaints?,Single office report with two labeled examples,Rework,02;18,
+30,Story,Political Celebrity Trivia Night,Single pub-quiz skit,Keep,26;04;06;18,26
+31,Story,GRWM for School Pickup,GRWM social reel,Keep,04;05;11,04
+32,Story,Receipts Guy,Cafe skit with source close-up,Keep,02;10;15;19;24,02
+33,Story,Follow the Puddle,Neighborhood skit with optional diagram,Keep,27;18;23,27
+34,Story,The Source Friend Gets Corrected,Single social scene with role reversal,Keep,08;02;10;20,30

@@ -1,5 +1,10 @@
 # Thirty individual comedy videos for Know Your Vote
 
+> **Current selection:** The [34-piece first-layer inventory](first-layer-34.md)
+> preserves the original 29 separately and adds five selected sketches from this
+> exploration. This file remains the script source; its 30 draft IDs are not the
+> final production IDs. The new inventory maps the selected scripts to 30–34.
+
 Working creative draft, 2026-10-13. These are individual skits with a setup, turn and ending, not campaign themes. They translate the previous 25 ideas plus the four restored ideas into specific videos; number 30 adds an ensemble reversal. Numbers identify sketches, not predicted performance. No videos have been filmed or generated, and no campaigns have been launched.
 
 ## The recurring cast and story

@@ -20,6 +20,7 @@ Files:
 | Conversion definitions, consent behavior and verification | [measurement.md](measurement.md) |
 | Empty account-data fields for a reproducible demand export | [volume-export-template.csv](volume-export-template.csv) |
 | Thirty individual social/comedy video drafts with a recurring cast | [individual-video-sketches.md](individual-video-sketches.md) |
+| Current first-layer inventory: original 29 + five selected story executions, with format evaluation and links | [34-piece review](first-layer-34.md), [inventory CSV](first-layer-34.csv) |
 
 ## Google policy findings
 
