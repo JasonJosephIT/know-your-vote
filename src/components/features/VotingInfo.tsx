@@ -210,7 +210,7 @@ export function VotingInfo({
         <Button type="submit" disabled={stage.kind === "sending"} className="w-fit">
           {stage.kind === "sending" ? "Sending…" : "Email my voting info"}
         </Button>
-        <p className="text-caption text-on-surface-muted">
+        <p className="text-body-sm text-on-surface-muted">
           No email needed:{" "}
           <a
             href={`/api/calendar/general_2026.ics${countyFips ? `?county=${countyFips}` : ""}`}

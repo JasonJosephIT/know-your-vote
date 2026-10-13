@@ -83,11 +83,16 @@ export function IssueBuckets({
         return (
           <div key={key} className="flex flex-col gap-2">
             {labelled && (
-              /* text-label (15px), not the 12px uppercase overline: these
-                 labels say whose words a claim is, so they meet the 14px
-                 floor for anything a voter must read (design.md; founder
-                 2026-10-12). Every tone is at least 5:1 on the page. */
-              <h4 className={`text-label ${tone}`}>
+              /* 14px, not the 12px overline: these labels say whose words
+                 a claim is, so they meet the 14px floor for anything a
+                 voter must read (design.md; founder 2026-10-12). Still set
+                 as a label (uppercase, tracked) so it never reads as the
+                 15px candidate-name link above it in a race-page cell,
+                 even where both are primary green. Every tone is at least
+                 5:1 on the page. */
+              <h4
+                className={`text-body-sm font-semibold uppercase tracking-[0.04em] ${tone}`}
+              >
                 {label}
               </h4>
             )}

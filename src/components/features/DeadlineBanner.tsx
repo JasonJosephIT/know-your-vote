@@ -61,9 +61,11 @@ export async function DeadlineBanner({
   /* 24 px tall at least (WCAG 2.5.8 Target Size, AA): as plain caption
      text the two links were 18 px and wrapped 4 px apart on a phone, and
      axe and Lighthouse both failed them (production re-run, 2026-10-05).
-     min-h-[24px], not min-h-6: this theme's spacing makes min-h-6 32 px. */
+     min-h-[24px], not min-h-6: this theme's spacing makes min-h-6 32 px.
+     14px (body-sm), not caption: the links say what they do, including
+     that the calendar one downloads a file, which a voter must read. */
   const link =
-    "inline-flex min-h-[24px] w-fit items-center text-caption underline underline-offset-2";
+    "inline-flex min-h-[24px] w-fit items-center text-body-sm underline underline-offset-2";
   return (
     <aside
       aria-label="Key dates"
