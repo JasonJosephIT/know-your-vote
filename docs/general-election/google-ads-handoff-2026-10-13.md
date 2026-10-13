@@ -1,5 +1,14 @@
 # Google Ads strategy: handoff (2026-10-13)
 
+> **Research continuation (2026-10-13):** See the [completed research package](google-ads-research/README.md)
+> for sourced policy/date findings, the four-county office table, all nine
+> additional themes, keywords, 55 paused search-ad drafts and a measurement plan.
+> It corrects this handoff's whole-ballot promise: KYV covers selected contests,
+> not every race. All four supported counties begin early voting October 19.
+> Google Ad Grants cannot run election ads. Account-only volumes and production
+> publication/measurement checks remain explicitly unverified. The original
+> handoff below is retained as the brief, not a verified launch specification.
+
 For ChatGPT, or anyone without access to the repo, picking up Know Your Vote's
 Google Ads work. Everything you need is in this file. Items marked **verify**
 are not confirmed yet; check them against an official source before an ad
