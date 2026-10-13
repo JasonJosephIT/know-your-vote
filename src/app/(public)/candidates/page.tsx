@@ -67,12 +67,16 @@ export default async function CandidatesPage({
     requested ??
     (sp.area ? "browse" : zip || county || scope ? "races" : "browse");
 
-  /* The races tab keeps any location already in the URL, except a ZIP:
-     an old ?zip= link still resolves (YourRaces), but nothing on the site
-     builds a ZIP into a link any more (2026-10-12). */
+  /* The races tab keeps any location already in the URL. Nothing on the
+     site builds a ZIP into a link any more (2026-10-12), but an old shared
+     ?zip= link still resolves (YourRaces), and the tab carries that ZIP
+     forward with the district it came with: the same ballot, not a new
+     link. Dropping it left the district without its county, and the tab
+     opened on the empty "add your address" prompt. */
   const tabHref = (tab: View) => {
     if (tab === "races") {
       const params = new URLSearchParams({ view: "races" });
+      if (zip) params.set("zip", zip);
       if (district) params.set("district", district);
       if (!zip && county) params.set("county", county);
       if (scope && !zip && !county && !district) params.set("scope", scope);

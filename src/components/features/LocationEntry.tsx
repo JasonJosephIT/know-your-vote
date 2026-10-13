@@ -45,6 +45,8 @@ import type { ResolveResult } from "@/types/app";
    Underneath is the district picker, which needs no third party at all.
    It is the way to go on without sharing an address, the fallback when a
    lookup fails, and, with ADDRESS_LOOKUP_OFF set, all there is: no field.
+   When the district list can't be read, links to each covered county and
+   the statewide ballot take the picker's place.
 
    Whatever route the voter takes, the outcome is the same: a district and a
    county in a cookie, and a URL carrying those two values -- never the
@@ -358,9 +360,11 @@ export function LocationEntry({
     }
   }
 
-  /* With the switch off and no districts to list (the read failed), the
-     picker has nothing to show, so the county links stand in for everyone. */
-  const linksOnly = !addressEnabled && districts.length === 0;
+  /* With no districts to list (the read failed), the picker has nothing to
+     show, so the county links stand in, for everyone and with the field on
+     or off: they are where every error's "choose your district below"
+     leads, and with the switch off they are all there is. */
+  const linksOnly = districts.length === 0;
 
   return (
     <div className="flex w-full flex-col gap-4">
@@ -465,19 +469,25 @@ export function LocationEntry({
       {/* The no-JavaScript path: every district as a plain link to its
           races, the same URL the picker commits to (without JavaScript
           nothing is remembered). The header chip renders nothing before
-          hydration, so these are the only way forward then. */}
-      {!linksOnly && (
+          hydration, so these are the only way forward then. With no
+          districts to list, the county links further down are already plain
+          links, so this only says why the field is gone and hides it. */}
+      {(addressEnabled || !linksOnly) && (
         <noscript>
-          <DistrictLinks
-            districts={districts}
-            lead={
-              !addressEnabled
-                ? "Choose your district:"
-                : districts.length > 0
+          {linksOnly ? (
+            <p className="text-body-sm text-on-surface-muted">
+              Finding your district from an address needs JavaScript.
+            </p>
+          ) : (
+            <DistrictLinks
+              districts={districts}
+              lead={
+                addressEnabled
                   ? "Finding your district from an address needs JavaScript. Choose it here instead:"
-                  : "Finding your district from an address needs JavaScript. Choose your county instead, or see the statewide ballot:"
-            }
-          />
+                  : "Choose your district:"
+              }
+            />
+          )}
           <style>{NO_SCRIPT_CSS}</style>
         </noscript>
       )}
@@ -523,10 +533,14 @@ export function LocationEntry({
         </div>
       )}
 
-      {linksOnly && (
+      {linksOnly && stage.kind !== "outOfCoverage" && (
         <DistrictLinks
           districts={districts}
-          lead="Choose your county, or see the statewide ballot:"
+          lead={
+            addressEnabled
+              ? "Or choose your county, or see the statewide ballot:"
+              : "Choose your county, or see the statewide ballot:"
+          }
         />
       )}
 

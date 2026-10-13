@@ -189,6 +189,12 @@ assert(
     /id="district-picker-form"/.test(locationCode)
 );
 assert(
+  "with no districts to list (the read failed), the county links show for everyone, field on or off, and noscript still hides the field",
+  /const linksOnly = districts\.length === 0;/.test(locationCode) &&
+    /\{\(addressEnabled \|\| !linksOnly\) && \(\s*<noscript>/.test(locationCode) &&
+    /\{linksOnly && stage\.kind !== "outOfCoverage" && \(\s*<DistrictLinks/.test(locationCode)
+);
+assert(
   "the address goes to the resolve route in a POST body",
   /fetch\("\/api\/address\/resolve", \{\s*method: "POST"/.test(locationCode) &&
     /body: JSON\.stringify\(/.test(locationCode)
@@ -205,10 +211,52 @@ assert(
 
 /* 4b. Nothing on the site builds a ?zip= URL any more. Old shared links
        still resolve (/candidates, /races, /api/resolve and /api/news read
-       one), but no page, component or route writes one: a ZIP template in
-       an href, a URLSearchParams set or a { zip } params object.
-       Comments are stripped, so a comment naming an old URL is fine. */
+       one), but no page, component or route writes one: a ZIP template or
+       concatenation in an href, a URLSearchParams set or append, or a
+       params object with a zip key anywhere in it.
+       Comments are stripped, so a comment naming an old URL is fine.
+
+       One carry-forward is allowed, and only in /candidates: its "Your
+       races" tab copies the ZIP the URL already has (`const zip = sp.zip`,
+       pinned in 4c) with its district, so clicking the tab on an old link
+       keeps the ballot on screen. It makes no ZIP link of its own. */
 {
+  const stripCode = (src: string) =>
+    src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|\s)\/\/[^\n]*/g, "$1");
+  const BUILDS_ZIP_URL =
+    /[?&]zip=(?:\$\{|["'`]\s*\+)|\.(?:set|append)\(\s*["']zip["']|new URLSearchParams\(\{[^}]*\bzip\b/;
+  const buildsZipUrl = (src: string) => BUILDS_ZIP_URL.test(stripCode(src));
+
+  /* The shapes, one each, so an edit that narrows the pattern fails here
+     before it lets one through. */
+  const mustMatch = [
+    "href={`/candidates?view=races&zip=${zip}`}",
+    "const u = '/candidates?view=races&zip=' + zip;",
+    'const u = "/candidates?view=races&zip=" + zip;',
+    "const u = `/candidates?zip=` + zip;",
+    'params.set("zip", zip);',
+    "params.append('zip', zip);",
+    "new URLSearchParams({ zip })",
+    'new URLSearchParams({ view: "races", zip })',
+    'new URLSearchParams({ view: "races", zip: z })',
+  ];
+  const mustNotMatch = [
+    "// href={`/candidates?view=races&zip=${zip}`}",
+    '/* params.set("zip", zip); */',
+    'url.searchParams.delete("zip");',
+    'const zip = sp.get("zip");',
+    'new URLSearchParams({ view: "races", district })',
+  ];
+  const missed = mustMatch.filter((s) => !buildsZipUrl(s));
+  const wrong = mustNotMatch.filter((s) => buildsZipUrl(s));
+  assert(
+    "the ?zip= builder pattern catches every shape and no comment or reader",
+    missed.length === 0 && wrong.length === 0,
+    [...missed.map((s) => `missed ${s}`), ...wrong.map((s) => `matched ${s}`)].join(" | ")
+  );
+
+  const CARRY_FORWARD_FILE = `${ROOT}/src/app/(public)/candidates/page.tsx`;
+  const CARRY_FORWARD = 'if (zip) params.set("zip", zip);';
   const files: string[] = [];
   (function walk(dir: string) {
     for (const name of readdirSync(dir)) {
@@ -218,15 +266,22 @@ assert(
     }
   })(`${ROOT}/src`);
   const builders = files.filter((f) => {
-    const code = readFileSync(f, "utf8")
-      .replace(/\/\*[\s\S]*?\*\//g, "")
-      .replace(/(^|\s)\/\/[^\n]*/g, "$1");
-    return /[?&]zip=\$\{|\.set\(\s*["']zip["']|new URLSearchParams\(\{\s*zip\b/.test(code);
+    let code = stripCode(readFileSync(f, "utf8"));
+    if (f === CARRY_FORWARD_FILE) code = code.replace(CARRY_FORWARD, "");
+    return BUILDS_ZIP_URL.test(code);
   });
   assert(
     "no source file builds a ?zip= URL",
     builders.length === 0,
     builders.map(rel).join(", ")
+  );
+  const candidatesCode = stripCode(readFileSync(CARRY_FORWARD_FILE, "utf8"));
+  assert(
+    "the /candidates races tab carries an incoming ZIP forward, once, with its district",
+    candidatesCode.split(CARRY_FORWARD).length === 2 &&
+      /if \(zip\) params\.set\("zip", zip\);\s*if \(district\) params\.set\("district", district\);/.test(
+        candidatesCode
+      )
   );
 }
 
