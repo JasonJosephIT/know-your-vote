@@ -127,3 +127,5 @@ Negative keywords include recommendation-seeking phrases, party names, opponent/
 7. Confirm live race publication and destination readiness per county. Read current official sample ballots before claiming a district's race appears in November.
 
 The account-only metrics, inaccessible local-undervote dataset, production publication checks and untranslated destinations remain plainly bounded gaps. They do not prevent delivery of this research package, but they prevent describing every draft as ready to launch.
+
+Output Engine production base for the top 10 (characters, settings, shot-by-shot scripts): [output-engine/](output-engine/README.md).
