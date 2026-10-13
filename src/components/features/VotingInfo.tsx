@@ -216,7 +216,7 @@ export function VotingInfo({
             href={`/api/calendar/general_2026.ics${countyFips ? `?county=${countyFips}` : ""}`}
             className="underline underline-offset-2 hover:text-on-surface"
           >
-            add the key dates straight to your calendar
+            add the key dates to your calendar (downloads a file)
           </a>
           .
         </p>

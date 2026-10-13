@@ -108,7 +108,9 @@ export async function DeadlineBanner({
           href={`/api/calendar/${ACTIVE_ELECTION}.ics${scope ? `?county=${scope}` : ""}`}
           className={link}
         >
-          Add these dates to your calendar
+          {/* The route answers with Content-Disposition: attachment, so
+              the link says it downloads (founder 2026-10-12). */}
+          Add these dates to your calendar (downloads a file)
         </a>
         {remindersHref && (
           <a href={remindersHref} className={link}>

@@ -83,7 +83,11 @@ export function IssueBuckets({
         return (
           <div key={key} className="flex flex-col gap-2">
             {labelled && (
-              <h4 className={`text-overline uppercase tracking-[0.08em] ${tone}`}>
+              /* text-label (15px), not the 12px uppercase overline: these
+                 labels say whose words a claim is, so they meet the 14px
+                 floor for anything a voter must read (design.md; founder
+                 2026-10-12). Every tone is at least 5:1 on the page. */
+              <h4 className={`text-label ${tone}`}>
                 {label}
               </h4>
             )}
