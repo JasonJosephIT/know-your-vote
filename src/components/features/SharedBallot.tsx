@@ -7,6 +7,8 @@ import {
   type StatewideRaceCandidate,
 } from "@/lib/races";
 import { partyLabel, partyLegend } from "@/lib/party-label";
+import { BALLOT_NOT_LOADED, STATEWIDE_NOT_LOADED } from "@/lib/coverage";
+import { supervisorLink } from "@/lib/supervisors";
 
 /* The ballot every Florida voter shares, rendered with no input at all
    (TASK-067).
@@ -18,15 +20,17 @@ import { partyLabel, partyLegend } from "@/lib/party-label";
    first HTML response, which is what makes it survive a slow connection, a
    blocked script, or a voter who has JavaScript off.
 
-   With nothing visible — or with the database unreachable, which both reads
+   With nothing visible — the database unreachable, which both reads
    degrade to rather than throwing — it says so in plain words instead of
    rendering an empty div. A blank landing page is the one failure that could
    ship unnoticed, so it is worth making visible.
 
    Since the listed tier (0033) a race is visible as soon as its roster is,
    before any brief exists, so each card says which it is (raceStatusLabel).
-   The "isn't published yet" copy below is now only the truly-empty case:
-   zero races AND zero measures, i.e. nothing at all is even listed.
+   The whole 2026 roster is listed, so zero races AND zero measures is a
+   failed read, never an unpublished ballot, and the copy says that rather
+   than "isn't published yet ... check back soon" (founder rule 2026-10-12,
+   BALLOT_NOT_LOADED in coverage.ts).
 
    Race rows (inspiration pass 2026-10-05). Each race used to be a tall card
    saying only its office, "Statewide" and its status, so five races filled
@@ -64,11 +68,24 @@ export async function SharedBallot() {
     getActiveMeasures(),
   ]);
 
+  /* No county here: the state's list of all 67 Supervisors. */
+  const supervisor = supervisorLink();
   if (races.length === 0 && measures.length === 0) {
     return (
-      <p className="text-body text-on-surface-muted">
-        The ballot isn&rsquo;t published yet — we publish a race only after every
-        candidate in it has been through the same checks. Check back soon.
+      <p
+        role="status"
+        className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
+      >
+        {BALLOT_NOT_LOADED}{" "}
+        <a
+          href={supervisor.url}
+          target="_blank"
+          rel="noreferrer"
+          className="text-primary underline underline-offset-2 hover:text-primary-hover"
+        >
+          {supervisor.label}
+        </a>
+        .
       </p>
     );
   }
@@ -81,6 +98,25 @@ export async function SharedBallot() {
 
   return (
     <div className="flex flex-col gap-6">
+      {/* The questions loaded and the races did not: say which half is
+          missing rather than present the questions as the whole ballot. */}
+      {races.length === 0 && (
+        <p
+          role="status"
+          className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
+        >
+          {STATEWIDE_NOT_LOADED}{" "}
+          <a
+            href={supervisor.url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-primary underline underline-offset-2 hover:text-primary-hover"
+          >
+            {supervisor.label}
+          </a>
+          .
+        </p>
+      )}
       {races.length > 0 && (
         <section id="statewide-races" className="flex flex-col gap-3">
           <div className="flex flex-col gap-1">

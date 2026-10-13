@@ -5,7 +5,15 @@ import { CountyRaces } from "@/components/features/CountyRaces";
 import { VotingInfo } from "@/components/features/VotingInfo";
 import { LocationEntry } from "@/components/features/LocationEntry";
 import { createAnonServerClient } from "@/lib/supabase/server";
-import { districtRaceMissing, STATEWIDE_BALLOT_HREF } from "@/lib/coverage";
+import {
+  districtRaceMissing,
+  houseRaceNotLoaded,
+  nothingLoaded,
+  RACES_NOT_LOADED,
+  STATEWIDE_BALLOT_HREF,
+  STATEWIDE_NOT_LOADED,
+} from "@/lib/coverage";
+import { supervisorLink } from "@/lib/supervisors";
 import { coveredCountyNames } from "@/lib/counties";
 import {
   getCoveredDistricts,
@@ -222,6 +230,10 @@ export async function YourRaces({
      the list never presents a race the voter can't vote in as theirs. */
   const printed = result.races.filter((r) => !isDecided(r));
   const decided = result.races.filter(isDecided);
+  /* Where the voter's full sample ballot is, for the two fault notices
+     below: their county's Supervisor of Elections, or the state's list of
+     all 67 when the result has no county (the statewide-only path). */
+  const supervisor = supervisorLink(result.countyFips);
 
   return (
     <div className="flex flex-col gap-5">
@@ -269,19 +281,31 @@ export async function YourRaces({
         </Link>
       </p>
 
-      {/* The truly-empty case only. Since the listed tier (0033) the roster is
-          visible before any brief is, so an empty list now means nothing at
-          all is visible for this location — and if county races did come
-          back, saying "your races aren't published" above them would
-          contradict the page. */}
+      {/* No statewide race came back. Every covered location has races
+          (scripts/verify-no-empty-races.ts checks the live roster for each
+          one), so this is a failed read, never a fact about the voter's
+          ballot, and it says so instead of "not published yet ... check
+          back soon" (founder rule 2026-10-12; coverage.ts): RACES_NOT_LOADED
+          when nothing loaded at all, STATEWIDE_NOT_LOADED when the county
+          races below did. */}
       {result.races.length === 0 ? (
-        (result.countyRaces?.length ?? 0) === 0 && (
-          <p className="text-body text-on-surface-muted">
-            Your races aren&rsquo;t published yet — we publish a race only after
-            every candidate in it has been through the same checks. Check back
-            soon.
-          </p>
-        )
+        <p
+          role="status"
+          className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
+        >
+          {nothingLoaded(result.races, result.countyRaces)
+            ? RACES_NOT_LOADED
+            : STATEWIDE_NOT_LOADED}{" "}
+          <a
+            href={supervisor.url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-primary underline underline-offset-2 hover:text-primary-hover"
+          >
+            {supervisor.label}
+          </a>
+          .
+        </p>
       ) : (
         printed.length > 0 && (
           <LinkRowList>
@@ -348,9 +372,12 @@ export async function YourRaces({
         </section>
       )}
 
-      {/* The ZIP resolved and the district race is not here. Without this the
-          list reads as a finished ballot: the voter asked for their House race,
-          got five statewide races, and nothing said which part is missing.
+      {/* The district resolved and its House race is not here. Without this
+          the list reads as a finished ballot: the voter asked for their House
+          race, got five statewide races, and nothing said which part is
+          missing. Every covered district's race is on file (printed, or
+          decided and listed under "Not on your ballot"), so a gap here is a
+          fault on our side, and it is not worded as a race still to come.
           Sits directly under the list because it is a statement about the
           list — the county path's counterpart is the caption further down. */}
       {districtRaceMissing(result.district, result.races) &&
@@ -359,10 +386,16 @@ export async function YourRaces({
             role="status"
             className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
           >
-            We don&rsquo;t have the U.S. House race for {result.district} yet.
-            The races above are the statewide ones every Florida voter shares
-            — your district&rsquo;s race will appear here once it&rsquo;s
-            published.
+            {houseRaceNotLoaded(result.district ?? "")}{" "}
+            <a
+              href={supervisor.url}
+              target="_blank"
+              rel="noreferrer"
+              className="text-primary underline underline-offset-2 hover:text-primary-hover"
+            >
+              {supervisor.label}
+            </a>
+            .
           </p>
         )}
 

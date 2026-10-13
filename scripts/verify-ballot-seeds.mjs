@@ -30,6 +30,7 @@ import { pgcrypto } from "@electric-sql/pglite/contrib/pgcrypto";
 import { readdir, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import { COVERED_COUNTIES } from "../src/lib/counties.ts";
 
 /* Resolve from this file, not cwd, so the script runs from anywhere. */
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -122,20 +123,23 @@ await check(
   2
 );
 
-console.log("0031 + 0032 — Tier A local races");
+console.log("0031 + 0032 + 0057 — Tier A local races");
+/* 0057 adds the eight decided Miami-Dade seats 0032 missed (its VoterFocus
+   read kept only "Active-" rows; docs/general-election/empty-races-2026-10-12.md):
+   six commission seats, two school board seats, one candidate each. */
 await check(
-  "thirty-two county races (17 contested + 15 decided)",
+  "forty county races (17 contested + 15 decided in 0032 + 8 decided in 0057)",
   "SELECT count(*)::int n FROM race WHERE level='county'",
-  32
+  40
 );
 /* 0038_county_roster_fixes swaps three wrongly seeded candidates for the
    right ones: the three out stay as rows, marked withdrawn/excluded and
-   listed in no race, so the ballot tier is still 49. */
+   listed in no race, so the ballot tier is still 49, and 57 with 0057. */
 const ROSTER_FIX_OUT = "('FL-VF-HIL-2639', 'FL-VF-HIL-2691', 'FL-VF-DAD-3080')";
 await check(
-  "forty-nine ballot-tier local candidates (34 contested + 15 decided)",
+  "fifty-seven ballot-tier local candidates (34 contested + 15 decided + 0057's 8)",
   "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND ballot_status = 'ballot'",
-  49
+  57
 );
 await check(
   "seventeen contested county races, each with exactly two candidates",
@@ -144,10 +148,10 @@ await check(
   17
 );
 await check(
-  "fifteen decided county seats, each with exactly one",
+  "twenty-three decided county seats (15 + 0057's 8), each with exactly one",
   `SELECT count(*)::int n FROM race r
     WHERE r.level='county' AND cardinality(r.candidate_ids) = 1`,
-  15
+  23
 );
 await check(
   "no county race has some other candidate count",
@@ -210,14 +214,14 @@ await check(
    who won a contested August primary. A drift that collapsed one into the
    other would publish that falsehood with nothing else noticing. */
 await check(
-  "five unopposed county officials",
+  "twelve unopposed county officials (5 + 0057's 7)",
   "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND qualifying_status = 'unopposed'",
-  5
+  12
 );
 await check(
-  "ten elected-in-primary county officials",
+  "eleven elected-in-primary county officials (10 + 0057's Cohen Higgins)",
   "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%' AND qualifying_status = 'elected_in_primary'",
-  10
+  11
 );
 await check(
   "every decided seat holds exactly one settled candidate",
@@ -527,9 +531,42 @@ await check(
   generalRaces
 );
 await check(
-  "anon reads every candidate a listed race names (49 local)",
+  "anon reads every candidate a listed race names (57 local)",
   "SELECT count(*)::int n FROM candidate WHERE candidate_id LIKE 'FL-VF-%'",
-  49
+  57
+);
+/* No covered county's races view is empty (founder rule 2026-10-12;
+   docs/general-election/empty-races-2026-10-12.md). The read is
+   fetchCountyRaces's (src/lib/resolve.ts): level 'county', district on the
+   county's prefix, as anon. Every race it returns must name a candidate anon
+   can read, or the races view would print a seat with no one in it.
+   Statewide and U.S. House races come from the DoE roster, which is not
+   seeded offline; verify-no-empty-races.ts checks those against the live
+   database. */
+for (const county of COVERED_COUNTIES) {
+  const like = `${county.raceDistrictPrefix}-%`;
+  const races = await n(
+    `SELECT count(*)::int n FROM race
+      WHERE election='general' AND level='county' AND district LIKE '${like}'`
+  );
+  if (races === 0) {
+    failures++;
+    console.error(`  FAIL ${county.name} County has no county race anon can read`);
+  }
+  await check(
+    `every ${county.name} County race anon reads names a candidate anon reads`,
+    `SELECT count(*)::int n FROM race r
+      WHERE r.election='general' AND r.level='county' AND r.district LIKE '${like}'
+        AND NOT EXISTS (SELECT 1 FROM candidate c WHERE c.candidate_id = ANY (r.candidate_ids))`,
+    0
+  );
+}
+/* 0057's eight with 0032's three and 0031's two: every Miami-Dade
+   commission and school board office on the county's 2026 VoterFocus list. */
+await check(
+  "anon reads Miami-Dade's thirteen county races (8 commission, 5 school board)",
+  "SELECT count(*)::int n FROM race WHERE level='county' AND district LIKE 'DAD-%'",
+  13
 );
 await check(
   "anon reads every listed measure's ballot text",
