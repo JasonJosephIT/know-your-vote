@@ -10,7 +10,8 @@ import { usePathname } from "next/navigation";
 
    RECOMMENDED (pending founder confirmation), founder decision 1: the
    disclaimer wording and the Methodology, Privacy and Terms links (About
-   came later, with the /about page). To change the wording, edit
+   came later, with the /about page; How privacy works, the detail behind
+   /privacy, on 2026-10-13). To change the wording, edit
    FOOTER_DISCLAIMER; to drop or add a link (for example /terms, if the founder
    decides against a terms page), edit FOOTER_LINKS. Nothing else reads them.
 
@@ -25,6 +26,7 @@ const FOOTER_LINKS: readonly { href: string; label: string }[] = [
   { href: "/about", label: "About" },
   { href: "/methodology", label: "Methodology" },
   { href: "/privacy", label: "Privacy" },
+  { href: "/privacy/how-it-works", label: "How privacy works" },
   { href: "/terms", label: "Terms of use" },
 ];
 
