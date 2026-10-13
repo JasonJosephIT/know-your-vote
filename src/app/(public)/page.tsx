@@ -124,9 +124,11 @@ export default async function Home() {
       : null;
   const ballotRendered = races.length > 0 || measures.length > 0;
 
-  /* The field takes a street address unless ADDRESS_LOOKUP_OFF is set, and
-     suggests addresses only when Pelias is configured (off in production:
-     a typed address goes to the Census Bureau instead; /privacy says so). */
+  /* The field takes a street address, and only that (no ZIP, founder
+     2026-10-12). It suggests addresses only when Pelias is configured (off
+     in production: a typed address goes to the Census Bureau instead;
+     /privacy says so). With ADDRESS_LOOKUP_OFF set there is no field, just
+     the district picker. */
   const addressEnabled = addressEntryEnabled();
   const suggestEnabled = geocoderConfigured();
   const field = locationFieldCopy(addressEnabled);
@@ -286,17 +288,28 @@ export default async function Home() {
                   removed kyv.location and this line said nothing was saved on
                   the device; that stopped being true when the district became
                   something we remember. What is still true, and is the sharper
-                  claim, is that the address and the ZIP are never kept.
+                  claim, is that the address is never kept.
 
-                  It asks for what the field takes (field.noun): an address
-                  or a ZIP, or a ZIP only with ADDRESS_LOOKUP_OFF set. */}
-                  <p className="text-body-sm text-on-surface-muted">
-                    Your U.S. House race isn&rsquo;t in the list above, because
-                    it depends on where you live. Give us your {field.noun} and
-                    we&rsquo;ll add it — or skip it and read the rest. We use it
-                    to find your district and keep only the district itself,
-                    never your {field.noun}.
-                  </p>
+                  It asks for what the field takes (field.noun): a street
+                  address, never a ZIP (founder, 2026-10-12). With
+                  ADDRESS_LOOKUP_OFF set there is no field, only the
+                  district picker, so it asks the voter to choose. */}
+                  {addressEnabled ? (
+                    <p className="text-body-sm text-on-surface-muted">
+                      Your U.S. House race isn&rsquo;t in the list above, because
+                      it depends on where you live. Give us your {field.noun} and
+                      we&rsquo;ll add it — or skip it and read the rest. We use it
+                      to find your district and keep only the district itself,
+                      never your {field.noun}.
+                    </p>
+                  ) : (
+                    <p className="text-body-sm text-on-surface-muted">
+                      Your U.S. House race isn&rsquo;t in the list above, because
+                      it depends on where you live. Choose your district below
+                      and we&rsquo;ll add it — or skip it and read the rest. We
+                      keep only the district you choose.
+                    </p>
+                  )}
                 </div>
                 {/* The tote figure stands beside the form from lg up, in
                 its own flex item, so it can never cover the field, the

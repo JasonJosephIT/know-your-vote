@@ -48,8 +48,8 @@ check(
   /id="district-picker-form"[\s\S]*?onSubmit=\{\(e\) => \{[\s\S]*?commit\(/.test(entry)
 );
 check(
-  "the picker has its own submit button",
-  /<Button type="submit" variant="secondary">\s*See my races\s*<\/Button>\s*<\/form>/.test(entry)
+  "the picker has its own submit button, live once hydrated",
+  /<Button type="submit" variant="secondary" disabled=\{!hydrated\}>\s*See my races\s*<\/Button>\s*<\/form>/.test(entry)
 );
 check(
   "the 'or choose your district' toggle exposes its state",
@@ -111,9 +111,20 @@ for (const [file, h1] of [
 /* ---- 5. field errors sit on their field ---------------------------------- */
 const entryFlat = entry.replace(/\s+/g, " ");
 check(
-  "the ZIP/address field reports itself invalid and names its error (and its hint)",
-  /ref=\{inputRef\} id="location" name="zip" aria-invalid=\{fieldError \|\| undefined\} aria-describedby=\{ \[field\.hint \? hintId : "", fieldError \? errorId : ""\] \.filter\(Boolean\) \.join\(" "\) \|\| undefined \}/.test(entryFlat)
+  "the address field reports itself invalid and names its error (and its hint)",
+  /ref=\{inputRef\} id="location" aria-invalid=\{fieldError \|\| undefined\} aria-describedby=\{ \[field\.hint \? hintId : "", fieldError \? errorId : ""\] \.filter\(Boolean\) \.join\(" "\) \|\| undefined \}/.test(entryFlat)
 );
+{
+  /* No name: a native submit (before hydration, or a script that fails)
+     serialises only named fields, so the address can't reach a URL. */
+  const at = entryFlat.indexOf("<Input ref={inputRef}");
+  const input = at >= 0 ? entryFlat.slice(at, entryFlat.indexOf("/>", at)) : "";
+  check(
+    "the address field has no name, so no native submit can carry it",
+    input.length > 0 && !/\bname=/.test(input) && !/name="zip"/.test(entry),
+    input
+  );
+}
 check(
   "a field error renders under the field with the described-by id",
   /<p\s+key=\{stage\.seq\}\s+id=\{errorId\}\s+role="alert"\s+className="mt-2 text-body-sm text-error"\s*>/.test(entry)
@@ -128,7 +139,7 @@ check(
 );
 check(
   "server failures aren't field errors",
-  (entry.match(/fail\("Something went wrong — give it another try\.", false\)/g) ?? []).length === 2 &&
+  (entry.match(/fail\("Something went wrong — give it another try\.", false\)/g) ?? []).length === 1 &&
     /We couldn't look up that address just now\.[^"]*",\s*false\s*\)/.test(entry)
 );
 const voting = code("src/components/features/VotingInfo.tsx");
@@ -232,7 +243,7 @@ check(
   /const combobox = suggestEnabled\s*\?/.test(entry) && !/^\s*role="combobox"/m.test(entry)
 );
 check(
-  "the ZIP field's label is visible, with an example as the placeholder",
+  "the address field's label is visible, with an example as the placeholder",
   /<label htmlFor="location" className="text-label text-on-surface">/.test(entry) &&
     /placeholder=\{placeholder \?\? field\.example\}/.test(entry)
 );

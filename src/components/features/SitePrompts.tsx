@@ -100,10 +100,11 @@ export function SitePrompts() {
   );
 }
 
-/* Google tag (gtag.js). It reports the page URL, and the no-JS ZIP path lands
-   on /candidates?zip=…, so the ZIP is dropped from page_location and
-   page_referrer before Google sees them — /privacy promises a ZIP is never
-   kept. */
+/* Google tag (gtag.js). It reports the page URL, and old shared links still
+   land on /candidates?zip=… (nothing on the site builds one since
+   2026-10-12, but links already out in the world resolve), so the ZIP is
+   dropped from page_location and page_referrer before Google sees them —
+   /privacy promises a ZIP is never kept. */
 function GoogleTag() {
   return (
     <>

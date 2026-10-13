@@ -9,7 +9,8 @@ import { coveredCounty } from "./counties.ts";
    offices for the welcome email and VotingInfo, but it is server-only, so
    the split-ZIP prompt in CountyPicker could not use it and linked "your
    county Supervisor of Elections" to the Department of Education
-   (fldoe.org) instead. That map keys on the county's name and keeps two
+   (fldoe.org) instead. That prompt's "Not sure?" line now sits under the
+   district picker in LocationEntry. That map keys on the county's name and keeps two
    older addresses that now redirect here (miamidade.gov's elections page
    to votemiamidade.gov, ocfelections.gov to voteorangefl.gov); folding it
    into this one is a follow-up for whoever owns that file.

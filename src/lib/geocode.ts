@@ -38,9 +38,10 @@ function baseUrl(): string | null {
 /* Whether the location field takes a street address at all. On by default
    since 2026-10-12: with no Pelias, a typed address goes to the Census
    Bureau's free one-line geocoder (census-block.ts blockForAddress), which
-   needs no account or key. ADDRESS_LOOKUP_OFF (any value) is the switch
-   back: the field takes a ZIP only, both address routes refuse, and
-   /privacy says nothing typed leaves the site. */
+   needs no account or key. ADDRESS_LOOKUP_OFF (any value) is the kill
+   switch: there is no field, only the district picker (never a ZIP; the
+   field stopped taking one 2026-10-12), both address routes refuse, and
+   /privacy says nothing the voter chooses leaves the site. */
 export function addressEntryEnabled(): boolean {
   return !process.env.ADDRESS_LOOKUP_OFF?.trim();
 }

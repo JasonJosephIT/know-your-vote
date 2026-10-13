@@ -44,40 +44,40 @@ export function houseRaceNotOnBallot(
     : `There's no U.S. House race on your ballot this year. The ${district} race was decided in the August primary, and ${name} takes the seat.`;
 }
 
-/** The location field's words. The field takes a street address while
-    address lookup is on (addressEntryEnabled(), on in production since
-    2026-10-12); with ADDRESS_LOOKUP_OFF set it asks for a ZIP and nothing
-    on the page asks for an address. */
+/** The location field's words. The field takes a street address and
+    nothing else (founder, 2026-10-12: no ZIP option): a ZIP can sit in
+    more than one district, an address sits in one census block. A ZIP
+    inside the address is fine, and Census needs it or the city. With
+    ADDRESS_LOOKUP_OFF set there is no field at all, only the district
+    picker, so the words are about the district and never ask for a ZIP. */
 export function locationFieldCopy(addressEnabled: boolean): {
-  /** What the voter types, mid-sentence: "Give us your ___". */
+  /** What the voter gives, mid-sentence: "Give us your ___". */
   noun: string;
   label: string;
   /** The field's placeholder: an example of what to type, never the label
       (the label is visible above the field; interface review 2026-10-05).
-      For an address it is the shape, not a street: any real example would
-      be someone's street, and Census needs the city or ZIP with it. */
+      It is the shape, not a street: any real example would be someone's
+      street, and Census needs the city or ZIP with it. */
   example?: string;
   /** A line under the label saying what the field needs, so the rule is
       visible after the placeholder goes. */
   hint?: string;
-  /** postal-code in both modes. The field takes a whole one-line address,
-      and no autocomplete token means that: street-address autofills the
-      street lines alone, which then fails for want of a city or ZIP
-      (review 2026-10-12), while an autofilled ZIP resolves. */
-  autoComplete: "postal-code";
+  /** street-address. It autofills the street lines alone, and the field
+      then asks for the city or ZIP code (the needsPlace answer). The token
+      it replaced, postal-code, would autofill the one thing the field now
+      refuses. */
+  autoComplete?: "street-address";
 } {
   return addressEnabled
     ? {
-        noun: "address or ZIP",
-        label: "Your address or ZIP code",
-        example: "Street and city, or ZIP",
-        hint: "Your street address with its city or ZIP finds your exact district. A ZIP works too.",
-        autoComplete: "postal-code",
+        noun: "address",
+        label: "Your address",
+        example: "Street and city, or street and ZIP",
+        hint: "Your house number and street, with your city or ZIP code.",
+        autoComplete: "street-address",
       }
     : {
-        noun: "ZIP",
-        label: "Your ZIP code",
-        example: "33130",
-        autoComplete: "postal-code",
+        noun: "district",
+        label: "Your congressional district",
       };
 }
