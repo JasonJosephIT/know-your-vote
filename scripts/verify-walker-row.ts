@@ -6,14 +6,14 @@
    after "What this is" on /about, below lg only. Its whole job is equal
    attention, so that is checked on the file's own pixels: eight figures in
    the hero's fixed order, every one scaled to the same height with its
-   soles on the bottom edge, and the same gap between each. Decision 4A
-   makes the fisherman skin-6 before the row can ship (the eight stop at
-   skin-5, and side by side the gap shows), so his three files, and his
-   slot in both row files, are checked for skin-6 and against skin-5. A
-   pixel re-tone was tried and withdrawn: his ink eyes fade on skin-6 at
-   hero size, which is 4A's own case for regenerating him. Until a
-   regenerated skin-6 fisherman whose eyes read lands, those checks fail,
-   and that is the row waiting, as 4A says.
+   soles on the bottom edge, and the same gap between each. The row ships
+   with today's eight (founder decision 4B, 2026-10-14): they span skin-1
+   to skin-5, and the missing skin-6 is a logged gap
+   (docs/brand-assets-roadmap.md, "Phone walker row"). A pixel re-tone of
+   the fisherman was tried and withdrawn, because his ink eyes fade on
+   skin-6. So the skin check here is that the row is not older than his
+   files: whatever tone his files carry, his slot in both row files carries
+   the same, so a regenerated skin-6 fisherman can't ship with a stale row.
 
    Then source checks: it is lazy (Art's default, never eager), phones only
    (lg:hidden, no desktop twin), still (no motion class), and only where
@@ -174,7 +174,7 @@ for (const [key, file] of [
   );
 }
 
-/* ---- 3. Decision 4A: a skin-6 walker ----------------------------------- */
+/* ---- 3. The row matches the fisherman's files (decision 4B) ----------- */
 
 {
   const design = read("docs/design.md");
@@ -189,35 +189,35 @@ for (const [key, file] of [
     Math.abs(data[i] - t[0]) <= tol &&
     Math.abs(data[i + 1] - t[1]) <= tol &&
     Math.abs(data[i + 2] - t[2]) <= tol;
-  const failedBefore = failures;
+  /* Which of the two deepest tones his skin is: the one with more pixels
+     near it. */
+  const deeper = (n5: number, n6: number) => (n6 > n5 ? 6 : 5);
+
+  const files = new Set<number>();
   for (const file of [
     "illustrations/walker-fisherman.webp",
     "illustrations/walker-fisherman-sm.webp",
     "rotator/walker-fisherman.webp",
   ]) {
     const { data } = await rgba(`${ROOT}/public/brand/site/${file}`);
-    let opaque = 0;
     let near5 = 0;
     let near6 = 0;
     for (let i = 0; i < data.length; i += 4) {
       if (data[i + 3] === 0) continue;
-      opaque++;
       if (near(data, i, skin5, 8)) near5++;
       if (near(data, i, skin6, 8)) near6++;
     }
-    check(
-      `${file}: the fisherman's skin is skin-6, not skin-5`,
-      near6 >= 0.02 * opaque && near5 <= 0.005 * opaque,
-      `skin-6 ${near6}px, skin-5 ${near5}px of ${opaque}`
-    );
+    files.add(deeper(near5, near6));
   }
+  check(
+    "the fisherman's three files carry one skin tone",
+    files.size === 1,
+    [...files].join(", ")
+  );
+  const filesTone = [...files][0];
 
-  /* The row is composed from those files, and a change to his skin leaves
-     his alpha and size as they were, so a row composed before it passes
-     every check in section 2. His slot's tone is checked here as well. At
-     96px a flat fill is blurred by the lossy encoding, so the window is
-     wider and the test relative: a skin-6 row measured 101 to 31 at +-10,
-     a skin-5 one 23 to 84 (2026-10-14). */
+  /* At 96px a flat fill is blurred by the lossy encoding, so the window is
+     wider than for his own files. */
   const at = WALKERS.indexOf("walker-fisherman");
   for (const file of ["walker-row-xs.webp", "walker-row-sm.webp"]) {
     const { data, w, h } = await rgba(`${ILL}/${file}`);
@@ -234,16 +234,14 @@ for (const [key, file] of [
       }
     }
     check(
-      `${file}: the fisherman's slot is skin-6 too, so the row is not older than his files`,
-      near6 > 0 && near6 >= 2 * near5,
+      `${file}: the fisherman's slot is skin-${filesTone} like his files, so the row is not older than them`,
+      near5 + near6 > 0 && deeper(near5, near6) === filesTone,
       `skin-6 ${near6}px, skin-5 ${near5}px in x ${x0}-${x0 + widths[at] - 1}`
     );
   }
-  if (failures > failedBefore)
-    console.error(
-      "      Decision 4A: the row waits for a skin-6 fisherman. Regenerate him in the same pose\n" +
-        "      (generate.py, then skinmask, then post; assets.json pins him to skin-6), check that\n" +
-        "      his eyes read at 180x240 beside the other seven, then run rotator.py and compose.py row."
+  if (filesTone !== 6)
+    console.log(
+      "  note: no walker is skin-6 yet (decision 4B, a logged gap; docs/brand-assets-roadmap.md)"
     );
 }
 
