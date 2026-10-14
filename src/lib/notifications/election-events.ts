@@ -5,7 +5,13 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 /* Reads for the election_event table (0007). Only VERIFIED rows ever reach
    a page, an email, or a calendar file: verified_by NULL means the founder
    has not yet checked the date against details_url (plan F4) — by design
-   those rows do not exist as far as any send path is concerned. */
+   those rows do not exist as far as any send path is concerned.
+
+   Two readers, one per key. verifiedElectionEvents is for the service-role
+   client (crons, the subscription route), which bypasses RLS, so it filters
+   on verified_by itself. publicElectionEvents is for the anon client (the
+   home banner and the calendar file): 0062's policy hands anon verified rows
+   only and withholds the verified_by column, so it cannot filter on it. */
 
 export type ElectionEvent = {
   id: string;
@@ -35,6 +41,9 @@ export type ElectionEvent = {
   verified_at?: string | null;
 };
 
+const EVENT_COLUMNS =
+  "id, county_fips, event_type, election, event_date, rule, details_url, verified_at";
+
 /* Every verified row for the election, statewide and county (0043).
    Callers never use the list raw: eventsForCounty (./schedule.ts) picks the
    dates that apply to one county, or to a voter whose county is unknown.
@@ -52,15 +61,29 @@ export async function verifiedElectionEvents(
 ): Promise<ElectionEvent[]> {
   let query = service
     .from("election_event")
-    .select(
-      "id, county_fips, event_type, election, event_date, rule, details_url, verified_at"
-    )
+    .select(EVENT_COLUMNS)
     .not("verified_by", "is", null)
     .order("event_date");
   if (election) query = query.eq("election", election);
   const { data, error } = await query;
   /* Read failure degrades to "no dates" — callers already render without
      them (§0.7 graceful no-op). */
+  if (error) return [];
+  return (data ?? []) as ElectionEvent[];
+}
+
+/* The same rows through the anon key. No verified_by filter: RLS (0062) is
+   the filter, and anon holds no grant on that column. Before 0062 is applied
+   the read is refused and this returns [] — no dates, never unverified ones. */
+export async function publicElectionEvents(
+  anon: SupabaseClient,
+  election: string
+): Promise<ElectionEvent[]> {
+  const { data, error } = await anon
+    .from("election_event")
+    .select(EVENT_COLUMNS)
+    .eq("election", election)
+    .order("event_date");
   if (error) return [];
   return (data ?? []) as ElectionEvent[];
 }

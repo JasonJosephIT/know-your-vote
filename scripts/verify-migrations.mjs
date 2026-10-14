@@ -24,8 +24,9 @@
     13. admin_action is append-only even for service_role: INSERT/SELECT are
         granted, UPDATE/DELETE are denied (PRD § 5).
     14. 0007_notifications objects exist (election_event,
-        notification_send_log); anon can neither read nor write them;
-        the event_type CHECK and the statewide-scope unique index reject
+        notification_send_log); anon can write neither and cannot read
+        notification_send_log; since 0062 anon reads verified election_event
+        rows only, and never their verified_by (operator email); the event_type CHECK and the statewide-scope unique index reject
         bad rows; send_log ON CONFLICT DO NOTHING dedupes.
     14c. 0043_county_early_voting_2026: both early-voting bounds for the
         four covered counties (Oct 19, Nov 1), no rule, verified_by NULL;
@@ -721,6 +722,9 @@ await db.exec(`
   -- alone (Palm Beach)
   INSERT INTO election_event (county_fips, event_type, election, event_date, details_url) VALUES
     ('12099', 'early_voting_start', 'general_2026', '2026-10-19', 'https://www.votepalmbeach.gov/');
+  -- a verified row beside it, so 0062's anon policy has one row to show
+  INSERT INTO election_event (county_fips, event_type, election, event_date, details_url, verified_by) VALUES
+    ('12099', 'early_voting_end', 'general_2026', '2026-11-01', 'https://www.votepalmbeach.gov/', 'probe@example.com');
   INSERT INTO notification_send_log (dedupe_key, recipient_count) VALUES
     ('general_2026:registration_deadline:T-7:email', 1);
 `);
@@ -820,9 +824,29 @@ await expectDenied(
   "UPDATE race_publication SET status='published' WHERE race_id='r-draft';"
 );
 await expectDenied("anon cannot update claims", "UPDATE claim SET text='x';");
+/* 0062: verified rows only, every column but verified_by. */
+await check("anon reads verified election_event rows only (0062)", async () => {
+  const r = await db.query(
+    "SELECT county_fips, event_type FROM election_event WHERE county_fips = '12099' ORDER BY event_type;"
+  );
+  const seen = r.rows.map((row) => row.event_type).join(",");
+  if (seen !== "early_voting_end") throw new Error(`expected only the verified row, saw [${seen}]`);
+});
 await expectDenied(
-  "anon cannot read election_event",
+  "anon cannot read election_event.verified_by (0062)",
+  "SELECT verified_by FROM election_event;"
+);
+await expectDenied(
+  "anon cannot SELECT * from election_event (verified_by is not granted)",
   "SELECT * FROM election_event;"
+);
+await expectDenied(
+  "anon cannot filter election_event on verified_by",
+  "SELECT id FROM election_event WHERE verified_by IS NOT NULL;"
+);
+await expectDenied(
+  "anon cannot update election_event",
+  "UPDATE election_event SET event_date = '2026-11-04';"
 );
 await expectDenied(
   "anon cannot insert election_event",
@@ -871,6 +895,10 @@ await db.exec("RESET ROLE;");
    0002 revoked writes from authenticated and never granted it SELECT; the ops
    tables add no grant either, so every verb is denied. */
 await db.exec("SET ROLE authenticated;");
+await expectDenied(
+  "authenticated cannot read election_event (0062 grants anon only)",
+  "SELECT id FROM election_event;"
+);
 for (const t of opsTables) {
   await expectDenied(`authenticated cannot SELECT ${t}`, `SELECT * FROM ${t};`);
   await expectDenied(`authenticated cannot INSERT ${t}`, opsInsert[t]);
