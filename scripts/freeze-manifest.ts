@@ -48,6 +48,7 @@ export const FROZEN_FILES: readonly string[] = [
   "src/components/features/IssueFilter.tsx",
   "src/components/features/ClaimList.tsx",
   "src/components/features/SourceLinks.tsx",
+  "src/lib/source-line.ts",
   "src/components/features/RaceHeader.tsx",
   "src/components/features/RaceListing.tsx",
   "src/components/features/CandidateListing.tsx",
