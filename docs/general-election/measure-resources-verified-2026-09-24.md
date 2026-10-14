@@ -489,3 +489,32 @@ Notes:
 
 **Gate picture after 0060, AM1:** support 4, oppose 5, neutral 12; 5 ≤ 2 × 4, passes. Status `published` once applied.
 **Gate picture, AM3:** unchanged at support 2, oppose 4, neutral 9; 4 ≤ 2 × 2, passes at the boundary.
+
+## Rows for 0061 (AM3 and AM2), 2026-10-14
+
+Founder decision, 2026-10-14 ("add for both"), on the two questions the 0060 section left open: add FEA's AM3 listing together with the four already-verified pages that state an AM3 position, and add Your Observer's AM2 recommendation. `supabase/migrations/0061_am3_am2_more_sides.sql` holds them. Each URL was opened on 2026-10-14 (`curl -sIL` for the status chain, a GET of the body) by one reader, then re-fetched by a second reader trying to refute the title, date, author and quote; none was refuted. Every page was already a row for another amendment.
+
+| # | Measure | URL | Loads | Publisher / author | Date | kind | stance | Title (verbatim) | Evidence | In 0061? |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | AM3 | https://florida.gop/florida-gop-officially-endorses-amendments-1-and-3/ | Yes (HTTP 200) | Republican Party of Florida, own release | 2026-09-14 (`article:published_time`) | argument | support | Florida GOP Officially Endorses Amendments 1 and 3 | "The Florida GOP urges Floridians to vote YES on Amendment 1, YES on Amendment 2, and YES on Amendment 3." | Yes |
+| 2 | AM3 | https://palmbeachexaminer.substack.com/p/stop-paying-rent-to-the-state-how | Yes (HTTP 200) | Palm Beach Examiner (Substack; wordmark "Karl Dickey’s Freedom Vanguard") / Karl Dickey | 2026-08-07 (JSON-LD) | commentary | support | Stop Paying Rent to the State How Florida Amendments 1, 2, and 3 Cut Your Taxes | "I can tell you that I will be voting YES on all three amendments this coming November." | Yes |
+| 3 | AM3 | https://feaweb.org/action-center/voter-toolkit/ | Yes (HTTP 200) | Florida Education Association, own site | undated | argument | oppose | Constitutional Amendments | "Amendment 3 / OPPOSED BY FEA / Save Our Homes From Excessive Property Taxes", linking the Division of Elections page for the 2026 AM3 (seqnum 110) | Yes |
+| 4 | AM3 | https://floridataxwatch.org/the-florida-taxpayers-guide-for-the-2026-constitutional-amendments/ | Yes (HTTP 200) | Florida TaxWatch (author box: Kurt Wenner) | 2026-09-17 (`itemprop="datePublished"`) | analysis | oppose | The Florida Taxpayer's Guide for the 2026 Constitutional Amendments | "Florida TaxWatch Recommends a “No” Vote on Amendment 3." | Yes |
+| 5 | AM3 | https://amandainformed.substack.com/p/three-amendments-three-reasons-to | Yes (HTTP 200) | Amanda Informed (Substack, pen name) | 2026-09-23 (JSON-LD) | commentary | oppose | Three Amendments, Three Reasons to Vote No | "That is why I am voting no on Amendment 3." | Yes |
+| 6 | AM2 | https://www.yourobserver.com/news/2026/oct/07/observer-recommends-state-amendments/ | Yes (HTTP 200) | Your Observer, opinion page / Matt Walsh, CEO and founder of Observer Media Group | 2026-10-07 (`article:published_time`) | commentary | support | Observer recommends: State Amendments 1 & 2 | "We recommend: Vote yes on Amendment 2" (a no-break space follows the colon) | Yes |
+
+Notes:
+- Row 2 settles the Palm Beach Examiner title: `<h1>`, og:title, JSON-LD headline and `<title>` all read it with no colon, and "Stop Paying Rent to the State:" does not occur on the page. 0040's AM2 row had a colon; 0061 corrects it. The post predates the court-ordered ballot-title rewrite and calls AM3 "SAVE OUR HOMES FROM EXCESSIVE PROPERTY TAXES"; the $150,000 / $250,000 figures and HJR 1 make it the 2026 AM3.
+- Row 3's `<h1>` is "Voter Toolkit"; "Constitutional Amendments" is the `<h2>` over the 2026 list, the title its AM1 and AM2 rows already use. The page also carries a hidden 2024 block ("Vote NO on Amendment 1", partisan school boards). It is not the 2026 AM1 and must never be quoted for it.
+- Row 4's title keeps the straight apostrophe its AM1 and AM2 rows use; the page sets a curly one. The guide gives both sides, an analysis and a conclusion before the recommendation, so `analysis` (F5), as for AM1 and AM2. The same page recommends Yes on AM1 and AM2.
+- Row 6's Amendment 2 section concedes costs ("Selected tax exemptions for one group over another distorts fairness.") before recommending Yes. The page says recommendations on every amendment "will appear in the Oct. 17 editions", so a later consolidated piece may follow.
+
+**Sweep of every stored page for positions not yet recorded (the equal-search-effort step, AGENTS.md).** Every sided page stored for AM1, AM2 or AM3 was opened again on 2026-10-14 and read for an explicit position on another amendment. Found, **not in 0061** (founder's call):
+- LWV of Florida's Vote411 synopsis PDF (already an AM2 row) lists "League of Women Voters of Florida" among AM3's opponents (page 5). It also lists LWV among AM1's opponents, which duplicates LWV's existing AM1 row.
+- The RPOF release (row 1) also urges "YES on Amendment 2"; its body says the party "endorsed Amendment 2 in May of last year". No reasons are given for AM2.
+- Your Observer published a separate AM3 editorial on 2026-10-14, "Amendment 3: It's wrong" (Matt Walsh), ending "We recommend: Vote no on Amendment 3".
+- Unopened leads: two Tampa Bay Times columns on AM3 (one "Why I’m voting yes on Florida’s Amendment 3", one "Why I’m voting no on Florida Amendment 3"), a dedicated Palm Beach Examiner AM3 post, and a Palm Beach Post AM2 piece linked from the Farm Bureau page.
+
+No other stored page states a position on an amendment it is not already a row for (VOTE411's AM1 page, the Villages-News and Chronicle letters, Farm Bureau, the Tampa Bay Times AM2 column, FDACS, Vote Yes on 3, Florida Realtors, the Sheriffs Association short, League of Cities, 1000 Friends, Political Cortadito). Political Cortadito is behind a Cloudflare challenge and was read only through a summarising fetch, so no text from it is quoted.
+
+**Gate picture after 0061.** AM3: support 4, oppose 7, neutral 9; 7 ≤ 2 × 4, passes. AM2: support 6, oppose 4, neutral 9; 6 ≤ 2 × 4, passes. AM1 unchanged at 4 / 5 / 12. Adding the three found positions as they stand would make AM3 4 / 9 (fails, 9 > 8) and AM2 7 / 4 (passes).
