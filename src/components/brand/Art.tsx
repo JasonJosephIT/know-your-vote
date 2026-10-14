@@ -26,7 +26,8 @@ export type ArtName = keyof typeof artSizes;
    the cat (64px on a phone), 264px for the seated reader (88px). Each is an
    exact proportional resize of its master, so a ledge (the reader's 0.618,
    the cat's 0.882, fractions of the height) lands on the same line.
-   scripts/verify-art-files.ts pins the sizes. */
+   scripts/verify-art-files.ts pins the sizes, and reads XS_MAX, wantsXs and
+   artSrc from this file's source. */
 const XS_MAX = 96;
 
 function wantsXs(name: ArtName, height?: number): boolean {

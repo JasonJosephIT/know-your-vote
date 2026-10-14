@@ -13,8 +13,10 @@
    2. Every -xs file keeps its -sm file's ratio (within 1%), so a ledge,
       a fraction of the height, lands on the same line, and is lighter than
       the -sm file it stands in for.
-   3. Every Art or LedgeArt drawn 96px tall or less has an -xs file, and
-      that file is at least 2x the height it is drawn at.
+   3. Art.tsx serves an -xs file at its XS_MAX (96px) or less, read from
+      its source rather than copied here; every Art or LedgeArt drawn that
+      small has an -xs file, and that file is at least 2x the height it is
+      drawn at.
    4. Below sm the footer's <source> serves the 750w town strip: one file,
       no sizes attribute (with sizes, WebKit picked the 2400w file on 402px+
       @3x iPhones), the width and height of the file, the ratio of the
@@ -36,7 +38,7 @@ const ROOT = resolve(import.meta.dirname, "..");
 const SITE = "public/brand/site";
 const SIZES = "src/components/brand/art-sizes.json";
 const FOOTER = "src/components/nav/SiteFooter.tsx";
-const XS_MAX = 96; // Art.tsx: an -xs file is used at this height or less
+const ART = "src/components/brand/Art.tsx";
 
 const source = (file: string) => readFileSync(join(ROOT, file), "utf8");
 const stripComments = (src: string) =>
@@ -133,6 +135,27 @@ for (const name of xsNames.filter((n) => n in sizes)) {
 
 /* ---- 3. Small pieces fetch small files ---------------------------------- */
 
+/* The cutoff and the choice are read from Art.tsx, not copied: a .tsx file
+   cannot be imported here, so they are matched in its source, the way the
+   footer is read below. */
+const artSource = rendered(ART);
+const XS_MAX = Number(artSource.match(/const XS_MAX = (\d+);/)?.[1]);
+check(
+  `Art.tsx sets the -xs cutoff (XS_MAX = ${XS_MAX})`,
+  Number.isInteger(XS_MAX),
+  "no `const XS_MAX = <n>;` in Art.tsx"
+);
+check(
+  "Art.tsx wants an -xs file at XS_MAX or less, when one exists",
+  artSource.includes("height <= XS_MAX && `xs/${name}` in artSizes")
+);
+check(
+  "Art.tsx's artSrc serves <name>-xs.webp when it wants an -xs file",
+  artSource.includes(
+    "wantsXs(name, height) ? `/brand/site/illustrations/${name}-xs.webp`"
+  )
+);
+
 const ART_FILES = [
   ...readdirSync(join(ROOT, "src"), { recursive: true, encoding: "utf8" }),
 ]
@@ -174,7 +197,7 @@ check(
 for (const name of ["sit-divider", "pet-cat-peek"]) {
   const drawn = small.filter((u) => u.name === name).map((u) => u.height);
   check(
-    `${name} is drawn on phones at ${drawn.join(", ") || "no height"}px and fetches its -xs file`,
+    `${name} is drawn on phones at ${drawn.map((h) => `${h}px`).join(", ") || `no height of ${XS_MAX}px or less`} and fetches its -xs file`,
     drawn.length > 0 && `xs/${name}` in sizes
   );
 }
