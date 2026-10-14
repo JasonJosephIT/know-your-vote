@@ -146,6 +146,20 @@ export default function PrivacyPage() {
       </section>
 
       <section className="flex flex-col gap-2">
+        {/* "Report a mistake" is in the footer of every page (#184, a mailto
+            with the fixed subject "Correction", src/components/nav/
+            SiteFooter.tsx), so what writing to us hands over is said here
+            too. Nothing in the code adds a sender to the reminder list. */}
+        <h2 className="text-h2">Writing to us</h2>
+        <p className="text-body">
+          If you email us, including through &ldquo;Report a mistake&rdquo;,
+          we get your email address and your message, as with any email. It
+          doesn&rsquo;t sign you up for anything.
+        </p>
+        <HowThisWorks topic="contact" about="writing to us" />
+      </section>
+
+      <section className="flex flex-col gap-2">
         <h2 className="text-h2">Analytics</h2>
         {analyticsOn ? (
           <p className="text-body">

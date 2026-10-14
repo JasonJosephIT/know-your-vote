@@ -16,14 +16,20 @@
         no onChange (WCAG 3.2.2: applied on submit, never on change), the
         options built from COVERED_COUNTIES and the covered districts, and no
         "use client".
-     4. The home page passes ?show= to the parser, puts the picker after the
-        tiles with action "/", and keeps today's rendering for "all": the
-        shared ballot, the House-race step and the coverage summary, with the
-        news column outside the switch so it stays in every view.
+     4. The home page passes ?show= to the parser, puts the picker right
+        after the "On this page" row with action "/", and keeps today's
+        rendering for "all": the shared ballot, the House-race step and the
+        coverage summary, with the news column outside the switch so it
+        stays in every view.
      5. Candidates → Your races puts the same picker on the races view with
         action "/candidates" and view=races, carries the URL's district and
         county but never a ZIP, and renders YourRaces, unchanged, for "all".
      6. Every narrowed view has a plain "See all races" link back.
+     7. No "On this page" chip jumps to nothing: for every scope, each chip
+        BallotAtAGlance keeps lands on a section the page renders in that
+        scope (the House chip only with the House step, the statewide and
+        ballot-question chips only with the shared ballot), and "all" keeps
+        all four chips, the row as it was before the picker.
 
    Run: node scripts/verify-race-scope.ts */
 
@@ -33,6 +39,7 @@ import { fileURLToPath } from "node:url";
 import { COVERED_COUNTIES } from "../src/lib/counties.ts";
 import {
   districtOptions,
+  homeSections,
   parseRaceScope,
   raceScopeValue,
   type RaceScope,
@@ -157,8 +164,8 @@ console.log("\n4. Home page");
 const home = code("src/app/(public)/page.tsx");
 check("reads ?show= and passes it to the parser with the covered districts", /parseRaceScope\( \(await searchParams\)\.show, districts\.map\(\(d\) => d\.district\) \)/.test(home));
 check(
-  "the picker sits right after the tiles, with action \"/\"",
-  /<BallotAtAGlance \/> <RaceScopePicker action="\/" scope=\{scope\} districts=\{districtOptions\(districts\)\} \/>/.test(home)
+  "the picker sits right after the \"On this page\" row, with action \"/\"",
+  /<BallotAtAGlance sections=\{homeSections\(scope\)\} \/> <RaceScopePicker action="\/" scope=\{scope\} districts=\{districtOptions\(districts\)\} \/>/.test(home)
 );
 check("a narrowed view says what it shows and links back to /", /<ScopeNote scope=\{scope\} allHref="\/" \/>/.test(home));
 check(
@@ -171,18 +178,25 @@ check(
   const block = gate >= 0 ? home.slice(gate, home.indexOf("<aside", gate)) : "";
   check("showAll is exactly the \"all\" scope", /const showAll = scope\.kind === "all";/.test(home));
   check(
-    "the zigzag, the House-race step and the coverage summary show only for \"all\"",
+    "the zigzag and the House-race step show only for \"all\"",
     gate >= 0 &&
       /<SectionDivider variant="zigzag" \/>/.test(block) &&
+      /<section id="house-race"/.test(block) &&
       /<LocationEntry/.test(block) &&
-      /See your races for \{saved\.district\}/.test(block) &&
-      /<CoverageSummary/.test(block)
+      /See your races for \{saved\.district\}/.test(block)
   );
   check(
-    "the masthead, banner, tiles and news column are outside the switch",
+    "the coverage summary, after the news since home PR A, shows only for \"all\"",
+    /\{showAll && \( <CoverageSummary/.test(home) &&
+      (home.match(/<CoverageSummary/g) ?? []).length === 1 &&
+      home.indexOf("<CoverageSummary") > home.indexOf("<HomeNews")
+  );
+  check(
+    "the masthead, banner, sample-ballot block, \"On this page\" row and news column are outside the switch",
     home.indexOf("<HomeMasthead />") < gate &&
       home.indexOf("<DeadlineBanner") < gate &&
-      home.indexOf("<BallotAtAGlance />") < gate &&
+      home.indexOf("<VotingResources") < gate &&
+      home.indexOf("<BallotAtAGlance") < gate &&
       home.indexOf("<HomeNews") > gate &&
       home.indexOf("<HomeNews") < end
   );
@@ -226,6 +240,91 @@ check(
 check("a failed district read says so (houseRaceNotLoaded)", /houseRaceNotLoaded\(district\)/.test(scoped));
 check("the way back is a plain \"See all races\" link", /<Link href=\{allHref\}[^>]*> See all races <\/Link>/.test(scoped));
 check("headings are h2, under each page's h1", /<h2 id="district-race-heading"/.test(scoped) && /<h2 id="county-races-heading"/.test(scoped));
+
+console.log("\n7. \"On this page\" never jumps to nothing");
+{
+  /* Which chip each section flag gates, read from BallotAtAGlance's chip
+     list: each entry from its guard to its href. */
+  const glance = code("src/components/features/BallotAtAGlance.tsx");
+  const list = glance.slice(glance.indexOf("const chips = ["), glance.indexOf("].filter(Boolean)"));
+  const entry = (target: string) => {
+    const at = list.indexOf(`href: "#${target}"`);
+    if (at < 0) return "";
+    const start = Math.max(list.lastIndexOf("},", at), list.lastIndexOf("[", at));
+    return list.slice(start, at);
+  };
+  check(
+    "each chip is gated by its section's flag; the news chip by none (the news column is in every view)",
+    /^(?:\[|\},) statewide && races\.length > 0 && \{/.test(entry("statewide-races")) &&
+      /^(?:\[|\},) questions && measures\.length > 0 && \{/.test(entry("ballot-questions")) &&
+      /^(?:\[|\},) house && \{/.test(entry("house-race")) &&
+      /^(?:\[|\},) \{ label: "Election news", $/.test(entry("home-news")),
+    ["statewide-races", "ballot-questions", "house-race", "home-news"].map(entry).join(" | ")
+  );
+  check(
+    "an unpassed flag is true, so the row with no sections is the row as before",
+    /const \{ statewide = true, questions = true, house = true \} = sections;/.test(glance)
+  );
+  check(
+    "a row with only the phones-only news chip is phones-only too (no empty row on a desktop)",
+    /chips\.every\(\(c\) => c\.className === "lg:hidden"\) \? "flex flex-col gap-2 lg:hidden" : "flex flex-col gap-2"/.test(glance) &&
+      /<nav aria-labelledby="on-this-page" className=\{rowClass\}>/.test(glance)
+  );
+
+  /* What the home page renders, per scope, from the switches checked in 4:
+     the shared ballot (#statewide-races in SharedBallot, #ballot-questions
+     in BallotQuestions, which SharedBallot renders) outside county and
+     district; the House step (#house-race) only under showAll, which is
+     exactly "all"; the news (#home-news) always. */
+  check(
+    "the jump targets are where the switches put them",
+    /<section id="statewide-races"/.test(read("src/components/features/SharedBallot.tsx")) &&
+      /<BallotQuestions \/>/.test(code("src/components/features/SharedBallot.tsx")) &&
+      /<section id="ballot-questions"/.test(read("src/components/features/BallotQuestions.tsx")) &&
+      /id="home-news"/.test(read("src/components/features/NewsRail.tsx")) &&
+      (home.match(/id="house-race"/g) ?? []).length === 1 &&
+      home.indexOf('id="house-race"') > home.indexOf("{showAll && (") &&
+      home.indexOf('id="house-race"') < home.indexOf("<aside")
+  );
+  const rendered = (scope: RaceScope) => {
+    const shared = scope.kind !== "county" && scope.kind !== "district";
+    return new Set([
+      ...(shared ? ["statewide-races", "ballot-questions"] : []),
+      ...(scope.kind === "all" ? ["house-race"] : []),
+      "home-news",
+    ]);
+  };
+  const chipsFor = (scope: RaceScope) => {
+    const s = homeSections(scope);
+    return [
+      ...(s.statewide ? ["statewide-races"] : []),
+      ...(s.questions ? ["ballot-questions"] : []),
+      ...(s.house ? ["house-race"] : []),
+      "home-news",
+    ];
+  };
+  for (const scope of [
+    ALL,
+    { kind: "statewide" } as RaceScope,
+    ...COVERED_COUNTIES.map((c): RaceScope => ({ kind: "county", fips: c.fips })),
+    { kind: "district", district: "FL-27" } as RaceScope,
+    { kind: "district", district: "FL-10" } as RaceScope,
+  ]) {
+    const chips = chipsFor(scope);
+    const there = rendered(scope);
+    const dead = chips.filter((c) => !there.has(c));
+    const missing = [...there].filter((t) => !chips.includes(t));
+    check(
+      `${raceScopeValue(scope)}: every chip lands on a rendered section, and every section has its chip`,
+      dead.length === 0 && missing.length === 0,
+      `dead: ${dead.join(", ") || "none"}; missing: ${missing.join(", ") || "none"}`
+    );
+  }
+  check(
+    "\"all\" keeps all four chips",
+    chipsFor(ALL).join(",") === "statewide-races,ballot-questions,house-race,home-news"
+  );
+}
 
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed`);

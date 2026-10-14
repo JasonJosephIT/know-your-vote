@@ -295,6 +295,36 @@ check(
   "the footer links /privacy/how-it-works",
   /href: "\/privacy\/how-it-works"/.test(code("src/components/nav/SiteFooter.tsx"))
 );
+/* Facts main added while these pages were being written (merged
+   2026-10-14): the footer's "Report a mistake" mailto (#184) and the
+   "Sample ballot and how to vote" links out (#190). Each is said where a
+   voter looks for it, in the words of the code that makes it true. */
+{
+  const footer = code("src/components/nav/SiteFooter.tsx");
+  const at = how.indexOf('id="contact"');
+  const contact = rendered(at >= 0 ? how.slice(at, how.indexOf("</section>", at)) : "");
+  check(
+    "how-it-works says what writing to us hands over, and Report a mistake's fixed subject matches the footer",
+    /\?subject=Correction`/.test(footer) &&
+      contact.includes('"Report a mistake"') &&
+      contact.includes('"Correction"') &&
+      contact.includes("{CONTACT_EMAIL}") &&
+      /doesn't sign you up for anything/.test(contact)
+  );
+  check(
+    "/privacy has a Writing to us point that names Report a mistake",
+    /<h2 className="text-h2">Writing to us<\/h2>/.test(privacy) &&
+      rendered(privacy).includes('"Report a mistake"')
+  );
+  const os = how.indexOf('id="official-sites"');
+  const sites = rendered(os >= 0 ? how.slice(os, how.indexOf("</section>", os)) : "");
+  check(
+    "how-it-works says the official sample-ballot links go out and we never see what is entered there, as their rows do",
+    /We never see what you enter there/.test(sites) &&
+      /We never see what you enter there/.test(code("src/components/features/VotingResources.tsx")) &&
+      !/<iframe/.test(code("src/components/features/VotingResources.tsx"))
+  );
+}
 
 if (failures) {
   console.error(`\n${failures} privacy-page check(s) failed`);

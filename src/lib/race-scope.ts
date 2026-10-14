@@ -77,6 +77,28 @@ export function raceScopeValue(scope: RaceScope): string {
   }
 }
 
+/* The home page's sections a scope renders, for its "On this page" row
+   (BallotAtAGlance), so the row never offers a jump to a section that is
+   not there. "all" is the whole page. "statewide" keeps the shared ballot
+   (the statewide races and the ballot questions) and drops the House-race
+   step. A county or a district replaces the shared ballot with
+   ScopedRaces, which has neither list, and drops the House step too. The
+   news column is in every view, so it is not a choice here. */
+export interface HomeSections {
+  statewide: boolean;
+  questions: boolean;
+  house: boolean;
+}
+
+export function homeSections(scope: RaceScope): HomeSections {
+  const sharedBallot = scope.kind === "all" || scope.kind === "statewide";
+  return {
+    statewide: sharedBallot,
+    questions: sharedBallot,
+    house: scope.kind === "all",
+  };
+}
+
 export interface DistrictOption {
   district: string;
   /* The covered counties it reaches, in COVERED_COUNTIES order, as a voter

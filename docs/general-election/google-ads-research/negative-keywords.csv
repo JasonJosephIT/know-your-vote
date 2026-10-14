@@ -1,0 +1,45 @@
+scope,negative_keyword,match_type,reason
+All draft campaigns,best candidate,Phrase,Recommendations or partisan persuasion outside neutral guide purpose
+All draft campaigns,who to vote for,Phrase,Recommendations or partisan persuasion outside neutral guide purpose
+All draft campaigns,who should i vote for,Phrase,Recommendations or partisan persuasion outside neutral guide purpose
+All draft campaigns,vote them out,Phrase,Recommendations or partisan persuasion outside neutral guide purpose
+All draft campaigns,endorsements,Phrase,Recommendations or partisan persuasion outside neutral guide purpose
+All draft campaigns,attack ad,Phrase,Recommendations or partisan persuasion outside neutral guide purpose
+All draft campaigns,opposition research,Phrase,Recommendations or partisan persuasion outside neutral guide purpose
+All draft campaigns,democrat,Phrase,Draft no-party query policy; review lost neutral queries; do not exclude the word green alone
+All draft campaigns,democrats,Phrase,Draft no-party query policy; review lost neutral queries; do not exclude the word green alone
+All draft campaigns,democratic party,Phrase,Draft no-party query policy; review lost neutral queries; do not exclude the word green alone
+All draft campaigns,republican,Phrase,Draft no-party query policy; review lost neutral queries; do not exclude the word green alone
+All draft campaigns,republicans,Phrase,Draft no-party query policy; review lost neutral queries; do not exclude the word green alone
+All draft campaigns,republican party,Phrase,Draft no-party query policy; review lost neutral queries; do not exclude the word green alone
+All draft campaigns,libertarian party,Phrase,Draft no-party query policy; review lost neutral queries; do not exclude the word green alone
+All draft campaigns,green party,Phrase,Draft no-party query policy; review lost neutral queries; do not exclude the word green alone
+All draft campaigns,reform party,Phrase,Draft no-party query policy; review lost neutral queries; do not exclude the word green alone
+All draft campaigns,jobs,Phrase,"Employment, campaign commerce or horse-race intent outside purpose"
+All draft campaigns,salary,Phrase,"Employment, campaign commerce or horse-race intent outside purpose"
+All draft campaigns,campaign donations,Phrase,"Employment, campaign commerce or horse-race intent outside purpose"
+All draft campaigns,campaign merchandise,Phrase,"Employment, campaign commerce or horse-race intent outside purpose"
+All draft campaigns,polling predictions,Phrase,"Employment, campaign commerce or horse-race intent outside purpose"
+All draft campaigns,election betting,Phrase,"Employment, campaign commerce or horse-race intent outside purpose"
+Election-2026 campaigns only,2024,Phrase,Old-cycle acquisition; do not apply to evergreen historical office content
+Election-2026 campaigns only,2022,Phrase,Old-cycle acquisition; do not apply to evergreen historical office content
+Election-2026 campaigns only,2020,Phrase,Old-cycle acquisition; do not apply to evergreen historical office content
+Election-2026 campaigns only,2018,Phrase,Old-cycle acquisition; do not apply to evergreen historical office content
+Candidate-comparison campaigns,judicial retention candidates,Phrase,Unsupported KYV comparisons; official referral education can use a separate reviewed group
+Candidate-comparison campaigns,judge voter guide,Phrase,Unsupported KYV comparisons; official referral education can use a separate reviewed group
+Candidate-comparison campaigns,city council candidates,Phrase,Unsupported KYV comparisons; official referral education can use a separate reviewed group
+Candidate-comparison campaigns,special district candidates,Phrase,Unsupported KYV comparisons; official referral education can use a separate reviewed group
+Candidate-comparison campaigns,state house candidates,Phrase,Unsupported KYV comparisons; official referral education can use a separate reviewed group
+Candidate-comparison campaigns,state senate candidates,Phrase,Unsupported KYV comparisons; official referral education can use a separate reviewed group
+C2 office-education campaign,bus schedule,Phrase,Transactional service request; office education cannot fulfill it
+C2 office-education campaign,train tickets,Phrase,Transactional service request; office education cannot fulfill it
+C2 office-education campaign,report pothole,Phrase,Transactional service request; office education cannot fulfill it
+C2 office-education campaign,pay property tax,Phrase,Transactional service request; office education cannot fulfill it
+C2 office-education campaign,marriage license application,Phrase,Transactional service request; office education cannot fulfill it
+C2 office-education campaign,file police report,Phrase,Transactional service request; office education cannot fulfill it
+C2 office-education campaign,insurance quote,Phrase,Transactional service request; office education cannot fulfill it
+C2 office-education campaign,gas prices near me,Phrase,Transactional service request; office education cannot fulfill it
+C2 office-education campaign,restaurant complaint,Phrase,Transactional service request; office education cannot fulfill it
+R3 November-election acquisition,florida voter registration,Exact,Registration deadline passed; preserve legitimate address-update queries
+R3 November-election acquisition,register to vote florida,Exact,Registration deadline passed; preserve legitimate address-update queries
+All draft campaigns,Candidate full names - populate from complete current roster before upload,Manual list required,No candidate-name bidding default; include every candidate equally without printing names in creative

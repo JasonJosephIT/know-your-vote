@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { CONTACT_EMAIL } from "@/lib/contact";
 
 /* The site-wide footer (launch handoff §1). Until now nothing on the site
    said in one place that it is independent and endorses no one; the
@@ -15,6 +16,18 @@ import { usePathname } from "next/navigation";
    FOOTER_DISCLAIMER; to drop or add a link (for example /terms, if the founder
    decides against a terms page), edit FOOTER_LINKS. Nothing else reads them.
 
+   A way to report a mistake from every page (Mobbin catalog 2026-10-12, HM7
+   The New Yorker; Top 12 #2). From the content freeze (2026-10-18 04:00
+   UTC) a correction is the only way a ballot page can change, and until now
+   the only route to report one was the address on /about. So the links add
+   "Contact" (/about's "Get in touch") and "Report a mistake" (a mailto), and
+   one line under the disclaimer names the address for anyone who can't use
+   the site with a screen reader or keyboard. The address is always
+   CONTACT_EMAIL: src/lib/contact.ts is frozen, so import it, never edit it,
+   and never type the address here. All footer text is body-sm, the 14px
+   floor (design.md), and stays muted: quiet, nothing filled.
+   scripts/verify-site-footer.ts pins it.
+
    A client component only for usePathname, for the same reason as
    SectionNav: the operator console (/admin) is a fixed full-screen surface of
    its own, and a footer behind it would still sit in the DOM and the tab
@@ -22,13 +35,32 @@ import { usePathname } from "next/navigation";
 const FOOTER_DISCLAIMER =
   "Independent and nonpartisan. Not affiliated with any candidate, party or government agency. No endorsements.";
 
-const FOOTER_LINKS: readonly { href: string; label: string }[] = [
+/* external: a plain <a>, not next/link, for a link that leaves the site
+   (the mailto). */
+const FOOTER_LINKS: readonly {
+  href: string;
+  label: string;
+  external?: boolean;
+}[] = [
   { href: "/about", label: "About" },
   { href: "/methodology", label: "Methodology" },
   { href: "/privacy", label: "Privacy" },
   { href: "/privacy/how-it-works", label: "How privacy works" },
   { href: "/terms", label: "Terms of use" },
+  { href: "/about#get-in-touch", label: "Contact" },
+  /* A fixed subject, so reports land as one kind of mail. It carries
+     nothing about the reader or the page they were on. */
+  {
+    href: `mailto:${CONTACT_EMAIL}?subject=Correction`,
+    label: "Report a mistake",
+    external: true,
+  },
 ];
+
+/* inline-flex with min-h gives each link a target of at least 24px
+   (WCAG 2.2, 2.5.8) at body-sm. */
+const FOOTER_LINK_CLASS =
+  "inline-flex min-h-[24px] items-center text-body-sm text-on-surface-muted underline underline-offset-2 hover:text-on-surface";
 
 export function SiteFooter() {
   const pathname = usePathname();
@@ -101,26 +133,48 @@ export function SiteFooter() {
         </picture>
       </div>
       <div className="border-t border-border">
-        <div className="mx-auto flex w-full max-w-[1120px] flex-col gap-2 px-5 py-5 md:flex-row md:items-center md:justify-between md:gap-6">
+        {/* One column at every width (HM7): the two lines, then the links.
+            Beside the two lines at md+, the six links wrapped onto a second
+            row with "Report a mistake" alone on it; stacked, they held one
+            row from about 560px. With "How privacy works" (#177) there are
+            seven, and they hold one row from about 700px (measured
+            2026-10-14); narrower, they wrap to two or three rows. */}
+        <div className="mx-auto flex w-full max-w-[1120px] flex-col gap-2 px-5 py-5">
           {/* No figure lying on this edge any more (lie-footer, #164): over
               the town strip it lands on the cyclist and the man with the
               cane, and the strip is already a street of people. */}
-          <p className="text-caption text-on-surface-muted">
-            {FOOTER_DISCLAIMER}
-          </p>
+          <div className="flex flex-col gap-1">
+            <p className="text-body-sm text-on-surface-muted">
+              {FOOTER_DISCLAIMER}
+            </p>
+            <p className="text-body-sm text-on-surface-muted">
+              Trouble using this site with a screen reader or keyboard? Email{" "}
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                className="underline underline-offset-2 hover:text-on-surface"
+              >
+                {CONTACT_EMAIL}
+              </a>
+              .
+            </p>
+          </div>
           <nav aria-label="About this site">
-            <ul className="flex flex-wrap gap-x-4">
-              {FOOTER_LINKS.map(({ href, label }) => (
+            <ul className="flex flex-wrap gap-x-4 gap-y-1">
+              {FOOTER_LINKS.map(({ href, label, external }) => (
                 <li key={href}>
-                  {/* py-1 gives each link a target of at least 24px
-                      (WCAG 2.2, 2.5.8) at caption size. */}
-                  <Link
-                    href={href}
-                    aria-current={pathname === href ? "page" : undefined}
-                    className="inline-block py-1 text-caption text-on-surface-muted underline underline-offset-2 hover:text-on-surface"
-                  >
-                    {label}
-                  </Link>
+                  {external ? (
+                    <a href={href} className={FOOTER_LINK_CLASS}>
+                      {label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={href}
+                      aria-current={pathname === href ? "page" : undefined}
+                      className={FOOTER_LINK_CLASS}
+                    >
+                      {label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

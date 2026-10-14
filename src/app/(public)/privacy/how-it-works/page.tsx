@@ -228,6 +228,23 @@ export default function PrivacyHowItWorksPage() {
         )}
       </section>
 
+      <section id="official-sites" className="flex flex-col gap-2">
+        {/* The "Sample ballot and how to vote" block on the home page (#190,
+            src/components/features/VotingResources.tsx) links out and
+            nothing else: it never embeds a county's tool, which would load
+            the county's reCAPTCHA and Google Translate here, and each link
+            opens a new tab (scripts/verify-voter-links.ts). Its rows say
+            "We never see what you enter there"; this is the same claim. */}
+        <h2 className="text-h2">Official election sites</h2>
+        <p className="text-body">
+          The sample-ballot and how-to-vote links open your county Supervisor
+          of Elections&rsquo; site or the Florida Division of Elections&rsquo;
+          site in a new tab. We never see what you enter there; their own
+          privacy policies apply. We link to their tools rather than putting
+          them on our pages, so their scripts don&rsquo;t run on this site.
+        </p>
+      </section>
+
       <section id="email-signup" className="flex flex-col gap-2">
         {/* This said the link "works immediately" and later called it
             "instant". Opening the link no longer unsubscribes, because mail
@@ -256,6 +273,28 @@ export default function PrivacyHowItWorksPage() {
             calendar file
           </a>{" "}
           that never touches our servers again after download.
+        </p>
+      </section>
+
+      <section id="contact" className="flex flex-col gap-2">
+        {/* The footer's "Report a mistake" is a mailto with a fixed subject
+            and no body, and "Contact" goes to /about's "Get in touch"
+            (src/components/nav/SiteFooter.tsx, #184; pinned by
+            scripts/verify-site-footer.ts). The address is CONTACT_EMAIL.
+            Nothing in the code reads that inbox into the reminder list. */}
+        <h2 className="text-h2">Writing to us</h2>
+        <p className="text-body">
+          &ldquo;Report a mistake&rdquo;, at the bottom of every page, opens an
+          email to <strong>{CONTACT_EMAIL}</strong> in your own mail app, and
+          &ldquo;Contact&rdquo; leads to the same address. When you write, we
+          get what any email brings: your email address and what you write.
+        </p>
+        <p className="text-body">
+          &ldquo;Report a mistake&rdquo; fills in only the subject line,
+          &ldquo;Correction&rdquo;. It adds nothing about you or the page you
+          were on; say which page in your message if you like. Writing to us
+          doesn&rsquo;t sign you up for anything: only the email signup above
+          does that.
         </p>
       </section>
 

@@ -114,18 +114,28 @@ export function SectionNav() {
           "region"). As a child of <body> it is the page's banner landmark,
           so screen-reader users moving by landmark reach Donate and the
           district chip, the only place to change or forget a saved district.
-          From md it is display: none and the nav carries both. */}
+          From md it is display: none and the nav carries both.
+
+          On a short screen (500px tall or less: a landscape phone, or 200%
+          and 400% zoom) it is static instead of fixed, at the top of the
+          page, and scrolls away with it (globals.css, short:). */}
       <header
-        className="fixed inset-x-0 top-0 z-40 flex items-center justify-between border-b border-border bg-surface px-3 py-2 md:hidden"
+        className="fixed inset-x-0 top-0 z-40 flex items-center justify-between border-b border-border bg-surface px-3 py-2 short:static md:hidden"
         style={{ paddingTop: "calc(0.5rem + env(safe-area-inset-top))" }}
       >
         <DonateLink className="flex" />
         <DistrictChip />
       </header>
 
+      {/* Static on a short screen too, so it renders where it sits in the
+          DOM: at the top of the page, under the header below md. In the flow
+          it drops the shadow, which marks a bar floating over the page, and
+          its top border becomes a bottom one, so below md the two bars share
+          one line between them and the page starts under a line, as it
+          does under the md bar. */}
       <nav
         aria-label="Sections"
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface shadow-elevation-2 md:top-0 md:bottom-auto md:border-t-0 md:border-b"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface shadow-elevation-2 short:static short:border-t-0 short:border-b short:shadow-none md:top-0 md:bottom-auto md:border-t-0 md:border-b"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div className="mx-auto flex w-full max-w-[1120px] items-center justify-between px-2 md:px-5">

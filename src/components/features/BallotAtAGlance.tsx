@@ -1,62 +1,78 @@
 import { getActiveMeasures } from "@/lib/measures";
 import { getStatewideRaces } from "@/lib/races";
 import { Art } from "@/components/brand/Art";
+import { ArrowDownGlyph } from "@/components/ui/Glyphs";
+import type { HomeSections } from "@/lib/race-scope";
 
-/* "On every Florida ballot" (layout pass 2026-10-11, item 3): three counts
-   from the same cached reads SharedBallot makes, so the tiles and the lists
-   below them cannot disagree. Each tile jumps to its list.
+/* "On this page" (home readability, 2026-10-12, A6; founder decision 1a,
+   2026-10-13). It began as three count tiles, "On every Florida ballot"
+   (layout pass 2026-10-11, item 3); the sample-ballot block above took
+   their slot, and the counts moved into this one row of jumps down the
+   page, which also reaches the House step and, on a phone, the news. The
+   race and question counts come from the same cached reads SharedBallot
+   makes, so the chips and the lists below them cannot disagree.
 
-   Real counts only. A tile whose count is zero is left out rather than
-   shown as "0", and with no races and no questions there is nothing to
-   count, so nothing renders and SharedBallot's "not published yet" line
-   speaks alone. */
-export async function BallotAtAGlance() {
+   It names sections, never a race or a candidate. Real counts only: a
+   chip whose count is zero is left out rather than shown as "0", and with
+   no races and no questions there is nothing to jump to, so nothing
+   renders and SharedBallot's "not published yet" line speaks alone. The
+   news chip is phones only: from lg the news is the column beside this.
+
+   40 px chips with 10 px sides and 6 px gaps keep the four to two rows at
+   375 px (three at 320). Each jumps to a heading; the root scroll-padding
+   keeps it clear of the bars, so no scroll-mt (design.md).
+
+   `sections` says which of the page's sections are rendered
+   (homeSections, src/lib/race-scope.ts). "Show races for"
+   (RaceScopePicker) narrows the home page: "Statewide races" drops the
+   House step, and a county or a district replaces the shared ballot
+   (statewide races and ballot questions) with ScopedRaces. A chip whose
+   section is not on the page is left out, so no chip jumps to nothing.
+   Not passed, every section is on the page, which is "All races" and
+   renders exactly as before the picker. The news column is in every
+   view. If only the phones-only news chip is left, the whole row is
+   phones-only too, so a desktop never shows the label over an empty
+   row. */
+export async function BallotAtAGlance({
+  sections = {},
+}: {
+  sections?: Partial<HomeSections>;
+} = {}) {
+  const { statewide = true, questions = true, house = true } = sections;
   const [races, measures] = await Promise.all([
     getStatewideRaces(),
     getActiveMeasures(),
   ]);
-  const candidates = races.reduce((n, r) => n + r.candidates.length, 0);
+  if (races.length === 0 && measures.length === 0) return null;
 
-  const tiles = [
-    {
-      n: races.length,
-      one: "statewide race",
-      many: "statewide races",
+  const chips = [
+    statewide && races.length > 0 && {
+      label: `${races.length} statewide ${races.length === 1 ? "race" : "races"}`,
       href: "#statewide-races",
     },
-    {
-      n: candidates,
-      one: "candidate in them",
-      many: "candidates in them",
-      href: "#statewide-races",
-    },
-    {
-      n: measures.length,
-      one: "ballot question",
-      many: "ballot questions",
+    questions && measures.length > 0 && {
+      label: `${measures.length} ballot ${measures.length === 1 ? "question" : "questions"}`,
       href: "#ballot-questions",
     },
-  ].filter((t) => t.n > 0);
-  if (tiles.length === 0) return null;
+    house && { label: "U.S. House race", href: "#house-race" },
+    { label: "Election news", href: "#home-news", className: "lg:hidden" },
+  ].filter(Boolean) as { label: string; href: string; className?: string }[];
+  const rowClass = chips.every((c) => c.className === "lg:hidden")
+    ? "flex flex-col gap-2 lg:hidden"
+    : "flex flex-col gap-2";
 
   return (
-    <section aria-labelledby="at-a-glance" className="flex flex-col gap-2">
+    <nav aria-labelledby="on-this-page" className={rowClass}>
       {/* The magnifier sticker (site illustration layer, design.md), lg+
-         only. It used to peek off the ballot-questions tile into the 48 px
-         column gap, where it sat 9 px from the news column's rule and read
-         as art in the news slot (review, 2026-10-11). It now sits just
-         right of this short, left-aligned heading, on the ballot side of
-         the page: 8 px past the heading's last letter, bottom-aligned with
-         the heading, so at 30 px tall it rises about 14 px above it into
-         the 32 px gap under the key-dates card. The 8 px gap-2 below the
-         heading keeps it clear of the tiles and of their focus rings,
-         which reach 4 px past a tile. */}
+         only, 8 px past the end of this short, left-aligned label and
+         bottom-aligned with it, so at 30 px tall it rises into the gap
+         above, on the ballot side of the page, clear of the news column's
+         rule. The 8 px gap-2 below the label keeps it clear of the chips
+         and of their focus rings, which reach 4 px past a chip. The palm
+         sticker that sat on the races tile retired with the tiles. */}
       <div className="relative w-fit">
-        <h2
-          id="at-a-glance"
-          className="text-overline uppercase text-on-surface-muted"
-        >
-          On every Florida ballot
+        <h2 id="on-this-page" className="text-label text-on-surface">
+          On this page
         </h2>
         <Art
           name="sticker-magnifier"
@@ -64,50 +80,19 @@ export async function BallotAtAGlance() {
           className="absolute bottom-0 left-[calc(100%+8px)] hidden lg:block"
         />
       </div>
-      <ul
-        className="grid gap-2 sm:gap-3"
-        style={{
-          gridTemplateColumns: `repeat(${tiles.length}, minmax(0, 1fr))`,
-        }}
-      >
-        {tiles.map((t) => (
-          <li key={t.many} className="relative">
-            {/* The palm sticker (site illustration layer, design.md).
-               Every tile is a link edge to edge, and art never sits over
-               or under a link, so it cannot go inside a tile's corner. It
-               peeks off the top-left of the statewide-races tile instead
-               (always first when it shows, since the candidates tile needs
-               races), picked by label, not position, because empty tiles
-               drop out. The other tiles stay plain.
-
-               It starts 6 px past the tile: the global :focus-visible
-               outline (2 px, 2 px offset) reaches 4 px past it, and the
-               art must not cover a focus ring. It hangs into the page
-               gutter, which is only the 24 px main padding until the
-               1120 px container stops growing, so it waits for 1400 px.
-               It rises 12 px above the tiles, left of the heading's
-               start, never over it. */}
-            {t.many === "statewide races" && (
-              <Art
-                name="sticker-palm"
-                height={36}
-                className="absolute -top-[12px] right-[calc(100%+6px)] hidden min-[1400px]:block"
-              />
-            )}
+      <ul className="flex flex-wrap gap-1.5">
+        {chips.map((c) => (
+          <li key={c.href} className={c.className}>
             <a
-              href={t.href}
-              className="flex h-full flex-col gap-1 rounded-lg bg-primary-muted px-3 py-3 text-primary-hover ring-primary transition-shadow hover:ring-1 sm:px-4"
+              href={c.href}
+              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full border border-border-strong bg-surface px-2.5 text-body-sm text-on-surface hover:bg-surface-muted"
             >
-              <span className="font-heading text-h1 leading-none text-primary">
-                {t.n}
-              </span>
-              <span className="text-caption sm:text-body-sm">
-                {t.n === 1 ? t.one : t.many}
-              </span>
+              {c.label}
+              <ArrowDownGlyph />
             </a>
           </li>
         ))}
       </ul>
-    </section>
+    </nav>
   );
 }

@@ -38,3 +38,50 @@ export function CaretGlyph() {
     </svg>
   );
 }
+
+/* A circled "!" before an error line, so an error isn't told by its colour
+   alone (Mobbin AD1, Square). */
+export function ErrorGlyph() {
+  return (
+    <svg {...svg}>
+      <circle cx="10" cy="10" r="7.25" />
+      <path d="M10 6.25v4.5M10 13.75h.01" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/* A padlock before a line about what happens to what the voter types
+   (Mobbin AD3, komoot). */
+export function LockGlyph() {
+  return (
+    <svg {...svg}>
+      <rect x="4.5" y="9" width="11" height="7.5" rx="1.5" />
+      <path d="M7 9V6.75a3 3 0 0 1 6 0V9" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/* A link that jumps further down this page (race "Jump to", amendment
+   YES/NO jump row), in place of the ↓ character the Inter subset lacks. */
+export function ArrowDownGlyph() {
+  return (
+    <svg {...svg}>
+      <path d="M10 4.5v11M5.5 11l4.5 4.5 4.5-4.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/* An arrow leaving a box: the link opens another site in a new tab. In
+   place of ↗, which the Inter subsets don't include either. The link's
+   own sr-only text says it opens a new tab. */
+export function ExternalGlyph() {
+  return (
+    <svg {...svg}>
+      <path
+        d="M8.5 4.5h-3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3M11.5 4.5h4v4M15.5 4.5l-6 6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

@@ -17,9 +17,17 @@ import type { NewsRegion } from "@/lib/news-region";
    SHOW caps every view, "All Florida" included, so a busy county can't
    push the column longer than the ballot beside it. The cap is the same
    for every region and the order is time, so it trims by date, never by
-   which region or outlet a story is from. */
+   which region or outlet a story is from.
+
+   Below lg the column sits in the page's one column, and PHONE_SHOW
+   stories, the newest, show there (home readability, 2026-10-12, A8;
+   founder decision 3a): the rest are in the list, hidden by CSS, so the
+   cap is the same for every filter and "All election news" has them all.
+   If the newest few look lopsided, run news-fairness.md §2 before
+   touching anything here: a real skew is shown, never evened out. */
 
 const SHOW = 8;
+const PHONE_SHOW = 4;
 
 export interface RailItem {
   id: string;
@@ -87,8 +95,11 @@ export function NewsRail({
       {/* aria-live so a screen-reader user hears that the list changed when
           a filter is pressed; polite, because it is never urgent. */}
       <ul aria-live="polite" className="flex flex-col">
-        {shown.map((i) => (
-          <li key={i.id}>
+        {shown.map((i, n) => (
+          <li
+            key={i.id}
+            className={n >= PHONE_SHOW ? "max-lg:hidden" : undefined}
+          >
             <NewsStoryCard
               variant="row"
               regionLabel={i.region.label}

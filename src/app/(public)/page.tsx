@@ -15,6 +15,7 @@ import { CoverageSummary } from "@/components/features/CoverageSummary";
 import { HomeNews } from "@/components/features/HomeNews";
 import { HomeMasthead } from "@/components/features/HomeMasthead";
 import { BallotAtAGlance } from "@/components/features/BallotAtAGlance";
+import { VotingResources } from "@/components/features/VotingResources";
 import { RaceScopePicker } from "@/components/features/RaceScopePicker";
 import { ScopedRaces, ScopeNote } from "@/components/features/ScopedRaces";
 import { Art } from "@/components/brand/Art";
@@ -22,6 +23,7 @@ import { LedgeArt } from "@/components/brand/Ledge";
 import { HeroRotator } from "@/components/brand/HeroRotator";
 import { pickLead } from "@/components/brand/hero-walk";
 import { SectionDivider } from "@/components/brand/SectionDivider";
+import { coveredCountyNames } from "@/lib/counties";
 import { getActiveMeasures } from "@/lib/measures";
 import { getStatewideRaces } from "@/lib/races";
 import { districtRace, getCoveredDistricts } from "@/lib/resolve";
@@ -32,7 +34,7 @@ import {
   locationFieldCopy,
   NOT_COVERED_SENTENCE,
 } from "@/lib/scope-copy";
-import { districtOptions, parseRaceScope } from "@/lib/race-scope";
+import { districtOptions, homeSections, parseRaceScope } from "@/lib/race-scope";
 
 /* Ballot first, ZIP optional (TASK-067).
 
@@ -135,9 +137,17 @@ export default async function Home({
      GET form, parsed against the counties and districts we cover; anything
      else is "all", which is this page exactly as it was before the control.
      "statewide" keeps the shared ballot and drops the House-race step and
-     the coverage summary below it; a county or a district replaces the
-     shared ballot with just that set of races (ScopedRaces). The masthead,
-     the deadline banner, the tiles and the news column stay in every view. */
+     the coverage summary; a county or a district replaces the shared ballot
+     with just that set of races (ScopedRaces). The masthead, the key dates
+     and sample-ballot block, the "On this page" row and the news column
+     stay in every view.
+
+     The picker sits right after the "On this page" row (home PR A, #190,
+     replaced the count tiles it used to follow). A narrowed view leaves
+     sections out, so the row is told which are on the page and drops any
+     chip that would jump to nothing (homeSections): the U.S. House chip
+     outside "all", and the statewide and ballot-question chips where
+     ScopedRaces stands in for the shared ballot (verify-race-scope). */
   const scope = parseRaceScope(
     (await searchParams).show,
     districts.map((d) => d.district)
@@ -166,54 +176,79 @@ export default async function Home({
 
   /* Layout pass 2026-10-11 (docs/design/layout-2026-10-11/): a dateline
      strip, then two columns from lg up: the ballot on the left, the news
-     column on the right, sticky, beside it. Below lg it is the one column
-     it always was, with the news where it used to sit, after the
-     coverage summary. The grid areas do the reordering, so the DOM order
-     is the phone order and a screen reader reads the ballot first at
-     every width. */
+     column on the right beside it. Below lg it is one column, and the news
+     comes after the House-race step, before the coverage summary, with
+     its four newest stories (home readability, 2026-10-12, A8; founder
+     decision 3a). The grid areas do the reordering, so the DOM order is
+     the phone order and a screen reader reads the ballot first at every
+     width.
+
+     The news column scrolls with the page. It was sticky, with its own
+     scrollbar and a viewport-tall cap, which hid most of its eight
+     stories inside a second scroll on desktop; now the page has one. */
   return (
     <>
       <HomeMasthead />
-      <main className="mx-auto grid w-full max-w-[680px] flex-1 grid-cols-1 content-start gap-6 px-5 py-8 lg:max-w-[1120px] lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:gap-x-12">
+      {/* 24 px top and bottom below lg, and 64 px from lg as before (home
+          readability A2), so on a phone the h1 starts 40 px higher. */}
+      <main className="mx-auto grid w-full max-w-[680px] flex-1 grid-cols-1 content-start gap-6 px-5 py-5 lg:max-w-[1120px] lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:gap-x-12 lg:py-8">
         <div className="flex min-w-0 flex-col gap-6 lg:col-start-1 lg:row-start-1">
-          {/* Kept in step with SITE_TITLE in src/app/layout.tsx (founder decision
-          1, recommended): the old h1, "Everything on every Florida ballot.",
-          and the old promise of records and verified facts overclaimed what
-          ships. Flip both together.
+          {/* The h1 and the lede read as one group, 12 px apart on a phone
+          (A3), where the h1 is 32 px on two lines; from sm it is the
+          40 px display size, and from lg the column's 32 px gap again. */}
+          <div className="flex flex-col gap-3 lg:gap-6">
+            {/* Kept in step with SITE_TITLE in src/app/layout.tsx (founder decision
+            1, recommended): the old h1, "Everything on every Florida ballot.",
+            and the old promise of records and verified facts overclaimed what
+            ships. Flip both together.
 
-          "See everyone you can vote for" went for the same reason it left
-          the share description in layout.tsx: it reads as the whole ballot,
-          and Florida House and Senate seats, judges and city races are on
-          real ballots and not here. */}
-          <h1 className="text-display">
-            Florida candidates, in their own words.
-          </h1>
-          {/* The lede and the walkers (design.md "Site illustration
-          layer"). From lg up the paragraph takes 58% and the rotator the
-          rest of the row, in its own cell, so it never sits over or under
-          the text. Below lg HeroRotator hides itself (hidden lg:block), the
-          grid is one column and the paragraph is full width, as before. */}
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[58%_minmax(0,1fr)]">
-            <p className="text-body-lg text-on-surface-muted">
-              See the races we cover and what each candidate says, quoted word
-              for word from their own campaign sites, with a link to every
-              source. The same questions and the same rules for every
-              candidate. No ZIP, no account, no agenda.
-            </p>
-            {/* The walker in the still is drawn per page view, so across
-                visitors every one of the eight leads equally often
-                (design.md: equal attention). The page is already dynamic
-                (cookies()), and passing it as a prop keeps the server
-                render and hydration identical. */}
-            <HeroRotator lead={pickLead()} />
+            "See everyone you can vote for" went for the same reason it left
+            the share description in layout.tsx: it reads as the whole ballot,
+            and Florida House and Senate seats, judges and city races are on
+            real ballots and not here. */}
+            <h1 className="text-h1 sm:text-display">
+              Florida candidates, in their own words.
+            </h1>
+            {/* The lede and the walkers (design.md "Site illustration
+            layer"). From lg up the paragraph takes 58% and the rotator the
+            rest of the row, in its own cell, so it never sits over or under
+            the text. Below lg HeroRotator hides itself (hidden lg:block), the
+            grid is one column and the paragraph is full width, as before.
+
+            Shorter and in the body colour (A4): 16 px on a phone, 18 px
+            from sm. "See the races we cover" stays: it claims the races
+            we cover, not the whole ballot (verify-home-coverage). */}
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-[58%_minmax(0,1fr)]">
+              <p className="text-body text-on-surface sm:text-body-lg">
+                See the races we cover and what each candidate says, quoted
+                from their own campaign sites with every source linked. The
+                same rules for every candidate. No ZIP, no account, no
+                agenda.
+              </p>
+              {/* The walker in the still is drawn per page view, so across
+                  visitors every one of the eight leads equally often
+                  (design.md: equal attention). The page is already dynamic
+                  (cookies()), and passing it as a prop keeps the server
+                  render and hydration identical. */}
+              <HeroRotator lead={pickLead()} />
+            </div>
           </div>
-          <DeadlineBanner
-            remindersHref={
-              promoteReminders ? `#${REMINDER_SIGNUP_ID}` : undefined
-            }
-            countyFips={saved?.countyFips}
-          />
-          <BallotAtAGlance />
+          {/* The dates, then what to do about them, as one group 12 px
+          apart (A1): the official sample ballot and how to vote, from the
+          county's Supervisor of Elections or the state. The key-dates sun
+          rises only into the gap above its card, so nothing overlaps.
+          empty:hidden: after Election Day both render nothing, and an
+          empty group would add a second gap. */}
+          <div className="flex flex-col gap-3 empty:hidden">
+            <DeadlineBanner
+              remindersHref={
+                promoteReminders ? `#${REMINDER_SIGNUP_ID}` : undefined
+              }
+              countyFips={saved?.countyFips}
+            />
+            <VotingResources countyFips={saved?.countyFips} />
+          </div>
+          <BallotAtAGlance sections={homeSections(scope)} />
           <RaceScopePicker
             action="/"
             scope={scope}
@@ -230,9 +265,9 @@ export default async function Home({
             </>
           )}
 
-          {/* Only on the whole page: the House-race step and the coverage
-              summary are about the voter's whole ballot, which a narrowed
-              view is deliberately not. */}
+          {/* Only on the whole page: the House-race step (and the coverage
+              summary after the news) are about the voter's whole ballot,
+              which a narrowed view is deliberately not. */}
           {showAll && (
             <>
               {/* The zigzag that used to be this section's border-t, with a
@@ -280,7 +315,8 @@ export default async function Home({
                 </div>
               </div>
 
-              <section className="flex flex-col gap-3">
+              {/* id="house-race": the "On this page" list jumps here. */}
+              <section id="house-race" className="flex flex-col gap-3">
                 {saved ? (
                   <>
                     <div className="flex flex-col gap-1 lg:pr-[112px]">
@@ -294,16 +330,18 @@ export default async function Home({
                       House and Senate seats, city races and more depend on it
                       too, and this guide doesn't cover them. A decided seat
                       (savedSeat) is said plainly as no race at all, never shown
-                      as the voter's race. */}
-                      <p className="text-body-sm text-on-surface-muted">
+                      as the voter's race. The sentence saying the statewide
+                      races are the same for every voter went (A7): both lists'
+                      intros above already say so. lg:max-w-[65ch] keeps
+                      desktop lines readable (A11). */}
+                      <p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]">
                         You&rsquo;re set to {saved.district}.{" "}
                         {savedSeat
                           ? houseRaceNotOnBallot(saved.district, savedSeat)
                           : "Your House race depends on where you live, so it's linked below rather than listed above."}{" "}
-                        The statewide races and amendments above are the same for
-                        every Florida voter. {NOT_COVERED_SENTENCE}
+                        {NOT_COVERED_SENTENCE}
                       </p>
-                      <p className="text-body-sm text-on-surface-muted">
+                      <p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]">
                         We remember the district, never your address or ZIP; the
                         chip at the top of the page changes it or forgets it.
                       </p>
@@ -330,21 +368,27 @@ export default async function Home({
                       It asks for what the field takes (field.noun): a street
                       address, never a ZIP (founder, 2026-10-12). With
                       ADDRESS_LOOKUP_OFF set there is no field, only the
-                      district picker, so it asks the voter to choose. */}
+                      district picker, so it asks the voter to choose.
+
+                      Shorter (home readability A7): it now also says which
+                      counties have House races, so the field's own coverage
+                      note below it is off (coverageNote={false}) rather than
+                      said twice. */}
                       {addressEnabled ? (
-                        <p className="text-body-sm text-on-surface-muted">
+                        <p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]">
                           Your U.S. House race isn&rsquo;t in the list above, because
                           it depends on where you live. Give us your {field.noun} and
-                          we&rsquo;ll add it — or skip it and read the rest. We use it
-                          to find your district and keep only the district itself,
-                          never your {field.noun}.
+                          we&rsquo;ll add it. We have House races for{" "}
+                          {coveredCountyNames()} counties so far, and we keep only
+                          the district, never your {field.noun}.
                         </p>
                       ) : (
-                        <p className="text-body-sm text-on-surface-muted">
+                        <p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]">
                           Your U.S. House race isn&rsquo;t in the list above, because
                           it depends on where you live. Choose your district below
-                          and we&rsquo;ll add it — or skip it and read the rest. We
-                          keep only the district you choose.
+                          and we&rsquo;ll add it. We have House races for{" "}
+                          {coveredCountyNames()} counties so far, and we keep only
+                          the district you choose.
                         </p>
                       )}
                     </div>
@@ -358,11 +402,17 @@ export default async function Home({
                     and the form is full width, as before. */}
                     <div className="lg:flex lg:items-end lg:gap-8">
                       <div className="min-w-0 lg:flex-1">
+                        {/* The picker stays behind its toggle here, and the
+                            field's privacy line is off: the paragraph above
+                            already says the district is all that's kept. */}
                         <LocationEntry
                           submitLabel="Add my House race"
                           addressEnabled={addressEnabled}
                           suggestEnabled={suggestEnabled}
+                          coverageNote={false}
                           districts={districts}
+                          pickerCollapsed
+                          privacyNote={false}
                         />
                       </div>
                       <Art
@@ -374,31 +424,39 @@ export default async function Home({
                   </>
                 )}
               </section>
-
-              {/* Drafts from the inspiration pass (2026-10-05), recommended pending
-              founder confirmation: what the guide covers in one place, then the
-              newest statewide news. After the House-race step, so the ballot
-              still comes first (TASK-067). Remove either line to flip it. */}
-              <CoverageSummary
-                hasDistrict={Boolean(saved)}
-                addressEnabled={addressEnabled}
-              />
             </>
           )}
         </div>
 
+        {/* In the page's flow at every width (A8): from lg a column with a
+        rule on its left that scrolls with the page, below lg the section
+        after the House-race step, where NewsRail shows the four newest. */}
         <aside
           aria-label="Florida election news"
-          className="min-w-0 lg:sticky lg:top-[88px] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:max-h-[calc(100dvh-104px)] lg:overflow-y-auto lg:border-l lg:border-border-strong lg:pl-6"
+          className="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:border-l lg:border-border-strong lg:pl-6"
         >
           <HomeNews countyFips={saved?.countyFips} />
         </aside>
 
         <div className="flex min-w-0 flex-col gap-6 lg:col-start-1 lg:row-start-2">
+          {/* Drafts from the inspiration pass (2026-10-05), recommended pending
+          founder confirmation: what the guide covers in one place, and the
+          newest news. After the House-race step, so the ballot still comes
+          first (TASK-067); below lg after the news too (A8), from lg in
+          the same place under the ballot as before. Remove either line to
+          flip it.
+
+          Only on the whole page, like the House-race step: it is about the
+          voter's whole ballot, which a narrowed view is deliberately not. */}
+          {showAll && (
+            <CoverageSummary
+              hasDistrict={Boolean(saved)}
+              addressEnabled={addressEnabled}
+            />
+          )}
           {/* A wave between the coverage summary above and the reminder and
           install cards; shows at every width (the section dividers are on
-          design.md's closed list of phone art). Below lg it falls between
-          the news and the cards. */}
+          design.md's closed list of phone art). */}
           <SectionDivider variant="wave" />
           {promoteReminders && (
             <ReminderSignupCta countyFips={saved?.countyFips} />
