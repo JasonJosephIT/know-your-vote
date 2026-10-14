@@ -125,8 +125,10 @@ function Column({
 }
 
 /* Both links come from one map with one className and one glyph: the same
-   size, weight and colour for YES and NO. md:hidden, because from md the
-   columns sit side by side and start at the same height. */
+   size, weight and colour for YES and NO. Only an in-page link gets the
+   down arrow: on a new-tab link it would read as staying on the page.
+   md:hidden, because from md the columns sit side by side and start at the
+   same height. */
 function JumpRow() {
   return (
     <nav aria-labelledby="measure-jump" className="flex flex-col gap-1 md:hidden">

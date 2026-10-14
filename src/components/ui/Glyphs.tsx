@@ -39,9 +39,8 @@ export function CaretGlyph() {
   );
 }
 
-/* For a link that jumps down the same page, in place of the ↓ character
-   (same subset gap). A new-tab link never gets it: it would read as staying
-   on the page. */
+/* A link that jumps further down this page (race "Jump to", amendment
+   YES/NO jump row), in place of the ↓ character the Inter subset lacks. */
 export function ArrowDownGlyph() {
   return (
     <svg {...svg}>
