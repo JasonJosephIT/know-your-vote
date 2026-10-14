@@ -1,4 +1,5 @@
 import { MeasureResourceRow } from "@/components/features/MeasureResourceRow";
+import { ArrowDownGlyph } from "@/components/ui/Glyphs";
 import type {
   MeasureBrief,
   MeasureResourceWithSource,
@@ -18,7 +19,17 @@ import type { MeasureKind } from "@/types/app";
 
    Rows arrive already tier-ordered from measures.ts; this groups, it does
    not sort. The cap is the same on both sides (equal room), and the
-   overflow is a native <details> so the page needs no client JavaScript. */
+   overflow is a native <details> so the page needs no client JavaScript.
+
+   EQUAL REACH ON PHONES (Mobbin catalog AM1, 2026-10-12). Below md the
+   columns stack, so the NO column starts only after up to eight YES rows.
+   A row of two jump links at the top of the ladder puts both sides one tap
+   away. The links and the columns are drawn from one SIDES list, so their
+   words and order can't drift apart, and the row lives here, beside the
+   columns, so it renders with both of them or not at all. No counts. The
+   jump is instant (nothing moves below lg, founder D2 2026-10-13), and the
+   root scroll-padding-top already lands each heading clear of the fixed
+   bars, so the columns need no scroll-mt. */
 
 const COLUMN_KINDS: readonly MeasureKind[] = [
   "analysis",
@@ -31,6 +42,12 @@ const NEUTRAL_KINDS: readonly MeasureKind[] = [
   "reporting",
 ];
 
+/* Ballot order: YES, then NO. */
+const SIDES = [
+  { id: "case-yes", heading: "The case for a YES", stance: "support" },
+  { id: "case-no", heading: "The case for a NO", stance: "oppose" },
+] as const;
+
 function groupByKind(items: MeasureResourceWithSource[]) {
   const groups = new Map<MeasureKind, MeasureResourceWithSource[]>();
   for (const item of items) {
@@ -41,6 +58,8 @@ function groupByKind(items: MeasureResourceWithSource[]) {
   return groups;
 }
 
+/* Rows are split by hairlines, not boxed (catalog AM4): the column card is
+   the only box, so a row is never a box inside a box. */
 function TieredList({
   items,
   kinds,
@@ -55,11 +74,11 @@ function TieredList({
   return (
     <div className="flex flex-col gap-3">
       {present.map((k) => (
-        <div key={k} className="flex flex-col gap-2">
+        <div key={k} className="flex flex-col">
           <h3 className="text-caption uppercase tracking-wide text-on-surface-muted">
             {TIER_LABEL[k]}
           </h3>
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col divide-y divide-border">
             {(groups.get(k) ?? []).map((item) => (
               <MeasureResourceRow
                 key={item.resource.resource_id}
@@ -74,16 +93,21 @@ function TieredList({
 }
 
 function Column({
+  id,
   heading,
   items,
 }: {
+  id: string;
   heading: string;
   items: MeasureResourceWithSource[];
 }) {
   const shown = items.slice(0, COLUMN_CAP);
   const rest = items.slice(COLUMN_CAP);
   return (
-    <section className="flex flex-col gap-3 rounded-lg border border-border bg-surface p-5 text-on-surface">
+    <section
+      id={id}
+      className="flex flex-col gap-3 rounded-lg border border-border bg-surface p-5 text-on-surface"
+    >
       <h2 className="text-h3">{heading}</h2>
       <TieredList items={shown} kinds={COLUMN_KINDS} />
       {rest.length > 0 && (
@@ -97,6 +121,32 @@ function Column({
         </details>
       )}
     </section>
+  );
+}
+
+/* Both links come from one map with one className and one glyph: the same
+   size, weight and colour for YES and NO. md:hidden, because from md the
+   columns sit side by side and start at the same height. */
+function JumpRow() {
+  return (
+    <nav aria-labelledby="measure-jump" className="flex flex-col gap-1 md:hidden">
+      <p id="measure-jump" className="text-body-sm text-on-surface-muted">
+        On this page
+      </p>
+      <ul className="grid grid-cols-2 gap-3">
+        {SIDES.map((side) => (
+          <li key={side.id}>
+            <a
+              href={`#${side.id}`}
+              className="inline-flex min-h-[44px] items-center gap-1 text-label text-primary underline underline-offset-2"
+            >
+              <ArrowDownGlyph />
+              {side.heading}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }
 
@@ -117,10 +167,17 @@ export function MeasureNeutralBlock({
 export function MeasureResourceLadder({ brief }: { brief: MeasureBrief }) {
   return (
     <div className="flex flex-col gap-5">
+      <JumpRow />
       <MeasureNeutralBlock items={brief.neutral} />
       <div className="grid grid-cols-1 items-stretch gap-5 md:grid-cols-2">
-        <Column heading="The case for a YES" items={brief.support} />
-        <Column heading="The case for a NO" items={brief.oppose} />
+        {SIDES.map((side) => (
+          <Column
+            key={side.id}
+            id={side.id}
+            heading={side.heading}
+            items={brief[side.stance]}
+          />
+        ))}
       </div>
     </div>
   );

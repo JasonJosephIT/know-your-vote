@@ -38,3 +38,14 @@ export function CaretGlyph() {
     </svg>
   );
 }
+
+/* For a link that jumps down the same page, in place of the ↓ character
+   (same subset gap). A new-tab link never gets it: it would read as staying
+   on the page. */
+export function ArrowDownGlyph() {
+  return (
+    <svg {...svg}>
+      <path d="M10 4.5v11M5.5 11l4.5 4.5 4.5-4.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
