@@ -247,7 +247,8 @@ const form = code("src/components/features/VotingInfo.tsx");
    your inbox" body, not two "Done." sentences. It still has to hold when
    this request sent nothing: "We sent" is true of a repeat (it went
    earlier today), and the body says what a repeat with this ZIP means,
-   whether or not reminders are on. */
+   whether or not reminders are on: the line follows a closing tag
+   directly, so no remindersOn condition or expression can wrap it. */
 {
   const at = form.indexOf('{stage.kind === "sent" ? (');
   const sent = at >= 0 ? form.slice(at, form.indexOf("<form", at)) : "";
@@ -256,7 +257,7 @@ const form = code("src/components/features/VotingInfo.tsx");
     sent.length > 0 &&
       !/"(Sent|Done)\./.test(sent) &&
       !/>\s*(Sent|Done)\./.test(sent) &&
-      /Already signed up today with this ZIP\? It&rsquo;s the email you\s+already have\./.test(sent) &&
+      /<\/p>\s*<p className="text-body-sm">\s*Already signed up today with this ZIP\? It&rsquo;s the email you\s+already have\./.test(sent) &&
       !/remindersOn[^"]*"[^"]*Already signed up/.test(sent),
     sent.slice(0, 200)
   );

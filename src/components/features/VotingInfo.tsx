@@ -207,7 +207,9 @@ export function VotingInfo({
            address) and answers a repeat with the same status and body as a
            send, so the form can't tell them apart
            (src/lib/notifications/welcome-throttle.ts). "We sent" holds for
-           a repeat today as well, and the line after it says so.
+           a repeat today as well, and the line after it says so. The
+           address can break anywhere: it has no spaces, so a long one would
+           otherwise run past the box and the card on a 320px phone.
 
            Focus moving to the heading is the announcement, at every width.
            At lg and up, and only when the voter hasn't asked for reduced
@@ -219,7 +221,7 @@ export function VotingInfo({
           </h3>
           <p className="text-body-sm">
             We sent where to vote and the key dates to{" "}
-            <span className="font-medium">{stage.email}</span>.
+            <span className="font-medium wrap-anywhere">{stage.email}</span>.
           </p>
           <p className="text-body-sm">
             {remindersOn

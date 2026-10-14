@@ -17,9 +17,10 @@ type InputProps = ComponentProps<"input">;
    but the caret. Same change fix 10 made for the /candidates search box and
    the /news selects.
 
-   A field that reports itself invalid (aria-invalid) keeps an error edge,
-   focused or not, so on a phone the field with the problem stands out, not
-   just the red line under it (Mobbin catalog 2026-10-12, AD1 Square). */
+   A field that reports itself invalid (aria-invalid) takes the error edge,
+   focused or not, so on a phone the field with the problem stands out from
+   the ones without (Mobbin AD1, Square). The message under it carries the
+   words and a glyph; the edge is never the only signal. */
 export function Input({ className = "", ...props }: InputProps) {
   return (
     <input

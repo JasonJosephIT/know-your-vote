@@ -175,10 +175,14 @@ check(
 );
 check(
   "it echoes the email on screen, and never into track() or a URL",
-  /to\{" "\}\s*<span className="font-medium">\{stage\.email\}<\/span>/.test(form) &&
+  /to\{" "\}\s*<span className="[^"]*">\{stage\.email\}<\/span>/.test(form) &&
     /track\("voting_info_requested"\);/.test(form) &&
     !/track\([^)]*email/.test(form) &&
     !/(href|router\.push|location)[^;\n]*email/.test(form.replace(/autoComplete="email"/g, ""))
+);
+check(
+  "a long address wraps inside the box on a 320px phone (it has no spaces to break at)",
+  /<span className="font-medium wrap-anywhere">\{stage\.email\}<\/span>/.test(form)
 );
 check(
   "\"Use a different email\" goes back to the form and focuses the email field",

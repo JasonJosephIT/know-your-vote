@@ -39,24 +39,23 @@ export function CaretGlyph() {
   );
 }
 
-/* A circle and a bang, before a field's error (Mobbin catalog 2026-10-12,
-   AD1 Square): the message says what's wrong; the glyph makes the line
-   stand out from the hints around it without relying on red alone. */
+/* A circled "!" before an error line, so an error isn't told by its colour
+   alone (Mobbin AD1, Square). */
 export function ErrorGlyph() {
   return (
     <svg {...svg}>
       <circle cx="10" cy="10" r="7.25" />
-      <path d="M10 6.25v4.5" strokeLinecap="round" />
-      <circle cx="10" cy="13.6" r="1" fill="currentColor" stroke="none" />
+      <path d="M10 6.25v4.5M10 13.75h.01" strokeLinecap="round" />
     </svg>
   );
 }
 
-/* A padlock, before a line that says what we store. */
+/* A padlock before a line about what happens to what the voter types
+   (Mobbin AD3, komoot). */
 export function LockGlyph() {
   return (
     <svg {...svg}>
-      <rect x="4.5" y="9" width="11" height="8" rx="1.5" />
+      <rect x="4.5" y="9" width="11" height="7.5" rx="1.5" />
       <path d="M7 9V6.75a3 3 0 0 1 6 0V9" strokeLinecap="round" />
     </svg>
   );
