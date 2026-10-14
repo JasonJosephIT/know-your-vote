@@ -1648,17 +1648,14 @@ await check("a draft or in_review measure's neutral rows stay unreadable to anon
   if (cnt !== 0) throw new Error(`expected 0, got ${cnt}`);
 });
 
-/* 0038 and 0040 publish the real FL-AM3-general and FL-AM2-general measures:
-   anon must see all 15 of AM3's resources (0038's 14 plus the
-   FL-AM3-general:booklet row 0035 already seeded) and all 18 of AM2's
-   (0040's 17 plus the FL-AM2-general:booklet row 0035 already seeded), and
-   0 for AM1 here even though 0041 seeded AM1's neutral rows and 0059 its
-   sided rows -- AM1 has
-   no measure_publication row at all at the migration level (it only becomes
-   'listed' via the hand-run scripts/list-ballot-2026.sql), and 0041's policy
-   only opens a neutral row once its measure has a 'listed' or 'published'
-   row to point at. */
-await check("anon sees all 15 FL-AM3-general and 18 FL-AM2-general resources, 0 for AM1", async () => {
+/* 0038, 0040 and 0060 publish the real FL-AM3-general, FL-AM2-general and
+   FL-AM1-general measures: anon must see all 15 of AM3's resources (0038's
+   14 plus the FL-AM3-general:booklet row 0035 already seeded), all 18 of
+   AM2's (0040's 17 plus its booklet row) and all 21 of AM1's (its booklet
+   row, 0041's 9 neutral rows, 0059's 8 sided rows and 0060's 3). On a
+   replay AM1 is published straight from "no row"; the listed -> published
+   path production takes is proved in verify-ballot-seeds.mjs. */
+await check("anon sees all 21 FL-AM1-general, 18 FL-AM2-general and 15 FL-AM3-general resources", async () => {
   await db.exec("SET ROLE anon;");
   const res = await db.query(
     `SELECT measure_id, count(*)::int n FROM measure_resource
@@ -1667,8 +1664,24 @@ await check("anon sees all 15 FL-AM3-general and 18 FL-AM2-general resources, 0 
   );
   await db.exec("RESET ROLE;");
   const got = res.rows.map((r) => `${r.measure_id}:${r.n}`).join(",");
-  if (got !== "FL-AM2-general:18,FL-AM3-general:15")
-    throw new Error(`expected FL-AM2-general:18,FL-AM3-general:15 only, got [${got}]`);
+  if (got !== "FL-AM1-general:21,FL-AM2-general:18,FL-AM3-general:15")
+    throw new Error(`expected FL-AM1-general:21,FL-AM2-general:18,FL-AM3-general:15, got [${got}]`);
+});
+/* 0060 publishes AM1 through the self-auditing block 0038/0040 use: one
+   founder 'publish' row, and the 2x gate holds for AM1 and for AM3 (which
+   0060 leaves at 0038's 2 support / 4 oppose). */
+await check("0060 published AM1 with one founder audit row, and AM1's and AM3's gates hold", async () => {
+  const res = await db.query(
+    `SELECT (SELECT status FROM measure_publication WHERE measure_id = 'FL-AM1-general') AS status,
+            (SELECT count(*)::int FROM admin_action
+              WHERE subject_kind = 'measure_publication' AND subject_ref = 'FL-AM1-general'
+                AND action = 'publish' AND actor = 'founder') AS logged,
+            public.measure_sides_balanced('FL-AM1-general') AS am1,
+            public.measure_sides_balanced('FL-AM3-general') AS am3;`
+  );
+  const r = res.rows[0];
+  if (r.status !== "published" || r.logged !== 1 || r.am1 !== true || r.am3 !== true)
+    throw new Error(JSON.stringify(r));
 });
 
 await db.exec("SET ROLE anon;");

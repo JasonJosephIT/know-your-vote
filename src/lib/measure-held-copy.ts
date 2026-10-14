@@ -23,7 +23,11 @@ export interface HeldNote {
    reporting (measure-resources-verified-2026-09-24.md). The note now says
    that, names no one on either side, and points to the reporting for both
    sides' reasons. Keeping AM1 neutral-only is the recommendation pending
-   founder confirmation (ballots-handoff.md §7). */
+   founder confirmation (ballots-handoff.md §7).
+   2026-10-14: the founder decided to publish AM1 (0060). The page shows a
+   note only while its measure is `listed`, so this entry stops rendering
+   once 0060 is applied live and covers AM1 only until then. Delete it
+   after 0060's read-back. */
 export const HELD_NOTES: Record<string, HeldNote> = {
   "FL-AM1-general": {
     paragraphs: [
