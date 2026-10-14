@@ -338,11 +338,12 @@ export function looseNameMatch(a: string, b: string): boolean {
 /** Every covered office on one county's list against our county races, both
     ways: MISSING is a filer still in the race (LIVE_LABELS) with no candidate
     of ours; EXTRA is a candidate of ours VoterFocus no longer lists as
-    running (withdrawn, defeated, did not qualify, a write-in, or absent).
-    Pairs on the `ca=` id our FL-VF-<PREFIX>-<ca> id carries, else on
-    normalizeName within the office, else on NAME_VARIANTS or
-    looseNameMatch, which is a CONFIRM line. A covered office with a live
-    filer and no race row is #178's `office:` line. Report lines only. */
+    running (withdrawn, defeated, did not qualify, a write-in, under another
+    office, or absent). Pairs on the `ca=` id our FL-VF-<PREFIX>-<ca> id
+    carries, else on normalizeName within the office, else on NAME_VARIANTS
+    or looseNameMatch, which is a CONFIRM line; so is anything not compared.
+    Headings that read as one seat are one office. A covered office with a
+    live filer and no race row is #178's `office:` line. Report lines only. */
 export function compareCountyRoster(
   county: { name: string; raceDistrictPrefix: string },
   rows: readonly VoterFocusRow[],
@@ -351,27 +352,68 @@ export function compareCountyRoster(
   const prefix = county.raceDistrictPrefix;
   const report: string[] = [];
   const offices: RosterOffice[] = [];
-  const mine = races.filter((r) => r.district.startsWith(`${prefix}-`));
-  const raceBy = new Map(mine.map((r) => [r.district, r]));
-  const byCa = new Map(rows.flatMap((r) => (r.ca ? [[r.ca, r] as const] : [])));
-  const byOffice = new Map<string, VoterFocusRow[]>();
-  for (const r of rows) byOffice.set(r.office, [...(byOffice.get(r.office) ?? []), r]);
   const show = (r: VoterFocusRow) => `${withoutParty(r.name)} (${r.label ?? "no label"})`;
   const quote = (name: string) => JSON.stringify(name);
+  const caNote = (r: VoterFocusRow) => (r.ca ? `, ca=${r.ca}` : "");
   const idCa = (candidateId: string) => new RegExp(`^FL-VF-${prefix}-(\\d+)$`).exec(candidateId)?.[1] ?? null;
-  const seen = new Set<string>();
+  const byCa = new Map(rows.flatMap((r) => (r.ca ? [[r.ca, r] as const] : [])));
 
-  for (const [office, filers] of byOffice) {
-    const live = filers.filter(isLive);
-    const seat = voterFocusSeat(prefix, office);
-    if (seat === undefined) continue;
-    if (seat === null) {
-      if (live.length > 0) {
-        report.push(`office: ${county.name}'s VoterFocus office ${JSON.stringify(office)} reads like a covered seat but does not parse; not checked for a race row`);
-      }
+  /* Our races by seat, each candidate once. A second race row for a seat is
+     not compared, and says so. */
+  const raceBy = new Map<string, CountyRace>();
+  for (const race of races.filter((r) => r.district.startsWith(`${prefix}-`))) {
+    const candidates = race.candidates.filter((c, i, all) => all.findIndex((x) => x.candidateId === c.candidateId) === i);
+    const first = raceBy.get(race.district);
+    if (!first) {
+      raceBy.set(race.district, { ...race, candidates });
       continue;
     }
-    seen.add(seat);
+    offices.push({
+      county: county.name, office: null, district: race.district, raceId: race.raceId, running: [],
+      ours: candidates.filter(runningOurs).map((c) => c.legalName), missing: [], extra: [],
+      confirm: [`a second race row for ${race.district}, beside ${first.raceId}; not compared`],
+    });
+  }
+
+  /* Each heading's seat, and the covered offices by seat, in page order. */
+  const seatOf = new Map<string, string | null | undefined>();
+  const bySeat = new Map<string, { headings: string[]; filers: VoterFocusRow[] }>();
+  for (const r of rows) {
+    if (!seatOf.has(r.office)) {
+      const seat = voterFocusSeat(prefix, r.office);
+      seatOf.set(r.office, seat);
+      if (seat === null && rows.some((x) => x.office === r.office && isLive(x))) {
+        report.push(`office: ${county.name}'s VoterFocus office ${JSON.stringify(r.office)} reads like a covered seat but does not parse; not checked for a race row`);
+      }
+    }
+    const seat = seatOf.get(r.office);
+    if (typeof seat !== "string") continue;
+    const office = bySeat.get(seat) ?? { headings: [], filers: [] };
+    if (!office.headings.includes(r.office)) office.headings.push(r.office);
+    office.filers.push(r);
+    bySeat.set(seat, office);
+  }
+
+  /* Why one of ours, running on our side, is not running in `seat` on the
+     list: an EXTRA reason, or a CONFIRM when it cannot be compared. */
+  const notRunning = (c: CountyRaceCandidate, seat: string): { extra: string } | { confirm: string } => {
+    const ca = idCa(c.candidateId);
+    const row = ca === null ? undefined : byCa.get(ca);
+    if (!row) return { extra: `not on ${county.name}'s VoterFocus list` };
+    const rowSeat = seatOf.get(row.office);
+    if (row.label === null || (!VOTERFOCUS_STATUS[row.label] && row.label !== WRITE_IN_LABEL)) {
+      return { confirm: `${c.legalName} (${c.candidateId}) is ${JSON.stringify(row.label ?? "(no label)")} on VoterFocus, which has no mapping; not compared` };
+    }
+    if (rowSeat === seat) return { extra: `${row.label} on VoterFocus` };
+    if (isLive(row) && typeof rowSeat !== "string") {
+      return { confirm: `${c.legalName} (${c.candidateId}) is ${row.label} under ${JSON.stringify(row.office)}, which does not read as ${seat}; not compared` };
+    }
+    return { extra: `listed under ${row.office} on VoterFocus (${row.label}${caNote(row)})` };
+  };
+
+  for (const [seat, { headings, filers }] of bySeat) {
+    const office = headings.join(" / ");
+    const live = filers.filter(isLive);
     const race = raceBy.get(seat);
     if (!race && live.length === 0) continue;
     const entry: RosterOffice = {
@@ -396,14 +438,15 @@ export function compareCountyRoster(
        name match never takes a row another candidate's id holds. */
     const pair = new Map<string, VoterFocusRow>();
     const taken = new Set<VoterFocusRow>();
-    const elsewhere = new Map<string, VoterFocusRow>();
-    const unsure = new Set<string>();
+    const elsewhere = new Set<string>();
+    const unsure = new Map<string, number>();
+    const unsureRows = new Map<VoterFocusRow, string>();
     for (const c of race.candidates) {
       const ca = idCa(c.candidateId);
       const row = ca === null ? undefined : byCa.get(ca);
       if (!row) continue;
-      if (row.office !== office) {
-        elsewhere.set(c.candidateId, row);
+      if (seatOf.get(row.office) !== seat) {
+        elsewhere.add(c.candidateId);
         continue;
       }
       pair.set(c.candidateId, row);
@@ -424,14 +467,15 @@ export function compareCountyRoster(
               : spellings.some((s) => normalizeName(s) === normalizeName(r.name) || looseNameMatch(s, r.name))),
         );
         if (hits.length > 1) {
-          unsure.add(c.candidateId);
+          unsure.set(c.candidateId, hits.length);
+          for (const r of hits) unsureRows.set(r, c.legalName);
           entry.confirm.push(`ours ${quote(c.legalName)} (${c.candidateId}) matches ${hits.length} rows: ${hits.map(show).join(", ")}`);
         }
         if (hits.length !== 1) continue;
         pair.set(c.candidateId, hits[0]);
         taken.add(hits[0]);
         if (how === "variant") {
-          entry.confirm.push(`ours ${quote(c.legalName)} (${c.candidateId}) paired with VoterFocus ${quote(withoutParty(hits[0].name))} (ca=${hits[0].ca}) on a name variant`);
+          entry.confirm.push(`ours ${quote(c.legalName)} (${c.candidateId}) paired with VoterFocus ${quote(withoutParty(hits[0].name))}${caNote(hits[0]).replace(", ", " (")}${hits[0].ca ? ")" : ""} on a name variant`);
         }
       }
     }
@@ -441,47 +485,57 @@ export function compareCountyRoster(
       const id = pairedWith.get(r);
       const c = id === undefined ? undefined : race.candidates.find((x) => x.candidateId === id);
       if (c && runningOurs(c)) continue;
-      entry.missing.push(c ? `${show(r)}, whom ours has as ${c.qualifyingStatus}, ${c.ballotStatus} (${c.candidateId})` : show(r));
+      const twin = unsureRows.get(r);
+      entry.missing.push(
+        c
+          ? `${show(r)}, whom ours has as ${c.qualifyingStatus}, ${c.ballotStatus} (${c.candidateId})`
+          : twin === undefined
+            ? show(r)
+            : `${show(r)}, not paired: ours ${quote(twin)} matches more than one row`,
+      );
     }
     for (const c of race.candidates.filter(runningOurs)) {
       const row = pair.get(c.candidateId);
       if (row && isLive(row)) continue;
-      if (row && (row.label === null || (!VOTERFOCUS_STATUS[row.label] && row.label !== WRITE_IN_LABEL))) {
-        report.push(`roster: ${county.name} ${office} (${race.raceId}): ${c.legalName} (${c.candidateId}) is ${JSON.stringify(row.label ?? "(no label)")} on VoterFocus, which has no mapping; not compared`);
+      const n = unsure.get(c.candidateId);
+      if (n !== undefined) {
+        entry.extra.push(`${c.legalName} (${c.candidateId}), matches ${n} rows on VoterFocus; not paired`);
         continue;
       }
-      const other = elsewhere.get(c.candidateId);
       const why = row
-        ? `${row.label} on VoterFocus`
-        : other
-          ? `listed under ${other.office} on VoterFocus (ca=${other.ca})`
-          : `not on ${county.name}'s VoterFocus list`;
-      entry.extra.push(`${c.legalName} (${c.candidateId}), ${why}`);
+        ? row.label === null || (!VOTERFOCUS_STATUS[row.label] && row.label !== WRITE_IN_LABEL)
+          ? { confirm: `${c.legalName} (${c.candidateId}) is ${JSON.stringify(row.label ?? "(no label)")} on VoterFocus, which has no mapping; not compared` }
+          : { extra: `${row.label} on VoterFocus` }
+        : notRunning(c, seat);
+      if ("extra" in why) entry.extra.push(`${c.legalName} (${c.candidateId}), ${why.extra}`);
+      else entry.confirm.push(why.confirm);
     }
-    const where = `${county.name} ${office} (${race.raceId})`;
-    for (const m of entry.missing) report.push(`roster: MISSING ${where}: VoterFocus lists ${m}, and our race does not`);
-    for (const x of entry.extra) report.push(`roster: EXTRA ${where}: ${x}`);
-    for (const k of entry.confirm) report.push(`roster: CONFIRM ${where}: ${k}`);
   }
 
-  /* A race of ours that no office on the list reads as: every running
-     candidate in it is absent from the list. */
-  for (const race of mine) {
-    if (seen.has(race.district)) continue;
+  /* A race of ours that no covered office on the list reads as. */
+  for (const race of raceBy.values()) {
+    if (bySeat.has(race.district)) continue;
     const ours = race.candidates.filter(runningOurs);
     const entry: RosterOffice = {
-      county: county.name,
-      office: null,
-      district: race.district,
-      raceId: race.raceId,
-      running: [],
-      ours: ours.map((c) => c.legalName),
-      missing: [],
-      extra: ours.map((c) => `${c.legalName} (${c.candidateId}), no office on ${county.name}'s VoterFocus list reads as ${race.district}`),
-      confirm: [],
+      county: county.name, office: null, district: race.district, raceId: race.raceId, running: [],
+      ours: ours.map((c) => c.legalName), missing: [], extra: [], confirm: [],
     };
+    for (const c of ours) {
+      const why = notRunning(c, race.district);
+      if (!("extra" in why)) entry.confirm.push(why.confirm);
+      else if (why.extra.startsWith("not on ")) {
+        entry.extra.push(`${c.legalName} (${c.candidateId}), no office on ${county.name}'s VoterFocus list reads as ${race.district}`);
+      } else entry.extra.push(`${c.legalName} (${c.candidateId}), ${why.extra}`);
+    }
     offices.push(entry);
-    for (const x of entry.extra) report.push(`roster: EXTRA ${county.name} ${race.district} (${race.raceId}): ${x}`);
+  }
+
+  for (const o of offices) {
+    if (o.raceId === null) continue;
+    const where = `${county.name} ${o.office ?? o.district} (${o.raceId})`;
+    for (const m of o.missing) report.push(`roster: MISSING ${where}: VoterFocus lists ${m}, and our race does not`);
+    for (const x of o.extra) report.push(`roster: EXTRA ${where}: ${x}`);
+    for (const k of o.confirm) report.push(`roster: CONFIRM ${where}: ${k}`);
   }
   return { offices, report };
 }
@@ -969,8 +1023,9 @@ export function buildCheck(input: CheckInput): CheckResult {
   }
   const ours = rosterOffices.filter((o) => o.raceId !== null);
   const total = (k: "missing" | "extra" | "confirm") => ours.reduce((n, o) => n + o[k].length, 0);
-  /* A race VoterFocus disagrees with is not confirmed, whatever its statuses say. */
-  const disputed = new Set(ours.filter((o) => o.missing.length + o.extra.length > 0).map((o) => o.raceId));
+  /* A race VoterFocus disagrees with, or one a person must confirm, is not
+     confirmed, whatever its statuses say. */
+  const disputed = new Set(ours.filter((o) => o.missing.length + o.extra.length + o.confirm.length > 0).map((o) => o.raceId));
   const confirmedRaces = [...readOk]
     .filter(([raceId, ok]) => ok && !disputed.has(raceId))
     .map(([raceId]) => raceId)

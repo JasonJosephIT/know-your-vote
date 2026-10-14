@@ -510,7 +510,7 @@ check("EXTRA: a candidate of ours absent from the list",
 const otherOffice = ok(base({ countyRaces: COUNTY_RACES.map((r) => r.raceId === "FL-ORA-CC2-general"
   ? { ...r, candidates: [...r.candidates, { candidateId: "FL-VF-ORA-1260", legalName: "Brian Jones", qualifyingStatus: "qualified", ballotStatus: "ballot" }] } : r) }));
 check("EXTRA: an id VoterFocus files under another office names that office",
-  rosterLines(otherOffice, "EXTRA").some((l) => l.includes("Brian Jones (FL-VF-ORA-1260), listed under County Commissioner District 4 on VoterFocus (ca=1260)")),
+  rosterLines(otherOffice, "EXTRA").some((l) => l.includes("Brian Jones (FL-VF-ORA-1260), listed under County Commissioner District 4 on VoterFocus (Qualified, ca=1260)")),
   rosterLines(otherOffice).join(" | "));
 const withArthur = ok(base({ countyRaces: COUNTY_RACES.map((r) => r.raceId === "FL-ORA-CC4-general"
   ? { ...r, candidates: [...r.candidates, { candidateId: "FL-VF-ORA-1378", legalName: "Isabella Arthur", qualifyingStatus: "qualified", ballotStatus: "ballot" }] } : r) }));
@@ -523,10 +523,43 @@ check("an unknown label on one of ours is not compared, not EXTRA",
   rosterLines(unmapped, "EXTRA").length === 0 && rosterLines(unmapped).some((l) => l.includes("Chris Messina") && l.includes("not compared")),
   rosterLines(unmapped).join(" | "));
 const stray = ok(base({ countyRaces: [...COUNTY_RACES, { raceId: "FL-ORA-CC9-general", district: "ORA-CC-9", candidates: [
+  { candidateId: "FL-VF-ORA-9999", legalName: "Nobody Here", qualifyingStatus: "qualified", ballotStatus: "ballot" },
   { candidateId: "FL-VF-ORA-1290", legalName: "Kamia Brown", qualifyingStatus: "qualified", ballotStatus: "ballot" }] }] }));
-check("EXTRA: a race of ours that no office on the list reads as",
-  rosterLines(stray, "EXTRA").some((l) => l === "roster: EXTRA Orange ORA-CC-9 (FL-ORA-CC9-general): Kamia Brown (FL-VF-ORA-1290), no office on Orange's VoterFocus list reads as ORA-CC-9"),
-  rosterLines(stray).join(" | "));
+check("EXTRA: a race of ours that no office on the list reads as, naming where VoterFocus has each person",
+  rosterLines(stray, "EXTRA").join("|") === [
+    "roster: EXTRA Orange ORA-CC-9 (FL-ORA-CC9-general): Nobody Here (FL-VF-ORA-9999), no office on Orange's VoterFocus list reads as ORA-CC-9",
+    "roster: EXTRA Orange ORA-CC-9 (FL-ORA-CC9-general): Kamia Brown (FL-VF-ORA-1290), listed under County Commissioner District 2 on VoterFocus (Runoff, ca=1290)",
+  ].join("|") && !stray.confirmedRaces.includes("FL-ORA-CC9-general"), rosterLines(stray).join(" | "));
+
+/* A renamed heading: its filers are not compared, never EXTRA (review fix). */
+const renamedHeading = (to: string) => ok(base({ voterFocus: { [DAD]: dade, [ORA]: parseVoterFocus(orangeHtml.replace("County Commissioner District 2", to)) } }));
+for (const to of ["Board of County Commissioners District 2", "Commissioner District 2"]) {
+  const r = renamedHeading(to);
+  check(`a heading renamed to ${JSON.stringify(to)}: its running filers are CONFIRM, not EXTRA, and the race is not confirmed`,
+    rosterLines(r, "EXTRA").length === 0 && rosterLines(r, "CONFIRM").length === 2 &&
+      rosterLines(r, "CONFIRM").every((l) => l.includes(`under ${JSON.stringify(to)}, which does not read as ORA-CC-2; not compared`)) &&
+      !r.confirmedRaces.includes("FL-ORA-CC2-general"), rosterLines(r).join(" | "));
+}
+const ora = { name: "Orange", raceDistrictPrefix: "ORA" };
+const cand = (id: string, name: string, status = "qualified", ballot = "ballot") => ({ candidateId: id, legalName: name, qualifyingStatus: status, ballotStatus: ballot });
+const twoHeadings = compareCountyRoster(ora, [
+  { ca: "1", name: "Ann Lee", office: "County Commissioner District 2", label: "Qualified" },
+  { ca: "2", name: "Bob Roe", office: "County Commissioner, Dist. 2", label: "Qualified" },
+], [{ raceId: "FL-ORA-CC2-general", district: "ORA-CC-2", candidates: [cand("FL-VF-ORA-1", "Ann Lee"), cand("FL-VF-ORA-2", "Bob Roe")] }]);
+check("two headings that read as one seat are one office",
+  twoHeadings.report.length === 0 && twoHeadings.offices.length === 1 &&
+    twoHeadings.offices[0].office === "County Commissioner District 2 / County Commissioner, Dist. 2", JSON.stringify(twoHeadings));
+const twoRaces = compareCountyRoster(ora, [{ ca: "1", name: "Ann Lee", office: "County Mayor", label: "Runoff" }], [
+  { raceId: "FL-ORA-MAYOR-general", district: "ORA-MAYOR", candidates: [cand("FL-VF-ORA-1", "Ann Lee"), cand("FL-VF-ORA-1", "Ann Lee")] },
+  { raceId: "FL-ORA-MAYOR2-general", district: "ORA-MAYOR", candidates: [cand("FL-VF-ORA-7", "Zed Who")] },
+]);
+check("a second race row for a seat is a CONFIRM, and a repeated candidate id counts once",
+  twoRaces.report.join("|") === "roster: CONFIRM Orange ORA-MAYOR (FL-ORA-MAYOR2-general): a second race row for ORA-MAYOR, beside FL-ORA-MAYOR-general; not compared" &&
+    twoRaces.offices.find((o) => o.raceId === "FL-ORA-MAYOR-general")?.ours.length === 1, twoRaces.report.join(" | "));
+const noCa = compareCountyRoster(ora, [{ ca: null, name: "Rob Piper", office: "County Mayor", label: "Runoff" }],
+  [{ raceId: "FL-ORA-MAYOR-general", district: "ORA-MAYOR", candidates: [cand("FL-VF-ORA-X", "Robert Piper")] }]);
+check("a variant pair on a row with no ca= prints no ca", noCa.report.length === 1 && !noCa.report[0].includes("ca=") &&
+  noCa.report[0].endsWith('paired with VoterFocus "Rob Piper" on a name variant'), noCa.report.join(" | "));
 check("a write-in or excluded candidate of ours is not running, so never EXTRA", (() => {
   const r = ok(base({ countyRaces: COUNTY_RACES.map((x) => x.raceId === "FL-ORA-CC2-general"
     ? { ...x, candidates: [...x.candidates, { candidateId: "FL-VF-ORA-9998", legalName: "Write In", qualifyingStatus: "qualified", ballotStatus: "write_in" }] } : x) }));
@@ -540,8 +573,8 @@ check("looseNameMatch: nickname, short form and double surname; not a different 
     !looseNameMatch("Robert Piper", "Rob Pipers") && !looseNameMatch("Karen Perez", "Katrina Perez") && !looseNameMatch("Lopez", "Lopez"));
 const variant = ok(base({ countyRaces: COUNTY_RACES.map((r) => r.raceId === "FL-DAD-CC5-general"
   ? { ...r, candidates: r.candidates.map((c) => c.candidateId === "FL-VF-DAD-2998" ? { ...c, candidateId: "FL-VF-DAD-X2998", legalName: "Robert Piper" } : c) } : r) }));
-check("a name variant pairs, is listed to CONFIRM, and is neither MISSING nor EXTRA",
-  rosterLines(variant).length === 1 &&
+check("a name variant pairs, is listed to CONFIRM, is neither MISSING nor EXTRA, and leaves the race unconfirmed",
+  rosterLines(variant).length === 1 && !variant.confirmedRaces.includes("FL-DAD-CC5-general") && variant.roster.confirm === 1 &&
     rosterLines(variant, "CONFIRM")[0] === 'roster: CONFIRM Miami-Dade County Commission District 05 (FL-DAD-CC5-general): ours "Robert Piper" (FL-VF-DAD-X2998) paired with VoterFocus "Rob Piper" (ca=2998) on a name variant',
   rosterLines(variant).join(" | "));
 const exactName = ok(base({ countyRaces: COUNTY_RACES.map((r) => r.raceId === "FL-DAD-CC5-general"
@@ -557,9 +590,10 @@ const twinsRoster = compareCountyRoster({ name: "Orange", raceDistrictPrefix: "O
   { ca: "2", name: "Pat Lee (REP)", office: "County Mayor", label: "Runoff" },
 ], [{ raceId: "FL-ORA-MAYOR-general", district: "ORA-MAYOR", candidates: [
   { candidateId: "FL-VF-ORA-X", legalName: "Pat Lee", qualifyingStatus: "qualified", ballotStatus: "ballot" }] }]);
-check("a name that fits two rows pairs with neither and is listed to CONFIRM, with no party",
-  twinsRoster.report.some((l) => l.includes("matches 2 rows")) && twinsRoster.offices[0].missing.length === 2 &&
-    twinsRoster.offices[0].extra.length === 1 && !/\((DEM|REP)\)/.test(JSON.stringify(twinsRoster)), JSON.stringify(twinsRoster));
+check("a name that fits two rows pairs with neither, says so in each line, and carries no party",
+  twinsRoster.report.some((l) => l.includes("CONFIRM") && l.includes("matches 2 rows")) && twinsRoster.offices[0].missing.length === 2 &&
+    twinsRoster.offices[0].missing.every((m) => m.endsWith('not paired: ours "Pat Lee" matches more than one row')) &&
+    twinsRoster.offices[0].extra.join() === "Pat Lee (FL-VF-ORA-X), matches 2 rows on VoterFocus; not paired" && !/\((DEM|REP)\)/.test(JSON.stringify(twinsRoster)), JSON.stringify(twinsRoster));
 check("no party label reaches the roster output", !/\((DEM|REP|NOP|NPA)\)/.test(JSON.stringify(with0057.rosterOffices.concat(noRaces.rosterOffices))));
 
 /* ---- dates --------------------------------------------------------------- */
