@@ -19,9 +19,15 @@ import artSizes from "./art-sizes.json";
 export type ArtName = keyof typeof artSizes;
 
 /* Rotator frames live in their own folder at full size (450x600); everything
-   else is an illustration served as its -sm WebP, or as its 192px-tall -xs
-   WebP when it is drawn 96px tall or less and an -xs file exists ("xs/<name>"
-   in art-sizes.json): a 36px sticker shouldn't fetch a 500px file. */
+   else is an illustration served as its -sm WebP, or as its -xs WebP when it
+   is drawn 96px tall or less and an -xs file exists ("xs/<name>" in
+   art-sizes.json): a 36px sticker shouldn't fetch a 500px file. An -xs file
+   is at least 2x the height it is drawn at: 192px tall for the stickers and
+   the cat (64px on a phone), 264px for the seated reader (88px). Each is an
+   exact proportional resize of its master, so a ledge (the reader's 0.618,
+   the cat's 0.882, fractions of the height) lands on the same line.
+   scripts/verify-art-files.ts pins the sizes, and reads XS_MAX, wantsXs and
+   artSrc from this file's source. */
 const XS_MAX = 96;
 
 function wantsXs(name: ArtName, height?: number): boolean {
