@@ -1,0 +1,3 @@
+# ADR-002: Neutrality governs our conduct, not the world's
+
+We never introduce bias through framing, selection, padding or trimming, and we never correct a skew that is real: uneven coverage is shown with its sources and context ("14 sourced stories for A, 3 for B"), not evened out. A source's lean is disclosed (on the outlet page, in four states: rated, unrated, N/A, pending) but never scored, and no article is ever rated as biased. We chose this over a balance gate because we don't control what the press publishes, and hiding or padding a real race to make counts match is itself bias (founder, 2026-09-19 and 2026-10-09; detail in `docs/general-election/news-fairness.md` §1–2).

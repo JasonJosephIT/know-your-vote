@@ -1,0 +1,3 @@
+# ADR-003: Ballot measures get a resource ladder, not our own case for and against
+
+For a ballot measure the site does not write arguments. It lists outside material (studies, news, video) for YES and NO in equal columns, ordered by a fixed credibility ladder that comes from what each resource *is*, never from a judgment about the item. This replaced `measure_argument` (sentences we authored, one source each) with `measure_resource` (founder, 2026-09-23), because a case for and against written by us strained "We describe. You decide."; pointing voters to the people who make the case is description. Spec: `docs/superpowers/specs/2026-09-23-measure-resource-ladder-design.md`.
