@@ -39,6 +39,8 @@ import {
   voterFocusSeat,
   type CheckInput,
   type CountyRace,
+  type DoeRace,
+  type DoeStatusRow,
   type ElectionEventRow,
   type Observations,
   type R2Diff,
@@ -102,8 +104,13 @@ const DOE_HEADER =
   "AcctNum\tVoterID\tElectionID\tOfficeCode\tOfficeDesc\tJuris1num\tJuris2num\tStatusCode\tStatusDesc\tPartyCode\tPartyDesc\t" +
   "NameLast\tNameFirst\tNameMiddle\tSuppressAddress\tAddr1\tAddr2\tCity\tState\tZip\tCounty\tPhone\tTrsNameLast\tTrsNameFirst\tTrsNameMiddle\tEmail";
 const PII = ["secret@example.com", "5615551212", "123 Private Way", "Treasurer-Lastname"];
-const doeRow = (acct: string, office: string, juris: string, status: string, last: string, first: string) =>
-  [acct, "0", "20261103-GEN", office, "desc", juris, "", status, "status", "REP", "Republican", last, first, "",
+/* StatusDesc as the live extract printed each code on 2026-10-14. */
+const DOE_DESC: Record<string, string> = {
+  QUA: "Qualified", UNO: "Unopposed", WIT: "Withdrew", DEF: "Defeated", DNQ: "Did Not Qualify", REM: "Removed",
+};
+const doeRow = (acct: string, office: string, juris: string, status: string, last: string, first: string, party = "REP") =>
+  [acct, "0", "20261103-GEN", office, "desc", juris, "", status, DOE_DESC[status] ?? "Unknown", party,
+    party === "WRI" ? "Write-In" : "Republican", last, first, "",
     "N", PII[2], "", "Tallahassee", "FL", "32301", "Leon", PII[1], PII[3], "Pat", "", PII[0]].join("\t");
 const doeText = [
   DOE_HEADER,
@@ -115,10 +122,16 @@ const doeText = [
 ].join("\r\n") + "\r\n";
 const doeRows = parseDoeExtract(doeText);
 check("the extract parses, CRLF and all", doeRows !== null && doeRows.length === 5, JSON.stringify(doeRows));
-check("each parsed row has exactly AcctNum, office, district and status",
-  (doeRows ?? []).every((r) => Object.keys(r).sort().join(",") === "acctNum,juris,officeCode,statusCode"));
+check("each parsed row has exactly AcctNum, office, district, status, name and write-in",
+  (doeRows ?? []).every((r) => Object.keys(r).sort().join(",") === "acctNum,juris,name,officeCode,statusCode,statusDesc,writeIn"));
 check("no address, phone, email or treasurer survives the parse",
   PII.every((p) => !JSON.stringify(doeRows).includes(p)), JSON.stringify(doeRows));
+check("no party survives the parse; a write-in is a boolean",
+  !/\bREP\b|Republican/.test(JSON.stringify(doeRows)) && doeRows?.[0].name === "Byron Donalds" && doeRows[0].statusDesc === "Qualified" &&
+    doeRows[0].writeIn === false && parseDoeExtract([DOE_HEADER, doeRow("1", "GOV", "", "QUA", "In", "Write", "WRI")].join("\n"))?.[0].writeIn === true,
+  JSON.stringify(doeRows?.[0]));
+check("an extract without PartyCode is not the extract (write-ins could not be told apart)",
+  parseDoeExtract(DOE_HEADER.replace("PartyCode", "Party") + "\n" + doeRow("1", "GOV", "", "QUA", "A", "B")) === null);
 check("an HTML page is not the extract", parseDoeExtract("<html><title>Just a moment...</title></html>") === null);
 check("doeRaceId: GOV, USR 010, SOS",
   doeRaceId("GOV", "") === "FL-GOV-general" && doeRaceId("USR", "010") === "FL-10-general" && doeRaceId("SOS", "") === null);
@@ -257,6 +270,14 @@ const DOE_ROSTER: BallotRosterCandidate[] = [
   doeCand("FL-GOV-general", "state", "FL-DOE-89042", "Byron Donalds", "qualified"),
   doeCand("FL-10-general", "federal", "FL-DOE-70001", "Maxwell Frost", "unopposed"),
 ];
+/* The race rows DOE_ROSTER sits in, with their candidates. */
+const ourCand = (id: string, name: string, status = "qualified", ballot = "ballot") => ({ candidateId: id, legalName: name, qualifyingStatus: status, ballotStatus: ballot });
+const DONALDS = ourCand("FL-DOE-89042", "Byron Donalds");
+const FROST = ourCand("FL-DOE-70001", "Maxwell Frost", "unopposed");
+const DOE_RACES: DoeRace[] = [
+  { raceId: "FL-GOV-general", level: "state", office: "Governor", candidates: [DONALDS] },
+  { raceId: "FL-10-general", level: "federal", office: "United States Representative", candidates: [FROST] },
+];
 
 /* The 14 general_2026 rows as they were on 2026-10-08. */
 const EVENTS: ElectionEventRow[] = [
@@ -289,6 +310,7 @@ const base = (over: Partial<CheckInput> = {}): CheckInput => ({
   doe: { CAB: doeRows, FED: doeRows },
   voterFocus: { [DAD]: dade, [ORA]: orange },
   countyRaces: COUNTY_RACES,
+  doeRaces: DOE_RACES,
   runningMates: { column: false, stored: {}, pages: {} },
   now: NOW,
   ...over,
@@ -595,6 +617,106 @@ check("a name that fits two rows pairs with neither, says so in each line, and c
     twinsRoster.offices[0].missing.every((m) => m.endsWith('not paired: ours "Pat Lee" matches more than one row')) &&
     twinsRoster.offices[0].extra.join() === "Pat Lee (FL-VF-ORA-X), matches 2 rows on VoterFocus; not paired" && !/\((DEM|REP)\)/.test(JSON.stringify(twinsRoster)), JSON.stringify(twinsRoster));
 check("no party label reaches the roster output", !/\((DEM|REP|NOP|NPA)\)/.test(JSON.stringify(with0057.rosterOffices.concat(noRaces.rosterOffices))));
+
+/* ---- statewide and U.S. House rosters: every candidate, both directions -- */
+
+check("the fixture extract agrees with our Governor and FL-10 races: no line, both compared",
+  clean.doeRosterRaces.length === 2 && JSON.stringify(clean.doeRoster) === JSON.stringify({ races: 2, noRace: 0, missing: 0, extra: 0, confirm: 0 }) &&
+    clean.doeRosterRaces.find((r) => r.raceId === "FL-10-general")?.running.join() === "Maxwell Frost (Unopposed)" &&
+    clean.doeRosterRaces.find((r) => r.raceId === "FL-GOV-general")?.ours.join() === "Byron Donalds", JSON.stringify(clean.doeRosterRaces));
+const GOV_DONALDS = doeRow("89042", "GOV", "", "QUA", "Donalds", "Byron");
+const FL10_FROST = doeRow("70001", "USR", "010", "UNO", "Frost", "Maxwell");
+const extractOf = (...rows: string[]) => parseDoeExtract([DOE_HEADER, ...rows].join("\n")) as DoeStatusRow[];
+const withDoe = (rows: string[], races: DoeRace[] = DOE_RACES) => {
+  const parsed = extractOf(GOV_DONALDS, FL10_FROST, ...rows);
+  return ok(base({ doe: { CAB: parsed, FED: parsed }, doeRaces: races }));
+};
+const govWith = (...extra: ReturnType<typeof ourCand>[]): DoeRace[] =>
+  DOE_RACES.map((r) => (r.raceId === "FL-GOV-general" ? { ...r, candidates: [...r.candidates, ...extra] } : r));
+const NEWCOMER = doeRow("70010", "GOV", "", "QUA", "Newcomer", "Nia");
+
+/* MISSING: a qualified filer with no running candidate of ours. */
+const doeMissing = withDoe([NEWCOMER]);
+check("MISSING: a qualified DoE filer not in our race is one line, named with the id to add, and the race is not confirmed",
+  rosterLines(doeMissing).join("|") === "roster: MISSING Governor (FL-GOV-general): the DoE extract lists Nia Newcomer (Qualified, FL-DOE-70010), and our race does not" &&
+    doeMissing.doeRoster.missing === 1 && !doeMissing.confirmedRaces.includes("FL-GOV-general") && doeMissing.confirmedRaces.includes("FL-10-general") &&
+    doeMissing.diffs.length === 0, rosterLines(doeMissing).join(" | "));
+const doeOursWithdrawn = withDoe([NEWCOMER], govWith(ourCand("FL-DOE-70010", "Nia Newcomer", "withdrawn")));
+check("MISSING: a filer the extract has running and ours has withdrawn says so",
+  rosterLines(doeOursWithdrawn).join("|") === "roster: MISSING Governor (FL-GOV-general): the DoE extract lists Nia Newcomer (Qualified, FL-DOE-70010), whom ours has as withdrawn, ballot, and our race does not",
+  rosterLines(doeOursWithdrawn).join(" | "));
+
+/* Write-ins (D1): never MISSING; one of ours the extract shows as a write-in is EXTRA. */
+const WRITE_IN = doeRow("70011", "GOV", "", "QUA", "Writein", "Wanda", "WRI");
+check("write-ins (D1): a qualified write-in filer is never MISSING", rosterLines(withDoe([WRITE_IN])).length === 0,
+  rosterLines(withDoe([WRITE_IN])).join(" | "));
+const doeWriteInOurs = withDoe([WRITE_IN], govWith(ourCand("FL-DOE-70011", "Wanda Writein")));
+check("write-ins (D1): one of ours on the ballot tier whom the extract shows as a write-in is EXTRA",
+  rosterLines(doeWriteInOurs).join("|") === "roster: EXTRA Governor (FL-GOV-general): Wanda Writein (FL-DOE-70011), a write-in in the DoE extract",
+  rosterLines(doeWriteInOurs).join(" | "));
+check("write-ins (D1): one of ours on the write-in tier is not running, so never EXTRA",
+  rosterLines(withDoe([WRITE_IN], govWith(ourCand("FL-DOE-70011", "Wanda Writein", "qualified", "write_in")))).length === 0);
+
+/* Withdrawn, did not qualify, removed and defeated: never MISSING; EXTRA when ours. */
+for (const [code, desc] of [["WIT", "Withdrew"], ["DNQ", "Did Not Qualify"], ["REM", "Removed"], ["DEF", "Defeated"]]) {
+  const row = doeRow("70012", "GOV", "", code, "Gone", "Gail");
+  const notOurs = withDoe([row]);
+  const ours = withDoe([row], govWith(ourCand("FL-DOE-70012", "Gail Gone")));
+  check(`${code}: a ${desc} filer is never MISSING, and one of ours is EXTRA`,
+    rosterLines(notOurs).length === 0 &&
+      rosterLines(ours).join("|") === `roster: EXTRA Governor (FL-GOV-general): Gail Gone (FL-DOE-70012), ${desc} in the DoE extract` &&
+      !ours.confirmedRaces.includes("FL-GOV-general"), rosterLines(notOurs).concat(rosterLines(ours)).join(" | "));
+}
+
+/* A decided seat (FL-10: unopposed, not printed) is its one candidate. */
+const FL10_OTHERS = [doeRow("70013", "USR", "010", "WIT", "Left", "Lou"), doeRow("70014", "USR", "010", "DNQ", "Write", "Will", "WRI")];
+const fl10 = (candidates: ReturnType<typeof ourCand>[]): DoeRace[] =>
+  DOE_RACES.map((r) => (r.raceId === "FL-10-general" ? { ...r, candidates } : r));
+check("a decided seat: the unopposed filer alone is running, beside withdrawn and write-in filers",
+  rosterLines(withDoe(FL10_OTHERS)).length === 0 &&
+    withDoe(FL10_OTHERS).doeRosterRaces.find((r) => r.raceId === "FL-10-general")?.running.join() === "Maxwell Frost (Unopposed)");
+const fl10Empty = withDoe(FL10_OTHERS, fl10([]));
+check("a decided seat with no candidate of ours: its one candidate is MISSING",
+  rosterLines(fl10Empty).join("|") === "roster: MISSING United States Representative (FL-10-general): the DoE extract lists Maxwell Frost (Unopposed, FL-DOE-70001), and our race does not",
+  rosterLines(fl10Empty).join(" | "));
+const fl10Extra = withDoe(FL10_OTHERS, fl10([FROST, ourCand("FL-DOE-70013", "Lou Left")]));
+check("a decided seat with a second candidate of ours: that one is EXTRA",
+  rosterLines(fl10Extra).join("|") === "roster: EXTRA United States Representative (FL-10-general): Lou Left (FL-DOE-70013), Withdrew in the DoE extract",
+  rosterLines(fl10Extra).join(" | "));
+
+/* What cannot be compared is a CONFIRM line, never MISSING or EXTRA. */
+const ELECTED = doeRow("70015", "GOV", "", "ELE", "Elect", "Ed");
+const unknownCode = withDoe([ELECTED]);
+const unknownCodeOurs = withDoe([ELECTED], govWith(ourCand("FL-DOE-70015", "Ed Elect")));
+check("an unmapped DoE code is one CONFIRM line, ours or not, and the race is not confirmed",
+  [unknownCode, unknownCodeOurs].every((r) => rosterLines(r).join("|") ===
+    'roster: CONFIRM Governor (FL-GOV-general): Ed Elect (FL-DOE-70015) has DoE status code "ELE", which has no mapping; not compared' &&
+    !r.confirmedRaces.includes("FL-GOV-general")), rosterLines(unknownCode).concat(rosterLines(unknownCodeOurs)).join(" | "));
+
+/* EXTRA: ours and not in the race on the extract. */
+const doeAbsent = withDoe([], govWith(ourCand("FL-DOE-99999", "Not Filed")));
+check("EXTRA: a candidate of ours not in the extract",
+  rosterLines(doeAbsent).join("|") === "roster: EXTRA Governor (FL-GOV-general): Not Filed (FL-DOE-99999), not in the DoE CAB extract", rosterLines(doeAbsent).join(" | "));
+const doeElsewhere = withDoe([], govWith(FROST));
+check("EXTRA: a candidate of ours the extract files under another race names it",
+  rosterLines(doeElsewhere).join("|") === "roster: EXTRA Governor (FL-GOV-general): Maxwell Frost (FL-DOE-70001), filed under FL-10-general in the DoE extract (Unopposed)",
+  rosterLines(doeElsewhere).join(" | "));
+check("a repeated candidate id counts once", withDoe([], govWith(DONALDS)).doeRosterRaces.find((r) => r.raceId === "FL-GOV-general")?.ours.length === 1);
+
+/* An unreadable group: its races are not compared; the other group still is. */
+const govOnly = extractOf(GOV_DONALDS, NEWCOMER);
+const fedDown = ok(base({ doe: { CAB: govOnly, FED: null }, doeRaces: fl10([]) }));
+check("an unreadable FED extract leaves FL-10 uncompared, and the Governor race is still compared",
+  fedDown.doeRosterRaces.map((r) => r.raceId).join() === "FL-GOV-general" && rosterLines(fedDown, "MISSING").length === 1 &&
+    rosterLines(fedDown, "MISSING")[0].includes("Nia Newcomer"), rosterLines(fedDown).join(" | "));
+
+/* A statewide race with no race row; a House district we do not cover is not ours. */
+const noGov = withDoe([doeRow("70016", "USR", "013", "QUA", "Elsewhere", "Ella")], DOE_RACES.filter((r) => r.raceId !== "FL-GOV-general"));
+check("a statewide race with a running filer and no race row is an office line; an uncovered House district is not",
+  officeLines(noGov).filter((l) => l.includes("DoE")).join("|") === "office: the DoE extract has FL-GOV-general with Byron Donalds (Qualified, FL-DOE-89042), and there is no FL-GOV-general race row" &&
+    noGov.doeRoster.noRace === 1 && noGov.doeRoster.races === 1 && rosterLines(noGov).length === 0, officeLines(noGov).concat(rosterLines(noGov)).join(" | "));
+check("no party label reaches the statewide and House output",
+  ![doeMissing, doeWriteInOurs, fl10Extra, noGov].some((r) => /\bREP\b|Republican|Write-In\b/.test(JSON.stringify([r.doeRosterRaces, r.report]))));
 
 /* ---- dates --------------------------------------------------------------- */
 

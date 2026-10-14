@@ -10,9 +10,9 @@
    candidate.qualifying_status, or a `date_mismatch` against election_event,
    whose approval records the finding and writes nothing (D3). A covered
    county office a list shows with a live filer and no race row of ours, and
-   each county candidate the list and our race disagree on (MISSING, EXTRA),
-   is a report line: a missing race or candidate is a migration, never a
-   review item.
+   each candidate the list (county) or the extract (statewide and House) and
+   our race disagree on (MISSING, EXTRA), is a report line: a missing race or
+   candidate is a migration, never a review item.
 
    Pure: no fetch, no clock, no database. scripts/logistics-check.ts is the
    I/O around these rules; scripts/verify-logistics-check.ts drives this file
@@ -86,38 +86,48 @@ export function doeOfficeGroup(level: string): DoeOfficeGroup | null {
   return level === "federal" ? "FED" : level === "state" ? "CAB" : null;
 }
 
-/** One extract row, with ONLY the four columns R2 needs. */
+/** One extract row, with ONLY the columns R2 needs. */
 export interface DoeStatusRow {
   acctNum: string;
   officeCode: string;
   juris: string;
   statusCode: string;
+  /** StatusDesc as the extract prints it: "Qualified", "Withdrew". */
+  statusDesc: string;
+  /** NameFirst NameLast, for report lines. */
+  name: string;
+  /** PartyCode WRI. The party itself is not kept. */
+  writeIn: boolean;
 }
 
-/** Parse the tab-separated extract, keeping AcctNum, OfficeCode, Juris1num
-    and StatusCode and dropping every other column here, in memory: the file
-    carries addresses, phones, emails and treasurers (intake.py:12-16), and
-    none of that may reach a file the CLI writes. null when the text is not
-    the extract (a missing column: an error or challenge page). */
+/** Parse the tab-separated extract, keeping AcctNum, OfficeCode, Juris1num,
+    StatusCode, StatusDesc, the first and last name and whether PartyCode is
+    WRI, and dropping every other column here, in memory: the file carries
+    addresses, phones, emails and treasurers (intake.py:12-16), and none of
+    that, nor any party, may reach a file the CLI writes. null when the text
+    is not the extract (a missing column: an error or challenge page). */
 export function parseDoeExtract(text: string): DoeStatusRow[] | null {
   const lines = text.split(/\r?\n/).filter((l) => l.trim() !== "");
   if (lines.length === 0) return null;
   const header = lines[0].split("\t").map((h) => h.trim());
-  const iAcct = header.indexOf("AcctNum");
-  const iOffice = header.indexOf("OfficeCode");
-  const iJuris = header.indexOf("Juris1num");
-  const iStatus = header.indexOf("StatusCode");
-  if ([iAcct, iOffice, iJuris, iStatus].some((i) => i < 0)) return null;
+  const at = ["AcctNum", "OfficeCode", "Juris1num", "StatusCode", "StatusDesc", "NameFirst", "NameLast", "PartyCode"].map((h) =>
+    header.indexOf(h),
+  );
+  if (at.some((i) => i < 0)) return null;
+  const [iAcct, iOffice, iJuris, iStatus, iDesc, iFirst, iLast, iParty] = at;
   const rows: DoeStatusRow[] = [];
   for (const line of lines.slice(1)) {
     const cols = line.split("\t");
-    const acctNum = (cols[iAcct] ?? "").trim();
-    if (!acctNum) continue;
+    const col = (i: number) => (cols[i] ?? "").trim();
+    if (!col(iAcct)) continue;
     rows.push({
-      acctNum,
-      officeCode: (cols[iOffice] ?? "").trim(),
-      juris: (cols[iJuris] ?? "").trim(),
-      statusCode: (cols[iStatus] ?? "").trim(),
+      acctNum: col(iAcct),
+      officeCode: col(iOffice),
+      juris: col(iJuris),
+      statusCode: col(iStatus),
+      statusDesc: col(iDesc),
+      name: `${col(iFirst)} ${col(iLast)}`.trim(),
+      writeIn: col(iParty) === "WRI",
     });
   }
   return rows;
@@ -540,6 +550,118 @@ export function compareCountyRoster(
   return { offices, report };
 }
 
+/* ---- statewide and U.S. House rosters: every candidate, both directions --- */
+
+/** A statewide or U.S. House race row as `check` reads it, whatever its publication. */
+export interface DoeRace {
+  raceId: string;
+  /** "federal" or "state": which extract group it is read from. */
+  level: string;
+  office: string;
+  candidates: readonly CountyRaceCandidate[];
+}
+
+/** One statewide or House race: the DoE extract's still-running filers against ours. */
+export interface DoeRosterRace {
+  raceId: string;
+  /** Our race's office; null when we have no race row for a statewide race. */
+  office: string | null;
+  /** The extract's still-running filers, "Name (StatusDesc)". */
+  running: string[];
+  ours: string[];
+  missing: string[];
+  extra: string[];
+  confirm: string[];
+}
+
+/** The codes of a filer still in the race: qualified, or unopposed (the one
+    candidate of a decided seat, as FL-10). Intake's ballot tier, D1. */
+const DOE_RUNNING: readonly string[] = ["QUA", "UNO"];
+
+/** Every statewide and House race of ours against the DoE extract, both
+    ways, keyed on AcctNum (our id is FL-DOE-<AcctNum>): MISSING is a filer
+    still running (QUA or UNO, not a write-in) with no running candidate of
+    ours; EXTRA is a candidate of ours the extract shows withdrawn, defeated,
+    not qualified or removed, as a write-in (D1 keeps write-ins out of
+    candidate_ids), under another office, or not at all. A filer with a code
+    DOE_STATUS does not know is a CONFIRM line. A race whose extract group
+    was not read is not compared (its status lines say so). A statewide race
+    with a still-running filer and no race row is an `office:` line. Report
+    lines only. */
+export function compareDoeRoster(
+  extract: CheckInput["doe"],
+  races: readonly DoeRace[],
+): { races: DoeRosterRace[]; report: string[] } {
+  const report: string[] = [];
+  const out: DoeRosterRace[] = [];
+  const byAcct = new Map<string, DoeStatusRow>();
+  for (const rows of Object.values(extract)) for (const r of rows ?? []) byAcct.set(r.acctNum, r);
+  const filersOf = (raceId: string) => [...byAcct.values()].filter((r) => doeRaceId(r.officeCode, r.juris) === raceId);
+  const isRunning = (r: DoeStatusRow) => DOE_RUNNING.includes(r.statusCode) && !r.writeIn;
+  const show = (r: DoeStatusRow) => `${r.name} (${r.statusDesc || r.statusCode})`;
+  const showId = (r: DoeStatusRow) => `${r.name} (${r.statusDesc || r.statusCode}, FL-DOE-${r.acctNum})`;
+  const unmapped = (r: DoeStatusRow) =>
+    `${r.name} (FL-DOE-${r.acctNum}) has DoE status code ${JSON.stringify(r.statusCode)}, which has no mapping; not compared`;
+
+  for (const race of [...races].sort((a, b) => a.raceId.localeCompare(b.raceId, "en", { numeric: true }))) {
+    const group = doeOfficeGroup(race.level);
+    if (!group || !extract[group]) continue;
+    const candidates = race.candidates.filter((c, i, all) => all.findIndex((x) => x.candidateId === c.candidateId) === i);
+    const filers = filersOf(race.raceId);
+    const live = filers.filter(isRunning);
+    const entry: DoeRosterRace = {
+      raceId: race.raceId, office: race.office, running: live.map(show),
+      ours: candidates.filter(runningOurs).map((c) => c.legalName), missing: [], extra: [], confirm: [],
+    };
+    out.push(entry);
+    for (const r of live) {
+      const c = candidates.find((x) => x.candidateId === `FL-DOE-${r.acctNum}`);
+      if (c && runningOurs(c)) continue;
+      entry.missing.push(c ? `${showId(r)}, whom ours has as ${c.qualifyingStatus}, ${c.ballotStatus}` : showId(r));
+    }
+    for (const r of filers) if (!DOE_STATUS[r.statusCode]) entry.confirm.push(unmapped(r));
+    for (const c of candidates.filter(runningOurs)) {
+      const row = c.candidateId.startsWith("FL-DOE-") ? byAcct.get(c.candidateId.slice("FL-DOE-".length)) : undefined;
+      const filedUnder = row ? doeRaceId(row.officeCode, row.juris) : null;
+      const who = `${c.legalName} (${c.candidateId})`;
+      if (!row) {
+        entry.extra.push(`${who}, not in the DoE ${group} extract`);
+        continue;
+      }
+      /* An unmapped code in this race already has its CONFIRM line. */
+      if (!DOE_STATUS[row.statusCode]) {
+        if (filedUnder !== race.raceId) entry.confirm.push(unmapped(row));
+        continue;
+      }
+      if (filedUnder !== race.raceId) {
+        entry.extra.push(`${who}, filed under ${filedUnder ?? `${row.officeCode} ${row.juris}`.trim()} in the DoE extract (${row.statusDesc || row.statusCode})`);
+      } else if (row.writeIn && DOE_RUNNING.includes(row.statusCode)) {
+        entry.extra.push(`${who}, a write-in in the DoE extract`);
+      } else if (!isRunning(row)) {
+        entry.extra.push(`${who}, ${row.statusDesc || row.statusCode} in the DoE extract`);
+      }
+    }
+  }
+
+  /* A statewide race the extract has a running filer for and we have no row for. */
+  for (const raceId of Object.values(DOE_NO_DISTRICT)) {
+    if (races.some((r) => r.raceId === raceId)) continue;
+    const live = filersOf(raceId).filter(isRunning);
+    if (live.length === 0) continue;
+    out.push({ raceId, office: null, running: live.map(show), ours: [], missing: live.map(showId), extra: [], confirm: [] });
+    report.push(`office: the DoE extract has ${raceId} with ${live.map(showId).join(", ")}, and there is no ${raceId} race row`);
+  }
+
+  for (const o of out) {
+    if (o.office === null) continue;
+    const where = `${o.office} (${o.raceId})`;
+    for (const m of o.missing) report.push(`roster: MISSING ${where}: the DoE extract lists ${m}, and our race does not`);
+    for (const x of o.extra) report.push(`roster: EXTRA ${where}: ${x}`);
+    for (const k of o.confirm) report.push(`roster: CONFIRM ${where}: ${k}`);
+  }
+  return { races: out, report };
+}
+
 /* ---- running mates (report lines only) --------------------------------- */
 
 /** The running mate a DoE canDetail page names, read as the roster worksheet
@@ -829,6 +951,8 @@ export interface CheckInput {
   voterFocus: Readonly<Record<string, VoterFocusRow[] | null>>;
   /** Every county race row with its candidates, whatever its publication. */
   countyRaces: readonly CountyRace[];
+  /** Every statewide and U.S. House race row with its candidates, likewise. */
+  doeRaces: readonly DoeRace[];
   runningMates: {
     /** False until candidate.running_mate exists (roster-completeness 0049). */
     column: boolean;
@@ -849,6 +973,9 @@ export interface CheckSummary {
   /** Candidates in the races we have, against VoterFocus: still running and
       not ours, ours and no longer running, and pairs to confirm. */
   roster: { missing: number; extra: number; confirm: number };
+  /** The same for statewide and House races against the DoE extract: races
+      compared, statewide races with no race row, and their candidates. */
+  doeRoster: { races: number; noRace: number; missing: number; extra: number; confirm: number };
   /** Every VoterFocus label met on the lists read, and every DoE status code
       in the extracts read, with counts, so the first watched run lists them. */
   labelsSeen: Record<string, number>;
@@ -856,7 +983,14 @@ export interface CheckSummary {
 }
 
 export type CheckResult =
-  | ({ ok: true; diffs: R2Diff[]; confirmedRaces: string[]; report: string[]; rosterOffices: RosterOffice[] } & CheckSummary)
+  | ({
+      ok: true;
+      diffs: R2Diff[];
+      confirmedRaces: string[];
+      report: string[];
+      rosterOffices: RosterOffice[];
+      doeRosterRaces: DoeRosterRace[];
+    } & CheckSummary)
   | { ok: false; error: string };
 
 const bump = (m: Record<string, number>, k: string) => {
@@ -1008,11 +1142,12 @@ export function buildCheck(input: CheckInput): CheckResult {
       },
     });
   }
-  /* Missing contests and county rosters (compareCountyRoster). Matching
-     roster candidates cannot see a whole missing race, as 0032 missed eight
-     settled Miami-Dade seats (docs/general-election/empty-races-2026-10-12.md),
-     nor a filer who is not ours. Report lines only: a new race or candidate
-     is a migration, never a diff. */
+  /* Missing contests and rosters (compareCountyRoster, compareDoeRoster).
+     Matching roster candidates cannot see a whole missing race, as 0032
+     missed eight settled Miami-Dade seats
+     (docs/general-election/empty-races-2026-10-12.md), nor a filer who is
+     not ours. Report lines only: a new race or candidate is a migration,
+     never a diff. */
   const rosterOffices: RosterOffice[] = [];
   for (const [fips, rows] of Object.entries(input.voterFocus)) {
     const county = coveredCounty(fips);
@@ -1021,11 +1156,17 @@ export function buildCheck(input: CheckInput): CheckResult {
     rosterOffices.push(...compared.offices);
     report.push(...compared.report);
   }
+  const statewide = compareDoeRoster(input.doe, input.doeRaces);
+  report.push(...statewide.report);
+  const doeOurs = statewide.races.filter((o) => o.office !== null);
   const ours = rosterOffices.filter((o) => o.raceId !== null);
-  const total = (k: "missing" | "extra" | "confirm") => ours.reduce((n, o) => n + o[k].length, 0);
-  /* A race VoterFocus disagrees with, or one a person must confirm, is not
-     confirmed, whatever its statuses say. */
-  const disputed = new Set(ours.filter((o) => o.missing.length + o.extra.length + o.confirm.length > 0).map((o) => o.raceId));
+  type Lines = Pick<RosterOffice, "missing" | "extra" | "confirm">;
+  const total = (list: readonly Lines[], k: keyof Lines) => list.reduce((n, o) => n + o[k].length, 0);
+  /* A race VoterFocus or the extract disagrees with, or one a person must
+     confirm, is not confirmed, whatever its statuses say. */
+  const disputed = new Set(
+    [...ours, ...doeOurs].filter((o) => o.missing.length + o.extra.length + o.confirm.length > 0).map((o) => o.raceId),
+  );
   const confirmedRaces = [...readOk]
     .filter(([raceId, ok]) => ok && !disputed.has(raceId))
     .map(([raceId]) => raceId)
@@ -1051,6 +1192,7 @@ export function buildCheck(input: CheckInput): CheckResult {
     confirmedRaces,
     report,
     rosterOffices,
+    doeRosterRaces: statewide.races,
     statuses: { roster: input.roster.length, read, changed, doe: viaDoe, voterFocus: viaVf },
     dates: {
       events: input.events.length,
@@ -1062,7 +1204,14 @@ export function buildCheck(input: CheckInput): CheckResult {
       listed: rosterOffices.filter((o) => o.office !== null && o.running.length > 0).length,
       missing: rosterOffices.filter((o) => o.raceId === null).length,
     },
-    roster: { missing: total("missing"), extra: total("extra"), confirm: total("confirm") },
+    roster: { missing: total(ours, "missing"), extra: total(ours, "extra"), confirm: total(ours, "confirm") },
+    doeRoster: {
+      races: doeOurs.length,
+      noRace: statewide.races.length - doeOurs.length,
+      missing: total(doeOurs, "missing"),
+      extra: total(doeOurs, "extra"),
+      confirm: total(doeOurs, "confirm"),
+    },
     labelsSeen,
     doeCodesSeen,
   };
