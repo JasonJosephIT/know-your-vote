@@ -116,7 +116,7 @@ check(
 check(
   "the intro says the date once, at a reading width",
   shared.includes(
-    '<p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]"> On every Florida ballot{sharedDate ? ` on ${sharedDate}` : ""}, whatever your ZIP or party, including no party. </p>'
+    '<p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]"> On every Florida ballot{sharedDate ? ` on ${sharedDate}` : ""}, wherever you live and whatever your party, including no party. </p>'
   )
 );
 check(

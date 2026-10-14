@@ -129,7 +129,7 @@ export async function SharedBallot() {
             <h2 className="text-h2">Statewide races</h2>
             <p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]">
               On every Florida ballot{sharedDate ? ` on ${sharedDate}` : ""},
-              whatever your ZIP or party, including no party.
+              wherever you live and whatever your party, including no party.
             </p>
             {legend && (
               <details className="group/legend">
