@@ -203,9 +203,17 @@
   301,
   600
  ],
+ "xs/pet-cat-peek": [
+  265,
+  192
+ ],
  "xs/pet-dog-sit": [
   102,
   192
+ ],
+ "xs/sit-divider": [
+  174,
+  264
  ],
  "xs/sticker-envelope": [
   245,
