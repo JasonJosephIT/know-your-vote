@@ -9,11 +9,16 @@
        loading.tsx routes and NewsFeed pulse exactly where candidate content
        renders, and an endless pulse is WCAG 2.2.2's "moves for more than 5
        seconds".
-     - The reduced-motion rule moved into a @layer, where the Tailwind
-       utilities outrank it, or losing one of its declarations.
+     - The reduced-motion rule losing one of its declarations or an
+       !important, which is what lets it beat the utilities and CSS
+       modules.
+     - A motion utility with Tailwind's important modifier (duration-300!
+       or !duration-300). Among important declarations a layered one beats
+       the unlayered reduced-motion rule, so it would keep its motion.
      - Tokens that drift from design.md's motion.* values.
      - A new looping animate-* utility, or a CSS animation outside a
-       prefers-reduced-motion: no-preference gate.
+       prefers-reduced-motion: no-preference gate (an @media rule or
+       Tailwind's @variant motion-safe). animation: none is not motion.
 
    Pure source checks, offline. Run: node scripts/verify-motion.ts */
 
@@ -135,12 +140,17 @@ check(
 {
   const at = globals.indexOf("@media (prefers-reduced-motion: reduce)");
   check("globals.css has a prefers-reduced-motion: reduce rule", at >= 0);
-  check(
-    "it is unlayered, so the layered utilities cannot outrank it",
-    at >= 0 && enclosing(globals, at).length === 0,
-    at >= 0 ? enclosing(globals, at).join(" > ") : ""
-  );
   const body = at >= 0 ? blockBody(globals, at) : "";
+  const decls = (/\{([^}]*)\}/.exec(body)?.[1] ?? "")
+    .split(";")
+    .map((d) => d.trim())
+    .filter(Boolean);
+  const weak = decls.filter((d) => !/!important$/.test(d));
+  check(
+    "every declaration in it is !important, so it beats the utilities and CSS modules",
+    decls.length > 0 && weak.length === 0,
+    weak.join("; ")
+  );
   check(
     "it covers every element and its ::before and ::after",
     /^\s*\*,\s*::before,\s*::after\s*\{/.test(body)
@@ -183,15 +193,35 @@ const files = walk("src");
   );
 }
 {
+  /* Tailwind's important modifier, trailing or leading, on a motion utility,
+     with or without a variant or value. Its !important sits in the
+     utilities layer, which outranks the unlayered reduced-motion rule. */
+  const found = files.flatMap((f) => {
+    const src = f.endsWith(".css") ? stripComments(read(f)) : read(f);
+    return [
+      ...src.matchAll(
+        /(?<=^|[\s"'`:])(?:!(?:transition|duration|animate|ease|delay)(?:-[\w.%/,()[\]-]+)?|(?:transition|duration|animate|ease|delay)(?:-[\w.%/,()[\]-]+)?!)(?=$|[\s"'`;])/gm
+      ),
+    ].map((m) => `${f}: ${m[0]}`);
+  });
+  check(
+    "no motion utility in src carries Tailwind's important modifier",
+    found.length === 0,
+    found.join(", ")
+  );
+}
+{
   const ungated = files
     .filter((f) => f.endsWith(".css"))
     .flatMap((f) => {
       const css = stripComments(read(f));
-      return [...css.matchAll(/\banimation(?:-name)?\s*:/g)]
+      return [...css.matchAll(/\banimation(?:-name)?\s*:(?!\s*none\b)/g)]
         .filter(
           (m) =>
-            !enclosing(css, m.index ?? 0).some((p) =>
-              /^@media\b.*prefers-reduced-motion:\s*no-preference/.test(p)
+            !enclosing(css, m.index ?? 0).some(
+              (p) =>
+                /^@media\b.*prefers-reduced-motion:\s*no-preference/.test(p) ||
+                /^@variant\s+motion-safe\b/.test(p)
             )
         )
         .map((m) => `${f}@${m.index}`);

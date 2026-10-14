@@ -210,12 +210,17 @@
    CSS that names a duration itself, such as an enter, dialog or disclosure
    rule. Utilities keep the 120ms default in @theme above.
 
-   Unlayered on purpose: a rule outside every @layer outranks the layered
-   Tailwind utilities, and !important lets the zero-specificity * win over a
-   component's own CSS module, so a reduced-motion reader gets no motion
-   from any component, whether or not it opted out on its own. 1ms rather
-   than none, so a transitionend or animationend that code waits for still
-   fires. The skeleton pulse then runs one 1ms cycle and shows still.
+   Unlayered, where the catalog puts it. !important is what makes it win:
+   an important declaration beats every normal one whatever its layer or
+   specificity, so the zero-specificity * wins over the Tailwind utilities
+   and a component's own CSS module, and a reduced-motion reader gets no
+   motion from any component, whether or not it opted out on its own. A
+   utility with Tailwind's important modifier on a duration, transition,
+   animate, ease or delay class would still win, because among important
+   declarations a layered one beats an unlayered one, so
+   scripts/verify-motion.ts fails on one. 1ms rather than none, so a
+   transitionend or animationend that code waits for still fires. The
+   skeleton pulse then runs one 1ms cycle and shows still.
 
    HeroRotator already runs only under no-preference and Button's press
    scale already stops under motion-reduce, so neither changes. The *
