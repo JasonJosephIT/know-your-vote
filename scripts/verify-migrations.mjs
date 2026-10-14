@@ -1652,7 +1652,8 @@ await check("a draft or in_review measure's neutral rows stay unreadable to anon
    anon must see all 15 of AM3's resources (0038's 14 plus the
    FL-AM3-general:booklet row 0035 already seeded) and all 18 of AM2's
    (0040's 17 plus the FL-AM2-general:booklet row 0035 already seeded), and
-   0 for AM1 here even though 0041 seeded AM1's neutral rows too -- AM1 has
+   0 for AM1 here even though 0041 seeded AM1's neutral rows and 0059 its
+   sided rows -- AM1 has
    no measure_publication row at all at the migration level (it only becomes
    'listed' via the hand-run scripts/list-ballot-2026.sql), and 0041's policy
    only opens a neutral row once its measure has a 'listed' or 'published'
