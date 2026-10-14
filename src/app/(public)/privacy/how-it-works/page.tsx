@@ -26,8 +26,14 @@ export const metadata = { title: "How privacy works — Know Your Vote" };
 const link = "text-primary underline underline-offset-2";
 
 export default function PrivacyHowItWorksPage() {
-  const { addressOn, geocoder, analyticsOn, adsOn, errorReportsOn } =
-    privacyDeployment();
+  const {
+    addressOn,
+    geocoder,
+    analyticsOn,
+    adsOn,
+    errorReportsOn,
+    remindersOn,
+  } = privacyDeployment();
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
       <p className="text-body-sm">
@@ -262,7 +268,10 @@ export default function PrivacyHowItWorksPage() {
           Your mail app&rsquo;s own Unsubscribe button works too.
         </p>
         <p className="text-body">
-          That same signup also gets you a handful of deadline reminders by
+          {remindersOn
+            ? "That same signup also gets you"
+            : "Deadline reminders are paused right now, so nothing more sends. While they run, that same signup gets you"}{" "}
+          a handful of deadline reminders by
           email &mdash; voter registration, vote-by-mail request, early voting,
           returning your vote-by-mail ballot, and election day. Every reminder
           contains only dates and official links, every date is verified against
