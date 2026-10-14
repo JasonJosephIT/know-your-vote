@@ -49,7 +49,7 @@ check(
 );
 check(
   "the picker has its own submit button, live once hydrated",
-  /<Button type="submit" variant="secondary" disabled=\{!hydrated\}>\s*See my races\s*<\/Button>\s*<\/form>/.test(entry)
+  /<Button type="submit" variant="secondary" disabled=\{!hydrated\}>\s*See my races\s*<\/Button>\s*<\/div>\s*<\/form>/.test(entry)
 );
 check(
   "the 'or choose your district' toggle exposes its state",
@@ -125,13 +125,16 @@ check(
     input
   );
 }
+/* Since Mobbin NS1 (2026-10-13) the error is a block: the described-by part
+   holds the lead and the "What to check" list, and only the lead is an
+   alert (scripts/verify-address-errors.ts pins the rest). */
 check(
   "a field error renders under the field with the described-by id",
-  /<p\s+key=\{stage\.seq\}\s+id=\{errorId\}\s+role="alert"\s+className="mt-2 text-body-sm text-error"\s*>/.test(entry)
+  /<div key=\{stage\.seq\} className="mt-2 flex flex-col gap-2">\s*<div id=\{errorId\} className="flex flex-col gap-1">\s*<p\s+role="alert"\s+className="flex items-start gap-1 text-body-sm text-error"\s*>/.test(entry)
 );
 check(
   "a field error is still announced when focus is already in the field (Enter)",
-  /<p\s+key=\{stage\.seq\}\s+id=\{errorId\}\s+role="alert"/.test(entry)
+  /<div key=\{stage\.seq\}[^>]*>\s*<div id=\{errorId\}[^>]*>\s*<p\s+role="alert"/.test(entry)
 );
 check(
   "focus moves to the field only when it was lost or on the form's own submit",
