@@ -16,6 +16,8 @@ import { HomeNews } from "@/components/features/HomeNews";
 import { HomeMasthead } from "@/components/features/HomeMasthead";
 import { BallotAtAGlance } from "@/components/features/BallotAtAGlance";
 import { VotingResources } from "@/components/features/VotingResources";
+import { RaceScopePicker } from "@/components/features/RaceScopePicker";
+import { ScopedRaces, ScopeNote } from "@/components/features/ScopedRaces";
 import { Art } from "@/components/brand/Art";
 import { LedgeArt } from "@/components/brand/Ledge";
 import { HeroRotator } from "@/components/brand/HeroRotator";
@@ -32,6 +34,7 @@ import {
   locationFieldCopy,
   NOT_COVERED_SENTENCE,
 } from "@/lib/scope-copy";
+import { districtOptions, homeSections, parseRaceScope } from "@/lib/race-scope";
 
 /* Ballot first, ZIP optional (TASK-067).
 
@@ -76,7 +79,11 @@ export async function generateMetadata(
   };
 }
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ show?: string | string[] }>;
+}) {
   /* The saved district. Reading cookies opts this route into dynamic rendering,
      which is why only this page and /candidates do it — the data behind the
      ballot still comes through unstable_cache, so what changes is the shell, not
@@ -125,6 +132,27 @@ export default async function Home() {
       ? { decided: savedRace.decided, holder: savedRace.holder }
       : null;
   const ballotRendered = races.length > 0 || measures.length > 0;
+
+  /* "Show races for" (RaceScopePicker, founder 2026-10-13). ?show= from its
+     GET form, parsed against the counties and districts we cover; anything
+     else is "all", which is this page exactly as it was before the control.
+     "statewide" keeps the shared ballot and drops the House-race step and
+     the coverage summary; a county or a district replaces the shared ballot
+     with just that set of races (ScopedRaces). The masthead, the key dates
+     and sample-ballot block, the "On this page" row and the news column
+     stay in every view.
+
+     The picker sits right after the "On this page" row (home PR A, #190,
+     replaced the count tiles it used to follow). A narrowed view leaves
+     sections out, so the row is told which are on the page and drops any
+     chip that would jump to nothing (homeSections): the U.S. House chip
+     outside "all", and the statewide and ballot-question chips where
+     ScopedRaces stands in for the shared ballot (verify-race-scope). */
+  const scope = parseRaceScope(
+    (await searchParams).show,
+    districts.map((d) => d.district)
+  );
+  const showAll = scope.kind === "all";
 
   /* The field takes a street address, and only that (no ZIP, founder
      2026-10-12). It suggests addresses only when Pelias is configured (off
@@ -220,165 +248,184 @@ export default async function Home() {
             />
             <VotingResources countyFips={saved?.countyFips} />
           </div>
-          <BallotAtAGlance />
+          <BallotAtAGlance sections={homeSections(scope)} />
+          <RaceScopePicker
+            action="/"
+            scope={scope}
+            districts={districtOptions(districts)}
+          />
+          {scope.kind !== "all" && <ScopeNote scope={scope} allHref="/" />}
 
-          {ballotRendered && <TrackView event="ballot_viewed" />}
-          <SharedBallot />
+          {scope.kind === "county" || scope.kind === "district" ? (
+            <ScopedRaces scope={scope} />
+          ) : (
+            <>
+              {ballotRendered && <TrackView event="ballot_viewed" />}
+              <SharedBallot />
+            </>
+          )}
 
-          {/* The zigzag that used to be this section's border-t, with a
-          figure sitting on it at the right end: 150px from lg up, 88px on a
-          phone (design.md's closed list of phone art). The divider is a
-          mask, which would clip a child, so the figure hangs from a
-          zero-height marker at the band's centre line: sit-divider's ledge
-          (0.618 of its height) lands on that line. At 150px that is ~93px
-          of figure above the line and ~57px of legs below it.
+          {/* Only on the whole page: the House-race step (and the coverage
+              summary after the news) are about the voter's whole ballot,
+              which a narrowed view is deliberately not. */}
+          {showAll && (
+            <>
+              {/* The zigzag that used to be this section's border-t, with a
+              figure sitting on it at the right end: 150px from lg up, 88px on a
+              phone (design.md's closed list of phone art). The divider is a
+              mask, which would clip a child, so the figure hangs from a
+              zero-height marker at the band's centre line: sit-divider's ledge
+              (0.618 of its height) lands on that line. At 150px that is ~93px
+              of figure above the line and ~57px of legs below it.
 
-          Above: the ballot-question list ends just before this, and art
-          never goes over a list, so lg adds 72px to the column's 32px gap
-          (104px clear for a 93px head). Below: the legs reach ~57px under the
-          band's centre line, beside the section's h2 and the start of its
-          paragraph. So the text block under each h2 (h2 and paragraphs)
-          carries lg:pr-[112px], which keeps every line out of the figure's
-          99px at the right. The figure and that guard are both px; the
-          spacing above the section is rem, so a rem guard (the old
-          lg:pr-32 on the h2 only) let the paragraph run under the legs at
-          a smaller root font size. The text block runs well past ~57px at
-          any root size, so the link and the form below it start clear of
-          the feet.
+              Above: the ballot-question list ends just before this, and art
+              never goes over a list, so lg adds 72px to the column's 32px gap
+              (104px clear for a 93px head). Below: the legs reach ~57px under the
+              band's centre line, beside the section's h2 and the start of its
+              paragraph. So the text block under each h2 (h2 and paragraphs)
+              carries lg:pr-[112px], which keeps every line out of the figure's
+              99px at the right. The figure and that guard are both px; the
+              spacing above the section is rem, so a rem guard (the old
+              lg:pr-32 on the h2 only) let the paragraph run under the legs at
+              a smaller root font size. The text block runs well past ~57px at
+              any root size, so the link and the form below it start clear of
+              the feet.
 
-          Below lg the 88px sitter has ~54px of figure above the line and
-          ~34px below, so the band takes 28px above and 12px below on top of
-          the column's 32px gap: the head clears the end of the list by
-          ~12px and the feet clear the h2 by ~16px, whichever h2 renders (no
-          district, or a saved one). The clearances are vertical and px, so
-          no text needs a right guard on a phone. */}
-          <div className="relative mt-[28px] mb-[12px] lg:mt-[72px] lg:mb-0">
-            <SectionDivider variant="zigzag" />
-            <div className="absolute inset-x-0 top-1/2">
-              <LedgeArt
-                name="sit-divider"
-                height={150}
-                edge="top"
-                className="right-0 hidden lg:block"
-              />
-              <LedgeArt
-                name="sit-divider"
-                height={88}
-                edge="top"
-                className="right-0 lg:hidden"
-              />
-            </div>
-          </div>
-
-          {/* id="house-race": the "On this page" list jumps here. */}
-          <section id="house-race" className="flex flex-col gap-3">
-            {saved ? (
-              <>
-                <div className="flex flex-col gap-1 lg:pr-[112px]">
-                  <h2 className="text-h2">
-                    {savedSeat
-                      ? "No U.S. House race on your ballot"
-                      : "Your U.S. House race"}
-                  </h2>
-                  {/* The House race is the race here that depends on where you
-                  live, not "the one part of your ballot" that does: Florida
-                  House and Senate seats, city races and more depend on it
-                  too, and this guide doesn't cover them. A decided seat
-                  (savedSeat) is said plainly as no race at all, never shown
-                  as the voter's race. The sentence saying the statewide
-                  races are the same for every voter went (A7): both lists'
-                  intros above already say so. lg:max-w-[65ch] keeps
-                  desktop lines readable (A11). */}
-                  <p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]">
-                    You&rsquo;re set to {saved.district}.{" "}
-                    {savedSeat
-                      ? houseRaceNotOnBallot(saved.district, savedSeat)
-                      : "Your House race depends on where you live, so it's linked below rather than listed above."}{" "}
-                    {NOT_COVERED_SENTENCE}
-                  </p>
-                  <p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]">
-                    We remember the district, never your address or ZIP; the
-                    chip at the top of the page changes it or forgets it.
-                  </p>
-                </div>
-                <Link
-                  href={`/candidates?view=races&district=${saved.district}&county=${saved.countyFips}`}
-                  className="w-fit text-body-sm text-primary underline underline-offset-2 hover:text-primary-hover"
-                >
-                  See your races for {saved.district}
-                </Link>
-              </>
-            ) : (
-              <>
-                <div className="flex flex-col gap-1 lg:pr-[112px]">
-                  <h2 className="text-h2">
-                    Add your U.S. House race
-                  </h2>
-                  {/* The storage claim, rewritten for the district cookie. TASK-070
-                  removed kyv.location and this line said nothing was saved on
-                  the device; that stopped being true when the district became
-                  something we remember. What is still true, and is the sharper
-                  claim, is that the address is never kept.
-
-                  It asks for what the field takes (field.noun): a street
-                  address, never a ZIP (founder, 2026-10-12). With
-                  ADDRESS_LOOKUP_OFF set there is no field, only the
-                  district picker, so it asks the voter to choose.
-
-                  Shorter (home readability A7): it now also says which
-                  counties have House races, so the field's own coverage
-                  note below it is off (coverageNote={false}) rather than
-                  said twice. */}
-                  {addressEnabled ? (
-                    <p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]">
-                      Your U.S. House race isn&rsquo;t in the list above, because
-                      it depends on where you live. Give us your {field.noun} and
-                      we&rsquo;ll add it. We have House races for{" "}
-                      {coveredCountyNames()} counties so far, and we keep only
-                      the district, never your {field.noun}.
-                    </p>
-                  ) : (
-                    <p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]">
-                      Your U.S. House race isn&rsquo;t in the list above, because
-                      it depends on where you live. Choose your district below
-                      and we&rsquo;ll add it. We have House races for{" "}
-                      {coveredCountyNames()} counties so far, and we keep only
-                      the district you choose.
-                    </p>
-                  )}
-                </div>
-                {/* The tote figure stands beside the form from lg up, in
-                its own flex item, so it can never cover the field, the
-                button or the coverage note. LocationEntry is w-full (field
-                capped at 320px, then the button, then a full-width note),
-                so it gets flex-1 and the figure its own ~85px; the row is
-                ~512px of a ~690px column, which leaves room for both.
-                Bottom-aligned with the form; below lg the figure is hidden
-                and the form is full width, as before. */}
-                <div className="lg:flex lg:items-end lg:gap-8">
-                  <div className="min-w-0 lg:flex-1">
-                    {/* The picker stays behind its toggle here, and the
-                        field's privacy line is off: the paragraph above
-                        already says the district is all that's kept. */}
-                    <LocationEntry
-                      submitLabel="Add my House race"
-                      addressEnabled={addressEnabled}
-                      suggestEnabled={suggestEnabled}
-                      coverageNote={false}
-                      districts={districts}
-                      pickerCollapsed
-                      privacyNote={false}
-                    />
-                  </div>
-                  <Art
-                    name="person-kyv-tote"
-                    height={160}
-                    className="hidden shrink-0 lg:block"
+              Below lg the 88px sitter has ~54px of figure above the line and
+              ~34px below, so the band takes 28px above and 12px below on top of
+              the column's 32px gap: the head clears the end of the list by
+              ~12px and the feet clear the h2 by ~16px, whichever h2 renders (no
+              district, or a saved one). The clearances are vertical and px, so
+              no text needs a right guard on a phone. */}
+              <div className="relative mt-[28px] mb-[12px] lg:mt-[72px] lg:mb-0">
+                <SectionDivider variant="zigzag" />
+                <div className="absolute inset-x-0 top-1/2">
+                  <LedgeArt
+                    name="sit-divider"
+                    height={150}
+                    edge="top"
+                    className="right-0 hidden lg:block"
+                  />
+                  <LedgeArt
+                    name="sit-divider"
+                    height={88}
+                    edge="top"
+                    className="right-0 lg:hidden"
                   />
                 </div>
-              </>
-            )}
-          </section>
+              </div>
+
+              {/* id="house-race": the "On this page" list jumps here. */}
+              <section id="house-race" className="flex flex-col gap-3">
+                {saved ? (
+                  <>
+                    <div className="flex flex-col gap-1 lg:pr-[112px]">
+                      <h2 className="text-h2">
+                        {savedSeat
+                          ? "No U.S. House race on your ballot"
+                          : "Your U.S. House race"}
+                      </h2>
+                      {/* The House race is the race here that depends on where you
+                      live, not "the one part of your ballot" that does: Florida
+                      House and Senate seats, city races and more depend on it
+                      too, and this guide doesn't cover them. A decided seat
+                      (savedSeat) is said plainly as no race at all, never shown
+                      as the voter's race. The sentence saying the statewide
+                      races are the same for every voter went (A7): both lists'
+                      intros above already say so. lg:max-w-[65ch] keeps
+                      desktop lines readable (A11). */}
+                      <p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]">
+                        You&rsquo;re set to {saved.district}.{" "}
+                        {savedSeat
+                          ? houseRaceNotOnBallot(saved.district, savedSeat)
+                          : "Your House race depends on where you live, so it's linked below rather than listed above."}{" "}
+                        {NOT_COVERED_SENTENCE}
+                      </p>
+                      <p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]">
+                        We remember the district, never your address or ZIP; the
+                        chip at the top of the page changes it or forgets it.
+                      </p>
+                    </div>
+                    <Link
+                      href={`/candidates?view=races&district=${saved.district}&county=${saved.countyFips}`}
+                      className="w-fit text-body-sm text-primary underline underline-offset-2 hover:text-primary-hover"
+                    >
+                      See your races for {saved.district}
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex flex-col gap-1 lg:pr-[112px]">
+                      <h2 className="text-h2">
+                        Add your U.S. House race
+                      </h2>
+                      {/* The storage claim, rewritten for the district cookie. TASK-070
+                      removed kyv.location and this line said nothing was saved on
+                      the device; that stopped being true when the district became
+                      something we remember. What is still true, and is the sharper
+                      claim, is that the address is never kept.
+
+                      It asks for what the field takes (field.noun): a street
+                      address, never a ZIP (founder, 2026-10-12). With
+                      ADDRESS_LOOKUP_OFF set there is no field, only the
+                      district picker, so it asks the voter to choose.
+
+                      Shorter (home readability A7): it now also says which
+                      counties have House races, so the field's own coverage
+                      note below it is off (coverageNote={false}) rather than
+                      said twice. */}
+                      {addressEnabled ? (
+                        <p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]">
+                          Your U.S. House race isn&rsquo;t in the list above, because
+                          it depends on where you live. Give us your {field.noun} and
+                          we&rsquo;ll add it. We have House races for{" "}
+                          {coveredCountyNames()} counties so far, and we keep only
+                          the district, never your {field.noun}.
+                        </p>
+                      ) : (
+                        <p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]">
+                          Your U.S. House race isn&rsquo;t in the list above, because
+                          it depends on where you live. Choose your district below
+                          and we&rsquo;ll add it. We have House races for{" "}
+                          {coveredCountyNames()} counties so far, and we keep only
+                          the district you choose.
+                        </p>
+                      )}
+                    </div>
+                    {/* The tote figure stands beside the form from lg up, in
+                    its own flex item, so it can never cover the field, the
+                    button or the coverage note. LocationEntry is w-full (field
+                    capped at 320px, then the button, then a full-width note),
+                    so it gets flex-1 and the figure its own ~85px; the row is
+                    ~512px of a ~690px column, which leaves room for both.
+                    Bottom-aligned with the form; below lg the figure is hidden
+                    and the form is full width, as before. */}
+                    <div className="lg:flex lg:items-end lg:gap-8">
+                      <div className="min-w-0 lg:flex-1">
+                        {/* The picker stays behind its toggle here, and the
+                            field's privacy line is off: the paragraph above
+                            already says the district is all that's kept. */}
+                        <LocationEntry
+                          submitLabel="Add my House race"
+                          addressEnabled={addressEnabled}
+                          suggestEnabled={suggestEnabled}
+                          coverageNote={false}
+                          districts={districts}
+                          pickerCollapsed
+                          privacyNote={false}
+                        />
+                      </div>
+                      <Art
+                        name="person-kyv-tote"
+                        height={160}
+                        className="hidden shrink-0 lg:block"
+                      />
+                    </div>
+                  </>
+                )}
+              </section>
+            </>
+          )}
         </div>
 
         {/* In the page's flow at every width (A8): from lg a column with a
@@ -397,11 +444,16 @@ export default async function Home() {
           newest news. After the House-race step, so the ballot still comes
           first (TASK-067); below lg after the news too (A8), from lg in
           the same place under the ballot as before. Remove either line to
-          flip it. */}
-          <CoverageSummary
-            hasDistrict={Boolean(saved)}
-            addressEnabled={addressEnabled}
-          />
+          flip it.
+
+          Only on the whole page, like the House-race step: it is about the
+          voter's whole ballot, which a narrowed view is deliberately not. */}
+          {showAll && (
+            <CoverageSummary
+              hasDistrict={Boolean(saved)}
+              addressEnabled={addressEnabled}
+            />
+          )}
           {/* A wave between the coverage summary above and the reminder and
           install cards; shows at every width (the section dividers are on
           design.md's closed list of phone art). */}

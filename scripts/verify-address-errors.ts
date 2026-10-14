@@ -305,13 +305,21 @@ console.log("\n5. AD3 where a typed address goes");
     "it never claims we don't see the address (our server passes it on)",
     !/we never see|never see your address|we don't see/i.test(note)
   );
-  /* The line is worded from /privacy; if /privacy stops saying this, the
-     line has to change with it. */
+  /* The line is worded from the privacy pages; if they stop saying this,
+     the line has to change with it. Since 2026-10-13 (#177) /privacy
+     states it in a sentence each and /privacy/how-it-works in full, so
+     both are pinned, each in its own words. */
   const privacy = flat(code("src/app/(public)/privacy/page.tsx"));
+  const how = flat(code("src/app/(public)/privacy/how-it-works/page.tsx"));
   check(
-    "/privacy still says a typed address goes to the Census Bureau and only the district is kept",
-    /we send what you typed to the U\.S\. Census Bureau's public geocoder/.test(privacy) &&
-      /the district is the only thing that is kept/.test(privacy)
+    "/privacy still says a typed address goes from our server to the Census Bureau and only the district is kept",
+    /our server sends the address you typed to the U\.S\. Census Bureau's public geocoder/.test(privacy) &&
+      /keep the district, and forget the rest/.test(privacy)
+  );
+  check(
+    "/privacy/how-it-works says the same in full",
+    /we send what you typed to the U\.S\. Census Bureau's public geocoder/.test(how) &&
+      /the district is the only thing that is kept/.test(how)
   );
 }
 

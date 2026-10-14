@@ -11,7 +11,8 @@ import { CONTACT_EMAIL } from "@/lib/contact";
 
    RECOMMENDED (pending founder confirmation), founder decision 1: the
    disclaimer wording and the Methodology, Privacy and Terms links (About
-   came later, with the /about page). To change the wording, edit
+   came later, with the /about page; How privacy works, the detail behind
+   /privacy, on 2026-10-13). To change the wording, edit
    FOOTER_DISCLAIMER; to drop or add a link (for example /terms, if the founder
    decides against a terms page), edit FOOTER_LINKS. Nothing else reads them.
 
@@ -44,6 +45,7 @@ const FOOTER_LINKS: readonly {
   { href: "/about", label: "About" },
   { href: "/methodology", label: "Methodology" },
   { href: "/privacy", label: "Privacy" },
+  { href: "/privacy/how-it-works", label: "How privacy works" },
   { href: "/terms", label: "Terms of use" },
   { href: "/about#get-in-touch", label: "Contact" },
   /* A fixed subject, so reports land as one kind of mail. It carries
@@ -133,8 +135,10 @@ export function SiteFooter() {
       <div className="border-t border-border">
         {/* One column at every width (HM7): the two lines, then the links.
             Beside the two lines at md+, the six links wrapped onto a second
-            row with "Report a mistake" alone on it; stacked, they hold one
-            row from about 560px. */}
+            row with "Report a mistake" alone on it; stacked, they held one
+            row from about 560px. With "How privacy works" (#177) there are
+            seven, and they hold one row from about 700px (measured
+            2026-10-14); narrower, they wrap to two or three rows. */}
         <div className="mx-auto flex w-full max-w-[1120px] flex-col gap-2 px-5 py-5">
           {/* No figure lying on this edge any more (lie-footer, #164): over
               the town strip it lands on the cyclist and the man with the

@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { zipDistrictRows } from "@/lib/resolve";
 import { unsubscribeUrl } from "../site-url.ts";
 import type { Rendered } from "./templates";
 
@@ -12,9 +13,10 @@ import type { Rendered } from "./templates";
    footer. One copy, so a correction can never reach a different list, or
    carry a different footer, than the reminder it corrects.
 
-   Server-only: everything here reads voting_info_subscription or
-   zip_district through the service role. The pure date logic stays in
-   ./schedule.ts and ./correction.ts, which Node can load. */
+   Server-only: everything here reads voting_info_subscription through the
+   service role, or zip_district through the cached copy in
+   src/lib/resolve.ts. The pure date logic stays in ./schedule.ts and
+   ./correction.ts, which Node can load. */
 
 export const BATCH_SIZE = 100;
 /* Resend's default API limit is 2 requests per second (per team, when last
@@ -56,7 +58,7 @@ export async function activeSubscribers(
     if (error) throw new Error(error.message);
     rows.push(...(page ?? []));
   }
-  const countyOf = await zipCounties(service, rows.map((r) => r.zip5));
+  const countyOf = await zipCounties();
   return rows.map((r) => {
     const county = countyOf.get(r.zip5) ?? null;
     return {
@@ -67,24 +69,24 @@ export async function activeSubscribers(
   });
 }
 
-/* ZIP -> county FIPS from zip_district, for the ZIPs given. Every ZIP in
-   the table sits in exactly one county (checked live 2026-10-05: 235 ZIPs,
-   none in two). A ZIP missing from the map reads as no county: statewide
-   dates. Throws on a read error. */
-export async function zipCounties(
-  service: SupabaseClient,
-  zips: string[]
-): Promise<Map<string, string>> {
-  const unique = [...new Set(zips)];
+/* ZIP -> county FIPS for every ZIP in zip_district. Every ZIP in the table
+   sits in exactly one county (checked live 2026-10-05: 235 ZIPs, none in
+   two). A ZIP missing from the map reads as no county: statewide dates.
+   Throws on a read error.
+
+   Built from zipDistrictRows (src/lib/resolve.ts), the whole table read
+   and cached once an hour through the anon client, rather than asked for
+   by ZIP. It used to ask .in("zip5", <every subscriber's ZIP>), which put
+   the subscribers' ZIPs in a Supabase request URL, and the API gateway
+   logs those. zip_district is a public table (anon reads it under 0002's
+   policy), so the service role adds nothing here, and the cached copy is
+   the one the signup route resolves a ZIP against (resolveZip), so a
+   reminder's county comes from the same rows as the county the welcome
+   email named. The cost is up to an hour's lag after a zip_district
+   migration, the lag the site itself has. */
+export async function zipCounties(): Promise<Map<string, string>> {
   const map = new Map<string, string>();
-  for (let i = 0; i < unique.length; i += 200) {
-    const { data, error } = await service
-      .from("zip_district")
-      .select("zip5, county_fips")
-      .in("zip5", unique.slice(i, i + 200));
-    if (error) throw new Error(error.message);
-    for (const row of data ?? []) map.set(row.zip5, row.county_fips);
-  }
+  for (const row of await zipDistrictRows()) map.set(row.zip5, row.county_fips);
   return map;
 }
 

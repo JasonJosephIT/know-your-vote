@@ -135,6 +135,16 @@
         source CHECK text differs from 0014's, is missing, or has a second
         CHECK on source_id beside it, and its assertion raises on an
         unattributed official_link or an official source of another type.
+    25. 0058_subscription_lookups: six functions, each SECURITY INVOKER
+        with an empty search_path, executable by service_role alone (not
+        PUBLIC, anon, authenticated or the cap roles); every .rpc() call in
+        src/ names one of them with exactly its input argument names (a
+        mismatch would fall back to the URL filter for ever); each does what
+        the query it replaces did, on exact addresses (no case folding, no
+        wildcard): the welcome throttle's read and stamp, the unsubscribe
+        token lookup, "still active?", the unsubscribe UPDATE with its
+        count, and the rehearsal's first active row in token order; a re-run
+        is a no-op.
 
 
    Supabase provides the anon/authenticated/service_role roles out of the box;
@@ -2960,6 +2970,205 @@ await probe0055("0055 raises when an official link's url_norm already holds a ro
           VALUES ('src_broward_opinion', 'https://browardvotes.gov', 'browardvotes.gov', 'Somebody', 'opinion', 'N/A');`,
   expect: "raise", pattern: /0055: a source row for an official link exists with another type or lean/,
 });
+
+/* ---------------------------------------------------------------- *
+ * 25. 0058_subscription_lookups: the six functions that keep a
+ * subscriber's address and unsubscribe token out of Supabase request
+ * URLs (src/lib/notifications/rpc-fallback.ts has the why).
+ * ---------------------------------------------------------------- */
+console.log("\n25. 0058_subscription_lookups");
+const SUB_FUNCTIONS = [
+  "subscription_email_for_token",
+  "subscription_for_rehearsal",
+  "subscription_is_active",
+  "subscription_mark_welcomed",
+  "subscription_unsubscribe",
+  "subscription_welcomed_zips",
+];
+const subFunctionRows = async () =>
+  (await db.query(
+    `SELECT p.oid::regprocedure::text AS sig, p.proname, p.prosecdef, p.proconfig,
+            p.proargnames, p.proargmodes::text[] AS proargmodes
+       FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+      WHERE n.nspname = 'public' AND p.proname LIKE 'subscription\\_%'
+      ORDER BY p.proname;`
+  )).rows;
+await check("0058 defines exactly the six functions, one signature each", async () => {
+  const names = (await subFunctionRows()).map((r) => r.proname);
+  if (JSON.stringify(names) !== JSON.stringify(SUB_FUNCTIONS)) throw new Error(JSON.stringify(names));
+});
+await check("0058 every function is SECURITY INVOKER with an empty search_path", async () => {
+  const bad = (await subFunctionRows()).filter(
+    (r) => r.prosecdef !== false || JSON.stringify(r.proconfig) !== JSON.stringify(['search_path=""'])
+  );
+  if (bad.length) throw new Error(JSON.stringify(bad));
+});
+/* PostgREST matches a call to a function by its argument names, and answers
+   PGRST202 for a name it does not know, which the code reads as "0058 not
+   applied" and falls back on, putting the value back in the URL. So the
+   names every .rpc() call in src/ sends must be exactly the function's
+   input arguments. */
+await check("0058 every .rpc() call in src/ names a 0058 function and sends exactly its input argument names", async () => {
+  const files = [
+    "src/lib/notifications/welcome-throttle.ts",
+    "src/lib/notifications/unsubscribe.ts",
+    "src/lib/notifications/rehearsal.ts",
+  ];
+  const calls = [];
+  for (const file of files) {
+    const src = await readFile(path.join(root, file), "utf8");
+    for (const m of src.matchAll(/\.rpc\(\s*"(\w+)",\s*\{([^}]*)\}\s*\)/g)) {
+      calls.push({ file, fn: m[1], keys: [...m[2].matchAll(/\b(p_\w+)\s*:/g)].map((k) => k[1]).sort() });
+    }
+  }
+  const inputs = new Map(
+    (await subFunctionRows()).map((r) => [
+      r.proname,
+      (r.proargnames ?? []).filter((_, i) => !r.proargmodes || r.proargmodes[i] === "i").sort(),
+    ])
+  );
+  const called = [...new Set(calls.map((c) => c.fn))].sort();
+  if (JSON.stringify(called) !== JSON.stringify(SUB_FUNCTIONS)) {
+    throw new Error(`called ${JSON.stringify(called)}, expected every 0058 function`);
+  }
+  const bad = calls.filter((c) => JSON.stringify(c.keys) !== JSON.stringify(inputs.get(c.fn)));
+  if (bad.length) {
+    throw new Error(bad.map((c) => `${c.file} ${c.fn}(${c.keys}) vs (${inputs.get(c.fn)})`).join("; "));
+  }
+});
+await check("0058 only service_role may EXECUTE: not PUBLIC, anon, authenticated, cap_tool_wrapper or cap_readonly", async () => {
+  const rows = (await db.query(
+    `SELECT p.proname, r.rolname, has_function_privilege(r.rolname, p.oid, 'EXECUTE') AS can
+       FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+       CROSS JOIN (VALUES ('anon'), ('authenticated'), ('cap_tool_wrapper'), ('cap_readonly'), ('service_role')) AS r(rolname)
+      WHERE n.nspname = 'public' AND p.proname LIKE 'subscription\\_%';`
+  )).rows;
+  const bad = rows.filter((r) => r.can !== (r.rolname === "service_role"));
+  if (bad.length) throw new Error(JSON.stringify(bad));
+  const pub = (await db.query(
+    `SELECT count(*)::int AS n FROM pg_proc p, aclexplode(p.proacl) a
+      WHERE p.proname LIKE 'subscription\\_%' AND a.grantee = 0;`
+  )).rows[0].n;
+  if (pub !== 0) throw new Error(`${pub} EXECUTE grant(s) to PUBLIC`);
+});
+
+/* Fixtures: tokens in a known order, an older row that differs only in
+   case, someone else, and an unsubscribed address. */
+const SUB_TOKEN = (n) => n.toString(16).padStart(32, "0");
+const SUB_FIXTURES = `
+  DELETE FROM voting_info_subscription WHERE email ILIKE '%@sub0058.example';
+  INSERT INTO voting_info_subscription (email, zip5, unsubscribe_token, last_sent_at, active) VALUES
+    ('ana@sub0058.example', '33130', '${SUB_TOKEN(1)}', now() - interval '1 hour', true),
+    ('ana@sub0058.example', '32801', '${SUB_TOKEN(2)}', now() - interval '25 hours', true),
+    ('ana@sub0058.example', '33602', '${SUB_TOKEN(3)}', NULL, true),
+    ('Ana@Sub0058.example', '33301', '${SUB_TOKEN(4)}', now() - interval '1 hour', true),
+    ('bo@sub0058.example', '33130', '${SUB_TOKEN(5)}', now() - interval '1 hour', true),
+    ('cy@sub0058.example', '33130', '${SUB_TOKEN(6)}', now() - interval '1 hour', false);
+`;
+await db.exec(SUB_FIXTURES);
+await db.exec("SET ROLE anon;");
+for (const [fn, call] of [
+  ["subscription_email_for_token", `SELECT public.subscription_email_for_token('${SUB_TOKEN(1)}');`],
+  ["subscription_is_active", "SELECT public.subscription_is_active('ana@sub0058.example');"],
+  ["subscription_unsubscribe", "SELECT public.subscription_unsubscribe('ana@sub0058.example');"],
+  ["subscription_welcomed_zips", "SELECT * FROM public.subscription_welcomed_zips('ana@sub0058.example', now() - interval '1 day', 3);"],
+  ["subscription_mark_welcomed", `SELECT public.subscription_mark_welcomed('${SUB_TOKEN(1)}', now());`],
+  ["subscription_for_rehearsal", "SELECT * FROM public.subscription_for_rehearsal(ARRAY['ana@sub0058.example']);"],
+]) {
+  await expectDenied(`0058 anon cannot call ${fn}`, call);
+}
+await db.exec("RESET ROLE;");
+
+await db.exec("SET ROLE service_role;");
+const asService = async (sql, params = []) => (await db.query(sql, params)).rows;
+await check("0058 subscription_welcomed_zips: this exact address's rows stamped since p_since, NULL never, up to p_limit", async () => {
+  const zips = async (email, limit) =>
+    (await asService(
+      "SELECT zip5 FROM public.subscription_welcomed_zips($1, now() - interval '24 hours', $2) ORDER BY zip5;",
+      [email, limit]
+    )).map((r) => r.zip5);
+  const ana = await zips("ana@sub0058.example", 3);
+  if (JSON.stringify(ana) !== JSON.stringify(["33130"])) throw new Error(`ana: ${JSON.stringify(ana)}`);
+  if ((await zips("ANA@SUB0058.EXAMPLE", 3)).length !== 0) throw new Error("matched another case");
+  if ((await zips("ana_sub0058.example", 3)).length !== 0) throw new Error("read _ as a wildcard");
+  await asService(
+    "UPDATE voting_info_subscription SET last_sent_at = now() WHERE email = 'ana@sub0058.example';"
+  );
+  if ((await zips("ana@sub0058.example", 3)).length !== 3) throw new Error("three recent rows did not all come back");
+  if ((await zips("ana@sub0058.example", 2)).length !== 2) throw new Error("p_limit did not cap the rows");
+});
+/* Fresh fixtures: the check above stamped every row of the address. */
+await db.exec("RESET ROLE;");
+await db.exec(SUB_FIXTURES);
+await db.exec("SET ROLE service_role;");
+await check("0058 subscription_mark_welcomed stamps the token's row and no other", async () => {
+  const before = await asService(
+    "SELECT unsubscribe_token, last_sent_at FROM voting_info_subscription WHERE email ILIKE '%@sub0058.example' ORDER BY 1;"
+  );
+  const at = "2026-10-13T12:34:56.000Z";
+  await asService("SELECT public.subscription_mark_welcomed($1, $2);", [SUB_TOKEN(3), at]);
+  const after = await asService(
+    "SELECT unsubscribe_token, last_sent_at FROM voting_info_subscription WHERE email ILIKE '%@sub0058.example' ORDER BY 1;"
+  );
+  for (const [i, row] of after.entries()) {
+    const expected = row.unsubscribe_token === SUB_TOKEN(3) ? new Date(at).getTime() : before[i].last_sent_at?.getTime() ?? null;
+    if ((row.last_sent_at?.getTime() ?? null) !== expected) throw new Error(`${row.unsubscribe_token}: ${row.last_sent_at}`);
+  }
+});
+await check("0058 subscription_email_for_token: the token's address, or NULL", async () => {
+  const one = await asService("SELECT public.subscription_email_for_token($1) AS e;", [SUB_TOKEN(4)]);
+  const none = await asService("SELECT public.subscription_email_for_token($1) AS e;", [SUB_TOKEN(99)]);
+  if (one[0].e !== "Ana@Sub0058.example" || none[0].e !== null) throw new Error(JSON.stringify([one, none]));
+});
+await check("0058 subscription_is_active: any active row with exactly this address", async () => {
+  const active = async (email) =>
+    (await asService("SELECT public.subscription_is_active($1) AS is_on;", [email]))[0].is_on;
+  const got = [
+    await active("ana@sub0058.example"),
+    await active("Ana@Sub0058.example"),
+    await active("ANA@SUB0058.EXAMPLE"),
+    await active("cy@sub0058.example"),
+    await active("nobody@sub0058.example"),
+  ];
+  if (JSON.stringify(got) !== JSON.stringify([true, true, false, false, false])) throw new Error(JSON.stringify(got));
+});
+await check("0058 subscription_for_rehearsal: one active row for either spelling, first in token order", async () => {
+  const pick = async (emails) =>
+    await asService("SELECT * FROM public.subscription_for_rehearsal($1::text[]);", [emails]);
+  const both = await pick(["Ana@Sub0058.example", "ana@sub0058.example"]);
+  if (both.length !== 1 || both[0].unsubscribe_token !== SUB_TOKEN(1) || both[0].email !== "ana@sub0058.example" || both[0].zip5 !== "33130") {
+    throw new Error(JSON.stringify(both));
+  }
+  const upper = await pick(["Ana@Sub0058.example"]);
+  if (upper.length !== 1 || upper[0].unsubscribe_token !== SUB_TOKEN(4)) throw new Error(JSON.stringify(upper));
+  if ((await pick(["cy@sub0058.example"])).length !== 0) throw new Error("returned an unsubscribed row");
+  if ((await pick(["nobody@sub0058.example"])).length !== 0) throw new Error("returned a row for an unknown address");
+});
+await check("0058 subscription_unsubscribe: turns off every active row with exactly this address, says how many, then 0", async () => {
+  const first = (await asService("SELECT public.subscription_unsubscribe($1) AS n;", ["ana@sub0058.example"]))[0].n;
+  const again = (await asService("SELECT public.subscription_unsubscribe($1) AS n;", ["ana@sub0058.example"]))[0].n;
+  const rows = await asService(
+    "SELECT unsubscribe_token, active FROM voting_info_subscription WHERE email ILIKE '%@sub0058.example' ORDER BY 1;"
+  );
+  const activeBy = Object.fromEntries(rows.map((r) => [r.unsubscribe_token, r.active]));
+  const expected = { [SUB_TOKEN(1)]: false, [SUB_TOKEN(2)]: false, [SUB_TOKEN(3)]: false, [SUB_TOKEN(4)]: true, [SUB_TOKEN(5)]: true, [SUB_TOKEN(6)]: false };
+  if (first !== 3 || again !== 0 || JSON.stringify(activeBy) !== JSON.stringify(expected)) {
+    throw new Error(`first ${first}, again ${again}, rows ${JSON.stringify(activeBy)}`);
+  }
+});
+await db.exec("RESET ROLE;");
+await check("0058 a re-run is a no-op and keeps the grants", async () => {
+  const before = JSON.stringify(await subFunctionRows());
+  await db.exec(await readFile(path.join(migrationsDir, "0058_subscription_lookups.sql"), "utf8"));
+  const after = JSON.stringify(await subFunctionRows());
+  if (after !== before) throw new Error("a re-run changed a function");
+  const anon = (await db.query(
+    `SELECT count(*)::int AS n FROM pg_proc p
+      WHERE p.proname LIKE 'subscription\\_%' AND has_function_privilege('anon', p.oid, 'EXECUTE');`
+  )).rows[0].n;
+  if (anon !== 0) throw new Error(`anon can EXECUTE ${anon} function(s) after a re-run`);
+});
+await db.exec("DELETE FROM voting_info_subscription WHERE email ILIKE '%@sub0058.example';");
 
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed`);

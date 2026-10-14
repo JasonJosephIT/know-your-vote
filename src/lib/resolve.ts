@@ -6,7 +6,11 @@ import { districtFromBlockRows } from "@/lib/address-lookup";
 import { getStatewideRaces, raceStatusOf } from "@/lib/races";
 import { decidedSeatOf, type DecidedSeat } from "@/lib/unopposed";
 import { uncoveredPartOf } from "@/lib/uncovered-zip-parts";
-import type { ResolveRaceSummary, ResolveResult } from "@/types/app";
+import type {
+  ResolveRaceSummary,
+  ResolveResult,
+  ZipDistrict,
+} from "@/types/app";
 import type { Candidate } from "@/types/schema";
 import { ACTIVE_ELECTION_KIND } from "@/lib/election";
 
@@ -332,16 +336,12 @@ export async function resolveZip(
   zip: string,
   confirmedDistrict?: string
 ): Promise<ResolveResultWithCounty> {
-  const supabase = await createAnonServerClient();
-  const { data, error } = await supabase
-    .from("zip_district")
-    .select(
-      "zip5, county_fips, county_name, congressional_district, metro, is_split, in_coverage"
-    )
-    .eq("zip5", zip);
-  if (error) throw new Error(`zip lookup failed: ${error.message}`);
-
-  const rows = (data ?? []).filter((r) => r.in_coverage);
+  /* The ZIP's rows, picked from the cached whole table (zipDistrictRows,
+     below) rather than asked for by ZIP: the same rows, with no ZIP in any
+     request URL. */
+  const rows = (await zipDistrictRows()).filter(
+    (r) => r.zip5 === zip && r.in_coverage
+  );
   if (rows.length === 0) {
     return {
       zip,
@@ -500,39 +500,83 @@ export async function resolveBlock(
    (block_start=lte.<block>) would put the voter's census block in the
    request URL, and Supabase's API gateway logs keep request URLs: a block
    is a few dozen homes (review 2026-10-12). The table is small (982 ranges
-   for the four counties on 2026-10-12), so reading all of it is cheap; it is
-   read in pages so PostgREST's row cap can't cut it short as it grows. */
+   for the four counties on 2026-10-12), so reading all of it is cheap. */
 type BlockRange = {
   block_start: string;
   block_end: string;
   county_fips: string;
   congressional_district: string;
 };
-const BLOCK_PAGE = 1000;
 
-async function fetchBlockRanges(): Promise<BlockRange[]> {
+const blockRanges = unstable_cache(
+  () =>
+    readWholeTable<BlockRange>(
+      "block_district",
+      "block_start, block_end, county_fips, congressional_district",
+      /* The primary key (0024). */
+      ["block_start"]
+    ),
+  ["block-ranges"],
+  { revalidate: 3600, tags: ["districts"] }
+);
+
+/* Every zip_district row, read whole and cached, for the same reason as
+   blockRanges: a filter (zip5=eq.33130) puts the voter's ZIP in the request
+   URL, and the gateway's logs keep it. Hashing the ZIP would hide nothing,
+   since Florida's ZIPs are few enough to try them all. The table is 314
+   rows since 0045 (the four counties' ZIPs, one row per district a ZIP
+   touches), so one read serves every ZIP for an hour.
+
+   Old shared ?zip= links (YourRaces), /api/resolve, /api/news and the
+   reminder signup (/api/voting-info) all reach it through resolveZip. The
+   reminder crons read it too, through zipCounties in
+   src/lib/notifications/cohort.ts, for each subscriber's county: one copy
+   of the map, so a voter's reminders are scoped by the same rows their
+   signup was resolved against. The "districts" tag is blockRanges', so
+   anything that refreshes one refreshes both. */
+export const zipDistrictRows = unstable_cache(
+  () =>
+    readWholeTable<ZipDistrict>(
+      "zip_district",
+      "zip5, county_fips, county_name, congressional_district, metro, is_split, in_coverage",
+      /* The primary key (0001). */
+      ["zip5", "congressional_district"]
+    ),
+  ["zip-district-rows"],
+  { revalidate: 3600, tags: ["districts"] }
+);
+
+/* A public lookup table, read whole through the anon client, in pages so
+   PostgREST's 1000-row cap can't cut it short as it grows. `order` must
+   be unique across rows, or a row could sit on both sides of a page break
+   and be read twice while another is missed.
+
+   An empty table is a failed read, not a Florida with no districts or
+   ZIPs, and it throws: unstable_cache keeps what this returns for an hour,
+   and an empty block_district would have sent every address to the
+   statewide ballot, an empty zip_district every ZIP to "we don't cover
+   this area yet". A throw is not cached. */
+const PAGE_ROWS = 1000;
+
+async function readWholeTable<Row>(
+  table: string,
+  columns: string,
+  order: string[]
+): Promise<Row[]> {
   const supabase = await createAnonServerClient();
-  const rows: BlockRange[] = [];
-  for (let from = 0; ; from += BLOCK_PAGE) {
-    const { data, error } = await supabase
-      .from("block_district")
-      .select("block_start, block_end, county_fips, congressional_district")
-      .order("block_start")
-      .range(from, from + BLOCK_PAGE - 1);
-    if (error) throw new Error(`block ranges read failed: ${error.message}`);
-    rows.push(...(data ?? []));
-    if (!data || data.length < BLOCK_PAGE) break;
+  const rows: Row[] = [];
+  for (let from = 0; ; from += PAGE_ROWS) {
+    let query = supabase.from(table).select(columns);
+    for (const column of order) query = query.order(column);
+    const { data, error } = await query.range(from, from + PAGE_ROWS - 1);
+    if (error) throw new Error(`${table} read failed: ${error.message}`);
+    const page = (data ?? []) as unknown as Row[];
+    rows.push(...page);
+    if (page.length < PAGE_ROWS) break;
   }
-  /* An empty table is a failed read, not a Florida with no districts:
-     caching it would send every address to the statewide ballot. */
-  if (rows.length === 0) throw new Error("block ranges read returned no rows");
+  if (rows.length === 0) throw new Error(`${table} read returned no rows`);
   return rows;
 }
-
-const blockRanges = unstable_cache(fetchBlockRanges, ["block-ranges"], {
-  revalidate: 3600,
-  tags: ["districts"],
-});
 
 /* A district the voter has already established -- from an address, a confirmed
    ZIP, or the picker -- plus the county it sits in.

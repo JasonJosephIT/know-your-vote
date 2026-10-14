@@ -3,8 +3,13 @@ import { cookies } from "next/headers";
 import { DISTRICT_COOKIE, parseDistrictCookie } from "@/lib/district-cookie";
 import { CandidateBrowser } from "@/components/features/CandidateBrowser";
 import { OutsideResources } from "@/components/features/OutsideResources";
+import { RaceScopePicker } from "@/components/features/RaceScopePicker";
+import { ScopedRaces, ScopeNote } from "@/components/features/ScopedRaces";
+import { SharedBallot } from "@/components/features/SharedBallot";
 import { SavedCandidates } from "@/components/features/SavedCandidates";
 import { YourRaces } from "@/components/features/YourRaces";
+import { getCoveredDistricts, resolveZip } from "@/lib/resolve";
+import { districtOptions, parseRaceScope } from "@/lib/race-scope";
 
 export const metadata = { title: "Candidates — Know Your Vote" };
 
@@ -35,6 +40,7 @@ export default async function CandidatesPage({
     district?: string;
     change?: string;
     scope?: string;
+    show?: string | string[];
   }>;
 }) {
   const sp = await searchParams;
@@ -85,6 +91,44 @@ export default async function CandidatesPage({
     return tab === "browse" ? "/candidates" : `/candidates?view=${tab}`;
   };
 
+  /* "Show races for" (RaceScopePicker, founder 2026-10-13), the same
+     control as the home page's, on the races view only. Its form carries
+     view=races and the district and county already in the URL, so "All
+     races" comes back to the same voter's races; never a ZIP (an old ?zip=
+     link drops it there, and the saved district, if any, takes over) and
+     never an address. A statewide ?scope= rides along the way tabHref
+     carries it. "all", and anything parseRaceScope doesn't know, is the
+     races view exactly as before; the other choices need no location. The
+     covered-district read is the cached one YourRaces makes. */
+  const districts = view === "races" ? await getCoveredDistricts() : [];
+  const raceScope = parseRaceScope(
+    sp.show,
+    districts.map((d) => d.district)
+  );
+  /* A district needs its county to come back as a ballot: without one
+     YourRaces shows the empty address prompt (review 2026-10-13). An old
+     ?zip= link brings a district but no county, so the county is worked
+     out here, never by carrying the ZIP: from the ZIP on the server
+     (resolveZip reads the cached table, nothing goes in a request URL),
+     else from the district when it lies in one covered county. */
+  let pickerCounty = sp.county;
+  if (sp.district && !pickerCounty && zip) {
+    try {
+      pickerCounty = (await resolveZip(zip)).countyFips;
+    } catch {
+      /* The district-only answer below still applies. */
+    }
+  }
+  if (sp.district && !pickerCounty) {
+    const homes = districts.filter((d) => d.district === sp.district);
+    if (homes.length === 1) pickerCounty = homes[0].countyFips;
+  }
+  const pickerHidden: Record<string, string> = { view: "races" };
+  if (sp.district && pickerCounty) pickerHidden.district = sp.district;
+  if (pickerCounty) pickerHidden.county = pickerCounty;
+  if (scope && !sp.district && !pickerCounty) pickerHidden.scope = scope;
+  const allRacesHref = `/candidates?${new URLSearchParams(pickerHidden)}`;
+
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
       <header className="flex flex-col gap-1">
@@ -118,6 +162,22 @@ export default async function CandidatesPage({
         <CandidateBrowser q={sp.q} countyFips={sp.county} area={sp.area} />
       )}
       {view === "races" && (
+        <RaceScopePicker
+          action="/candidates"
+          scope={raceScope}
+          districts={districtOptions(districts)}
+          hidden={pickerHidden}
+        />
+      )}
+      {view === "races" && raceScope.kind !== "all" && (
+        <ScopeNote scope={raceScope} allHref={allRacesHref} />
+      )}
+      {view === "races" && raceScope.kind === "statewide" && <SharedBallot />}
+      {view === "races" &&
+        (raceScope.kind === "county" || raceScope.kind === "district") && (
+          <ScopedRaces scope={raceScope} />
+        )}
+      {view === "races" && raceScope.kind === "all" && (
         <YourRaces
           zip={zip}
           district={district}

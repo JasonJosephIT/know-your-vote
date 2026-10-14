@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { CONTACT_EMAIL } from "../contact.ts";
+import { functionMissing } from "./rpc-fallback.ts";
 
 /* The unsubscribe link, end to end. src/app/api/voting-info/unsubscribe/
    route.ts only hands each request to unsubscribeResponse() below.
@@ -53,9 +54,22 @@ export type UnsubscribeStore = {
   unsubscribe(email: string): Promise<number>;
 };
 
+/* Each method calls its SQL function from migration 0058 first, so the
+   token or the address goes in the body of a POST rather than in a
+   Supabase request URL, which the API gateway logs. The token is the
+   credential that unsubscribes a voter, and the address is who they are.
+   Until 0058 is applied, PostgREST answers PGRST202 and the method runs the
+   query it ran before (./rpc-fallback.ts). */
 export function subscriptionStore(service: SupabaseClient): UnsubscribeStore {
   return {
     async addressFor(token) {
+      const viaFunction = await service.rpc("subscription_email_for_token", {
+        p_token: token,
+      });
+      if (!functionMissing("subscription_email_for_token", viaFunction.error)) {
+        if (viaFunction.error) throw new Error(viaFunction.error.message);
+        return (viaFunction.data as string | null) ?? null;
+      }
       const { data, error } = await service
         .from(TABLE)
         .select("email")
@@ -65,6 +79,13 @@ export function subscriptionStore(service: SupabaseClient): UnsubscribeStore {
       return data?.email ?? null;
     },
     async subscribed(email) {
+      const viaFunction = await service.rpc("subscription_is_active", {
+        p_email: email,
+      });
+      if (!functionMissing("subscription_is_active", viaFunction.error)) {
+        if (viaFunction.error) throw new Error(viaFunction.error.message);
+        return viaFunction.data === true;
+      }
       const { data, error } = await service
         .from(TABLE)
         .select("id")
@@ -84,6 +105,13 @@ export function subscriptionStore(service: SupabaseClient): UnsubscribeStore {
        lower-cased, and ilike would read "_" in an address as a wildcard
        and could stop someone else's mail. */
     async unsubscribe(email) {
+      const viaFunction = await service.rpc("subscription_unsubscribe", {
+        p_email: email,
+      });
+      if (!functionMissing("subscription_unsubscribe", viaFunction.error)) {
+        if (viaFunction.error) throw new Error(viaFunction.error.message);
+        return Number(viaFunction.data ?? 0);
+      }
       const { data, error } = await service
         .from(TABLE)
         .update({ active: false })

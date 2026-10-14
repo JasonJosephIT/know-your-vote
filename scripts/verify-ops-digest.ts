@@ -604,6 +604,13 @@ try {
   check("subscriptions are read as zip5 and consent_at, active only",
     requests.some((r) => r.table === "voting_info_subscription" && r.query.includes("select=zip5%2Cconsent_at") && r.query.includes("active=eq.true")),
     j(requests.filter((r) => r.table === "voting_info_subscription")));
+  /* A filter on zip5 would put the subscribers' ZIPs in a request URL,
+     which Supabase's API gateway logs. */
+  const zipReads = requests.filter((r) => r.table === "zip_district");
+  check("zip_district is read whole, with no subscriber's ZIP in any request URL",
+    zipReads.length > 0 && zipReads.every((r) => !new URLSearchParams(r.query).has("zip5") && !/33101/.test(r.query)) &&
+      requests.every((r) => !/33101/.test(r.query)),
+    j(zipReads));
   check("races are read for the guide's election only", requests.some((r) => r.table === "race" && r.query.includes(`election=eq.${ELECTION_KIND}`)));
   check("the digest writes no file", listing(TMP) === before, listing(TMP));
   if (d) {

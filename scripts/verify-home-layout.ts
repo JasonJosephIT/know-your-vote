@@ -248,7 +248,7 @@ check(
   check(
     "home renders the masthead, the jump list and the news column with the saved county",
     /<HomeMasthead \/>/.test(page) &&
-      /<BallotAtAGlance \/>/.test(page) &&
+      /<BallotAtAGlance(?: sections=\{homeSections\(scope\)\})? \/>/.test(page) &&
       /<HomeNews countyFips=\{saved\?\.countyFips\} \/>/.test(page)
   );
   check(
@@ -395,7 +395,7 @@ check(
   );
   check(
     "the key dates and the sample-ballot block are one group, 12 px apart",
-    /<div className="flex flex-col gap-3[^"]*">\s*<DeadlineBanner[\s\S]*?<VotingResources countyFips=\{saved\?\.countyFips\} \/>\s*<\/div>\s*<BallotAtAGlance \/>/.test(
+    /<div className="flex flex-col gap-3[^"]*">\s*<DeadlineBanner[\s\S]*?<VotingResources countyFips=\{saved\?\.countyFips\} \/>\s*<\/div>\s*<BallotAtAGlance(?: sections=\{homeSections\(scope\)\})? \/>/.test(
       page
     )
   );

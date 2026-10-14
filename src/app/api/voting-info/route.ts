@@ -10,7 +10,10 @@ import {
 import { verifiedElectionEvents } from "@/lib/notifications/election-events";
 import { easternToday, eventsForCounty } from "@/lib/notifications/schedule";
 import { welcomeEmail } from "@/lib/notifications/templates";
-import { welcomeSentWithinWindow } from "@/lib/notifications/welcome-throttle";
+import {
+  markWelcomeSent,
+  welcomeSentWithinWindow,
+} from "@/lib/notifications/welcome-throttle";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { resolveZip, ZIP_RE } from "@/lib/resolve";
 import { resendApiKey } from "@/lib/server-keys";
@@ -26,6 +29,14 @@ import { createServiceClient } from "@/lib/supabase/service";
    most three times a day per address (src/lib/notifications/
    welcome-throttle.ts): a repeat is saved but sends nothing, and answers
    with the status and body a send does.
+
+   No request this route makes to Supabase carries the address, the ZIP or
+   the unsubscribe token in its URL, which the API gateway logs: the ZIP is
+   resolved against a cached copy of the whole zip_district table
+   (resolveZip), the upsert sends its row in the body, and the throttle's
+   read and stamp call SQL functions whose arguments travel in the body
+   (until migration 0058 is applied, those two fall back to filters that do
+   put the address and the token in the URL).
 
    A 400 about one field names it ({ error, field: "zip" | "email" }), so
    the form puts the message under that field by key, never by matching
@@ -191,11 +202,9 @@ export async function POST(request: NextRequest) {
   }
 
   /* The stamp the 24-hour check reads. Best-effort, as before: if it
-     fails, the next signup for this address sends again. */
-  await service
-    .from("voting_info_subscription")
-    .update({ last_sent_at: new Date().toISOString() })
-    .eq("unsubscribe_token", subscription.unsubscribe_token);
+     fails, the next signup for this address sends again. By token, in a
+     request body (welcome-throttle.ts). */
+  await markWelcomeSent(service, subscription.unsubscribe_token);
 
   return signedUp();
 }
