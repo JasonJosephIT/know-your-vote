@@ -1,6 +1,7 @@
 import { LinkRow, LinkRowList } from "@/components/ui/LinkRows";
 import { CaretGlyph } from "@/components/ui/Glyphs";
 import { BallotQuestions } from "@/components/features/BallotQuestions";
+import { SectionDivider } from "@/components/brand/SectionDivider";
 import { getActiveMeasures } from "@/lib/measures";
 import { getStatewideRaces, raceStatusLabel } from "@/lib/races";
 import { partyLabel, partyLegend } from "@/lib/party-label";
@@ -61,7 +62,11 @@ function formatDate(iso: string | null) {
   });
 }
 
-export async function SharedBallot() {
+export async function SharedBallot({
+  seam = false,
+}: {
+  seam?: boolean;
+} = {}) {
   /* Both are cached and independent, so they overlap rather than queue. */
   const [races, measures] = await Promise.all([
     getStatewideRaces(),
@@ -186,6 +191,16 @@ export async function SharedBallot() {
             })}
           </LinkRowList>
         </section>
+      )}
+
+      {/* Where the candidates end: a ballot question is a distinct kind of
+          thing (the note below). Only when both lists render. A plain wave
+          with no figure, between the lists and never inside either, at
+          every width (design.md "Art on phones", founder 2026-10-14). Home
+          only: the home page passes `seam`, and /candidates, which mounts
+          this same ballot, passes nothing and stays without art. */}
+      {seam && races.length > 0 && measures.length > 0 && (
+        <SectionDivider variant="wave" />
       )}
 
       {/* Statewide too, but a distinct kind of thing — a voter scanning for

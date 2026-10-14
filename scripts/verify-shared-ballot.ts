@@ -92,7 +92,7 @@ assert("landing page is a server component", !isClient(ENTRY));
 /* 2. The ballot must be on the landing page at all. */
 assert(
   "landing page renders SharedBallot",
-  /<SharedBallot\s*\/>/.test(pageSource)
+  /<SharedBallot(?:\s+seam)?\s*\/>/.test(pageSource)
 );
 
 /* 3. Nothing the ballot reaches may be a client component. */
