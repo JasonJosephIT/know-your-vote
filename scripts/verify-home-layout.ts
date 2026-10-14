@@ -253,7 +253,7 @@ check(
   );
   check(
     "the ballot comes before the news in the DOM, so phones and screen readers get it first",
-    page.indexOf("<SharedBallot />") < page.indexOf("<HomeNews")
+    page.indexOf("<SharedBallot seam />") < page.indexOf("<HomeNews")
   );
 }
 

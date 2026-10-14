@@ -431,7 +431,7 @@ console.log("\n8. The wiring");
     at > 0 &&
       page.indexOf("<VotingResources", at + 1) === -1 &&
       page.indexOf("<DeadlineBanner") < at &&
-      at < page.indexOf("<SharedBallot />")
+      at < page.indexOf("<SharedBallot seam />")
   );
   check("the House step is a jump target", /<section id="house-race"/.test(page));
   check(

@@ -5,7 +5,7 @@
    (scripts/freeze-manifest.ts), so they had to be right before then:
 
      - a wave at the seam between the statewide races and the ballot
-       questions, in SharedBallot.tsx (home, every width);
+       questions, in SharedBallot.tsx (home only, every width);
      - a 30px magnifier beside /methodology's "No source, no quote".
 
    What would regress quietly, and is pinned here:
@@ -13,7 +13,9 @@
    1. The wave renders only when both lists do, sits after the statewide
       section and before <BallotQuestions />, never inside either list, and
       carries no figure. A figure beside a list of candidates is the one
-      thing design.md's art rules forbid outright.
+      thing design.md's art rules forbid outright. It is home's alone:
+      /candidates mounts the same SharedBallot, and the spec gives that
+      page no visual change, so only the home page passes `seam`.
    2. The magnifier is in the flow, in one flex row with the heading, after
       its words, phone only and 30px. Placed absolutely it runs out of the
       column at 320px with a 20px root font; from lg the page keeps its one
@@ -36,6 +38,8 @@ import { FROZEN_FILES } from "./freeze-manifest.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const SHARED_BALLOT = "src/components/features/SharedBallot.tsx";
+const HOME = "src/app/(public)/page.tsx";
+const CANDIDATES = "src/app/(public)/candidates/page.tsx";
 const METHODOLOGY = "src/app/(public)/methodology/page.tsx";
 const DIVIDER = "src/components/brand/SectionDivider.tsx";
 const DESIGN = "docs/design.md";
@@ -95,7 +99,8 @@ const desktopOnly = (className: string) => {
 
 /* ---- 1. The seam wave --------------------------------------------------- */
 
-const WAVE = /\{\s*races\.length > 0 && measures\.length > 0 && \(?\s*<SectionDivider variant="wave" \/>\s*\)?\s*\}/;
+const WAVE =
+  /\{\s*seam && races\.length > 0 && measures\.length > 0 && \(?\s*<SectionDivider variant="wave" \/>\s*\)?\s*\}/;
 
 function seamProblems(text: string): string[] {
   const code = flat(text);
@@ -105,8 +110,10 @@ function seamProblems(text: string): string[] {
   const dividers = code.match(/<SectionDivider\b/g) ?? [];
   if (dividers.length !== 1) problems.push(`one SectionDivider, found ${dividers.length}`);
   const wave = WAVE.exec(code);
+  if (!/export async function SharedBallot\(\{ seam = false, \}: \{ seam\?: boolean; \} = \{\}\)/.test(code))
+    problems.push("SharedBallot takes an optional seam prop, off by default");
   if (!wave) {
-    problems.push("the wave renders only when races AND measures are non-empty");
+    problems.push("the wave renders only when seam is passed and races AND measures are non-empty");
     return problems;
   }
   const statewideEnd = code.lastIndexOf("</section>", wave.index);
@@ -123,7 +130,7 @@ function seamProblems(text: string): string[] {
 const shared = source(SHARED_BALLOT);
 const seam = seamProblems(shared);
 check(
-  "SharedBallot: a plain wave between the statewide races and the ballot questions, only when both render",
+  "SharedBallot: a plain wave between the statewide races and the ballot questions, only with seam and when both render",
   seam.length === 0,
   seam.join("; ")
 );
@@ -137,10 +144,17 @@ check(
   );
 }
 const WAVE_JSX = '<SectionDivider variant="wave" />';
+const GATE = "seam && races.length > 0 && measures.length > 0 && (";
 mutation(
   "the wave shown when only one list renders",
   shared,
-  [["races.length > 0 && measures.length > 0 && (", "measures.length > 0 && ("]],
+  [[GATE, "seam && measures.length > 0 && ("]],
+  seamProblems
+);
+mutation(
+  "the wave shown without seam, so on /candidates too",
+  shared,
+  [[GATE, "races.length > 0 && measures.length > 0 && ("]],
   seamProblems
 );
 mutation(
@@ -148,7 +162,7 @@ mutation(
   shared,
   [
     [WAVE_JSX, "null"],
-    ["</LinkRowList>", `{races.length > 0 && measures.length > 0 && (${WAVE_JSX})}</LinkRowList>`],
+    ["</LinkRowList>", `{${GATE}${WAVE_JSX})}</LinkRowList>`],
   ],
   seamProblems
 );
@@ -157,7 +171,7 @@ mutation(
   shared,
   [
     [WAVE_JSX, "null"],
-    ["<BallotQuestions />", `<BallotQuestions />{races.length > 0 && measures.length > 0 && (${WAVE_JSX})}`],
+    ["<BallotQuestions />", `<BallotQuestions />{${GATE}${WAVE_JSX})}`],
   ],
   seamProblems
 );
@@ -166,6 +180,36 @@ mutation(
   shared,
   [[WAVE_JSX, `${WAVE_JSX}<Art name="sticker-palm" height={36} className="lg:hidden" />`]],
   seamProblems
+);
+
+/* Who passes seam: the home page, and only it. /candidates mounts the
+   same ballot for its statewide view and stays without art. */
+function mountProblems(home: string, candidates: string): string[] {
+  const problems: string[] = [];
+  const homeMounts = flat(home).match(/<SharedBallot\b[^>]*\/>/g) ?? [];
+  if (homeMounts.join() !== "<SharedBallot seam />")
+    problems.push(`home mounts <SharedBallot seam /> once, found ${homeMounts.join(", ") || "none"}`);
+  const candidateMounts = flat(candidates).match(/<SharedBallot\b[^>]*\/>/g) ?? [];
+  if (candidateMounts.join() !== "<SharedBallot />")
+    problems.push(`/candidates mounts <SharedBallot /> with no seam, found ${candidateMounts.join(", ") || "none"}`);
+  return problems;
+}
+
+const home = source(HOME);
+const candidates = source(CANDIDATES);
+const mounts = mountProblems(home, candidates);
+check("only the home page passes seam; /candidates gets no wave", mounts.length === 0, mounts.join("; "));
+mutation(
+  "seam passed on /candidates",
+  candidates,
+  [["<SharedBallot />", "<SharedBallot seam />"]],
+  (edited) => mountProblems(home, edited)
+);
+mutation(
+  "seam dropped from home",
+  home,
+  [["<SharedBallot seam />", "<SharedBallot />"]],
+  (edited) => mountProblems(edited, candidates)
 );
 
 /* ---- 2. The /methodology magnifier -------------------------------------- */

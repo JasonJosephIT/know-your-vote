@@ -62,7 +62,11 @@ function formatDate(iso: string | null) {
   });
 }
 
-export async function SharedBallot() {
+export async function SharedBallot({
+  seam = false,
+}: {
+  seam?: boolean;
+} = {}) {
   /* Both are cached and independent, so they overlap rather than queue. */
   const [races, measures] = await Promise.all([
     getStatewideRaces(),
@@ -192,8 +196,10 @@ export async function SharedBallot() {
       {/* Where the candidates end: a ballot question is a distinct kind of
           thing (the note below). Only when both lists render. A plain wave
           with no figure, between the lists and never inside either, at
-          every width (design.md "Art on phones", founder 2026-10-14). */}
-      {races.length > 0 && measures.length > 0 && (
+          every width (design.md "Art on phones", founder 2026-10-14). Home
+          only: the home page passes `seam`, and /candidates, which mounts
+          this same ballot, passes nothing and stays without art. */}
+      {seam && races.length > 0 && measures.length > 0 && (
         <SectionDivider variant="wave" />
       )}
 

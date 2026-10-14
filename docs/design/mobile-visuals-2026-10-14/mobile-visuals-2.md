@@ -140,13 +140,18 @@ Ship it as its own small PR. If it misses Friday, drop it: never edit these file
 // SharedBallot.tsx, between the statewide </section> and <BallotQuestions />
 import { SectionDivider } from "@/components/brand/SectionDivider";
 ...
+export async function SharedBallot({ seam = false }: { seam?: boolean } = {}) {
+...
 {/* Where the candidates end: a ballot question is a distinct kind of
     thing (the note below). Only when both lists render. */}
-{races.length > 0 && measures.length > 0 && <SectionDivider variant="wave" />}
+{seam && races.length > 0 && measures.length > 0 && <SectionDivider variant="wave" />}
 <BallotQuestions />
+
+// page.tsx (home, not frozen): <SharedBallot seam />
+// candidates/page.tsx keeps <SharedBallot />, so /candidates gets no wave
 ```
 
-- It shows at every width, desktop included.
+- It shows at every width, desktop included, on home only.
 - `SectionDivider` is a server component, so `verify-shared-ballot`'s no-client-JS rule holds.
 
 ```tsx
