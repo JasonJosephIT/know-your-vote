@@ -31,6 +31,13 @@ const read = (p: string) => readFileSync(new URL(`../${p}`, import.meta.url), "u
 const page = read("src/app/(public)/measures/[measureId]/page.tsx");
 check("page renders the neutral block for a held measure", /<MeasureNeutralBlock\b/.test(page));
 check("page renders the held note", /heldNote\(/.test(page));
+/* A published measure's note would describe a hold that is over (AM1 after
+   0060), so the page asks for a note only while the measure is listed. */
+check(
+  "page renders the held note only for a listed measure",
+  /status === "listed" \? heldNote\(measure\.measure_id\) : null/.test(page) &&
+    (page.match(/heldNote\(/g) ?? []).length === 1
+);
 check("page never renders sided columns outside the published brief", !/brief\s*\?\s*\(?\s*<Column|support\.map|oppose\.map/.test(page));
 
 /* The held page shows the neutral resources (0041), so no copy may say it

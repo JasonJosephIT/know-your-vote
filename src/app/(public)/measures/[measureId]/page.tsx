@@ -88,8 +88,11 @@ export default async function MeasurePage({
      brief, which is null), so it shows the ballot text alone and the card
      below says so. The verbatim summary is the Division of Elections' own
      wording, so it needs no audit. */
-  const { measure, brief, neutral = [] } = listing;
-  const note = heldNote(measure.measure_id);
+  const { measure, status, brief, neutral = [] } = listing;
+  /* The held note explains why a LISTED measure has no YES/NO columns. A
+     published measure never shows it, even one whose brief fails the
+     re-check: its note would describe a hold that is over (AM1, 0060). */
+  const note = status === "listed" ? heldNote(measure.measure_id) : null;
 
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-5 px-5 py-8">
