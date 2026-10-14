@@ -20,8 +20,10 @@ import { coveredCountyNames } from "@/lib/counties";
    offered anywhere else. remindersOn is always true here: the card renders
    only while reminders are not paused. The welcome email links to the
    county's precinct lookup rather than naming a polling place, so the
-   intro says exactly that. The ZIP limit is said up front so a voter
-   outside the four counties is not left to discover it from an error.
+   intro says exactly that. The ZIP limit is said under the ZIP label,
+   before anyone types, so a voter outside the four counties is not left to
+   discover it from an error, or from a line after the button (Mobbin
+   catalog 2026-10-12, RS1 Legora; founder decision D4 (a), 2026-10-13).
 
    countyFips is the saved district's county, when there is one, so the
    card's calendar link gives that county's dates, the same file the
@@ -58,8 +60,8 @@ export function ReminderSignupCta({ countyFips }: { countyFips?: string }) {
          radiates from its own top-left, so it is mirrored to start from the
          top-right. Its box is the pt-10 strip above the heading and no
          taller, so it never sits under the heading, the intro or the form,
-         whose fields run the full width from sm up. Decorative: aria-hidden,
-         no pointer events, a CSS background rather than an image. */}
+         whose card runs the full width. Decorative: aria-hidden, no pointer
+         events, a CSS background rather than an image. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute top-0 right-0 hidden h-10 w-60 -scale-x-100 select-none opacity-70 lg:block"
@@ -76,10 +78,8 @@ export function ReminderSignupCta({ countyFips }: { countyFips?: string }) {
         countyFips={countyFips}
         heading="Get deadline reminders by email"
         intro="A short email as each remaining deadline comes up, through Election Day: dates and official links only, never candidates or news. First, right away: the official link to look up your polling place."
+        zipHint={`${coveredCountyNames("or")} County ZIPs for now`}
       />
-      <p className="text-caption text-on-surface-muted">
-        For ZIP codes in {coveredCountyNames()} counties for now.
-      </p>
     </section>
   );
 }

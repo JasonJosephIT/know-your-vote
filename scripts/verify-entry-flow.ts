@@ -143,16 +143,23 @@ check(
     /We couldn't look up that address just now\.[^"]*",\s*false\s*\)/.test(entry)
 );
 const voting = code("src/components/features/VotingInfo.tsx");
+/* The consent box was the reminder form's one field error; since the
+   Mobbin catalog's RS5 (2026-10-12) the ZIP and the email have their own
+   too. scripts/verify-reminder-form.ts pins the rest of that form. */
 check(
-  "the consent box reports itself invalid, names its error and takes focus",
-  /aria-invalid=\{consentError \|\| undefined\}/.test(voting) &&
-    /aria-describedby=\{consentError \? consentErrorId : undefined\}/.test(voting) &&
-    /if \(consentError\) consentRef\.current\?\.focus\(\);/.test(voting)
+  "each reminder-form field reports itself invalid, names its error, and the first takes focus",
+  ["zip", "email", "consent"].every(
+    (f) =>
+      new RegExp(`aria-invalid=\\{errors\\.${f} \\? true : undefined\\}`).test(voting) &&
+      new RegExp(`errors\\.${f} && \`\\$\\{id\\}-${f}-error\``).test(voting)
+  ) &&
+    /focusNext\.current = FIELDS\.find\(\(f\) => errors\[f\]\) \?\? null;/.test(voting) &&
+    /if \(field === "consent"\) consentRef\.current\?\.focus\(\);/.test(voting)
 );
 
 /* ---- 6. focus doesn't fall to <body> when its control goes ---------------- */
 check(
-  "the reminder form's success message takes focus once, on the change",
+  "the reminder form's sent heading takes focus once, on the change",
   /if \(stage\.kind === "sent"\) sentRef\.current\?\.focus\(/.test(voting) &&
     /ref=\{sentRef\}\s*tabIndex=\{-1\}/.test(voting)
 );

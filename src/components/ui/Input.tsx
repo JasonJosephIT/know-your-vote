@@ -15,11 +15,15 @@ type InputProps = ComponentProps<"input">;
    2026-10-05): outline-none has no forced-colors fallback and forced colors
    drop box-shadow, so in Windows High Contrast the field kept no focus cue
    but the caret. Same change fix 10 made for the /candidates search box and
-   the /news selects. */
+   the /news selects.
+
+   A field that reports itself invalid (aria-invalid) keeps an error edge,
+   focused or not, so on a phone the field with the problem stands out, not
+   just the red line under it (Mobbin catalog 2026-10-12, AD1 Square). */
 export function Input({ className = "", ...props }: InputProps) {
   return (
     <input
-      className={`w-full rounded-md border border-border-input bg-surface px-[14px] py-3 text-body text-on-surface placeholder:text-on-surface-muted focus:border-primary ${className}`}
+      className={`w-full rounded-md border border-border-input bg-surface px-[14px] py-3 text-body text-on-surface placeholder:text-on-surface-muted focus:border-primary aria-[invalid=true]:border-error aria-[invalid=true]:focus:border-error ${className}`}
       {...props}
     />
   );

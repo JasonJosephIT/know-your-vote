@@ -89,10 +89,12 @@ export function countyForRaceDistrict(
 
 /* The covered counties as a voter reads them: "Miami-Dade, Broward,
    Hillsborough and Orange". Derived from the list, so the coverage copy can
-   never name a county the resolver does not cover, or miss one it does. */
-export function coveredCountyNames(): string {
+   never name a county the resolver does not cover, or miss one it does.
+   "or" is for one-of-them copy, such as the reminder form's ZIP hint
+   ("… Hillsborough or Orange County ZIPs"), since a ZIP is in one county. */
+export function coveredCountyNames(conjunction: "and" | "or" = "and"): string {
   const names = COVERED_COUNTIES.map((c) => c.name);
   return names.length <= 1
     ? names.join("")
-    : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+    : `${names.slice(0, -1).join(", ")} ${conjunction} ${names[names.length - 1]}`;
 }
