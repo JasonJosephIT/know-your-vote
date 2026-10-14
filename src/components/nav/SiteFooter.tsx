@@ -99,12 +99,15 @@ export function SiteFooter() {
           half. Each ratio is fixed, so nothing shifts on load.
 
           An <img>, lazy, so pages that never scroll to the footer don't
-          fetch it; the -sm file on phones and narrow windows, the full file
-          for sharp edges on wide screens. The <source> pins phones to the
-          -sm file: with sizes alone, WebKit picked the 2400w file on 402px+
-          @3x iPhones. Browsers without range media queries skip it and use
-          the <img> as before. Decoration only: aria-hidden, alt="", nothing
-          to click. */}
+          fetch it. Below sm the <source> gives phones the 750w file: 2x at
+          375px, and 31KB against the -sm file's 130KB on every page
+          (docs/design/mobile-visuals-2026-10-14/). It is a single file, not
+          a srcset with a sizes attribute: with sizes, WebKit picked the
+          2400w file on 402px+ @3x iPhones. From sm
+          the <img> takes the -sm file in narrow windows and the full file
+          for sharp edges on wide screens. Browsers without range media
+          queries skip the <source> and use the <img> as before. Decoration
+          only: aria-hidden, alt="", nothing to click. */}
       <div
         aria-hidden="true"
         className="pointer-events-none mx-auto aspect-[1200/509] max-h-[184px] w-full max-w-[1120px] select-none overflow-hidden sm:aspect-[2400/504] sm:max-h-none"
@@ -112,9 +115,9 @@ export function SiteFooter() {
         <picture className="block h-full w-full">
           <source
             media="(width < 40rem)"
-            srcSet="/brand/site/illustrations/footer-town-strip-sm.webp"
-            width={1200}
-            height={509}
+            srcSet="/brand/site/illustrations/footer-town-strip-750.webp"
+            width={750}
+            height={318}
           />
           {/* Plain <img> in a <picture> (the lint rule allows it): a
               pre-sized WebP from public/; next/image's resizing adds nothing
