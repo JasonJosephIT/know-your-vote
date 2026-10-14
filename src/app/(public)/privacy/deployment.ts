@@ -1,5 +1,6 @@
 import { addressEntryEnabled, geocoderHost } from "@/lib/geocode";
 import { ADS_TAG_ENABLED } from "@/lib/ads";
+import { remindersPaused } from "@/lib/notifications/config";
 
 /* The deployment facts the two privacy pages describe, read in one place.
 
@@ -24,6 +25,9 @@ export type PrivacyDeployment = {
   analyticsOn: boolean;
   adsOn: boolean;
   errorReportsOn: boolean;
+  /* NOTIFICATIONS_PAUSED unset (src/lib/notifications/config.ts). While it
+     is set no reminder sends, so neither page may promise one. */
+  remindersOn: boolean;
 };
 
 export function privacyDeployment(): PrivacyDeployment {
@@ -45,5 +49,6 @@ export function privacyDeployment(): PrivacyDeployment {
     errorReportsOn: Boolean(
       process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN
     ),
+    remindersOn: !remindersPaused(),
   };
 }
