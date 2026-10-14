@@ -1,0 +1,9 @@
+{
+  "name": "KYV Florida Group Chat Top 10",
+  "slug": "kyv-florida-group-chat-top-10",
+  "created": "2026-10-13T19:46:14Z",
+  "nodetool_url": "http://127.0.0.1:7777",
+  "open_design_daemon": "",
+  "mirofish_url": "http://127.0.0.1:5001",
+  "keys_file": "~/.config/output-engine/keys.env"
+}
