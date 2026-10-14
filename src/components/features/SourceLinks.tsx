@@ -4,7 +4,7 @@ import { sourceLine } from "@/lib/source-line";
 /* Every rendered claim carries its receipts (FR-004).
 
    One line per source (catalog CP3): the publisher, then what kind of source
-   it is and when we read it, "Source: janedoe.com · Campaign website ·
+   it is and when we read it, "Source: janedoe.com · From the candidate ·
    retrieved Sep 29, 2026". The words and the rules (nothing the row doesn't
    hold, the same weight for every type, no lean, http(s) urls only) live in
    src/lib/source-line.ts. Each part is its own flex item, so a narrow

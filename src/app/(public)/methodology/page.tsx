@@ -917,7 +917,7 @@ export default async function MethodologyPage() {
             it.
           </li>
           <li>
-            <strong>Positions</strong> &mdash; a named person or organisation
+            <strong>Advocacy</strong> &mdash; a named person or organisation
             making the case: editorials, the sponsor, an advocacy group.
           </li>
           <li>
@@ -930,7 +930,7 @@ export default async function MethodologyPage() {
           first. Nothing else does &mdash; not the outlet&rsquo;s lean, not
           whether it is a video or an article, and never our opinion of it. A
           video can sit in any group depending on who made it. Official
-          documents and reporting are shown to everyone first; positions and
+          documents and reporting are shown to everyone first; advocacy and
           commentary are shown under the side they argue for, in two columns of
           equal size. A ballot question is published only when both sides are
           represented. Until then its page shows the ballot text and any

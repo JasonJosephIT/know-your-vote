@@ -30,7 +30,7 @@ export const TIER_LABEL: Record<MeasureKind, string> = {
   official: "Official documents",
   analysis: "Research",
   reporting: "Reporting",
-  argument: "Positions",
+  argument: "Advocacy",
   commentary: "Commentary",
 };
 
