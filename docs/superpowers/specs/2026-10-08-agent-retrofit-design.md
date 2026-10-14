@@ -732,6 +732,27 @@ hacked or unrelated"), made through a reviewed migration, since
   migration. County judges, community councils and special districts are out
   of scope; an office that reads like a covered one but does not parse is a
   report line.
+- **County rosters, every candidate (added 2026-10-14).** For each covered
+  office that is ours, `compareCountyRoster` compares VoterFocus's filers
+  still in the race (Qualified, Runoff, Unopposed, Elected) with our race's
+  still-running candidates (ballot tier, not withdrawn), both ways:
+  `roster: MISSING` is a filer still running with no candidate of ours (or
+  one ours has as withdrawn); `roster: EXTRA` is a candidate of ours that
+  VoterFocus shows Withdrawn, Defeated, Did not qualify or Qualified
+  Write-In, lists under another office, or does not list at all (a race of
+  ours that no office on the list reads as is EXTRA for each of its
+  candidates). Pairs are made on the `ca=` id our `FL-VF-<PREFIX>-<ca>` id
+  carries, else on `normalizeName` within the office, else on
+  `NAME_VARIANTS` or a loose name match (same surname; first name equal, the
+  quoted nickname, or a short form), which is a `roster: CONFIRM` line, as is
+  an id whose names differ. Write-ins: founder rule D1 (`0013`) keeps them out
+  of `candidate_ids`, so a Qualified Write-In is never MISSING. Headings that
+  read as one seat are one office. What cannot be compared is a CONFIRM line,
+  never EXTRA: an unmapped label, a filer of ours VoterFocus lists under a
+  heading that does not read as a covered seat, a name that fits several
+  rows, a second race row for one seat. A race with any MISSING, EXTRA or
+  CONFIRM line is left out of `confirmedRaces`. Report lines only;
+  `check.json` carries the per-office comparison as `rosterOffices`.
 - **Dates (R2's reading).** For each `general_2026` `election_event` row, R2
   reads that row's own `details_url` (6 distinct pages, §2.6) and writes
   `observations.json`:
