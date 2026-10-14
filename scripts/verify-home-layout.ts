@@ -340,16 +340,17 @@ check(
     !/success|green|animate-|transition|duration-|keyframes/.test(code)
   );
   /* Phones: the segment to the next stop starts at this dot's centre (a
-     2px top margin and half a 16px dot) and ends at the next dot's centre,
-     the list's 12px gap further down. A stop's own height never enters it,
-     so the line stays whole when a label wraps. */
+     5px top margin and half a 12px dot, level with the middle of a 21px
+     line of 14px text) and ends at the next dot's centre, the list's 12px
+     gap further down. A stop's own height never enters it, so the line
+     stays whole when a label wraps. */
   const top = Number(/after:top-\[(\d+)px\]/.exec(code)?.[1]);
   const below = Number(/after:bottom-\[-(\d+)px\]/.exec(code)?.[1]);
   check(
     "phones: one line from dot centre to dot centre",
     /<ol className="grid gap-3 /.test(code) &&
-      /mt-0\.5 flex size-4 /.test(code) &&
-      top === 2 + 16 / 2 &&
+      /mt-\[5px\] flex size-3 /.test(code) &&
+      top === 5 + 12 / 2 &&
       below === 12 + top,
     `top ${top}px, bottom -${below}px`
   );
