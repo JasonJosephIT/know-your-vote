@@ -1,5 +1,39 @@
 @import "tailwindcss";
 
+/* Short screens: the bars join the page (home readability spec 2026-10-12,
+   PR C; founder decision 4 (a), 2026-10-13). On a window 500px tall or less
+   (a landscape phone, or a desktop at 200% or 400% zoom) the fixed top bar
+   and bottom nav took a quarter to nearly half of the height, and with them
+   most of the room a keyboard user has to see where focus is (WCAG 1.4.10
+   Reflow, 2.4.11 Focus Not Obscured). There `short:` puts both bars in the
+   page flow at the top, where they scroll away with the page
+   (SectionNav.tsx), and takes away the body padding that cleared them
+   (layout.tsx). On every taller window they stay fixed, as before. Nothing
+   hides or slides on scroll at any size: no motion is added.
+
+   The scroll padding then only has to clear the status-bar and
+   home-indicator insets, and the cookie banner, which stays fixed and sits
+   8px above the bottom edge on a short screen (SitePrompts.tsx); its
+   --kyv-overlay-bottom term stays. The rule is on :root, not html, so that
+   it outranks the html rule in @layer base further down (the phone and md
+   values) although that rule comes later in the file.
+
+   To flip: delete this block and the short: classes in SectionNav.tsx,
+   layout.tsx and SitePrompts.tsx; scripts/verify-short-screens.ts pins all
+   four. */
+@custom-variant short (@media (max-height: 31.25rem));
+
+@layer base {
+  :root {
+    @variant short {
+      scroll-padding-top: calc(8px + env(safe-area-inset-top));
+      scroll-padding-bottom: calc(
+        8px + env(safe-area-inset-bottom) + var(--kyv-overlay-bottom, 0px)
+      );
+    }
+  }
+}
+
 /* Design tokens from docs/design.md (mirrored in docs/design.html).
    @theme emits each token as a :root CSS variable and a Tailwind utility. */
 @theme {
