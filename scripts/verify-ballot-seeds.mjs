@@ -496,9 +496,19 @@ await check(
   "SELECT public.measure_sides_balanced('FL-AM2-general')::int n",
   1
 );
-const publishRows = await n(
-  "SELECT count(*)::int n FROM admin_action WHERE subject_kind = 'measure_publication'"
+/* 0061 writes no audit row on its first apply either: the only admin_action
+   rows that name AM2 or AM3 (or one of their resources) by this point are
+   0038's and 0040's publishes; list-ballot-2026.sql and the production
+   path below add theirs later. */
+await check(
+  "no admin_action row names AM2 or AM3 apart from 0038's and 0040's publishes",
+  `SELECT count(*)::int n FROM admin_action
+    WHERE (subject_ref LIKE 'FL-AM2-general%' OR subject_ref LIKE 'FL-AM3-general%')
+      AND NOT (action = 'publish' AND subject_kind = 'measure_publication'
+               AND subject_ref IN ('FL-AM2-general', 'FL-AM3-general'))`,
+  0
 );
+const publishRows = await n("SELECT count(*)::int n FROM admin_action");
 await db.exec(
   await readFile(
     path.join(migrationsDir, "0061_am3_am2_more_sides.sql"),
@@ -519,8 +529,8 @@ await check(
   2019
 );
 await check(
-  "0061 writes no admin_action row",
-  "SELECT count(*)::int n FROM admin_action WHERE subject_kind = 'measure_publication'",
+  "re-applying 0061 writes no admin_action row of any kind",
+  "SELECT count(*)::int n FROM admin_action",
   publishRows
 );
 

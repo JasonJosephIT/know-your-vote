@@ -15,9 +15,14 @@
 --        for AM1 only). AM2 goes from 5 / 4 to 6 / 4.
 -- Every page here was already a row for another amendment; this file
 -- records the positions each one states on AM3 or AM2 that were never
--- stored (0038 left the RPOF and Palm Beach Examiner AM3 material out as
--- unopened at the time). That is a pipeline gap, fixed on both sides
--- (AGENTS.md, Neutrality).
+-- stored. 0038 had left out, as "via search only" or without a working
+-- URL, the RPOF endorsement and TaxWatch's "No" (seen then only through
+-- Jacksonville Today), Amanda Informed's AM3 mention and a different
+-- Palm Beach Examiner post (/p/vote-yes-on-florida-amendment-3-for, still
+-- an unopened lead below); the Palm Beach Examiner row here is the
+-- all-three-amendments post. That is a pipeline gap on both sides
+-- (AGENTS.md, Neutrality), partly closed here: what remains open is
+-- listed under NOT IN THIS FILE.
 --
 -- ROWS. Each URL was opened on 2026-10-14 (`curl -sIL` for the status
 -- chain, a GET of the body) by one reader, then re-fetched by a second
@@ -92,8 +97,10 @@
 --     Amendment 3".
 --   - Unopened leads: two Tampa Bay Times AM3 columns (one yes, one no), a
 --     dedicated Palm Beach Examiner AM3 post, a Palm Beach Post AM2 piece.
---   With the three positions above, AM3 would be 4 / 9 and fail the 2x gate
---   (9 > 8), and AM2 7 / 4. Which of them become rows is the founder's call.
+--   Gate, one find at a time from this file's counts: LWV's AM3 listing
+--   makes AM3 4 / 8 (passes); Your Observer's AM3 editorial also makes it
+--   4 / 8 (passes); both make it 4 / 9 (fails, 9 > 8); RPOF's AM2 yes makes
+--   AM2 7 / 4 (passes). Which of them become rows is the founder's call.
 --
 -- COUNTS AFTER THIS FILE.
 --   FL-AM3-general: support 4 (3 argument, 1 commentary), oppose 7 (4
