@@ -102,6 +102,14 @@
      review 2026-10-05). */
   --default-transition-duration: 120ms;
   --default-transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Tailwind's animate-pulse, capped at 2 cycles (Mobbin reference catalog
+     2026-10-12, MO1). Its default loops forever, so a skeleton that waited
+     on a slow server pulsed for as long as it waited, past WCAG 2.2.2's 5
+     seconds. 2 x 2s = 4s; Tailwind's pulse keyframes end at full opacity,
+     so the block then rests still. This reaches NewsFeed's skeleton and the
+     race and candidate loading.tsx routes without editing them. */
+  --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 2;
 }
 
 /* Font families resolve through next/font variables set on <html> */
@@ -192,5 +200,42 @@
   :focus-visible {
     outline: 2px solid var(--color-focus-ring);
     outline-offset: 2px;
+  }
+}
+
+/* Motion tokens and the reduced-motion safety net (Mobbin reference
+   catalog 2026-10-12, MO1; design.md motion.* and "Motion on phones").
+
+   The tokens are design.md's motion.fast, base and slow and its easing, for
+   CSS that names a duration itself, such as an enter, dialog or disclosure
+   rule. Utilities keep the 120ms default in @theme above.
+
+   Unlayered on purpose: a rule outside every @layer outranks the layered
+   Tailwind utilities, and !important lets the zero-specificity * win over a
+   component's own CSS module, so a reduced-motion reader gets no motion
+   from any component, whether or not it opted out on its own. 1ms rather
+   than none, so a transitionend or animationend that code waits for still
+   fires. The skeleton pulse then runs one 1ms cycle and shows still.
+
+   HeroRotator already runs only under no-preference and Button's press
+   scale already stops under motion-reduce, so neither changes. The *
+   selector does not reach ::backdrop, ::details-content or the
+   ::view-transition-* pseudo-elements: a rule that animates one of those
+   carries its own reduced-motion fallback. */
+:root {
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-slow: 320ms;
+  --ease-kyv: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
   }
 }
