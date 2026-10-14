@@ -162,6 +162,22 @@
     }
   }
 
+  /* The race page's "Jump to" links scroll smoothly (Mobbin catalog RC1),
+     but only at lg and up and only for visitors who haven't asked for
+     reduced motion: below lg nothing moves except colour changes and
+     loading indicators (founder decision D2 (a), 2026-10-13). Everywhere
+     else, and on every other page, an anchor still jumps at once; :has()
+     keys it to the list's own id. data-scroll-behavior="smooth" on <html>
+     (layout.tsx) has Next switch it off for the scroll to the top on a
+     route change, so it only ever runs for an in-page jump. */
+  html:has(#issue-jump-nav) {
+    @variant lg {
+      @variant motion-safe {
+        scroll-behavior: smooth;
+      }
+    }
+  }
+
   /* No page-wide texture on the body. The riso speckle tile
      (tex-riso-speckle.webp) was tried here and taken out in review: a body
      background lies under every heading, link and verdict that is not in a

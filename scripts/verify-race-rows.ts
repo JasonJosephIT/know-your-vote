@@ -8,12 +8,17 @@
       only their non-spine issues.
    3. Source scans: the collapse rule is one constant for everyone, the race
       page stays static, and RaceCompare adds no client JavaScript.
+   4. "Jump to" and "Why a position can be missed" (Mobbin catalog RC1 and
+      RC5, 2026-10-12): the jump list names the page's own headings in page
+      order and nothing per candidate; it scrolls smoothly only at lg and up
+      under no-preference (founder decision D2 (a)); and the methodology
+      link sits on every issue row, whatever its cells hold.
 
    Run: node scripts/verify-race-rows.ts */
 
 import { readFileSync } from "node:fs";
 
-import { candidateExtras, raceRows } from "../src/lib/race-rows.ts";
+import { candidateExtras, raceJumpLinks, raceRows } from "../src/lib/race-rows.ts";
 import type { RaceBrief } from "../src/lib/briefs.ts";
 
 let failures = 0;
@@ -132,6 +137,84 @@ check(
   "roster cards keep the candidate-<id> anchors the old jump links used",
   compare.includes("id={`candidate-${candidate.candidate_id}`}")
 );
+
+/* ---- 4. Jump to, and why a position can be missed ----------------------- */
+check(
+  "jump links: the roster, every row in page order, then the other issues",
+  eq(raceJumpLinks(rows, "Who's running", "Other issues they raise"), [
+    { href: "#whos-running", label: "Who's running" },
+    { href: "#issue-economy", label: "Economy" },
+    { href: "#issue-housing", label: "Housing" },
+    { href: "#other-issues", label: "Other issues they raise" },
+  ])
+);
+check(
+  "no other-issues link when no candidate has one",
+  !raceJumpLinks(rows, "Who's running", null).some((j) => j.href === "#other-issues")
+);
+check(
+  "the roster link carries the roster's own heading",
+  raceJumpLinks(rows, "The winners", null)[0]?.label === "The winners"
+);
+
+/* Comments may explain the rule; code is what renders. */
+const compareCode = compare
+  .replace(/\{\s*\/\*[\s\S]*?\*\/\s*\}/g, "")
+  .replace(/\/\*[\s\S]*?\*\//g, "");
+{
+  const navAt = compareCode.indexOf('id="issue-jump-nav"');
+  const rosterAt = compareCode.indexOf('aria-labelledby="whos-running"');
+  check("the jump list comes before the roster", navAt > 0 && rosterAt > navAt);
+  const nav = compareCode.slice(navAt, rosterAt);
+  check(
+    "it is a labelled nav, shown only when there is somewhere past the roster",
+    /\{jumps\.length > 1 && \(\s*<nav\s+id="issue-jump-nav"\s+aria-label="Issues on this page"/.test(compareCode) &&
+      nav.includes("Jump to:")
+  );
+  check(
+    "it renders raceJumpLinks with the page's own headings",
+    /const jumps = raceJumpLinks\(rows, rosterHeading, anyExtras \? otherIssuesHeading : null\);/.test(compareCode) &&
+      /<h2 id="whos-running" className="text-h2">\s*\{rosterHeading\}/.test(compareCode) &&
+      /<h2 id="other-issues" className="text-h2">\s*\{otherIssuesHeading\}/.test(compareCode)
+  );
+  check(
+    "jump links are plain underlined text links at 14px with a 24px target, not chips",
+    /<a\s+href=\{href\}\s+className="inline-flex min-h-\[24px\] items-center gap-1 text-body-sm text-primary underline underline-offset-2/.test(
+      nav
+    ) && !/rounded-full|<Link/.test(nav)
+  );
+  check("jump targets need no scroll-mt (root scroll-padding clears the bars)", !/scroll-mt-/.test(compareCode));
+}
+{
+  const css = read("src/app/globals.css")
+    .replace(/\/\*[\s\S]*?\*\//g, "");
+  const smooth = css.match(/scroll-behavior:\s*smooth/g) ?? [];
+  check(
+    "smooth scrolling is the jump list's alone, at lg and up, motion-safe only",
+    smooth.length === 1 &&
+      /html:has\(#issue-jump-nav\) \{\s*@variant lg \{\s*@variant motion-safe \{\s*scroll-behavior: smooth;/.test(css)
+  );
+  check(
+    "route changes still scroll to the top at once (Next's data-scroll-behavior)",
+    /<html[^>]*data-scroll-behavior="smooth"/.test(read("src/app/layout.tsx"))
+  );
+}
+{
+  /* From the start of the row loop to its cells: the heading line. */
+  const rowAt = compareCode.indexOf("{rows.map((row) => (");
+  const head = compareCode.slice(rowAt, compareCode.indexOf("row.cells.map", rowAt));
+  const link = /<Link\s+href="\/methodology#limits"\s+className="ms-auto inline-flex min-h-\[24px\] items-center text-body-sm text-on-surface-muted underline underline-offset-2[^"]*"\s*>\s*Why a position can be missed\s*<\/Link>/;
+  check('every issue row\'s heading line links "Why a position can be missed" at 14px', rowAt > 0 && link.test(head));
+  check(
+    "the link doesn't depend on what the row's cells hold",
+    !/block|coverage|no_stated_position_found|cells/.test(head) &&
+      !/(&&|\?)\s*\(?\s*<Link\s+href="\/methodology#limits"/.test(head)
+  );
+  check(
+    "the one-time note above the rows stays",
+    /\{rows\.length > 0 && <NoStatedPositionNote \/>\}/.test(compareCode)
+  );
+}
 
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed.`);

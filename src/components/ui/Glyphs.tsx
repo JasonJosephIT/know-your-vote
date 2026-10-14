@@ -38,3 +38,13 @@ export function CaretGlyph() {
     </svg>
   );
 }
+
+/* An in-page jump: the link goes further down this page, not to another
+   one (the race page's "Jump to" list; Mobbin catalog RC1). */
+export function ArrowDownGlyph() {
+  return (
+    <svg {...svg}>
+      <path d="M10 4.5v11M5.5 11l4.5 4.5 4.5-4.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
