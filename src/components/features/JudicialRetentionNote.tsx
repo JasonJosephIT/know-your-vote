@@ -55,11 +55,12 @@ function NewTab() {
 
 /* `county` is a county NAME, the value resolve returns as result.county
    ("Miami-Dade", not "12086"). It narrows the appeals court lines to the
-   voter's own county when it is known: the "Your races" view, and the home
-   page when the saved district names a covered county. Without it, or for a
-   county outside the list, every covered county is shown, which is still
-   true for everyone (appealsForCounty). The Supreme Court line is outside
-   that choice: Justice Muñiz is on every Florida ballot. */
+   voter's own county when it is known: the "Your races" view passes it. The
+   home page passes none, on purpose, so every visitor gets the full note
+   (verify-judicial-retention pins this). Without it, or for a county outside
+   the list, every covered county is shown, which is still true for everyone
+   (appealsForCounty). The Supreme Court line is outside that choice: Justice
+   Muñiz is on every Florida ballot. */
 export function JudicialRetentionNote({ county }: { county?: string | null }) {
   if (!SHOW_JUDICIAL_RETENTION_NOTE) return null;
 
