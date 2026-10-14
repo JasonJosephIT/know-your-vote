@@ -27,8 +27,17 @@ import { getActiveMeasures } from "@/lib/measures";
    because a "Ballot questions" heading over judges alone would read as if the
    amendments had been dropped. `county` is optional and only narrows the
    note's appeals court lines. It is a county name (result.county), not a
-   FIPS code: YourRaces passes the resolved county, SharedBallot passes the
-   saved district's county or nothing, and nothing means the full note. */
+   FIPS code: YourRaces passes the resolved county, and SharedBallot passes
+   nothing, on purpose, so the home page shows the full note to every
+   visitor (verify-judicial-retention pins both). Nothing means the full
+   note.
+
+   Each row's heading is "Amendment N", the number a voter looks for on the
+   ballot, and the official title is quoted under it word for word, in the
+   capitals the ballot prints (home readability spec 2026-10-12, PR B). As
+   the heading, a title of up to three all-caps lines read slower than the
+   number and made the row's link name a paragraph; only its size and place
+   change, never its words. */
 export async function BallotQuestions({
   county,
 }: {
@@ -41,9 +50,8 @@ export async function BallotQuestions({
     <section id="ballot-questions" className="flex flex-col gap-3">
       <div className="flex flex-col gap-1">
         <h2 className="text-h2">Ballot questions</h2>
-        <p className="text-body-sm text-on-surface-muted">
-          These are on every Florida ballot, whatever your ZIP. Each needs a
-          supermajority to pass, not a simple majority.
+        <p className="text-body-sm text-on-surface-muted lg:max-w-[65ch]">
+          Each needs a supermajority to pass, not a simple majority.
         </p>
       </div>
       {/* Same row shell as the race lists (LinkRows), so the races and
@@ -53,8 +61,11 @@ export async function BallotQuestions({
           <LinkRow
             key={m.measure_id}
             href={`/measures/${m.measure_id}`}
-            title={`Amendment ${m.number}: ${m.official_title}`}
+            title={`Amendment ${m.number}`}
           >
+            <p className="text-[0.9375rem] leading-[1.5] text-on-surface">
+              {m.official_title}
+            </p>
             <p className="text-body-sm text-on-surface-muted">
               {m.jurisdiction === "FL" ? "Statewide" : m.jurisdiction} ·
               Needs{" "}
