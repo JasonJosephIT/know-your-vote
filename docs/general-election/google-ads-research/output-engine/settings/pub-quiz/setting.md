@@ -21,7 +21,7 @@ A local bar on trivia night.
 
 ## Geography and layout
 
-Mel at host stand camera-left; Ray's team table centre-right; projector screen behind Mel.
+Quiz host at the stand camera-left; the friends' team table centre-right; projector screen behind the host.
 
 ## Time of day
 

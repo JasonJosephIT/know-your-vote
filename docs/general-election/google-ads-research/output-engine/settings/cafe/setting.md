@@ -21,7 +21,7 @@ A small, bright neighbourhood cafe; the group's default hangout.
 
 ## Geography and layout
 
-Table centre frame; Dev enters camera-left; window camera-right supplies key light.
+Table centre frame; the second friend enters camera-left; window camera-right supplies key light.
 
 ## Time of day
 

@@ -21,7 +21,7 @@ A residential street with a large standing puddle at the kerb after rain.
 
 ## Geography and layout
 
-Puddle in foreground; drain grate camera-right; Ray and Dev on the pavement behind.
+Puddle in foreground; drain grate camera-right; two friends on the pavement behind.
 
 ## Time of day
 

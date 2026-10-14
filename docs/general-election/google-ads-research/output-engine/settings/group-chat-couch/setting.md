@@ -10,7 +10,7 @@ sources: [../individual-video-sketches.md, ../ranked-34.md, brief.md]
 
 ## Identity
 
-The friends' living room where Jo shares a link.
+The friends' living room where the source friend shares a link.
 
 - Kind: environment (built or generated; no real address)
 - Real address or place: none. Regional cuts swap only signage, inserts and scenery plates.
@@ -21,7 +21,7 @@ The friends' living room where Jo shares a link.
 
 ## Geography and layout
 
-Jo centre on couch; Dev leaning over her shoulder from behind; Ray and Mel in armchairs.
+Source friend centre on the couch; literal friend leaning over from behind; the other two in armchairs.
 
 ## Time of day
 

@@ -1,16 +1,16 @@
 ---
-name: Ray's bedroom mirror
-slug: ray-bedroom
+name: Bedroom mirror
+slug: bedroom-mirror
 kind: environment
 status: candidate
 sources: [../individual-video-sketches.md, ../ranked-34.md, brief.md]
 ---
 
-# Ray's bedroom mirror
+# Bedroom mirror
 
 ## Identity
 
-Ray's bedroom with a full-length mirror for a get-ready-with-me reel.
+A bedroom with a full-length mirror for a get-ready-with-me reel.
 
 - Kind: environment (built or generated; no real address)
 - Real address or place: none. Regional cuts swap only signage, inserts and scenery plates.
@@ -21,7 +21,7 @@ Ray's bedroom with a full-length mirror for a get-ready-with-me reel.
 
 ## Geography and layout
 
-Ray faces mirror, phone filming the reflection; doorway camera-right where Mel leans in.
+The confident friend faces the mirror, phone filming the reflection; doorway camera-right where the organizer leans in.
 
 ## Time of day
 

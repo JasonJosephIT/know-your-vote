@@ -25,8 +25,11 @@ Before you guess, ask which office handles it and check the source.
 
 ## Mandatory elements
 
-- The recurring cast and their fixed wardrobe: Ray, Jo, Mel, Dev
-  (`../individual-video-sketches.md`, "The recurring cast and story").
+- The four recurring friends and their fixed wardrobe (`characters/`). They are never named on
+  screen unless a script says the ad needs it, and they have no catchphrases.
+- Slice-of-life ads feel like walking into a conversation already under way: no setup line,
+  no address to camera, natural overlapping talk. Only the creator-format videos (05, 08) speak
+  to camera.
 - Neutrality (`AGENTS.md`, `../../google-ads-handoff-2026-10-13.md` §3). No party, candidate,
   real official or partisan colour. Jokes target guessing and overcomplication, never a party,
   official, community or group of voters.

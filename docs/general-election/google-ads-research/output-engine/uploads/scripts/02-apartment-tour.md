@@ -2,32 +2,32 @@
 
 | | |
 |---|---|
-| Format | Apartment-tour / moving-vlog skit |
-| Runtime | ~30 s, 9:16 |
-| Cast | Ray (filming), Dev (agent), Jo |
+| Format | Slice of life: a friend filming a viewing for the group chat |
+| Runtime | ~30 s |
+| Cast | CONFIDENT (filming), LITERAL, SOURCE |
 | Setting | `settings/apartment-tour` |
-| Regional | Shared Florida version; specific development inserts optional and checked separately |
+| Regional | Shared Florida version; any specific development insert is optional and checked separately |
 
-**Logline:** Dev sells a parking-lot view as an amenity; Ray asks who approves the construction outside.
+**Logline:** Viewing an apartment; the "view" is a parking lot, and there's something being built next door.
 
 ## Script
 
 | Time | Shot | Picture | Dialogue / sound | On-screen text |
 |---|---|---|---|---|
-| 0:00 | 1 | Ray POV, handheld, entering the empty unit. | RAY: "Apartment tour! Still deciding. Show me the amenities." | "Apartment tour (still deciding)" |
-| 0:03 | 2 | Dev, very formal, gestures at blinds. | DEV: "Premium feature: a view." | |
-| 0:05 | 3 | Blinds open on a parking lot. | DEV: "Of cars." | "View: ✓ (cars)" |
-| 0:08 | 4 | Dev produces a small price tag and hangs it on the window latch. | DEV: "View fee." | "+ view fee" |
-| 0:11 | 5 | Ray's camera drifts past the lot to the crane and fenced site. | RAY: "Wait. What's being built? Who decides what gets approved around here?" | |
-| 0:15 | 6 | Jo steps in from the hallway, phone up. | JO: "Not the landlord. Rent's private. That project went through a public planning process." | |
-| 0:20 | 7 | INSERT, illustrated graphic: "Rent and fees → private" vs "Zoning and site approvals → local planning board or commission (check your city or county)". | JO (V.O.): "The public record says who decided and when." | "Who approves new buildings? Check your city or county planning record." |
-| 0:26 | 8 | Dev peels a new label onto the window: "UNDER DEVELOPMENT". | DEV: "Updated the listing." | |
+| 0:00 | 1 | Phone POV, handheld, walking into the empty unit mid-sentence. | CONFIDENT: "—I'm sending it to the chat so don't say anything weird." | |
+| 0:03 | 2 | LITERAL reading the listing printout. | LITERAL: "It says it has a view." | |
+| 0:05 | 3 | Blinds open on a parking lot. Beat. | CONFIDENT: "…That's cars." LITERAL: "That's a view of cars." | |
+| 0:08 | 4 | LITERAL reads further down the page. | LITERAL: "There's also a fee for the view." | |
+| 0:11 | 5 | Camera drifts past the lot to a crane and a fenced construction site. | CONFIDENT: "Wait, what are they building over there? Who even okays that?" | |
+| 0:15 | 6 | SOURCE in the hallway, phone already out. | SOURCE: "Not the landlord. Rent's the landlord. That's a planning decision." CONFIDENT (overlapping): "Like, the city?" SOURCE: "City or county. It's on record." | |
+| 0:21 | 7 | INSERT, simple illustrated graphic. | | "Rent and fees: private · What gets built: city or county planning (check yours)" |
+| 0:26 | 8 | LITERAL tapes a handwritten note on the window: "VIEW (UNDER CONSTRUCTION)". | LITERAL: "Updated it." | |
 | 0:29 | 9 | End card. | | "Know Your Vote · Know who decides" |
 
 ## Fact card (verify before export)
 
-- Shared cut: keep the graphic generic ("your city or county") — it is an explanation of roles, not a claim about a specific project.
-- Any regional insert naming a real body (e.g. a city planning commission) needs that body's current page as the source.
+- The shared cut stays generic ("city or county"); it explains roles, not a specific project.
+- A regional insert naming a real body needs that body's current page as its source.
 - Never claim a local office sets private rent or guarantees cheaper housing.
 
 ## Caption draft

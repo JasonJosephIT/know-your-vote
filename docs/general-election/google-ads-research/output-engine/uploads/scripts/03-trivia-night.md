@@ -1,40 +1,38 @@
-# 03 · Political Celebrity Trivia Night (asset 30)
+# 03 · Trivia Night (asset 30)
 
 | | |
 |---|---|
-| Format | Single pub-quiz skit |
-| Runtime | ~30 s, 9:16 |
-| Cast | Mel (host), Ray (contestant), Jo, Dev |
-| Setting | `settings/pub-quiz`; Mel in `quiz-host` variant |
+| Format | Slice of life, pub quiz |
+| Runtime | ~30 s |
+| Cast | ORGANIZER (`quiz-host`), CONFIDENT, SOURCE, LITERAL |
+| Setting | `settings/pub-quiz` |
 | Regional | Shared Florida version |
 
-**Logline:** Ray knows everything about a fictional famous politician and nothing about who sets his school calendar.
+**Logline:** He knows everything about a famous (fictional) politician and nothing about who sets his kid's school calendar.
 
 ## Script
 
 | Time | Shot | Picture | Dialogue / sound | On-screen text |
 |---|---|---|---|---|
-| 0:00 | 1 | Mel at host stand, projector reads "ROUND 4: FAMOUS NAMES". | MEL: "Senator Glenn Example's dog's name?" | "Fictional politician" |
-| 0:02 | 2 | Ray slams the bell before Mel finishes. | RAY: "Biscuit!" DING. | |
-| 0:03 | 3 | Rapid montage, 3 cuts, Ray answering. | MEL: "Shoe size?" RAY: "Eleven and a half." MEL: "Breakfast?" RAY: "Egg-white omelette, no regrets." | "Ray: 3 · Everyone else: 0" |
-| 0:08 | 4 | Projector flips: "BONUS ROUND: CLOSE TO HOME". | MEL: "Who sets your kid's school calendar?" | |
-| 0:11 | 5 | CU Ray. Silence. A single cricket. | (cricket) | |
-| 0:14 | 6 | Ray, slowly: | RAY: "Can I phone a friend?" | |
-| 0:15 | 7 | Dev, sincere, pulls a toy telephone from the tote and slides it over. | DEV: "You said phone." | |
-| 0:17 | 8 | Jo, beside him, shows her phone. INSERT: graphic "School calendar → your elected district school board". | JO: "Your school board. It's on your ballot more often than this guy's dog." | "Who sets the school calendar? Your district school board." |
-| 0:24 | 9 | Ray picks up the toy phone. | RAY (into toy phone): "Biscuit? I need a new study plan." | |
-| 0:28 | 10 | End card. | | "Know Your Vote · Know the names that run your day" |
+| 0:00 | 1 | Bar noise. Projector: "ROUND 4 · FAMOUS NAMES". ORGANIZER at the mic, already reading. | ORGANIZER: "—the senator's dog. What's its name?" | |
+| 0:02 | 2 | CONFIDENT hits the bell before the question finishes. | CONFIDENT: "Biscuit." DING. Table cheers. | |
+| 0:04 | 3 | Quick montage, three cuts. | ORGANIZER: "Shoe size?" CONFIDENT: "Eleven and a half." ORGANIZER: "Breakfast?" CONFIDENT: "Egg whites. He's said it like four times." | |
+| 0:09 | 4 | Projector flips: "BONUS · CLOSE TO HOME". | ORGANIZER: "Who sets your school calendar?" | |
+| 0:12 | 5 | CU CONFIDENT, hand hovering over the bell. Doesn't press it. | CONFIDENT (quietly, to the table): "…Is that also the senator?" | |
+| 0:15 | 6 | LITERAL slides a toy telephone across the table. | LITERAL: "You can phone a friend." | |
+| 0:17 | 7 | SOURCE, phone out, low. INSERT graphic. | SOURCE: "School board. Your district's. You vote for them." | "School calendar: your district school board" |
+| 0:23 | 8 | CONFIDENT picks up the toy phone, holds it to his ear, deadpan. | CONFIDENT: "Yeah, hi. I'd like to know less about the dog." | |
+| 0:28 | 9 | End card. | | "Know Your Vote · Know who runs your day" |
 
 ## Fact card (verify before export)
 
-- School calendars are adopted by each district school board (verify for the counties shown in any caption).
-- The "on your ballot more often" line is a joke about a fictional politician; if a reviewer reads it as a factual claim, change it to: "Your school board. It's on your ballot too."
-- "Senator Glenn Example" must not resemble any real officeholder; no party, state or district.
+- School calendars are adopted by each district school board; confirm for any county named in the caption.
+- "The senator" is fictional and never named, shown or given a party, state or district.
 
 ## Caption draft
 
-"You know the famous names. Do you know who sets the school calendar? (It's your district school board.) Find the local races on your ballot. [link]"
+"You know the famous names. Do you know who sets the school calendar? It's your district school board. [link]"
 
 ## Guardrails
 
-One office question only; flooding, rates and consumer law stay in their own videos. Evidence: E03, M05, O01. Onward: 31, 04, 18.
+One office question only. Evidence: E03, M05, O01. Onward: 31, 04, 18.

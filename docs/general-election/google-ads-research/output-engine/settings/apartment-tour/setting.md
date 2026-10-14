@@ -10,7 +10,7 @@ sources: [../individual-video-sketches.md, ../ranked-34.md, brief.md]
 
 ## Identity
 
-An empty rental unit Ray is still considering; parking lot and a construction site visible outside.
+An empty rental unit the confident friend is still considering; parking lot and a construction site visible outside.
 
 - Kind: environment (built or generated; no real address)
 - Real address or place: none. Regional cuts swap only signage, inserts and scenery plates.

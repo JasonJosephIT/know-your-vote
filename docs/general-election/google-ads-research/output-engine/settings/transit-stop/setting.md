@@ -10,7 +10,7 @@ sources: [../individual-video-sketches.md, ../ranked-34.md, brief.md]
 
 ## Identity
 
-A covered transit stop where Ray films his daily commuter vlog.
+A covered transit stop where the confident friend films a daily commuter vlog.
 
 - Kind: environment (built or generated; no real address)
 - Real address or place: none. Regional cuts swap only signage, inserts and scenery plates.
@@ -21,7 +21,7 @@ A covered transit stop where Ray films his daily commuter vlog.
 
 ## Geography and layout
 
-Ray selfie at bench; arrivals board over his right shoulder; road cones behind.
+Selfie at the bench; arrivals board over his right shoulder; road cones behind.
 
 ## Time of day
 
