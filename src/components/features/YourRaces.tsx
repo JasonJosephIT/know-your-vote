@@ -457,6 +457,9 @@ export async function YourRaces({
         remindersOn={!remindersPaused()}
         sources={officialSources(result.county)}
         countyFips={result.countyFips}
+        /* The same hint as the home form (founder D4 (a), 2026-10-13): the
+           ZIP stays through Nov 3, and the label says which ZIPs it takes. */
+        zipHint={`${coveredCountyNames("or")} County ZIPs for now`}
       />
     </div>
   );
