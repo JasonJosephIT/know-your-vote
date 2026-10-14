@@ -310,11 +310,11 @@ check(
   );
   check(
     "home: after the ballot, the news and the coverage card, so never on a screen with a candidate list",
-    at > page.indexOf("<SharedBallot />") &&
+    at > page.indexOf("<SharedBallot") &&
       at > page.indexOf("<ScopedRaces scope={scope} />") &&
       at > page.indexOf("<HomeNews") &&
       at > page.indexOf("<CoverageSummary") &&
-      page.indexOf("<SharedBallot />") > 0 &&
+      page.indexOf("<SharedBallot") > 0 &&
       page.indexOf("<HomeNews") > 0 &&
       page.indexOf("<CoverageSummary") > 0
   );
