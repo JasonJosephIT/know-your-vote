@@ -118,7 +118,7 @@ export async function CoverageSummary({
         <dl className="flex flex-col divide-y divide-border rounded-lg border border-border bg-surface">
           <Row term="Every Florida voter">
             {statewide.length > 0
-              ? `${statewide.join(" and ")}, the same for everyone, whatever your ZIP or party.`
+              ? `${statewide.join(" and ")}, the same for everyone, wherever you live and whatever your party.`
               : "The statewide races and amendments, once they're published."}
           </Row>
           <Row
