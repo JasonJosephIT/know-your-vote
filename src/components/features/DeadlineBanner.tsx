@@ -10,6 +10,7 @@ import {
 } from "@/lib/notifications/schedule";
 import { KeyDatesRail } from "@/components/features/KeyDatesRail";
 import { Art } from "@/components/brand/Art";
+import { BellGlyph, CalendarGlyph } from "@/components/ui/Glyphs";
 
 /* The one piece of urgency on the landing page (TASK-064).
 
@@ -63,9 +64,16 @@ export async function DeadlineBanner({
      axe and Lighthouse both failed them (production re-run, 2026-10-05).
      min-h-[24px], not min-h-6: this theme's spacing makes min-h-6 32 px.
      14px (body-sm), not caption: the links say what they do, including
-     that the calendar one downloads a file, which a voter must read. */
+     that the calendar one downloads a file, which a voter must read.
+     Each starts with a 1em line icon that says the same thing (a calendar,
+     a bell; design.md "Art on phones": Glyphs.tsx icons on a voter's own
+     task). items-start and the icon's 0.25em top margin centre it on the
+     first line of the 1.5 line height when the link wraps, as the calendar
+     one does at 375 px, so it costs no height. The five stops on the rail
+     stay plain. */
   const link =
-    "inline-flex min-h-[24px] w-fit items-center text-body-sm underline underline-offset-2";
+    "inline-flex min-h-[24px] w-fit items-start gap-[6px] text-body-sm underline underline-offset-2";
+  const glyph = "mt-[0.25em] block size-[1em] shrink-0";
   return (
     <aside
       aria-label="Key dates"
@@ -112,10 +120,12 @@ export async function DeadlineBanner({
         >
           {/* The route answers with Content-Disposition: attachment, so
               the link says it downloads (founder 2026-10-12). */}
+          <CalendarGlyph className={glyph} />
           Add these dates to your calendar (downloads a file)
         </a>
         {remindersHref && (
           <a href={remindersHref} className={link}>
+            <BellGlyph className={glyph} />
             Get deadline reminders by email
           </a>
         )}

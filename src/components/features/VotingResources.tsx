@@ -7,7 +7,14 @@ import {
   voterLinks,
 } from "@/lib/supervisors";
 import { resourceTiles, type ResourceTile } from "@/lib/voter-resources";
-import { CaretGlyph, ExternalGlyph } from "@/components/ui/Glyphs";
+import {
+  BallotGlyph,
+  CalendarGlyph,
+  CaretGlyph,
+  ExternalGlyph,
+  MailGlyph,
+  PinGlyph,
+} from "@/components/ui/Glyphs";
 
 /* "Sample ballot and how to vote" (home readability, 2026-10-12, §2;
    founder decision 1a, 2026-10-13): the official tools a voter came for,
@@ -146,34 +153,53 @@ function CountyRow({
   );
 }
 
+/* One line icon per task, keyed by the tile and never by the county, so
+   every county row and the state row show the same four (design.md "Art
+   on phones": Glyphs.tsx icons mark a voter's own task). The ballot is a
+   ruled sheet with no ovals, so it can't read as a marked one. */
+const TILE_GLYPH = {
+  "sample-ballot": BallotGlyph,
+  "polling-place": PinGlyph,
+  "early-voting": CalendarGlyph,
+  mail: MailGlyph,
+} as const;
+
 /* The four tiles: stacked on a phone, two by two from sm. The sage fill
    is the retired count tiles' style, so the page gains no new look and the
    block doesn't read as one more white card. The visible label comes
-   first in each link's name (WCAG 2.5.3); the sr-only end names whose
-   site it opens, so a links list never shows four bare "See your sample
-   ballot"s. */
+   first in each link's name (WCAG 2.5.3): the icon before it is
+   aria-hidden, and the sr-only end names whose site it opens, so a links
+   list never shows four bare "See your sample ballot"s. The icon is 20px
+   in the tile's own colour and takes 32px from the text, so a note that
+   wrapped once may wrap twice. */
 function TaskTiles({ tiles, who }: { tiles: ResourceTile[]; who: string }) {
   return (
     <ul className="grid gap-2 sm:grid-cols-2">
-      {tiles.map((t) => (
-        <li key={t.key}>
-          <a
-            href={t.href}
-            target="_blank"
-            rel="noreferrer"
-            className="flex h-full min-h-[48px] items-start justify-between gap-3 rounded-lg bg-primary-muted px-4 py-3 text-primary-hover ring-primary transition-shadow hover:ring-1"
-          >
-            <span className="flex flex-col gap-0.5">
-              <span className="text-label">{t.label}</span>
-              {t.note && (
-                <span className="text-body-sm text-on-surface">{t.note}</span>
-              )}
-            </span>
-            <ExternalGlyph />
-            <span className="sr-only">, {who} (opens in a new tab)</span>
-          </a>
-        </li>
-      ))}
+      {tiles.map((t) => {
+        const Glyph = TILE_GLYPH[t.key];
+        return (
+          <li key={t.key}>
+            <a
+              href={t.href}
+              target="_blank"
+              rel="noreferrer"
+              className="flex h-full min-h-[48px] items-start justify-between gap-3 rounded-lg bg-primary-muted px-4 py-3 text-primary-hover ring-primary transition-shadow hover:ring-1"
+            >
+              <span className="flex items-start gap-3">
+                <Glyph className="block size-[20px] shrink-0" />
+                <span className="flex flex-col gap-0.5">
+                  <span className="text-label">{t.label}</span>
+                  {t.note && (
+                    <span className="text-body-sm text-on-surface">{t.note}</span>
+                  )}
+                </span>
+              </span>
+              <ExternalGlyph />
+              <span className="sr-only">, {who} (opens in a new tab)</span>
+            </a>
+          </li>
+        );
+      })}
     </ul>
   );
 }
