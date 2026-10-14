@@ -15,6 +15,7 @@ import { fileURLToPath } from "node:url";
 import { buildBallotRoster, type BallotRosterCandidate } from "../src/lib/news-intake.ts";
 import {
   DOE_STATUS,
+  LIVE_LABELS,
   MAX_DATE_OBSERVATIONS,
   VOTERFOCUS_STATUS,
   buildCheck,
@@ -33,6 +34,7 @@ import {
   reviewItemKey,
   robotsText,
   runningMateOnPage,
+  voterFocusSeat,
   type CheckInput,
   type ElectionEventRow,
   type Observations,
@@ -221,6 +223,10 @@ const COUNTY_ROSTER: BallotRosterCandidate[] = [
   vf("FL-ORA-SB3-general", "ORA-SB-3", ORA, "FL-VF-ORA-1314", "Diana Moore", "qualified"),
   vf("FL-ORA-SBCHAIR-general", "ORA-SBCHAIR", ORA, "FL-VF-ORA-1245", "Angie Gallo", "elected_in_primary"),
 ];
+/* The county race rows the roster above sits in. On 2026-10-08 Miami-Dade
+   had 5; 0057 adds the 8 settled seats 0032 missed. */
+const COUNTY_DISTRICTS = [...new Set(COUNTY_ROSTER.map((c) => c.district as string))];
+const DAD_0057 = ["DAD-CC-1", "DAD-CC-4", "DAD-CC-6", "DAD-CC-8", "DAD-CC-10", "DAD-CC-12", "DAD-SB-4", "DAD-SB-6"];
 const doeCand = (raceId: string, level: string, id: string, name: string, status: string): BallotRosterCandidate => ({
   candidateId: id, legalName: name, raceId, office: "office", level, district: null, countyFips: null,
   publication: "published", qualifyingStatus: status, officialSite: null,
@@ -260,6 +266,7 @@ const base = (over: Partial<CheckInput> = {}): CheckInput => ({
   observations: observeAll(),
   doe: { CAB: doeRows, FED: doeRows },
   voterFocus: { [DAD]: dade, [ORA]: orange },
+  countyRaceDistricts: COUNTY_DISTRICTS,
   runningMates: { column: false, stored: {}, pages: {} },
   now: NOW,
   ...over,
@@ -352,6 +359,85 @@ check("an unmapped DoE code, another office and a missing account are report lin
 const doeDown = ok(base({ doe: { CAB: null, FED: doeRows } }));
 check("an unreadable DoE extract is a report line; the other group is still compared",
   doeDown.report.some((l) => l.includes("DoE CAB extract could not be read")) && doeDown.statuses.doe === 1);
+
+/* ---- missing contests: a covered office with no race row ------------------ */
+
+check("the live labels are Qualified, Runoff, Unopposed and Elected",
+  [...LIVE_LABELS].sort().join(",") === "Elected,Qualified,Runoff,Unopposed", LIVE_LABELS.join(","));
+/* Spellings from the four lists: Miami-Dade and Orange as saved 2026-10-08,
+   Broward and Hillsborough as read 2026-10-13. */
+const seats: [string, string, string | null | undefined][] = [
+  ["DAD", "County Commission District 04", "DAD-CC-4"],
+  ["DAD", "School Board District 06", "DAD-SB-6"],
+  ["ORA", "County Commissioner District 2", "ORA-CC-2"],
+  ["ORA", "School Board Dist. 1", "ORA-SB-1"],
+  ["ORA", "School Board Chair", "ORA-SBCHAIR"],
+  ["ORA", "County Mayor", "ORA-MAYOR"],
+  ["ORA", "Clerk of the Courts", "ORA-CLERK"],
+  ["BRO", "County Commission, Dist. 6", "BRO-CC-6"],
+  ["BRO", "School Board, Dist. 7", "BRO-SB-7"],
+  ["BRO", "School Board, At Large 8", "BRO-SBAL-8"],
+  ["HIL", "County Commissioner, Dist. 5", "HIL-CC-5"],
+  ["HIL", "School Board Member, Dist. 2", "HIL-SB-2"],
+  ["DAD", "County Court Judge Group 05", undefined],
+  ["ORA", "County Judge Group 2", undefined],
+  ["DAD", "Community Council Area/Subarea 02/21", undefined],
+  ["DAD", "Bonterra CDD Seat 3", undefined],
+  ["ORA", "Orange Soil and Water Conservation District 1", undefined],
+  ["BRO", "South Broward Drainage District, Zone 2", undefined],
+  ["HIL", "Trustee, Carrollwood Recreation District", undefined],
+  ["DAD", "County Mayor", undefined],
+  ["HIL", "Board of County Commissioners Seat A", null],
+  ["ORA", "Mayor of Orange County", null],
+];
+for (const [prefix, office, want] of seats) {
+  const got = voterFocusSeat(prefix, office);
+  check(`voterFocusSeat(${prefix}, ${JSON.stringify(office)}) is ${String(want)}`, got === want, String(got));
+}
+
+const officeLines = (r: { report: string[] }) => r.report.filter((l) => l.startsWith("office: "));
+const missing8 = officeLines(clean);
+check("the 2026-10-08 roster lacks 8 Miami-Dade seats, and the saved list names each",
+  missing8.length === 8 && DAD_0057.every((d) => missing8.some((l) => l.endsWith(`no ${d} race row`))) &&
+    clean.offices.missing === 8, missing8.join(" | "));
+check("13 Miami-Dade and 11 Orange covered offices have a live filer", clean.offices.listed === 24, JSON.stringify(clean.offices));
+check("a missing seat's line names its winner and label, no party and no Inactive",
+  missing8.some((l) => l === "office: Miami-Dade's VoterFocus list has County Commission District 04 with Micky Steinberg (Unopposed), and there is no DAD-CC-4 race row") &&
+    missing8.some((l) => l.includes("Danielle Cohen Higgins (Elected)") && !l.includes("Defeated")) &&
+    !missing8.some((l) => /\((DEM|REP|NOP|NPA)\)|Inactive/.test(l)),
+  missing8.join(" | "));
+check("a missing contest is a report line, never a diff", clean.diffs.length === 0);
+const with0057 = ok(base({ countyRaceDistricts: [...COUNTY_DISTRICTS, ...DAD_0057] }));
+check("with 0057's seats present, no office line", officeLines(with0057).length === 0 && with0057.offices.missing === 0,
+  officeLines(with0057).join(" | "));
+const noRaces = ok(base({ countyRaceDistricts: [] }));
+check("with no county race rows, every covered office is named and nothing else",
+  officeLines(noRaces).length === 24 && !officeLines(noRaces).some((l) => /Judge|CDD|Community Council|Soil|Improvement/.test(l)),
+  officeLines(noRaces).join(" | "));
+const vfRow = (office: string, label: string, ca: string) => ({ ca, name: `Filer ${ca} (NPA)`, office, label });
+const synthetic = ok(base({
+  voterFocus: {
+    [DAD]: [
+      vfRow("County Commission District 03", "Withdrawn", "1"),
+      vfRow("County Commission District 03", "Defeated", "2"),
+      vfRow("School Board District 05", "Qualified Write-In", "3"),
+      vfRow("County Commission District 07", "Qualified", "4"),
+      vfRow("County Commission District 07", "Withdrawn", "5"),
+      vfRow("Board of County Commissioners Seat A", "Unopposed", "6"),
+    ],
+    [ORA]: null,
+  },
+  countyRaceDistricts: [],
+}));
+check("an office whose filers all withdrew or lost, or only a write-in, needs no race row",
+  !officeLines(synthetic).some((l) => l.includes("District 03") || l.includes("District 05")), officeLines(synthetic).join(" | "));
+check("a live office lists only its live filers",
+  officeLines(synthetic).includes("office: Miami-Dade's VoterFocus list has County Commission District 07 with Filer 4 (Qualified), and there is no DAD-CC-7 race row"),
+  officeLines(synthetic).join(" | "));
+check("a covered-looking office that does not parse is a report line",
+  officeLines(synthetic).some((l) => l.includes('"Board of County Commissioners Seat A"') && l.includes("does not parse")) &&
+    synthetic.offices.listed === 1, officeLines(synthetic).join(" | "));
+check("an unreadable list yields no office line", !officeLines(synthetic).some((l) => l.includes("Orange")));
 
 /* ---- dates --------------------------------------------------------------- */
 

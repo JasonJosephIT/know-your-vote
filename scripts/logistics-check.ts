@@ -10,8 +10,9 @@
                           sites.json; stamps candidate.site_last_verified_at
                           for `live` sites only.
      check                observations.json on stdin; read the DoE extract and
-                          the four VoterFocus lists; print the plan. Writes
-                          nothing.
+                          the four VoterFocus lists; print the plan, with a
+                          report line for each covered county office a list
+                          shows with no race row of ours. Writes nothing.
      queue [--dry-run]    check again, then insert each new diff as a pending
                           review_item (source agent:R2) and stamp
                           race.info_last_verified_at on confirmed races.
@@ -26,8 +27,8 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { loadEnvLocal } from "./env-local.ts";
 import { isAllowedByRobots } from "../src/lib/candidate-site.ts";
-import { coveredCounty } from "../src/lib/counties.ts";
-import { ACTIVE_ELECTION } from "../src/lib/election.ts";
+import { COVERED_COUNTIES, coveredCounty } from "../src/lib/counties.ts";
+import { ACTIVE_ELECTION, ACTIVE_ELECTION_KIND } from "../src/lib/election.ts";
 import { loadBallotRoster, USER_AGENT, type BallotRosterCandidate } from "../src/lib/news-intake.ts";
 import {
   GOVERNOR_RACE_ID,
@@ -130,6 +131,14 @@ async function events(db: SupabaseClient): Promise<(ElectionEventRow & { verifie
     .sort((a, b) => eventKey(a).localeCompare(eventKey(b)));
 }
 
+/** race.district of every county race row, whatever its publication: a
+    draft race is ours, and listing it is a founder call, not R2's. */
+async function countyRaceDistricts(db: SupabaseClient): Promise<string[]> {
+  const { data, error } = await db.from("race").select("district").eq("election", ACTIVE_ELECTION_KIND).eq("level", "county");
+  if (error) die(`could not read county races: ${error.message}`);
+  return ((data ?? []) as { district: string | null }[]).flatMap((r) => (r.district ? [r.district] : []));
+}
+
 /** The governor candidates' stored running mates, or column false while
     candidate.running_mate does not exist (roster-completeness 0049). */
 async function storedRunningMates(
@@ -195,6 +204,7 @@ async function runCheck(db: SupabaseClient, observations: Observations): Promise
   const people = await roster(db);
   const dates = await events(db);
   const mates = await storedRunningMates(db, people);
+  const districts = await countyRaceDistricts(db);
   const groups = [
     ...new Set(
       people
@@ -203,13 +213,9 @@ async function runCheck(db: SupabaseClient, observations: Observations): Promise
         .filter((g): g is DoeOfficeGroup => g !== null),
     ),
   ].sort();
-  const counties = [
-    ...new Set(
-      people
-        .filter((c) => c.candidateId.startsWith("FL-VF-") && c.countyFips !== null)
-        .map((c) => c.countyFips as string),
-    ),
-  ].sort();
+  /* Every covered county's list, roster candidates or not: a county whose
+     races are all missing still has offices to check. */
+  const counties = COVERED_COUNTIES.map((c) => c.fips).sort();
 
   const doe: Partial<Record<DoeOfficeGroup, DoeStatusRow[] | null>> = {};
   const pages: Record<string, string | null | undefined> = {};
@@ -239,6 +245,7 @@ async function runCheck(db: SupabaseClient, observations: Observations): Promise
     observations,
     doe,
     voterFocus,
+    countyRaceDistricts: districts,
     runningMates: { column: mates.column, stored: mates.stored, pages },
     now: new Date(),
   });
@@ -248,7 +255,8 @@ function summaryLine(r: Extract<CheckResult, { ok: true }>): string {
   return (
     `statuses read ${r.statuses.read} of ${r.statuses.roster} (${r.statuses.doe} DoE, ${r.statuses.voterFocus} VoterFocus), ` +
     `${r.statuses.changed} changed; dates observed ${r.dates.observed} of ${r.dates.events}, ${r.dates.changed} changed, ` +
-    `${r.dates.unreadablePages} page(s) unreadable; ${r.confirmedRaces.length} race(s) confirmed; ${r.report.length} report line(s)`
+    `${r.dates.unreadablePages} page(s) unreadable; ${r.offices.listed} covered office(s) on VoterFocus, ${r.offices.missing} with no race row; ` +
+    `${r.confirmedRaces.length} race(s) confirmed; ${r.report.length} report line(s)`
   );
 }
 
