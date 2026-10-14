@@ -8,7 +8,9 @@
    from each election_event row's own details_url and compared here. What
    differs becomes a pending review item: a `gated_diff` on
    candidate.qualifying_status, or a `date_mismatch` against election_event,
-   whose approval records the finding and writes nothing (D3).
+   whose approval records the finding and writes nothing (D3). A covered
+   county office a list shows with a live filer and no race row of ours is a
+   report line: a missing race is a migration, never a review item.
 
    Pure: no fetch, no clock, no database. scripts/logistics-check.ts is the
    I/O around these rules; scripts/verify-logistics-check.ts drives this file
@@ -217,6 +219,49 @@ export function matchVoterFocus(
   const byId = hits.filter((r) => r.ca === ca);
   return byId.length === 1 ? { kind: "match", row: byId[0] } : { kind: "ambiguous", count: hits.length };
 }
+
+/** The labels of a filer still in the contest or already its winner:
+    Qualified, Runoff, Unopposed, Elected. A covered office with one of these
+    needs a race row of ours. */
+export const LIVE_LABELS: readonly string[] = Object.keys(VOTERFOCUS_STATUS).filter(
+  (l) => VOTERFOCUS_STATUS[l] !== "withdrawn",
+);
+
+/* Countywide offices the guide carries, by race.district prefix (0031):
+   Orange's mayor and clerk. The guide carries no other county's. */
+const COUNTYWIDE_SEATS: Readonly<Record<string, Readonly<Record<string, string>>>> = {
+  ORA: { "County Mayor": "MAYOR", "Clerk of the Courts": "CLERK" },
+};
+
+/** The race.district a VoterFocus office would be ours under, for the
+    offices the guide carries (0031, 0032, 0057): each covered county's
+    commission and school board seats, and Orange's mayor and clerk. The four
+    lists spell them differently: "County Commission District 01" (Miami-Dade),
+    "County Commissioner District 2" and "School Board Dist. 1" (Orange),
+    "County Commission, Dist. 2" and "School Board, At Large 8" (Broward),
+    "County Commissioner, Dist. 1" and "School Board Member, Dist. 2"
+    (Hillsborough). undefined for an office the guide does not carry (county
+    judges, community councils, CDDs and other special districts); null for
+    one that reads like a covered office but does not parse: a report line. */
+export function voterFocusSeat(prefix: string, office: string): string | null | undefined {
+  const o = office.replace(/\s+/g, " ").trim();
+  const seat = (code: string, n?: string) => `${prefix}-${code}${n === undefined ? "" : `-${Number(n)}`}`;
+  let m = /^County Commission(?:er)?,? (?:District|Dist\.) (\d+)$/i.exec(o);
+  if (m) return seat("CC", m[1]);
+  m = /^School Board(?: Member)?,? (?:District|Dist\.) (\d+)$/i.exec(o);
+  if (m) return seat("SB", m[1]);
+  m = /^School Board,? At[- ]Large,? (?:District |Dist\. )?(\d+)$/i.exec(o);
+  if (m) return seat("SBAL", m[1]);
+  if (/^School Board Chair$/i.test(o)) return seat("SBCHAIR");
+  const countywide = COUNTYWIDE_SEATS[prefix];
+  if (countywide?.[o]) return seat(countywide[o]);
+  if (/county commission|school board/i.test(o) || (countywide && /\b(mayor|clerk)\b/i.test(o))) return null;
+  return undefined;
+}
+
+/** A VoterFocus name without the party code it prints after it, so no
+    party reaches a report line: "Marleine Bastien (NOP)" → "Marleine Bastien". */
+const withoutParty = (name: string): string => name.replace(/\s*\([A-Z]{2,4}\)$/, "");
 
 /* ---- running mates (report lines only) --------------------------------- */
 
@@ -505,6 +550,9 @@ export interface CheckInput {
   doe: Partial<Record<DoeOfficeGroup, DoeStatusRow[] | null>>;
   /** Per county FIPS: the parsed rows, or null when the list could not be read. */
   voterFocus: Readonly<Record<string, VoterFocusRow[] | null>>;
+  /** race.district of every county race row, whatever its publication: a
+      draft race is ours, and listing it is a founder call, not R2's. */
+  countyRaceDistricts: readonly string[];
   runningMates: {
     /** False until candidate.running_mate exists (roster-completeness 0049). */
     column: boolean;
@@ -519,6 +567,9 @@ export interface CheckInput {
 export interface CheckSummary {
   statuses: { roster: number; read: number; changed: number; doe: number; voterFocus: number };
   dates: { events: number; observed: number; changed: number; unreadablePages: number };
+  /** Covered offices with a live filer on the lists read, and how many of
+      them have no race row of ours. */
+  offices: { listed: number; missing: number };
   /** Every VoterFocus label met on the lists read, and every DoE status code
       in the extracts read, with counts, so the first watched run lists them. */
   labelsSeen: Record<string, number>;
@@ -680,6 +731,35 @@ export function buildCheck(input: CheckInput): CheckResult {
   }
   const confirmedRaces = [...readOk].filter(([, ok]) => ok).map(([raceId]) => raceId).sort();
 
+  /* Missing contests: a covered office the list shows with a live filer and
+     no race row of ours, as 0032 missed eight settled Miami-Dade seats
+     (docs/general-election/empty-races-2026-10-12.md). Matching roster
+     candidates cannot see a whole missing race. Report lines only: a new
+     race is a migration, never a diff. */
+  const ourSeats = new Set(input.countyRaceDistricts);
+  let officesListed = 0;
+  let officesMissing = 0;
+  for (const [fips, rows] of Object.entries(input.voterFocus)) {
+    const county = coveredCounty(fips);
+    if (!county || !rows) continue;
+    const offices = new Map<string, VoterFocusRow[]>();
+    for (const r of rows) offices.set(r.office, [...(offices.get(r.office) ?? []), r]);
+    for (const [office, filers] of offices) {
+      const live = filers.filter((r) => r.label !== null && LIVE_LABELS.includes(r.label));
+      const seat = live.length > 0 ? voterFocusSeat(county.raceDistrictPrefix, office) : undefined;
+      if (seat === undefined) continue;
+      if (seat === null) {
+        report.push(`office: ${county.name}'s VoterFocus office ${JSON.stringify(office)} reads like a covered seat but does not parse; not checked for a race row`);
+        continue;
+      }
+      officesListed++;
+      if (ourSeats.has(seat)) continue;
+      officesMissing++;
+      const who = live.map((r) => `${withoutParty(r.name)} (${r.label})`).join(", ");
+      report.push(`office: ${county.name}'s VoterFocus list has ${office} with ${who}, and there is no ${seat} race row`);
+    }
+  }
+
   /* Running mates: report lines only (spec §3.6). */
   if (!input.runningMates.column) {
     report.push("running mates: not compared; the running-mate column does not exist yet (roster-completeness 0049)");
@@ -706,6 +786,7 @@ export function buildCheck(input: CheckInput): CheckResult {
       changed: datesChanged,
       unreadablePages: input.observations.unreadable.length,
     },
+    offices: { listed: officesListed, missing: officesMissing },
     labelsSeen,
     doeCodesSeen,
   };
