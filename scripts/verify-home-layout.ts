@@ -5,8 +5,13 @@
    real verified dates, statewide and for a covered county, because a rail
    that marks the wrong stop "next" on one day is a wrong civic deadline on
    that day. The rest are source checks on what keeps the column neutral,
-   and on what keeps the rail readable without its colours (section 4;
-   Mobbin catalog HM1 and HM8, 2026-10-12).
+   on what keeps the rail readable without its colours (section 4;
+   Mobbin catalog HM1 and HM8, 2026-10-12), and on the home readability
+   pass (section 5; 2026-10-12, PR A,
+   docs/design/home-readability-2026-10-12/): the news column in the
+   page's flow and before the coverage card on a phone, and the tighter
+   top of the page. The sample-ballot block's own checks are in
+   verify-voter-links.
 
    Run: node scripts/verify-home-layout.ts */
 
@@ -166,6 +171,8 @@ check(
     "src/lib/notifications/key-dates.ts",
     "src/components/features/HomeMasthead.tsx",
     "src/components/features/KeyDatesRail.tsx",
+    "src/components/features/VotingResources.tsx",
+    "src/lib/voter-resources.ts",
   ]
     .map(source)
     .join("\n");
@@ -224,12 +231,22 @@ check(
     "the column passes no lean to a card",
     !/lean/i.test(rail.replace(/\/\*[\s\S]*?\*\//g, ""))
   );
+  /* Home readability A8 (founder decision 3a): the four newest on a
+     phone, eight from lg, the same cap for every filter. The cap hides
+     by position in the time-ordered list, never by region or outlet. */
+  check(
+    "phones show the four newest stories and lg the eight, by position alone",
+    /const SHOW = 8;/.test(rail) &&
+      /const PHONE_SHOW = 4;/.test(rail) &&
+      /\.slice\(0, SHOW\)/.test(rail) &&
+      /n >= PHONE_SHOW \? "max-lg:hidden"/.test(rail)
+  );
 }
 
 {
   const page = source("src/app/(public)/page.tsx");
   check(
-    "home renders the masthead, the tiles and the news column with the saved county",
+    "home renders the masthead, the jump list and the news column with the saved county",
     /<HomeMasthead \/>/.test(page) &&
       /<BallotAtAGlance \/>/.test(page) &&
       /<HomeNews countyFips=\{saved\?\.countyFips\} \/>/.test(page)
@@ -335,6 +352,41 @@ check(
       top === 2 + 16 / 2 &&
       below === 12 + top,
     `top ${top}px, bottom -${below}px`
+  );
+}
+
+/* ---- 5. Home readability (2026-10-12, PR A) ---------------------------- */
+
+{
+  const page = source("src/app/(public)/page.tsx");
+  const aside = page.match(/<aside\s+aria-label="Florida election news"\s+className="([^"]*)"/)?.[1] ?? "";
+  check(
+    "the news column scrolls with the page: not sticky, no scrollbar of its own",
+    aside !== "" &&
+      !/sticky/.test(aside) &&
+      !/overflow-y-auto/.test(aside) &&
+      !/max-h-/.test(aside),
+    aside
+  );
+  check(
+    "on a phone the news comes before what this guide covers",
+    page.indexOf("<HomeNews") < page.indexOf("<CoverageSummary")
+  );
+  check(
+    "the key dates and the sample-ballot block are one group, 12 px apart",
+    /<div className="flex flex-col gap-3[^"]*">\s*<DeadlineBanner[\s\S]*?<VotingResources countyFips=\{saved\?\.countyFips\} \/>\s*<\/div>\s*<BallotAtAGlance \/>/.test(
+      page
+    )
+  );
+  check(
+    "the top of the phone page is tighter: 24 px main padding, a 32 px h1 grouped with the lede",
+    /<main className="[^"]*\bpy-5\b[^"]*\blg:py-8\b/.test(page) &&
+      /<h1 className="text-h1 sm:text-display">/.test(page) &&
+      /<div className="flex flex-col gap-3 lg:gap-6">\s*(?:\{\/\*[\s\S]*?\*\/\}\s*)?<h1/.test(page)
+  );
+  check(
+    "the lede is the body colour, 16 px on a phone, and still says what we cover",
+    /<p className="text-body text-on-surface sm:text-body-lg">\s*See the races we cover/.test(page)
   );
 }
 

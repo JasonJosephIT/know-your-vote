@@ -170,6 +170,7 @@ export function LocationEntry({
   districts = [],
   pickerCollapsed = false,
   privacyNote = true,
+  coverageNote = true,
 }: {
   submitLabel?: string;
   placeholder?: string;
@@ -187,6 +188,9 @@ export function LocationEntry({
   /* The line under the field saying where a typed address goes and what is
      kept. Home passes false: its House step already says so. */
   privacyNote?: boolean;
+  /* The "Full statewide coverage" note under the field. The home page's
+     House step says the same in its own paragraph and passes false. */
+  coverageNote?: boolean;
 } = {}) {
   const hintId = useId();
   const router = useRouter();
@@ -715,12 +719,15 @@ export function LocationEntry({
 
       {/* Always visible, not only after a miss: a voter outside the four
           counties should know before typing that their House and county
-          races are not here yet. */}
-      <p className="text-body-sm text-on-surface-muted">
-        Full statewide coverage isn&rsquo;t available yet. Every Florida voter
-        gets the statewide races and amendments; U.S. House and county races
-        are only for {coveredCountyNames()} counties so far.
-      </p>
+          races are not here yet. Where the field sits under a paragraph
+          that already says so (the home page), coverageNote is false. */}
+      {coverageNote && (
+        <p className="text-body-sm text-on-surface-muted">
+          Full statewide coverage isn&rsquo;t available yet. Every Florida
+          voter gets the statewide races and amendments; U.S. House and county
+          races are only for {coveredCountyNames()} counties so far.
+        </p>
+      )}
 
       {/* Only an address outside Florida lands here: a Florida address
           outside the covered counties goes to the statewide ballot. */}
