@@ -353,10 +353,14 @@ check(
 );
 const ledger = source("supabase/migrations/README.md");
 const row = ledger.split("\n").find((l) => /^\|\s*0058\s*\|/.test(l)) ?? "";
+/* 0058 was applied live on 2026-10-14 with the founder's yes (#195): the
+   ledger records the apply and its read-back, and keeps the SQL-editor
+   steps for a rebuild. */
 check(
-  "the ledger lists 0058_subscription_lookups.sql as written, not applied, for the SQL editor, and moves the free number to 0059",
+  "the ledger lists 0058_subscription_lookups.sql as applied, with its read-back, and moves the free number to 0059",
   /`0058_subscription_lookups\.sql`/.test(row) &&
-    /\*\*written, not applied\.\*\*/.test(row) &&
+    /\*\*applied 2026-10-14\*\*/.test(row) &&
+    /service_exec` true/.test(row) &&
     /SQL editor/.test(row) &&
     /^\|\s*0059\+\s*\|\s*free/m.test(ledger),
   row.slice(0, 200)
