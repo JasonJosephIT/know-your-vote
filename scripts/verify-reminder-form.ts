@@ -57,7 +57,14 @@ const between = (from: string, to: string) => {
 /* ---- 1. the ZIP field and the counties (D4 (a)) -------------------------- */
 
 console.log("1. ZIP field, counties named under its label");
-check("the form still asks for a ZIP (D4 (a): through Nov 3)", /name="zip"/.test(form));
+check(
+  "the form still asks for a ZIP (D4 (a): through Nov 3)",
+  /id=\{`\$\{id\}-zip`\}/.test(form) && /autoComplete="postal-code"/.test(form)
+);
+check(
+  "no field has a name, so a native submit before hydration puts nothing in the URL",
+  !/\bname=/.test(form.slice(form.indexOf("<form"), form.indexOf("</form>")))
+);
 check(
   "the hint sits between the ZIP label and its field, and the field names it as a description",
   /ZIP code\s*<\/label>\s*\{zipHint && \(\s*<p id=\{`\$\{id\}-zip-hint`\}/.test(form) &&
