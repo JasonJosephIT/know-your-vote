@@ -434,3 +434,28 @@ Notes:
 
 **Gate picture, AM1:** support adds one `commentary` row (row 1). Oppose still has no case with reasons in the opponent's own words, only the FEA and LWV bare listings.
 **Gate picture, AM2:** unchanged from the 2026-09-26 state; no new rows.
+
+## Weekly re-check, 2026-10-12
+
+Covers material published since the 2026-10-09 re-check. Each URL below was fetched with `curl -sL -A 'Mozilla/5.0 ...'` and its body text read (the Villages-News URL redirected once, to its `http://` canonical form, which is the one read). One page is logged as blocked, not opened.
+
+| # | URL | Loads | Publisher / author | Date | Format | kind | stance | Gives reasons? | Evidence |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | https://www.villages-news.com/2026/10/08/what-is-the-budget-stabilization-fund-and-why-should-i-care/ | Yes (curl, HTTP 200 after one redirect, body text confirmed) | Villages-News.com, Letters to the Editor; signed Charlene Griffin, Village of Tamarind Grove | 2026-10-08 (`datePublished` 2026-10-08T15:00:41Z) | article | commentary | oppose | Yes (worried the amendment's "critical state need" withdrawal clause becomes a slush fund that leaves too little for a true emergency) | "that is why I've decided to vote 'no' on Amendment 1" |
+
+Not opened / not usable as a row:
+- https://www.yourobserver.com/news/2026/oct/07/observer-recommends-state-amendments/ — "Observer recommends: State Amendments 1 & 2," dated 2026-10-07, would be a newspaper's own editorial-board recommendation on both AM1 and AM2 if it opened. Blocked by a Cloudflare JS challenge on every attempt: WebFetch (HTTP 403), `curl` with two different desktop user-agent strings, and a headless-Chromium fetch (Playwright, `/opt/pw-browsers`) that waited 15+ seconds for the challenge to clear. The page title never left "Just a moment..." in the browser attempt. Per the rules, a search-engine snippet describing its recommendation does not count as a read, so it is not filed as a row. Worth another try next week in case the bot wall relaxes.
+
+Checked, nothing new:
+- flgov.com press releases through 2026-10-11 (hurricane response, appointments, an I-95 interchange opening — nothing on Amendment 1 or 2)
+- flaflcio.org press and legislative-post listings (still nothing newer than 2026-06-16; no AM1 statement in Rich Templin's or the union's own words)
+- lwvfl.org / Vote411 PDF (fetched directly this time, not blocked — still only names LWV as an opponent inside a neutral synopsis, no reasoning text on either amendment)
+- flgov.com's own site has no Amendment 1 or 2 release; DeSantis's opposition to AM1 remains sourced only to news coverage of his social-media post
+- florida.gop press releases (no new AM1 or AM2 post beyond the already-filed 2026-09-14 endorsement and the out-of-window 2025-05-19 agricultural post)
+- Florida Policy Institute site search (still only Amendment 3 material)
+- Florida Farm Bureau, Florida Chamber of Commerce, Florida Realtors, pcfb.org (Polk County Farm Bureau) — no 2026-cycle Amendment 2 statement found beyond the Farm Bureau's already-filed `yeson2/` page
+- Newspaper editorial boards (Miami Herald, Sun-Sentinel, Orlando Sentinel, Palm Beach Post) — no AM1 or AM2 editorial located and opened; one editorial (Your Observer, above) was found but could not be opened
+- No new YouTube video or ad-campaign page was found for either amendment this week
+
+**Gate picture, AM1:** oppose adds one `commentary` row with stated reasons (row 1 above), balancing the 2026-10-09 pass's one `commentary` support row. Tier 4 `argument` is unchanged: support = 1 (RPOF), oppose = 2 (FEA, LWV, both bare listings). No primary-source statement was found this week from DeSantis, Rich Templin/Florida AFL-CIO, or Fentrice Driskell in their own words.
+**Gate picture, AM2:** unchanged; no new rows found on either side this week.
