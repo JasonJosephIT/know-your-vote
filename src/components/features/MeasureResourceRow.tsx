@@ -7,9 +7,17 @@ import type { MeasureFormat } from "@/types/app";
 
 /* One outside resource about a ballot question (spec §5).
 
-   Title, then one muted line of facts: publisher · author · format ·
-   duration · date, then the attribution note if there is one. Facts, no
-   icons: "Video · 14 min" is a statement, a play glyph is an invitation.
+   The flag on its own line, then the title, then one muted line of facts:
+   publisher · author · format · duration · date, then the attribution note
+   if there is one. Facts, no icons: "Video · 14 min" is a statement, a play
+   glyph is an invitation.
+
+   A ROW, NOT A BOX (Mobbin catalog AM4, 2026-10-12). The list it sits in
+   draws a hairline between rows and the column card is the only box, so
+   there is no box inside a box. The title is what the reader is choosing,
+   so it is body size (16px), and the flag stays at 14px: it has to be read,
+   so it never drops to a caption. Rows are the same in the neutral block
+   and in both columns.
 
    NO LEAN HERE, same as NewsStoryCard and for the same reason (news-labels.ts,
    founder 2026-09-19): the publisher links to its outlet page when the outlet
@@ -93,49 +101,54 @@ export function MeasureResourceRow({
   ].filter((f): f is string => Boolean(f));
 
   return (
+    /* An opinion row keeps its tint across the full width of the box it
+       sits in: -mx-5 px-5 matches the column card's p-5, and in the neutral
+       block, which has no card, the page's px-5. */
     <li
-      className={[
-        "flex flex-col gap-1 rounded-md border p-3",
+      className={
         marked
-          ? "border-border-strong bg-surface-muted"
-          : "border-border bg-surface",
-      ].join(" ")}
+          ? "-mx-5 flex flex-col gap-1 bg-surface-muted px-5 py-3"
+          : "flex flex-col gap-1 py-3"
+      }
     >
+      {shownFlag && (
+        <p className="text-body-sm font-medium text-on-surface-muted">
+          {shownFlag}
+        </p>
+      )}
       {href ? (
         <a
           href={href}
           target="_blank"
           rel="noreferrer"
-          className="text-body-sm text-on-surface underline underline-offset-2"
+          className="text-body text-on-surface underline underline-offset-2"
         >
           {resource.title}
+          <span className="sr-only"> (opens in a new tab)</span>
         </a>
       ) : (
-        <span className="text-body-sm text-on-surface">{resource.title}</span>
+        <span className="text-body text-on-surface">{resource.title}</span>
       )}
-      {/* One separator rule for every item after the first, so the flag
-          ("Official document", "Opinion") is set off from the publisher like
-          everything else (interface review 2026-10-05: it ran straight into
-          it, "Official document Florida Division of Elections"). The dot is
-          inline-block so a link's underline doesn't run under it. */}
-      <p className="flex flex-wrap items-center gap-x-2 font-mono text-mono text-on-surface-muted [&>*+*]:before:me-2 [&>*+*]:before:inline-block [&>*+*]:before:content-['·']">
-        {shownFlag && (
-          <span className={marked ? "text-on-surface" : undefined}>
-            {shownFlag}
-          </span>
-        )}
-        {publisher &&
-          (outletHref ? (
-            <a href={outletHref} className="underline underline-offset-2">
-              {publisher}
-            </a>
-          ) : (
-            <span>{publisher}</span>
+      {/* One separator rule for every item after the first, so no fact runs
+          into the next (interface review 2026-10-05: the flag, then on this
+          line, ran straight into the publisher, "Official document Florida
+          Division of Elections"). The dot is inline-block so a link's
+          underline doesn't run under it. */}
+      {(publisher || facts.length > 0) && (
+        <p className="flex flex-wrap items-center gap-x-2 font-mono text-mono text-on-surface-muted [&>*+*]:before:me-2 [&>*+*]:before:inline-block [&>*+*]:before:content-['·']">
+          {publisher &&
+            (outletHref ? (
+              <a href={outletHref} className="underline underline-offset-2">
+                {publisher}
+              </a>
+            ) : (
+              <span>{publisher}</span>
+            ))}
+          {facts.map((f) => (
+            <span key={f}>{f}</span>
           ))}
-        {facts.map((f) => (
-          <span key={f}>{f}</span>
-        ))}
-      </p>
+        </p>
+      )}
       {resource.note && (
         <p className="text-caption text-on-surface-muted">{resource.note}</p>
       )}
