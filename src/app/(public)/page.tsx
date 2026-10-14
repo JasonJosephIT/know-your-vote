@@ -458,8 +458,27 @@ export default async function Home({
           )}
           {/* A wave between the coverage summary above and the reminder and
           install cards; shows at every width (the section dividers are on
-          design.md's closed list of phone art). */}
-          <SectionDivider variant="wave" />
+          design.md's closed list of phone art).
+
+          Below lg, the eight hero walkers stand on it, still and equal
+          height (design.md "Art on phones"). Their soles are the file's
+          bottom edge, so bottom-[6px] stands them on the band's centre line;
+          24px above the band keeps their heads ~14px clear of the coverage
+          card. Right-aligned, clear of the reminder envelope (left-0) when
+          reminders are live. Only on the whole page, after the coverage
+          card: a narrowed view has no card, and the row would stand right
+          under the news. Never on a screen with a candidate list
+          (verify-walker-row). */}
+          <div className={showAll ? "relative mt-[24px] lg:mt-0" : undefined}>
+            <SectionDivider variant="wave" />
+            {showAll && (
+              <Art
+                name="walker-row"
+                height={48}
+                className="absolute bottom-[6px] right-0 lg:hidden"
+              />
+            )}
+          </div>
           {promoteReminders && (
             <ReminderSignupCta countyFips={saved?.countyFips} />
           )}
