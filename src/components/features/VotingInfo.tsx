@@ -241,6 +241,10 @@ export function VotingInfo({
           </button>
         </div>
       ) : (
+        /* No field carries a name: submit() sends the JSON body itself, so
+           a native submit before hydration (a GET to this page) has nothing
+           to put in the URL, never the email or the ZIP (review of #177,
+           2026-10-14; LocationEntry does the same). */
         <form
           onSubmit={submit}
           noValidate
@@ -271,7 +275,6 @@ export function VotingInfo({
             <Input
               ref={zipRef}
               id={`${id}-zip`}
-              name="zip"
               autoComplete="postal-code"
               inputMode="numeric"
               maxLength={5}
@@ -297,7 +300,6 @@ export function VotingInfo({
             <Input
               ref={emailRef}
               id={`${id}-email`}
-              name="email"
               autoComplete="email"
               type="email"
               placeholder="you@example.com"
