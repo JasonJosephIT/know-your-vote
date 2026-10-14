@@ -112,8 +112,16 @@
 --     founder call. Not seeded here.
 --   - Every position known only through news coverage (Gov. DeSantis, Rich
 --     Templin / Florida AFL-CIO, Rep. Driskell, David Jolly, an Albritton
---     quote seen only in a search summary): `reporting` at most, and the
---     opened news rows are already 0041's neutral rows.
+--     quote seen only in a search summary): `reporting`/neutral at most,
+--     never a sided row. 0041's 9 neutral rows cover the news opened up to
+--     2026-09-26. The 2026-10-09 re-check opened two more neutral
+--     `reporting` rows, both verified (rows 2 and 3) and NOT seeded here,
+--     because this file seeds sided rows only: Florida Politics / A.G.
+--     Gancarski on David Jolly (2026-10-03,
+--     floridapolitics.com/archives/823095-a1-jolly-floridagop-desantis/)
+--     and WPTV / Scott Sutton's AM1-AM2 explainer (2026-10-08). They are
+--     owed to a later neutral-rows migration. The Albritton quote has no
+--     source page and is no row at all.
 --   - Nothing from the "Groups checked, nothing found" lists: no own-words
 --     AM1 material exists to seed.
 --
