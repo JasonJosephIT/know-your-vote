@@ -344,15 +344,35 @@ check(
      line of 14px text) and ends at the next dot's centre, the list's 12px
      gap further down. A stop's own height never enters it, so the line
      stays whole when a label wraps. */
-  const top = Number(/after:top-\[(\d+)px\]/.exec(code)?.[1]);
-  const below = Number(/after:bottom-\[-(\d+)px\]/.exec(code)?.[1]);
+  /* Base (phone) classes only: the lookbehind keeps sm:after:… from
+     matching. */
+  const px = (re: RegExp) => Number(re.exec(code)?.[1]);
+  const top = px(/(?<![\w:])after:top-\[(\d+)px\]/);
+  const below = px(/(?<![\w:])after:bottom-\[-(\d+)px\]/);
+  const left = px(/(?<![\w:])after:left-\[(\d+)px\]/);
+  const smTop = px(/sm:after:top-\[(\d+)px\]/);
   check(
     "phones: one line from dot centre to dot centre",
     /<ol className="grid gap-3 /.test(code) &&
       /mt-\[5px\] flex size-3 /.test(code) &&
       top === 5 + 12 / 2 &&
-      below === 12 + top,
-    `top ${top}px, bottom -${below}px`
+      below === 12 + top &&
+      // the 2px line (w-0.5) centred on the 12px dot
+      /after:w-0\.5/.test(code) &&
+      left === (12 - 2) / 2,
+    `top ${top}px, bottom -${below}px, left ${left}px`
+  );
+  check(
+    "from sm: 16px dots in a row, the line through their centres",
+    /sm:mt-0 sm:size-4/.test(code) && smTop === 16 / 2 - 1,
+    `sm top ${smTop}px`
+  );
+  check(
+    "phones: one line per stop at 14px, nothing at 13px (home A5)",
+    /flex flex-wrap items-baseline/.test(code) &&
+      !/text-caption/.test(code) &&
+      (code.match(/text-body-sm/g) ?? []).length >= 3,
+    String((code.match(/text-body-sm/g) ?? []).length)
   );
 }
 

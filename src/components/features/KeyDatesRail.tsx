@@ -93,8 +93,8 @@ export function KeyDatesRail({ stops }: { stops: KeyDateStop[] }) {
                   and takes a line of its own under the date in the row.
                   The space stays outside the hidden dot, so a screen reader
                   hears "October 22 Next", not "October 22Next". */}
-              <span>
-                <span className="text-body-sm text-on-surface-muted">
+              <span className="text-body-sm">
+                <span className="text-on-surface-muted">
                   {s.when}
                 </span>
                 {word && (
