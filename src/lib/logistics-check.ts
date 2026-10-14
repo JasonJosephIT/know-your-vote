@@ -584,7 +584,8 @@ const DOE_RUNNING: readonly string[] = ["QUA", "UNO"];
     ours; EXTRA is a candidate of ours the extract shows withdrawn, defeated,
     not qualified or removed, as a write-in (D1 keeps write-ins out of
     candidate_ids), under another office, or not at all. A filer with a code
-    DOE_STATUS does not know is a CONFIRM line. A race whose extract group
+    DOE_STATUS does not know is a CONFIRM line, as is an account the extract
+    lists twice with different rows. A race whose extract group
     was not read is not compared (its status lines say so). A statewide race
     with a still-running filer and no race row is an `office:` line. Report
     lines only. */
@@ -594,14 +595,27 @@ export function compareDoeRoster(
 ): { races: DoeRosterRace[]; report: string[] } {
   const report: string[] = [];
   const out: DoeRosterRace[] = [];
+  /* One row per account; an account the extract lists twice, differently,
+     keeps its last row and is a CONFIRM line on every race it touches. */
   const byAcct = new Map<string, DoeStatusRow>();
-  for (const rows of Object.values(extract)) for (const r of rows ?? []) byAcct.set(r.acctNum, r);
+  const distinct = new Map<string, DoeStatusRow[]>();
+  for (const rows of Object.values(extract)) {
+    for (const r of rows ?? []) {
+      const list = distinct.get(r.acctNum) ?? [];
+      if (!list.some((x) => x.officeCode === r.officeCode && x.juris === r.juris && x.statusCode === r.statusCode)) list.push(r);
+      distinct.set(r.acctNum, list);
+      byAcct.set(r.acctNum, r);
+    }
+  }
+  const twice = [...distinct].filter(([, list]) => list.length > 1);
   const filersOf = (raceId: string) => [...byAcct.values()].filter((r) => doeRaceId(r.officeCode, r.juris) === raceId);
+  const filedAs = (r: DoeStatusRow) => doeRaceId(r.officeCode, r.juris) ?? `${r.officeCode} ${r.juris}`.trim();
   const isRunning = (r: DoeStatusRow) => DOE_RUNNING.includes(r.statusCode) && !r.writeIn;
   const show = (r: DoeStatusRow) => `${r.name} (${r.statusDesc || r.statusCode})`;
   const showId = (r: DoeStatusRow) => `${r.name} (${r.statusDesc || r.statusCode}, FL-DOE-${r.acctNum})`;
-  const unmapped = (r: DoeStatusRow) =>
-    `${r.name} (FL-DOE-${r.acctNum}) has DoE status code ${JSON.stringify(r.statusCode)}, which has no mapping; not compared`;
+  const unmapped = (r: DoeStatusRow, elsewhere = false) =>
+    `${r.name} (FL-DOE-${r.acctNum}) has DoE status code ${JSON.stringify(r.statusCode)}` +
+    `${elsewhere ? ` under ${filedAs(r)}` : ""}, which has no mapping; not compared`;
 
   for (const race of [...races].sort((a, b) => a.raceId.localeCompare(b.raceId, "en", { numeric: true }))) {
     const group = doeOfficeGroup(race.level);
@@ -620,6 +634,10 @@ export function compareDoeRoster(
       entry.missing.push(c ? `${showId(r)}, whom ours has as ${c.qualifyingStatus}, ${c.ballotStatus}` : showId(r));
     }
     for (const r of filers) if (!DOE_STATUS[r.statusCode]) entry.confirm.push(unmapped(r));
+    for (const [acct, rows] of twice) {
+      if (!rows.some((r) => doeRaceId(r.officeCode, r.juris) === race.raceId) && !candidates.some((c) => c.candidateId === `FL-DOE-${acct}`)) continue;
+      entry.confirm.push(`FL-DOE-${acct} is in the DoE extract ${rows.length} times (${rows.map((r) => `${filedAs(r)} ${r.statusDesc || r.statusCode}`).join(", ")}); compared on the last`);
+    }
     for (const c of candidates.filter(runningOurs)) {
       const row = c.candidateId.startsWith("FL-DOE-") ? byAcct.get(c.candidateId.slice("FL-DOE-".length)) : undefined;
       const filedUnder = row ? doeRaceId(row.officeCode, row.juris) : null;
@@ -630,11 +648,11 @@ export function compareDoeRoster(
       }
       /* An unmapped code in this race already has its CONFIRM line. */
       if (!DOE_STATUS[row.statusCode]) {
-        if (filedUnder !== race.raceId) entry.confirm.push(unmapped(row));
+        if (filedUnder !== race.raceId) entry.confirm.push(unmapped(row, true));
         continue;
       }
       if (filedUnder !== race.raceId) {
-        entry.extra.push(`${who}, filed under ${filedUnder ?? `${row.officeCode} ${row.juris}`.trim()} in the DoE extract (${row.statusDesc || row.statusCode})`);
+        entry.extra.push(`${who}, filed under ${filedAs(row)} in the DoE extract (${row.statusDesc || row.statusCode})`);
       } else if (row.writeIn && DOE_RUNNING.includes(row.statusCode)) {
         entry.extra.push(`${who}, a write-in in the DoE extract`);
       } else if (!isRunning(row)) {

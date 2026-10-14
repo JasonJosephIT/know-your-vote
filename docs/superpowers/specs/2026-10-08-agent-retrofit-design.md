@@ -764,8 +764,9 @@ hacked or unrelated"), made through a reviewed migration, since
   candidate of ours; `roster: EXTRA` is a candidate of ours the extract shows
   as withdrew, defeated, did not qualify or removed, as a write-in, filed
   under another race, or not at all. A decided seat (`UNO`; FL-10 is not
-  printed) is its one candidate. A filer with a code `_STATUS` does not know
-  is a `roster: CONFIRM` line. A race whose extract group was not read is not
+  printed) is its one candidate. A filer with a code `_STATUS` does not know,
+  and an account the extract lists twice with different rows, is a
+  `roster: CONFIRM` line. A race whose extract group was not read is not
   compared (its status lines say so). A statewide race with a still-running
   filer and no race row is an `office:` line; House coverage is our race rows,
   so a House district with no row is not checked. The same stamp rule

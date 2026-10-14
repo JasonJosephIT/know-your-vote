@@ -107,6 +107,8 @@ const PII = ["secret@example.com", "5615551212", "123 Private Way", "Treasurer-L
 /* StatusDesc as the live extract printed each code on 2026-10-14. */
 const DOE_DESC: Record<string, string> = {
   QUA: "Qualified", UNO: "Unopposed", WIT: "Withdrew", DEF: "Defeated", DNQ: "Did Not Qualify", REM: "Removed",
+  /* Not in the 2026-10-14 file; intake.py's names for them. */
+  XTL: "Transferred to Local", DEC: "Deceased",
 };
 const doeRow = (acct: string, office: string, juris: string, status: string, last: string, first: string, party = "REP") =>
   [acct, "0", "20261103-GEN", office, "desc", juris, "", status, DOE_DESC[status] ?? "Unknown", party,
@@ -657,8 +659,10 @@ check("write-ins (D1): one of ours on the ballot tier whom the extract shows as 
 check("write-ins (D1): one of ours on the write-in tier is not running, so never EXTRA",
   rosterLines(withDoe([WRITE_IN], govWith(ourCand("FL-DOE-70011", "Wanda Writein", "qualified", "write_in")))).length === 0);
 
-/* Withdrawn, did not qualify, removed and defeated: never MISSING; EXTRA when ours. */
-for (const [code, desc] of [["WIT", "Withdrew"], ["DNQ", "Did Not Qualify"], ["REM", "Removed"], ["DEF", "Defeated"]]) {
+/* Withdrawn, did not qualify, removed, defeated, transferred and deceased:
+   never MISSING; EXTRA when ours. */
+for (const code of ["WIT", "DNQ", "REM", "DEF", "XTL", "DEC"]) {
+  const desc = DOE_DESC[code];
   const row = doeRow("70012", "GOV", "", code, "Gone", "Gail");
   const notOurs = withDoe([row]);
   const ours = withDoe([row], govWith(ourCand("FL-DOE-70012", "Gail Gone")));
@@ -688,6 +692,12 @@ check("a decided seat with a second candidate of ours: that one is EXTRA",
 const ELECTED = doeRow("70015", "GOV", "", "ELE", "Elect", "Ed");
 const unknownCode = withDoe([ELECTED]);
 const unknownCodeOurs = withDoe([ELECTED], govWith(ourCand("FL-DOE-70015", "Ed Elect")));
+const unknownElsewhere = withDoe([doeRow("70015", "USR", "010", "ELE", "Elect", "Ed")], [
+  { raceId: "FL-GOV-general", level: "state", office: "Governor", candidates: [DONALDS, ourCand("FL-DOE-70015", "Ed Elect")] }]);
+check("an unmapped DoE code on one of ours filed under another race is a CONFIRM naming that race",
+  rosterLines(unknownElsewhere).join("|") ===
+    'roster: CONFIRM Governor (FL-GOV-general): Ed Elect (FL-DOE-70015) has DoE status code "ELE" under FL-10-general, which has no mapping; not compared' &&
+    !unknownElsewhere.confirmedRaces.includes("FL-GOV-general"), rosterLines(unknownElsewhere).join(" | "));
 check("an unmapped DoE code is one CONFIRM line, ours or not, and the race is not confirmed",
   [unknownCode, unknownCodeOurs].every((r) => rosterLines(r).join("|") ===
     'roster: CONFIRM Governor (FL-GOV-general): Ed Elect (FL-DOE-70015) has DoE status code "ELE", which has no mapping; not compared' &&
@@ -702,6 +712,16 @@ check("EXTRA: a candidate of ours the extract files under another race names it"
   rosterLines(doeElsewhere).join("|") === "roster: EXTRA Governor (FL-GOV-general): Maxwell Frost (FL-DOE-70001), filed under FL-10-general in the DoE extract (Unopposed)",
   rosterLines(doeElsewhere).join(" | "));
 check("a repeated candidate id counts once", withDoe([], govWith(DONALDS)).doeRosterRaces.find((r) => r.raceId === "FL-GOV-general")?.ours.length === 1);
+
+/* An account the extract lists twice, differently: a CONFIRM on each race it touches, never a silent pick. */
+const twiceGov = withDoe([NEWCOMER, doeRow("70010", "GOV", "", "WIT", "Newcomer", "Nia")]);
+const twiceAcross = withDoe([doeRow("89042", "USR", "010", "WIT", "Donalds", "Byron")]);
+check("an account listed twice with different rows is a CONFIRM on each race it touches, and those races are not confirmed",
+  rosterLines(twiceGov, "CONFIRM").join("|") === "roster: CONFIRM Governor (FL-GOV-general): FL-DOE-70010 is in the DoE extract 2 times (FL-GOV-general Qualified, FL-GOV-general Withdrew); compared on the last" &&
+    rosterLines(twiceGov, "MISSING").length === 0 && !twiceGov.confirmedRaces.includes("FL-GOV-general") &&
+    rosterLines(twiceAcross, "CONFIRM").length === 2 && !twiceAcross.confirmedRaces.includes("FL-GOV-general") && !twiceAcross.confirmedRaces.includes("FL-10-general"),
+  rosterLines(twiceGov).concat(rosterLines(twiceAcross)).join(" | "));
+check("the same row twice (both groups read from one file) is not a repeat", rosterLines(clean).length === 0);
 
 /* An unreadable group: its races are not compared; the other group still is. */
 const govOnly = extractOf(GOV_DONALDS, NEWCOMER);
