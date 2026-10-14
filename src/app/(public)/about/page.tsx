@@ -113,8 +113,9 @@ export default function AboutPage() {
           text. Gutter pieces show from 1400px only. On a phone a 56px dog
           sits in the heading's row instead, after the words, never beside
           the paragraph or the email link (design.md's closed list of phone
-          art, 2026-10-11). */}
-      <section className="relative flex flex-col gap-2">
+          art, 2026-10-11). The id is the footer's "Contact" link on every
+          page (SiteFooter, verify-site-footer). */}
+      <section id="get-in-touch" className="relative flex flex-col gap-2">
         <Art
           name="pet-dog-sit"
           height={90}
