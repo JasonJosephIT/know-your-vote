@@ -2,7 +2,9 @@ import "server-only";
 
 /* Relative, with the extension: scripts/verify-reminder-schedule.ts loads
    this file in plain Node, which doesn't know the @/ alias. */
+import { COVERED_COUNTIES } from "../counties.ts";
 import { resendApiKey, serviceRoleKey } from "../server-keys.ts";
+import { supervisorSite } from "../supervisors.ts";
 
 /* Email delivery: is it switched on, and where do we point voters when it
    is not (launch handoff 2026-10-04, §2 items 2–3).
@@ -77,28 +79,26 @@ export type OfficialSources = {
   dates: OfficialSource;
 };
 
-const SUPERVISORS: Record<string, OfficialSource> = {
-  "Miami-Dade": {
-    name: "Miami-Dade Supervisor of Elections",
-    url: "https://www.miamidade.gov/global/elections/home.page",
-  },
-  Broward: {
-    name: "Broward Supervisor of Elections",
-    url: "https://www.browardvotes.gov",
-  },
-  Hillsborough: {
-    name: "Hillsborough Supervisor of Elections",
-    url: "https://www.votehillsborough.gov",
-  },
-  Orange: {
-    name: "Orange County Supervisor of Elections",
-    url: "https://www.ocfelections.gov",
-  },
+/* The offices' names. Their addresses come from supervisorSite
+   (src/lib/supervisors.ts), the one map of Supervisor sites, so the
+   welcome email and VotingInfo link the same sites as the rest of the
+   site. This list kept its own until 2026-10-13, and Miami-Dade's and
+   Orange's were older addresses that only redirect there. */
+const SUPERVISORS: Record<string, { name: string }> = {
+  "Miami-Dade": { name: "Miami-Dade Supervisor of Elections" },
+  Broward: { name: "Broward Supervisor of Elections" },
+  Hillsborough: { name: "Hillsborough Supervisor of Elections" },
+  Orange: { name: "Orange County Supervisor of Elections" },
 };
 
 export function officialSources(county?: string | null): OfficialSources {
+  const fips = COVERED_COUNTIES.find((c) => c.name === county)?.fips;
+  const url = fips ? supervisorSite(fips) : null;
   return {
-    office: (county && SUPERVISORS[county]) || null,
+    office:
+      county && SUPERVISORS[county] && url
+        ? { name: SUPERVISORS[county].name, url }
+        : null,
     state: {
       name: "Florida Division of Elections",
       url: "https://dos.fl.gov/elections/",

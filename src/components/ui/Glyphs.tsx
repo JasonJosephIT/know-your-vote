@@ -38,3 +38,28 @@ export function CaretGlyph() {
     </svg>
   );
 }
+
+/* An arrow leaving a box: the link opens another site in a new tab. In
+   place of ↗, which the Inter subsets don't include either. The link's
+   own sr-only text says it opens a new tab. */
+export function ExternalGlyph() {
+  return (
+    <svg {...svg}>
+      <path
+        d="M8.5 4.5h-3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3M11.5 4.5h4v4M15.5 4.5l-6 6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/* A down arrow: the link jumps further down this page (the home page's
+   "On this page" list), so it never reads as leaving it. In place of ↓. */
+export function ArrowDownGlyph() {
+  return (
+    <svg {...svg}>
+      <path d="M10 4.5v11M5.5 11l4.5 4.5 4.5-4.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
