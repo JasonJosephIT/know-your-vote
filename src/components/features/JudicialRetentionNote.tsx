@@ -25,8 +25,19 @@
    scripts/verify-judicial-retention.ts can check each covered county's lines
    under plain node. Re-check them there if a judge leaves the bench before
    Election Day. After the election this content is stale and should go with
-   the 2026 cycle. */
+   the 2026 cycle.
 
+   The heading and the scope sentence (they're on your ballot; we don't
+   cover them) stay visible, and the court lines and links sit behind "Who
+   is on the ballot, with links", a native <details> that works without
+   JavaScript (home readability spec 2026-10-12, PR B). Open, the box was
+   546px tall on a 375px phone, most of a screen between the amendments
+   and the House step; closed it is 155px. It is closed for every visitor
+   on every page, and the h3 sits outside the <details> so it stays in the
+   headings list. Its caret turns without a transition (nothing moves on
+   phones, founder D2 a). */
+
+import { CaretGlyph } from "@/components/ui/Glyphs";
 import {
   appealsForCounty,
   appealsLineLabel,
@@ -44,11 +55,12 @@ function NewTab() {
 
 /* `county` is a county NAME, the value resolve returns as result.county
    ("Miami-Dade", not "12086"). It narrows the appeals court lines to the
-   voter's own county when it is known: the "Your races" view, and the home
-   page when the saved district names a covered county. Without it, or for a
-   county outside the list, every covered county is shown, which is still
-   true for everyone (appealsForCounty). The Supreme Court line is outside
-   that choice: Justice Muñiz is on every Florida ballot. */
+   voter's own county when it is known: the "Your races" view passes it. The
+   home page passes none, on purpose, so every visitor gets the full note
+   (verify-judicial-retention pins this). Without it, or for a county outside
+   the list, every covered county is shown, which is still true for everyone
+   (appealsForCounty). The Supreme Court line is outside that choice: Justice
+   Muñiz is on every Florida ballot. */
 export function JudicialRetentionNote({ county }: { county?: string | null }) {
   if (!SHOW_JUDICIAL_RETENTION_NOTE) return null;
 
@@ -60,74 +72,83 @@ export function JudicialRetentionNote({ county }: { county?: string | null }) {
       className="flex flex-col gap-2 rounded-md border border-border bg-surface-muted px-4 py-3"
     >
       <h3 className="text-label">Judges on your ballot</h3>
-      <p className="text-body-sm text-on-surface-muted">
+      <p className="text-body-sm text-on-surface">
         Your ballot also asks whether to keep some judges in office. Know Your
-        Vote doesn&rsquo;t cover these questions. The links go to the
-        state&rsquo;s list of who is up and to the courts&rsquo; own pages.
+        Vote doesn&rsquo;t cover these questions.
       </p>
-      <ul className="flex list-disc flex-col gap-1 pl-5 text-body-sm text-on-surface">
-        <li>
-          Every Florida ballot:{" "}
-          <a
-            href={SUPREME_COURT.url}
-            target="_blank"
-            rel="noreferrer"
-            className={linkClass}
-          >
-            {SUPREME_COURT.justice}, Florida Supreme Court
-            <NewTab />
-          </a>
-        </li>
-        {appeals.map((a) => (
-          <li key={a.county}>
-            {a.county} ballots:{" "}
-            {a.judges > 0 ? (
-              <>
-                <a
-                  href={DOE_JUDICIAL_LIST}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={linkClass}
-                >
-                  {appealsLineLabel(a)}
-                  <NewTab />
-                </a>{" "}
-                (
-                <a
-                  href={a.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={linkClass}
-                >
-                  about this court&rsquo;s judges
-                  {/* Three of these sit on one page; a links list must
-                      say which court each is (production re-run,
-                      2026-10-05). */}
-                  <span className="sr-only">: {a.court}</span>
-                  <NewTab />
-                </a>
-                )
-              </>
-            ) : (
-              <>{appealsLineLabel(a)}</>
-            )}
-          </li>
-        ))}
-      </ul>
-      <p className="text-body-sm text-on-surface-muted">
-        The Florida Division of Elections{" "}
-        <a
-          href={DOE_JUDICIAL_LIST}
-          target="_blank"
-          rel="noreferrer"
-          className={linkClass}
-        >
-          lists every judge on the 2026 ballot
-          <NewTab />
-        </a>
-        . Some county ballots also have a circuit judge race, which we
-        don&rsquo;t cover either.
-      </p>
+      <details className="group/judges">
+        <summary className="inline-flex min-h-[32px] w-fit cursor-pointer list-none items-center gap-1 text-body-sm font-semibold text-primary underline underline-offset-2 hover:text-primary-hover [&::-webkit-details-marker]:hidden">
+          Who is on the ballot, with links
+          <span className="group-open/judges:rotate-180">
+            <CaretGlyph />
+          </span>
+        </summary>
+        <div className="mt-2 flex flex-col gap-2">
+          <ul className="flex list-disc flex-col gap-1 pl-5 text-body-sm text-on-surface">
+            <li>
+              Every Florida ballot:{" "}
+              <a
+                href={SUPREME_COURT.url}
+                target="_blank"
+                rel="noreferrer"
+                className={linkClass}
+              >
+                {SUPREME_COURT.justice}, Florida Supreme Court
+                <NewTab />
+              </a>
+            </li>
+            {appeals.map((a) => (
+              <li key={a.county}>
+                {a.county} ballots:{" "}
+                {a.judges > 0 ? (
+                  <>
+                    <a
+                      href={DOE_JUDICIAL_LIST}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={linkClass}
+                    >
+                      {appealsLineLabel(a)}
+                      <NewTab />
+                    </a>{" "}
+                    (
+                    <a
+                      href={a.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={linkClass}
+                    >
+                      about this court&rsquo;s judges
+                      {/* Three of these sit on one page; a links list must
+                          say which court each is (production re-run,
+                          2026-10-05). */}
+                      <span className="sr-only">: {a.court}</span>
+                      <NewTab />
+                    </a>
+                    )
+                  </>
+                ) : (
+                  <>{appealsLineLabel(a)}</>
+                )}
+              </li>
+            ))}
+          </ul>
+          <p className="text-body-sm text-on-surface-muted">
+            The Florida Division of Elections{" "}
+            <a
+              href={DOE_JUDICIAL_LIST}
+              target="_blank"
+              rel="noreferrer"
+              className={linkClass}
+            >
+              lists every judge on the 2026 ballot
+              <NewTab />
+            </a>
+            . Some county ballots also have a circuit judge race, which we
+            don&rsquo;t cover either.
+          </p>
+        </div>
+      </details>
     </aside>
   );
 }

@@ -1,4 +1,11 @@
 import { z } from "zod";
+import {
+  namesOtherState,
+  sameStreet,
+  streetIfPlaceNamed,
+  typedZip,
+  type MatchedStreet,
+} from "./address-text.ts";
 
 /* The address -> district path, minus the I/O.
 
@@ -7,7 +14,7 @@ import { z } from "zod";
    it cannot do for a module that imports `server-only` or an @/-aliased value.
    src/lib/news-match.ts is arranged the same way and for the same reason.
 
-   Two response shapes and one lookup live here. The fetching lives in
+   Three response shapes and one lookup live here. The fetching lives in
    census-block.ts and geocode.ts, which are thin by design. */
 
 export interface CensusBlock {
@@ -96,6 +103,122 @@ export function parseSuggestions(json: unknown): AddressSuggestion[] {
       [p.locality, p.region_a, p.postalcode].filter(Boolean).join(", ") || null;
     return [{ id: p.gid ?? `${text}:${i}`, text, secondary, lat, lon }];
   });
+}
+
+/* A typed address -> census block, from the Census Bureau's one-line address
+   geocoder (census-block.ts blockForAddress). This is the path when no
+   Pelias is configured, which is production: the voter types the whole
+   address and presses Enter, with no suggestions.
+
+   Census corrects what it is given and still answers with one confident
+   match (address-text.ts has the cases), so every match is checked against
+   the voter's own words before it counts. The answers, each needing
+   different words to the voter:
+   - match: one census block, so exactly one district.
+   - ambiguous: the voter's words fit more than one block. The route
+     answers anyway when every block gives the same district.
+   - checkStreet: Census found the place but a different street: another
+     direction (SW for NW), type (Ave for St) or house number.
+   - placeConflict: the voter typed a ZIP, and no match is in that ZIP
+     and their city. Census prefers the city when the two disagree, which
+     in Broward's repeated street grids is another city's street (review
+     2026-10-12), so the answer is to check both, never the city's match.
+   - needsPlace: Census found the street, but not in the city the voter
+     named, or they named none. "115 S Andrews Ave, FL" matches Fort
+     Lauderdale, and if the voter's own address is missing from Census's
+     address ranges, the same street in another city would be matched
+     instead and look just as sure.
+   - outOfState: Census found it, in the other state the voter named.
+   - none: nothing matches in Florida. */
+export type AddressMatch =
+  | { kind: "match"; block: CensusBlock }
+  | { kind: "ambiguous"; blocks: CensusBlock[] }
+  | { kind: "checkStreet" }
+  | { kind: "placeConflict" }
+  | { kind: "needsPlace" }
+  | { kind: "outOfState" }
+  | { kind: "none" };
+
+const component = z.string().optional().default("");
+const addressSchema = z.object({
+  result: z.object({
+    addressMatches: z
+      .array(
+        z.object({
+          matchedAddress: component,
+          addressComponents: z
+            .object({
+              preDirection: component,
+              streetName: component,
+              suffixType: component,
+              suffixDirection: component,
+              city: component,
+              zip: component,
+              state: component,
+            })
+            .optional(),
+          geographies: z.object({
+            "Census Blocks": z
+              .array(z.object({ GEOID: z.string(), STATE: z.string() }))
+              .default([]),
+          }),
+        })
+      )
+      .default([]),
+  }),
+});
+
+export function parseAddressMatches(
+  json: unknown,
+  typed: string
+): AddressMatch | null {
+  const parsed = addressSchema.safeParse(json);
+  if (!parsed.success) return null;
+  const matches = parsed.data.result.addressMatches;
+  const florida = matches.flatMap((m) => {
+    const block = m.geographies["Census Blocks"][0];
+    /* The same 15-digit rule as parseBlockResponse, and Florida only. */
+    if (!block || !/^\d{15}$/.test(block.GEOID) || block.STATE !== "12") {
+      return [];
+    }
+    const c = m.addressComponents;
+    const street: MatchedStreet = {
+      matchedAddress: m.matchedAddress,
+      preDirection: c?.preDirection ?? "",
+      streetName: c?.streetName ?? "",
+      suffixType: c?.suffixType ?? "",
+      suffixDirection: c?.suffixDirection ?? "",
+      city: c?.city ?? "",
+      zip: c?.zip ?? "",
+    };
+    return [{ block: { geoid: block.GEOID, state: block.STATE }, street }];
+  });
+  if (florida.length === 0) {
+    const states = matches.map((m) => m.addressComponents?.state ?? "");
+    return matches.length > 0 && namesOtherState(typed, states)
+      ? { kind: "outOfState" }
+      : { kind: "none" };
+  }
+
+  const placed = florida.flatMap((m) => {
+    const street = streetIfPlaceNamed(typed, m.street);
+    return street ? [{ ...m, typedStreet: street }] : [];
+  });
+  if (placed.length === 0) {
+    return typedZip(typed) !== null
+      ? { kind: "placeConflict" }
+      : { kind: "needsPlace" };
+  }
+
+  const same = placed.filter((m) => sameStreet(m.typedStreet, m.street));
+  if (same.length === 0) return { kind: "checkStreet" };
+
+  const blocks = [
+    ...new Map(same.map((m) => [m.block.geoid, m.block])).values(),
+  ];
+  return blocks.length === 1
+    ? { kind: "match", block: blocks[0] }
+    : { kind: "ambiguous", blocks };
 }
 
 /* The range lookup's own logic, so it can be tested without a database.

@@ -15,15 +15,18 @@ import { fileURLToPath } from "node:url";
 import { buildBallotRoster, type BallotRosterCandidate } from "../src/lib/news-intake.ts";
 import {
   DOE_STATUS,
+  LIVE_LABELS,
   MAX_DATE_OBSERVATIONS,
   VOTERFOCUS_STATUS,
   buildCheck,
   classifySite,
+  compareCountyRoster,
   dateSourceAllowed,
   doeOfficeGroup,
   doeRaceId,
   electionEventKey,
   gatedDiffKey,
+  looseNameMatch,
   looksParked,
   matchVoterFocus,
   parseDoeExtract,
@@ -33,7 +36,11 @@ import {
   reviewItemKey,
   robotsText,
   runningMateOnPage,
+  voterFocusSeat,
   type CheckInput,
+  type CountyRace,
+  type DoeRace,
+  type DoeStatusRow,
   type ElectionEventRow,
   type Observations,
   type R2Diff,
@@ -97,8 +104,15 @@ const DOE_HEADER =
   "AcctNum\tVoterID\tElectionID\tOfficeCode\tOfficeDesc\tJuris1num\tJuris2num\tStatusCode\tStatusDesc\tPartyCode\tPartyDesc\t" +
   "NameLast\tNameFirst\tNameMiddle\tSuppressAddress\tAddr1\tAddr2\tCity\tState\tZip\tCounty\tPhone\tTrsNameLast\tTrsNameFirst\tTrsNameMiddle\tEmail";
 const PII = ["secret@example.com", "5615551212", "123 Private Way", "Treasurer-Lastname"];
-const doeRow = (acct: string, office: string, juris: string, status: string, last: string, first: string) =>
-  [acct, "0", "20261103-GEN", office, "desc", juris, "", status, "status", "REP", "Republican", last, first, "",
+/* StatusDesc as the live extract printed each code on 2026-10-14. */
+const DOE_DESC: Record<string, string> = {
+  QUA: "Qualified", UNO: "Unopposed", WIT: "Withdrew", DEF: "Defeated", DNQ: "Did Not Qualify", REM: "Removed",
+  /* Not in the 2026-10-14 file; intake.py's names for them. */
+  XTL: "Transferred to Local", DEC: "Deceased",
+};
+const doeRow = (acct: string, office: string, juris: string, status: string, last: string, first: string, party = "REP") =>
+  [acct, "0", "20261103-GEN", office, "desc", juris, "", status, DOE_DESC[status] ?? "Unknown", party,
+    party === "WRI" ? "Write-In" : "Republican", last, first, "",
     "N", PII[2], "", "Tallahassee", "FL", "32301", "Leon", PII[1], PII[3], "Pat", "", PII[0]].join("\t");
 const doeText = [
   DOE_HEADER,
@@ -110,10 +124,16 @@ const doeText = [
 ].join("\r\n") + "\r\n";
 const doeRows = parseDoeExtract(doeText);
 check("the extract parses, CRLF and all", doeRows !== null && doeRows.length === 5, JSON.stringify(doeRows));
-check("each parsed row has exactly AcctNum, office, district and status",
-  (doeRows ?? []).every((r) => Object.keys(r).sort().join(",") === "acctNum,juris,officeCode,statusCode"));
+check("each parsed row has exactly AcctNum, office, district, status, name and write-in",
+  (doeRows ?? []).every((r) => Object.keys(r).sort().join(",") === "acctNum,juris,name,officeCode,statusCode,statusDesc,writeIn"));
 check("no address, phone, email or treasurer survives the parse",
   PII.every((p) => !JSON.stringify(doeRows).includes(p)), JSON.stringify(doeRows));
+check("no party survives the parse; a write-in is a boolean",
+  !/\bREP\b|Republican/.test(JSON.stringify(doeRows)) && doeRows?.[0].name === "Byron Donalds" && doeRows[0].statusDesc === "Qualified" &&
+    doeRows[0].writeIn === false && parseDoeExtract([DOE_HEADER, doeRow("1", "GOV", "", "QUA", "In", "Write", "WRI")].join("\n"))?.[0].writeIn === true,
+  JSON.stringify(doeRows?.[0]));
+check("an extract without PartyCode is not the extract (write-ins could not be told apart)",
+  parseDoeExtract(DOE_HEADER.replace("PartyCode", "Party") + "\n" + doeRow("1", "GOV", "", "QUA", "A", "B")) === null);
 check("an HTML page is not the extract", parseDoeExtract("<html><title>Just a moment...</title></html>") === null);
 check("doeRaceId: GOV, USR 010, SOS",
   doeRaceId("GOV", "") === "FL-GOV-general" && doeRaceId("USR", "010") === "FL-10-general" && doeRaceId("SOS", "") === null);
@@ -221,6 +241,29 @@ const COUNTY_ROSTER: BallotRosterCandidate[] = [
   vf("FL-ORA-SB3-general", "ORA-SB-3", ORA, "FL-VF-ORA-1314", "Diana Moore", "qualified"),
   vf("FL-ORA-SBCHAIR-general", "ORA-SBCHAIR", ORA, "FL-VF-ORA-1245", "Angie Gallo", "elected_in_primary"),
 ];
+/* The county race rows the roster above sits in, with their candidates. On
+   2026-10-08 Miami-Dade had 5; 0057 adds the 8 settled seats 0032 missed. */
+const racesOf = (people: readonly BallotRosterCandidate[]): CountyRace[] =>
+  [...new Set(people.map((c) => c.raceId))].map((raceId) => {
+    const inRace = people.filter((c) => c.raceId === raceId);
+    return {
+      raceId,
+      district: inRace[0].district as string,
+      candidates: inRace.map((c) => ({ candidateId: c.candidateId, legalName: c.legalName, qualifyingStatus: c.qualifyingStatus, ballotStatus: "ballot" })),
+    };
+  });
+const COUNTY_RACES = racesOf(COUNTY_ROSTER);
+const RACES_0057 = racesOf([
+  vf("FL-DAD-CC1-general", "DAD-CC-1", DAD, "FL-VF-DAD-2981", "Steve Gallon III", "unopposed"),
+  vf("FL-DAD-CC4-general", "DAD-CC-4", DAD, "FL-VF-DAD-2954", "Micky Steinberg", "unopposed"),
+  vf("FL-DAD-CC6-general", "DAD-CC-6", DAD, "FL-VF-DAD-2922", "Natalie Milian Orbis", "unopposed"),
+  vf("FL-DAD-CC8-general", "DAD-CC-8", DAD, "FL-VF-DAD-2962", "Danielle Cohen Higgins", "elected_in_primary"),
+  vf("FL-DAD-CC10-general", "DAD-CC-10", DAD, "FL-VF-DAD-2972", "Anthony Rodriguez", "unopposed"),
+  vf("FL-DAD-CC12-general", "DAD-CC-12", DAD, "FL-VF-DAD-2955", 'Juan Carlos "JC" Bermudez', "unopposed"),
+  vf("FL-DAD-SB4-general", "DAD-SB-4", DAD, "FL-VF-DAD-2956", "Roberto J. Alonso", "unopposed"),
+  vf("FL-DAD-SB6-general", "DAD-SB-6", DAD, "FL-VF-DAD-2914", 'Maria "Mari Tere" Rojas', "unopposed"),
+]);
+const DAD_0057 = RACES_0057.map((r) => r.district);
 const doeCand = (raceId: string, level: string, id: string, name: string, status: string): BallotRosterCandidate => ({
   candidateId: id, legalName: name, raceId, office: "office", level, district: null, countyFips: null,
   publication: "published", qualifyingStatus: status, officialSite: null,
@@ -228,6 +271,14 @@ const doeCand = (raceId: string, level: string, id: string, name: string, status
 const DOE_ROSTER: BallotRosterCandidate[] = [
   doeCand("FL-GOV-general", "state", "FL-DOE-89042", "Byron Donalds", "qualified"),
   doeCand("FL-10-general", "federal", "FL-DOE-70001", "Maxwell Frost", "unopposed"),
+];
+/* The race rows DOE_ROSTER sits in, with their candidates. */
+const ourCand = (id: string, name: string, status = "qualified", ballot = "ballot") => ({ candidateId: id, legalName: name, qualifyingStatus: status, ballotStatus: ballot });
+const DONALDS = ourCand("FL-DOE-89042", "Byron Donalds");
+const FROST = ourCand("FL-DOE-70001", "Maxwell Frost", "unopposed");
+const DOE_RACES: DoeRace[] = [
+  { raceId: "FL-GOV-general", level: "state", office: "Governor", candidates: [DONALDS] },
+  { raceId: "FL-10-general", level: "federal", office: "United States Representative", candidates: [FROST] },
 ];
 
 /* The 14 general_2026 rows as they were on 2026-10-08. */
@@ -260,6 +311,8 @@ const base = (over: Partial<CheckInput> = {}): CheckInput => ({
   observations: observeAll(),
   doe: { CAB: doeRows, FED: doeRows },
   voterFocus: { [DAD]: dade, [ORA]: orange },
+  countyRaces: COUNTY_RACES,
+  doeRaces: DOE_RACES,
   runningMates: { column: false, stored: {}, pages: {} },
   now: NOW,
   ...over,
@@ -352,6 +405,338 @@ check("an unmapped DoE code, another office and a missing account are report lin
 const doeDown = ok(base({ doe: { CAB: null, FED: doeRows } }));
 check("an unreadable DoE extract is a report line; the other group is still compared",
   doeDown.report.some((l) => l.includes("DoE CAB extract could not be read")) && doeDown.statuses.doe === 1);
+
+/* ---- missing contests: a covered office with no race row ------------------ */
+
+check("the live labels are Qualified, Runoff, Unopposed and Elected",
+  [...LIVE_LABELS].sort().join(",") === "Elected,Qualified,Runoff,Unopposed", LIVE_LABELS.join(","));
+/* Spellings from the four lists: Miami-Dade and Orange as saved 2026-10-08,
+   Broward and Hillsborough as read 2026-10-13. */
+const seats: [string, string, string | null | undefined][] = [
+  ["DAD", "County Commission District 04", "DAD-CC-4"],
+  ["DAD", "School Board District 06", "DAD-SB-6"],
+  ["ORA", "County Commissioner District 2", "ORA-CC-2"],
+  ["ORA", "School Board Dist. 1", "ORA-SB-1"],
+  ["ORA", "School Board Chair", "ORA-SBCHAIR"],
+  ["ORA", "County Mayor", "ORA-MAYOR"],
+  ["ORA", "Clerk of the Courts", "ORA-CLERK"],
+  ["BRO", "County Commission, Dist. 6", "BRO-CC-6"],
+  ["BRO", "School Board, Dist. 7", "BRO-SB-7"],
+  ["BRO", "School Board, At Large 8", "BRO-SBAL-8"],
+  ["HIL", "County Commissioner, Dist. 5", "HIL-CC-5"],
+  ["HIL", "School Board Member, Dist. 2", "HIL-SB-2"],
+  ["DAD", "County Court Judge Group 05", undefined],
+  ["ORA", "County Judge Group 2", undefined],
+  ["DAD", "Community Council Area/Subarea 02/21", undefined],
+  ["DAD", "Bonterra CDD Seat 3", undefined],
+  ["ORA", "Orange Soil and Water Conservation District 1", undefined],
+  ["BRO", "South Broward Drainage District, Zone 2", undefined],
+  ["HIL", "Trustee, Carrollwood Recreation District", undefined],
+  ["DAD", "County Mayor", undefined],
+  ["HIL", "Board of County Commissioners Seat A", null],
+  ["ORA", "Mayor of Orange County", null],
+];
+for (const [prefix, office, want] of seats) {
+  const got = voterFocusSeat(prefix, office);
+  check(`voterFocusSeat(${prefix}, ${JSON.stringify(office)}) is ${String(want)}`, got === want, String(got));
+}
+
+const officeLines = (r: { report: string[] }) => r.report.filter((l) => l.startsWith("office: "));
+const missing8 = officeLines(clean);
+check("the 2026-10-08 roster lacks 8 Miami-Dade seats, and the saved list names each",
+  missing8.length === 8 && DAD_0057.every((d) => missing8.some((l) => l.endsWith(`no ${d} race row`))) &&
+    clean.offices.missing === 8, missing8.join(" | "));
+check("13 Miami-Dade and 11 Orange covered offices have a live filer", clean.offices.listed === 24, JSON.stringify(clean.offices));
+check("a missing seat's line names its winner and label, no party and no Inactive",
+  missing8.some((l) => l === "office: Miami-Dade's VoterFocus list has County Commission District 04 with Micky Steinberg (Unopposed), and there is no DAD-CC-4 race row") &&
+    missing8.some((l) => l.includes("Danielle Cohen Higgins (Elected)") && !l.includes("Defeated")) &&
+    !missing8.some((l) => /\((DEM|REP|NOP|NPA)\)|Inactive/.test(l)),
+  missing8.join(" | "));
+check("a missing contest is a report line, never a diff", clean.diffs.length === 0);
+const with0057 = ok(base({ countyRaces: [...COUNTY_RACES, ...RACES_0057] }));
+check("with 0057's seats present, no office line", officeLines(with0057).length === 0 && with0057.offices.missing === 0,
+  officeLines(with0057).join(" | "));
+const noRaces = ok(base({ countyRaces: [] }));
+check("with no county race rows, every covered office is named and nothing else",
+  officeLines(noRaces).length === 24 && !officeLines(noRaces).some((l) => /Judge|CDD|Community Council|Soil|Improvement/.test(l)),
+  officeLines(noRaces).join(" | "));
+const vfRow = (office: string, label: string, ca: string) => ({ ca, name: `Filer ${ca} (NPA)`, office, label });
+const synthetic = ok(base({
+  voterFocus: {
+    [DAD]: [
+      vfRow("County Commission District 03", "Withdrawn", "1"),
+      vfRow("County Commission District 03", "Defeated", "2"),
+      vfRow("School Board District 05", "Qualified Write-In", "3"),
+      vfRow("County Commission District 07", "Qualified", "4"),
+      vfRow("County Commission District 07", "Withdrawn", "5"),
+      vfRow("Board of County Commissioners Seat A", "Unopposed", "6"),
+    ],
+    [ORA]: null,
+  },
+  countyRaces: [],
+}));
+check("an office whose filers all withdrew or lost, or only a write-in, needs no race row",
+  !officeLines(synthetic).some((l) => l.includes("District 03") || l.includes("District 05")), officeLines(synthetic).join(" | "));
+check("a live office lists only its live filers",
+  officeLines(synthetic).includes("office: Miami-Dade's VoterFocus list has County Commission District 07 with Filer 4 (Qualified), and there is no DAD-CC-7 race row"),
+  officeLines(synthetic).join(" | "));
+check("a covered-looking office that does not parse is a report line",
+  officeLines(synthetic).some((l) => l.includes('"Board of County Commissioners Seat A"') && l.includes("does not parse")) &&
+    synthetic.offices.listed === 1, officeLines(synthetic).join(" | "));
+check("an unreadable list yields no office line", !officeLines(synthetic).some((l) => l.includes("Orange")));
+
+/* ---- county rosters: every candidate, both directions --------------------- */
+
+const rosterLines = (r: { report: string[] }, kind = "") => r.report.filter((l) => l.startsWith(`roster: ${kind}`));
+check("the 2026-10-08 pages and roster agree on every candidate of every race we have",
+  rosterLines(clean).length === 0 && clean.roster.missing === 0 && clean.roster.extra === 0 && clean.roster.confirm === 0,
+  rosterLines(clean).join(" | "));
+check("with 0057, all 24 covered offices on the two saved pages are ours and agree",
+  rosterLines(with0057).length === 0 && with0057.rosterOffices.length === 24 &&
+    with0057.rosterOffices.every((o) => o.raceId !== null && o.running.length === o.ours.length), JSON.stringify(with0057.roster));
+const cc5 = with0057.rosterOffices.find((o) => o.district === "DAD-CC-5");
+check("an office's entry lists VoterFocus's still-running filers and ours",
+  cc5?.office === "County Commission District 05" && cc5.raceId === "FL-DAD-CC5-general" && cc5.running.length === 2 &&
+    cc5.running.every((n) => n.endsWith("(Runoff)")) && cc5.ours.join(",") === "Vicki L. Lopez,Rob Piper", JSON.stringify(cc5));
+
+/* MISSING: a filer still in the race with no candidate of ours. */
+const withoutPiper = (races: CountyRace[]) => races.map((r) => r.raceId === "FL-DAD-CC5-general"
+  ? { ...r, candidates: r.candidates.filter((c) => c.candidateId !== "FL-VF-DAD-2998") } : r);
+const noPiper = ok(base({ countyRaces: withoutPiper(COUNTY_RACES) }));
+check("MISSING: a Runoff filer not in our race is one line, and the race is not confirmed",
+  rosterLines(noPiper, "MISSING").length === 1 &&
+    rosterLines(noPiper, "MISSING")[0] === "roster: MISSING Miami-Dade County Commission District 05 (FL-DAD-CC5-general): VoterFocus lists Rob Piper (Runoff), and our race does not" &&
+    noPiper.roster.missing === 1 && !noPiper.confirmedRaces.includes("FL-DAD-CC5-general") && noPiper.diffs.length === 0,
+  rosterLines(noPiper).join(" | "));
+const ourWithdrawn = ok(base({ countyRaces: COUNTY_RACES.map((r) => ({ ...r, candidates: r.candidates.map((c) =>
+  c.candidateId === "FL-VF-DAD-2998" ? { ...c, qualifyingStatus: "withdrawn" } : c) })) }));
+check("MISSING: a filer VoterFocus has running and ours has withdrawn says so",
+  rosterLines(ourWithdrawn, "MISSING").some((l) => l.includes("Rob Piper (Runoff), whom ours has as withdrawn, ballot (FL-VF-DAD-2998)")),
+  rosterLines(ourWithdrawn).join(" | "));
+
+/* EXTRA: ours, and VoterFocus no longer lists them as running. */
+const extraOf = (html: string, ca: string, label: string) => ok(base({ voterFocus: { [DAD]: dade, [ORA]: parseVoterFocus(relabel(html, ca, label)) } }));
+const tiffanyOut = extraOf(orangeHtml, "1236", "Withdrawn");
+check("EXTRA: a candidate VoterFocus shows Withdrawn",
+  rosterLines(tiffanyOut, "EXTRA").join("|") === "roster: EXTRA Orange County Mayor (FL-ORA-MAYOR-general): Tiffany Moore Russell (FL-VF-ORA-1236), Withdrawn on VoterFocus",
+  rosterLines(tiffanyOut).join(" | "));
+const messinaOut = extraOf(orangeHtml, "1239", "Defeated");
+check("EXTRA: a candidate VoterFocus shows Defeated",
+  rosterLines(messinaOut, "EXTRA").join("|") === "roster: EXTRA Orange County Mayor (FL-ORA-MAYOR-general): Chris Messina (FL-VF-ORA-1239), Defeated on VoterFocus",
+  rosterLines(messinaOut).join(" | "));
+const dnq = extraOf(orangeHtml, "1239", "Did not qualify");
+check("EXTRA: Did not qualify", rosterLines(dnq, "EXTRA").some((l) => l.endsWith("Did not qualify on VoterFocus")));
+const absent = ok(base({ countyRaces: COUNTY_RACES.map((r) => r.raceId === "FL-ORA-CC2-general"
+  ? { ...r, candidates: [...r.candidates, { candidateId: "FL-VF-ORA-9999", legalName: "Nobody Here", qualifyingStatus: "qualified", ballotStatus: "ballot" }] } : r) }));
+check("EXTRA: a candidate of ours absent from the list",
+  rosterLines(absent, "EXTRA").join("|") === "roster: EXTRA Orange County Commissioner District 2 (FL-ORA-CC2-general): Nobody Here (FL-VF-ORA-9999), not on Orange's VoterFocus list" &&
+    !absent.confirmedRaces.includes("FL-ORA-CC2-general"), rosterLines(absent).join(" | "));
+const otherOffice = ok(base({ countyRaces: COUNTY_RACES.map((r) => r.raceId === "FL-ORA-CC2-general"
+  ? { ...r, candidates: [...r.candidates, { candidateId: "FL-VF-ORA-1260", legalName: "Brian Jones", qualifyingStatus: "qualified", ballotStatus: "ballot" }] } : r) }));
+check("EXTRA: an id VoterFocus files under another office names that office",
+  rosterLines(otherOffice, "EXTRA").some((l) => l.includes("Brian Jones (FL-VF-ORA-1260), listed under County Commissioner District 4 on VoterFocus (Qualified, ca=1260)")),
+  rosterLines(otherOffice).join(" | "));
+const withArthur = ok(base({ countyRaces: COUNTY_RACES.map((r) => r.raceId === "FL-ORA-CC4-general"
+  ? { ...r, candidates: [...r.candidates, { candidateId: "FL-VF-ORA-1378", legalName: "Isabella Arthur", qualifyingStatus: "qualified", ballotStatus: "ballot" }] } : r) }));
+check("write-ins (D1): a Qualified Write-In is never MISSING, and one of ours shown as a write-in is EXTRA",
+  !rosterLines(clean).some((l) => l.includes("Arthur")) &&
+    rosterLines(withArthur, "EXTRA").some((l) => l.includes("Isabella Arthur (FL-VF-ORA-1378), Qualified Write-In on VoterFocus")),
+  rosterLines(withArthur).join(" | "));
+const unmapped = extraOf(orangeHtml, "1239", "Pending Review");
+check("an unknown label on one of ours is not compared, not EXTRA",
+  rosterLines(unmapped, "EXTRA").length === 0 && rosterLines(unmapped).some((l) => l.includes("Chris Messina") && l.includes("not compared")),
+  rosterLines(unmapped).join(" | "));
+const stray = ok(base({ countyRaces: [...COUNTY_RACES, { raceId: "FL-ORA-CC9-general", district: "ORA-CC-9", candidates: [
+  { candidateId: "FL-VF-ORA-9999", legalName: "Nobody Here", qualifyingStatus: "qualified", ballotStatus: "ballot" },
+  { candidateId: "FL-VF-ORA-1290", legalName: "Kamia Brown", qualifyingStatus: "qualified", ballotStatus: "ballot" }] }] }));
+check("EXTRA: a race of ours that no office on the list reads as, naming where VoterFocus has each person",
+  rosterLines(stray, "EXTRA").join("|") === [
+    "roster: EXTRA Orange ORA-CC-9 (FL-ORA-CC9-general): Nobody Here (FL-VF-ORA-9999), no office on Orange's VoterFocus list reads as ORA-CC-9",
+    "roster: EXTRA Orange ORA-CC-9 (FL-ORA-CC9-general): Kamia Brown (FL-VF-ORA-1290), listed under County Commissioner District 2 on VoterFocus (Runoff, ca=1290)",
+  ].join("|") && !stray.confirmedRaces.includes("FL-ORA-CC9-general"), rosterLines(stray).join(" | "));
+
+/* A renamed heading: its filers are not compared, never EXTRA (review fix). */
+const renamedHeading = (to: string) => ok(base({ voterFocus: { [DAD]: dade, [ORA]: parseVoterFocus(orangeHtml.replace("County Commissioner District 2", to)) } }));
+for (const to of ["Board of County Commissioners District 2", "Commissioner District 2"]) {
+  const r = renamedHeading(to);
+  check(`a heading renamed to ${JSON.stringify(to)}: its running filers are CONFIRM, not EXTRA, and the race is not confirmed`,
+    rosterLines(r, "EXTRA").length === 0 && rosterLines(r, "CONFIRM").length === 2 &&
+      rosterLines(r, "CONFIRM").every((l) => l.includes(`under ${JSON.stringify(to)}, which does not read as ORA-CC-2; not compared`)) &&
+      !r.confirmedRaces.includes("FL-ORA-CC2-general"), rosterLines(r).join(" | "));
+}
+const ora = { name: "Orange", raceDistrictPrefix: "ORA" };
+const cand = (id: string, name: string, status = "qualified", ballot = "ballot") => ({ candidateId: id, legalName: name, qualifyingStatus: status, ballotStatus: ballot });
+const twoHeadings = compareCountyRoster(ora, [
+  { ca: "1", name: "Ann Lee", office: "County Commissioner District 2", label: "Qualified" },
+  { ca: "2", name: "Bob Roe", office: "County Commissioner, Dist. 2", label: "Qualified" },
+], [{ raceId: "FL-ORA-CC2-general", district: "ORA-CC-2", candidates: [cand("FL-VF-ORA-1", "Ann Lee"), cand("FL-VF-ORA-2", "Bob Roe")] }]);
+check("two headings that read as one seat are one office",
+  twoHeadings.report.length === 0 && twoHeadings.offices.length === 1 &&
+    twoHeadings.offices[0].office === "County Commissioner District 2 / County Commissioner, Dist. 2", JSON.stringify(twoHeadings));
+const twoRaces = compareCountyRoster(ora, [{ ca: "1", name: "Ann Lee", office: "County Mayor", label: "Runoff" }], [
+  { raceId: "FL-ORA-MAYOR-general", district: "ORA-MAYOR", candidates: [cand("FL-VF-ORA-1", "Ann Lee"), cand("FL-VF-ORA-1", "Ann Lee")] },
+  { raceId: "FL-ORA-MAYOR2-general", district: "ORA-MAYOR", candidates: [cand("FL-VF-ORA-7", "Zed Who")] },
+]);
+check("a second race row for a seat is a CONFIRM, and a repeated candidate id counts once",
+  twoRaces.report.join("|") === "roster: CONFIRM Orange ORA-MAYOR (FL-ORA-MAYOR2-general): a second race row for ORA-MAYOR, beside FL-ORA-MAYOR-general; not compared" &&
+    twoRaces.offices.find((o) => o.raceId === "FL-ORA-MAYOR-general")?.ours.length === 1, twoRaces.report.join(" | "));
+const noCa = compareCountyRoster(ora, [{ ca: null, name: "Rob Piper", office: "County Mayor", label: "Runoff" }],
+  [{ raceId: "FL-ORA-MAYOR-general", district: "ORA-MAYOR", candidates: [cand("FL-VF-ORA-X", "Robert Piper")] }]);
+check("a variant pair on a row with no ca= prints no ca", noCa.report.length === 1 && !noCa.report[0].includes("ca=") &&
+  noCa.report[0].endsWith('paired with VoterFocus "Rob Piper" on a name variant'), noCa.report.join(" | "));
+check("a write-in or excluded candidate of ours is not running, so never EXTRA", (() => {
+  const r = ok(base({ countyRaces: COUNTY_RACES.map((x) => x.raceId === "FL-ORA-CC2-general"
+    ? { ...x, candidates: [...x.candidates, { candidateId: "FL-VF-ORA-9998", legalName: "Write In", qualifyingStatus: "qualified", ballotStatus: "write_in" }] } : x) }));
+  return rosterLines(r).length === 0;
+})());
+
+/* Name variants: no usable id, so the pair is made on the name and listed to confirm. */
+check("looseNameMatch: nickname, short form and double surname; not a different person",
+  looseNameMatch("Ken Gay", 'Kenneth "Ken" Gay') && looseNameMatch("Robert Piper", "Rob Piper") &&
+    looseNameMatch("Dorothy Bendross Mindingall", "Dorothy Bendross-Mindingall") &&
+    !looseNameMatch("Robert Piper", "Rob Pipers") && !looseNameMatch("Karen Perez", "Katrina Perez") && !looseNameMatch("Lopez", "Lopez"));
+const variant = ok(base({ countyRaces: COUNTY_RACES.map((r) => r.raceId === "FL-DAD-CC5-general"
+  ? { ...r, candidates: r.candidates.map((c) => c.candidateId === "FL-VF-DAD-2998" ? { ...c, candidateId: "FL-VF-DAD-X2998", legalName: "Robert Piper" } : c) } : r) }));
+check("a name variant pairs, is listed to CONFIRM, is neither MISSING nor EXTRA, and leaves the race unconfirmed",
+  rosterLines(variant).length === 1 && !variant.confirmedRaces.includes("FL-DAD-CC5-general") && variant.roster.confirm === 1 &&
+    rosterLines(variant, "CONFIRM")[0] === 'roster: CONFIRM Miami-Dade County Commission District 05 (FL-DAD-CC5-general): ours "Robert Piper" (FL-VF-DAD-X2998) paired with VoterFocus "Rob Piper" (ca=2998) on a name variant',
+  rosterLines(variant).join(" | "));
+const exactName = ok(base({ countyRaces: COUNTY_RACES.map((r) => r.raceId === "FL-DAD-CC5-general"
+  ? { ...r, candidates: r.candidates.map((c) => c.candidateId === "FL-VF-DAD-2998" ? { ...c, candidateId: "FL-VF-DAD-X2998" } : c) } : r) }));
+check("the same normalised name pairs without a CONFIRM", rosterLines(exactName).length === 0, rosterLines(exactName).join(" | "));
+const renamed = ok(base({ countyRaces: COUNTY_RACES.map((r) => r.raceId === "FL-DAD-CC5-general"
+  ? { ...r, candidates: r.candidates.map((c) => c.candidateId === "FL-VF-DAD-2998" ? { ...c, legalName: "Someone Different" } : c) } : r) }));
+check("an id whose names differ pairs on the id and is listed to CONFIRM",
+  rosterLines(renamed).length === 1 && rosterLines(renamed, "CONFIRM")[0].includes('is ca=2998, which VoterFocus names "Rob Piper"'),
+  rosterLines(renamed).join(" | "));
+const twinsRoster = compareCountyRoster({ name: "Orange", raceDistrictPrefix: "ORA" }, [
+  { ca: "1", name: "Pat Lee (DEM)", office: "County Mayor", label: "Runoff" },
+  { ca: "2", name: "Pat Lee (REP)", office: "County Mayor", label: "Runoff" },
+], [{ raceId: "FL-ORA-MAYOR-general", district: "ORA-MAYOR", candidates: [
+  { candidateId: "FL-VF-ORA-X", legalName: "Pat Lee", qualifyingStatus: "qualified", ballotStatus: "ballot" }] }]);
+check("a name that fits two rows pairs with neither, says so in each line, and carries no party",
+  twinsRoster.report.some((l) => l.includes("CONFIRM") && l.includes("matches 2 rows")) && twinsRoster.offices[0].missing.length === 2 &&
+    twinsRoster.offices[0].missing.every((m) => m.endsWith('not paired: ours "Pat Lee" matches more than one row')) &&
+    twinsRoster.offices[0].extra.join() === "Pat Lee (FL-VF-ORA-X), matches 2 rows on VoterFocus; not paired" && !/\((DEM|REP)\)/.test(JSON.stringify(twinsRoster)), JSON.stringify(twinsRoster));
+check("no party label reaches the roster output", !/\((DEM|REP|NOP|NPA)\)/.test(JSON.stringify(with0057.rosterOffices.concat(noRaces.rosterOffices))));
+
+/* ---- statewide and U.S. House rosters: every candidate, both directions -- */
+
+check("the fixture extract agrees with our Governor and FL-10 races: no line, both compared",
+  clean.doeRosterRaces.length === 2 && JSON.stringify(clean.doeRoster) === JSON.stringify({ races: 2, noRace: 0, missing: 0, extra: 0, confirm: 0 }) &&
+    clean.doeRosterRaces.find((r) => r.raceId === "FL-10-general")?.running.join() === "Maxwell Frost (Unopposed)" &&
+    clean.doeRosterRaces.find((r) => r.raceId === "FL-GOV-general")?.ours.join() === "Byron Donalds", JSON.stringify(clean.doeRosterRaces));
+const GOV_DONALDS = doeRow("89042", "GOV", "", "QUA", "Donalds", "Byron");
+const FL10_FROST = doeRow("70001", "USR", "010", "UNO", "Frost", "Maxwell");
+const extractOf = (...rows: string[]) => parseDoeExtract([DOE_HEADER, ...rows].join("\n")) as DoeStatusRow[];
+const withDoe = (rows: string[], races: DoeRace[] = DOE_RACES) => {
+  const parsed = extractOf(GOV_DONALDS, FL10_FROST, ...rows);
+  return ok(base({ doe: { CAB: parsed, FED: parsed }, doeRaces: races }));
+};
+const govWith = (...extra: ReturnType<typeof ourCand>[]): DoeRace[] =>
+  DOE_RACES.map((r) => (r.raceId === "FL-GOV-general" ? { ...r, candidates: [...r.candidates, ...extra] } : r));
+const NEWCOMER = doeRow("70010", "GOV", "", "QUA", "Newcomer", "Nia");
+
+/* MISSING: a qualified filer with no running candidate of ours. */
+const doeMissing = withDoe([NEWCOMER]);
+check("MISSING: a qualified DoE filer not in our race is one line, named with the id to add, and the race is not confirmed",
+  rosterLines(doeMissing).join("|") === "roster: MISSING Governor (FL-GOV-general): the DoE extract lists Nia Newcomer (Qualified, FL-DOE-70010), and our race does not" &&
+    doeMissing.doeRoster.missing === 1 && !doeMissing.confirmedRaces.includes("FL-GOV-general") && doeMissing.confirmedRaces.includes("FL-10-general") &&
+    doeMissing.diffs.length === 0, rosterLines(doeMissing).join(" | "));
+const doeOursWithdrawn = withDoe([NEWCOMER], govWith(ourCand("FL-DOE-70010", "Nia Newcomer", "withdrawn")));
+check("MISSING: a filer the extract has running and ours has withdrawn says so",
+  rosterLines(doeOursWithdrawn).join("|") === "roster: MISSING Governor (FL-GOV-general): the DoE extract lists Nia Newcomer (Qualified, FL-DOE-70010), whom ours has as withdrawn, ballot, and our race does not",
+  rosterLines(doeOursWithdrawn).join(" | "));
+
+/* Write-ins (D1): never MISSING; one of ours the extract shows as a write-in is EXTRA. */
+const WRITE_IN = doeRow("70011", "GOV", "", "QUA", "Writein", "Wanda", "WRI");
+check("write-ins (D1): a qualified write-in filer is never MISSING", rosterLines(withDoe([WRITE_IN])).length === 0,
+  rosterLines(withDoe([WRITE_IN])).join(" | "));
+const doeWriteInOurs = withDoe([WRITE_IN], govWith(ourCand("FL-DOE-70011", "Wanda Writein")));
+check("write-ins (D1): one of ours on the ballot tier whom the extract shows as a write-in is EXTRA",
+  rosterLines(doeWriteInOurs).join("|") === "roster: EXTRA Governor (FL-GOV-general): Wanda Writein (FL-DOE-70011), a write-in in the DoE extract",
+  rosterLines(doeWriteInOurs).join(" | "));
+check("write-ins (D1): one of ours on the write-in tier is not running, so never EXTRA",
+  rosterLines(withDoe([WRITE_IN], govWith(ourCand("FL-DOE-70011", "Wanda Writein", "qualified", "write_in")))).length === 0);
+
+/* Withdrawn, did not qualify, removed, defeated, transferred and deceased:
+   never MISSING; EXTRA when ours. */
+for (const code of ["WIT", "DNQ", "REM", "DEF", "XTL", "DEC"]) {
+  const desc = DOE_DESC[code];
+  const row = doeRow("70012", "GOV", "", code, "Gone", "Gail");
+  const notOurs = withDoe([row]);
+  const ours = withDoe([row], govWith(ourCand("FL-DOE-70012", "Gail Gone")));
+  check(`${code}: a ${desc} filer is never MISSING, and one of ours is EXTRA`,
+    rosterLines(notOurs).length === 0 &&
+      rosterLines(ours).join("|") === `roster: EXTRA Governor (FL-GOV-general): Gail Gone (FL-DOE-70012), ${desc} in the DoE extract` &&
+      !ours.confirmedRaces.includes("FL-GOV-general"), rosterLines(notOurs).concat(rosterLines(ours)).join(" | "));
+}
+
+/* A decided seat (FL-10: unopposed, not printed) is its one candidate. */
+const FL10_OTHERS = [doeRow("70013", "USR", "010", "WIT", "Left", "Lou"), doeRow("70014", "USR", "010", "DNQ", "Write", "Will", "WRI")];
+const fl10 = (candidates: ReturnType<typeof ourCand>[]): DoeRace[] =>
+  DOE_RACES.map((r) => (r.raceId === "FL-10-general" ? { ...r, candidates } : r));
+check("a decided seat: the unopposed filer alone is running, beside withdrawn and write-in filers",
+  rosterLines(withDoe(FL10_OTHERS)).length === 0 &&
+    withDoe(FL10_OTHERS).doeRosterRaces.find((r) => r.raceId === "FL-10-general")?.running.join() === "Maxwell Frost (Unopposed)");
+const fl10Empty = withDoe(FL10_OTHERS, fl10([]));
+check("a decided seat with no candidate of ours: its one candidate is MISSING",
+  rosterLines(fl10Empty).join("|") === "roster: MISSING United States Representative (FL-10-general): the DoE extract lists Maxwell Frost (Unopposed, FL-DOE-70001), and our race does not",
+  rosterLines(fl10Empty).join(" | "));
+const fl10Extra = withDoe(FL10_OTHERS, fl10([FROST, ourCand("FL-DOE-70013", "Lou Left")]));
+check("a decided seat with a second candidate of ours: that one is EXTRA",
+  rosterLines(fl10Extra).join("|") === "roster: EXTRA United States Representative (FL-10-general): Lou Left (FL-DOE-70013), Withdrew in the DoE extract",
+  rosterLines(fl10Extra).join(" | "));
+
+/* What cannot be compared is a CONFIRM line, never MISSING or EXTRA. */
+const ELECTED = doeRow("70015", "GOV", "", "ELE", "Elect", "Ed");
+const unknownCode = withDoe([ELECTED]);
+const unknownCodeOurs = withDoe([ELECTED], govWith(ourCand("FL-DOE-70015", "Ed Elect")));
+const unknownElsewhere = withDoe([doeRow("70015", "USR", "010", "ELE", "Elect", "Ed")], [
+  { raceId: "FL-GOV-general", level: "state", office: "Governor", candidates: [DONALDS, ourCand("FL-DOE-70015", "Ed Elect")] }]);
+check("an unmapped DoE code on one of ours filed under another race is a CONFIRM naming that race",
+  rosterLines(unknownElsewhere).join("|") ===
+    'roster: CONFIRM Governor (FL-GOV-general): Ed Elect (FL-DOE-70015) has DoE status code "ELE" under FL-10-general, which has no mapping; not compared' &&
+    !unknownElsewhere.confirmedRaces.includes("FL-GOV-general"), rosterLines(unknownElsewhere).join(" | "));
+check("an unmapped DoE code is one CONFIRM line, ours or not, and the race is not confirmed",
+  [unknownCode, unknownCodeOurs].every((r) => rosterLines(r).join("|") ===
+    'roster: CONFIRM Governor (FL-GOV-general): Ed Elect (FL-DOE-70015) has DoE status code "ELE", which has no mapping; not compared' &&
+    !r.confirmedRaces.includes("FL-GOV-general")), rosterLines(unknownCode).concat(rosterLines(unknownCodeOurs)).join(" | "));
+
+/* EXTRA: ours and not in the race on the extract. */
+const doeAbsent = withDoe([], govWith(ourCand("FL-DOE-99999", "Not Filed")));
+check("EXTRA: a candidate of ours not in the extract",
+  rosterLines(doeAbsent).join("|") === "roster: EXTRA Governor (FL-GOV-general): Not Filed (FL-DOE-99999), not in the DoE CAB extract", rosterLines(doeAbsent).join(" | "));
+const doeElsewhere = withDoe([], govWith(FROST));
+check("EXTRA: a candidate of ours the extract files under another race names it",
+  rosterLines(doeElsewhere).join("|") === "roster: EXTRA Governor (FL-GOV-general): Maxwell Frost (FL-DOE-70001), filed under FL-10-general in the DoE extract (Unopposed)",
+  rosterLines(doeElsewhere).join(" | "));
+check("a repeated candidate id counts once", withDoe([], govWith(DONALDS)).doeRosterRaces.find((r) => r.raceId === "FL-GOV-general")?.ours.length === 1);
+
+/* An account the extract lists twice, differently: a CONFIRM on each race it touches, never a silent pick. */
+const twiceGov = withDoe([NEWCOMER, doeRow("70010", "GOV", "", "WIT", "Newcomer", "Nia")]);
+const twiceAcross = withDoe([doeRow("89042", "USR", "010", "WIT", "Donalds", "Byron")]);
+check("an account listed twice with different rows is a CONFIRM on each race it touches, and those races are not confirmed",
+  rosterLines(twiceGov, "CONFIRM").join("|") === "roster: CONFIRM Governor (FL-GOV-general): FL-DOE-70010 is in the DoE extract 2 times (FL-GOV-general Qualified, FL-GOV-general Withdrew); compared on the last" &&
+    rosterLines(twiceGov, "MISSING").length === 0 && !twiceGov.confirmedRaces.includes("FL-GOV-general") &&
+    rosterLines(twiceAcross, "CONFIRM").length === 2 && !twiceAcross.confirmedRaces.includes("FL-GOV-general") && !twiceAcross.confirmedRaces.includes("FL-10-general"),
+  rosterLines(twiceGov).concat(rosterLines(twiceAcross)).join(" | "));
+check("the same row twice (both groups read from one file) is not a repeat", rosterLines(clean).length === 0);
+
+/* An unreadable group: its races are not compared; the other group still is. */
+const govOnly = extractOf(GOV_DONALDS, NEWCOMER);
+const fedDown = ok(base({ doe: { CAB: govOnly, FED: null }, doeRaces: fl10([]) }));
+check("an unreadable FED extract leaves FL-10 uncompared, and the Governor race is still compared",
+  fedDown.doeRosterRaces.map((r) => r.raceId).join() === "FL-GOV-general" && rosterLines(fedDown, "MISSING").length === 1 &&
+    rosterLines(fedDown, "MISSING")[0].includes("Nia Newcomer"), rosterLines(fedDown).join(" | "));
+
+/* A statewide race with no race row; a House district we do not cover is not ours. */
+const noGov = withDoe([doeRow("70016", "USR", "013", "QUA", "Elsewhere", "Ella")], DOE_RACES.filter((r) => r.raceId !== "FL-GOV-general"));
+check("a statewide race with a running filer and no race row is an office line; an uncovered House district is not",
+  officeLines(noGov).filter((l) => l.includes("DoE")).join("|") === "office: the DoE extract has FL-GOV-general with Byron Donalds (Qualified, FL-DOE-89042), and there is no FL-GOV-general race row" &&
+    noGov.doeRoster.noRace === 1 && noGov.doeRoster.races === 1 && rosterLines(noGov).length === 0, officeLines(noGov).concat(rosterLines(noGov)).join(" | "));
+check("no party label reaches the statewide and House output",
+  ![doeMissing, doeWriteInOurs, fl10Extra, noGov].some((r) => /\bREP\b|Republican|Write-In\b/.test(JSON.stringify([r.doeRosterRaces, r.report]))));
 
 /* ---- dates --------------------------------------------------------------- */
 

@@ -20,8 +20,9 @@ export default function AboutPage() {
   return (
     <main className="relative mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
       {/* Site illustration layer (design.md), all decorative. The gutter
-          pieces show from 1400px; below lg only the 56px dog beside "Get in
-          touch" shows (design.md's closed list of phone art).
+          pieces show from 1400px; below lg only the walker row after "What
+          this is" and the 56px dog beside "Get in touch" show (design.md's
+          closed list of phone art).
           A figure in the left gutter leans on the column's left edge
           (ledge x 1.038, so its hand lands on main's edge, outside the
           px-5 padding and clear of every line of text). The gutter is
@@ -71,6 +72,12 @@ export default function AboutPage() {
         </p>
       </section>
 
+      {/* Below lg, the home page's still row of all eight hero walkers, on
+          its own row so it sits under no text (design.md "Art on phones").
+          The same file as home, so it is usually cached. This page names no
+          candidates. */}
+      <Art name="walker-row" height={48} className="lg:hidden" />
+
       {/* A wide spot illustration between the first two sections, on its
           own row so it sits under no text. At lg the column is always 632px
           inside the padding (px-5 is 24px in this scale), so a 424px height
@@ -113,8 +120,9 @@ export default function AboutPage() {
           text. Gutter pieces show from 1400px only. On a phone a 56px dog
           sits in the heading's row instead, after the words, never beside
           the paragraph or the email link (design.md's closed list of phone
-          art, 2026-10-11). */}
-      <section className="relative flex flex-col gap-2">
+          art, 2026-10-11). The id is the footer's "Contact" link on every
+          page (SiteFooter, verify-site-footer). */}
+      <section id="get-in-touch" className="relative flex flex-col gap-2">
         <Art
           name="pet-dog-sit"
           height={90}

@@ -25,13 +25,19 @@ import { SectionDivider } from "@/components/brand/SectionDivider";
 
    hasDistrict: the home page shows the location field above only when no
    district is saved, so the county row points to it only then.
-   addressEnabled: whether that field takes an address at all
-   (geocoderConfigured(), read by the page). Without a geocoder it takes a
-   ZIP only, so the row asks for a ZIP (locationFieldCopy).
+   addressEnabled: whether there is an address field at all
+   (addressEntryEnabled(), read by the page). It takes an address and never
+   a ZIP; with ADDRESS_LOOKUP_OFF set there is only the district picker, so
+   the row asks for the district (locationFieldCopy).
 
    The "Not covered" row is the long form of NOT_COVERED_SENTENCE
    (src/lib/scope-copy.ts), which the House-race step and the races view
-   print; change them together.
+   print; change them together. Its "official sample ballot" jumps to the
+   county links near the top of the page (#sample-ballot, VotingResources).
+   The caption that closed the card ("Every candidate in a race we cover
+   gets the same questions...") went in the home readability pass
+   (2026-10-12, A9): it repeated the lede, and the page's closing caption
+   keeps "How we stay fair".
 
    Recommended (pending founder confirmation). TO FLIP: remove
    <CoverageSummary /> from src/app/(public)/page.tsx.
@@ -112,7 +118,7 @@ export async function CoverageSummary({
         <dl className="flex flex-col divide-y divide-border rounded-lg border border-border bg-surface">
           <Row term="Every Florida voter">
             {statewide.length > 0
-              ? `${statewide.join(" and ")}, the same for everyone, whatever your ZIP or party.`
+              ? `${statewide.join(" and ")}, the same for everyone, wherever you live and whatever your party.`
               : "The statewide races and amendments, once they're published."}
           </Row>
           <Row
@@ -131,7 +137,14 @@ export async function CoverageSummary({
             and other judicial races), county and city ballot questions, city
             races, special districts such as soil and water conservation and
             community development districts, and local races in other counties.
-            Your county Supervisor of Elections has your official sample ballot.{" "}
+            Your county Supervisor of Elections has your{" "}
+            <a
+              href="#sample-ballot"
+              className="underline underline-offset-2 hover:text-on-surface"
+            >
+              official sample ballot
+            </a>
+            .{" "}
             <Link
               href="/methodology#not-covered"
               className="underline underline-offset-2 hover:text-on-surface"
@@ -141,16 +154,6 @@ export async function CoverageSummary({
           </Row>
         </dl>
       </div>
-      <p className="text-caption text-on-surface-muted">
-        Every candidate in a race we cover gets the same questions and the same
-        rules.{" "}
-        <Link
-          href="/methodology"
-          className="underline underline-offset-2 hover:text-on-surface"
-        >
-          How we stay fair
-        </Link>
-      </p>
     </section>
   );
 }

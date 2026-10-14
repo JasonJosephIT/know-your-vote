@@ -85,17 +85,15 @@ const latestRegional = unstable_cache(
   { revalidate: 900, tags: ["news"] }
 );
 
-export async function HomeNews({
-  countyFips,
-}: {
-  /** The saved district's county: the filter opens on it when it has stories. */
-  countyFips?: string | null;
-}) {
+/* The column's stories, [] when the read fails. HomeNews renders nothing
+   then, and homeNewsHasItems tells BallotAtAGlance so, which leaves out its
+   "Election news" chip rather than jump to a column that isn't there. */
+async function railItems(): Promise<RailItem[]> {
   let rows: Row[];
   try {
     rows = await latestRegional();
   } catch {
-    return null;
+    return [];
   }
 
   const items: RailItem[] = [];
@@ -122,6 +120,21 @@ export async function HomeNews({
             : null,
     });
   }
+  return items;
+}
+
+/* Whether HomeNews renders: the same cached read and the same filter. */
+export async function homeNewsHasItems() {
+  return (await railItems()).length > 0;
+}
+
+export async function HomeNews({
+  countyFips,
+}: {
+  /** The saved district's county: the filter opens on it when it has stories. */
+  countyFips?: string | null;
+}) {
+  const items = await railItems();
   if (items.length === 0) return null;
 
   const regions = regionOrder(items.map((i) => i.region));

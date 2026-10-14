@@ -1,0 +1,1177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home Page Readability</title>
+<meta name="description" content="Know Your Vote home page: sample ballot links and an easier scroll. Build spec mockups, 2026-10-12.">
+<style>
+/* ---------- Site tokens (src/app/globals.css @theme) ---------- */
+:root{
+  color-scheme: light;
+  --bg:#f6f3ec; --surface:#ffffff; --surface-muted:#efeae0;
+  --ink:#22271f; --muted:#585e52;
+  --border:#e4ded2; --border-strong:#cfc7b6; --border-input:#857e6e;
+  --primary:#2f6b4f; --primary-hover:#255a41; --primary-muted:#e4efe7;
+  --accent:#b26836; --accent-strong:#8a4e24; --accent-muted:#f5e7d6;
+  --error:#b4402e; --warning:#b07a1e;
+  --f-head: Figtree, "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --f-body: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  /* doc chrome */
+  --doc-bg:#fbfaf7; --doc-panel:#ffffff; --doc-line:#e6e2d8; --doc-ink:#22271f; --doc-muted:#5c6157;
+  --rec:#2f6b4f; --frozen:#8a4e24; --frozen-bg:#f5e7d6;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:16px}
+body{margin:0;background:var(--doc-bg);color:var(--doc-ink);font:15px/1.55 var(--f-body)}
+a{color:var(--primary)}
+code{font-family:var(--f-mono);font-size:.86em;background:#f1eee6;border-radius:4px;padding:0 .3em;overflow-wrap:anywhere}
+.wrap{max-width:1440px;margin:0 auto;padding:0 16px}
+@media (min-width:720px){.wrap{padding:0 28px}}
+.doc-head{padding:28px 0 8px}
+.eyebrow{font:700 12px/1.3 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--doc-muted);margin:0 0 6px}
+h1.doc-title{font:700 clamp(26px,4vw,36px)/1.15 var(--f-head);letter-spacing:-.02em;margin:0 0 10px;text-wrap:balance}
+.doc-sub{max-width:900px;color:var(--doc-muted);margin:0 0 18px}
+.plan{max-width:960px;font-size:16px;line-height:1.65;margin:0 0 18px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:0 0 18px}
+.stat{background:var(--doc-panel);border:1px solid var(--doc-line);border-radius:12px;padding:12px 14px}
+.stat b{display:block;font:700 22px/1.2 var(--f-head);letter-spacing:-.01em}
+.stat span{color:var(--doc-muted);font-size:13.5px}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 4px;padding:0;list-style:none}
+.toc a{display:inline-flex;min-height:32px;align-items:center;padding:0 12px;border-radius:999px;border:1px solid var(--doc-line);background:#fff;color:var(--doc-ink);text-decoration:none;font-size:13.5px}
+.toc a:hover{border-color:var(--border-input)}
+section.doc{padding:28px 0 8px;border-top:1px solid var(--doc-line);margin-top:24px}
+h2.doc-h{font:700 22px/1.25 var(--f-head);letter-spacing:-.01em;margin:0 0 6px}
+h3.doc-h3{font:600 17px/1.3 var(--f-head);margin:18px 0 6px}
+.lead{color:var(--doc-muted);max-width:960px;margin:0 0 14px}
+.note{font-size:13px;color:var(--doc-muted)}
+.panel{background:var(--doc-panel);border:1px solid var(--doc-line);border-radius:12px;padding:14px}
+.controls{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:0 0 14px;font-size:14px}
+.controls fieldset{border:0;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.controls legend{float:left;margin-right:8px;font-weight:600}
+.seg{display:inline-flex;align-items:center;min-height:32px;padding:0 12px;border:1px solid var(--doc-line);border-radius:999px;background:#fff;cursor:pointer}
+.seg:has(input:checked){background:var(--doc-ink);color:#fff;border-color:var(--doc-ink)}
+.seg input{position:absolute;opacity:0;width:1px;height:1px}
+.seg:has(input:focus-visible){outline:2px solid var(--primary);outline-offset:2px}
+.badge{display:inline-block;font:700 11px/1.6 var(--f-body);letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:0 8px;white-space:nowrap}
+.b-frozen{background:var(--frozen-bg);color:var(--frozen)}
+.b-free{background:var(--primary-muted);color:var(--primary-hover)}
+.b-adj{background:#efeae0;color:#5c6157}
+.b-rec{background:var(--primary);color:#fff}
+
+/* bars */
+.bars{display:grid;gap:8px;max-width:900px}
+.bar-row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:4px 10px;align-items:center;font-size:13.5px}
+@media (max-width:560px){.bar-row{grid-template-columns:minmax(0,1fr)}}
+.bar{height:22px;border-radius:6px;background:var(--border-strong);position:relative;display:flex;align-items:center}
+.bar i{position:absolute;inset:0 auto 0 0;background:repeating-linear-gradient(90deg,transparent 0 calc(var(--sw) - 1px),rgba(34,39,31,.35) calc(var(--sw) - 1px) var(--sw));border-radius:6px}
+.bar span{position:relative;padding:0 8px;font-weight:600;white-space:nowrap;font-size:12.5px}
+.bar.after{background:var(--primary-muted)}
+.bar.mid{background:#dfe8e1}
+
+/* comparison frames */
+.cmp{display:flex;gap:24px;overflow-x:auto;padding-bottom:8px;align-items:flex-start}
+.fr{margin:0;flex:none}
+.fr figcaption{font-size:13.5px;margin:0 0 8px;max-width:520px}
+.fr figcaption b{font-family:var(--f-head);font-size:16px}
+.fr-row{display:flex;align-items:flex-start}
+.gutter{position:relative;flex:none;width:104px;margin-right:6px}
+.gutter .tick{position:absolute;right:0;height:1px;background:#c9c3b6}
+.gutter .tick.big{width:14px;background:#8f897c}
+.gutter .tick.sm{width:6px}
+.gutter .tl{position:absolute;right:18px;font:11px/1 var(--f-mono);color:#8f897c;transform:translateY(-50%)}
+.gutter .sec{position:absolute;right:18px;left:0;font:600 11px/1.15 var(--f-body);color:var(--doc-ink);text-align:right;transform:translateY(-2px)}
+.gutter .sec small{display:block;font:400 10.5px/1.2 var(--f-mono);color:var(--doc-muted)}
+.gutterR{position:relative;flex:none;width:80px;margin-left:6px}
+.gutterR .scr{position:absolute;left:0;font:700 10.5px/1 var(--f-body);color:#fff;background:#6b5ea8;border-radius:3px;padding:3px 5px;white-space:nowrap;transform:translateY(-50%)}
+.scaler{position:relative;flex:none;overflow:hidden;border:1px solid #cfc9bc;border-radius:10px;box-shadow:0 4px 18px rgba(34,39,31,.08);background:var(--bg)}
+.scaler>.pg{transform-origin:0 0;position:absolute;top:0;left:0}
+.scrline{position:absolute;left:0;right:0;height:0;border-top:3px dashed #6b5ea8;z-index:30;pointer-events:none}
+.firstfold{border-top-color:#b4402e}
+
+/* first-screen viewport */
+.vp{position:relative;width:375px;height:812px;overflow:hidden;border:1px solid #cfc9bc;border-radius:28px;box-shadow:0 6px 24px rgba(34,39,31,.12);background:var(--bg);flex:none}
+.vp>.pg{position:absolute;top:0;left:0}
+
+/* ---------- Mockup of the site ---------- */
+.pg{position:relative;width:375px;background:var(--bg);color:var(--ink);font:16px/1.6 var(--f-body);text-align:left}
+.pg.desk{width:1280px}
+.pg *{box-sizing:border-box}
+.pg h1,.pg h2,.pg h3{font-family:var(--f-head);margin:0;text-wrap:balance}
+.pg p{margin:0}
+.pg ul,.pg ol,.pg dl,.pg dd{margin:0;padding:0;list-style:none}
+.pg a{color:inherit;text-decoration:none}
+.t-display{font-size:40px;line-height:1.1;letter-spacing:-.02em;font-weight:700}
+.t-h1{font-size:32px;line-height:1.15;letter-spacing:-.02em;font-weight:700}
+.t-h2{font-size:24px;line-height:1.2;letter-spacing:-.01em;font-weight:600}
+.t-h3{font-size:20px;line-height:1.3;font-weight:600}
+.t-blg{font-size:18px;line-height:1.6}
+.t-b{font-size:16px;line-height:1.6}
+.t-sm{font-size:14px;line-height:1.5}
+.t-label{font-size:15px;line-height:1.2;font-weight:600}
+.t-cap{font-size:13px;line-height:1.4;letter-spacing:.01em;font-weight:500}
+.t-over{font-size:12px;line-height:1.3;letter-spacing:.08em;font-weight:700;text-transform:uppercase}
+.c-muted{color:var(--muted)} .c-ink{color:var(--ink)} .c-pri{color:var(--primary)} .c-prih{color:var(--primary-hover)}
+.u{text-decoration:underline !important;text-underline-offset:2px}
+.svg1{display:inline-block;width:1em;height:1em;flex:none}
+
+/* chrome */
+.topbar{position:absolute;top:0;left:0;right:0;height:45px;z-index:20;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px}
+.donate{display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:999px;background:var(--primary);color:#fff;font:600 13px/1 var(--f-body)}
+.dchip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--border-strong);background:#fff;font:500 13px/1 var(--f-body);color:var(--ink)}
+.botnav{position:absolute;left:0;right:0;bottom:0;height:73px;z-index:20;background:#fff;border-top:1px solid var(--border);box-shadow:0 4px 12px rgba(34,39,31,.08);display:flex;justify-content:space-around;align-items:stretch;padding:8px}
+.botnav span{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:72px;border-radius:4px;font:500 13px/1.4 var(--f-body);color:var(--muted)}
+.botnav span.on{background:var(--primary-muted);color:var(--primary-hover)}
+.botnav span.on::after{content:"";position:absolute;bottom:2px;width:16px;height:2px;border-radius:2px;background:var(--accent)}
+.desknav{position:absolute;top:0;left:0;right:0;height:72px;z-index:20;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 4px 12px rgba(34,39,31,.08)}
+.desknav>div{max-width:1120px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+.desknav .wm{font:600 20px/1.3 var(--f-head);color:var(--primary)}
+.desknav .its{display:flex;align-items:center;gap:8px}
+.desknav .it{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:76px;padding:8px;border-radius:4px;font:500 13px/1.4 var(--f-body);color:var(--muted);position:relative}
+.desknav .it.on{background:var(--primary-muted);color:var(--primary-hover)}
+.desknav .it.on::after{content:"";position:absolute;bottom:2px;width:16px;height:2px;border-radius:2px;background:var(--accent)}
+.bodypad{padding-top:40px;padding-bottom:88px}
+.desk .bodypad{padding-top:72px;padding-bottom:0}
+.mast{background:#22271f url(../../../public/brand/site/textures/tex-masthead-ink.webp) repeat;color:#fff}
+.mast p{max-width:1120px;margin:0 auto;padding:8px 24px;display:flex;flex-wrap:wrap;gap:2px 12px;font:500 13px/1.4 var(--f-body);letter-spacing:.01em}
+.mast b{font-weight:600}
+.mast .sep{opacity:.5}
+.half{height:12px;background:url(../../../public/brand/site/textures/edge-halftone.svg) repeat-x;background-size:auto 12px}
+
+/* main grid */
+.main{max-width:680px;margin:0 auto;padding:var(--mpy,64px) 24px;display:grid;grid-template-columns:minmax(0,1fr);gap:32px;align-content:start}
+.after.phone .main{--mpy:24px}
+.desk .main{max-width:1120px;grid-template-columns:minmax(0,1fr) 340px;column-gap:48px;align-items:start;--mpy:64px}
+.col1,.row2{display:flex;flex-direction:column;gap:32px;min-width:0}
+.desk .col1{grid-column:1;grid-row:1}
+.desk .row2{grid-column:1;grid-row:2}
+.desk .newsaside{grid-column:2;grid-row:1 / span 2;border-left:1px solid var(--border-strong);padding-left:24px;min-width:0}
+.desk.before .newsaside{max-height:796px;overflow-y:auto;position:relative}
+.top-grp{display:flex;flex-direction:column;gap:32px}
+.after.phone .top-grp{gap:12px}
+.lede-row{display:grid;gap:32px}
+.desk .lede-row{grid-template-columns:58% minmax(0,1fr)}
+.hero{position:relative;min-height:300px;overflow:hidden}
+.hero img{position:absolute;bottom:0;left:50%;transform:translateX(-50%)}
+.hero .pause{position:absolute;top:8px;right:8px;height:32px;display:inline-flex;align-items:center;padding:0 12px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.9);font:500 13px/1 var(--f-body);color:var(--muted)}
+.grp12{display:flex;flex-direction:column;gap:12px}
+
+/* key dates */
+.kd{position:relative;display:flex;flex-direction:column;gap:12px;border:1px solid var(--border);border-radius:12px;background:#fff;padding:16px;font-size:14px;line-height:1.5}
+.kd .sun{position:absolute;top:-24px;right:12px}
+.desk .kd .sun{top:-26px;right:-22px}
+.kd-head{font-weight:600;color:var(--primary-hover)}
+.desk .kd-head{padding-right:28px}
+.rail{display:grid;gap:12px}
+.rail li{position:relative;display:flex;align-items:flex-start;gap:12px}
+.rail .dot{position:relative;z-index:1;flex:none;width:16px;height:16px;margin-top:2px;border-radius:50%;border:2px solid var(--border-strong);background:#fff}
+.rail li+li::before{content:"";position:absolute;top:-12px;left:7px;width:2px;height:12px;background:var(--border-strong)}
+.rail li.dk::before{background:var(--muted)}
+.rail .past .dot{border-color:var(--muted);background:var(--muted)}
+.rail .today .dot{border-color:var(--accent);background:var(--accent);box-shadow:0 0 0 4px var(--accent-muted)}
+.rail .next .dot{border-color:var(--primary)}
+.rail .txt{display:flex;flex-direction:column}
+.rail .lab{font:600 13px/1.4 var(--f-body);letter-spacing:.01em}
+.rail .when{font:500 13px/1.4 var(--f-body);letter-spacing:.01em;color:var(--muted)}
+.rail .past .lab{color:var(--muted)} .rail .today .lab{color:var(--accent-strong)} .rail .next .lab{color:var(--primary)} .rail .later .lab{color:var(--ink)}
+.after .rail .lab,.after .rail .when{font-size:14px;line-height:1.5;letter-spacing:0}
+.after.phone .rail .txt{flex-direction:row;flex-wrap:wrap;align-items:baseline;column-gap:8px}
+.desk .rail{grid-auto-flow:column;grid-auto-columns:1fr;gap:8px}
+.desk .rail li{flex-direction:column;align-items:center;text-align:center;gap:6px}
+.desk .rail .dot{margin-top:0}
+.desk .rail li+li::before{top:7px;left:-50%;right:50%;width:auto;height:2px}
+.kd-links{display:flex;flex-wrap:wrap;gap:4px 16px;color:var(--primary)}
+.kd-links span{display:inline-flex;min-height:24px;align-items:center;font:500 13px/1.4 var(--f-body);text-decoration:underline;text-underline-offset:2px}
+.after .kd-links span{font:400 14px/1.5 var(--f-body)}
+
+/* tiles (before) */
+.glance{display:flex;flex-direction:column;gap:8px}
+.glance-h{position:relative;width:fit-content}
+.glance-h img{position:absolute;bottom:0;left:calc(100% + 8px)}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.desk .tiles{gap:12px}
+.tile{display:flex;flex-direction:column;gap:4px;height:100%;border-radius:12px;background:var(--primary-muted);color:var(--primary-hover);padding:12px}
+.desk .tile{padding:12px 16px}
+.tile .n{font:700 32px/1 var(--f-head);color:var(--primary)}
+.tile .l{font:500 13px/1.4 var(--f-body)}
+.desk .tile .l{font:400 14px/1.5 var(--f-body)}
+
+/* resources block (after) */
+.vr{display:flex;flex-direction:column;gap:8px;scroll-margin-top:0}
+.vr-intro{color:var(--ink)}
+.desk .vr-intro{max-width:65ch}
+.vtiles{display:grid;gap:8px}
+.desk .vtiles,.wide .vtiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+.vtile{display:flex;height:100%;min-height:48px;align-items:flex-start;justify-content:space-between;gap:12px;border-radius:12px;background:var(--primary-muted);color:var(--primary-hover) !important;padding:12px 16px;text-decoration:none}
+.vtile:hover{box-shadow:0 0 0 1px var(--primary)}
+.vtile:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.vtile .vt{display:flex;flex-direction:column;gap:2px}
+.vtile .vt .t-sm{color:var(--ink)}
+.vtile .svg1{margin-top:1px;font-size:16px}
+.vrows{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:12px;background:#fff}
+.vrows>details+details{border-top:1px solid var(--border)}
+.vrows summary{display:flex;min-height:48px;cursor:pointer;list-style:none;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;font:600 15px/1.2 var(--f-body);color:var(--ink)}
+.vrows summary::-webkit-details-marker{display:none}
+.vrows summary:hover{background:var(--bg)}
+.vrows summary:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
+.vrows summary .svg1{color:var(--muted);font-size:20px}
+details[open]>summary .rot{transform:rotate(180deg)}
+.vpanel{display:flex;flex-direction:column;gap:8px;padding:0 16px 16px}
+.vfoot{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:14px;line-height:1.5}
+.vfoot a,.vfoot span{display:inline-flex;min-height:24px;align-items:center;gap:4px;color:var(--primary);text-decoration:underline;text-underline-offset:2px}
+.prov{font:700 10px/1.4 var(--f-body);letter-spacing:.04em;text-transform:uppercase;color:var(--warning);margin-left:6px}
+
+/* on this page (after) */
+.otp{display:flex;flex-direction:column;gap:8px}
+.otp-h{position:relative;width:fit-content}
+.otp-h img{position:absolute;bottom:0;left:calc(100% + 8px)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;min-height:40px;align-items:center;gap:6px;border-radius:999px;border:1px solid var(--border-strong);background:#fff;padding:0 10px;font:400 14px/1.5 var(--f-body);color:var(--ink)}
+.desk .ph-only{display:none}
+
+/* ballot rows */
+.secgrp{display:flex;flex-direction:column;gap:12px}
+.sechead{display:flex;flex-direction:column;gap:4px}
+.desk .after-65{max-width:65ch}
+.rows{border:1px solid var(--border);border-radius:12px;background:#fff}
+.rows>li{position:relative;display:flex;flex-direction:column;gap:4px;padding:16px 24px}
+.rows>li+li{border-top:1px solid var(--border)}
+.rowhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px}
+.rowhead h3{font-size:20px;line-height:1.4;font-weight:600;color:var(--primary)}
+.rowhead .ra{font:500 13px/1.4 var(--f-body);letter-spacing:.01em;color:var(--muted)}
+.after .rowhead .ra{font:400 14px/1.5 var(--f-body);letter-spacing:0}
+.names{display:flex;flex-direction:column;gap:2px}
+.desk .names{flex-direction:row;flex-wrap:wrap;column-gap:16px;row-gap:4px}
+.names li{font-size:16px;line-height:1.375;color:var(--ink)}
+.desk .names li{white-space:nowrap}
+.names .pty{font-size:14px;color:var(--muted)}
+.amt{font-size:15px;line-height:1.5;color:var(--ink)}
+.legend summary,.judges summary{display:inline-flex;min-height:24px;width:fit-content;cursor:pointer;list-style:none;align-items:center;gap:4px;font-size:14px;line-height:1.5;color:var(--primary);text-decoration:underline;text-underline-offset:2px}
+.judges summary{min-height:32px;font-weight:600}
+.legend summary::-webkit-details-marker,.judges summary::-webkit-details-marker{display:none}
+.judges{display:flex;flex-direction:column;gap:8px;border:1px solid var(--border);border-radius:8px;background:var(--surface-muted);padding:12px 16px}
+.judges h3{font:600 15px/1.2 var(--f-body)}
+.judges ul{list-style:disc !important;padding-left:20px !important;display:flex;flex-direction:column;gap:4px;font-size:14px;line-height:1.5}
+.judges ul li{list-style:disc}
+.jl{color:var(--primary);text-decoration:underline;text-underline-offset:2px}
+
+/* dividers */
+.band{height:12px;background:rgba(178,104,54,.6)}
+.band.zig{-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'%3E%3Cpath d='M0 9 6 3l6 6 6-6 6 6' fill='none' stroke='black' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E") left center/auto 12px repeat-x;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'%3E%3Cpath d='M0 9 6 3l6 6 6-6 6 6' fill='none' stroke='black' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E") left center/auto 12px repeat-x}
+.band.wave{-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='12' viewBox='0 0 32 12'%3E%3Cpath d='M0 6c4 0 4-4 8-4s4 4 8 4 4 4 8 4 4-4 8-4' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E") left center/auto 12px repeat-x;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='12' viewBox='0 0 32 12'%3E%3Cpath d='M0 6c4 0 4-4 8-4s4 4 8 4 4 4 8 4 4-4 8-4' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E") left center/auto 12px repeat-x}
+.zz{position:relative;margin:28px 0 12px}
+.desk .zz{margin:72px 0 0}
+.zz img{position:absolute;right:0}
+
+/* house */
+.house{display:flex;flex-direction:column;gap:12px}
+.desk .house .hx{padding-right:112px}
+.hform{display:flex;flex-direction:column;gap:12px}
+.desk .hrow{display:flex;align-items:flex-end;gap:32px}
+.desk .hrow>div{flex:1;min-width:0}
+.fld{display:flex;flex-direction:column;gap:8px}
+.fr2{display:flex;flex-direction:column;gap:12px}
+.desk .fr2{flex-direction:row;align-items:flex-start}
+.inp{height:50px;border:1px solid var(--border-input);border-radius:8px;background:#fff;padding:0 12px;display:flex;align-items:center;color:#8b8a85;font-size:16px;width:100%}
+.desk .inp{max-width:320px}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 20px;border-radius:8px;background:var(--primary);color:#fff;font:600 15px/1.2 var(--f-body);white-space:nowrap}
+
+/* coverage */
+.cov{display:flex;flex-direction:column;gap:12px}
+.cov h2{padding-right:108px}
+.desk .cov h2{margin-top:48px;padding-right:176px}
+.covcard{position:relative}
+.covcard img{position:absolute}
+.dl{border:1px solid var(--border);border-radius:12px;background:#fff}
+.dl>div{display:flex;flex-direction:column;gap:4px;padding:12px 16px}
+.desk .dl>div{display:grid;grid-template-columns:11rem 1fr;gap:16px}
+.dl>div+div{border-top:1px solid var(--border)}
+.dl dt{font:600 15px/1.4 var(--f-body)}
+.dl dd{font-size:14px;line-height:1.5;color:var(--muted)}
+
+/* news */
+.news{display:flex;flex-direction:column;gap:8px}
+.nhead{display:flex;flex-direction:column;gap:4px;border-bottom:2px solid var(--ink);padding-bottom:8px}
+.pills{display:flex;flex-wrap:wrap;gap:6px;padding:4px 0}
+.pill{display:inline-flex;min-height:32px;align-items:center;border-radius:999px;border:1px solid var(--border-input);background:#fff;padding:0 12px;font:600 13px/1.4 var(--f-body);color:var(--ink)}
+.pill.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.nrow{display:flex;flex-direction:row-reverse;align-items:flex-start;gap:12px;border-bottom:1px solid var(--border);padding:12px 0}
+.thumb{flex:none;width:88px;height:66px;border-radius:4px;background:repeating-linear-gradient(135deg,#e7e1d4 0 6px,#efeae0 6px 12px)}
+.ntxt{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
+.nmeta{font:500 13px/1.4 var(--f-mono);color:var(--muted)}
+.nmeta u{text-underline-offset:2px}
+.ntitle{font:600 15px/1.375 var(--f-body);color:var(--primary)}
+.after.phone .nrow.ph-cut{display:none}
+.flag{display:inline-block;font:700 10px/1.5 var(--f-body);letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--frozen);border-radius:3px;padding:0 5px;margin-top:2px;width:fit-content}
+.innerscroll{position:sticky;top:0;z-index:3;display:block;font:700 11px/1.4 var(--f-body);color:#fff;background:#b4402e;border-radius:4px;padding:3px 6px;margin-bottom:6px}
+
+/* footer */
+.foot{background:var(--bg)}
+.foot .strip{display:block;width:100%;height:auto}
+.foot .ft{max-width:1120px;margin:0 auto;padding:16px 24px 24px;display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:1.4;color:var(--muted);border-top:1px solid var(--border)}
+.foot .fl{display:flex;flex-wrap:wrap;gap:4px 16px}
+.foot .fl span{text-decoration:underline;text-underline-offset:2px;min-height:24px;display:inline-flex;align-items:center}
+.desk .foot .strip{height:268px;object-fit:cover}
+
+/* annotations on mockups */
+.anno{outline:2px solid #6b5ea8;outline-offset:3px;border-radius:12px}
+.newtag{position:absolute;z-index:6;top:-10px;left:-8px;background:#6b5ea8;color:#fff;font:700 10.5px/1.5 var(--f-body);border-radius:3px;padding:0 6px;letter-spacing:.02em}
+
+/* close-ups */
+.closeups{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.cu{flex:none;max-width:100%}
+.cu h4{font:600 14px/1.3 var(--f-head);margin:0 0 6px}
+.cu .pg{width:375px;max-width:100%;padding:24px;border-radius:12px;border:1px solid #cfc9bc}
+.cu .pg.wide{width:734px}
+@media (max-width:760px){.cu .pg.wide{width:100%}}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--doc-line);border-radius:12px;background:#fff}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--doc-line)}
+th{background:#f6f3ec;font-weight:600;position:sticky;top:0}
+td.num{white-space:nowrap;font-family:var(--f-mono);font-size:12.5px}
+tr.tot td{font-weight:700;background:#fbfaf6}
+.pr{font:700 11px/1.6 var(--f-body);border-radius:4px;padding:0 6px;background:#22271f;color:#fff}
+td .files{font-family:var(--f-mono);font-size:11.5px;color:var(--doc-muted)}
+
+/* order lists */
+.orders{display:grid;gap:16px}
+@media (min-width:900px){.orders{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.olist{counter-reset:o;list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.olist li{counter-increment:o;display:grid;grid-template-columns:22px minmax(0,1fr);gap:2px 8px;align-items:baseline;padding:6px 8px;border-radius:8px;background:#fff;border:1px solid var(--doc-line);font-size:13.5px}
+@media (min-width:620px){.olist li{grid-template-columns:26px minmax(0,1fr) auto}}
+.olist li::before{content:counter(o);font:700 12px/1 var(--f-mono);color:var(--doc-muted)}
+.olist li.new{border-color:#6b5ea8;background:#f4f2fb}
+.olist .y{grid-column:2;font:12px/1.3 var(--f-mono);color:var(--doc-muted)}
+@media (min-width:620px){.olist .y{grid-column:auto;white-space:nowrap}}
+
+/* timeline */
+.tl-wrap{overflow-x:auto;padding-bottom:6px}
+.tl{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:4px}
+.day{background:#fff;border:1px solid var(--doc-line);border-radius:8px;padding:6px;min-height:92px;font-size:12px;line-height:1.3;display:flex;flex-direction:column;gap:4px;overflow-wrap:anywhere}
+.day .d{font:700 12px/1.2 var(--f-mono);color:var(--doc-muted)}
+.day.wk .d{color:#b4402e}
+.ev{border-radius:4px;padding:2px 4px;font-weight:600}
+.ev.a{background:var(--primary-muted);color:var(--primary-hover)}
+.ev.b{background:var(--frozen-bg);color:var(--frozen)}
+.ev.f{background:#22271f;color:#fff}
+.ev.v{background:#efeae0;color:var(--ink)}
+.ev.c{background:#e6e3f3;color:#4a3f86}
+
+/* decisions */
+.dec{display:flex;flex-direction:column;gap:14px;max-width:960px}
+.dec fieldset{border:1px solid var(--doc-line);border-radius:12px;background:#fff;padding:12px 14px 14px;margin:0}
+.dec legend{font:600 16px/1.3 var(--f-head);padding:0 4px}
+.opt{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;padding:8px;border-radius:8px;cursor:pointer}
+.opt:hover{background:#f6f3ec}
+.opt input{margin:4px 0 0;width:18px;height:18px;accent-color:var(--primary)}
+.opt:has(input:checked){background:var(--primary-muted)}
+.dec textarea{width:100%;min-height:56px;margin-top:8px;font:14px/1.5 var(--f-body);border:1px solid var(--border-input);border-radius:8px;padding:8px 10px;resize:vertical}
+.dec textarea:focus-visible,.dec input:focus-visible,.btn-doc:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.btn-doc{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:8px;background:var(--primary);color:#fff;border:0;font:600 15px/1 var(--f-body);cursor:pointer}
+.btn-doc:hover{background:var(--primary-hover)}
+pre.md{white-space:pre-wrap;background:#22271f;color:#f6f3ec;border-radius:10px;padding:12px 14px;font:12.5px/1.5 var(--f-mono);max-width:960px;overflow-x:auto}
+details.more{margin:10px 0}
+details.more>summary{cursor:pointer;font-weight:600;min-height:32px;display:flex;align-items:center}
+ul.plain{margin:6px 0 0;padding-left:20px}
+ul.plain li{margin:3px 0}
+.two{display:grid;gap:16px}
+@media (min-width:900px){.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.foot-doc{padding:28px 0 48px;color:var(--doc-muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc-head">
+  <p class="eyebrow">Know Your Vote · build spec · 2026-10-12 · branch claude/home-readability</p>
+  <h1 class="doc-title">Home page: sample ballot links and an easier scroll</h1>
+  <p class="doc-sub">The founder asked for sample ballots and other helpful resources to be easier to find, and for the page to feel more scroll-friendly, especially on phones. This page shows the reconciled plan with before/after mockups built from the site's real tokens, copy and section order. The written spec is <code>home-readability.md</code> beside this file.</p>
+  <p class="plan"><b>The plan.</b> A new block, <b>“Sample ballot and how to vote”</b>, sits 12px under the key dates and links only to the county Supervisors of Elections' own pages and the Florida Division of Elections: your sample ballot, where to vote on Election Day, early voting, and the mail ballot (which switches from “Request” to “Return” on October 23). A saved district shows that county's four links; otherwise five closed rows let the voter pick a county. It stores nothing. It takes the slot of the three count tiles, which become an “On this page” jump list. PR A also tightens the top of the phone page, drops repeated copy, shows the 4 newest stories on phones and ends the desktop news column's inner scroll. PR B (frozen ballot files, all or nothing, merge by <b>Fri Oct 16</b>) puts one candidate name per line, says the date once, makes “Amendment N” the heading with the official title quoted underneath, and folds the judges' court links into a disclosure. PR C (optional) stops the bars being fixed on short screens.</p>
+  <div class="stats">
+    <div class="stat"><b>≈6,345 → ≈5,370px</b><span>Phone page at 375×812, PRs A+B, no saved county. 9.1 → 7.7 screens of 694px. PR A alone ≈5,870. The first race row moves only from y 1,303 to ≈1,395.</span></div>
+    <div class="stat"><b>0 → 4 official links</b><span>Nothing on the home page links a sample ballot today. The block's heading lands on phone screen 1.</span></div>
+    <div class="stat"><b>1 scrollbar</b><span>Desktop news stops scrolling inside the page (547px of news was hidden in it). Page ≈3,780px, about today's ≈3,720.</span></div>
+    <div class="stat"><b>Fri Oct 16</b><span>Last day to merge PR B (frozen files) before the Oct 17 freeze-copy PR writes the hashes.</span></div>
+  </div>
+  <ul class="toc" aria-label="On this page">
+    <li><a href="#first">First phone screen</a></li>
+    <li><a href="#phone">Phone, full scroll</a></li>
+    <li><a href="#desktop">Desktop</a></li>
+    <li><a href="#block">Resources block states</a></li>
+    <li><a href="#changes">Table of changes</a></li>
+    <li><a href="#order">Page order</a></li>
+    <li><a href="#timeline">Freeze timing</a></li>
+    <li><a href="#checks">Neutrality and a11y</a></li>
+    <li><a href="#reconcile">Reconciliation</a></li>
+    <li><a href="#decide">Decisions</a></li>
+  </ul>
+</header>
+
+<section class="doc" id="heights">
+  <h2 class="doc-h">Page height in phone screens</h2>
+  <p class="lead">Each tick is one screen of usable height (812px minus the 45px top bar and the 73px bottom nav = 694px). “m” = measured on the dev server; “e” = estimated from the mockups below (they ran 2% long on today's page). Re-measure after each PR.</p>
+  <div class="bars">
+    <div class="bar-row"><span>Today (e)</span><div class="bar" style="width:100%;--sw:calc(694 / 6345 * 100%)"><i></i><span>≈6,345px · 9.1 screens</span></div></div>
+    <div class="bar-row"><span>PR A only (e)</span><div class="bar mid" style="width:calc(5870 / 6345 * 100%);--sw:calc(694 / 5870 * 100%)"><i></i><span>≈5,870px · 8.5</span></div></div>
+    <div class="bar-row"><span>PRs A+B (e)</span><div class="bar after" style="width:calc(5370 / 6345 * 100%);--sw:calc(694 / 5370 * 100%)"><i></i><span>≈5,370px · 7.7</span></div></div>
+  </div>
+</section>
+
+<section class="doc" id="first">
+  <h2 class="doc-h">What a phone shows on load (375×812, 100%)</h2>
+  <p class="lead">Fixed top bar and bottom nav drawn over the page, as on a real phone. Today the first screen holds the headline, a 7-line grey lede and the top of the key dates. After, the h1 is two lines, the lede is dark and shorter, each date sits on one line, and the “Sample ballot and how to vote” heading appears just above the bottom nav.</p>
+  <div class="cmp" id="firstScreens"></div>
+</section>
+
+<section class="doc" id="phone">
+  <h2 class="doc-h">Phone, full scroll: before and after</h2>
+  <p class="lead">The whole page at 375px wide, scaled down. Dashed purple lines mark where each phone screen ends (the first at 739px, where the bottom nav starts, then every 694px). Labels in the gutter name each section with its y position: measured today, estimated after. The mockup's own height differs a little from the real page because it uses system fonts.</p>
+  <div class="controls">
+    <fieldset><legend>Scale</legend>
+      <label class="seg"><input type="radio" name="pscale" value="0.4">40%</label>
+      <label class="seg"><input type="radio" name="pscale" value="0.6" checked>60%</label>
+      <label class="seg"><input type="radio" name="pscale" value="0.8">80%</label>
+      <label class="seg"><input type="radio" name="pscale" value="1">100%</label>
+    </fieldset>
+    <span class="note">Purple outline = new on the page. Disclosures in the mockups open and close.</span>
+  </div>
+  <div class="cmp" id="phoneCmp"></div>
+</section>
+
+<section class="doc" id="desktop">
+  <h2 class="doc-h">Desktop at 1280×900: before and after</h2>
+  <p class="lead">Scaled to fit. Today the news column is a sticky box with its own scrollbar (marked in red, and scrollable in the mockup). After, it scrolls with the page, keeps 8 stories, and the resources block sits on the first screen. The first race row moves down (1,072 → ≈1,400 with no county saved, ≈1,290 with one) because the official links now come first. The mockup's fallback display font wraps the 40px h1 to two lines, so its desktop y values run about 44px long.</p>
+  <div class="controls">
+    <fieldset><legend>Scale</legend>
+      <label class="seg"><input type="radio" name="dscale" value="0.3">30%</label>
+      <label class="seg"><input type="radio" name="dscale" value="0.36" checked>36%</label>
+      <label class="seg"><input type="radio" name="dscale" value="0.5">50%</label>
+      <label class="seg"><input type="radio" name="dscale" value="0.75">75%</label>
+    </fieldset>
+  </div>
+  <div class="cmp" id="deskCmp"></div>
+</section>
+
+<section class="doc" id="block">
+  <h2 class="doc-h">The resources block, close up</h2>
+  <p class="lead">Real links, checked 2026-10-12 (they open the official sites in a new tab). Pick a Florida calendar day to see the dated rows change; dates are stated, never counted down.</p>
+  <div class="controls">
+    <fieldset><legend>As of</legend>
+      <label class="seg"><input type="radio" name="asof" value="oct12" checked>Oct 12</label>
+      <label class="seg"><input type="radio" name="asof" value="oct22">Oct 22</label>
+      <label class="seg"><input type="radio" name="asof" value="oct23">Oct 23 – Nov 2</label>
+      <label class="seg"><input type="radio" name="asof" value="nov3">Nov 3</label>
+    </fieldset>
+    <label class="seg" style="gap:6px"><input type="checkbox" id="evgate" checked style="position:static;opacity:1;width:auto;height:auto;accent-color:#fff">All four counties' early-voting rows verified</label>
+  </div>
+  <div class="closeups" id="closeups"></div>
+  <details class="more">
+    <summary>All county and state links (checked 2026-10-12)</summary>
+    <div class="tbl-wrap" id="linkTable"></div>
+    <p class="note">200 = HEAD and GET returned 200 to curl. 403* = Cloudflare refuses curl, but the page loaded in a real browser the same day. Hillsborough's return link is provisional: a person opens /173 and /291 by Oct 21 and keeps whichever explains returning a ballot. Every “Asks for” line is confirmed on the live form before PR A merges.</p>
+  </details>
+</section>
+
+<section class="doc" id="changes">
+  <h2 class="doc-h">Table of changes</h2>
+  <p class="lead">px: negative = shorter. “m” = measured on the dev server (audit or prototype); “mockup” = measured in the mockups above; “e” = estimated. “Frozen” = in <code>FROZEN_FILES</code>; “ships pre-freeze” = not hashed, but renders on a frozen page, so it lands before the hashes are written.</p>
+  <div class="tbl-wrap" id="changeTable"></div>
+</section>
+
+<section class="doc" id="order">
+  <h2 class="doc-h">New page order</h2>
+  <div class="orders">
+    <div><h3 class="doc-h3">Phone 375×812, A+B, no saved county</h3><ol class="olist" id="orderPhone"></ol></div>
+    <div><h3 class="doc-h3">Desktop 1280×900, A+B</h3><ol class="olist" id="orderDesk"></ol></div>
+  </div>
+</section>
+
+<section class="doc" id="timeline">
+  <h2 class="doc-h">Freeze timing and PR plan</h2>
+  <p class="lead">PR B's real deadline is the freeze-copy PR on Oct 17, not the Oct 18 04:00 UTC cut-off: the hashes are written after every frozen-file change has merged. If PR B isn't merged by end of day Oct 16, close it and redo it after Nov 4; never merge part of it.</p>
+  <div class="tl-wrap"><div class="tl" id="tl"></div></div>
+  <p class="note"><span class="ev a">PR A</span> not frozen · <span class="ev b">PR B</span> frozen files · <span class="ev f">freeze</span> · <span class="ev v">voter dates</span> · <span class="ev c">checks</span></p>
+</section>
+
+<section class="doc" id="checks">
+  <h2 class="doc-h">Neutrality and accessibility checks</h2>
+  <div class="two">
+    <div class="panel">
+      <h3 class="doc-h3" style="margin-top:0">Neutrality</h3>
+      <ul class="plain">
+        <li><b>Official sources only:</b> the four Supervisors' own pages and the Division of Elections. No vendor tools, no Vote411, no Ballotpedia on the home page.</li>
+        <li><b>Every county the same:</b> same four tiles, labels, order and style; all closed; the only preselection is the visitor's own saved county. A verify script enforces all-or-none.</li>
+        <li><b>County facts are the county's:</b> each “Asks for” line is that county's form. The early-voting window shows for all four counties or none. No hours printed (Orange 8–8, the others 7–7).</li>
+        <li><b>Dates stated, never counted;</b> from verified rows only.</li>
+        <li><b>Every candidate the same:</b> one line each, ballot order, same size and colour, every name printed, nothing truncated or collapsed. The jump list names sections, never a race.</li>
+        <li><b>Amendment titles verbatim</b> in ALL CAPS; only size and position change.</li>
+        <li><b>Judges:</b> collapsed identically everywhere; the visible sentence says they're on the ballot and not covered. The home page still passes no county.</li>
+        <li><b>News:</b> the phone cap is time only, the same for every region filter. A lopsided 4 gets the news-fairness §2 check, then is shown, never padded or trimmed. The Jolly campaign-stop row is a tagging gap to fix in the pipeline.</li>
+        <li><b>No new storage:</b> no cookie, localStorage key or URL parameter.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3 class="doc-h3" style="margin-top:0">Accessibility (WCAG 2.2 AA)</h3>
+      <ul class="plain">
+        <li><b>Targets:</b> tiles and county rows ≥48px, jump chips 40px, judges summary 32px, footer links 24px.</li>
+        <li><b>Text:</b> nothing a voter must read below 14px; key dates, banner links and row status rise from 13px.</li>
+        <li><b>Contrast:</b> primary-hover on primary-muted ≈6.8:1; ink on primary-muted ≈12.9:1.</li>
+        <li><b>Headings:</b> h1 → h2 Sample ballot… → h2 On this page → h2 Statewide races → h3 offices → h2 Ballot questions → h3 Amendment N → h3 Judges (outside the disclosure) → h2 House → h2 News → h2 What this guide covers.</li>
+        <li><b>Links:</b> SVG glyphs (the Inter subset lacks ↗ ↓ ›); new-tab links name their county in sr-only text.</li>
+        <li><b>Disclosures:</b> native details/summary; keyboard and no-JS work; every summary names its county or subject.</li>
+        <li><b>Anchors:</b> no scroll-mt; the root scroll-padding clears the bars.</li>
+        <li><b>Reflow:</b> single column below sm, no fixed widths, no horizontal scroll at 320px.</li>
+        <li><b>PR C:</b> bars static at ≤500px tall, freeing 26–46% of the screen at 200–400% zoom.</li>
+      </ul>
+    </div>
+  </div>
+  <details class="more">
+    <summary>Follow-ups (10)</summary>
+    <ol class="plain">
+      <li>Hillsborough return link: confirm /173 or /291 by Oct 21.</li>
+      <li>Re-check links Oct 19, 21, 23 and Nov 1; add the 29 URLs to the weekly re-check routine.</li>
+      <li>Confirm 0043's county early-voting rows are verified (F4): until then the block shows no window note and no-county visitors see Oct 24–31 in the key dates.</li>
+      <li>“Jolly makes campaign stop in Coconut Creek” is in the home column because the row has no candidate_id: fix the tagging in the pipeline.</li>
+      <li>Broward's mail page still opens with the August deadline; Orange's other-language ballots are “COMING SOON”. Theirs to fix; the founder may email Broward.</li>
+      <li>News filter pills and NewsStoryCard meta are still 13px; they render on /news and candidate pages, so raise them after Nov 4.</li>
+      <li>Welcome email and VotingInfo could point at the sample-ballot lookup instead of the Supervisor's home page: after Nov 4.</li>
+      <li>Desktop placement: if the lower first race row matters, try the block at the top of the right column at lg.</li>
+      <li>67-county directory (commit 1bde01b): revisit after Nov 3 with the CountyPicker owner.</li>
+      <li>COUNTY_VOTER_LINKS is 2026 data: re-check every URL before the next election.</li>
+    </ol>
+  </details>
+</section>
+
+<section class="doc" id="reconcile">
+  <h2 class="doc-h">How the two judges' specs were reconciled</h2>
+  <p class="lead">Both judges built on Design 2 with Design 1's resources block. Where they differed, the call went by neutrality first, then readability evidence, then build risk.</p>
+  <div class="tbl-wrap" id="reconTable"></div>
+  <details class="more">
+    <summary>Not doing</summary>
+    <ul class="plain">
+      <li>No address field in this block and no embedded county tool (the House step's field already takes an address and keeps only the district; the county tools load third-party scripts).</li>
+      <li>No vendor deep links: VoterFocus, electionsfl.org and OmniBallot addresses change between elections.</li>
+      <li>No sticky sub-nav (content-to-chrome ≈5.9:1 → ≈4:1) and no hide-on-scroll top bar.</li>
+      <li>No collapsing or truncating of races or amendments.</li>
+      <li>No county passed through SharedBallot (deliberate; pinned by verify-judicial-retention).</li>
+      <li>No CSS :has() radio pills, no “Vote” nav item, no globals.css token changes, no SUPERVISOR_LIST_URL change.</li>
+      <li>No new art: the palm sticker retires with the tiles; the sun, seated reader, cat and magnifier stay as they are.</li>
+    </ul>
+  </details>
+</section>
+
+<section class="doc" id="decide">
+  <h2 class="doc-h">Founder decisions</h2>
+  <p class="lead">The recommended option is pre-selected. Change any, add notes, then copy the result as markdown and paste it back into the session.</p>
+  <form class="dec" id="decForm" onsubmit="return false">
+    <fieldset>
+      <legend>1. Count tiles → resources block and “On this page” list</legend>
+      <label class="opt"><input type="radio" name="d1" value="a" checked><span><b>(a) Replace</b> <span class="badge b-rec">Recommended</span><br>“Sample ballot and how to vote” takes the tiles' slot; the tiles become a jump list that keeps the counts: “5 statewide races · 3 ballot questions · U.S. House race · Election news” (news on phones only). The “17 candidates in them” total and the ≥1400px palm sticker go; the magnifier stays. Undoes layout-pass item 3 (approved 10-11).</span></label>
+      <label class="opt"><input type="radio" name="d1" value="b"><span><b>(b) Keep the tiles</b> under the new block: about +150px on phones, and still no quick way to the House step or the news.</span></label>
+      <textarea name="n1" aria-label="Notes on decision 1" placeholder="Notes (optional)"></textarea>
+    </fieldset>
+    <fieldset>
+      <legend>2. PR B, the frozen ballot rows, as one unit</legend>
+      <label class="opt"><input type="radio" name="d2" value="a" checked><span><b>(a) Approve by Thu Oct 15</b>, merge Fri Oct 16 <span class="badge b-rec">Recommended</span><br>One name per line in dark text (inline on desktop), the date said once, party key behind “What the party codes mean”, “Amendment N” with the official ALL-CAPS title quoted underneath, judges' heading and “we don't cover these” sentence visible with the court links behind “Who is on the ballot, with links”, row status at 14px. About −510px on phones.</span></label>
+      <label class="opt"><input type="radio" name="d2" value="b"><span><b>(b) Defer all of it</b> to after Nov 4. PR A ships on its own either way. Never part of it.</span></label>
+      <textarea name="n2" aria-label="Notes on decision 2" placeholder="Notes (optional)"></textarea>
+    </fieldset>
+    <fieldset>
+      <legend>3. News layout</legend>
+      <label class="opt"><input type="radio" name="d3" value="a" checked><span><b>(a) Phones: 4 newest, news before “What this guide covers”. Desktop: not sticky, 8 stories, one scrollbar</b> <span class="badge b-rec">Recommended</span><br>Same cap for every region filter, newest first, “All election news” kept. −453px on phones; fixes the main desktop scroll complaint.</span></label>
+      <label class="opt"><input type="radio" name="d3" value="b"><span><b>(b) Phones only</b>: keep the sticky inner-scroll column on desktop.</span></label>
+      <label class="opt"><input type="radio" name="d3" value="c"><span><b>(c) Leave news as it is.</b></span></label>
+      <textarea name="n3" aria-label="Notes on decision 3" placeholder="Notes (optional)"></textarea>
+    </fieldset>
+    <fieldset>
+      <legend>4. Phone bars</legend>
+      <label class="opt"><input type="radio" name="d4" value="a" checked><span><b>(a) Static only on short screens (PR C)</b> <span class="badge b-rec">Recommended</span><br>Keep the 45px top bar (the district chip's only home) and the bottom nav fixed on normal screens, no hide-on-scroll; make both static at 500px tall or less (landscape phones, 200% and 400% zoom). Its own PR, revertible alone.</span></label>
+      <label class="opt"><input type="radio" name="d4" value="b"><span><b>(b) Hide the top bar on scroll down</b>, show it on scroll up: saves about 5% of the screen but adds motion on top of Safari's own toolbars.</span></label>
+      <label class="opt"><input type="radio" name="d4" value="c"><span><b>(c) Leave the bars as they are.</b></span></label>
+      <textarea name="n4" aria-label="Notes on decision 4" placeholder="Notes (optional)"></textarea>
+    </fieldset>
+    <label style="display:block;max-width:960px"><b>Anything else</b><textarea name="n0" placeholder="Copy changes, links to check, questions"></textarea></label>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <button type="button" class="btn-doc" id="copyMd">Copy as markdown</button>
+      <span id="copied" class="note" aria-live="polite"></span>
+    </div>
+    <pre class="md" id="mdOut" aria-label="Markdown preview"></pre>
+  </form>
+</section>
+
+<p class="foot-doc">Sources: the audit, research and three designs of 2026-10-12, both judges' final specs, the live dev page at 375×812 and 1280×900, and the code on main b3f0b86, rechecked on 71db8fb (address lookup, PRs #171/#172). Art shown is the site's own files, at today's sizes and places. Nothing under src/ or public/ was edited.</p>
+</div>
+
+<script>
+(function(){
+"use strict";
+var ART = "../../../public/brand/site/";
+var ILL = ART + "illustrations/";
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+var uidN = 0; function uid(){ uidN += 1; return "m" + uidN; }
+
+/* ---------- glyphs (Glyphs.tsx idiom) ---------- */
+function svg(d){return '<svg class="svg1" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="'+d+'" stroke-linecap="round" stroke-linejoin="round"/></svg>';}
+var G_EXT = svg("M11.5 4.5h4v4M15.5 4.5l-6 6M8.5 5.5h-3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-3");
+var G_DOWN = svg("M10 4.5v11M5.5 11l4.5 4.5 4.5-4.5");
+var G_CARET = '<span class="rot" style="display:inline-flex">'+svg("M6 8l4 4 4-4")+'</span>';
+var I_BALLOT = svg("M5 3.5h10v13H5zM7.5 7h5M7.5 10h5M7.5 13h3");
+var I_PEOPLE = svg("M7 9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM2.5 16c.5-2.5 2.3-4 4.5-4s4 1.5 4.5 4M13.5 9a2 2 0 1 0 0-4M14 12c1.8.2 3 1.6 3.5 4");
+var I_NEWS = svg("M4 4.5h10v11H5.5A1.5 1.5 0 0 1 4 14zM14 7.5h2v6.5a1.5 1.5 0 0 1-3 0M6.5 7.5h5M6.5 10.5h5M6.5 13h3");
+
+/* ---------- real data (dev page, 2026-10-12) ---------- */
+var RACES = [
+  {o:"United States Senator", s:"Full brief", c:[["Ashley Moody","REP"],["Angie Nixon","DEM"],["Neil J. Gillespie","NPA"]]},
+  {o:"Governor", s:"Full brief", c:[["Byron Donalds","REP"],["David Jolly","DEM"],["Scott Eckhard Jewett","LPF"],["Charles Burkett","NPA"],["Frank J. Russo","NPA"],['Moliere "Moe" Dimanche',"NPA"],["Dean Ocean Abrams","NPA"],['Jeffrey Peter "Dr. Jeff" Datto',"NPA"]]},
+  {o:"Attorney General", s:"Full brief", c:[["James Uthmeier","REP"],["Jose Javier Rodriguez","DEM"]]},
+  {o:"Chief Financial Officer", s:"Names on the ballot · no brief", c:[["Blaise Ingoglia","REP"],["Annette Taddeo","DEM"]]},
+  {o:"Commissioner of Agriculture", s:"Full brief", c:[["Wilton Simpson","REP"],["Joey Mendoza Atkins","DEM"]]}
+];
+var LEGEND = "Party codes, as the ballot prints them: REP, Republican Party of Florida; DEM, Florida Democratic Party; LPF, Libertarian Party of Florida; NPA, no party affiliation.";
+var MEASURES = [
+  {n:1, t:"BUDGET STABILIZATION FUND", th:"Statewide · Needs 60% to pass · resources being collected"},
+  {n:2, t:"EXEMPTION OF TANGIBLE PERSONAL PROPERTY ON AGRICULTURAL LAND FROM TAXATION", th:"Statewide · Needs 60% to pass"},
+  {n:3, t:"INCREASED HOMESTEAD EXEMPTION; LOWER CAP ON INCREASES IN NON-HOMESTEAD PROPERTY ASSESSMENTS", th:"Statewide · Needs 60% to pass"}
+];
+var NEWS = [
+  ["Statewide","Florida's Voice","Oct 6","Palm Beach GOP drops suspended clerk Mike Caruso from voter guide after backlash"],
+  ["Miami-Dade","CBS News Miami","Oct 6","Nearly 150,000 ballots cast in Florida with more than 2 million more awaiting action, state officials say"],
+  ["Miami-Dade","Diario Las Américas","Oct 6","Demócratas recortan ligeramente ventaja republicana en registro electoral de Florida"],
+  ["Miami-Dade","CBS News Miami","Oct 5","Could speeding cameras cover the losses to city budgets from potential property tax cuts?"],
+  ["Miami-Dade","WPLG Local 10","Oct 5","North Miami voters face mayoral election in November"],
+  ["Miami-Dade","WSVN 7News","Oct 5","Miami-Dade supervisor of elections says ICE will not be at the polls, amid voter intimidation arrest"],
+  ["Miami-Dade","WPLG Local 10","Oct 5","Jolly makes campaign stop in Coconut Creek", "tagging gap: no candidate_id (follow-up 4)"],
+  ["Statewide","Florida's Voice","Oct 5","Nationwide election crackdown leads to 2 Florida illegal voting charges"]
+];
+var COUNTIES = [
+  {fips:"12086", name:"Miami-Dade", site:"votemiamidade.gov", asks:"your name and date of birth",
+   sample:"https://www.votemiamidade.gov/elections/voters/information.page", polling:"https://www.votemiamidade.gov/elections/voters/information.page",
+   early:"https://www.votemiamidade.gov/elections/voters/early-voting.page", mailReq:"https://www.votemiamidade.gov/elections/voters/vote-by-mail.page", mailRet:"https://www.votemiamidade.gov/elections/voters/vote-by-mail.page", st:"200"},
+  {fips:"12011", name:"Broward", site:"browardvotes.gov", asks:"your name, year of birth and house number",
+   sample:"https://my.browardvotes.gov/Portals/ElectionLink/VoterSearch.aspx", polling:"https://browardvotes.gov/voters/precinct-finder",
+   early:"https://browardvotes.gov/voters/early-voting-ballot-return", mailReq:"https://browardvotes.gov/voters/vote-mail-information", mailRet:"https://browardvotes.gov/voters/early-voting-ballot-return", st:"200"},
+  {fips:"12057", name:"Hillsborough", site:"votehillsborough.gov", asks:"your name and date of birth",
+   sample:"https://www.votehillsborough.gov/180/On-the-Ballot", polling:"https://www.votehillsborough.gov/159/Voting-Precincts",
+   early:"https://www.votehillsborough.gov/171/Early-Voting", mailReq:"https://www.votehillsborough.gov/173/Request-a-Vote-By-Mail-Ballot", mailRet:"https://www.votehillsborough.gov/291/2026-General-Election", st:"403*", prov:true},
+  {fips:"12095", name:"Orange", site:"voteorangefl.gov", asks:"your address",
+   sample:"https://voteorangefl.gov/whats-on-my-ballot/", polling:"https://voteorangefl.gov/find-your-polling-place/",
+   early:"https://voteorangefl.gov/vote-early/", mailReq:"https://voteorangefl.gov/request-a-mail-ballot/", mailRet:"https://voteorangefl.gov/secure-ballot-intake-stations-drop-boxes/", st:"200"}
+];
+var STATE = {dir:"https://dos.elections.myflorida.com/supervisors/",
+  polling:"https://dos.fl.gov/elections/for-voters/check-your-voter-status-and-polling-place/voter-precinct-lookup/",
+  early:"https://dos.fl.gov/elections/for-voters/voting/early-voting-and-secure-ballot-intake-stations/",
+  mail:"https://dos.fl.gov/elections/for-voters/voting/vote-by-mail/",
+  reg:"https://registration.dos.fl.gov/CheckVoterStatus"};
+
+/* ---------- dated rows (voter-resources.ts) ---------- */
+function mailRow(date){
+  if(date==="oct22") return {k:"request", label:"Request a mail ballot", note:"By 5 p.m. today, October 22"};
+  if(date==="oct23") return {k:"return", label:"Return your mail ballot", note:"It must be received by 7 p.m. on November 3, and can’t be handed in at an Election Day polling place."};
+  if(date==="nov3") return {k:"return", label:"Return your mail ballot", note:"It must be received by 7 p.m. today, November 3, and can’t be handed in at an Election Day polling place."};
+  return {k:"request", label:"Request a mail ballot", note:"By 5 p.m. on October 22"};
+}
+function tilesFor(c, date, ev){
+  var m = mailRow(date);
+  if(!c){
+    return [
+      {label:"Find your county’s Supervisor of Elections", note:"They have your official sample ballot", href:STATE.dir},
+      {label:"Where to vote on Election Day", note:"Every county’s polling-place finder", href:STATE.polling},
+      {label:"Early voting sites and hours", note:(date==="nov3"? null : "Every county: at least October 24 to October 31"), href:STATE.early},
+      {label:m.label, note:m.note, href:STATE.mail}
+    ];
+  }
+  var t = [
+    {label:"See your sample ballot", note:"Asks for " + c.asks, href:c.sample},
+    {label:"Where to vote on Election Day", note:(date==="nov3" ? "Today, November 3, 7 a.m. to 7 p.m." : "November 3, 7 a.m. to 7 p.m."), href:c.polling}
+  ];
+  if(!(ev && date==="nov3")) t.push({label:"Early voting sites and hours", note:(ev ? "October 19 to November 1" : null), href:c.early});
+  t.push({label:m.label, note:m.note, href:(m.k==="return" ? c.mailRet : c.mailReq), prov:(m.k==="return" && c.prov)});
+  return t;
+}
+function tileList(tiles, who){
+  return '<ul class="vtiles">' + tiles.map(function(t){
+    return '<li><a class="vtile" href="'+esc(t.href)+'" target="_blank" rel="noreferrer"><span class="vt"><span class="t-label">'+esc(t.label)+(t.prov?'<span class="prov">provisional</span>':'')+'</span>'+(t.note?'<span class="t-sm">'+esc(t.note)+'</span>':'')+'</span>'+G_EXT+'</a></li>';
+  }).join("") + '</ul>';
+}
+function resources(o){
+  /* o: {county: fips|null, open: fips|"other"|null, date, ev} */
+  var date = o.date || "oct12", ev = o.ev !== false;
+  var c = o.county ? COUNTIES.filter(function(x){return x.fips===o.county;})[0] : null;
+  var h = '<section class="vr" aria-label="Sample ballot and how to vote"><h2 class="t-h2">Sample ballot and how to vote</h2>';
+  if(c){
+    h += '<p class="t-sm vr-intro">From the '+c.name+' County Supervisor of Elections, who runs your election. These links open '+c.site+' in a new tab; we never see what you enter there.</p>';
+    h += tileList(tilesFor(c, date, ev), c.name + " County");
+    h += '<p class="vfoot"><a href="'+STATE.reg+'" target="_blank" rel="noreferrer">Check your voter registration '+G_EXT+'</a><a href="'+STATE.dir+'" target="_blank" rel="noreferrer">Another county’s Supervisor of Elections '+G_EXT+'</a></p>';
+  } else {
+    var nm = "sample-ballot-county-" + uid();
+    h += '<p class="t-sm vr-intro">Your county’s Supervisor of Elections has your official sample ballot. Choose your county:</p>';
+    h += '<div class="vrows">';
+    COUNTIES.forEach(function(k){
+      h += '<details name="'+nm+'"'+(o.open===k.fips?' open':'')+'><summary>'+k.name+' County'+G_CARET+'</summary><div class="vpanel">'+tileList(tilesFor(k, date, ev), k.name+" County")+'<p class="t-sm c-muted">Links open '+k.site+', the Supervisor’s own site. We never see what you enter there.</p></div></details>';
+    });
+    h += '<details name="'+nm+'"'+(o.open==="other"?' open':'')+'><summary>Another Florida county'+G_CARET+'</summary><div class="vpanel">'+tileList(tilesFor(null, date, ev), "Florida Division of Elections")+'<p class="t-sm c-muted">From the Florida Division of Elections. We never see what you enter there.</p></div></details>';
+    h += '</div><p class="vfoot"><a href="'+STATE.reg+'" target="_blank" rel="noreferrer">Check your voter registration '+G_EXT+'</a></p>';
+  }
+  return h + '</section>';
+}
+
+/* ---------- page sections ---------- */
+function img(name, h, w, cls, style){ return '<img src="'+ILL+name+'-sm.webp" alt="" aria-hidden="true" width="'+w+'" height="'+h+'" class="'+(cls||'')+'" style="width:'+w+'px;height:'+h+'px;'+(style||'')+'" loading="lazy">'; }
+function sec(name, y, inner, cls){ return '<div data-sec="'+esc(name)+'" data-y="'+esc(y)+'" class="'+(cls||'')+'" style="position:relative">'+inner+'</div>'; }
+
+function masthead(d){
+  return '<div class="mast"><p><b>Monday, October 12, 2026</b>'+(d?'<span class="sep">|</span><span>2026 Florida general election</span><span class="sep">|</span>':'')+'<span>Election Day: Tuesday, November 3</span></p></div><div class="half"></div>';
+}
+function h1(d, v){
+  var cls = (v==="after" && !d) ? "t-h1" : "t-display";
+  return '<h1 class="'+cls+'">Florida candidates, in their own words.</h1>';
+}
+function lede(d, v){
+  var p = v==="before"
+    ? '<p class="t-blg c-muted">See the races we cover and what each candidate says, quoted word for word from their own campaign sites, with a link to every source. The same questions and the same rules for every candidate. No ZIP, no account, no agenda.</p>'
+    : '<p class="'+(d?'t-blg':'t-b')+' c-ink">See the races we cover and what each candidate says, quoted from their own campaign sites with every source linked. The same rules for every candidate. No ZIP, no account, no agenda.</p>';
+  if(!d) return p;
+  return '<div class="lede-row">'+p+'<div class="hero"><img src="'+ART+'rotator/walker-teacher.webp" alt="" aria-hidden="true" style="height:250px;width:auto"><span class="pause">Pause</span></div></div>';
+}
+function keyDates(d, v){
+  var stops = [
+    ["past","Registration deadline","October 5"],
+    ["today","Today","October 12"],
+    ["next","Mail-ballot request deadline","October 22"],
+    ["later","Early voting","October 24 to October 31"],
+    ["later","Election Day; mail ballots due","November 3"]
+  ];
+  var rail = '<ol class="rail">' + stops.map(function(s,i){
+    var dk = (i>0 && (s[0]==="past"||s[0]==="today")) ? " dk" : "";
+    return '<li class="'+s[0]+dk+'"><span class="dot"></span><span class="txt"><span class="lab">'+s[1]+'</span><span class="when">'+s[2]+'</span></span></li>';
+  }).join("") + '</ol>';
+  var sun = d ? img("sticker-sun",56,56,"sun") : img("sticker-sun",36,36,"sun");
+  return '<aside class="kd" aria-label="Key dates">'+sun+'<p class="kd-head">Request a vote-by-mail ballot by 5 p.m. on October 22 · Election Day is November 3</p>'+rail+'<p class="kd-links"><span>Add these dates to your calendar</span></p></aside>';
+}
+function tiles(d){
+  var mag = d ? img("sticker-magnifier",30,33) : "";
+  return '<section class="glance"><div class="glance-h"><h2 class="t-over c-muted">On every Florida ballot</h2>'+mag+'</div><ul class="tiles">'+
+    [["5","statewide races"],["17","candidates in them"],["3","ballot questions"]].map(function(t){return '<li><span class="tile"><span class="n">'+t[0]+'</span><span class="l">'+t[1]+'</span></span></li>';}).join("")+'</ul></section>';
+}
+function onThisPage(d){
+  var mag = d ? img("sticker-magnifier",30,33) : "";
+  var chips = [["5 statewide races",""],["3 ballot questions",""],["U.S. House race",""],["Election news"," ph-only"]];
+  return '<nav class="otp" aria-label="On this page"><div class="otp-h"><h2 class="t-label c-ink">On this page</h2>'+mag+'</div><ul class="chips">'+chips.map(function(c){return '<li class="'+c[1]+'"><span class="chip">'+c[0]+' '+G_DOWN+'</span></li>';}).join("")+'</ul></nav>';
+}
+function statewide(d, v){
+  var h = '<section class="secgrp"><div class="sechead"><h2 class="t-h2">Statewide races</h2>';
+  if(v==="before"){
+    h += '<p class="t-sm c-muted">Every Florida voter gets these, whatever your ZIP and whatever party you’re registered with — including no party at all.</p><p class="t-sm c-muted">'+LEGEND+'</p>';
+  } else {
+    h += '<p class="t-sm c-muted after-65">On every Florida ballot on November 3, 2026, whatever your ZIP or party, including no party.</p><details class="legend"><summary>What the party codes mean '+G_CARET+'</summary><p class="t-sm c-muted after-65" style="margin-top:4px">'+LEGEND+'</p></details>';
+  }
+  h += '</div><ul class="rows">';
+  RACES.forEach(function(r, i){
+    var body;
+    if(v==="before"){
+      body = '<p class="t-sm c-muted">'+r.c.length+' candidates: '+r.c.map(function(c){return esc(c[0])+' ('+c[1]+')';}).join(", ")+'</p><p class="t-cap c-muted">General election November 3, 2026</p>';
+    } else {
+      body = '<ul class="names">'+r.c.map(function(c){return '<li>'+esc(c[0])+'<span class="pty"> ('+c[1]+')</span></li>';}).join("")+'</ul>';
+    }
+    var row = '<li><div class="rowhead"><h3>'+r.o+'</h3><p class="ra">'+r.s+'</p></div>'+body+'</li>';
+    h += row;
+  });
+  h += '</ul></section>';
+  return h;
+}
+function ballotQuestions(d, v){
+  var h = '<section class="secgrp"><div class="sechead"><h2 class="t-h2">Ballot questions</h2>';
+  h += v==="before"
+    ? '<p class="t-sm c-muted">These are on every Florida ballot, whatever your ZIP. Each needs a supermajority to pass, not a simple majority.</p>'
+    : '<p class="t-sm c-muted after-65">Each needs a supermajority to pass, not a simple majority.</p>';
+  h += '</div><ul class="rows">';
+  MEASURES.forEach(function(m){
+    if(v==="before") h += '<li><div class="rowhead"><h3>Amendment '+m.n+': '+m.t+'</h3></div><p class="t-sm c-muted">'+m.th+'</p></li>';
+    else h += '<li><div class="rowhead"><h3>Amendment '+m.n+'</h3></div><p class="amt">'+m.t+'</p><p class="t-sm c-muted">'+m.th+'</p></li>';
+  });
+  h += '</ul>' + judges(d, v) + '</section>';
+  return h;
+}
+function judges(d, v){
+  var list = '<ul><li>Every Florida ballot: <span class="jl">Justice Carlos G. Muñiz, Florida Supreme Court</span></li>'+
+    '<li>Miami-Dade ballots: <span class="jl">5 judges of the 3rd District Court of Appeal</span> (<span class="jl">about this court’s judges</span>)</li>'+
+    '<li>Broward ballots: <span class="jl">5 judges of the 4th District Court of Appeal</span> (<span class="jl">about this court’s judges</span>)</li>'+
+    '<li>Hillsborough ballots: <span class="jl">4 judges of the 2nd District Court of Appeal</span> (<span class="jl">about this court’s judges</span>)</li>'+
+    '<li>Orange ballots: no appeals court judges this year</li></ul>';
+  var closing = '<p class="t-sm c-muted">The Florida Division of Elections <span class="jl">lists every judge on the 2026 ballot</span>. Some county ballots also have a circuit judge race, which we don’t cover either.</p>';
+  if(v==="before"){
+    return '<aside class="judges"><h3>Judges on your ballot</h3><p class="t-sm c-muted">Your ballot also asks whether to keep some judges in office. Know Your Vote doesn’t cover these questions. The links go to the state’s list of who is up and to the courts’ own pages.</p>'+list+closing+'</aside>';
+  }
+  return '<aside class="judges"><h3>Judges on your ballot</h3><p class="t-sm c-ink">Your ballot also asks whether to keep some judges in office. Know Your Vote doesn’t cover these questions.</p><details><summary>Who is on the ballot, with links '+G_CARET+'</summary><div style="margin-top:8px;display:flex;flex-direction:column;gap:8px">'+list+closing+'</div></details></aside>';
+}
+function zigzag(d){
+  var H = d ? 150 : 88, W = Math.round(H*395/600), top = 6 - Math.round(0.618*H);
+  return '<div class="zz"><div class="band zig"></div>'+img("sit-divider", H, W, "", "top:"+top+"px")+'</div>';
+}
+function house(d, v){
+  var p = v==="before"
+    ? 'Your U.S. House race isn’t in the list above, because it depends on where you live. Give us your address or ZIP and we’ll add it — or skip it and read the rest. We use it to find your district and keep only the district itself, never your address or ZIP.'
+    : 'Your U.S. House race depends on where you live, so it isn’t in the list above. Give us your address or ZIP and we’ll add it. We have House races for Miami-Dade, Broward, Hillsborough and Orange counties so far, and we keep only the district, never your address or ZIP.';
+  var form = '<div class="hform"><div class="fld"><span class="t-label">Your address or ZIP code</span><p class="t-sm c-muted" style="margin-top:-4px">Your street address with its city or ZIP finds your exact district. A ZIP works too.</p><div class="fr2"><span class="inp">Street and city, or ZIP</span><span class="btn">Add my House race</span></div></div>'+
+    (v==="before" ? '<p class="t-sm c-muted">Full statewide coverage isn’t available yet. Every Florida voter gets the statewide races and amendments; U.S. House and county races are only for Miami-Dade, Broward, Hillsborough and Orange counties so far.</p>' : '')+
+    '<span class="t-sm c-muted u" style="width:fit-content">or choose your district</span></div>';
+  var tote = d ? img("person-kyv-tote",160,85,"","flex:none") : "";
+  return '<section class="house"><div class="hx" style="display:flex;flex-direction:column;gap:4px"><h2 class="t-h2">Add your U.S. House race</h2><p class="t-sm c-muted'+(v==="after"?' after-65':'')+'">'+p+'</p></div><div class="hrow"><div>'+form+'</div>'+tote+'</div></section>';
+}
+function coverage(d, v){
+  var art = d ? img("peek-card-edge",120,148,"","right:16px;top:-112px") : img("pet-cat-peek",64,88,"","right:12px;top:-56px");
+  var link = v==="after" ? '<a class="u" href="#sample-ballot-anchor" style="color:inherit">official sample ballot</a>' : 'official sample ballot';
+  var h = '<section class="cov"><div class="band wave" style="margin-bottom:12px"></div><h2 class="t-h2">What this guide covers</h2><div class="covcard">'+art+'<dl class="dl">'+
+    '<div><dt>Every Florida voter</dt><dd>5 statewide races (4 with a full brief so far) and 3 amendments, the same for everyone, whatever your ZIP or party.</dd></div>'+
+    '<div><dt>Miami-Dade, Broward, Hillsborough and Orange counties</dt><dd>The U.S. House races, and the county commission, school board, Orange County mayor and Orange County clerk races. Add your address or ZIP above for your House race. Your county’s sample ballot says which commission and school board seats are yours.</dd></div>'+
+    '<div><dt>Not covered</dt><dd>Florida House and Florida Senate seats, judges (retention questions and other judicial races), county and city ballot questions, city races, special districts such as soil and water conservation and community development districts, and local races in other counties. Your county Supervisor of Elections has your '+link+'. <span class="u">What we don’t cover</span></dd></div>'+
+    '</dl></div>';
+  if(v==="before") h += '<p class="t-cap c-muted">Every candidate in a race we cover gets the same questions and the same rules. <span class="u">How we stay fair</span></p>';
+  return h + '</section>';
+}
+function news(d, v){
+  var h = '<section class="news">';
+  if(d && v==="before") h += '<span class="innerscroll">Sticky box with its own scrollbar: 547px of news hidden inside</span>';
+  h += '<div class="nhead"><h2 class="t-h2">Florida election news</h2><p class="t-cap c-muted">Statewide and county stories and official notices, newest first.</p></div>';
+  h += '<div class="pills">'+["All Florida","Statewide","Miami-Dade","Hillsborough","Orange"].map(function(p,i){return '<span class="pill'+(i===0?' on':'')+'">'+p+'</span>';}).join("")+'</div><ul>';
+  NEWS.forEach(function(n, i){
+    h += '<li class="nrow'+(i>=4?' ph-cut':'')+'"><span class="thumb"></span><div class="ntxt"><p class="t-over c-pri">'+n[0]+'</p><p class="nmeta"><u>'+esc(n[1])+'</u> · '+n[2]+'</p><h3 class="ntitle">'+esc(n[3])+'</h3>'+(n[4]?'<span class="flag">'+n[4]+'</span>':'')+'</div></li>';
+  });
+  h += '</ul><p class="t-sm" style="display:flex;flex-wrap:wrap;gap:4px 16px;padding-top:4px"><span class="u c-pri">All election news</span><span class="u c-muted">Where the news comes from</span></p></section>';
+  return h;
+}
+function closing(){
+  return '<p class="t-cap c-muted">We quote what each candidate says, in their own words. You decide. <span class="u">How we stay fair</span> · <span class="u">Privacy</span></p>';
+}
+function footer(d){
+  var src = d ? ILL+"footer-town-strip.webp" : ILL+"footer-town-strip-sm.webp";
+  var h = d ? 268 : 159;
+  return '<footer class="foot"><img class="strip" src="'+src+'" alt="" aria-hidden="true" style="height:'+h+'px" loading="lazy"><div class="ft"><p>Independent and nonpartisan. Not affiliated with any candidate, party or government agency. No endorsements.</p><p class="fl"><span>About</span><span>Methodology</span><span>Privacy</span><span>Terms of use</span></p></div></footer>';
+}
+function chromeTop(d){
+  if(d) return '<div class="desknav"><div><span class="wm">Know Your Vote</span><span class="its"><span class="it on">'+I_BALLOT+'Ballot</span><span class="it">'+I_PEOPLE+'Candidates</span><span class="it">'+I_NEWS+'News</span><span class="donate">Donate</span><span class="dchip">Choose your district</span></span></div></div>';
+  return '<div class="topbar"><span class="donate">Donate</span><span class="dchip">Choose your district</span></div>';
+}
+function chromeBottom(){
+  return '<div class="botnav"><span class="on">'+I_BALLOT+'Ballot</span><span>'+I_PEOPLE+'Candidates</span><span>'+I_NEWS+'News</span></div>';
+}
+
+/* Y positions: measured today (m) / estimated after (e). */
+var Y = {
+  phone: {
+    before: {h1:"170 m", lede:"334 m", kd:"568 m", tiles:"954 m", sw:"1,106 m (row 1,303)", bq:"≈2,000 m", house:"3,312 m", cov:"≈3,850 e", news:"≈4,610 e", end:"≈6,345 e"},
+    after:  {h1:"≈130 e", lede:"≈216 e", kd:"≈376 e", vr:"≈705 e", otp:"≈1,135 e", sw:"≈1,275 e (row ≈1,395)", bq:"≈2,200 e", house:"≈3,040 e", news:"≈3,460 e", cov:"≈4,230 e", end:"≈5,370 e"}
+  },
+  desk: {
+    before: {h1:"182 m", kd:"590 m", tiles:"802 m", sw:"≈939 m (row 1,072)", house:"", cov:"", news:"182 m", end:"≈3,720 e"},
+    after:  {h1:"182", kd:"≈590 e", vr:"≈790 e", otp:"≈1,190 e", sw:"≈1,285 e (row ≈1,400)", house:"", cov:"", news:"182", end:"≈3,780 e"}
+  }
+};
+
+function page(o){
+  /* o: {d, v, date, county, open} */
+  var d = !!o.d, v = o.v, y = Y[d?"desk":"phone"][v];
+  var col1 = sec("h1", y.h1, h1(d, v)), top;
+  if(v==="after" && !d){
+    col1 = '<div class="top-grp">' + sec("h1", y.h1, h1(d,v)) + sec("Lede", y.lede, lede(d,v)) + '</div>';
+  } else {
+    col1 += sec("Lede", y.lede || "", lede(d, v));
+  }
+  if(v==="before"){
+    col1 += sec("Key dates", y.kd, keyDates(d, v)) + sec("Count tiles", y.tiles, tiles(d));
+  } else {
+    col1 += '<div class="grp12">' + sec("Key dates", y.kd, keyDates(d, v)) + sec("Sample ballot block", y.vr, '<span class="newtag">NEW</span>'+resources({county:o.county||null, open:o.open||null, date:o.date||"oct12"}), "anno") + '</div>' + sec("On this page", y.otp, '<span class="newtag">NEW</span>'+onThisPage(d), "anno");
+  }
+  col1 += '<div style="display:flex;flex-direction:column;gap:32px">' + sec("Statewide races", y.sw, statewide(d, v)) + sec("Ballot questions + judges", y.bq || "", ballotQuestions(d, v)) + '</div>';
+  col1 += zigzag(d) + sec("House race", y.house, house(d, v));
+  var cov = sec("What this guide covers", y.cov, coverage(d, v));
+  if(v==="before") col1 += cov;
+  var aside = '<aside class="newsaside" aria-label="Florida election news">' + sec("News", y.news, news(d, v)) + '</aside>';
+  var row2 = '<div class="row2">' + (v==="after" ? cov : "") + '<div class="band wave"></div>' + closing() + '</div>';
+  var main = '<main class="main"><div class="col1">' + col1 + '</div>' + aside + row2 + '</main>';
+  return '<div class="pg '+(d?'desk':'phone')+' '+v+'">' + chromeTop(d) + '<div class="bodypad">' + masthead(d) + main + footer(d) + '</div>' + (d ? '' : chromeBottom()) + '</div>';
+}
+
+/* ---------- measuring and rulers ---------- */
+function offTop(el, root){ var t = 0; while(el && el !== root){ t += el.offsetTop; el = el.offsetParent; } return t; }
+function buildFrame(host, opts){
+  /* opts: {d, v, scale, caption} */
+  var fig = document.createElement("figure"); fig.className = "fr";
+  fig.innerHTML = '<figcaption>'+opts.caption+'</figcaption><div class="fr-row"><div class="gutter"></div><div class="scaler"></div><div class="gutterR"></div></div>';
+  host.appendChild(fig);
+  var scaler = fig.querySelector(".scaler");
+  scaler.innerHTML = page({d:opts.d, v:opts.v});
+  var pg = scaler.firstChild;
+  fig._pg = pg; fig._opts = opts;
+  return fig;
+}
+function layoutFrame(fig, scale){
+  var pg = fig._pg, d = fig._opts.d, scaler = fig.querySelector(".scaler"), gut = fig.querySelector(".gutter"), gutR = fig.querySelector(".gutterR"), gr = "";
+  pg.style.transform = "none";
+  var H = pg.offsetHeight, W = pg.offsetWidth;
+  pg.style.transform = "scale(" + scale + ")";
+  scaler.style.width = (W*scale) + "px"; scaler.style.height = (H*scale) + "px";
+  gut.style.height = (H*scale) + "px"; gutR.style.height = (H*scale) + "px";
+  var g = "";
+  var step = 100;
+  for(var y=0; y<=H; y+=step){
+    var big = (y % 500 === 0);
+    if(scale < 0.5 && !big && y % 200 !== 0) continue;
+    g += '<span class="tick '+(big?'big':'sm')+'" style="top:'+(y*scale)+'px"></span>';
+    if(y % 1000 === 0 && y>0) g += '<span class="tl" style="top:'+(y*scale)+'px">'+y.toLocaleString()+'</span>';
+  }
+  /* screen boundaries */
+  pg.querySelectorAll(".scrline").forEach(function(n){ n.remove(); });
+  var first = d ? 900 : 739, per = d ? 828 : 694, k = 1;
+  for(var s = first; s < H; s += per){
+    var ln = document.createElement("div"); ln.className = "scrline" + (k===1 ? " firstfold" : ""); ln.style.top = s + "px"; pg.appendChild(ln);
+    gr += '<span class="scr" style="top:'+(s*scale)+'px;'+(k===1?'background:#b4402e':'')+'">'+(k===1?'end of screen 1':'screen '+(k+1)+' starts')+'</span>';
+    k++;
+  }
+  /* section labels */
+  var last = -999;
+  pg.querySelectorAll("[data-sec]").forEach(function(el){
+    var t = offTop(el, pg) * scale;
+    if(t - last < 26) t = last + 26;
+    last = t;
+    var yv = el.getAttribute("data-y");
+    g += '<span class="sec" style="top:'+t+'px">'+esc(el.getAttribute("data-sec"))+(yv?'<small>y '+esc(yv)+'</small>':'')+'</span>';
+  });
+  g += '<span class="sec" style="top:'+(H*scale - 22)+'px">Page end<small>mockup '+H.toLocaleString()+'px</small></span>';
+  gut.innerHTML = g; gutR.innerHTML = gr;
+}
+
+/* ---------- build: first screens ---------- */
+function firstScreens(){
+  var host = document.getElementById("firstScreens");
+  [["before","Today"],["after","After PRs A+B, no saved county"]].forEach(function(p){
+    var fig = document.createElement("figure"); fig.className = "fr";
+    fig.innerHTML = '<figcaption><b>'+p[1]+'</b></figcaption><div class="vp">'+page({d:false, v:p[0]})+'</div>';
+    var vp = fig.querySelector(".vp");
+    /* the bottom nav is fixed on a real phone: pin it to the viewport */
+    var bn = vp.querySelector(".botnav"); vp.appendChild(bn);
+    host.appendChild(fig);
+  });
+}
+
+/* ---------- build: phone and desktop comparisons ---------- */
+var phoneFigs = [], deskFigs = [];
+function buildComparisons(){
+  var ph = document.getElementById("phoneCmp");
+  phoneFigs.push(buildFrame(ph, {d:false, v:"before", caption:'<b>Before</b> · today on main 71db8fb: ≈6,345px (6,278 measured before the address field), 9.1 screens'}));
+  phoneFigs.push(buildFrame(ph, {d:false, v:"after", caption:'<b>After A+B</b> · estimate ≈5,370px, 7.7 screens (no saved county)'}));
+  var dk = document.getElementById("deskCmp");
+  deskFigs.push(buildFrame(dk, {d:true, v:"before", caption:'<b>Before</b> · ≈3,720px · news column sticky with an inner scroll'}));
+  deskFigs.push(buildFrame(dk, {d:true, v:"after", caption:'<b>After A+B</b> · ≈3,780px no county (≈3,650 saved) · one scrollbar'}));
+}
+function relayout(){
+  var ps = parseFloat(document.querySelector('input[name="pscale"]:checked').value);
+  var ds = parseFloat(document.querySelector('input[name="dscale"]:checked').value);
+  phoneFigs.forEach(function(f){ layoutFrame(f, ps); });
+  deskFigs.forEach(function(f){ layoutFrame(f, ds); });
+}
+
+/* ---------- build: resources close-ups ---------- */
+function closeups(){
+  var date = document.querySelector('input[name="asof"]:checked').value;
+  var ev = document.getElementById("evgate").checked;
+  var cards = [
+    ["Phone · no saved county (all rows closed)", {county:null, open:null}, false],
+    ["Phone · no saved county · Broward opened", {county:null, open:"12011"}, false],
+    ["Phone · no saved county · Another Florida county", {county:null, open:"other"}, false],
+    ["Phone · saved district in Orange County", {county:"12095"}, false],
+    ["Desktop column (684px) · saved Orange: 2×2 tiles", {county:"12095"}, true],
+    ["Desktop column · no saved county · Hillsborough opened", {county:null, open:"12057"}, true]
+  ];
+  var host = document.getElementById("closeups"); host.innerHTML = "";
+  cards.forEach(function(c){
+    var o = c[1]; o.date = date; o.ev = ev;
+    var div = document.createElement("div"); div.className = "cu";
+    div.innerHTML = '<h4>'+c[0]+'</h4><div class="pg '+(c[2]?'wide desk':'phone')+' after">'+resources(o)+'</div>';
+    host.appendChild(div);
+  });
+}
+function linkTable(){
+  var rows = [];
+  COUNTIES.forEach(function(c){
+    [["Sample ballot", c.sample, "Asks for "+c.asks],["Where to vote on Election Day", c.polling, c.fips==="12086"?"same page: the county's only lookup":""],["Early voting", c.early, ""],["Mail ballot: request", c.mailReq, ""],["Mail ballot: return", c.mailRet, c.prov?"PROVISIONAL: confirm by Oct 21":""]].forEach(function(r, i){
+      rows.push('<tr><td>'+(i===0?'<b>'+c.name+'</b><br><span class="note">'+c.fips+' · '+c.site+'</span>':'')+'</td><td>'+r[0]+'</td><td><a href="'+esc(r[1])+'" target="_blank" rel="noreferrer">'+esc(r[1])+'</a>'+(r[2]?'<br><span class="note">'+esc(r[2])+'</span>':'')+'</td><td class="num">'+c.st+'</td></tr>');
+    });
+  });
+  [["Supervisors directory", STATE.dir, "200"],["Polling-place finders, all 67 counties", STATE.polling, "200"],["Early voting and drop boxes", STATE.early, "200"],["Vote by mail", STATE.mail, "200"],["Registration status", STATE.reg, "200 (GET)"]].forEach(function(r, i){
+    rows.push('<tr><td>'+(i===0?'<b>State</b>':'')+'</td><td>'+r[0]+'</td><td><a href="'+esc(r[1])+'" target="_blank" rel="noreferrer">'+esc(r[1])+'</a></td><td class="num">'+r[2]+'</td></tr>');
+  });
+  document.getElementById("linkTable").innerHTML = '<table><thead><tr><th>County</th><th>Purpose</th><th>URL</th><th>Status</th></tr></thead><tbody>'+rows.join("")+'</tbody></table>';
+}
+
+/* ---------- table of changes ---------- */
+var CHANGES = [
+  ["A","A1","New “Sample ballot and how to vote” block, 12px under key dates","VotingResources.tsx (new), supervisors.ts, voter-resources.ts (new), Glyphs.tsx, page.tsx","+406 / +514 saved (mockup)","+377 / +269 saved (mockup)","free"],
+  ["A","A2","Main padding py-8 → py-5 lg:py-8 (64 → 24px on phones)","page.tsx","−80 (m)","0","free"],
+  ["A","A3","h1 text-h1 sm:text-display (2 lines on phones), grouped 12px with the lede","page.tsx","−78 (m)","0","free"],
+  ["A","A4","Shorter dark lede (keeps “See the races we cover”)","page.tsx","−74 (e)","0","free"],
+  ["A","A5","Key dates: one line per date on phones; 13 → 14px; banner links 14px","KeyDatesRail.tsx, DeadlineBanner.tsx","−45 (m)","+6 (e)","free"],
+  ["A","A6","Count tiles → “On this page” jump list (40px chips, SVG ↓, two rows at 375px); id=house-race; palm retired","BallotAtAGlance.tsx, page.tsx","−8 (mockup)","−39 (mockup)","free"],
+  ["A","A7","Shorter House step; LocationEntry coverageNote={false} on home; saved paragraph drops a repeat","page.tsx, LocationEntry.tsx","−150 (m −163)","−80 (e)","adj"],
+  ["A","A8","News: 4 newest on phones, before coverage; desktop column not sticky (one scrollbar)","NewsRail.tsx, page.tsx","−453 (m)","0 (547px leaves the inner scroll)","free"],
+  ["A","A9","Coverage card links #sample-ballot; repeated caption removed","CoverageSummary.tsx","−48 (e)","−40 (e)","free"],
+  ["A","A10","officialSources() takes Supervisor URLs from supervisors.ts (retires 2 redirecting addresses)","config.ts","0","0","adj"],
+  ["A","A11","lg:max-w-[65ch] on home prose (86–93 → ≤65 characters a line)","page.tsx, VotingResources.tsx","0","+20 (e)","free"],
+  ["A","A12","verify-voter-links.ts (new); additions to verify-home-layout.ts","scripts/","0","0","free"],
+  ["A","","After PR A","","≈5,870 (≈5,910 saved)","≈4,030 (≈3,900 saved)","tot"],
+  ["B","B1","One name per line (inline on desktop), date said once, party key behind a disclosure, one-line intro","SharedBallot.tsx","−55 (e)","−130 (e)","frozen"],
+  ["B","B2","“Amendment N” heading; official ALL-CAPS title verbatim underneath at 15px; one-sentence intro","BallotQuestions.tsx","−65 (e)","+45 (e)","adj"],
+  ["B","B3","Judges: h3 + scope sentence visible; court links behind “Who is on the ballot, with links”","JudicialRetentionNote.tsx","−390 (m −399)","−165 (e)","frozen"],
+  ["B","B4","Row status 13 → 14px","LinkRows.tsx","0","0","adj"],
+  ["B","","PR B total","","≈ −510","≈ −250","tot"],
+  ["C","C1–C5","Bars static at ≤500px tall; scroll-padding reset; body padding; 5px masthead overlap","globals.css, SectionNav.tsx, layout.tsx","0 at 375×812 (+5 overlap fix)","frees 26–46% of zoomed screens","free"],
+  ["","","After A + B","","≈5,370 (≈5,410 saved)","≈3,780 (≈3,650 saved)","tot"]
+];
+function changeTable(){
+  var badge = {free:'<span class="badge b-free">not frozen</span>', frozen:'<span class="badge b-frozen">frozen</span>', adj:'<span class="badge b-adj">ships pre-freeze</span>', tot:''};
+  var h = '<table><thead><tr><th>PR</th><th>#</th><th>Change</th><th>Files</th><th>375px</th><th>1280px</th><th>Freeze</th></tr></thead><tbody>';
+  CHANGES.forEach(function(c){
+    h += '<tr'+(c[6]==="tot"?' class="tot"':'')+'><td>'+(c[0]?'<span class="pr">'+c[0]+'</span>':'')+'</td><td>'+c[1]+'</td><td>'+esc(c[2])+'</td><td><span class="files">'+esc(c[3])+'</span></td><td class="num">'+c[4]+'</td><td class="num">'+c[5]+'</td><td>'+badge[c[6]]+'</td></tr>';
+  });
+  document.getElementById("changeTable").innerHTML = h + '</tbody></table>';
+}
+
+/* ---------- page order ---------- */
+function orders(){
+  var ph = [
+    ["Fixed top bar, masthead dateline","0",0],["h1 at 32px, 2 lines","≈130 (170)",0],["Lede, dark 16px, 12px under the h1","≈216 (334)",0],
+    ["Key-dates card, one line per date at 14px","≈376 (568)",0],["Sample ballot and how to vote","≈705 (absent)",1],["On this page: 2 rows of chips","≈1,135 (tiles 954)",1],
+    ["Statewide races; first race row","≈1,275; row ≈1,395 (1,303)",0],["Ballot questions, judges closed","≈2,200",0],["Zigzag with the seated reader","≈2,985 (3,256)",0],
+    ["Add your U.S. House race","≈3,040 (3,312)",0],["Florida election news, 4 newest","≈3,460 (≈4,610)",0],["What this guide covers","≈4,230 (≈3,850)",0],
+    ["Wave, reminders (when live), install card, caption","≈4,950",0],["Footer · total","≈5,370 (≈6,345)",0]
+  ];
+  var dk = [
+    ["h1 40px; lede beside the hero walk (unchanged row)","182",0],["Key-dates card, rail at 14px","≈590",0],
+    ["Sample ballot and how to vote (rows ≈365px; saved 2×2 ≈255px)","≈790",1],["On this page: 3 chips, magnifier beside","≈1,190",1],
+    ["Statewide races, names inline; first row","row ≈1,400 / ≈1,290 saved (1,072)",0],["Ballot questions, judges closed; zigzag; House step","",0],
+    ["Row 2: What this guide covers, wave, cards, caption","",0],["Right column: news, 8 stories, scrolls with the page","182",1],["Total","≈3,780 / ≈3,650 saved (≈3,720)",0]
+  ];
+  function render(id, list){ document.getElementById(id).innerHTML = list.map(function(r){ return '<li'+(r[2]?' class="new"':'')+'><span>'+esc(r[0])+'</span><span class="y">'+esc(r[1])+'</span></li>'; }).join(""); }
+  render("orderPhone", ph); render("orderDesk", dk);
+}
+
+/* ---------- timeline (dates stated, not counted) ---------- */
+function timeline(){
+  var ev = {
+    "Oct 12":[["c","Founder reads spec, answers decisions"],["a","Build PR A"]],
+    "Oct 13":[["a","PR A review"],["c","Open all 29 links on a phone"]],
+    "Oct 14":[["a","PR A merged"]],
+    "Oct 15":[["b","Founder approves PR B"]],
+    "Oct 16":[["b","PR B merged (last day)"]],
+    "Oct 17":[["f","Freeze-copy PR writes hashes"]],
+    "Oct 18":[["f","Freeze from 04:00 UTC"]],
+    "Oct 19":[["v","Early voting opens (4 counties)"],["c","Re-check links"]],
+    "Oct 21":[["c","Decide Hillsborough return link"]],
+    "Oct 22":[["v","Mail-ballot request deadline, 5 p.m."]],
+    "Oct 23":[["a","Mail row switches to Return"],["c","Check live"]],
+    "Oct 24":[["v","State minimum early voting starts"]],
+    "Oct 31":[["v","State minimum ends"]],
+    "Nov 1":[["v","Last county early-voting day"],["c","Re-check links"]],
+    "Nov 3":[["v","Election Day, 7 a.m. to 7 p.m."]],
+    "Nov 4":[["a","Block renders nothing"],["b","Redo PR B here if it slipped"]]
+  };
+  var days = [], wk = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  for(var i=0;i<24;i++){
+    var dt = new Date(2026, 9, 12 + i);
+    var lab = (dt.getMonth()===9?"Oct ":"Nov ") + dt.getDate();
+    var w = wk[(dt.getDay()+6)%7];
+    days.push('<div class="day'+((w==="Sat"||w==="Sun")?' wk':'')+'"><span class="d">'+w+' '+lab+'</span>'+(ev[lab]||[]).map(function(e){return '<span class="ev '+e[0]+'">'+esc(e[1])+'</span>';}).join("")+'</div>');
+  }
+  document.getElementById("tl").innerHTML = days.join("");
+}
+
+/* ---------- reconciliation ---------- */
+var RECON = [
+  ["Early-voting note per county","County window; tile dropped after its end","No note","J1, gated: all four counties or none","Neutrality, then readability"],
+  ["Orange sample-ballot link","/sample-ballots/ hub","/whats-on-my-ballot/","J2","Neutrality: same kind of link for every county"],
+  ["Broward “asks for”","date of birth","year of birth","J2","Accuracy (research)"],
+  ["Return-phase note","“at a polling place”","“at an Election Day polling place”","J2","Accuracy: early-voting sites take mail ballots"],
+  ["Mail labels","“vote-by-mail ballot”","“mail ballot”","J2","Readability: shorter; matches the rail"],
+  ["Polling tile label","Find your polling place","Where to vote on Election Day","J2","Readability: not confused with early-voting sites"],
+  ["Polling tile note","Election Day, 7 a.m. to 7 p.m.","none","J1","Readability; same for every county by law"],
+  ["Tile note colour","on-surface","on-surface-muted","J1","Readability: 62% of the page is grey today"],
+  ["Saved-county intro","names the county's host","generic","J1","Readability and trust"],
+  ["Glyphs","↗ › ↓ characters","SVG glyphs","J2","Build risk: not in the Inter subset"],
+  ["Pure helper","voter-resources.ts","mail-ballot-line.ts","One file: voter-resources.ts","Build risk"],
+  ["details name","kyv-sample-ballot-county","kyv-county","sample-ballot-county","Build risk: no storage-like prefix"],
+  ["Lede","“…for every candidate.”","“…for everyone.”","J1","Accuracy"],
+  ["Saved House paragraph","unchanged","drop the repeat","J2","Readability: fifth repeat"],
+  ["Coverage caption","remove","keep","Remove","Readability: repeats lede and closing caption"],
+  ["Rail at sm","items-stretch","items-center","J2","Build risk: keeps today's desktop rail"],
+  ["Jump chips","40px, “Election news”","32px, “News”","40px, 10px sides, 6px gaps, “Election news”","Readability on phones; still two rows at 375px"],
+  ["Candidate count in rows","dropped","moved to the aside","Dropped","Readability: aside would wrap on 4 of 5 rows (+≈84px); the list announces its count"],
+  ["Amendment title size","15px","14px","15px","Readability: ALL CAPS reads slower"],
+  ["Ballot-questions intro","one sentence","unchanged","One sentence","Readability: repeat removed; pinned words kept"],
+  ["Judges summary","32px, semibold","24px, underlined","32px, semibold, underlined","Readability and target size"],
+  ["Judges sentence colour","on-surface","muted","on-surface","Readability: it is the scope statement"],
+  ["PR C scroll padding","8px + safe area","8px","J1","Build risk: notched phones in landscape"],
+  ["Statewide early-voting note","“at least Oct 24 to Oct 31”","“Links to every county”","J1, dropped after Oct 31","Readability"],
+  ["Height claims","≈5,300 / ≈3,450","≈5,200 / ≈3,200","≈5,370 / ≈3,780","Measured in these mockups; desktop counts the block's real height"]
+];
+function reconTable(){
+  var h = '<table><thead><tr><th>Question</th><th>Judge 1</th><th>Judge 2</th><th>Call</th><th>Why</th></tr></thead><tbody>';
+  RECON.forEach(function(r){ h += '<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td><td>'+esc(r[2])+'</td><td><b>'+esc(r[3])+'</b></td><td>'+esc(r[4])+'</td></tr>'; });
+  document.getElementById("reconTable").innerHTML = h + '</tbody></table>';
+}
+
+/* ---------- decision form ---------- */
+var DEC = [
+  {t:"Count tiles → resources block and “On this page” list", o:{a:"(a) Replace the tiles with the resources block and an “On this page” jump list (recommended)", b:"(b) Keep the tiles under the new block"}},
+  {t:"PR B, the frozen ballot rows, as one unit", o:{a:"(a) Approve by Thu Oct 15, merge Fri Oct 16 (recommended)", b:"(b) Defer all of PR B to after Nov 4"}},
+  {t:"News layout", o:{a:"(a) Phones: 4 newest, news before coverage; desktop: not sticky, 8 stories (recommended)", b:"(b) Phones only; keep the sticky inner-scroll column on desktop", c:"(c) Leave news as it is"}},
+  {t:"Phone bars", o:{a:"(a) Static only on short screens, in PR C; no hide-on-scroll (recommended)", b:"(b) Hide the top bar on scroll down", c:"(c) Leave the bars as they are"}}
+];
+function md(){
+  var f = document.getElementById("decForm");
+  var out = "## Home readability: founder decisions (2026-10-12)\n\n";
+  DEC.forEach(function(dd, i){
+    var n = i+1, sel = f.querySelector('input[name="d'+n+'"]:checked');
+    var val = sel ? sel.value : "a";
+    out += n + ". " + dd.t + ": **" + dd.o[val] + "**\n";
+    var note = f.querySelector('textarea[name="n'+n+'"]').value.trim();
+    if(note) out += "   Notes: " + note.replace(/\n+/g, " ") + "\n";
+  });
+  var other = f.querySelector('textarea[name="n0"]').value.trim();
+  if(other) out += "\nOther notes: " + other + "\n";
+  out += "\nSpec: docs/design/home-readability-2026-10-12/home-readability.md\n";
+  return out;
+}
+function refreshMd(){ document.getElementById("mdOut").textContent = md(); }
+function copyMd(){
+  var text = md(), msg = document.getElementById("copied");
+  function done(){ msg.textContent = "Copied to the clipboard."; }
+  function fallback(){
+    var ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly",""); ta.style.position="absolute"; ta.style.left="-9999px";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); done(); } catch(e){ msg.textContent = "Copy failed: select the preview below and copy it."; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(text).then(done, fallback); } else { fallback(); }
+}
+
+/* ---------- boot ---------- */
+firstScreens();
+buildComparisons();
+relayout();
+closeups(); linkTable(); changeTable(); orders(); timeline(); reconTable(); refreshMd();
+document.querySelectorAll('input[name="pscale"],input[name="dscale"]').forEach(function(i){ i.addEventListener("change", relayout); });
+document.querySelectorAll('input[name="asof"]').forEach(function(i){ i.addEventListener("change", closeups); });
+document.getElementById("evgate").addEventListener("change", closeups);
+document.getElementById("decForm").addEventListener("input", refreshMd);
+document.getElementById("decForm").addEventListener("change", refreshMd);
+document.getElementById("copyMd").addEventListener("click", copyMd);
+/* images settle heights: measure again once everything has loaded, and when a disclosure opens */
+window.addEventListener("load", relayout);
+document.addEventListener("toggle", function(e){ if(e.target && e.target.closest && e.target.closest(".scaler")) relayout(); }, true);
+})();
+</script>
+</body>
+</html>

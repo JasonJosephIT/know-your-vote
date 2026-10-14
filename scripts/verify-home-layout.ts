@@ -4,7 +4,14 @@
    The rail's stops are walked day by day across the general election's
    real verified dates, statewide and for a covered county, because a rail
    that marks the wrong stop "next" on one day is a wrong civic deadline on
-   that day. The rest are source checks on what keeps the column neutral.
+   that day. The rest are source checks on what keeps the column neutral,
+   on what keeps the rail readable without its colours (section 4;
+   Mobbin catalog HM1 and HM8, 2026-10-12), and on the home readability
+   pass (section 5; 2026-10-12, PR A,
+   docs/design/home-readability-2026-10-12/): the news column in the
+   page's flow and before the coverage card on a phone, and the tighter
+   top of the page. The sample-ballot block's own checks are in
+   verify-voter-links.
 
    Run: node scripts/verify-home-layout.ts */
 
@@ -14,6 +21,8 @@ import {
   keyDateStops,
   mastheadDate,
   mastheadElectionDay,
+  stopText,
+  type StopState,
 } from "../src/lib/notifications/key-dates.ts";
 import {
   eventsForCounty,
@@ -162,6 +171,8 @@ check(
     "src/lib/notifications/key-dates.ts",
     "src/components/features/HomeMasthead.tsx",
     "src/components/features/KeyDatesRail.tsx",
+    "src/components/features/VotingResources.tsx",
+    "src/lib/voter-resources.ts",
   ]
     .map(source)
     .join("\n");
@@ -220,19 +231,183 @@ check(
     "the column passes no lean to a card",
     !/lean/i.test(rail.replace(/\/\*[\s\S]*?\*\//g, ""))
   );
+  /* Home readability A8 (founder decision 3a): the four newest on a
+     phone, eight from lg, the same cap for every filter. The cap hides
+     by position in the time-ordered list, never by region or outlet. */
+  check(
+    "phones show the four newest stories and lg the eight, by position alone",
+    /const SHOW = 8;/.test(rail) &&
+      /const PHONE_SHOW = 4;/.test(rail) &&
+      /\.slice\(0, SHOW\)/.test(rail) &&
+      /n >= PHONE_SHOW \? "max-lg:hidden"/.test(rail)
+  );
 }
 
 {
   const page = source("src/app/(public)/page.tsx");
   check(
-    "home renders the masthead, the tiles and the news column with the saved county",
+    "home renders the masthead, the jump list and the news column with the saved county",
     /<HomeMasthead \/>/.test(page) &&
-      /<BallotAtAGlance \/>/.test(page) &&
+      /<BallotAtAGlance(?: sections=\{homeSections\(scope\)\})? \/>/.test(page) &&
       /<HomeNews countyFips=\{saved\?\.countyFips\} \/>/.test(page)
   );
   check(
     "the ballot comes before the news in the DOM, so phones and screen readers get it first",
-    page.indexOf("<SharedBallot />") < page.indexOf("<HomeNews")
+    page.indexOf("<SharedBallot seam />") < page.indexOf("<HomeNews")
+  );
+}
+
+/* ---- 4. The rail reads without colour (catalog HM1 and HM8) ------------ */
+
+/* What a sighted reader sees of each stop, its label and then its state
+   word, the way KeyDatesRail draws them from stopText. */
+const onScreen = (events: ElectionEvent[], day: string) =>
+  keyDateStops(events, day)
+    ?.map((s) => {
+      const t = stopText(s);
+      return t.word ? `${t.label} (${t.word})` : t.label;
+    })
+    .join(" | ") ?? "null";
+
+check(
+  "Oct 11: passed, today and next are words on screen, a later date has none",
+  onScreen(STATE, "2026-10-11") ===
+    "Registration deadline (Passed) | Today | Mail-ballot request deadline (Next) | Early voting | Election Day; mail ballots due",
+  onScreen(STATE, "2026-10-11")
+);
+check(
+  "Oct 5: a deadline that falls today says Today after its date",
+  onScreen(STATE, "2026-10-05") ===
+    "Registration deadline (Today) | Mail-ballot request deadline (Next) | Early voting | Election Day; mail ballots due",
+  onScreen(STATE, "2026-10-05")
+);
+check(
+  "Oct 24: an open window says so in its label, with no second word",
+  onScreen(STATE, "2026-10-24") ===
+    "Registration deadline (Passed) | Mail-ballot request deadline (Passed) | Early voting: open now | Election Day; mail ballots due (Next)",
+  onScreen(STATE, "2026-10-24")
+);
+
+/* Every day of the cycle, statewide and in Miami-Dade: each state is
+   named in visible words, and a later date is the only stop with none, so
+   no two states differ by colour alone (WCAG 1.4.1). */
+{
+  const says: Record<
+    StopState,
+    (t: { label: string; word: string | null }) => boolean
+  > = {
+    past: (t) => t.word === "Passed",
+    today: (t) =>
+      t.word === "Today" || (t.label === "Today" && t.word === null),
+    open: (t) => t.label.endsWith(": open now") && t.word === null,
+    next: (t) => t.word === "Next",
+    later: (t) =>
+      t.word === null && !/passed|today|open now|next/i.test(t.label),
+  };
+  const bad: string[] = [];
+  for (const events of [STATE, DADE]) {
+    for (let i = 0; i <= 60; i++) {
+      const day = isoDaysBefore("2026-11-03", i);
+      for (const s of keyDateStops(events, day) ?? []) {
+        if (!says[s.state](stopText(s))) bad.push(`${day} ${s.key}:${s.state}`);
+      }
+    }
+  }
+  check(
+    "every day, every stop's state is in words on screen, not only in colour",
+    bad.length === 0,
+    bad.join(", ")
+  );
+}
+
+{
+  const rail = source("src/components/features/KeyDatesRail.tsx");
+  const code = rail.replace(/\/\*[\s\S]*?\*\//g, "");
+  check(
+    "the rail draws each stop's label and word from stopText",
+    /stopText\(s\)/.test(code)
+  );
+  check("no state is left in sr-only text", !/sr-only/.test(code));
+  check(
+    "a passed dot carries a check, surface on grey",
+    /s\.state === "past" && <CheckGlyph \/>/.test(code) &&
+      /past: "border-on-surface-muted bg-on-surface-muted [^"]*text-surface"/.test(
+        code
+      )
+  );
+  check(
+    "never verdict green, and nothing moves: no fill, pulse or transition",
+    !/success|green|animate-|transition|duration-|keyframes/.test(code)
+  );
+  /* Phones: the segment to the next stop starts at this dot's centre (a
+     5px top margin and half a 12px dot, level with the middle of a 21px
+     line of 14px text) and ends at the next dot's centre, the list's 12px
+     gap further down. A stop's own height never enters it, so the line
+     stays whole when a label wraps. */
+  /* Base (phone) classes only: the lookbehind keeps sm:after:… from
+     matching. */
+  const px = (re: RegExp) => Number(re.exec(code)?.[1]);
+  const top = px(/(?<![\w:])after:top-\[(\d+)px\]/);
+  const below = px(/(?<![\w:])after:bottom-\[-(\d+)px\]/);
+  const left = px(/(?<![\w:])after:left-\[(\d+)px\]/);
+  const smTop = px(/sm:after:top-\[(\d+)px\]/);
+  check(
+    "phones: one line from dot centre to dot centre",
+    /<ol className="grid gap-3 /.test(code) &&
+      /mt-\[5px\] flex size-3 /.test(code) &&
+      top === 5 + 12 / 2 &&
+      below === 12 + top &&
+      // the 2px line (w-0.5) centred on the 12px dot
+      /after:w-0\.5/.test(code) &&
+      left === (12 - 2) / 2,
+    `top ${top}px, bottom -${below}px, left ${left}px`
+  );
+  check(
+    "from sm: 16px dots in a row, the line through their centres",
+    /sm:mt-0 sm:size-4/.test(code) && smTop === 16 / 2 - 1,
+    `sm top ${smTop}px`
+  );
+  check(
+    "phones: one line per stop at 14px, nothing at 13px (home A5)",
+    /flex flex-wrap items-baseline/.test(code) &&
+      !/text-caption/.test(code) &&
+      (code.match(/text-body-sm/g) ?? []).length >= 3,
+    String((code.match(/text-body-sm/g) ?? []).length)
+  );
+}
+
+/* ---- 5. Home readability (2026-10-12, PR A) ---------------------------- */
+
+{
+  const page = source("src/app/(public)/page.tsx");
+  const aside = page.match(/<aside\s+aria-label="Florida election news"\s+className="([^"]*)"/)?.[1] ?? "";
+  check(
+    "the news column scrolls with the page: not sticky, no scrollbar of its own",
+    aside !== "" &&
+      !/sticky/.test(aside) &&
+      !/overflow-y-auto/.test(aside) &&
+      !/max-h-/.test(aside),
+    aside
+  );
+  check(
+    "on a phone the news comes before what this guide covers",
+    page.indexOf("<HomeNews") < page.indexOf("<CoverageSummary")
+  );
+  check(
+    "the key dates and the sample-ballot block are one group, 12 px apart",
+    /<div className="flex flex-col gap-3[^"]*">\s*<DeadlineBanner[\s\S]*?<VotingResources countyFips=\{saved\?\.countyFips\} \/>\s*<\/div>\s*<BallotAtAGlance(?: sections=\{homeSections\(scope\)\})? \/>/.test(
+      page
+    )
+  );
+  check(
+    "the top of the phone page is tighter: 24 px main padding, a 32 px h1 grouped with the lede",
+    /<main className="[^"]*\bpy-5\b[^"]*\blg:py-8\b/.test(page) &&
+      /<h1 className="text-h1 sm:text-display">/.test(page) &&
+      /<div className="flex flex-col gap-3 lg:gap-6">\s*(?:\{\/\*[\s\S]*?\*\/\}\s*)?<h1/.test(page)
+  );
+  check(
+    "the lede is the body colour, 16 px on a phone, and still says what we cover",
+    /<p className="text-body text-on-surface sm:text-body-lg">\s*See the races we cover/.test(page)
   );
 }
 

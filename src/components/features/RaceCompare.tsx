@@ -5,13 +5,14 @@ import { PartyChip } from "@/components/ui/PartyChip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
 import { CampaignWebsite } from "@/components/features/CampaignWebsite";
 import { PolicyAreaChip, policyAreaHref } from "@/components/ui/PolicyAreaChip";
+import { ArrowDownGlyph } from "@/components/ui/Glyphs";
 import { IssueBuckets } from "@/components/features/IssueSection";
 import { NoStatedPositionNote } from "@/components/features/ClaimList";
 import { IncumbencyLine, RunningMateLine } from "@/components/features/RosterLines";
 import type { RaceBrief } from "@/lib/briefs";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import type { Incumbency } from "@/lib/incumbency";
-import { candidateExtras, raceRows } from "@/lib/race-rows";
+import { candidateExtras, raceJumpLinks, raceRows } from "@/lib/race-rows";
 import { statusBranch } from "@/lib/listing-copy";
 import { partyLegend } from "@/lib/party-label";
 import type { RunningMates } from "@/lib/running-mate";
@@ -89,9 +90,42 @@ export function RaceCompare({
       : branch === "not_printed"
         ? "Elected without opposition"
         : "Who's running";
+  const otherIssuesHeading = "Other issues they raise";
+  /* "Jump to" (Mobbin catalog RC1, 2026-10-12): on a phone the roster, up
+     to 8 cards with photos, sits between the filter chips and the first
+     issue. Plain underlined text links, not pills, so they don't read as
+     IssueFilter's chips, and plain <a>s, so the browser makes the jump and
+     the root scroll-padding in globals.css clears the bars (no scroll-mt).
+     The jump is smooth only at lg and up under no-preference (founder
+     decision D2 (a), 2026-10-13), keyed on this nav's id in globals.css.
+     Only when there is somewhere to jump past the roster. */
+  const jumps = raceJumpLinks(rows, rosterHeading, anyExtras ? otherIssuesHeading : null);
 
   return (
     <>
+      {jumps.length > 1 && (
+        <nav
+          id="issue-jump-nav"
+          aria-label="Issues on this page"
+          className="flex flex-col gap-1"
+        >
+          <p className="text-body-sm text-on-surface-muted">Jump to:</p>
+          <ul className="flex flex-wrap gap-x-4 gap-y-1">
+            {jumps.map(({ href, label }) => (
+              <li key={href}>
+                <a
+                  href={href}
+                  className="inline-flex min-h-[24px] items-center gap-1 text-body-sm text-primary underline underline-offset-2 hover:text-primary-hover"
+                >
+                  {label}
+                  <ArrowDownGlyph />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+
       <section aria-labelledby="whos-running" className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
           <h2 id="whos-running" className="text-h2">
@@ -179,6 +213,16 @@ export function RaceCompare({
                 ))}
               </ul>
             )}
+            {/* The note above the first row, carried down the page (Mobbin
+                catalog RC5, 2026-10-12). On every row, whatever its cells
+                hold: shown only beside an empty cell, it would point at
+                whoever is silent. */}
+            <Link
+              href="/methodology#limits"
+              className="ms-auto inline-flex min-h-[24px] items-center text-body-sm text-on-surface-muted underline underline-offset-2 hover:text-on-surface"
+            >
+              Why a position can be missed
+            </Link>
           </div>
           <div className={`${grid} items-start`} style={cols}>
             {row.cells.map(({ candidate, block }) => (
@@ -217,7 +261,7 @@ export function RaceCompare({
         >
           <div className="flex flex-col gap-1">
             <h2 id="other-issues" className="text-h2">
-              Other issues they raise
+              {otherIssuesHeading}
             </h2>
             {/* Said as a fact about the layout, not about who raised what:
                 the same issue often appears under several candidates (13 of

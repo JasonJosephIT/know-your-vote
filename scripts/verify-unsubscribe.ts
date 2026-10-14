@@ -28,12 +28,20 @@
         no-referrer, noindex (header and meta), a CSP with no script and
         no framing, no full address, lang, title, h1.
      6. THE QUERIES subscriptionStore() sends, recorded with a fake
-        Supabase client: exact matches, writes only active = false, and a
-        database error throws rather than reading as "no such token".
+        Supabase client. Each method calls its SQL function from migration
+        0058 first, with the token or the address in the POST body, never
+        in a Supabase request URL (the API gateway logs those). Only on
+        PGRST202 (0058 not applied yet) does it run the query it ran
+        before, unchanged: exact matches, writes only active = false. A
+        database error, from the function or the fallback, throws rather
+        than reading as "no such token", and any error but PGRST202 never
+        falls back.
      7. ROUTE SOURCE. GET and POST only, both delegating, neither reading
         a body, redirecting or touching the database itself.
-     8. THE PRIVACY PAGE no longer says the link "works immediately" or is
-        "instant": one click, then the button, or the mail app's own.
+     8. THE PRIVACY PAGES no longer say the link "works immediately" or is
+        "instant": one click, then the button, or the mail app's own
+        (/privacy/how-it-works says so; /privacy that every email has the
+        link).
 
    What it cannot cover: the deployed route and the live table. That is
    docs/general-election/reminders-e2e-runbook.md, step 4e.
@@ -293,16 +301,23 @@ every("an HTML document: lang, viewport, title, one h1", (p) =>
 
 console.log("\n6. The queries subscriptionStore() sends");
 type Call = [string, ...unknown[]];
-function recordingClient(result: { data: unknown; error: unknown }) {
+type Result = { data: unknown; error: unknown };
+/* PostgREST's answer while migration 0058 is not applied. */
+const MISSING: Result = {
+  data: null,
+  error: { code: "PGRST202", message: "Could not find the function in the schema cache" },
+};
+/* Records every call. `.rpc()` answers `rpc`; a `.from()` chain answers
+   `table`. */
+function recordingClient(rpc: Result, table: Result = { data: null, error: { message: "the table was read" } }) {
   const calls: Call[] = [];
+  const thenable = (result: Result) => (resolve: (v: unknown) => unknown, reject: (e: unknown) => unknown) =>
+    Promise.resolve(result).then(resolve, reject);
   const builder: object = new Proxy(
     {},
     {
       get(_target, prop) {
-        if (prop === "then") {
-          return (resolve: (v: unknown) => unknown, reject: (e: unknown) => unknown) =>
-            Promise.resolve(result).then(resolve, reject);
-        }
+        if (prop === "then") return thenable(table);
         return (...args: unknown[]) => {
           calls.push([String(prop), ...args]);
           return builder;
@@ -315,53 +330,120 @@ function recordingClient(result: { data: unknown; error: unknown }) {
       calls.push(["from", name]);
       return builder;
     },
+    rpc(...args: unknown[]) {
+      calls.push(["rpc", ...args]);
+      return { then: thenable(rpc) };
+    },
   };
   return { client: client as unknown as SupabaseClient, calls };
 }
 const chain = (calls: Call[]) => JSON.stringify(calls);
 {
-  const r = recordingClient({ data: { email: ANA }, error: null });
+  /* With 0058 applied: one function call each, the token or the address
+     in the POST body, never a filter in a URL (the API gateway logs
+     those), and no option that would turn the call into a GET. */
+  const r = recordingClient({ data: ANA, error: null });
   const email = await subscriptionStore(r.client).addressFor(T(1));
   check(
-    "addressFor: the token's row by exact token, one row at most",
-    email === ANA &&
-      chain(r.calls) === chain([["from", "voting_info_subscription"], ["select", "email"], ["eq", "unsubscribe_token", T(1)], ["maybeSingle"]]),
+    "addressFor: subscription_email_for_token, the token in the body",
+    email === ANA && chain(r.calls) === chain([["rpc", "subscription_email_for_token", { p_token: T(1) }]]),
     chain(r.calls)
   );
-  const none = recordingClient({ data: null, error: null });
-  check("no row: null", (await subscriptionStore(none.client).addressFor(T(1))) === null);
+  check("no row: null", (await subscriptionStore(recordingClient({ data: null, error: null }).client).addressFor(T(1))) === null);
 
-  const s = recordingClient({ data: [{ id: "x" }], error: null });
+  const s = recordingClient({ data: true, error: null });
   const on = await subscriptionStore(s.client).subscribed(ANA);
+  const off = await subscriptionStore(recordingClient({ data: false, error: null }).client).subscribed(ANA);
   check(
-    "subscribed: any active row with exactly this address",
-    on === true &&
-      chain(s.calls) === chain([["from", "voting_info_subscription"], ["select", "id"], ["eq", "email", ANA], ["eq", "active", true], ["limit", 1]]),
+    "subscribed: subscription_is_active, the address in the body; true and false come back as they are",
+    on === true && off === false && chain(s.calls) === chain([["rpc", "subscription_is_active", { p_email: ANA }]]),
     chain(s.calls)
   );
 
-  const u = recordingClient({ data: [{ id: "x" }, { id: "y" }], error: null });
+  const u = recordingClient({ data: 2, error: null });
   const n = await subscriptionStore(u.client).unsubscribe(ANA);
+  const zero = await subscriptionStore(recordingClient({ data: 0, error: null }).client).unsubscribe(ANA);
   check(
-    "unsubscribe: active = false on every active row with exactly this address, and nothing else",
-    n === 2 &&
-      chain(u.calls) === chain([["from", "voting_info_subscription"], ["update", { active: false }], ["eq", "email", ANA], ["eq", "active", true], ["select", "id"]]),
+    "unsubscribe: subscription_unsubscribe, the address in the body, and the count it turned off",
+    n === 2 && zero === 0 && chain(u.calls) === chain([["rpc", "subscription_unsubscribe", { p_email: ANA }]]),
     chain(u.calls)
   );
 
-  let threw = 0;
-  for (const run of [
+  /* Before 0058 (PGRST202): the function call, then exactly the query each
+     method sent before, answered the same way. */
+  const fr = recordingClient(MISSING, { data: { email: ANA }, error: null });
+  const fEmail = await subscriptionStore(fr.client).addressFor(T(1));
+  check(
+    "0058 not applied: addressFor falls back to the token's row by exact token, one row at most",
+    fEmail === ANA &&
+      chain(fr.calls) ===
+        chain([
+          ["rpc", "subscription_email_for_token", { p_token: T(1) }],
+          ["from", "voting_info_subscription"], ["select", "email"], ["eq", "unsubscribe_token", T(1)], ["maybeSingle"],
+        ]),
+    chain(fr.calls)
+  );
+  check(
+    "0058 not applied: no row is null",
+    (await subscriptionStore(recordingClient(MISSING, { data: null, error: null }).client).addressFor(T(1))) === null
+  );
+
+  const fs = recordingClient(MISSING, { data: [{ id: "x" }], error: null });
+  const fOn = await subscriptionStore(fs.client).subscribed(ANA);
+  check(
+    "0058 not applied: subscribed falls back to any active row with exactly this address",
+    fOn === true &&
+      chain(fs.calls) ===
+        chain([
+          ["rpc", "subscription_is_active", { p_email: ANA }],
+          ["from", "voting_info_subscription"], ["select", "id"], ["eq", "email", ANA], ["eq", "active", true], ["limit", 1],
+        ]),
+    chain(fs.calls)
+  );
+
+  const fu = recordingClient(MISSING, { data: [{ id: "x" }, { id: "y" }], error: null });
+  const fN = await subscriptionStore(fu.client).unsubscribe(ANA);
+  check(
+    "0058 not applied: unsubscribe falls back to active = false on every active row with exactly this address, and nothing else",
+    fN === 2 &&
+      chain(fu.calls) ===
+        chain([
+          ["rpc", "subscription_unsubscribe", { p_email: ANA }],
+          ["from", "voting_info_subscription"], ["update", { active: false }], ["eq", "email", ANA], ["eq", "active", true], ["select", "id"],
+        ]),
+    chain(fu.calls)
+  );
+
+  /* A database error throws (the 503 page), from the function or from the
+     fallback; an error from the function that is not PGRST202 never falls
+     back to a URL filter. */
+  const methods = [
     (c: SupabaseClient) => subscriptionStore(c).addressFor(T(1)),
     (c: SupabaseClient) => subscriptionStore(c).subscribed(ANA),
     (c: SupabaseClient) => subscriptionStore(c).unsubscribe(ANA),
-  ]) {
+  ];
+  let threw = 0;
+  let fellBack = 0;
+  for (const run of methods) {
+    const viaFn = recordingClient({ data: null, error: { code: "57014", message: "timeout" } }, { data: [], error: null });
     try {
-      await run(recordingClient({ data: null, error: { message: "timeout" } }).client);
+      await run(viaFn.client);
+    } catch {
+      threw++;
+    }
+    if (viaFn.calls.some(([op]) => op === "from")) fellBack++;
+    try {
+      await run(recordingClient(MISSING, { data: null, error: { message: "timeout" } }).client);
     } catch {
       threw++;
     }
   }
-  check("a database error throws from every method (the 503 page), never reads as \"no such token\"", threw === 3);
+  check(
+    "a database error throws from every method, through the function or the fallback (the 503 page), never reads as \"no such token\"",
+    threw === 6,
+    `${threw} of 6 threw`
+  );
+  check("an error from the function other than PGRST202 never falls back to the URL filter", fellBack === 0);
 }
 
 /* ---- 7. route source ---------------------------------------------------- */
@@ -387,14 +469,24 @@ check(
 
 /* ---- 8. privacy page ---------------------------------------------------- */
 
-console.log("\n8. Privacy page");
-/* Comments stripped: the page's own note quotes the old wording. */
+console.log("\n8. Privacy pages");
+/* Comments stripped: the pages' own notes quote the old wording. Since
+   2026-10-13 /privacy says only that every email has an unsubscribe link,
+   and /privacy/how-it-works says how it works, so the old wording is barred
+   from both and the confirm step is pinned where it is explained. */
 const privacy = code("src/app/(public)/privacy/page.tsx").replace(/\s+/g, " ");
-check("no longer says the link \"works immediately\"", !/works immediately/.test(privacy));
-check("no longer calls it \"instant\"", !/instant unsubscribe/i.test(privacy));
+const howItWorks = code("src/app/(public)/privacy/how-it-works/page.tsx").replace(/\s+/g, " ");
+for (const [page, text] of [
+  ["/privacy", privacy],
+  ["/privacy/how-it-works", howItWorks],
+] as const) {
+  check(`${page} no longer says the link "works immediately"`, !/works immediately/.test(text));
+  check(`${page} no longer calls it "instant"`, !/instant unsubscribe/i.test(text));
+}
+check("/privacy says every email has an unsubscribe link", /every email has an unsubscribe link/.test(privacy));
 check(
-  "says it is one click on the link, one on the confirm button, or the mail app's own button",
-  /confirm button/.test(privacy) && /mail app(&apos;|')s own/.test(privacy)
+  "/privacy/how-it-works says it is one click on the link, one on the confirm button, or the mail app's own button",
+  /press the confirm button/.test(howItWorks) && /mail app(&apos;|&rsquo;|'|’)s own Unsubscribe/.test(howItWorks)
 );
 
 if (failures > 0) {

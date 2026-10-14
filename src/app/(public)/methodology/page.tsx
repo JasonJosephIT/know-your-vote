@@ -337,7 +337,19 @@ export default async function MethodologyPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-h2">No source, no quote</h2>
+        {/* A 30px magnifier after the heading's words, the same piece and
+            size as home's "On this page" (design.md's closed list of phone
+            art, 2026-10-14). It is in the flow, not placed absolutely, so
+            with larger text the heading wraps beside it instead of the
+            sticker running out of the column (320px, 20px root font). */}
+        <div className="flex items-end gap-2">
+          <h2 className="text-h2">No source, no quote</h2>
+          <Art
+            name="sticker-magnifier"
+            height={30}
+            className="shrink-0 lg:hidden"
+          />
+        </div>
         <p className="text-body">
           Every quote links to the page it came from, so you can read it in
           context. The step that writes a brief stores each quote together with

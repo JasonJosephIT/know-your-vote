@@ -48,8 +48,8 @@ check(
   /id="district-picker-form"[\s\S]*?onSubmit=\{\(e\) => \{[\s\S]*?commit\(/.test(entry)
 );
 check(
-  "the picker has its own submit button",
-  /<Button type="submit" variant="secondary">\s*See my races\s*<\/Button>\s*<\/form>/.test(entry)
+  "the picker has its own submit button, live once hydrated",
+  /<Button type="submit" variant="secondary" disabled=\{!hydrated\}>\s*See my races\s*<\/Button>\s*<\/div>\s*<\/form>/.test(entry)
 );
 check(
   "the 'or choose your district' toggle exposes its state",
@@ -111,16 +111,30 @@ for (const [file, h1] of [
 /* ---- 5. field errors sit on their field ---------------------------------- */
 const entryFlat = entry.replace(/\s+/g, " ");
 check(
-  "the ZIP/address field reports itself invalid and names its error",
-  /ref=\{inputRef\} id="location" name="zip" aria-invalid=\{fieldError \|\| undefined\} aria-describedby=\{fieldError \? errorId : undefined\}/.test(entryFlat)
+  "the address field reports itself invalid and names its error (and its hint)",
+  /ref=\{inputRef\} id="location" aria-invalid=\{fieldError \|\| undefined\} aria-describedby=\{ \[field\.hint \? hintId : "", fieldError \? errorId : ""\] \.filter\(Boolean\) \.join\(" "\) \|\| undefined \}/.test(entryFlat)
 );
+{
+  /* No name: a native submit (before hydration, or a script that fails)
+     serialises only named fields, so the address can't reach a URL. */
+  const at = entryFlat.indexOf("<Input ref={inputRef}");
+  const input = at >= 0 ? entryFlat.slice(at, entryFlat.indexOf("/>", at)) : "";
+  check(
+    "the address field has no name, so no native submit can carry it",
+    input.length > 0 && !/\bname=/.test(input) && !/name="zip"/.test(entry),
+    input
+  );
+}
+/* Since Mobbin NS1 (2026-10-13) the error is a block: the described-by part
+   holds the lead and the "What to check" list, and only the lead is an
+   alert (scripts/verify-address-errors.ts pins the rest). */
 check(
   "a field error renders under the field with the described-by id",
-  /<p\s+key=\{stage\.seq\}\s+id=\{errorId\}\s+role="alert"\s+className="mt-2 text-body-sm text-error"\s*>/.test(entry)
+  /<div key=\{stage\.seq\} className="mt-2 flex flex-col gap-2">\s*<div id=\{errorId\} className="flex flex-col gap-1">\s*<p\s+role="alert"\s+className="flex items-start gap-1 text-body-sm text-error"\s*>/.test(entry)
 );
 check(
   "a field error is still announced when focus is already in the field (Enter)",
-  /<p\s+key=\{stage\.seq\}\s+id=\{errorId\}\s+role="alert"/.test(entry)
+  /<div key=\{stage\.seq\}[^>]*>\s*<div id=\{errorId\}[^>]*>\s*<p\s+role="alert"/.test(entry)
 );
 check(
   "focus moves to the field only when it was lost or on the form's own submit",
@@ -128,20 +142,27 @@ check(
 );
 check(
   "server failures aren't field errors",
-  (entry.match(/fail\("Something went wrong — give it another try\.", false\)/g) ?? []).length === 2 &&
+  (entry.match(/fail\("Something went wrong — give it another try\.", false\)/g) ?? []).length === 1 &&
     /We couldn't look up that address just now\.[^"]*",\s*false\s*\)/.test(entry)
 );
 const voting = code("src/components/features/VotingInfo.tsx");
+/* The consent box was the reminder form's one field error; since the
+   Mobbin catalog's RS5 (2026-10-12) the ZIP and the email have their own
+   too. scripts/verify-reminder-form.ts pins the rest of that form. */
 check(
-  "the consent box reports itself invalid, names its error and takes focus",
-  /aria-invalid=\{consentError \|\| undefined\}/.test(voting) &&
-    /aria-describedby=\{consentError \? consentErrorId : undefined\}/.test(voting) &&
-    /if \(consentError\) consentRef\.current\?\.focus\(\);/.test(voting)
+  "each reminder-form field reports itself invalid, names its error, and the first takes focus",
+  ["zip", "email", "consent"].every(
+    (f) =>
+      new RegExp(`aria-invalid=\\{errors\\.${f} \\? true : undefined\\}`).test(voting) &&
+      new RegExp(`errors\\.${f} && \`\\$\\{id\\}-${f}-error\``).test(voting)
+  ) &&
+    /focusNext\.current = FIELDS\.find\(\(f\) => errors\[f\]\) \?\? null;/.test(voting) &&
+    /if \(field === "consent"\) consentRef\.current\?\.focus\(\);/.test(voting)
 );
 
 /* ---- 6. focus doesn't fall to <body> when its control goes ---------------- */
 check(
-  "the reminder form's success message takes focus once, on the change",
+  "the reminder form's sent heading takes focus once, on the change",
   /if \(stage\.kind === "sent"\) sentRef\.current\?\.focus\(/.test(voting) &&
     /ref=\{sentRef\}\s*tabIndex=\{-1\}/.test(voting)
 );
@@ -228,11 +249,11 @@ for (const [file, phrase] of [
 /* ==== LOW findings of the same review ===================================== */
 
 check(
-  "the ZIP field is a combobox only when address completion can show a list",
-  /const combobox = addressEnabled\s*\?/.test(entry) && !/^\s*role="combobox"/m.test(entry)
+  "the location field is a combobox only when address completion can show a list",
+  /const combobox = suggestEnabled\s*\?/.test(entry) && !/^\s*role="combobox"/m.test(entry)
 );
 check(
-  "the ZIP field's label is visible, with an example as the placeholder",
+  "the address field's label is visible, with an example as the placeholder",
   /<label htmlFor="location" className="text-label text-on-surface">/.test(entry) &&
     /placeholder=\{placeholder \?\? field\.example\}/.test(entry)
 );
@@ -241,6 +262,7 @@ check(
     "src/components/features/LocationEntry.tsx",
     "src/components/features/DistrictChip.tsx",
     "src/app/(public)/privacy/page.tsx",
+    "src/app/(public)/privacy/how-it-works/page.tsx",
   ].filter((f) => /\bpick your district|Pick your district|Set your district/.test(code(f)));
   check("one verb for the district: choose", verbs.length === 0, verbs.join(", "));
 }

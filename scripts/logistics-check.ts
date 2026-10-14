@@ -10,8 +10,11 @@
                           sites.json; stamps candidate.site_last_verified_at
                           for `live` sites only.
      check                observations.json on stdin; read the DoE extract and
-                          the four VoterFocus lists; print the plan. Writes
-                          nothing.
+                          the four VoterFocus lists; print the plan, with a
+                          report line for each covered county office a list
+                          shows with no race row of ours, and for each
+                          candidate the list or the extract and our race
+                          disagree on. Writes nothing.
      queue [--dry-run]    check again, then insert each new diff as a pending
                           review_item (source agent:R2) and stamp
                           race.info_last_verified_at on confirmed races.
@@ -26,8 +29,8 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { loadEnvLocal } from "./env-local.ts";
 import { isAllowedByRobots } from "../src/lib/candidate-site.ts";
-import { coveredCounty } from "../src/lib/counties.ts";
-import { ACTIVE_ELECTION } from "../src/lib/election.ts";
+import { COVERED_COUNTIES, coveredCounty } from "../src/lib/counties.ts";
+import { ACTIVE_ELECTION, ACTIVE_ELECTION_KIND } from "../src/lib/election.ts";
 import { loadBallotRoster, USER_AGENT, type BallotRosterCandidate } from "../src/lib/news-intake.ts";
 import {
   GOVERNOR_RACE_ID,
@@ -37,7 +40,6 @@ import {
   canDetailUrl,
   classifySite,
   doeExtractForm,
-  doeOfficeGroup,
   eventKey,
   parseDoeExtract,
   parseObservations,
@@ -49,7 +51,10 @@ import {
   siteHost,
   voterFocusListUrl,
   type CheckResult,
+  type CountyRace,
+  type CountyRaceCandidate,
   type DoeOfficeGroup,
+  type DoeRace,
   type DoeStatusRow,
   type ElectionEventRow,
   type Observations,
@@ -130,6 +135,54 @@ async function events(db: SupabaseClient): Promise<(ElectionEventRow & { verifie
     .sort((a, b) => eventKey(a).localeCompare(eventKey(b)));
 }
 
+/** Every county, statewide and U.S. House race row with the candidates its
+    candidate_ids name, whatever its publication: a draft race is ours, and
+    listing it is a founder call, not R2's. */
+async function raceRows(db: SupabaseClient): Promise<{ county: CountyRace[]; doe: DoeRace[] }> {
+  const raceRead = await db
+    .from("race")
+    .select("race_id, office, level, district, candidate_ids")
+    .eq("election", ACTIVE_ELECTION_KIND)
+    .in("level", ["county", "federal", "state"]);
+  if (raceRead.error) die(`could not read races: ${raceRead.error.message}`);
+  const races = (raceRead.data ?? []) as {
+    race_id: string;
+    office: string;
+    level: string;
+    district: string | null;
+    candidate_ids: string[] | null;
+  }[];
+  const ids = [...new Set(races.flatMap((r) => r.candidate_ids ?? []))];
+  const people = new Map<string, CountyRaceCandidate>();
+  if (ids.length > 0) {
+    const candRead = await db
+      .from("candidate")
+      .select("candidate_id, legal_name, qualifying_status, ballot_status")
+      .in("candidate_id", ids);
+    if (candRead.error) die(`could not read race candidates: ${candRead.error.message}`);
+    for (const c of (candRead.data ?? []) as { candidate_id: string; legal_name: string; qualifying_status: string; ballot_status: string }[]) {
+      people.set(c.candidate_id, {
+        candidateId: c.candidate_id,
+        legalName: c.legal_name,
+        qualifyingStatus: c.qualifying_status,
+        ballotStatus: c.ballot_status,
+      });
+    }
+  }
+  /* An id with no candidate row is left out and logged; the list's or the
+     extract's row for that person then reads as MISSING. */
+  for (const id of ids.filter((x) => !people.has(x))) log(`  race.candidate_ids names ${id}, which has no candidate row`);
+  const candidates = (r: (typeof races)[number]) => (r.candidate_ids ?? []).flatMap((id) => people.get(id) ?? []);
+  return {
+    county: races.flatMap((r) =>
+      r.level === "county" && r.district ? [{ raceId: r.race_id, district: r.district, candidates: candidates(r) }] : [],
+    ),
+    doe: races
+      .filter((r) => r.level !== "county")
+      .map((r) => ({ raceId: r.race_id, level: r.level, office: r.office, candidates: candidates(r) })),
+  };
+}
+
 /** The governor candidates' stored running mates, or column false while
     candidate.running_mate does not exist (roster-completeness 0049). */
 async function storedRunningMates(
@@ -195,21 +248,13 @@ async function runCheck(db: SupabaseClient, observations: Observations): Promise
   const people = await roster(db);
   const dates = await events(db);
   const mates = await storedRunningMates(db, people);
-  const groups = [
-    ...new Set(
-      people
-        .filter((c) => c.candidateId.startsWith("FL-DOE-"))
-        .map((c) => doeOfficeGroup(c.level))
-        .filter((g): g is DoeOfficeGroup => g !== null),
-    ),
-  ].sort();
-  const counties = [
-    ...new Set(
-      people
-        .filter((c) => c.candidateId.startsWith("FL-VF-") && c.countyFips !== null)
-        .map((c) => c.countyFips as string),
-    ),
-  ].sort();
+  const races = await raceRows(db);
+  /* Both groups every run, roster candidates or not: a statewide or House
+     race of ours may be missing a filer whatever the roster holds. */
+  const groups: DoeOfficeGroup[] = ["CAB", "FED"];
+  /* Every covered county's list, roster candidates or not: a county whose
+     races are all missing still has offices to check. */
+  const counties = COVERED_COUNTIES.map((c) => c.fips).sort();
 
   const doe: Partial<Record<DoeOfficeGroup, DoeStatusRow[] | null>> = {};
   const pages: Record<string, string | null | undefined> = {};
@@ -239,6 +284,8 @@ async function runCheck(db: SupabaseClient, observations: Observations): Promise
     observations,
     doe,
     voterFocus,
+    countyRaces: races.county,
+    doeRaces: races.doe,
     runningMates: { column: mates.column, stored: mates.stored, pages },
     now: new Date(),
   });
@@ -248,7 +295,11 @@ function summaryLine(r: Extract<CheckResult, { ok: true }>): string {
   return (
     `statuses read ${r.statuses.read} of ${r.statuses.roster} (${r.statuses.doe} DoE, ${r.statuses.voterFocus} VoterFocus), ` +
     `${r.statuses.changed} changed; dates observed ${r.dates.observed} of ${r.dates.events}, ${r.dates.changed} changed, ` +
-    `${r.dates.unreadablePages} page(s) unreadable; ${r.confirmedRaces.length} race(s) confirmed; ${r.report.length} report line(s)`
+    `${r.dates.unreadablePages} page(s) unreadable; ${r.offices.listed} covered office(s) on VoterFocus, ${r.offices.missing} with no race row; ` +
+    `county candidates ${r.roster.missing} missing, ${r.roster.extra} extra, ${r.roster.confirm} to confirm; ` +
+    `${r.doeRoster.races} statewide and House race(s) on the DoE extract, ${r.doeRoster.noRace} statewide with no race row; ` +
+    `their candidates ${r.doeRoster.missing} missing, ${r.doeRoster.extra} extra, ${r.doeRoster.confirm} to confirm; ` +
+    `${r.confirmedRaces.length} race(s) confirmed; ${r.report.length} report line(s)`
   );
 }
 

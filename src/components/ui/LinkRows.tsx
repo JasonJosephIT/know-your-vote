@@ -31,7 +31,9 @@ export function LinkRow({
 }: {
   href: string;
   title: ReactNode;
-  /* Short status text beside the title, e.g. "Full brief". */
+  /* Short status text beside the title, e.g. "Full brief". 14px, not a
+     13px caption: whether a race has a brief is something a voter reads
+     (design.md, home readability spec 2026-10-12 B4). */
   aside?: ReactNode;
   headingLevel?: "h3" | "h4";
   children?: ReactNode;
@@ -40,8 +42,8 @@ export function LinkRow({
   return (
     <li className="relative flex flex-col gap-1 px-5 py-4 transition-colors first:rounded-t-lg last:rounded-b-lg hover:bg-background active:bg-background">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        {/* leading-[1.4]: a row title can be a 3-line all-caps amendment
-            title; one-line race titles gain 2px. */}
+        {/* leading-[1.4]: a long office title can wrap on a phone;
+            one-line titles gain 2px. */}
         <Heading className="text-h3 leading-[1.4]">
           <Link
             href={href}
@@ -50,7 +52,7 @@ export function LinkRow({
             {title}
           </Link>
         </Heading>
-        {aside && <p className="text-caption text-on-surface-muted">{aside}</p>}
+        {aside && <p className="text-body-sm text-on-surface-muted">{aside}</p>}
       </div>
       {children}
     </li>

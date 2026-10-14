@@ -692,10 +692,12 @@ hacked or unrelated"), made through a reviewed migration, since
 
 - **Federal and state statuses (deterministic).** The CLI POSTs the DoE
   extract (endpoint and form fields as `intake.py:825-831`) once per office
-  group holding an `FL-DOE` candidate in context (FED and CAB today). It keeps
-  only `AcctNum`, office, district and `StatusCode`, and drops every other
-  column in memory: address, phone, email and treasurer fields never reach a
-  file. It maps codes with a TypeScript copy of `_STATUS`, parity-tested
+  group, FED and CAB, every run (both since 2026-10-14, so the roster check
+  below sees every statewide and House race). It keeps only `AcctNum`,
+  office, district, `StatusCode` and `StatusDesc`, the first and last name,
+  and whether `PartyCode` is `WRI` (a boolean; the party is not kept), and
+  drops every other column in memory: address, phone, email and treasurer
+  fields never reach a file. It maps codes with a TypeScript copy of `_STATUS`, parity-tested
   against `intake.py:137-141`. A candidate missing from every group fetched
   is a report line, never a diff.
 - **County statuses (deterministic).** The CLI fetches the four VoterFocus
@@ -719,6 +721,56 @@ hacked or unrelated"), made through a reviewed migration, since
   from `roster-recalibration-2026-09-21.md:155-159`. Only Qualified and Runoff
   appear in a saved file, so the first watched run's report lists every label
   it met.
+- **Missing contests (deterministic, added 2026-10-13).** Matching roster
+  candidates cannot see a whole missing race: `0032` dropped eight settled
+  Miami-Dade seats VoterFocus printed as "Inactive - Unopposed/Elected", and
+  nothing noticed (`empty-races-2026-10-12.md`). So `check` also reads every
+  county `race.district` (any publication status: a draft race is ours) and
+  all four lists, and for each covered office (commission, school board,
+  Orange's mayor and clerk; `voterFocusSeat` maps the four lists' spellings)
+  with a live filer (Qualified, Runoff, Unopposed or Elected, the last status
+  span) and no race row, writes a report line naming the office, the live
+  filers and the missing `race.district`. Never a diff: a new race is a
+  migration. County judges, community councils and special districts are out
+  of scope; an office that reads like a covered one but does not parse is a
+  report line.
+- **County rosters, every candidate (added 2026-10-14).** For each covered
+  office that is ours, `compareCountyRoster` compares VoterFocus's filers
+  still in the race (Qualified, Runoff, Unopposed, Elected) with our race's
+  still-running candidates (ballot tier, not withdrawn), both ways:
+  `roster: MISSING` is a filer still running with no candidate of ours (or
+  one ours has as withdrawn); `roster: EXTRA` is a candidate of ours that
+  VoterFocus shows Withdrawn, Defeated, Did not qualify or Qualified
+  Write-In, lists under another office, or does not list at all (a race of
+  ours that no office on the list reads as is EXTRA for each of its
+  candidates). Pairs are made on the `ca=` id our `FL-VF-<PREFIX>-<ca>` id
+  carries, else on `normalizeName` within the office, else on
+  `NAME_VARIANTS` or a loose name match (same surname; first name equal, the
+  quoted nickname, or a short form), which is a `roster: CONFIRM` line, as is
+  an id whose names differ. Write-ins: founder rule D1 (`0013`) keeps them out
+  of `candidate_ids`, so a Qualified Write-In is never MISSING. Headings that
+  read as one seat are one office. What cannot be compared is a CONFIRM line,
+  never EXTRA: an unmapped label, a filer of ours VoterFocus lists under a
+  heading that does not read as a covered seat, a name that fits several
+  rows, a second race row for one seat. A race with any MISSING, EXTRA or
+  CONFIRM line is left out of `confirmedRaces`. Report lines only;
+  `check.json` carries the per-office comparison as `rosterOffices`.
+- **Statewide and U.S. House rosters, every candidate (added 2026-10-14).**
+  `compareDoeRoster` does the same for every statewide and House race row of
+  ours (any publication) against the DoE extract, keyed on `AcctNum` (our id
+  is `FL-DOE-<AcctNum>`, so there is no name matching). Still running is
+  `QUA` or `UNO` and not a write-in (`PartyCode` `WRI`), intake's ballot
+  tier (D1). `roster: MISSING` is a filer still running with no running
+  candidate of ours; `roster: EXTRA` is a candidate of ours the extract shows
+  as withdrew, defeated, did not qualify or removed, as a write-in, filed
+  under another race, or not at all. A decided seat (`UNO`; FL-10 is not
+  printed) is its one candidate. A filer with a code `_STATUS` does not know,
+  and an account the extract lists twice with different rows, is a
+  `roster: CONFIRM` line. A race whose extract group was not read is not
+  compared (its status lines say so). A statewide race with a still-running
+  filer and no race row is an `office:` line; House coverage is our race rows,
+  so a House district with no row is not checked. The same stamp rule
+  applies. `check.json` carries the per-race comparison as `doeRosterRaces`.
 - **Dates (R2's reading).** For each `general_2026` `election_event` row, R2
   reads that row's own `details_url` (6 distinct pages, §2.6) and writes
   `observations.json`:

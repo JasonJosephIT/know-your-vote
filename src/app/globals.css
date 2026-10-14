@@ -1,5 +1,39 @@
 @import "tailwindcss";
 
+/* Short screens: the bars join the page (home readability spec 2026-10-12,
+   PR C; founder decision 4 (a), 2026-10-13). On a window 500px tall or less
+   (a landscape phone, or a desktop at 200% or 400% zoom) the fixed top bar
+   and bottom nav took a quarter to nearly half of the height, and with them
+   most of the room a keyboard user has to see where focus is (WCAG 1.4.10
+   Reflow, 2.4.11 Focus Not Obscured). There `short:` puts both bars in the
+   page flow at the top, where they scroll away with the page
+   (SectionNav.tsx), and takes away the body padding that cleared them
+   (layout.tsx). On every taller window they stay fixed, as before. Nothing
+   hides or slides on scroll at any size: no motion is added.
+
+   The scroll padding then only has to clear the status-bar and
+   home-indicator insets, and the cookie banner, which stays fixed and sits
+   8px above the bottom edge on a short screen (SitePrompts.tsx); its
+   --kyv-overlay-bottom term stays. The rule is on :root, not html, so that
+   it outranks the html rule in @layer base further down (the phone and md
+   values) although that rule comes later in the file.
+
+   To flip: delete this block and the short: classes in SectionNav.tsx,
+   layout.tsx and SitePrompts.tsx; scripts/verify-short-screens.ts pins all
+   four. */
+@custom-variant short (@media (max-height: 31.25rem));
+
+@layer base {
+  :root {
+    @variant short {
+      scroll-padding-top: calc(8px + env(safe-area-inset-top));
+      scroll-padding-bottom: calc(
+        8px + env(safe-area-inset-bottom) + var(--kyv-overlay-bottom, 0px)
+      );
+    }
+  }
+}
+
 /* Design tokens from docs/design.md (mirrored in docs/design.html).
    @theme emits each token as a :root CSS variable and a Tailwind utility. */
 @theme {
@@ -102,6 +136,14 @@
      review 2026-10-05). */
   --default-transition-duration: 120ms;
   --default-transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Tailwind's animate-pulse, capped at 2 cycles (Mobbin reference catalog
+     2026-10-12, MO1). Its default loops forever, so a skeleton that waited
+     on a slow server pulsed for as long as it waited, past WCAG 2.2.2's 5
+     seconds. 2 x 2s = 4s; Tailwind's pulse keyframes end at full opacity,
+     so the block then rests still. This reaches NewsFeed's skeleton and the
+     race and candidate loading.tsx routes without editing them. */
+  --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 2;
 }
 
 /* Font families resolve through next/font variables set on <html> */
@@ -162,6 +204,22 @@
     }
   }
 
+  /* The race page's "Jump to" links scroll smoothly (Mobbin catalog RC1),
+     but only at lg and up and only for visitors who haven't asked for
+     reduced motion: below lg nothing moves except colour changes and
+     loading indicators (founder decision D2 (a), 2026-10-13). Everywhere
+     else, and on every other page, an anchor still jumps at once; :has()
+     keys it to the list's own id. data-scroll-behavior="smooth" on <html>
+     (layout.tsx) has Next switch it off for the scroll to the top on a
+     route change, so it only ever runs for an in-page jump. */
+  html:has(#issue-jump-nav) {
+    @variant lg {
+      @variant motion-safe {
+        scroll-behavior: smooth;
+      }
+    }
+  }
+
   /* No page-wide texture on the body. The riso speckle tile
      (tex-riso-speckle.webp) was tried here and taken out in review: a body
      background lies under every heading, link and verdict that is not in a
@@ -192,5 +250,47 @@
   :focus-visible {
     outline: 2px solid var(--color-focus-ring);
     outline-offset: 2px;
+  }
+}
+
+/* Motion tokens and the reduced-motion safety net (Mobbin reference
+   catalog 2026-10-12, MO1; design.md motion.* and "Motion on phones").
+
+   The tokens are design.md's motion.fast, base and slow and its easing, for
+   CSS that names a duration itself, such as an enter, dialog or disclosure
+   rule. Utilities keep the 120ms default in @theme above.
+
+   Unlayered, where the catalog puts it. !important is what makes it win:
+   an important declaration beats every normal one whatever its layer or
+   specificity, so the zero-specificity * wins over the Tailwind utilities
+   and a component's own CSS module, and a reduced-motion reader gets no
+   motion from any component, whether or not it opted out on its own. A
+   utility with Tailwind's important modifier on a duration, transition,
+   animate, ease or delay class would still win, because among important
+   declarations a layered one beats an unlayered one, so
+   scripts/verify-motion.ts fails on one. 1ms rather than none, so a
+   transitionend or animationend that code waits for still fires. The
+   skeleton pulse then runs one 1ms cycle and shows still.
+
+   HeroRotator already runs only under no-preference and Button's press
+   scale already stops under motion-reduce, so neither changes. The *
+   selector does not reach ::backdrop, ::details-content or the
+   ::view-transition-* pseudo-elements: a rule that animates one of those
+   carries its own reduced-motion fallback. */
+:root {
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-slow: 320ms;
+  --ease-kyv: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -197,9 +197,11 @@ def make_skin_mask(src, ar):
 SKIN_TONES = ["#F2D3B3", "#E3B48A", "#C98E5F", "#A86A42", "#7E4A2C", "#4F2E1D"]
 
 
-def flatten_skin(im, mask, raw):
+def flatten_skin(im, mask, raw, force=None):
     """Inside the skin mask, every pixel that is not Ink becomes one flat skin token: the nearest of SKIN_TONES to the
-    region's average raw colour, so each person keeps the depth the model gave them but in an exact brand tone."""
+    region's average raw colour, so each person keeps the depth the model gave them but in an exact brand tone.
+    force (an asset's "skin": 1-6) pins every region to that token instead, e.g. skin-6 for walker-fisherman so the
+    eight hero walkers span the range (founder decision 4A, 2026-10-14)."""
     from PIL import ImageFilter
     mask = mask.resize(im.size, Image.Resampling.NEAREST).filter(ImageFilter.MinFilter(3))  # stay off the outlines
     ink = hexrgb("#22271F")
@@ -223,7 +225,7 @@ def flatten_skin(im, mask, raw):
             if not body:
                 continue
             avg = [sum(c[i] for c in body) / len(body) for i in range(3)]
-            tone = min(tones, key=lambda t: sum((t[i] - avg[i]) ** 2 for i in range(3)))
+            tone = tones[force - 1] if force else min(tones, key=lambda t: sum((t[i] - avg[i]) ** 2 for i in range(3)))
             for x, y in comp:
                 if px[x, y][:3] != ink:
                     px[x, y] = (*tone, px[x, y][3]) if len(px[x, y]) == 4 else tone
@@ -281,7 +283,7 @@ def post(a):
     snapped = snap_lab(im, pal)  # every pixel is a token
     skin = None
     if (RAW / f"{a['slug']}.skin.png").exists():  # flat, grain-free skin (see skinmask)
-        snapped, skin = flatten_skin(snapped, Image.open(RAW / f"{a['slug']}.skin.png").convert("L"), im)
+        snapped, skin = flatten_skin(snapped, Image.open(RAW / f"{a['slug']}.skin.png").convert("L"), im, a.get("skin"))
     ledge = None
     if a["kind"] == "ledge" and (RAW / f"{a['slug']}.ledge").exists():
         # the bar was measured (<slug>.ledge) and then edited out of the raw

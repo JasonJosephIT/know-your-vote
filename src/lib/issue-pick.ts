@@ -87,6 +87,27 @@ export function togglePickHref(
   );
 }
 
+/* The line under the filter's chips, saying in words what the page shows
+   (Mobbin catalog RC2, 2026-10-12): "Showing all 9 issues." on the race
+   page, "Showing 2 of 9 issues: Housing and Property taxes." on /issues.
+   It counts issues, never candidates or positions: "3 candidates speak to
+   Housing" would score coverage. Titles follow spine order, as the chips
+   do, whatever order the URL named them in. */
+const TITLE_LIST = new Intl.ListFormat("en-US", {
+  style: "long",
+  type: "conjunction",
+});
+
+export function pickSummary(options: SpineOption[], selected: string[]): string {
+  const total = options.length;
+  const picked = options.filter((o) => selected.includes(o.id));
+  if (picked.length === 0) {
+    return total === 1 ? "Showing 1 issue." : `Showing all ${total} issues.`;
+  }
+  const titles = TITLE_LIST.format(picked.map((o) => o.title));
+  return `Showing ${picked.length} of ${total} ${total === 1 ? "issue" : "issues"}: ${titles}.`;
+}
+
 export function issueRowsFor(brief: RaceBrief, selected: string[]): IssueRow[] {
   const want = new Set(selected);
   return brief.spineIssues

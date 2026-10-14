@@ -1,0 +1,61 @@
+{
+  "result": {
+    "input": {
+      "address": {
+        "address": "1 Main St, Springfield, FL"
+      }
+    },
+    "addressMatches": [
+      {
+        "matchedAddress": "1 MAIN ST, SPRINGFIELD, ME, 04487",
+        "coordinates": {
+          "x": -68.224955626993,
+          "y": 45.375797578731
+        },
+        "addressComponents": {
+          "preDirection": "",
+          "streetName": "MAIN",
+          "suffixType": "ST",
+          "suffixDirection": "",
+          "city": "SPRINGFIELD",
+          "state": "ME",
+          "zip": "04487"
+        },
+        "geographies": {
+          "Census Blocks": [
+            {
+              "GEOID": "230190255002212",
+              "STATE": "23",
+              "COUNTY": "019"
+            }
+          ]
+        }
+      },
+      {
+        "matchedAddress": "1 MAIN ST, SPRINGFIELD, MA, 01151",
+        "coordinates": {
+          "x": -72.510559182854,
+          "y": 42.160347858354
+        },
+        "addressComponents": {
+          "preDirection": "",
+          "streetName": "MAIN",
+          "suffixType": "ST",
+          "suffixDirection": "",
+          "city": "SPRINGFIELD",
+          "state": "MA",
+          "zip": "01151"
+        },
+        "geographies": {
+          "Census Blocks": [
+            {
+              "GEOID": "250138002021000",
+              "STATE": "25",
+              "COUNTY": "013"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

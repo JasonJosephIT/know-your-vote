@@ -250,8 +250,9 @@ for (const [label, re] of [
       asserted here rather than trusted.
 
       Every key below is allowed for a stated reason, and none of them holds
-      location. Each also names how /privacy discloses it, because that page
-      promises "the whole list of what we store"; section 4 asserts it.
+      location. Each also names how /privacy/how-it-works discloses it,
+      because that page promises "the whole list" of what the site saves in
+      the browser; section 4 asserts it.
       Adding a key here is a privacy decision, so the reason has to be written
       down next to it. */
 const ALLOWED_LOCAL = new Map<string, { why: string; disclosed: RegExp }>([
@@ -985,13 +986,25 @@ assert(
   "expected the FL-nn|ccccc regex to guard both parse and format"
 );
 
-/* 4. The privacy page must describe exactly this, including both third parties
-      on the address path. A page whose whole value is being checkable cannot
-      carry a claim that fails the check.
+/* 4. The privacy pages must describe exactly this, including every third
+      party on the address path. A page whose whole value is being checkable
+      cannot carry a claim that fails the check.
+
+      Two pages since 2026-10-13: /privacy states each point in a sentence or
+      two, and /privacy/how-it-works holds the detail (the cookie's value,
+      the device keys, the Census and Pelias paths). Each claim is pinned on
+      the page that now makes it; a claim pinned on the wrong page would pass
+      while the voter reads something else.
 
       These reads sit here because section 4 now asserts against all of them. */
 const privacyText = stripComments(
   readFileSync(join(SRC, "app", "(public)", "privacy", "page.tsx"), "utf8")
+);
+const howText = stripComments(
+  readFileSync(
+    join(SRC, "app", "(public)", "privacy", "how-it-works", "page.tsx"),
+    "utf8"
+  )
 );
 const analytics = stripComments(
   readFileSync(join(SRC, "lib", "analytics.ts"), "utf8")
@@ -999,49 +1012,88 @@ const analytics = stripComments(
 const landing = stripComments(
   readFileSync(join(SRC, "app", "(public)", "page.tsx"), "utf8")
 );
+const privacyFlat = privacyText.replace(/\s+/g, " ");
+const howFlat = howText.replace(/\s+/g, " ");
 
-assert(
-  "privacy page no longer claims quiz answers are stored",
-  !/quiz answers are\s+stored/i.test(privacyText.replace(/\s+/g, " "))
-);
-assert(
-  "privacy page says the address and ZIP are not stored",
-  /address and your ZIP aren(?:&apos;|&rsquo;|'|’)t stored/i.test(privacyText)
-);
-assert("privacy page names the cookie", /kyv\.district/.test(privacyText));
-assert("privacy page shows the stored value", /FL-27\|12086/.test(privacyText));
+for (const [page, flat] of [
+  ["privacy page", privacyFlat],
+  ["how-it-works page", howFlat],
+] as const) {
+  assert(
+    `${page} no longer claims quiz answers are stored`,
+    !/quiz answers are\s+stored/i.test(flat)
+  );
+  /* What stays on the device is sent with requests (the district cookie) or
+     looked up by id (the keep-in-mind list), so it does reach our servers. */
+  assert(
+    `${page} doesn't say device storage never reaches our servers`,
+    !/never reach(?:es)? our servers/i.test(flat)
+  );
+  assert(
+    `${page} says the address and ZIP are not stored`,
+    /address and your ZIP aren(?:&apos;|&rsquo;|'|’)t stored/i.test(flat)
+  );
+  assert(`${page} names the Census Bureau`, /Census Bureau/.test(flat));
+}
+assert("how-it-works page names the cookie", /kyv\.district/.test(howFlat));
+assert("how-it-works page shows the stored value", /FL-27\|12086/.test(howFlat));
 /* The vendor paragraph is rendered from PELIAS_BASE_URL (a deployment fact),
-   so what is pinned here is that the page still NAMES a geocoder and still
-   offers the no-third-party route -- not a hard-coded company. Pinning
+   so what is pinned here is that the pages still NAME a geocoder and still
+   offer the no-third-party route -- not a hard-coded company. Pinning
    "Google Places" is what made this assertion wrong the moment the geocoder
    changed. */
-assert("privacy page names the geocoder", /Pelias/.test(privacyText));
+assert("privacy page names the geocoder", /Pelias/.test(privacyFlat));
+assert("how-it-works page names the geocoder", /Pelias/.test(howFlat));
 assert(
   "privacy page still offers a no-third-party path",
-  /no third party at all/.test(privacyText)
+  /no third party at all/.test(privacyFlat)
+);
+/* What Census receives depends on the path (since 2026-10-12): a picked
+   Pelias suggestion sends only its coordinates; a typed address, which is
+   production, sends the text, from our server and with nothing else. Both
+   pages say it, each under the configuration it describes: /privacy in a
+   sentence, how-it-works in full. */
+assert(
+  "privacy page says a picked suggestion sends Census only the map point",
+  /the U\.S\. Census Bureau then gets only the map point/.test(privacyFlat) &&
+    /never the address itself/.test(privacyFlat)
 );
 assert(
-  "privacy page names the Census Bureau",
-  /Census Bureau/.test(privacyText)
+  "privacy page says a typed address goes to Census from our server, alone",
+  /our server sends the address you typed to the U\.S\. Census Bureau(?:&rsquo;|’|')s public geocoder/.test(
+    privacyFlat
+  ) && /with nothing that says who typed it/.test(privacyFlat)
 );
 assert(
-  "privacy page says only coordinates go to Census",
-  /coordinates/i.test(privacyText) &&
-    /never receives your address/i.test(privacyText)
+  "how-it-works page says a picked suggestion sends Census only coordinates",
+  /we send just those coordinates to the U\.S\. Census Bureau/.test(howFlat) &&
+    /The Census Bureau never receives your address/.test(howFlat)
 );
 assert(
-  "privacy page names the way out of both third parties",
-  /(?:pick|choose) your district/i.test(privacyText)
+  "how-it-works page says a typed address goes to Census from our server, alone",
+  /we send what you typed to the U\.S\. Census Bureau(?:&rsquo;|’|')s public geocoder/.test(
+    howFlat
+  ) &&
+    /goes from our server, not your browser/.test(howFlat) &&
+    /receives the address and nothing else/.test(howFlat)
 );
-/* Every key section 3 found in the code is on the page. This replaces the two
-   hand-written checks for the keep-in-mind list and the install flag, and
-   covers the two SitePrompts keys the same way: a key the code stores and the
-   page omits would make "that is the whole list" untrue. */
-const privacyFlat = privacyText.replace(/\s+/g, " ");
+assert(
+  "privacy page names the way out of the address path",
+  /(?:pick|choose) your district/i.test(privacyFlat)
+);
+/* Every key section 3 found in the code is on the explanation page, which
+   promises "the whole list". This replaces the two hand-written checks for
+   the keep-in-mind list and the install flag, and covers the two
+   SitePrompts keys the same way: a key the code stores and the page omits
+   would make that list untrue. Each key is also named as written, so a
+   reader can find it in devtools. */
 for (const key of new Set(storage.keys.map((k) => k.key))) {
   const rule = ALLOWED_LOCAL.get(key);
   if (!rule) continue; /* already a failure in section 3 */
-  assert(`privacy page discloses ${key}`, rule.disclosed.test(privacyFlat));
+  assert(
+    `how-it-works page discloses ${key}`,
+    rule.disclosed.test(howFlat) && howFlat.includes(`<code>${key}</code>`)
+  );
 }
 
 /* The landing page's storage claim had to move with the cookie: it used to say
@@ -1055,33 +1107,49 @@ assert(
   /keep only the district|remember the district/i.test(landing)
 );
 
-/* 5. ballot_viewed exists and precedes zip_resolved: the funnel's entry event is
-      the ballot, not the ZIP. district_set carries a method label and never a
-      value -- LocationEntry passes the shorthand { via }, so the check accepts a
-      bare identifier as well as a literal, and rejects anything else. */
+/* 5. ballot_viewed exists and comes first: the funnel's entry event is the
+      ballot. zip_resolved went with the ZIP option (2026-10-12), so the
+      district event is district_set alone. It carries a method label and
+      never a value -- LocationEntry passes the shorthand { via }, so the
+      check accepts a bare identifier as well as a literal, and rejects
+      anything else. */
 assert(
   "ballot_viewed is a declared analytics event",
   /"ballot_viewed"/.test(analytics)
 );
 assert(
-  "ballot_viewed precedes zip_resolved in the funnel",
-  analytics.indexOf('"ballot_viewed"') < analytics.indexOf('"zip_resolved"')
+  "zip_resolved is gone: nothing takes a ZIP for location",
+  !/"zip_resolved"/.test(analytics) &&
+    files.every((f) => !/track\(\s*"zip_resolved"/.test(f.code))
 );
 assert(
   "district_set is a declared analytics event",
   /"district_set"/.test(analytics)
+);
+assert(
+  "ballot_viewed precedes district_set in the funnel",
+  analytics.indexOf('"ballot_viewed"') < analytics.indexOf('"district_set"')
 );
 const districtSetCalls = files.flatMap((f) => [
   ...f.code.matchAll(/track\(\s*"district_set"\s*,\s*\{([^}]*)\}/g),
 ]);
 assert("district_set is tracked somewhere", districtSetCalls.length > 0);
 assert(
-  "district_set only ever carries via: address | zip | picker",
+  "district_set only ever carries via: address | picker",
   districtSetCalls.every((m) =>
-    /^\s*via\s*(:\s*(via|"address"|"zip"|"picker"))?\s*,?\s*$/.test(m[1])
+    /^\s*via\s*(:\s*(via|"address"|"picker"))?\s*,?\s*$/.test(m[1])
   ),
   districtSetCalls.map((m) => m[1]).join(" | ")
 );
+{
+  /* The shorthand { via } is only as narrow as its type. */
+  const entry = files.find((f) => /LocationEntry\.tsx$/.test(f.path));
+  assert(
+    "LocationEntry's via is address | picker, never zip",
+    Boolean(entry) && /via: "address" \| "picker"/.test(entry?.code ?? ""),
+    entry ? "" : "LocationEntry.tsx not scanned"
+  );
+}
 assert(
   "landing page fires ballot_viewed only when a ballot rendered",
   /ballotRendered && <TrackView event="ballot_viewed" \/>/.test(landing)

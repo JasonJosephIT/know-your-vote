@@ -23,6 +23,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/news/outlet`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/methodology`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/privacy`, changeFrequency: "yearly", priority: 0.3 },
+    /* The detail behind each /privacy point (2026-10-13). */
+    {
+      url: `${BASE}/privacy/how-it-works`,
+      changeFrequency: "yearly",
+      priority: 0.2,
+    },
     { url: `${BASE}/about`, changeFrequency: "yearly", priority: 0.4 },
     /* Terms of use (2026-10-04, launch handoff §1). Recommended, pending
        founder confirmation: remove this line if the page is dropped. */

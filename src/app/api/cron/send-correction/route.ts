@@ -25,6 +25,10 @@ import {
   verifiedElectionEvents,
   type ElectionEvent,
 } from "@/lib/notifications/election-events";
+import {
+  rehearsalSubscription,
+  type RehearsalSubscription,
+} from "@/lib/notifications/rehearsal";
 import { countiesWithOwnDates, easternToday } from "@/lib/notifications/schedule";
 import type { Rendered } from "@/lib/notifications/templates";
 import { secretEquals } from "@/lib/secret-compare";
@@ -413,21 +417,18 @@ async function rehearse(
   dedupeKey: string,
   to: string
 ) {
-  /* Signups are stored lower-cased; the exact spelling is tried too, for
-     any row saved before that. */
-  const { data: subs, error: subError } = await service
-    .from("voting_info_subscription")
-    .select("email, unsubscribe_token, zip5")
-    .in("email", [...new Set([to, to.toLowerCase()])])
-    .eq("active", true)
-    .limit(1);
-  if (subError) {
+  /* The address goes to the database in a request body, never a URL
+     (rehearsalSubscription, shared with send-reminders; it also tries the
+     exact spelling, for rows saved before signups were lower-cased). */
+  let sub: RehearsalSubscription | null;
+  try {
+    sub = await rehearsalSubscription(service, to);
+  } catch {
     return NextResponse.json(
       { error: "Subscription lookup failed — nothing was sent." },
       { status: 502 }
     );
   }
-  const sub = subs?.[0];
   if (!sub) {
     return NextResponse.json(
       {
@@ -440,7 +441,7 @@ async function rehearse(
 
   let county: string | null;
   try {
-    county = (await zipCounties(service, [sub.zip5])).get(sub.zip5) ?? null;
+    county = (await zipCounties()).get(sub.zip5) ?? null;
   } catch {
     return NextResponse.json(
       { error: "ZIP lookup failed — nothing was sent." },

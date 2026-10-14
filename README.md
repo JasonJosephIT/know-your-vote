@@ -71,8 +71,9 @@ new deployments). The production env checklist and an end-to-end test are in
 Also unset in production on 2026-10-04, under any name:
 `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`, `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`,
 `PELIAS_BASE_URL` and `ADMIN_EMAILS`. So knowyour.vote runs no analytics,
-sends no error reports and offers no address completion, and the admin
-console is closed.
+sends no error reports and offers no address suggestions, and the admin
+console is closed. Since 2026-10-12 it takes typed street addresses anyway,
+through the Census Bureau (`ADDRESS_LOOKUP_OFF`, below).
 
 `NEXT_PUBLIC_` is a one-way door — Next.js inlines those values into the
 browser bundle at build time. Everything else is server-only and must never
@@ -100,14 +101,24 @@ missing key degrades a surface, it never fakes one.
   strongest sense. Unset under both names → `POST /api/voting-info` returns 503 with nothing sent or stored, both crons
   return 503 (the news feed keeps yesterday's items), the calendar file
   returns 503, and the deadline banner renders nothing.
-- `PELIAS_BASE_URL` — address completion in the location field. **Where it
+- `ADDRESS_LOOKUP_OFF` — the off switch for street addresses. Unset (the
+  default since 2026-10-12) → with no Pelias, a typed address goes from the
+  server to the Census Bureau's free one-line geocoder
+  (`src/lib/census-block.ts`), which answers its census block; the match
+  counts only when the voter's own words agree with it
+  (`src/lib/address-text.ts`). Any value → the field takes a ZIP only, both
+  `/api/address/*` routes answer 503, and `/privacy` says nothing typed
+  leaves the site. Redeploy after changing it: `/privacy` is prerendered.
+- `PELIAS_BASE_URL` — address suggestions as the voter types. **Where it
   points is the privacy decision, and it is made here rather than in code:**
   an instance you host (`deploy/pelias/`) means no third party ever sees a
   voter's address; `https://api.geocode.earth` means a geocoding company
-  does. `/privacy` reads the configured host, so the page stays true without
-  anyone remembering to edit the prose. Unset → `/api/address/suggest`
-  answers 503 `unavailable`, the field takes a ZIP, and the district picker
-  still works.
+  does. With it set, an address resolves only from a picked suggestion, whose
+  coordinate alone goes to the Census Bureau. `/privacy` reads the
+  configured host, so the page stays true without anyone remembering to edit
+  the prose. Unset → `/api/address/suggest` answers 503 `unavailable`, and
+  the field takes a whole typed address (Census, above), a ZIP, or the
+  district picker.
 - `PELIAS_API_KEY` — hosted Pelias only; Geocode Earth authenticates by query
   parameter. A self-hosted instance normally needs nothing here, so an absent
   key is normal rather than an error.

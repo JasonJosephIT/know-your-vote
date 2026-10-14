@@ -5,7 +5,15 @@ import { CountyRaces } from "@/components/features/CountyRaces";
 import { VotingInfo } from "@/components/features/VotingInfo";
 import { LocationEntry } from "@/components/features/LocationEntry";
 import { createAnonServerClient } from "@/lib/supabase/server";
-import { districtRaceMissing, STATEWIDE_BALLOT_HREF } from "@/lib/coverage";
+import {
+  districtRaceMissing,
+  houseRaceNotLoaded,
+  nothingLoaded,
+  RACES_NOT_LOADED,
+  STATEWIDE_BALLOT_HREF,
+  STATEWIDE_NOT_LOADED,
+} from "@/lib/coverage";
+import { supervisorLink } from "@/lib/supervisors";
 import { coveredCountyNames } from "@/lib/counties";
 import {
   getCoveredDistricts,
@@ -16,13 +24,17 @@ import {
   ZIP_RE,
 } from "@/lib/resolve";
 import { raceStatusLabel } from "@/lib/races";
-import { geocoderConfigured } from "@/lib/geocode";
+import { addressEntryEnabled, geocoderConfigured } from "@/lib/geocode";
 import {
   emailDeliveryConfigured,
   officialSources,
   remindersPaused,
 } from "@/lib/notifications/config";
-import { DECIDED_TAG, NOT_COVERED_SENTENCE } from "@/lib/scope-copy";
+import {
+  DECIDED_TAG,
+  locationFieldCopy,
+  NOT_COVERED_SENTENCE,
+} from "@/lib/scope-copy";
 import type {
   DistrictRaceSummary,
   ResolveResultWithCounty,
@@ -98,10 +110,12 @@ export async function YourRaces({
     return (
       <div className="flex flex-col gap-4">
         <p className="text-body text-on-surface-muted">
-          Add your ZIP and we&rsquo;ll show the races we cover on your ballot.
+          Add your {locationFieldCopy(addressEntryEnabled()).noun} and
+          we&rsquo;ll show the races we cover on your ballot.
         </p>
         <LocationEntry
-          addressEnabled={geocoderConfigured()}
+          addressEnabled={addressEntryEnabled()}
+          suggestEnabled={geocoderConfigured()}
           districts={districts}
         />
       </div>
@@ -115,10 +129,10 @@ export async function YourRaces({
           We can&rsquo;t place that ZIP on a ballot yet. Full statewide coverage
           isn&rsquo;t available: U.S. House and county races are only for{" "}
           {coveredCountyNames()} counties so far. If you live in Florida,{" "}
-          {/* The address field only exists when a geocoder is configured
-              (PELIAS_BASE_URL, unset in production on 2026-10-04), so the
-              hint follows it rather than pointing at a field that isn't there. */}
-          {geocoderConfigured() ? "try your street address, or " : ""}
+          {/* The field takes an address unless ADDRESS_LOOKUP_OFF is set,
+              so the hint follows it rather than pointing at a field that
+              can't take one. */}
+          {addressEntryEnabled() ? "try your street address, or " : ""}
           <Link
             href={STATEWIDE_BALLOT_HREF}
             className="text-primary underline underline-offset-2"
@@ -128,7 +142,8 @@ export async function YourRaces({
           .
         </p>
         <LocationEntry
-          addressEnabled={geocoderConfigured()}
+          addressEnabled={addressEntryEnabled()}
+          suggestEnabled={geocoderConfigured()}
           districts={districts}
         />
       </div>
@@ -136,13 +151,29 @@ export async function YourRaces({
   }
 
   if (result.needsCountyConfirm) {
-    /* A ZIP that crosses into a county we don't cover (uncovered-zip-parts.ts)
-       says so here too, for the visitor who reaches this server-rendered
-       answer without JavaScript or from a shared ?zip= link: each covered
-       district is a plain link (resolveZip accepts it as confirmed), and the
-       other side gets its House race and the statewide ballot, never a
-       district filed under the covered county. */
+    /* Only an old shared ?zip= link reaches this now: the field takes an
+       address, which lands in one district (2026-10-12). Each covered
+       district is a plain link carrying the district and county, never the
+       ZIP again: every split ZIP sits in one county, so resolveDistrict
+       gives the races resolveZip would. A ZIP that crosses into a county we
+       don't cover (uncovered-zip-parts.ts) says so, and the other side gets
+       its House race and the statewide ballot, never a district filed under
+       the covered county. */
     const part = result.uncoveredPart;
+    const districtLinks = result.countyFips && (
+      <ul className="flex flex-wrap gap-2">
+        {(result.candidateDistricts ?? []).map((d) => (
+          <li key={d}>
+            <Link
+              href={`/candidates?view=races&district=${d}&county=${result.countyFips}`}
+              className="block rounded-md border border-border-strong bg-surface px-4 py-3 text-label text-primary transition-colors hover:border-primary hover:bg-primary-muted hover:text-primary-hover"
+            >
+              {d}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    );
     return (
       <div className="flex flex-col gap-4">
         {part ? (
@@ -150,20 +181,9 @@ export async function YourRaces({
             <p className="text-body text-on-surface-muted">
               That ZIP is partly in {result.county} County and partly in{" "}
               {part.county} County. If you live in the {result.county} County
-              part, pick your congressional district:
+              part, choose your congressional district:
             </p>
-            <ul className="flex flex-wrap gap-2">
-              {(result.candidateDistricts ?? []).map((d) => (
-                <li key={d}>
-                  <Link
-                    href={`/candidates?view=races&zip=${zip}&district=${d}`}
-                    className="block rounded-md border border-border-strong bg-surface px-4 py-3 text-label text-primary transition-colors hover:border-primary hover:bg-primary-muted hover:text-primary-hover"
-                  >
-                    {d}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {districtLinks}
             <p className="text-body-sm text-on-surface-muted">
               In the {part.county} County part? Your U.S. House race is{" "}
               <Link
@@ -184,14 +204,20 @@ export async function YourRaces({
             </p>
           </>
         ) : (
-          <p className="text-body text-on-surface-muted">
-            That ZIP spans more than one congressional district (
-            {result.candidateDistricts?.join(", ")}). Re-enter it below and
-            we&rsquo;ll ask which district is yours:
-          </p>
+          <>
+            <p className="text-body text-on-surface-muted">
+              That ZIP spans more than one congressional district (
+              {result.candidateDistricts?.join(", ")}).{" "}
+              {addressEntryEnabled()
+                ? "Choose yours, or enter your street address below and we'll find it:"
+                : "Choose yours:"}
+            </p>
+            {districtLinks}
+          </>
         )}
         <LocationEntry
-          addressEnabled={geocoderConfigured()}
+          addressEnabled={addressEntryEnabled()}
+          suggestEnabled={geocoderConfigured()}
           districts={districts}
         />
       </div>
@@ -204,6 +230,10 @@ export async function YourRaces({
      the list never presents a race the voter can't vote in as theirs. */
   const printed = result.races.filter((r) => !isDecided(r));
   const decided = result.races.filter(isDecided);
+  /* Where the voter's full sample ballot is, for the two fault notices
+     below: their county's Supervisor of Elections, or the state's list of
+     all 67 when the result has no county (the statewide-only path). */
+  const supervisor = supervisorLink(result.countyFips);
 
   return (
     <div className="flex flex-col gap-5">
@@ -251,19 +281,31 @@ export async function YourRaces({
         </Link>
       </p>
 
-      {/* The truly-empty case only. Since the listed tier (0033) the roster is
-          visible before any brief is, so an empty list now means nothing at
-          all is visible for this location — and if county races did come
-          back, saying "your races aren't published" above them would
-          contradict the page. */}
+      {/* No statewide race came back. Every covered location has races
+          (scripts/verify-no-empty-races.ts checks the live roster for each
+          one), so this is a failed read, never a fact about the voter's
+          ballot, and it says so instead of "not published yet ... check
+          back soon" (founder rule 2026-10-12; coverage.ts): RACES_NOT_LOADED
+          when nothing loaded at all, STATEWIDE_NOT_LOADED when the county
+          races below did. */}
       {result.races.length === 0 ? (
-        (result.countyRaces?.length ?? 0) === 0 && (
-          <p className="text-body text-on-surface-muted">
-            Your races aren&rsquo;t published yet — we publish a race only after
-            every candidate in it has been through the same checks. Check back
-            soon.
-          </p>
-        )
+        <p
+          role="status"
+          className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
+        >
+          {nothingLoaded(result.races, result.countyRaces)
+            ? RACES_NOT_LOADED
+            : STATEWIDE_NOT_LOADED}{" "}
+          <a
+            href={supervisor.url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-primary underline underline-offset-2 hover:text-primary-hover"
+          >
+            {supervisor.label}
+          </a>
+          .
+        </p>
       ) : (
         printed.length > 0 && (
           <LinkRowList>
@@ -330,9 +372,12 @@ export async function YourRaces({
         </section>
       )}
 
-      {/* The ZIP resolved and the district race is not here. Without this the
-          list reads as a finished ballot: the voter asked for their House race,
-          got five statewide races, and nothing said which part is missing.
+      {/* The district resolved and its House race is not here. Without this
+          the list reads as a finished ballot: the voter asked for their House
+          race, got five statewide races, and nothing said which part is
+          missing. Every covered district's race is on file (printed, or
+          decided and listed under "Not on your ballot"), so a gap here is a
+          fault on our side, and it is not worded as a race still to come.
           Sits directly under the list because it is a statement about the
           list — the county path's counterpart is the caption further down. */}
       {districtRaceMissing(result.district, result.races) &&
@@ -341,10 +386,16 @@ export async function YourRaces({
             role="status"
             className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
           >
-            We don&rsquo;t have the U.S. House race for {result.district} yet.
-            The races above are the statewide ones every Florida voter shares
-            — your district&rsquo;s race will appear here once it&rsquo;s
-            published.
+            {houseRaceNotLoaded(result.district ?? "")}{" "}
+            <a
+              href={supervisor.url}
+              target="_blank"
+              rel="noreferrer"
+              className="text-primary underline underline-offset-2 hover:text-primary-hover"
+            >
+              {supervisor.label}
+            </a>
+            .
           </p>
         )}
 
@@ -387,7 +438,11 @@ export async function YourRaces({
         result.races.length > 0 && (
         <p className="text-body-sm text-on-surface-muted">
           Showing statewide races. To add your U.S. House race, use Change
-          location above and enter your ZIP.
+          location above and{" "}
+          {addressEntryEnabled()
+            ? "enter your address or choose your district"
+            : "choose your district"}
+          .
         </p>
       )}
 
@@ -402,6 +457,9 @@ export async function YourRaces({
         remindersOn={!remindersPaused()}
         sources={officialSources(result.county)}
         countyFips={result.countyFips}
+        /* The same hint as the home form (founder D4 (a), 2026-10-13): the
+           ZIP stays through Nov 3, and the label says which ZIPs it takes. */
+        zipHint={`${coveredCountyNames("or")} County ZIPs for now`}
       />
     </div>
   );
