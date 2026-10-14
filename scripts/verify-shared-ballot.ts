@@ -178,15 +178,20 @@ assert(
       locationCode
     )
 );
+/* The picker's block (#district-picker-route) holds its divider, toggle and
+   form, so hiding the block hides all three: an open picker (Mobbin AD7) is
+   in the server render, and its label and divider would otherwise show
+   over nothing. */
 assert(
-  "without JavaScript, the address form and the picker's toggle and form are hidden",
+  "without JavaScript, the address form and the picker's whole block (toggle and form) are hidden",
   /<style>\{NO_SCRIPT_CSS\}<\/style>\s*<\/noscript>/.test(locationCode) &&
-    /NO_SCRIPT_CSS =\s*"#location-form,#district-picker-toggle,#district-picker-form\{display:none\}"/.test(
+    /NO_SCRIPT_CSS = "#location-form,#district-picker-route\{display:none\}"/.test(
       locationCode
     ) &&
     /id="location-form"/.test(locationCode) &&
-    /id="district-picker-toggle"/.test(locationCode) &&
-    /id="district-picker-form"/.test(locationCode)
+    /id="district-picker-route"[\s\S]*id="district-picker-toggle"[\s\S]*id="district-picker-form"/.test(
+      locationCode
+    )
 );
 assert(
   "with no districts to list (the read failed), the county links show for everyone, field on or off, and noscript still hides the field",
@@ -203,7 +208,7 @@ assert(
   "a bare ZIP gets the field error and is sent nowhere",
   /const zipAlone = \/\^\\d\{5\}\(\?:\[\\s-\]\?\\d\{4\}\)\?\$\/\.test\(trimmed\);/.test(locationCode) &&
     /if \(zipAlone\) \{\s*fail\(ZIP_ALONE\);\s*return;\s*\}/.test(locationCode) &&
-    /const ZIP_ALONE =\s*"A ZIP code alone can't tell us your district\. Add your house number and street, or choose your district below\.";/.test(
+    /const ZIP_ALONE =\s*"A ZIP code alone can't tell us your district\. Add your house number and street\.";/.test(
       locationCode
     ) &&
     locationCode.indexOf("if (zipAlone)") < locationCode.indexOf("void resolveAddress({ address: trimmed })")

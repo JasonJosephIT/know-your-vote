@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
+import { coveredCountyNames } from "@/lib/counties";
 import {
   emailSenderConfigured,
   officialSources,
@@ -24,13 +25,28 @@ import { createServiceClient } from "@/lib/supabase/service";
    The welcome email goes at most once a day per address and ZIP, and at
    most three times a day per address (src/lib/notifications/
    welcome-throttle.ts): a repeat is saved but sends nothing, and answers
-   with the status and body a send does. */
+   with the status and body a send does.
+
+   A 400 about one field names it ({ error, field: "zip" | "email" }), so
+   the form puts the message under that field by key, never by matching
+   its words (Mobbin catalog 2026-10-12, RS5). The words are the ones the
+   form's own checks use, so a ZIP or email the form let through and this
+   route refused reads the same. 429, 502 and 503 name no field. */
+
+const ZIP_MESSAGE = "Enter a 5-digit ZIP code.";
+const EMAIL_MESSAGE = "Enter an email address, like name@example.com.";
 
 const body = z.object({
-  zip: z.string().regex(ZIP_RE, "Invalid ZIP"),
-  email: z.string().email("Invalid email").max(254),
+  zip: z.string().regex(ZIP_RE, ZIP_MESSAGE),
+  email: z.string().email(EMAIL_MESSAGE).max(254, EMAIL_MESSAGE),
   consent: z.literal(true, { message: "Consent required" }),
 });
+
+type Field = "zip" | "email";
+
+function isField(key: unknown): key is Field {
+  return key === "zip" || key === "email";
+}
 
 export async function POST(request: NextRequest) {
   const { allowed } = rateLimit(`voting-info:${clientKey(request)}`, 5, 60_000);
@@ -48,8 +64,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
   if (!parsed.success) {
-    const first = parsed.error.issues[0]?.message ?? "Invalid request";
-    return NextResponse.json({ error: first }, { status: 400 });
+    const issue = parsed.error.issues[0];
+    const field = issue?.path[0];
+    return NextResponse.json(
+      { error: issue?.message ?? "Invalid request", ...(isField(field) ? { field } : {}) },
+      { status: 400 }
+    );
   }
   const { zip } = parsed.data;
   /* One address, one spelling. The table is unique on (email, zip5) and
@@ -62,7 +82,10 @@ export async function POST(request: NextRequest) {
   const resolved = await resolveZip(zip);
   if (!resolved.inCoverage || !resolved.county) {
     return NextResponse.json(
-      { error: "We don't cover that ZIP yet — we can only send info for the four covered metros." },
+      {
+        error: `We don't cover that ZIP yet — we can only send info for ZIP codes in ${coveredCountyNames()} counties.`,
+        field: "zip",
+      },
       { status: 400 }
     );
   }

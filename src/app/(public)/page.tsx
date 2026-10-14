@@ -357,12 +357,17 @@ export default async function Home() {
                 and the form is full width, as before. */}
                 <div className="lg:flex lg:items-end lg:gap-8">
                   <div className="min-w-0 lg:flex-1">
+                    {/* The picker stays behind its toggle here, and the
+                        field's privacy line is off: the paragraph above
+                        already says the district is all that's kept. */}
                     <LocationEntry
                       submitLabel="Add my House race"
                       addressEnabled={addressEnabled}
                       suggestEnabled={suggestEnabled}
                       coverageNote={false}
                       districts={districts}
+                      pickerCollapsed
+                      privacyNote={false}
                     />
                   </div>
                   <Art
