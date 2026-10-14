@@ -60,3 +60,13 @@ export function LockGlyph() {
     </svg>
   );
 }
+
+/* A link that jumps further down this page (race "Jump to", amendment
+   YES/NO jump row), in place of the ↓ character the Inter subset lacks. */
+export function ArrowDownGlyph() {
+  return (
+    <svg {...svg}>
+      <path d="M10 4.5v11M5.5 11l4.5 4.5 4.5-4.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}

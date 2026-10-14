@@ -154,6 +154,10 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${figtree.variable} ${inter.variable} ${ibmPlexMono.variable} h-full antialiased`}
+      /* Next 16 switches smooth scrolling off for a route change's scroll
+         to the top only when this is set. globals.css turns it on for the
+         race page's "Jump to" links alone (lg and up, motion-safe). */
+      data-scroll-behavior="smooth"
     >
       {/* Bottom padding clears the fixed nav plus the home-indicator inset in
           standalone PWA mode; top inset keeps content out of the status bar.

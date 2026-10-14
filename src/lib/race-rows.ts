@@ -52,6 +52,29 @@ export function raceRows(brief: RaceBrief): RaceRow[] {
     });
 }
 
+export interface JumpLink {
+  href: string;
+  label: string;
+}
+
+/* The race page's "Jump to" list (Mobbin catalog RC1, 2026-10-12): the
+   roster, every spine row in the order the page shows them, then the other
+   issues when any candidate has one. Each label is its target's own
+   heading, and each href an id RaceCompare already renders. It names
+   issues only, race-wide and the same for every candidate: never a count
+   of positions, never "most discussed", never a candidate's name. */
+export function raceJumpLinks(
+  rows: RaceRow[],
+  rosterHeading: string,
+  otherIssuesHeading: string | null
+): JumpLink[] {
+  return [
+    { href: "#whos-running", label: rosterHeading },
+    ...rows.map((row) => ({ href: `#issue-${row.subIssueId}`, label: row.title })),
+    ...(otherIssuesHeading ? [{ href: "#other-issues", label: otherIssuesHeading }] : []),
+  ];
+}
+
 /* Every candidate, in ballot order, with the issues only they raised. A
    candidate with none still gets an entry, so the section's shape doesn't
    depend on who wrote more. */

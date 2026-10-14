@@ -9,6 +9,9 @@
    3. Source scans (added by later tasks): the view's components cannot
       render what the data layer already withholds, and the hub's outbound
       card loads nothing from the third party.
+   4. pickSummary and the filter's "All issues" chip (Mobbin catalog RC2,
+      2026-10-12): the line under the chips counts issues, never candidates
+      or positions, and the default state has a visibly selected chip.
 
    Run: node scripts/verify-issue-pick.ts */
 
@@ -18,6 +21,7 @@ import {
   issueRowsFor,
   parseIssuePick,
   pickHref,
+  pickSummary,
   spineOptions,
   subIssueIdOf,
   togglePickHref,
@@ -244,6 +248,65 @@ check(
 check(
   "sitemap lists no /issues URLs",
   !read("src/app/sitemap.ts").includes("/issues")
+);
+
+/* ---- 4. pickSummary and the "All issues" chip ---------------------------- */
+const OPTIONS = spineOptions([ECON, HOUS, INS] as never);
+check("nothing picked: says all, with the count", pickSummary(OPTIONS, []) === "Showing all 3 issues.");
+check(
+  "two picked: the count of the total, then the titles joined in words",
+  pickSummary(OPTIONS, ["economy", "insurance"]) ===
+    "Showing 2 of 3 issues: Economy & Affordability and Insurance & Property Costs."
+);
+check(
+  "titles follow spine order, not the order they were picked in",
+  pickSummary(OPTIONS, ["insurance", "economy"]) === pickSummary(OPTIONS, ["economy", "insurance"])
+);
+check(
+  "three titles take a list's commas",
+  pickSummary(OPTIONS, ["economy", "housing", "insurance"]) ===
+    "Showing 3 of 3 issues: Economy & Affordability, Housing, and Insurance & Property Costs."
+);
+check("unknown ids are ignored", pickSummary(OPTIONS, ["bogus"]) === "Showing all 3 issues.");
+check("one issue is singular", pickSummary(OPTIONS.slice(0, 1), []) === "Showing 1 issue.");
+check(
+  "one of one is singular too",
+  pickSummary(OPTIONS.slice(0, 1), ["economy"]) === "Showing 1 of 1 issue: Economy & Affordability."
+);
+check(
+  "the line counts issues, never candidates or positions",
+  [[], ["economy"], ["economy", "housing", "insurance"]].every(
+    (sel) => !/candidate|position|stated|quote/i.test(pickSummary(OPTIONS, sel))
+  )
+);
+
+const filter = code("src/components/features/IssueFilter.tsx");
+{
+  const allAt = filter.indexOf("All issues");
+  const optionsAt = filter.indexOf("{options.map((o) => {");
+  check(
+    '"All issues" is the first chip, before the issue chips',
+    allAt > 0 && optionsAt > 0 && allAt < optionsAt
+  );
+  const allChip = filter.slice(filter.lastIndexOf("<Link", allAt), allAt);
+  check(
+    '"All issues" goes to the race page and is current when nothing is picked',
+    /href=\{pickHref\(raceId, \[\]\)\}/.test(allChip) &&
+      /const all = selected\.length === 0;/.test(filter) &&
+      /aria-current=\{all \? "true" : undefined\}/.test(allChip) &&
+      /\{all && \(\s*<>\s*<CheckGlyph \/>/.test(allChip)
+  );
+}
+check('the trailing "Show everything" link is gone', !filter.includes("Show everything"));
+check(
+  "the filter states what it shows under the chips, at body-sm",
+  /<\/ul>\s*<p className="text-body-sm text-on-surface-muted">\s*\{pickSummary\(options, selected\)\}/.test(filter)
+);
+check('no role="status": every change is a full page load', !/role="status"/.test(filter));
+check(
+  "every chip shares one class, whose colour change stops under reduced motion",
+  /transition-colors motion-reduce:transition-none/.test(filter) &&
+    (filter.match(/className=\{chip\((all|on)\)\}/g) ?? []).length === 2
 );
 
 /* ---- summary ------------------------------------------------------------ */
