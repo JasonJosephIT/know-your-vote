@@ -473,13 +473,24 @@ await check(
    publication row yet, publishes nothing new, and is a no-op the second
    time. FL-AM3-general, FL-AM2-general and FL-AM1-general already have a
    row each (0038's, 0040's and 0060's 'published') by this point, so
-   list-ballot-2026.sql's own NOT EXISTS guard skips all three -- `measures
-   - 3`, which is 0, get listed here. */
+   list-ballot-2026.sql's own NOT EXISTS guard skips all three. To keep the
+   measure branch covered, a harness-only general_2026 measure with no
+   publication row is added first: it is the one measure (`measures - 3`)
+   the listing must list and log. It stays listed for the rest of the run,
+   so anon's ballot_measure count below includes it. */
 console.log("list-ballot-2026.sql — go-live flip (throwaway)");
 const listSql = await readFile(
   path.join(root, "scripts", "list-ballot-2026.sql"),
   "utf8"
 );
+await db.exec(`
+  INSERT INTO ballot_measure
+    (measure_id, election, number, official_title, ballot_summary,
+     full_text_url, placed_by, threshold_pct)
+  VALUES ('FL-HARNESS-general', 'general_2026', '99', 'HARNESS-ONLY MEASURE',
+          'Inserted by verify-ballot-seeds.mjs so list-ballot-2026.sql has a measure to list.',
+          'https://example.invalid/', 'legislature', 60.00);
+`);
 const generalRaces = await n(
   "SELECT count(*)::int n FROM race WHERE election='general'"
 );
@@ -502,10 +513,16 @@ await check(
   0
 );
 await check(
-  "every measure without a prior row is now listed (none: AM1, AM2 and AM3 are published)",
+  "every measure without a prior row is now listed (the harness measure; AM1, AM2 and AM3 are published)",
   `SELECT count(*)::int n FROM ballot_measure bm JOIN measure_publication mp USING (measure_id)
-    WHERE bm.election='general_2026' AND mp.status='listed'`,
+    WHERE bm.election='general_2026' AND mp.status='listed'
+      AND bm.measure_id = 'FL-HARNESS-general'`,
   measures - 3
+);
+await check(
+  "the listing listed no other measure",
+  "SELECT count(*)::int n FROM measure_publication WHERE status='listed'",
+  1
 );
 await check(
   "the listing published nothing new (published count unchanged by the listing)",
@@ -520,10 +537,18 @@ await check(
   generalRaces
 );
 await check(
-  "every newly-listed measure (none: AM1, AM2 and AM3 are published) logged an audit row",
+  "every newly-listed measure (the harness measure) logged one 'list' audit row",
+  `SELECT count(*)::int n FROM admin_action
+    WHERE subject_kind='measure_publication' AND action='list'
+      AND subject_ref='FL-HARNESS-general'
+      AND detail->>'prior_status' IS NULL AND detail->>'new_status'='listed'`,
+  measures - 3
+);
+await check(
+  "the listing logged no other measure 'list' row",
   `SELECT count(*)::int n FROM admin_action
     WHERE subject_kind='measure_publication' AND action='list'`,
-  measures - 3
+  1
 );
 await check(
   "listing stamped no published_at",
@@ -740,5 +765,5 @@ if (failures > 0) {
   process.exit(1);
 }
 console.log(
-  "\nverify-ballot-seeds: OK — measures and Tier A local races seeded as intended; no race is listed or published by a migration, and FL-AM3-general/FL-AM2-general/FL-AM1-general are the three measures 0038/0040/0060 publish; list-ballot-2026.sql lists every race and every measure without a prior row (none now) and publishes nothing new; anon reads only AM1's 12 neutral rows while it is listed, and AM3's 15 resources, AM2's 18 and AM1's 21 once published."
+  "\nverify-ballot-seeds: OK — measures and Tier A local races seeded as intended; no race is listed or published by a migration, and FL-AM3-general/FL-AM2-general/FL-AM1-general are the three measures 0038/0040/0060 publish; list-ballot-2026.sql lists every race and every measure without a prior row (a harness-only one, since all three amendments have a row) and publishes nothing new; anon reads only AM1's 12 neutral rows while it is listed, and AM3's 15 resources, AM2's 18 and AM1's 21 once published."
 );
