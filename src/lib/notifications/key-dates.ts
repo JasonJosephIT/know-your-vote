@@ -145,6 +145,31 @@ export function keyDateStops(
   }));
 }
 
+/* What a stop says on screen: its label, and the word after its date that
+   names its state (catalog HM1, 2026-10-12). Visible, not sr-only, so a
+   reader who can't tell the dots' colours apart still sees which date has
+   passed and which is next (WCAG 1.4.1). A label that already says it takes
+   no word: an open window reads "Early voting: open now", and the Today
+   stop is labelled "Today". A later date has none; it is the plain stop. */
+const STATE_WORDS: Record<StopState, string | null> = {
+  past: "Passed",
+  today: "Today",
+  open: null,
+  next: "Next",
+  later: null,
+};
+
+export function stopText(s: KeyDateStop): {
+  label: string;
+  word: string | null;
+} {
+  if (s.state === "open") return { label: `${s.label}: open now`, word: null };
+  return {
+    label: s.label,
+    word: s.key === "today" ? null : STATE_WORDS[s.state],
+  };
+}
+
 /* The masthead's dateline: "Sunday, October 11, 2026". Built at noon UTC so
    no zone can move it to the day before or after; `today` is already the
    Florida calendar day. */

@@ -4,7 +4,9 @@
    The rail's stops are walked day by day across the general election's
    real verified dates, statewide and for a covered county, because a rail
    that marks the wrong stop "next" on one day is a wrong civic deadline on
-   that day. The rest are source checks on what keeps the column neutral.
+   that day. The rest are source checks on what keeps the column neutral,
+   and on what keeps the rail readable without its colours (section 4;
+   Mobbin catalog HM1 and HM8, 2026-10-12).
 
    Run: node scripts/verify-home-layout.ts */
 
@@ -14,6 +16,8 @@ import {
   keyDateStops,
   mastheadDate,
   mastheadElectionDay,
+  stopText,
+  type StopState,
 } from "../src/lib/notifications/key-dates.ts";
 import {
   eventsForCounty,
@@ -233,6 +237,104 @@ check(
   check(
     "the ballot comes before the news in the DOM, so phones and screen readers get it first",
     page.indexOf("<SharedBallot />") < page.indexOf("<HomeNews")
+  );
+}
+
+/* ---- 4. The rail reads without colour (catalog HM1 and HM8) ------------ */
+
+/* What a sighted reader sees of each stop, its label and then its state
+   word, the way KeyDatesRail draws them from stopText. */
+const onScreen = (events: ElectionEvent[], day: string) =>
+  keyDateStops(events, day)
+    ?.map((s) => {
+      const t = stopText(s);
+      return t.word ? `${t.label} (${t.word})` : t.label;
+    })
+    .join(" | ") ?? "null";
+
+check(
+  "Oct 11: passed, today and next are words on screen, a later date has none",
+  onScreen(STATE, "2026-10-11") ===
+    "Registration deadline (Passed) | Today | Mail-ballot request deadline (Next) | Early voting | Election Day; mail ballots due",
+  onScreen(STATE, "2026-10-11")
+);
+check(
+  "Oct 5: a deadline that falls today says Today after its date",
+  onScreen(STATE, "2026-10-05") ===
+    "Registration deadline (Today) | Mail-ballot request deadline (Next) | Early voting | Election Day; mail ballots due",
+  onScreen(STATE, "2026-10-05")
+);
+check(
+  "Oct 24: an open window says so in its label, with no second word",
+  onScreen(STATE, "2026-10-24") ===
+    "Registration deadline (Passed) | Mail-ballot request deadline (Passed) | Early voting: open now | Election Day; mail ballots due (Next)",
+  onScreen(STATE, "2026-10-24")
+);
+
+/* Every day of the cycle, statewide and in Miami-Dade: each state is
+   named in visible words, and a later date is the only stop with none, so
+   no two states differ by colour alone (WCAG 1.4.1). */
+{
+  const says: Record<
+    StopState,
+    (t: { label: string; word: string | null }) => boolean
+  > = {
+    past: (t) => t.word === "Passed",
+    today: (t) =>
+      t.word === "Today" || (t.label === "Today" && t.word === null),
+    open: (t) => t.label.endsWith(": open now") && t.word === null,
+    next: (t) => t.word === "Next",
+    later: (t) =>
+      t.word === null && !/passed|today|open now|next/i.test(t.label),
+  };
+  const bad: string[] = [];
+  for (const events of [STATE, DADE]) {
+    for (let i = 0; i <= 60; i++) {
+      const day = isoDaysBefore("2026-11-03", i);
+      for (const s of keyDateStops(events, day) ?? []) {
+        if (!says[s.state](stopText(s))) bad.push(`${day} ${s.key}:${s.state}`);
+      }
+    }
+  }
+  check(
+    "every day, every stop's state is in words on screen, not only in colour",
+    bad.length === 0,
+    bad.join(", ")
+  );
+}
+
+{
+  const rail = source("src/components/features/KeyDatesRail.tsx");
+  const code = rail.replace(/\/\*[\s\S]*?\*\//g, "");
+  check(
+    "the rail draws each stop's label and word from stopText",
+    /stopText\(s\)/.test(code)
+  );
+  check("no state is left in sr-only text", !/sr-only/.test(code));
+  check(
+    "a passed dot carries a check, surface on grey",
+    /s\.state === "past" && <CheckGlyph \/>/.test(code) &&
+      /past: "border-on-surface-muted bg-on-surface-muted [^"]*text-surface"/.test(
+        code
+      )
+  );
+  check(
+    "never verdict green, and nothing moves: no fill, pulse or transition",
+    !/success|green|animate-|transition|duration-|keyframes/.test(code)
+  );
+  /* Phones: the segment to the next stop starts at this dot's centre (a
+     2px top margin and half a 16px dot) and ends at the next dot's centre,
+     the list's 12px gap further down. A stop's own height never enters it,
+     so the line stays whole when a label wraps. */
+  const top = Number(/after:top-\[(\d+)px\]/.exec(code)?.[1]);
+  const below = Number(/after:bottom-\[-(\d+)px\]/.exec(code)?.[1]);
+  check(
+    "phones: one line from dot centre to dot centre",
+    /<ol className="grid gap-3 /.test(code) &&
+      /mt-0\.5 flex size-4 /.test(code) &&
+      top === 2 + 16 / 2 &&
+      below === 12 + top,
+    `top ${top}px, bottom -${below}px`
   );
 }
 
