@@ -1,6 +1,7 @@
 import { getActiveMeasures } from "@/lib/measures";
 import { getStatewideRaces } from "@/lib/races";
 import { Art } from "@/components/brand/Art";
+import { homeNewsHasItems } from "@/components/features/HomeNews";
 import { ArrowDownGlyph } from "@/components/ui/Glyphs";
 import type { HomeSections } from "@/lib/race-scope";
 
@@ -30,18 +31,21 @@ import type { HomeSections } from "@/lib/race-scope";
    section is not on the page is left out, so no chip jumps to nothing.
    Not passed, every section is on the page, which is "All races" and
    renders exactly as before the picker. The news column is in every
-   view. If only the phones-only news chip is left, the whole row is
-   phones-only too, so a desktop never shows the label over an empty
-   row. */
+   view, but HomeNews renders nothing when its read fails or finds no
+   story from the last 45 days, so the news chip waits on the same read
+   (homeNewsHasItems). If only the phones-only news chip is left, the
+   whole row is phones-only too, so a desktop never shows the label over
+   an empty row; with no chip left, nothing renders. */
 export async function BallotAtAGlance({
   sections = {},
 }: {
   sections?: Partial<HomeSections>;
 } = {}) {
   const { statewide = true, questions = true, house = true } = sections;
-  const [races, measures] = await Promise.all([
+  const [races, measures, news] = await Promise.all([
     getStatewideRaces(),
     getActiveMeasures(),
+    homeNewsHasItems(),
   ]);
   if (races.length === 0 && measures.length === 0) return null;
 
@@ -55,8 +59,9 @@ export async function BallotAtAGlance({
       href: "#ballot-questions",
     },
     house && { label: "U.S. House race", href: "#house-race" },
-    { label: "Election news", href: "#home-news", className: "lg:hidden" },
+    news && { label: "Election news", href: "#home-news", className: "lg:hidden" },
   ].filter(Boolean) as { label: string; href: string; className?: string }[];
+  if (chips.length === 0) return null;
   const rowClass = chips.every((c) => c.className === "lg:hidden")
     ? "flex flex-col gap-2 lg:hidden"
     : "flex flex-col gap-2";

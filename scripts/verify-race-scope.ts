@@ -28,8 +28,10 @@
      7. No "On this page" chip jumps to nothing: for every scope, each chip
         BallotAtAGlance keeps lands on a section the page renders in that
         scope (the House chip only with the House step, the statewide and
-        ballot-question chips only with the shared ballot), and "all" keeps
-        all four chips, the row as it was before the picker.
+        ballot-question chips only with the shared ballot, the news chip
+        only when HomeNews has stories to render), a row left with no chip
+        renders nothing, and "all" keeps all four chips, the row as it was
+        before the picker.
 
    Run: node scripts/verify-race-scope.ts */
 
@@ -254,16 +256,32 @@ console.log("\n7. \"On this page\" never jumps to nothing");
     return list.slice(start, at);
   };
   check(
-    "each chip is gated by its section's flag; the news chip by none (the news column is in every view)",
+    "each chip is gated by its section's flag; the news chip by whether HomeNews has stories",
     /^(?:\[|\},) statewide && races\.length > 0 && \{/.test(entry("statewide-races")) &&
       /^(?:\[|\},) questions && measures\.length > 0 && \{/.test(entry("ballot-questions")) &&
       /^(?:\[|\},) house && \{/.test(entry("house-race")) &&
-      /^(?:\[|\},) \{ label: "Election news", $/.test(entry("home-news")),
+      /^(?:\[|\},) news && \{ label: "Election news", $/.test(entry("home-news")),
     ["statewide-races", "ballot-questions", "house-race", "home-news"].map(entry).join(" | ")
   );
+  {
+    /* news is the same read and filter HomeNews renders from: HomeNews
+       returns null exactly when railItems() is empty. */
+    const news = code("src/components/features/HomeNews.tsx");
+    check(
+      "the news chip waits on homeNewsHasItems, which is HomeNews's own items",
+      /const \[races, measures, news\] = await Promise\.all\(\[ getStatewideRaces\(\), getActiveMeasures\(\), homeNewsHasItems\(\), \]\);/.test(glance) &&
+        /export async function homeNewsHasItems\(\) \{ return \(await railItems\(\)\)\.length > 0; \}/.test(news) &&
+        /const items = await railItems\(\); if \(items\.length === 0\) return null;/.test(news) &&
+        /catch \{ return \[\]; \}/.test(news)
+    );
+  }
   check(
     "an unpassed flag is true, so the row with no sections is the row as before",
     /const \{ statewide = true, questions = true, house = true \} = sections;/.test(glance)
+  );
+  check(
+    "a row with no chip left renders nothing",
+    /\]\.filter\(Boolean\) as \{ label: string; href: string; className\?: string \}\[\]; if \(chips\.length === 0\) return null;/.test(glance)
   );
   check(
     "a row with only the phones-only news chip is phones-only too (no empty row on a desktop)",
@@ -275,7 +293,8 @@ console.log("\n7. \"On this page\" never jumps to nothing");
      the shared ballot (#statewide-races in SharedBallot, #ballot-questions
      in BallotQuestions, which SharedBallot renders) outside county and
      district; the House step (#house-race) only under showAll, which is
-     exactly "all"; the news (#home-news) always. */
+     exactly "all"; the news (#home-news) in every view, when HomeNews has
+     stories, and nowhere when it has none. */
   check(
     "the jump targets are where the switches put them",
     /<section id="statewide-races"/.test(read("src/components/features/SharedBallot.tsx")) &&
@@ -286,43 +305,50 @@ console.log("\n7. \"On this page\" never jumps to nothing");
       home.indexOf('id="house-race"') > home.indexOf("{showAll && (") &&
       home.indexOf('id="house-race"') < home.indexOf("<aside")
   );
-  const rendered = (scope: RaceScope) => {
+  const rendered = (scope: RaceScope, news: boolean) => {
     const shared = scope.kind !== "county" && scope.kind !== "district";
     return new Set([
       ...(shared ? ["statewide-races", "ballot-questions"] : []),
       ...(scope.kind === "all" ? ["house-race"] : []),
-      "home-news",
+      ...(news ? ["home-news"] : []),
     ]);
   };
-  const chipsFor = (scope: RaceScope) => {
+  const chipsFor = (scope: RaceScope, news: boolean) => {
     const s = homeSections(scope);
     return [
       ...(s.statewide ? ["statewide-races"] : []),
       ...(s.questions ? ["ballot-questions"] : []),
       ...(s.house ? ["house-race"] : []),
-      "home-news",
+      ...(news ? ["home-news"] : []),
     ];
   };
-  for (const scope of [
-    ALL,
-    { kind: "statewide" } as RaceScope,
-    ...COVERED_COUNTIES.map((c): RaceScope => ({ kind: "county", fips: c.fips })),
-    { kind: "district", district: "FL-27" } as RaceScope,
-    { kind: "district", district: "FL-10" } as RaceScope,
-  ]) {
-    const chips = chipsFor(scope);
-    const there = rendered(scope);
-    const dead = chips.filter((c) => !there.has(c));
-    const missing = [...there].filter((t) => !chips.includes(t));
-    check(
-      `${raceScopeValue(scope)}: every chip lands on a rendered section, and every section has its chip`,
-      dead.length === 0 && missing.length === 0,
-      `dead: ${dead.join(", ") || "none"}; missing: ${missing.join(", ") || "none"}`
-    );
+  for (const news of [true, false]) {
+    for (const scope of [
+      ALL,
+      { kind: "statewide" } as RaceScope,
+      ...COVERED_COUNTIES.map((c): RaceScope => ({ kind: "county", fips: c.fips })),
+      { kind: "district", district: "FL-27" } as RaceScope,
+      { kind: "district", district: "FL-10" } as RaceScope,
+    ]) {
+      const chips = chipsFor(scope, news);
+      const there = rendered(scope, news);
+      const dead = chips.filter((c) => !there.has(c));
+      const missing = [...there].filter((t) => !chips.includes(t));
+      check(
+        `${raceScopeValue(scope)}, ${news ? "with" : "without"} news: every chip lands on a rendered section, and every section has its chip`,
+        dead.length === 0 && missing.length === 0,
+        `dead: ${dead.join(", ") || "none"}; missing: ${missing.join(", ") || "none"}`
+      );
+    }
   }
   check(
-    "\"all\" keeps all four chips",
-    chipsFor(ALL).join(",") === "statewide-races,ballot-questions,house-race,home-news"
+    "\"all\" with news keeps all four chips",
+    chipsFor(ALL, true).join(",") === "statewide-races,ballot-questions,house-race,home-news"
+  );
+  check(
+    "a county or district view without news has no chip, so the row renders nothing",
+    chipsFor({ kind: "district", district: "FL-27" }, false).length === 0 &&
+      COVERED_COUNTIES.every((c) => chipsFor({ kind: "county", fips: c.fips }, false).length === 0)
   );
 }
 

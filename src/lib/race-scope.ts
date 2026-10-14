@@ -83,7 +83,8 @@ export function raceScopeValue(scope: RaceScope): string {
    (the statewide races and the ballot questions) and drops the House-race
    step. A county or a district replaces the shared ballot with
    ScopedRaces, which has neither list, and drops the House step too. The
-   news column is in every view, so it is not a choice here. */
+   news column is in every view, so it is not a choice here (whether it
+   has stories to show, BallotAtAGlance asks HomeNews). */
 export interface HomeSections {
   statewide: boolean;
   questions: boolean;
