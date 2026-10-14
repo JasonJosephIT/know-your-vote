@@ -355,14 +355,16 @@ const ledger = source("supabase/migrations/README.md");
 const row = ledger.split("\n").find((l) => /^\|\s*0058\s*\|/.test(l)) ?? "";
 /* 0058 was applied live on 2026-10-14 with the founder's yes (#195): the
    ledger records the apply and its read-back, and keeps the SQL-editor
-   steps for a rebuild. */
+   steps for a rebuild. The free number only has to be past 0058; pinning
+   the exact next number broke this check on every new migration. */
+const freeFrom = Number(ledger.match(/^\|\s*(\d{4})\+\s*\|\s*free/m)?.[1] ?? 0);
 check(
-  "the ledger lists 0058_subscription_lookups.sql as applied, with its read-back, and moves the free number to 0059",
+  "the ledger lists 0058_subscription_lookups.sql as applied, with its read-back, and the free number is past 0058",
   /`0058_subscription_lookups\.sql`/.test(row) &&
     /\*\*applied 2026-10-14\*\*/.test(row) &&
     /service_exec` true/.test(row) &&
     /SQL editor/.test(row) &&
-    /^\|\s*0059\+\s*\|\s*free/m.test(ledger),
+    freeFrom > 58,
   row.slice(0, 200)
 );
 

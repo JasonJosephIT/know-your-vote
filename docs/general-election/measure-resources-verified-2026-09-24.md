@@ -459,3 +459,12 @@ Checked, nothing new:
 
 **Gate picture, AM1:** oppose adds one `commentary` row with stated reasons (row 1 above), balancing the 2026-10-09 pass's one `commentary` support row. Tier 4 `argument` is unchanged: support = 1 (RPOF), oppose = 2 (FEA, LWV, both bare listings). No primary-source statement was found this week from DeSantis, Rich Templin/Florida AFL-CIO, or Fentrice Driskell in their own words.
 **Gate picture, AM2:** unchanged; no new rows found on either side this week.
+
+## AM1 sided rows re-opened for 0059, 2026-10-14
+
+Founder, 2026-10-14: seed the row above with every other verified AM1 sided row, and keep AM1 listed. `supabase/migrations/0059_am1_verified_resources.sql` seeds 8 rows: support 4 (RPOF release, TaxWatch guide, Citrus County Chronicle letter, Palm Beach Examiner) and oppose 4 (FEA toolkit, LWV VOTE411 page, Villages-News letter, Amanda Informed). Each URL was re-opened with `curl -sIL` and a GET of the body, and its title, date and quoted text were read again. All 8 loaded (HTTP 200; VOTE411 answers HEAD with 405 and GET with 200).
+
+- Palm Beach Examiner's own `<title>`, og:title and `<h1>` read "Stop Paying Rent to the State How Florida Amendments 1, 2, and 3 Cut Your Taxes", with no colon. 0059 uses that. 0040's AM2 row for the same post has a colon.
+- FEA's toolkit now also lists Amendment 3 as "OPPOSED BY FEA". That is outside this pass and is not a row.
+- Your Observer, "Observer recommends: State Amendments 1 & 2" (2026-10-07, byline Matt Walsh), opened for the first time. It ends its Amendment 1 section with "We recommend: Vote no on Amendment 1". It is **not seeded**: it was never a verified row, and its kind (editorial `argument` or columnist `commentary`) needs a founder call. Adding it would make AM1 4 support / 5 oppose, which still passes the gate.
+- The 2026-10-09 re-check's two neutral `reporting` rows (row 2, Florida Politics / A.G. Gancarski on David Jolly, 2026-10-03; row 3, WPTV / Scott Sutton's AM1-AM2 explainer, 2026-10-08) are verified but in neither 0041 nor 0059, so anon's 10 neutral rows do not include them. 0059 seeds sided rows only; they are owed to a later neutral-rows migration.

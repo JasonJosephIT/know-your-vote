@@ -377,6 +377,39 @@ await check(
   18
 );
 
+/* 0059 stores Amendment 1's 8 verified sided rows beside 0035's booklet and
+   0041's 9 neutral rows, and publishes nothing: AM1 has no
+   measure_publication row here (the count of 2 above). The anon read-back
+   after the listing below proves the sided rows stay hidden while AM1 is
+   listed. */
+console.log("0059 — Amendment 1's sided rows, AM1 not published");
+const am1Stance = (stance) =>
+  `SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM1-general' AND stance = '${stance}'`;
+await check("FL-AM1-general stores 4 support rows", am1Stance("support"), 4);
+await check("FL-AM1-general stores 4 oppose rows", am1Stance("oppose"), 4);
+await check("FL-AM1-general stores 10 neutral rows (0035's booklet, 0041's 9)", am1Stance("neutral"), 10);
+await check(
+  "the 2x gate a later AM1 publish would face already holds",
+  "SELECT public.measure_sides_balanced('FL-AM1-general')::int n",
+  1
+);
+await db.exec(
+  await readFile(
+    path.join(migrationsDir, "0059_am1_verified_resources.sql"),
+    "utf8"
+  )
+);
+await check(
+  "re-applying 0059 still leaves FL-AM1-general with 18 resources (no duplicates)",
+  "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM1-general'",
+  18
+);
+await check(
+  "re-applying 0059 writes no measure_publication row for AM1",
+  "SELECT count(*)::int n FROM measure_publication WHERE measure_id = 'FL-AM1-general'",
+  0
+);
+
 /* scripts/list-ballot-2026.sql, the go-live flip, applied to this throwaway
    database after every migration. Proves it runs, flips through the door
    (one admin_action row per race), lists every measure that has no
@@ -588,7 +621,8 @@ await check(
    2026.sql is what listed it), but 0041 widens the anon policy so a listed
    measure's NEUTRAL rows are readable: anon now sees AM1's resources too --
    0041's 9 neutral rows plus the FL-AM1-general:booklet row 0035 already
-   seeded, 10 total, 0 support / 0 oppose. */
+   seeded, 10 total, 0 support / 0 oppose. 0059's 8 sided AM1 rows are
+   stored (checked above) and must stay invisible here. */
 await check(
   "anon reads FL-AM3-general's 15 published resources",
   "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM3-general'",
@@ -605,7 +639,7 @@ await check(
   10
 );
 await check(
-  "anon reads 0 support/oppose FL-AM1-general resources while merely listed",
+  "anon reads 0 of 0059's 8 support/oppose FL-AM1-general resources while merely listed",
   "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM1-general' AND stance IN ('support','oppose')",
   0
 );
@@ -616,5 +650,5 @@ if (failures > 0) {
   process.exit(1);
 }
 console.log(
-  "\nverify-ballot-seeds: OK — measures and Tier A local races seeded as intended; no race is listed or published by a migration, and FL-AM3-general/FL-AM2-general are the two measures 0038/0040 publish; list-ballot-2026.sql lists every race and every measure without a prior row (AM1), publishes nothing new, and anon reads back AM3's 15 resources, AM2's 18 and (since 0041) AM1's 10 neutral-only resources."
+  "\nverify-ballot-seeds: OK — measures and Tier A local races seeded as intended; no race is listed or published by a migration, and FL-AM3-general/FL-AM2-general are the two measures 0038/0040 publish; list-ballot-2026.sql lists every race and every measure without a prior row (AM1), publishes nothing new, and anon reads back AM3's 15 resources, AM2's 18 and (since 0041) AM1's 10 neutral-only resources, with 0059's 8 sided AM1 rows stored but hidden."
 );
