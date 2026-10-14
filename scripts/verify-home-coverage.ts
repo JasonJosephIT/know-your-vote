@@ -405,11 +405,15 @@ check(
     !/\/api\/resolve[?"`]/.test(entry) &&
     !/resolveZipCode|zip_resolved|DistrictConfirm/.test(entry)
 );
+/* Since Mobbin AD7 (2026-10-13) the picker shows open everywhere unless the
+   page passes pickerCollapsed (home), and the toggle exists only then. With
+   the switch off pickerCollapsed is ignored: no field, no toggle, open. */
 check(
   "with the switch off there is no field, and the picker shows open with no toggle",
   /\{addressEnabled && \( <form id="location-form"/.test(entry) &&
-    /useState\(!addressEnabled\)/.test(entry) &&
-    /\{addressEnabled && \( <button id="district-picker-toggle"/.test(entry)
+    /const collapsible = addressEnabled && pickerCollapsed;/.test(entry) &&
+    /useState\(!collapsible\)/.test(entry) &&
+    /\{collapsible && \( <button id="district-picker-toggle"/.test(entry)
 );
 check(
   "LocationEntry's copy never offers a ZIP in place of an address",
