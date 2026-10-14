@@ -328,6 +328,15 @@ check(
   );
 }
 
+/* Reminders can be paused (NOTIFICATIONS_PAUSED); while they are, neither
+   page may promise them (founder, 2026-10-14). */
+check(
+  "both pages promise deadline reminders only while they run",
+  /remindersOn: !remindersPaused\(\)/.test(deployment) &&
+    /\{remindersOn\s*\?\s*", and send you a few deadline reminders too\."\s*:\s*"\. Deadline reminders are paused right now/.test(privacy) &&
+    /\{remindersOn\s*\?\s*"That same signup also gets you"\s*:\s*"Deadline reminders are paused right now/.test(how)
+);
+
 if (failures) {
   console.error(`\n${failures} privacy-page check(s) failed`);
   process.exit(1);

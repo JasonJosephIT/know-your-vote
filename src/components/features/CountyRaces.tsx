@@ -48,7 +48,7 @@ const DECIDED_COPY: Record<
    countywide or at large (Hillsborough 5 and 7, Broward At Large 8), and the
    row cannot say which. */
 const PLACEMENT =
-  "most commission and school board seats are elected by district, and we can't place you in one from a ZIP or address yet. Your county's sample ballot will say.";
+  "most commission and school board seats are elected by district, and we can't place you in one from your address yet. Your county's sample ballot will say.";
 
 export function CountyRaces({
   county,

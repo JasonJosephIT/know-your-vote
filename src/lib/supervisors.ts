@@ -128,10 +128,9 @@ const COUNTY_VOTER_LINKS: Record<string, VoterLinks> = {
     earlyVoting: "https://www.votehillsborough.gov/171/Early-Voting",
     mailRequest:
       "https://www.votehillsborough.gov/173/Request-a-Vote-By-Mail-Ballot",
-    /* PROVISIONAL until a person decides, by Oct 21, between this page and
-       /173 (spec §2.3): keep whichever explains returning a ballot and
-       where to drop it off. On 2026-10-13 /173 covered requests only and
-       this one mentioned dropping a mail ballot off. */
+    /* The 2026 general-election page, not /173 (founder, 2026-10-14):
+       on 2026-10-13 /173 covered requests only, and this one says where to
+       drop a mail ballot off. */
     mailReturn: "https://www.votehillsborough.gov/291/2026-General-Election",
   },
   "12095": {

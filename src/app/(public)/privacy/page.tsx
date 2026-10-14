@@ -62,8 +62,14 @@ function HowThisWorks({ topic, about }: { topic: string; about: string }) {
 }
 
 export default function PrivacyPage() {
-  const { addressOn, geocoder, analyticsOn, adsOn, errorReportsOn } =
-    privacyDeployment();
+  const {
+    addressOn,
+    geocoder,
+    analyticsOn,
+    adsOn,
+    errorReportsOn,
+    remindersOn,
+  } = privacyDeployment();
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
       <h1 className="text-h1">Privacy, in plain language</h1>
@@ -176,8 +182,11 @@ export default function PrivacyPage() {
         </h2>
         <p className="text-body">
           If you ask us to email you where to vote, we store your email address
-          and your ZIP, and send you a few deadline reminders too. We never sell
-          or share them, and every email has an unsubscribe link.
+          and your ZIP
+          {remindersOn
+            ? ", and send you a few deadline reminders too."
+            : ". Deadline reminders are paused right now, so that one email is all you get."}{" "}
+          We never sell or share them, and every email has an unsubscribe link.
         </p>
         <HowThisWorks topic="email-signup" about="the email signup" />
       </section>

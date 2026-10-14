@@ -170,8 +170,8 @@ this is" on /about. **Known gap, logged by founder decision 4B (2026-10-14):** t
 `skin-5`; none is `skin-6`, so "a set of people spans the range" is not yet met, on the desktop hero or the
 row. A pixel re-tone of the fisherman to `skin-6` was tried and withdrawn because his ink eyes fade (about
 1.26:1). The fix is to regenerate him: `assets.json` pins him to `skin-6`, and `generate.py` enforces it.
-His eyes need drawing so they read on the deepest tone, for example with small cream whites, which is a
-style call for the founder. Then re-run `rotator.py` and `compose.py row`, and re-run `verify-hero-walk`
+His eyes need drawing so they read on the deepest tone: the founder approved small cream eye whites for
+him (2026-10-14). Then re-run `rotator.py` and `compose.py row`, and re-run `verify-hero-walk`
 and `verify-walker-row`.
 
 **Open decision (from the layout pass):** a serif for display sizes only (Newsreader or Source Serif 4,
