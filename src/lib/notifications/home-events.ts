@@ -3,10 +3,10 @@ import "server-only";
 import { unstable_cache } from "next/cache";
 import { ACTIVE_ELECTION } from "@/lib/election";
 import {
-  verifiedElectionEvents,
+  publicElectionEvents,
   type ElectionEvent,
 } from "@/lib/notifications/election-events";
-import { createServiceClient } from "@/lib/supabase/service";
+import { createAnonServerClient } from "@/lib/supabase/server";
 
 /* Every verified date for the active election, statewide and county
    (0043). This used to come from getPublicElectionDates (src/lib/
@@ -17,16 +17,16 @@ import { createServiceClient } from "@/lib/supabase/service";
    The key changed with the county rows, so no entry cached before them
    (statewide rows only) is served after.
 
-   createServiceClient throws without the service-role key (src/lib/
-   server-keys.ts), inside the cache, so a missing key is never cached as
-   "no dates": the banner appears on the first request after the key is
-   readable rather than up to an hour later.
+   Read with the anon key (0062: verified rows only, RLS-enforced), not the
+   service-role key — a public page has no reason to bypass RLS.
+   createAnonServerClient throws inside the cache when the Supabase URL or
+   anon key is missing, so that is never cached as "no dates".
 
    Moved here from DeadlineBanner (layout pass 2026-10-11) so the home
    masthead reads the same cached entry; the key is unchanged. */
 const cachedEvents = unstable_cache(
   async (): Promise<ElectionEvent[]> =>
-    verifiedElectionEvents(createServiceClient(), ACTIVE_ELECTION),
+    publicElectionEvents(await createAnonServerClient(), ACTIVE_ELECTION),
   ["deadline-banner-events-by-county", ACTIVE_ELECTION],
   { revalidate: 3600, tags: ["election-dates"] }
 );

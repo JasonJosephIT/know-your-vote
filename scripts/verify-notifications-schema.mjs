@@ -12,7 +12,10 @@
    LIVE (when Supabase env is present; fail-closed if migration 0007 is
    missing — mirrors verify-refresh-schema.mjs):
      1. election_event and notification_send_log exist.
-     2. RLS: anon can neither SELECT nor INSERT either table.
+     2. RLS: anon can neither SELECT nor INSERT notification_send_log, and
+        never sees election_event.verified_by (the operator's email); once
+        0062 is applied anon sees exactly the verified election_event rows,
+        and before it, none.
      3. send-log claim idempotency: the same dedupe_key upserts once;
         the second ignoreDuplicates upsert returns no row (the cron's
         skip-duplicate signal). Synthetic key, deleted in finally.
@@ -151,12 +154,31 @@ if (gate.error) {
 }
 console.log("  ok  migration 0007 applied (notification_send_log reachable)");
 
-for (const table of ["election_event", "notification_send_log"]) {
-  const read = await anon.from(table).select("*").limit(1);
+{
+  const read = await anon.from("notification_send_log").select("*").limit(1);
   check(
-    `anon cannot read ${table}`,
+    "anon cannot read notification_send_log",
     !!read.error || (read.data ?? []).length === 0,
     read.error?.message ?? `saw ${read.data?.length} rows`
+  );
+}
+const anonVerifiedBy = await anon.from("election_event").select("verified_by").limit(1);
+check(
+  "anon cannot read election_event.verified_by",
+  !!anonVerifiedBy.error || (anonVerifiedBy.data ?? []).length === 0,
+  anonVerifiedBy.error?.message ?? `saw ${anonVerifiedBy.data?.length} rows`
+);
+{
+  const anonRows = await anon.from("election_event").select("id");
+  const serviceVerified = await service
+    .from("election_event")
+    .select("id", { head: true, count: "exact" })
+    .not("verified_by", "is", null);
+  const seen = anonRows.error ? 0 : (anonRows.data ?? []).length;
+  check(
+    "anon sees verified election_event rows only (0062; none before it)",
+    seen === 0 || seen === serviceVerified.count,
+    `anon saw ${seen}, verified rows ${serviceVerified.count ?? "?"}`
   );
 }
 const anonInsert = await anon

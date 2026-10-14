@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifiedElectionEvents } from "@/lib/notifications/election-events";
+import { publicElectionEvents } from "@/lib/notifications/election-events";
 import { buildElectionCalendar, ELECTION_LABEL } from "@/lib/notifications/ics";
 import { eventsForCounty } from "@/lib/notifications/schedule";
-import { createServiceClient } from "@/lib/supabase/service";
+import { createAnonServerClient } from "@/lib/supabase/server";
 
 /* GET /api/calendar/[election].ics — verified dates as a calendar file
    (plan A6). The zero-infrastructure reminder channel: no email, no
    subscription row, the voter's own calendar app does the reminding.
-   Unverified rows never appear (verifiedElectionEvents filters them).
+   Unverified rows never appear: the anon key reads them under 0062's
+   policy, which returns verified rows only.
 
    ?county=<FIPS> gives that county's dates where it has its own (0043):
    all four covered counties run early voting Oct 19 to Nov 1, wider than
@@ -30,9 +31,9 @@ export async function GET(
     return NextResponse.json({ error: "Unknown election" }, { status: 404 });
   }
 
-  let service;
+  let anon;
   try {
-    service = createServiceClient();
+    anon = await createAnonServerClient();
   } catch {
     return NextResponse.json(
       { error: "Calendar data isn't available right now — try again shortly." },
@@ -42,7 +43,7 @@ export async function GET(
 
   const county = request.nextUrl.searchParams.get("county");
   const events = eventsForCounty(
-    await verifiedElectionEvents(service, election),
+    await publicElectionEvents(anon, election),
     county && FIPS_RE.test(county) ? county : null
   );
   return new NextResponse(buildElectionCalendar(election, events), {
