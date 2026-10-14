@@ -178,10 +178,22 @@ export default function RootLayout({
           moving it up when the banner appears: a harness measured that move
           as a layout shift of 0.09 at 390px, and 0 with this.
           Recommended (pending founder confirmation), with the scroll padding.
-          To flip: drop the var() term from the min-h- and both pb- classes
-          here, from scroll-padding-bottom in globals.css, and the effect in
-          ConsentBanner that sets it. */}
-      <body className="flex min-h-[calc(100%+var(--kyv-overlay-bottom,0px))] flex-col pt-[calc(40px+env(safe-area-inset-top))] pb-[calc(88px+env(safe-area-inset-bottom)+var(--kyv-overlay-bottom,0px))] md:pt-[72px] md:pb-[var(--kyv-overlay-bottom,0px)]">
+          To flip: drop the var() term from the min-h- and the three pb-
+          classes here, from scroll-padding-bottom in globals.css, and the
+          effect in ConsentBanner that sets it.
+
+          The phone top padding is the header's height: 45px, measured at
+          375px on 2026-10-13 (8px of padding above and below the 28px
+          Donate pill and chip, and a 1px border). At 40px the header hid
+          the top 5px of the home masthead's dateline strip.
+
+          On a short screen (500px tall or less; founder decision 4 (a),
+          2026-10-13) both bars are in the page flow (SectionNav), so the
+          top padding goes: below md the header in the flow carries the
+          status-bar inset itself. The bottom keeps the home-indicator inset
+          and the banner's term, since the banner stays fixed. short: comes
+          after md: in the stylesheet, so it wins on a landscape phone. */}
+      <body className="flex min-h-[calc(100%+var(--kyv-overlay-bottom,0px))] flex-col pt-[calc(45px+env(safe-area-inset-top))] pb-[calc(88px+env(safe-area-inset-bottom)+var(--kyv-overlay-bottom,0px))] md:pt-[72px] md:pb-[var(--kyv-overlay-bottom,0px)] short:pt-0 short:pb-[calc(env(safe-area-inset-bottom)+var(--kyv-overlay-bottom,0px))]">
         {/* Skip link (a11y audit 2026-10-04, fix 4; WCAG 2.4.1 Bypass
             Blocks). Every page put 4 or 5 nav stops, and 3 more while the
             cookie banner is open, before its content; this is the first Tab

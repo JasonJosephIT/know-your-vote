@@ -145,7 +145,12 @@ const OVERLAY_GAP = 8;
    variable is removed when the banner closes.
    Recommended (pending founder confirmation). To flip: remove this effect
    and the var() term from globals.css and layout.tsx, or move the phone
-   banner into the page flow. */
+   banner into the page flow.
+
+   On a short screen (500px tall or less) the bars are in the page flow
+   (globals.css, short:), so there is no bottom nav to sit above: the banner
+   stays fixed but drops to 8px above the bottom edge and its inset, where
+   the short scroll padding expects it. */
 function ConsentBanner({
   onDecide,
 }: {
@@ -176,7 +181,7 @@ function ConsentBanner({
     <section
       ref={ref}
       aria-label="Cookie choice"
-      className="fixed inset-x-3 bottom-[calc(96px+env(safe-area-inset-bottom))] z-50 rounded-md border border-border bg-surface p-4 shadow-elevation-2 md:inset-x-auto md:bottom-5 md:left-5 md:max-w-[400px]"
+      className="fixed inset-x-3 bottom-[calc(96px+env(safe-area-inset-bottom))] z-50 rounded-md border border-border bg-surface p-4 shadow-elevation-2 md:inset-x-auto md:bottom-5 md:left-5 md:max-w-[400px] short:bottom-[calc(8px+env(safe-area-inset-bottom))]"
     >
       {/* Kept to the question itself (founder, 2026-10-05). /privacy names
           the ad provider and what it receives; Details links there. */}
