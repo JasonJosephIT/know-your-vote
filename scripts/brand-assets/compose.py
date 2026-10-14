@@ -1,12 +1,14 @@
-"""Code-composed brand pieces: Florida motif wallpaper, corner sunburst, halftone edge, walkers share card and
-reminder-email hero. Text and the wordmark are real (font + untouched SVG), never generated.
+"""Code-composed brand pieces: Florida motif wallpaper, corner sunburst, halftone edge, walkers share card,
+reminder-email hero and the phone walker row. Text and the wordmark are real (font + untouched SVG), never generated.
 
   uv run --python 3.12 --with pillow --with resvg-py python scripts/brand-assets/compose.py <Figtree.ttf>
+  uv run --python 3.12 --with pillow --with resvg-py python scripts/brand-assets/compose.py row   (the walker row only)
 """
 import io, math, random, sys
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 import resvg_py
+from rotator import WALKERS  # the hero's order, mirrored from src/components/brand/hero-walk.ts
 
 ROOT = Path(__file__).resolve().parents[2]
 ILL = ROOT / "public/brand/site/illustrations"
@@ -111,7 +113,29 @@ def card(size, walkers, headline, sub, out, walker_h):
     im.convert("RGB").save(out, "PNG", optimize=True)
 
 
+def row(height, gap, out):
+    """All eight hero walkers, still, at one height and evenly spaced, in the hero's fixed order (design.md "Art on
+    phones": the walker row on home and /about). Every figure is the same size, as in the walk, and the order is fixed
+    as on the share card: all eight are on screen at once, so rotating the lead per view adds nothing."""
+    figs = []
+    for slug in WALKERS:  # soles are on each file's last row (measured 2026-10-14), so the row's bottom is the sole line
+        im = Image.open(ILL / f"{slug}.webp").convert("RGBA")
+        im = im.crop(im.getbbox())
+        figs.append(im.resize((round(im.width * height / im.height), height), Image.Resampling.LANCZOS))
+    canvas = Image.new("RGBA", (sum(f.width for f in figs) + gap * (len(figs) - 1), height), (0, 0, 0, 0))
+    x = 0
+    for f in figs:
+        canvas.alpha_composite(f, (x, 0))
+        x += f.width + gap
+    canvas.save(out, "WEBP", quality=78, method=6)
+    return canvas.size
+
+
 if __name__ == "__main__":
+    if sys.argv[1] == "row":  # the 2x phone file (96px for a 48px row) and the -sm file the ArtName key resolves to
+        print("walker-row-xs", row(96, 4, ILL / "walker-row-xs.webp"))
+        print("walker-row-sm", row(300, 12, ILL / "walker-row-sm.webp"))
+        sys.exit()
     wallpaper()
     svgs()
     card((1200, 630), ["person-phone-reader", "walker-teacher", "walker-chef", "walker-prosthetic"],
