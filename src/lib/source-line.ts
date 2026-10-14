@@ -26,16 +26,13 @@
 
 import type { Source } from "../types/schema.ts";
 import { safeHttpUrl } from "./format.ts";
+import { SOURCE_KIND_LABEL } from "./news-labels.ts";
 
-/* The four `source.type` values (CHECK-constrained in migration 0000).
-   Stated positions are quoted only from the candidate's own campaign
-   website (brief-rows.ts checks the site), so candidate_self says so. */
-export const SOURCE_TYPE_LABEL: Record<Source["type"], string> = {
-  candidate_self: "Campaign website",
-  primary_doc: "Official record",
-  factual_reporting: "News report",
-  opinion: "Opinion",
-};
+/* The four `source.type` values (CHECK-constrained in migration 0000), in
+   the same words a story's source uses (news-labels.ts, CONTEXT.md
+   "Source"): one definition, so a claim and a story never name the same
+   kind of source two ways. */
+export const SOURCE_TYPE_LABEL: Record<Source["type"], string> = SOURCE_KIND_LABEL;
 
 export interface SourceLine {
   /** The link text: the publisher, or the host when the row has none. */

@@ -1,13 +1,14 @@
 /* The source line under every claim (Mobbin catalog 2026-10-12, CP3: "Each
    source line says what kind of source it is and when we read it").
 
-   "Source: janedoe.com · Campaign website · retrieved Sep 29, 2026". It
+   "Source: janedoe.com · From the candidate · retrieved Sep 29, 2026". It
    renders on every candidate page and every race page, so what would
    quietly break it is a field shown that the row doesn't hold, a type that
    looks heavier than the others, or a raw url that throws. This checks:
 
-   1. The words: one plain label per source.type, exactly the catalog's,
-      and nothing for a type the table doesn't know.
+   1. The words: one plain label per source.type, exactly the glossary's
+      (CONTEXT.md "Source", shared with news-labels.ts), and nothing for a
+      type the table doesn't know.
    2. sourceLine: the url only when safeHttpUrl passes it; the host for
       screen readers only when the publisher doesn't already say it; the
       retrieved date in Florida's zone, and nothing when retrieved_at is
@@ -28,12 +29,13 @@ const { check, mutation, done } = checker("source-line");
 type Module = typeof import("../src/lib/source-line.ts");
 const MODULE = "src/lib/source-line.ts";
 
-/* 1. The words. The catalog's build note for CP3, word for word. */
+/* 1. The words. CONTEXT.md "Source", word for word, the same set a story's
+   source uses. */
 const WANT: Record<Source["type"], string> = {
-  candidate_self: "Campaign website",
-  primary_doc: "Official record",
-  factual_reporting: "News report",
+  factual_reporting: "Reporting",
   opinion: "Opinion",
+  primary_doc: "Official document",
+  candidate_self: "From the candidate",
 };
 
 function labelProblems(labels: Record<string, string>): string[] {
@@ -46,7 +48,7 @@ function labelProblems(labels: Record<string, string>): string[] {
 }
 
 const labels = labelProblems(SOURCE_TYPE_LABEL);
-check("one plain label per source.type, exactly the catalog's", labels.length === 0, labels.join("; "));
+check("one plain label per source.type, exactly the glossary's", labels.length === 0, labels.join("; "));
 
 /* 2. sourceLine. Rows shaped like the live ones (2026-10-13: all 119
    sources behind published claims are candidate_self, https, with the
@@ -68,13 +70,13 @@ function lineProblems(line: Module["sourceLine"]): string[] {
   const cases: Array<[string, Row, Want]> = [
     ["a live-shaped row", row(), {
       publisher: "www.janedoe.com", href: "https://www.janedoe.com/issues", host: null,
-      typeLabel: "Campaign website", label: "Sep 29, 2026",
+      typeLabel: "From the candidate", label: "Sep 29, 2026",
     }],
     ["the publisher is the host without www.", row({ publisher: "janedoe.com" }), { host: null }],
     ["a publisher that isn't the host", row({
       url: "https://www.miamiherald.com/news/a.html", publisher: "Miami Herald", type: "factual_reporting",
-    }), { publisher: "Miami Herald", host: "miamiherald.com", typeLabel: "News report" }],
-    ["an official record", row({ type: "primary_doc" }), { typeLabel: "Official record" }],
+    }), { publisher: "Miami Herald", host: "miamiherald.com", typeLabel: "Reporting" }],
+    ["an official document", row({ type: "primary_doc" }), { typeLabel: "Official document" }],
     ["an opinion piece", row({ type: "opinion" }), { typeLabel: "Opinion" }],
     ["a late-evening read stays on Florida's day", row({ retrieved_at: "2026-09-30T02:00:00Z" }), { label: "Sep 29, 2026" }],
     ["Postgres's own timestamp shape", row({ retrieved_at: "2026-09-27 12:50:23+00" }), { label: "Sep 27, 2026" }],
@@ -182,8 +184,8 @@ await mutation("the host is read out even when the publisher says it", async () 
   return lineProblems(m.sourceLine);
 });
 await mutation('"Opinion" gets a heavier word', async () => {
-  const m = await importVariant<Module>(MODULE, [['opinion: "Opinion"', 'opinion: "OPINION (one side)"']]);
-  return labelProblems(m.SOURCE_TYPE_LABEL);
+  const m = await importVariant<typeof import("../src/lib/news-labels.ts")>("src/lib/news-labels.ts", [['opinion: "Opinion"', 'opinion: "OPINION (one side)"']]);
+  return labelProblems(m.SOURCE_KIND_LABEL);
 });
 await mutation("the link goes back to the raw url", () =>
   componentProblems(edit(read(COMPONENT), "href={line.href}", "href={s.url}")),

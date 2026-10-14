@@ -7,6 +7,11 @@ cards**. The S-pipeline's three agents (Profiler / Record / Fact-Checker) go
 idle; see `../../Civic Awareness (Know Your Vote)/CAP_Runtime_PRD_v1.md` for
 what they were. "For now" — this is reversible; nothing is deleted.
 
+> **Reversed (noted 2026-10-14):** the retirement above did not last. Briefs
+> are live again — 36 races are published with a brief per candidate —
+> and **brief** is a live term (CONTEXT.md). The decision
+> is kept here as history; the news-labelling rules below still apply.
+
 **What that costs, in one line:** the Balance Audit measured brief content, so
 retiring briefs removes the mechanical publication gate that made neutrality
 auditable. **This document is where that guarantee is rebuilt**, on the news

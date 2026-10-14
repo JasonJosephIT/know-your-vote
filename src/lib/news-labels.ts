@@ -58,7 +58,10 @@ export interface NewsLabels {
   isOpinion: boolean;
 }
 
-const KIND: Record<SourceType, string> = {
+/** What kind of source a row is, in one set of words. The claim source line
+    (source-line.ts) uses this same table, so a source reads the same
+    everywhere it appears. */
+export const SOURCE_KIND_LABEL: Record<SourceType, string> = {
   factual_reporting: "Reporting",
   opinion: "Opinion",
   primary_doc: "Official document",
@@ -129,7 +132,7 @@ export function newsCardLabels(
   const isOpinion = source.type === "opinion";
   return {
     publisher: source.publisher ?? null,
-    flag: source.type === "factual_reporting" ? null : (KIND[source.type] ?? null),
+    flag: source.type === "factual_reporting" ? null : (SOURCE_KIND_LABEL[source.type] ?? null),
     isOpinion,
   };
 }
@@ -141,7 +144,7 @@ export function newsCardLabels(
     for it from a card; use `newsCardLabels`. */
 export function newsLabels(source: NewsSource | null | undefined): NewsLabels {
   if (!source) return { kind: null, lean: null, isOpinion: false };
-  const kind = KIND[source.type] ?? null;
+  const kind = SOURCE_KIND_LABEL[source.type] ?? null;
   const lean = LEAN[source.lean_tag] ?? null;
   return { kind, lean, isOpinion: source.type === "opinion" };
 }

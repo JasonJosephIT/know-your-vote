@@ -10,9 +10,11 @@ import type { User } from "@supabase/supabase-js";
    has no accounts — `authenticated` has zero policies — so this allowlist is
    the ENTIRE authorization surface: a Supabase Auth session whose email is in
    ADMIN_EMAILS is an operator; everyone else is not.
-   requireAdmin()/checkAdmin() are used by BOTH the proxy and every admin RSC /
-   route handler; the proxy is UX, the in-handler check is the boundary
-   (CVE-2025-29927 — Next.js middleware/proxy is a known bypass class). */
+   requireAdmin() gates every admin page and checkAdmin() every admin API
+   route; that in-handler check is the boundary. The proxy (src/proxy.ts)
+   calls neither: it only refreshes the session and bounces signed-out
+   visitors, which is UX (CVE-2025-29927 — Next.js middleware/proxy is a
+   known bypass class). */
 
 /* ADMIN_EMAILS: comma-separated, compared case-folded. */
 export function adminEmails(): string[] {

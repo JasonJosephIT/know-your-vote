@@ -82,7 +82,7 @@ export default async function MeasurePage({
      lopsided. A listed measure gets the ballot text plus its neutral rows
      (stance 'neutral': official documents, research and reporting that take
      no side; readable on a listed measure since 0041), and nothing that
-     argues a side — sided research waits with the positions and commentary.
+     argues a side — sided research waits with the advocacy and commentary.
      The methodology page says the same. A published measure that fails the
      re-check gets no neutral rows (fetchMeasureListing takes them from the
      brief, which is null), so it shows the ballot text alone and the card
