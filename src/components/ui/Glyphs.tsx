@@ -39,8 +39,8 @@ export function CaretGlyph() {
   );
 }
 
-/* An in-page jump: the link goes further down this page, not to another
-   one (the race page's "Jump to" list; Mobbin catalog RC1). */
+/* A link that jumps further down this page (race "Jump to", amendment
+   YES/NO jump row), in place of the ↓ character the Inter subset lacks. */
 export function ArrowDownGlyph() {
   return (
     <svg {...svg}>
