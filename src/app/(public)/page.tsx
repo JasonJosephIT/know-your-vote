@@ -263,7 +263,7 @@ export default async function Home({
           ) : (
             <>
               {ballotRendered && <TrackView event="ballot_viewed" />}
-              <SharedBallot />
+              <SharedBallot seam />
             </>
           )}
 

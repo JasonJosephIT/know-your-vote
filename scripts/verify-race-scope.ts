@@ -172,7 +172,7 @@ check(
 check("a narrowed view says what it shows and links back to /", /<ScopeNote scope=\{scope\} allHref="\/" \/>/.test(home));
 check(
   "county and district render ScopedRaces; all and statewide the shared ballot, tracked as before",
-  /scope\.kind === "county" \|\| scope\.kind === "district" \? \( <ScopedRaces scope=\{scope\} \/> \) : \( <> \{ballotRendered && <TrackView event="ballot_viewed" \/>\} <SharedBallot \/> <\/> \)/.test(home)
+  /scope\.kind === "county" \|\| scope\.kind === "district" \? \( <ScopedRaces scope=\{scope\} \/> \) : \( <> \{ballotRendered && <TrackView event="ballot_viewed" \/>\} <SharedBallot seam \/> <\/> \)/.test(home)
 );
 {
   const gate = home.indexOf("{showAll && (");
