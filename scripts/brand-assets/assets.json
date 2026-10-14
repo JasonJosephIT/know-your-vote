@@ -456,7 +456,7 @@
     "v2-bike-coffee.png"
    ],
    "subject": "same scale, framing and walking pose as the FIRST reference image: full body, mid-stride, stepping to the right and facing right, one foot about to land, relaxed and confident; an older Black fishing-boat captain with a grey beard, a cap, rolled sleeves and rubber boots, carrying a tackle box",
-   "skin": "skin-6: re-toned from skin-5 on 2026-10-14 (retone.py, founder decision 4A), so the eight hero walkers span skin-1 to skin-6; a regeneration must keep skin-6"
+   "skin": 6
   },
   {
    "slug": "walker-teacher",

@@ -7,9 +7,13 @@
    attention, so that is checked on the file's own pixels: eight figures in
    the hero's fixed order, every one scaled to the same height with its
    soles on the bottom edge, and the same gap between each. Decision 4A
-   re-toned the fisherman to skin-6 before the row could ship (the eight
-   stopped at skin-5, and side by side the gap shows), so his three files
-   are checked for skin-6 and against skin-5.
+   makes the fisherman skin-6 before the row can ship (the eight stop at
+   skin-5, and side by side the gap shows), so his three files, and his
+   slot in both row files, are checked for skin-6 and against skin-5. A
+   pixel re-tone was tried and withdrawn: his ink eyes fade on skin-6 at
+   hero size, which is 4A's own case for regenerating him. Until a
+   regenerated skin-6 fisherman whose eyes read lands, those checks fail,
+   and that is the row waiting, as 4A says.
 
    Then source checks: it is lazy (Art's default, never eager), phones only
    (lg:hidden, no desktop twin), still (no motion class), and only where
@@ -84,6 +88,19 @@ const masters = await Promise.all(
   })
 );
 
+/* Each figure's slot in a row file: its master scaled to the row's height,
+   as row() does (Python's round(), which takes a half to the even side).
+   What is left over is the gaps, which must divide evenly. */
+const pyRound = (v: number) => {
+  const f = Math.floor(v);
+  return v - f !== 0.5 ? Math.round(v) : f % 2 === 0 ? f : f + 1;
+};
+function slots(w: number, h: number) {
+  const widths = masters.map((m) => pyRound((m.w * h) / m.h));
+  const gap = (w - widths.reduce((a, b) => a + b, 0)) / (WALKERS.length - 1);
+  return { widths, gap };
+}
+
 for (const [key, file] of [
   ["xs/walker-row", "walker-row-xs.webp"],
   ["walker-row", "walker-row-sm.webp"],
@@ -95,16 +112,7 @@ for (const [key, file] of [
     JSON.stringify(sizes[key])
   );
   const alpha = (x: number, y: number) => data[(y * w + x) * 4 + 3];
-
-  /* Each figure's slot: its master scaled to the row's height, as row()
-     does (Python's round(), which takes a half to the even side). What is
-     left over is the gaps, which must divide evenly. */
-  const pyRound = (v: number) => {
-    const f = Math.floor(v);
-    return v - f !== 0.5 ? Math.round(v) : f % 2 === 0 ? f : f + 1;
-  };
-  const widths = masters.map((m) => pyRound((m.w * h) / m.h));
-  const gap = (w - widths.reduce((a, b) => a + b, 0)) / (WALKERS.length - 1);
+  const { widths, gap } = slots(w, h);
   check(
     `${file}: eight slots in the hero's order with one gap between each (${gap}px)`,
     Number.isInteger(gap) && gap > 0,
@@ -177,6 +185,11 @@ for (const [key, file] of [
     return [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16));
   };
   const [skin5, skin6] = [tone(5), tone(6)];
+  const near = (data: Buffer, i: number, t: number[], tol: number) =>
+    Math.abs(data[i] - t[0]) <= tol &&
+    Math.abs(data[i + 1] - t[1]) <= tol &&
+    Math.abs(data[i + 2] - t[2]) <= tol;
+  const failedBefore = failures;
   for (const file of [
     "illustrations/walker-fisherman.webp",
     "illustrations/walker-fisherman-sm.webp",
@@ -186,15 +199,11 @@ for (const [key, file] of [
     let opaque = 0;
     let near5 = 0;
     let near6 = 0;
-    const near = (i: number, t: number[]) =>
-      Math.abs(data[i] - t[0]) <= 8 &&
-      Math.abs(data[i + 1] - t[1]) <= 8 &&
-      Math.abs(data[i + 2] - t[2]) <= 8;
     for (let i = 0; i < data.length; i += 4) {
       if (data[i + 3] === 0) continue;
       opaque++;
-      if (near(i, skin5)) near5++;
-      if (near(i, skin6)) near6++;
+      if (near(data, i, skin5, 8)) near5++;
+      if (near(data, i, skin6, 8)) near6++;
     }
     check(
       `${file}: the fisherman's skin is skin-6, not skin-5`,
@@ -202,6 +211,40 @@ for (const [key, file] of [
       `skin-6 ${near6}px, skin-5 ${near5}px of ${opaque}`
     );
   }
+
+  /* The row is composed from those files, and a change to his skin leaves
+     his alpha and size as they were, so a row composed before it passes
+     every check in section 2. His slot's tone is checked here as well. At
+     96px a flat fill is blurred by the lossy encoding, so the window is
+     wider and the test relative: a skin-6 row measured 101 to 31 at +-10,
+     a skin-5 one 23 to 84 (2026-10-14). */
+  const at = WALKERS.indexOf("walker-fisherman");
+  for (const file of ["walker-row-xs.webp", "walker-row-sm.webp"]) {
+    const { data, w, h } = await rgba(`${ILL}/${file}`);
+    const { widths, gap } = slots(w, h);
+    const x0 = widths.slice(0, at).reduce((a, b) => a + b, 0) + gap * at;
+    let near5 = 0;
+    let near6 = 0;
+    for (let y = 0; y < h; y++) {
+      for (let x = x0; x < x0 + widths[at]; x++) {
+        const i = (y * w + x) * 4;
+        if (data[i + 3] <= 128) continue;
+        if (near(data, i, skin5, 10)) near5++;
+        if (near(data, i, skin6, 10)) near6++;
+      }
+    }
+    check(
+      `${file}: the fisherman's slot is skin-6 too, so the row is not older than his files`,
+      near6 > 0 && near6 >= 2 * near5,
+      `skin-6 ${near6}px, skin-5 ${near5}px in x ${x0}-${x0 + widths[at] - 1}`
+    );
+  }
+  if (failures > failedBefore)
+    console.error(
+      "      Decision 4A: the row waits for a skin-6 fisherman. Regenerate him in the same pose\n" +
+        "      (generate.py, then skinmask, then post; assets.json pins him to skin-6), check that\n" +
+        "      his eyes read at 180x240 beside the other seven, then run rotator.py and compose.py row."
+    );
 }
 
 /* ---- 4. Where it goes, and how ----------------------------------------- */
