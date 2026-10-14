@@ -68,13 +68,17 @@ export async function BallotAtAGlance({
 
   return (
     <nav aria-labelledby="on-this-page" className={rowClass}>
-      {/* The magnifier sticker (site illustration layer, design.md), lg+
-         only, 8 px past the end of this short, left-aligned label and
-         bottom-aligned with it, so at 30 px tall it rises into the gap
-         above, on the ballot side of the page, clear of the news column's
-         rule. The 8 px gap-2 below the label keeps it clear of the chips
-         and of their focus rings, which reach 4 px past a chip. The palm
-         sticker that sat on the races tile retired with the tiles. */}
+      {/* The magnifier sticker (site illustration layer, design.md), at
+         every width: the same 30 px piece on a phone and from lg, so it is
+         one element, not an lg:hidden twin (design.md's closed list of
+         phone art, 2026-10-14). 8 px past the end of this short,
+         left-aligned label and bottom-aligned with it, so at 30 px tall it
+         rises 12 px into the 32 px gap above and stays 20 px clear of the
+         registration link there; from lg it sits on the ballot side of the
+         page, clear of the news column's rule. The 8 px gap-2 below the
+         label keeps it clear of the chips and of their focus rings, which
+         reach 4 px past a chip. The palm sticker that sat on the races
+         tile retired with the tiles. */}
       <div className="relative w-fit">
         <h2 id="on-this-page" className="text-label text-on-surface">
           On this page
@@ -82,7 +86,7 @@ export async function BallotAtAGlance({
         <Art
           name="sticker-magnifier"
           height={30}
-          className="absolute bottom-0 left-[calc(100%+8px)] hidden lg:block"
+          className="absolute bottom-0 left-[calc(100%+8px)]"
         />
       </div>
       <ul className="flex flex-wrap gap-1.5">

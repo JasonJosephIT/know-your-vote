@@ -1,5 +1,17 @@
 import Link from "next/link";
 import { ResetAdsConsent } from "@/components/features/SitePrompts";
+import {
+  AdGlyph,
+  BugGlyph,
+  ChartGlyph,
+  HouseGlyph,
+  MailGlyph,
+  MapGlyph,
+  MessageGlyph,
+  PhoneGlyph,
+  PinGlyph,
+  SlidersGlyph,
+} from "@/components/ui/Glyphs";
 import { privacyDeployment } from "./deployment";
 
 export const metadata = { title: "Privacy — Know Your Vote" };
@@ -26,6 +38,16 @@ export const metadata = { title: "Privacy — Know Your Vote" };
 
 const link = "text-primary underline underline-offset-2";
 
+/* Every heading gets one 20px line icon (phone visuals round 2,
+   docs/design/mobile-visuals-2026-10-14/; design.md "Art on phones"), so
+   no point is marked out over another: the same mark, the same size and
+   colour, beside words that already say the same thing. The svg is
+   aria-hidden, so each heading's name is unchanged. The 4px top margin
+   centres it on the first line of the 24px heading, and when a heading
+   wraps it wraps beside the icon. Inline SVG: no request, no image. */
+const heading = "flex items-start gap-2 text-h2";
+const icon = "mt-[4px] block size-[20px] shrink-0 text-primary";
+
 /* Closes each point. `topic` is the id of its section on the explanation
    page; `about` names the point for a screen reader, whose list of links
    would otherwise be nine identical "How this works". */
@@ -51,7 +73,10 @@ export default function PrivacyPage() {
       </p>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-h2">What stays on your device</h2>
+        <h2 className={heading}>
+          <PhoneGlyph className={icon} />
+          What stays on your device
+        </h2>
         {/* "Answered or closed": with the ad tag off there is no cookie
             question to answer, only prompts to close, and this sentence has
             to hold either way. */}
@@ -65,7 +90,10 @@ export default function PrivacyPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-h2">Your district</h2>
+        <h2 className={heading}>
+          <MapGlyph className={icon} />
+          Your district
+        </h2>
         <p className="text-body">
           Your district is kept in one cookie that holds a district and its
           county &mdash; not your address, not your ZIP. The chip at the top of
@@ -75,7 +103,10 @@ export default function PrivacyPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-h2">Your address</h2>
+        <h2 className={heading}>
+          <HouseGlyph className={icon} />
+          Your address
+        </h2>
         {/* The reminder signup is named as the exception because it does keep
             a ZIP, one the voter types into that form for that purpose. */}
         <p className="text-body">
@@ -98,7 +129,10 @@ export default function PrivacyPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-h2">When you type an address</h2>
+        <h2 className={heading}>
+          <PinGlyph className={icon} />
+          When you type an address
+        </h2>
         {/* Who sees an address is a deployment fact: ADDRESS_LOOKUP_OFF
             removes the field, and PELIAS_BASE_URL adds completion from an
             instance we run or a hosted one. A sentence that is wrong on some
@@ -136,7 +170,10 @@ export default function PrivacyPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-h2">The one thing we store</h2>
+        <h2 className={heading}>
+          <MailGlyph className={icon} />
+          The one thing we store
+        </h2>
         <p className="text-body">
           If you ask us to email you where to vote, we store your email address
           and your ZIP, and send you a few deadline reminders too. We never sell
@@ -150,7 +187,10 @@ export default function PrivacyPage() {
             with the fixed subject "Correction", src/components/nav/
             SiteFooter.tsx), so what writing to us hands over is said here
             too. Nothing in the code adds a sender to the reminder list. */}
-        <h2 className="text-h2">Writing to us</h2>
+        <h2 className={heading}>
+          <MessageGlyph className={icon} />
+          Writing to us
+        </h2>
         <p className="text-body">
           If you email us, including through &ldquo;Report a mistake&rdquo;,
           we get your email address and your message, as with any email. It
@@ -160,7 +200,10 @@ export default function PrivacyPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-h2">Analytics</h2>
+        <h2 className={heading}>
+          <ChartGlyph className={icon} />
+          Analytics
+        </h2>
         {analyticsOn ? (
           <p className="text-body">
             We count visits with cookieless, aggregate analytics (Plausible)
@@ -176,7 +219,10 @@ export default function PrivacyPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-h2">Advertising</h2>
+        <h2 className={heading}>
+          <AdGlyph className={icon} />
+          Advertising
+        </h2>
         {/* Brief by the founder's choice (2026-10-05), but it still names the
             provider and what it receives, here and not only on the
             explanation page: Google's ad policies expect a site using its ad
@@ -203,7 +249,10 @@ export default function PrivacyPage() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-h2">Error reports</h2>
+        <h2 className={heading}>
+          <BugGlyph className={icon} />
+          Error reports
+        </h2>
         {errorReportsOn ? (
           <p className="text-body">
             If something breaks, an error report goes to Sentry. It includes the
@@ -223,7 +272,10 @@ export default function PrivacyPage() {
           render nothing anyway. */}
       {adsOn && (
         <section className="flex flex-col gap-2">
-          <h2 className="text-h2">Your cookie choice</h2>
+          <h2 className={heading}>
+            <SlidersGlyph className={icon} />
+            Your cookie choice
+          </h2>
           <p className="text-body">
             Your answer to the cookie question is saved in your browser, and you
             can change it at any time.

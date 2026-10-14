@@ -236,7 +236,9 @@ export default async function Home({
           {/* The dates, then what to do about them, as one group 12 px
           apart (A1): the official sample ballot and how to vote, from the
           county's Supervisor of Elections or the state. The key-dates sun
-          rises only into the gap above its card, so nothing overlaps.
+          rises only into the gap above its card, so nothing overlaps. The
+          line icons on the key-dates links and the sample-ballot tiles are
+          product UI on the voter's own tasks, not art (Glyphs.tsx).
           empty:hidden: after Election Day both render nothing, and an
           empty group would add a second gap. */}
           <div className="flex flex-col gap-3 empty:hidden">

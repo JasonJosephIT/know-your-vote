@@ -12,9 +12,11 @@ import artSizes from "./art-sizes.json";
    Placement is the caller's job: className and style go on the wrapper, so
    "absolute -top-4 right-6 hidden lg:block" positions and gates the piece
    without touching the image. Below lg only the pieces on design.md's
-   closed list of phone art show (each a second, lg:hidden Art beside its
-   hidden lg:block twin); see the rules in design.md before placing
-   anything near text or a control. */
+   closed list of phone art show: a second, lg:hidden Art beside its
+   hidden lg:block twin when the sizes differ, or one ungated Art when the
+   piece is the same size at every width (the magnifier beside "On this
+   page"). See the rules in design.md before placing anything near text or
+   a control. The line icons in Glyphs.tsx are product UI, not art. */
 
 export type ArtName = keyof typeof artSizes;
 

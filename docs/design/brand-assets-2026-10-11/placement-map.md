@@ -52,23 +52,36 @@ Kit = already made (step 1). Held = slot-specific art still to make, now sized a
 | 19 | Home · coverage map card | `map-explorer` | Held | Waits for the map card |
 | 20 | Inner pages (race, measure, candidate, news) | calm-style spots | Held | Only page headers and empty states; needs calm versions of the kit |
 
-### Phone slots (below lg, built 2026-10-11)
+### Phone slots (below lg, built 2026-10-11, extended 2026-10-14)
 
-The closed list in design.md ("Art on phones"). Each is a second, `lg:hidden` piece beside its desktop
-twin; all are static and lazy. The plan, measurements and budget are in
-`docs/design/mobile-visuals-2026-10-11/`.
+The closed list in design.md ("Art on phones"). Most are a second, `lg:hidden` piece beside a desktop
+twin of another size; a piece drawn the same size at every width is one element. All are static and
+lazy. The plans, measurements and budgets are in `docs/design/mobile-visuals-2026-10-11/` and
+`docs/design/mobile-visuals-2026-10-14/` (round 2: decisions 1A–5A, 6B).
 
 | Page · slot | Asset | Size | How it sits |
 |---|---|---|---|
 | Home · key dates card | `sticker-sun` (-xs) | 36px | Inside the card's top-right corner, rising 24px into the gap above; nothing above the card moves |
-| Home · zigzag after the ballot list | `sit-divider` | 88px | Seated on the band at the right; px margins keep it 12px clear of the list and 16px clear of the House h2 |
-| Home · coverage card | `pet-cat-peek` | 64px | Peeks over the card's top edge at the right; the h2 carries `pr-[108px]` |
+| Home · "On this page" | `sticker-magnifier` (-xs) | 30px | 8px after the label, bottom-aligned; one element at every width. Rises 12px into the gap above, 20px clear of the registration link, 8px above the chips |
+| Home · between the statewide races and the ballot questions | wave divider | 12px band | Only when both lists render, at every width; no figure, never inside either list |
+| Home · zigzag after the ballot list | `sit-divider` (-xs) | 88px | Seated on the band at the right; px margins keep it 12px clear of the list and 16px clear of the House h2 |
+| Home · coverage card | `pet-cat-peek` (-xs) | 64px | Peeks over the card's top edge at the right; the h2 carries `pr-[108px]` |
+| Home · wave after the coverage card | `walker-row` (-xs) | 48px | All eight hero walkers, still, one height, a fixed order; stands on the wave at the right; never on a screen with a candidate list |
 | Home · install card | `sticker-kyv-badge` (-xs) | 48px | In flow, left of "Get the app", untilted |
 | Home · reminder card | `sticker-envelope` | 40px | Unchanged |
-| All pages · footer | `footer-town-strip-sm` | full width, max 184px | Whole town up to about 434px; from there to sm, capped at 184px and cropped from the top (sky, then roofs, never a person) |
+| All pages · footer | `footer-town-strip-750` | full width, max 184px | One 750w phone file below sm. Whole town up to about 434px; from there to sm, capped at 184px and cropped from the top (sky, then roofs, never a person) |
 | 404 | `error-404-funk` | 120px | Own row above the h1 |
+| Error page | `error-404-funk` | 120px | The 404's piece, own row above the h1; one plain img (220px from lg), since the page is a client component |
 | Methodology | `method-receipts` | 112px | Own row under the header (first to drop) |
+| Methodology · "No source, no quote" | `sticker-magnifier` (-xs) | 30px | In the heading's row, after the words; the heading wraps beside it |
+| About · after "What this is" | `walker-row` (-xs) | 48px | Its own row; cached from home |
 | About · "Get in touch" | `pet-dog-sit` (-xs) | 56px | In the heading's row, after the words |
+
+Line icons (`src/components/ui/Glyphs.tsx`) are product UI, not art, so they are not slots: one per
+sample-ballot tile, keyed by task (ballot sheet, pin, calendar, mail; 20px); one before each key-dates
+link (calendar, bell; 1em); and one on every /privacy heading (20px, the same treatment for each). None
+has a tick, a filled shape or an oval, and none marks a candidate, party, race, a measure's YES/NO, a
+verdict or a news item.
 
 ## Not used
 
