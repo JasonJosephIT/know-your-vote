@@ -39,6 +39,28 @@ export function CaretGlyph() {
   );
 }
 
+/* A circled "!" before an error line, so an error isn't told by its colour
+   alone (Mobbin AD1, Square). */
+export function ErrorGlyph() {
+  return (
+    <svg {...svg}>
+      <circle cx="10" cy="10" r="7.25" />
+      <path d="M10 6.25v4.5M10 13.75h.01" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/* A padlock before a line about what happens to what the voter types
+   (Mobbin AD3, komoot). */
+export function LockGlyph() {
+  return (
+    <svg {...svg}>
+      <rect x="4.5" y="9" width="11" height="7.5" rx="1.5" />
+      <path d="M7 9V6.75a3 3 0 0 1 6 0V9" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 /* A link that jumps further down this page (race "Jump to", amendment
    YES/NO jump row), in place of the ↓ character the Inter subset lacks. */
 export function ArrowDownGlyph() {

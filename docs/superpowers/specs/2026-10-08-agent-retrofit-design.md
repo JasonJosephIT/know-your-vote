@@ -719,6 +719,19 @@ hacked or unrelated"), made through a reviewed migration, since
   from `roster-recalibration-2026-09-21.md:155-159`. Only Qualified and Runoff
   appear in a saved file, so the first watched run's report lists every label
   it met.
+- **Missing contests (deterministic, added 2026-10-13).** Matching roster
+  candidates cannot see a whole missing race: `0032` dropped eight settled
+  Miami-Dade seats VoterFocus printed as "Inactive - Unopposed/Elected", and
+  nothing noticed (`empty-races-2026-10-12.md`). So `check` also reads every
+  county `race.district` (any publication status: a draft race is ours) and
+  all four lists, and for each covered office (commission, school board,
+  Orange's mayor and clerk; `voterFocusSeat` maps the four lists' spellings)
+  with a live filer (Qualified, Runoff, Unopposed or Elected, the last status
+  span) and no race row, writes a report line naming the office, the live
+  filers and the missing `race.district`. Never a diff: a new race is a
+  migration. County judges, community councils and special districts are out
+  of scope; an office that reads like a covered one but does not parse is a
+  report line.
 - **Dates (R2's reading).** For each `general_2026` `election_event` row, R2
   reads that row's own `details_url` (6 distinct pages, §2.6) and writes
   `observations.json`:
