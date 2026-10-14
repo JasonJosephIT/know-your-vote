@@ -283,7 +283,7 @@ const home = flat(source("src/app/(public)/page.tsx"));
 const shared = flat(source("src/components/features/SharedBallot.tsx"));
 check(
   "home page renders SharedBallot with no county, and SharedBallot passes none on",
-  /<SharedBallot \/>/.test(home) && /<BallotQuestions \/>/.test(shared)
+  /<SharedBallot (?:seam )?\/>/.test(home) && /<BallotQuestions \/>/.test(shared)
 );
 
 if (failures) {

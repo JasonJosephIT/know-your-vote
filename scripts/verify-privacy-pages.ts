@@ -144,7 +144,9 @@ console.log("1. How this works links");
   const sections = privacy.split("<section").slice(1).map((s) => s.split("</section>")[0]);
   check("/privacy has a section per point", sections.length >= 8, `found ${sections.length}`);
   sections.forEach((s, i) => {
-    const heading = s.match(/<h2[^>]*>([^<]*)</)?.[1]?.trim() ?? `section ${i + 1}`;
+    /* Past the heading's line icon (a self-closing *Glyph), to its words. */
+    const heading =
+      s.match(/<h2[^>]*>\s*(?:<\w+Glyph\b[^>]*\/>)?([^<]*)</)?.[1]?.trim() || `section ${i + 1}`;
     const n = (s.match(/<HowThisWorks\b/g) ?? []).length;
     check(
       `/privacy "${rendered(heading)}" ends with one How this works link`,
@@ -313,7 +315,7 @@ check(
   );
   check(
     "/privacy has a Writing to us point that names Report a mistake",
-    /<h2 className="text-h2">Writing to us<\/h2>/.test(privacy) &&
+    /<h2 className=\{heading\}>\s*<\w+Glyph className=\{icon\} \/>\s*Writing to us\s*<\/h2>/.test(privacy) &&
       rendered(privacy).includes('"Report a mistake"')
   );
   const os = how.indexOf('id="official-sites"');
