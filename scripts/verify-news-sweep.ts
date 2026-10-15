@@ -738,20 +738,29 @@ const entry = (published: string) => ({ published });
 
 /* CADENCE_HOURS must be the longest gap between two runs of the news-sweep
    cron in vercel.json: daily is 24, the old Mondays and Thursdays (D9's TO
-   FLIP) is 96, the Thursday-to-Monday gap. A flip of the schedule that forgets
-   CADENCE_HOURS would call a feed deep that loses stories between runs, so it
-   fails here. Reads "M H * * <days>" with <days> "*" or a comma list of 0-6. */
+   FLIP) is 96, the Thursday-to-Monday gap; twice daily at 11 and 23 is 12. A
+   flip of the schedule that forgets CADENCE_HOURS would call a feed deep that
+   loses stories between runs, so it fails here. Reads "M H * * <days>" with H
+   one hour or a comma list of hours, and <days> "*" or a comma list of 0-6;
+   an hour list only with every day. */
 function longestGapHours(schedule: string): number | null {
   const parts = schedule.trim().split(/\s+/);
-  if (parts.length !== 5 || !/^\d+$/.test(parts[0]) || !/^\d+$/.test(parts[1]) || parts[2] !== "*" || parts[3] !== "*") return null;
+  if (parts.length !== 5 || !/^\d+$/.test(parts[0]) || !/^\d+(,\d+)*$/.test(parts[1]) || parts[2] !== "*" || parts[3] !== "*") return null;
+  const hours = [...new Set(parts[1].split(",").map(Number))].sort((a, b) => a - b);
+  if (hours.some((h) => h > 23)) return null;
+  if (hours.length > 1) {
+    if (parts[4] !== "*") return null;
+    return Math.max(...hours.map((h, i) => (i + 1 < hours.length ? hours[i + 1] - h : 24 - h + hours[0])));
+  }
   if (parts[4] === "*") return 24;
   if (!/^[0-6](,[0-6])*$/.test(parts[4])) return null;
   const days = [...new Set(parts[4].split(",").map(Number))].sort((a, b) => a - b);
   const gaps = days.map((d, i) => (i + 1 < days.length ? days[i + 1] - d : 7 - d + days[0]));
   return Math.max(...gaps) * 24;
 }
-check("the gap reader: daily is 24h, Mondays and Thursdays is 96h, anything else is unread",
-  longestGapHours("0 11 * * *") === 24 && longestGapHours("0 11 * * 1,4") === 96 &&
+check("the gap reader: daily is 24h, 11 and 23 is 12h, 11 and 17 is 18h, Mondays and Thursdays is 96h, anything else is unread",
+  longestGapHours("0 11 * * *") === 24 && longestGapHours("0 11,23 * * *") === 12 && longestGapHours("0 11,17 * * *") === 18 &&
+    longestGapHours("0 11 * * 1,4") === 96 &&
     longestGapHours("0 11 * * 3") === 168 && longestGapHours("*/5 * * * *") === null,
   [longestGapHours("0 11 * * *"), longestGapHours("0 11 * * 1,4"), longestGapHours("0 11 * * 3"), longestGapHours("*/5 * * * *")].join(","));
 {
