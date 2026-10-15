@@ -992,7 +992,7 @@ assert(
 
       Two pages since 2026-10-13: /privacy states each point in a sentence or
       two, and /privacy/how-it-works holds the detail (the cookie's value,
-      the device keys, the Census and Pelias paths). Each claim is pinned on
+      the device keys, the Google and Census paths). Each claim is pinned on
       the page that now makes it; a claim pinned on the wrong page would pass
       while the voter reads something else.
 
@@ -1037,45 +1037,32 @@ for (const [page, flat] of [
 }
 assert("how-it-works page names the cookie", /kyv\.district/.test(howFlat));
 assert("how-it-works page shows the stored value", /FL-27\|12086/.test(howFlat));
-/* The vendor paragraph is rendered from PELIAS_BASE_URL (a deployment fact),
-   so what is pinned here is that the pages still NAME a geocoder and still
-   offer the no-third-party route -- not a hard-coded company. Pinning
-   "Google Places" is what made this assertion wrong the moment the geocoder
-   changed. */
-assert("privacy page names the geocoder", /Pelias/.test(privacyFlat));
-assert("how-it-works page names the geocoder", /Pelias/.test(howFlat));
+/* Google finds the address and the Census Bureau gets only its point
+   (since 2026-10-14). Both pages name Google, say Census never gets the
+   address, say the text goes from our server with nothing that says who
+   typed it, and still offer the no-third-party route. */
+assert("privacy page names the geocoder", /Google/.test(privacyFlat));
+assert("how-it-works page names the geocoder", /Google Maps Platform/.test(howFlat));
 assert(
   "privacy page still offers a no-third-party path",
   /no third party at all/.test(privacyFlat)
 );
-/* What Census receives depends on the path (since 2026-10-12): a picked
-   Pelias suggestion sends only its coordinates; a typed address, which is
-   production, sends the text, from our server and with nothing else. Both
-   pages say it, each under the configuration it describes: /privacy in a
-   sentence, how-it-works in full. */
 assert(
-  "privacy page says a picked suggestion sends Census only the map point",
-  /the U\.S\. Census Bureau then gets only the map point/.test(privacyFlat) &&
+  "privacy page says Google gets the text from our server, alone, and Census only the point",
+  /goes from our server to <strong>Google<\/strong>/.test(privacyFlat) &&
+    /with nothing that says who typed it/.test(privacyFlat) &&
+    /the U\.S\. Census Bureau then gets only its map point/.test(privacyFlat) &&
     /never the address itself/.test(privacyFlat)
 );
 assert(
-  "privacy page says a typed address goes to Census from our server, alone",
-  /our server sends the address you typed to the U\.S\. Census Bureau(?:&rsquo;|’|')s public geocoder/.test(
-    privacyFlat
-  ) && /with nothing that says who typed it/.test(privacyFlat)
-);
-assert(
-  "how-it-works page says a picked suggestion sends Census only coordinates",
-  /we send just those coordinates to the U\.S\. Census Bureau/.test(howFlat) &&
+  "how-it-works page says Census gets only coordinates",
+  /We send just those coordinates to the U\.S\. Census Bureau/.test(howFlat) &&
     /The Census Bureau never receives your address/.test(howFlat)
 );
 assert(
-  "how-it-works page says a typed address goes to Census from our server, alone",
-  /we send what you typed to the U\.S\. Census Bureau(?:&rsquo;|’|')s public geocoder/.test(
-    howFlat
-  ) &&
-    /goes from our server, not your browser/.test(howFlat) &&
-    /receives the address and nothing else/.test(howFlat)
+  "how-it-works page says every request goes from our server, alone",
+  /goes from our server, not your browser/.test(howFlat) &&
+    /nothing else: not your IP address/.test(howFlat)
 );
 assert(
   "privacy page names the way out of the address path",

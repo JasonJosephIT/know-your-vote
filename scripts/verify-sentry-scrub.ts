@@ -62,27 +62,26 @@ assert(
   addressFlat
 );
 
-/* The resolve body no longer carries a place id — since the move to Pelias it
-   carries the COORDINATE of the address the voter picked, which is their home
-   to about the width of a house. Nothing in the scrubber's PII regexes would
-   catch a pair of plain numbers, so this asserts the whole-body drop covers
-   the resolve route too, not just suggest. */
+/* The resolve body carries the Google place id of the address the voter
+   picked, which names their home. Nothing in the scrubber's PII regexes
+   would catch an opaque id, so this asserts the whole-body drop covers the
+   resolve route too, not just suggest. */
 const resolveEvent = scrubEvent({
   request: {
     url: "https://example.org/api/address/resolve",
     method: "POST",
-    data: { lat: 25.769463071522, lon: -80.197602442738 },
+    data: { placeId: "ChIJhome-place-id", sessionToken: "x" },
   },
 });
 const resolveFlat = JSON.stringify(resolveEvent);
 assert(
-  "resolve body (a home coordinate) is dropped",
-  !resolveFlat.includes("25.769463") && !resolveFlat.includes("80.1976"),
+  "resolve body (a home's place id) is dropped",
+  !resolveFlat.includes("ChIJhome"),
   resolveFlat
 );
 
-/* And the typed address itself, the resolve body when no Pelias is
-   configured: prose, which no PII regex would catch. */
+/* And the typed address itself, the resolve body when the voter pressed
+   Enter without picking: prose, which no PII regex would catch. */
 const typedFlat = JSON.stringify(
   scrubEvent({
     request: {
@@ -156,18 +155,18 @@ const serverEvent = scrubEvent({
     {
       category: "fetch",
       data: {
-        url: "https://api.geocode.earth/v1/autocomplete?text=444+SW+2nd+Ave&api_key=pelias-secret",
-        "http.query": "text=444+SW+2nd+Ave&api_key=pelias-secret",
+        url: "https://places.googleapis.com/v1/places/ChIJhome-place-id?sessionToken=abc",
+        "http.query": "sessionToken=abc",
         method: "GET",
       },
     },
     {
-      /* The typed-address path (no Pelias, production since 2026-10-12):
-         the address rides in the outbound Census URL's query. */
+      /* The typed-address path: the address and the key ride in the
+         outbound Geocoding URL's query. */
       category: "fetch",
       data: {
-        url: "https://geocoding.geo.census.gov/geocoder/geographies/onelineaddress?address=601+E+Kennedy+Blvd%2C+Tampa%2C+FL&format=json",
-        "http.query": "address=601+E+Kennedy+Blvd%2C+Tampa%2C+FL&format=json",
+        url: "https://maps.googleapis.com/maps/api/geocode/json?address=601+E+Kennedy+Blvd%2C+Tampa%2C+FL&key=google-secret",
+        "http.query": "address=601+E+Kennedy+Blvd%2C+Tampa%2C+FL&key=google-secret",
         method: "GET",
       },
     },
@@ -183,8 +182,9 @@ for (const [name, secret] of [
   ["referring page's query", "gclid-value"],
   ["URL-encoded email", "voter%40example.com"],
   ["address in a query string", "2nd+Ave"],
-  ["PELIAS_API_KEY in a breadcrumb", "pelias-secret"],
-  ["typed address in the Census geocoder's URL", "Kennedy"],
+  ["picked place id in a Details URL", "ChIJhome"],
+  ["GOOGLE_MAPS_API_KEY in a breadcrumb", "google-secret"],
+  ["typed address in Google's geocoder URL", "Kennedy"],
 ]) {
   assert(`server event drops the ${name}`, !serverFlat.includes(secret), serverFlat);
 }

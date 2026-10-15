@@ -13,10 +13,11 @@ import {
   parseBlockResponse,
   districtFromBlockRows,
   parseSuggestions,
+  parsePlaceLocation,
   parseAddressMatches,
 } from "../src/lib/address-lookup.ts";
 import {
-  censusAddressQuery,
+  addressQuery,
   looksLikeStreetAddress,
 } from "../src/lib/address-text.ts";
 
@@ -95,100 +96,84 @@ assert(
     districtFromBlockRows(rows, "120860036061999")?.district === "FL-27"
 );
 
-/* ---- Pelias: suggestions carry their own coordinates ---- */
-const suggestions = parseSuggestions(fixture("pelias-autocomplete.json"));
+/* ---- Google Places: suggestions, then the picked one's point ---- */
+const suggestions = parseSuggestions(fixture("places-autocomplete.json"));
 assert(
-  "only the address features survive",
+  "a prediction with no place id or text is dropped",
   suggestions.length === 2,
   `got ${suggestions.length}`
 );
-/* The fixture holds a `locality` feature on purpose. A locality (or street)
-   result is a centroid, and a centroid can sit in a different district than the
-   house does -- which is the exact ambiguity address lookup exists to remove.
-   Answering confidently from one would be worse than not answering. */
+assert("the place id is carried", suggestions[0].id === "ChIJ-444-sw-2nd-ave");
+assert("the main text is the display name", suggestions[0].text === "444 SW 2nd Ave");
 assert(
-  "a locality centroid is refused",
-  suggestions.every((s) => !s.id.includes("whosonfirst"))
-);
-/* And an address feature with no geometry: Pelias would have nothing to resolve
-   and the old Google path had a second call to fall back on. This one does not,
-   so a coordinate-less suggestion must never reach the dropdown. */
-assert(
-  "an address with no geometry is refused",
-  suggestions.every((s) => !s.id.endsWith("nogeom"))
-);
-assert(
-  "the stable id is carried",
-  suggestions[0].id === "openaddresses:address:us/fl/miami:4a1b2c3d"
-);
-assert("the display name is carried", suggestions[0].text === "444 SW 2nd Ave");
-assert(
-  "the secondary line is composed from the address parts",
-  suggestions[0].secondary === "Miami, FL, 33130",
+  "the secondary text is carried",
+  suggestions[0].secondary === "Miami, FL, USA",
   suggestions[0].secondary ?? "null"
 );
-/* GeoJSON is [longitude, latitude]. Reversed, this Miami address lands off the
-   coast of Somalia -- and both numbers stay plausible, so nothing else in the
-   pipeline would notice. */
-assert("the latitude is read from position 1", suggestions[0].lat === 25.769463071522);
-assert("the longitude is read from position 0", suggestions[0].lon === -80.197602442738);
 assert(
   "a malformed payload yields no suggestions",
   parseSuggestions({ nope: 1 }).length === 0
 );
-
-/* The coordinate must reach Census exactly. Rounding one can move it across a
+const location = parsePlaceLocation(fixture("places-details.json"));
+/* The point must reach Census exactly. Rounding one can move it across a
    block boundary, and a block boundary is a district boundary. */
 assert(
-  "the coordinate is not rounded on the way through",
-  String(suggestions[0].lat).length > 8 && String(suggestions[0].lon).length > 8
+  "Details' location is read, unrounded",
+  location?.lat === 25.769463071522 && location?.lon === -80.197602442738,
+  JSON.stringify(location)
 );
+assert("Details with no location yields null", parsePlaceLocation({}) === null);
 
-/* ---- Census: typed address -> block (no Pelias: production) ---- */
-const typed = fixture("census-address.json");
+/* ---- Google Geocoding: typed address -> point ---- */
+const typed = fixture("google-geocode.json");
 const kind = (json: unknown, text: string) => parseAddressMatches(json, text)?.kind;
 
-/* One Census match, shaped like the real response (census-address.json is
-   the real one for 444 SW 2nd Ave). Built rather than recorded so that no
-   fixture holds an address that might be someone's home. */
+/* One Google geocoding result, built from a Census-style description of
+   the street (each case below was first seen from the Census geocoder,
+   2026-10-12; the rules that answer it are geocoder-neutral). Built rather
+   than recorded so that no fixture holds an address that might be
+   someone's home. The point is derived from `geoid` so that two results in
+   "the same block" share a point and two in different blocks don't. */
 function censusMatch(m: {
   matchedAddress: string;
   preDirection?: string;
   streetName: string;
   suffixType?: string;
   suffixDirection?: string;
+  routeLong?: string;
   city: string;
   zip: string;
   state?: string;
   geoid: string;
 }) {
+  const route = [m.preDirection, m.streetName, m.suffixType, m.suffixDirection]
+    .filter(Boolean)
+    .join(" ");
+  const number = m.matchedAddress.split(" ")[0];
+  const c = (v: string, ...types: string[]) => ({ long_name: v, short_name: v, types });
   return {
-    matchedAddress: m.matchedAddress,
-    addressComponents: {
-      preDirection: m.preDirection ?? "",
-      streetName: m.streetName,
-      suffixType: m.suffixType ?? "",
-      suffixDirection: m.suffixDirection ?? "",
-      city: m.city,
-      zip: m.zip,
-      state: m.state ?? "FL",
-    },
-    geographies: {
-      "Census Blocks": [{ GEOID: m.geoid, STATE: m.geoid.slice(0, 2) }],
+    address_components: [
+      c(number, "street_number"),
+      { long_name: m.routeLong ?? route, short_name: route, types: ["route"] },
+      c(m.city, "locality", "political"),
+      c(m.state ?? "FL", "administrative_area_level_1", "political"),
+      c(m.zip, "postal_code"),
+    ],
+    geometry: {
+      location: { lat: 25 + Number(m.geoid.slice(-7)) / 1e8, lng: -80 },
     },
   };
 }
 const census = (...ms: ReturnType<typeof censusMatch>[]) => ({
-  result: { addressMatches: ms },
+  status: ms.length ? "OK" : "ZERO_RESULTS",
+  results: ms,
 });
+const POINT = { lat: 25.769463071522, lon: -80.197602442738 };
 
 assert(
   "a typed address naming its city resolves to its block",
   JSON.stringify(parseAddressMatches(typed, "444 SW 2nd Ave, Miami, FL")) ===
-    JSON.stringify({
-      kind: "match",
-      block: { geoid: "120860036061055", state: "12" },
-    }),
+    JSON.stringify({ kind: "match", point: POINT }),
   JSON.stringify(parseAddressMatches(typed, "444 SW 2nd Ave, Miami, FL"))
 );
 for (const text of [
@@ -348,32 +333,47 @@ for (const text of [
   assert(
     "the direction typed picks one",
     JSON.stringify(parseAddressMatches(orange, "400 S Orange Ave, Orlando")) ===
-      JSON.stringify({ kind: "match", block: { geoid: "120950189021048", state: "12" } })
+      JSON.stringify({
+        kind: "match",
+        point: { lat: 25 + 9021048 / 1e8, lon: -80 },
+      })
   );
 }
 {
   const two = structuredClone(typed);
-  const other = structuredClone(two.result.addressMatches[0]);
-  other.geographies["Census Blocks"][0].GEOID = "120860036061099";
-  two.result.addressMatches.push(other);
+  const other = structuredClone(two.results[0]);
+  other.geometry.location.lat += 0.001;
+  two.results.push(other);
   const both = parseAddressMatches(two, "444 SW 2nd Ave, Miami");
   assert(
-    "the same street in two blocks is ambiguous, with both blocks for the route",
-    both?.kind === "ambiguous" && both.blocks.length === 2,
+    "the same street at two points is ambiguous, with both points for the route",
+    both?.kind === "ambiguous" && both.points.length === 2,
     JSON.stringify(both)
   );
   const same = structuredClone(typed);
-  same.result.addressMatches.push(structuredClone(same.result.addressMatches[0]));
+  same.results.push(structuredClone(same.results[0]));
   assert(
-    "two matches in the same block are one answer",
+    "two results at the same point are one answer",
     kind(same, "444 SW 2nd Ave, Miami") === "match"
   );
-  const shortBlock = structuredClone(typed);
-  shortBlock.result.addressMatches[0].geographies["Census Blocks"][0].GEOID =
-    "1208600";
+  const street = structuredClone(typed);
+  street.results[0].address_components = street.results[0].address_components.filter(
+    (c: { types: string[] }) => !c.types.includes("street_number")
+  );
   assert(
-    "a short GEOID is not a Florida match",
-    kind(shortBlock, "444 SW 2nd Ave, Miami") === "none"
+    "a street-level result (no house number) is not the voter's house",
+    kind(street, "444 SW 2nd Ave, Miami") === "checkStreet"
+  );
+  const kendall = structuredClone(typed);
+  kendall.results[0].address_components.push({
+    long_name: "Little Havana",
+    short_name: "Little Havana",
+    types: ["neighborhood", "political"],
+  });
+  assert(
+    "the neighbourhood Google names counts as the place too",
+    kind(kendall, "444 SW 2nd Ave, Little Havana") === "match" &&
+      kind(kendall, "444 SW 2nd Ave, Miami") === "match"
   );
 }
 
@@ -561,19 +561,33 @@ for (const text of [
       matchedAddress: "120 PALM ESTS, TAMPA, FL, 33602",
       streetName: "PALM",
       suffixType: "ESTS",
+      routeLong: "PALM ESTATES",
       city: "TAMPA",
       zip: "33602",
       geoid: "120570051012000",
     })
   );
-  assert("Census's own type counts though it isn't listed", kind(estates, "120 Palm Ests, Tampa") === "match");
+  assert("Google's own type counts though it isn't listed", kind(estates, "120 Palm Ests, Tampa") === "match");
   assert("…and another type before it doesn't", kind(estates, "120 Palm Ests Ave, Tampa") === "checkStreet");
 }
 
 /* Outside Florida. */
 assert(
-  "Census's other-state answers to a Florida street are no match",
-  kind(fixture("census-address-elsewhere.json"), "1 Main St, Springfield, FL") === "none"
+  "an other-state answer to a Florida street is no match",
+  kind(
+    census(
+      censusMatch({
+        matchedAddress: "1 MAIN ST, SPRINGFIELD, IL, 62701",
+        streetName: "MAIN",
+        suffixType: "ST",
+        city: "SPRINGFIELD",
+        zip: "62701",
+        state: "IL",
+        geoid: "171670001001000",
+      })
+    ),
+    "1 Main St, Springfield, FL"
+  ) === "none"
 );
 assert(
   "an address the voter put in another state is out of state, not 'not found'",
@@ -595,33 +609,37 @@ assert(
 );
 assert(
   "no matches at all is no match",
-  kind({ result: { addressMatches: [] } }, "1 Nowhere Rd, Miami") === "none"
+  kind({ status: "ZERO_RESULTS", results: [] }, "1 Nowhere Rd, Miami") === "none"
 );
 assert(
   "a malformed payload is null (a failure, not an answer)",
   parseAddressMatches({ nope: true }, "x") === null
 );
+assert(
+  "a refused key is null (ours to report), not 'no match'",
+  parseAddressMatches({ status: "REQUEST_DENIED", results: [] }, "x") === null
+);
 
 assert(
   "', FL' is added when no state or ZIP is given",
-  censusAddressQuery(" 601 E  Kennedy Blvd, Tampa ") ===
+  addressQuery(" 601 E  Kennedy Blvd, Tampa ") ===
     "601 E Kennedy Blvd, Tampa, FL"
 );
 assert(
   "a named state is left alone",
-  censusAddressQuery("601 E Kennedy Blvd, Tampa, Florida") ===
+  addressQuery("601 E Kennedy Blvd, Tampa, Florida") ===
     "601 E Kennedy Blvd, Tampa, Florida" &&
-    censusAddressQuery("601 E Kennedy Blvd Tampa fl") ===
+    addressQuery("601 E Kennedy Blvd Tampa fl") ===
       "601 E Kennedy Blvd Tampa fl"
 );
 assert(
   "a trailing ZIP is left alone",
-  censusAddressQuery("115 S Andrews Ave, 33301") === "115 S Andrews Ave, 33301" &&
-    censusAddressQuery("444 SW 2nd Ave 33130-1910") === "444 SW 2nd Ave 33130-1910"
+  addressQuery("115 S Andrews Ave, 33301") === "115 S Andrews Ave, 33301" &&
+    addressQuery("444 SW 2nd Ave 33130-1910") === "444 SW 2nd Ave 33130-1910"
 );
 assert(
   "a five-digit house number is not a ZIP",
-  censusAddressQuery("12345 SW 88th St, Miami") === "12345 SW 88th St, Miami, FL"
+  addressQuery("12345 SW 88th St, Miami") === "12345 SW 88th St, Miami, FL"
 );
 assert(
   "an address needs a house number and a street",

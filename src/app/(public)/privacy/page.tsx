@@ -17,7 +17,7 @@ import { privacyDeployment } from "./deployment";
 export const metadata = { title: "Privacy — Know Your Vote" };
 
 /* Short on purpose (founder, 2026-10-13). This page used to carry every
-   detail: the cookie's exact value, the device keys, the Census and Pelias
+   detail: the cookie's exact value, the device keys, the Google and Census
    paths, what a Sentry report keeps. That made it a long disclaimer, when
    what a voter needs first is what happens, in a sentence or two. So each
    point here says only that, and ends with a "How this works" link to its
@@ -64,7 +64,6 @@ function HowThisWorks({ topic, about }: { topic: string; about: string }) {
 export default function PrivacyPage() {
   const {
     addressOn,
-    geocoder,
     analyticsOn,
     adsOn,
     errorReportsOn,
@@ -139,31 +138,22 @@ export default function PrivacyPage() {
           <PinGlyph className={icon} />
           When you type an address
         </h2>
-        {/* Who sees an address is a deployment fact: ADDRESS_LOOKUP_OFF
-            removes the field, and PELIAS_BASE_URL adds completion from an
-            instance we run or a hosted one. A sentence that is wrong on some
-            deployments is worse than none, so this reads the configuration
-            (src/lib/geocode.ts). With Pelias, a typed address that wasn't
-            picked from the list is refused rather than sent on to the Census
-            Bureau (LocationEntry), which is what makes "never the address"
-            true. */}
+        {/* Whether there is an address field is a deployment fact
+            (ADDRESS_LOOKUP_OFF, GOOGLE_MAPS_API_KEY; src/lib/geocode.ts).
+            A sentence that is wrong on some deployments is worse than none,
+            so this reads the configuration. */}
         {!addressOn ? (
           <p className="text-body">
             Address lookup is switched off on this deployment &mdash;
             there&rsquo;s no address field. You choose your district from a
             list, and nothing you choose reaches anyone else.
           </p>
-        ) : geocoder ? (
-          <p className="text-body">
-            What you type goes to <strong>{geocoder}</strong> (Pelias) to finish
-            the address; the U.S. Census Bureau then gets only the map point of
-            the address you picked, never the address itself.
-          </p>
         ) : (
           <p className="text-body">
-            When you press Enter, our server sends the address you typed to the
-            U.S. Census Bureau&rsquo;s public geocoder, with nothing that says
-            who typed it.
+            What you type goes from our server to <strong>Google</strong> to
+            finish and find the address, with nothing that says who typed it;
+            the U.S. Census Bureau then gets only its map point, never the
+            address itself.
           </p>
         )}
         {addressOn && (

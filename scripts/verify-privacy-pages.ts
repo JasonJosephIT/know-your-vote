@@ -11,7 +11,7 @@
       a link is never rendered in a configuration where its section isn't
       (cookie-choice exists only while the ad tag is on, so its link must be
       guarded by the same switch). The explanation page links back.
-   2. ONE READING OF THE DEPLOYMENT. Both pages take the address, geocoder,
+   2. ONE READING OF THE DEPLOYMENT. Both pages take the address,
       analytics, ads and error-report switches from privacyDeployment()
       (privacy/deployment.ts) and read no environment of their own, and each
       switch is read from the variable that actually starts the thing it
@@ -28,7 +28,7 @@
       days, the action that stays on /privacy (ResetAdsConsent), and the
       sitemap and footer entries.
 
-   The claims themselves (cookie value, device keys, Census and Pelias
+   The claims themselves (cookie value, device keys, Google and Census
    paths, unsubscribe wording) are pinned by verify-no-stored-location.ts and
    verify-unsubscribe.ts on whichever page now makes them.
 
@@ -171,7 +171,6 @@ console.log("\n2. Deployment switches");
 {
   for (const [label, re] of [
     ["addressEntryEnabled()", /\baddressEntryEnabled\(\)/],
-    ["geocoderHost()", /\bgeocoderHost\(\)/],
     ["NEXT_PUBLIC_PLAUSIBLE_DOMAIN", /process\.env\.NEXT_PUBLIC_PLAUSIBLE_DOMAIN\b/],
     ["SENTRY_DSN", /process\.env\.SENTRY_DSN\b/],
     ["NEXT_PUBLIC_SENTRY_DSN", /process\.env\.NEXT_PUBLIC_SENTRY_DSN\b/],
@@ -206,9 +205,9 @@ console.log("\n2. Deployment switches");
     );
     check(
       `${page} reads no environment or switch of its own`,
-      !/process\.env|addressEntryEnabled|geocoderHost|ADS_TAG_ENABLED/.test(src)
+      !/process\.env|addressEntryEnabled|ADS_TAG_ENABLED/.test(src)
     );
-    for (const name of ["addressOn", "geocoder", "analyticsOn", "adsOn", "errorReportsOn"]) {
+    for (const name of ["addressOn", "analyticsOn", "adsOn", "errorReportsOn"]) {
       check(
         `${page} branches on ${name}`,
         new RegExp(`\\{!?${name}\\s*(?:\\?|&&)|\\)\\s*:\\s*${name}\\s*\\?`).test(src)

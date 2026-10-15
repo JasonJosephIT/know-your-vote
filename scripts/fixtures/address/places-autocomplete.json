@@ -1,0 +1,21 @@
+{
+  "suggestions": [
+    {
+      "placePrediction": {
+        "placeId": "ChIJ-444-sw-2nd-ave",
+        "text": { "text": "444 SW 2nd Ave, Miami, FL, USA" },
+        "structuredFormat": {
+          "mainText": { "text": "444 SW 2nd Ave" },
+          "secondaryText": { "text": "Miami, FL, USA" }
+        }
+      }
+    },
+    {
+      "placePrediction": {
+        "placeId": "ChIJ-444-sw-2nd-st",
+        "text": { "text": "444 SW 2nd St, Miami, FL, USA" }
+      }
+    },
+    { "queryPrediction": { "text": { "text": "444 sw 2nd" } } }
+  ]
+}

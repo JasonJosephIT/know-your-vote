@@ -28,7 +28,6 @@ const link = "text-primary underline underline-offset-2";
 export default function PrivacyHowItWorksPage() {
   const {
     addressOn,
-    geocoder,
     analyticsOn,
     adsOn,
     errorReportsOn,
@@ -176,11 +175,11 @@ export default function PrivacyHowItWorksPage() {
       </section>
 
       <section id="typed-address" className="flex flex-col gap-2">
-        {/* Who sees an address is a deployment fact (src/lib/geocode.ts):
-            ADDRESS_LOOKUP_OFF removes the field, and PELIAS_BASE_URL adds
-            completion from an instance we run or a hosted one. Prose can't
-            know which, and a paragraph that is wrong on some deployments is
-            worse than none, so the section is read from the configuration. */}
+        {/* Whether there is an address field is a deployment fact
+            (src/lib/geocode.ts): ADDRESS_LOOKUP_OFF, or no
+            GOOGLE_MAPS_API_KEY, removes it. A paragraph that is wrong on
+            some deployments is worse than none, so the section is read from
+            the configuration. */}
         <h2 className="text-h2">When you type an address</h2>
         {!addressOn ? (
           <p className="text-body">
@@ -188,41 +187,27 @@ export default function PrivacyHowItWorksPage() {
             there&rsquo;s no address field. You choose your district from a
             list, and nothing you choose reaches anyone else.
           </p>
-        ) : geocoder ? (
-          <>
-            <p className="text-body">
-              Address completion is{" "}
-              <a href="https://pelias.io" className={link}>
-                Pelias
-              </a>
-              , an open-source geocoder built on public address data. What you
-              type goes to <strong>{geocoder}</strong> so it can finish the
-              address. We don&rsquo;t log it and we don&rsquo;t store it.
-            </p>
-            <p className="text-body">
-              Turning that address into a district takes no second lookup:
-              Pelias returns the map coordinates along with the suggestion you
-              picked, and we send just those coordinates to the U.S. Census
-              Bureau to find which census block they fall in. The Census Bureau
-              never receives your address. If you press Enter without picking a
-              suggestion, the site asks you to pick one rather than send what
-              you typed anywhere else.
-            </p>
-          </>
         ) : (
           <>
             <p className="text-body">
-              When you type a street address and press Enter, we send what you
-              typed to the U.S. Census Bureau&rsquo;s public geocoder, which
-              finds the census block the address sits in. The block tells us
-              your district, using Florida&rsquo;s enacted 2026 map, and the
-              district is the only thing that is kept. We don&rsquo;t log the
-              address and we don&rsquo;t store it.
+              Addresses are found by Google Maps Platform. As you type, what you
+              have typed so far goes to Google so it can suggest matching
+              addresses; when you pick one, or press Enter, Google returns its
+              map coordinates. We don&rsquo;t log the address and we
+              don&rsquo;t store it.
             </p>
             <p className="text-body">
-              The request goes from our server, not your browser, so the Census
-              Bureau receives the address and nothing else: not your IP address,
-              not your name, not anything that says who typed it.
+              We send just those coordinates to the U.S. Census Bureau to find
+              which census block they fall in. The block tells us your
+              district, using Florida&rsquo;s enacted 2026 map, and the
+              district is the only thing that is kept. The Census Bureau never
+              receives your address.
+            </p>
+            <p className="text-body">
+              Every request goes from our server, not your browser, so Google
+              and the Census Bureau receive the address or the point and
+              nothing else: not your IP address, not your name, not anything
+              that says who typed it.
             </p>
           </>
         )}

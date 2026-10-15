@@ -72,8 +72,8 @@ Also unset in production on 2026-10-04, under any name:
 `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`, `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`,
 `PELIAS_BASE_URL` and `ADMIN_EMAILS`. So knowyour.vote runs no analytics,
 sends no error reports and offers no address suggestions, and the admin
-console is closed. Since 2026-10-12 it takes typed street addresses anyway,
-through the Census Bureau (`ADDRESS_LOOKUP_OFF`, below).
+console is closed. Since 2026-10-14 street addresses go through Google
+(`GOOGLE_MAPS_API_KEY`, below).
 
 `NEXT_PUBLIC_` is a one-way door — Next.js inlines those values into the
 browser bundle at build time. Everything else is server-only and must never
@@ -101,27 +101,18 @@ missing key degrades a surface, it never fakes one.
   strongest sense. Unset under both names → `POST /api/voting-info` returns 503 with nothing sent or stored, both crons
   return 503 (the news feed keeps yesterday's items), the calendar file
   returns 503, and the deadline banner renders nothing.
-- `ADDRESS_LOOKUP_OFF` — the off switch for street addresses. Unset (the
-  default since 2026-10-12) → with no Pelias, a typed address goes from the
-  server to the Census Bureau's free one-line geocoder
-  (`src/lib/census-block.ts`), which answers its census block; the match
-  counts only when the voter's own words agree with it
-  (`src/lib/address-text.ts`). Any value → the field takes a ZIP only, both
-  `/api/address/*` routes answer 503, and `/privacy` says nothing typed
-  leaves the site. Redeploy after changing it: `/privacy` is prerendered.
-- `PELIAS_BASE_URL` — address suggestions as the voter types. **Where it
-  points is the privacy decision, and it is made here rather than in code:**
-  an instance you host (`deploy/pelias/`) means no third party ever sees a
-  voter's address; `https://api.geocode.earth` means a geocoding company
-  does. With it set, an address resolves only from a picked suggestion, whose
-  coordinate alone goes to the Census Bureau. `/privacy` reads the
-  configured host, so the page stays true without anyone remembering to edit
-  the prose. Unset → `/api/address/suggest` answers 503 `unavailable`, and
-  the field takes a whole typed address (Census, above), a ZIP, or the
-  district picker.
-- `PELIAS_API_KEY` — hosted Pelias only; Geocode Earth authenticates by query
-  parameter. A self-hosted instance normally needs nothing here, so an absent
-  key is normal rather than an error.
+- `GOOGLE_MAPS_API_KEY` — street addresses (since 2026-10-14). Places API
+  (New) suggests addresses as the voter types, and the Geocoding API matches
+  one typed without picking (`src/lib/geocode.ts`); a typed match counts only
+  when the voter's own words agree with it (`src/lib/address-text.ts`). Only
+  the resulting point goes to the Census Bureau, which answers its census
+  block (`src/lib/census-block.ts`). Enable both APIs on the key and restrict
+  it to them. Unset → no address field, only the district picker, and both
+  `/api/address/*` routes answer 503.
+- `ADDRESS_LOOKUP_OFF` — the off switch for street addresses. Any value → no
+  address field even with a key, both `/api/address/*` routes answer 503, and
+  `/privacy` says nothing typed leaves the site. Redeploy after changing
+  either: `/privacy` is prerendered.
 - `RESEND_API_KEY` (or `RESEND`, production's name) + `EMAIL_FROM` — opt-in
   transactional email: the voting-info reply and the deadline reminders. Both
   are required; one alone counts as unconfigured. Unset → the voting-info
@@ -218,15 +209,6 @@ Scripts that need keys load `.env.local` themselves — most with
 when run from a `.claude/worktrees/…` worktree and prints to stderr which
 file it used. The migration and Sentry-scrub checks under
 [Database](#database) need no keys at all.
-
-Address completion can be exercised without a geocoder account or a 20GB
-Elasticsearch import — `scripts/pelias-stub.mjs` serves a handful of real
-Florida addresses in the exact shape `/v1/autocomplete` returns:
-
-```bash
-node scripts/pelias-stub.mjs             # listens on 127.0.0.1:4000
-PELIAS_BASE_URL=http://127.0.0.1:4000 npm run dev
-```
 
 ## Database
 

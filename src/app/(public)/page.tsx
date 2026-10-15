@@ -155,10 +155,9 @@ export default async function Home({
   const showAll = scope.kind === "all";
 
   /* The field takes a street address, and only that (no ZIP, founder
-     2026-10-12). It suggests addresses only when Pelias is configured (off
-     in production: a typed address goes to the Census Bureau instead;
-     /privacy says so). With ADDRESS_LOOKUP_OFF set there is no field, just
-     the district picker. */
+     2026-10-12), found by Google (/privacy says so). With
+     ADDRESS_LOOKUP_OFF set, or no GOOGLE_MAPS_API_KEY, there is no field,
+     just the district picker. */
   const addressEnabled = addressEntryEnabled();
   const suggestEnabled = geocoderConfigured();
   const field = locationFieldCopy(addressEnabled);

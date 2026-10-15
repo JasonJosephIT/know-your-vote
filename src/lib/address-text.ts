@@ -6,8 +6,9 @@
    apart from the response schemas.
 
    The rest is what parseAddressMatches (address-lookup.ts) uses to decide
-   whether a Census match is the address the voter typed. Census's one-line
-   geocoder corrects as it matches: "6000 SW 7th Ave, Miami" comes back as
+   whether a geocoder's match is the address the voter typed. Geocoders
+   correct as they match (Google flags it only as partial_match), and the
+   Census one-line geocoder we used before Google showed how far: "6000 SW 7th Ave, Miami" comes back as
    6000 NW 7TH AVE (Liberty City, another district), "North Miami" as MIAMI,
    "18605 NW 27th St" as NW 27TH AVE, all as single confident matches with no
    quality score. So a match is kept only when the voter's own words agree
@@ -15,18 +16,18 @@
    directions, its type and its name. Anything else is asked about, never
    guessed. */
 
-/* An address Census can place has a house number and a street name. */
+/* An address a geocoder can place has a house number and a street name. */
 export function looksLikeStreetAddress(typed: string): boolean {
   const text = typed.trim();
   return text.length >= 5 && /\d/.test(text) && /[a-z]/i.test(text);
 }
 
-/* What goes to Census. ", FL" is added unless the voter already named the
+/* What goes to the geocoder. ", FL" is added unless the voter already named the
    state or ended with a ZIP, so a Florida street is looked for in Florida
    ("601 E Kennedy Blvd, Tampa" has a Tampa elsewhere too). A leading
    five-digit number is a house number, not a ZIP, which is why only a
    trailing one counts. */
-export function censusAddressQuery(typed: string): string {
+export function addressQuery(typed: string): string {
   const text = typed.trim().replace(/\s+/g, " ");
   if (/\b(?:fl|fla|florida)\b/i.test(text) || /\b\d{5}(?:-\d{4})?$/.test(text)) {
     return text;
@@ -275,7 +276,7 @@ function splitTyped(typed: string): Typed {
   };
 }
 
-/* The parts of a Census match the comparison needs. */
+/* The parts of a geocoder's match the comparison needs. */
 export interface MatchedStreet {
   matchedAddress: string;
   preDirection: string;
@@ -284,6 +285,30 @@ export interface MatchedStreet {
   suffixDirection: string;
   city: string;
   zip: string;
+}
+
+/* Google's route in those parts. Its short name is USPS style ("SW 2nd
+   Ave", "Tampa St N"): a trailing direction comes off first, then the
+   street type. The type is a word we know, or one Google shortened (long
+   "Palm Estates", short "Palm Ests"), which is how a type we don't list
+   still counts as one. A leading direction is the pre-direction, so "N
+   West Shore Blvd" keeps WEST SHORE whole for sameStreet's run-together
+   rule ("Westshore"). */
+export function routeParts(
+  short: string,
+  long: string
+): Pick<MatchedStreet, "preDirection" | "streetName" | "suffixType" | "suffixDirection"> {
+  const ws = words(short);
+  const longWords = words(long);
+  const suffixDirection = ws.length > 1 && isDirection(ws[ws.length - 1]) ? ws.pop()! : "";
+  if (suffixDirection) longWords.pop();
+  const last = ws[ws.length - 1];
+  const suffixType =
+    ws.length > 1 && (last in STREET_TYPES || last !== longWords[longWords.length - 1])
+      ? ws.pop()!
+      : "";
+  const preDirection = ws.length > 1 && isDirection(ws[0]) ? ws.shift()! : "";
+  return { preDirection, streetName: ws.join(" "), suffixType, suffixDirection };
 }
 
 /* Does the place the voter named (city or ZIP) belong to this match? If so,
