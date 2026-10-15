@@ -48,7 +48,7 @@ export interface DirectoryCandidate extends Pick<
 export type DecidedSeat = "unopposed" | "elected_in_primary";
 
 export interface DirectoryRace {
-  race: Pick<Race, "race_id" | "office" | "district" | "level">;
+  race: Pick<Race, "race_id" | "office" | "district" | "level" | "candidate_ids">;
   candidates: DirectoryCandidate[];
   /** The race-level form of DirectoryCandidate.decided, so the count line can
       say how many of the races shown are seats already decided. */
