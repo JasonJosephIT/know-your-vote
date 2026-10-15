@@ -609,6 +609,14 @@ export function LocationEntry({
                       }}
                     >
                       {s.text}
+                      {/* The same street is in several cities ("444 SW
+                          2nd Ave" is in Miami, Homestead and Florida
+                          City), so the city tells them apart. */}
+                      {s.secondary && (
+                        <span className="block text-on-surface-muted">
+                          {s.secondary}
+                        </span>
+                      )}
                     </li>
                   ))}
                 </ul>
