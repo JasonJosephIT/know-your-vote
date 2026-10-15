@@ -266,6 +266,16 @@ const ALLOWED_LOCAL = new Map<string, { why: string; disclosed: RegExp }>([
     },
   ],
   [
+    "kyv.picks",
+    {
+      why:
+        "the voter's own marks on 'Mark your ballot' (picks.ts): race and " +
+        "measure ids to a candidate id or yes/no, written only when they " +
+        "mark one. Read in the browser only, never sent.",
+      disclosed: /mark your\s+ballot/i,
+    },
+  ],
+  [
     "kyv.install-dismissed",
     {
       why: 'the constant "1" once the voter closes the get-the-app card (InstallCard.tsx).',

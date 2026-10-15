@@ -231,19 +231,17 @@ check(
 );
 check("race page renders the IssueFilter", /<IssueFilter\b/.test(racePage));
 
-const outside = read("src/components/features/OutsideResources.tsx");
-check("OutsideResources.tsx exists", outside.length > 0);
-check("outbound card loads nothing third-party", !/<img|<iframe|<script/i.test(outside));
+/* The hub's "Another view" pointer to Ballotpedia's sample-ballot lookup
+   gave way to our own (MarkBallotCard, founder 2026-10-14). The card keeps
+   the old one's rules: nothing third-party, no client JavaScript. */
+const card = read("src/components/features/MarkBallotCard.tsx");
+check("MarkBallotCard.tsx exists", card.length > 0);
+check("ballot card loads nothing third-party", !/<img|<iframe|<script/i.test(card));
+check("ballot card links to /ballot", /href = "\/ballot"/.test(card));
+check("ballot card adds no client JavaScript", card.length > 0 && !card.includes('"use client"'));
 check(
-  "outbound card links to Ballotpedia's sample ballot lookup in a new tab, no referrer",
-  outside.includes('href="https://ballotpedia.org/Sample_Ballot_Lookup"') &&
-    outside.includes('target="_blank"') &&
-    outside.includes('rel="noreferrer"')
-);
-check("outbound card adds no client JavaScript", outside.length > 0 && !outside.includes('"use client"'));
-check(
-  "candidates hub renders the outbound card",
-  /<OutsideResources\s*\/>/.test(code("src/app/(public)/candidates/page.tsx"))
+  "candidates hub renders the ballot card",
+  /<MarkBallotCard\s+href=\{ballotHref\}\s*\/>/.test(code("src/app/(public)/candidates/page.tsx"))
 );
 check(
   "sitemap lists no /issues URLs",
