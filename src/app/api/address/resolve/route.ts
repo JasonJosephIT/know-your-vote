@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
-import type { CensusBlock } from "@/lib/address-lookup";
+import type { Point } from "@/lib/address-lookup";
 import { looksLikeStreetAddress } from "@/lib/address-text";
-import { blockForAddress, blockForCoordinates } from "@/lib/census-block";
+import { blockForCoordinates } from "@/lib/census-block";
 import { addressCoverage } from "@/lib/coverage";
-import { addressEntryEnabled } from "@/lib/geocode";
+import {
+  addressEntryEnabled,
+  geocodeAddress,
+  placeLocation,
+} from "@/lib/geocode";
 import {
   resolveBlock,
   resolveDistrict,
@@ -13,25 +17,23 @@ import {
 } from "@/lib/resolve";
 import type { ResolveResult } from "@/types/app";
 
-/* Census block -> district -> ballot, from one of two inputs.
+/* Address -> point (Google) -> census block (Census) -> district -> ballot,
+   from one of two inputs.
 
-   { lat, lon }: Pelias returned the coordinate alongside the suggestion, so
-   the browser posts the coordinate of the address the voter picked and the
-   Census Bureau sees only that.
+   { placeId, sessionToken }: the voter picked a Google suggestion. Place
+   Details answers its point, in the same billing session as the
+   suggestions.
 
-   { address }: no Pelias (production), so the voter typed the whole address
-   and pressed Enter. It goes to the Census Bureau's one-line geocoder, which
-   answers the block in the same call. The address is in this request's
-   body, never a URL, and nothing here is logged or stored.
+   { address }: the voter typed the address and pressed Enter without
+   picking. Google's Geocoding API answers the point, and every result is
+   checked against the voter's words first (address-lookup.ts).
 
-   Trusting a client-supplied coordinate costs nothing: the district picker
-   already lets anyone choose any district outright, so there is no privilege to
-   escalate -- only a ballot to look at. The bounds check below is a sanity
-   guard against nonsense, not a security control. */
+   Either way the address is in this request's body, never a URL, and
+   nothing here is logged or stored; the Census Bureau sees only the point. */
 const body = z.union([
   z.object({
-    lat: z.number().gte(24.3963).lte(31.0011),
-    lon: z.number().gte(-87.6349).lte(-79.9743),
+    placeId: z.string().min(1).max(300),
+    sessionToken: z.string().uuid(),
   }),
   z.object({ address: z.string().trim().min(5).max(200) }),
 ]);
@@ -43,7 +45,7 @@ const OUT_OF_COVERAGE: ResolveResult = {
   message: "We don't cover this area yet.",
 };
 
-/* 422 is "Census answered, and the answer is about what was typed": the
+/* 422 is "Google answered, and the answer is about what was typed": the
    field says what to fix. `reason` picks the words (LocationEntry). */
 function unmatched(
   reason: "none" | "needsPlace" | "placeConflict" | "checkStreet" | "ambiguous"
@@ -80,34 +82,36 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    let block: CensusBlock | null;
+    let point: Point | null;
     if ("address" in parsed.data) {
-      /* No house number or no street: Census can't place it, so it isn't
+      /* No house number or no street: no geocoder can place it, so it isn't
          sent. The field said so before submitting; this is the same rule. */
       if (!looksLikeStreetAddress(parsed.data.address)) return unmatched("none");
-      const match = await blockForAddress(parsed.data.address);
+      const match = await geocodeAddress(parsed.data.address);
       if (match?.kind === "outOfState") return NextResponse.json(OUT_OF_COVERAGE);
       if (match?.kind === "ambiguous") {
-        /* The voter's words fit more than one block. When every one of them
+        /* The voter's words fit more than one point. When every one of them
            sits in the same district and county, that is still one answer;
            otherwise ask. resolveBlock reads a cached table, not the
-           network, so this costs nothing per block. */
+           network; each point is one Census call. */
         const places = await Promise.all(
-          match.blocks.map((b) => resolveBlock(b.geoid))
+          match.points.map(async (p) => {
+            const b = await blockForCoordinates(p.lat, p.lon);
+            const placed = b ? await resolveBlock(b.geoid) : null;
+            return placed ? `${placed.district}|${placed.countyFips}` : "statewide";
+          })
         );
-        const answers = new Set(
-          places.map((p) => (p ? `${p.district}|${p.countyFips}` : "statewide"))
-        );
-        if (answers.size !== 1) return unmatched("ambiguous");
-        block = match.blocks[0];
+        if (new Set(places).size !== 1) return unmatched("ambiguous");
+        point = match.points[0];
       } else if (match && match.kind !== "match") {
         return unmatched(match.kind);
       } else {
-        block = match?.block ?? null;
+        point = match?.point ?? null;
       }
     } else {
-      block = await blockForCoordinates(parsed.data.lat, parsed.data.lon);
+      point = await placeLocation(parsed.data.placeId, parsed.data.sessionToken);
     }
+    const block = point ? await blockForCoordinates(point.lat, point.lon) : null;
     if (!block) {
       return NextResponse.json(
         {

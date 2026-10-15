@@ -1,4 +1,4 @@
-import { addressEntryEnabled, geocoderHost } from "@/lib/geocode";
+import { addressEntryEnabled } from "@/lib/geocode";
 import { ADS_TAG_ENABLED } from "@/lib/ads";
 import { remindersPaused } from "@/lib/notifications/config";
 
@@ -6,7 +6,7 @@ import { remindersPaused } from "@/lib/notifications/config";
 
    /privacy states each point in a sentence or two and /privacy/how-it-works
    explains it. Several points are deployment facts rather than constants:
-   whether the field takes an address, who completes it, and whether
+   whether the field takes an address, and whether
    analytics, the ad tag and error reports are on. If each page read them on
    its own, a new switch added to one page could leave the short statement
    and its explanation describing two different sites. So both read this,
@@ -15,13 +15,10 @@ import { remindersPaused } from "@/lib/notifications/config";
    Not a client module: the Sentry DSN is server configuration, and only its
    presence is read, never its value. */
 export type PrivacyDeployment = {
-  /* ADDRESS_LOOKUP_OFF unset (src/lib/geocode.ts). Off means no address
-     field at all, only the district picker. */
+  /* ADDRESS_LOOKUP_OFF unset and GOOGLE_MAPS_API_KEY set
+     (src/lib/geocode.ts). Off means no address field at all, only the
+     district picker. On, a typed address goes to Google. */
   addressOn: boolean;
-  /* The host that completes an address as it is typed, from PELIAS_BASE_URL,
-     or null when the typed address goes to the Census Bureau instead. Only
-     meaningful while the field takes an address, so null when it doesn't. */
-  geocoder: string | null;
   analyticsOn: boolean;
   adsOn: boolean;
   errorReportsOn: boolean;
@@ -34,7 +31,6 @@ export function privacyDeployment(): PrivacyDeployment {
   const addressOn = addressEntryEnabled();
   return {
     addressOn,
-    geocoder: addressOn ? geocoderHost() : null,
     /* The same variable the root layout uses to load the script, so the
        pages can't drift from what runs. On 2026-10-04
        NEXT_PUBLIC_PLAUSIBLE_DOMAIN was unset in production and /privacy

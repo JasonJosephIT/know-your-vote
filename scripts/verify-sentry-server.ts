@@ -75,15 +75,15 @@ const SECRETS: [string, string][] = [
   ["URL-encoded email", "maria%40example.com"],
   ["ZIP", "33101"],
   ["typed address", "2nd+Ave"],
-  ["PELIAS_API_KEY", "pelias-secret"],
+  ["GOOGLE_MAPS_API_KEY", "google-secret"],
 ];
 
 Sentry.addBreadcrumb({
   category: "fetch",
   type: "http",
   data: {
-    url: "https://api.geocode.earth/v1/autocomplete",
-    "http.query": "?text=444+SW+2nd+Ave&api_key=pelias-secret",
+    url: "https://maps.googleapis.com/maps/api/geocode/json",
+    "http.query": "?address=444+SW+2nd+Ave&key=google-secret",
     method: "GET",
     status_code: 200,
   },

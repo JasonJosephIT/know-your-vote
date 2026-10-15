@@ -1,0 +1,23 @@
+{
+  "status": "OK",
+  "results": [
+    {
+      "address_components": [
+        { "long_name": "444", "short_name": "444", "types": ["street_number"] },
+        { "long_name": "Southwest 2nd Avenue", "short_name": "SW 2nd Ave", "types": ["route"] },
+        { "long_name": "Miami", "short_name": "Miami", "types": ["locality", "political"] },
+        { "long_name": "Miami-Dade County", "short_name": "Miami-Dade County", "types": ["administrative_area_level_2", "political"] },
+        { "long_name": "Florida", "short_name": "FL", "types": ["administrative_area_level_1", "political"] },
+        { "long_name": "United States", "short_name": "US", "types": ["country", "political"] },
+        { "long_name": "33130", "short_name": "33130", "types": ["postal_code"] }
+      ],
+      "formatted_address": "444 SW 2nd Ave, Miami, FL 33130, USA",
+      "geometry": {
+        "location": { "lat": 25.769463071522, "lng": -80.197602442738 },
+        "location_type": "ROOFTOP"
+      },
+      "place_id": "ChIJ-444-sw-2nd-ave",
+      "types": ["street_address"]
+    }
+  ]
+}

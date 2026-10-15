@@ -8,11 +8,13 @@ import { geocoderConfigured, suggestAddresses } from "@/lib/geocode";
    Referer header and the browser's own history. Nothing here is logged or
    stored (spec §8).
 
-   The 5-character floor and the client's debounce are the cost control. On a
-   self-hosted Pelias that is load rather than money, but the floor earns its
-   keep either way: a two-character prefix matches half of Florida. */
+   The 5-character floor and the client's debounce are the cost control:
+   each request is a billed Places call, and a two-character prefix matches
+   half of Florida anyway. The session token ties these calls to the one
+   Details call that follows a pick, so Google bills them as one session. */
 const body = z.object({
   q: z.string().min(5).max(120),
+  sessionToken: z.string().uuid(),
 });
 
 export async function POST(request: NextRequest) {
@@ -28,10 +30,8 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  /* Address completion is optional. With no geocoder configured the field
-     still takes a typed address (Census) and the district picker still
-     works; with ADDRESS_LOOKUP_OFF set there is only the picker. Either way
-     this is a degraded feature rather than a broken page. */
+  /* With ADDRESS_LOOKUP_OFF set, or no Google key, there is only the
+     district picker: a degraded feature rather than a broken page. */
   if (!geocoderConfigured()) {
     return NextResponse.json(
       { suggestions: [], unavailable: true },
@@ -52,6 +52,9 @@ export async function POST(request: NextRequest) {
   /* suggestAddresses swallows its own failures and returns []; an empty dropdown
      is the right answer for "we could not complete that", and the voter still
      has the picker. */
-  const suggestions = await suggestAddresses(parsed.data.q);
+  const suggestions = await suggestAddresses(
+    parsed.data.q,
+    parsed.data.sessionToken
+  );
   return NextResponse.json({ suggestions });
 }

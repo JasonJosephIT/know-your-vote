@@ -293,13 +293,9 @@ console.log("\n5. AD3 where a typed address goes");
     note.slice(0, 200)
   );
   check(
-    "production's line says the text goes from our server to the Census Bureau, and only the district is kept",
-    /"What you type goes from our server to the U\.S\. Census Bureau to find your district\."/.test(note) &&
+    "the line says the text goes from our server to Google, Census gets only the point, and only the district is kept",
+    /What you type goes from our server to Google to find the address, and the U\.S\. Census Bureau gets only its map point\./.test(note) &&
       /We keep only the district, on this device\./.test(note)
-  );
-  check(
-    "with suggestions on, it says Census gets only the picked point",
-    /suggestEnabled \? "What you type goes to an address-completion service[^"]*the U\.S\. Census Bureau gets only the map point/.test(note)
   );
   check(
     "it never claims we don't see the address (our server passes it on)",
@@ -312,13 +308,13 @@ console.log("\n5. AD3 where a typed address goes");
   const privacy = flat(code("src/app/(public)/privacy/page.tsx"));
   const how = flat(code("src/app/(public)/privacy/how-it-works/page.tsx"));
   check(
-    "/privacy still says a typed address goes from our server to the Census Bureau and only the district is kept",
-    /our server sends the address you typed to the U\.S\. Census Bureau's public geocoder/.test(privacy) &&
+    "/privacy still says a typed address goes from our server to Google and only the district is kept",
+    /goes from our server to <strong>Google<\/strong>/.test(privacy) &&
       /keep the district, and forget the rest/.test(privacy)
   );
   check(
     "/privacy/how-it-works says the same in full",
-    /we send what you typed to the U\.S\. Census Bureau's public geocoder/.test(how) &&
+    /goes to Google so it can suggest matching addresses/.test(how) &&
       /the district is the only thing that is kept/.test(how)
   );
 }

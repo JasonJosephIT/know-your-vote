@@ -1,95 +1,149 @@
 import "server-only";
-import { parseSuggestions, type AddressSuggestion } from "@/lib/address-lookup";
+import {
+  parseAddressMatches,
+  parsePlaceLocation,
+  parseSuggestions,
+  type AddressMatch,
+  type AddressSuggestion,
+  type Point,
+} from "@/lib/address-lookup";
+import { addressQuery } from "@/lib/address-text";
 
-/* Pelias (https://pelias.io), reached only from the server.
+/* Google Maps Platform, reached only from the server: Places (New)
+   autocomplete and details, and the Geocoding API.
 
-   Pelias replaced Google Places, and the reason is structural rather than
-   ideological: `/v1/autocomplete` returns the coordinate *with* each
-   suggestion, so picking an address needs no second call. The Google path was
-   autocomplete -> place details -> coordinate, with a session token threaded
-   through both to make the billing work. That entire step is gone.
+   Google replaced the Census Bureau's one-line geocoder (2026-10-14), which
+   refused too many real addresses ("We couldn't match that address") for
+   small differences in how they were typed. Census still answers the census
+   block, from the point only (census-block.ts blockForCoordinates).
 
-   WHERE IT RUNS IS CONFIGURATION, NOT CODE. `PELIAS_BASE_URL` points either at
-   an instance we host -- in which case no third party ever sees a voter's
-   address -- or at Geocode Earth, the hosted Pelias run by its maintainers, in
-   which case a geocoding company does. The API is identical; only the privacy
-   claim differs, which is why the privacy page reads the configured host rather
-   than asserting one (see `geocoderHost`).
+   The key never goes to the browser: a referrer-restricted browser key is
+   readable from any page's source, and proxying also keeps the voter's IP
+   out of Google's logs. The typed text transits our server -- it lives in
+   memory for one request, is passed straight on, and is never logged or
+   stored.
 
-   Unlike the Google client this one issues a GET, because that is the only
-   shape Pelias offers. The typed fragment is therefore in the URL of the
-   OUTBOUND request. Inbound from the browser it stays a POST, so it never
-   reaches our own access log, Referer or history. */
+   Two ways in, both sending Google the text the voter typed:
+   - suggestAddresses then placeLocation: the voter picks a suggestion, and
+     Details asks for `location` and nothing else (the Essentials SKU). One
+     session token threads both, so they bill as one session.
+   - geocodeAddress: the voter pressed Enter without picking. */
 
-/* Florida's bounding box. Restriction, not bias: a Florida voter guide has no
-   use for a Georgia address. */
-const FLORIDA_RECT = {
-  "boundary.rect.min_lat": "24.3963",
-  "boundary.rect.max_lat": "31.0011",
-  "boundary.rect.min_lon": "-87.6349",
-  "boundary.rect.max_lon": "-79.9743",
+const AUTOCOMPLETE_URL = "https://places.googleapis.com/v1/places:autocomplete";
+const DETAILS_URL = "https://places.googleapis.com/v1/places";
+const GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json";
+
+const AUTOCOMPLETE_MASK =
+  "suggestions.placePrediction.placeId,suggestions.placePrediction.text,suggestions.placePrediction.structuredFormat";
+
+/* Florida's bounding box. A restriction for suggestions (a Florida voter
+   guide has no use for a Georgia address), but only a bias for geocoding,
+   so an address the voter put in another state is found there and the
+   field can say so. */
+const FLORIDA = {
+  low: { latitude: 24.3963, longitude: -87.6349 },
+  high: { latitude: 31.0011, longitude: -79.9743 },
 };
 
-function baseUrl(): string | null {
-  const raw = process.env.PELIAS_BASE_URL?.trim();
-  return raw ? raw.replace(/\/+$/, "") : null;
+function apiKey(): string | null {
+  return process.env.GOOGLE_MAPS_API_KEY?.trim() || null;
 }
 
-/* Whether the location field takes a street address at all. On by default
-   since 2026-10-12: with no Pelias, a typed address goes to the Census
-   Bureau's free one-line geocoder (census-block.ts blockForAddress), which
-   needs no account or key. ADDRESS_LOOKUP_OFF (any value) is the kill
-   switch: there is no field, only the district picker (never a ZIP; the
-   field stopped taking one 2026-10-12), both address routes refuse, and
+/* Whether the location field takes a street address at all. On by default:
+   ADDRESS_LOOKUP_OFF (any value) is the kill switch, and so is a missing
+   GOOGLE_MAPS_API_KEY, since nothing could match the address. Off, there is
+   no field, only the district picker; both address routes refuse, and
    /privacy says nothing the voter chooses leaves the site. */
 export function addressEntryEnabled(): boolean {
-  return !process.env.ADDRESS_LOOKUP_OFF?.trim();
+  return !process.env.ADDRESS_LOOKUP_OFF?.trim() && apiKey() !== null;
 }
 
-/* Whether the field suggests addresses as the voter types: Pelias is
-   configured, and address entry is on. */
+/* Whether the field suggests addresses as the voter types. The same switch
+   as the field itself: one key covers both. */
 export function geocoderConfigured(): boolean {
-  return addressEntryEnabled() && baseUrl() !== null;
+  return addressEntryEnabled();
 }
 
-/* The privacy page states who sees an address, and that is a deployment fact,
-   not a constant. Returning the host keeps the page honest across both
-   deployments without anyone remembering to edit prose. */
-export function geocoderHost(): string | null {
-  const base = baseUrl();
-  if (!base) return null;
+export async function suggestAddresses(
+  input: string,
+  sessionToken: string
+): Promise<AddressSuggestion[]> {
+  const key = apiKey();
+  if (!key) return [];
   try {
-    return new URL(base).host;
+    const res = await fetch(AUTOCOMPLETE_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": key,
+        "X-Goog-FieldMask": AUTOCOMPLETE_MASK,
+      },
+      body: JSON.stringify({
+        input,
+        sessionToken,
+        /* Addresses only. A street or city resolves to a centroid, and a
+           centroid can sit in a different district than the house does. */
+        includedPrimaryTypes: ["street_address", "premise", "subpremise"],
+        includedRegionCodes: ["us"],
+        locationRestriction: { rectangle: FLORIDA },
+        languageCode: "en",
+      }),
+      signal: AbortSignal.timeout(2500),
+    });
+    if (!res.ok) return [];
+    return parseSuggestions(await res.json());
+  } catch {
+    /* Never logged: the request body is a partial home address. */
+    return [];
+  }
+}
+
+export async function placeLocation(
+  placeId: string,
+  sessionToken: string
+): Promise<Point | null> {
+  const key = apiKey();
+  if (!key) return null;
+  const url = new URL(`${DETAILS_URL}/${encodeURIComponent(placeId)}`);
+  url.searchParams.set("sessionToken", sessionToken);
+  try {
+    const res = await fetch(url, {
+      headers: { "X-Goog-Api-Key": key, "X-Goog-FieldMask": "location" },
+      signal: AbortSignal.timeout(2500),
+    });
+    if (!res.ok) return null;
+    return parsePlaceLocation(await res.json());
   } catch {
     return null;
   }
 }
 
-export async function suggestAddresses(
-  input: string
-): Promise<AddressSuggestion[]> {
-  const base = baseUrl();
-  if (!base) return [];
-
-  const url = new URL(`${base}/v1/autocomplete`);
-  url.searchParams.set("text", input);
-  url.searchParams.set("boundary.country", "USA");
-  /* Addresses only. A street or locality result would resolve to a centroid,
-     and a centroid can sit in a different district than the house does. */
-  url.searchParams.set("layers", "address");
-  url.searchParams.set("size", "5");
-  for (const [k, v] of Object.entries(FLORIDA_RECT)) url.searchParams.set(k, v);
-  /* Geocode Earth authenticates by query parameter; a self-hosted instance
-     usually needs nothing, so an absent key is normal rather than an error. */
-  const key = process.env.PELIAS_API_KEY?.trim();
-  if (key) url.searchParams.set("api_key", key);
-
+/* null is "Google could not be asked" (timeout, transport, a refused key, a
+   shape we don't know), which is ours to report; every AddressMatch is an
+   answer about what the voter typed. Geocoding is a GET, so the address is
+   in the outbound URL: never logged, never cached. */
+export async function geocodeAddress(
+  typed: string
+): Promise<AddressMatch | null> {
+  const key = apiKey();
+  if (!key) return null;
+  const url = new URL(GEOCODE_URL);
+  url.searchParams.set("address", addressQuery(typed));
+  url.searchParams.set("components", "country:US");
+  url.searchParams.set(
+    "bounds",
+    `${FLORIDA.low.latitude},${FLORIDA.low.longitude}|${FLORIDA.high.latitude},${FLORIDA.high.longitude}`
+  );
+  url.searchParams.set("key", key);
   try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(2500) });
-    if (!res.ok) return [];
-    return parseSuggestions(await res.json());
+    const res = await fetch(url, {
+      signal: AbortSignal.timeout(5000),
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    return parseAddressMatches(await res.json(), typed);
   } catch {
-    /* Never logged: the request carries a partial home address. */
-    return [];
+    /* Never logged: the URL carries the address and the key. */
+    return null;
   }
 }

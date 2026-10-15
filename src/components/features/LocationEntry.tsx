@@ -34,14 +34,15 @@ import type { ResolveResult } from "@/types/app";
    these two districts" (75 covered ZIPs span two), and 29 of the covered
    non-split ZIPs even contain a sliver the ZIP answers wrongly without
    saying so. So a bare ZIP is refused with a field error that says what to
-   add; a ZIP inside the address is fine, and Census needs it or the city.
+   add; a ZIP inside the address is fine, and the geocoder needs it or the city.
 
-   An address gets there one of two ways (src/app/api/address/resolve):
-   - suggestEnabled (Pelias configured): it completes as you type through our
-     own proxy, and the suggestion you pick posts only its coordinate.
-   - otherwise, which is production: you type the whole address and press
-     Enter, and the text goes to our server and on to the Census Bureau's
-     geocoder. No list, so the field is a plain text box, not a combobox.
+   An address gets there one of two ways (src/app/api/address/resolve),
+   both through our server to Google:
+   - suggestEnabled: it completes as you type (Google Places), and the
+     suggestion you pick posts its place id.
+   - you type the whole address and press Enter without picking, and the
+     text goes to Google's geocoder. With suggestEnabled off the field is a
+     plain text box, not a combobox.
 
    Underneath is the district picker, which needs no third party at all.
    It is the way to go on without sharing an address, the fallback when a
@@ -60,7 +61,7 @@ import type { ResolveResult } from "@/types/app";
 let errorSeq = 0;
 
 /* What an error says (Mobbin NS1, Walmart): one short lead, which is the
-   only line announced, then, for an address Census couldn't match, a
+   only line announced, then, for an address Google couldn't match, a
    "What to check" list of one to three fixes. The way on (the district
    picker, or trying again) is a button under it, not more words. */
 type ErrorCopy = { lead: string; checks?: readonly string[] };
@@ -83,7 +84,7 @@ type Stage =
   | { kind: "outOfCoverage" };
 
 /* What one lookup sends: a picked suggestion's point, or a typed address. */
-type Lookup = { lat: number; lon: number } | { address: string };
+type Lookup = { placeId: string; sessionToken: string } | { address: string };
 
 const MIN_ADDRESS_CHARS = 5;
 const DEBOUNCE_MS = 250;
@@ -95,7 +96,7 @@ const UNMATCHED: Record<string, ErrorCopy> = {
     lead: "We couldn't match that address.",
     checks: ["The house number and street", "The city and ZIP code"],
   },
-  /* The ZIP, not "city or ZIP": Census also answers with its own spelling
+  /* The ZIP, not "city or ZIP": Google also answers with its own spelling
      of the city ("Sunny Isles" is SUNNY ISLES BEACH), and a ZIP settles it
      whatever the voter calls the place. */
   needsPlace: {
@@ -112,7 +113,7 @@ const UNMATCHED: Record<string, ErrorCopy> = {
       "The street",
     ],
   },
-  /* Census found the place, but another direction, type or house number. */
+  /* Google found the place, but another direction, type or house number. */
   checkStreet: {
     lead: "We couldn't match that address.",
     checks: [
@@ -188,7 +189,7 @@ export function LocationEntry({
   /* The field takes a street address (addressEntryEnabled()). */
   addressEnabled?: boolean;
   /* It also suggests addresses as the voter types (geocoderConfigured():
-     Pelias). Never true without addressEnabled. */
+     a Google key). Never true without addressEnabled. */
   suggestEnabled?: boolean;
   districts?: CoveredDistrict[];
   /* The district picker sits behind an "Or choose your district" toggle
@@ -229,6 +230,10 @@ export function LocationEntry({
 
   /* The suggestion request still in flight, cancelled by the next one. */
   const abort = useRef<AbortController | null>(null);
+  /* Google's session token: the suggestions typed toward one address and
+     the pick that ends them bill as one session. A new one after each pick. */
+  const session = useRef<string | null>(null);
+  const sessionToken = () => (session.current ??= crypto.randomUUID());
   /* The last lookup sent, so "Try again" sends the same one. */
   const lastPick = useRef<Lookup | null>(null);
   /* Set by "Choose your district instead" while the picker is still closed:
@@ -341,7 +346,7 @@ export function LocationEntry({
         const res = await fetch("/api/address/suggest", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ q: trimmed }),
+          body: JSON.stringify({ q: trimmed, sessionToken: sessionToken() }),
           signal: controller.signal,
         });
         if (!res.ok) {
@@ -379,25 +384,21 @@ export function LocationEntry({
     );
   }
 
-  /* A picked suggestion already carries its coordinate, so it posts the point
-     and nothing else -- the address itself never leaves the browser on that
-     call. A typed address (no suggestions) posts the text, in the body. */
+  /* A picked suggestion posts its place id; a typed address posts the text.
+     Both in the body, never a URL. */
   async function resolveAddress(pick: Lookup) {
     lastPick.current = pick;
+    if ("placeId" in pick) session.current = null;
     setStage({ kind: "loading" });
     setSuggestions([]);
     try {
       const res = await fetch("/api/address/resolve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(
-          "address" in pick
-            ? { address: pick.address }
-            : { lat: pick.lat, lon: pick.lon }
-        ),
+        body: JSON.stringify(pick),
       });
       if (res.status === 422) {
-        /* Census answered, about what was typed: the field says what to
+        /* Google answered, about what was typed: the field says what to
            check, and echoes a typed address back (on screen only, from
            this component's state: never into track(), a log or a URL). A
            picked suggestion has no typed address to echo. */
@@ -457,19 +458,11 @@ export function LocationEntry({
        first if none is highlighted. */
     const picked = visible[highlighted] ?? visible[0];
     if (picked) {
-      void resolveAddress({ lat: picked.lat, lon: picked.lon });
+      void resolveAddress({ placeId: picked.id, sessionToken: sessionToken() });
       return;
     }
-    /* With Pelias configured, an address resolves only from a picked
-       suggestion, as before: the typed text never goes on to the Census
-       Bureau, so a self-hosted Pelias still keeps every address in house
-       (deploy/pelias/README.md). */
-    if (suggestEnabled) {
-      fail("Pick your address from the list.");
-      return;
-    }
-    /* No suggestions (production): the typed address itself, if it has a
-       house number and a street. */
+    /* No suggestion to take: the typed address itself, if it has a house
+       number and a street. */
     if (!looksLikeStreetAddress(trimmed)) {
       fail("Enter your house number and street, with your city or ZIP code.");
       return;
@@ -630,10 +623,18 @@ export function LocationEntry({
                       onMouseDown={(e) => {
                         /* mousedown, not click: blur would close the list first. */
                         e.preventDefault();
-                        void resolveAddress({ lat: s.lat, lon: s.lon });
+                        void resolveAddress({ placeId: s.id, sessionToken: sessionToken() });
                       }}
                     >
                       {s.text}
+                      {/* The same street is in several cities ("444 SW
+                          2nd Ave" is in Miami, Homestead and Florida
+                          City), so the city tells them apart. */}
+                      {s.secondary && (
+                        <span className="block text-on-surface-muted">
+                          {s.secondary}
+                        </span>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -643,7 +644,7 @@ export function LocationEntry({
               {stage.kind === "loading" ? "Looking up…" : submitLabel}
             </Button>
           </div>
-          {/* A failure that isn't about what was typed (Census down, 429,
+          {/* A failure that isn't about what was typed (Google down, 429,
               the network) sits right under the button the voter just
               pressed, above the coverage note (AD1, NS1), with a retry of
               the same lookup and the picker. */}
@@ -682,20 +683,17 @@ export function LocationEntry({
           )}
           {/* Where a typed address goes and what is kept, beside the field
               it is about (Mobbin AD3, komoot). Worded from /privacy's
-              address section, and literally true on each path: production
-              sends the text from our server to the Census Bureau; with
-              suggestions, the completion service gets the text and Census
-              only the picked point. Never "we never see your address": our
-              server passes it on. */}
+              address section: our server sends the text to Google, and
+              Census gets only the point. Never "we never see your address":
+              our server passes it on. */}
           {privacyNote && (
             <p className="flex items-start gap-1 text-body-sm text-on-surface-muted">
               <span className="flex h-[1lh] shrink-0 items-center">
                 <LockGlyph />
               </span>
               <span>
-                {suggestEnabled
-                  ? "What you type goes to an address-completion service to finish the address, and the U.S. Census Bureau gets only the map point of the one you pick."
-                  : "What you type goes from our server to the U.S. Census Bureau to find your district."}{" "}
+                What you type goes from our server to Google to find the
+                address, and the U.S. Census Bureau gets only its map point.{" "}
                 We keep only the district, on this device.{" "}
                 <Link
                   href="/privacy"

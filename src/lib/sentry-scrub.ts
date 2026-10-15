@@ -10,9 +10,10 @@
    the Supabase session; the cron routes' Authorization and x-cron-secret
    headers hold CRON_SECRET; Vercel's x-vercel-ip-* headers hold a
    location; Referer holds the previous page's query. A query string can
-   hold anything a voter typed, and an outbound call to hosted Pelias
-   carries both the address and PELIAS_API_KEY in its query, which the
-   SDK's fetch breadcrumbs record. Everywhere else, keys that name a
+   hold anything a voter typed, and an outbound call to Google's geocoder
+   carries both the address and GOOGLE_MAPS_API_KEY in its query, which the
+   SDK's fetch breadcrumbs record. A Place Details URL carries the picked
+   place's id in its path, and a place id is the address. Everywhere else, keys that name a
    cookie, a credential or a query are dropped, and URL queries are cut.
 
    Address-route request bodies are dropped whole rather than pattern-matched. A
@@ -38,8 +39,12 @@ const URL_QUERY_RE = /((?:https?:\/\/|\/)[^\s?#"'<>]*)\?[^\s#"'<>]*/g;
 const DROPPED_KEY_RE =
   /email|zip|ip_address|remote_addr|cookie|authorization|cron-secret|query|forwarded-for|real-ip/i;
 
+/* places.googleapis.com/v1/places/<place id>: the id names the address. */
+const PLACE_ID_RE = /(places\.googleapis\.com\/v1\/places\/)[^\s?#"'<>]+/g;
+
 export function scrubString(value: string): string {
   return value
+    .replace(PLACE_ID_RE, "$1[place]")
     .replace(URL_QUERY_RE, "$1?[query]")
     .replace(EMAIL_RE, "[email]")
     .replace(IPV4_RE, "[ip]")

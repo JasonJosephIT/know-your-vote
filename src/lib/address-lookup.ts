@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   namesOtherState,
+  routeParts,
   sameStreet,
   streetIfPlaceNamed,
   typedZip,
@@ -14,7 +15,7 @@ import {
    it cannot do for a module that imports `server-only` or an @/-aliased value.
    src/lib/news-match.ts is arranged the same way and for the same reason.
 
-   Three response shapes and one lookup live here. The fetching lives in
+   Four response shapes and one lookup live here. The fetching lives in
    census-block.ts and geocode.ts, which are thin by design. */
 
 export interface CensusBlock {
@@ -22,13 +23,16 @@ export interface CensusBlock {
   state: string;
 }
 
+/* A Google Places suggestion. It carries no coordinate: picking one asks
+   Place Details for the point (geocode.ts placeLocation), with the same
+   session token, so the pair bills as one session. */
 export interface AddressSuggestion {
   id: string;
   text: string;
   secondary: string | null;
-  /* Pelias returns the coordinate with the suggestion, so picking one needs no
-     second call to anybody. This is the whole reason the Google two-step
-     (autocomplete -> place details) is gone. */
+}
+
+export interface Point {
   lat: number;
   lon: number;
 }
@@ -53,30 +57,20 @@ export function parseBlockResponse(json: unknown): CensusBlock | null {
   return { geoid: block.GEOID, state: block.STATE };
 }
 
-/* Pelias answers in GeoJSON: a FeatureCollection whose features carry the
-   coordinate in `geometry` and the address parts in `properties`. */
-const peliasSchema = z.object({
-  features: z
+const autocompleteSchema = z.object({
+  suggestions: z
     .array(
       z.object({
-        geometry: z
+        placePrediction: z
           .object({
-            /* GeoJSON order is [longitude, latitude]. Reversing these puts a
-               Miami address in the Indian Ocean, and the failure is silent
-               because both are plausible numbers -- so the tuple is destructured
-               by position exactly once, here. */
-            coordinates: z.tuple([z.number(), z.number()]),
-          })
-          .optional(),
-        properties: z
-          .object({
-            gid: z.string().optional(),
-            layer: z.string().optional(),
-            name: z.string().optional(),
-            label: z.string().optional(),
-            locality: z.string().optional(),
-            region_a: z.string().optional(),
-            postalcode: z.string().optional(),
+            placeId: z.string(),
+            text: z.object({ text: z.string() }).optional(),
+            structuredFormat: z
+              .object({
+                mainText: z.object({ text: z.string() }).optional(),
+                secondaryText: z.object({ text: z.string() }).optional(),
+              })
+              .optional(),
           })
           .optional(),
       })
@@ -85,125 +79,143 @@ const peliasSchema = z.object({
 });
 
 export function parseSuggestions(json: unknown): AddressSuggestion[] {
-  const parsed = peliasSchema.safeParse(json);
+  const parsed = autocompleteSchema.safeParse(json);
   if (!parsed.success) return [];
-  return parsed.data.features.flatMap((f, i) => {
-    const p = f.properties;
-    const coords = f.geometry?.coordinates;
-    if (!p || !coords) return [];
-    /* `layers=address` is already on the request, but a street or locality
-       centroid that slipped through would resolve to whichever district the
-       midpoint of the street happens to sit in -- the exact ambiguity this
-       feature exists to remove. Refuse it rather than answer confidently. */
-    if (p.layer !== "address") return [];
-    const text = p.name ?? p.label;
+  return parsed.data.suggestions.flatMap(({ placePrediction: p }) => {
+    if (!p) return [];
+    const text = p.structuredFormat?.mainText?.text ?? p.text?.text;
     if (!text) return [];
-    const [lon, lat] = coords;
-    const secondary =
-      [p.locality, p.region_a, p.postalcode].filter(Boolean).join(", ") || null;
-    return [{ id: p.gid ?? `${text}:${i}`, text, secondary, lat, lon }];
+    return [
+      {
+        id: p.placeId,
+        text,
+        secondary: p.structuredFormat?.secondaryText?.text ?? null,
+      },
+    ];
   });
 }
 
-/* A typed address -> census block, from the Census Bureau's one-line address
-   geocoder (census-block.ts blockForAddress). This is the path when no
-   Pelias is configured, which is production: the voter types the whole
-   address and presses Enter, with no suggestions.
+/* Place Details asked for `location` only. */
+const placeSchema = z.object({
+  location: z.object({ latitude: z.number(), longitude: z.number() }),
+});
 
-   Census corrects what it is given and still answers with one confident
-   match (address-text.ts has the cases), so every match is checked against
-   the voter's own words before it counts. The answers, each needing
-   different words to the voter:
-   - match: one census block, so exactly one district.
-   - ambiguous: the voter's words fit more than one block. The route
-     answers anyway when every block gives the same district.
-   - checkStreet: Census found the place but a different street: another
-     direction (SW for NW), type (Ave for St) or house number.
-   - placeConflict: the voter typed a ZIP, and no match is in that ZIP
-     and their city. Census prefers the city when the two disagree, which
-     in Broward's repeated street grids is another city's street (review
-     2026-10-12), so the answer is to check both, never the city's match.
-   - needsPlace: Census found the street, but not in the city the voter
+export function parsePlaceLocation(json: unknown): Point | null {
+  const parsed = placeSchema.safeParse(json);
+  if (!parsed.success) return null;
+  return { lat: parsed.data.location.latitude, lon: parsed.data.location.longitude };
+}
+
+/* A typed address -> a point, from Google's Geocoding API (geocode.ts
+   geocodeAddress); census-block.ts then turns the point into a block.
+
+   Google corrects what it is given and still answers with one confident
+   result (partial_match is its only hint), so every result is checked
+   against the voter's own words before it counts (address-text.ts has the
+   cases). The answers, each needing different words to the voter:
+   - match: one point.
+   - ambiguous: the voter's words fit more than one point. The route
+     answers anyway when every point gives the same district.
+   - checkStreet: Google found the place but a different street: another
+     direction (SW for NW), type (Ave for St) or house number, or no house
+     at all (a street-level result).
+   - placeConflict: the voter typed a ZIP, and no result is in that ZIP
+     and their city. In Broward's repeated street grids the city's match is
+     another city's street (review 2026-10-12), so the answer is to check
+     both, never the city's match.
+   - needsPlace: Google found the street, but not in the city the voter
      named, or they named none. "115 S Andrews Ave, FL" matches Fort
-     Lauderdale, and if the voter's own address is missing from Census's
-     address ranges, the same street in another city would be matched
-     instead and look just as sure.
-   - outOfState: Census found it, in the other state the voter named.
+     Lauderdale, and the same street in another city would look just as
+     sure.
+   - outOfState: Google found it, in the other state the voter named.
    - none: nothing matches in Florida. */
 export type AddressMatch =
-  | { kind: "match"; block: CensusBlock }
-  | { kind: "ambiguous"; blocks: CensusBlock[] }
+  | { kind: "match"; point: Point }
+  | { kind: "ambiguous"; points: Point[] }
   | { kind: "checkStreet" }
   | { kind: "placeConflict" }
   | { kind: "needsPlace" }
   | { kind: "outOfState" }
   | { kind: "none" };
 
-const component = z.string().optional().default("");
-const addressSchema = z.object({
-  result: z.object({
-    addressMatches: z
-      .array(
-        z.object({
-          matchedAddress: component,
-          addressComponents: z
-            .object({
-              preDirection: component,
-              streetName: component,
-              suffixType: component,
-              suffixDirection: component,
-              city: component,
-              zip: component,
-              state: component,
+const geocodeSchema = z.object({
+  status: z.string(),
+  results: z
+    .array(
+      z.object({
+        address_components: z
+          .array(
+            z.object({
+              long_name: z.string(),
+              short_name: z.string(),
+              types: z.array(z.string()),
             })
-            .optional(),
-          geographies: z.object({
-            "Census Blocks": z
-              .array(z.object({ GEOID: z.string(), STATE: z.string() }))
-              .default([]),
-          }),
-        })
-      )
-      .default([]),
-  }),
+          )
+          .default([]),
+        geometry: z.object({
+          location: z.object({ lat: z.number(), lng: z.number() }),
+        }),
+      })
+    )
+    .default([]),
 });
+
+/* The names a voter might give for the place: Google's city, and the
+   unincorporated community or neighbourhood it sits in ("Kendall" is
+   Miami to the Postal Service and neither to Google's locality). */
+const PLACE_TYPES = [
+  "locality",
+  "sublocality",
+  "neighborhood",
+  "administrative_area_level_3",
+];
 
 export function parseAddressMatches(
   json: unknown,
   typed: string
 ): AddressMatch | null {
-  const parsed = addressSchema.safeParse(json);
+  const parsed = geocodeSchema.safeParse(json);
   if (!parsed.success) return null;
-  const matches = parsed.data.result.addressMatches;
-  const florida = matches.flatMap((m) => {
-    const block = m.geographies["Census Blocks"][0];
-    /* The same 15-digit rule as parseBlockResponse, and Florida only. */
-    if (!block || !/^\d{15}$/.test(block.GEOID) || block.STATE !== "12") {
-      return [];
-    }
-    const c = m.addressComponents;
-    const street: MatchedStreet = {
-      matchedAddress: m.matchedAddress,
-      preDirection: c?.preDirection ?? "",
-      streetName: c?.streetName ?? "",
-      suffixType: c?.suffixType ?? "",
-      suffixDirection: c?.suffixDirection ?? "",
-      city: c?.city ?? "",
-      zip: c?.zip ?? "",
-    };
-    return [{ block: { geoid: block.GEOID, state: block.STATE }, street }];
+  /* OK and ZERO_RESULTS are answers; anything else (REQUEST_DENIED,
+     OVER_QUERY_LIMIT) is a failure of ours, not about what was typed. */
+  if (parsed.data.status === "ZERO_RESULTS") return { kind: "none" };
+  if (parsed.data.status !== "OK") return null;
+
+  const results = parsed.data.results.map((r) => {
+    const part = (type: string) =>
+      r.address_components.find((c) => c.types.includes(type));
+    const route = part("route");
+    const number = part("street_number")?.short_name ?? "";
+    const point = { lat: r.geometry.location.lat, lon: r.geometry.location.lng };
+    const parts = route
+      ? routeParts(route.short_name, route.long_name)
+      : { preDirection: "", streetName: "", suffixType: "", suffixDirection: "" };
+    const cities = PLACE_TYPES.flatMap((t) => part(t)?.long_name ?? []);
+    const streets: MatchedStreet[] = (cities.length ? cities : [""]).map((city) => ({
+      /* sameStreet reads the house number as the first word. A result with
+         no street_number is a street, not a house, so it never matches. */
+      matchedAddress: `${number || "-"} ${route?.short_name ?? ""}`,
+      ...parts,
+      city,
+      zip: part("postal_code")?.short_name ?? "",
+    }));
+    return { point, streets, state: part("administrative_area_level_1")?.short_name ?? "" };
   });
+
+  const florida = results.filter((r) => r.state === "FL");
   if (florida.length === 0) {
-    const states = matches.map((m) => m.addressComponents?.state ?? "");
-    return matches.length > 0 && namesOtherState(typed, states)
+    return results.length > 0 &&
+      namesOtherState(typed, results.map((r) => r.state))
       ? { kind: "outOfState" }
       : { kind: "none" };
   }
 
-  const placed = florida.flatMap((m) => {
-    const street = streetIfPlaceNamed(typed, m.street);
-    return street ? [{ ...m, typedStreet: street }] : [];
-  });
+  const placed = florida.flatMap((r) =>
+    r.streets.flatMap((street) => {
+      const typedStreet = streetIfPlaceNamed(typed, street);
+      return typedStreet ? [{ point: r.point, street, typedStreet }] : [];
+    })
+  );
   if (placed.length === 0) {
     return typedZip(typed) !== null
       ? { kind: "placeConflict" }
@@ -213,12 +225,12 @@ export function parseAddressMatches(
   const same = placed.filter((m) => sameStreet(m.typedStreet, m.street));
   if (same.length === 0) return { kind: "checkStreet" };
 
-  const blocks = [
-    ...new Map(same.map((m) => [m.block.geoid, m.block])).values(),
+  const points = [
+    ...new Map(same.map((m) => [`${m.point.lat},${m.point.lon}`, m.point])).values(),
   ];
-  return blocks.length === 1
-    ? { kind: "match", block: blocks[0] }
-    : { kind: "ambiguous", blocks };
+  return points.length === 1
+    ? { kind: "match", point: points[0] }
+    : { kind: "ambiguous", points };
 }
 
 /* The range lookup's own logic, so it can be tested without a database.
