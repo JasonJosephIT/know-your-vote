@@ -220,20 +220,31 @@
     }
   }
 
-  /* No page-wide texture on the body. The riso speckle tile
-     (tex-riso-speckle.webp) was tried here and taken out in review: a body
-     background lies under every heading, link and verdict that is not in a
-     bg-surface box, and shows on phones, which design.md "Site illustration
-     layer" rules out (art never under text or a control; below lg only the
-     closed list of phone art there, which has no page-wide texture). To bring it back
-     it needs a wrapper that holds no text, at lg and up, or a design.md
-     exception for a page-wide texture. */
+  /* The one page-wide texture (founder exception, 2026-10-14; design.md
+     "Site illustration layer"): at lg and up the Florida wallpaper sits under
+     a 90% veil of the page cream, so it shows at about 10% wherever the page
+     is cream and never behind a bg-surface card. The veil keeps text
+     contrast: the darkest motif blends to about #eeebe3. Phones get plain
+     cream (their art is a closed list). The riso speckle tried here before
+     was taken out because it ran at full strength under text. */
   body {
     background-color: var(--color-background);
     color: var(--color-on-surface);
     font-family: var(--font-body);
     font-size: var(--text-body);
     line-height: var(--text-body--line-height);
+  }
+  /* Tailwind's lg (64rem). */
+  @media (width >= 64rem) {
+    body {
+      background-image:
+        linear-gradient(
+          color-mix(in srgb, var(--color-background) 90%, transparent),
+          color-mix(in srgb, var(--color-background) 90%, transparent)
+        ),
+        url(/brand/site/textures/tex-florida-wallpaper-strong.webp);
+      background-size: auto, 512px;
+    }
   }
 
   /* Balanced wrapping keeps a short last line from hanging alone under a
