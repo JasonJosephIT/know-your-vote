@@ -103,9 +103,12 @@ export async function CoverageSummary({
         What this guide covers
       </h2>
       <div className="relative">
+        {/* The climber's ladder runs down behind the card (the dl is
+            relative, so it paints over him); only his head and hands show
+            above the edge, about 110px, as the peek did. */}
         <LedgeArt
-          name="peek-card-edge"
-          height={120}
+          name="climb-tiles"
+          height={300}
           edge="top"
           className="right-4 hidden lg:block"
         />
@@ -115,7 +118,7 @@ export async function CoverageSummary({
           edge="top"
           className="right-[12px] lg:hidden"
         />
-        <dl className="flex flex-col divide-y divide-border rounded-lg border border-border bg-surface">
+        <dl className="relative flex flex-col divide-y divide-border rounded-lg border border-border bg-surface">
           <Row term="Every Florida voter">
             {statewide.length > 0
               ? `${statewide.join(" and ")}, the same for everyone, wherever you live and whatever your party.`

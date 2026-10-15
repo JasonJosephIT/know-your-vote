@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Art } from "@/components/brand/Art";
 import { CONTACT_EMAIL } from "@/lib/contact";
 
 export const metadata = { title: "Terms of use — Know Your Vote" };
@@ -28,7 +29,15 @@ const linkClass = "text-primary underline underline-offset-2";
 
 export default function TermsPage() {
   return (
-    <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
+    <main className="relative mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
+      {/* Decorative (design.md site illustration layer): the skater rolls
+          in the right gutter, about 122px wide in a gutter of about 360px
+          at 1400, so it shows from 1400px only and never touches text. */}
+      <Art
+        name="person-skater"
+        height={160}
+        className="absolute top-36 left-full ml-12 hidden min-[1400px]:block"
+      />
       <h1 className="text-h1">Terms of use</h1>
       <p className="text-body-lg text-on-surface-muted">
         Know Your Vote is a free voter guide for Florida. These are the ground

@@ -8,10 +8,7 @@ export default function NotFound() {
           own row above the heading, under no text: 220px from lg up, 120px
           on a phone (one of the inner-page spots on design.md's closed list
           of phone art, 2026-10-11), so the heading stays the largest text
-          on the screen and the link stays in the first screen at 375x812.
-          No page-wide wallpaper here: a background lies under the heading
-          and the link, which the illustration rules forbid (see globals.css
-          on body). */}
+          on the screen and the link stays in the first screen at 375x812. */}
       <Art name="error-404-funk" height={120} className="lg:hidden" />
       <Art name="error-404-funk" height={220} className="hidden lg:block" />
       <h1 className="text-h1">We couldn&rsquo;t find that page</h1>

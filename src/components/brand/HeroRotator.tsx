@@ -43,7 +43,7 @@ import s from "./HeroRotator.module.css";
 
    WCAG 2.2.2: the motion starts by itself and never ends, so one native
    button pauses all of it, and a pause holds for the rest of the visit.
-   The button's label changes
+   The button shows only a pause or play icon; its hidden label changes
    (Pause / Play animation) and it carries no aria-pressed, so a screen
    reader announces one state, not two. The art layer is aria-hidden and
    holds nothing focusable. */
@@ -281,16 +281,18 @@ export function HeroRotator({
             </div>
           );
         })}
-        {/* Edge fades in the page colour: walkers emerge through the text
+        {/* Edge fades in the page colour at the wallpaper veil's 90%, so the
+            wallpaper reads through them: walkers emerge through the text
             side and leave through the right, never with a hard clip. */}
-        <div className="absolute inset-y-0 left-0 w-[18%] bg-linear-to-r from-background to-transparent" />
-        <div className="absolute inset-y-0 right-0 w-[14%] bg-linear-to-l from-background to-transparent" />
+        <div className="absolute inset-y-0 left-0 w-[18%] bg-linear-to-r from-background/90 to-transparent" />
+        <div className="absolute inset-y-0 right-0 w-[14%] bg-linear-to-l from-background/90 to-transparent" />
       </div>
       {showButton && (
         <button
           type="button"
           onClick={toggle}
-          className={`${s.chip} absolute top-[8px] right-[8px] inline-flex h-[32px] items-center gap-1.5 rounded-full border border-border bg-surface/90 px-3 text-caption text-on-surface-muted transition-colors hover:text-on-surface`}
+          title={playing ? "Pause animation" : "Play animation"}
+          className={`${s.chip} absolute top-[8px] right-[8px] inline-flex size-[32px] items-center justify-center rounded-full text-on-surface-muted/90 transition-colors hover:text-on-surface`}
         >
           <svg
             aria-hidden="true"
@@ -308,8 +310,9 @@ export function HeroRotator({
               <path d="M2 1 9 5 2 9Z" />
             )}
           </svg>
-          {playing ? "Pause" : "Play"}{" "}
-          <span className="sr-only">animation</span>
+          <span className="sr-only">
+            {playing ? "Pause animation" : "Play animation"}
+          </span>
         </button>
       )}
     </div>
