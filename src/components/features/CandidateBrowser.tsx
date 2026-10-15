@@ -5,6 +5,8 @@ import { PartyChip } from "@/components/ui/PartyChip";
 import { PolicyAreaChip } from "@/components/ui/PolicyAreaChip";
 import { SaveToggle } from "@/components/ui/SaveToggle";
 import { CampaignWebsite } from "@/components/features/CampaignWebsite";
+import { CandidatePhoto } from "@/components/features/CandidatePhoto";
+import { racePhotosFor } from "@/lib/headshots";
 import { browseCandidates, type DecidedSeat } from "@/lib/directory";
 import { policyAreaLabel } from "@/lib/policy-areas";
 import { COVERED_COUNTIES } from "@/lib/counties";
@@ -44,6 +46,16 @@ export async function CandidateBrowser({
   area?: string;
 }) {
   const results = await browseCandidates({ q, countyFips, area });
+  /* Per race, from the race's whole ballot (candidate_ids), not the cards a
+     search left showing: a filter must not turn a race's faces on or off.
+     Same all-or-none rule as the race and candidate pages (headshots.ts). */
+  const photos = await Promise.all(
+    results.races.map(({ race }) =>
+      racePhotosFor(
+        (race.candidate_ids ?? []).map((id) => ({ candidate_id: id }))
+      )
+    )
+  );
   /* From the taxonomy, not from the options list: an area the current search
      empties still has a name, and the copy below has to use it. */
   const areaLabel = results.area ? policyAreaLabel(results.area) : null;
@@ -138,7 +150,7 @@ export async function CandidateBrowser({
             : "No candidates match that search. Try a shorter name, an office like “Governor”, or clear the search to see everyone."}
         </p>
       ) : (
-        results.races.map(({ race, candidates }) => (
+        results.races.map(({ race, candidates }, i) => (
           <section key={race.race_id} className="flex flex-col gap-3">
             <h2 className="text-h3">
               {/* The district sits inside the link, so the link's name is
@@ -167,16 +179,19 @@ export async function CandidateBrowser({
               {candidates.map((c) => (
                 <li key={c.candidate_id}>
                   <Card className="flex h-full flex-col gap-2 p-4">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-label">
-                        <Link
-                          href={`/candidates/${c.candidate_id}`}
-                          className="text-primary hover:text-primary-hover hover:underline"
-                        >
-                          {c.legal_name}
-                        </Link>
-                      </h3>
-                      <PartyChip party={c.party} />
+                    <div className="flex items-center gap-3">
+                      <CandidatePhoto photos={photos[i]} candidateId={c.candidate_id} />
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="text-label">
+                          <Link
+                            href={`/candidates/${c.candidate_id}`}
+                            className="text-primary hover:text-primary-hover hover:underline"
+                          >
+                            {c.legal_name}
+                          </Link>
+                        </h3>
+                        <PartyChip party={c.party} />
+                      </div>
                     </div>
                     {/* A seat settled before November. Same card as everyone
                         else's, plus the one fact that changes what a voter
