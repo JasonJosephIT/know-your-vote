@@ -1,8 +1,15 @@
 # Queue review 2026-10-15: drafted verdicts for the whole pending queue (615 rows)
 
-Working file for `queue-review-2026-10-15.console.js`. The session drafts.
-**The founder makes every approve and reject in /admin.** Nothing here has been
-written to the database. Method, rules and safety are the 10-09 ones
+Working file for `queue-review-2026-10-15.console.js`.
+
+**Applied 2026-10-15 by script, not /admin.** The founder could not sign in
+(Supabase's built-in mailer refuses non-team addresses) and decided in the
+session to publish "via script by founder again", as on 10-06.
+`scripts/apply-queue-review-2026-10-15.ts` mirrors the decision route step by
+step (schema re-check, neutrality lint, source resolution, insert, guarded
+finalize, audit row). Result: 318 approved, 291 rejected, 0 fail-closed; audit
+actor `founder via Claude Code (2026-10-15)`; `news_item` 97 → 415. The 6 rows
+in §3 are still pending. Method, rules and safety are the 10-09 ones
 (`handoff-backfill-review-2026-10-09.md` §3–4, founder answers in
 `backfill-review-2026-10-09.md` §2); this file only records what is new.
 
