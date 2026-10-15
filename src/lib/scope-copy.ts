@@ -20,8 +20,11 @@ import type { DecidedSeat } from "@/lib/unopposed";
     sentence. Judges come first because they are on every Florida ballot (the
     Supreme Court retention question); the rest depend on where you live.
     Keep in step with CoverageSummary's "Not covered" row. */
-export const NOT_COVERED_SENTENCE =
-  "Your ballot also has contests this guide doesn't cover: judges, and, depending on where you live, Florida House and Senate seats, local ballot questions, and city and special-district races. Your county's sample ballot lists every one.";
+export const NOT_COVERED_CONTESTS =
+  "Your ballot also has contests this guide doesn't cover: judges, and, depending on where you live, Florida House and Senate seats, local ballot questions, and city and special-district races.";
+/* Mark your ballot prints NOT_COVERED_CONTESTS alone (founder 2026-10-14);
+   everywhere else says where the full list is. */
+export const NOT_COVERED_SENTENCE = `${NOT_COVERED_CONTESTS} Your county's sample ballot lists every one.`;
 
 /** Why a decided seat is not on the November ballot, as the short tag a
     race list prints after the holder's name. Same words as CountyRaces. */

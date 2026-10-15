@@ -394,8 +394,8 @@ check(
     page.indexOf("<HomeNews") < page.indexOf("<CoverageSummary")
   );
   check(
-    "the key dates and the sample-ballot block are one group, 12 px apart",
-    /<div className="flex flex-col gap-3[^"]*">\s*<DeadlineBanner[\s\S]*?<VotingResources countyFips=\{saved\?\.countyFips\} \/>\s*<\/div>\s*<BallotAtAGlance(?: sections=\{homeSections\(scope\)\})? \/>/.test(
+    "the key dates and the sample-ballot block (with the Mark your ballot card) are one group, 12 px apart",
+    /<div className="flex flex-col gap-3[^"]*">\s*<DeadlineBanner[\s\S]*?<VotingResources countyFips=\{saved\?\.countyFips\} \/>\s*(?:\{\/\*[\s\S]*?\*\/\}\s*)?<MarkBallotCard \/>\s*<\/div>\s*<BallotAtAGlance(?: sections=\{homeSections\(scope\)\})? \/>/.test(
       page
     )
   );

@@ -75,8 +75,8 @@ check('the section nav lists "/" first', firstHref === "/", String(firstHref));
   );
 }
 check(
-  "amendment pages light up the Ballot section",
-  /href: "\/",\s*label: "Ballot",\s*alsoMatch: \["\/measures"\]/.test(nav)
+  "amendment pages and /ballot light up the Ballot section",
+  /href: "\/",\s*label: "Ballot",\s*alsoMatch: \["\/measures", "\/ballot"\]/.test(nav)
 );
 
 /* ---- 3. the "Other issues" intro ----------------------------------------- */

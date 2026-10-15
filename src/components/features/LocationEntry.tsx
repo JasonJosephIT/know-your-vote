@@ -159,6 +159,16 @@ function useHydrated(): boolean {
    links stand in. */
 const NO_SCRIPT_CSS = "#location-form,#district-picker-route{display:none}";
 
+/* Where a placed voter goes: Your races by default, or back to Mark your
+   ballot when the field sits on /ballot (to="ballot", founder 2026-10-14).
+   The same district and county either way, never a ZIP or an address. */
+type Destination = "races" | "ballot";
+const BALLOT_STATEWIDE_HREF = "/ballot?scope=statewide";
+const countyHref = (to: Destination, fips: string) =>
+  to === "ballot"
+    ? `/ballot?county=${fips}`
+    : `/candidates?view=races&county=${fips}`;
+
 /* The field shows only while addressEnabled (addressEntryEnabled()): with
    address lookup switched off (ADDRESS_LOOKUP_OFF) there is no field, and
    the district picker shows open. It never falls back to a ZIP. */
@@ -171,6 +181,7 @@ export function LocationEntry({
   pickerCollapsed = false,
   privacyNote = true,
   coverageNote = true,
+  to = "races",
 }: {
   submitLabel?: string;
   placeholder?: string;
@@ -188,6 +199,7 @@ export function LocationEntry({
   /* The line under the field saying where a typed address goes and what is
      kept. Home passes false: its House step already says so. */
   privacyNote?: boolean;
+  to?: Destination;
   /* The "Full statewide coverage" note under the field. The home page's
      House step says the same in its own paragraph and passes false. */
   coverageNote?: boolean;
@@ -360,7 +372,11 @@ export function LocationEntry({
       district: choice.district,
       county: choice.countyFips,
     });
-    router.push(`/candidates?${q}`);
+    router.push(
+      to === "ballot"
+        ? `/ballot?district=${choice.district}&county=${choice.countyFips}`
+        : `/candidates?${q}`
+    );
   }
 
   /* A picked suggestion already carries its coordinate, so it posts the point
@@ -411,7 +427,9 @@ export function LocationEntry({
          the statewide ballot is still theirs. Nothing is written to the
          district cookie -- there is no district to remember. */
       if (data.coverage === "statewide") {
-        router.push(STATEWIDE_BALLOT_HREF);
+        router.push(
+          to === "ballot" ? BALLOT_STATEWIDE_HREF : STATEWIDE_BALLOT_HREF
+        );
         return;
       }
       if (!data.district || !data.countyFips) {
@@ -705,6 +723,7 @@ export function LocationEntry({
             </p>
           ) : (
             <DistrictLinks
+              to={to}
               districts={districts}
               lead={
                 addressEnabled
@@ -739,7 +758,7 @@ export function LocationEntry({
             only.
           </p>
           <Link
-            href={STATEWIDE_BALLOT_HREF}
+            href={to === "ballot" ? BALLOT_STATEWIDE_HREF : STATEWIDE_BALLOT_HREF}
             className="w-fit text-body-sm text-primary underline underline-offset-2"
           >
             See the statewide ballot every Florida voter shares
@@ -749,7 +768,7 @@ export function LocationEntry({
           </p>
           <CountyPicker
             onPick={(county) =>
-              router.push(`/candidates?view=races&county=${county.fips}`)
+              router.push(countyHref(to, county.fips))
             }
           />
         </div>
@@ -757,6 +776,7 @@ export function LocationEntry({
 
       {linksOnly && stage.kind !== "outOfCoverage" && (
         <DistrictLinks
+          to={to}
           districts={districts}
           lead={
             addressEnabled
@@ -895,26 +915,31 @@ export function LocationEntry({
 function DistrictLinks({
   districts,
   lead,
+  to,
 }: {
   districts: CoveredDistrict[];
   lead: string;
+  to: Destination;
 }) {
   const links =
     districts.length > 0
       ? districts.map((d) => ({
           key: `${d.district}|${d.countyFips}`,
-          href: `/candidates?view=races&district=${d.district}&county=${d.countyFips}`,
+          href:
+            to === "ballot"
+              ? `/ballot?district=${d.district}&county=${d.countyFips}`
+              : `/candidates?view=races&district=${d.district}&county=${d.countyFips}`,
           label: `${d.district} · ${d.countyName}`,
         }))
       : [
           ...COVERED_COUNTIES.map((c) => ({
             key: c.fips,
-            href: `/candidates?view=races&county=${c.fips}`,
+            href: countyHref(to, c.fips),
             label: `${c.name} County`,
           })),
           {
             key: "statewide",
-            href: STATEWIDE_BALLOT_HREF,
+            href: to === "ballot" ? BALLOT_STATEWIDE_HREF : STATEWIDE_BALLOT_HREF,
             label: "The statewide ballot",
           },
         ];

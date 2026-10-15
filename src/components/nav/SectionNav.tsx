@@ -10,12 +10,13 @@ const items = [
      "Know Your Vote" wordmark is hidden and nothing else linked to "/", so a
      voter who opened a shared race or amendment link on a phone had no way
      to the statewide ballot or the House-race step. Ballot amendment pages
-     belong here, since the landing page is where they are listed. isActive
+     belong here, since the landing page is where they are listed, and so
+     does /ballot, the ballot to mark and print. isActive
      treats "/" as an exact match: startsWith("//") never matches. */
   {
     href: "/",
     label: "Ballot",
-    alsoMatch: ["/measures"],
+    alsoMatch: ["/measures", "/ballot"],
     icon: (
       <svg
         viewBox="0 0 20 20"

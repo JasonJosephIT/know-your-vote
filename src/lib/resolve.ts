@@ -618,6 +618,35 @@ export async function resolveDistrict(
   };
 }
 
+const DISTRICT_RE = /^FL-\d{1,2}$/;
+
+/* The ballot for whatever location a page was given: the URL's, or the saved
+   district's. null with none. Your races and Mark your ballot both place the
+   voter through this, so the two views can never disagree about whose ballot
+   it is. `scope: "statewide"` is a Florida voter we cannot place in a
+   district yet (the address path's answer outside the covered counties). */
+export async function resolveLocation({
+  zip,
+  district,
+  county,
+  scope,
+}: {
+  zip?: string;
+  district?: string;
+  county?: string;
+  scope?: string;
+}): Promise<ResolveResultWithCounty | null> {
+  if (zip && ZIP_RE.test(zip)) return resolveZip(zip, district);
+  /* An address result, a confirmed ZIP, or the saved district: the district
+     is already known, so there is nothing to look up but the races. */
+  if (district && DISTRICT_RE.test(district) && county) {
+    return resolveDistrict(county, district);
+  }
+  if (county) return resolveCounty(county);
+  if (scope === "statewide") return resolveStatewideOnly();
+  return null;
+}
+
 export interface CoveredDistrict {
   countyFips: string;
   countyName: string;

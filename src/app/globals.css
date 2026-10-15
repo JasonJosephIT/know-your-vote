@@ -295,6 +295,18 @@
   --ease-kyv: cubic-bezier(0.2, 0, 0, 1);
 }
 
+/* Printing (Mark your ballot, 2026-10-14): the page's content prints, and
+   the bars, prompts and footer around it don't. The body's padding only
+   clears those fixed bars. */
+@media print {
+  body {
+    padding: 0 !important;
+  }
+  body > :not(#content) {
+    display: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,

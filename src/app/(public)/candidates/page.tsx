@@ -2,7 +2,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { DISTRICT_COOKIE, parseDistrictCookie } from "@/lib/district-cookie";
 import { CandidateBrowser } from "@/components/features/CandidateBrowser";
-import { OutsideResources } from "@/components/features/OutsideResources";
+import { MarkBallotCard } from "@/components/features/MarkBallotCard";
 import { RaceScopePicker } from "@/components/features/RaceScopePicker";
 import { ScopedRaces, ScopeNote } from "@/components/features/ScopedRaces";
 import { SharedBallot } from "@/components/features/SharedBallot";
@@ -91,6 +91,12 @@ export default async function CandidatesPage({
     return tab === "browse" ? "/candidates" : `/candidates?view=${tab}`;
   };
 
+  const ballotParams = new URLSearchParams();
+  if (district && county) ballotParams.set("district", district);
+  if (county) ballotParams.set("county", county);
+  if (scope && !county) ballotParams.set("scope", scope);
+  const ballotHref = `/ballot${ballotParams.size ? `?${ballotParams}` : ""}`;
+
   /* "Show races for" (RaceScopePicker, founder 2026-10-13), the same
      control as the home page's, on the races view only. Its form carries
      view=races and the district and county already in the URL, so "All
@@ -156,7 +162,10 @@ export default async function CandidatesPage({
         })}
       </nav>
 
-      <OutsideResources />
+      {/* Where an entered address lands, so the way to mark this ballot is
+          the first thing after the tabs. It carries the location the page
+          has, never a ZIP. */}
+      <MarkBallotCard href={ballotHref} />
 
       {view === "browse" && (
         <CandidateBrowser q={sp.q} countyFips={sp.county} area={sp.area} />

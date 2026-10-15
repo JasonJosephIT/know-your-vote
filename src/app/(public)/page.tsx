@@ -16,6 +16,7 @@ import { HomeNews } from "@/components/features/HomeNews";
 import { HomeMasthead } from "@/components/features/HomeMasthead";
 import { BallotAtAGlance } from "@/components/features/BallotAtAGlance";
 import { VotingResources } from "@/components/features/VotingResources";
+import { MarkBallotCard } from "@/components/features/MarkBallotCard";
 import { RaceScopePicker } from "@/components/features/RaceScopePicker";
 import { ScopedRaces, ScopeNote } from "@/components/features/ScopedRaces";
 import { Art } from "@/components/brand/Art";
@@ -249,6 +250,9 @@ export default async function Home({
               countyFips={saved?.countyFips}
             />
             <VotingResources countyFips={saved?.countyFips} />
+            {/* Ours, under the county's official ones (founder
+                2026-10-14). */}
+            <MarkBallotCard />
           </div>
           <BallotAtAGlance sections={homeSections(scope)} />
           <RaceScopePicker

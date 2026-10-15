@@ -76,6 +76,19 @@ export type StatewideRace = ResolveRaceSummary & {
   candidates: StatewideRaceCandidate[];
 };
 
+type RaceRow = {
+  race_id: string;
+  office: string;
+  level: string;
+  district: string | null;
+  key_dates: unknown;
+  candidate_ids: string[] | null;
+  race_publication: unknown;
+};
+
+const RACE_COLUMNS =
+  "race_id, office, level, district, key_dates, candidate_ids, race_publication(status)";
+
 async function fetchStatewideRaces(): Promise<StatewideRace[]> {
   let supabase;
   try {
@@ -91,9 +104,7 @@ async function fetchStatewideRaces(): Promise<StatewideRace[]> {
   }
   const { data, error } = await supabase
     .from("race")
-    .select(
-      "race_id, office, level, district, key_dates, candidate_ids, race_publication(status)"
-    )
+    .select(RACE_COLUMNS)
     .eq("election", ACTIVE_ELECTION_KIND)
     .is("district", null)
     /* race_id only to make the read deterministic; the rows are put in
@@ -109,10 +120,18 @@ async function fetchStatewideRaces(): Promise<StatewideRace[]> {
      at all can only be an outage. */
   if (error) return [];
 
-  /* One query for every race's candidates rather than one per race. A
-     failure here costs the rows their names, not the ballot: the races
-     still render, as they did before this field existed. */
-  const ids = [...new Set((data ?? []).flatMap((r) => r.candidate_ids ?? []))];
+  return orderRaces(await withCandidates(supabase, (data ?? []) as RaceRow[]));
+}
+
+/* Each race with who is on its ballot, in Florida ballot order, rows kept in
+   the order given. One query for every race's candidates rather than one per
+   race. A failure here costs the rows their names, not the ballot: the races
+   still render, as they did before this field existed. */
+async function withCandidates(
+  supabase: Awaited<ReturnType<typeof createAnonServerClient>>,
+  rows: RaceRow[]
+): Promise<StatewideRace[]> {
+  const ids = [...new Set(rows.flatMap((r) => r.candidate_ids ?? []))];
   const { data: people } =
     ids.length > 0
       ? await supabase
@@ -127,7 +146,7 @@ async function fetchStatewideRaces(): Promise<StatewideRace[]> {
     )
   );
 
-  return orderRaces((data ?? []).map((r) => {
+  return rows.map((r) => {
     const status = raceStatusOf(r.race_publication);
     const ballotOrder: string[] = r.candidate_ids ?? [];
     const candidates = orderCandidates(
@@ -150,7 +169,7 @@ async function fetchStatewideRaces(): Promise<StatewideRace[]> {
         (r.key_dates as Record<string, string> | null)?.general_date ?? null,
       candidates,
     };
-  }));
+  });
 }
 
 export function getStatewideRaces() {
@@ -160,6 +179,39 @@ export function getStatewideRaces() {
        old entries to age out, although an old entry would still be read
        safely — a missing status is `listed`. v3: `candidates`. v4: office order. */
     ["statewide-races", "v4", ACTIVE_ELECTION_KIND],
+    { revalidate: 3600, tags: ["races"] }
+  )();
+}
+
+/* The same rows for any races, by id, in the order given: "Mark your
+   ballot" needs the candidates of the voter's House and county races as
+   well as the statewide ones. [] when the read fails, like the statewide
+   read; the page then says it couldn't load the races. */
+async function fetchRacesById(raceIds: string[]): Promise<StatewideRace[]> {
+  if (raceIds.length === 0) return [];
+  let supabase;
+  try {
+    supabase = await createAnonServerClient();
+  } catch {
+    return [];
+  }
+  const { data, error } = await supabase
+    .from("race")
+    .select(RACE_COLUMNS)
+    .eq("election", ACTIVE_ELECTION_KIND)
+    .in("race_id", raceIds);
+  if (error) return [];
+  const byId = new Map(((data ?? []) as RaceRow[]).map((r) => [r.race_id, r]));
+  return withCandidates(
+    supabase,
+    raceIds.flatMap((id) => byId.get(id) ?? [])
+  );
+}
+
+export function getRacesById(raceIds: string[]) {
+  return unstable_cache(
+    () => fetchRacesById(raceIds),
+    ["races-by-id", "v1", ACTIVE_ELECTION_KIND, ...raceIds],
     { revalidate: 3600, tags: ["races"] }
   )();
 }

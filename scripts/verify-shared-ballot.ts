@@ -172,11 +172,12 @@ assert(
   /disabled=\{!hydrated \|\| stage\.kind === "loading"\}/.test(locationCode)
 );
 assert(
-  "without JavaScript, noscript links lead to every district's races",
+  "without JavaScript, noscript links lead to every district's races (on /ballot, its ballot)",
   /<noscript>[\s\S]*<DistrictLinks[\s\S]*<\/noscript>/.test(locationCode) &&
-    /href: `\/candidates\?view=races&district=\$\{d\.district\}&county=\$\{d\.countyFips\}`/.test(
+    /`\/candidates\?view=races&district=\$\{d\.district\}&county=\$\{d\.countyFips\}`/.test(
       locationCode
-    )
+    ) &&
+    /`\/ballot\?district=\$\{d\.district\}&county=\$\{d\.countyFips\}`/.test(locationCode)
 );
 /* The picker's block (#district-picker-route) holds its divider, toggle and
    form, so hiding the block hides all three: an open picker (Mobbin AD7) is
@@ -303,6 +304,7 @@ assert(
     `${ROOT}/src/components/features/YourRaces.tsx`,
     "utf8"
   );
+  const resolveSrc = readFileSync(`${ROOT}/src/lib/resolve.ts`, "utf8");
   const nextConfig = readFileSync(`${ROOT}/next.config.ts`, "utf8");
   const apiResolve = `${ROOT}/src/app/api/resolve/route.ts`;
   assert(
@@ -313,7 +315,9 @@ assert(
   );
   assert(
     "old ?zip= links: YourRaces still resolves a ZIP, and asks on a split one",
-    /if \(zip && ZIP_RE\.test\(zip\)\) \{\s*result = await resolveZip\(zip, district\);/.test(yourRaces) &&
+    /* The branch moved to resolveLocation, which Mark your ballot shares. */
+    /resolveLocation\(\{ zip, district, county, scope \}\)/.test(yourRaces) &&
+      /if \(zip && ZIP_RE\.test\(zip\)\) return resolveZip\(zip, district\);/.test(resolveSrc) &&
       /if \(result\.needsCountyConfirm\) \{/.test(yourRaces)
   );
   assert(

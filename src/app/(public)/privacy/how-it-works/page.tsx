@@ -78,6 +78,11 @@ export default function PrivacyHowItWorksPage() {
             button.
           </li>
           <li>
+            <code>kyv.picks</code>: the choices you mark on &ldquo;Mark your
+            ballot&rdquo;, one per race or ballot question, by their public
+            IDs. Only this device reads them; they are never sent to us.
+          </li>
+          <li>
             <code>kyv.install-dismissed</code>: whether you closed the &ldquo;get
             the app&rdquo; prompt.
           </li>

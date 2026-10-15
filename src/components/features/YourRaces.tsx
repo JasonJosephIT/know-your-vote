@@ -15,14 +15,7 @@ import {
 } from "@/lib/coverage";
 import { supervisorLink } from "@/lib/supervisors";
 import { coveredCountyNames } from "@/lib/counties";
-import {
-  getCoveredDistricts,
-  resolveCounty,
-  resolveDistrict,
-  resolveStatewideOnly,
-  resolveZip,
-  ZIP_RE,
-} from "@/lib/resolve";
+import { getCoveredDistricts, resolveLocation, ZIP_RE } from "@/lib/resolve";
 import { raceStatusLabel } from "@/lib/races";
 import { addressEntryEnabled, geocoderConfigured } from "@/lib/geocode";
 import {
@@ -35,13 +28,8 @@ import {
   locationFieldCopy,
   NOT_COVERED_SENTENCE,
 } from "@/lib/scope-copy";
-import type {
-  DistrictRaceSummary,
-  ResolveResultWithCounty,
-} from "@/lib/resolve";
+import type { DistrictRaceSummary } from "@/lib/resolve";
 import type { DecidedSeat } from "@/lib/unopposed";
-
-const DISTRICT_RE = /^FL-\d{1,2}$/;
 
 /* A district-list race that will not be printed, with the person who takes
    the seat. Both fields are set together by resolve.ts (decidedSeatOf), so
@@ -93,18 +81,7 @@ export async function YourRaces({
 }) {
   const districts = await getCoveredDistricts();
 
-  let result: ResolveResultWithCounty | null = null;
-  if (zip && ZIP_RE.test(zip)) {
-    result = await resolveZip(zip, district);
-  } else if (district && DISTRICT_RE.test(district) && county) {
-    /* An address result, a confirmed ZIP, or the saved district — the district
-       is already known, so there is nothing to look up but the races. */
-    result = await resolveDistrict(county, district);
-  } else if (county) {
-    result = await resolveCounty(county);
-  } else if (scope === "statewide") {
-    result = await resolveStatewideOnly();
-  }
+  const result = await resolveLocation({ zip, district, county, scope });
 
   if (!result) {
     return (
