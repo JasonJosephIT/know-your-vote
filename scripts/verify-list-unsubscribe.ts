@@ -242,9 +242,16 @@ function files(dir: string): string[] {
     return statSync(full).isDirectory() ? files(full) : /\.tsx?$/.test(name) ? [full] : [];
   });
 }
+/* Files that make a Resend client for contacts only and never send: the
+   /civics signup adds a contact to a segment. Each must have no .send(. */
+const CONTACTS_ONLY = ["src/app/api/updates/route.ts"];
+for (const f of CONTACTS_ONLY) {
+  check(`${f} sends no email`, !/\.send\(/.test(readFileSync(path.join(root, f), "utf8")));
+}
 const senders = files(path.join(root, "src"))
   .filter((f) => /\.(emails|batch)\.send\(|new Resend\(/.test(readFileSync(f, "utf8")))
   .map((f) => path.relative(root, f))
+  .filter((f) => !CONTACTS_ONLY.includes(f))
   .sort();
 check(
   "no other file under src/ sends email",
