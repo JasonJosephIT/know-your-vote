@@ -489,3 +489,63 @@ Notes:
 
 **Gate picture after 0060, AM1:** support 4, oppose 5, neutral 12; 5 ≤ 2 × 4, passes. Status `published` once applied.
 **Gate picture, AM3:** unchanged at support 2, oppose 4, neutral 9; 4 ≤ 2 × 2, passes at the boundary.
+
+## Weekly re-check, 2026-10-19
+
+Covers material not previously catalogued in this document. Every URL below was
+opened with `curl -sL -A 'Mozilla/5.0 ...'` and its body text read directly
+(not just a WebFetch summary); two were also cross-checked with WebFetch. One
+URL could not be opened at all and is excluded. This pass found three county-
+or chapter-level organisations' own pages taking a position on AM1 and/or AM2
+— the first of either kind found below the state level. All three pages also
+address AM3 and/or other 2026 measures; only the AM1/AM2 material is reported
+here, per scope. Note on dating: the Palm Beach County Democratic Party page
+is dated 2026-10-07, before the last entries filed in this document
+(2026-10-12 and 2026-10-14) — it was missed by earlier passes, which did not
+search county party or county labor-council sites; it is reported now as a
+pipeline-gap fix, not because it is newly published.
+
+| # | URL | Loads | Publisher / author | Date | Format | kind | stance | Gives reasons? | Evidence |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | https://pbcdemocraticparty.org/no-on-1-2-3-yes-on-our-schools-parks-and-libraries/ | Yes (curl HTTP 200, body text confirmed; `article:published_time` metadata read directly) | Palm Beach County Democratic Party (own site) | 2026-10-07 | article | argument | oppose | Yes | "it writes budget policy into the Constitution, where it's hard to fix" (AM1) |
+| 2 | https://pbcdemocraticparty.org/no-on-1-2-3-yes-on-our-schools-parks-and-libraries/ | Yes (same page as row 1) | Palm Beach County Democratic Party (own site) | 2026-10-07 | article | argument | oppose | Yes | "paid for by local governments, which means cuts to local services" (AM2) |
+| 3 | https://hillsboroughcountydemocrats.org/vote | Yes (curl HTTP 200, body text confirmed) | Hillsborough County Democratic Party (own site) | undated (live page footer reads "©2025"; content references the Nov. 3, 2026 ballot and tax years beginning 2027) | article | argument | oppose | Yes | "It's written to help the biggest operators most." (AM2) |
+| 4 | https://unionhall.aflcio.org/browardcounty/2026-broward-afl-cio-endorsements | Yes (curl HTTP 200, body text confirmed) | Broward County AFL-CIO (own site) | undated (footer "© 2026") | article | argument | oppose | No — bare listing | "Ammendment 1 ... OPPOSE" [sic] — no rationale given on the page |
+| 5 | https://unionhall.aflcio.org/browardcounty/2026-broward-afl-cio-endorsements | Yes (same page as row 4) | Broward County AFL-CIO (own site) | undated (footer "© 2026") | article | argument | oppose | No — bare listing | "Ammendment 2 ... OPPOSE" [sic] — no rationale given on the page |
+
+Notes:
+- Row 3 (Hillsborough County Democratic Party): the same page takes "No
+  Recommendation" on AM1 and gives a neutral summary of its provisions — not
+  a row, consistent with the rule that only a stated for/against case counts.
+- Rows 4–5 (Broward County AFL-CIO) match the bare-listing pattern already
+  accepted for FEA's and LWV Florida's AM1/AM2 rows (no reasoning text, just
+  a named organisation's own stated position).
+- Not opened / excluded: **Miami-Dade Democratic Party**,
+  `https://www.miamidadedems.org/official-2026-endorsements` — blocked
+  (HTTP 403) on every attempt (WebFetch, curl with two different user
+  agents, and a Wayback Machine lookup). A third-party article (WLRN,
+  2026-10-15) reports this page also recommends NO on AM1, with a link to
+  the page but no quoted reasoning, but per the rules a secondhand report of
+  an unopened primary page is not a verified row.
+- Checked, nothing new found: Florida AFL-CIO (state level, `flaflcio.org` —
+  no new post), Gov. DeSantis / flgov.com press list (no AM1 or AM2 release),
+  Rep. Driskell (no AM1-specific statement located; her public comments this
+  period concern Amendment 3), Florida Policy Institute site search (no AM1
+  or AM2 page), Florida Democratic Party state site (`floridadems.org` — its
+  own amendment posts found were all from the 2024 cycle), Orange County
+  Democratic Party, newspaper editorial boards (Palm Beach Post, South
+  Florida Sun-Sentinel, Orlando Sentinel, Miami Herald, Tampa Bay Times — no
+  2026 AM1/AM2 editorial located), Florida Farm Bureau, Florida Realtors,
+  Florida Chamber of Commerce (no new AM2 statement beyond what is already
+  filed).
+- David Jolly's support for AM1 remains known only through news coverage
+  (floridapolitics.com, via the WLRN/WGCU 2026-10-15 explainer); no campaign
+  statement or own-site page was found, so it stays `reporting`/neutral.
+
+**Gate picture, AM1:** if rows 1 and 4 above were added to the currently
+published counts (support 4, oppose 5 per the 0060 gate), oppose would rise
+to 7; 7 ≤ 2 × 4 = 8 still passes, at the boundary.
+**Gate picture, AM2:** if rows 2, 3, and 5 above were added to the counts
+carried forward from the 2026-09-26 pass (support 5, oppose 4), oppose would
+rise to 7; 7 ≤ 2 × 5 = 10 passes comfortably. AM2 remains `listed`, not
+published, so no live gate is affected by this report.
