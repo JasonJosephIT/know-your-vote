@@ -544,7 +544,7 @@ Notes:
 
 **Gate picture, AM1:** if rows 1 and 4 above were added to the currently
 published counts (support 4, oppose 5 per the 0060 gate), oppose would rise
-to 7; 7 ≤ 2 × 4 = 8 still passes, at the boundary.
+to 7; 7 < 2 × 4 = 8 passes below the boundary, with one oppose-row headroom.
 **Gate picture, AM2:** correction (2026-10-22) — AM2 is already `published`
 via `0040_measure_resources_am2.sql`, not `listed` as this section first
 said; `/measures/FL-AM2-general` appears as a live published page in
@@ -569,3 +569,35 @@ comment reports, so Miami-Dade Democratic Party stays excluded, unchanged
 from the note above. If the founder has in fact opened this page from a
 browser session that gets past its bot wall, say so with the page's own
 text or a screenshot and it can be added next pass.
+
+
+The blocked result in the preceding correction is specific to that session.
+In this founder-authorized publication session, the same primary URL returned
+HTTP 200 with a plain Mozilla/5.0 user agent; the response body was read, not
+inferred from the PR review. Its amendment recommendations explicitly read
+AM1 No / No / Non (#251) and AM2 No / No / Non (#253). The page title is
+"Official 2026 Endorsements by the Miami-Dade Democratic Party" and its h1 is
+"2026 Official Endorsements". Separate fetch environments can receive
+different bot-wall results; the successful direct read is the basis below.
+
+## Founder-authorized publication, 2026-10-21
+
+The founder requested the reviewed resources live, preserving the direction to
+keep AM1 below the boundary unless further qualifying support-side sources are
+verified. All four pages were re-opened on October 21 (HTTP 200). The earlier
+Miami-Dade blocked-fetch result above is historical: its own endorsement page
+now opens and states opposition to both AM1 and AM2, without reasons. Both are
+verified argument/oppose candidates under the FEA/LWV bare-endorsement precedent.
+Miami-Dade AM1 remains held from seeding by the founder, not disqualified or
+removed from the research record.
+
+The original five rows plus Miami-Dade AM2 were applied as an explicit
+founder-authorized content-freeze exception, documented in
+`corrections/2026-10-21-amendment-resource-publication.md`, with the exact
+transaction in the paired `.sql` file. Existing rows and publication statuses
+were unchanged. The exception does not alter the standing freeze policy.
+
+Live anon readback after commit (2026-10-22 00:52 UTC / October 21 EDT):
+AM1 published, **4 support / 7 oppose / 12 neutral**; AM2 published,
+**5 support / 8 oppose / 9 neutral**. All six new resources are publicly readable.
+AM1 remains below the 4 / 8 boundary; Miami-Dade AM1 is absent, as directed.
