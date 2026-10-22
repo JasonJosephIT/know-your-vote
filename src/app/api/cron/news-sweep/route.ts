@@ -5,11 +5,13 @@ import { createServiceClient } from "@/lib/supabase/service";
 import { enqueueIntake, runSweep } from "@/lib/news-intake";
 import { cronRunRow, type CronOutcome } from "@/lib/agent-budget";
 
-/* The news intake, daily at 11:00 UTC (vercel.json; news-source-integrity
-   §3.5, founder decision D9, recommended and pending confirmation; it ran
-   Mondays and Thursdays from 2026-10-06). Most feeds hold under three days of
-   stories, so a twice-weekly run missed what fell off between runs; daily
-   leaves only the feeds the depth line below names as shallow. It sweeps
+/* The news intake, twice daily at 11:00 and 23:00 UTC (vercel.json). It ran
+   Mondays and Thursdays from 2026-10-06 and daily from D9
+   (news-source-integrity §3.5). Most feeds hold under three days of stories,
+   and four hold under a day (cbsnews.com/miami, wtsp.com, wftv.com, wlrn.org
+   on 10-10 to 10-14), so a daily run lost what fell off between runs
+   (source-check-2026-10-15.md). Every outlet, so every candidate, is read on
+   the same cadence; the depth line below names any feed still shallower. It sweeps
    every usable outlet for the last 14 days and queues
    what it finds as PENDING review items: stories naming a candidate on the
    ballot, and election stories that name no one (statewide or county-scoped).

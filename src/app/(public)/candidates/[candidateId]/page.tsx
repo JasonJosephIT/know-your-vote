@@ -37,6 +37,7 @@ async function runningFor(
   incumbency: Incumbency | null;
   runningMates: RunningMates | null;
   photos: RacePhotos | null;
+  positionCounts: { name: string; count: number }[] | null;
 }> {
   const brief = await getRaceBrief(raceId);
   const listing = brief ? null : await getRaceListing(raceId);
@@ -58,6 +59,19 @@ async function runningFor(
     /* The whole race's photos, so this page shows a face only when the
        race page does (all or none, src/lib/headshots.ts). */
     photos: await racePhotosFor(raceCandidates),
+    /* Every candidate's count of issues with a quoted position, in ballot
+       order (news-fairness.md: a real skew is shown with its source, never
+       evened out). Counts a block only when a sourced quote renders, so the
+       number matches what the briefs show. Briefed races of 2+ only. */
+    positionCounts:
+      brief && brief.candidates.length > 1
+        ? brief.candidates.map((c) => ({
+            name: c.candidate.legal_name,
+            count: c.issues.filter(
+              (b) => b.coverage === "stated" && b.say.length > 0
+            ).length,
+          }))
+        : null,
   };
 }
 
@@ -134,7 +148,7 @@ export default async function CandidatePage({
     );
   }
 
-  const { office, settled, incumbency, runningMates, photos } = await runningFor(detail.raceId, detail.office);
+  const { office, settled, incumbency, runningMates, photos, positionCounts } = await runningFor(detail.raceId, detail.office);
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-5 py-8">
       <p className="text-body-sm text-on-surface-muted">
@@ -147,6 +161,19 @@ export default async function CandidatePage({
         </Link>
         {settled ? ` · ${settled}, so not on the November ballot` : ""}
       </p>
+      {positionCounts && (
+        <p className="text-caption text-on-surface-muted">
+          {`Issues with a position we could quote from each candidate\u2019s own campaign website: ${positionCounts
+            .map((c) => `${c.name} ${c.count}`)
+            .join(" \u00b7 ")}. `}
+          <Link
+            href="/methodology#limits"
+            className="underline underline-offset-2 hover:text-on-surface"
+          >
+            How positions are found
+          </Link>
+        </p>
+      )}
       <TrackView event="brief_viewed" />
       <CandidateBrief
         data={detail.brief}

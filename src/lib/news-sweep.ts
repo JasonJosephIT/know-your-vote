@@ -427,12 +427,14 @@ export function sweep(input: SweepInput): SweptArticle[] {
 
 /* ---------- feed depth (news-source-integrity §3.5, D9) ----------------- */
 
-/** The sweep's cadence in hours: daily at 11:00 UTC (vercel.json; founder D9,
-    recommended and pending confirmation). A feed whose oldest item is younger
-    than this drops stories between two runs, whatever the window says. It is
-    the LONGEST gap between two runs, and verify-news-sweep checks it against
-    vercel.json: D9's TO FLIP back to Mondays and Thursdays makes it 96. */
-export const CADENCE_HOURS = 24;
+/** The sweep's cadence in hours: twice daily, 11:00 and 23:00 UTC
+    (vercel.json). Daily (D9) still lost stories: from 10-10 to 10-14 the depth
+    line named cbsnews.com/miami (12.6h-20.9h), wtsp.com, wftv.com and wlrn.org
+    as under 24h (source-check-2026-10-15.md). A feed whose oldest item is
+    younger than this drops stories between two runs, whatever the window says.
+    It is the LONGEST gap between two runs, and verify-news-sweep checks it
+    against vercel.json. */
+export const CADENCE_HOURS = 12;
 
 /** How far back one fetched RSS/Atom feed reached at sweep time. */
 export interface FeedDepth {

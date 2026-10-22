@@ -575,16 +575,15 @@ check("isElectionRelated reads the summary too",
     !ManualNewsPayloadSchema.safeParse({ ...state, county_fips: "12086" }).success);
 }
 
-/* The daily cron (news-source-integrity §3.5, D9: recommended, pending the
-   founder; it was Mondays and Thursdays from 2026-10-06). TO FLIP: restore
-   "0 11 * * 1,4" in vercel.json and here, and set CADENCE_HOURS to 96 in
-   src/lib/news-sweep.ts (the Thursday-to-Monday gap), or the depth line keeps
-   calling a feed deep that loses stories between runs. verify-news-sweep
-   fails until the two agree. */
+/* The twice-daily cron (source-check-2026-10-15.md; daily from D9 until then,
+   Mondays and Thursdays from 2026-10-06). A schedule change must also set
+   CADENCE_HOURS in src/lib/news-sweep.ts to the longest gap between runs, or
+   the depth line keeps calling a feed deep that loses stories between runs.
+   verify-news-sweep fails until the two agree. */
 {
   const vercel = JSON.parse(readFileSync(resolve(import.meta.dirname, "..", "vercel.json"), "utf8"));
   const cron = (vercel.crons ?? []).find((c: { path: string }) => c.path === "/api/cron/news-sweep");
-  check("vercel.json runs /api/cron/news-sweep daily at 11:00 UTC", cron?.schedule === "0 11 * * *", JSON.stringify(cron));
+  check("vercel.json runs /api/cron/news-sweep at 11:00 and 23:00 UTC", cron?.schedule === "0 11,23 * * *", JSON.stringify(cron));
   const routeSrc = readFileSync(resolve(import.meta.dirname, "..", "src/app/api/cron/news-sweep/route.ts"), "utf8");
   const routeCode = routeSrc.replace(/\/\*[\s\S]*?\*\//g, "");
   check("the window stays 14 days, so overlap and dedupe are unchanged", /const WINDOW_DAYS = 14;/.test(routeCode));
