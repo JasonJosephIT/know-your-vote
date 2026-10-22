@@ -601,3 +601,7 @@ Live anon readback after commit (2026-10-22 00:52 UTC / October 21 EDT):
 AM1 published, **4 support / 7 oppose / 12 neutral**; AM2 published,
 **5 support / 8 oppose / 9 neutral**. All six new resources are publicly readable.
 AM1 remains below the 4 / 8 boundary; Miami-Dade AM1 is absent, as directed.
+
+Public-page postflight: invalidated the production measure cache tags, then
+confirmed both pages return HTTP 200/cache HIT and include all six new links.
+The held Miami-Dade AM1 link is absent.
