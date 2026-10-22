@@ -41,15 +41,23 @@ import { OUTLETS, outletForUrl } from "../src/lib/news-sources.ts";
 import { officialForUrl } from "../src/lib/official-sources.ts";
 import { urlNorm } from "../src/lib/brief-rows.ts";
 
-const ACTOR = "founder via Claude Code (2026-10-15)";
 const APPLY = process.argv.includes("--apply");
-const LOOP = new URL("../docs/general-election/queue-review-2026-10-15.console.js", import.meta.url);
+/* --decisions <file.json> applies a later review's JSON array instead
+   (2026-10-22 onwards); the actor is dated from the file name. */
+const di = process.argv.indexOf("--decisions");
+const FILE = di > -1 ? process.argv[di + 1] : null;
+const ACTOR = `founder via Claude Code (${FILE?.match(/\d{4}-\d{2}-\d{2}/)?.[0] ?? "2026-10-15"})`;
 
 type Decision = { id: string; action: "approve" | "reject"; note: string; label: string };
-const src = readFileSync(LOOP, "utf8");
-const DECISIONS: Decision[] = JSON.parse(
-  src.slice(src.indexOf("const DECISIONS = ") + "const DECISIONS = ".length, src.indexOf("];\n") + 1)
-);
+let DECISIONS: Decision[];
+if (FILE) {
+  DECISIONS = JSON.parse(readFileSync(FILE, "utf8"));
+} else {
+  const src = readFileSync(new URL("../docs/general-election/queue-review-2026-10-15.console.js", import.meta.url), "utf8");
+  DECISIONS = JSON.parse(
+    src.slice(src.indexOf("const DECISIONS = ") + "const DECISIONS = ".length, src.indexOf("];\n") + 1)
+  );
+}
 
 loadEnvLocal(import.meta.url);
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
