@@ -489,3 +489,119 @@ Notes:
 
 **Gate picture after 0060, AM1:** support 4, oppose 5, neutral 12; 5 ≤ 2 × 4, passes. Status `published` once applied.
 **Gate picture, AM3:** unchanged at support 2, oppose 4, neutral 9; 4 ≤ 2 × 2, passes at the boundary.
+
+## Weekly re-check, 2026-10-19
+
+Covers material not previously catalogued in this document. Every URL below was
+opened with `curl -sL -A 'Mozilla/5.0 ...'` and its body text read directly
+(not just a WebFetch summary); two were also cross-checked with WebFetch. One
+URL could not be opened at all and is excluded. This pass found three county-
+or chapter-level organisations' own pages taking a position on AM1 and/or AM2
+— the first of either kind found below the state level. All three pages also
+address AM3 and/or other 2026 measures; only the AM1/AM2 material is reported
+here, per scope. Note on dating: the Palm Beach County Democratic Party page
+is dated 2026-10-07, before the last entries filed in this document
+(2026-10-12 and 2026-10-14) — it was missed by earlier passes, which did not
+search county party or county labor-council sites; it is reported now as a
+pipeline-gap fix, not because it is newly published.
+
+| # | URL | Loads | Publisher / author | Date | Format | kind | stance | Gives reasons? | Evidence |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | https://pbcdemocraticparty.org/no-on-1-2-3-yes-on-our-schools-parks-and-libraries/ | Yes (curl HTTP 200, body text confirmed; `article:published_time` metadata read directly) | Palm Beach County Democratic Party (own site) | 2026-10-07 | article | argument | oppose | Yes | "it writes budget policy into the Constitution, where it's hard to fix" (AM1) |
+| 2 | https://pbcdemocraticparty.org/no-on-1-2-3-yes-on-our-schools-parks-and-libraries/ | Yes (same page as row 1) | Palm Beach County Democratic Party (own site) | 2026-10-07 | article | argument | oppose | Yes | "paid for by local governments, which means cuts to local services" (AM2) |
+| 3 | https://hillsboroughcountydemocrats.org/vote | Yes (curl HTTP 200, body text confirmed) | Hillsborough County Democratic Party (own site) | undated (live page footer reads "©2025"; content references the Nov. 3, 2026 ballot and tax years beginning 2027) | article | argument | oppose | Yes | "It's written to help the biggest operators most." (AM2) |
+| 4 | https://unionhall.aflcio.org/browardcounty/2026-broward-afl-cio-endorsements | Yes (curl HTTP 200, body text confirmed) | Broward County AFL-CIO (own site) | undated (footer "© 2026") | article | argument | oppose | No — bare listing | "Ammendment 1 ... OPPOSE" [sic] — no rationale given on the page |
+| 5 | https://unionhall.aflcio.org/browardcounty/2026-broward-afl-cio-endorsements | Yes (same page as row 4) | Broward County AFL-CIO (own site) | undated (footer "© 2026") | article | argument | oppose | No — bare listing | "Ammendment 2 ... OPPOSE" [sic] — no rationale given on the page |
+
+Notes:
+- Row 3 (Hillsborough County Democratic Party): the same page takes "No
+  Recommendation" on AM1 and gives a neutral summary of its provisions — not
+  a row, consistent with the rule that only a stated for/against case counts.
+- Rows 4–5 (Broward County AFL-CIO) match the bare-listing pattern already
+  accepted for FEA's and LWV Florida's AM1/AM2 rows (no reasoning text, just
+  a named organisation's own stated position).
+- Not opened / excluded: **Miami-Dade Democratic Party**,
+  `https://www.miamidadedems.org/official-2026-endorsements` — blocked
+  (HTTP 403) on every attempt (WebFetch, curl with two different user
+  agents, and a Wayback Machine lookup). A third-party article (WLRN,
+  2026-10-15) reports this page also recommends NO on AM1, with a link to
+  the page but no quoted reasoning, but per the rules a secondhand report of
+  an unopened primary page is not a verified row.
+- Checked, nothing new found: Florida AFL-CIO (state level, `flaflcio.org` —
+  no new post), Gov. DeSantis / flgov.com press list (no AM1 or AM2 release),
+  Rep. Driskell (no AM1-specific statement located; her public comments this
+  period concern Amendment 3), Florida Policy Institute site search (no AM1
+  or AM2 page), Florida Democratic Party state site (`floridadems.org` — its
+  own amendment posts found were all from the 2024 cycle), Orange County
+  Democratic Party, newspaper editorial boards (Palm Beach Post, South
+  Florida Sun-Sentinel, Orlando Sentinel, Miami Herald, Tampa Bay Times — no
+  2026 AM1/AM2 editorial located), Florida Farm Bureau, Florida Realtors,
+  Florida Chamber of Commerce (no new AM2 statement beyond what is already
+  filed).
+- David Jolly's support for AM1 remains known only through news coverage
+  (floridapolitics.com, via the WLRN/WGCU 2026-10-15 explainer); no campaign
+  statement or own-site page was found, so it stays `reporting`/neutral.
+
+**Gate picture, AM1:** if rows 1 and 4 above were added to the currently
+published counts (support 4, oppose 5 per the 0060 gate), oppose would rise
+to 7; 7 < 2 × 4 = 8 passes below the boundary, with one oppose-row headroom.
+**Gate picture, AM2:** correction (2026-10-22) — AM2 is already `published`
+via `0040_measure_resources_am2.sql`, not `listed` as this section first
+said; `/measures/FL-AM2-general` appears as a live published page in
+`a11y-perf-2026-10-04.md`, confirming this independently of the migration
+file. The published baseline is support 5, oppose 4. If rows 2, 3, and 5
+above were added, oppose would rise to 7; 7 ≤ 2 × 5 = 10 still passes. This
+PR still applies no migration and changes no live row — any seeding is a
+founder decision, as with every prior row in this document.
+
+### Correction, 2026-10-22
+
+A PR review (`JasonJosephIT`, review 5607913257) flagged the AM2
+publication-status error above, which checks out against `0040` and the
+a11y doc and is fixed in place. The same review also asserted that
+`https://www.miamidadedems.org/official-2026-endorsements` "now opens" and
+opposes AM1 and AM2 with no reasons given, and asked that this be appended
+as a dated verification. Re-checked just now (curl with two user agents,
+and WebFetch, independently of the review): the page still returns
+**HTTP 403** for every attempt from this session. Per this document's own
+rule, an unopened page is not a verified row regardless of what a review
+comment reports, so Miami-Dade Democratic Party stays excluded, unchanged
+from the note above. If the founder has in fact opened this page from a
+browser session that gets past its bot wall, say so with the page's own
+text or a screenshot and it can be added next pass.
+
+
+The blocked result in the preceding correction is specific to that session.
+In this founder-authorized publication session, the same primary URL returned
+HTTP 200 with a plain Mozilla/5.0 user agent; the response body was read, not
+inferred from the PR review. Its amendment recommendations explicitly read
+AM1 No / No / Non (#251) and AM2 No / No / Non (#253). The page title is
+"Official 2026 Endorsements by the Miami-Dade Democratic Party" and its h1 is
+"2026 Official Endorsements". Separate fetch environments can receive
+different bot-wall results; the successful direct read is the basis below.
+
+## Founder-authorized publication, 2026-10-21
+
+The founder requested the reviewed resources live, preserving the direction to
+keep AM1 below the boundary unless further qualifying support-side sources are
+verified. All four pages were re-opened on October 21 (HTTP 200). The earlier
+Miami-Dade blocked-fetch result above is historical: its own endorsement page
+now opens and states opposition to both AM1 and AM2, without reasons. Both are
+verified argument/oppose candidates under the FEA/LWV bare-endorsement precedent.
+Miami-Dade AM1 remains held from seeding by the founder, not disqualified or
+removed from the research record.
+
+The original five rows plus Miami-Dade AM2 were applied as an explicit
+founder-authorized content-freeze exception, documented in
+`corrections/2026-10-21-amendment-resource-publication.md`, with the exact
+transaction in the paired `.sql` file. Existing rows and publication statuses
+were unchanged. The exception does not alter the standing freeze policy.
+
+Live anon readback after commit (2026-10-22 00:52 UTC / October 21 EDT):
+AM1 published, **4 support / 7 oppose / 12 neutral**; AM2 published,
+**5 support / 8 oppose / 9 neutral**. All six new resources are publicly readable.
+AM1 remains below the 4 / 8 boundary; Miami-Dade AM1 is absent, as directed.
+
+Public-page postflight: invalidated the production measure cache tags, then
+confirmed both pages return HTTP 200/cache HIT and include all six new links.
+The held Miami-Dade AM1 link is absent.
