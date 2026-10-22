@@ -128,7 +128,7 @@ export default function PrivacyPage() {
               district from a list.
             </>
           )}{" "}
-          The only exception is a ZIP you give us for email reminders, below.
+          The only exceptions are a ZIP or county you give us for email, below.
         </p>
         <HowThisWorks topic="your-address" about="your address" />
       </section>
@@ -168,7 +168,7 @@ export default function PrivacyPage() {
       <section className="flex flex-col gap-2">
         <h2 className={heading}>
           <MailGlyph className={icon} />
-          The one thing we store
+          What we store
         </h2>
         <p className="text-body">
           If you ask us to email you where to vote, we store your email address
@@ -177,6 +177,12 @@ export default function PrivacyPage() {
             ? ", and send you a few deadline reminders too."
             : ". Deadline reminders are paused right now, so that one email is all you get."}{" "}
           We never sell or share them, and every email has an unsubscribe link.
+        </p>
+        <p className="text-body">
+          If you sign up on the civics quiz to stay informed, we store your
+          email address and the county you choose, for county news and civic
+          updates. They are kept with Resend, the service that sends our
+          email, never sold or shared, and every email has an unsubscribe link.
         </p>
         <HowThisWorks topic="email-signup" about="the email signup" />
       </section>

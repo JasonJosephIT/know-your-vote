@@ -27,3 +27,9 @@ export function serviceRoleKey(): string | undefined {
 export function resendApiKey(): string | undefined {
   return process.env.RESEND_API_KEY || process.env.RESEND;
 }
+
+/* The /civics stay-informed signup needs the Resend key and the segment
+   its contacts go into (src/app/api/updates/route.ts). */
+export function updatesSignupConfigured(): boolean {
+  return Boolean(resendApiKey() && process.env.RESEND_UPDATES_SEGMENT_ID);
+}
