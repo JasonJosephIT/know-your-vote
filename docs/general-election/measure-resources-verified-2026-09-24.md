@@ -545,7 +545,27 @@ Notes:
 **Gate picture, AM1:** if rows 1 and 4 above were added to the currently
 published counts (support 4, oppose 5 per the 0060 gate), oppose would rise
 to 7; 7 ≤ 2 × 4 = 8 still passes, at the boundary.
-**Gate picture, AM2:** if rows 2, 3, and 5 above were added to the counts
-carried forward from the 2026-09-26 pass (support 5, oppose 4), oppose would
-rise to 7; 7 ≤ 2 × 5 = 10 passes comfortably. AM2 remains `listed`, not
-published, so no live gate is affected by this report.
+**Gate picture, AM2:** correction (2026-10-22) — AM2 is already `published`
+via `0040_measure_resources_am2.sql`, not `listed` as this section first
+said; `/measures/FL-AM2-general` appears as a live published page in
+`a11y-perf-2026-10-04.md`, confirming this independently of the migration
+file. The published baseline is support 5, oppose 4. If rows 2, 3, and 5
+above were added, oppose would rise to 7; 7 ≤ 2 × 5 = 10 still passes. This
+PR still applies no migration and changes no live row — any seeding is a
+founder decision, as with every prior row in this document.
+
+### Correction, 2026-10-22
+
+A PR review (`JasonJosephIT`, review 5607913257) flagged the AM2
+publication-status error above, which checks out against `0040` and the
+a11y doc and is fixed in place. The same review also asserted that
+`https://www.miamidadedems.org/official-2026-endorsements` "now opens" and
+opposes AM1 and AM2 with no reasons given, and asked that this be appended
+as a dated verification. Re-checked just now (curl with two user agents,
+and WebFetch, independently of the review): the page still returns
+**HTTP 403** for every attempt from this session. Per this document's own
+rule, an unopened page is not a verified row regardless of what a review
+comment reports, so Miami-Dade Democratic Party stays excluded, unchanged
+from the note above. If the founder has in fact opened this page from a
+browser session that gets past its bot wall, say so with the page's own
+text or a screenshot and it can be added next pass.
