@@ -489,3 +489,40 @@ Notes:
 
 **Gate picture after 0060, AM1:** support 4, oppose 5, neutral 12; 5 ≤ 2 × 4, passes. Status `published` once applied.
 **Gate picture, AM3:** unchanged at support 2, oppose 4, neutral 9; 4 ≤ 2 × 2, passes at the boundary.
+
+## Weekly re-check, 2026-10-26
+
+Covers material published or found since the 2026-10-14 entries above. Every row below was fetched directly (`curl -sL -A 'Mozilla/5.0 ...'`) and its full body text read; two blocked pages are logged as not opened, not as rows. This pass widened the search to county-level Democratic party committees, a category not checked in any prior session.
+
+| # | URL | Loads | Publisher / author | Date | Format | kind | stance | Gives reasons? | Evidence |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | https://pbcdemocraticparty.org/no-on-1-2-3-yes-on-our-schools-parks-and-libraries/ | Yes (curl, HTTP 200, full body read) | Palm Beach County Democratic Party (own site), signed "Communications Committee Chair" | 2026-10-07 (page byline, 8:26 am) | article | argument | oppose | Yes — cites the $750M/yr annual transfer and locking budget policy into the Constitution | "would tie up about $16.4 billion over roughly 22 years" that could fund schools, health care and housing now |
+| 2 | https://pbcdemocraticparty.org/no-on-1-2-3-yes-on-our-schools-parks-and-libraries/ | Yes (same page, same fetch) | Palm Beach County Democratic Party (own site), signed "Communications Committee Chair" | 2026-10-07 | article | argument | oppose | Yes — cites the ~$31M/yr cost to local governments | "It's a break worth about $31 million a year, paid for by local governments" |
+| 3 | https://hillsboroughcountydemocrats.org/vote | Yes (curl, HTTP 200, full body read) | Hillsborough County Democratic Party (own site), "Make A Plan to Vote" page | undated (no byline date on the page; a cited news link elsewhere on the page is dated 2026-06-14, but that is not this page's own date) | article | argument | oppose | Yes — cites the Revenue Estimating Conference's ≈$28.7M/yr local-government loss and "no dollar cap" favoring the largest operators | "It drains local budgets with no guardrails." |
+
+Row 1 and row 2 are the same page's Amendment 1 and Amendment 2 sections respectively, filed as two rows because each is a separate `measure_resource` (different `measure_id`, same `source_id`). The same page's Amendment 3 section is out of this routine's scope and not filed.
+
+The Hillsborough County Democratic Party page's Amendment 1 section is headed "No Recommendation" and states no position — it is informational only (describes the mechanism and "the balance between fiscal conservatism" versus "the flexibility to fund annual spending priorities") and is not filed as a row for either stance.
+
+### Not opened
+
+- https://www.miamidadedems.org/official-2026-endorsements — cited by a WLRN article (2026-10-15) as the Miami-Dade Democratic Party's source for opposing Amendment 1. Blocked by a Cloudflare JS challenge on every attempt: `curl` with a desktop user-agent (HTTP 403, `cf-mitigated: challenge`), and the Wayback Machine's closest snapshot (2026-10-16) could not be fetched either (blocked by egress policy / "unable to fetch from web.archive.org"). Per the rules, not opened, not a row. Worth another try next week.
+
+### Groups checked, nothing found (this pass)
+
+- Broward, Orange County, and Pinellas County Democratic parties — no 2026 Amendment 1 or Amendment 2 position located; only stale 2024-cycle material (a different, same-numbered Amendment 1/2) surfaced in search.
+- florida.gop press releases through 2026-10-19 — none mention Amendment 1 or Amendment 2 (one Oct 19 release is unrelated campaign material; the only AM1/AM2 release remains the 2026-09-14 endorsement already filed).
+- flgov.com press releases through 2026-10-21 — none on Amendment 1 or Amendment 2 (hurricane response, appointments, and one Oct 21 release on Amendment 3 only).
+- Florida TaxWatch — no new October statement on Amendment 1 or Amendment 2 found (its only new material concerns Amendment 3).
+- Florida Policy Institute site — still only Amendment 3 material.
+- lwvfl.org / Vote411 — re-checked, unchanged: still a bare "opposed" listing with no reasoning text for either amendment.
+
+### Caution, re-confirmed
+
+- feaweb.org's voter toolkit still carries an unrelated, older "Vote NO on Amendment 1" flier about the 2024 partisan-school-board amendment (also numbered "Amendment 1"). This is the same conflation flagged on 2026-09-26 — it is not new reasoning about the Budget Stabilization Fund, and is not filed as a row.
+
+### Gate picture
+
+**AM1** (published, 0060: support 4, oppose 5): this pass adds one new `argument`/oppose row (Palm Beach County Democratic Party) with stated reasons. Oppose would become 6 against support 4; 6 ≤ 2 × 4 holds. No DeSantis, Rich Templin/Florida AFL-CIO, or Fentrice Driskell statement in their own words was found this pass — all three remain reporting-only.
+
+**AM2** (published, 0040: support 5, oppose 4): this pass adds two new `argument`/oppose rows with stated reasons (Palm Beach County and Hillsborough County Democratic parties). Oppose would become 6 against support 5; 6 ≤ 2 × 5 holds. No new YES-side organisation's own case was found this pass.
