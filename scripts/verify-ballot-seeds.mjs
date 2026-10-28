@@ -343,11 +343,23 @@ await check(
   1
 );
 
+/* 0061 corrects 0040's AM2 Palm Beach Examiner title to the page's own (no
+   colon). Checked here, straight after the replay: re-applying 0040 below
+   puts the colon back until 0061 is re-applied in its own section. */
+await check(
+  "0061 leaves AM2's Palm Beach Examiner title verbatim (no colon)",
+  `SELECT count(*)::int n FROM measure_resource
+    WHERE resource_id = 'FL-AM2-general:palmbeachexaminer'
+      AND title = 'Stop Paying Rent to the State How Florida Amendments 1, 2, and 3 Cut Your Taxes'`,
+  1
+);
+
 /* Re-apply 0038 itself (idempotency, same proof style as 0033 below): the
    admin_action guard (`prior.status IS DISTINCT FROM upserted.status`) must
    see no change the second time -- still exactly one audit row, and AM3's
-   resource count must still be 15 (ON CONFLICT DO UPDATE re-writing the
-   same 14 rows, not appending duplicates). This check runs unrestricted
+   resource count must still be 20 (ON CONFLICT DO UPDATE re-writing the
+   same 14 rows beside 0035's booklet row and 0061's 5, not appending
+   duplicates). This check runs unrestricted
    (no SET ROLE), so it counts total rows in the table, not what anon can
    see -- the anon-scoped read-back is checked separately below. */
 await db.exec(
@@ -364,12 +376,13 @@ await check(
   1
 );
 await check(
-  "re-applying 0038 still leaves FL-AM3-general with 15 resources (no duplicates)",
+  "re-applying 0038 still leaves FL-AM3-general with 20 resources (no duplicates)",
   "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM3-general'",
-  15
+  20
 );
 
-/* Same idempotency proof for 0040 / FL-AM2-general. */
+/* Same idempotency proof for 0040 / FL-AM2-general (18 of its own with the
+   booklet row, plus 0061's Your Observer row). */
 await db.exec(
   await readFile(
     path.join(migrationsDir, "0040_measure_resources_am2.sql"),
@@ -384,9 +397,9 @@ await check(
   1
 );
 await check(
-  "re-applying 0040 still leaves FL-AM2-general with 18 resources (no duplicates)",
+  "re-applying 0040 still leaves FL-AM2-general with 19 resources (no duplicates)",
   "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM2-general'",
-  18
+  19
 );
 
 /* 0059 stores Amendment 1's 8 verified sided rows beside 0035's booklet and
@@ -416,14 +429,16 @@ await check(
   1
 );
 /* Founder decision 4 (FEA's toolkit on AM3) is NOT in 0060: a fifth oppose
-   row would make AM3 2 vs 5 and fail the gate. AM3 keeps 0038's counts. */
+   row would have made AM3 2 vs 5 and failed the gate. 0061 adds it with the
+   four other verified AM3 positions (2 support, 3 oppose), so AM3 ends at
+   4 / 7 after every migration. */
 const am3Stance = (stance) =>
   `SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM3-general' AND stance = '${stance}'`;
-await check("FL-AM3-general stores 2 support rows (0038)", am3Stance("support"), 2);
-await check("FL-AM3-general stores 4 oppose rows (0038; no FEA row)", am3Stance("oppose"), 4);
+await check("FL-AM3-general stores 4 support rows (0038's 2, 0061's RPOF and Palm Beach Examiner)", am3Stance("support"), 4);
+await check("FL-AM3-general stores 7 oppose rows (0038's 4, 0061's FEA, TaxWatch and Amanda Informed)", am3Stance("oppose"), 7);
 await check("FL-AM3-general stores 9 neutral rows (0035's booklet, 0038's 8)", am3Stance("neutral"), 9);
 await check(
-  "AM3's 2x gate still holds (4 oppose <= 2 x 2 support)",
+  "AM3's 2x gate holds (7 oppose <= 2 x 4 support)",
   "SELECT public.measure_sides_balanced('FL-AM3-general')::int n",
   1
 );
@@ -464,7 +479,59 @@ await check(
 await check(
   "re-applying 0060 adds no FL-AM3-general row",
   "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM3-general'",
-  15
+  20
+);
+
+/* 0061 adds AM3's five rows (above) and Your Observer to AM2, and fixes
+   AM2's Palm Beach Examiner title, which re-applying 0040 above reverted.
+   It writes no measure_publication or admin_action row. */
+console.log("0061 — more AM3 and AM2 sides, AM2 title corrected");
+const am2Stance = (stance) =>
+  `SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM2-general' AND stance = '${stance}'`;
+await check("FL-AM2-general stores 6 support rows (0040's 5, 0061's Your Observer)", am2Stance("support"), 6);
+await check("FL-AM2-general stores 4 oppose rows (0040)", am2Stance("oppose"), 4);
+await check("FL-AM2-general stores 9 neutral rows", am2Stance("neutral"), 9);
+await check(
+  "AM2's 2x gate holds (6 support <= 2 x 4 oppose)",
+  "SELECT public.measure_sides_balanced('FL-AM2-general')::int n",
+  1
+);
+/* 0061 writes no audit row on its first apply either: the only admin_action
+   rows that name AM2 or AM3 (or one of their resources) by this point are
+   0038's and 0040's publishes; list-ballot-2026.sql and the production
+   path below add theirs later. */
+await check(
+  "no admin_action row names AM2 or AM3 apart from 0038's and 0040's publishes",
+  `SELECT count(*)::int n FROM admin_action
+    WHERE (subject_ref LIKE 'FL-AM2-general%' OR subject_ref LIKE 'FL-AM3-general%')
+      AND NOT (action = 'publish' AND subject_kind = 'measure_publication'
+               AND subject_ref IN ('FL-AM2-general', 'FL-AM3-general'))`,
+  0
+);
+const publishRows = await n("SELECT count(*)::int n FROM admin_action");
+await db.exec(
+  await readFile(
+    path.join(migrationsDir, "0061_am3_am2_more_sides.sql"),
+    "utf8"
+  )
+);
+await check(
+  "re-applying 0061 restores AM2's verbatim Palm Beach Examiner title after 0040's re-apply",
+  `SELECT count(*)::int n FROM measure_resource
+    WHERE resource_id = 'FL-AM2-general:palmbeachexaminer'
+      AND title = 'Stop Paying Rent to the State How Florida Amendments 1, 2, and 3 Cut Your Taxes'`,
+  1
+);
+await check(
+  "re-applying 0061 leaves FL-AM3-general with 20 and FL-AM2-general with 19 resources (no duplicates)",
+  `SELECT ((SELECT count(*) FROM measure_resource WHERE measure_id = 'FL-AM3-general') * 100
+         + (SELECT count(*) FROM measure_resource WHERE measure_id = 'FL-AM2-general'))::int n`,
+  2019
+);
+await check(
+  "re-applying 0061 writes no admin_action row of any kind",
+  "SELECT count(*)::int n FROM admin_action",
+  publishRows
 );
 
 /* scripts/list-ballot-2026.sql, the go-live flip, applied to this throwaway
@@ -734,19 +801,20 @@ await check(
 );
 /* All three measures are published (0038, 0040 and 0060, each round-
    tripped through 'listed' just above): anon sees AM3's resources --
-   0038's 14 rows plus the FL-AM3-general:booklet row 0035 already seeded,
-   15 total -- AM2's -- 0040's 17 rows plus its booklet row, 18 total -- and
-   AM1's -- the booklet row, 0041's 9 neutral rows, 0059's 8 sided rows and
-   0060's 3, 21 total, of which 4 support and 5 oppose. */
+   0038's 14 rows plus the FL-AM3-general:booklet row 0035 already seeded
+   and 0061's 5, 20 total -- AM2's -- 0040's 17 rows plus its booklet row
+   and 0061's 1, 19 total -- and AM1's -- the booklet row, 0041's 9 neutral
+   rows, 0059's 8 sided rows and 0060's 3, 21 total, of which 4 support and
+   5 oppose. */
 await check(
-  "anon reads FL-AM3-general's 15 published resources",
+  "anon reads FL-AM3-general's 20 published resources",
   "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM3-general'",
-  15
+  20
 );
 await check(
-  "anon reads FL-AM2-general's 18 published resources",
+  "anon reads FL-AM2-general's 19 published resources",
   "SELECT count(*)::int n FROM measure_resource WHERE measure_id = 'FL-AM2-general'",
-  18
+  19
 );
 await check(
   "anon reads FL-AM1-general's 21 published resources",
@@ -765,5 +833,5 @@ if (failures > 0) {
   process.exit(1);
 }
 console.log(
-  "\nverify-ballot-seeds: OK — measures and Tier A local races seeded as intended; no race is listed or published by a migration, and FL-AM3-general/FL-AM2-general/FL-AM1-general are the three measures 0038/0040/0060 publish; list-ballot-2026.sql lists every race and every measure without a prior row (a harness-only one, since all three amendments have a row) and publishes nothing new; anon reads only AM1's 12 neutral rows while it is listed, and AM3's 15 resources, AM2's 18 and AM1's 21 once published."
+  "\nverify-ballot-seeds: OK — measures and Tier A local races seeded as intended; no race is listed or published by a migration, and FL-AM3-general/FL-AM2-general/FL-AM1-general are the three measures 0038/0040/0060 publish; list-ballot-2026.sql lists every race and every measure without a prior row (a harness-only one, since all three amendments have a row) and publishes nothing new; anon reads only AM1's 12 neutral rows while it is listed, and AM3's 20 resources, AM2's 19 and AM1's 21 once published."
 );
