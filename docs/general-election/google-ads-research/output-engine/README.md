@@ -9,6 +9,7 @@ The production base for the top 10 videos in [`../ranked-34.md`](../ranked-34.md
 | `settings/` | Eight built environments: cafe, kitchen table, apartment tour, transit stop, pub quiz, bedroom mirror, street after rain, living-room couch |
 | `uploads/scripts/` | `00-how-to-read.md` plus one shot-by-shot script per video: timing, picture, dialogue, on-screen text, fact card, caption draft, guardrails |
 | `HANDOFF.md` | Instructions for the Output Engine session that will produce the ads |
+| `uploads/political-animal/` | Separate test: a thumb-scroll phone still and its [handoff](uploads/political-animal/HANDOFF.md) for an image-to-video run |
 | `records/ assets/ generated/ stress-tests/` | Empty; filled by the engine stages |
 
 ## The ten scripts
