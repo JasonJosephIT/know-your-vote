@@ -489,3 +489,35 @@ Notes:
 
 **Gate picture after 0060, AM1:** support 4, oppose 5, neutral 12; 5 ≤ 2 × 4, passes. Status `published` once applied.
 **Gate picture, AM3:** unchanged at support 2, oppose 4, neutral 9; 4 ≤ 2 × 2, passes at the boundary.
+
+## Weekly re-check, 2026-11-02
+
+Covers both amendments. Every URL below was fetched with `curl -sL -A 'Mozilla/5.0 ...'` (WebFetch first, where WebFetch could load it) and its body text read. Two newspaper editorial-board pages were found this pass that neither the 2026-09-26 nor the 2026-10-12 search located — both checks explicitly looked for Orlando Sentinel and Sun Sentinel material on AM1/AM2 and reported none found. Their publish dates (2026-09-30 and 2026-10-03) are earlier than the 2026-10-12 cutoff, so they are gap-fills of a prior miss, the same way the 2026-10-09 pass's row 1 and the 2026-10-14 Your Observer row were — not material that appeared this week.
+
+| # | Amendment | URL | Loads | Publisher / author | Date | Format | kind | stance | Gives reasons? | Evidence (≤15 words) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | AM1 | https://www.sun-sentinel.com/2026/10/03/list-of-sun-sentinel-endorsements-editorial/ | Yes (curl, HTTP 200) | South Florida Sun Sentinel Editorial Board (own site) | Published 2026-10-03; updated 2026-10-30 | article | argument | oppose | No — bare listing, same pattern as the already-filed FEA/LWV rows | "Amendment 1, Budget Stabilization Fund: No" |
+| 2 | AM2 | https://www.sun-sentinel.com/2026/10/03/list-of-sun-sentinel-endorsements-editorial/ | Yes (curl, HTTP 200) | South Florida Sun Sentinel Editorial Board (own site) | Published 2026-10-03; updated 2026-10-30 | article | argument | oppose | No — bare listing | "Amendment 2, Agricultural Land Tax Exemption: No" |
+| 3 | AM1 | https://www.orlandosentinel.com/2026/09/30/endorsement-vote-no-on-amendments-1-and-2/ | Partial — curl HTTP 200, but body paywalled past the lede (headline and opening sentence confirmed) | Orlando Sentinel Editorial Board (own site) | 2026-09-30 | article | argument | oppose | Implied, not confirmed in full — the visible lede frames both amendments as inconsistent/hypocritical, but the stated reasons are paywalled | "If you want to know what hypocrisy in action looks like" (headline: "Endorsement: Vote 'no' on Amendments 1 and 2") |
+| 4 | AM2 | https://www.orlandosentinel.com/2026/09/30/endorsement-vote-no-on-amendments-1-and-2/ | Partial — same as row 3 | Orlando Sentinel Editorial Board (own site) | 2026-09-30 | article | argument | oppose | Implied, not confirmed in full — see row 3 | Same piece; headline names both amendments, full reasoning paywalled |
+
+Not opened / not usable as a row:
+- https://www.miamiherald.com/opinion/election-recommendations/article317353696.html — Miami Herald Editorial Board's 2026 recommendations page, reported (via a WLRN 2026-10-23 voter guide and a 2026-10-21 Coral Springs roundup) to list "No" on Amendments 1, 2 and 3. WebFetch and a `curl` with a desktop user agent both failed to load miamiherald.com at all. Not opened, not a row — the Herald's own words were never read, only secondary reporting of them.
+- https://www.palmbeachpost.com/story/opinion/endorsements/2026/10/06/palm-beach-post-editorial-board-endorsements-for-the-nov-3-election/92119677007/ — Palm Beach Post Editorial Board's 2026 endorsements page (dated 2026-10-06, found via a WLRN link). `curl` returned HTTP 402 ("Access Restricted"). Not opened; WLRN's own page confirms the Post's section lists candidate races but doesn't show an Amendment 1/2 position either way.
+- TCPalm — no 2026 Amendment 1 or 2 editorial located in search; only its 2024 (different amendments) recommendations surfaced.
+
+## Groups and searches checked, nothing new found (2026-11-02)
+
+- Florida AFL-CIO (flaflcio.org `/category/press/` and `/category/legislative/`, re-fetched) — still no post mentioning Amendment 1, Budget Stabilization Fund, or rainy day fund. Templin's opposition remains known only through reporting of his committee testimony.
+- Gov. DeSantis's own channels — no primary flgov.com release or social post text located; his continued opposition is known only through a 2026-10-21 Florida Phoenix/States Newsroom report of remarks at a Miami-Dade Sheriff's Office event (for Amendment 3) where he said he "would encourage" a no vote on Amendment 1. Reporting only, not opened as his own words.
+- Fentrice Driskell, Florida Policy Institute — no 2026-cycle AM1 statement found in their own words; Florida Policy Institute's site still carries only Amendment 3 material.
+- Florida Cattlemen's Association, Florida Citrus Mutual — no AM2 statement, support or oppose, found.
+- Vote Yes/Vote No campaign-committee sites for Amendment 1 (e.g. a `voteyeson1`-style domain) — none found; unlike Amendment 3's `voteyeson3.com`, no dedicated committee site for Amendment 1 turned up in search.
+- Letters to the editor specifically about Amendment 2 (searched Tampa Bay Times, Villages-News, Citrus County Chronicle) — none found this pass, beyond the already-filed Amendment 1 letters.
+- Newspaper conflation check: confirmed every row above is about the Nov. 3, 2026 general-election Amendment 1 (HJR 5019, Budget Stabilization Fund) and Amendment 2 (CS/HJR 1215, agricultural tangible personal property), not the 2024 hunting/fishing Amendment 2 or the 2026F special-session homestead measure.
+
+## Gate picture, 2026-11-02
+
+**AM1:** Published gate (after 0060) is support 4, oppose 5, neutral 12 (5 ≤ 2×4, passes). Adding the two new oppose rows above (Sun Sentinel, Orlando Sentinel) would make it support 4, oppose 7 — 7 ≤ 2×4 = 8, still passes, but closer to the cap than before. Tier-4 `argument` on oppose would then hold four rows (FEA, LWV, Sun Sentinel, Orlando Sentinel), three of them bare or partial listings with no confirmed reasoning text; DeSantis, Rich Templin/Florida AFL-CIO and Fentrice Driskell remain reporting-only in their own words.
+
+**AM2:** Published gate (0040) is support 5, oppose 4 (4 ≤ 2×5, passes). Adding the same two new oppose rows would make it oppose 6 — 6 ≤ 2×5 = 10, comfortably passes. No new support-side row was found for AM2 this pass.
