@@ -1677,13 +1677,14 @@ await check("a draft or in_review measure's neutral rows stay unreadable to anon
 });
 
 /* 0038, 0040 and 0060 publish the real FL-AM3-general, FL-AM2-general and
-   FL-AM1-general measures: anon must see all 15 of AM3's resources (0038's
-   14 plus the FL-AM3-general:booklet row 0035 already seeded), all 18 of
-   AM2's (0040's 17 plus its booklet row) and all 21 of AM1's (its booklet
-   row, 0041's 9 neutral rows, 0059's 8 sided rows and 0060's 3). On a
+   FL-AM1-general measures: anon must see all 20 of AM3's resources (0038's
+   14 plus the FL-AM3-general:booklet row 0035 already seeded and 0061's 5),
+   all 19 of AM2's (0040's 17 plus its booklet row and 0061's 1) and all 21
+   of AM1's (its booklet row, 0041's 9 neutral rows, 0059's 8 sided rows and
+   0060's 3). On a
    replay AM1 is published straight from "no row"; the listed -> published
    path production takes is proved in verify-ballot-seeds.mjs. */
-await check("anon sees all 21 FL-AM1-general, 18 FL-AM2-general and 15 FL-AM3-general resources", async () => {
+await check("anon sees all 21 FL-AM1-general, 19 FL-AM2-general and 20 FL-AM3-general resources", async () => {
   await db.exec("SET ROLE anon;");
   const res = await db.query(
     `SELECT measure_id, count(*)::int n FROM measure_resource
@@ -1692,12 +1693,12 @@ await check("anon sees all 21 FL-AM1-general, 18 FL-AM2-general and 15 FL-AM3-ge
   );
   await db.exec("RESET ROLE;");
   const got = res.rows.map((r) => `${r.measure_id}:${r.n}`).join(",");
-  if (got !== "FL-AM1-general:21,FL-AM2-general:18,FL-AM3-general:15")
-    throw new Error(`expected FL-AM1-general:21,FL-AM2-general:18,FL-AM3-general:15, got [${got}]`);
+  if (got !== "FL-AM1-general:21,FL-AM2-general:19,FL-AM3-general:20")
+    throw new Error(`expected FL-AM1-general:21,FL-AM2-general:19,FL-AM3-general:20, got [${got}]`);
 });
 /* 0060 publishes AM1 through the self-auditing block 0038/0040 use: one
-   founder 'publish' row, and the 2x gate holds for AM1 and for AM3 (which
-   0060 leaves at 0038's 2 support / 4 oppose). */
+   founder 'publish' row, and the 2x gate holds for AM1 and for AM3 (0038's
+   2 support / 4 oppose, then 0061's 4 / 7). */
 await check("0060 published AM1 with one founder audit row, and AM1's and AM3's gates hold", async () => {
   const res = await db.query(
     `SELECT (SELECT status FROM measure_publication WHERE measure_id = 'FL-AM1-general') AS status,
