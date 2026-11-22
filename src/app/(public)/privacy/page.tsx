@@ -1,10 +1,8 @@
 import Link from "next/link";
-import { geocoderHost } from "@/lib/geocode";
 
 export const metadata = { title: "Privacy — Know Your Vote" };
 
 export default function PrivacyPage() {
-  const geocoder = geocoderHost();
   return (
     <main className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-5 px-5 py-8">
       <h1 className="text-h1">Privacy, in plain language</h1>
@@ -22,77 +20,29 @@ export default function PrivacyPage() {
             devtools beats a claim you have to trust. */}
         <h2 className="text-h2">What stays on your device</h2>
         <p className="text-body">
-          Three things, and you can check all three in your browser&apos;s
-          devtools: the district you chose, the candidates you &quot;keep in
+          Two things, and you can check both: the candidates you &quot;keep in
           mind&quot;, and whether you dismissed the &quot;get the app&quot;
           prompt. That is the whole list. They never reach our servers, and
           clearing your browser data removes them completely.
         </p>
-        {/* Named exactly, with its value, because that is the only version of
-            this claim a skeptic can check. The district is a public electoral
-            unit of roughly 750,000 people; the address that found it is not
-            kept anywhere, which is the distinction the whole design rests on. */}
-        <p className="text-body">
-          The district is one cookie, <code>kyv.district</code>, holding exactly
-          this: <code>FL-27|12086</code> — a district and the county it sits in.
-          Not your address. Not your ZIP. Not a coordinate. It is written only
-          when you ask for it, the chip at the top of every page shows it, and
-          &quot;Forget my district&quot; deletes it on the spot.
-        </p>
         <p className="text-body">
           Your quiz answers aren&apos;t stored anywhere — not on your device,
-          not with us. They exist while you are answering and are gone when you
-          close the tab.
+          not with us. They exist while you are answering and are gone when
+          you close the tab.
         </p>
+        {/* The one exception has to be named here, not left to the next
+            section. "Your ZIP isn't stored" directly above "we store your
+            ZIP" reads as a contradiction even though both are true of
+            different things, and a privacy page that needs careful reading
+            to be accurate is not doing its job. */}
         <p className="text-body">
-          Your address and your ZIP aren&apos;t stored either — not on your
-          device, not with us. We use them to work out which district you are
-          in, keep the district, and forget the rest. The single exception is
-          below, and only if you ask for it: an email reminder needs a ZIP to
-          know which polling place to send you.
-        </p>
-      </section>
-
-      <section className="flex flex-col gap-2">
-        <h2 className="text-h2">When you type an address</h2>
-        {/* This section states who sees an address, and that is a deployment
-            fact rather than a constant: PELIAS_BASE_URL points either at an
-            instance we run or at a hosted one. Prose cannot know which, and a
-            paragraph that is wrong on half of the deployments is worse than no
-            paragraph — so the host is read from the configuration. */}
-        {geocoder ? (
-          <>
-            <p className="text-body">
-              Address completion is{" "}
-              <a
-                href="https://pelias.io"
-                className="text-primary underline underline-offset-2"
-              >
-                Pelias
-              </a>
-              , an open-source geocoder built on public address data. What you
-              type goes to <strong>{geocoder}</strong> so it can finish the
-              address. We don&apos;t log it and we don&apos;t store it.
-            </p>
-            <p className="text-body">
-              Turning that address into a district takes no second lookup:
-              Pelias returns the map coordinates along with the suggestion you
-              picked, and we send just those coordinates to the U.S. Census
-              Bureau to find which census block they fall in. The Census Bureau
-              never receives your address. The block tells us your district,
-              using Florida&apos;s enacted 2026 map, and the district is the
-              only thing that is kept.
-            </p>
-          </>
-        ) : (
-          <p className="text-body">
-            Address completion is switched off on this deployment — the field
-            takes a ZIP only, and nothing you type reaches anyone else.
-          </p>
-        )}
-        <p className="text-body">
-          Prefer neither? Enter your ZIP, or pick your district from the list —
-          both work with no third party at all.
+          Your ZIP isn&apos;t stored either. We use it to look up your
+          district and show your races, and that is the end of it — we
+          don&apos;t keep it on your device or remember it for next time. That
+          is why a return visit asks again: nothing about where you live
+          carries over. The single exception is below, and only if you ask for
+          it: an email reminder needs a ZIP to know which polling place to
+          send you.
         </p>
       </section>
 
@@ -101,17 +51,17 @@ export default function PrivacyPage() {
         <p className="text-body">
           If you ask us to email your polling place, we store exactly four
           things: your email, your ZIP, when you consented, and an unsubscribe
-          token. Nothing is linked to your browsing, nothing is shared or sold,
-          and the unsubscribe link in every email works immediately.
+          token. Nothing is linked to your browsing, nothing is shared or
+          sold, and the unsubscribe link in every email works immediately.
         </p>
         <p className="text-body">
           That same signup also gets you a handful of deadline reminders by
-          email — voter registration, vote-by-mail request, early voting,
-          returning your vote-by-mail ballot, and election day. Every reminder
-          contains only dates and official links, every date is verified against
-          its official source before anything sends, and every email carries the
-          same instant unsubscribe link. Our send records store counts, never
-          addresses. Prefer zero email? The same dates are available as a{" "}
+          email — voter registration, vote-by-mail request, early voting, and
+          election day. Every reminder contains only dates and official
+          links, every date is verified against its official source before
+          anything sends, and every email carries the same instant
+          unsubscribe link. Our send records store counts, never addresses.
+          Prefer zero email? The same dates are available as a{" "}
           <a
             href="/api/calendar/general_2026.ics"
             className="text-primary underline underline-offset-2"
@@ -125,11 +75,11 @@ export default function PrivacyPage() {
       <section className="flex flex-col gap-2">
         <h2 className="text-h2">The quiz and AI</h2>
         <p className="text-body">
-          Quiz answers are interpreted by an AI model. We send it only the races
-          on your ballot and your issue answers — never your name, email, or any
-          identifier. Candidates are even anonymized in that request, so the
-          model can&apos;t favor anyone it recognizes. Take the quiz without a
-          ZIP and the races are simply the statewide ones.
+          Quiz answers are interpreted by an AI model. We send it only the
+          races on your ballot and your issue answers — never your name,
+          email, or any identifier. Candidates are even anonymized in that
+          request, so the model can&apos;t favor anyone it recognizes. Take
+          the quiz without a ZIP and the races are simply the statewide ones.
         </p>
       </section>
 
@@ -144,10 +94,7 @@ export default function PrivacyPage() {
 
       <p className="text-body-sm text-on-surface-muted">
         Questions about how any of this works?{" "}
-        <Link
-          href="/methodology"
-          className="text-primary underline underline-offset-2"
-        >
+        <Link href="/methodology" className="text-primary underline underline-offset-2">
           Read the methodology
         </Link>{" "}
         — fairness and privacy are both things you can check, not just trust.

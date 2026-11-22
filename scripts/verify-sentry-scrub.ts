@@ -41,60 +41,6 @@ assert("event has no raw email", !flat.includes("maria@example.com"), flat);
 assert("event has no raw zip", !/\b3\d{4}\b/.test(flat), flat);
 assert("event has no raw ip", !flat.includes("8.8.8.8"), flat);
 
-/* An address route's body is the voter's home address. No regex separates it
-   from ordinary prose, so the whole body is dropped rather than scrubbed. */
-const addressEvent = scrubEvent({
-  request: {
-    url: "https://example.org/api/address/suggest",
-    method: "POST",
-    data: { q: "444 SW 2nd Ave, Miami" },
-  },
-});
-const addressFlat = JSON.stringify(addressEvent);
-assert(
-  "address body is dropped",
-  !addressFlat.includes("444 SW 2nd Ave"),
-  addressFlat
-);
-assert(
-  "address body is marked as dropped",
-  addressFlat.includes("[dropped]"),
-  addressFlat
-);
-
-/* The resolve body no longer carries a place id — since the move to Pelias it
-   carries the COORDINATE of the address the voter picked, which is their home
-   to about the width of a house. Nothing in the scrubber's PII regexes would
-   catch a pair of plain numbers, so this asserts the whole-body drop covers
-   the resolve route too, not just suggest. */
-const resolveEvent = scrubEvent({
-  request: {
-    url: "https://example.org/api/address/resolve",
-    method: "POST",
-    data: { lat: 25.769463071522, lon: -80.197602442738 },
-  },
-});
-const resolveFlat = JSON.stringify(resolveEvent);
-assert(
-  "resolve body (a home coordinate) is dropped",
-  !resolveFlat.includes("25.769463") && !resolveFlat.includes("80.1976"),
-  resolveFlat
-);
-
-/* A non-address route keeps its body, minus the usual PII. */
-const otherEvent = scrubEvent({
-  request: {
-    url: "https://example.org/api/quiz",
-    method: "POST",
-    data: { issue: "housing" },
-  },
-});
-assert(
-  "other routes keep their body",
-  JSON.stringify(otherEvent).includes("housing"),
-  JSON.stringify(otherEvent)
-);
-
 const crumb = scrubBreadcrumb({
   message: "click by voter@x.com",
   data: { url: "/api/resolve?zip=33101", ip: "9.9.9.9" },

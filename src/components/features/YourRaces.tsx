@@ -2,20 +2,10 @@ import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { BallotQuestions } from "@/components/features/BallotQuestions";
 import { VotingInfo } from "@/components/features/VotingInfo";
-import { LocationEntry } from "@/components/features/LocationEntry";
+import { ZipEntry } from "@/components/features/ZipEntry";
 import { createAnonServerClient } from "@/lib/supabase/server";
-import { districtRaceMissing } from "@/lib/coverage";
-import {
-  getCoveredDistricts,
-  resolveCounty,
-  resolveDistrict,
-  resolveZip,
-  ZIP_RE,
-} from "@/lib/resolve";
-import { geocoderConfigured } from "@/lib/geocode";
+import { resolveCounty, resolveZip, ZIP_RE } from "@/lib/resolve";
 import type { ResolveResult } from "@/types/app";
-
-const DISTRICT_RE = /^FL-\d{1,2}$/;
 
 /* The "Your races" view inside the Candidates hub: ZIP/county in, the
    voter's ballot out. Formerly the standalone /races page. */
@@ -52,15 +42,9 @@ export async function YourRaces({
   district?: string;
   county?: string;
 }) {
-  const districts = await getCoveredDistricts();
-
   let result: ResolveResult | null = null;
   if (zip && ZIP_RE.test(zip)) {
     result = await resolveZip(zip, district);
-  } else if (district && DISTRICT_RE.test(district) && county) {
-    /* An address result, a confirmed ZIP, or the saved district — the district
-       is already known, so there is nothing to look up but the races. */
-    result = await resolveDistrict(county, district);
   } else if (county) {
     result = await resolveCounty(county);
   }
@@ -71,10 +55,7 @@ export async function YourRaces({
         <p className="text-body text-on-surface-muted">
           Add your ZIP and we&apos;ll show every race on your ballot.
         </p>
-        <LocationEntry
-          addressEnabled={geocoderConfigured()}
-          districts={districts}
-        />
+        <ZipEntry />
       </div>
     );
   }
@@ -87,10 +68,7 @@ export async function YourRaces({
           Fort Lauderdale, Tampa, and Orlando metros. Try another ZIP or pick a
           county:
         </p>
-        <LocationEntry
-          addressEnabled={geocoderConfigured()}
-          districts={districts}
-        />
+        <ZipEntry />
       </div>
     );
   }
@@ -103,10 +81,7 @@ export async function YourRaces({
           {result.candidateDistricts?.join(", ")}). Re-enter it below and
           we&apos;ll ask which district is yours:
         </p>
-        <LocationEntry
-          addressEnabled={geocoderConfigured()}
-          districts={districts}
-        />
+        <ZipEntry />
       </div>
     );
   }
@@ -154,24 +129,6 @@ export async function YourRaces({
         </ul>
       )}
 
-      {/* The ZIP resolved and the district race is not here. Without this the
-          list reads as a finished ballot: the voter asked for their House race,
-          got five statewide races, and nothing said which part is missing.
-          Sits directly under the list because it is a statement about the
-          list — the county path's counterpart is the caption further down. */}
-      {districtRaceMissing(result.district, result.races) &&
-        result.races.length > 0 && (
-          <p
-            role="status"
-            className="rounded-md bg-surface-muted px-4 py-3 text-body-sm text-on-surface"
-          >
-            We don&apos;t have the U.S. House race for {result.district} yet.
-            What&apos;s above is the statewide ballot every Florida voter shares
-            — your district&apos;s race will appear here once it&apos;s
-            published.
-          </p>
-        )}
-
       {/* Statewide, so they belong below the location-specific races rather
           than inside that list — a voter scanning for candidates should not
           mistake a ballot question for one. */}
@@ -180,8 +137,8 @@ export async function YourRaces({
       <p className="text-caption text-on-surface-muted">
         Every registered Florida voter gets the same ballot in the general
         election, whatever party you&apos;re registered with — including no
-        party at all. If you couldn&apos;t vote in August&apos;s closed primary,
-        you can vote on all of this.
+        party at all. If you couldn&apos;t vote in August&apos;s closed
+        primary, you can vote on all of this.
       </p>
 
       {!result.district && result.races.length > 0 && (

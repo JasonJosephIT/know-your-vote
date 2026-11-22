@@ -111,52 +111,34 @@ for (const spec of BALLOT_ROOTS) {
   );
 }
 
-/* 4. The ZIP upgrade must work without JavaScript: a plain GET form that lands
-      on the races view. Without action/method the field is inert for a voter
-      with scripts off — the field would be there and do nothing.
-
-      ZipEntry became LocationEntry when address lookup landed. The no-JS path
-      is unchanged and still ZIP-only by design: address completion needs
-      JavaScript, so the form that survives without it is the one that posts a
-      ZIP. */
-const locationSource = readFileSync(
-  `${ROOT}/src/components/features/LocationEntry.tsx`,
+/* 4. The ZIP upgrade must work without JavaScript: a plain GET form that
+      lands on the races view. Without action/method the field is inert for a
+      voter with scripts off — the field would be there and do nothing. */
+const zipSource = readFileSync(
+  `${ROOT}/src/components/features/ZipEntry.tsx`,
   "utf8"
 );
 assert(
-  "location form submits without JavaScript (action + method=get)",
-  /action="\/candidates"/.test(locationSource) &&
-    /method="get"/.test(locationSource)
+  "ZIP form submits without JavaScript (action + method=get)",
+  /action="\/candidates"/.test(zipSource) && /method="get"/.test(zipSource)
 );
 assert(
-  "location form carries the races view in the no-JavaScript GET",
-  /name="view"\s+value="races"/.test(locationSource)
+  "ZIP form carries the races view in the no-JavaScript GET",
+  /name="view"\s+value="races"/.test(zipSource)
 );
 assert(
-  "the input is named zip so the no-JavaScript GET carries it",
-  /name="zip"/.test(locationSource)
+  "ZIP input is named so the no-JavaScript GET carries it",
+  /name="zip"/.test(zipSource)
 );
 
 /* 5. The landing page must not gate the ballot behind a location read.
-
-      Since address lookup, the page DOES read one stored value: kyv.district,
-      to show the voter's House race instead of the field. That is a district,
-      not a location, and it gates nothing — SharedBallot renders above it
-      either way, which assertion 1 pins. What must stay gone is the old
-      kyv.location, which held a ZIP.
-
-      Comments are stripped first, so a comment explaining why the page does NOT
-      read stored location cannot read as the thing it warns about. */
+      Comments are stripped first, so a comment explaining why the page does
+      NOT read stored location does not read as the thing it warns about. */
 const stripComments = (src: string) =>
   src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
 assert(
-  "landing page reads no stored ZIP or location",
+  "landing page reads no stored location",
   !/readLocation|kyv\.location/.test(stripComments(pageSource))
-);
-assert(
-  "the ballot renders before any district is known",
-  pageSource.indexOf("<SharedBallot") < pageSource.indexOf("saved ?"),
-  "SharedBallot must come above the district-dependent section"
 );
 
 if (failures) {
