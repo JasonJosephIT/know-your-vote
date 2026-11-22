@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/Users/jsloth/Projects/Civic Awareness Project(Know Your Vote)/.claude/worktrees/play-pause-icon-redesign-165dce/.codex/hooks/session-start.sh'"
+          }
+        ]
+      }
+    ]
+  }
+}
