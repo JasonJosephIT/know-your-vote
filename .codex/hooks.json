@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/Users/jsloth/Projects/Civic Awareness Project(Know Your Vote)/.claude/worktrees/sample-ballot-integration-5d62b5/.codex/hooks/session-start.sh'"
+          }
+        ]
+      }
+    ]
+  }
+}
