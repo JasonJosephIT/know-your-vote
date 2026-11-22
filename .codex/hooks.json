@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/Users/jsloth/Projects/Civic Awareness Project(Know Your Vote)/.claude/worktrees/confident-wozniak-1001e5/.codex/hooks/session-start.sh'"
+          }
+        ]
+      }
+    ]
+  }
+}
