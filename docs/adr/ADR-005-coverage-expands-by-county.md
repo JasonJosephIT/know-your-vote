@@ -1,0 +1,3 @@
+# ADR-005: Coverage grows by county, not by district
+
+What the site covers is a list of counties (`COVERED_COUNTIES`: Miami-Dade, Broward, Hillsborough, Orange). The congressional districts we list are not chosen: they are whichever districts have at least one census block in those counties, currently sixteen. To cover more of Florida we add a county and let its districts follow (founder, 2026-09-10). We rejected "carry all 28 districts" (PR #42) because every race costs news sweeps, briefs and fairness checks, and twelve of those districts would be races that no covered voter can reach. We also never pick districts directly, because a district spans counties while the county is what the elections office, county races and news scoping key on.

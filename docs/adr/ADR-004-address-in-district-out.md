@@ -1,0 +1,3 @@
+# ADR-004: Address in, district out — we never keep where a voter lives
+
+A voter places themselves by typing an address (the ZIP option was removed in PR #175; old `?zip=` links still resolve). The address is used once to find a district and is never stored. The only thing kept is the `kyv.district` cookie, a congressional district plus county FIPS (`FL-27|12086`), written only when the voter asks, always visible, and forgettable in one click. This knowingly reverses part of TASK-070 ("store nothing"): a district holds about 750,000 people and identifies nobody, and without it every page would have to ask again. `scripts/verify-no-stored-location.ts` enforces it.
