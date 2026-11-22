@@ -78,7 +78,7 @@ export default async function AdminLoginPage({
     missing_code: "That sign-in link was incomplete. Request a new one.",
     send_failed:
       "The sign-in email couldn't be sent. Check Supabase Auth logs (SMTP / rate limit), then try again.",
-    exchange_failed:"That sign-in link has expired or was already used.",
+    exchange_failed: "That sign-in link has expired or was already used.",
   };
 
   return (
