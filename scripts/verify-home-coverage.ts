@@ -250,8 +250,8 @@ for (const [label, re] of [
   check(`home page no longer says "${label}"`, !re.test(home));
 }
 check(
-  "home hero says it covers the races we cover",
-  /See the races we cover/.test(home)
+  "home hero is the founder's mission line",
+  /Know Your Vote Florida!/.test(home) && /KYV aims to inform/.test(home)
 );
 check(
   "home House-race step prints the not-covered sentence",

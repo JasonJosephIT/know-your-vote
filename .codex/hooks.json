@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/Users/jsloth/Projects/Civic Awareness Project(Know Your Vote)/.claude/worktrees/kyv-florida-rewrite-cc247e/.codex/hooks/session-start.sh'"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -208,7 +208,7 @@ export default async function Home({
             and Florida House and Senate seats, judges and city races are on
             real ballots and not here. */}
             <h1 className="text-h1 sm:text-display">
-              Florida candidates, in their own words.
+              Know Your Vote Florida!
             </h1>
             {/* The lede and the walkers (design.md "Site illustration
             layer"). From lg up the paragraph takes 58% and the rotator the
@@ -217,14 +217,15 @@ export default async function Home({
             grid is one column and the paragraph is full width, as before.
 
             Shorter and in the body colour (A4): 16 px on a phone, 18 px
-            from sm. "See the races we cover" stays: it claims the races
-            we cover, not the whole ballot (verify-home-coverage). */}
+            from sm. Founder copy (2026-10-14): the mission line. It must
+            not claim the whole ballot (verify-home-coverage). */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-[58%_minmax(0,1fr)]">
               <p className="text-body text-on-surface sm:text-body-lg">
-                See the races we cover and what each candidate says, quoted
-                from their own campaign sites with every source linked. The
-                same rules for every candidate. No ZIP, no account, no
-                agenda.
+                <span className="block font-semibold">
+                  Florida candidates, in their own words.
+                </span>
+                Our biggest enemy is a lack of knowledge. KYV aims to inform
+                all Florida voters!
               </p>
               {/* The walker in the still is drawn per page view, so across
                   visitors every one of the eight leads equally often

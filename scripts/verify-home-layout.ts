@@ -406,8 +406,8 @@ check(
       /<div className="flex flex-col gap-3 lg:gap-6">\s*(?:\{\/\*[\s\S]*?\*\/\}\s*)?<h1/.test(page)
   );
   check(
-    "the lede is the body colour, 16 px on a phone, and still says what we cover",
-    /<p className="text-body text-on-surface sm:text-body-lg">\s*See the races we cover/.test(page)
+    "the lede is the body colour, 16 px on a phone, and opens with the old headline",
+    /<p className="text-body text-on-surface sm:text-body-lg">\s*<span className="block font-semibold">\s*Florida candidates, in their own words\./.test(page)
   );
 }
 
