@@ -41,10 +41,16 @@ async function requestLink(formData: FormData): Promise<void> {
     const origin = host ? `${proto}://${host}` : process.env.NEXT_PUBLIC_SITE_URL ?? "";
 
     const supabase = await createAdminServerClient();
-    await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithOtp({
       email,
       options: { emailRedirectTo: `${origin}/admin/auth/callback` },
     });
+    /* Only allowlisted addresses reach this call, so surfacing a send failure
+       (SMTP rejected, rate limit) does not leak the allowlist. */
+    if (error) {
+      console.error("admin sign-in: signInWithOtp failed", error.status, error.message);
+      redirect("/admin/login?error=send_failed");
+    }
   }
 
   /* Neutral outcome whether or not the email was allowlisted. */
@@ -70,7 +76,9 @@ export default async function AdminLoginPage({
     invalid_email: "That doesn't look like an email address. Try again.",
     not_configured: "Admin sign-in isn't configured yet.",
     missing_code: "That sign-in link was incomplete. Request a new one.",
-    exchange_failed: "That sign-in link has expired or was already used.",
+    send_failed:
+      "The sign-in email couldn't be sent. Check Supabase Auth logs (SMTP / rate limit), then try again.",
+    exchange_failed:"That sign-in link has expired or was already used.",
   };
 
   return (
