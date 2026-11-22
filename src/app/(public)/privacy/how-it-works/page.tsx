@@ -247,7 +247,7 @@ export default function PrivacyHowItWorksPage() {
             scanners open links before the voter does: it shows a confirm
             button, and the button (or the mail app's own Unsubscribe,
             RFC 8058) does it. See src/lib/notifications/unsubscribe.ts. */}
-        <h2 className="text-h2">The one thing we store</h2>
+        <h2 className="text-h2">What we store</h2>
         <p className="text-body">
           If you ask us to email you where to vote, we store your email, your
           ZIP, when you consented, an unsubscribe token, whether you&rsquo;re
@@ -256,6 +256,13 @@ export default function PrivacyHowItWorksPage() {
           nothing is shared or sold, and every email has an unsubscribe link:
           open it and press the confirm button, and you&rsquo;re off the list.
           Your mail app&rsquo;s own Unsubscribe button works too.
+        </p>
+        <p className="text-body">
+          The civics quiz&rsquo;s &ldquo;Stay more informed&rdquo; signup is
+          separate: it adds your email and the county you choose to our mailing
+          list with Resend, the service that sends our email, for county news
+          and civic updates. Resend&rsquo;s emails carry their own unsubscribe
+          link.
         </p>
         <p className="text-body">
           {remindersOn

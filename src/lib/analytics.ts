@@ -21,7 +21,12 @@ export type AnalyticsEvent =
   | "district_set"
   | "brief_viewed"
   | "candidate_saved"
-  | "voting_info_requested";
+  | "voting_info_requested"
+  /* /civics: every quiz question marked, and the stay-informed signup
+     accepted. Neither carries props: never the score, the email or the
+     county. */
+  | "civics_done"
+  | "updates_signed_up";
 
 type PlausibleFn = ((
   event: string,

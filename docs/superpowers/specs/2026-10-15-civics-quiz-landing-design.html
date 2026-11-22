@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Civics Quiz Spec</title>
+<style>
+:root{
+  --green:#2F6B4F;--cream:#F5EBD8;--ink:#22271F;--bg:#F6F3EC;--surface:#FFFFFF;
+  --accent:#B26836;--accent-strong:#8A4E24;--gold:#E3A72E;--brick:#7A2E1E;--olive:#6B7A3A;
+  --muted:#5b6157;--line:#ddd6c6;--yes:#2F6B4F;--half:#8A4E24;--no:#7A2E1E;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1b1f19;--surface:#242a22;--ink:#F5EBD8;--cream:#2c3329;--muted:#b9b3a4;--line:#3a4136;
+    --green:#7fbf9c;--accent-strong:#e0a36f;--brick:#e08a73;--yes:#7fbf9c;--half:#e0a36f;--no:#e08a73;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1b1f19;--surface:#242a22;--ink:#F5EBD8;--cream:#2c3329;--muted:#b9b3a4;--line:#3a4136;
+  --green:#7fbf9c;--accent-strong:#e0a36f;--brick:#e08a73;--yes:#7fbf9c;--half:#e0a36f;--no:#e08a73;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:24px 16px 64px}
+h1,h2,h3{font-family:Figtree,Inter,system-ui,sans-serif;line-height:1.2}
+h1{font-size:2rem;margin:.2em 0}
+h2{font-size:1.4rem;margin:2.2em 0 .6em;padding-top:.6em;border-top:1px solid var(--line)}
+h3{font-size:1.1rem;margin:1.2em 0 .4em}
+.mono,code{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.85em}
+.meta{color:var(--muted);font-size:.9rem}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.8rem;font-weight:600;background:var(--cream);color:var(--ink);border:1px solid var(--line)}
+.grid{display:grid;gap:16px}
+@media(min-width:800px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.decide{background:var(--cream);border-left:4px solid var(--green);padding:14px 16px;border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:.92rem;background:var(--surface)}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font-family:Figtree,Inter,sans-serif;background:var(--cream)}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+.y{color:var(--yes);font-weight:700}.h{color:var(--half);font-weight:700}.n{color:var(--no);font-weight:700}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.tabs button{font:inherit;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--green);color:#fff;border-color:var(--green)}
+.panel[hidden]{display:none}
+/* mockup */
+.phone{max-width:360px;margin:0 auto;background:var(--bg);border:8px solid var(--ink);border-radius:28px;padding:16px;min-height:520px}
+.q{font-family:Figtree,sans-serif;font-size:1.25rem;font-weight:700;margin:6px 0 12px}
+.btn{display:inline-block;font:600 .95rem Inter,sans-serif;padding:10px 16px;border-radius:8px;border:1px solid var(--green);background:var(--green);color:#fff;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--green)}
+.ans{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;margin-top:12px}
+.ans .name{font-family:Figtree,sans-serif;font-size:1.2rem;font-weight:700}
+.receipt{font-family:"IBM Plex Mono",monospace;font-size:.75rem;color:var(--muted);border-top:1px dashed var(--line);margin-top:10px;padding-top:8px}
+.ballot{margin-top:10px;font-size:.9rem;padding:8px 10px;background:var(--cream);border-radius:6px}
+.field{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0}
+summary{cursor:pointer;font-weight:600}
+svg text{font-family:Inter,sans-serif}
+.oq input[type=text]{width:100%;font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
+.oq select{font:inherit;padding:4px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.tl{position:relative;margin:12px 0 0;padding-left:18px;border-left:3px solid var(--green)}
+.tl div{margin:0 0 12px}
+.tl b{font-family:"IBM Plex Mono",monospace;font-size:.85rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<p class="meta">Know Your Vote · spec v2 · 2026-10-15 · <span class="pill">Draft: waiting for founder approval</span></p>
+<h1>"Do you know civics?": a simple quiz landing for the "Who's my ___?" ads</h1>
+<p>One short page that every ad links to: <b>address first</b>, then <b>seven recall-and-reveal questions</b> about who holds each office for <i>you</i>, every answer sourced, then on to the existing ballot guide. No product code here. Markdown version: <code>2026-10-15-civics-quiz-landing-design.md</code>.</p>
+
+<div class="decide">
+<b>Three things to decide:</b>
+<ol style="margin:.4em 0 0">
+<li><b>Approve by Fri 10-16:</b> v1 (questions 1–6) goes live <b>Tue 10-20</b>, and the Senator pair can run from Wed 10-21.</li>
+<li><b>Mayor stays, in v1.1 (Tue 10-27):</b> the Mayor pair runs from Wed 10-28, <b>in the four covered counties only</b>. If v1.1 misses that date, the Mayor pair is dropped for 2026.</li>
+<li><b>Card rules:</b> recall and reveal (no multiple choice), no photos, and party shown by the same rule as candidate cards.</li>
+</ol>
+</div>
+
+<h2>0. What changed in v2</h2>
+<p>The founder: <i>"For now, let's keep it a simple landing quiz that all of them will link over to."</i> The ad roles are now U.S. Senator (<code>?role=senator</code>, statewide) and Mayor (<code>?role=mayor</code>, held until mayor data is ready).</p>
+<div class="tw"><table>
+<tr><th>v1 spec</th><th>v2</th></tr>
+<tr><td>Three levels (Easy, Medium, Hard)</td><td><b>One short quiz</b>, 7 questions on one page, easiest first</td></tr>
+<tr><td>U.S. Representative (needs a 2022-map lookup)</td><td class="n">Cut for 2026</td></tr>
+<tr><td>County commissioner, school board</td><td class="n">Cut for 2026</td></tr>
+<tr><td>Mayor</td><td class="y">Kept, in v1.1</td></tr>
+</table></div>
+
+<h2>1. The flow</h2>
+<div class="tw" style="background:var(--surface);padding:8px">
+<svg viewBox="0 0 1000 170" width="100%" role="img" aria-label="Flow: ad, address, seven questions, ballot guide">
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="currentColor"/></marker></defs>
+  <g style="color:var(--muted)" stroke="currentColor" stroke-width="2" fill="none" marker-end="url(#ar)">
+    <line x1="180" y1="70" x2="220" y2="70"/><line x1="410" y1="70" x2="450" y2="70"/><line x1="750" y1="70" x2="790" y2="70"/>
+  </g>
+  <g font-size="14">
+    <rect x="10" y="35" width="170" height="70" rx="10" fill="var(--cream)" stroke="var(--line)"/>
+    <text x="95" y="64" text-anchor="middle" fill="var(--ink)" font-weight="700">Ad</text>
+    <text x="95" y="84" text-anchor="middle" fill="var(--muted)" font-size="12">?role=senator | mayor</text>
+    <rect x="220" y="35" width="190" height="70" rx="10" fill="var(--green)"/>
+    <text x="315" y="64" text-anchor="middle" fill="#fff" font-weight="700">Address box</text>
+    <text x="315" y="84" text-anchor="middle" fill="#fff" font-size="12">→ Census block only</text>
+    <rect x="450" y="35" width="300" height="70" rx="10" fill="var(--surface)" stroke="var(--green)" stroke-width="2"/>
+    <text x="600" y="64" text-anchor="middle" fill="var(--ink)" font-weight="700">7 questions · recall → reveal</text>
+    <text x="600" y="84" text-anchor="middle" fill="var(--muted)" font-size="12">Senators · Governor · Cabinet · amendments · mayor</text>
+    <rect x="790" y="35" width="200" height="70" rx="10" fill="var(--green)"/>
+    <text x="890" y="64" text-anchor="middle" fill="#fff" font-weight="700">Ballot guide</text>
+    <text x="890" y="84" text-anchor="middle" fill="#fff" font-size="12">existing, district set</text>
+  </g>
+  <text x="500" y="140" text-anchor="middle" font-size="12" fill="var(--accent-strong)">The role in the link only picks which question opens first. "See your ballot" sets the existing kyv.district cookie on the voter's click; nothing goes in the URL.</text>
+</svg>
+</div>
+
+<h3>Mockup: one question, before and after reveal</h3>
+<div class="grid g2">
+  <div class="phone">
+    <div class="meta">Question 7 of 7</div>
+    <div class="q">Who is your mayor?</div>
+    <p class="meta">Think of the name, then check.</p>
+    <button class="btn" id="reveal">Show answer</button>
+    <div id="ansbox" hidden>
+      <div class="ans">
+        <div class="meta">City of [City] · Mayor</div>
+        <div class="name">[Mayor's name]</div>
+        <div>In office since Nov 2023 (elected)</div>
+        <div class="meta" style="margin-top:6px">[One sourced line on what the city's mayor does, from its charter.]</div>
+        <div class="ballot">This seat isn't on your ballot this year. Next election: 2027.</div>
+        <div class="receipt">City of [City] · [city site] · Checked 2026-10-27</div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px"><button class="btn">I knew it</button><button class="btn ghost">I didn't</button></div>
+    </div>
+    <p class="meta" style="margin-top:14px">Mockup only, not a real KYV screen. The names are placeholders.</p>
+  </div>
+  <div>
+    <div class="card">
+      <b>Every answer card has</b>
+      <ul>
+        <li>The name, as the official source prints it</li>
+        <li>The office; "in office since"; elected or appointed, said for every holder</li>
+        <li>One sourced line on what the office does (never how well)</li>
+        <li>A receipt: <span class="mono">Source · Where · Checked date</span></li>
+        <li>A ballot line: on your ballot (with a link), on your ballot but not covered, or not up this year</li>
+      </ul>
+      <b>Stale guard:</b> if a row was checked more than 14 days ago, or is past its changeover date, the card shows no name, only "We're re-checking this one. [Source] lists it."
+    </div>
+    <div class="card" style="margin-top:16px">
+      <b>Address box first</b>
+      <label class="meta" for="addr" style="display:block;margin:6px 0 4px">Your address</label>
+      <input id="addr" class="field" placeholder="Street and city, or street and ZIP" disabled>
+      <p class="meta">The same field and copy as the home page. The address goes from our server to Census only. It is never stored or logged, never put in a URL, and never sent to analytics or Google.</p>
+    </div>
+  </div>
+</div>
+
+<h2>2. The seven questions</h2>
+<div class="tw"><table>
+<tr><th>#</th><th>Question</th><th>Answer (re-check before launch)</th><th>KYV today</th><th>Ships</th></tr>
+<tr><td>1</td><td>Your two U.S. Senators</td><td>Rick Scott, Ashley Moody</td><td class="h">Half (Moody only)</td><td>v1</td></tr>
+<tr><td>2</td><td>Governor</td><td>Ron DeSantis</td><td class="n">No (open seat)</td><td>v1</td></tr>
+<tr><td>3</td><td>Attorney General</td><td>James Uthmeier (appointed 2025)</td><td class="y">Yes</td><td>v1</td></tr>
+<tr><td>4</td><td>Chief Financial Officer</td><td>Blaise Ingoglia (appointed 2025)</td><td class="y">Yes</td><td>v1</td></tr>
+<tr><td>5</td><td>Commissioner of Agriculture</td><td>Wilton Simpson</td><td class="y">Yes</td><td>v1</td></tr>
+<tr><td>6</td><td>How many statewide amendments are on your ballot, and what share does each need to pass?</td><td>Three; 60%</td><td class="y">Yes</td><td>v1</td></tr>
+<tr><td>7</td><td>Your mayor</td><td>City mayor, county mayor, or "no city mayor"</td><td class="n">No (no city geography)</td><td><b>v1.1</b></td></tr>
+</table></div>
+<p class="meta">Questions 1–6 have the same answer for every Floridian, so they work for any address and suit the statewide Senator ads.</p>
+
+<h2>3. Data and sources</h2>
+<div class="tabs" role="tablist" id="srcTabs">
+  <button role="tab" aria-selected="true" data-p="p-fed">Questions 1–6</button>
+  <button role="tab" aria-selected="false" data-p="p-city">Mayor</button>
+  <button role="tab" aria-selected="false" data-p="p-shape">Data shape</button>
+  <button role="tab" aria-selected="false" data-p="p-later">Cut for later</button>
+</div>
+<div class="panel" id="p-fed"><div class="tw"><table>
+<tr><th>Data</th><th>Official source</th><th>Cross-check</th><th>Changes</th></tr>
+<tr><td>U.S. Senators</td><td>senate.gov</td><td>Clerk / Bioguide</td><td>Scott's term runs to 2031-01-03. Moody's seat is a 2026 <b>special</b> election, so the winner may be sworn in once results are certified in November (confirm)</td></tr>
+<tr><td>Governor, AG, CFO, Agriculture</td><td>flgov.com · myfloridalegal.com · myfloridacfo.com · fdacs.gov</td><td>DOS results / appointment record</td><td>2027-01-05</td></tr>
+<tr><td>Amendment facts</td><td>DOS amendment booklet (already in KYV); FL Const. Art. XI §5(e)</td><td>DOS Initiatives DB "Made ballot"</td><td>fixed until 11-03</td></tr>
+</table></div></div>
+<div class="panel" id="p-city" hidden><div class="tw"><table>
+<tr><th>Who</th><th>Fact</th><th>Source</th><th>Changes</th></tr>
+<tr><td>Miami-Dade</td><td>Elected executive mayor</td><td>Mayor's office page</td><td>next county election</td></tr>
+<tr><td>Orange</td><td>Elected mayor; the seat is on the 2026 ballot and the incumbent isn't running</td><td>orangecountyfl.net</td><td>when the winner takes office (confirm date)</td></tr>
+<tr><td>Broward</td><td>Ceremonial; the commission picks a new mayor each November (Mark Bogen since 2025-11-18)</td><td>broward.org; charter</td><td>November reorganization</td></tr>
+<tr><td>Hillsborough</td><td><b>No county mayor</b>; the commission elects a chair</td><td>charter</td><td>—</td></tr>
+<tr><td>~80 cities</td><td>City mayor (in some cities the post rotates)</td><td>Each city's own site or clerk. Cross-check against the FL League of Cities and Miami-Dade League of Cities lists; those are associations, so never the source</td><td>per-city calendars</td></tr>
+<tr><td>Which city</td><td>Block → municipality table, built from county GIS boundaries; no match means unincorporated</td><td>Census Incorporated Places</td><td>annexations</td></tr>
+</table></div></div>
+<div class="panel" id="p-shape" hidden>
+<div class="grid g2">
+<div class="card"><b>Officeholder file</b> (a typed data file in the repo; ~10 rows for v1, ~85 more for v1.1)<pre class="mono" style="white-space:pre-wrap">seat · name · party (as printed) · since
+electedOrAppointed · termEnds · vacant
+sourceName · sourceUrl · checkedAt · validUntil</pre>
+The PR is the review and git is the audit trail. It sits outside the content freeze. A check asserts it agrees with <code>candidate.is_incumbent</code>.</div>
+<div class="card"><b>block_municipality table</b> (v1.1; new, because <code>block_district</code> freezes on 10-18)<pre class="mono" style="white-space:pre-wrap">block_start · block_end · county_fips · municipality</pre>
+Built offline by matching each 2020 block's internal point to a city polygon (~89,816 blocks), like <code>build-block-seed.mjs</code>.</div>
+</div></div>
+<div class="panel" id="p-later" hidden><div class="tw"><table>
+<tr><th>Cut</th><th>Why it's hard</th><th>What's already there</th></tr>
+<tr><td>U.S. Representative</td><td>KYV maps addresses to the <b>2026</b> district (HB 1-D), but today's member was elected on the <b>2022</b> map. It needs a block → 2022-district table, and the card has to say both districts</td><td>Clerk member list; the Legislature's 2022 plan block file (not fetched yet)</td></tr>
+<tr><td>County commission, school board</td><td>Every 2026 seat changes hands on <b>2026-11-17</b>. Orange's current map has 6 districts; its 8-district map starts that day</td><td>Most boundaries are in <code>docs/general-election/boundaries/</code>. Missing: the Broward commission map and Orange's current 6-district map. Building this would also make the 17 county races reachable</td></tr>
+</table></div></div>
+
+<h3>Freshness</h3>
+<div class="tl">
+  <div><b>Weekly until 11-03</b> re-check every row; each card prints "Checked [date]"</div>
+  <div><b>November (date TBC)</b> the U.S. Senate special winner is sworn in; Broward picks its new mayor</div>
+  <div><b>Orange (date TBC)</b> the new county mayor takes office</div>
+  <div><b>2027-01-05</b> the Governor and Cabinet take office</div>
+</div>
+
+<h2>4. Question rules</h2>
+<div class="grid g2">
+<div class="card"><ol>
+<li><b>Facts only:</b> who holds the office, since when, elected or appointed, what the office does, how many, what threshold, and whether it's on your ballot.</li>
+<li><b>Every answer is sourced</b> with a receipt. No source means no name.</li>
+<li><b>Recall, not multiple choice:</b> multiple choice would mean KYV picking which real politicians appear as the wrong answers.</li>
+<li><b>One template for every holder:</b> no photos, and one party rule for everyone.</li>
+</ol></div>
+<div class="card"><ol start="5">
+<li><b>Describe the office, never the holder.</b></li>
+<li><b>Amendments: process facts only</b>, never whether they're good or bad.</li>
+<li><b>The ad's out-of-state politicians never appear on the page.</b></li>
+<li><b>No wordmark next to an answer card.</b></li>
+</ol></div>
+</div>
+
+<h2>5. Privacy</h2>
+<div class="tw"><table>
+<tr><th>Thing</th><th>Goes to</th><th>Never</th></tr>
+<tr><td>Address</td><td>Our server → Census Geocoder (no IP sent). The route sits under <code>/api/address/*</code>, so Sentry drops the request body</td><td>stored, logged, URL, cookie, analytics, Google</td></tr>
+<tr><td>Block, city</td><td>memory, for that one request</td><td>anywhere else</td></tr>
+<tr><td>District</td><td>the existing <code>kyv.district</code> cookie, written only when the voter clicks "See your ballot"</td><td>any new cookie shape</td></tr>
+<tr><td>Self-marks, tally</td><td>component state</td><td>server, localStorage</td></tr>
+<tr><td>Plausible</td><td><code>civics_started</code>, <code>civics_done</code>, <code>civics_handoff</code>, with no props</td><td>role, score, office, county, city</td></tr>
+<tr><td>Google Ads</td><td>Only after Accept (Basic Consent Mode). The KPI stays <code>ballot_lookup_completed</code>, counted at the ballot</td><td><b>Enhanced conversions or automatic form-field collection</b> (they would hash the address); remarketing or audiences built from quiz visitors</td></tr>
+</table></div>
+
+<h2>6. Coverage honesty</h2>
+<div class="tw"><table>
+<tr><th>Address</th><th>Q1–6</th><th>Mayor</th></tr>
+<tr><td>Four covered counties, in a city</td><td class="y">all</td><td class="y">city mayor + county fact</td></tr>
+<tr><td>Four counties, unincorporated</td><td class="y">all</td><td class="y">"You have no city mayor" + county fact (this counts as an answer)</td></tr>
+<tr><td>Hillsborough</td><td class="y">all</td><td class="y">+ "no county mayor; the commission elects a chair"</td></tr>
+<tr><td>Elsewhere in Florida</td><td class="y">all</td><td class="n">"We haven't mapped cities in [County] yet" + a link to its Supervisor of Elections</td></tr>
+<tr><td>Near a city line</td><td class="y">all</td><td>names both cities, says why, never guesses</td></tr>
+</table></div>
+<p class="meta">This is why the <b>Mayor pair should target only the four covered counties</b>.</p>
+
+<h2>7. What ships before Election Day</h2>
+<div class="tw"><table>
+<tr><th>Release</th><th>Ships</th><th>Live</th><th>Unblocks</th><th>If late</th></tr>
+<tr><td><b>v1</b></td><td>Page, address box, Q1–6, cards, hand-off, privacy, analytics events, stale guard</td><td><b>Tue 10-20</b></td><td>Senator pair from Wed 10-21</td><td>—</td></tr>
+<tr><td><b>v1.1</b></td><td>Q7 mayor: county facts, ~80 city mayors, block → city table</td><td><b>Tue 10-27</b></td><td>Mayor pair (four counties) from Wed 10-28</td><td>Misses Wed 10-28 → drop the Mayor pair for 2026</td></tr>
+<tr><td>After 11-03</td><td>The ads stop. Take the page down on 11-04, or keep it updated</td><td>—</td><td>—</td><td>—</td></tr>
+</table></div>
+<p class="meta">v1: research ½ day · page 1½ days · review + privacy check + founder ½ day. v1.1: boundaries + table 1 day · mayor rows 1–2 days.</p>
+
+<h2>8. Open questions</h2>
+<p class="meta">Edit your answers, then copy them as markdown.</p>
+<div class="tw oq"><table id="oq">
+<tr><th>#</th><th>Question</th><th>Recommended</th><th>Your call</th></tr>
+</table></div>
+<p><button class="btn" id="copy">Copy answers as markdown</button> <span class="meta" id="copied"></span></p>
+
+<h2>9. Done means</h2>
+<ul>
+<li><code>/civics</code> is live with Q1–6, plus Q7 after v1.1. Every receipt is dated within 14 days, and the officeholder ↔ incumbency check passes.</li>
+<li>Network inspection shows the address going only to Census, nothing sent to Google when consent is declined, and no address-derived data in Google requests when it's accepted.</li>
+<li>Test addresses give the expected cards: one per county plus one outside coverage. v1.1 adds an unincorporated address, Hillsborough, an address near a city line, and one city per county.</li>
+<li>The founder has reviewed the live page.</li>
+</ul>
+</div>
+
+<script>
+document.getElementById('reveal').onclick=function(){document.getElementById('ansbox').hidden=false;this.hidden=true};
+document.querySelectorAll('#srcTabs button').forEach(function(b){b.onclick=function(){
+  document.querySelectorAll('#srcTabs button').forEach(function(x){x.setAttribute('aria-selected','false');document.getElementById(x.dataset.p).hidden=true});
+  b.setAttribute('aria-selected','true');document.getElementById(b.dataset.p).hidden=false;}});
+var Q=[
+ ["Q1","Route and title: /civics, \"Do you know civics?\"","Yes"],
+ ["Q2","Party on answer cards","Same rule as candidate cards: as printed, none for nonpartisan"],
+ ["Q3","Officeholder photos","None"],
+ ["Q4","Officeholder data as a reviewed file outside the content freeze","Yes, same-day correction PRs"],
+ ["Q5","Mayor pair targets the four covered counties only","Yes"],
+ ["Q6","After 11-03: take down or keep updated","Take down 11-04"],
+ ["Q7","Approve by Fri 10-16 for v1 on Tue 10-20","Yes"],
+ ["Q8","Score sharing","Not in 2026"]];
+var t=document.getElementById('oq');
+Q.forEach(function(q){var r=t.insertRow();r.insertCell().textContent=q[0];r.insertCell().textContent=q[1];r.insertCell().textContent=q[2];
+ var c=r.insertCell();var s=document.createElement('select');['Agree','Change'].forEach(function(o){var op=document.createElement('option');op.textContent=o;s.appendChild(op)});
+ var i=document.createElement('input');i.type='text';i.placeholder='note';c.appendChild(s);c.appendChild(i);});
+document.getElementById('copy').onclick=function(){
+ var rows=[...t.rows].slice(1).map(function(r){return '| '+r.cells[0].textContent+' | '+r.cells[1].textContent+' | '+r.cells[2].textContent+' | '+r.querySelector('select').value+' | '+r.querySelector('input').value+' |'});
+ var md='| # | Question | Recommended | Call | Note |\n|---|---|---|---|---|\n'+rows.join('\n');
+ navigator.clipboard.writeText(md).then(function(){document.getElementById('copied').textContent='Copied.'},function(){document.getElementById('copied').textContent='Copy blocked; select the table instead.'});};
+</script>
+</body>
+</html>
