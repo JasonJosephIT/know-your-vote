@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/Users/jsloth/Projects/Civic Awareness Project(Know Your Vote)/.claude/worktrees/candidate-profiles-handoff-46d6e7/.codex/hooks/session-start.sh'"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobbin decisions D1–D4</title>
+<style>
+  :root { --bg:#f6f3ec; --surface:#fff; --ink:#1f2a24; --muted:#55615a; --line:#ddd6c8; --primary:#2f6b4f; --accent:#8a4e24; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#151a17; --surface:#1e2420; --ink:#eef1ec; --muted:#a9b3ac; --line:#34403a; --primary:#7fc2a0; --accent:#e0a074; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 28px; line-height: 1.2; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 24px; font-size: 15px; }
+  fieldset { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px 20px; margin: 0 0 16px; }
+  legend { font-weight: 700; font-size: 18px; padding: 0 6px; }
+  .why { color: var(--muted); font-size: 14px; margin: 4px 0 12px; }
+  label.opt { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; margin-top: 8px; cursor: pointer; }
+  label.opt:has(input:checked) { border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); }
+  label.opt input { margin-top: 4px; accent-color: var(--primary); }
+  .rec { font-style: normal; font-size: 12px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: .04em; margin-left: 6px; }
+  .opt small { display: block; color: var(--muted); font-size: 14px; margin-top: 2px; }
+  textarea { width: 100%; min-height: 56px; margin-top: 12px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font: inherit; font-size: 14px; background: var(--bg); color: var(--ink); }
+  .bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 24px; }
+  button { font: inherit; font-weight: 600; padding: 10px 18px; border-radius: 8px; border: 0; background: var(--primary); color: #fff; cursor: pointer; min-height: 44px; }
+  #status { color: var(--muted); font-size: 14px; }
+  pre { white-space: pre-wrap; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 13px; }
+  .note { font-size: 14px; color: var(--accent); margin-top: 8px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Mobbin catalog: decisions D1–D4</h1>
+  <p class="sub">Recommended answers are pre-selected. Change any, add a note, then copy as markdown and paste it back into the chat. Full context: mobbin-references.md, "Founder decisions".</p>
+
+  <fieldset data-key="D1" data-q="How much frozen-file work goes in before the Oct 18 freeze?">
+    <legend>D1 · How much frozen-file work goes in before the freeze?</legend>
+    <p class="why">Top-12 items #4–#8 touch files that freeze on Oct 18, so they must merge by Fri Oct 16. Anything not merged by then waits until after Nov 4.</p>
+    <label class="opt"><input type="radio" name="D1" value="(a) #4 and #8 first, then #5, #6, #7 as small separate PRs; whatever misses Fri Oct 16 waits until after Nov 4" checked><span><b>(a) #4 and #8 first, then #5, #6, #7 as small PRs</b><i class="rec">Recommended</i><small>#4 = address errors with a way forward (mostly shipped in #175). #8 = reminder form: consent split, errors under each field, a real "sent" state. Then #5 race-page "Jump to" + "Showing 2 of 9 issues", #6 source type and date on each source line, #7 equal YES/NO reach on amendment pages.</small></span></label>
+    <label class="opt"><input type="radio" name="D1" value="(b) Only #4 and #8; every other frozen item waits until after Nov 4"><span><b>(b) Only #4 and #8</b><small>Everything else that's frozen waits until after Nov 4.</small></span></label>
+    <label class="opt"><input type="radio" name="D1" value="(c) Nothing more in frozen files; only unfrozen items until Nov 4"><span><b>(c) Nothing more in frozen files</b><small>The address-only change already shipped; only unfrozen items until Nov 4.</small></span></label>
+    <textarea placeholder="Notes (optional)"></textarea>
+  </fieldset>
+
+  <fieldset data-key="D2" data-q="Does 'no motion on phones' also cover small feedback motion?">
+    <legend>D2 · Does "no motion on phones" cover feedback motion too?</legend>
+    <p class="why">design.md says no motion below the desktop width. Feedback motion (a dialog or message arriving) isn't art, so the rule needs a reading.</p>
+    <label class="opt"><input type="radio" name="D2" value="(a) Yes: on phones only colour changes and loading indicators move; fades, rises and slides are desktop-only and respect reduced motion" checked><span><b>(a) Yes, phones stay still</b><i class="rec">Recommended</i><small>On phones only colour changes and loading indicators (a spinner that stops at 5s) move. Every fade, rise or slide is desktop-only and off under reduced motion.</small></span></label>
+    <label class="opt"><input type="radio" name="D2" value="(b) Allow short 120–200ms feedback entrances on phones too, only when the visitor hasn't asked for reduced motion"><span><b>(b) Allow short feedback entrances on phones</b><small>120–200ms fades for dialogs, the district sheet and messages, only when the visitor hasn't asked for reduced motion.</small></span></label>
+    <textarea placeholder="Notes (optional)"></textarea>
+  </fieldset>
+
+  <fieldset data-key="D3" data-q="Show a message after 'Keep in mind' (with Undo)?">
+    <legend>D3 · A message after "Keep in mind", with Undo?</legend>
+    <p class="why">Today tapping "Keep in mind" changes silently, and claims success even when private browsing blocks the save.</p>
+    <label class="opt"><input type="radio" name="D3" value="(a) Yes, after Nov 4: one identical site-level message with Undo, no name/photo/party, no auto-hide, says 'kept' only when the save really worked" checked><span><b>(a) Yes, after Nov 4</b><i class="rec">Recommended</i><small>One message, identical for every candidate, with no name, photo or party. Stays until closed. Says "kept" only when the save really worked.</small></span></label>
+    <label class="opt"><input type="radio" name="D3" value="(b) No message; keep the silent toggle and add 'on this device only' to the Saved tab"><span><b>(b) No message</b><small>Keep the silent toggle; add an "on this device only" line to the Saved tab.</small></span></label>
+    <textarea placeholder="Notes (optional)"></textarea>
+  </fieldset>
+
+  <fieldset data-key="D4" data-q="The reminder email sign-up's ZIP field">
+    <legend>D4 · The reminder sign-up's ZIP field</legend>
+    <p class="why">The reminder form asks for a ZIP only to pick your county's dates for the emails. The address-only change didn't touch it.</p>
+    <label class="opt"><input type="radio" name="D4" value="(a) Keep the ZIP through Nov 3, with the four counties named under the label; revisit after Nov 4" checked><span><b>(a) Keep it through Election Day</b><i class="rec">Recommended</i><small>Name the four counties under the label. Changing it now touches the subscriber table, the send schedule and /privacy, nine days before the Oct 21 send.</small></span></label>
+    <label class="opt"><input type="radio" name="D4" value="(b) Replace it now with a county choice (four counties + 'Elsewhere in Florida'), preselected from the saved district; must merge by Fri Oct 16"><span><b>(b) Replace it with a county choice now</b><small>The four counties plus "Elsewhere in Florida", preselected from the saved district, so the site asks for a ZIP nowhere. Same Fri Oct 16 deadline; /privacy changes too.</small></span></label>
+    <textarea placeholder="Notes (optional)"></textarea>
+  </fieldset>
+
+  <div class="bar">
+    <button type="button" id="copy">Copy as markdown</button>
+    <span id="status" role="status"></span>
+  </div>
+  <pre id="out" hidden></pre>
+</main>
+<script>
+  function toMarkdown() {
+    var lines = ["## Mobbin decisions D1–D4 (founder)", ""];
+    document.querySelectorAll("fieldset").forEach(function (fs) {
+      var key = fs.dataset.key, q = fs.dataset.q;
+      var picked = fs.querySelector("input:checked");
+      var note = fs.querySelector("textarea").value.trim();
+      lines.push("- **" + key + ". " + q + "** " + (picked ? picked.value : "(no answer)"));
+      if (note) lines.push("  - Note: " + note);
+    });
+    return lines.join("\n");
+  }
+  document.getElementById("copy").addEventListener("click", function () {
+    var md = toMarkdown(), out = document.getElementById("out"), status = document.getElementById("status");
+    out.textContent = md; out.hidden = false;
+    var done = function (ok) { status.textContent = ok ? "Copied. Paste it into the chat." : "Couldn't copy automatically; select the text below."; };
+    try { navigator.clipboard.writeText(md).then(function () { done(true); }, function () { done(false); }); }
+    catch (e) { done(false); }
+  });
+</script>
+</body>
+</html>

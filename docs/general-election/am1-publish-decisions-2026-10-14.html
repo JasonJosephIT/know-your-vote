@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amendment 1 decisions</title>
+<style>
+  :root { --bg:#f6f3ec; --surface:#fff; --ink:#1f2a24; --muted:#55615a; --line:#ddd6c8; --primary:#2f6b4f; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#151a17; --surface:#1e2420; --ink:#eef1ec; --muted:#a9b3ac; --line:#34403a; --primary:#7fc2a0; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 26px; line-height: 1.2; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 20px; font-size: 15px; }
+  table { width:100%; border-collapse: collapse; background: var(--surface); border:1px solid var(--line); border-radius: 12px; overflow:hidden; font-size: 14px; margin: 0 0 20px; }
+  th, td { text-align:left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 13px; color: var(--muted); }
+  fieldset { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px 20px; margin: 0 0 16px; }
+  legend { font-weight: 700; font-size: 17px; padding: 0 6px; }
+  .why { color: var(--muted); font-size: 14px; margin: 4px 0 10px; }
+  label.opt { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; margin-top: 8px; cursor: pointer; }
+  label.opt:has(input:checked) { border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); }
+  label.opt input { margin-top: 4px; accent-color: var(--primary); }
+  .rec { font-style: normal; font-size: 12px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: .04em; margin-left: 6px; }
+  .opt small { display: block; color: var(--muted); font-size: 14px; margin-top: 2px; }
+  textarea { width: 100%; min-height: 48px; margin-top: 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font: inherit; font-size: 14px; background: var(--bg); color: var(--ink); }
+  button { font: inherit; font-weight: 600; padding: 10px 18px; border-radius: 8px; border: 0; background: var(--primary); color: #fff; cursor: pointer; min-height: 44px; }
+  #status { color: var(--muted); font-size: 14px; margin-left: 12px; }
+  pre { white-space: pre-wrap; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Amendment 1: publish before the freeze?</h1>
+  <p class="sub">0059 is live: AM1 now stores these 8 sources, still hidden while AM1 is held (voters see only its 10 neutral sources). The freeze starts Sun Oct 18 04:00 UTC. Recommended answers are pre-selected; copy as markdown and paste it into the chat.</p>
+
+  <table>
+    <tr><th>Side</th><th>Kind</th><th>Source</th></tr>
+    <tr><td>For</td><td>argument</td><td>Republican Party of Florida press release</td></tr>
+    <tr><td>For</td><td>analysis</td><td>Florida TaxWatch taxpayer's guide</td></tr>
+    <tr><td>For</td><td>commentary</td><td>Letter, Citrus County Chronicle (George Wilson)</td></tr>
+    <tr><td>For</td><td>commentary</td><td>Palm Beach Examiner Substack (Karl Dickey)</td></tr>
+    <tr><td>Against</td><td>argument</td><td>Florida Education Association toolkit, listed as opposed</td></tr>
+    <tr><td>Against</td><td>argument</td><td>League of Women Voters, VOTE411, listed as opposed</td></tr>
+    <tr><td>Against</td><td>commentary</td><td>Letter, Villages-News (Charlene Griffin)</td></tr>
+    <tr><td>Against</td><td>commentary</td><td>Amanda Informed Substack</td></tr>
+  </table>
+
+  <fieldset data-key="1" data-q="Publish Amendment 1 before the freeze?">
+    <legend>1 · Publish Amendment 1 before the freeze?</legend>
+    <p class="why">Publishing shows the for/against columns, as Amendments 2 and 3 already do. Balance check passes (4 vs 4). The against side's two organisation rows are bare "opposed" listings without reasons, the same kind you accepted for Amendment 2. After Oct 18 it would need a freeze exception.</p>
+    <label class="opt"><input type="radio" name="d1" value="(a) Yes, publish AM1 before Oct 18 04:00 UTC (migration 0060 through the publication door)" checked><span><b>(a) Yes, publish before Oct 18</b><i class="rec">Recommended</i><small>Consistent with how Amendment 2 was published.</small></span></label>
+    <label class="opt"><input type="radio" name="d1" value="(b) Keep AM1 held through Nov 3 (neutral sources only)"><span><b>(b) Keep it held through Election Day</b><small>Voters keep seeing only the neutral sources and the held note.</small></span></label>
+    <textarea placeholder="Notes (optional)"></textarea>
+  </fieldset>
+
+  <fieldset data-key="2" data-q="Your Observer editorial ('We recommend: Vote no on Amendment 1')">
+    <legend>2 · The Your Observer editorial</legend>
+    <p class="why">Blocked in last week's check; it opened today and recommends a No vote. It was never verified as a row, so it isn't in 0059.</p>
+    <label class="opt"><input type="radio" name="d2" value="(a) Add it as against / commentary (a newspaper's opinion), verified first" checked><span><b>(a) Add as commentary</b><i class="rec">Recommended</i><small>Keeps the argument tier for the advocates and organisations themselves. Makes it 4 for / 5 against; still balanced.</small></span></label>
+    <label class="opt"><input type="radio" name="d2" value="(b) Add it as against / argument (the paper's own position)"><span><b>(b) Add as argument</b><small>Treats an editorial board like an organisation stating its position.</small></span></label>
+    <label class="opt"><input type="radio" name="d2" value="(c) Leave it out"><span><b>(c) Leave it out</b></span></label>
+    <textarea placeholder="Notes (optional)"></textarea>
+  </fieldset>
+
+  <fieldset data-key="3" data-q="Two verified neutral news rows not yet stored (Florida Politics on Jolly, WPTV explainer)">
+    <legend>3 · Two verified neutral news sources</legend>
+    <p class="why">Florida Politics (Oct 3, on David Jolly's support) and WPTV's AM1–AM2 explainer (Oct 8) were verified on Oct 9 but never stored. Neutral rows show even while AM1 is held.</p>
+    <label class="opt"><input type="radio" name="d3" value="(a) Add both in the same migration, re-verified first" checked><span><b>(a) Add both</b><i class="rec">Recommended</i></span></label>
+    <label class="opt"><input type="radio" name="d3" value="(b) Leave them out"><span><b>(b) Leave them out</b></span></label>
+    <textarea placeholder="Notes (optional)"></textarea>
+  </fieldset>
+
+  <fieldset data-key="4" data-q="FEA now lists Amendment 3 as opposed">
+    <legend>4 · FEA's Amendment 3 listing</legend>
+    <p class="why">FEA's voter toolkit now also lists Amendment 3 as "OPPOSED BY FEA". Amendment 3 (published) has no FEA row. Same kind of bare listing already used for AM1 and AM2.</p>
+    <label class="opt"><input type="radio" name="d4" value="(a) Add an FEA against/argument row to Amendment 3, re-verified first, before Oct 18" checked><span><b>(a) Add it to Amendment 3</b><i class="rec">Recommended</i><small>Applies the bare-listing rule the same way across all three amendments.</small></span></label>
+    <label class="opt"><input type="radio" name="d4" value="(b) Leave Amendment 3 as is"><span><b>(b) Leave Amendment 3 as is</b></span></label>
+    <textarea placeholder="Notes (optional)"></textarea>
+  </fieldset>
+
+  <p><button type="button" id="copy">Copy as markdown</button><span id="status" role="status"></span></p>
+  <pre id="out" hidden></pre>
+</main>
+<script>
+  document.getElementById("copy").addEventListener("click", function () {
+    var lines = ["## Amendment 1 decisions (founder, 2026-10-14)", ""];
+    document.querySelectorAll("fieldset").forEach(function (fs) {
+      var p = fs.querySelector("input:checked"), n = fs.querySelector("textarea").value.trim();
+      lines.push("- **" + fs.dataset.key + ". " + fs.dataset.q + "** " + (p ? p.value : "(no answer)"));
+      if (n) lines.push("  - Note: " + n);
+    });
+    var md = lines.join("\n"), out = document.getElementById("out"), st = document.getElementById("status");
+    out.textContent = md; out.hidden = false;
+    var done = function (ok) { st.textContent = ok ? "Copied. Paste it into the chat." : "Select the text below to copy."; };
+    try { navigator.clipboard.writeText(md).then(function () { done(true); }, function () { done(false); }); } catch (e) { done(false); }
+  });
+</script>
+</body>
+</html>
