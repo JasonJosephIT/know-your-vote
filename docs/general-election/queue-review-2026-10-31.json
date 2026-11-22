@@ -1,0 +1,3890 @@
+[
+ {
+  "id": "27e2e320-d3db-4dc8-81a5-35b556e168e3",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Syndicated copy of WLRN's FL-22 map story; WLRN's copy is kept.",
+  "label": "Askar · 2026-10-22 · DeSantis' congressional map was designed to flip 4 seats to"
+ },
+ {
+  "id": "f72c335c-d645-4247-8c7b-4c044e490685",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: the FL-22 contest between Dandiya and Askar (both in the dek); WLRN is the South Florida newsroom's copy.",
+  "label": "Askar · 2026-10-22 · DeSantis’ congressional map was designed to flip 4 seats to"
+ },
+ {
+  "id": "2859147f-cd2b-4cef-a91b-7bc91458651d",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'Surges' is a form of the banned horse-race word 'surging'.",
+  "label": "Askar · 2026-10-27 · Casey Askar Surges in Latest Progressive Poll, Pia Dandiya D"
+ },
+ {
+  "id": "fce96614-6c65-4bf8-b7e6-c9132ecf8d26",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'JUICE' daily roundup strings unrelated items together.",
+  "label": "Askar · 2026-10-28 · JUICE🍊— 10.28.2026 — Casey Askar Surges in Latest Progressiv"
+ },
+ {
+  "id": "9f768747-de93-4428-b479-5a01829dabc8",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: profile of the agriculture commissioner race; WLRN's copy (earliest).",
+  "label": "Atkins · 2026-10-23 · How Florida's often overlooked Commissioner of Agriculture r"
+ },
+ {
+  "id": "e26f3798-1ac9-4359-bb5f-a0c37220272c",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Syndicated copy of WLRN's agriculture commissioner story.",
+  "label": "Atkins · 2026-10-24 · How Florida's often overlooked Commissioner of Agriculture r"
+ },
+ {
+  "id": "372fd300-6773-47b2-bc35-58f215a59ca2",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: what to know about the agriculture commissioner race.",
+  "label": "Atkins · 2026-10-27 · What to know about the Florida agriculture commissioner race"
+ },
+ {
+  "id": "223476f3-a95e-4ccb-9a21-5b58e38a5607",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'Last Squeeze' daily roundup strings unrelated items together.",
+  "label": "Beltran · 2026-10-26 · Last Squeeze🍊— 10.26.2026 — House Democrats Report 'Mounting"
+ },
+ {
+  "id": "92674756-8ab7-45c9-9af5-a164ef346517",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Beltran's lawyers and a PAC's texts about him.",
+  "label": "Beltran · 2026-10-30 · EXCLUSIVE: Mike Beltran’s lawyers demand PAC stop ‘knowingly"
+ },
+ {
+  "id": "bc0c0829-57d4-44c0-8e13-a1eb97ef57f1",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'Last Squeeze' daily roundup strings unrelated items together.",
+  "label": "Castor · 2026-10-22 · Last Squeeze🍊— 10.22.2026 — Florida GOP Drops Lawsuit Over H"
+ },
+ {
+  "id": "beac7267-9e36-453e-ae31-5b5858e25cb0",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Castor's position on a House Democrats' letter (Castor in the headline).",
+  "label": "Castor · 2026-10-29 · Tampa’s Kathy Castor among Democrats who did not sign letter"
+ },
+ {
+  "id": "8b49b4e8-0d75-4264-b388-503f5af2d8fe",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Syndicated copy of WLRN's FL-22 map story; WLRN's copy is kept.",
+  "label": "Dandiya · 2026-10-22 · DeSantis' congressional map was designed to flip 4 seats to"
+ },
+ {
+  "id": "31cf7296-1195-4e9e-bac6-c5eac497f702",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: the FL-22 contest between Dandiya and Askar (both in the dek); WLRN is the South Florida newsroom's copy.",
+  "label": "Dandiya · 2026-10-22 · DeSantis’ congressional map was designed to flip 4 seats to"
+ },
+ {
+  "id": "2d00b395-40b1-47ab-ad81-59e2beaef814",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'Surges' is a form of the banned horse-race word 'surging'.",
+  "label": "Dandiya · 2026-10-27 · Casey Askar Surges in Latest Progressive Poll, Pia Dandiya D"
+ },
+ {
+  "id": "ec800fb9-4fec-4dc0-95e1-80b501c4d4b4",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'JUICE' daily roundup strings unrelated items together.",
+  "label": "Dandiya · 2026-10-28 · JUICE🍊— 10.28.2026 — Casey Askar Surges in Latest Progressiv"
+ },
+ {
+  "id": "4d3ab44a-21eb-4d8f-8a37-8edb6e857dcc",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Diaz-Balart · 2026-10-22 · NED premia al congresista Mario Díaz-Balart en la Torre de l).",
+  "label": "Diaz-Balart · 2026-10-22 · Mario Díaz-Balart Receives Champion of Freedom Democracy Awa"
+ },
+ {
+  "id": "2613d19b-65d5-4b47-acc4-c637cf1ad4c8",
+  "action": "approve",
+  "note": "Queue review 10-31: NED award to Diaz-Balart (earliest copy of this event for this candidate).",
+  "label": "Diaz-Balart · 2026-10-22 · NED premia al congresista Mario Díaz-Balart en la Torre de l"
+ },
+ {
+  "id": "5cad40e9-d100-4acb-b5ad-4901a5222e2f",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] A full-episode listing with several guests; Local 10's single-segment page for Diaz-Balart is kept.",
+  "label": "Diaz-Balart · 2026-10-25 · This Week in South Florida Full Episode: October 25, 2026"
+ },
+ {
+  "id": "565b2cd1-4640-4b91-aed2-bb949bcef3e0",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Local 10 segment with Diaz-Balart.",
+  "label": "Diaz-Balart · 2026-10-25 · This Week in South Florida: Mario Diaz-Balart"
+ },
+ {
+  "id": "b2fe93bb-c899-4111-b52b-dc298945a118",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: local officials endorse Donalds.",
+  "label": "Donalds · 2026-10-22 · 156 Florida local officials back Byron Donalds for governor"
+ },
+ {
+  "id": "0c1ac6bf-302b-4d9f-86ef-3619a9549e55",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] subject: the story is about the other candidates for governor; Donalds is named only for contrast.",
+  "label": "Donalds · 2026-10-22 · Donalds and Jolly aren't the only candidates for Florida gov"
+ },
+ {
+  "id": "c2f681c1-c7df-429d-95e2-e54a03fbc664",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Donalds bus tour stop in Fort Lauderdale.",
+  "label": "Donalds · 2026-10-22 · Donalds, Avila urge turnout and affordability at Fort Lauder"
+ },
+ {
+  "id": "11efe18f-e723-48f3-9b5e-3e312e2f0361",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'JUICE' daily roundup strings unrelated items together.",
+  "label": "Donalds · 2026-10-22 · JUICE🍊— 10.22.2026 — Donalds Leads Jolly by Two Points in La"
+ },
+ {
+  "id": "59ac4d7a-dae4-4444-93da-11cff3d37a04",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Donalds campaign stop in Sarasota.",
+  "label": "Donalds · 2026-10-22 · On Byron Donalds campaign stop in Sarasota, crowd cheers for"
+ },
+ {
+  "id": "c0306241-357d-49e1-afdb-48ec0dd616f8",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: UNF poll of the governor's race (polls approved when on-subject).",
+  "label": "Donalds · 2026-10-22 · UNF poll: Republicans Donalds, Moody hold slim leads in tigh"
+ },
+ {
+  "id": "c6ecd20f-e2bc-43fd-825d-67b65b9c377c",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Donalds's new ads and the GOP's ads on Jolly (both in the headline).",
+  "label": "Donalds · 2026-10-22 · ‘Vote for my son’: Byron Donalds’ mother featured in new ads"
+ },
+ {
+  "id": "689e9df7-96e4-465d-bc50-59ef3d3f6873",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: a Westside Gazette opinion piece that would show as reporting.",
+  "label": "Donalds · 2026-10-22 · “Not This Time”"
+ },
+ {
+  "id": "c2ad3612-daa0-429b-892b-336a46a864cf",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same ad release as Florida's Voice's earlier story, which is kept.",
+  "label": "Donalds · 2026-10-23 · 'Vote for my Son': Byron Donalds' Mom Talks Upbringing, Educ"
+ },
+ {
+  "id": "0a0d6b65-4092-404c-b22f-feeeee1d0d7e",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Jolly's criticism of Donalds (both in the headline).",
+  "label": "Donalds · 2026-10-23 · David Jolly Calls Out Byron Donalds Over Alleged Conflicts O"
+ },
+ {
+  "id": "b213839a-0271-4436-81df-0889b7549df5",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: a Jolly ad about Donalds (both in the headline).",
+  "label": "Donalds · 2026-10-23 · David Jolly Slams Byron Donalds' Loyalty to Trump in New Ad"
+ },
+ {
+  "id": "da6e7fb4-d3ce-4fd4-9742-6c55c93ba664",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Donalds bus tour stops in Pasco and Polk.",
+  "label": "Donalds · 2026-10-23 · Donalds tells Pasco, Polk crowds to defend Florida Dream wit"
+ },
+ {
+  "id": "69998e1f-ec00-4a64-be38-fd89bd41739b",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] subject: the story is Francis Suarez's prediction about Republicans.",
+  "label": "Donalds · 2026-10-23 · Francis Suarez Says Republicans Will Win Florida Despite Tig"
+ },
+ {
+  "id": "eac6bfd5-4a87-4502-8231-b5918dd796cb",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: poll of Hispanic voters in the governor's race; WLRN's copy (earliest).",
+  "label": "Donalds · 2026-10-23 · Poll: Florida's Hispanic voters back Amendment 3, lean Democ"
+ },
+ {
+  "id": "7b5aedd0-e765-4a27-9693-135fc9e1bbe5",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-23 · Trump to visit Fort Myers for campaign rally with Byron Dona).",
+  "label": "Donalds · 2026-10-23 · President Trump stops by Fort Myers to rally for GOP candida"
+ },
+ {
+  "id": "2754a061-2118-4d9a-a72c-7f4f8f8d5a3b",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-23 · Trump to visit Fort Myers for campaign rally with Byron Dona).",
+  "label": "Donalds · 2026-10-23 · Trump packs Fort Myers rally, urges turnout for Donalds, Moo"
+ },
+ {
+  "id": "3b848ff4-8a7b-409d-a63e-bf17cacdc495",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-23 · Trump to visit Fort Myers for campaign rally with Byron Dona).",
+  "label": "Donalds · 2026-10-23 · Trump rallies for Byron Donalds, Ashley Moody in Florida as"
+ },
+ {
+  "id": "b64e037b-a64e-4def-b959-00024b31afb9",
+  "action": "approve",
+  "note": "Queue review 10-31: Trump's Fort Myers rally (earliest copy of this event for this candidate).",
+  "label": "Donalds · 2026-10-23 · Trump to visit Fort Myers for campaign rally with Byron Dona"
+ },
+ {
+  "id": "0989650e-74e8-4f0c-99ce-ddc0153764f8",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-23 · Trump to visit Fort Myers for campaign rally with Byron Dona).",
+  "label": "Donalds · 2026-10-23 · Trump visits Fort Myers to rally support for Byron Donalds i"
+ },
+ {
+  "id": "6c7be7fe-a65c-4368-88f7-33590196627d",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-23 · Trump to visit Fort Myers for campaign rally with Byron Dona).",
+  "label": "Donalds · 2026-10-23 · Trump visits Fort Myers to stump for Republican gubernatoria"
+ },
+ {
+  "id": "6ed65130-8d4e-4ae4-80b9-60f6598138ad",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Syndicated copy of WLRN's poll story.",
+  "label": "Donalds · 2026-10-24 · Poll: Florida's Hispanic voters back Amendment 3, lean Democ"
+ },
+ {
+  "id": "242cade9-3def-4ac6-b1c9-38baf9209557",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-23 · Trump to visit Fort Myers for campaign rally with Byron Dona).",
+  "label": "Donalds · 2026-10-24 · President Trump goes to Fort Myers to fire up the Republican"
+ },
+ {
+  "id": "e121a4d2-7f3f-4c05-8994-088e3a28d5b2",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-25 · Byron Donalds discusses the final stretch in his gubernatori).",
+  "label": "Donalds · 2026-10-25 · Byron Donalds discusses campaign, data centers with Jim DeFe"
+ },
+ {
+  "id": "bdc14e2a-207f-4bb5-be10-d570aba67811",
+  "action": "approve",
+  "note": "Queue review 10-31: Donalds interview with Jim DeFede (earliest copy of this event for this candidate).",
+  "label": "Donalds · 2026-10-25 · Byron Donalds discusses the final stretch in his gubernatori"
+ },
+ {
+  "id": "aefe1657-96ca-45fe-a450-b59c3127725f",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-25 · Byron Donalds discusses the final stretch in his gubernatori).",
+  "label": "Donalds · 2026-10-25 · Byron Donalds discusses the final stretch in his gubernatori"
+ },
+ {
+  "id": "c3eda403-cae5-4c37-9992-6fcb305f699a",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: the Donalds campaign's field operation.",
+  "label": "Donalds · 2026-10-26 · Byron Donalds campaign tops two million doors knocked in Flo"
+ },
+ {
+  "id": "96c7d4cf-33b0-4352-8bb0-8e22c6daa527",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Donalds bus tour in the Panhandle.",
+  "label": "Donalds · 2026-10-26 · Donalds rallies Florida Panhandle conservatives on multi-sto"
+ },
+ {
+  "id": "ebc25be7-de38-4313-9625-370d3950c9e4",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: public campaign financing received by both governor candidates (both in the dek).",
+  "label": "Donalds · 2026-10-26 · Florida's public campaign finance program has sent more than"
+ },
+ {
+  "id": "99f7936c-d789-4e40-8022-ac2d40c7a65e",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'JUICE' daily roundup strings unrelated items together.",
+  "label": "Donalds · 2026-10-26 · JUICE🍊— 10.26.2026 — Donalds' Mom Talks Upbringing, Educatio"
+ },
+ {
+  "id": "b8d24fb8-cacf-4a34-919d-104eef93ae5f",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Donalds and Moody criticize Nixon (Donalds in the headline).",
+  "label": "Donalds · 2026-10-27 · Ashley Moody, Byron Donalds Criticize Angie Nixon for not Ca"
+ },
+ {
+  "id": "c0bdf82c-5a6c-4b6c-801c-5d5afde3ab8a",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-25 · Byron Donalds discusses the final stretch in his gubernatori).",
+  "label": "Donalds · 2026-10-27 · Jim DeFede's Full Interview with GOP gubernatorial candidate"
+ },
+ {
+  "id": "3be55161-eeda-4d21-99f1-1cea6e0740cf",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'Last Squeeze' daily roundup strings unrelated items together.",
+  "label": "Donalds · 2026-10-27 · Last Squeeze🍊— 10.27.2026 — Angie Nixon's Comment on Cuba Sp"
+ },
+ {
+  "id": "6a9abbe0-b61b-457e-9e8b-8e5268c6ce67",
+  "action": "approve",
+  "note": "Queue review 10-31: Donalds Hialeah rally with Donald Trump Jr (earliest copy of this event for this candidate).",
+  "label": "Donalds · 2026-10-28 · Donald Trump Jr. to join Byron Donalds at Hialeah GOTV rally"
+ },
+ {
+  "id": "68be3030-a4f1-41bb-908e-fa0baeb74814",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-28 · Gov. DeSantis campaigns for Byron Donalds, then warns Republ).",
+  "label": "Donalds · 2026-10-28 · Donalds, DeSantis urge Hernando County voters to defend Flor"
+ },
+ {
+  "id": "c0f5b474-b1bd-4ece-a82e-684dbff70342",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: both governor candidates' closing pitches.",
+  "label": "Donalds · 2026-10-28 · Florida governor candidates share different visions for stat"
+ },
+ {
+  "id": "8be8ace7-adad-4bc1-9696-15c733145397",
+  "action": "approve",
+  "note": "Queue review 10-31: DeSantis campaigns with Donalds in Hernando County (earliest copy of this event for this candidate).",
+  "label": "Donalds · 2026-10-28 · Gov. DeSantis campaigns for Byron Donalds, then warns Republ"
+ },
+ {
+  "id": "53383737-fc6c-459c-a40f-b3102e663e34",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Donalds named for hurricane disaster aid (Donalds in the headline).",
+  "label": "Donalds · 2026-10-28 · Lawmakers Praise Trump & Donalds for Hurricane Disaster Assi"
+ },
+ {
+  "id": "1794dbda-3eef-4840-92ab-fb9a44795fd9",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-28 · PolitiFact FL: Fact-checking David Jolly’s claim that Byron).",
+  "label": "Donalds · 2026-10-28 · PolitiFact FL: Fact-checking David Jolly's claim that Byron"
+ },
+ {
+  "id": "5af25c5a-5b05-4571-aa14-4bfd026cc246",
+  "action": "approve",
+  "note": "Queue review 10-31: PolitiFact check of Jolly's statement about Donalds (earliest copy of this event for this candidate).",
+  "label": "Donalds · 2026-10-28 · PolitiFact FL: Fact-checking David Jolly’s claim that Byron"
+ },
+ {
+  "id": "a3f57043-097b-43cc-bd8b-a9e9150dad3c",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-28 · PolitiFact FL: Fact-checking David Jolly’s claim that Byron).",
+  "label": "Donalds · 2026-10-28 · PolitiFact FL: Fact-checking David Jolly’s claim that Byron"
+ },
+ {
+  "id": "f8e420f5-b041-458e-b988-42daeab3b0e6",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-28 · Donald Trump Jr. to join Byron Donalds at Hialeah GOTV rally).",
+  "label": "Donalds · 2026-10-29 · Byron Donalds campaigns to South Florida voters in Hialeah w"
+ },
+ {
+  "id": "40e919eb-a386-41dc-8480-cdd9bc4c74ff",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-28 · Donald Trump Jr. to join Byron Donalds at Hialeah GOTV rally).",
+  "label": "Donalds · 2026-10-29 · Byron Donalds rallies Hialeah Republicans as Miami-Dade earl"
+ },
+ {
+  "id": "8c345201-2585-4842-9153-36ad616b50bd",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-28 · Gov. DeSantis campaigns for Byron Donalds, then warns Republ).",
+  "label": "Donalds · 2026-10-29 · DeSantis advierte a los republicanos: confiarse puede salir"
+ },
+ {
+  "id": "f3903bde-adcd-480c-9651-32e3af36a7ce",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-28 · Gov. DeSantis campaigns for Byron Donalds, then warns Republ).",
+  "label": "Donalds · 2026-10-29 · DeSantis stumps for Donalds and warns against GOP complacenc"
+ },
+ {
+  "id": "22282085-12d1-46b2-9aaf-c360489ed858",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: banned horse-race word 'momentum' in the headline (fails closed on approve).",
+  "label": "Donalds · 2026-10-29 · Democrat David Jolly says he has ‘momentum’ over Republican"
+ },
+ {
+  "id": "0219aef2-43a2-4709-83a6-9bb92577a1c9",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'claims' in the headline (fails closed on approve).",
+  "label": "Donalds · 2026-10-29 · Failed GOP candidate James Fishback retracts false sex traff"
+ },
+ {
+  "id": "87fc07fc-38db-4f64-aa66-3ce5045f462a",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: both governor candidates' last campaign stops.",
+  "label": "Donalds · 2026-10-29 · Florida candidates make final visits on the campaign trail"
+ },
+ {
+  "id": "1b471a5d-f9ea-4a91-870c-a2d932e8d6c4",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: both governor candidates campaigning during early voting.",
+  "label": "Donalds · 2026-10-29 · Gubernatorial candidates Byron Donalds, David Jolly battle f"
+ },
+ {
+  "id": "242d65b8-095d-4674-85ef-12c3dc47be38",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'claims' in the dek (fails closed on approve).",
+  "label": "Donalds · 2026-10-29 · James Fishback says he made a 'terrible mistake' by accusing"
+ },
+ {
+  "id": "82de9654-e849-4989-8090-c66e61c29ef0",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: labelled 'Opinion'; would show as reporting.",
+  "label": "Donalds · 2026-10-29 · Opinion: Florida’s school choice success needs a governor li"
+ },
+ {
+  "id": "6915f509-5837-4640-b82d-5931006854b6",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: a veteran's criticism of Donalds (Donalds in the headline).",
+  "label": "Donalds · 2026-10-29 · Transgender veteran criticizes U.S. Rep. Byron Donalds over"
+ },
+ {
+  "id": "6580d50e-4d99-49ed-af53-a660e2e26ddb",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: issues facing the next governor, both candidates in the headline; WLRN's copy (earliest).",
+  "label": "Donalds · 2026-10-30 · 3 major issues that Republican Byron Donalds or Democrat Dav"
+ },
+ {
+  "id": "f44375dd-f272-4810-b31f-4a92a938fa9e",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-28 · Donald Trump Jr. to join Byron Donalds at Hialeah GOTV rally).",
+  "label": "Donalds · 2026-10-30 · Donald Trump Jr. campaigns for Byron Donalds in Hialeah as R"
+ },
+ {
+  "id": "2b685bf1-df5d-4f34-8852-126826fd7a0c",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-28 · Donald Trump Jr. to join Byron Donalds at Hialeah GOTV rally).",
+  "label": "Donalds · 2026-10-30 · Donald Trump Jr. joins Hialeah campaign stop for Byron Donal"
+ },
+ {
+  "id": "27c56286-3440-4b4f-8050-f45151b61033",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-28 · Donald Trump Jr. to join Byron Donalds at Hialeah GOTV rally).",
+  "label": "Donalds · 2026-10-30 · Donalds, Trump Jr. rally Hialeah crowd to keep Florida free"
+ },
+ {
+  "id": "42963d43-48ee-47ff-8d69-943f7d286a1b",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: where both governor candidates stand on issues.",
+  "label": "Donalds · 2026-10-30 · Florida’s governor’s race: Where Byron Donalds and David Jol"
+ },
+ {
+  "id": "f4924b49-c7a4-416d-af3a-fb5d6bcd8bdb",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: an argument piece ('Media attacks ... ignore the facts') that would show as reporting.",
+  "label": "Donalds · 2026-10-30 · Media attacks on Erika Donalds ignore the facts on student g"
+ },
+ {
+  "id": "8e1fb0bc-0d51-463f-80b6-e849a92615b0",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Syndicated copy of WLRN's story, which is kept.",
+  "label": "Donalds · 2026-10-31 · 3 major issues Byron Donalds or David Jolly will need to add"
+ },
+ {
+  "id": "d4566c61-5865-434d-8846-2418ad7ca951",
+  "action": "approve",
+  "note": "Queue review 10-31: Donalds at the Daytona Beach rally (earliest copy of this event for this candidate).",
+  "label": "Donalds · 2026-10-31 · Byron Donalds speaks at Daytona Beach rally"
+ },
+ {
+  "id": "0b52e10d-e243-440e-a598-07799c675308",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: the governor candidates' climate policies.",
+  "label": "Donalds · 2026-10-31 · In Florida’s gubernatorial race, a choice between new climat"
+ },
+ {
+  "id": "35387562-21a2-4de5-b5a6-2b1860112bee",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Donalds · 2026-10-31 · Byron Donalds speaks at Daytona Beach rally).",
+  "label": "Donalds · 2026-10-31 · Trump rallies in Daytona Beach, urges voters to back Byron D"
+ },
+ {
+  "id": "c50229dc-ae1e-4db4-b843-e4ff451cb0fc",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: profile of the FL-28 contest, both candidates named.",
+  "label": "Ehr · 2026-10-22 · Retired U.S. Navy commander challenges Gimenez for Florida’s"
+ },
+ {
+  "id": "f80cf0b4-d4ae-40c6-9857-c13338fb12be",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Frost answers Moody's 'Red Scare' push (Frost in the headline).",
+  "label": "Frost · 2026-10-29 · Maxwell Alejandro Frost Fires Back at Moody's Communist 'Fea"
+ },
+ {
+  "id": "1600c800-aa26-4033-91e0-e4f80faaf5c7",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'JUICE' daily roundup strings unrelated items together.",
+  "label": "Frost · 2026-10-30 · JUICE🍊— 10.30.2026 — Maxwell Alejandro Frost Fires Back at M"
+ },
+ {
+  "id": "43692eae-c9e6-423e-9e27-e1775b35e307",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: profile of the FL-28 contest, both candidates named.",
+  "label": "Gimenez · 2026-10-22 · Retired U.S. Navy commander challenges Gimenez for Florida’s"
+ },
+ {
+  "id": "abea240e-ab80-49fd-ba62-5e6be82ee01b",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] subject: the story is Donalds's Hialeah stop; Gimenez is one of the officials with him.",
+  "label": "Gimenez · 2026-10-29 · Byron Donalds campaigns to South Florida voters in Hialeah w"
+ },
+ {
+  "id": "999e3a74-290e-4085-a0f2-18e016e8a0dd",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: endorsement of Green by agriculture leaders.",
+  "label": "Green · 2026-10-23 · Florida Agriculture leaders back GOP candidate Dan Green in"
+ },
+ {
+  "id": "1ac69f19-9b9e-4614-9188-b0a5d1608bce",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: banned motive phrase 'aims to' in the dek.",
+  "label": "Green · 2026-10-26 · Dan Green attacks incumbent Darren Soto over federal spendin"
+ },
+ {
+  "id": "01950b72-50ff-4672-aad6-0bcc66b08ba6",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: U.S. Chamber endorsement of Green.",
+  "label": "Green · 2026-10-28 · U.S. Chamber of Commerce endorses Republican Dan Green in Fl"
+ },
+ {
+  "id": "1bf6b16c-eb21-4e87-8d5d-e5b045faec14",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: reporting on Jenkins's record as a school board member.",
+  "label": "Jenkins · 2026-10-27 · Jennifer Jenkins cost Brevard schools more than $1.3 million"
+ },
+ {
+  "id": "6a6c3a01-380b-48d4-b6a3-40e1e197e1a0",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: interview with Jewett, the Libertarian candidate for governor.",
+  "label": "Jewett · 2026-10-30 · Scott Jewett Affirms Thorium Will ‘Make Everything More Affo"
+ },
+ {
+  "id": "33c3a86e-805e-490c-a28d-a7ab0d3f6e46",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: endorsement of Jolly.",
+  "label": "Jolly · 2026-10-21 · Carlos Guillermo Smith Endorses David Jolly for Governor"
+ },
+ {
+  "id": "c2574547-32d9-4f16-b61c-e99b8c8f4861",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] subject: the story is about the other candidates for governor; Jolly is named only for contrast.",
+  "label": "Jolly · 2026-10-22 · Donalds and Jolly aren't the only candidates for Florida gov"
+ },
+ {
+  "id": "b3a07d26-4b7c-4332-810e-4ca64f4e0e07",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'JUICE' daily roundup strings unrelated items together.",
+  "label": "Jolly · 2026-10-22 · JUICE🍊— 10.22.2026 — Donalds Leads Jolly by Two Points in La"
+ },
+ {
+  "id": "bec70456-2022-49c7-8eaa-c331efef343b",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: UNF poll of the governor's race (polls approved when on-subject).",
+  "label": "Jolly · 2026-10-22 · UNF poll: Republicans Donalds, Moody hold slim leads in tigh"
+ },
+ {
+  "id": "3c99343a-11ac-4355-9a5d-8164180e69fc",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Donalds's new ads and the GOP's ads on Jolly (both in the headline).",
+  "label": "Jolly · 2026-10-22 · ‘Vote for my son’: Byron Donalds’ mother featured in new ads"
+ },
+ {
+  "id": "1ea9d75b-2709-4075-abdb-c1200c2ea8f0",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Jolly's criticism of Donalds (both in the headline).",
+  "label": "Jolly · 2026-10-23 · David Jolly Calls Out Byron Donalds Over Alleged Conflicts O"
+ },
+ {
+  "id": "bdfa1294-e8be-4bab-8409-677f5195b203",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: a Jolly ad about Donalds (both in the headline).",
+  "label": "Jolly · 2026-10-23 · David Jolly Slams Byron Donalds' Loyalty to Trump in New Ad"
+ },
+ {
+  "id": "04230ec6-b644-4762-bc89-8ff0b6ca49e9",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: poll of Hispanic voters in the governor's race; WLRN's copy (earliest).",
+  "label": "Jolly · 2026-10-23 · Poll: Florida's Hispanic voters back Amendment 3, lean Democ"
+ },
+ {
+  "id": "09ae89f8-24f3-4f70-9c2b-0de72062ffac",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Jolly · 2026-10-24 · From parade to tailgate, Jolly and Graham join FAMU celebrat).",
+  "label": "Jolly · 2026-10-24 · Come together: Democrats David Jolly, Angie Nixon stump on F"
+ },
+ {
+  "id": "4bae0894-b608-4b85-a52c-9223d2f45eaf",
+  "action": "approve",
+  "note": "Queue review 10-31: Jolly at FAMU homecoming (earliest copy of this event for this candidate).",
+  "label": "Jolly · 2026-10-24 · From parade to tailgate, Jolly and Graham join FAMU celebrat"
+ },
+ {
+  "id": "8ae2e0cd-ac0e-4a65-bac9-562f9ab771c6",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Syndicated copy of WLRN's poll story.",
+  "label": "Jolly · 2026-10-24 · Poll: Florida's Hispanic voters back Amendment 3, lean Democ"
+ },
+ {
+  "id": "f8270618-6564-4130-8331-7579cbe447eb",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: an op-ed ('it's time to sound the alarm') that would show as reporting.",
+  "label": "Jolly · 2026-10-25 · Bryan Leib: David Jolly and CAIR, it’s time to sound the ala"
+ },
+ {
+  "id": "20479072-af22-4d34-80e0-037498441503",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Jolly · 2026-10-24 · From parade to tailgate, Jolly and Graham join FAMU celebrat).",
+  "label": "Jolly · 2026-10-25 · Come together: Democrats David Jolly, Angie Nixon stump on F"
+ },
+ {
+  "id": "a5bffa10-d8e8-40e5-bdfd-516ab47a542a",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Jolly · 2026-10-26 · Trump prepara un nuevo mitin en Florida y Obama respalda a J).",
+  "label": "Jolly · 2026-10-26 · Barack Obama Endorses David Jolly for Governor"
+ },
+ {
+  "id": "befff011-a59c-450d-b063-6e843cfdcc7d",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: endorsement of Jolly.",
+  "label": "Jolly · 2026-10-26 · Cory Booker Endorses Jolly for Governor"
+ },
+ {
+  "id": "ea61b60f-fcbd-4c5f-9879-32ed5ef515ef",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: Creative Loafing's voting guide gives the paper's own recommendation, which would show as reporting.",
+  "label": "Jolly · 2026-10-26 · Creative Loafing voting guide 2026: Electing David Jolly is"
+ },
+ {
+  "id": "3266fcbe-31b8-4f94-85df-22edbc020a60",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: public campaign financing received by both governor candidates (both in the dek).",
+  "label": "Jolly · 2026-10-26 · Florida's public campaign finance program has sent more than"
+ },
+ {
+  "id": "1db64441-4b64-4938-acdb-b90d7669519d",
+  "action": "approve",
+  "note": "Queue review 10-31: Obama endorses Jolly (earliest copy of this event for this candidate).",
+  "label": "Jolly · 2026-10-26 · Trump prepara un nuevo mitin en Florida y Obama respalda a J"
+ },
+ {
+  "id": "e6cc4bc9-be85-4751-b7bb-3e3aef88d29c",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'JUICE' daily roundup strings unrelated items together.",
+  "label": "Jolly · 2026-10-27 · JUICE🍊— 10.27.2026 — Obama Endorses Jolly, Nixon — DOJ Arres"
+ },
+ {
+  "id": "a2111b65-0cb3-43b4-a21b-49ad415117c1",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Jolly's campaign tour (Jolly in the headline).",
+  "label": "Jolly · 2026-10-28 · Annette Taddeo Joins David Jolly's Believe in Better Tour"
+ },
+ {
+  "id": "4a0ce360-e725-4984-a732-8a44e4cd3fe2",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: both governor candidates' closing pitches.",
+  "label": "Jolly · 2026-10-28 · Florida governor candidates share different visions for stat"
+ },
+ {
+  "id": "fe9dd0ab-0a56-4731-8663-e90a86d70ef0",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Jolly · 2026-10-28 · PolitiFact FL: Fact-checking David Jolly’s claim that Byron).",
+  "label": "Jolly · 2026-10-28 · PolitiFact FL: Fact-checking David Jolly's claim that Byron"
+ },
+ {
+  "id": "5c4fe9fb-0f15-4191-ba15-116c12e475fb",
+  "action": "approve",
+  "note": "Queue review 10-31: PolitiFact check of Jolly's statement about Donalds (earliest copy of this event for this candidate).",
+  "label": "Jolly · 2026-10-28 · PolitiFact FL: Fact-checking David Jolly’s claim that Byron"
+ },
+ {
+  "id": "95b23fdb-df03-4d10-9a5d-8064d27363c4",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Jolly · 2026-10-28 · PolitiFact FL: Fact-checking David Jolly’s claim that Byron).",
+  "label": "Jolly · 2026-10-28 · PolitiFact FL: Fact-checking David Jolly’s claim that Byron"
+ },
+ {
+  "id": "c3e3fa6f-f5a0-4089-9126-62f7c0f04c4c",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: banned motive phrase 'in an effort to' in the dek.",
+  "label": "Jolly · 2026-10-29 · Candidates Take Their Message to the FAMU Community"
+ },
+ {
+  "id": "41be00a8-aa52-4243-b416-123402386e12",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] subject: the story is DeSantis campaigning for Donalds; Jolly is named only as the opponent.",
+  "label": "Jolly · 2026-10-29 · DeSantis stumps for Donalds and warns against GOP complacenc"
+ },
+ {
+  "id": "8fdbf2ed-02fd-4419-bbfb-3c092cb90860",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: banned horse-race word 'momentum' in the headline (fails closed on approve).",
+  "label": "Jolly · 2026-10-29 · Democrat David Jolly says he has ‘momentum’ over Republican"
+ },
+ {
+  "id": "1f4b0294-defb-4906-98fa-b0539bf6f5b0",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: a first-person op-ed by Erika Donalds that would show as reporting.",
+  "label": "Jolly · 2026-10-29 · Erika Donalds: Women entrepreneurs are building the educatio"
+ },
+ {
+  "id": "8ce2111d-7e29-422e-b4cb-0a1c764ae4a3",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: both governor candidates' last campaign stops.",
+  "label": "Jolly · 2026-10-29 · Florida candidates make final visits on the campaign trail"
+ },
+ {
+  "id": "ec03fd7b-2ff7-4058-89f1-29730a87efcc",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: both governor candidates campaigning during early voting.",
+  "label": "Jolly · 2026-10-29 · Gubernatorial candidates Byron Donalds, David Jolly battle f"
+ },
+ {
+  "id": "ba9d1a18-6d0c-403f-a86b-1583942ed577",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'JUICE' daily roundup strings unrelated items together.",
+  "label": "Jolly · 2026-10-29 · JUICE🍊— 10.29.2026 — Jolly's Past Support for Cuban Consulat"
+ },
+ {
+  "id": "85989543-3a0d-45b7-8893-2c36fd2eb9e1",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'Last Squeeze' daily roundup strings unrelated items together.",
+  "label": "Jolly · 2026-10-29 · Last Squeeze🍊— 10.29.2026 — FIU Poll Shows 68% of Cuban Vote"
+ },
+ {
+  "id": "248dd1a7-c230-4e15-ae9f-f3e8ab6c8f80",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: issues facing the next governor, both candidates in the headline; WLRN's copy (earliest).",
+  "label": "Jolly · 2026-10-30 · 3 major issues that Republican Byron Donalds or Democrat Dav"
+ },
+ {
+  "id": "db325888-f848-475b-b7a6-cdaa986a0334",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: where both governor candidates stand on issues.",
+  "label": "Jolly · 2026-10-30 · Florida’s governor’s race: Where Byron Donalds and David Jol"
+ },
+ {
+  "id": "d3f3b00e-27eb-4f4b-ab38-f49cd6dcaceb",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'JUICE' daily roundup strings unrelated items together.",
+  "label": "Jolly · 2026-10-30 · JUICE🍊— 10.30.2026 — Maxwell Alejandro Frost Fires Back at M"
+ },
+ {
+  "id": "5d50f8af-8263-43a9-8007-daf6b9d71798",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Syndicated copy of WLRN's story, which is kept.",
+  "label": "Jolly · 2026-10-31 · 3 major issues Byron Donalds or David Jolly will need to add"
+ },
+ {
+  "id": "e0a0d50d-73ec-48ac-ab3a-648725f36403",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: the governor candidates' climate policies.",
+  "label": "Jolly · 2026-10-31 · In Florida’s gubernatorial race, a choice between new climat"
+ },
+ {
+  "id": "d7936058-e8a4-4b17-890f-51254428811d",
+  "action": "approve",
+  "note": "Queue review 10-31: Orange County mayoral debate (earliest copy of this event for this candidate).",
+  "label": "Messina · 2026-10-26 · Tiffany Moore Russell and Chris Messina to debate for Orange"
+ },
+ {
+  "id": "5996ece0-2f7c-45e9-94fb-a7614f490899",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Messina · 2026-10-26 · Tiffany Moore Russell and Chris Messina to debate for Orange).",
+  "label": "Messina · 2026-10-29 · Orange County Mayoral candidates face off during final debat"
+ },
+ {
+  "id": "11654a56-0c84-48f6-ba81-59e3d9973b52",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Messina · 2026-10-26 · Tiffany Moore Russell and Chris Messina to debate for Orange).",
+  "label": "Messina · 2026-10-29 · Orange County mayoral candidates face off in final debate ah"
+ },
+ {
+  "id": "733fe755-e068-4d53-8fd0-86873ebb5378",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Moody · 2026-10-22 · Florida State Hispanic Chamber of Commerce endorses Sen. Ash).",
+  "label": "Moody · 2026-10-22 · Florida State Hispanic Chamber of Commerce Endorses Ashley M"
+ },
+ {
+  "id": "50cd68bd-1a5d-4264-9d99-f31b185ffcd2",
+  "action": "approve",
+  "note": "Queue review 10-31: Hispanic Chamber endorses Moody (earliest copy of this event for this candidate).",
+  "label": "Moody · 2026-10-22 · Florida State Hispanic Chamber of Commerce endorses Sen. Ash"
+ },
+ {
+  "id": "6242bb7d-1c78-4111-ab59-32cded127117",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: UNF poll of the Senate race (polls approved when on-subject).",
+  "label": "Moody · 2026-10-22 · UNF poll: Republicans Donalds, Moody hold slim leads in tigh"
+ },
+ {
+  "id": "b59ddc1d-21e3-43e9-93a7-9a3d15c08162",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Moody · 2026-10-23 · Trump to visit Fort Myers for campaign rally with Byron Dona).",
+  "label": "Moody · 2026-10-23 · President Trump stops by Fort Myers to rally for GOP candida"
+ },
+ {
+  "id": "16d5a9d6-ace7-44db-9af7-5d9df96c9e3c",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Moody · 2026-10-23 · Trump to visit Fort Myers for campaign rally with Byron Dona).",
+  "label": "Moody · 2026-10-23 · Trump rallies for Byron Donalds, Ashley Moody in Florida as"
+ },
+ {
+  "id": "b7aabe49-371e-47a9-a73b-8077f35747c0",
+  "action": "approve",
+  "note": "Queue review 10-31: Trump's Fort Myers rally (earliest copy of this event for this candidate).",
+  "label": "Moody · 2026-10-23 · Trump to visit Fort Myers for campaign rally with Byron Dona"
+ },
+ {
+  "id": "f53cc329-8532-4234-b8aa-d0e2cb55c105",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Moody · 2026-10-23 · Trump to visit Fort Myers for campaign rally with Byron Dona).",
+  "label": "Moody · 2026-10-24 · President Trump goes to Fort Myers to fire up the Republican"
+ },
+ {
+  "id": "1b29f3e4-73b5-4660-b13e-42933234243d",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: what the record shows on Hope Florida and Moody; WLRN's copy (earliest).",
+  "label": "Moody · 2026-10-26 · Angie Nixon keeps hammering on Hope Florida. What happened?"
+ },
+ {
+  "id": "4324692f-e3eb-458c-a326-0779ad5faf70",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'JUICE' daily roundup strings unrelated items together.",
+  "label": "Moody · 2026-10-26 · JUICE🍊— 10.26.2026 — Donalds' Mom Talks Upbringing, Educatio"
+ },
+ {
+  "id": "0ebbe4c9-dbc0-46c3-983c-906e72d77500",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Moody's case for re-election.",
+  "label": "Moody · 2026-10-26 · Moody, appointed in 2025 to replace Rubio, asks voters to ke"
+ },
+ {
+  "id": "86e023f3-9de5-4a28-a92b-433b3ca8ee58",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Syndicated PolitiFact copy of WLRN's Hope Florida story, which is kept.",
+  "label": "Moody · 2026-10-26 · PolitiFact: Nixon keeps hammering on Hope Florida. What was"
+ },
+ {
+  "id": "019d9bf9-47e7-43af-9b96-b47c6839730e",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: banned words 'underdog' and 'momentum' in the dek.",
+  "label": "Moody · 2026-10-27 · Angie Nixon looking to unseat incumbent Ashley Moody in US S"
+ },
+ {
+  "id": "618636c2-4f88-4a1a-bbcb-67354864cf7e",
+  "action": "approve",
+  "note": "Queue review 10-31: Moody criticizes Nixon's Cuba comments (earliest copy of this event for this candidate).",
+  "label": "Moody · 2026-10-27 · Ashley Moody, Byron Donalds Criticize Angie Nixon for not Ca"
+ },
+ {
+  "id": "047c2653-8b30-4e4b-90f8-6a5f6cdea6fe",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: DeSantis campaigns with Moody.",
+  "label": "Moody · 2026-10-27 · DeSantis Joins Ashley Moody for Campaign Event"
+ },
+ {
+  "id": "036c4160-12fa-4011-aa50-5cc28e6b0d2b",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Moody campaigning on a ballot amendment (Moody in the headline).",
+  "label": "Moody · 2026-10-27 · DeSantis, Moody and Simpson urge voters to back homestead ta"
+ },
+ {
+  "id": "f911c2ab-bf6e-44f5-950e-f10bb3c6d421",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Moody · 2026-10-27 · Ashley Moody, Byron Donalds Criticize Angie Nixon for not Ca).",
+  "label": "Moody · 2026-10-27 · Florida GOP, Ashley Moody slam Democratic Senate candidate A"
+ },
+ {
+  "id": "fef53d01-696e-4260-8d44-ed96869e066d",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'Last Squeeze' daily roundup strings unrelated items together.",
+  "label": "Moody · 2026-10-27 · Last Squeeze🍊— 10.27.2026 — Angie Nixon's Comment on Cuba Sp"
+ },
+ {
+  "id": "7ef459c0-53e6-4d74-9bbd-76df762b41f6",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] subject: the story is Nixon's campaign event; Moody is named only as the opponent.",
+  "label": "Moody · 2026-10-28 · Angie Nixon campaigns in Central Florida ahead of midterm"
+ },
+ {
+  "id": "27b9eaca-de61-4037-aee6-19b5b21305c2",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Frost responds to Moody's statements (Moody in the headline).",
+  "label": "Moody · 2026-10-29 · Maxwell Alejandro Frost Fires Back at Moody's Communist 'Fea"
+ },
+ {
+  "id": "029c8ae1-0ead-4648-94ab-69557286098d",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Moody's student aid fraud bill.",
+  "label": "Moody · 2026-10-30 · Ashley Moody Chides Democrats Over Blocking Her Student Aid"
+ },
+ {
+  "id": "7b9f5308-d468-4e17-8e66-e4ec3d437ccc",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: overview of the Senate race.",
+  "label": "Moody · 2026-10-30 · Ashley Moody, Angie Nixon face off for U.S. Senate seat"
+ },
+ {
+  "id": "8e36eb3e-756c-4c7b-b827-98b0e5695403",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] subject: the story is Shapiro's endorsement of Singer, not about Moskowitz.",
+  "label": "Moskowitz · 2026-10-22 · Ben Shapiro Endorses Scott Singer for Congress"
+ },
+ {
+  "id": "598ae84f-426f-4912-8eb9-fb4e65e4f56a",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Moskowitz · 2026-10-22 · Florida Man Arrested for Allegedly Threatening Rep. Jared Mo).",
+  "label": "Moskowitz · 2026-10-22 · Congressman Jared Moskowitz said a man was arrested in Boca"
+ },
+ {
+  "id": "256b8bc3-703d-4993-a5df-780b3174dbb6",
+  "action": "approve",
+  "note": "Queue review 10-31: Arrest over a threat against Moskowitz (earliest copy of this event for this candidate).",
+  "label": "Moskowitz · 2026-10-22 · Florida Man Arrested for Allegedly Threatening Rep. Jared Mo"
+ },
+ {
+  "id": "81f5c389-9376-4956-a48f-f78b7dcbc127",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Moskowitz · 2026-10-22 · Florida Man Arrested for Allegedly Threatening Rep. Jared Mo).",
+  "label": "Moskowitz · 2026-10-22 · Man arrested in Palm Beach after threatening voicemail to Re"
+ },
+ {
+  "id": "c6487423-f52c-4c44-91e9-08b47fbd83ef",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: an FL-25 internal poll naming both candidates (polls approved when on-subject).",
+  "label": "Moskowitz · 2026-10-22 · POLL: Scott Singer leads Jared Moskowitz by 7 points in FL-2"
+ },
+ {
+  "id": "aa930ce9-f65a-4726-b62f-c16da53e0c99",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Moskowitz · 2026-10-22 · Florida Man Arrested for Allegedly Threatening Rep. Jared Mo).",
+  "label": "Moskowitz · 2026-10-22 · US Rep. Moskowitz says man has been arrested in Boca Raton f"
+ },
+ {
+  "id": "ad9593ad-c774-4a32-b32e-bfb0445cdda2",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Moskowitz · 2026-10-22 · Florida Man Arrested for Allegedly Threatening Rep. Jared Mo).",
+  "label": "Moskowitz · 2026-10-23 · Arrestan a hombre tras amenaza contra el congresista Jared M"
+ },
+ {
+  "id": "bf0d1278-fabd-427c-b3fa-d11178bce914",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Moskowitz · 2026-10-22 · Florida Man Arrested for Allegedly Threatening Rep. Jared Mo).",
+  "label": "Moskowitz · 2026-10-23 · Jared Moskowitz says man arrested after death threat near hi"
+ },
+ {
+  "id": "bd09c4cc-206f-421b-8f0d-be4f332b9cb1",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Moskowitz · 2026-10-22 · Florida Man Arrested for Allegedly Threatening Rep. Jared Mo).",
+  "label": "Moskowitz · 2026-10-23 · Man arrested after threat against Congressman Jared Moskowit"
+ },
+ {
+  "id": "d46ec8a5-8811-463b-9b59-0cd62ccbe654",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Moskowitz · 2026-10-22 · Florida Man Arrested for Allegedly Threatening Rep. Jared Mo).",
+  "label": "Moskowitz · 2026-10-23 · Man arrested in Palm Beach County for threatening voicemail"
+ },
+ {
+  "id": "5a88cf91-f23a-40a5-b21d-01fa3304b826",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: profile of the FL-25 contest, both candidates in the headline.",
+  "label": "Moskowitz · 2026-10-26 · Republican Scott Singer challenges incumbent Jared Moskowitz"
+ },
+ {
+  "id": "3cfecff6-2867-4d90-b812-887d871ce485",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Moskowitz · 2026-10-28 · Scott Singer and Jared Moskowitz meet for second congression).",
+  "label": "Moskowitz · 2026-10-28 · Jared Moskowitz, Scott Singer clash on Israel, social progra"
+ },
+ {
+  "id": "de4e1ab4-7e7a-42f1-aa00-294a3945fcae",
+  "action": "approve",
+  "note": "Queue review 10-31: FL-25 candidates' second forum in Miami Beach (earliest copy of this event for this candidate).",
+  "label": "Moskowitz · 2026-10-28 · Scott Singer and Jared Moskowitz meet for second congression"
+ },
+ {
+  "id": "d02e9519-9995-4cb3-add5-7dd244374c96",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: profile of Nixon's Senate campaign.",
+  "label": "Nixon · 2026-10-22 · Angie Nixon wants to be Florida’s first Democratic US senato"
+ },
+ {
+  "id": "90ed1354-0a55-47ed-9669-ea47307bb22e",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: UNF poll of the Senate race (polls approved when on-subject).",
+  "label": "Nixon · 2026-10-22 · UNF poll: Republicans Donalds, Moody hold slim leads in tigh"
+ },
+ {
+  "id": "215dd54e-132e-42fb-917c-b69aa202e301",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same Sanders tour as the Creative Loafing story approved for Nixon on 10-15.",
+  "label": "Nixon · 2026-10-22 · Why did Bernie Sanders and Angie Nixon rally together across"
+ },
+ {
+  "id": "5a24c54b-63b1-4fe2-85f3-02e362bc35f7",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same Sanders tour as the Creative Loafing story approved for Nixon on 10-15.",
+  "label": "Nixon · 2026-10-23 · Why did Bernie Sanders and Angie Nixon rally together across"
+ },
+ {
+  "id": "aa25ee3b-4a3a-42bc-8928-3aafef4521a2",
+  "action": "approve",
+  "note": "Queue review 10-31: Nixon at FAMU homecoming (earliest copy of this event for this candidate).",
+  "label": "Nixon · 2026-10-24 · Come together: Democrats David Jolly, Angie Nixon stump on F"
+ },
+ {
+  "id": "37c3a3f2-d187-40a4-8f1d-7b59939dd82a",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Nixon · 2026-10-24 · Come together: Democrats David Jolly, Angie Nixon stump on F).",
+  "label": "Nixon · 2026-10-25 · Come together: Democrats David Jolly, Angie Nixon stump on F"
+ },
+ {
+  "id": "849e7338-5b53-4fda-883e-11399efbe72b",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: what the record shows on Hope Florida and Moody; WLRN's copy (earliest).",
+  "label": "Nixon · 2026-10-26 · Angie Nixon keeps hammering on Hope Florida. What happened?"
+ },
+ {
+  "id": "381306fe-58a6-4118-8300-3d452f1048fa",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Obama endorses Nixon.",
+  "label": "Nixon · 2026-10-26 · Barack Obama Endorses Angie Nixon for Senate"
+ },
+ {
+  "id": "c78aabdc-cc59-44ee-a48c-21a6f51c30db",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'JUICE' daily roundup strings unrelated items together.",
+  "label": "Nixon · 2026-10-26 · JUICE🍊— 10.26.2026 — Donalds' Mom Talks Upbringing, Educatio"
+ },
+ {
+  "id": "b0778f50-4d4e-48e5-a77e-a69529f267da",
+  "action": "approve",
+  "note": "Queue review 10-31: Reaction to Nixon's Cuba comments (earliest copy of this event for this candidate).",
+  "label": "Nixon · 2026-10-27 · Angie Nixon & CBS News Under Fire Over Interview Sharing Her"
+ },
+ {
+  "id": "1129967d-ec15-4c5c-9360-9272725bb3de",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: banned words 'underdog' and 'momentum' in the dek.",
+  "label": "Nixon · 2026-10-27 · Angie Nixon looking to unseat incumbent Ashley Moody in US S"
+ },
+ {
+  "id": "bd6e630d-c614-4ab2-a7c6-fff82e625420",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Nixon · 2026-10-27 · Angie Nixon & CBS News Under Fire Over Interview Sharing Her).",
+  "label": "Nixon · 2026-10-27 · Ashley Moody, Byron Donalds Criticize Angie Nixon for not Ca"
+ },
+ {
+  "id": "a21da428-ff1c-4eb7-bda8-25f36568c78a",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] subject: the story is Moody's campaign event; Nixon is named only as the opponent.",
+  "label": "Nixon · 2026-10-27 · DeSantis Joins Ashley Moody for Campaign Event"
+ },
+ {
+  "id": "dc4e21ad-f6a3-4d88-8114-2ee295541f8e",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Nixon · 2026-10-27 · Angie Nixon & CBS News Under Fire Over Interview Sharing Her).",
+  "label": "Nixon · 2026-10-27 · Florida GOP, Ashley Moody slam Democratic Senate candidate A"
+ },
+ {
+  "id": "cb7453e3-9487-4137-8bf1-9a371465c61b",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'Last Squeeze' daily roundup strings unrelated items together.",
+  "label": "Nixon · 2026-10-27 · Last Squeeze🍊— 10.27.2026 — Angie Nixon's Comment on Cuba Sp"
+ },
+ {
+  "id": "2b618c1a-0626-4db8-85d0-ae21aaee6270",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Nixon · 2026-10-28 · Angie Nixon campaigns in Central Florida ahead of midterm).",
+  "label": "Nixon · 2026-10-28 · AOC stumps for Angie Nixon in Central Florida before electio"
+ },
+ {
+  "id": "47015556-4da2-4341-94c0-0b53796ca53a",
+  "action": "approve",
+  "note": "Queue review 10-31: Nixon's Kissimmee event with Rep. Ocasio-Cortez (earliest copy of this event for this candidate).",
+  "label": "Nixon · 2026-10-28 · Angie Nixon campaigns in Central Florida ahead of midterm"
+ },
+ {
+  "id": "4b4b60f7-11d3-436c-88cd-eeb303965450",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Nixon walks back her Cuba comments.",
+  "label": "Nixon · 2026-10-28 · Florida Senate Candidate Angie Nixon Walks Back Cuba Comment"
+ },
+ {
+  "id": "1b1baff6-43ef-46bd-9363-9f136754e233",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Meta suspended Nixon's campaign account.",
+  "label": "Nixon · 2026-10-28 · Meta Under Fire For Suspending Angie Nixon's Campaign Accoun"
+ },
+ {
+  "id": "11c951a7-28ea-4d82-93cb-931507b78e97",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: banned motive phrase 'in an effort to' in the dek.",
+  "label": "Nixon · 2026-10-29 · Candidates Take Their Message to the FAMU Community"
+ },
+ {
+  "id": "efc622da-e64d-4f63-a2f1-931e6716c8e0",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'JUICE' daily roundup strings unrelated items together.",
+  "label": "Nixon · 2026-10-29 · JUICE🍊— 10.29.2026 — Jolly's Past Support for Cuban Consulat"
+ },
+ {
+  "id": "630e29f5-6f8e-4343-af8a-da8a3f546f3e",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] subject: the story is Frost's response to Moody; Nixon is not its subject.",
+  "label": "Nixon · 2026-10-29 · Maxwell Alejandro Frost Fires Back at Moody's Communist 'Fea"
+ },
+ {
+  "id": "7609d417-c1a6-45fe-9848-5e974ce84018",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: church coalition endorses Nixon.",
+  "label": "Nixon · 2026-10-29 · The National Black Church Initiative: A Coalition of 150,000"
+ },
+ {
+  "id": "04cfd349-08b6-4b03-968c-256783b5e756",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: overview of the Senate race.",
+  "label": "Nixon · 2026-10-30 · Ashley Moody, Angie Nixon face off for U.S. Senate seat"
+ },
+ {
+  "id": "20915c41-2791-4f4c-9f82-7e4bbb9b65b4",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: Creative Loafing's voting guide gives the paper's own recommendations, which would show as reporting.",
+  "label": "Overman · 2026-10-22 · Creative Loafing voting guide 2026: Hillsborough and Pinella"
+ },
+ {
+  "id": "0c15d770-d9a7-4e11-808f-c0d7ae203bbe",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'Claim' is a form of the banned attribution verb 'claims'.",
+  "label": "Rodriguez · 2026-10-22 · Florida Democrats Claim They’re Leading in the Race For Stat"
+ },
+ {
+  "id": "b84211b3-43b6-439c-92bc-76d893d192ab",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'JUICE' daily roundup strings unrelated items together.",
+  "label": "Rodriguez · 2026-10-23 · JUICE🍊— 10.23.2026 — Trump Makes Last Minute Push to Help Re"
+ },
+ {
+  "id": "e8e3c957-f4ce-4d13-9d77-254d6ddc9635",
+  "action": "approve",
+  "note": "Queue review 10-31: What to know about the attorney general race (earliest copy of this event for this candidate).",
+  "label": "Rodriguez · 2026-10-23 · What to know about the Florida attorney general race"
+ },
+ {
+  "id": "460d8ce6-b0dd-4aab-b0b2-e8ea632592c9",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Rodriguez · 2026-10-23 · What to know about the Florida attorney general race).",
+  "label": "Rodriguez · 2026-10-23 · What to know about the Florida attorney general's race"
+ },
+ {
+  "id": "43972d14-56e2-4d6d-97f2-ae1dc6982e39",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: interview with Rodriguez.",
+  "label": "Rodriguez · 2026-10-25 · Democratic challenger for Florida AG sits down with Jim DeFe"
+ },
+ {
+  "id": "ecf25237-73a7-4bb6-9b7f-04855ad92963",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] A full-episode listing with several guests; Local 10's single-segment page for Rodriguez is kept.",
+  "label": "Rodriguez · 2026-10-25 · This Week in South Florida Full Episode: October 25, 2026"
+ },
+ {
+  "id": "8e6ec723-2f48-436a-8e3b-b0603cf25691",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Local 10 segment with Rodriguez.",
+  "label": "Rodriguez · 2026-10-25 · This Week in South Florida: Jose Javier Rodriguez"
+ },
+ {
+  "id": "ef471992-54db-424c-9094-525d03a8dea4",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: a Republican Party ad about Rodriguez (attack ads approved when the candidate is in the headline, 10-06).",
+  "label": "Rodriguez · 2026-10-28 · Republican Party of Florida Attacks Jose Javier Rodriguez Ov"
+ },
+ {
+  "id": "0d51c67d-adef-4241-8130-f65784f005f3",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: an Orlando Weekly column ('corrupt power structure') that would show as reporting.",
+  "label": "Rodriguez · 2026-10-29 · Climate warrior Jose Javier Rodriguez spars with Florida’s c"
+ },
+ {
+  "id": "cd488ca2-ebd2-4194-abbb-82efbe937221",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: banned motive phrase 'hoping to' in the dek.",
+  "label": "Rodriguez · 2026-10-29 · Jose Javier Rodriguez looks to unseat Florida Attorney Gener"
+ },
+ {
+  "id": "04774688-84e2-46c1-934a-88e088f72e93",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: overview of the attorney general race.",
+  "label": "Rodriguez · 2026-10-30 · Florida attorney general race: James Uthmeier, Jose Javier R"
+ },
+ {
+  "id": "674ecc89-4187-42e7-b510-ba12d694ab29",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: Spanish copy of the Local 10 story rejected for 'hoping to'; 'busca' carries the same motive wording.",
+  "label": "Rodriguez · 2026-10-30 · José Javier Rodríguez busca desbancar al fiscal general de F"
+ },
+ {
+  "id": "c615b1db-159b-4ab8-88f6-9ec220d8745b",
+  "action": "approve",
+  "note": "Queue review 10-31: Orange County mayoral debate (earliest copy of this event for this candidate).",
+  "label": "Russell · 2026-10-26 · Tiffany Moore Russell and Chris Messina to debate for Orange"
+ },
+ {
+  "id": "3f9abf4a-f237-4021-b1d7-a278ae8ac74b",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Russell · 2026-10-26 · Tiffany Moore Russell and Chris Messina to debate for Orange).",
+  "label": "Russell · 2026-10-29 · Orange County Mayoral candidates face off during final debat"
+ },
+ {
+  "id": "d397e96f-052b-4796-a337-e3b50feed199",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Russell · 2026-10-26 · Tiffany Moore Russell and Chris Messina to debate for Orange).",
+  "label": "Russell · 2026-10-29 · Orange County mayoral candidates face off in final debate ah"
+ },
+ {
+  "id": "427f2455-4b6d-4f67-a41a-ce535d104718",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Salazar campaign event.",
+  "label": "Salazar · 2026-10-23 · Rep. Salazar rallies voters for District 27 campaign at libr"
+ },
+ {
+  "id": "d861cea8-83da-4e0a-9f13-dc63856f826f",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: profile of the FL-27 contest.",
+  "label": "Salazar · 2026-10-29 · 2 former journalists face off for Florida’s 27th Congression"
+ },
+ {
+  "id": "a4cdd960-68f7-41b3-8559-ab306870a343",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: banned attribution verb 'touts' in the headline.",
+  "label": "Simpson · 2026-10-22 · Wilton Simpson touts fiscal discipline, low state debt in co"
+ },
+ {
+  "id": "94ba2065-3fc7-4af0-8980-30447b4421b8",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] subject: the story is Dan Green's FL-9 endorsement; Simpson is one of the endorsers.",
+  "label": "Simpson · 2026-10-23 · Florida Agriculture leaders back GOP candidate Dan Green in"
+ },
+ {
+  "id": "c844c8b4-602a-4213-8aa4-fce8e3b8b838",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Simpson campaigning on a ballot amendment (Simpson in the headline).",
+  "label": "Simpson · 2026-10-27 · DeSantis, Moody and Simpson urge voters to back homestead ta"
+ },
+ {
+  "id": "5f4d63b0-4921-4f67-854a-0194c113fd7a",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: what to know about the agriculture commissioner race.",
+  "label": "Simpson · 2026-10-27 · What to know about the Florida agriculture commissioner race"
+ },
+ {
+  "id": "67f35a06-35e6-4939-af07-772155bb6953",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: an endorsement of Singer (approved when on-subject, founder 10-09).",
+  "label": "Singer · 2026-10-22 · Ben Shapiro Endorses Scott Singer for Congress"
+ },
+ {
+  "id": "3ab1f38e-d867-47c0-94e4-0f6c87ac38e7",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'Last Squeeze' daily roundup strings unrelated items together.",
+  "label": "Singer · 2026-10-22 · Last Squeeze🍊— 10.22.2026 — Florida GOP Drops Lawsuit Over H"
+ },
+ {
+  "id": "596fff12-2cb8-4653-8354-818b07b781a2",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: an FL-25 internal poll naming both candidates (polls approved when on-subject).",
+  "label": "Singer · 2026-10-22 · POLL: Scott Singer leads Jared Moskowitz by 7 points in FL-2"
+ },
+ {
+  "id": "655b773e-fc08-4ac3-ae36-4f1e765cdc93",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: profile of the FL-25 contest, both candidates in the headline.",
+  "label": "Singer · 2026-10-26 · Republican Scott Singer challenges incumbent Jared Moskowitz"
+ },
+ {
+  "id": "31a87eb8-46d0-46fd-b41c-e7e7d04618a0",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Singer · 2026-10-28 · Scott Singer and Jared Moskowitz meet for second congression).",
+  "label": "Singer · 2026-10-28 · Jared Moskowitz, Scott Singer clash on Israel, social progra"
+ },
+ {
+  "id": "b8c6111e-a5d8-4bc0-b805-2cb2560225c8",
+  "action": "approve",
+  "note": "Queue review 10-31: FL-25 candidates' second forum in Miami Beach (earliest copy of this event for this candidate).",
+  "label": "Singer · 2026-10-28 · Scott Singer and Jared Moskowitz meet for second congression"
+ },
+ {
+  "id": "e006a045-168b-46ba-aef5-513ce78f5eb1",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'JUICE' daily roundup strings unrelated items together.",
+  "label": "Soto · 2026-10-23 · JUICE🍊— 10.23.2026 — Trump Makes Last Minute Push to Help Re"
+ },
+ {
+  "id": "298c29d1-46cf-4fbb-975a-3b07fd490261",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: banned motive phrase 'aims to' in the dek.",
+  "label": "Soto · 2026-10-26 · Dan Green attacks incumbent Darren Soto over federal spendin"
+ },
+ {
+  "id": "574f90fd-f0e7-478f-adf1-58e57fa3631a",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Uthmeier · 2026-10-22 · Florida AG James Uthmeier, Sheriff Grady Judd unveil ‘Safe S).",
+  "label": "Uthmeier · 2026-10-22 · AG Uthmeier Takes Aim at Big Tech with Safe Screens Act, Cal"
+ },
+ {
+  "id": "0131d3e6-93ea-4beb-a3ca-73dff26744dd",
+  "action": "approve",
+  "note": "Queue review 10-31: Uthmeier's Safe Screens Act proposal (earliest copy of this event for this candidate).",
+  "label": "Uthmeier · 2026-10-22 · Florida AG James Uthmeier, Sheriff Grady Judd unveil ‘Safe S"
+ },
+ {
+  "id": "79b3a3ca-1394-47d7-bb04-f3444b41c108",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'Claim' is a form of the banned attribution verb 'claims'.",
+  "label": "Uthmeier · 2026-10-22 · Florida Democrats Claim They’re Leading in the Race For Stat"
+ },
+ {
+  "id": "2ad2885f-a53b-4aff-9a0f-e7b4c736ebde",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] subject: the story is the Florida GOP dropping its lawsuit; Uthmeier is a passing mention.",
+  "label": "Uthmeier · 2026-10-22 · Florida GOP drops Hope Florida ad lawsuit"
+ },
+ {
+  "id": "c95efa3f-f7ab-46fa-bd6d-a53f22c34cdd",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] subject: the story is Alex Rizo's state Senate race; Uthmeier is the endorser.",
+  "label": "Uthmeier · 2026-10-22 · James Uthmeier Endorses Alex Rizo in SD 39 Bid"
+ },
+ {
+  "id": "47f789f4-2071-4587-b77b-c580a7a7ccaa",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: banned motive phrase 'in an effort to' in the dek.",
+  "label": "Uthmeier · 2026-10-23 · Florida Attorney General Proposes New Law Restricting Social"
+ },
+ {
+  "id": "c3f8959b-df9f-4dda-9fc4-da1622eed050",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Uthmeier · 2026-10-22 · Florida AG James Uthmeier, Sheriff Grady Judd unveil ‘Safe S).",
+  "label": "Uthmeier · 2026-10-23 · Florida proposal would impose overnight social media ban, ti"
+ },
+ {
+  "id": "07e0b3d2-b2de-43fc-aadd-90147bd338cc",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Uthmeier · 2026-10-22 · Florida AG James Uthmeier, Sheriff Grady Judd unveil ‘Safe S).",
+  "label": "Uthmeier · 2026-10-23 · James Uthmeier Proposes Legislation to Protect Minors From S"
+ },
+ {
+  "id": "09d5f115-5114-4c0c-8b7f-a776b9e536c2",
+  "action": "approve",
+  "note": "Queue review 10-31: What to know about the attorney general race (earliest copy of this event for this candidate).",
+  "label": "Uthmeier · 2026-10-23 · What to know about the Florida attorney general race"
+ },
+ {
+  "id": "bfda6ef2-b535-4ea9-83ca-402138f7a249",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Uthmeier · 2026-10-23 · What to know about the Florida attorney general race).",
+  "label": "Uthmeier · 2026-10-23 · What to know about the Florida attorney general's race"
+ },
+ {
+  "id": "86aff99e-dd09-4d57-bca5-bca11da3fefa",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] subject: an interview with Rodriguez; Uthmeier is named only as his opponent.",
+  "label": "Uthmeier · 2026-10-25 · Democratic challenger for Florida AG sits down with Jim DeFe"
+ },
+ {
+  "id": "12eee96f-47e7-43f9-812c-c839ac6b3c02",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: banned motive phrase 'aims to' in the headline.",
+  "label": "Uthmeier · 2026-10-25 · Florida AG Uthmeier aims to end all abortions in the state"
+ },
+ {
+  "id": "dea5b8b5-dbf1-472b-8254-8b37280aa927",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Uthmeier's push on abortion and fetal personhood.",
+  "label": "Uthmeier · 2026-10-25 · Florida attorney general pushes for fetal personhood and an"
+ },
+ {
+  "id": "30bb778a-76bb-4a2d-aa37-72042e448be8",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Uthmeier is one of the officials who threatened TV stations over the Hope Florida ad.",
+  "label": "Uthmeier · 2026-10-25 · Free speech advocate responds after effort to stop TV statio"
+ },
+ {
+  "id": "3289e4d7-3748-45b3-aeb3-bfb5e65406da",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: banned attribution verb 'touts' in the headline.",
+  "label": "Uthmeier · 2026-10-26 · DeSantis touts Uthmeier’s record in endorsement video for at"
+ },
+ {
+  "id": "5ba6663a-3fe6-4f64-8f45-fd7ca4e28a98",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Subject: Uthmeier is not named in the title or dek (a law-enforcement story); the copies that name him are kept.",
+  "label": "Uthmeier · 2026-10-27 · Florida officials dismantle Sinaloa cartel pipeline flooding"
+ },
+ {
+  "id": "a03cb71d-2083-4010-abd1-4d3f1b5075a2",
+  "action": "approve",
+  "note": "Queue review 10-31: Sinaloa cartel racketeering charges (earliest copy of this event for this candidate).",
+  "label": "Uthmeier · 2026-10-27 · James Uthmeier Charges Several Linked to Sinaloa Cartel for"
+ },
+ {
+  "id": "49886453-e112-4a16-8957-62f2e67a8926",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Uthmeier · 2026-10-27 · James Uthmeier Charges Several Linked to Sinaloa Cartel for).",
+  "label": "Uthmeier · 2026-10-27 · Sinaloa Cartel ‘pipeline’ suspects face Florida racketeering"
+ },
+ {
+  "id": "970fe810-5089-4582-a2e1-ddd94be8f819",
+  "action": "approve",
+  "note": "Queue review 10-31: 100 felony counts and an AI lawsuit (earliest copy of this event for this candidate).",
+  "label": "Uthmeier · 2026-10-28 · AG Uthmeier announces 100 felony counts against Kissimmee ma"
+ },
+ {
+  "id": "15710b21-008b-4d01-b732-7287b1028616",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Uthmeier opens an investigation.",
+  "label": "Uthmeier · 2026-10-28 · EXCLUSIVE: Florida AG launches probe of Ferretti Group site"
+ },
+ {
+  "id": "e1aed386-77e9-4484-b491-cdf34f81af77",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Uthmeier · 2026-10-28 · AG Uthmeier announces 100 felony counts against Kissimmee ma).",
+  "label": "Uthmeier · 2026-10-29 · Florida Attorney General Announces 100 Felony Charges Agains"
+ },
+ {
+  "id": "38e8971a-f019-4e49-8536-c43def7367bc",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (Uthmeier · 2026-10-28 · AG Uthmeier announces 100 felony counts against Kissimmee ma).",
+  "label": "Uthmeier · 2026-10-29 · James Uthmeier Charges Man on 100 Felony Counts, Sues AI Pla"
+ },
+ {
+  "id": "894f7f83-e8a4-44a0-a2be-80bfb256bfc0",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: banned motive phrase 'hoping to' in the dek.",
+  "label": "Uthmeier · 2026-10-29 · Jose Javier Rodriguez looks to unseat Florida Attorney Gener"
+ },
+ {
+  "id": "8b4bfb3d-fd2d-4b87-b704-1ea487a6d174",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: overview of the attorney general race.",
+  "label": "Uthmeier · 2026-10-30 · Florida attorney general race: James Uthmeier, Jose Javier R"
+ },
+ {
+  "id": "58beb162-0d55-41f2-a4ea-aee1f03ba519",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Uthmeier announces sting arrests.",
+  "label": "Uthmeier · 2026-10-30 · James Uthmeier Announces Arrest of 281 in Child Predator, Hu"
+ },
+ {
+  "id": "ce17d272-e376-4b31-9cdf-df4a8987bd51",
+  "action": "approve",
+  "note": "Queue review 10-31: On-subject: Uthmeier announces a settlement.",
+  "label": "Uthmeier · 2026-10-30 · James Uthmeier Announces Snap Finance Settlement"
+ },
+ {
+  "id": "14a512f6-106f-4bc0-a786-38b28f1b0814",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: Spanish copy of the Local 10 story rejected for 'hoping to'; 'busca' carries the same motive wording.",
+  "label": "Uthmeier · 2026-10-30 · José Javier Rodríguez busca desbancar al fiscal general de F"
+ },
+ {
+  "id": "6e398c52-6594-4d8f-ab4f-474adee987ef",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: a Volusia County ballot error, shown only to Orange County voters.",
+  "label": "election news · 2026-10-22 · About 350 Volusia mail ballots affected by vendor error, ele"
+ },
+ {
+  "id": "92ec0063-d968-448b-9548-26916cd67389",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide Florida's Voice story on Albritton's Amendment 3 position, which already reaches Hillsborough voters.",
+  "label": "election news · 2026-10-22 · Ben Albritton is the latest GOP senator to come out against"
+ },
+ {
+  "id": "f944e9d8-f0d0-4c05-a735-a89b574d617d",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Brazil).",
+  "label": "election news · 2026-10-22 · Brazil's Indigenous voters deep in Amazon struggle to cast b"
+ },
+ {
+  "id": "e504f6a2-b3c6-405d-ab41-9b8d0ca7e103",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting: a young-voter education event in Ybor City.",
+  "label": "election news · 2026-10-22 · Cast members of Hamilton will be in Tampa next week educatin"
+ },
+ {
+  "id": "cfb8c815-2be9-47c7-a85b-2598f58eb2c2",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: Creative Loafing's voting guide gives the paper's own recommendations, which would show as reporting.",
+  "label": "election news · 2026-10-22 · Creative Loafing voting guide 2026: Florida’s Constitutional"
+ },
+ {
+  "id": "511c2754-dcf0-41b9-8728-462cf4f799e2",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: Creative Loafing's voting guide gives the paper's own recommendations, which would show as reporting.",
+  "label": "election news · 2026-10-22 · Creative Loafing voting guide 2026: How to vote in Tampa Bay"
+ },
+ {
+  "id": "615c0212-362b-4404-b1f8-ee17ac8ec7d9",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event for the same audience as the DeSantis Miami Amendment 3 story approved 10-22.",
+  "label": "election news · 2026-10-22 · Despite earlier hesitation to campaign, Gov. DeSantis hosts"
+ },
+ {
+  "id": "739c398a-17fd-44a4-8e1b-ed3d8caf8248",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Ecuador).",
+  "label": "election news · 2026-10-22 · Excandidata presidencial es detenida en Ecuador señalada por"
+ },
+ {
+  "id": "ba5045c6-6843-4489-9a95-11c4540799c8",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (nine other states).",
+  "label": "election news · 2026-10-22 · Federal judge orders Trump administration to halt noncitizen"
+ },
+ {
+  "id": "3c0af4b1-cc28-4e31-84f1-19cfee85fcfa",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (House races to watch).",
+  "label": "election news · 2026-10-22 · Fight for the House of Representatives: Here are the races t"
+ },
+ {
+  "id": "5f439723-9283-46ee-bef5-97b69c610498",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide Florida's Voice story on Albritton's Amendment 3 position approved 10-22.",
+  "label": "election news · 2026-10-22 · Florida Senate President Ben Albritton comes out against Ame"
+ },
+ {
+  "id": "24394ec2-eba7-4fe1-a88a-ca62bd238dec",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: Leon and Broward County polling-site stories, shown only to Hillsborough voters.",
+  "label": "election news · 2026-10-22 · Florida election supervisors in 2 counties report immigratio"
+ },
+ {
+  "id": "e7ebeea1-594a-4e7d-ba9d-a217ca626093",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting information: the last day to request a vote-by-mail ballot.",
+  "label": "election news · 2026-10-22 · Florida vote-by-mail request: Oct. 22 is the last day to req"
+ },
+ {
+  "id": "4a2d89a2-95aa-47dc-8323-21ea6b1a7703",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: Fort Lauderdale and Wilton Manors (Broward) budgets, shown only to Miami-Dade voters.",
+  "label": "election news · 2026-10-22 · Fort Lauderdale, Wilton Manors mayors project millions in lo"
+ },
+ {
+  "id": "fc33f6ad-da18-41f8-a159-3abf6c7f9ac2",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: Fort Lauderdale and Wilton Manors (Broward) budgets, shown only to Miami-Dade voters.",
+  "label": "election news · 2026-10-22 · Fort Lauderdale, Wilton Manors mayors warn Amendment 3 could"
+ },
+ {
+  "id": "ccec0fbd-e52b-49e5-b290-11c0baad3458",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting: Central Florida Hispanic leaders urge people to vote.",
+  "label": "election news · 2026-10-22 · Hispanic leaders urge voters to go to the polls amid represe"
+ },
+ {
+  "id": "60974d48-69c5-4e38-8f0c-a772a4cec726",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting information: how to vote by mail in Florida and who is eligible.",
+  "label": "election news · 2026-10-22 · How to vote by mail in Florida for the 2026 midterm election"
+ },
+ {
+  "id": "d1d03f85-3309-4ad3-b245-bf80850d4e3c",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: Leon and Broward County polling-site stories, shown only to Orange County voters.",
+  "label": "election news · 2026-10-22 · Immigration enforcement agents reported at early voting site"
+ },
+ {
+  "id": "c3157aee-eee4-42b2-9f72-f9e28bdab230",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: Leon and Broward County polling-site stories, shown only to Hillsborough voters.",
+  "label": "election news · 2026-10-22 · Immigration enforcement spotted at early voting polls in Flo"
+ },
+ {
+  "id": "241d1c3e-ce45-4926-8490-cf738bad714b",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: Leon and Broward County polling-site stories, shown only to Miami-Dade voters (10-22 precedent).",
+  "label": "election news · 2026-10-22 · Immigration enforcement spotted at early voting polls in Flo"
+ },
+ {
+  "id": "2042ddc3-1622-4633-a8b4-9cc986dbae9c",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: labelled 'COMMENTARY'; would show as reporting.",
+  "label": "election news · 2026-10-22 · It's election season in Miami! Time to play our tired and to"
+ },
+ {
+  "id": "26315b2b-19d3-4050-a885-f0fbc4dffcb0",
+  "action": "approve",
+  "note": "Queue review 10-31: Local race on the Nov 3 ballot in Miami-Dade: a judge dismisses the North Miami mayor's counterclaim.",
+  "label": "election news · 2026-10-22 · Judge dismisses North Miami mayor’s counterclaim after elect"
+ },
+ {
+  "id": "3fcd9705-7668-4152-94c2-fe138c6b80de",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (a federal ruling on DHS).",
+  "label": "election news · 2026-10-22 · Judge rules against DHS's policy of knocking on doors to tra"
+ },
+ {
+  "id": "1e6a2b22-ec3b-42a9-9955-b0800587284b",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting information: the deadline to request a vote-by-mail ballot.",
+  "label": "election news · 2026-10-22 · Oct. 22 is the deadline to request a vote-by-mail ballot in"
+ },
+ {
+  "id": "5a9d02ce-1e2c-4497-be5f-13ed48596552",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: Orlando Weekly's voting guide gives the paper's own recommendations, which would show as reporting.",
+  "label": "election news · 2026-10-22 · Orlando Weekly’s voting guide for the 2026 midterms"
+ },
+ {
+  "id": "3d76c7f3-afea-4bfc-b700-a5a57c00e05b",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: the Kissimmee mayor's arrest (Osceola County), shown only to Orange County voters.",
+  "label": "election news · 2026-10-22 · Osceola leaders differ over timing of Kissimmee mayor’s arre"
+ },
+ {
+  "id": "19f75633-712e-4a11-88be-ee8f2fd24f4f",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (the House majority).",
+  "label": "election news · 2026-10-22 · President Trump to Make 11th Hour Push to Help Republicans R"
+ },
+ {
+  "id": "b2bccd1a-5902-4dfb-aeca-6cde3b6f955d",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (RNC transfers).",
+  "label": "election news · 2026-10-22 · RNC transfers over $50 million to House, Senate committees t"
+ },
+ {
+  "id": "c7ddb0d2-281d-4aa3-b18d-069e9ab89e88",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: how it could affect child care and children's programs (Orange County audience).",
+  "label": "election news · 2026-10-22 · Some families fear Amendment 3 will hurt child care and kids"
+ },
+ {
+  "id": "5877bc30-721b-4127-b5b8-399012cc661c",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting information: what to do if a Miami-Dade mail ballot's return envelope arrives sealed.",
+  "label": "election news · 2026-10-22 · Some voters receive mail-in ballot’s return envelopes sealed"
+ },
+ {
+  "id": "648b31a0-eccf-4495-83a2-6cf27062a181",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Kansas).",
+  "label": "election news · 2026-10-22 · The GOP is on a rescue mission in Kansas, where Dems haven't"
+ },
+ {
+  "id": "08d0a17e-b279-43eb-b9d6-e60be4c650dc",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: an opinion column on a national story; would show as reporting.",
+  "label": "election news · 2026-10-22 · The Raid on Ilhan Omar’s Home Should Concern Every American"
+ },
+ {
+  "id": "af2f9c1a-aa2a-4f36-a37f-ce00fb8d2d01",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Ohio).",
+  "label": "election news · 2026-10-22 · Trump backs Ramaswamy on ad featuring Amy Acton's estranged"
+ },
+ {
+  "id": "2fa56822-d5fe-496a-b9f9-9e3cdb70fb42",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Ohio).",
+  "label": "election news · 2026-10-22 · Trump defends controversial ad featuring Democratic candidat"
+ },
+ {
+  "id": "4e906ddd-d721-4399-9182-022a0f7e8eb7",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (a national poll).",
+  "label": "election news · 2026-10-22 · Voters want the next Congress to focus on costs and Iran, no"
+ },
+ {
+  "id": "2ba0b455-c7ef-4412-9fc4-91f898ccb7f2",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (measures in other states).",
+  "label": "election news · 2026-10-22 · Voting-related measures on November ballots include a voter"
+ },
+ {
+  "id": "1877871a-669e-49ec-836b-9fd1d543d417",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (voting machine rumours nationwide).",
+  "label": "election news · 2026-10-22 · Why reported challenges with touchscreen voting machines don"
+ },
+ {
+  "id": "1bcae81f-77f9-4aa4-965c-a25fcfac3668",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: Leon and Broward County polling-site stories, shown only to Hillsborough voters.",
+  "label": "election news · 2026-10-22 · ‘It smells and feels like an intimidation tactic’: Immigrati"
+ },
+ {
+  "id": "ee6d4196-c4a9-4165-9fa9-b4c59c88a36a",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (federal charges).",
+  "label": "election news · 2026-10-23 · 2 ex-FBI officials charged with lying about involvement in i"
+ },
+ {
+  "id": "76e7da19-082e-4471-bf83-29b850949cf1",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (federal charges).",
+  "label": "election news · 2026-10-23 · 2 ex-FBI officials charged with lying about involvement in i"
+ },
+ {
+  "id": "bbb1a043-8a65-4827-a31c-472e51d81404",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (federal charges).",
+  "label": "election news · 2026-10-23 · 2 ex-FBI officials charged with making false statements abou"
+ },
+ {
+  "id": "9c46d1b6-5616-4a34-affd-913ca5cd3f0a",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (federal charges).",
+  "label": "election news · 2026-10-23 · 2 former FBI officials charged with lying about Hunter Biden"
+ },
+ {
+  "id": "a82be6f4-df82-4f6f-8226-4875fbabe429",
+  "action": "approve",
+  "note": "Queue review 10-31: Florida election: Central Florida voters on affordability and campaign promises.",
+  "label": "election news · 2026-10-23 · 2026 Voter Insight Panel: Young Voters, Affordability, Campa"
+ },
+ {
+  "id": "df5e017e-ecbe-4120-9cf5-ba06daf2862c",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Second copy of the same Voter Insight Panel story for the same audience.",
+  "label": "election news · 2026-10-23 · 2026 Voter Insight Panel: Young Voters, Affordability, Campa"
+ },
+ {
+  "id": "c810157e-e6b0-4aa0-b54f-6ed8d1834166",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Brazil).",
+  "label": "election news · 2026-10-23 · Brazil court orders government to provide transportation for"
+ },
+ {
+  "id": "c935528f-351d-4e56-a6f0-b07ab543138c",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Brazil).",
+  "label": "election news · 2026-10-23 · Brazil faces tight presidential runoff as Lula and Bolsonaro"
+ },
+ {
+  "id": "d8f1f4e7-1361-49c9-86b8-ad402a79c78f",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the statewide story on Trump's Fort Myers rally approved 10-22.",
+  "label": "election news · 2026-10-23 · Bucs legend Mike Alstott to join Trump at Fort Myers midterm"
+ },
+ {
+  "id": "403357d3-9875-4009-8b52-9fdf73bfef2b",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: Creative Loafing's voting guide gives the paper's own recommendations, which would show as reporting.",
+  "label": "election news · 2026-10-23 · Creative Loafing voting guide 2026: Hillsborough County Comm"
+ },
+ {
+  "id": "d875c560-5d71-44cd-b472-8855c90c90ac",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: Creative Loafing's voting guide gives the paper's own recommendations (also Pinellas races).",
+  "label": "election news · 2026-10-23 · Creative Loafing voting guide 2026: Pinellas state represent"
+ },
+ {
+  "id": "b6f5dc2e-fca0-4a03-b582-ce07ebf2dc0b",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: Creative Loafing's voting guide gives the paper's own recommendations (also St. Petersburg races).",
+  "label": "election news · 2026-10-23 · Creative Loafing voting guide 2026: St. Petersburg City Coun"
+ },
+ {
+  "id": "04ca4f42-ddd5-422b-a337-3b9b53fd606f",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: Creative Loafing's voting guide gives the paper's own recommendations, which would show as reporting.",
+  "label": "election news · 2026-10-23 · Creative Loafing voting guide 2026: Tampa Bay’s Florida Stat"
+ },
+ {
+  "id": "2ad19201-0805-423f-9c92-7541cbe5ca14",
+  "action": "approve",
+  "note": "Queue review 10-31: Florida election: Trump's Oct. 30 rally in Daytona Beach (statewide; the earliest copy).",
+  "label": "election news · 2026-10-23 · EXCLUSIVE: Trump to hold second Florida midterm rally in Day"
+ },
+ {
+  "id": "9b2f5671-4c9d-4254-9985-c4692185910e",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: Leon and Broward County polling-site stories, shown only to Orange County voters.",
+  "label": "election news · 2026-10-23 · Florida election officials report immigration agents near po"
+ },
+ {
+  "id": "d6340f15-77d8-407c-8675-0603a5e731a5",
+  "action": "approve",
+  "note": "Queue review 10-31: Local race on the Nov 3 ballot in Miami-Dade: a judge rejects a special election for North Miami mayor.",
+  "label": "election news · 2026-10-23 · George Morgan set to become North Miami mayor after judge re"
+ },
+ {
+  "id": "3d2a0dec-c989-442c-8183-6575833467ec",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting: how the new congressional map affects Tampa Bay voters.",
+  "label": "election news · 2026-10-23 · How Florida's new congressional map is affecting Tampa Bay v"
+ },
+ {
+  "id": "0ad1c302-78f7-4171-9de6-157a574446a9",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Brazil).",
+  "label": "election news · 2026-10-23 · How close is the Amazon to a 'tipping point?' Brazil’s elect"
+ },
+ {
+  "id": "38e7c49b-5125-495e-8b31-a2844cb72912",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (California).",
+  "label": "election news · 2026-10-23 · Immigrants seeking US citizenship targeted in Trump administ"
+ },
+ {
+  "id": "86732dcf-0c40-4c7e-94fc-56e703ed42ac",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: the Kissimmee mayor's arrest (Osceola County), shown only to Orange County voters.",
+  "label": "election news · 2026-10-23 · Kissimmee Mayor Jackie Espinosa released on $70,000 bond"
+ },
+ {
+  "id": "1dba4bd0-2a6f-4b85-9552-935ee37805db",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'Last Squeeze' daily roundup strings unrelated items together.",
+  "label": "election news · 2026-10-23 · Last Squeeze🍊— 10.23.2026 — Trump Lands in Fort Myers for Mi"
+ },
+ {
+  "id": "caa1d64e-2a45-471d-b907-993e47d2740c",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: the Kissimmee mayor's arrest (Osceola County), shown only to Orange County voters.",
+  "label": "election news · 2026-10-23 · Mayor Espinosa links arrest to upcoming election"
+ },
+ {
+  "id": "7b392a1b-372a-4bd7-9df9-1ccdc02a75c2",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting information: how to look up who funds your candidates (Hillsborough audience).",
+  "label": "election news · 2026-10-23 · Money is everywhere in politics. Here's how to see who's fun"
+ },
+ {
+  "id": "445fad95-0be0-4808-b4d7-6d45ea7ad987",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting information: how to look up who funds your candidates.",
+  "label": "election news · 2026-10-23 · Money is everywhere in politics. Here’s how to see who’s fun"
+ },
+ {
+  "id": "16326a55-6125-4bec-9e72-b4a653c7da16",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting in Florida: more than one in ten registered voters have cast ballots.",
+  "label": "election news · 2026-10-23 · More than 1 in 10 registered Florida voters have already cas"
+ },
+ {
+  "id": "76372793-0889-4a18-b66a-10022b5eb810",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting in Florida: more than 1.6 million people have voted.",
+  "label": "election news · 2026-10-23 · More than 1.6 million people have already voted in Florida"
+ },
+ {
+  "id": "593b64ea-c473-400d-84e0-cbfe364033ce",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting in Florida: more than 10 percent of voters have cast ballots.",
+  "label": "election news · 2026-10-23 · More than 10 percent of voters have cast ballots in Florida"
+ },
+ {
+  "id": "bacbef7f-2e23-443e-afb7-c5392fc563c7",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (New York).",
+  "label": "election news · 2026-10-23 · New York state woman charged with voting illegally says she"
+ },
+ {
+  "id": "aea1628e-c98a-4472-a80c-d8b73907949e",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event for the same audience as the North Miami disqualification story approved 10-22.",
+  "label": "election news · 2026-10-23 · North Miami mayor disqualified from race, leaving opponent a"
+ },
+ {
+  "id": "71f92f76-7cc2-43d2-bec2-5c774b4fe719",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the statewide story on Trump's Fort Myers rally approved 10-22.",
+  "label": "election news · 2026-10-23 · President Trump Arrives in Fort Myers for Midterm Rally"
+ },
+ {
+  "id": "2460a50c-5483-4885-8e0e-118253989315",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on Trump's Fort Myers rally, which already reaches Orange County voters.",
+  "label": "election news · 2026-10-23 · President Trump holds midterm rally in Florida: Here’s what"
+ },
+ {
+  "id": "528e7f96-e27c-4c9f-bf66-8573eda7a306",
+  "action": "approve",
+  "note": "Queue review 10-31: Local ballot question on Nov 3 in Miami: Referendum 3 on Virginia Key.",
+  "label": "election news · 2026-10-23 · Referendum 3 will let Miami voters decide the fate of Virgin"
+ },
+ {
+  "id": "8ef9d27c-fd6f-45de-9b1f-6e6512d7f378",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (New Hampshire).",
+  "label": "election news · 2026-10-23 · Supreme Court allows New Hampshire to fully ban student IDs"
+ },
+ {
+  "id": "755107db-92f7-44da-8605-abd77a6182df",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-23 · The Latest: Trump administration sues to block possible Demo"
+ },
+ {
+  "id": "b51f32fd-d0d9-4d87-8467-df48b7325e4c",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-23 · Trump administration sues to block Alaska Senate race if Rep"
+ },
+ {
+  "id": "2011ab19-cf6a-4aef-9fde-442c3698cff9",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-23 · Trump administration sues to block certification of Alaska's"
+ },
+ {
+  "id": "381948f8-6ff1-4dac-ac8f-d8e5422b9e07",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the statewide story on Trump's Fort Myers rally approved 10-22.",
+  "label": "election news · 2026-10-23 · Trump announces $250 million for senior care nurses at Fort"
+ },
+ {
+  "id": "7cb05b90-2c34-4693-93eb-13a0c0c32d6e",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on Trump's Fort Myers rally, which already reaches Miami-Dade voters.",
+  "label": "election news · 2026-10-23 · Trump at South Florida rally revives the idea of military in"
+ },
+ {
+  "id": "4c524c6e-2e09-4492-b8bd-514e49e28d44",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on Trump's Fort Myers rally, which already reaches Miami-Dade voters.",
+  "label": "election news · 2026-10-23 · Trump holds rally in Fort Myers to stump for Donalds, Moody"
+ },
+ {
+  "id": "0e7bc7c0-fe52-4656-be9a-2c2879821647",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-23 · Trump says he ordered the Justice Department's lawsuit over"
+ },
+ {
+  "id": "8c8e16d4-77e8-45e4-b87b-3c858bb749d8",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: a Volusia County ballot error, shown only to Orange County voters.",
+  "label": "election news · 2026-10-23 · Volusia elections office resending 350 ballots after vendor"
+ },
+ {
+  "id": "e861e673-116b-464c-899e-d28de0b63475",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-23 · What's going on with Dan Sullivan and Dan Sullivan? The Alas"
+ },
+ {
+  "id": "41ea5bff-8a48-44a5-ab42-40fd50815145",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the statewide story on Trump's Fort Myers rally approved 10-22 (the White House's framing of a crime story before it).",
+  "label": "election news · 2026-10-23 · White House highlights brutal Fort Myers hammer attack ahead"
+ },
+ {
+  "id": "7e01cdd3-b936-4e4b-b144-fbe04a59b039",
+  "action": "reject",
+  "note": "Queue review 10-31: Not election news: social media memes about a hurricane's name.",
+  "label": "election news · 2026-10-23 · With hurricane off Mexico sharing name with Vice President J"
+ },
+ {
+  "id": "77e50721-2fa6-4175-8e24-feb1d94d9223",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (a national figure's prospects).",
+  "label": "election news · 2026-10-24 · AOC can draw a crowd. The midterms will test whether her pol"
+ },
+ {
+  "id": "3b4aebda-1a95-4a15-9438-c773c70373ed",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'hoping to' in the summary (also another country's election, Brazil).",
+  "label": "election news · 2026-10-24 · Brazil's Lula, Bolsonaro close arguments to voters ahead of"
+ },
+ {
+  "id": "3e5d1759-6b26-4fa6-bd03-004748712f8d",
+  "action": "approve",
+  "note": "Queue review 10-31: The first weekend of early voting in South Florida (earliest copy of this event).",
+  "label": "election news · 2026-10-24 · Checking out the first weekend of early voting in South Flor"
+ },
+ {
+  "id": "05e7906f-dff0-4a25-aacb-52b45ebeced8",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (FBI cases in several states).",
+  "label": "election news · 2026-10-24 · FBI’s historic week of crackdowns: noncitizen voter fraud bu"
+ },
+ {
+  "id": "f8d43787-ad4f-4894-94cc-200384b59409",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'embattled' in the summary (also not an election in Florida: FIFA).",
+  "label": "election news · 2026-10-24 · Infantino says he's supported by 'vast, vast majority' of so"
+ },
+ {
+  "id": "c93ead98-2379-46f2-b5dc-bdb8dabbe4a4",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Israel).",
+  "label": "election news · 2026-10-24 · Israelis hold final rally against Netanyahu before election,"
+ },
+ {
+  "id": "4eecf37b-0fac-4a6a-bec8-2973a33216fd",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (election news · 2026-10-24 · Checking out the first weekend of early voting in South Flor).",
+  "label": "election news · 2026-10-24 · Larger turnout expected on weekends for early voting in Sout"
+ },
+ {
+  "id": "487413e9-15c9-41a8-8e44-04dc6473cf64",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: a Sarasota City Commission race, shown only to Hillsborough voters.",
+  "label": "election news · 2026-10-24 · Little-known donor injects $200,000 into Sarasota City Commi"
+ },
+ {
+  "id": "0d956ab7-25c0-4839-a5ee-34366f299c2f",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Brazil).",
+  "label": "election news · 2026-10-24 · Lula y Bolsonaro cierran campañas antes de la segunda vuelta"
+ },
+ {
+  "id": "844daf85-5fb6-451c-a923-17081a91e902",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Brazil).",
+  "label": "election news · 2026-10-24 · Lula, Bolsonaro reach out to undecided voters in last debate"
+ },
+ {
+  "id": "aac3c6fe-3f1f-4989-8b37-adf29306d325",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Ohio and Michigan).",
+  "label": "election news · 2026-10-24 · Obama is set to campaign with Democrats in Ohio and Michigan"
+ },
+ {
+  "id": "6abd0ca1-1d06-48fe-8190-8dfae6d79fd4",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Ohio).",
+  "label": "election news · 2026-10-24 · Obama, in Ohio, assails 'cruelty' and indecency from Trump a"
+ },
+ {
+  "id": "dbc01ba2-916d-4b2d-baa0-69ac3c7778f0",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on Trump's Daytona Beach rally, which already reaches Orange County voters.",
+  "label": "election news · 2026-10-24 · President Donald Trump to attend midterm election rally in D"
+ },
+ {
+  "id": "408f2dea-eddd-4196-b0c2-8559f3617285",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Georgia).",
+  "label": "election news · 2026-10-24 · Republican billionaire Rick Jackson is walking a Trump tight"
+ },
+ {
+  "id": "1f6c751b-8402-4eee-80fe-89677c0b37f5",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the statewide story on Trump's Fort Myers rally approved 10-22 (foreign-policy remarks at it).",
+  "label": "election news · 2026-10-24 · Trump at South Florida rally revives the idea of military in"
+ },
+ {
+  "id": "97c74144-2dd5-40e5-8689-209a9b3ca6c9",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on Trump's Fort Myers rally, which already reaches Miami-Dade voters.",
+  "label": "election news · 2026-10-24 · Trump at South Florida rally revives the idea of military in"
+ },
+ {
+  "id": "ab86cf89-ee2a-4666-85c6-ff8563f9332d",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide AP story on Trump voting early, which already reaches Miami-Dade voters.",
+  "label": "election news · 2026-10-24 · Trump casts his midterm ballot early in Florida"
+ },
+ {
+  "id": "2a78bdc6-eabb-42aa-8f85-27b758900140",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide AP story on Trump voting early, which already reaches Miami-Dade voters.",
+  "label": "election news · 2026-10-24 · Trump casts his midterm ballot early in Florida"
+ },
+ {
+  "id": "564fc3b6-5cf7-441d-b4c8-de3537172ea1",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] A weekly radio roundup of several topics.",
+  "label": "election news · 2026-10-24 · Undecided voters, Isaias recovery, ICE spending and weekly n"
+ },
+ {
+  "id": "078c1f4d-e807-450c-83c2-411fdbf8c1d4",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Colorado and Washington).",
+  "label": "election news · 2026-10-24 · Voters in 2 Democratic strongholds could ban transgender gir"
+ },
+ {
+  "id": "e522b3ba-9d42-457a-b288-4ae2dbf443ab",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: what it could mean for housing and water resources.",
+  "label": "election news · 2026-10-24 · What's at stake for Florida's housing market and water resou"
+ },
+ {
+  "id": "ce9db835-d81e-4dd7-98ad-4c52069da0e9",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (a general explainer on negative ads).",
+  "label": "election news · 2026-10-24 · Why do politicians pay money to say negative things about th"
+ },
+ {
+  "id": "de49bfbe-5d84-4613-968c-4afa5e3cbb94",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (a national figure's prospects).",
+  "label": "election news · 2026-10-25 · AOC can draw a crowd. The midterms will test whether her pol"
+ },
+ {
+  "id": "12c36ec5-e747-4d83-8b88-d0d6a44537c1",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-25 · Alaska Democratic Senate candidate Mary Peltola and her fami"
+ },
+ {
+  "id": "972f83ea-c8aa-4913-afb8-419e3d1413bb",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: a Manatee County story, shown only to Hillsborough voters.",
+  "label": "election news · 2026-10-25 · As development threatens Manatee’s water supply, voters weig"
+ },
+ {
+  "id": "12ed9014-732e-4d64-af93-d5fe89c025ab",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-25 · Blanche says Trump isn't trying to meddle with Alaska electi"
+ },
+ {
+  "id": "83279947-5ba3-4ec9-a077-ba7da376c2a5",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Brazil).",
+  "label": "election news · 2026-10-25 · Brazil faces a tense Lula vs Bolsonaro runoff with US influe"
+ },
+ {
+  "id": "94f4918c-1ddd-4548-8e21-e18f8d768a5f",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Brazil).",
+  "label": "election news · 2026-10-25 · Brazil votes in a tense Lula vs Bolsonaro runoff with US inf"
+ },
+ {
+  "id": "416f861c-0284-41b4-9439-b42fa5822fc3",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Brazil).",
+  "label": "election news · 2026-10-25 · Brazilians in South Florida cast ballots in country’s presid"
+ },
+ {
+  "id": "a18065fa-f27f-481f-86b2-aec202977078",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Bulgaria).",
+  "label": "election news · 2026-10-25 · Bulgaria holds a presidential election dominated by economic"
+ },
+ {
+  "id": "8a0ba607-ecc9-45a2-bf85-91e496b6e209",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (California).",
+  "label": "election news · 2026-10-25 · California election officials frustrated, rattled by DOJ dem"
+ },
+ {
+  "id": "f232c28b-551a-4af8-8670-5c22ca167cf6",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Israel).",
+  "label": "election news · 2026-10-25 · Days before Israeli election, military conducts massive West"
+ },
+ {
+  "id": "11f2c088-e9a5-405b-8437-2879fa144947",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (election news · 2026-10-24 · Checking out the first weekend of early voting in South Flor).",
+  "label": "election news · 2026-10-25 · Early voting numbers remain large across South Florida"
+ },
+ {
+  "id": "1f976568-afe0-4f84-9a8d-98958c246d7c",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same CBS Miami report as the earlier social-media-clips story, same audience.",
+  "label": "election news · 2026-10-25 · How can social media clipping be used to influence the midte"
+ },
+ {
+  "id": "9de89ea9-c507-4f74-8a8a-74db78a955c4",
+  "action": "approve",
+  "note": "Queue review 10-31: Florida election: how social media clips shape local elections in South Florida.",
+  "label": "election news · 2026-10-25 · How social media clips can impact local elections in South F"
+ },
+ {
+  "id": "df669d63-dc78-4613-88a1-a3bbf026bc10",
+  "action": "approve",
+  "note": "Queue review 10-31: Florida election: Doral's Venezuelan-American voters ahead of Nov 3.",
+  "label": "election news · 2026-10-25 · In Doral, Florida, some voters with close ties to Venezuela"
+ },
+ {
+  "id": "fef8c351-b180-4bd0-9ad4-fdd1fd923b71",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Ohio).",
+  "label": "election news · 2026-10-25 · In Ohio rally, Obama blasts Ramaswamy, GOP over controversia"
+ },
+ {
+  "id": "4ff908de-c7a2-4c0b-97ef-7a5de3e1fabc",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (the Middle East).",
+  "label": "election news · 2026-10-25 · Iran says messages are still being passed to the US amid war"
+ },
+ {
+  "id": "557d5677-eee8-4ef1-9f38-f74b9f34f4d0",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Israel).",
+  "label": "election news · 2026-10-25 · Israel presses ahead with West Bank operation as election ap"
+ },
+ {
+  "id": "d2721d77-0db4-419d-bec6-a7c35d191bed",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Israel).",
+  "label": "election news · 2026-10-25 · Israeli military to close West Bank crossings ahead of upcom"
+ },
+ {
+  "id": "bba37107-c6b1-4e7f-88a0-2f555125d298",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Brazil).",
+  "label": "election news · 2026-10-25 · Lula and Bolsonaro make final appeals as Brazil votes in pre"
+ },
+ {
+  "id": "882df65e-1da3-4659-8aa1-b7ddd113136c",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Brazil).",
+  "label": "election news · 2026-10-25 · Lula and Bolsonaro make final push as Brazil heads into clos"
+ },
+ {
+  "id": "1e6502e1-e6d3-4127-9aa8-5b0b9c05e77d",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Brazil).",
+  "label": "election news · 2026-10-25 · Lula is declared winner of Brazil’s election as Bolsonaro re"
+ },
+ {
+  "id": "60309569-14cb-4258-8040-e68b4e3fde23",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Massachusetts and Idaho).",
+  "label": "election news · 2026-10-25 · Massachusetts and Idaho put guns on the ballot. One seeks to"
+ },
+ {
+  "id": "3f8083f6-5149-43f3-9881-f39cc94c2515",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (the Midwest).",
+  "label": "election news · 2026-10-25 · Obama, in Midwest, assails 'cruelty' and indecency from Trum"
+ },
+ {
+  "id": "e3b7b049-4717-4cb4-ac6f-d56691103ccd",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (the Midwest).",
+  "label": "election news · 2026-10-25 · Obama, in Midwest, assails ‘cruelty’ and indecency from Trum"
+ },
+ {
+  "id": "fbd358ee-961d-4920-b9c3-9ee2ab218449",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Venezuela).",
+  "label": "election news · 2026-10-25 · Opposition leader María Corina Machado returns to Venezuela"
+ },
+ {
+  "id": "23140efb-b13e-4491-8680-6dd254b951b4",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Bulgaria).",
+  "label": "election news · 2026-10-25 · Presidential race in Bulgaria heads to runoff due to record"
+ },
+ {
+  "id": "22e8f2c8-3ba2-442e-b576-aed41f1b7a7b",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (national cost-of-living concerns).",
+  "label": "election news · 2026-10-25 · Rising gas prices, cost of living weigh on voters ahead of m"
+ },
+ {
+  "id": "c04676b3-627a-4ea1-9d31-5a34b3d933cc",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Serbia).",
+  "label": "election news · 2026-10-25 · Serbia holds a parliamentary election as strongman Vucic fac"
+ },
+ {
+  "id": "cb713b32-bcca-4b1b-a2f8-e3d88d550aa2",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'concedes' in the title (also another country's election, Serbia).",
+  "label": "election news · 2026-10-25 · Serbia’s strongman leader Vucic concedes defeat to student-l"
+ },
+ {
+  "id": "28c61214-604d-4b27-a8c1-e533b55975d7",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: how it could affect child care and children's programs (Hillsborough audience).",
+  "label": "election news · 2026-10-25 · Some families fear Amendment 3 will hurt child care and kids"
+ },
+ {
+  "id": "0bb0bee5-3224-4958-8d11-30435de9a217",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Venezuela).",
+  "label": "election news · 2026-10-25 · South Florida Venezuelans react to Maria Corina Machado's re"
+ },
+ {
+  "id": "9a8eeb7e-186e-466c-98ef-58a29dbdb96b",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (election news · 2026-10-24 · Checking out the first weekend of early voting in South Flor).",
+  "label": "election news · 2026-10-25 · South Florida voters hit polls on first Saturday of early vo"
+ },
+ {
+  "id": "fd286deb-a8af-48e1-8e71-22ce40acdab5",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-25 · Sullivan, Peltola seek support from Alaska Native voters ahe"
+ },
+ {
+  "id": "a80f42f3-2875-4e34-b7fd-87b837de4bc7",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Israel).",
+  "label": "election news · 2026-10-25 · Tens of thousands of Israelis living abroad are expected to"
+ },
+ {
+  "id": "95fa53e2-35e3-4462-bb5d-123d2813e2a6",
+  "action": "reject",
+  "note": "Queue review 10-31: Poll: two pollsters on the race; left out of the home column (founder 2026-10-11).",
+  "label": "election news · 2026-10-25 · This Week in South Florida: Fernand Amandi and Rob Schmidt"
+ },
+ {
+  "id": "15deafa8-a41e-490f-bfe2-6d8078e1ea85",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Georgia).",
+  "label": "election news · 2026-10-25 · Trump announces at a Georgia campaign rally that Audi will b"
+ },
+ {
+  "id": "84583c72-40ca-4309-87c2-2bbb2d50dd27",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Michigan).",
+  "label": "election news · 2026-10-25 · Trump escalates anti-Muslim attacks against El-Sayed in Mich"
+ },
+ {
+  "id": "ee1ac9dc-edf9-46b3-8bcb-f4e89cea8fc1",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'claims' in the summary (also a national story, Michigan).",
+  "label": "election news · 2026-10-25 · Trump escalates rhetoric against El-Sayed as he tries to und"
+ },
+ {
+  "id": "1c45102b-0959-4a9a-a76a-c7d19679ba65",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on Trump's Fort Myers rally, which already reaches Hillsborough voters.",
+  "label": "election news · 2026-10-25 · Trump rally in Fort Myers draws supporters in droves, reache"
+ },
+ {
+  "id": "4f828911-844f-456f-94c1-6e182e19b8a1",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide AP story on Trump voting early, which already reaches Orange County voters.",
+  "label": "election news · 2026-10-25 · Trump talks midterm issues, praises first lady on securing c"
+ },
+ {
+  "id": "79de32c7-2321-41ed-b06a-816476d9901c",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide AP story on Trump voting early, which already reaches Miami-Dade voters.",
+  "label": "election news · 2026-10-25 · Trump votes early in West Palm Beach, criticizes Democrats"
+ },
+ {
+  "id": "6cd12fe8-4f06-4bec-a771-1928a5077be8",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Colorado and Washington).",
+  "label": "election news · 2026-10-25 · Voters in 2 Democratic strongholds could ban transgender gir"
+ },
+ {
+  "id": "9ff432aa-bd7c-4a09-9235-3908f1b70bb6",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Venezuela).",
+  "label": "election news · 2026-10-25 · What to know about Venezuela's opposition leader Maria Corin"
+ },
+ {
+  "id": "5e963263-8f1b-49f2-999c-eb523b1a2435",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendments: the reading level of this year's ballot measures.",
+  "label": "election news · 2026-10-26 · 2026 ballot measures are written at a graduate-school readin"
+ },
+ {
+  "id": "33d7fc13-9b88-4b16-b86f-a664afeabf3e",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (California).",
+  "label": "election news · 2026-10-26 · 9th Circuit questions DOJ demand to set aside 20,000 Califor"
+ },
+ {
+  "id": "e1b1acb9-8838-418c-a566-55396f20d087",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Israel).",
+  "label": "election news · 2026-10-26 · A look at the main issues in Israeli elections seen as a ref"
+ },
+ {
+  "id": "9bd8cd5b-ef2a-4394-a9eb-1f2ce0305ab3",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Georgia).",
+  "label": "election news · 2026-10-26 · AI chat bot accessed Georgia voter data without being prompt"
+ },
+ {
+  "id": "64a0681a-b4c5-45d5-aafb-f801de855dae",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: a Leon County polling-site follow-up, shown only to Miami-Dade voters.",
+  "label": "election news · 2026-10-26 · Border Patrol agents spotted at Florida early voting site we"
+ },
+ {
+  "id": "ea3a9173-de1e-45c2-897a-c9b6c5b216cd",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: a follow-up on the Leon and Broward polling-site stories, shown only to Orange County voters.",
+  "label": "election news · 2026-10-26 · Border patrol agents seen at Florida polls wanted to vote, o"
+ },
+ {
+  "id": "6e04d27b-3786-458f-8682-ee823a82a6b5",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Brazil).",
+  "label": "election news · 2026-10-26 · Brazil President Luiz Inácio Lula da Silva wins reelection o"
+ },
+ {
+  "id": "e61773db-ec75-4958-8fd9-e2b9037d6fdb",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (a national poll).",
+  "label": "election news · 2026-10-26 · CBS News poll finds Democrats still boosted by voters' econo"
+ },
+ {
+  "id": "b06e3480-8f04-4117-b5d7-1e5df1d58809",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (a nationwide DOJ action; Florida is 6 of 48).",
+  "label": "election news · 2026-10-26 · DOJ Arrests 48 Foreign Nationals For Election Fraud, Includi"
+ },
+ {
+  "id": "0c37af87-36fb-415b-9b4d-4a6a479e343f",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: DeSantis and Miami-Dade officials make the case for it (Broward audience).",
+  "label": "election news · 2026-10-26 · DeSantis supports property tax relief ahead of midterm elect"
+ },
+ {
+  "id": "63412604-64de-4d8c-ac0c-55b8d4745f7f",
+  "action": "approve",
+  "note": "Queue review 10-31: Florida election: the governor candidates campaign in Miami-Dade (10-22 precedent).",
+  "label": "election news · 2026-10-26 · Donalds y Jolly intensifican campaña en Miami-Dade en recta"
+ },
+ {
+  "id": "84bf51a5-93f9-4a7a-af57-9fb7c8e3d7f9",
+  "action": "reject",
+  "note": "Queue review 10-31: Not election news: an airspace intercept near Mar-a-Lago.",
+  "label": "election news · 2026-10-26 · Fighter jet uses \"headbutt maneuver\" to intercept plane near"
+ },
+ {
+  "id": "29487e1a-b528-448c-83c6-70e77f14cb9f",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: a commentator's show transcript on early-vote numbers, which would show as reporting.",
+  "label": "election news · 2026-10-26 · Florida Democrats Show Major Early Voting Gains Compared to"
+ },
+ {
+  "id": "d35f4311-2dd4-4504-8b16-e441b7ec10f6",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'surge' in the headline is a form of the banned horse-race word 'surging'; Creative Loafing's copy of the same turnout news is kept.",
+  "label": "election news · 2026-10-26 · Florida voters — almost 2.8M — surge past '22 midterm benchm"
+ },
+ {
+  "id": "165e747b-cd14-4ea1-9179-e78188714670",
+  "action": "approve",
+  "note": "Queue review 10-31: Local races on the Nov 3 ballot: circuit judge runoffs in South and Central Florida.",
+  "label": "election news · 2026-10-26 · Four circuit court judicial contests head to runoffs in Sout"
+ },
+ {
+  "id": "14f9b4f6-1d16-42c7-836b-80414fd71043",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: public safety leaders warn about its effect on emergency services (Orange County audience).",
+  "label": "election news · 2026-10-26 · Grady Judd, public safety leaders raise emergency service co"
+ },
+ {
+  "id": "dc6e9fb5-d0a0-4d98-bb4a-30e8541a5fd6",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (national energy prices).",
+  "label": "election news · 2026-10-26 · In his own words: Trump on gas prices and energy costs since"
+ },
+ {
+  "id": "a0100831-caf8-41f6-8a70-1f13f75eddb2",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Brazil).",
+  "label": "election news · 2026-10-26 · Local 10 World News reports from Brazil: Lula da Silva wins"
+ },
+ {
+  "id": "2ee0db40-4b21-4569-92f8-6ac5432becd0",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Brazil).",
+  "label": "election news · 2026-10-26 · Lula mobilized millions to win Brazil's election, while Bols"
+ },
+ {
+  "id": "cf405910-ac47-4ee1-980d-8d18ea7b49c0",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Brazil, Spanish).",
+  "label": "election news · 2026-10-26 · Lula moviliza a millones para ganar elecciones en Brasil, Bo"
+ },
+ {
+  "id": "d99ea593-a931-49d2-bb70-b4362bb48bcd",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Brazil).",
+  "label": "election news · 2026-10-26 · Lula wins fourth term as Brazil's president, beating Flávio"
+ },
+ {
+  "id": "1e49c845-b66e-49b9-89a4-7e07714eb35f",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Brazil), with local reaction.",
+  "label": "election news · 2026-10-26 · Lula's surprise win is a downer for most South Florida Brazi"
+ },
+ {
+  "id": "4fc292cd-13b4-4e23-a0c0-b40557715b47",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'denies' in the title (also another country's election, Brazil).",
+  "label": "election news · 2026-10-26 · Lula’s win in Brazil bucks a regional shift to the right and"
+ },
+ {
+  "id": "a5968a55-56c8-4fd6-9137-63ebd20054e8",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: Miami-Dade's mayor on its effect on the county.",
+  "label": "election news · 2026-10-26 · Miami-Dade Mayor Daniella Levine Cava speaks on Amendment 3,"
+ },
+ {
+  "id": "bd25d0b5-e8db-4304-bf8e-353d84c589e7",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same CBS Miami interview with the mayor on Amendment 3 as the earlier copy the same day, same audience.",
+  "label": "election news · 2026-10-26 · Miami-Dade mayor Daniella Levine Cava speaks on Amendment 3"
+ },
+ {
+  "id": "4cb4dadd-aa31-458a-b723-c7522fd3cc16",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting in Florida: nearly 2.8 million votes cast so far.",
+  "label": "election news · 2026-10-26 · Nearly 2.8 million votes cast for General Election"
+ },
+ {
+  "id": "d7a4974c-9b06-4028-bc41-3aac02e614f1",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Israel).",
+  "label": "election news · 2026-10-26 · Netanyahu’s legacy is on the line as Israelis vote in the fi"
+ },
+ {
+  "id": "8a1d5223-34c7-4263-bfb4-f5b272782c6c",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Israel).",
+  "label": "election news · 2026-10-26 · Opponents accuse Netanyahu of stoking tensions with Iran bef"
+ },
+ {
+  "id": "1eb75b99-e33d-4a93-b623-69626dbaf71d",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting in Florida: more than 2.8 million votes cast so far.",
+  "label": "election news · 2026-10-26 · Over 2.8 million votes cast in Florida’s general election so"
+ },
+ {
+  "id": "c873c529-28b4-4bd0-b56c-c0ec6728769c",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting in Miami-Dade: elections officials on brisk early turnout.",
+  "label": "election news · 2026-10-26 · South Florida elections officials say brisk early turnout me"
+ },
+ {
+  "id": "5ed65e4e-1096-4f10-b4c6-ef433cb368a1",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting: Tampa Bay election supervisors report no immigration agents at polls.",
+  "label": "election news · 2026-10-26 · Tampa Bay-area election supervisors confirm no sightings of"
+ },
+ {
+  "id": "aea37d77-d9e0-44d4-93b4-c4cb0dd0165f",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Mississippi).",
+  "label": "election news · 2026-10-26 · The Latest: Trump to rally in Mississippi as GOP midterm woe"
+ },
+ {
+  "id": "02fa444d-4cc1-41ce-9d1e-abe7014ef045",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (poll observers nationwide).",
+  "label": "election news · 2026-10-26 · Thousands of observers are expected to descend on polling pl"
+ },
+ {
+  "id": "43ff23a9-a3ae-435d-8e33-7a30840979fa",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (poll observers nationwide).",
+  "label": "election news · 2026-10-26 · Thousands of observers are expected to descend on polling pl"
+ },
+ {
+  "id": "8c8aae22-ebf1-471a-ad2b-b547a1f7860b",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (poll observers nationwide).",
+  "label": "election news · 2026-10-26 · Thousands of observers expected to monitor polling sites nat"
+ },
+ {
+  "id": "9639bf73-3deb-488a-9a94-90f1ad7aa5c7",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (the national Senate majority).",
+  "label": "election news · 2026-10-26 · Thune scrambles to save his Senate majority as voters voice"
+ },
+ {
+  "id": "389b0912-7518-4725-85be-9fc07044b406",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Washington state).",
+  "label": "election news · 2026-10-26 · Trump administration asks Washington to set aside ballots fr"
+ },
+ {
+  "id": "5ede59ca-534f-4b22-9a84-b70103d7268c",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Mississippi).",
+  "label": "election news · 2026-10-26 · Trump campaigns in Mississippi, highlighting Republicans’ ch"
+ },
+ {
+  "id": "0d21ba1b-5962-481a-9631-667b09faab93",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting in Florida: the President casts his ballot early in West Palm Beach (statewide).",
+  "label": "election news · 2026-10-26 · Trump casts his midterm ballot early in Florida"
+ },
+ {
+  "id": "c389cb61-42f1-4530-acb7-978e26451473",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Michigan).",
+  "label": "election news · 2026-10-26 · Trump escalates anti-Muslim attacks against El-Sayed in Mich"
+ },
+ {
+  "id": "be42f27c-2a66-490e-8fb4-a060db4b0264",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (national inflation).",
+  "label": "election news · 2026-10-26 · Trump failed to stop inflation. Now Republicans may pay the"
+ },
+ {
+  "id": "99c459fc-bd41-45aa-b765-773677a673ac",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Mississippi).",
+  "label": "election news · 2026-10-26 · Trump heads to Mississippi for a midterm rally, and the Demo"
+ },
+ {
+  "id": "1c6d17b1-298e-45b9-8121-f8a707c7694f",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Mississippi).",
+  "label": "election news · 2026-10-26 · Trump heads to Mississippi for a midterm rally, and the Demo"
+ },
+ {
+  "id": "4491466d-065d-4661-be7b-fc50727dc211",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Venezuela).",
+  "label": "election news · 2026-10-26 · US told Venezuelan authorities that opposition leader Machad"
+ },
+ {
+  "id": "3e981b26-2b7b-480f-a72c-3f40f725302c",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (how election polling works).",
+  "label": "election news · 2026-10-26 · Unlocking the mystery behind election polling"
+ },
+ {
+  "id": "864dab6f-be9c-48db-b51b-f79352820267",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (how election polling works).",
+  "label": "election news · 2026-10-26 · Unlocking the mystery behind election polling"
+ },
+ {
+  "id": "f9151018-2194-4d93-baa0-d3033117a161",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Venezuela).",
+  "label": "election news · 2026-10-26 · Venezuelans in South Florida celebrate María Corina Machado’"
+ },
+ {
+  "id": "72ae457d-a2dd-4734-8fc0-7696917fab6e",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's politics (Venezuela).",
+  "label": "election news · 2026-10-26 · Venezuelans in South Florida weigh Maria Corina Machado's re"
+ },
+ {
+  "id": "a40067a6-04c7-4cb9-9de3-6b27e22c3ccd",
+  "action": "reject",
+  "note": "Queue review 10-31: Not about voting in Florida: Florida does not use ranked choice voting.",
+  "label": "election news · 2026-10-26 · What is ranked choice voting? Learn how it works ahead of El"
+ },
+ {
+  "id": "fcdb18b0-8485-4896-be3c-2fc557c6cfef",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (a general guide for every state).",
+  "label": "election news · 2026-10-26 · What to do if your name isn't on the voter rolls on Election"
+ },
+ {
+  "id": "0d9e43db-8acb-419e-83a2-5b68bdea4a64",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (poll closing times in all 50 states).",
+  "label": "election news · 2026-10-26 · When do polls close on Election Day? A guide to voting times"
+ },
+ {
+  "id": "0f6eb8e5-7158-4aea-a011-332ecdf11ed3",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: the debate over property tax relief and public safety.",
+  "label": "election news · 2026-10-26 · With Election Day a week away, Florida Amendment 3 sparks de"
+ },
+ {
+  "id": "522edef5-2b7f-429c-86d0-b5eb96669013",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (early vote across the nation).",
+  "label": "election news · 2026-10-27 · Across the Nation, Democrats Outpacing Republicans in Early"
+ },
+ {
+  "id": "2027a7d4-83d9-46bc-a437-1fc56b6d9dc5",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: FL-13 (Pinellas) is not on the ballot for the Hillsborough voters this item would show to (10-15 precedent).",
+  "label": "election news · 2026-10-27 · Anna Paulina Luna, Leela Gray face off in Florida’s 13th Con"
+ },
+ {
+  "id": "e521c5bc-4b4d-4a7c-88ab-1055fe3bcd0f",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (California).",
+  "label": "election news · 2026-10-27 · Appeals court declines to block California from counting 20,"
+ },
+ {
+  "id": "395c047e-1ad1-4603-a5ee-475a7b7adbb5",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (California).",
+  "label": "election news · 2026-10-27 · Appeals court declines to rule on federal bid to set aside C"
+ },
+ {
+  "id": "6c6c114e-6099-40a4-b7a7-6b72b97ff8f2",
+  "action": "reject",
+  "note": "Queue review 10-31: Not election news: health insurance premiums.",
+  "label": "election news · 2026-10-27 · As midterm elections near, health advocates demand action am"
+ },
+ {
+  "id": "1bdf73c7-7dc8-4bc5-9845-3826dd329007",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: a Leon County polling-site follow-up, shown only to Hillsborough voters.",
+  "label": "election news · 2026-10-27 · Border Patrol agents at Leon County polls wanted to vote, of"
+ },
+ {
+  "id": "08ccdc76-3fd7-4590-b8a2-7dfdbb646e1e",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Brazil).",
+  "label": "election news · 2026-10-27 · Brazil's Flávio Bolsonaro and family will get US visas after"
+ },
+ {
+  "id": "9d4f12c0-19f6-4ea4-a1b7-4a3315748fba",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Brazil).",
+  "label": "election news · 2026-10-27 · Brazil’s Flávio Bolsonaro leaves Brazil for South Florida, a"
+ },
+ {
+  "id": "fee51a9f-0b34-4e17-8e50-7bae606a6794",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: a Broward and Monroe mail-ballot story, shown only to Miami-Dade voters.",
+  "label": "election news · 2026-10-27 · Broward and Monroe County report possible delays in mail-in"
+ },
+ {
+  "id": "733f4ba6-fc04-4754-9caf-f4abe1be3897",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: a Broward mail-ballot story, shown only to Miami-Dade voters.",
+  "label": "election news · 2026-10-27 · Broward elections chief urges voters to hand-deliver mail ba"
+ },
+ {
+  "id": "06d62ee5-56d0-4883-b60c-0caf57d0f148",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (mail ballot deadlines across states).",
+  "label": "election news · 2026-10-27 · Can you still vote by mail? Changes and dates to know for th"
+ },
+ {
+  "id": "db0c7b1f-0eeb-4d27-8f81-8815b9ac61b0",
+  "action": "reject",
+  "note": "Queue review 10-31: Story about a state Senate race not on our roster; cannot be filed under a candidate (10-15 precedent).",
+  "label": "election news · 2026-10-27 · Central Florida Sen. Jason Brodeur brings conservative legis"
+ },
+ {
+  "id": "35feacb5-fb69-457d-b030-e81460092451",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Israel).",
+  "label": "election news · 2026-10-27 · Exit polls suggest a rebuke of Netanyahu but no clear winner"
+ },
+ {
+  "id": "18420c82-563f-4a04-b267-c934b94d021c",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Brazil).",
+  "label": "election news · 2026-10-27 · Flavio Bolsonaro reportedly left Brazil after losing electio"
+ },
+ {
+  "id": "0aa0de9b-42fb-4e23-922c-7ef17a583b49",
+  "action": "reject",
+  "note": "Queue review 10-31: Story about a state Senate race not on our roster; cannot be filed under a candidate (10-15 precedent).",
+  "label": "election news · 2026-10-27 · Florida Sen. Nick DiCeglie’s record spotlighted as November"
+ },
+ {
+  "id": "2f55111a-2222-40b8-bef8-94476d16ddd1",
+  "action": "reject",
+  "note": "Queue review 10-31: Not election news: gas prices.",
+  "label": "election news · 2026-10-27 · Gas prices are set to reach record highs ahead of Election D"
+ },
+ {
+  "id": "e2f0591a-722a-44c9-8849-26b41abbbfaf",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (national midterms and Iran).",
+  "label": "election news · 2026-10-27 · How Trump’s ‘little detour’ to Iran became a roadblock in th"
+ },
+ {
+  "id": "da64797b-e9b0-4a95-b626-a979ebbf9942",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (US Senate races elsewhere).",
+  "label": "election news · 2026-10-27 · Libertarians could spoil Republicans' chances in the fight f"
+ },
+ {
+  "id": "959a201f-75a2-4f79-9e70-e2bcef656377",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Israel).",
+  "label": "election news · 2026-10-27 · Live Updates: 8-month Iran war looms over Israeli election a"
+ },
+ {
+  "id": "d157eea5-d057-4750-bdfa-846d558f6dff",
+  "action": "approve",
+  "note": "Queue review 10-31: Local ballot question on Nov 3 in Miami-Dade: the school funding renewal.",
+  "label": "election news · 2026-10-27 · M-DCPS, BCPS officials urge voters to approve critical educa"
+ },
+ {
+  "id": "33456aaf-cf6e-4a9c-a2fb-9cc8a7c0f1c2",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: Venezuelan politics.",
+  "label": "election news · 2026-10-27 · María Corina Machado's offer of talks with Delcy Rodríguez d"
+ },
+ {
+  "id": "ecca5f5c-80a5-4182-b222-0290745f0d9e",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (national ad spending).",
+  "label": "election news · 2026-10-27 · Midterm election ads are on track to hit a record $11.6 bill"
+ },
+ {
+  "id": "f31a4591-1de1-4be2-b38e-dcbeaf3f914a",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'claims' in the summary.",
+  "label": "election news · 2026-10-27 · No evidence voting machines are purposely ‘flipping’ votes,"
+ },
+ {
+  "id": "dee92e2d-7d0c-4850-ac6e-4cb1d87b402f",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting in Florida: what early turnout shows in Tampa Bay.",
+  "label": "election news · 2026-10-27 · One week until Election Day, Tampa Bay turnout offers clues"
+ },
+ {
+  "id": "5a20f5a7-3513-49ea-ad4b-d4808d947734",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: labelled 'Opinion'; would show as reporting.",
+  "label": "election news · 2026-10-27 · Opinion: Amendment 3 could offer relief Marathon homeowners"
+ },
+ {
+  "id": "bda8c07b-2d7f-4b38-b361-837ab000fdff",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on Trump's Daytona Beach rally, which already reaches Orange County voters.",
+  "label": "election news · 2026-10-27 · President Trump to hold rally in Daytona Beach days before E"
+ },
+ {
+  "id": "b44ce203-40bf-4b54-a14f-dbac4f059f15",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Israel).",
+  "label": "election news · 2026-10-27 · The Latest: Israelis vote in a tense election seen as a refe"
+ },
+ {
+  "id": "39372a65-c911-4db1-aaf4-fa2cfa5afe4f",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Mississippi).",
+  "label": "election news · 2026-10-27 · Trump campaigns in Mississippi, highlighting Republicans' ch"
+ },
+ {
+  "id": "c08ada4e-1050-4adf-9813-54141b07e3e3",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (gas prices fact check).",
+  "label": "election news · 2026-10-27 · Trump said gasoline is cheaper now than during Biden, Obama"
+ },
+ {
+  "id": "ba7e2ccb-f7d8-4988-9be9-c11c598d6677",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Israel).",
+  "label": "election news · 2026-10-27 · Voters in Israel are deciding whether to oust Netanyahu afte"
+ },
+ {
+  "id": "49f47501-5c72-43bd-94c2-0f9fb3b85901",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting information: when to mail a vote-by-mail ballot in Florida.",
+  "label": "election news · 2026-10-27 · When do I need to mail in my ballot in Florida?"
+ },
+ {
+  "id": "43e51161-cd59-489a-956a-07cf9ef481c5",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (a national Election Day explainer).",
+  "label": "election news · 2026-10-27 · When is Election Day?"
+ },
+ {
+  "id": "b7bb4238-66ae-4b42-932d-83fe37dea2a2",
+  "action": "reject",
+  "note": "Queue review 10-31: Not election news: health insurance premiums (same verdict as the Hillsborough copy).",
+  "label": "election news · 2026-10-27 · ‘Unsustainable’: Ahead of Nov. 3 elections, health advocates"
+ },
+ {
+  "id": "21c3c48d-7c63-4b6c-a140-938b4622de33",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: labelled 'COMMENTARY'; also another country's election (Brazil).",
+  "label": "election news · 2026-10-28 · 'Banana' Bolsonaro is now in Florida. Brazilians here should"
+ },
+ {
+  "id": "091217d1-b153-4a37-99ab-166f4430eb91",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (races for control of Congress).",
+  "label": "election news · 2026-10-28 · 2026 Midterm elections: These are the races that could deter"
+ },
+ {
+  "id": "82df2489-c99d-48df-b46a-2a5bebb2220d",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: what it could mean for local health safety nets.",
+  "label": "election news · 2026-10-28 · Amendment 3 would slash Florida’s health safety net. But no"
+ },
+ {
+  "id": "e55aec04-3732-4c84-9181-bd74ca7aaf80",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: what it could mean for local health safety nets (Miami-Dade audience).",
+  "label": "election news · 2026-10-28 · Amendment 3 would slash Florida’s health safety net. But no"
+ },
+ {
+  "id": "dab7f3a3-9878-4cf6-8bf1-ed2bfa4a6e0f",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Brazil).",
+  "label": "election news · 2026-10-28 · Brazilian far-right candidate Flavio Bolsonaro reportedly fl"
+ },
+ {
+  "id": "933ae7ee-203f-46d8-87ae-2d28adbce486",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Brazil), with local reaction.",
+  "label": "election news · 2026-10-28 · Brazilians in South Florida react to Flávio Bolsonaro's arri"
+ },
+ {
+  "id": "9b25dd02-66a3-4ccf-a09d-9a3ab521eb2a",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: a Broward mail-ballot story, shown only to Miami-Dade voters.",
+  "label": "election news · 2026-10-28 · Broward election officials sound alarm over reports of long"
+ },
+ {
+  "id": "b3cc1cb1-ba28-4a31-ad94-1a5cedd06e7d",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] wording: the headline implies a motive ('noticeably silent') about a sheriff who is not on the ballot.",
+  "label": "election news · 2026-10-28 · Chad Chronister has been noticeably silent about Amendment 3"
+ },
+ {
+  "id": "0f3397fa-0fc3-4ef1-b299-8a923d79068d",
+  "action": "reject",
+  "note": "Queue review 10-31: Not election news: a university faculty vote.",
+  "label": "election news · 2026-10-28 · Cornell faculty to begin voting on no-confidence measure ove"
+ },
+ {
+  "id": "9560865b-4c15-45a5-a61d-32f24b926c1b",
+  "action": "approve",
+  "note": "Queue review 10-31: Florida election: data centers as an issue for voters and candidates.",
+  "label": "election news · 2026-10-28 · Data centers have become a key political issue for Florida v"
+ },
+ {
+  "id": "5bcfaf03-6679-4b45-a01d-af53058abefd",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: DeSantis and Republican candidates campaign for it (statewide).",
+  "label": "election news · 2026-10-28 · DeSantis and Florida GOP candidates push for the passage of"
+ },
+ {
+  "id": "3432c3bb-1506-4612-828d-1ff1873e4090",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Syndicated copy of WFSU's statewide story on DeSantis and Amendment 3, which already reaches Hillsborough voters.",
+  "label": "election news · 2026-10-28 · DeSantis and several GOP candidates push for the passage of"
+ },
+ {
+  "id": "5522637c-ecd0-4c84-bd69-0e420e74585a",
+  "action": "approve",
+  "note": "Queue review 10-31: Florida election: DeSantis on Republican turnout.",
+  "label": "election news · 2026-10-28 · DeSantis blames low GOP voter turnout on lack of urgency fro"
+ },
+ {
+  "id": "9c585c8b-0c75-49a3-9789-1f20b1fb4e83",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Brazil).",
+  "label": "election news · 2026-10-28 · Defeated Brazilian presidential candidate Flávio Bolsonaro a"
+ },
+ {
+  "id": "dbb4b3ad-c150-446e-bd50-c0fba78b0709",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Brazil).",
+  "label": "election news · 2026-10-28 · Defeated Brazilian presidential candidate Flávio Bolsonaro a"
+ },
+ {
+  "id": "67ad45b4-2ea8-4d55-a557-36b5d4312981",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Brazil).",
+  "label": "election news · 2026-10-28 · Defeated Brazilian presidential candidate Flávio Bolsonaro a"
+ },
+ {
+  "id": "4ddafa01-70bf-45b6-afd6-e73dade17aa9",
+  "action": "reject",
+  "note": "Queue review 10-31: Not on the Nov 3 ballot: Tampa City Council elections are held in March (10-15 precedent).",
+  "label": "election news · 2026-10-28 · District 7 Tampa City Council candidates Alan Cohn and Morri"
+ },
+ {
+  "id": "3db2675a-bdc6-4f12-babe-ce90402fa3c3",
+  "action": "reject",
+  "note": "Queue review 10-31: Not election news: Federal Reserve rates.",
+  "label": "election news · 2026-10-28 · Federal Reserve likely to skip rate hike despite elevated in"
+ },
+ {
+  "id": "e5c49e71-4dab-4ad4-8616-940f7b0bff8a",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'claims' in the title (also another country's election, Brazil).",
+  "label": "election news · 2026-10-28 · Flávio Bolsonaro claims he is Brazil's rightful president af"
+ },
+ {
+  "id": "ee490d09-c04a-4b7c-b6df-2e55d49c6ff1",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'claims' in the title (also another country's election, Brazil).",
+  "label": "election news · 2026-10-28 · Flávio Bolsonaro claims he was the \"rightful winner\" of Braz"
+ },
+ {
+  "id": "12e00ddd-4e3b-44e2-8b82-52bf1ea14e71",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Brazil).",
+  "label": "election news · 2026-10-28 · Flávio Bolsonaro heading to Ecuador, Argentina says, after l"
+ },
+ {
+  "id": "3c51e42a-bee3-4947-9956-ac14b933206b",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: Miami-Dade's estimate of the cost to county transit (earliest copy of this event).",
+  "label": "election news · 2026-10-28 · Impact of Amendment 3 on Miami-Dade county transit system"
+ },
+ {
+  "id": "97a9897a-ef90-44af-8170-0002e7e3d620",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Israel).",
+  "label": "election news · 2026-10-28 · Israelis await final election results as Netanyahu rivals we"
+ },
+ {
+  "id": "4b6420cd-4ffb-4ee4-9876-d8e330bd2538",
+  "action": "reject",
+  "note": "Queue review 10-31: Story about a congressional race not on our roster (FL-13); cannot be filed under a candidate (10-15 precedent).",
+  "label": "election news · 2026-10-28 · Leela Gray’s stock holdings, Empower board role clash with a"
+ },
+ {
+  "id": "2ca7e431-ec2e-4f9f-8f61-2e7a3d35b45a",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (national live updates).",
+  "label": "election news · 2026-10-28 · Live Updates: 2026 midterm campaigns make final push before"
+ },
+ {
+  "id": "b4be20e0-a877-4ccc-a81a-2a2a732f841f",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: a Manatee County library story, shown only to Hillsborough voters.",
+  "label": "election news · 2026-10-28 · Manatee County bans nonpartisan voter guide in public librar"
+ },
+ {
+  "id": "b33db98e-7658-46a5-b6cd-4bc3a90608f8",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (election news · 2026-10-28 · Impact of Amendment 3 on Miami-Dade county transit system).",
+  "label": "election news · 2026-10-28 · Miami-Dade mayor warns Amendment 3 could cost transit more t"
+ },
+ {
+  "id": "a3a3866b-10a0-4b32-9454-3f03303cd6e2",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (how AP reports results).",
+  "label": "election news · 2026-10-28 · Midterm elections: What is the AP's Estimated Expected Vote"
+ },
+ {
+  "id": "3d516fe5-7e2b-46f9-b77d-cdd606b6ebc4",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Israel).",
+  "label": "election news · 2026-10-28 · No clear winner in Israeli election as polls show race heade"
+ },
+ {
+  "id": "3abfa16e-0f71-4e95-ace8-337821ec0828",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: labelled 'OPINION'; would show as reporting.",
+  "label": "election news · 2026-10-28 · OPINION: Florida must keep advancing school choice and put p"
+ },
+ {
+  "id": "0a32ce16-b3b7-4ded-9f57-de56ba45eb4c",
+  "action": "reject",
+  "note": "Queue review 10-31: Poll: left out of the home column (founder 2026-10-11).",
+  "label": "election news · 2026-10-28 · Polls show Amendment 3 falling short, can Ron DeSantis save"
+ },
+ {
+  "id": "6d593e86-6d53-4a02-a587-1fb9c60775c7",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-28 · Report: Peltola’s campaign involved in effort to recruit sec"
+ },
+ {
+  "id": "8efab156-5da9-46fc-94db-f954027779fa",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Brazil).",
+  "label": "election news · 2026-10-28 · Reports vary on whereabouts of Flávio Bolsonaro after fleein"
+ },
+ {
+  "id": "a1e39dbe-b3ef-4e46-a203-efff04e2d2cd",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: a Broward mail-ballot story, shown only to Miami-Dade voters (Spanish).",
+  "label": "election news · 2026-10-28 · Retrasos en boletas por correo inquietan a votantes en Browa"
+ },
+ {
+  "id": "5582abde-1a8b-4cee-a2e3-43ad7f43aec7",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: a talk-show panel with political commentators, which would show as reporting.",
+  "label": "election news · 2026-10-28 · Top Issues for the Midterm Voters in the Final Push"
+ },
+ {
+  "id": "e4ef1455-29e3-4042-8bbc-93986448e305",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (AP analysis of the national midterms).",
+  "label": "election news · 2026-10-28 · Trump's cure for Republicans' midterm woes is more Trump. Wi"
+ },
+ {
+  "id": "8e4973df-03c7-4030-9982-7f5161060db9",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (rallies in other states).",
+  "label": "election news · 2026-10-28 · Trump, Vance and Obama are making closing stretch appeals to"
+ },
+ {
+  "id": "565137a3-2906-4d34-9012-325327223fef",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-29 · Alaska's governor orders a probe into Democrat's Senate camp"
+ },
+ {
+  "id": "0447f17f-41ed-4c2e-b305-289a2f238616",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: how children's services councils could be affected.",
+  "label": "election news · 2026-10-29 · Amendment 3 makes an exception for schools. Students, famili"
+ },
+ {
+  "id": "637b186b-adff-4cb4-8be0-9d20e24b58a6",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: a Manatee County library story, shown only to Miami-Dade voters (same verdict as the Hillsborough copy).",
+  "label": "election news · 2026-10-29 · Another Florida county bans nonpartisan voter guide in publi"
+ },
+ {
+  "id": "87b9e62d-ae3e-49c6-b2c0-31bfa050bae5",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (North Carolina).",
+  "label": "election news · 2026-10-29 · As MAGA tries to rig the vote, Black students say no"
+ },
+ {
+  "id": "b5bb7950-47ff-4c1c-a74d-adcd7c2e9d76",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: an opinion column; would show as reporting.",
+  "label": "election news · 2026-10-29 · Black Votes Matter"
+ },
+ {
+  "id": "ea9d6b50-a5fe-4b3a-9170-779623a68abb",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the statewide story on DeSantis's Oct. 28 Amendment 3 push, which already reaches Miami-Dade voters.",
+  "label": "election news · 2026-10-29 · Can Ron DeSantis push Amendment 3 over the top?"
+ },
+ {
+  "id": "559a257b-423c-4b9e-ac11-c9c40936fea6",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Minnesota).",
+  "label": "election news · 2026-10-29 · Conservative activists O'Keefe, Higby charged with unlawful"
+ },
+ {
+  "id": "0ab84fb4-b819-48ba-8e94-60eb61dafd51",
+  "action": "reject",
+  "note": "Queue review 10-31: Local race outside our counties (Palm Beach County School Board).",
+  "label": "election news · 2026-10-29 · Could Christina Romelus Become the First Haitian-American El"
+ },
+ {
+  "id": "1f69ff3a-62c5-4863-bc44-076749d34a9a",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Michigan).",
+  "label": "election news · 2026-10-29 · Democratic divisions linger in Michigan Senate race. Will fr"
+ },
+ {
+  "id": "c0d31e90-b67d-462e-9458-45adaee66ca9",
+  "action": "reject",
+  "note": "Queue review 10-31: Poll: left out of the home column (founder 2026-10-11).",
+  "label": "election news · 2026-10-29 · FIU Cuba Poll: 68% Of Cuban Voters Back Republican Candidate"
+ },
+ {
+  "id": "2c211bdc-a6f0-450d-9539-ba7971b8a513",
+  "action": "reject",
+  "note": "Queue review 10-31: Not election news: a university court case.",
+  "label": "election news · 2026-10-29 · Federal judge hears argument from FIU students involved in a"
+ },
+ {
+  "id": "df4dfd4f-ba55-45d9-bc1b-c2c59ca924e9",
+  "action": "reject",
+  "note": "Queue review 10-31: Not voting information: a station's own results-coverage listing.",
+  "label": "election news · 2026-10-29 · Florida Election Day 2026 | How to watch live election resul"
+ },
+ {
+  "id": "879845aa-76f0-4874-8aa3-254c8a03450f",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting information: what is on the Nov 3 ballot in Florida.",
+  "label": "election news · 2026-10-29 · Florida Election Day 2026: What are we voting for on Nov. 3?"
+ },
+ {
+  "id": "af64ba3c-328b-4752-93e8-2d54a683c8fa",
+  "action": "reject",
+  "note": "Queue review 10-31: Poll: left out of the home column (founder 2026-10-11).",
+  "label": "election news · 2026-10-29 · Florida Election Poll: Donalds Leads Jolly by 6 Points, Mood"
+ },
+ {
+  "id": "031bfde1-fd80-4f08-bf51-1afdecafb4a6",
+  "action": "approve",
+  "note": "Queue review 10-31: Florida election: a statewide get-out-the-vote effort ahead of Nov 3.",
+  "label": "election news · 2026-10-29 · Florida Young Republicans near 50,000 door knocks in Operati"
+ },
+ {
+  "id": "c6ff9d8b-10cd-42a7-ae05-96cf9552f81b",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'denies' in the title (also a national story, California).",
+  "label": "election news · 2026-10-29 · Judge denies federal request to segregate California ballots"
+ },
+ {
+  "id": "1bffedbd-0bb4-4461-933d-e3ec19ae0488",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (a federal court case on noncitizen voting).",
+  "label": "election news · 2026-10-29 · Judge presses the Trump administration for details on its ca"
+ },
+ {
+  "id": "959137a1-bd67-45bc-b4ff-210b61a10ac6",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-29 · Justice Department issues new subpoenas over Alaska spoiler"
+ },
+ {
+  "id": "3160d839-7ab3-4e45-a8c3-22169262b0d6",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-29 · Justice Department issues new subpoenas over Alaska spoiler"
+ },
+ {
+  "id": "cffd3bcf-d0ec-4552-bb33-2654dd954db8",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (California).",
+  "label": "election news · 2026-10-29 · Justice Department subpoenas California officials in escalat"
+ },
+ {
+  "id": "f2520f28-f6cb-4199-9213-e83b82bced78",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Spanish copy of the Local 10 Amendment 2 explainer, kept for the same Miami-Dade audience (10-22 precedent).",
+  "label": "election news · 2026-10-29 · Local 10 News analiza la Enmienda 2 de Florida"
+ },
+ {
+  "id": "c23b5fee-41f9-4ad1-bc7b-035d0a787e74",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendments: Amendment 2 explained (Miami-Dade audience).",
+  "label": "election news · 2026-10-29 · Local 10 News breaks down Florida’s Amendment 2"
+ },
+ {
+  "id": "a5153a1a-b45d-4853-a63e-66f6528a0afa",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: Venezuelan politics.",
+  "label": "election news · 2026-10-29 · María Corina Machado expects new presidential election next"
+ },
+ {
+  "id": "f8ff5b74-0632-4147-af63-ee57d482d62d",
+  "action": "reject",
+  "note": "Queue review 10-31: Not election news: city crime figures.",
+  "label": "election news · 2026-10-29 · Miami police chief says crime is down 3% overall, 7% for vio"
+ },
+ {
+  "id": "0e164538-5a55-4446-8161-1b447d868e0e",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Virginia).",
+  "label": "election news · 2026-10-29 · Police chief says shooting outside Virginia GOP offices has"
+ },
+ {
+  "id": "287a2a2c-d71b-4591-b093-7e5d098b0c6d",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'claims' in the summary.",
+  "label": "election news · 2026-10-29 · Political Advertising on Haitian Radio: When Campaign Promot"
+ },
+ {
+  "id": "c66219c2-d14e-467d-b629-58002154bb01",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on Trump's Daytona Beach rally, which already reaches Orange County voters.",
+  "label": "election news · 2026-10-29 · President Trump midterm election rally in Daytona Beach: Sch"
+ },
+ {
+  "id": "897745d0-8895-4dcf-a85a-1dd85c9385e3",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (federal tax law).",
+  "label": "election news · 2026-10-29 · Republicans highlight tax cuts, fraud crackdowns and investm"
+ },
+ {
+  "id": "583dfac8-e77d-4663-9ff2-1237e94f8838",
+  "action": "approve",
+  "note": "Queue review 10-31: Local ballot questions on Nov 3: school funding referendums including Hillsborough's.",
+  "label": "election news · 2026-10-29 · School funding is on the ballot for three districts in the T"
+ },
+ {
+  "id": "af4a10dd-234c-4d59-a83d-87f955a82eca",
+  "action": "reject",
+  "note": "Queue review 10-31: Not election news: astronomy.",
+  "label": "election news · 2026-10-29 · Scientists discover possible new dwarf planet beyond Pluto"
+ },
+ {
+  "id": "1096075a-c525-4b63-8b01-1ff4357bce40",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'seeking to' in the summary; also a state Senate race not on our roster.",
+  "label": "election news · 2026-10-29 · Sen. Alexis Calatayud’s record on affordability, education s"
+ },
+ {
+  "id": "920afa33-06ac-47bc-a612-cf8c45fa43a3",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: Serbian politics.",
+  "label": "election news · 2026-10-29 · Serbia's students demand resignations in police, judiciary a"
+ },
+ {
+  "id": "f904ee56-7128-4d51-ae20-ce21a6662a2b",
+  "action": "reject",
+  "note": "Queue review 10-31: Not election news: weather.",
+  "label": "election news · 2026-10-29 · Showers in South Florida become more scattered after days of"
+ },
+ {
+  "id": "1c35bb8e-600e-4e78-9f39-c502ebfd65e4",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Social Security in congressional races nationally).",
+  "label": "election news · 2026-10-29 · Social Security surfaces as key issue in midterm races as in"
+ },
+ {
+  "id": "4e73962d-bfd5-481b-a5dd-18e0a4a1bc43",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Spain).",
+  "label": "election news · 2026-10-29 · Spain reckons with second deadly train crash of the year ahe"
+ },
+ {
+  "id": "56c31778-ba3e-416c-bbb5-6967ef2f1e76",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (California).",
+  "label": "election news · 2026-10-29 · The Latest: DOJ subpoenas California officials in escalation"
+ },
+ {
+  "id": "05947381-dd1e-4050-b880-fa29ead46cc5",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Brazil).",
+  "label": "election news · 2026-10-29 · Trump Calls Brazil's Election 'A Great Embarrassment' Amid B"
+ },
+ {
+  "id": "93bdd087-dc58-415b-a792-65fb93118d6f",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-29 · Trump calls for prosecution of Democratic Alaska Senate cand"
+ },
+ {
+  "id": "f28adf12-7ae8-4711-b800-ca22474c37da",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-29 · Trump calls for prosecution of Democratic Alaska Senate cand"
+ },
+ {
+  "id": "cee71762-48ee-4938-8eaa-f63c50f9ed4d",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: an editorial with no dek; would show as reporting.",
+  "label": "election news · 2026-10-29 · VOTERS’ WRATH"
+ },
+ {
+  "id": "e380ebb8-9b32-49be-ae72-b134a5a9a687",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Israel).",
+  "label": "election news · 2026-10-29 · What to know about Israel’s election as results emerge with"
+ },
+ {
+  "id": "6c45f2b9-7d21-4324-af9d-1f74b2f842f4",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendments: what each proposed amendment would do.",
+  "label": "election news · 2026-10-29 · What would Florida's proposed constitutional amendments do?"
+ },
+ {
+  "id": "50cf0a24-24a0-480c-b384-d7320d824359",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting information: when early voting ends across Tampa Bay.",
+  "label": "election news · 2026-10-29 · When does early voting end across Tampa Bay? | County-by-cou"
+ },
+ {
+  "id": "2e3ef49f-ffc2-467d-905a-081f0538e1cb",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on Trump's Daytona Beach rally (a side story about an impersonator).",
+  "label": "election news · 2026-10-30 · 'Daytona Trump' ready for Trump's visit to Daytona Beach"
+ },
+ {
+  "id": "9cb0d4ee-d6c8-4d53-b1fe-5bfd7073124c",
+  "action": "approve",
+  "note": "Queue review 10-31: Florida election: what is at stake for Central Florida on Nov 3.",
+  "label": "election news · 2026-10-30 · 2026 Midterms: What’s at Stake for Central Florida"
+ },
+ {
+  "id": "e122d2ff-edfc-455d-8e40-14467f23461a",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the statewide story on Trump's Daytona Beach rally (also national live updates).",
+  "label": "election news · 2026-10-30 · 2026 elections live updates as Trump heads to Florida for ra"
+ },
+ {
+  "id": "1a91cad1-5a21-4803-ab8f-1f90cdfae759",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (AP analysis of the national parties).",
+  "label": "election news · 2026-10-30 · A midterm crossroads for both parties eyeing the beginning o"
+ },
+ {
+  "id": "2814212d-8b2f-4cb8-a5aa-71937cd4af8a",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (the national parties).",
+  "label": "election news · 2026-10-30 · A midterm crossroads for both parties eyeing the beginning o"
+ },
+ {
+  "id": "90a24089-a117-4cb9-802b-5029242db5ed",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: the trade-off between homeowner relief and local budgets (Miami-Dade audience).",
+  "label": "election news · 2026-10-30 · Amendment 3 would provide relief for homeowners, but could s"
+ },
+ {
+  "id": "7ae8714d-7d19-4542-8654-ca6e610bcb93",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (California).",
+  "label": "election news · 2026-10-30 · Appeals court rejects Justice Department request for Califor"
+ },
+ {
+  "id": "0330a03b-6d60-4b7f-b2c0-a25393eba61e",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'surges' in the title (also a national story).",
+  "label": "election news · 2026-10-30 · As early voting surges, Trump reshuffles his schedule to add"
+ },
+ {
+  "id": "850435c8-d716-4cb8-85a5-67d02b211a04",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'surges' in the title (also a national story).",
+  "label": "election news · 2026-10-30 · As early voting surges, Trump reshuffles his schedule to add"
+ },
+ {
+  "id": "68efad71-ed49-4359-aa55-01b6e45012eb",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting in Florida: ballots cast pass four million in early voting (statewide).",
+  "label": "election news · 2026-10-30 · Ballots Cast Surpass Four Million Over Halfway Through Early"
+ },
+ {
+  "id": "606d9afb-0b5c-44cf-9202-21e1676c9e5d",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: a Broward campaign-flier story, shown only to Miami-Dade voters.",
+  "label": "election news · 2026-10-30 · Broward elections chief fights misleading campaign fliers"
+ },
+ {
+  "id": "031d3508-27f2-494c-afd9-01026c1fbad0",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: a Broward campaign-flier story, shown only to Miami-Dade voters.",
+  "label": "election news · 2026-10-30 · Broward elections supervisor threatens legal action over mis"
+ },
+ {
+  "id": "a0b48c92-81b6-4967-9389-8a59e2d7a760",
+  "action": "reject",
+  "note": "Queue review 10-31: Local story outside our counties (a Clay County charter question), shown statewide.",
+  "label": "election news · 2026-10-30 · Clay County salary proposal sparks backlash after video show"
+ },
+ {
+  "id": "dc553bb5-021d-4d6f-bb04-bf5f9f49e34c",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Ohio).",
+  "label": "election news · 2026-10-30 · Controversial attack ad featuring Democrat’s estranged mothe"
+ },
+ {
+  "id": "53fae3c3-1765-4804-99a8-feb62247e56d",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (election news · 2026-10-30 · Final preparations underway at polling sites ahead of Electi).",
+  "label": "election news · 2026-10-30 · DOJ warns local election officials of impostors posing as fe"
+ },
+ {
+  "id": "43e40ee3-5cbd-47ac-b7b6-a36f516a90be",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (election news · 2026-10-30 · Final preparations underway at polling sites ahead of Electi).",
+  "label": "election news · 2026-10-30 · DOJ warns of fake election monitors at South Florida voting"
+ },
+ {
+  "id": "c4d94b8b-7bfc-4e2e-a4fd-f31dcf069f41",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on Trump's Daytona Beach rally, which already reaches Orange County voters.",
+  "label": "election news · 2026-10-30 · Democrats attempt to sway republican voters in Daytona Beach"
+ },
+ {
+  "id": "7378c6db-2893-416c-ad02-39ff3562aeb9",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Israel).",
+  "label": "election news · 2026-10-30 · Difficult negotiations lie ahead in Israel after Netanyahu's"
+ },
+ {
+  "id": "2cafe2cd-3efc-41ef-8493-6a26bf70e568",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting information: where and when to vote early before it ends.",
+  "label": "election news · 2026-10-30 · Early voting ends this weekend in Florida: Here's where, whe"
+ },
+ {
+  "id": "fc8e75b7-7034-47e2-b416-b1fd967d9e6a",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Senate battleground states).",
+  "label": "election news · 2026-10-30 · Early voting jumps across Senate battlegrounds as millions m"
+ },
+ {
+  "id": "b30bd755-212d-4480-aa6e-ad35a92f6efb",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Senate battleground states).",
+  "label": "election news · 2026-10-30 · Early voting jumps across Senate battlegrounds as millions m"
+ },
+ {
+  "id": "7eb99e62-2529-403f-85fd-ad99d1349ea3",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting in Miami-Dade: DOJ warning about people posing as federal election monitors (earliest copy of this event).",
+  "label": "election news · 2026-10-30 · Final preparations underway at polling sites ahead of Electi"
+ },
+ {
+  "id": "a8bff3ea-ad81-42c0-8918-0de96f29991d",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: an Amendment 3 story about Broward hospitals, shown only to Miami-Dade voters.",
+  "label": "election news · 2026-10-30 · Florida Amendment 3 could cost Broward hospitals more than $"
+ },
+ {
+  "id": "2cd49aec-e57f-400d-bb9c-756f9856530c",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: an Amendment 3 story about Broward hospitals, shown only to Miami-Dade voters.",
+  "label": "election news · 2026-10-30 · Florida Amendment 3 could cost hospitals millions, report wa"
+ },
+ {
+  "id": "4e1cb8ef-501c-453a-abef-b9411ac45baa",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: how it could affect homeowners.",
+  "label": "election news · 2026-10-30 · Florida Amendment 3: How the proposed property tax overhaul"
+ },
+ {
+  "id": "3a6efd00-c36a-4851-a7f1-a40e57610fc8",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] A weekly radio roundup of several topics (the CFO race and baseball).",
+  "label": "election news · 2026-10-30 · Florida chief financial officer candidates and Orlando’s Maj"
+ },
+ {
+  "id": "d26d1914-2402-49c9-80d9-235a5b5bfeb6",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendments: what to know about the three ballot measures.",
+  "label": "election news · 2026-10-30 · Florida constitutional amendments: Here’s what to know about"
+ },
+ {
+  "id": "3c5cce3f-5031-4112-b476-85a0f8543c93",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (election news · 2026-10-30 · Swastikas discovered on trees near Orange County early votin).",
+  "label": "election news · 2026-10-30 · Hate symbols painted on trees near Orange County early votin"
+ },
+ {
+  "id": "9af26fb0-464f-44f4-b22a-39b375b88ed0",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: what Florida voters need to know (Miami-Dade audience).",
+  "label": "election news · 2026-10-30 · Here is what Florida voters need to know about Amendment 3"
+ },
+ {
+  "id": "d4bf31b0-e656-4d5e-b88b-56d456ba55ac",
+  "action": "approve",
+  "note": "Queue review 10-31: Local ballot question on Nov 3: expanding the Hillsborough County Commission.",
+  "label": "election news · 2026-10-30 · Hillsborough voters will decide whether to expand the county"
+ },
+ {
+  "id": "8458fe24-1dd2-48f2-8f14-b7b525b84b93",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-30 · In Alaska race, Trump targets a long, sometimes sordid polit"
+ },
+ {
+  "id": "2ab3eb8c-892c-4694-accf-7df8f6461dd3",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: another country's election (Israel).",
+  "label": "election news · 2026-10-30 · Israel's election results are in. Here's what could happen n"
+ },
+ {
+  "id": "f5244c3c-98f2-4559-b1b9-9b4ad0440647",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on early-vote totals passing four million, which already reaches Miami-Dade voters.",
+  "label": "election news · 2026-10-30 · Jim DeFede breaks down Florida’s early voting numbers"
+ },
+ {
+  "id": "d3e80d2f-72cc-4e20-873c-5fc0b64abd73",
+  "action": "reject",
+  "note": "Queue review 10-31: Not election news: a lawsuit against the city of Tampa.",
+  "label": "election news · 2026-10-30 · Judge dismisses Warren Sapp's lawsuit against the city of Ta"
+ },
+ {
+  "id": "e2670a05-b39c-4b6d-9524-ee6a7ef462ad",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (federal ads ruling).",
+  "label": "election news · 2026-10-30 · Judge orders 3 taxpayer-funded Trump administration ads to b"
+ },
+ {
+  "id": "a8038435-5ea2-4325-b510-82247056cdf8",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (federal ads ruling).",
+  "label": "election news · 2026-10-30 · Judge orders 3 taxpayer-funded Trump administration ads to b"
+ },
+ {
+  "id": "f7826cc4-fb45-42e4-a882-d04b8e72c238",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'denies' in the title (also a national story, Alaska).",
+  "label": "election news · 2026-10-30 · Justice Department issues subpoenas as Democratic candidate"
+ },
+ {
+  "id": "31c400ed-c4c1-478d-950b-08e3e186cd5e",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (California).",
+  "label": "election news · 2026-10-30 · Justice Department subpoenas California officials in escalat"
+ },
+ {
+  "id": "061ae513-43ae-4d98-8517-0a057888ddca",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on Trump's Daytona Beach rally, which already reaches Orange County voters.",
+  "label": "election news · 2026-10-30 · LIVE UPDATES: Thousands gather for President Donald Trump’s"
+ },
+ {
+  "id": "32c2014c-769f-49ae-a4c8-c57dc86da655",
+  "action": "reject",
+  "note": "Queue review 10-31: [A2/P2] The Floridian's 'Last Squeeze' daily roundup strings unrelated items together.",
+  "label": "election news · 2026-10-30 · Last Squeeze🍊— 10.30.2026 — Leftist 'Voter Information' Grou"
+ },
+ {
+  "id": "c41750a8-397c-477f-8e14-dab37bc06e62",
+  "action": "reject",
+  "note": "Queue review 10-31: Local story outside our counties (a Lee County School Board race), shown statewide.",
+  "label": "election news · 2026-10-30 · Lee County School Board candidate Tony Beougher focuses on b"
+ },
+ {
+  "id": "0f15c556-261a-438e-9051-9a551a755834",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: an attack piece ('Leftist', 'misinformation') about an outside group that would show as reporting.",
+  "label": "election news · 2026-10-30 · Leftist 'Voter Information' Group Trying to Influence Congre"
+ },
+ {
+  "id": "7d4c6136-101d-478a-8767-de919f132926",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (the Pope votes).",
+  "label": "election news · 2026-10-30 · Leo XIV has become the first pope in history to vote in a US"
+ },
+ {
+  "id": "13743192-0e20-4cb7-be06-825e4e51530f",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] P1: labelled 'Editorial'; would show as reporting.",
+  "label": "election news · 2026-10-30 · Local 10 Editorial: Make your voice heard in the midterm ele"
+ },
+ {
+  "id": "4bc6039e-bba0-44ba-9747-90b41eb16167",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting information: free rides to the polls.",
+  "label": "election news · 2026-10-30 · Local organizations offers free rides to boost voter turnout"
+ },
+ {
+  "id": "aa8b459e-e2e8-4418-9c07-f2b129203a24",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting in Miami-Dade: an event with the Supervisor of Elections for first-time voters.",
+  "label": "election news · 2026-10-30 · Miami Heat hosts event with M-DCPS, MDC, Supervisor of Elect"
+ },
+ {
+  "id": "0fb0baa6-4018-4cf6-9ebb-5ba156a7789c",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the statewide story on Trump's Daytona Beach rally, which already reaches Miami-Dade voters.",
+  "label": "election news · 2026-10-30 · Midterm elections: Trump to campaign for Donalds in Daytona"
+ },
+ {
+  "id": "5c7d0f61-bed0-464b-b605-d4196fb5ebc7",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting in Florida: nearly 4 million votes cast.",
+  "label": "election news · 2026-10-30 · Nearly 4 million Florida votes have been cast for the midter"
+ },
+ {
+  "id": "c282e3aa-603b-4850-bbb0-4c0f6b1970d9",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (election news · 2026-10-30 · North Miami election thrown into uncertainty as candidates a).",
+  "label": "election news · 2026-10-30 · North Miami candidate reinstated as others fight to get back"
+ },
+ {
+  "id": "cf77701b-d305-4c18-b85c-29481eb17964",
+  "action": "approve",
+  "note": "Queue review 10-31: Local race on the Nov 3 ballot in Miami-Dade: disqualifications and court rulings in North Miami (earliest copy of this event).",
+  "label": "election news · 2026-10-30 · North Miami election thrown into uncertainty as candidates a"
+ },
+ {
+  "id": "1b8a0e82-785d-4154-954e-e0806656e126",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (election news · 2026-10-30 · North Miami election thrown into uncertainty as candidates a).",
+  "label": "election news · 2026-10-30 · North Miami mayor’s supporters call for opponent’s disqualif"
+ },
+ {
+  "id": "e3f99716-71d3-45c8-b372-cfb3fc0617a3",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'denies' in the title (also a national story, Alaska).",
+  "label": "election news · 2026-10-30 · Peltola denies knowing about Alaska spoiler candidate as Jus"
+ },
+ {
+  "id": "8f0ebbdf-ee98-4ce7-a609-dc7ef15fa0dd",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (the Pope votes).",
+  "label": "election news · 2026-10-30 · Pope Leo XIV becomes first pontiff to vote in a U.S. electio"
+ },
+ {
+  "id": "d34ba7ff-04ee-4c81-a598-6eeb6212578c",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (the Pope votes).",
+  "label": "election news · 2026-10-30 · Pope Leo XIV has become the first pope in history to vote in"
+ },
+ {
+  "id": "e5d1a468-de0e-49eb-b920-7910d2f4f1f0",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (the Pope votes; same verdict as the Hillsborough copy).",
+  "label": "election news · 2026-10-30 · Pope Leo XIV has become the first pope in history to vote in"
+ },
+ {
+  "id": "0d3062ef-66e9-4b64-abb7-65fb71a1f134",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (redistricting nationwide).",
+  "label": "election news · 2026-10-30 · Redistricting could shape 2026 midterm election"
+ },
+ {
+  "id": "02535d53-046a-4531-b437-a03ca1380511",
+  "action": "reject",
+  "note": "Queue review 10-31: Not Florida's election: UN Security Council vote.",
+  "label": "election news · 2026-10-30 · Rival US and Russia resolutions on disputed Western Sahara a"
+ },
+ {
+  "id": "549df7df-d504-443d-8a0c-3b00d3074780",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: rural sheriffs and firefighters on possible cuts (Miami-Dade audience).",
+  "label": "election news · 2026-10-30 · Rural Florida sheriffs, firefighters warn Amendment 3 could"
+ },
+ {
+  "id": "bcc3aa39-2c7b-42d0-9fd3-a9b5ae60611e",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on Trump's Daytona Beach rally, which already reaches Orange County voters.",
+  "label": "election news · 2026-10-30 · Sen. Rick Scott remarks at Daytona Beach rally"
+ },
+ {
+  "id": "059fbfc7-f011-4f22-b57c-8bce847fa06a",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-30 · Simultaneous civil and criminal investigations launched over"
+ },
+ {
+  "id": "b7f5033b-e87f-49bd-8641-c01c7875a6dc",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (election news · 2026-10-30 · Final preparations underway at polling sites ahead of Electi).",
+  "label": "election news · 2026-10-30 · South Florida election officials warned about fake election"
+ },
+ {
+  "id": "50e0b5dc-6c40-4745-a160-b5b312757ce5",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (election news · 2026-10-30 · Teacher pay, school safety funding at stake in ballot refere).",
+  "label": "election news · 2026-10-30 · Superintendents of public schools ask voters in South Florid"
+ },
+ {
+  "id": "22a78780-1abc-4a89-947d-39673c1f22a2",
+  "action": "approve",
+  "note": "Queue review 10-31: Hate symbols found near an Orange County early voting site (earliest copy of this event).",
+  "label": "election news · 2026-10-30 · Swastikas discovered on trees near Orange County early votin"
+ },
+ {
+  "id": "1f418cb6-1822-4dfb-99ec-59269f62698b",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (election news · 2026-10-30 · Swastikas discovered on trees near Orange County early votin).",
+  "label": "election news · 2026-10-30 · Swastikas found painted on trees near early voting site in O"
+ },
+ {
+  "id": "71ce9822-4c7a-4d2e-9334-5a957ca6c5a7",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (election news · 2026-10-30 · Swastikas discovered on trees near Orange County early votin).",
+  "label": "election news · 2026-10-30 · Swastikas painted on trees outside early voting sites"
+ },
+ {
+  "id": "bb493187-4382-4735-8cb7-cc893e523d53",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the copy kept (election news · 2026-10-30 · Teacher pay, school safety funding at stake in ballot refere).",
+  "label": "election news · 2026-10-30 · Teacher pay, school safety at stake as South Florida voters"
+ },
+ {
+  "id": "c68b4248-50eb-4b20-a770-a7dee6af18a0",
+  "action": "approve",
+  "note": "Queue review 10-31: Local ballot question on Nov 3: superintendents on the school funding referendums (earliest copy of this event).",
+  "label": "election news · 2026-10-30 · Teacher pay, school safety funding at stake in ballot refere"
+ },
+ {
+  "id": "e408c5a5-7fd6-49da-8543-c78c86836f31",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] lint: 'seeking to' in the summary (also a national story, Alaska).",
+  "label": "election news · 2026-10-30 · The Latest: Justice Department looks to separate Alaska ball"
+ },
+ {
+  "id": "eb9931c7-d42d-44d4-b542-7d5671829d86",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (possible national firsts).",
+  "label": "election news · 2026-10-30 · These historic firsts could happen in the 2026 midterms"
+ },
+ {
+  "id": "6bb9f987-ab19-42fd-9a4d-e4d43bf9c7ba",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Senate battleground states).",
+  "label": "election news · 2026-10-30 · Top 5 states where voters are most likely to decide the outc"
+ },
+ {
+  "id": "71dade1a-afdf-40dc-9110-614045a5e376",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-30 · Top federal prosecutor in Alaska says criminal probe underwa"
+ },
+ {
+  "id": "6d5d7196-a371-40d4-9995-b78663e6ed5a",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Georgia and national).",
+  "label": "election news · 2026-10-30 · Vote Republican, or else: How Trump is dangling government h"
+ },
+ {
+  "id": "3fa1d1dd-5e78-4fa6-84b6-f20ead76b5e0",
+  "action": "reject",
+  "note": "Queue review 10-31: [AUDIT] Scope: Manatee and Sarasota County ballot questions, shown only to Hillsborough voters.",
+  "label": "election news · 2026-10-30 · Voters in multiple Florida counties will decide whether to f"
+ },
+ {
+  "id": "4c5f011b-c8ce-4f54-80f2-d87422882183",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on early-vote totals passing four million, which already reaches Miami-Dade voters.",
+  "label": "election news · 2026-10-30 · What early voting numbers so far reveal about Florida’s stat"
+ },
+ {
+  "id": "70832bba-22f7-4b43-be8c-8479337d6c1e",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on Trump's Daytona Beach rally, which already reaches Orange County voters.",
+  "label": "election news · 2026-10-30 · What to know before President Trump's Daytona Beach rally"
+ },
+ {
+  "id": "0f36ce72-cdd6-4117-b71d-4350426ad6f0",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (when national results are known).",
+  "label": "election news · 2026-10-30 · When will we know who won the midterms?"
+ },
+ {
+  "id": "ff379819-a921-4c03-9f14-5206c7774a05",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Idaho).",
+  "label": "election news · 2026-10-30 · While other states pick governors and senators, voters in on"
+ },
+ {
+  "id": "5a9f5fba-f3fd-4587-8895-9f57cfdbf54c",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting information: how to handle a vote-by-mail ballot in Miami-Dade.",
+  "label": "election news · 2026-10-30 · With midterm election in a few days in South Florida, here i"
+ },
+ {
+  "id": "f2be01bd-3724-42d6-9cc3-d65062a69d26",
+  "action": "approve",
+  "note": "Queue review 10-31: Amendment 3: rural sheriffs on possible cuts.",
+  "label": "election news · 2026-10-30 · ‘It’s going to take deputies off the street’: Florida’s rura"
+ },
+ {
+  "id": "cfaf62fe-9f82-40cb-bcf8-dfd64c336393",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-31 · FBI visits Dan J. Sullivan donor in candidate's home town as"
+ },
+ {
+  "id": "d286a7ed-2ffb-41d6-89d2-cd50ec32614f",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting in Florida: early-voting turnout by party.",
+  "label": "election news · 2026-10-31 · Florida Democrats outpacing Republicans in early voting turn"
+ },
+ {
+  "id": "b443cb7a-5e10-42b3-87de-9935dea4278b",
+  "action": "approve",
+  "note": "Queue review 10-31: Voting in Miami-Dade: the last days of early voting.",
+  "label": "election news · 2026-10-31 · Florida voters make final push to cast ballots ahead of Tues"
+ },
+ {
+  "id": "9ddacbc5-d045-4af0-be39-dffe4d8a9442",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (foreign influence accounts).",
+  "label": "election news · 2026-10-31 · Graphika finds China-linked Spamouflage accounts posing as U"
+ },
+ {
+  "id": "1fd92b87-680b-4fcf-9aff-abc76482d237",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (California).",
+  "label": "election news · 2026-10-31 · Judge bars intimidation of election workers as court rejects"
+ },
+ {
+  "id": "c4b2795b-e2ed-49a8-b15a-35451eb283fd",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (Alaska).",
+  "label": "election news · 2026-10-31 · Justice Department seeks to isolate Alaska ballots as crimin"
+ },
+ {
+  "id": "8d18e475-dc76-4212-9b93-e7351156ed39",
+  "action": "reject",
+  "note": "Queue review 10-31: National story, not about voting in Florida (congressional candidates elsewhere).",
+  "label": "election news · 2026-10-31 · Meet the 'socialist' progressive Democrats likely on their w"
+ },
+ {
+  "id": "78d050c1-fed6-486f-a98e-1fa15bc61849",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same news as the statewide story on Trump's Daytona Beach rally, which already reaches Orange County voters.",
+  "label": "election news · 2026-10-31 · President Trump rallies voters in Daytona Beach"
+ },
+ {
+  "id": "c5171ae5-6ba6-44f6-bf26-fb916998de90",
+  "action": "reject",
+  "note": "Queue review 10-31: Not election news: weather.",
+  "label": "election news · 2026-10-31 · Rain threatens Halloween plans in South Florida, with floodi"
+ },
+ {
+  "id": "33decae3-bf1d-4407-a8ea-f876ed2c3af3",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the statewide story on Trump's Daytona Beach rally, which already reaches Miami-Dade voters.",
+  "label": "election news · 2026-10-31 · Trump boosts Donalds in Daytona Beach; Jolly reaches for und"
+ },
+ {
+  "id": "c3dcb5a0-2089-4d4e-88d6-c84471bb738a",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the statewide story on Trump's Daytona Beach rally, which already reaches Miami-Dade voters.",
+  "label": "election news · 2026-10-31 · Trump rallies in Daytona Beach, urges Republicans to vote ah"
+ },
+ {
+  "id": "e96597fe-c1f3-47d0-bd79-853dc410f390",
+  "action": "reject",
+  "note": "Queue review 10-31: [DUP] Same event as the statewide story on Trump's Daytona Beach rally kept (Florida's Voice, 10-23).",
+  "label": "election news · 2026-10-31 · Trump, Donalds and Florida GOP ticket pack Daytona Beach ral"
+ }
+]
