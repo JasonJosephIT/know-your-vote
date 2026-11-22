@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/Users/jsloth/Projects/Civic Awareness Project(Know Your Vote)/.claude/worktrees/reverent-mahavira-8b3bdb/.codex/hooks/session-start.sh'"
+          }
+        ]
+      }
+    ]
+  }
+}
