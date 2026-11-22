@@ -7,7 +7,7 @@
    looks heavier than the others, or a raw url that throws. This checks:
 
    1. The words: one plain label per source.type, exactly the glossary's
-      (CONTEXT.md "Source", shared with news-labels.ts), and nothing for a
+      (GLOSSARY.md "Source", shared with news-labels.ts), and nothing for a
       type the table doesn't know.
    2. sourceLine: the url only when safeHttpUrl passes it; the host for
       screen readers only when the publisher doesn't already say it; the
@@ -29,7 +29,7 @@ const { check, mutation, done } = checker("source-line");
 type Module = typeof import("../src/lib/source-line.ts");
 const MODULE = "src/lib/source-line.ts";
 
-/* 1. The words. CONTEXT.md "Source", word for word, the same set a story's
+/* 1. The words. GLOSSARY.md "Source", word for word, the same set a story's
    source uses. */
 const WANT: Record<Source["type"], string> = {
   factual_reporting: "Reporting",

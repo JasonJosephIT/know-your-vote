@@ -29,7 +29,7 @@ import { safeHttpUrl } from "./format.ts";
 import { SOURCE_KIND_LABEL } from "./news-labels.ts";
 
 /* The four `source.type` values (CHECK-constrained in migration 0000), in
-   the same words a story's source uses (news-labels.ts, CONTEXT.md
+   the same words a story's source uses (news-labels.ts, GLOSSARY.md
    "Source"): one definition, so a claim and a story never name the same
    kind of source two ways. */
 export const SOURCE_TYPE_LABEL: Record<Source["type"], string> = SOURCE_KIND_LABEL;
