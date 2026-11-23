@@ -705,3 +705,90 @@ Not opened / not usable as a row:
 **AM1:** Published gate (after 0060) is support 4, oppose 5, neutral 12 (5 ≤ 2×4, passes). Adding the two new oppose rows above (Sun Sentinel, Orlando Sentinel) would make it support 4, oppose 7 — 7 ≤ 2×4 = 8, still passes, but closer to the cap than before. Tier-4 `argument` on oppose would then hold four rows (FEA, LWV, Sun Sentinel, Orlando Sentinel), three of them bare or partial listings with no confirmed reasoning text; DeSantis, Rich Templin/Florida AFL-CIO and Fentrice Driskell remain reporting-only in their own words.
 
 **AM2:** Published gate (0040) is support 5, oppose 4 (4 ≤ 2×5, passes). Adding the same two new oppose rows would make it oppose 6 — 6 ≤ 2×5 = 10, comfortably passes. No new support-side row was found for AM2 this pass.
+
+## Weekly re-check, 2026-11-23
+
+Covers material published or found since the 2026-11-02 re-check, including the
+period after the Nov. 3, 2026 general election. Every URL below was checked
+directly: `x.com` itself serves a JavaScript shell that neither WebFetch nor
+`curl` can render into post text (WebFetch's browser path returns HTTP 402),
+so each post's own text was read through `api.fxtwitter.com`, a read-only
+mirror that returns the post's raw text field, author handle, verification
+badge and timestamp as recorded by X's own card data — not a summary or a
+third party's paraphrase. The text was cross-checked against the account's
+verification badge (`"verified":true`, author `RonDeSantis`, name "Ron
+DeSantis", bio "Governor of Florida") and against news coverage that quotes
+the same lines (WUSF/CBS Miami, already filed in this doc for the first post;
+ClickOrlando, 2026-11-04, "'Good riddance:' Florida Gov. Ron DeSantis blasts
+failed amendment," for the second) before being logged as a row.
+
+Both posts close a gap open since 2026-09-24: every prior pass found
+DeSantis's opposition to Amendment 1 only through news coverage of his
+remarks, never his own page or post. The first post is the source behind the
+"foolish" quote already reported secondhand in this doc's Amendment 1 section
+(row 6, WUSF, 2026-09-15) — it predates the 2026-11-02 cutoff and is reported
+now as a pipeline-gap fix (the same basis the 2026-10-19 and 2026-10-09
+passes used for older material a prior search missed), not because it is
+newly published. The second post is genuinely new, posted the day after the
+Nov. 3 election result.
+
+| # | URL | Loads | Publisher / author | Date | Format | kind | stance | Gives reasons? | Evidence (≤15 words) |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | https://x.com/RonDeSantis/status/2099636846099661272 | Yes — `x.com` itself returns HTTP 200 but no post text in the rendered DOM; text, author and verification confirmed via `api.fxtwitter.com`'s raw-text field | Gov. Ron DeSantis, own X account (verified) | 2026-09-14 | social post | argument | oppose | Yes — cites an already-maxed rainy day fund and record surpluses, prefers tax cuts and toll relief instead | "This is a foolish constitutional amendment proposal... I recommend a NO vote." |
+| 2 | https://x.com/RonDeSantis/status/2117784328721531189 | Yes — same method as row 1 | Gov. Ron DeSantis, own X account (verified) | 2026-11-04 (day after the election) | social post | argument | oppose | Brief — ties the measure's failure to a "failed former speaker of the House" (Amendment 1's champion, then-Speaker Daniel Perez), no new policy reasoning | "Amendment 1... is deservedly going down in flames. Good riddance." |
+
+### Election result confirmed, to rule out conflation
+
+Amendment 1 (Budget Stabilization Fund, HJR 5019) failed at the Nov. 3, 2026
+general election — it did not clear the 60% threshold required for a
+constitutional amendment (ClickOrlando, 2026-11-04; Florida Phoenix;
+floridatrib.org). This confirms row 2 is about the same 2026 Amendment 1
+this document covers (the post itself also names "Amendment 1" and ties it
+to Perez, who publicly championed HJR 5019 while Speaker), not a
+differently-numbered amendment from another cycle.
+
+### Groups and searches checked, nothing new found (2026-11-23)
+
+- **AM1:** Florida AFL-CIO / Rich Templin (`flaflcio.org` press and
+  legislative-post listings, re-fetched — still no post in the union's own
+  words; his reasoning remains known only through committee-testimony
+  reporting). Rep. Fentrice Driskell (no own-site or own-statement page
+  found). Florida Policy Institute (site search — nothing on Amendment 1).
+  Miami Herald and Palm Beach Post opinion sections (searched directly for a
+  2026 Amendment 1 piece — nothing located, not even a snippet, so these are
+  not logged as "blocked," just not found). New letters to the editor
+  (searched — none beyond the Citrus County Chronicle and Villages-News
+  letters already filed). Miami-Dade, Orange and Pinellas County Democratic
+  parties (no position distinct from what is already filed for Miami-Dade).
+- **AM2:** Florida Policy Institute (still only Amendment 3 material).
+  Florida Farm Bureau and Wilton Simpson/FDACS (no post-election statement
+  found). No new letters to the editor. No new county party or labor body
+  beyond those already filed.
+
+### Conflation caught
+
+A Wilton Simpson/FDACS search surfaced material about Florida's "right to
+fish and hunt" amendment, which some 2026 coverage informally also calls
+"Amendment 2." That is unrelated to this document's Amendment 2 (agricultural
+tangible personal property tax exemption, CS/HJR 1215, DoS seqnum 109) and
+was not used.
+
+### Gate picture, 2026-11-23
+
+**AM1:** Using the last published gate recorded in this doc (0060: support 4,
+oppose 5, neutral 12), adding both DeSantis posts above as a single
+tier-4 `argument`/oppose finding set would bring oppose to 7 — 7 ≤ 2×4 = 8,
+still passes. But the 2026-11-02 section above already identified two other
+not-yet-seeded oppose rows (Sun Sentinel, Orlando Sentinel) against the same
+baseline; if every oppose row found since 0060 (those two plus these two
+DeSantis posts) were seeded together, oppose would reach 9 against support
+4 — 9 > 2×4 = 8, and the ≤2× gate would fail. Support has had no new
+primary-source row since the RPOF release (2026-09-14); this is a pipeline
+gap worth the founder's attention (AGENTS.md, Neutrality: a persistent
+one-sided result is something to diagnose, not pad around), not a reason to
+hold back the oppose-side finds above. Seeding any subset of the open
+oppose-side finds is a founder call, as with every prior row in this
+document.
+
+**AM2:** No new row either side. Gate unchanged from 2026-11-02: published
+(0040) support 5, oppose 4, 4 ≤ 2×5 passes.
